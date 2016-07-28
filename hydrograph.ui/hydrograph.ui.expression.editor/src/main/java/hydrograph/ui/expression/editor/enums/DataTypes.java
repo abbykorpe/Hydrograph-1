@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
 
 public enum DataTypes {
 	
-	Integer("I") {
+	Integer("I","integer") {
 		@Override
 		protected String getDefaultValue() {
 			return "0";
@@ -27,8 +27,13 @@ public enum DataTypes {
 		protected String getDataTypeName() {
 			return "int";
 		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.Integer.class;
+		}
 	},
-	Float("F") {
+	Float("F","float") {
 		@Override
 		protected String getDefaultValue() {
 			return "1.0";
@@ -38,8 +43,13 @@ public enum DataTypes {
 		protected String getDataTypeName() {
 			return "float";
 		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.Float.class;
+		}
 	},
-	Double("D") {
+	Double("D","double") {
 		@Override
 		protected String getDefaultValue() {
 			return "1.0";
@@ -49,8 +59,13 @@ public enum DataTypes {
 		protected String getDataTypeName() {
 			return "double";
 		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.Double.class;
+		}
 	},
-	Long("J") {
+	Long("J","long") {
 		@Override
 		protected String getDefaultValue() {
 			return "1";
@@ -60,8 +75,13 @@ public enum DataTypes {
 		protected String getDataTypeName() {
 			return "long";
 		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.Long.class;
+		}
 	},
-	Short("S") {
+	Short("S","short") {
 		@Override
 		protected String getDefaultValue() {
 			return "1";
@@ -71,8 +91,13 @@ public enum DataTypes {
 		protected String getDataTypeName() {
 			return "short";
 		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.Short.class;
+		}
 	},
-	Boolean("Z") {
+	Boolean("Z","boolean") {
 		@Override
 		public String getDefaultValue() {
 			return "false";
@@ -83,9 +108,14 @@ public enum DataTypes {
 			// TODO Auto-generated method stub
 			return "boolean";
 		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.Boolean.class;
+		}
 	},
 	
-	Void("V") {
+	Void("V","void") {
 		@Override
 		public String getDefaultValue() {
 			return "";
@@ -93,27 +123,51 @@ public enum DataTypes {
 
 		@Override
 		protected String getDataTypeName() {
-			// TODO Auto-generated method stub
 			return "void";
+		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.Void.class;
+		}
+	},
+	
+	String("S","String") {
+		@Override
+		public String getDefaultValue() {
+			return "";
+		}
+
+		@Override
+		protected String getDataTypeName() {
+			return "String";
+		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.lang.String.class;
 		}
 	};
 
-	private final String value;
+	private final String reflectionValue;
+	private String dataType;
 
 	protected abstract String getDefaultValue();
 	protected abstract String getDataTypeName();
+	protected abstract Class<?> getDataTypeClass();
 	
-	DataTypes(String value) {
-		this.value = value;
+	DataTypes(String value,String dataType) {
+		this.reflectionValue = value;
+		this.dataType=dataType;
 	}
 
 	public String value() {
-		return value;
+		return reflectionValue;
 	}
 
 	public static String getDefaulltValuefromString(String value) {
 		for (DataTypes dataType : DataTypes.values()) {
-			if (StringUtils.equalsIgnoreCase(dataType.value, value)) {
+			if (StringUtils.equalsIgnoreCase(dataType.reflectionValue, value)) {
 				return dataType.getDefaultValue();
 			}
 		}
@@ -122,10 +176,20 @@ public enum DataTypes {
 	
 	public static String getDataTypefromString(String value) {
 		for (DataTypes dataType : DataTypes.values()) {
-			if (StringUtils.equalsIgnoreCase(dataType.value, value)) {
+			if (StringUtils.equalsIgnoreCase(dataType.reflectionValue, value)) {
 				return dataType.getDataTypeName();
 			}
 		}
 		return value;
 	}
+	
+	public static Class<?> getDataTypeClassfromString(String dataTypeName) {
+		for (DataTypes dataType : DataTypes.values()) {
+			if (StringUtils.equalsIgnoreCase(dataType.dataType, dataTypeName)) {
+				return dataType.getDataTypeClass();
+			}
+		}
+		return null;
+	}
+	
 }

@@ -234,15 +234,15 @@ public class ConverterHelper {
 		if(outSocketList.size()==0 || componenetSchema==null){
 			return;
 		}
-		List<Object> fields = outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField();
+		List<Object> fields = outSocketList.get(0).getPassThroughFieldOrOperationFieldOrExpressionField();
 		List<Object> newFieldList = new LinkedList<>();
 		
 		for(int index=0;index<componenetSchema.getGridRow().size();index++){
 			newFieldList.add(getField(componenetSchema.getGridRow().get(index).getFieldName(),fields));
 		}
 		
-		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField().clear();
-		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField().addAll(newFieldList);
+		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrExpressionField().clear();
+		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrExpressionField().addAll(newFieldList);
 	}
 	
 
@@ -277,12 +277,12 @@ public class ConverterHelper {
 		outSocket.setId(link.getSourceTerminal());
 		outSocketAsInsocket.setInSocketId(link.getTargetTerminal());
 		outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformMapping,gridRows));
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(transformMapping,gridRows));
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addOperationFields(transformMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(addPassThroughFields(transformMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(addMapFields(transformMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(addOperationFields(transformMapping,gridRows));
 		addMapFieldParams(transformMapping);
 		addOutputFieldParams(transformMapping);
-		if (outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()) {
+		if (outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().isEmpty()) {
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 
 		}

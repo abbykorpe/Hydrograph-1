@@ -35,7 +35,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private Map<String,List<FilterProperties>> outputFieldMap;
 	private TransformDialog transformDialogNew;
 	private List<FilterProperties> outerOutputList;
-	
+	private boolean isExpression;
 	/**
 	 * @param transformDialogNew
 	 * @param mappingSheetRows
@@ -79,12 +79,25 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		this.operationInputfieldtableviewer=tableViewer;
 		this.transformDialogNew=transformDialogNew;
 		this.outerOutputList=transformMapping.getOutputFieldList();
+		this.isExpression=isExpression;
 	}
 
 	
 	@Override
 	public void saveResult(String result) {
-		 if(isSingleColumn){
+		if(isSingleColumn && isExpression)
+		{
+			FilterProperties inputField = new FilterProperties();
+	        inputField.setPropertyname(result);
+	        if(!listOfInputFields.contains(inputField))
+        	{	
+        		listOfInputFields.add(inputField);
+        		operationInputfieldtableviewer.refresh();
+        	}	
+		}
+		else 
+		{	
+			if(isSingleColumn){
 			   FilterProperties inputField = new FilterProperties();
 	           inputField.setPropertyname(result);
 	           FilterProperties outputField = new FilterProperties();
@@ -115,6 +128,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		 transformDialogNew.showHideValidationMessage();
 		 transformDialogNew.getComponent().setLatestChangesInSchema(false);
 		}
+		}
 
 	/**
 	 * @return the outputFieldMap
@@ -123,3 +137,4 @@ public class DragDropTransformOpImp implements DragDropOperation {
 		return outputFieldMap;
 	}
 }
+

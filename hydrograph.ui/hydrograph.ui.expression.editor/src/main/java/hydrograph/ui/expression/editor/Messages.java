@@ -17,6 +17,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
+	public static String MESSAGE_TO_EXIT_WITHOUT_SAVE;
 	public static String JAVA_DOC_NOT_AVAILABLE;
 	public static String OPERATOR_FILE_NOT_FOUND;
 	public static String WARNING;

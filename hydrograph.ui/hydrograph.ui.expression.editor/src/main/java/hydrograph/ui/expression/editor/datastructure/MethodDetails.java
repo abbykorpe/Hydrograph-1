@@ -2,6 +2,7 @@ package hydrograph.ui.expression.editor.datastructure;
 
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.enums.DataTypes;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.core.IMethod;
@@ -54,25 +55,15 @@ public class MethodDetails {
 		}
 	}
 
-	private String lastString(String field, String seperator) {
-		String result = Constants.EMPTY_STRING;
-		if (StringUtils.isNotBlank(field)) {
-			String[] strArray = StringUtils.split(field, seperator);
-			result = strArray[strArray.length - 1];
-			if (StringUtils.endsWith(result, Constants.SEMICOLON)) {
-				result = StringUtils.remove(result, Constants.SEMICOLON);
-			}
-		}
-		return result;
-	}
+	
 
 	private String createSignature(IMethod iMethod) throws JavaModelException {
 		StringBuffer buffer = new StringBuffer();
-		returnType = DataTypes.getDataTypefromString(lastString(iMethod.getReturnType(), Constants.DOT));
+		returnType = DataTypes.getDataTypefromString(ExpressionEditorUtil.INSTANCE.lastString(iMethod.getReturnType(), Constants.DOT));
 		buffer.append(iMethod.getElementName() + SWT.SPACE + Constants.OPENING_BRACKET);
 		if (iMethod.getParameters() != null && iMethod.getParameters().length > 0) {
 			for (int index = 0; index < iMethod.getParameters().length; index++) {
-				buffer.append(DataTypes.getDataTypefromString(lastString(
+				buffer.append(DataTypes.getDataTypefromString(ExpressionEditorUtil.INSTANCE.lastString(
 						iMethod.getParameters()[index].getTypeSignature(), Constants.DOT)));
 				buffer.append(SWT.SPACE);
 				buffer.append(iMethod.getParameters()[index].getElementName());

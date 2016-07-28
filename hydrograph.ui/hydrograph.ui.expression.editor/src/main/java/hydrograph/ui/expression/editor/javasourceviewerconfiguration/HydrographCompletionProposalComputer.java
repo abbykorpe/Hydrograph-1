@@ -2,17 +2,18 @@ package hydrograph.ui.expression.editor.javasourceviewerconfiguration;
 
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.comparator.ProposalComparator;
 import hydrograph.ui.expression.editor.datastructure.ClassDetails;
 import hydrograph.ui.expression.editor.datastructure.MethodDetails;
+import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.repo.ClassRepo;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.ui.text.java.ContentAssistInvocationContext;
@@ -22,6 +23,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
@@ -91,7 +93,6 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 			if (replacementLength == 0) {
 				replacementLength = prefix.length();
 			}
-
 			String displayLabel;
 			String replacementString;
 			List<ClassDetails> classList = ClassRepo.INSTANCE.getClassList();
@@ -110,11 +111,24 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 					}
 				}
 			}
+			addAvailableFieldsProposals(textViewer,imageData,proposals,prefix,offset,replacementLength);
 		} catch (RuntimeException exception) {
 			LOGGER.error("Error occurred while building custom proposals", exception);
 		}
 		filterProposalsOnPrefix(prefix, proposals);
 		return proposals;
+	}
+	@SuppressWarnings("unchecked")
+	private void addAvailableFieldsProposals(ITextViewer textViewer,ImageData imageData, List<ICompletionProposal> proposals,String prefix, int offset,int replacementLength) {
+		Map<String,Class<?>> fieldMap=(Map<String, Class<?>>)textViewer.getTextWidget().getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP); 
+		
+		for(Entry<String, Class<?>> entry:fieldMap.entrySet()){
+			String display = entry.getKey()+SWT.SPACE+Constants.DASH+entry.getValue().getSimpleName();
+			String replacementString=SWT.SPACE+entry.getKey()+SWT.SPACE;
+			HydrographCompletionProposal customProposal=new HydrographCompletionProposal(replacementString,offset-prefix.length(),replacementLength,replacementString.length(),
+        			new Image(Display.getCurrent(),imageData),display,null,null);
+        	customProposal.setType(CUSTOM_TYPE);
+		}
 	}
 
 	@Override

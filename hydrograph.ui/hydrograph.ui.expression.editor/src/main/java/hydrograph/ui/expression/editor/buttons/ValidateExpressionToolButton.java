@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
+import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 
 import java.io.File;
@@ -80,7 +81,7 @@ public class ValidateExpressionToolButton extends Button {
 	@SuppressWarnings("unchecked")
 	public void validateExpresion(StyledText expressionStyledText) {
 
-		
+		Map<String,Class<?>> fieldMap =(Map<String, Class<?>>) expressionStyledText.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP);
 		DiagnosticCollector<JavaFileObject> diagnostics = null;
 		IPackageFragmentRoot[] packageFragments;
 		String transfromJarPath=null;
@@ -104,9 +105,7 @@ public class ValidateExpressionToolButton extends Button {
 					Method[] methods = class1.getDeclaredMethods();
 					for (Method method : methods) {
 						if (method.getParameterTypes().length ==3 && StringUtils.equals(method.getName(), "compile")) {
-							Map<String, Class<?>> map = new LinkedHashMap<>();
-							
-							diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressionStyledText.getText(),map,transfromJarPath);
+							diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressionStyledText.getText(),fieldMap,transfromJarPath);
 							break;
 						}
 					}

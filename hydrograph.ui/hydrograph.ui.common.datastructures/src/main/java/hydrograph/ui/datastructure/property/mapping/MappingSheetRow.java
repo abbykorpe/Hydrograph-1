@@ -1,3 +1,4 @@
+
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,7 @@
 package hydrograph.ui.datastructure.property.mapping;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
@@ -44,8 +46,12 @@ public class MappingSheetRow implements IDataStructure {
     private String wholeOperationParameterValue;
     private String operationClassFullPath;
 	
-	
+		private boolean isExpression;
+	private ExpressionEditorData expressionEditorData;
 
+	public boolean isExpression() {
+		return isExpression;
+	}
 	/**
 	 * Gets the operation class full path.
 	 * 
@@ -117,7 +123,9 @@ public class MappingSheetRow implements IDataStructure {
 			boolean isClassParameter,
 			String wholeOperationParameterValue,
 			boolean isWholeOperationParameter,
-			String operationClassFullPath
+			String operationClassFullPath,
+			boolean isExpression,
+			ExpressionEditorData expressionEditorData
 			) {
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -129,7 +137,8 @@ public class MappingSheetRow implements IDataStructure {
 		this.wholeOperationParameterValue=wholeOperationParameterValue;
 		this.isWholeOperationParameter=isWholeOperationParameter;
 		this.operationClassFullPath=operationClassFullPath;
-		
+		this.isExpression=isExpression;
+		this.expressionEditorData=expressionEditorData;
     }
 	
 	/**
@@ -368,6 +377,13 @@ public class MappingSheetRow implements IDataStructure {
 		return isClassParameter;
 	}
 
+	public ExpressionEditorData getExpressionEditorData() {
+		return expressionEditorData;
+	}
+
+	public void setExpressionEditorData(ExpressionEditorData expressionEditorData) {
+		this.expressionEditorData = expressionEditorData;
+	}
 	/**
 	 * Sets the class parameter.
 	 * 
@@ -391,6 +407,7 @@ public class MappingSheetRow implements IDataStructure {
 		String comboBoxvalue=this.comboBoxValue;
 		String operationClasspath=this.operationClassPath;
 		boolean isClassParamter=this.isClassParameter;
+		boolean isOperationClass=this.isExpression;
 		String operationId=this.operationId;
 		String operationClassFullPath=this.operationClassFullPath;
 		inputFieldList.addAll(this.inputFieldList);
@@ -404,8 +421,11 @@ public class MappingSheetRow implements IDataStructure {
 			nameValuePropertyList.add(clonedNameValueProperty);
 		}
 		}
-		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath);
-		
+		MappingSheetRow mappingSheetRow;
+		if(isExpression)
+		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,isOperationClass,expressionEditorData.clone());
+		else
+		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,isOperationClass,null);	
 		return mappingSheetRow;
 	}
 

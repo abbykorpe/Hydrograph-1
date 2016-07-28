@@ -67,7 +67,7 @@ public class UniqueSequenceConverter extends TransformConverter {
 		GenerateSequence generateSequence = (GenerateSequence) baseComponent;
 		operationsList = getOperations();
 		if (operationsList != null)
-			generateSequence.getOperation().addAll(operationsList);
+			generateSequence.getOperationOrExpression().addAll(operationsList);
 	}
 
 	/* *
@@ -119,12 +119,12 @@ public class UniqueSequenceConverter extends TransformConverter {
 		TypeInputField inputField = new TypeInputField();
 		inputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 		inputField.setName(Constants.ADD_ALL_FIELDS_SYMBOL);
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().add(inputField);
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().add(inputField);
 		if (StringUtils.isNotBlank(newFieldName)) {
 			TypeOperationField operationField = new TypeOperationField();
 			operationField.setName(newFieldName);
 			operationField.setOperationId(defaultOperationId);
-			outSocket.getPassThroughFieldOrOperationFieldOrMapField().add(operationField);
+			outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().add(operationField);
 		}
 	}
 

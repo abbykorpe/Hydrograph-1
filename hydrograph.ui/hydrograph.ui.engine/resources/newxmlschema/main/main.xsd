@@ -89,9 +89,17 @@
 							<xs:selector xpath="./operation" />
 							<xs:field xpath="@id" />
 						</xs:key>
+						<xs:key name="operations-keyExpressionId">
+							<xs:selector xpath="./expression" />
+							<xs:field xpath="@id" />
+						</xs:key>
 						<xs:keyref name="operations-keyOperationIdRef" refer="operations-keyOperationId">
 							<xs:selector xpath=".//*" />
 							<xs:field xpath="@operationId" />
+						</xs:keyref>
+						<xs:keyref name="operations-keyExpressionIdRef" refer="operations-keyExpressionId">
+							<xs:selector xpath=".//*" />
+							<xs:field xpath="@expressionId" />
 						</xs:keyref>
 					</xs:element>
 

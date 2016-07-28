@@ -1,7 +1,5 @@
 package hydrograph.ui.expression.editor.styletext;
 
-import hydrograph.ui.expression.editor.color.manager.JavaLineStyler;
-import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
 import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -16,13 +14,10 @@ import org.eclipse.swt.widgets.Composite;
 public class ExpressionEditorStyledText extends StyledText{
 
 	private SourceViewer viewer;
-    private  JavaLineStyler lineStyler;
     
     public ExpressionEditorStyledText(Composite parent, int style, SourceViewer viewer) {
         super(parent, style);
-        lineStyler=new JavaLineStyler(LaunchExpressionEditor.tempData());
         setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		addLineStyleListener(lineStyler);
 		setBackground(new Color(null , 255,255,255));
         this.viewer = viewer;
        

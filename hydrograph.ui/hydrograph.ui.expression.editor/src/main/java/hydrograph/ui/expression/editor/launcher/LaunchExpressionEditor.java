@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.launcher;
 
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
@@ -24,28 +25,17 @@ import org.eclipse.swt.widgets.Display;
 
 public class LaunchExpressionEditor {
 
-	public String launchExpressionEditor(List<String> selectedInputFields){
+	public void launchExpressionEditor(ExpressionEditorData expressionEditorData){
 		BuildExpressionEditorDataSturcture.INSTANCE.createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
-		ExpressionEditorDialog expressionEditorDialog=new ExpressionEditorDialog(Display.getCurrent().getActiveShell(),tempData());
-		
-		expressionEditorDialog.open();
-		return "";
+		ExpressionEditorDialog expressionEditorDialog=new ExpressionEditorDialog(Display.getCurrent().getActiveShell(),
+				expressionEditorData.getSelectedInputFieldsForExpression(),expressionEditorData.getExpression());
+		int returnCode=expressionEditorDialog.open();
+		if(returnCode==0){
+			saveProperty(expressionEditorData,expressionEditorDialog.getExpressionText());
+		}
 	}
 
-	// Delete 
-	public static List<String> tempData() {
-		List<String> inputFields=new ArrayList<String>();
-		inputFields.add("Field1");
-		inputFields.add("Field2");
-		inputFields.add("Field3");
-		inputFields.add("Field4");
-		inputFields.add("Field5");
-		inputFields.add("Field6");
-		inputFields.add("Field7");
-		inputFields.add("Search");
-		inputFields.add("Searchaasdasd");
-		inputFields.add("asdsSearch");
-		return inputFields;
+	private void saveProperty(ExpressionEditorData expressionEditorData, String expressionText) {
+		expressionEditorData.setExpression(expressionText);
 	}
-	
 }

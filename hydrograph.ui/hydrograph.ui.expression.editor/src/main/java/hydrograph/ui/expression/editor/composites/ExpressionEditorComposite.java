@@ -14,19 +14,11 @@
 package hydrograph.ui.expression.editor.composites;
 
 import hydrograph.ui.expression.editor.buttons.EvaluateExpressionToolButton;
-import hydrograph.ui.expression.editor.buttons.ExportExpressionToolButton;
-import hydrograph.ui.expression.editor.buttons.ImportExpressionToolButton;
 import hydrograph.ui.expression.editor.buttons.OperatorToolCombo;
 import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.buttons.WordWrapToolCheckButton;
 import hydrograph.ui.expression.editor.color.manager.JavaLineStyler;
 import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
-import hydrograph.ui.expression.editor.tooIitems.ExportExpressionToolItem;
-import hydrograph.ui.expression.editor.tooIitems.ImportExpressionToolItem;
-import hydrograph.ui.expression.editor.tooIitems.OperatorToolItem;
-import hydrograph.ui.expression.editor.tooIitems.TestExpressionToolItem;
-import hydrograph.ui.expression.editor.tooIitems.ValidateExpressionToolItem;
-import hydrograph.ui.expression.editor.tooIitems.WordWrapToolItem;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 import org.eclipse.swt.SWT;
@@ -43,8 +35,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 
 public class ExpressionEditorComposite extends Composite {

@@ -109,4 +109,16 @@ public class ExpressionEditorUtil {
 			}
 		});
 	}
+
+	public String lastString(String field, String seperator) {
+		String result = Constants.EMPTY_STRING;
+		if (StringUtils.isNotBlank(field)) {
+			String[] strArray = StringUtils.split(field, seperator);
+			result = strArray[strArray.length - 1];
+			if (StringUtils.endsWith(result, Constants.SEMICOLON)) {
+				result = StringUtils.remove(result, Constants.SEMICOLON);
+			}
+		}
+		return result;
+	}
 }

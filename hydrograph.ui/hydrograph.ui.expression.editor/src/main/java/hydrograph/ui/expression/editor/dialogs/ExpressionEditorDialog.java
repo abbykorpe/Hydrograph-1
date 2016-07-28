@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.dialogs;
 
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.color.manager.JavaLineStyler;
 import hydrograph.ui.expression.editor.composites.AvailableFieldsComposite;
 import hydrograph.ui.expression.editor.composites.CategoriesComposite;
@@ -21,8 +22,12 @@ import hydrograph.ui.expression.editor.composites.ExpressionEditorComposite;
 import hydrograph.ui.expression.editor.composites.FunctionsComposite;
 import hydrograph.ui.expression.editor.repo.ClassRepo;
 
+import java.io.Closeable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -33,10 +38,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 public class ExpressionEditorDialog extends Dialog {
 
+	public static final String FIELD_DATA_TYPE_MAP = "fieldMap";
 	private StyledText expressionEditorTextBox;
 	private AvailableFieldsComposite availableFieldsComposite;
 	private ExpressionEditorComposite expressionEditorComposite;
@@ -45,17 +53,22 @@ public class ExpressionEditorDialog extends Dialog {
 	private DescriptionComposite descriptionComposite;
 	private List<String> selectedInputFields;
 	private JavaLineStyler javaLineStyler;
+	private String newExpressionText;
+	private String oldExpressionText;
+	private Map<String, Class<?>> fieldMap;
 	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public ExpressionEditorDialog(Shell parentShell, List<String> selectedInputFields) {
+	public ExpressionEditorDialog(Shell parentShell, Map<String, Class<?>> fieldMap,String oldExpressionText) {
 		
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.MIN | SWT.MAX | SWT.RESIZE );
-		this.selectedInputFields=selectedInputFields;
+		setShellStyle(SWT.CLOSE | SWT.MAX | SWT.RESIZE );
+		this.fieldMap=fieldMap;
+		this.selectedInputFields=new ArrayList<>(fieldMap.keySet());
 		javaLineStyler=new JavaLineStyler(selectedInputFields);
+		this.oldExpressionText=oldExpressionText;
 	}
 	
 
@@ -104,6 +117,8 @@ public class ExpressionEditorDialog extends Dialog {
 
 	private void intializeWidgets() {
 		expressionEditorTextBox.setFocus();
+		expressionEditorTextBox.setText(oldExpressionText);
+		expressionEditorTextBox.setData(FIELD_DATA_TYPE_MAP,fieldMap);
 	}
 
 	/**
@@ -125,9 +140,35 @@ public class ExpressionEditorDialog extends Dialog {
 	}
 	
 	public boolean close() {
-		ClassRepo.INSTANCE.flusRepo();
+		if (StringUtils.isBlank(newExpressionText)) {
+			if (confirmToExitWithoutSave()) {
+				ClassRepo.INSTANCE.flusRepo();
+				return super.close();
+			} else
+				return false;
+		} else
+			ClassRepo.INSTANCE.flusRepo();
 		return super.close();
 	}
+
+	@Override
+	protected void okPressed() {
+		newExpressionText=expressionEditorTextBox.getText();
+		super.okPressed();
+	}
 	
-	
+	private boolean confirmToExitWithoutSave() {
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+	        messageBox.setMessage(Messages.MESSAGE_TO_EXIT_WITHOUT_SAVE);
+	        messageBox.setText("Exiting expression editor");
+	        int response = messageBox.open();
+	        if (response == SWT.YES)
+	        	return true;
+		return false;
+	}
+
+
+	public String getExpressionText() {
+		return newExpressionText;
+	}
 }

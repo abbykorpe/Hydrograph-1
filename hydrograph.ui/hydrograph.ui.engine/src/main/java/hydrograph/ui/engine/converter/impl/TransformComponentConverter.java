@@ -73,7 +73,7 @@ public class TransformComponentConverter extends TransformConverter {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Transform transform = (Transform) baseComponent;
-		transform.getOperation().addAll(getOperations());
+		transform.getOperationOrExpression().addAll(getOperations());
 	}
 
 	@Override
