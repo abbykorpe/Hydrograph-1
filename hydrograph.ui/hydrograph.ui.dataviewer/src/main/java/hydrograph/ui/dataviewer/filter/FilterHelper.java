@@ -71,8 +71,6 @@ public class FilterHelper {
 	private DebugDataViewer debugDataViewer;
 	private FilterConditionsDialog filterConditionsDialog;
 	private String SCHEMA_FILE_EXTENTION=".xml";
-	private String filteredFileLocation;
-	private String filteredFileName = "";
 	private String localCondition = "";
 	private String remoteCondition;
 	
@@ -88,7 +86,8 @@ public class FilterHelper {
 				FilterConstants.NOT_EQUALS,FilterConstants.FIELD_NOT_EQUALS,
 				FilterConstants.EQUALS,FilterConstants.FIELD_EQUALS,
 				FilterConstants.IN, FilterConstants.NOT_IN,
-				FilterConstants.BETWEEN};
+				FilterConstants.BETWEEN,
+				FilterConstants.BETWEEN_FIELD};
 
 		typeBasedConditionalOperators.put(FilterConstants.TYPE_STRING, new String[]{FilterConstants.NOT_EQUALS, FilterConstants.EQUALS, 
 				FilterConstants.LIKE, FilterConstants.NOT_LIKE, FilterConstants.IN, FilterConstants.NOT_IN}); 
@@ -230,11 +229,7 @@ public class FilterHelper {
 				TableItem tableItem = getTableItem(source);
 				Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
 				String selectedValue = source.getItem(source.getSelectionIndex());
-				if (selectedValue.equalsIgnoreCase(FilterConstants.BETWEEN)) {
-					text.setVisible(true);
-				} else {
-					text.setVisible(false);
-				}
+				enableAndDisableValue2TextBox(selectedValue, text);
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 			@Override
@@ -260,16 +255,21 @@ public class FilterHelper {
 				Condition condition = (Condition) tableItem.getData();
 				if (tableItem.getData(FilterConstants.VALUE2TEXTBOX) != null) {
 					Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
-					if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
-						text.setVisible(true);
-					} else {
-						text.setVisible(false);
-					}
+					enableAndDisableValue2TextBox(condition.getConditionalOperator(), text);
 				}
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, okButton, applyButton);
 			}
 		};
 		return listener;
+	}
+	
+	private void enableAndDisableValue2TextBox(String condition, Text text) {
+		if(StringUtils.equalsIgnoreCase(condition,FilterConstants.BETWEEN)
+				|| StringUtils.equalsIgnoreCase(condition,FilterConstants.BETWEEN_FIELD)){
+			text.setVisible(true);
+		} else {
+			text.setVisible(false);
+		}
 	}
 	
 	/**
@@ -371,7 +371,8 @@ public class FilterHelper {
 	
 	
 	public SelectionListener getOkButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
-			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions) {
+			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions,
+			final RetainFilter retainRemoteFilter,final RetainFilter retainLocalFilter) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -427,7 +428,8 @@ public class FilterHelper {
 					StringBuffer conditionString = new StringBuffer();
 					
 					Condition condition = conditionsList.get(item);
-					if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+					if(StringUtils.equalsIgnoreCase(condition.getConditionalOperator(), FilterConstants.BETWEEN)
+							|| StringUtils.equalsIgnoreCase(condition.getConditionalOperator(),FilterConstants.BETWEEN_FIELD)){
 						conditionString
 								.append(condition.getFieldName())
 								.append(FilterConstants.SINGLE_SPACE)
@@ -456,7 +458,7 @@ public class FilterHelper {
 				for (String item : actualStringList) {
 					buffer.append(item + FilterConstants.SINGLE_SPACE);
 				}
-				logger.debug("Query String : " + buffer);
+				
 				Pattern p = Pattern.compile("\\(Field\\)");
 				Matcher m = p.matcher(buffer);
 				StringBuffer temp = new StringBuffer();
@@ -466,20 +468,38 @@ public class FilterHelper {
 				m.appendTail(temp);
 				buffer = new StringBuffer(temp);
 				
+				logger.debug("Query String : " + buffer);
 				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
-					if(!originalFilterConditions.getRetainRemote()){
-						originalFilterConditions.setRemoteCondition("");
-						originalFilterConditions.getLocalConditions().clear();
-						filterConditionsDialog.getRemoteConditionsList().clear();
-						debugDataViewer.setRemoteCondition("");
-						remoteCondition="";
-					}
 					localCondition=buffer.toString();
 					showLocalFilteredData(StringUtils.trim(buffer.toString()));
 					debugDataViewer.setLocalCondition(localCondition);
 				}
 				else{
-					if(!originalFilterConditions.getRetainLocal()){
+					if(!retainLocalFilter.getRetainFilter()){
+						if(!debugDataViewer.getLocalCondition().equals("")){
+							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Warning");
+							messageBox.setMessage(Messages.NOT_RETAINED);
+							int response = messageBox.open();
+							if (response != SWT.OK) {
+								return;
+							}
+						}
+					}
+					else{
+						if(!debugDataViewer.getLocalCondition().equals("")){
+							MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Warning");
+							messageBox.setMessage(Messages.RETAINED);
+							int response = messageBox.open();
+							if (response != SWT.OK) {
+								return;
+							}
+						}else{
+							retainLocalFilter.setRetainFilter(false);
+						}
+					}
+					if (!retainLocalFilter.getRetainFilter()) {
 						originalFilterConditions.setLocalCondition("");
 						originalFilterConditions.getLocalConditions().clear();
 						filterConditionsDialog.getLocalConditionsList().clear();
@@ -508,11 +528,15 @@ public class FilterHelper {
 	private void showLocalFilteredData(String buffer) {
 		try {
 			dataViewerAdapter.setFilterCondition(buffer);
+			dataViewerAdapter.resetOffset();
 			dataViewerAdapter.initializeTableData();
+			debugDataViewer.clearJumpToText();
 			debugDataViewer.submitRecordCountJob();
 			debugDataViewer.getDataViewLoader().updateDataViewLists();
 			debugDataViewer.getDataViewLoader().reloadloadViews();
+			
 			enableAndDisableNextButtonOfDataViewer();
+			
 		} catch (SQLException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}

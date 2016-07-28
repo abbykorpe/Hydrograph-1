@@ -20,11 +20,11 @@ import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.debug.service.ViewDataServiceInitiator;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -78,12 +78,18 @@ public class JobManager {
 	private static final String PARAMETER_FILE_EXTENTION=".properties";
 	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
-	private Map<String,DebugDataViewer> dataViewerMap;
+	private Map<String,DebugDataViewer> dataViewerMap;		
+	private Map<String,Job> previouslyExecutedJobs;
+	private String activeCanvas;
 	
 	public boolean isLocalMode() {
 		return localMode;
 	}
 
+	public Map<String, Job> getPreviouslyExecutedJobs() {
+		return previouslyExecutedJobs;
+	}
+	
 	public void setLocalMode(boolean localMode) {
 		this.localMode = localMode;
 	}
@@ -95,13 +101,9 @@ public class JobManager {
 	public void setDataViewerMap(Map<String, DebugDataViewer> dataViewerMap2) {
 		this.dataViewerMap = dataViewerMap2;
 	}
-
-
-
-
-	private String activeCanvas;
 	
 	private JobManager() {
+		previouslyExecutedJobs = new LinkedHashMap<>();
 		runningJobsMap = new LinkedHashMap<>();
 	}
 	
@@ -252,8 +254,14 @@ public class JobManager {
 		}
 
 		gefCanvas.disableRunningJobResource();
-
+		
+		DataViewerUtility.INSTANCE.deletePreviousRunsDataviewCsvXmlFiles(previouslyExecutedJobs.get(job.getConsoleName()));
+		DataViewerUtility.INSTANCE.deletePreviousRunsBasePathDebugFiles(previouslyExecutedJobs.get(job.getConsoleName()));
+		DataViewerUtility.INSTANCE.closeDataViewerWindows(previouslyExecutedJobs.get(job.getConsoleName()));
+		
+		previouslyExecutedJobs.put(job.getConsoleName(), job);
 		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,externalSchemaFiles,subJobList);
+		
 	}
 	
 	/**
@@ -317,7 +325,7 @@ public class JobManager {
 			}).start();
 		} else {
 			setLocalMode(true);
-			ViewDataServiceInitiator.startService();
+			//ViewDataServiceInitiator.startService();
 			new Thread(new Runnable() {
 
 				@Override

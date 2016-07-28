@@ -14,6 +14,7 @@
 package hydrograph.ui.graph.action.debug;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.filter.FilterConditions;
@@ -24,7 +25,6 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
@@ -48,7 +48,6 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -164,6 +163,18 @@ public class WatchRecordAction extends SelectionAction {
 		}
 	}
 
+	/**
+	 * Gets the component canvas.
+	 *
+	 * @return the component canvas
+	 */
+	private DefaultGEFCanvas getComponentCanvas() {		
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		else
+			return null;
+	}
+	
 	@Override
 	public void run() {			
 		//Create watch command
@@ -176,7 +187,7 @@ public class WatchRecordAction extends SelectionAction {
 		}
 		
 		// Check if job is executed in debug mode
-		Job job = DebugHandler.getJob(watchRecordInner.getCurrentJob());		
+		Job job = JobManager.INSTANCE.getPreviouslyExecutedJobs().get(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
 		if(job==null){
 			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.FORGOT_TO_EXECUTE_DEBUG_JOB);
 			return;
@@ -205,9 +216,9 @@ public class WatchRecordAction extends SelectionAction {
 		final String dataViewerWindowTitle = dataViewerWindowName;	
 
 		//Open data viewer window
-		Display.getDefault().asyncExec(new Runnable() {
+		/*Display.getDefault().asyncExec(new Runnable() {
 			@Override
-			public void run() {
+			public void run() {*/
 				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
 				String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
 				dataViewerMap.put(dataViewerWindowTitle, window);
@@ -231,11 +242,9 @@ public class WatchRecordAction extends SelectionAction {
 					window.getConditions().setRemoteCondition("");
 					window.getConditions().getRemoteConditions().clear();
 					window.getConditions().getRemoteGroupSelectionMap().clear();
-				}
 					
 				watcherAndConditon.put(watcherId,window.getConditions());
 			}
-		});
 	}
 
 	
@@ -246,7 +255,7 @@ public class WatchRecordAction extends SelectionAction {
 				job.getUserId(), 
 				job.getPassword(), 
 				job.getBasePath(),
-				watchRecordInner.getUniqueJobId(), 
+				job.getUniqueJobId(), 
 				watchRecordInner.getComponentId(), 
 				watchRecordInner.getSocketId(),
 				job.isRemoteMode());

@@ -14,10 +14,10 @@ package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.logging.factory.LogFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -62,8 +63,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import hydrograph.ui.dataviewer.actions.ReloadAction;
 
 /**
  * Dialog for Data Viewer Filter conditions
@@ -130,6 +129,10 @@ public class FilterConditionsDialog extends Dialog {
 	Button remoteBtnAddGrp;
 	Button localBtnAddGrp;
 	
+	/**
+	 * Set map of fields and their types respectively
+	 * @param fieldsAndTypes
+	 */
 	public void setFieldsAndTypes(Map<String, String> fieldsAndTypes) {
 		this.fieldsAndTypes = fieldsAndTypes;
 		fieldNames = (String[]) this.fieldsAndTypes.keySet().toArray(new String[this.fieldsAndTypes.size()]);
@@ -157,6 +160,10 @@ public class FilterConditionsDialog extends Dialog {
 		this.originalFilterConditions = new FilterConditions();
 	}
 
+	/**
+	 * Setup saved/applied filter conditions values before opening the window
+	 * @param filterConditions
+	 */
 	public void setFilterConditions(FilterConditions filterConditions) {
 		this.originalFilterConditions = filterConditions;
 		localConditionsList.addAll(FilterHelper.INSTANCE.cloneList(filterConditions.getLocalConditions()));
@@ -173,7 +180,7 @@ public class FilterConditionsDialog extends Dialog {
 	 * @param parent
 	 */
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		parent.getShell().setText(Messages.DATA_VIEWER + " " + Messages.FILTER);
 		container.setLayout(new GridLayout(1, false));
@@ -190,6 +197,20 @@ public class FilterConditionsDialog extends Dialog {
 		
 		createRemoteTabItem(tabFolder, remoteTableViewer);
 		createLocalTabItem(tabFolder, localTableViewer);
+		parent.getShell().setDefaultButton(remoteOkButton);
+		 tabFolder.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                  TabItem tabItem = (TabItem) e.item;
+                  if (StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.ORIGINAL_DATASET)) {
+                        parent.getShell().setDefaultButton(remoteOkButton);
+                  } else if(StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.DOWNLOADED_DATASET)){
+                        parent.getShell().setDefaultButton(localOkButton);
+                  }
+            }
+      });
+
 		FilterHelper.INSTANCE.setDataViewerAdapter(dataViewerAdapter,this);
 		FilterHelper.INSTANCE.setDebugDataViewer(debugDataViewer);
 		return container;
@@ -232,7 +253,7 @@ public class FilterConditionsDialog extends Dialog {
         
         remoteBtnAddGrp.setText(Messages.CREATE_GROUP);		
         remoteBtnAddGrp.setEnabled(false);
-        remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer,clearGroupsRemote,remoteConditionsList, remoteBtnAddGrp,remoteGroupSelectionMap));
+        remoteBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer,clearGroupsRemote,remoteConditionsList, remoteBtnAddGrp,remoteGroupSelectionMap,true));
 		
 		Button retainButton = new Button(composite_3, SWT.CHECK);
 		retainButton.setText(Messages.RETAIN_REMOTE_FILTER);
@@ -241,25 +262,21 @@ public class FilterConditionsDialog extends Dialog {
 		Composite composite_4 = new Composite(composite, SWT.NONE);
 		composite_4.setLayout(new GridLayout(4, false));
 		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-				
-						
-		remoteOkButton = new Button(composite_4, SWT.NONE);
-		remoteOkButton.setText(Messages.OK2);
+			
+		remoteOkButton = createButton(composite_4, Messages.OK2, true);
+		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes, 
+				remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions,retainRemoteFilter,retainLocalFilter));
 		
-		remoteApplyButton = new Button(composite_4, SWT.NONE);
-		remoteApplyButton.setText(Messages.APPLY);
-		
-		Button btnCancel = new Button(composite_4, SWT.NONE);
-		btnCancel.setText(Messages.CANCEL2);
+		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
 		
-		Button clearButton = new Button(composite_4, SWT.NONE);
-		clearButton.setText(Messages.CLEAR);
-		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, true, retainButton, remoteGroupSelectionMap,remoteBtnAddGrp));
+		Button clearButton = createButton(composite_4, Messages.CLEAR, false);
+		clearButton.addSelectionListener(getClearButtonListener(tableViewer, remoteConditionsList, dummyList, originalFilterConditions, 
+				true, retainButton, remoteGroupSelectionMap,remoteBtnAddGrp));
 
+		remoteApplyButton = createButton(composite_4, Messages.APPLY, false);
 		remoteApplyButton.addSelectionListener(FilterHelper.INSTANCE.getRemoteApplyButtonListener(originalFilterConditions, 
-		remoteConditionsList, retainRemoteFilter));
-		remoteOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(remoteConditionsList, fieldsAndTypes,remoteGroupSelectionMap,Messages.ORIGINAL,originalFilterConditions));
+				remoteConditionsList, retainRemoteFilter));
 		
 		if(retainRemoteFilter.getRetainFilter() == true){
 			retainButton.setSelection(true);
@@ -269,7 +286,7 @@ public class FilterConditionsDialog extends Dialog {
 		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(tableViewer, remoteConditionsList, remoteGroupSelectionMap));
 		
 		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
-		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp,remoteGroupSelectionMap));
+		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp,remoteGroupSelectionMap,true));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
 		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, remoteConditionsList,remoteBtnAddGrp));
@@ -303,6 +320,24 @@ public class FilterConditionsDialog extends Dialog {
 		tableViewer.setInput(remoteConditionsList);
 		tableViewer.refresh();
 		
+	}
+	
+	private Button createButton(Composite parent, String label,
+			boolean defaultButton) {
+		
+		((GridLayout) parent.getLayout()).numColumns++;
+		Button button = new Button(parent, SWT.NONE);
+		button.setText(label);
+		
+		if (defaultButton) {
+			Shell shell = parent.getShell();
+			if (shell != null) {
+				shell.setDefaultButton(button);
+			}
+		}
+		
+		setButtonLayoutData(button);
+		return button;
 	}
 
 	private MouseListener getCancelButtonListener() {
@@ -360,7 +395,7 @@ public class FilterConditionsDialog extends Dialog {
         
         localBtnAddGrp.setText(Messages.CREATE_GROUP);
         localBtnAddGrp.setEnabled(false);
-        localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer, clearGroupsLocal,localConditionsList,localBtnAddGrp,localGroupSelectionMap));
+        localBtnAddGrp.addSelectionListener(getAddGroupButtonListner(tableViewer, clearGroupsLocal,localConditionsList,localBtnAddGrp,localGroupSelectionMap,false));
         		
         		        
 		Button retainButton = new Button(composite_3, SWT.CHECK);
@@ -371,22 +406,20 @@ public class FilterConditionsDialog extends Dialog {
 		composite_4.setLayout(new GridLayout(4, false));
 		composite_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		
-		localOkButton = new Button(composite_4, SWT.NONE);
-		localOkButton.setText(Messages.OK2);
-		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes,localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions));
+		localOkButton = createButton(composite_4, Messages.OK2, false);
+		localOkButton.addSelectionListener(FilterHelper.INSTANCE.getOkButtonListener(localConditionsList, fieldsAndTypes, 
+				localGroupSelectionMap, Messages.DOWNLOADED,originalFilterConditions,retainRemoteFilter,retainLocalFilter));
 		
-		localApplyButton = new Button(composite_4, SWT.NONE);
-		localApplyButton.setText(Messages.APPLY);
-		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getLocalApplyButtonListener(originalFilterConditions, 
-				localConditionsList, retainLocalFilter));
-		
-		Button btnCancel = new Button(composite_4, SWT.NONE);
-		btnCancel.setText(Messages.CANCEL2);
+		Button btnCancel = createButton(composite_4, Messages.CANCEL2, false);
 		btnCancel.addMouseListener(getCancelButtonListener());
 		
-		Button clearButton = new Button(composite_4, SWT.NONE);
-		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList,dummyList,originalFilterConditions,false,retainButton,localGroupSelectionMap, localBtnAddGrp));
-		clearButton.setText(Messages.CLEAR);
+		Button clearButton = createButton(composite_4, Messages.CLEAR, false);
+		clearButton.addSelectionListener(getClearButtonListener(tableViewer, localConditionsList, dummyList, originalFilterConditions, 
+				false,retainButton,localGroupSelectionMap, localBtnAddGrp));
+		
+		localApplyButton = createButton(composite_4, Messages.APPLY, false);
+		localApplyButton.addSelectionListener(FilterHelper.INSTANCE.getLocalApplyButtonListener(originalFilterConditions, 
+				localConditionsList, retainLocalFilter));
 		
 		if(retainLocalFilter.getRetainFilter() == true){
 			retainButton.setSelection(true);
@@ -396,7 +429,7 @@ public class FilterConditionsDialog extends Dialog {
 		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(tableViewer, localConditionsList,localGroupSelectionMap));
 		
 		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
-		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, localConditionsList,localBtnAddGrp,localGroupSelectionMap));
+		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, localConditionsList,localBtnAddGrp,localGroupSelectionMap,false));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
 		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, localConditionsList,localBtnAddGrp));
@@ -530,7 +563,8 @@ public class FilterConditionsDialog extends Dialog {
 	}
 	
 	private void enableAndDisableValue2TextBox(final List<Condition> conditionsList, int index, Text text) {
-		if (conditionsList.get(index).getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
+				if(StringUtils.equalsIgnoreCase(conditionsList.get(index).getConditionalOperator(),FilterConstants.BETWEEN)
+						|| StringUtils.equalsIgnoreCase(conditionsList.get(index).getConditionalOperator(),FilterConstants.BETWEEN_FIELD)){
 			text.setVisible(true);
 		} else {
 			text.setVisible(false);
@@ -570,7 +604,9 @@ public class FilterConditionsDialog extends Dialog {
 					
 					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
 						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
-						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						if(fieldsAndTypes.containsKey(fieldsName)){
+							combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						}
 					}
 					else{
 						combo.setItems(new String[]{});
@@ -596,7 +632,9 @@ public class FilterConditionsDialog extends Dialog {
 					CCombo combo = (CCombo) item.getData(CONDITIONAL_OPERATORS);
 					if(StringUtils.isNotBlank(dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName())){
 						String fieldsName = dummyList.get(tableViewer.getTable().indexOf(item)).getFieldName();
-						combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						if(fieldsAndTypes.containsKey(fieldsName)){
+							combo.setItems(typeBasedConditionalOperators.get(fieldsAndTypes.get(fieldsName)));
+						}
 					}
 					else{
 						combo.setItems(new String[]{});
@@ -756,7 +794,7 @@ public class FilterConditionsDialog extends Dialog {
 	}
 
 	private CellLabelProvider getRemoveButtonCellProvider(final TableViewer tableViewer, final List<Condition> conditionsList, 
-			final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
+			final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final boolean isRemote) {
 		return new CellLabelProvider() {
 			
 			@Override
@@ -770,7 +808,7 @@ public class FilterConditionsDialog extends Dialog {
 					return;
 				}
 				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
-						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp), 
+						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp,isRemote), 
 						ImagePathConstant.DELETE_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
@@ -952,7 +990,7 @@ public class FilterConditionsDialog extends Dialog {
 	}
 	
 	private SelectionListener getAddGroupButtonListner(final TableViewer tableViewer,final Button clearGroups,
-		final List<Condition> conditionsList,final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
+		final List<Condition> conditionsList,final Button btnAddGrp, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap,final boolean isRemote) {
 		
 		SelectionListener listener = new SelectionListener() {
 			
@@ -962,7 +1000,7 @@ public class FilterConditionsDialog extends Dialog {
 					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
 				    dummyList.clear();
 				    dummyList.addAll(FilterHelper.INSTANCE.cloneList(conditionsList));
-				    redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
+				    redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap,isRemote);
 				   	clearGroups.setEnabled(true);		 
 				}
 			}
@@ -977,14 +1015,22 @@ public class FilterConditionsDialog extends Dialog {
 
 	
 	
+	/**
+	 * Redraws the table in order to add or delete the grouping columns 
+	 * @param tableViewer
+	 * @param conditionsList
+	 * @param btnAddGrp
+	 * @param groupSelectionMap
+	 * @param isRemote
+	 */
 	public void redrawAllColumns(TableViewer tableViewer, List<Condition> conditionsList, Button btnAddGrp, 
-			TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
+			TreeMap<Integer, List<List<Integer>>> groupSelectionMap, boolean isRemote){
 		
 		TableViewerColumn addButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
 		addButtonTableViewerColumn.setLabelProvider(getAddButtonCellProvider(tableViewer, conditionsList,groupSelectionMap));
 		
 		TableViewerColumn removeButtonTableViewerColumn = createTableColumns(tableViewer, "", 28);
-		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, conditionsList,btnAddGrp,groupSelectionMap));
+		removeButtonTableViewerColumn.setLabelProvider(getRemoveButtonCellProvider(tableViewer, conditionsList,btnAddGrp,groupSelectionMap,isRemote));
 		
 		TableViewerColumn groupButtonTableViewerColumn = createTableColumns(tableViewer, "", 40);
 		groupButtonTableViewerColumn.setLabelProvider(getGroupCheckCellProvider(tableViewer, conditionsList,btnAddGrp));
@@ -998,20 +1044,20 @@ public class FilterConditionsDialog extends Dialog {
 		
 		
 		TableViewerColumn relationalDropDownColumn = createTableColumns(tableViewer, Messages.RELATIONAL_OPERATOR, 120);
-		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, conditionsList, true));
+		relationalDropDownColumn.setLabelProvider(getRelationalCellProvider(tableViewer, conditionsList, isRemote));
 		
 		
 		TableViewerColumn fieldNameDropDownColumn = createTableColumns(tableViewer, Messages.FIELD_NAME, 150);
-		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, conditionsList, true));
+		fieldNameDropDownColumn.setLabelProvider(getFieldNameCellProvider(tableViewer, conditionsList, isRemote));
 		
 		TableViewerColumn conditionalDropDownColumn = createTableColumns(tableViewer, Messages.CONDITIONAL_OPERATOR, 130);
-		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, conditionsList, true));
+		conditionalDropDownColumn.setLabelProvider(getConditionalCellProvider(tableViewer, conditionsList, isRemote));
 		
 		TableViewerColumn value1TextBoxColumn = createTableColumns(tableViewer, Messages.VALUE1, 150);
-		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, conditionsList, true));
+		value1TextBoxColumn.setLabelProvider(getValue1CellProvider(tableViewer, conditionsList, isRemote));
 		
 		TableViewerColumn valueTextBoxValue2Column = createTableColumns(tableViewer, Messages.VALUE2, 150);
-		valueTextBoxValue2Column.setLabelProvider(getValue2CellProvider(tableViewer, conditionsList, true));
+		valueTextBoxValue2Column.setLabelProvider(getValue2CellProvider(tableViewer, conditionsList, isRemote));
 		
 		btnAddGrp.setEnabled(false);
 		
@@ -1060,7 +1106,7 @@ public class FilterConditionsDialog extends Dialog {
 	}
 	
 	public SelectionListener removeButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList,
-			final List<Condition> dummyList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final Button btnAddGrp) {
+			final List<Condition> dummyList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final Button btnAddGrp,final boolean isRemote) {
 		SelectionListener listener = new SelectionListener() {
 			
 			@Override
@@ -1076,14 +1122,13 @@ public class FilterConditionsDialog extends Dialog {
 					
 					TableItem[] items = tableViewer.getTable().getItems();
 					items[removeIndex].dispose();
-					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-					redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
 					
 					if(isRemoveAllColumns){
 						FilterHelper.INSTANCE.reArrangeGroupColumns(groupSelectionMap);
-						FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-						redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
 					}
+					
+					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
+					redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap,isRemote);
 					
 				}
 				tableViewer.refresh();
@@ -1149,7 +1194,7 @@ public class FilterConditionsDialog extends Dialog {
 			   }
 				
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-				redrawAllColumns(tableViewer, conditionsList, btnAddGrp,groupSelectionMap);			
+				redrawAllColumns(tableViewer, conditionsList, btnAddGrp,groupSelectionMap,isRemote);			
 				clearGroups.setEnabled(false);
 			
 				
@@ -1206,7 +1251,7 @@ public class FilterConditionsDialog extends Dialog {
 				
 				 
 				FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
-				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap);
+				redrawAllColumns(tableViewer,conditionsList,btnAddGrp,groupSelectionMap,isRemote);
 				((ReloadAction)debugDataViewer.getActionFactory().getAction(ReloadAction.class.getName())).run();
 				debugDataViewer.submitRecordCountJob();
 				cancelPressed();
@@ -1253,5 +1298,6 @@ public class FilterConditionsDialog extends Dialog {
 		
 		return remoteGroupSelectionMap;
 	}
+    
 }
 

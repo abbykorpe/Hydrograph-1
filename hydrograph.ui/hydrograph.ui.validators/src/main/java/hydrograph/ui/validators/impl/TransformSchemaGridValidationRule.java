@@ -122,11 +122,6 @@ public class TransformSchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(StringUtils.equalsIgnoreCase(DATA_TYPE_BIG_DECIMAL, gridRow.getDataTypeValue()) && (StringUtils.isBlank(gridRow.getPrecision()))){
-				errorMessage = "Precision cannot be blank or none for Big Decimal data type";
-				return false;
-			}
-			
 			if(uniqueNamesList.isEmpty() || !uniqueNamesList.contains(gridRow.getFieldName())){
 				uniqueNamesList.add(gridRow.getFieldName());
 			}

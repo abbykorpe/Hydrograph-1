@@ -42,8 +42,8 @@ public enum HiveParquetDatatypeMapping {
 
 		DATE {
 			private final String TIME_STAMP = "hh:mm:ss";
-			private final String SQL_TIMESTAMP = "java.sql.TimeStamp";
-			private final String DATE_STRING = "java.util.Date";
+			private final String SQL_TIMESTAMP = "java.sql.Timestamp";
+			private final String DATE_STRING = "Date";
 
 			@Override
 			String getMapping(SchemaField schemaField,

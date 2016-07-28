@@ -29,8 +29,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.TableCursor;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellEvent;
@@ -59,6 +57,7 @@ public class FindViewDataDialog extends Dialog{
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FindViewDataDialog.class);
 	public static final int CLOSE = 9999;
+	private static final String labelText = "String Not Found";
 	private TableViewer debugDataViewer;
 	private StyledText formatedStyledText;
 	private StyledText unFormatedStyledText;
@@ -319,14 +318,14 @@ public class FindViewDataDialog extends Dialog{
 					checkPageNo();
 					if(!isTextExist(formatedStyledText, textData)){
 						clearStyledTextBgColor(formatedStyledText, textData);
-						StyledTextEventListener.INSTANCE.allButtonListener(formatedStyledText, textData, null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));  
+						StyledTextEventListener.INSTANCE.allButtonListener(formatedStyledText, textData, null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY), label);  
 					}
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
 					logger.trace("UNFORMATTED View on All--------------");
 					checkPageNo();
 					if(!isTextExist(unFormatedStyledText, textData)){
 						clearStyledTextBgColor(unFormatedStyledText, textData);
-						StyledTextEventListener.INSTANCE.allButtonListener(unFormatedStyledText, textData, null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY)); 
+						StyledTextEventListener.INSTANCE.allButtonListener(unFormatedStyledText, textData, null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY), label); 
 					}
 				}
 			}
@@ -355,7 +354,7 @@ public class FindViewDataDialog extends Dialog{
 	private void checkPageNo(){
 		if(dataViewer.getCurrentPage() != pageNo){
 			findRowIndex = 0;
-			findColIndex = 1;
+			findColIndex = 0;
 			formattedViewPrevLineIndex = 0;
 			formattedViewNextLineIndex = 0;
 			unFormattedViewPrevLineIndex = 0;
@@ -365,8 +364,11 @@ public class FindViewDataDialog extends Dialog{
 	}
 	
 	private boolean isTextExist(StyledText styledText, String text){
-		if(styledText.getText().indexOf(text, 0) < 0){
+		int textIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), 0);
+		
+		if(textIndex < 0){
 			label.setVisible(true);
+			label.setText(labelText);
 			return true;
 		}else{
 			label.setVisible(false);
@@ -378,6 +380,7 @@ public class FindViewDataDialog extends Dialog{
 		TableItem previousSelectedTableItem = null;
 		if(debugDataViewer.getData("SELECTED_ROW_INDEX")!=null){
 			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
+			findColIndex++;
 		}
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
@@ -403,7 +406,6 @@ public class FindViewDataDialog extends Dialog{
 					debugDataViewer.setData("SELECTED_ROW_INDEX", findRowIndex);
 					debugDataViewer.setData("SEELCTED_COLUMN_INDEX", findColIndex);
 					prevColSelection = findColIndex;
-					findColIndex++;
 					return;
 				}
 			}
@@ -419,12 +421,14 @@ public class FindViewDataDialog extends Dialog{
 			previousSelectedTableItem = debugDataViewer.getTable().getItem((int) debugDataViewer.getData("SELECTED_ROW_INDEX"));
 			findColIndex -= 1;
 		}
+		if(findRowIndex < 0){
+			findRowIndex = debugDataViewer.getTable().getItems().length - 1;
+		}
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
 		for(; findRowIndex >=0; findRowIndex--){
 			TableItem tableItem = tableItems[findRowIndex];
-			if(findColIndex < 0){ findColIndex = table.getColumnCount(); }
-			for( ; findColIndex >= 0 ;findColIndex--){
+			for( ; findColIndex > 0 ;findColIndex--){
 				if(StringUtils.containsIgnoreCase(tableItem.getText(findColIndex), findText.getText())){
 					if(prevColSelection > 0){
 						previousSelectedTableItem.setBackground(prevColSelection, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -445,6 +449,7 @@ public class FindViewDataDialog extends Dialog{
 				}
 				
 			}
+			if(findColIndex <= 0){ findColIndex = table.getColumnCount();}
 			if(findRowIndex == 0){ findRowIndex = tableItems.length; }
 		}
 	}
@@ -452,6 +457,7 @@ public class FindViewDataDialog extends Dialog{
 	private void selectAllInTable(TableViewer debugDataViewer, TableCursor tableCursor){
 		Table table = debugDataViewer.getTable();
 		TableItem[] tableItems = table.getItems();
+		int recordCount = 0;
 		
 		for(int rowIndex = 0; rowIndex < tableItems.length; rowIndex++){
 			TableItem tableItem = tableItems[rowIndex];
@@ -463,13 +469,20 @@ public class FindViewDataDialog extends Dialog{
 					tableCursor.setSelection(rowIndex, colIndex);
 					tableCursor.setVisible(false);
 					tableItem.setBackground(colIndex, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
+					recordCount++;
 				}
 			}
 			findColIndex=1;
 		}
 		
 		findRowIndex = 0;
-		findColIndex = 1;
+		findColIndex = 0;
+		
+		if(recordCount > 0){
+			label.setVisible(true);
+			label.setText("Matching count - " + recordCount);
+		}else{ label.setVisible(false); }
+		
 	}
 	
 	  private void clearStyledTextBgColor(StyledText styledText, String textData){
@@ -496,6 +509,7 @@ public class FindViewDataDialog extends Dialog{
 					return isDataExist;
 				}else{
 					label.setVisible(true);
+					label.setText(labelText);
 					isDataExist =  false;
 				}
 				
@@ -534,15 +548,15 @@ public class FindViewDataDialog extends Dialog{
 		GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 0, 0);
 		parent.setLayoutData(gridData);
 		
-		label=new  Label(parent, SWT.NONE);
+		label=new  Label(parent, SWT.None);
 		label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 0, 0));
-		label.setText("String Not Found");		
+		label.setText(labelText + "                ");		
 		label.setVisible(false);
 		
 		closeButton = createButton(parent, CLOSE, "Close", false);
-		closeButton.addMouseListener(new MouseListener() {
+		closeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 				clearTableItemBgColor(debugDataViewer);
 				if(debugDataViewer != null){
 					 debugDataViewer.setData("SELECTED_ROW_INDEX", null);
@@ -553,10 +567,6 @@ public class FindViewDataDialog extends Dialog{
 				clearStyledTextBgColor(unFormatedStyledText, textData);
 				close();
 			}
-			@Override
-			public void mouseDown(MouseEvent e) {}
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {}
 		});
 	}
 

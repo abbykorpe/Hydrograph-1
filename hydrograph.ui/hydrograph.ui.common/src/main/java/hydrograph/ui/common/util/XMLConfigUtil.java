@@ -34,6 +34,9 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -44,6 +47,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 
@@ -86,17 +90,23 @@ public class XMLConfigUtil {
 				JAXBContext jaxbContext = JAXBContext.newInstance(Config.class);
 				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 				String[] configFileList = getFilteredFiles(CONFIG_FILES_PATH, getFileNameFilter(Messages.XMLConfigUtil_FILE_EXTENTION));
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				dbf.setNamespaceAware(true);
+				dbf.setExpandEntityReferences(false);
+				DocumentBuilder builder = dbf.newDocumentBuilder();
 				for (int i = 0; i < configFileList.length; i++){
 					logger.trace("Creating palette component: ", configFileList[i]);
 					if(validateXMLSchema(COMPONENT_CONFIG_XSD_PATH, CONFIG_FILES_PATH + SEPARATOR + configFileList[i])){
 						
-						Config config = (Config) unmarshaller.unmarshal(new File(CONFIG_FILES_PATH + SEPARATOR + configFileList[i]));
+						Document document = builder.parse(new File(CONFIG_FILES_PATH + SEPARATOR + configFileList[i]));
+						Config config = (Config) unmarshaller.unmarshal(document);
 						componentList.addAll(config.getComponent());
+						builder.reset();
 					}
 				}
 				validateAndFillComponentConfigList(componentList);
 				return componentList;
-			}catch(JAXBException | SAXException | IOException exception){
+			}catch(JAXBException | SAXException | IOException | ParserConfigurationException exception){
 				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, "XML read failed", exception);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(exception.getMessage());
@@ -160,14 +170,23 @@ public class XMLConfigUtil {
 			try{
 				JAXBContext jaxbContext = JAXBContext.newInstance(PolicyConfig.class);
 				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+				
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				dbf.setNamespaceAware(true);
+				dbf.setExpandEntityReferences(false);
+				DocumentBuilder builder = dbf.newDocumentBuilder();
+				
 				String[] configFileList = getFilteredFiles(CONFIG_FILES_PATH + SEPARATOR + Messages.XMLConfigUtil_POLICY, getFileNameFilter(Messages.XMLConfigUtil_FILE_EXTENTION));
 				for (int i = 0; i < configFileList.length; i++) {
 					if(validateXMLSchema(POLICY_CONFIG_XSD_PATH, CONFIG_FILES_PATH + SEPARATOR + Messages.XMLConfigUtil_POLICY + SEPARATOR + configFileList[i]))	{
-						policyConfig = (PolicyConfig) unmarshaller.unmarshal(new File(CONFIG_FILES_PATH + SEPARATOR + Messages.XMLConfigUtil_POLICY + SEPARATOR + configFileList[i]));
+						Document document = builder.parse(new File(CONFIG_FILES_PATH + SEPARATOR
+								+ Messages.XMLConfigUtil_POLICY + SEPARATOR + configFileList[i]));
+						policyConfig = (PolicyConfig) unmarshaller.unmarshal(document);
+						builder.reset();
 					}
 				}
 				return policyConfig;
-			}catch(JAXBException | SAXException | IOException  exception){
+			}catch(JAXBException | SAXException | IOException | ParserConfigurationException  exception){
 				Status status = new Status(IStatus.ERROR,Activator.PLUGIN_ID, "XML read failed", exception);
 				StatusManager.getManager().handle(status, StatusManager.BLOCK);
 				logger.error(exception.getMessage());

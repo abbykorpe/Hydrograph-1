@@ -39,34 +39,6 @@ public class HydrographJobGenerator {
 	Debug debug;
 	private static Logger LOG = LoggerFactory.getLogger(HydrographJobGenerator.class);
 
-	public HydrographJob createHydrographJob(String xmlContent) throws JAXBException {
-
-		context = JAXBContext.newInstance(Graph.class);
-
-		unmarshaller = context.createUnmarshaller();
-
-		graph = (Graph) unmarshaller.unmarshal(new StringReader(xmlContent));
-
-		HydrographJob hydrographJob = new HydrographJob(graph);
-
-		return hydrographJob;
-
-	}
-
-	public HydrographDebugInfo createHydrographDebugInfo(String xmlContent) throws JAXBException {
-
-		context = JAXBContext.newInstance(Debug.class);
-
-		unmarshaller = context.createUnmarshaller();
-
-		debug = (Debug) unmarshaller.unmarshal(new StringReader(xmlContent));
-
-		HydrographDebugInfo hydrographDebugInfo = new HydrographDebugInfo(debug);
-
-		return hydrographDebugInfo;
-
-	}
-
 	/**
 	 * Creates the object of type {@link HydrographJob} from the graph xml of type
 	 * {@link Document}.

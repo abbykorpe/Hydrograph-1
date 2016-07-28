@@ -249,8 +249,13 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			while ((line = reader.readLine()) != null) {
 
 				if (line.contains(Messages.CURRENT_JOB_ID)) {
-					job.setRemoteJobProcessID((line.split("#")[1]).trim());
-					((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
+					try {
+						Long.parseLong((line.split("#")[1]).trim());
+						job.setRemoteJobProcessID((line.split("#")[1]).trim());
+						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
+					} catch (NumberFormatException e) {
+						logger.warn("Exception while setting Remote job processId- " + line.split("#")[1].trim(), e);
+					}
 				}
 
 				if (line.contains(Messages.GRADLE_TASK_FAILED)) {

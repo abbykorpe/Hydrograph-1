@@ -48,6 +48,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -67,6 +68,7 @@ public class TransformWidget extends AbstractWidget {
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private TransformMapping transformMapping;
 	private List<AbstractWidget> widgets;
+	private List<FilterProperties> outputList;
 	/**
 	 * Instantiates a new ELT operation class widget.
 	 * 
@@ -122,7 +124,7 @@ public class TransformWidget extends AbstractWidget {
 				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping);
 				
 				transformDialog.open();
-
+                outputList = transformDialog.getValidatorOutputFields();
 				if(transformDialog.isCancelPressed())
 				{
 					transformMapping=oldATMappings;
@@ -172,10 +174,6 @@ public class TransformWidget extends AbstractWidget {
 			operationFieldList.addAll(operationFields);
 			addOperationFieldsToSchema(operationFields);
 		}
-
-
-
-
 		List<String> passThroughFields = getPassThroughFields(transformMapping.getMapAndPassthroughField());
 		Map<String, String> mapFields = getMapFields(transformMapping.getMapAndPassthroughField());
 		finalMapFields.putAll(mapFields);
@@ -188,6 +186,30 @@ public class TransformWidget extends AbstractWidget {
 		for(FilterProperties f:operationFieldList)
 		{	
 			getOperationFieldList().add(f.getPropertyname());
+			
+		}
+		if(outputList!=null)
+		{
+			
+		 List<GridRow> sortedList=new ArrayList<>();
+		 GridRow gridRowTemp = null;
+		 for(int i=0;i<outputList.size();i++)
+		 {
+			 for(GridRow gridRow:getSchemaForInternalPropagation().getGridRow())
+			 {
+				 if(StringUtils.equals(gridRow.getFieldName(), outputList.get(i).getPropertyname()))
+				 {
+					 gridRowTemp=gridRow;
+					 break;
+				 }
+				 
+			 }
+			 if(gridRowTemp!=null)
+			 sortedList.add(gridRowTemp);
+		 } 
+		 getSchemaForInternalPropagation().getGridRow().clear();
+		 getSchemaForInternalPropagation().getGridRow().addAll(sortedList);
+		 sortedList.clear();
 		}
 	}
 

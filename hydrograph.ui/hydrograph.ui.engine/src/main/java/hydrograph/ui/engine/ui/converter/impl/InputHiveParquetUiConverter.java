@@ -120,6 +120,7 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 		List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
 
 		HivePartitionFilterType hivePartitionFilterType=parquetHive.getPartitionFilter();
+                if(hivePartitionFilterType!=null){
 		List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
 
 		if(partitionColumn!=null)
@@ -138,7 +139,7 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 			
 		}
 		property.put(list.get(0),inputHivePartitionColumn);
-		
+		}
 		return property;
 		
 	}

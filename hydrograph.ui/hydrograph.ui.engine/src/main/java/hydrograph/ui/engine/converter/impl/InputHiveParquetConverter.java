@@ -45,12 +45,13 @@ import org.slf4j.Logger;
 /**
  * Converter implementation for Input Hive Parquet component
  * 
- * @author eyy445 
+ * @author Bitwise
  */
 public class InputHiveParquetConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveParquetConverter.class);
 	Iterator itr;
+	ParquetHiveFile parquetHive;
 
 	public InputHiveParquetConverter(Component component) {
 		super(component);
@@ -63,7 +64,7 @@ public class InputHiveParquetConverter extends InputConverter {
 	public void prepareForXML(){
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		ParquetHiveFile parquetHive = (ParquetHiveFile) baseComponent;
+		parquetHive = (ParquetHiveFile) baseComponent;
 		parquetHive.setRuntimeProperties(getRuntimeProperties());
 
 		parquetHive.setDatabaseName(getHiveType(PropertyNameConstants.DATABASE_NAME.value()));
@@ -74,17 +75,25 @@ public class InputHiveParquetConverter extends InputConverter {
 			parquetHive.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		parquetHive.setPartitionKeys(getPartitionKeys());
-		parquetHive.setPartitionFilter(getPartitionFilter());
-		
+		checkPartitionFilter();
 	}
 	
-	private HivePartitionFilterType getPartitionFilter(){
+	private void checkPartitionFilter()
+	{
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
 			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
 			List<String> fieldValueSet = new ArrayList<String>();
 			fieldValueSet.addAll(property.keySet());
-			
-			List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
+				if(!fieldValueSet.isEmpty()){
+					List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
+						if(!inputHivePartitionColumn.isEmpty()){
+							parquetHive.setPartitionFilter(getPartitionFilter(inputHivePartitionColumn));
+						}
+				}
+			}
+	}
+	
+	private HivePartitionFilterType getPartitionFilter(List<InputHivePartitionColumn> inputHivePartitionColumn){
 			HivePartitionFilterType hivePartitionFilterType = new HivePartitionFilterType();
 			List<PartitionColumn> partitionColumn = hivePartitionFilterType.getPartitionColumn();
 			
@@ -101,21 +110,21 @@ public class InputHiveParquetConverter extends InputConverter {
 				}
 			}
 			return hivePartitionFilterType;
-		}
-		return null;
 	}
 	
 	private void  addPartitionColumn(InputHivePartitionColumn partcol,PartitionColumn pcol){
 		InputHivePartitionColumn partitionColumn_rec=partcol.getInputHivePartitionColumn();
 		PartitionColumn partc = new PartitionColumn();
-		
+		if(StringUtils.isNotBlank(partitionColumn_rec.getValue()))
+		{
 		partc.setName(partitionColumn_rec.getName());
 		partc.setValue(partitionColumn_rec.getValue());
 		pcol.setPartitionColumn(partc);
 		if(partitionColumn_rec.getInputHivePartitionColumn()!=null){
-			if(partitionColumn_rec.getInputHivePartitionColumn().getValue()!=""){
+			if(StringUtils.isNotBlank(partitionColumn_rec.getInputHivePartitionColumn().getValue())){
 				addPartitionColumn(partitionColumn_rec,partc);
 			}
+		}
 		}
 	}
 	

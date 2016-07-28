@@ -303,7 +303,6 @@ public class DebugDataViewer extends ApplicationWindow {
 				
 				DataViewerFileManager dataViewerFileManager = new DataViewerFileManager(jobDetails);
 				final StatusMessage statusMessage = dataViewerFileManager.downloadDataViewerFiles(filterApplied,getConditions(),isOverWritten);
-				setOverWritten(false);
 
 
 				if (StatusConstants.ERROR == statusMessage.getReturnCode()) {
@@ -1323,13 +1322,14 @@ public class DebugDataViewer extends ApplicationWindow {
 					int columnIndex=(int) e.widget.getData(Views.COLUMN_ID_KEY);
 					String columnDataType=dataViewerFileSchema.getField().get(columnIndex).getType().value();
 					String dateFormat = dataViewerFileSchema.getField().get(columnIndex).getFormat();
+					int originalColumnIndex=(int)dataViewerAdapter.getAllColumnsMap().get(tableViewerColumn.getColumn().getText());
 					
 					if(sortOrder==null || SortOrder.ASC == sortOrder){
-						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.DSC, columnIndex, getSortType(columnDataType), dateFormat));
+						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.DSC, originalColumnIndex, getSortType(columnDataType), dateFormat));
 						sortOrder=SortOrder.DSC;
 						((TableColumn)e.widget).setImage(descending);
 					}else{
-						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.ASC, columnIndex, getSortType(columnDataType), dateFormat));
+						Collections.sort(gridViewData,new TypeBasedComparator(SortOrder.ASC, originalColumnIndex, getSortType(columnDataType), dateFormat));
 						sortOrder=SortOrder.ASC;
 						((TableColumn)e.widget).setImage(ascending);
 					}
@@ -1761,6 +1761,14 @@ public class DebugDataViewer extends ApplicationWindow {
 	 */
 	public TableCursor getTablecursor(){
 		return tableCursor;
+	}
+	/**
+	 * clear jumpTo text while applying filter.
+	 */
+	public void clearJumpToText(){
+		
+		statusManager.clearJumpToPageText();
+		
 	}
 }
 

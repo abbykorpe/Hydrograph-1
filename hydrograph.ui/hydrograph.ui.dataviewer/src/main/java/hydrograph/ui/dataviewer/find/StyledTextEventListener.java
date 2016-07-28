@@ -21,6 +21,7 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 
 
@@ -105,10 +106,11 @@ public class StyledTextEventListener {
 	 * @param foreground
 	 * @param background
 	 */
-	public void allButtonListener(StyledText styledText, String text, Color foreground, Color background){
+	public void allButtonListener(StyledText styledText, String text, Color foreground, Color background, Label label){
 		logger.debug("StyledText All button selected");
-		if(styledText == null){return;}
 		int index = 0;
+		int recordCount = 0;
+		if(styledText == null){return;}
 		for(;index < styledText.getText().length();){
 			  int lastIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), index);
 			  
@@ -116,6 +118,9 @@ public class StyledTextEventListener {
 			  else{
 				  setStyledRange(styledText, lastIndex, text.length(), null, background);
 				  index = lastIndex + 1;
+				  recordCount++ ;
+				  label.setVisible(true);
+				  label.setText("Matching count - " + recordCount);
 			  }
 		  }
 	}

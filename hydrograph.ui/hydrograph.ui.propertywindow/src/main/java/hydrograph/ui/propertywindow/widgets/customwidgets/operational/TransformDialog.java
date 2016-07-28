@@ -164,7 +164,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Integer windowButtonHeight = 25;
 	private Integer macButtonWidth = 40;
 	private Integer macButtonHeight = 30;
-	
+	private List<FilterProperties> validatorOutputFields;
 	
 	public TransformDialog(Shell parentShell, Component component, WidgetConfig widgetConfig, TransformMapping atMapping) {
 
@@ -1065,7 +1065,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	public void refreshOutputTable() {
 		  
-		List<FilterProperties> validatorOutputFields = new ArrayList<>();
+		validatorOutputFields = new ArrayList<>();
 		
 		  for (Map.Entry<String, List<FilterProperties>> entry: temporaryOutputFieldMap.entrySet()) {
 			  for(FilterProperties filterproperty :entry.getValue())
@@ -1085,14 +1085,13 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}
 		temporaryOutputFieldMap.put(OUTPUT_FIELD,transformMapping.getOutputFieldList());
 
-		SchemaSyncUtility.INSTANCE.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
-				validatorOutputFields);
+		
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
 			List<FilterProperties> operationOutputFieldList=mappingSheetRow1.getOutputList();
 			List<FilterProperties> nonParameterOutputFieldList=new ArrayList<>();  
             for(FilterProperties filterProperties : operationOutputFieldList)
             {
-                  if(!ParameterUtil.isParameter(filterProperties.getPropertyname()))
+                  if(!ParameterUtil.isParameter(filterProperties.getPropertyname()) && StringUtils.isNotBlank(filterProperties.getPropertyname()))
                 	  nonParameterOutputFieldList.add(filterProperties);
                  
             } 
@@ -1100,16 +1099,16 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		}
 		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
-		
+		SchemaSyncUtility.INSTANCE.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
+				validatorOutputFields);
 		outputFieldViewer.setInput(validatorOutputFields);
 		outputFieldViewer.refresh();
 		mappingTableViewer.refresh();
 	}
-
-	
-	
-	
-	
+  
+	public List<FilterProperties> getValidatorOutputFields() {
+		return validatorOutputFields;
+	}
 
 	public Map<String,List<String>> getDuplicateOutputFieldMap(Map<String,List<FilterProperties> > temporaryOutputFieldListTemp) {
 		

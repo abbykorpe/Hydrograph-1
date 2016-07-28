@@ -177,6 +177,7 @@ public class Messages extends NLS {
 	public static String SCALETYPE_MUST_NOT_BE_NONE;
 	public static String SCALE_SHOULD_BE_POSITIVE_INTEGER;
 	public static String SCALE_MUST_NOT_BE_BLANK;
+	public static String SCALE_MUST_CONTAINS_NUMBER_ONLY_0_9;
 	public static String PRECISION_MUST_CONTAINS_NUMBER_ONLY_0_9;
 	public static String PRECISION_MUST_NOT_BE_BLANK;
 	public static String DATE_FORMAT_MUST_NOT_BE_BLANK;
@@ -186,6 +187,7 @@ public class Messages extends NLS {
 	public static String ONLY_SPECIFY_LENGTH_OR_DELIMITER;
 	public static String LENGTH_SHOULD_NOT_BE_ZERO;
 	public static String MAPPING_WINDOW_DUPLICATE_FIELD;
+	public static String SCALE_MUST_BE_LESS_THAN_PRECISION;
 	
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;

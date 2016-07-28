@@ -2,6 +2,8 @@
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
+1.   <22-jul-16> [Sonia Raheja]   - Added Between operator support on fields of data viewer.
+2.   <25-jul-16> [Vibhor Tyagi]   - Find: If user search for any text or string then find window should display count of the text/string matches in the current filter window.
 
 =====================================================================================================
 Issues/Defects fixed:
@@ -10,6 +12,34 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 1.#..   [Ashika Holkar] One should be able to copy the Content displayed on dataset information window
 2.#..   [Rahul Mahajan] Alignment fix on Run Configurations Settings window
 3.#863  [Shrirang Kumbhar] Debug service not responding when user tries to fetch data multiple times 
+4.#..   [Sonia Raheja] The Records information shown at the bottom of the data viewer window should be updated to display actual page size when its less than
+		the one defined in preferences. This will probably happen on the last page of the result or when filter result returns records less than page size
+5.#...  [Vibhor Tyagi] MAC & Windows :Find Window Default Focus is not Set Properly
+6.#..   [Vibhor Tagi] MAC: Debug Service Need to Kill Implicitly When Tool is Closed/ Job Closed
+7.#797  [Nitin Gupta] Select Column: Sort Icon on Select Column Window is Not Properly Visible
+8.#873  [Prateem Tadas] Filter Window: OK Button is not getting enabled as validation call is not getting genrated if user add few rows in the downloaded Dataset and then delete them and add valid data filter window
+9.#875  [Shrirang Kumbhar]	Data Viewer Window: "Unable to fetch debug files" error window is getting displayed when user tries to run job in debug mode and click on cancel button located on Parameter file dialog window
+10.#807 [Shrirang Kumbhar] Data Viewer: Data Viewer Window is Getting Closed on Job Re-run Event of Different Job  
+11.#..  [Vibhor Tyagi] MAC: Debug Service Need to Kill Implicitly When Tool is Closed/ Job Closed
+12.#864 [Vibhor Tyagi] Find: Find action is getting called when user keep clicking TAB from keyboard on data viewer window
+13.#826 [Akhilesh Joshi/Shrirang Kumbhar] View Data :Issue Reading Data from CSV and Display on Data Viewer 
+14.#878 [Vibhor Tyagi] Find Window(View Data): Expected Functionality of the Button Not Met When Focus has Been Shifted to Other Button And Hitting 'Enter' key 
+15.#862 [Vibhor Tyagi] Find : User needs to click Previous button two times after clicking next button
+16.#732 [Vibhor Tyagi] View Data Filter: Search Values are Getting Skipped When User Switch to Other Page
+17.#898 [Rakesh Kanchalwar] Data Viewer : Filter : Getting "Argument can not be null" error message when user enter garbage value in field name, conditional operator and then try to delete same row
+18.#890 [Rushikesh Pawale] Import Engine XML feature not working
+19.#891 [Rushikesh Pawale] Hive partitionFilter feature getting considered as mandatory
+20.#826 [Akhilesh Joshi/Shrirang Kumbhar] View Data :Issue Reading Data from CSV and Display on Data Viewer
+21.#..  [Akhilesh Joshi] •	When we apply filter on Downloaded Dataset after applying filter on Original Dataset, and if we open dataset info window, under filter 
+		section it shows only recent filter i.e. Downloaded Dataset filter. Expected behavior is- dataset info window should display all the
+		 filters that are currently active on data viewer window
+22.#885 [Kalyan Rajpoot] Vertical scroll bar not present in schema structure details for Input file components
+23.#..  [Akhilesh Joshi] Sort issue with selected columns		 
+24.#901 [Prateem Tadas] Downloaded Dataset Filter: Records not Shown in View Data on Filtering Data 
+25.#925 [Vibhor Tyagi]  Find Functionality: Focus is not shifting to the respective cell when user clicks on previous button
+26.#880 [Sonia Raheja]Data viewer window: Invalid messgae for the page count is getting displayed if fiter data set is not matched with data viewer window data
+27.#897 [Sonia Raheja]Filter: Record Count Range is Not Showed Properly On Filtering the Records
+28.#930 [Vibhor Tyagi]  Select Columns: Sorting Icon is Getting Changed When There is No Field Present in All Columns/Selected Columns
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

@@ -233,6 +233,9 @@ public class JoinConverter extends TransformConverter {
 				for (LookupMapProperty lookupMapProperty : lookupMapProperties) {
 					
 					if(!ParameterUtil.isParameter(lookupMapProperty.getSource_Field())){
+						if(lookupMapProperty.getSource_Field()==null){
+							continue;
+						}
 						String[] sourceNameValue = lookupMapProperty.getSource_Field().split(Pattern.quote("."));
 
 						if(sourceNameValue.length == 2){

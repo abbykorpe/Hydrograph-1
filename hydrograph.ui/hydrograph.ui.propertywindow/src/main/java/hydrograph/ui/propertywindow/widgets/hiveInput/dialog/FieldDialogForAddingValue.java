@@ -366,10 +366,30 @@ public class FieldDialogForAddingValue extends Dialog {
 			}
 		} 
 		
+		checkAndAdjustRowsColumns(fieldsDialogList,fieldsMap.keySet());
+		
 		return fieldsDialogList;
 	}
 	
-	
+	private void checkAndAdjustRowsColumns(List<HivePartitionFields> incomingList,Set<String> keySet)
+	{
+		
+		for(HivePartitionFields rowFields: incomingList){
+			
+			if(keySet.size()!=rowFields.getRowFields().size()){
+				
+			int tempDiff=keySet.size()-rowFields.getRowFields().size();
+			
+				for(int i=0;i<tempDiff;i++){
+					
+					rowFields.getRowFields().add("");
+				}
+				
+			}
+		}		
+			
+		
+	}
 	
 	private List<String> checkIfNewColumnAdded(Set<String> columnNames,Set<String> keySet) {
 		

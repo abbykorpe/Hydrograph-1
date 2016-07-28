@@ -1038,8 +1038,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
+		String jobId = getActiveProject() + "." + getJobName();
+		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE.getPreviouslyExecutedJobs().get(jobId));
 		
-		DataViewerUtility.INSTANCE.closeDataViewerWindows();		
 		deleteDebugFiles();
 		
 		Map<String, String> currentParameterMap = getCurrentParameterMap();
@@ -1221,25 +1222,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
 		
-		DataViewerUtility.INSTANCE.closeDataViewerWindows();
-		
+		String jobId = getActiveProject() + "." + getJobName();
+		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE
+				.getPreviouslyExecutedJobs().get(jobId));
+
 		deleteDebugFiles();
 		enableRunningJobResource() ;
-		closeSocket();
 	}
-	
-	private void closeSocket()  {
-        int portPID;
-        try {
-              portPID = Integer.parseInt(DebugHelper.INSTANCE.getServicePortPID());
-              DebugHelper.INSTANCE.killPortProcess(portPID);
-        } catch (NumberFormatException e) {
-              logger.debug("Socket id is not correct");
-        } catch (IOException e) {
-              logger.debug("Socket is not closed.");
-        }
-  }
-
 	
 	private void deleteDebugFiles() {
 		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");

@@ -14,10 +14,12 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class JoinMappingValidationRule implements IValidator{
 
+	private static final String INPUT_PORT0_ID = "in0";
+	private static final String INPUT_PORT1_ID = "in1";
 	private String errorMessage;
 	
 	@Override
@@ -82,11 +86,46 @@ public class JoinMappingValidationRule implements IValidator{
 			}
 		}
 		
+		if(hasInvalidInputFields(getAllInputFieldNames(lookupInputProperties), lookupMapProperties)){
+			errorMessage = "Invalid input fields in join mapping";
+			return false;
+		}
+		
 		return true;
 	}
 
 	@Override
 	public String getErrorMessage() {
 		return errorMessage;
+	}
+	
+	private List<String> getAllInputFieldNames(List<List<FilterProperties>> lookupInputProperties){
+		List<FilterProperties> in0FieldList=lookupInputProperties.get(0);
+		List<FilterProperties> in1FieldList=lookupInputProperties.get(1);
+		
+		List<String> inputFieldList = new LinkedList<>();
+		
+		
+		for(FilterProperties in0Field: in0FieldList){
+			inputFieldList.add(INPUT_PORT0_ID + "."
+							+ in0Field.getPropertyname());
+		}
+		
+		for(FilterProperties in1Field: in1FieldList){
+			inputFieldList.add(INPUT_PORT1_ID + "."
+					+ in1Field.getPropertyname());
+		}
+		
+		return inputFieldList;
+	}
+	
+	private boolean hasInvalidInputFields(List<String> allInputFields,List<LookupMapProperty> mappingTableItemList){
+		for(LookupMapProperty mapRow: mappingTableItemList){
+			if (!allInputFields.contains(mapRow
+					.getSource_Field()) && !ParameterUtil.isParameter(mapRow.getSource_Field())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
