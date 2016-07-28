@@ -1318,6 +1318,10 @@ public class DebugDataViewer extends ApplicationWindow {
 					
 					if(recentlySortedColumn!=null && !recentlySortedColumn.isDisposed()){
 						recentlySortedColumn.setImage(null);
+						//Code to sort each column in ASC order on first column click
+						if(!StringUtils.equals(recentlySortedColumn.getText(), ((TableColumn)e.widget).getText())){
+							sortOrder=SortOrder.DSC;
+						}
 					}
 					
 					int columnIndex=(int) e.widget.getData(Views.COLUMN_ID_KEY);
