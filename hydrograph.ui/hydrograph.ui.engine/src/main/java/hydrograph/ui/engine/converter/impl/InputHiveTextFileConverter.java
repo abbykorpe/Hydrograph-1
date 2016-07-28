@@ -17,11 +17,8 @@ package hydrograph.ui.engine.converter.impl;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFieldsType;
-import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
 import hydrograph.engine.jaxb.ihivetextfile.HivePathType;
 import hydrograph.engine.jaxb.ihivetextfile.HiveType;
-import hydrograph.engine.jaxb.ihivetextfile.PartitionColumn;
-import hydrograph.engine.jaxb.ihivetextfile.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextDelimitedOutSocket;
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.ui.common.util.Constants;
@@ -141,7 +138,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 		}
 		
 	}
-	
+
 	/*
 	 * returns hiveType
 	 */
@@ -174,6 +171,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 		return null;
 	}
 	
+<<<<<<< HEAD
 	/*
 	 * returns HivePartitionFieldsType
 	 */
@@ -216,6 +214,44 @@ public class InputHiveTextFileConverter extends InputConverter {
 			addPartitionKey(field);
 			}
 	}
+=======
+//	/*
+//	 * returns HivePartitionFieldsType
+//	 */
+//	private HivePartitionFieldsType getPartitionKeys(){
+//		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null)
+//		{
+//			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+//			Set<String> fieldValueSet = new HashSet<String>();
+//			fieldValueSet=(Set<String>) property.keySet();
+//			
+//			HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
+//			PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();
+//			hivePartitionFieldsType.setField(partitionFieldBasicType);
+//	
+//			if (fieldValueSet != null){
+//				itr = fieldValueSet.iterator(); 
+//					if(itr.hasNext()){
+//					partitionFieldBasicType.setName((String)itr.next());
+//					}
+//					if(itr.hasNext()){
+//					addPartitionKey(partitionFieldBasicType);
+//					}
+//			}
+//			return hivePartitionFieldsType;
+//		}
+//		return null;
+//	}
+//	
+//	private void addPartitionKey(PartitionFieldBasicType partfbasic){
+//		PartitionFieldBasicType field = new PartitionFieldBasicType();
+//		field.setName((String)itr.next());
+//		partfbasic.setField(field);
+//			if(itr.hasNext()){
+//			addPartitionKey(field);
+//			}
+//	}
+>>>>>>> Temporary commented code for removing errors: 
 	
 	@Override
 	protected List<TypeInputOutSocket> getInOutSocket() {
