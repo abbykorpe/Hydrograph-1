@@ -68,8 +68,8 @@ public class FilterUiConverter extends TransformUiConverter{
 	private OperationClassProperty getOperationClass() {
 		OperationClassProperty operationClassProperty=null;
 		String clazz=null;
-		if(filter.getOperation()!=null && filter.getOperation().size()!=0){
-			clazz=filter.getOperation().get(0).getClazz();
+		if(filter.getOperationOrExpression()!=null && filter.getOperationOrExpression().size()!=0){
+//			clazz=filter.getOperationOrExpression().get(0).getClazz();
 			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.isParameter(clazz));
 		}
 		return operationClassProperty;
@@ -79,13 +79,15 @@ public class FilterUiConverter extends TransformUiConverter{
 	private List<String> getOperationFileds() {
 		List<String> componentOperationFileds=null;
 		
-			for(TypeTransformOperation transformOperation:filter.getOperation())
-			{	if(transformOperation.getInputFields()!=null){
+			for(Object object:filter.getOperationOrExpression()){
+			if(object instanceof TypeTransformOperation){
+				TypeTransformOperation transformOperation=(TypeTransformOperation) object;
+				if(transformOperation.getInputFields()!=null){
 					componentOperationFileds=new ArrayList<>();
 						for(TypeInputField inputFileds:transformOperation.getInputFields().getField()){
 							componentOperationFileds.add(inputFileds.getName());
 				}
-			}}
+			}}}
 			return componentOperationFileds;
 	}
 	

@@ -58,7 +58,7 @@ public class FilterConverter extends TransformConverter {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Filter filter = (Filter) baseComponent;
-		filter.getOperation().addAll(getOperations());
+		filter.getOperationOrExpression().addAll(getOperations());
 	}
 
 	@Override

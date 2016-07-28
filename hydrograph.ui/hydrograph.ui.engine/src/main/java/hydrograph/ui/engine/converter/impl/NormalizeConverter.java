@@ -74,7 +74,7 @@ public class NormalizeConverter extends TransformConverter {
 		super.prepareForXML();
 
 		Normalize normalize = (Normalize) baseComponent;
-		normalize.getOperation().addAll(getOperations());
+		normalize.getOperationOrExpression().addAll(getOperations());
 	}
 
 	@Override

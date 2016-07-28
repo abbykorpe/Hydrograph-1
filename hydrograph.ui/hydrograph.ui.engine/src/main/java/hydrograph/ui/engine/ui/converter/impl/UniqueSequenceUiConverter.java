@@ -68,8 +68,8 @@ public class UniqueSequenceUiConverter extends TransformUiConverter {
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
 				uiComponent.engageOutputPort(outSocket.getId());
-				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null)
-					for (Object outSocketProperties : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+				if (outSocket.getPassThroughFieldOrOperationFieldOrExpressionField() != null)
+					for (Object outSocketProperties : outSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 						if (((TypeOperationField.class).isAssignableFrom(outSocketProperties.getClass()))) {
 							newFieldName = ((TypeOperationField) outSocketProperties).getName();
 							createComponentOutputSchemaForPropagation(newFieldName);

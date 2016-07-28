@@ -173,7 +173,7 @@ public class LookupConverter extends TransformConverter {
 			outSocket.getOtherAttributes();
 			outSockectList.add(outSocket);
 			if (properties.get(Constants.LOOKUP_MAP_FIELD) != null)
-				outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(
+				outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(
 						converterHelper.getLookuporJoinOutputMaping(lookupPropertyGrid));
 
 		}

@@ -147,7 +147,7 @@ public class JoinConverter extends TransformConverter {
 					outSocket.setId(link.getSourceTerminal());
 					outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 					outSocketList.add(outSocket);
-					outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(
+					outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(
 							getLookupOrJoinOutputMapping(joinupPropertyGrid));
 				} else {
 					if (joinMappingGrid != null) {
