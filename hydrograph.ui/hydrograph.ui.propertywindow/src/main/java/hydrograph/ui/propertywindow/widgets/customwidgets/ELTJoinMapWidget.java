@@ -175,12 +175,18 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	private boolean isSyncRequired() {
 		Schema schema = (Schema) getComponent().getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 		
-		if(schema==null){
+		
+		List<String> joinOutputFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(getSchemaForInternalPropagation().getGridRow());
+		if(schema==null && joinOutputFieldList.size()!=0){
 			return true;
 		}
 		
+		if(schema==null && joinOutputFieldList.size()==0){
+			return false;
+		}
+		
 		List<String> schemaFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(schema.getGridRow());
-		List<String> joinOutputFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(getSchemaForInternalPropagation().getGridRow());
+		
 		
 		if(schemaFieldList == null && joinOutputFieldList == null){
 			return false;
