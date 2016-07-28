@@ -47,6 +47,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 32.#911 [Shrirang Kumbhar] Join Component: Mappings Are Getting Blank on "Pull Schema" and NullPointer Exception Thrown On Re-pulling the Schema in Join Mapping Dialog
 33.#895 [Shrirang Kumbhar] Join Schema: Schema Sequence is Getting Changed on Pull Schema/Auto Sync If There is Any Change in Schema or Mapping
 34..... [Shrirang Kumbhar] Fixed multiple internal schema sync issues with Lookup and join
+35.#949 [Vibhor Tyagi] Import XML: Job is Getting Failed Due to cvc-enumeration Issue in Lookup Component 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
