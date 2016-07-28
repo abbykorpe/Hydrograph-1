@@ -1122,7 +1122,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		}
 		//temporaryOutputFieldMap.put(OUTPUT_FIELD,transformMapping.getOutputFieldList());
-
+		
 		
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
 			List<FilterProperties> operationOutputFieldList=mappingSheetRow1.getOutputList();
@@ -1139,12 +1139,44 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
 		SchemaSyncUtility.INSTANCE.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
 				validatorOutputFields);
+		backwardJobComapatabilityCode();   
 		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), finalSortedList);
-	   outputFieldViewer.setInput(finalSortedList);
+	    outputFieldViewer.setInput(finalSortedList);
 		outputFieldViewer.refresh();
 		mappingTableViewer.refresh();
 	}
-
+    private void backwardJobComapatabilityCode()
+    {
+    	boolean isJobOld = false;
+    	for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+    	{
+    		if(nameValueProperty.getAttachFilterProperty()==null)
+    		{
+    			isJobOld=true;
+    			break;
+    		}	
+    	}
+    	if(isJobOld)
+    	{
+    		for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
+    		{
+    		transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
+    		}
+    		List<NameValueProperty> tempNameValuePropertyList=new ArrayList<>();
+    		for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+    		{
+    			NameValueProperty newNameValueProperty=new NameValueProperty();
+    			newNameValueProperty.setPropertyName(nameValueProperty.getPropertyName());
+    			newNameValueProperty.setPropertyValue(nameValueProperty.getPropertyValue());
+    			newNameValueProperty.getAttachFilterProperty().setPropertyname(nameValueProperty.getPropertyValue());
+    			tempNameValuePropertyList.add(newNameValueProperty);
+    			transformMapping.getOutputFieldList().add(newNameValueProperty.getAttachFilterProperty());
+    		}	
+    		transformMapping.getMapAndPassthroughField().clear();
+    		transformMapping.getMapAndPassthroughField().addAll(tempNameValuePropertyList);
+    		tempNameValuePropertyList.clear();
+    	}	
+    }
 	public List<FilterProperties> getFinalSortedList() {
 		return finalSortedList;
 	}
@@ -1589,7 +1621,27 @@ private void addFocusListenerToOperationIdTextBox(String currentId,Text operatio
 	 * Sync transform fields with outer schema.
 	 */
 	private void syncTransformFieldsWithSchema() {
+		
 		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
+		if(filterProperties.isEmpty())
+		{
+			
+			transformMapping.getOutputFieldList().clear();
+			for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
+			{
+				mappingSheetRow.getOutputList().clear();
+			}
+			for(ExpandItem item:expandBar.getItems())
+			{
+				TableViewer t=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
+				t.refresh();
+			}
+			transformMapping.getMapAndPassthroughField().clear();
+			mappingTableViewer.refresh();
+			finalSortedList.clear();
+			outputFieldViewer.refresh();
+			return;
+		}
 		List<FilterProperties> finalSortedList=new ArrayList<>();
 		SchemaSyncUtility.INSTANCE.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
 		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
@@ -1650,6 +1702,8 @@ private void addFocusListenerToOperationIdTextBox(String currentId,Text operatio
 	private List<FilterProperties> convertSchemaToFilterProperty(){
 		List<FilterProperties> outputFileds = new ArrayList<>();
 		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		    if(schema==null)
+			 return outputFileds;  
 			for (GridRow gridRow : schema.getGridRow()) {
 				FilterProperties filterProperty = new FilterProperties();
 				filterProperty.setPropertyname(gridRow.getFieldName());
