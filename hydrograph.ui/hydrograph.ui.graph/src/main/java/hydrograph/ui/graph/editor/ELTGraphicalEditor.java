@@ -872,9 +872,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		try {
 			if(container!=null)
-				ConverterUtil.INSTANCE.convertToXML(container, true, null, null);
+				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 			else
-				ConverterUtil.INSTANCE.convertToXML(this.container, true, null, null);
+				ConverterUtil.INSTANCE.convertToXML(this.container, false, null, null);
 		firePropertyChange(PROP_DIRTY);
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
@@ -1083,7 +1083,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 		try {
 			if(container!=null)
-				ConverterUtil.INSTANCE.convertToXML(container, true, null, null);
+				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 			else
 				ConverterUtil.INSTANCE.convertToXML(this.container, true, null, null);		
 			if(file!=null){

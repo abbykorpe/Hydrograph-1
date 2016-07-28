@@ -120,7 +120,7 @@ public class SubJobUtility {
 	public IFile doSaveAsSubJob(IFile file, Container container) {
 
 		try {
-			ConverterUtil.INSTANCE.convertToXML(container, true, null, null);
+			ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 		
 			if (file != null) {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
