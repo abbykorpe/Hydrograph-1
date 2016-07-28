@@ -131,14 +131,13 @@ public class JoinMappingValidationRule implements IValidator{
 	private boolean isOutputFieldInvalid(List<LookupMapProperty> mappingTableItemList){
 		List<String> outputFieldList = new ArrayList<>();
 		for(LookupMapProperty mapRow: mappingTableItemList){
-			outputFieldList.add(mapRow.getOutput_Field());
-		}
-		
-		for(LookupMapProperty mapRow: mappingTableItemList){
-			if(Collections.frequency(outputFieldList, mapRow.getOutput_Field()) > 1){
+			if(outputFieldList.contains(mapRow.getOutput_Field())){
 				return true;
+			}else{
+				outputFieldList.add(mapRow.getOutput_Field());
 			}
 		}
+		
 		return false;
 	}
 }

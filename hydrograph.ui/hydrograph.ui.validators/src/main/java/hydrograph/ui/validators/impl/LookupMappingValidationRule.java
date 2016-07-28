@@ -14,6 +14,7 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
@@ -54,11 +55,11 @@ public class LookupMappingValidationRule implements IValidator{
 		List<LookupMapProperty> lookupMapProperties = lookupMappingGrid.getLookupMapProperties();
 		if(lookupInputProperties == null || 
 				lookupInputProperties.isEmpty() || lookupInputProperties.size() < 2){
-			errorMessage = "Invalid input for join component"; 
+			errorMessage = "Invalid input for lookup component"; 
 			return false;
 		}
 		if(lookupMapProperties == null || lookupMapProperties.isEmpty()){
-			errorMessage = "Invalid output from join component"; 
+			errorMessage = "Invalid output from lookup component"; 
 			return false;
 		}
 		
@@ -122,7 +123,7 @@ public class LookupMappingValidationRule implements IValidator{
 	
 	private boolean isInputFieldInvalid(List<String> allInputFields,List<LookupMapProperty> mappingTableItemList){
 		for(LookupMapProperty mapRow: mappingTableItemList){
-			if (!allInputFields.contains(mapRow.getSource_Field()) ) {
+			if (!allInputFields.contains(mapRow.getSource_Field()) && !ParameterUtil.isParameter(mapRow.getSource_Field())) {
 				return true;
 			}
 		}
@@ -132,12 +133,10 @@ public class LookupMappingValidationRule implements IValidator{
 	private boolean isOutputFieldInvalid(List<LookupMapProperty> mappingTableItemList){
 		List<String> outputFieldList = new ArrayList<>();
 		for(LookupMapProperty mapRow: mappingTableItemList){
-			outputFieldList.add(mapRow.getOutput_Field());
-		}
-		
-		for(LookupMapProperty mapRow: mappingTableItemList){
-			if(Collections.frequency(outputFieldList, mapRow.getOutput_Field()) > 1){
+			if(outputFieldList.contains(mapRow.getOutput_Field())){
 				return true;
+			}else{
+				outputFieldList.add(mapRow.getOutput_Field());
 			}
 		}
 		return false;
