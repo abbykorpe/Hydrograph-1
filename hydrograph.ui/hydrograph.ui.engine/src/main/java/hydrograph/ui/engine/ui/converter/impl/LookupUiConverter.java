@@ -29,7 +29,9 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
+import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.TransformUiConverter;
+import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -79,6 +81,24 @@ public class LookupUiConverter extends TransformUiConverter {
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LOOKUP.value());
 		
+	}
+	
+	protected void getInPort(TypeOperationsComponent operationsComponent) {
+		LOGGER.debug("Generating InPut Ports for -{}", componentName);
+		if (operationsComponent.getInSocket() != null) {
+			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
+				uiComponent.engageInputPort(inSocket.getId());
+				UIComponentRepo.INSTANCE.getComponentLinkList().add(
+						new LinkingData(inSocket.getFromComponentId(),
+								operationsComponent.getId(), inSocket
+										.getFromSocketId(), inSocket.getId()));
+				if(inSocket.getType().equalsIgnoreCase(PortTypeEnum.LOOKUP.value())){
+					uiComponent.getPorts().get(inSocket.getId()).setPortType(PortTypeEnum.LOOKUP);
+				}else{
+					uiComponent.getPorts().get(inSocket.getId()).setPortType(PortTypeEnum.DRIVER);
+				}
+			}
+		}
 	}
 	
 
