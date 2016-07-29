@@ -70,7 +70,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -1234,91 +1233,97 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			duplicateOperationInputFieldMap.put(mappingSheetRow.getOperationID(),duplicateFields);
 	}
     
-   /**
- * check if error exist
- */
-public void showHideValidationMessage()
+     /**
+     * check if error exist
+     */
+    public void showHideValidationMessage()
    	{		
 		if(errorTableViewer!=null)
 		{
-		   Map<String,List<String>> duplicateOutputFieldMap=getDuplicateOutputFieldMap(temporaryOutputFieldMap);
-		   if(!duplicateOutputFieldMap.isEmpty())
-		   {	for (Map.Entry<String,List<String>> entry: duplicateOutputFieldMap.entrySet()) 
-			{
-			   for(String f:entry.getValue())
-			   {   
-				   boolean logError=true;   
-			    errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
-				errorLabel.setVisible(true);
-				errorLabel.setText("Duplicate Output Field "+" "+f+" "+"exist in"+" "+entry.getKey()); 
-				
-				for(Label tempErrorLabel:errorLabelList) {
-					   if(StringUtils.equalsIgnoreCase(errorLabel.getText(),tempErrorLabel.getText()))
-					   logError=false;
-				   }
-				if(logError)
-				errorLabelList.add(errorLabel);
-			   }
-		    }
-		   }
-		 if(!duplicateOperationInputFieldMap.isEmpty())
-	   {
-		   for(Map.Entry<String, List<String>> entry:duplicateOperationInputFieldMap.entrySet())
-		   {
-			   for(String f:entry.getValue())
-			   {   
-				   boolean logError=true;
-				   errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
-				   errorLabel.setVisible(true); 
-				   errorLabel.setText("Duplicate Operation Input Field"+" "+f +" "+"exist in"+" "+entry.getKey()); 
-				   for(Label tempErrorLabel:errorLabelList) {
-					   if(StringUtils.equalsIgnoreCase(errorLabel.getText(),tempErrorLabel.getText()))
-					   logError=false;
-				   }
-				   if(logError)
-				   errorLabelList.add(errorLabel);
-			   }
-		   
-		   }
-	   } 
-		
-		   Set<String> setToCheckDuplicates = new HashSet<String>();
-			
-		   for(ExpandItem item:expandBar.getItems() )
-			{
-					
-				Text operationClassTextBox=(Text)item.getData(OPERATION_CLASS_TEXT_BOX);
-				Button isParam=(Button)item.getData(IS_PARAM);
-				Text idTextBox=(Text)item.getData();
-				
-				if(operationClassTextBox!=null)
-				{
-				if(StringUtils.isBlank(operationClassTextBox.getText()) && !isParam.getSelection())
-				{
-					errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
-				    errorLabel.setVisible(true); 
-					errorLabel.setText("Operation Class must not be blank for"+" "+idTextBox.getText()); 	
-					errorLabelList.add(errorLabel);
-					
-				}
-				}
-				if(!setToCheckDuplicates.add(idTextBox.getText())&&!isParam.getSelection())
-				{
-					errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
-				    errorLabel.setVisible(true); 
-					errorLabel.setText("Duplicate Operation Id"+" "+idTextBox.getText()); 	
-					errorLabelList.add(errorLabel);
-					
-				}	
-				
-			} 	
-			
-	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
-	   errorTableViewer.refresh();
-	   errorLabelList.clear();
-	   setToCheckDuplicates.clear();
+		   setErrorMessageForDuplicateOutputField();
+		   setErrorMessageForDuplicateInputField(); 
+		   Set<String> setToCheckDuplicates = setErrorMessageIfOperationClassBlankOrOperationIDDuplicate(); 	
+     	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
+	       errorTableViewer.refresh();
+	       errorLabelList.clear();
+	       setToCheckDuplicates.clear();
 		}
 	}
+
+    private Set<String> setErrorMessageIfOperationClassBlankOrOperationIDDuplicate() 
+    {
+	    Set<String> setToCheckDuplicates = new HashSet<String>();
+		 for(ExpandItem item:expandBar.getItems() )
+		{
+			Text operationClassTextBox=(Text)item.getData(OPERATION_CLASS_TEXT_BOX);
+			Button isParam=(Button)item.getData(IS_PARAM);
+			Text idTextBox=(Text)item.getData();
+			if(operationClassTextBox!=null)
+			{
+			   if(StringUtils.isBlank(operationClassTextBox.getText()) && !isParam.getSelection())
+			   {
+				errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+			    errorLabel.setVisible(true); 
+				errorLabel.setText("Operation Class must not be blank for"+" "+idTextBox.getText()); 	
+				errorLabelList.add(errorLabel);
+			    }
+			}
+			if(!setToCheckDuplicates.add(idTextBox.getText())&&!isParam.getSelection())
+			{
+				errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+			    errorLabel.setVisible(true); 
+				errorLabel.setText("Duplicate Operation Id"+" "+idTextBox.getText()); 	
+				errorLabelList.add(errorLabel);
+			}	
+		}
+	 return setToCheckDuplicates;
+   }
+
+   private void setErrorMessageForDuplicateInputField() {
+	if(!duplicateOperationInputFieldMap.isEmpty())
+   {
+	   for(Map.Entry<String, List<String>> entry:duplicateOperationInputFieldMap.entrySet())
+	   {
+		   for(String f:entry.getValue())
+		   {   
+			   boolean logError=true;
+			   errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+			   errorLabel.setVisible(true); 
+			   errorLabel.setText("Duplicate Operation Input Field"+" "+f +" "+"exist in"+" "+entry.getKey()); 
+			   for(Label tempErrorLabel:errorLabelList) {
+				   if(StringUtils.equalsIgnoreCase(errorLabel.getText(),tempErrorLabel.getText()))
+				   logError=false;
+			   }
+			   if(logError)
+			   errorLabelList.add(errorLabel);
+		   }
+	   
+	   }
+   }
+}
+
+   private void setErrorMessageForDuplicateOutputField() {
+	Map<String,List<String>> duplicateOutputFieldMap=getDuplicateOutputFieldMap(temporaryOutputFieldMap);
+	   if(!duplicateOutputFieldMap.isEmpty())
+	   {	for (Map.Entry<String,List<String>> entry: duplicateOutputFieldMap.entrySet()) 
+		{
+		   for(String f:entry.getValue())
+		   {   
+			   boolean logError=true;   
+		    errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+			errorLabel.setVisible(true);
+			errorLabel.setText("Duplicate Output Field "+" "+f+" "+"exist in"+" "+entry.getKey()); 
+			
+			for(Label tempErrorLabel:errorLabelList) {
+				   if(StringUtils.equalsIgnoreCase(errorLabel.getText(),tempErrorLabel.getText()))
+				   logError=false;
+			   }
+			if(logError)
+			errorLabelList.add(errorLabel);
+		   }
+	    }
+	   }
+}
 
 	/**
 	 * @param nameValueProperty
@@ -1641,6 +1646,55 @@ private void addFocusListenerToOperationIdTextBox(String currentId,Text operatio
 	private void syncTransformFieldsWithSchema() {
 		
 		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
+		if(checkIfSchemaIsBlank(filterProperties))
+		{
+		return;
+		} 	
+		List<FilterProperties> finalSortedList=new ArrayList<>();
+		SchemaSyncUtility.INSTANCE.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
+		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
+		SchemaSyncUtility.INSTANCE.filterCommonMapFields(outputFileds, transformMapping);
+		transformMapping.getOutputFieldList().clear();
+		addOperationFieldAndMapPassthroughfieldToOutputField();
+		sortOutputFieldToMatchSchemaSequence(filterProperties, finalSortedList);
+		transformMapping.getOutputFieldList().clear();
+		transformMapping.getOutputFieldList().addAll(finalSortedList);
+		refreshOutputTable();
+		for(ExpandItem item:expandBar.getItems())
+		{
+			TableViewer t=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
+			t.refresh();
+		}
+	}
+
+	private void sortOutputFieldToMatchSchemaSequence(
+			List<FilterProperties> filterProperties,
+			List<FilterProperties> finalSortedList) {
+		for(int i=0;i<filterProperties.size();i++)
+		{
+			for(FilterProperties f:transformMapping.getOutputFieldList())
+			{
+				if(f.equals(filterProperties.get(i)))
+				{
+					finalSortedList.add(f);
+					break;
+				}
+			}
+		}
+	}
+
+	private void addOperationFieldAndMapPassthroughfieldToOutputField() {
+		for(MappingSheetRow row:transformMapping.getMappingSheetRows())
+		{
+			transformMapping.getOutputFieldList().addAll(row.getOutputList());
+		}	
+		for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+		{
+			transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
+		}
+	}
+
+	private boolean checkIfSchemaIsBlank(List<FilterProperties> filterProperties) {
 		if(filterProperties.isEmpty())
 		{
 			
@@ -1658,40 +1712,9 @@ private void addFocusListenerToOperationIdTextBox(String currentId,Text operatio
 			mappingTableViewer.refresh();
 			finalSortedList.clear();
 			outputFieldViewer.refresh();
-			return;
+			
 		}
-		List<FilterProperties> finalSortedList=new ArrayList<>();
-		SchemaSyncUtility.INSTANCE.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
-		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
-		SchemaSyncUtility.INSTANCE.filterCommonMapFields(outputFileds, transformMapping);
-		transformMapping.getOutputFieldList().clear();
-		for(MappingSheetRow row:transformMapping.getMappingSheetRows())
-		{
-			transformMapping.getOutputFieldList().addAll(row.getOutputList());
-		}	
-		for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
-		{
-			transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
-		}
-		for(int i=0;i<filterProperties.size();i++)
-		{
-			for(FilterProperties f:transformMapping.getOutputFieldList())
-			{
-				if(f.equals(filterProperties.get(i)))
-				{
-					finalSortedList.add(f);
-					break;
-				}
-			}
-		}
-		transformMapping.getOutputFieldList().clear();
-		transformMapping.getOutputFieldList().addAll(finalSortedList);
-		refreshOutputTable();
-		for(ExpandItem item:expandBar.getItems())
-		{
-			TableViewer t=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
-			t.refresh();
-		}
+		return filterProperties.isEmpty();
 	}
 	
 	/**

@@ -50,10 +50,12 @@ public class OperationClassDeleteDialog extends Dialog {
 	private ExpandBar expandBar;
 	private CheckboxTableViewer checkboxTableViewer;
     private List<FilterProperties> outerOutputList;
+	
+    
 	/**
-	 * Create the dialog.
-	 * 
 	 * @param parentShell
+	 * @param transformMapping
+	 * @param expandBar
 	 */
 	public OperationClassDeleteDialog(Shell parentShell, TransformMapping transformMapping, ExpandBar expandBar) {
 		super(parentShell);
@@ -129,6 +131,7 @@ public class OperationClassDeleteDialog extends Dialog {
 		return new Point(260, 344);
 	}
 
+	
 	@Override
 	protected void okPressed() {
 		for (ExpandItem expandItem : expandBar.getItems()) {

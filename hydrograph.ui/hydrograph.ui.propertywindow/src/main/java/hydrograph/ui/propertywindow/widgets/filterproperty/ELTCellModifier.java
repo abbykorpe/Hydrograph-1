@@ -25,7 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
-import org.eclipse.swt.widgets.TableItem;
 
 
 
@@ -99,22 +98,21 @@ public class ELTCellModifier implements ICellModifier{
 			transformDialog.refreshOutputTable();
 			transformDialog.setDuplicateOperationInputFieldMap(mappingSheetRow); 
 			transformDialog.showHideValidationMessage();
-			}
-			else if(StringUtils.equals(Messages.INNER_OPERATION_OUTPUT_FIELD, property))
-			{		
+		 }
+		else if(StringUtils.equals(Messages.INNER_OPERATION_OUTPUT_FIELD, property))
+		 {		
 		    int indexOfSelectedField= transformDialog.getATMapping().getOutputFieldList().indexOf(filterProperties);
 			filterProperties.setPropertyname((String )value);	
 			if(indexOfSelectedField==-1)
 			transformDialog.getATMapping().getOutputFieldList().add(filterProperties);
-			
 			transformDialog.refreshOutputTable();
             transformDialog.showHideValidationMessage();
-		}
+		 }
 			
-		else if(StringUtils.equals(Messages.OUTPUT_FIELD,property))
-			{
+		 else if(StringUtils.equals(Messages.OUTPUT_FIELD,property))
+		 {
 				filterProperties.setPropertyname((String )value);	
-			}
+		 }
 		viewer.refresh();
 
 	}
