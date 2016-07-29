@@ -260,7 +260,7 @@ public class OperationEntityUtils {
 
 		for (TypeOperationsOutSocket socket : outSocket) {
 			ArrayList<String> operationFields = new ArrayList<String>();
-			for (Object field : socket.getPassThroughFieldOrOperationFieldOrMapField()) {
+			for (Object field : socket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 				if (field instanceof TypeOperationField) {
 					TypeOperationField operationField = (TypeOperationField) field;
 					operationFields.add(operationField.getName());
@@ -298,7 +298,7 @@ public class OperationEntityUtils {
 
 		for (TypeOperationsOutSocket socket : outSocket) {
 			ArrayList<String> passThroughFields = new ArrayList<String>();
-			for (Object field : socket.getPassThroughFieldOrOperationFieldOrMapField()) {
+			for (Object field : socket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 				if (field instanceof TypeInputField) {
 					TypeInputField passThroughField = (TypeInputField) field;
 					passThroughFields.add(passThroughField.getName());
@@ -338,7 +338,7 @@ public class OperationEntityUtils {
 
 		for (TypeOperationsOutSocket socket : outSocket) {
 			Map<String, String> mapFields = new HashMap<String, String>();
-			for (Object field : socket.getPassThroughFieldOrOperationFieldOrMapField()) {
+			for (Object field : socket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 				if (field instanceof TypeMapField) {
 					TypeMapField mapField = (TypeMapField) field;
 					mapFields.put(mapField.getSourceName(), mapField.getName());
@@ -452,7 +452,7 @@ public class OperationEntityUtils {
 			throw new NullPointerException("Out socket cannot be null");
 		}
 		List<PassThroughField> passThroughFieldsList = new ArrayList<PassThroughField>();
-		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if (field instanceof TypeInputField) {
 				TypeInputField passThroughField = (TypeInputField) field;
 				PassThroughField passThroughFieldsObj = new PassThroughField(passThroughField.getName(),
@@ -483,7 +483,7 @@ public class OperationEntityUtils {
 			throw new NullPointerException("Out socket cannot be null");
 		}
 		List<OperationField> operationFieldList = new ArrayList<>();
-		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if (field instanceof TypeOperationField) {
 				TypeOperationField typeOperationField = (TypeOperationField) field;
 				operationFieldList
@@ -514,7 +514,7 @@ public class OperationEntityUtils {
 			throw new NullPointerException("Out socket cannot be null");
 		}
 		List<MapField> mapFieldsList = new ArrayList<MapField>();
-		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if (field instanceof TypeMapField) {
 				TypeMapField typeMapField = (TypeMapField) field;
 				MapField mapField = new MapField(typeMapField.getSourceName(), typeMapField.getName(),
