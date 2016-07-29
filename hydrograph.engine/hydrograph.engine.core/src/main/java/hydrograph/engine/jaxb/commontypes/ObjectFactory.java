@@ -90,6 +90,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeExpressionField }
+     * 
+     */
+    public TypeExpressionField createTypeExpressionField() {
+        return new TypeExpressionField();
+    }
+
+    /**
      * Create an instance of {@link TypeOperationInputFields }
      * 
      */

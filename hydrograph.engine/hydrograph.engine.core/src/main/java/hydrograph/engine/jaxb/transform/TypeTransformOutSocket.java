@@ -33,6 +33,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
  *         &lt;choice maxOccurs="unbounded">
  *           &lt;element name="passThroughField" type="{hydrograph/engine/jaxb/transform}type-transform-operation-input-field"/>
  *           &lt;element name="operationField" type="{hydrograph/engine/jaxb/commontypes}type-operation-field"/>
+ *           &lt;element name="expressionField" type="{hydrograph/engine/jaxb/commontypes}type-expression-field"/>
  *           &lt;element name="mapField" type="{hydrograph/engine/jaxb/commontypes}type-map-field"/>
  *         &lt;/choice>
  *       &lt;/choice>

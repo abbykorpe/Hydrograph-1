@@ -40,6 +40,7 @@ import hydrograph.engine.jaxb.transform.TypeTransformOutSocket;
  *         &lt;choice maxOccurs="unbounded">
  *           &lt;element name="passThroughField" type="{hydrograph/engine/jaxb/commontypes}type-input-field"/>
  *           &lt;element name="operationField" type="{hydrograph/engine/jaxb/commontypes}type-operation-field"/>
+ *           &lt;element name="expressionField" type="{hydrograph/engine/jaxb/commontypes}type-expression-field"/>
  *           &lt;element name="mapField" type="{hydrograph/engine/jaxb/commontypes}type-map-field"/>
  *         &lt;/choice>
  *       &lt;/choice>
@@ -54,7 +55,7 @@ import hydrograph.engine.jaxb.transform.TypeTransformOutSocket;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-operations-out-socket", propOrder = {
     "copyOfInsocket",
-    "passThroughFieldOrOperationFieldOrMapField"
+    "passThroughFieldOrOperationFieldOrExpressionField"
 })
 @XmlSeeAlso({
     TypeTransformOutSocket.class,
@@ -76,9 +77,10 @@ public class TypeOperationsOutSocket
     @XmlElements({
         @XmlElement(name = "passThroughField", type = TypeInputField.class),
         @XmlElement(name = "operationField", type = TypeOperationField.class),
+        @XmlElement(name = "expressionField", type = TypeExpressionField.class),
         @XmlElement(name = "mapField", type = TypeMapField.class)
     })
-    protected List<Object> passThroughFieldOrOperationFieldOrMapField;
+    protected List<Object> passThroughFieldOrOperationFieldOrExpressionField;
 
     /**
      * Gets the value of the copyOfInsocket property.
@@ -105,18 +107,18 @@ public class TypeOperationsOutSocket
     }
 
     /**
-     * Gets the value of the passThroughFieldOrOperationFieldOrMapField property.
+     * Gets the value of the passThroughFieldOrOperationFieldOrExpressionField property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the passThroughFieldOrOperationFieldOrMapField property.
+     * This is why there is not a <CODE>set</CODE> method for the passThroughFieldOrOperationFieldOrExpressionField property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPassThroughFieldOrOperationFieldOrMapField().add(newItem);
+     *    getPassThroughFieldOrOperationFieldOrExpressionField().add(newItem);
      * </pre>
      * 
      * 
@@ -124,15 +126,16 @@ public class TypeOperationsOutSocket
      * Objects of the following type(s) are allowed in the list
      * {@link TypeInputField }
      * {@link TypeOperationField }
+     * {@link TypeExpressionField }
      * {@link TypeMapField }
      * 
      * 
      */
-    public List<Object> getPassThroughFieldOrOperationFieldOrMapField() {
-        if (passThroughFieldOrOperationFieldOrMapField == null) {
-            passThroughFieldOrOperationFieldOrMapField = new ArrayList<Object>();
+    public List<Object> getPassThroughFieldOrOperationFieldOrExpressionField() {
+        if (passThroughFieldOrOperationFieldOrExpressionField == null) {
+            passThroughFieldOrOperationFieldOrExpressionField = new ArrayList<Object>();
         }
-        return this.passThroughFieldOrOperationFieldOrMapField;
+        return this.passThroughFieldOrOperationFieldOrExpressionField;
     }
 
 }

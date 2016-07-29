@@ -284,6 +284,7 @@
 					<xs:choice maxOccurs="unbounded" minOccurs="1">
 						<xs:element name="passThroughField" type="type-input-field" />
 						<xs:element name="operationField" type="type-operation-field" />
+						<xs:element name="expressionField" type="type-expression-field" />
 						<xs:element name="mapField" type="type-map-field" />
 					</xs:choice>
 				</xs:choice>
@@ -348,7 +349,10 @@
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="operationId" type="xs:string" use="required" />
 	</xs:complexType>
-
+	<xs:complexType name="type-expression-field">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="expressionId" type="xs:string" use="required" />
+	</xs:complexType>
 
 	<!--**************other standard types ends************ -->
 
