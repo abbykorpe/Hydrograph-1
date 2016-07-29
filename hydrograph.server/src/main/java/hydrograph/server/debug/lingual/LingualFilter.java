@@ -1,14 +1,14 @@
 /*******************************************************************************
- *  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  * http://www.apache.org/licenses/LICENSE-2.0
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ *  Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  *******************************************************************************/
 package hydrograph.server.debug.lingual;
 
@@ -39,23 +39,21 @@ public class LingualFilter {
 	String resultSchema = null;
 	String processingSchema = null;
 
-	public void filterData(String linugalMetaDataPath, String uniqueID,
-			String hdfsFilePath, double sizeOfDataInByte,
-			String localDebugFilePath, String condition, String[] fieldNames,
-			Type[] fieldTypes, Configuration conf) {
+	public void filterData(String linugalMetaDataPath, String uniqueID, String hdfsFilePath, double sizeOfDataInByte,
+			String localDebugFilePath, String condition, String[] fieldNames, Type[] fieldDatatype,
+			Configuration conf) {
 
 		String tableName = uniqueID + "_table";
 		String stereotypeName = uniqueID + "_stereo";
-	//	resultSchema = uniqueID + "_resultSchema";
 		processingSchema = uniqueID + "_process";
+		LingualSchemaCreator lingualSchemaCreator = new LingualSchemaCreator();
 		try {
-			new LingualSchemaCreator().createCatalog(linugalMetaDataPath,
-					processingSchema,  tableName, stereotypeName,
-					hdfsFilePath, fieldNames, fieldTypes);
-			runJdbcQuery(getQuery(tableName, condition), getProperties(conf),
-					sizeOfDataInByte, localDebugFilePath);
-			
-			new LingualSchemaCreator().cleanUp(processingSchema);
+			lingualSchemaCreator.createCatalog(linugalMetaDataPath, processingSchema, tableName, stereotypeName,
+					hdfsFilePath, fieldNames, fieldDatatype);
+			runJdbcQuery(getQuery(tableName, condition, fieldNames), getProperties(conf), sizeOfDataInByte,
+					localDebugFilePath);
+
+			lingualSchemaCreator.cleanUp(processingSchema);
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			LOG.error(e.getMessage());
 		}
@@ -67,21 +65,28 @@ public class LingualFilter {
 		return properties;
 	}
 
-	private String getQuery(String tableName, String condition) {
-		String query = "select * from  \"" + processingSchema + "\"" + ".\""
+	private String getQuery(String tableName, String condition, String[] fieldNames) {
+		String query = "select " + getFieldNamesWithQuotes(fieldNames) + " from  \"" + processingSchema + "\"" + ".\""
 				+ tableName + "\" where " + condition;
-		
+
 		return query;
 	}
 
-	private void runJdbcQuery(String query, Properties properties,
-			double sizeOfDataInByte, String localDebugFile)
+	private String getFieldNamesWithQuotes(String[] fieldNames) {
+		String fieldName="";
+		for(int i=0;i<fieldNames.length;i++){
+			fieldName += (i==0)?"\"" +fieldNames[i] +  "\"" :",\"" +fieldNames[i]  + "\"";
+		}
+			
+		return fieldName;
+	}
+
+	private void runJdbcQuery(String query, Properties properties, double sizeOfDataInByte, String localDebugFile)
 			throws ClassNotFoundException, SQLException, IOException {
 		LOG.debug("Initializing Connection ");
 		Connection connection;
 		Class.forName("cascading.lingual.jdbc.Driver");
-		connection = DriverManager.getConnection("jdbc:lingual:hadoop2-mr1",
-				properties);
+		connection = DriverManager.getConnection("jdbc:lingual:hadoop2-mr1", properties);
 		Statement statement = connection.createStatement();
 
 		LOG.debug("executing query: " + query);
@@ -91,8 +96,8 @@ public class LingualFilter {
 		resultSet.close();
 	}
 
-	private void writeFiles(ResultSet resultSet, double sizeOfDataInByte,
-			String localDebugFile) throws SQLException, IOException {
+	private void writeFiles(ResultSet resultSet, double sizeOfDataInByte, String localDebugFile)
+			throws SQLException, IOException {
 
 		String row = "";
 		ResultSetMetaData metaData = resultSet.getMetaData();
@@ -105,8 +110,7 @@ public class LingualFilter {
 		while (resultSet.next()) {
 			row = "";
 			for (int i = 1; i <= columnLength; i++) {
-				row = (resultSet.getObject(i) == null) ? "" : resultSet
-						.getObject(i).toString();
+				row = (resultSet.getObject(i) == null) ? "" : resultSet.getObject(i).toString();
 				if (i != columnLength) {
 					row += ",";
 				}
@@ -124,8 +128,7 @@ public class LingualFilter {
 		os.close();
 	}
 
-	private StringBuilder getColumnName(ResultSetMetaData metaData)
-			throws SQLException {
+	private StringBuilder getColumnName(ResultSetMetaData metaData) throws SQLException {
 		String columnName = "";
 		StringBuilder stringBuilder = new StringBuilder();
 		int numberOfColumn = metaData.getColumnCount();

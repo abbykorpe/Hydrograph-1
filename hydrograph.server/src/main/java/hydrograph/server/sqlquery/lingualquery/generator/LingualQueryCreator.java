@@ -1,14 +1,14 @@
 /*******************************************************************************
- *  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  * http://www.apache.org/licenses/LICENSE-2.0
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ *  Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  *******************************************************************************/
 package hydrograph.server.sqlquery.lingualquery.generator;
 
@@ -76,7 +76,10 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ getLeftBrace(ctx.specialexpr()) + generateIdentifierText(ctx.specialexpr().javaiden(), 0)
+					+ getLeftBrace(ctx.specialexpr())
+					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
+							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
+							: generateIdentifierText(ctx.specialexpr().javaiden(), 0)))
 					+ generateBetweenText(ctx.specialexpr(), dataType) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 		} else {
@@ -98,7 +101,9 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ generateIdentifierText(ctx.specialexpr().javaiden(), 0)
+					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
+							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
+							: generateIdentifierText(ctx.specialexpr().javaiden(), 0)))
 					+ generateBetweenText(ctx.specialexpr(), dataType) + (notPresent ? ")" : "");
 		} else {
 			if (ctx.javaiden() != null) {
@@ -119,8 +124,10 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ getLeftBrace(ctx.specialexpr()) + " cast("
-					+ generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as double) "
+					+ getLeftBrace(ctx.specialexpr())
+					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
+							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
+							: " cast(" + generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as double) "))
 					+ generateBetweenText(ctx.specialexpr(), dataType) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 		} else {
@@ -142,8 +149,10 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ getLeftBrace(ctx.specialexpr()) + "date "
-					+ generateIdentifierText(ctx.specialexpr().javaiden(), 0)
+					+ getLeftBrace(ctx.specialexpr())
+					+ (ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
+							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
+							: "date " + generateIdentifierText(ctx.specialexpr().javaiden(), 0))
 					+ generateBetweenText(ctx.specialexpr(), dataType.toLowerCase()) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 		} else {
@@ -164,8 +173,10 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ getLeftBrace(ctx.specialexpr()) + " cast("
-					+ generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as float) "
+					+ getLeftBrace(ctx.specialexpr())
+					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
+							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
+							: " cast(" + generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as float) "))
 					+ generateBetweenText(ctx.specialexpr(), dataType) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 
@@ -179,19 +190,51 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		return expr;
 	}
 
+	// private String generateBetweenText(SpecialexprContext specialexprContext,
+	// String datType) {
+	// String expr = "";
+	// datType = datType.toLowerCase();
+	// if (isBetweenPresent(specialexprContext.getText())) {
+	// String field = specialexprContext.fieldname() != null &&
+	// specialexprContext.fieldname().size()>0
+	// ? "\""+specialexprContext.fieldname().get(0).getText()+"\""
+	// :generateIdentifierText(specialexprContext.javaiden(), 1);
+	// expr = getAndOr(specialexprContext)+" ";
+	// if (datType.contains("date")) {
+	// expr += "date " + field;
+	// } else if (datType.contains("float")) {
+	// expr += "cast(" + field + " as float)";
+	// } else if (datType.contains("double")) {
+	// expr += "cast(" + field + " as double)";
+	// } else {
+	// expr += field;
+	// }
+	// }
+	// return expr;
+	// }
+
 	private String generateBetweenText(SpecialexprContext specialexprContext, String datType) {
 		String expr = "";
 		datType = datType.toLowerCase();
 		if (isBetweenPresent(specialexprContext.getText())) {
 			expr = getAndOr(specialexprContext) + " ";
+			String fieldName = "";
 			if (datType.contains("date")) {
-				expr += "date " + generateIdentifierText(specialexprContext.javaiden(), 1);
+				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
+						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
+						: "date " + generateIdentifierText(specialexprContext.javaiden(), 1);
 			} else if (datType.contains("float")) {
-				expr += "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as float)";
+				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
+						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
+						: "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as float)";
 			} else if (datType.contains("double")) {
-				expr += "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as double)";
+				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
+						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
+						: "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as double)";
 			} else {
-				expr += generateIdentifierText(specialexprContext.javaiden(), 1);
+				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
+						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
+						: generateIdentifierText(specialexprContext.javaiden(), 1);
 			}
 		}
 		return expr;
