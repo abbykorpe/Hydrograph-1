@@ -83,7 +83,7 @@ public enum HiveTypeToCoercibleTypeMapping {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Date.class, "yyyy-mm-dd", -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(Date.class, "yyyy-MM-dd", -999, null);
 			}
 		},
 		DECIMAL {
