@@ -60,6 +60,7 @@ public class OutputComponentSubJobConverter extends OutputConverter {
 			outInSocket.setId(link.getTarget().getPort(link.getTargetTerminal()).getTerminal());
 			outInSocket.setId(link.getTargetTerminal().replaceAll(Constants.INPUT_SOCKET_TYPE, Constants.OUTPUT_SOCKET_TYPE));	 	
 			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
+			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();

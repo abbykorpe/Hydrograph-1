@@ -440,6 +440,7 @@ public class ConverterHelper {
 				TypeBaseInSocket inSocket = new TypeBaseInSocket();
 				inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
 				inSocket.setFromSocketId(getFromSocketId(link));
+				inSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 				inSocket.setId(link.getTargetTerminal());
 				inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 				inSocket.getOtherAttributes();
@@ -480,6 +481,10 @@ public class ConverterHelper {
 		if (object.getLength() != null && !object.getLength().trim().isEmpty()) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.LENGTH_QNAME), object.getLength());
 		}
+		if(!StringUtils.isEmpty(object.getDescription())){
+			typeBaseField.setDescription(object.getDescription());
+			}
+		
 		return typeBaseField;
 	}
 	
@@ -517,7 +522,10 @@ public class ConverterHelper {
 		
 		if (object.getDelimiter() != null && !object.getDelimiter().isEmpty()) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.DELIMITER_QNAME), object.getDelimiter());
-		}		
+		}	
+		if(!StringUtils.isEmpty(object.getDescription())){
+			typeBaseField.setDescription(object.getDescription());
+			}
 		return typeBaseField;
 	}	
 
@@ -556,7 +564,10 @@ public class ConverterHelper {
 			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
 				typeBaseField.setType(fieldDataType);
 		}
-
+		
+		if(!StringUtils.isEmpty(object.getDescription())){
+			typeBaseField.setDescription(object.getDescription());
+		}
 		return typeBaseField;
 	}
 

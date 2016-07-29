@@ -81,6 +81,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 			TypeOutputDelimitedInSocket outInSocket = new TypeOutputDelimitedInSocket();
 			outInSocket.setId(link.getTargetTerminal());
 			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
+			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();
