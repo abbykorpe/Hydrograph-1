@@ -17,6 +17,7 @@ package hydrograph.ui.graph.utility;
 import hydrograph.ui.common.util.CanvasDataAdpater;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.figure.ComponentFigure;
@@ -31,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -117,23 +119,26 @@ public class SubJobUtility {
 	 */
 	public IFile doSaveAsSubJob(IFile file, Container container) {
 
-		if (file != null) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
+		try {
+			ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
+		
+			if (file != null) {
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
+				
 				if (file.exists())
 					file.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
 				else
 					file.create(new ByteArrayInputStream(out.toByteArray()), true, null);
+				
 				getCurrentEditor().genrateTargetXml(file, null, container);
-			} catch (CoreException | IOException ce) {
-				MessageDialog.openError(new Shell(), "Error",
-						"Exception occured while saving the graph -\n" + ce.getMessage());
+				getCurrentEditor().setDirty(false);
 			}
-			getCurrentEditor().setDirty(false);
+		} catch (Exception e ) {
+			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
 		}
+		
 		return file;
-
 	}
 
 	/**

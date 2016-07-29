@@ -89,7 +89,7 @@ public class ConverterUtil {
 				}
 			}
 			graph.setRuntimeProperties(getRuntimeProperties(container));
-			marshall(graph, validate,outPutFile,externalOutputFile);
+			marshall(graph, validate, outPutFile,externalOutputFile);
 	}
 	
 	
@@ -105,7 +105,8 @@ public class ConverterUtil {
 			return outPutFile.getName();
 		else if (externalOutputFile != null && StringUtils.isNotBlank(externalOutputFile.getName()))
 			return externalOutputFile.getName();
-		return null;
+		else
+			return "Temp.xml";
 	}
 
 	/**
@@ -116,15 +117,16 @@ public class ConverterUtil {
 	 * @param outPutFile
 	 * @param externalOutputFile
 	 */
-	private void marshall(Graph graph, boolean validate,IFile outPutFile, IFileStore externalOutputFile) {
+	private void marshall(Graph graph, boolean validate, IFile outPutFile, IFileStore externalOutputFile) {
 		LOGGER.debug("Marshaling generated object into target XML");
 		ByteArrayOutputStream out = null;
 		try {
 			 if (outPutFile!=null)
-				 storeFileIntoWorkspace(graph,outPutFile,out);
+				 storeFileIntoWorkspace(graph, validate, outPutFile, out);
 			else if(externalOutputFile!=null)
-				storeFileIntoLocalFileSystem(graph,externalOutputFile,out);
-			
+				storeFileIntoLocalFileSystem(graph, validate, externalOutputFile, out);
+			else
+				validateJobState(graph, validate, externalOutputFile, out);			
 			
 		} catch (JAXBException |CoreException| IOException exception) {
 			LOGGER.error("Failed in marshal", exception);
@@ -138,6 +140,16 @@ public class ConverterUtil {
 			}
 		}
 	}
+	
+	
+	private void validateJobState(Graph graph, boolean validate, IFileStore externalOutputFile, ByteArrayOutputStream out) throws CoreException, JAXBException, IOException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
+		Marshaller marshaller = jaxbContext.createMarshaller();
+		out = new ByteArrayOutputStream();
+	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.marshal(graph, out);
+		out = ComponentXpath.INSTANCE.addParameters(out);
+	}
 
 	/**
 	 * Store file into local file system.
@@ -149,18 +161,19 @@ public class ConverterUtil {
 	 * @throws JAXBException the JAXB exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	private void storeFileIntoLocalFileSystem(Graph graph, IFileStore externalOutputFile, ByteArrayOutputStream out) throws CoreException, JAXBException, IOException {
+	private void storeFileIntoLocalFileSystem(Graph graph, boolean validate, IFileStore externalOutputFile, ByteArrayOutputStream out) throws CoreException, JAXBException, IOException {
+		
 		File externalFile=externalOutputFile.toLocalFile(0, null);
 		OutputStream outputStream = new FileOutputStream (externalFile.getAbsolutePath().replace(".job", ".xml")); 
+		
 		JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		out = new ByteArrayOutputStream();
 	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		marshaller.marshal(graph, out);
 		out = ComponentXpath.INSTANCE.addParameters(out);
-			out.writeTo(outputStream);
-			outputStream.close();
-		
+		out.writeTo(outputStream);
+		outputStream.close();
 	}
 
 	/**
@@ -172,22 +185,20 @@ public class ConverterUtil {
 	 * @throws JAXBException the JAXB exception
 	 * @throws CoreException the core exception
 	 */
-	private void storeFileIntoWorkspace(Graph graph, IFile outPutFile, ByteArrayOutputStream out) throws JAXBException, CoreException {
+	private void storeFileIntoWorkspace(Graph graph, boolean validate, IFile outPutFile, ByteArrayOutputStream out) throws JAXBException, CoreException {
 		
 		JAXBContext jaxbContext = JAXBContext.newInstance(graph.getClass());
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		out = new ByteArrayOutputStream();
 	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.marshal(graph, out);
-	 	 
-		out = ComponentXpath.INSTANCE.addParameters(out);
-		if (outPutFile.exists()){
-			outPutFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,false, null);
-		}
-		else{
-			outPutFile.create(new ByteArrayInputStream(out.toByteArray()),true, null);
-			}
-		
+	    marshaller.marshal(graph, out);
+	    out = ComponentXpath.INSTANCE.addParameters(out);
+	    
+	    if (outPutFile.exists()){
+	    	outPutFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,false, null);
+	    }else{
+	    	outPutFile.create(new ByteArrayInputStream(out.toByteArray()),true, null);
+		}		
 	}
 
 	/**
