@@ -471,10 +471,6 @@ public class FindViewDataDialog extends Dialog{
 			for(int colIndex = 1; colIndex <= table.getColumnCount(); colIndex++){
 				if(StringUtils.containsIgnoreCase(tableItem.getText(colIndex), findText.getText())){
 					label.setVisible(false);
-					table.showItem(tableItem);
-					table.showColumn(table.getColumn(colIndex));
-					tableCursor.setSelection(rowIndex, colIndex);
-					tableCursor.setVisible(false);
 					tableItem.setBackground(colIndex, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 					recordCount++;
 				}
