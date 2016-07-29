@@ -369,7 +369,7 @@ public class FindViewDataDialog extends Dialog{
 	}
 	
 	private boolean isTextExist(StyledText styledText, String text){
-		if(!StringUtils.isBlank(styledText.getText())){
+		if(StringUtils.isNotBlank(styledText.getText())){
 			int textIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), 0);
 			if(textIndex < 0){
 				label.setVisible(true);
