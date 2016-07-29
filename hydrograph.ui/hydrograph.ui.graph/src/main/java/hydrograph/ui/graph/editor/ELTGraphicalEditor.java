@@ -406,12 +406,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		boolean isWatch = false;
-		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-
+		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();		
 		IHydrographConsole currentConsoleView = (IHydrographConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().findView(CONSOLE_VIEW_ID);
 
 		if (partView instanceof ELTGraphicalEditor) {
+			
 			if (getActiveProject() != null) {
 				isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
 				ConsolePlugin plugin = ConsolePlugin.getDefault();
@@ -463,8 +463,14 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						}
 					}
 				}else{
-					logger.debug("enabling run job button");
-					enableRunJob(true);
+															
+					if(((ELTGraphicalEditor)partView).getContainer().isCurrentGraphIsSubjob()){
+						((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+					} else{
+						logger.debug("enabling run job button");
+						enableRunJob(true);
+					}
+					
 					if(isWatch){
 						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 					}else{
