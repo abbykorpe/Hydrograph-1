@@ -134,12 +134,8 @@ public class SubJobUtility {
 				getCurrentEditor().genrateTargetXml(file, null, container);
 				getCurrentEditor().setDirty(false);
 			}
-		} catch (CoreException | IOException ce) {
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + ce.getMessage());
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+		} catch (Exception e ) {
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
-		} catch (RuntimeException re ) {
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + re.getMessage());
 		}
 		
 		return file;

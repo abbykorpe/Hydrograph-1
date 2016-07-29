@@ -875,22 +875,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 			else
 				ConverterUtil.INSTANCE.convertToXML(this.container, false, null, null);
-		firePropertyChange(PROP_DIRTY);
+			
+			firePropertyChange(PROP_DIRTY);
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(getEditorInput(), this);
 			genrateContainerData.storeContainerData();
 			
 			saveParameters();
 			updateMainGraphOnSavingSubjob();
-		} catch (CoreException | IOException ce ) {
-			logger.error(METHOD_NAME , ce);
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + ce.getMessage());
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			logger.error(METHOD_NAME, e);
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
-		} catch (RuntimeException re) {
-				logger.error(METHOD_NAME, re);
-				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + re.getMessage());
+		} catch (Exception e) {
+				logger.error(METHOD_NAME, e);
+				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
 		}	
 	}
 
@@ -1102,15 +1097,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				getCommandStack().markSaveLocation();
 				setDirty(false);
 			}
-		} catch (CoreException  | IOException ce) {
-				logger.error("Failed to Save the file : ", ce);
-				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + ce.getMessage());
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+		} catch (Exception e ) {
 			logger.error("Failed to Save the file : ", e);
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
-		} catch (RuntimeException re ) {
-			logger.error("Failed to Save the file : ", re);
-			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + re.getMessage());
 		}	
 	}
 
