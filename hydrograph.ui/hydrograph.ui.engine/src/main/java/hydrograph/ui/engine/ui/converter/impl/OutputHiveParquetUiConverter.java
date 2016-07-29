@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -53,6 +54,7 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 	private ParquetHiveFile parquetHive;
 	private List<String> property;
 	
+	
 	public OutputHiveParquetUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
 		this.typeBaseComponent = typeBaseComponent;
@@ -72,8 +74,11 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 		if (parquetHive.getTableName() != null){
 			propertyMap.put(PropertyNameConstants.TABLE_NAME.value(), (String)(parquetHive.getTableName().getValue()));
 			}
-		if (parquetHive.getExternalTablePath() != null){
+		if (parquetHive.getExternalTablePath() != null && StringUtils.isNotBlank(parquetHive.getExternalTablePath().getUri())){
 			propertyMap.put(PropertyNameConstants.EXTERNAL_TABLE_PATH.value(), (String)parquetHive.getExternalTablePath().getUri());
+		}
+		else{
+			propertyMap.put(PropertyNameConstants.EXTERNAL_TABLE_PATH.value(),"");
 		}
 		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
 		
