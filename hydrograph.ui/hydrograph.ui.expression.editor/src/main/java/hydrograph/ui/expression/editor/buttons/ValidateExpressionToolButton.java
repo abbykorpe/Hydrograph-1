@@ -88,8 +88,8 @@ public class ValidateExpressionToolButton extends Button {
 		try {
 			IJavaProject iJavaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject());
 			packageFragments = iJavaProject.getAllPackageFragmentRoots();
-			URL[] superSetURLs=new URL[packageFragments.length];
-			for (int i=0;i<superSetURLs.length;i++) {
+			URL[] superSetURLs=new URL[packageFragments.length+1];
+			for (int i=0;i<superSetURLs.length-1;i++) {
 				if(transfromJarPath!=null){
 					IPath iPath=packageFragments[i].getPath();
 					iPath.isAbsolute();
@@ -98,29 +98,32 @@ public class ValidateExpressionToolButton extends Button {
 				else
 					transfromJarPath=getAbsolutePathForJars(packageFragments[i].getPath());
 					superSetURLs[i]=packageFragments[i].getPath().toFile().toURI().toURL();
+					
 					System.out.println("==========="+packageFragments[i].getElementName()+"===========");
 			}
+			superSetURLs[superSetURLs.length-1]=new File("C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\EXPR_TEST\\properties\\UserFunctions.properties").toURI().toURL();
 					ClassLoader child = new URLClassLoader(superSetURLs);
 					Class<?> class1 = Class.forName("hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI",true, child);
 					Method[] methods = class1.getDeclaredMethods();
 					for (Method method : methods) {
-						if (method.getParameterTypes().length ==3 && StringUtils.equals(method.getName(), "compile")) {
-							diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressionStyledText.getText(),fieldMap,transfromJarPath);
+						if (method.getParameterTypes().length ==4 && StringUtils.equals(method.getName(), "compile")) {
+//							transfromJarPath=transfromJarPath+";"+"C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\EXPR_TEST\\properties\\UserFunctions.properties";
+							diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressionStyledText.getText(),fieldMap,transfromJarPath,null);
 							break;
 						}
 					}
 			if (diagnostics != null && !diagnostics.getDiagnostics().isEmpty()) {
-				String message="";
-				for (Diagnostic diagnostic2 : diagnostics.getDiagnostics()) {
-					message=message+diagnostic2.getMessage(null)
-							+"\n Start:"+(diagnostic2.getColumnNumber()-351)+"\n, End"+(diagnostic2.getEndPosition()-351)+
-							"\n\n====================================\n\n";
-					
-					expressionStyledText.setSelection((int)diagnostic2.getColumnNumber()-352, (int)diagnostic2.getEndPosition()-351);
-				}
-				MessageBox box = new MessageBox(Display.getCurrent().getActiveShell());
-				box.setMessage(message);
-				box.open();
+//				String message="";
+//				for (Diagnostic diagnostic2 : diagnostics.getDiagnostics()) {
+//					message=message+diagnostic2.getMessage(null)
+//							+"\n Start:"+(diagnostic2.getColumnNumber()-351)+"\n, End"+(diagnostic2.getEndPosition()-351)+
+//							"\n\n====================================\n\n";
+//					
+//					expressionStyledText.setSelection((int)diagnostic2.getColumnNumber()-352, (int)diagnostic2.getEndPosition()-351);
+//				}
+//				MessageBox box = new MessageBox(Display.getCurrent().getActiveShell());
+//				box.setMessage(message);
+//				box.open();
 			}else{
 				MessageBox box = new MessageBox(Display.getCurrent().getActiveShell());
 				box.setMessage("Success");

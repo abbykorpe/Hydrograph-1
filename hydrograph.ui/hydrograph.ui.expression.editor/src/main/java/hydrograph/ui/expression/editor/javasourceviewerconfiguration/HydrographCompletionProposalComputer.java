@@ -118,6 +118,8 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 		filterProposalsOnPrefix(prefix, proposals);
 		return proposals;
 	}
+	
+	
 	@SuppressWarnings("unchecked")
 	private void addAvailableFieldsProposals(ITextViewer textViewer,ImageData imageData, List<ICompletionProposal> proposals,String prefix, int offset,int replacementLength) {
 		Map<String,Class<?>> fieldMap=(Map<String, Class<?>>)textViewer.getTextWidget().getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP); 
@@ -128,6 +130,7 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 			HydrographCompletionProposal customProposal=new HydrographCompletionProposal(replacementString,offset-prefix.length(),replacementLength,replacementString.length(),
         			new Image(Display.getCurrent(),imageData),display,null,null);
         	customProposal.setType(CUSTOM_TYPE);
+        	proposals.add(customProposal);
 		}
 	}
 

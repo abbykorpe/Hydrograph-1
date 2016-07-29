@@ -112,9 +112,10 @@ public class BuildExpressionEditorDataSturcture {
 		Properties properties = new Properties();
 		IFolder folder=getCurrentProject().getFolder(PathConstant.PROJECTS_SETTINGS_FOLDER);
 		IFile file = folder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
+		System.out.println("sdasd");
 		try {
 			LOGGER.debug("Loading property file");
-			if (file.exists()) {
+			if (file.getLocation().toFile().exists()) {
 				FileInputStream inStream = new FileInputStream(file.getLocation().toString());
 				properties.loadFromXML(inStream);
 				

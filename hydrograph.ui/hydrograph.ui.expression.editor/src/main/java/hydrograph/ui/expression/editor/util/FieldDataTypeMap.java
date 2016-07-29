@@ -43,7 +43,7 @@ public class FieldDataTypeMap {
 		Class<?> clazz = null;
 		for (GridRow gridRow : outputSchema.getBasicGridRowsOutputFields()) {
 			if (StringUtils.equalsIgnoreCase(gridRow.getFieldName(), field)) {
-				DataTypes.getDataTypeClassfromString(ExpressionEditorUtil.INSTANCE.lastString(
+				clazz=DataTypes.getDataTypeClassfromString(ExpressionEditorUtil.INSTANCE.lastString(
 						gridRow.getDataTypeValue(), Constants.DOT));
 			}
 		}

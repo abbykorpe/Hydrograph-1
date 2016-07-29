@@ -86,7 +86,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 		IFile file = folder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
 		try {
 			LOGGER.debug("Loading property file");
-			if (file.exists()) {
+			if (file.getLocation().toFile().exists()) {
 				FileInputStream inStream = new FileInputStream(file.getLocation().toString());
 				properties.loadFromXML(inStream);
 
