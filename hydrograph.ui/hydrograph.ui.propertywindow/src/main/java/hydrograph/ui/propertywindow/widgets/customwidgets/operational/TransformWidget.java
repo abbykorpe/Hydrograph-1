@@ -134,8 +134,9 @@ public class TransformWidget extends AbstractWidget {
 			 	
 				if(transformDialog.isOkPressed())
                	{
-               	propagateOuputFieldsToSchemaTabFromTransformWidget();	
-               	showHideErrorSymbol(widgets);
+					propagateOuputFieldsToSchemaTabFromTransformWidget();	
+					SchemaSyncUtility.INSTANCE.autoSyncSchema(getSchemaForInternalPropagation(), getComponent(), widgets);
+					showHideErrorSymbol(widgets);
                	}	
 
 				if(!oldATMappings.equals(transformDialog.getATMapping()))
@@ -155,7 +156,7 @@ public class TransformWidget extends AbstractWidget {
 		});
 		propagateOuputFieldsToSchemaTabFromTransformWidget();
 	}
-
+	
 	private void propagateOuputFieldsToSchemaTabFromTransformWidget() {
 
 		if (transformMapping == null || transformMapping.getMappingSheetRows() == null)
