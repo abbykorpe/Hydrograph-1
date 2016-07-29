@@ -210,8 +210,8 @@ public class FindViewDataDialog extends Dialog{
 					logger.debug("HORIZONTAL View");
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
 					logger.trace("------------FORMATTED View on Prev------------------------------");
+					formatedStyledText = dataViewer.getFormattedViewTextarea();
 					checkPageNo();
-					
 					if(!isTextExist(formatedStyledText, textData)){
 						clearStyledTextBgColor(formatedStyledText, textData);
 						int[] resultIndex =StyledTextEventListener.INSTANCE.prevButtonListener(formatedStyledText, textData, formattedViewPrevLineIndex, formattedViewNextLineIndex);
@@ -221,6 +221,7 @@ public class FindViewDataDialog extends Dialog{
 					
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
 					logger.trace("------------UNFORMATTED View on Prev------------");
+					unFormatedStyledText = dataViewer.getUnformattedViewTextarea();
 					checkPageNo();
 					if(!isTextExist(unFormatedStyledText, textData)){
 						clearStyledTextBgColor(unFormatedStyledText, textData);
@@ -257,6 +258,7 @@ public class FindViewDataDialog extends Dialog{
 					logger.debug("HORIZONTAL View");
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
 					logger.trace("---------------------------FORMATTED View on Next-------------------------");
+					formatedStyledText = dataViewer.getFormattedViewTextarea();
 					checkPageNo();
 					if(textData != null && !textData.equalsIgnoreCase(findText.getText())){
 						formattedViewPrevLineIndex = 0;
@@ -274,6 +276,7 @@ public class FindViewDataDialog extends Dialog{
 					
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
 					logger.trace("---------------------------UNFORMATTED View on Next-------------------------");
+					unFormatedStyledText = dataViewer.getUnformattedViewTextarea();
 					checkPageNo();
 					if(textData != null && !textData.equalsIgnoreCase(findText.getText())){
 						unFormattedViewPrevLineIndex = 0;
@@ -315,6 +318,7 @@ public class FindViewDataDialog extends Dialog{
 					logger.debug("HORIZONTAL View");
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.FORMATTED_VIEW_NAME)) {
 					logger.trace("-----------FORMATTED View on All--------------");
+					formatedStyledText = dataViewer.getFormattedViewTextarea();
 					checkPageNo();
 					if(!isTextExist(formatedStyledText, textData)){
 						clearStyledTextBgColor(formatedStyledText, textData);
@@ -322,6 +326,7 @@ public class FindViewDataDialog extends Dialog{
 					}
 				} else if (tabItem.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)) {
 					logger.trace("UNFORMATTED View on All--------------");
+					unFormatedStyledText = dataViewer.getUnformattedViewTextarea();
 					checkPageNo();
 					if(!isTextExist(unFormatedStyledText, textData)){
 						clearStyledTextBgColor(unFormatedStyledText, textData);
@@ -364,16 +369,18 @@ public class FindViewDataDialog extends Dialog{
 	}
 	
 	private boolean isTextExist(StyledText styledText, String text){
-		int textIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), 0);
+		if(!StringUtils.isBlank(styledText.getText())){
+			int textIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), 0);
+			if(textIndex < 0){
+				label.setVisible(true);
+				label.setText(labelText);
+				return true;
+			}else{
+				label.setVisible(false);
+				return false;
+			}
+		}else{ return false;}
 		
-		if(textIndex < 0){
-			label.setVisible(true);
-			label.setText(labelText);
-			return true;
-		}else{
-			label.setVisible(false);
-			return false;
-		}
 	}
 	
 	private void forwardTableTraverse(TableViewer debugDataViewer, TableCursor tableCursor){
