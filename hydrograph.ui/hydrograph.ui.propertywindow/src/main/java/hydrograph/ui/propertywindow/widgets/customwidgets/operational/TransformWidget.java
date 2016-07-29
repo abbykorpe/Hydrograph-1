@@ -41,6 +41,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -88,7 +89,7 @@ public class TransformWidget extends AbstractWidget {
 		if (transformMapping == null) {
 			transformMapping = new TransformMapping();
 		}
-
+		outputList=new ArrayList<>();
 		this.propertyName = componentConfigrationProperty.getPropertyName();
  
 	}
@@ -111,7 +112,7 @@ public class TransformWidget extends AbstractWidget {
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
 		getPropagatedSChema();
-		
+		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), outputList);
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -124,7 +125,8 @@ public class TransformWidget extends AbstractWidget {
 				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping);
 				
 				transformDialog.open();
-                outputList = transformDialog.getValidatorOutputFields();
+				outputList.clear();
+                outputList = transformDialog.getFinalSortedList();
 				if(transformDialog.isCancelPressed())
 				{
 					transformMapping=oldATMappings;
@@ -188,7 +190,7 @@ public class TransformWidget extends AbstractWidget {
 			getOperationFieldList().add(f.getPropertyname());
 			
 		}
-		if(outputList!=null)
+		if(!outputList.isEmpty())
 		{
 			
 		 List<GridRow> sortedList=new ArrayList<>();

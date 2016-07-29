@@ -25,7 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
-import org.eclipse.swt.widgets.TableItem;
 
 
 
@@ -79,15 +78,18 @@ public class ELTCellModifier implements ICellModifier{
 
 	@Override
 	public void modify(Object element, String property, Object value) {
-		final TableItem item=(TableItem) element;
 		if (element instanceof Item)
+		{	
 			element = ((Item) element).getData();
-
+		}
 		FilterProperties filterProperties = (FilterProperties) element;
 
 		if(StringUtils.equals(Constants.COMPONENT_NAME, property))
+		{
 			filterProperties.setPropertyname((String)value);
-		else if(StringUtils.equals(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD, property)){
+		}
+		else if(StringUtils.equals(ELTLookupMapWizard.OPERATIONAL_INPUT_FIELD, property))
+		{
 			filterProperties.setPropertyname((String)value);
 		}
 		else if(StringUtils.equals(Messages.INNER_OPERATION_INPUT_FIELD,property))
@@ -96,18 +98,21 @@ public class ELTCellModifier implements ICellModifier{
 			transformDialog.refreshOutputTable();
 			transformDialog.setDuplicateOperationInputFieldMap(mappingSheetRow); 
 			transformDialog.showHideValidationMessage();
-			}
-			else if(StringUtils.equals(Messages.INNER_OPERATION_OUTPUT_FIELD, property))
-			{		
+		 }
+		else if(StringUtils.equals(Messages.INNER_OPERATION_OUTPUT_FIELD, property))
+		 {		
+		    int indexOfSelectedField= transformDialog.getATMapping().getOutputFieldList().indexOf(filterProperties);
 			filterProperties.setPropertyname((String )value);	
+			if(indexOfSelectedField==-1)
+			transformDialog.getATMapping().getOutputFieldList().add(filterProperties);
 			transformDialog.refreshOutputTable();
             transformDialog.showHideValidationMessage();
-		}
+		 }
 			
-		else if(StringUtils.equals(Messages.OUTPUT_FIELD,property))
-			{
+		 else if(StringUtils.equals(Messages.OUTPUT_FIELD,property))
+		 {
 				filterProperties.setPropertyname((String )value);	
-			}
+		 }
 		viewer.refresh();
 
 	}

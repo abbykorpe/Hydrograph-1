@@ -14,7 +14,9 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,25 +36,32 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.widgets.Button;
 
+/**
+ * @author Bitwise
+ *
+ */
 public class OperationClassDeleteDialog extends Dialog {
 
+	private static final String SELECT_ALL = "Select All";
 	private static final String DELETE_OPERATION = "Delete Operation";
 	private Table table;
 	private List<MappingSheetRow> mappingSheetRowList;
 	private List<String> operationIdList = new ArrayList<>();
-	List<String> checkedElements = new ArrayList<>();
 	private ExpandBar expandBar;
 	private CheckboxTableViewer checkboxTableViewer;
-
+    private List<FilterProperties> outerOutputList;
+	
+    
 	/**
-	 * Create the dialog.
-	 * 
 	 * @param parentShell
+	 * @param transformMapping
+	 * @param expandBar
 	 */
-	public OperationClassDeleteDialog(Shell parentShell, List<MappingSheetRow> mappingSheetRowList, ExpandBar expandBar) {
+	public OperationClassDeleteDialog(Shell parentShell, TransformMapping transformMapping, ExpandBar expandBar) {
 		super(parentShell);
-		this.mappingSheetRowList = mappingSheetRowList;
+		this.mappingSheetRowList =transformMapping.getMappingSheetRows();
 		this.expandBar = expandBar;
+		this.outerOutputList=transformMapping.getOutputFieldList();
 	}
 
 	/**
@@ -69,7 +78,7 @@ public class OperationClassDeleteDialog extends Dialog {
 		GridData gd_btnCheckButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnCheckButton.widthHint = 190;
 		selectAllCheckButton.setLayoutData(gd_btnCheckButton);
-		selectAllCheckButton.setText("Select All");
+		selectAllCheckButton.setText(SELECT_ALL);
 		selectAllCheckButton.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -122,6 +131,7 @@ public class OperationClassDeleteDialog extends Dialog {
 		return new Point(260, 344);
 	}
 
+	
 	@Override
 	protected void okPressed() {
 		for (ExpandItem expandItem : expandBar.getItems()) {
@@ -131,6 +141,7 @@ public class OperationClassDeleteDialog extends Dialog {
 					expandItem.setExpanded(false);
 					for (int i = 0; i < mappingSheetRowList.size(); i++) {
 						if (mappingSheetRowList.get(i).getOperationID().equals(object.toString())) {
+							outerOutputList.removeAll(mappingSheetRowList.get(i).getOutputList());
 							mappingSheetRowList.remove(i);
 							break;
 						}
