@@ -47,8 +47,6 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	private Map<String, List<InputHivePartitionColumn>> fieldsMap;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private boolean isAnyUpdatePerformed;
-	String Color;
-	private Color color;
 	
 	public FieldDialogWithAddValue(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar) {
 		
@@ -174,8 +172,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	protected boolean compareAndChangeColor(TableItem[] items){
 		boolean check_field=compare_fields(items);
 		if(!check_field){
-			Color = "red";
-			color = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+			Color color = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 			for (TableItem tableItem : items){
 				tableItem.setForeground(color);
 			}

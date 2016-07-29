@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>hydrograph</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
-			<version>0.1.8-SNAPSHOT</version>
+			<version>0.1.9-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
