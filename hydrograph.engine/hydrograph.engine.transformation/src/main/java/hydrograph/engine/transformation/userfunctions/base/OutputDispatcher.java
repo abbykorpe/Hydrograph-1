@@ -12,7 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.base;
 
+/**
+ * @author bitwise
+ *
+ */
 public interface OutputDispatcher {
 
+	/**
+	 * This method sends the current output row to the out port.
+	 */
 	public void sendOutput();
 }
