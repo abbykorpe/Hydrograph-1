@@ -35,7 +35,9 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
@@ -156,12 +158,10 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		
 		if(!compareAndChangeColor(items)){
 			int rc=Message_Dialog();
-			   if(rc==0)
-			   {
+			   if(rc==0){
 				   super.okPressed();
 			   }
-			   else if(rc==1)
-			   {
+			   else if(rc==1){
 				   return;
 			   }
 		}
@@ -171,14 +171,12 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	}
 
 
-
-	protected boolean compareAndChangeColor(TableItem[] items) {
+	protected boolean compareAndChangeColor(TableItem[] items){
 		boolean check_field=compare_fields(items);
-		if(!check_field)
-		{
+		if(!check_field){
 			Color = "red";
 			color = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-			for (TableItem tableItem : items) {
+			for (TableItem tableItem : items){
 				tableItem.setForeground(color);
 			}
 		}
@@ -189,49 +187,43 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	{
 		String message="The partition fields should appear at the end of the schema in the same order. Please rearrange fields either in schema or in partition fields";
 		
-		MessageDialog dialog = new MessageDialog(Display.getCurrent().getActiveShell(), "Rearrange Fields", null,
+			MessageDialog dialog = new MessageDialog(Display.getCurrent().getActiveShell(), "Rearrange Fields", null,
 			    message, MessageDialog.ERROR, new String[] { "Rearrange Schema",
 			  "Rearrange Partition Fields" }, 0);
 			int result = dialog.open();
-			System.out.println(result);
 			return result;
 	}
 	
 	 
 	private boolean compare_fields(TableItem[] items)
 	{
-		List<String> source_field;
 		ListIterator<String> t_itr,s_itr;
-		boolean b=false;
+		boolean is_equal=true;
 		
 		List<String> target_fields = new ArrayList<String>();
-		if(items.length > 0)
-		{
-			for (TableItem tableItem : items) {
+		if(items.length > 0){
+			for (TableItem tableItem : items){
 				target_fields.add((String) tableItem.getText());
 			}
-		}
 		
-		source_field = new ArrayList<String>(sourceFieldsList);
+		
+		List<String> source_field = new ArrayList<String>(sourceFieldsList);
 		
 		t_itr=target_fields.listIterator(target_fields.size());
 		s_itr = source_field.listIterator(source_field.size());
 		
 		
-		while(t_itr.hasPrevious() & s_itr.hasPrevious())
-		{
-			if(StringUtils.equals(s_itr.previous(),t_itr.previous()))
-			{
-				b=true;
+		while(t_itr.hasPrevious() & s_itr.hasPrevious()){
+			if(StringUtils.equals(s_itr.previous(),t_itr.previous())){
+				is_equal=true;
 			}
-			else
-			{
-				b=false;
+			else{
+				is_equal=false;
 				break;
 			}
 		}
-		
-		return b;
+		}
+		return is_equal;
 		
 	}
 	
@@ -267,7 +259,12 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		compareAndChangeColor(getTargetTableViewer().getTable().getItems());
 		
 	}
-	
+
+	@Override
+	protected void checkFieldsOnStartup() {
+
+		compareAndChangeColor(getTargetTableViewer().getTable().getItems());
+	}
 }
 
 

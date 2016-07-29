@@ -260,8 +260,15 @@ public class FieldDialog extends Dialog {
 		createTargetTable(tableComposite);
 
 		addErrorLabel(container);
+		checkFieldsOnStartup();
 		return container;
 	}
+	
+	protected void checkFieldsOnStartup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void addErrorLabel(Composite container) {
 		Composite composite_3 = new Composite(container, SWT.NONE);
 		composite_3.setLayout(new ColumnLayout());
