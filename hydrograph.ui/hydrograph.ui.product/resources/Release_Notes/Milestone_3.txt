@@ -52,6 +52,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 37.#936 [Ashika Holkar] Hive Parquet Ouput: External Path Is Populated with 'null' Value On XML Import Which Leads to Job Failure
 38.#656 [Harsha Manwani] Run button should be disabled for input and ou0tput subgraph
 39.#802 [Nikhil Deokar] Fix issue - Even if the UI throws error message while saving the state of the job, somehow it still saves the job
+40.#757 [Vibhor Tyagi]  Find Functionality: When user clicks on 'All' button located in find window then focus is shifting to last instance in grid view whereas it remains same in other two views.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
