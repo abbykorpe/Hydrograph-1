@@ -42,6 +42,12 @@ public class FieldCompareUtility {
 		
 	}
 	
+	/**
+	 * 
+	 * Compares available fields and selected partition key fields for 
+	 *   hive input and output components. 
+	 * 
+	 */
 	public boolean compare_fields(TableItem[] items,List<String> sourceFieldsList)
 	{
 		ListIterator<String> t_itr,s_itr;
@@ -74,6 +80,11 @@ public class FieldCompareUtility {
 		
 	}
 	
+	/**
+	 * 
+	 * Message dialog to be displayed if compare_fields() method returns false. 
+	 * 
+	 */
 	public int Message_Dialog()
 	{
 		String message="The partition fields should appear at the end of the schema in the same order. Please rearrange fields either in schema or in partition fields";
@@ -85,6 +96,11 @@ public class FieldCompareUtility {
 			return result;
 	}
 	
+	/**
+	 * 
+	 * Change color of selected partition key fields to red if compare_fields() method returns false.
+	 * 
+	 */
 	public boolean compareAndChangeColor(TableItem[] items,List<String> sourceFieldsList){
 		boolean check_field=compare_fields(items,sourceFieldsList);
 		if(!check_field){
