@@ -49,7 +49,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 
-
+/**
+ * 
+ * Lookup mapping widget to be shown on Property dialog window 
+ * 
+ * @author Bitwise
+ *
+ */
 public class ELTLookupMapWidget extends AbstractWidget {
 
 	private String propertyName;

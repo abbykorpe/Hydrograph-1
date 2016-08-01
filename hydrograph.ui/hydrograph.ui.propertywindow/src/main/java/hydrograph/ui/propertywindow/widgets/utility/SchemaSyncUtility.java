@@ -39,7 +39,8 @@ import org.eclipse.swt.widgets.Shell;
 
 
 /**
- * The Class FilterOperationClassUtility.
+ * This class holds utility method to perform 
+ * Internal and external schema propagation 
  * 
  * @author Bitwise
  */
@@ -49,7 +50,7 @@ public class SchemaSyncUtility {
 	public static final String LOOKUP_MAP = "hash_join_map";
 	public static final String JOIN_MAP = "join_mapping";
 
-	public static SchemaSyncUtility INSTANCE= new SchemaSyncUtility();
+	public static final SchemaSyncUtility INSTANCE= new SchemaSyncUtility();
 	
 	private SchemaSyncUtility(){
 		
@@ -147,7 +148,7 @@ public class SchemaSyncUtility {
 					Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM,
 					new String[] { Messages.SYNC_NOW, Messages.MANUAL_SYNC }, 0);
 			if (dialog.open() == 0) {
-				SchemaSyncUtility.INSTANCE.getSchemaGridWidget(widgets).updateSchemaWithPropogatedSchema();
+				getSchemaGridWidget(widgets).updateSchemaWithPropogatedSchema();
 			}
 		}
 	}
@@ -430,6 +431,34 @@ public class SchemaSyncUtility {
 				operationFieldList, schemaFieldList, tempOpertionFieldList);
 		operationFieldList.removeAll(tempOpertionFieldList);
 		deleteOperationField(transformMapping,operationFieldList);
+		arrangeMapAndPassFieldsWithOldSequence(mapAndPassthroughFieldCopy,transformMapping);
+	}
+
+	private void arrangeMapAndPassFieldsWithOldSequence(
+			List<NameValueProperty> mapAndPassthroughFieldCopy,
+			TransformMapping transformMapping) {
+		
+		List<NameValueProperty> tempMapAndPassthroughField = new LinkedList<>();
+		tempMapAndPassthroughField.addAll(transformMapping.getMapAndPassthroughField());
+				
+		transformMapping.getMapAndPassthroughField().clear();
+		
+		for(NameValueProperty nameValueProperty: mapAndPassthroughFieldCopy){
+			if(tempMapAndPassthroughField.contains(nameValueProperty)){
+				transformMapping.getMapAndPassthroughField().add(nameValueProperty);
+			}
+		}
+		List<NameValueProperty> newMapAndPassthroughField = getNewlyAddedFields(mapAndPassthroughFieldCopy,tempMapAndPassthroughField);
+		transformMapping.getMapAndPassthroughField().addAll(newMapAndPassthroughField);
+	}
+
+	private List<NameValueProperty> getNewlyAddedFields(
+			List<NameValueProperty> mapAndPassthroughFieldCopy,
+			List<NameValueProperty> mapAndPassthroughField) {
+		List<NameValueProperty> newMapAndPassthroughField = new LinkedList<>();
+		newMapAndPassthroughField.addAll(mapAndPassthroughField);
+		newMapAndPassthroughField.removeAll(mapAndPassthroughFieldCopy);
+		return newMapAndPassthroughField;
 	}
 
 	private void clearMapAndPassFieldsFromOriginalDataStructure(

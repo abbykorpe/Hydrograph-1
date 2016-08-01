@@ -49,9 +49,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 
-
+/**
+ * 
+ * Join mapping widget to be shown on Property dialog window 
+ * 
+ * @author Bitwise
+ *
+ */
 public class ELTJoinMapWidget extends AbstractWidget {
-	public static int value;	
 	private String propertyName;
 	private JoinMappingGrid joinMappingGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
