@@ -333,7 +333,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			if (SchemaSyncUtility.INSTANCE.isAutoSchemaSyncAllow(getComponent()
 					.getComponentName())) {
 
-				if (SchemaSyncUtility.INSTANCE.isSyncRequired(getComponent(),
+				if (SchemaSyncUtility.INSTANCE.isAutoSyncRequiredInMappingWidget(getComponent(),
 						schemaGridRowList)) {
 					
 					MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.MANUAL_SYNC }, 0);

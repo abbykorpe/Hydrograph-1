@@ -24,13 +24,11 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.JoinMapDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -46,28 +44,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 
-
+/**
+ * 
+ * Join mapping widget to be shown on Property dialog window 
+ * 
+ * @author Bitwise
+ *
+ */
 public class ELTJoinMapWidget extends AbstractWidget {
-
-	public static int value;
-	private Object properties;
 	private String propertyName;
 	private JoinMappingGrid joinMappingGrid;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private List<AbstractWidget> widgets;
-	
+	private List<AbstractWidget> widgets;	
 	public ELTJoinMapWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
 		this.propertyName = componentConfigrationProperty.getPropertyName();
-		this.properties = componentConfigrationProperty.getPropertyValue();
 		if (componentConfigProp.getPropertyValue() == null) {
 			joinMappingGrid = new JoinMappingGrid();
 		} else {
@@ -97,7 +94,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 						joinMappingGrid,propertyDialogButtonBar);
 				joinMapDialog.open();				
 				propagateInternalSchema();
-				syncSchema();
+				SchemaSyncUtility.INSTANCE.autoSyncSchema(getSchemaForInternalPropagation(), getComponent(), widgets);
 				showHideErrorSymbol(widgets);
 				
 			}
@@ -105,8 +102,6 @@ public class ELTJoinMapWidget extends AbstractWidget {
 		
 		propagateInternalSchema();
 	}
-
-	
 	
 	private void propagateInternalSchema() {
 		if(joinMappingGrid ==null)
@@ -161,47 +156,6 @@ public class ELTJoinMapWidget extends AbstractWidget {
 
 		internalSchema.getGridRow().addAll(outputSchemaGridRowList);
 		
-	}
-	
-	private void syncSchema() {
-		if(isSyncRequired()){
-			MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.MANUAL_SYNC }, 0);
-			if (dialog.open() == 0) {
-				getSchemaGridWidget().updateSchemaWithPropogatedSchema();
-			}
-		}
-	}
-
-	private boolean isSyncRequired() {
-		Schema schema = (Schema) getComponent().getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-		
-		
-		List<String> joinOutputFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(getSchemaForInternalPropagation().getGridRow());
-		if(schema==null && joinOutputFieldList.size()!=0){
-			return true;
-		}
-		
-		if(schema==null && joinOutputFieldList.size()==0){
-			return false;
-		}
-		
-		List<String> schemaFieldList = SchemaSyncUtility.INSTANCE.getSchemaFieldList(schema.getGridRow());
-		
-		
-		if(schemaFieldList == null && joinOutputFieldList == null){
-			return false;
-		}
-		
-		if(schemaFieldList.size()!=joinOutputFieldList.size()){
-			return true;
-		}
-		
-		for(int index=0;index<schemaFieldList.size();index++){
-			if(!StringUtils.equals(schemaFieldList.get(index), joinOutputFieldList.get(index))){
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	private void addPassthroughFieldsAndMappingFieldsToComponentOuputSchema(Map<String, String> mapFields,
@@ -293,14 +247,5 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 		widgets=widgetList;
 		
-	}
-	
-	private ELTSchemaGridWidget getSchemaGridWidget(){
-		for(AbstractWidget widget: widgets){
-			if(widget instanceof ELTSchemaGridWidget){
-				return (ELTSchemaGridWidget) widget;
-			}
-		}
-		return null;
 	}
 }

@@ -24,16 +24,23 @@ import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 
 /**
- * The Class FilterOperationClassUtility.
+ * This class holds utility method to perform 
+ * Internal and external schema propagation 
  * 
  * @author Bitwise
  */
@@ -43,7 +50,7 @@ public class SchemaSyncUtility {
 	public static final String LOOKUP_MAP = "hash_join_map";
 	public static final String JOIN_MAP = "join_mapping";
 
-	public static SchemaSyncUtility INSTANCE= new SchemaSyncUtility();
+	public static final SchemaSyncUtility INSTANCE= new SchemaSyncUtility();
 	
 	private SchemaSyncUtility(){
 		
@@ -128,8 +135,61 @@ public class SchemaSyncUtility {
 	 * @return boolean value if schema sync is allowed
 	 */
 	public boolean isAutoSchemaSyncAllow(String componentName){
-		return StringUtils.equalsIgnoreCase(Constants.JOIN, componentName) || 
-				StringUtils.equalsIgnoreCase(Constants.LOOKUP, componentName) ;
+		return isSchemaSyncAllow(componentName);
+	}
+	
+	
+	public void autoSyncSchema(Schema SchemaForInternalPropagation,Component component,List<AbstractWidget> widgets) {
+		if (SchemaSyncUtility.INSTANCE.isAutoSyncRequiredInSchemaTab(
+				SchemaForInternalPropagation.getGridRow(),
+				(Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME))) {
+			MessageDialog dialog = new MessageDialog(new Shell(),
+					Constants.SYNC_WARNING, null,
+					Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM,
+					new String[] { Messages.SYNC_NOW, Messages.MANUAL_SYNC }, 0);
+			if (dialog.open() == 0) {
+				getSchemaGridWidget(widgets).updateSchemaWithPropogatedSchema();
+			}
+		}
+	}
+	
+	private boolean isAutoSyncRequiredInSchemaTab(List<GridRow> outputFieldSchema,Schema schema) {
+		
+		List<String> outputFieldList = getSchemaFieldList(outputFieldSchema);
+		if(schema==null && outputFieldList.size()!=0){
+			return true;
+		}
+		
+		if(schema==null && outputFieldList.size()==0){
+			return false;
+		}
+		
+		List<String> schemaFieldList = getSchemaFieldList(schema.getGridRow());
+		
+		
+		if(schemaFieldList == null && outputFieldList == null){
+			return false;
+		}
+		
+		if(schemaFieldList.size()!=outputFieldList.size()){
+			return true;
+		}
+		
+		for(int index=0;index<schemaFieldList.size();index++){
+			if(!StringUtils.equals(schemaFieldList.get(index), outputFieldList.get(index))){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private ELTSchemaGridWidget getSchemaGridWidget(List<AbstractWidget> widgets){
+		for(AbstractWidget widget: widgets){
+			if(widget instanceof ELTSchemaGridWidget){
+				return (ELTSchemaGridWidget) widget;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -151,71 +211,51 @@ public class SchemaSyncUtility {
 		}
 	}
 	
-	/**
-	 * Check if schema sync is required in schema tab 
-	 *
-	 * @param component
-	 * @param schemaGridRowList
-	 */
-	public boolean isSyncRequired( Component component, List<GridRow> schemaGridRowList) {
-		if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName()) ||
-		   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName()) ||
-		   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName()) ||
-		   StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())){
-			return true;
-		}else if(StringUtils.equalsIgnoreCase(Constants.LOOKUP, component.getComponentName())){
-			return isSyncRequiredInLookup(component, schemaGridRowList);
-		}else if(StringUtils.equalsIgnoreCase(Constants.JOIN, component.getComponentName())){
-			return isSyncRequiredInJoin(component, schemaGridRowList);
-		}else{
-			return false;
-		}
-	}
-	
-	private boolean isSyncRequiredInLookup(Component component,
-			List<GridRow> schemaGridRowList) {
-		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
+	public boolean isAutoSyncRequiredInMappingWidget(Component component, List<GridRow> schemaGridRowList) {
+		List<String> outputFieldList = getOutputFieldList(component);
 		
-		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
-		List<String> joinOutputFieldList = getOutputFieldsFromLookupMapping(lookupMappingGrid);
-		
-		if(schemaFieldList == null && joinOutputFieldList == null){
+		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);		
+		if(schemaFieldList == null && outputFieldList == null){
 			return false;
 		}
 		
-		if(schemaFieldList.size()!=joinOutputFieldList.size()){
+		if(schemaFieldList.size()!=outputFieldList.size()){
 			return true;
 		}
 		
 		for(int index=0;index<schemaFieldList.size();index++){
-			if(!StringUtils.equals(schemaFieldList.get(index), joinOutputFieldList.get(index))){
+			if(!StringUtils.equals(schemaFieldList.get(index), outputFieldList.get(index))){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean isSyncRequiredInJoin(Component component,
-			List<GridRow> schemaGridRowList) {
-		JoinMappingGrid joinMappingGrid = (JoinMappingGrid) component.getProperties().get(JOIN_MAP);
-		
-		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
-		List<String> joinOutputFieldList = getOutputFieldsFromJoinMapping(joinMappingGrid);
-		
-		if(schemaFieldList == null && joinOutputFieldList == null){
-			return false;
+	private List<String> getOutputFieldList(Component component) {
+		List<String> outputFieldList=null;
+		if(StringUtils.equalsIgnoreCase(component.getComponentName(),Constants.JOIN)){
+			JoinMappingGrid joinMappingGrid = (JoinMappingGrid) component.getProperties().get(JOIN_MAP);
+			outputFieldList = getOutputFieldsFromJoinMapping(joinMappingGrid);
+		}else if(StringUtils.equalsIgnoreCase(component.getComponentName(),Constants.LOOKUP)){
+			LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
+			outputFieldList = getOutputFieldsFromLookupMapping(lookupMappingGrid);
+		}else if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())){
+			TransformMapping transformMapping = (TransformMapping) component.getProperties().get(OPERATION);
+			outputFieldList = getOutputFieldsFromTransformMapping(transformMapping.getOutputFieldList());
 		}
-		
-		if(schemaFieldList.size()!=joinOutputFieldList.size()){
-			return true;
+		return outputFieldList;
+	}
+	
+	private List<String> getOutputFieldsFromTransformMapping(
+			List<FilterProperties> outputFieldList) {
+		List<String> outputFields = new ArrayList<>();
+		for (FilterProperties fileFilterProperty : outputFieldList) {
+			outputFields.add(fileFilterProperty.getPropertyname());
 		}
-		
-		for(int index=0;index<schemaFieldList.size();index++){
-			if(!StringUtils.equals(schemaFieldList.get(index), joinOutputFieldList.get(index))){
-				return true;
-			}
-		}
-		return false;
+		return outputFields;
 	}
 
 	/**
@@ -231,8 +271,7 @@ public class SchemaSyncUtility {
 		List<LookupMapProperty> mappingTableItemListCopy=new LinkedList<>();
 		mappingTableItemListCopy.addAll(joinMappingGrid.getLookupMapProperties());
 		joinMappingGrid.getLookupMapProperties().clear();
-		
-		
+				
 		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
 		if(schemaFieldList.size() == 0){
 			return;
@@ -278,15 +317,27 @@ public class SchemaSyncUtility {
 	 */
 	public void pushSchemaToLookupMapping( Component component,
 			List<GridRow> schemaGridRowList) {
-		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
-		List<String> lookupMapOutputs = getOutputFieldsFromLookupMapping(lookupMappingGrid);
-		List<LookupMapProperty> outputFieldsFromSchema = getComponentSchemaAsLookupMapProperty(schemaGridRowList);
-		List<LookupMapProperty> outputFieldsFromSchemaToRetain = getOutputFieldsFromSchemaToRetain(schemaGridRowList, lookupMappingGrid.getLookupMapProperties());
 		
-		lookupMappingGrid.setLookupMapProperties(outputFieldsFromSchemaToRetain);
-		for (LookupMapProperty l : outputFieldsFromSchema){
-			if(!lookupMapOutputs.contains(l.getOutput_Field())){
-				lookupMappingGrid.getLookupMapProperties().add(l);
+		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid) component.getProperties().get(LOOKUP_MAP);
+		
+		List<LookupMapProperty> mappingTableItemListCopy=new LinkedList<>();
+		mappingTableItemListCopy.addAll(lookupMappingGrid.getLookupMapProperties());
+		lookupMappingGrid.getLookupMapProperties().clear();
+		
+		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
+		if(schemaFieldList.size() == 0){
+			return;
+		}
+		
+		for(String fieldName:schemaFieldList){
+			LookupMapProperty row = getMappingTableItem(mappingTableItemListCopy,fieldName);
+			if(row!=null){
+				lookupMappingGrid.getLookupMapProperties().add(row);
+			}else{
+				row=new LookupMapProperty();
+				row.setSource_Field("");
+				row.setOutput_Field(fieldName);
+				lookupMappingGrid.getLookupMapProperties().add(row);
 			}
 		}
 	}
@@ -362,13 +413,125 @@ public class SchemaSyncUtility {
 
 	private void pushSchemaToTransformMapping(
 			Component component, List<GridRow> schemaGridRowList) {
-		TransformMapping transformMapping= (TransformMapping) component.getProperties().get(OPERATION);
-		List<FilterProperties> filterProperties = convertSchemaToFilterProperty(schemaGridRowList);
-		SchemaSyncUtility.INSTANCE.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
-		List<NameValueProperty> outputFileds =getComponentSchemaAsProperty(schemaGridRowList);
-		SchemaSyncUtility.INSTANCE.filterCommonMapFields(outputFileds, transformMapping);
+		
+		TransformMapping transformMapping = (TransformMapping) component.getProperties().get(OPERATION);
+		List<NameValueProperty> mapAndPassthroughFieldCopy = new LinkedList<>();
+		mapAndPassthroughFieldCopy.addAll(transformMapping.getMapAndPassthroughField());		
+		List<String> operationFieldList = getOperationFieldList(transformMapping);
+		
+		clearMapAndPassFieldsFromOriginalDataStructure(transformMapping);
+		
+		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
+		if(schemaFieldList.size() == 0){
+			return;
+		}
+		
+		List<String> tempOpertionFieldList = new LinkedList<>();
+		adjustMapAndPassFields(transformMapping, mapAndPassthroughFieldCopy,
+				operationFieldList, schemaFieldList, tempOpertionFieldList);
+		operationFieldList.removeAll(tempOpertionFieldList);
+		deleteOperationField(transformMapping,operationFieldList);
+		arrangeMapAndPassFieldsWithOldSequence(mapAndPassthroughFieldCopy,transformMapping);
+	}
+
+	private void arrangeMapAndPassFieldsWithOldSequence(
+			List<NameValueProperty> mapAndPassthroughFieldCopy,
+			TransformMapping transformMapping) {
+		
+		List<NameValueProperty> tempMapAndPassthroughField = new LinkedList<>();
+		tempMapAndPassthroughField.addAll(transformMapping.getMapAndPassthroughField());
+				
+		transformMapping.getMapAndPassthroughField().clear();
+		
+		for(NameValueProperty nameValueProperty: mapAndPassthroughFieldCopy){
+			if(tempMapAndPassthroughField.contains(nameValueProperty)){
+				transformMapping.getMapAndPassthroughField().add(nameValueProperty);
+			}
+		}
+		List<NameValueProperty> newMapAndPassthroughField = getNewlyAddedFields(mapAndPassthroughFieldCopy,tempMapAndPassthroughField);
+		transformMapping.getMapAndPassthroughField().addAll(newMapAndPassthroughField);
+	}
+
+	private List<NameValueProperty> getNewlyAddedFields(
+			List<NameValueProperty> mapAndPassthroughFieldCopy,
+			List<NameValueProperty> mapAndPassthroughField) {
+		List<NameValueProperty> newMapAndPassthroughField = new LinkedList<>();
+		newMapAndPassthroughField.addAll(mapAndPassthroughField);
+		newMapAndPassthroughField.removeAll(mapAndPassthroughFieldCopy);
+		return newMapAndPassthroughField;
+	}
+
+	private void clearMapAndPassFieldsFromOriginalDataStructure(
+			TransformMapping transformMapping) {
+		transformMapping.getMapAndPassthroughField().clear();
+		transformMapping.getOutputFieldList().clear();
+	}
+
+	private void adjustMapAndPassFields(TransformMapping transformMapping,
+			List<NameValueProperty> mapAndPassthroughFieldCopy,
+			List<String> operationFieldList, List<String> schemaFieldList,
+			List<String> tempOpertionFieldList) {
+		for(String fieldName:schemaFieldList){
+			FilterProperties filterProperties = new FilterProperties();
+			filterProperties.setPropertyname(fieldName);
+			transformMapping.getOutputFieldList().add(filterProperties);
+				
+			if(!operationFieldList.contains(fieldName)){
+				NameValueProperty row = getMappingAndPassThroughTableItem(mapAndPassthroughFieldCopy,fieldName);
+				if(row!=null){
+					transformMapping.getMapAndPassthroughField().add(row);
+				}else{
+					row=new NameValueProperty();					
+					row.setPropertyName("");
+					row.setPropertyValue(fieldName);				
+					transformMapping.getMapAndPassthroughField().add(row);
+				}
+			}else{
+				tempOpertionFieldList.add(fieldName);
+			}
+		}
 	}
 	
+	private void deleteOperationField(TransformMapping transformMapping,
+			List<String> operationFieldListTobeDelete) {
+		for(String fieldName:operationFieldListTobeDelete){
+			for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows()){
+				List<FilterProperties> outputFieldList = mappingSheetRow.getOutputList();
+				Iterator<FilterProperties> iterator = outputFieldList.iterator();
+				while(iterator.hasNext()){
+					FilterProperties filterProperties = iterator.next();
+					if(StringUtils.equals(filterProperties.getPropertyname(), fieldName)){
+						iterator.remove();
+					}
+				}
+			}	
+		}
+	}
+
+	private List<String> getOperationFieldList(TransformMapping transformMapping) {
+		List<String> operationFieldList = new LinkedList<>();
+		
+		for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows()){
+			List<FilterProperties> outputFieldList = mappingSheetRow.getOutputList();
+			for(FilterProperties field: outputFieldList){
+				operationFieldList.add(field.getPropertyname());
+			}
+		}		
+		return operationFieldList;
+	}
+
+	private NameValueProperty getMappingAndPassThroughTableItem(
+			List<NameValueProperty> mapAndPassthroughFieldCopy, String fieldName) {
+
+		for(NameValueProperty nameValueProperty: mapAndPassthroughFieldCopy){
+			if(StringUtils.equals(nameValueProperty.getPropertyValue(), fieldName)){
+				return nameValueProperty;
+			}
+		}
+		
+		return null;
+	}
+
 	public List<FilterProperties> convertSchemaToFilterProperty(List<GridRow> schemaGridRowList){
 		List<FilterProperties> outputFileds = new ArrayList<>();
 			for (GridRow gridRow : schemaGridRowList) {
