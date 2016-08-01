@@ -97,18 +97,18 @@ public class OperationHandler {
 		HashSet<SchemaField> newSchemaFieldList = new LinkedHashSet<SchemaField>();
 		for (Object transformOperation : operationList) {
 			if (transformOperation instanceof TypeTransformOperation) {
-				List<Object> outputFieldList = new ArrayList<Object>(((TypeTransformOperation)transformOperation).getOutputFields() != null
-						? ((TypeTransformOperation)transformOperation).getOutputFields().getField() : new ArrayList<Object>());
+				List<Object> outputFieldList = new ArrayList<Object>(
+						((TypeTransformOperation) transformOperation).getOutputFields() != null
+								? ((TypeTransformOperation) transformOperation).getOutputFields().getField()
+								: new ArrayList<Object>());
 				newSchemaFieldList.addAll(InputEntityUtils.extractInputFields(outputFieldList));
-				newSchemaFieldMap.put(((TypeTransformOperation)transformOperation).getId(), newSchemaFieldList);
-			}
-			else 
-			{
+				newSchemaFieldMap.put(((TypeTransformOperation) transformOperation).getId(), newSchemaFieldList);
+			} else {
 				List<Object> outputFieldList = new ArrayList<Object>();
-				outputFieldList.add(((TypeTransformExpression)transformOperation).getOutputFields() != null
-						? ((TypeTransformExpression)transformOperation).getOutputFields().getField() : null);
+				if (((TypeTransformExpression) transformOperation).getOutputFields() != null)
+					outputFieldList.add(((TypeTransformExpression) transformOperation).getOutputFields().getField());
 				newSchemaFieldList.addAll(InputEntityUtils.extractInputFields(outputFieldList));
-				newSchemaFieldMap.put(((TypeTransformExpression)transformOperation).getId(), newSchemaFieldList);
+				newSchemaFieldMap.put(((TypeTransformExpression) transformOperation).getId(), newSchemaFieldList);
 			}
 		}
 		return newSchemaFieldMap;

@@ -72,8 +72,8 @@ public class OperationEntityUtils {
 		List<Operation> operationList = new ArrayList<Operation>();
 
 		for (Object typeTransformOperation : jaxbOperationList) {
+			Operation operation = new Operation();
 			if (typeTransformOperation instanceof TypeTransformOperation) {
-				Operation operation = new Operation();
 				operation.setOperationId(((TypeTransformOperation) typeTransformOperation).getId());
 				operation.setOperationInputFields(extractOperationInputFields(
 						((TypeTransformOperation) typeTransformOperation).getInputFields()));
@@ -82,6 +82,16 @@ public class OperationEntityUtils {
 				operation.setOperationClass(((TypeTransformOperation) typeTransformOperation).getClazz());
 				operation.setOperationProperties(
 						extractOperationProperties(((TypeTransformOperation) typeTransformOperation).getProperties()));
+				operationList.add(operation);
+			}else {
+				operation.setOperationId(((TypeTransformExpression) typeTransformOperation).getId());
+				operation.setOperationInputFields(extractOperationInputFields(
+						((TypeTransformExpression) typeTransformOperation).getInputFields()));
+				operation.setOperationOutputFields(new String[] { extractExpressionOutputFields(
+						((TypeTransformExpression) typeTransformOperation).getOutputFields()) });
+				operation.setExpression(((TypeTransformExpression) typeTransformOperation).getExpr());
+				operation.setOperationProperties(
+						extractOperationProperties(((TypeTransformExpression) typeTransformOperation).getProperties()));
 				operationList.add(operation);
 			}
 		}

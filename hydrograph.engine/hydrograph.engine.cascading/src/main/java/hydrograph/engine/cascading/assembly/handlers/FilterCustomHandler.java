@@ -15,6 +15,7 @@ package hydrograph.engine.cascading.assembly.handlers;
 import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
 import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
+import hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 
 import java.util.Arrays;
@@ -23,9 +24,11 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bsh.Interpreter;
 import cascading.operation.FilterCall;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
+import cascading.tuple.TupleEntry;
 
 public class FilterCustomHandler implements RecordFilterHandlerBase {
 
@@ -36,6 +39,7 @@ public class FilterCustomHandler implements RecordFilterHandlerBase {
 	private Fields inputFields;
 	private String transformClass;
 	private Properties userProperties;
+	private String operationExpression;
 	private boolean isUnused = false;
 
 	private static Logger LOG = LoggerFactory
@@ -51,80 +55,94 @@ public class FilterCustomHandler implements RecordFilterHandlerBase {
 	}
 
 	public FilterCustomHandler(Fields inputFields, String transformClass,
-			Properties userProperties, boolean isUnused) {
+			Properties userProperties, boolean isUnused,String operationExpression) {
 
 		this.inputFields = inputFields;
 		this.transformClass = transformClass;
 		this.userProperties = userProperties;
 		this.isUnused = isUnused;
-		LOG.trace("FilterCustomHandler object created for: " + transformClass);
+		this.operationExpression = operationExpression;
+		if (operationExpression == null)
+			LOG.trace("FilterCustomHandler object created for: " + transformClass);
+		else
+			LOG.trace("FilterCustomHandler object created for: " + operationExpression);
 	}
 
 	@Override
 	public Object prepare() {
-
-		CustomHandlerContext<FilterBase> context = new CustomHandlerContext<FilterBase>(
-				inputFields, transformClass);
-
-		LOG.trace("calling prepare method of: "
-				+ context.getSingleTransformInstance().getClass().getName());
-		try {
-			context.getSingleTransformInstance().prepare(userProperties,
-					context.getSingleInputRow().getFieldNames());
-		} catch (Exception e) {
-			LOG.error(
-					"Exception in prepare method of: "
-							+ context.getSingleTransformInstance().getClass().getName()
-							+ ".\nArguments passed to prepare() method are: \nProperties: "
-							+ userProperties
-							+ "\nInput Fields: "
-							+ Arrays.toString(context.getSingleInputRow().getFieldNames().toArray()), e);
-			throw new RuntimeException(
-					"Exception in prepare method of: "
-							+ context.getSingleTransformInstance().getClass().getName()
-							+ ".\nArguments passed to prepare() method are: \nProperties: "
-							+ userProperties
-							+ "\nInput Fields: "
-							+ Arrays.toString(context.getSingleInputRow().getFieldNames().toArray()), e);
+		if(transformClass != null){
+			CustomHandlerContext<FilterBase> context = new CustomHandlerContext<FilterBase>(
+					inputFields, transformClass);
+	
+			LOG.trace("calling prepare method of: "
+					+ context.getSingleTransformInstance().getClass().getName());
+			try {
+				context.getSingleTransformInstance().prepare(userProperties,
+						context.getSingleInputRow().getFieldNames());
+			} catch (Exception e) {
+				LOG.error(
+						"Exception in prepare method of: "
+								+ context.getSingleTransformInstance().getClass().getName()
+								+ ".\nArguments passed to prepare() method are: \nProperties: "
+								+ userProperties
+								+ "\nInput Fields: "
+								+ Arrays.toString(context.getSingleInputRow().getFieldNames().toArray()), e);
+				throw new RuntimeException(
+						"Exception in prepare method of: "
+								+ context.getSingleTransformInstance().getClass().getName()
+								+ ".\nArguments passed to prepare() method are: \nProperties: "
+								+ userProperties
+								+ "\nInput Fields: "
+								+ Arrays.toString(context.getSingleInputRow().getFieldNames().toArray()), e);
+			}
+			return context;
 		}
-		return context;
+		return null;
+		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isRemove(FilterCall<RecordFilterContext> call) {
 
-		CustomHandlerContext<FilterBase> context = (CustomHandlerContext<FilterBase>) call
-				.getContext().getHandlerContext();
+		CustomHandlerContext<FilterBase> context = (CustomHandlerContext<FilterBase>) call.getContext()
+				.getHandlerContext();
 
-		LOG.trace("calling isRemove method of: "
-				+ context.getSingleTransformInstance().getClass().getName());
+		TupleEntry tupleEntry = call.getArguments();
+		// LOG.trace("calling isRemove method of: " +
+		// context.getSingleTransformInstance().getClass().getName());
 
 		try {
-			boolean isRemove = context.getSingleTransformInstance().isRemove(
-					ReusableRowHelper.extractFromTuple(call.getArguments()
-							.getTuple(), context.getSingleInputRow()));
+			if (operationExpression != null) {
+				Interpreter interpreter = new Interpreter();
+				for (int i = 0; i < inputFields.size(); i++) {
+					interpreter.set(String.valueOf(inputFields.get(i)), tupleEntry.getObject(inputFields.get(i)));
+				}
+				return isUnused ? !(boolean) interpreter.eval(ValidationAPI.getValidExpression(operationExpression))
+						: (boolean) interpreter.eval(ValidationAPI.getValidExpression(operationExpression));
+			} else {
+				boolean isRemove = context.getSingleTransformInstance().isRemove(ReusableRowHelper
+						.extractFromTuple(call.getArguments().getTuple(), context.getSingleInputRow()));
 
-			return isUnused ? !isRemove : isRemove;
+				return isUnused ? !isRemove : isRemove;
+			}
 		} catch (Exception e) {
-			LOG.error("Exception in isRemove method of: "
-					+ context.getSingleTransformInstance().getClass().getName()
+			LOG.error("Exception in isRemove method of: " + context.getSingleTransformInstance().getClass().getName()
 					+ ".\nRow being processed: " + call.getArguments(), e);
-			throw new RuntimeException("Exception in isRemove method of: "
-					+ context.getSingleTransformInstance().getClass().getName()
-					+ ".\nRow being processed: " + call.getArguments(), e);
+			throw new RuntimeException(e);
 		}
 	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public void cleanup(OperationCall<RecordFilterContext> call) {
 
 		CustomHandlerContext<FilterBase> context = (CustomHandlerContext<FilterBase>) call
 				.getContext().getHandlerContext();
-		LOG.trace("calling cleanup method of: "
-				+ context.getSingleTransformInstance().getClass().getName());
-		context.getSingleTransformInstance().cleanup();
+		if (context != null) {
+			LOG.trace("calling cleanup method of: "
+					+ context.getSingleTransformInstance().getClass().getName());
+			context.getSingleTransformInstance().cleanup();
+		}
 
 	}
 

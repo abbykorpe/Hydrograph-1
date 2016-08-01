@@ -28,19 +28,14 @@
 		<hasHeader value="false" />
 	</inputs>
 
-	<operations id="trans" phase="1" xsi:type="op:filter">
+
+	<operations id="trans" phase="0" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<operation id="operation1" class="hydrograph.engine.userfunctions.Filter">
+		<expression
+			expr="StringFunctions.stringMatch(Choice,&quot;AAA&quot;)?true:false;"
+			id="sadf">
 			<inputFields>
 				<field name="Choice" inSocketId="in0" />
-			</inputFields>
-			<properties>
-				<property name="Filter" value="filter" />
-			</properties>
-		</operation>
-		<expression expr="sad" id="sadf">
-			<inputFields>
-				<field name="saf" inSocketId="in0" />
 			</inputFields>
 		</expression>
 		<outSocket id="out1" type="out">

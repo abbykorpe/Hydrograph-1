@@ -98,6 +98,7 @@ public class CustomHandlerContext<T> {
 
 		if (transformClassNames != null) {
 			for (String transformClassName : transformClassNames) {
+				if(transformClassName!=null)
 				transformInstances.add((T) UserClassLoader.loadAndInitClass(transformClassName));
 
 			}

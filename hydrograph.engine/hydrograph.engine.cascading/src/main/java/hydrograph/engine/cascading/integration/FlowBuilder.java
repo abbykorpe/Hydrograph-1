@@ -120,7 +120,7 @@ public class FlowBuilder {
 			} else if (assemblyGeneratorBase instanceof OutputAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
-						.setFlowdef().setInputPipes().setSchemaFields().setInputFields().build();
+						.setFlowdef().setInputPipes().setInputFields().setSchemaFields().build();
 			} else if (assemblyGeneratorBase instanceof StraightPullAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
@@ -129,8 +129,8 @@ public class FlowBuilder {
 			} else if (assemblyGeneratorBase instanceof OperationAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
-						.setFlowdef().setJobConf().setInputPipes().setSchemaFields()
-						.setInputFields().build();
+						.setFlowdef().setJobConf().setInputPipes()
+						.setInputFields().setSchemaFields().build();
 			} else if (assemblyGeneratorBase instanceof CommandComponentGeneratorBase) {
 				CommandComponentGeneratorBase command = ((CommandComponentGeneratorBase) assemblyGeneratorBase)
 						.getCommandComponent();

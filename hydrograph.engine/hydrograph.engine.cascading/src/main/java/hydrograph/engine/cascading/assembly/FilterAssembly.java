@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +26,12 @@ import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.FilterEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.RecordFilter;
+import hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class FilterAssembly extends BaseComponent<FilterEntity> {
@@ -71,12 +79,13 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 
 		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("filter",filterEntity.getComponentId() ,
 				 socketId), componentParameters.getInputPipe());
-
+		// validate expression
+				expressionValidate();
 		FilterCustomHandler filterCustomHandler = new FilterCustomHandler(
 				new Fields(filterEntity.getOperation()
 						.getOperationInputFields()), filterEntity
 						.getOperation().getOperationClass(), filterEntity
-						.getOperation().getOperationProperties(), isUnused);
+						.getOperation().getOperationProperties(), isUnused,filterEntity.getOperation().getExpression());
 
 		RecordFilter selectCustomFilter = new RecordFilter(filterCustomHandler,componentParameters.getInputPipe().getName());
 
@@ -87,6 +96,25 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 
 		setOutLink(socketType, socketId, filterEntity.getComponentId(),
 				filterPipe, componentParameters.getInputFields());
+	}
+	
+	private void expressionValidate() {
+		if (filterEntity.getOperation().getExpression() != null) {
+			Map<String, Class<?>> schemaMap = new HashMap<String, Class<?>>();
+			try {
+				for (SchemaField schemaField : componentParameters.getSchemaFields()) {
+					schemaMap.put(schemaField.getFieldName(), Class.forName(schemaField.getFieldDataType()));
+				}
+				DiagnosticCollector<JavaFileObject> diagnostic = ValidationAPI
+						.compile(filterEntity.getOperation().getExpression(), schemaMap);
+				if (diagnostic.getDiagnostics().size() > 0) {
+					diagnostic.getDiagnostics().get(0).getMessage(null);
+					throw new RuntimeException(diagnostic.getDiagnostics().get(0).getMessage(null));
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
