@@ -78,8 +78,8 @@ public class NormalizeConverter extends TransformConverter {
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(atMapping,schemaGridRows);
+	protected List<Object> getOperations() {
+		return converterHelper.getOperationsOrExpression(atMapping,schemaGridRows);
 	}
 
 	@Override

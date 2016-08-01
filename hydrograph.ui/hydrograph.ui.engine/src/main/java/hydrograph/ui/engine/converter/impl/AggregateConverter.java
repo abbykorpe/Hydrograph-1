@@ -88,8 +88,8 @@ public class AggregateConverter extends TransformConverter {
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(transformMapping, schemaGridRows);
+	protected List<Object> getOperations() {
+		return converterHelper.getOperationsOrExpression(transformMapping, schemaGridRows);
 	}
 
 	@Override

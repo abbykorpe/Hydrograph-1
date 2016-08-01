@@ -1,6 +1,7 @@
 package hydrograph.ui.datastructure.expression;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.datastructure.property.FilterProperties;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -18,13 +19,12 @@ public class ExpressionEditorData implements IDataStructure {
 		selectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
 	}
 
-	ExpressionEditorData(String expression, List<String> clonedListUsedFieldsInExpression,
+	public ExpressionEditorData(String expression, List<String> clonedListUsedFieldsInExpression,
 			Map<String,Class<?>> clonedSelectedFieldsForExpression) {
-		expression = this.expression;
-		if (fieldsUsedInExpression != null)
-			clonedListUsedFieldsInExpression.addAll(fieldsUsedInExpression);
-		if (selectedInputFieldsForExpression != null)
-			clonedSelectedFieldsForExpression.putAll(selectedInputFieldsForExpression);
+		this.expression=expression;
+		this.fieldsUsedInExpression=clonedListUsedFieldsInExpression;
+		this.selectedInputFieldsForExpression=clonedSelectedFieldsForExpression;
+		
 	}
 
 	public String getExpression() {
@@ -45,9 +45,16 @@ public class ExpressionEditorData implements IDataStructure {
 
 	@Override
 	public ExpressionEditorData clone() {
-		List<String> clonedList = new ArrayList<>();
-		Map<String,Class<?>> clonedSelectedFieldsForExpression = new LinkedHashMap<String,Class<?>>();
-		return new ExpressionEditorData("", clonedList, clonedSelectedFieldsForExpression);
+		String clonedExpression=this.expression;
+		List<String> clonedFieldsUsedInExpression = new ArrayList<>();
+		clonedFieldsUsedInExpression.addAll(this.fieldsUsedInExpression);
+		Map<String,Class<?>> clonedSelectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
+		
+		for(Map.Entry<String, Class<?>> entry:selectedInputFieldsForExpression.entrySet())
+		{
+			clonedSelectedInputFieldsForExpression.put(entry.getKey(), entry.getValue());
+		}	
+		return new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression);
 	}
 
 }

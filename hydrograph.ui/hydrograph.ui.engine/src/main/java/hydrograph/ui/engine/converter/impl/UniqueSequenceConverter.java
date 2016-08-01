@@ -63,7 +63,7 @@ public class UniqueSequenceConverter extends TransformConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		List<TypeTransformOperation> operationsList = null;
+		List<Object> operationsList = null;
 		GenerateSequence generateSequence = (GenerateSequence) baseComponent;
 		operationsList = getOperations();
 		if (operationsList != null)
@@ -74,9 +74,9 @@ public class UniqueSequenceConverter extends TransformConverter {
 	 * This method creates operation field in target XML under UniqueSequence component.
 	 */
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
+	protected List<Object> getOperations() {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
-		List<TypeTransformOperation> operationList = null;
+		List<Object> operationList = null;
 		if (StringUtils.isNotBlank(newFieldName)) {
 			operationList = new ArrayList<>();
 			TypeTransformOperation operation = new TypeTransformOperation();

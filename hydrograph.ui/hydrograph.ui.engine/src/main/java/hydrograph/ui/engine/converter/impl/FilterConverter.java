@@ -82,9 +82,9 @@ public class FilterConverter extends TransformConverter {
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
+	protected List<Object> getOperations() {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
-		List<TypeTransformOperation> operationList = new ArrayList<>();
+		List<Object> operationList = new ArrayList<>();
 		TypeTransformOperation operation = new TypeTransformOperation();
 		TypeOperationInputFields operationInputFields = new TypeOperationInputFields();
 		operationInputFields.getField().addAll(getOperationField());

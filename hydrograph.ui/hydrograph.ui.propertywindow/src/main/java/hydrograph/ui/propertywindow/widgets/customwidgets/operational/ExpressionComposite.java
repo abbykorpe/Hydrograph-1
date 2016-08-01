@@ -136,6 +136,7 @@ public class ExpressionComposite extends Composite {
 				}
 				LaunchExpressionEditor launchExpressionEditor = new LaunchExpressionEditor();
 				launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getExpressionEditorData());
+				expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());
 			}
 		});
 		

@@ -173,8 +173,8 @@ public class JoinConverter extends TransformConverter {
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		List<TypeTransformOperation> operationList = new ArrayList<>();
+	protected List<Object> getOperations() {
+		List<Object> operationList = new ArrayList<>();
 		TypeTransformOperation operation = new TypeTransformOperation();
 		TypeOperationInputFields operationInputFields = new TypeOperationInputFields();
 		operationInputFields.getField().addAll(getOperationField());

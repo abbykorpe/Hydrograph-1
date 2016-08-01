@@ -222,7 +222,7 @@ public class LookupConverter extends TransformConverter {
 	}*/
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
+	protected List<Object> getOperations() {
 		return null;
 	}
 

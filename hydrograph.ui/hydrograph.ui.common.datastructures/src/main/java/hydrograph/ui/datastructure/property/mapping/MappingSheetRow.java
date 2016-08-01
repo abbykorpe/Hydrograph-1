@@ -160,7 +160,7 @@ public class MappingSheetRow implements IDataStructure {
 	 *            the name value property
 	 */
 	public MappingSheetRow(List<FilterProperties> input, List<FilterProperties> outputList, String comBoxValue,String operationClassPath,boolean isClassParameter,String operationId,
-			 List<NameValueProperty> nameValueProperty) 
+			 List<NameValueProperty> nameValueProperty,boolean isExpression,ExpressionEditorData expressionEditorData) 
 	{
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -169,6 +169,8 @@ public class MappingSheetRow implements IDataStructure {
 		this.operationId=operationId;
 		this.nameValuePropertyList=nameValueProperty;
 		this.setClassParameter(isClassParameter);
+		this.isExpression=isExpression;
+		this.expressionEditorData=expressionEditorData;
 	}
 	
 	
