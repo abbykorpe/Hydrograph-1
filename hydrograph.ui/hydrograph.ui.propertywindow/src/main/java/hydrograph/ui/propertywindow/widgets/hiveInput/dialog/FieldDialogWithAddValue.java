@@ -16,20 +16,29 @@ package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialogs.FieldCompareUtility;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
@@ -46,6 +55,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
 
+	
 	
 	@Override
 	protected Composite addButtonPanel(final Composite container) {
@@ -79,6 +89,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 					
 									
 					fieldsMap.put((String)tableItem.getText(),persitedList);
+						
 					
 				}
 				addingValue.setProperties(fieldsMap);
@@ -118,6 +129,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	@Override
 	protected void okPressed() {
 		TableItem[] items = getTargetTableViewer().getTable().getItems();
+		
 		if (fieldsMap != null && fieldsMap.isEmpty() && items.length > 0) {
 			if (items.length > 0) {
 
@@ -138,13 +150,25 @@ public class FieldDialogWithAddValue extends FieldDialog {
 			
 		}
 		
-			
 		if(isAnyUpdatePerformed){
 			propertyDialogButtonBar.enableApplyButton(true);
 		}
 		
+		
+		if(!FieldCompareUtility.INSTANCE.compareAndChangeColor(items,sourceFieldsList)){
+			int rc=FieldCompareUtility.INSTANCE.Message_Dialog();
+			   if(rc==0){
+				   super.okPressed();
+			   }
+			   else if(rc==1){
+				   return;
+			   }
+		}
+		
 		super.okPressed();
+		
 	}
+	
 	
 	private boolean isItemsNameChanged(TableItem[] items, Set<String> keySet) {
 		
@@ -172,7 +196,18 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		return messageBox;
 	}
 	
-	
+	@Override
+	protected void operationOnDrop(DropTargetEvent event) {
+		super.operationOnDrop(event);
+		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
+		
+	}
+
+	@Override
+	protected void checkFieldsOnStartup() {
+
+		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
+	}
 }
 
 

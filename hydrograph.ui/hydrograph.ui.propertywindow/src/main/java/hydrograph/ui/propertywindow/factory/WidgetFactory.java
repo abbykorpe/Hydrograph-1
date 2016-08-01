@@ -41,6 +41,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTOperationClassWidge
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveInputSingleColumnWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.HiveOutputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
@@ -102,7 +103,7 @@ public class WidgetFactory {
 		COUNT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getCountWidgetConfig ()),
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
-		PARTITION_KEYS_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
+		PARTITION_KEYS_WIDGET(HiveOutputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
 		
 		PARTITION_KEYS_WIDGET_INPUT_HIVE(HiveInputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),

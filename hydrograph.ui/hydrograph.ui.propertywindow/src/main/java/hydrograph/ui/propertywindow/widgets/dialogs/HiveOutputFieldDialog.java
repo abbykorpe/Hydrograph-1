@@ -28,15 +28,20 @@ import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvide
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellEditorValidator;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -75,20 +80,18 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.DoubleClickEvent;
 
 
 /**
  * 
- * The class to create key field dialog.
+ * The class to create partition key field dialog for Hive Output.
  * 
  * @author Bitwise
  * 
  */
 
-public class FieldDialog extends Dialog {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(FieldDialog.class);
+public class HiveOutputFieldDialog extends Dialog {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(HiveOutputFieldDialog.class);
 
 	private final List<FilterProperties> propertyList;
 	private List<String> fieldNameList;
@@ -121,7 +124,7 @@ public class FieldDialog extends Dialog {
 	protected Button okButton;
 	private static final String INFORMATION="Information";
 
-	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
+	public HiveOutputFieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
 
 		propertyList = new ArrayList<FilterProperties>();
@@ -265,7 +268,7 @@ public class FieldDialog extends Dialog {
 	}
 	
 	protected void checkFieldsOnStartup() {
-		// To compare available and selected partition keys for hive input.
+		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
 		
 	}
 
@@ -562,6 +565,7 @@ public class FieldDialog extends Dialog {
 		for (String fieldName : getformatedData((String) event.data))
 				addNewProperty(targetTableViewer, fieldName);
 		enableControlButons();
+		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
 	}
 
 	public void createSourceTable(Composite container) {
@@ -736,6 +740,7 @@ public class FieldDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		TableItem[] items = getTargetTableViewer().getTable().getItems();
 		if (validate()) {
 			fieldNameList.clear();
 			for (FilterProperties temp : propertyList) {
@@ -745,11 +750,24 @@ public class FieldDialog extends Dialog {
 			if (isAnyUpdatePerformed) {
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
+			
+			if(!FieldCompareUtility.INSTANCE.compareAndChangeColor(items,sourceFieldsList)){
+				int rc=FieldCompareUtility.INSTANCE.Message_Dialog();
+				   if(rc==0){
+					   super.okPressed();
+				   }
+				   else if(rc==1){
+					   return;
+				   }
+			}
+			
 			okPressed=true;
 			super.okPressed();
 		} else {
 			return;
 		}
+		
+		
 	}
 
 	@Override
@@ -770,7 +788,7 @@ public class FieldDialog extends Dialog {
 	
 	@Override
 	public boolean close() {
-		if(!okPressed){
+		if(okPressed){
 			cancelPressed();			
 			return closeDialog;
 		}else{
@@ -791,4 +809,6 @@ public class FieldDialog extends Dialog {
 	protected TableViewer getTargetTableViewer() {
 		return targetTableViewer;
 	}
+	
+	
 }
