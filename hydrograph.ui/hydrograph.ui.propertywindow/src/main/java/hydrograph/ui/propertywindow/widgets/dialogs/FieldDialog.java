@@ -265,7 +265,7 @@ public class FieldDialog extends Dialog {
 	}
 	
 	protected void checkFieldsOnStartup() {
-		// TODO Auto-generated method stub
+		// To compare available and selected partition keys for hive input.
 		
 	}
 

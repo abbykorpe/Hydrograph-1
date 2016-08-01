@@ -21,7 +21,6 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.dialogs.HiveOutputFieldDialog;
@@ -41,7 +40,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-
+/**
+ * 
+ * The class to create partition key field dialog for hive output.
+ * 
+ * @author Bitwise
+ * 
+ */
 public class HiveOutputSingleColumnWidget extends AbstractWidget {
 
 	protected String propertyName;

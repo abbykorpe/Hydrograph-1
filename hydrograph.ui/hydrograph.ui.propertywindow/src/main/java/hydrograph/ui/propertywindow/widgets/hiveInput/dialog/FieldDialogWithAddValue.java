@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialogs.FieldCompareUtility;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 
 import java.util.ArrayList;
@@ -154,8 +155,8 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		}
 		
 		
-		if(!compareAndChangeColor(items)){
-			int rc=Message_Dialog();
+		if(!FieldCompareUtility.INSTANCE.compareAndChangeColor(items,sourceFieldsList)){
+			int rc=FieldCompareUtility.INSTANCE.Message_Dialog();
 			   if(rc==0){
 				   super.okPressed();
 			   }
@@ -167,62 +168,7 @@ public class FieldDialogWithAddValue extends FieldDialog {
 		super.okPressed();
 		
 	}
-
-
-	protected boolean compareAndChangeColor(TableItem[] items){
-		boolean check_field=compare_fields(items);
-		if(!check_field){
-			Color color = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-			for (TableItem tableItem : items){
-				tableItem.setForeground(color);
-			}
-		}
-		return check_field;
-	}
 	
-	private int Message_Dialog()
-	{
-		String message="The partition fields should appear at the end of the schema in the same order. Please rearrange fields either in schema or in partition fields";
-		
-			MessageDialog dialog = new MessageDialog(Display.getCurrent().getActiveShell(), "Rearrange Fields", null,
-			    message, MessageDialog.ERROR, new String[] { "Rearrange Schema",
-			  "Rearrange Partition Fields" }, 0);
-			int result = dialog.open();
-			return result;
-	}
-	
-	 
-	private boolean compare_fields(TableItem[] items)
-	{
-		ListIterator<String> t_itr,s_itr;
-		boolean is_equal=true;
-		
-		List<String> target_fields = new ArrayList<String>();
-		if(items.length > 0){
-			for (TableItem tableItem : items){
-				target_fields.add((String) tableItem.getText());
-			}
-		
-		
-		List<String> source_field = new ArrayList<String>(sourceFieldsList);
-		
-		t_itr=target_fields.listIterator(target_fields.size());
-		s_itr = source_field.listIterator(source_field.size());
-		
-		
-		while(t_itr.hasPrevious() & s_itr.hasPrevious()){
-			if(StringUtils.equals(s_itr.previous(),t_itr.previous())){
-				is_equal=true;
-			}
-			else{
-				is_equal=false;
-				break;
-			}
-		}
-		}
-		return is_equal;
-		
-	}
 	
 	private boolean isItemsNameChanged(TableItem[] items, Set<String> keySet) {
 		
@@ -253,14 +199,14 @@ public class FieldDialogWithAddValue extends FieldDialog {
 	@Override
 	protected void operationOnDrop(DropTargetEvent event) {
 		super.operationOnDrop(event);
-		compareAndChangeColor(getTargetTableViewer().getTable().getItems());
+		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
 		
 	}
 
 	@Override
 	protected void checkFieldsOnStartup() {
 
-		compareAndChangeColor(getTargetTableViewer().getTable().getItems());
+		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
 	}
 }
 
