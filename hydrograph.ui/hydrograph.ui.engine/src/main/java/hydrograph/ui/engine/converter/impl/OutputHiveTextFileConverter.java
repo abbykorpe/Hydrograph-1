@@ -154,6 +154,7 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 			TypeOutputHiveTextFileDelimitedInSocket outInSocket = new TypeOutputHiveTextFileDelimitedInSocket();
 			outInSocket.setId(link.getTargetTerminal());
 			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
+			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();

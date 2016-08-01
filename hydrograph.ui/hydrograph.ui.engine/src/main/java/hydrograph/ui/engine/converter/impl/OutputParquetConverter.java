@@ -68,6 +68,7 @@ public class OutputParquetConverter extends OutputConverter {
 						+ link.getLinkNumber());
 			else
 				outInSocket.setFromSocketId(link.getSourceTerminal());
+			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();

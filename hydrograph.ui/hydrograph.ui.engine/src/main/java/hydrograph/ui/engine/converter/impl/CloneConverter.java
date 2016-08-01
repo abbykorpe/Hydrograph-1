@@ -83,6 +83,7 @@ public class CloneConverter extends StraightPullConverter {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
 			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
 			inSocket.setFromSocketId(converterHelper.getFromSocketId(link));
+			inSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 			inSocket.setId(link.getTargetTerminal());
 			inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			inSocket.getOtherAttributes();
