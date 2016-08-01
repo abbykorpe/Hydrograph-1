@@ -1153,7 +1153,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	boolean isJobOld = false;
     	for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
     	{
-    		if(nameValueProperty.getFilterProperty()==null || nameValueProperty.getFilterProperty().getPropertyname()==null)
+    		if(nameValueProperty.getFilterProperty()==null || StringUtils.isBlank(nameValueProperty.getFilterProperty().getPropertyname()))
     		{
     			isJobOld=true;
     			break;
