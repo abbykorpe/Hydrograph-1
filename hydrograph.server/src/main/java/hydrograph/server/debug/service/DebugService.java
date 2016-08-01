@@ -1,14 +1,14 @@
 /*******************************************************************************
- *  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  * http://www.apache.org/licenses/LICENSE-2.0
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ *  Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  *******************************************************************************/
 package hydrograph.server.debug.service;
 
@@ -24,6 +24,7 @@ import java.net.URL;
 import java.security.PrivilegedAction;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 
 import javax.security.auth.Subject;
@@ -61,8 +62,7 @@ import spark.Spark;
  * 
  */
 public class DebugService implements PrivilegedAction<Object> {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(DebugService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DebugService.class);
 
 	public DebugService() {
 	}
@@ -70,14 +70,11 @@ public class DebugService implements PrivilegedAction<Object> {
 	private void start() {
 		int portNumber = Constants.DEFAULT_PORT_NUMBER;
 		try {
-			portNumber = Integer.parseInt(ServiceUtilities
-					.getServiceConfigResourceBundle().getString(
-							Constants.PORT_ID));
-			LOG.debug("Port number '" + portNumber
-					+ "' fetched from properties file");
+			portNumber = Integer
+					.parseInt(ServiceUtilities.getServiceConfigResourceBundle().getString(Constants.PORT_ID));
+			LOG.debug("Port number '" + portNumber + "' fetched from properties file");
 		} catch (Exception e) {
-			LOG.error("Error fetching port number. Defaulting to "
-					+ Constants.DEFAULT_PORT_NUMBER, e);
+			LOG.error("Error fetching port number. Defaulting to " + Constants.DEFAULT_PORT_NUMBER, e);
 		}
 		Spark.setPort(portNumber);
 
@@ -87,8 +84,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				LOG.info("************************read endpoint - started************************");
 				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
 				String jobId = request.queryParams(Constants.JOB_ID);
-				String componentId = request
-						.queryParams(Constants.COMPONENT_ID);
+				String componentId = request.queryParams(Constants.COMPONENT_ID);
 				String socketId = request.queryParams(Constants.SOCKET_ID);
 				String basePath = request.queryParams(Constants.BASE_PATH);
 
@@ -96,24 +92,18 @@ public class DebugService implements PrivilegedAction<Object> {
 				String userID = request.queryParams(Constants.USER_ID);
 				String password = request.queryParams(Constants.PASSWORD);
 
-				double sizeOfData = Double.parseDouble(request
-						.queryParams(Constants.FILE_SIZE)) * 1024 * 1024;
-				LOG.info(
-						"Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}, DataSize:{}",
-						new Object[] { basePath, jobId, componentId, socketId,
-								userID, sizeOfData });
+				double sizeOfData = Double.parseDouble(request.queryParams(Constants.FILE_SIZE)) * 1024 * 1024;
+				LOG.info("Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}, DataSize:{}",
+						new Object[] { basePath, jobId, componentId, socketId, userID, sizeOfData });
 
 				String batchID = jobId + "_" + componentId + "_" + socketId;
-				String tempLocationPath = ServiceUtilities
-						.getServiceConfigResourceBundle().getString(
-								Constants.TEMP_LOCATION_PATH);
+				String tempLocationPath = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.TEMP_LOCATION_PATH);
 				String filePath = tempLocationPath + "/" + batchID + ".csv";
 				try {
-					readFileFromHDFS(basePath + "/debug/" + jobId + "/"
-							+ componentId + "_" + socketId, sizeOfData,
+					readFileFromHDFS(basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId, sizeOfData,
 							filePath, userID, password);
-					LOG.info("+++ Stop: "
-							+ new Timestamp((new Date()).getTime()));
+					LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
 				} catch (Exception e) {
 					LOG.error("Error in reading debug files", e);
 					return "error";
@@ -139,8 +129,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			 * @param password
 			 * 
 			 */
-			private void readFileFromHDFS(String hdfsFilePath,
-					double sizeOfData, String remoteFileName, String userId,
+			private void readFileFromHDFS(String hdfsFilePath, double sizeOfData, String remoteFileName, String userId,
 					String password) {
 				try {
 					Path path = new Path(hdfsFilePath);
@@ -148,12 +137,10 @@ public class DebugService implements PrivilegedAction<Object> {
 					Configuration conf = new Configuration();
 
 					// load hdfs-site.xml and core-site.xml
-					String hdfsConfigPath = ServiceUtilities
-							.getServiceConfigResourceBundle().getString(
-									Constants.HDFS_SITE_CONFIG_PATH);
-					String coreSiteConfigPath = ServiceUtilities
-							.getServiceConfigResourceBundle().getString(
-									Constants.CORE_SITE_CONFIG_PATH);
+					String hdfsConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+							.getString(Constants.HDFS_SITE_CONFIG_PATH);
+					String coreSiteConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+							.getString(Constants.CORE_SITE_CONFIG_PATH);
 					LOG.debug("Loading hdfs-site.xml:" + hdfsConfigPath);
 					conf.addResource(new Path(hdfsConfigPath));
 					LOG.debug("Loading hdfs-site.xml:" + coreSiteConfigPath);
@@ -180,9 +167,8 @@ public class DebugService implements PrivilegedAction<Object> {
 			 * @throws IOException
 			 * @throws FileNotFoundException
 			 */
-			private void listAndWriteFiles(String remoteFileName, Path path,
-					Configuration conf, double sizeOfData) throws IOException,
-					FileNotFoundException {
+			private void listAndWriteFiles(String remoteFileName, Path path, Configuration conf, double sizeOfData)
+					throws IOException, FileNotFoundException {
 				FileSystem fs = FileSystem.get(conf);
 				FileStatus[] status = fs.listStatus(path);
 				File remoteFile = new File(remoteFileName);
@@ -192,9 +178,7 @@ public class DebugService implements PrivilegedAction<Object> {
 
 					int numOfBytes = 0;
 					for (int i = 0; i < status.length; i++) {
-						BufferedReader br = new BufferedReader(
-								new InputStreamReader(fs.open(status[i]
-										.getPath())));
+						BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
 						String line = "";
 						line = br.readLine();
 						if (line != null) {
@@ -209,8 +193,7 @@ public class DebugService implements PrivilegedAction<Object> {
 								numOfBytes += line.toString().length();
 								// line = br.readLine();
 								if (numOfBytes <= sizeOfData) {
-									os.write((line + "\n").toString()
-											.getBytes());
+									os.write((line + "\n").toString().getBytes());
 								} else {
 									break;
 								}
@@ -237,38 +220,31 @@ public class DebugService implements PrivilegedAction<Object> {
 				response.type("text/json");
 				String jobId = request.queryParams(Constants.JOB_ID);
 				String basePath = request.queryParams(Constants.BASE_PATH);
-				String componentId = request
-						.queryParams(Constants.COMPONENT_ID);
+				String componentId = request.queryParams(Constants.COMPONENT_ID);
 				String socketId = request.queryParams(Constants.SOCKET_ID);
 				String userID = request.queryParams(Constants.USER_ID);
 				String password = request.queryParams(Constants.PASSWORD);
 
-				LOG.info(
-						"Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
-						new Object[] { basePath, jobId, componentId, socketId,
-								userID });
+				LOG.info("Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
+						new Object[] { basePath, jobId, componentId, socketId, userID });
 
 				try {
-					removeDebugFiles(basePath, jobId, componentId, socketId,
-							userID, password);
-					LOG.info("+++ Stop: "
-							+ new Timestamp((new Date()).getTime()));
+					removeDebugFiles(basePath, jobId, componentId, socketId, userID, password);
+					LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
 				} catch (Exception e) {
 					LOG.error("Error in deleting debug files", e);
 				}
 				return "error";
 			}
 
-			private void removeDebugFiles(String basePath, String jobId,
-					String componentId, String socketId, String userID,
-					String password) {
+			private void removeDebugFiles(String basePath, String jobId, String componentId, String socketId,
+					String userID, String password) {
 				try {
 					// DebugFilesReader debugFilesReader = new
 					// DebugFilesReader(basePath, jobId, componentId, socketId,
 					// userID,
 					// password);
-					delete(basePath, jobId, componentId, socketId, userID,
-							password);
+					delete(basePath, jobId, componentId, socketId, userID, password);
 				} catch (Exception e) {
 					LOG.error("Error while deleting the debug file", e);
 					throw new RuntimeException(e);
@@ -287,8 +263,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			 * 
 			 * @throws IOException
 			 */
-			public void delete(String basePath, String jobId,
-					String componentId, String socketId, String userID,
+			public void delete(String basePath, String jobId, String componentId, String socketId, String userID,
 					String password) throws IOException {
 				LOG.trace("Entering method delete()");
 				String deletePath = basePath + "/debug/" + jobId;
@@ -314,22 +289,16 @@ public class DebugService implements PrivilegedAction<Object> {
 				LOG.info("************************deleteLocalDebugFile endpoint - started************************");
 				try {
 					String jobId = request.queryParams(Constants.JOB_ID);
-					String componentId = request
-							.queryParams(Constants.COMPONENT_ID);
+					String componentId = request.queryParams(Constants.COMPONENT_ID);
 					String socketId = request.queryParams(Constants.SOCKET_ID);
 					String batchID = jobId + "_" + componentId + "_" + socketId;
-					String tempLocationPath = ServiceUtilities
-							.getServiceConfigResourceBundle().getString(
-									Constants.TEMP_LOCATION_PATH);
+					String tempLocationPath = ServiceUtilities.getServiceConfigResourceBundle()
+							.getString(Constants.TEMP_LOCATION_PATH);
 
-					LOG.info(
-							"Job Id: {}, Component Id: {}, Socket ID: {}, TemporaryPath: {}",
-							new Object[] { jobId, componentId, socketId,
-									tempLocationPath });
-					LOG.debug("File to be deleted: " + tempLocationPath + "/"
-							+ batchID + ".csv");
-					File file = new File(tempLocationPath + "/" + batchID
-							+ ".csv");
+					LOG.info("Job Id: {}, Component Id: {}, Socket ID: {}, TemporaryPath: {}",
+							new Object[] { jobId, componentId, socketId, tempLocationPath });
+					LOG.debug("File to be deleted: " + tempLocationPath + "/" + batchID + ".csv");
+					File file = new File(tempLocationPath + "/" + batchID + ".csv");
 					file.delete();
 					LOG.trace("Local debug file deleted successfully.");
 					return "Success";
@@ -373,55 +342,45 @@ public class DebugService implements PrivilegedAction<Object> {
 
 				Gson gson = new Gson();
 				String json = request.queryParams(Constants.JSON);
-				RemoteFilterJson remoteFilterJson = gson.fromJson(json,
-						RemoteFilterJson.class);
+				RemoteFilterJson remoteFilterJson = gson.fromJson(json, RemoteFilterJson.class);
 
-				String jobId = remoteFilterJson.getJobDetails()
-						.getUniqueJobID();
-				String componentId = remoteFilterJson.getJobDetails()
-						.getComponentID();
-				String socketId = remoteFilterJson.getJobDetails()
-						.getComponentSocketID();
-				String basePath = remoteFilterJson.getJobDetails()
-						.getBasepath();
-				String username = remoteFilterJson.getJobDetails()
-						.getUsername();
-				String password = remoteFilterJson.getJobDetails()
-						.getPassword();
+				String jobId = remoteFilterJson.getJobDetails().getUniqueJobID();
+				String componentId = remoteFilterJson.getJobDetails().getComponentID();
+				String socketId = remoteFilterJson.getJobDetails().getComponentSocketID();
+				String basePath = remoteFilterJson.getJobDetails().getBasepath();
+				String username = remoteFilterJson.getJobDetails().getUsername();
+				String password = remoteFilterJson.getJobDetails().getPassword();
 				double outputFileSizeInMB = remoteFilterJson.getFileSize();
 				double sizeOfDataInByte = outputFileSizeInMB * 1024 * 1024;
 
 				String condition = parseSQLQueryToLingualQuery(remoteFilterJson);
 
-				LOG.info(
-						"Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}, DataSize:{}",
-						new Object[] { basePath, jobId, componentId, socketId,
-								username, sizeOfDataInByte });
+				LOG.info("Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}, DataSize:{}",
+						new Object[] { basePath, jobId, componentId, socketId, username, sizeOfDataInByte });
 
 				String batchID = jobId + "_" + componentId + "_" + socketId;
 
-				String tempLocationPath = ServiceUtilities
-						.getServiceConfigResourceBundle().getString(
-								Constants.TEMP_LOCATION_PATH);
+				String tempLocationPath = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.TEMP_LOCATION_PATH);
 
 				String filePath = tempLocationPath + "/" + batchID + ".csv";
 				String UUID = generateUUID();
 				String uniqueId = batchID + "_" + UUID;
 				String linugalMetaDataPath = basePath + "/filter/" + UUID;
-				try {
-					String[] fieldNames = getFieldName(remoteFilterJson);
-					Type[] fieldTypes = getFieldType(remoteFilterJson);
 
+				String fieldNames[] = getHeader(basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId,
+						username, password);
+				try {
+					HashMap<String, Type> fieldNameAndDatatype = getFieldNameAndType(remoteFilterJson);
+					Type[] fieldTypes = getFieldTypeFromMap(fieldNames, fieldNameAndDatatype);
 					Configuration conf = getConfiguration(username, password);
-					new LingualFilter().filterData(linugalMetaDataPath,
-							uniqueId, basePath + "/debug/" + jobId + "/"
-									+ componentId + "_" + socketId,
-							sizeOfDataInByte, filePath, condition, fieldNames,
-							fieldTypes, conf);
+
+					new LingualFilter().filterData(linugalMetaDataPath, uniqueId,
+							basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId, sizeOfDataInByte,
+							filePath, condition, fieldNames, fieldTypes, conf);
 
 					LOG.info("debug output path : " + filePath);
-					LOG.info("+++ Stop: "
-							+ new Timestamp((new Date()).getTime()));
+					LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
 				} catch (Exception e) {
 					LOG.error("Error in reading debug files", e);
 					return "error";
@@ -429,26 +388,82 @@ public class DebugService implements PrivilegedAction<Object> {
 					try {
 						System.gc();
 						deleteLingualResult(linugalMetaDataPath);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 
 				return filePath;
-
 			}
 
-			private Configuration getConfiguration(String userId,
-					String password) throws LoginException, IOException {
+			private Type[] getFieldTypeFromMap(String[] fieldNames, HashMap<String, Type> fieldNameAndDatatype) {
+				Type[] type = new Type[fieldNameAndDatatype.size()];
+				int i = 0;
+				for (String eachFieldName : fieldNames) {
+					type[i++] = fieldNameAndDatatype.get(eachFieldName);
+				}
+				return type;
+			}
+
+			private String[] getHeader(String path, String username, String password) {
+				String[] header = readFile(path, username, password);
+				return header;
+			}
+
+			private String[] readFile(String hdfsFilePath, String username, String password) {
+				String[] header = null;
+				try {
+					Path path = new Path(hdfsFilePath);
+					LOG.debug("Reading Debug file:" + hdfsFilePath);
+					Configuration conf = new Configuration();
+
+					// load hdfs-site.xml and core-site.xml
+					String hdfsConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+							.getString(Constants.HDFS_SITE_CONFIG_PATH);
+					String coreSiteConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+							.getString(Constants.CORE_SITE_CONFIG_PATH);
+					LOG.debug("Loading hdfs-site.xml:" + hdfsConfigPath);
+					conf.addResource(new Path(hdfsConfigPath));
+					LOG.debug("Loading hdfs-site.xml:" + coreSiteConfigPath);
+					conf.addResource(new Path(coreSiteConfigPath));
+
+					// apply kerberos token
+					applyKerberosToken(username, password, conf);
+
+					header = getHeaderArray(path, conf);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+				return header;
+			}
+
+			private String[] getHeaderArray(Path path, Configuration conf) throws IOException {
+				FileSystem fs = FileSystem.get(conf);
+				FileStatus[] status = fs.listStatus(path);
+				String line = "";
+				try {
+
+					BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(status[0].getPath())));
+
+					line = br.readLine();
+					br.close();
+
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				} finally {
+					fs.close();
+				}
+				return line.split(",");
+			}
+
+			private Configuration getConfiguration(String userId, String password) throws LoginException, IOException {
 				Configuration conf = new Configuration();
 
 				// load hdfs-site.xml and core-site.xml
-				String hdfsConfigPath = ServiceUtilities
-						.getServiceConfigResourceBundle().getString(
-								Constants.HDFS_SITE_CONFIG_PATH);
-				String coreSiteConfigPath = ServiceUtilities
-						.getServiceConfigResourceBundle().getString(
-								Constants.CORE_SITE_CONFIG_PATH);
+				String hdfsConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.HDFS_SITE_CONFIG_PATH);
+				String coreSiteConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.CORE_SITE_CONFIG_PATH);
 				LOG.debug("Loading hdfs-site.xml:" + hdfsConfigPath);
 				conf.addResource(new Path(hdfsConfigPath));
 				LOG.debug("Loading hdfs-site.xml:" + coreSiteConfigPath);
@@ -459,8 +474,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				return conf;
 			}
 
-			private void deleteLingualResult(String deletePath)
-					throws IOException {
+			private void deleteLingualResult(String deletePath) throws IOException {
 
 				Configuration configuration = new Configuration();
 				FileSystem fileSystem = FileSystem.get(configuration);
@@ -468,11 +482,9 @@ public class DebugService implements PrivilegedAction<Object> {
 
 				try {
 					if (!fileSystem.exists(deletingFilePath)) {
-						throw new PathNotFoundException(deletingFilePath
-								.toString());
+						throw new PathNotFoundException(deletingFilePath.toString());
 					} else {
-						boolean isDeleted = fileSystem.delete(deletingFilePath,
-								true);
+						boolean isDeleted = fileSystem.delete(deletingFilePath, true);
 						if (isDeleted) {
 							fileSystem.deleteOnExit(deletingFilePath);
 						}
@@ -488,47 +500,31 @@ public class DebugService implements PrivilegedAction<Object> {
 				return String.valueOf(UUID.randomUUID());
 			}
 
-			private String parseSQLQueryToLingualQuery(
-					RemoteFilterJson remoteFilterJson) {
-				ANTLRInputStream stream = new ANTLRInputStream(remoteFilterJson
-						.getCondition());
+			private String parseSQLQueryToLingualQuery(RemoteFilterJson remoteFilterJson) {
+				ANTLRInputStream stream = new ANTLRInputStream(remoteFilterJson.getCondition());
 				QueryParserLexer lexer = new QueryParserLexer(stream);
 				CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 				QueryParserParser parser = new QueryParserParser(tokenStream);
 				parser.removeErrorListeners();
-				LingualQueryCreator customVisitor = new LingualQueryCreator(
-						remoteFilterJson.getSchema());
+				LingualQueryCreator customVisitor = new LingualQueryCreator(remoteFilterJson.getSchema());
 				String condition = customVisitor.visit(parser.eval());
 				return condition;
 			}
 
-			private Type[] getFieldType(RemoteFilterJson remoteFilterJson)
+			private HashMap<String, Type> getFieldNameAndType(RemoteFilterJson remoteFilterJson)
 					throws ClassNotFoundException {
-				Type[] type = new Type[remoteFilterJson.getSchema().size()];
-
+				HashMap<String, Type> fieldDataTypeMap = new HashMap<>();
+				Type type;
 				for (int i = 0; i < remoteFilterJson.getSchema().size(); i++) {
-					Class clazz = Class.forName(remoteFilterJson.getSchema()
-							.get(i).getDataTypeValue());
-
-					if (clazz.getSimpleName().toString()
-							.equalsIgnoreCase("Date")) {
-						type[i] = new SQLDateCoercibleType();
+					Class clazz = Class.forName(remoteFilterJson.getSchema().get(i).getDataTypeValue());
+					if (clazz.getSimpleName().toString().equalsIgnoreCase("Date")) {
+						type = new SQLDateCoercibleType();
 					} else {
-						type[i] = clazz;
+						type = clazz;
 					}
+					fieldDataTypeMap.put(remoteFilterJson.getSchema().get(i).getFieldName(), type);
 				}
-				return type;
-			}
-
-			private String[] getFieldName(RemoteFilterJson remoteFilterJson) {
-				String fieldName[] = new String[remoteFilterJson.getSchema()
-						.size()];
-
-				for (int i = 0; i < remoteFilterJson.getSchema().size(); i++) {
-					fieldName[i] = remoteFilterJson.getSchema().get(i)
-							.getFieldName();
-				}
-				return fieldName;
+				return fieldDataTypeMap;
 			}
 
 		});
@@ -546,22 +542,16 @@ public class DebugService implements PrivilegedAction<Object> {
 	 * @throws LoginException
 	 * @throws IOException
 	 */
-	private void applyKerberosToken(String userId, String password,
-			Configuration conf) throws LoginException, IOException {
-		String enableKerberos = ServiceUtilities
-				.getServiceConfigResourceBundle().getString(
-						Constants.ENABLE_KERBEROS);
+	private void applyKerberosToken(String userId, String password, Configuration conf)
+			throws LoginException, IOException {
+		String enableKerberos = ServiceUtilities.getServiceConfigResourceBundle().getString(Constants.ENABLE_KERBEROS);
 		if (Boolean.parseBoolean(enableKerberos)) {
-			LOG.debug("Kerberos is enabled. Kerberos ticket will be generated for user: "
-					+ userId);
-			if (ServiceUtilities.getServiceConfigResourceBundle().containsKey(
-					Constants.KERBEROS_DOMAIN_NAME)) {
+			LOG.debug("Kerberos is enabled. Kerberos ticket will be generated for user: " + userId);
+			if (ServiceUtilities.getServiceConfigResourceBundle().containsKey(Constants.KERBEROS_DOMAIN_NAME)) {
 				LOG.debug("Kerberos domain name is set in config. UserID will be updated with the domain name.");
-				String kerberosDomainName = ServiceUtilities
-						.getServiceConfigResourceBundle().getString(
-								Constants.KERBEROS_DOMAIN_NAME);
-				kerberosDomainName = kerberosDomainName.equals("") ? "" : "@"
-						+ kerberosDomainName;
+				String kerberosDomainName = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.KERBEROS_DOMAIN_NAME);
+				kerberosDomainName = kerberosDomainName.equals("") ? "" : "@" + kerberosDomainName;
 				userId = userId + kerberosDomainName;
 				LOG.debug("Updated userId: " + userId);
 			}
@@ -569,18 +559,16 @@ public class DebugService implements PrivilegedAction<Object> {
 		}
 	}
 
-	private void getKerberosToken(String user, char[] password,
-			Configuration configuration) throws LoginException, IOException {
+	private void getKerberosToken(String user, char[] password, Configuration configuration)
+			throws LoginException, IOException {
 		LOG.trace("Entering method getKerberosToken() for user: " + user);
 		URL url = DebugService.class.getClassLoader().getResource("jaas.conf");
-		System.setProperty("java.security.auth.login.config",
-				url.toExternalForm());
+		System.setProperty("java.security.auth.login.config", url.toExternalForm());
 
 		LOG.info("Generating Kerberos ticket for user: " + user);
 		UserGroupInformation.setConfiguration(configuration);
 
-		LoginContext lc = new LoginContext("EntryName",
-				new UserPassCallbackHandler(user, password));
+		LoginContext lc = new LoginContext("EntryName", new UserPassCallbackHandler(user, password));
 		lc.login();
 
 		Subject subject = lc.getSubject();
