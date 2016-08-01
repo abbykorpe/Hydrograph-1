@@ -22,9 +22,10 @@ import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
 public enum HiveTypeToCoercibleTypeMapping {
 
-	INT(HiveType.INT), STRING(HiveType.STRING), DOUBLE(HiveType.DOUBLE), FLOAT(HiveType.FLOAT), SHORT(
-			HiveType.SHORT), BOOLEAN(
-					HiveType.BOOLEAN), DATE(HiveType.DATE), DECIMAL(HiveType.DECIMAL), LONG(HiveType.LONG);
+	INT(HiveType.INT), STRING(HiveType.STRING), DOUBLE(HiveType.DOUBLE), FLOAT(
+			HiveType.FLOAT), SHORT(HiveType.SHORT), BOOLEAN(HiveType.BOOLEAN), DATE(
+			HiveType.DATE), TIMESTAMP(HiveType.TIMESTAMP), DECIMAL(
+			HiveType.DECIMAL), LONG(HiveType.LONG), BIGINT(HiveType.LONG);
 
 	private final HiveType hiveType;
 
@@ -39,7 +40,8 @@ public enum HiveTypeToCoercibleTypeMapping {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Integer.class, null, -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(
+						Integer.class, null, -999, null);
 			}
 
 		},
@@ -48,58 +50,75 @@ public enum HiveTypeToCoercibleTypeMapping {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(String.class, null, -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(String.class,
+						null, -999, null);
 			}
 		},
 		DOUBLE {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Double.class, null, -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(Double.class,
+						null, -999, null);
 			}
 		},
 		FLOAT {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Float.class, null, -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(Float.class,
+						null, -999, null);
 			}
 		},
 		SHORT {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Short.class, null, -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(Short.class,
+						null, -999, null);
 			}
 		},
 		BOOLEAN {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Boolean.class, null, -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(
+						Boolean.class, null, -999, null);
 			}
 		},
 		DATE {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Date.class, "yyyy-MM-dd", -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(Date.class,
+						"yyyy-MM-dd", -999, null);
+			}
+		},
+		TIMESTAMP {
+			@Override
+			Type getMapping(String hiveDataType) {
+
+				return DataTypeCoerce.convertClassToCoercibleType(Date.class,
+						"yyyy-MM-dd HH:mm:ss", -999, null);
 			}
 		},
 		DECIMAL {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(BigDecimal.class, null, getScale(hiveDataType), null);
+				return DataTypeCoerce.convertClassToCoercibleType(
+						BigDecimal.class, null, getScale(hiveDataType), null);
 			}
 		},
 		LONG {
 			@Override
 			Type getMapping(String hiveDataType) {
 
-				return DataTypeCoerce.convertClassToCoercibleType(Long.class, null, -999, null);
+				return DataTypeCoerce.convertClassToCoercibleType(Long.class,
+						null, -999, null);
 			}
-		},;
+		},
+		;
 
 		abstract Type getMapping(String hiveDataType);
 
