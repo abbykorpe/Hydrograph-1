@@ -36,6 +36,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -43,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -128,7 +133,7 @@ public class DataViewerAdapter {
 	private void createConnection() throws ClassNotFoundException, SQLException, IOException {
 		Class.forName(AdapterConstants.CSV_DRIVER_CLASS);
 		Properties properties = new Properties();
-		properties.put(AdapterConstants.COLUMN_TYPES, getType(databaseName));
+		properties.put(AdapterConstants.COLUMN_TYPES, getType(databaseName).replaceAll("Date","TimeStamp"));
 		connection = DriverManager.getConnection(AdapterConstants.CSV_DRIVER_CONNECTION_PREFIX + databaseName,properties);
 		statement = connection.createStatement();
 	}
@@ -196,6 +201,21 @@ public class DataViewerAdapter {
 	}
 
 	public void initializeTableData() throws SQLException  {
+		List<Integer> temp3=new ArrayList<Integer>();
+		try {
+			String dataTypeString=getType(databaseName).replaceAll("Date","TimeStamp");
+			String[] temp=dataTypeString.split(",");
+			for(int i=0;i<temp.length;i++)
+			{
+				if(temp[i].equalsIgnoreCase("TimeStamp"))
+				{
+					temp3.add(i+1); 
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		viewerData.clear();
 		
 		String sql;
@@ -208,9 +228,42 @@ public class DataViewerAdapter {
 		}
 		ResultSet results = statement.executeQuery(sql);
 		int rowIndex = 1;
+		
 		while (results.next()) {
 			List<RowField> row = new LinkedList<>();
+			int indexTemp=1;
 			for (int index = 1; index <= columnCount; index++) {
+				boolean flag=false;
+				for(int i=indexTemp;i<=temp3.size();i++)
+				{
+					if(index==temp3.get(i-1))
+					{
+						try {
+							TimeZone tz = TimeZone.getDefault();
+						    int zoneOffset = tz.getRawOffset();
+						    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						    Date date = formatter.parse(results.getString(index));
+							 Long time = date.getTime();  
+				    		  long zoneLessTime = time-zoneOffset;
+				    		  Date d  =new Date(zoneLessTime);
+				    		  String timestampDate = formatter.format(d);
+				    		  System.out.println(time);
+				    		  System.out.println("'"+timestampDate+"'");
+				    		  row.add(new RowField(timestampDate));
+				    		  indexTemp++;
+				    		  flag=true;
+				    		  break;
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+					}
+//					else
+//					{
+//						row.add(new RowField(results.getString(index)));
+//						break;
+//					}
+				}
+				if(!flag)
 				row.add(new RowField(results.getString(index)));
 			}
 			viewerData.add(new RowData(row, rowIndex));
