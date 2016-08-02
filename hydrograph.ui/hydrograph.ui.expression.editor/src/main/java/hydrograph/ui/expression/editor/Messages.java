@@ -22,6 +22,9 @@ public class Messages extends NLS {
 	public static String JAVA_DOC_NOT_AVAILABLE;
 	public static String OPERATOR_FILE_NOT_FOUND;
 	public static String WARNING;
+	public static String ERROR_TITLE;
+	public static String JAR_FILE_COPY_ERROR;
+	public static String DUPLICATE_JAR_FILE_COPY_ERROR;
 	
 	static {
 		// initialize resource bundle

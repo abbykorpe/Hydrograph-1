@@ -13,8 +13,10 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
+import hydrograph.ui.expression.editor.message.CustomMessageBox;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -130,7 +132,7 @@ public class ValidateExpressionToolButton extends Button {
 				box.open();
 			}
 
-		} catch (JavaModelException | ClassNotFoundException | MalformedURLException | IllegalAccessException
+		} catch (JavaModelException |  MalformedURLException | IllegalAccessException
 				| IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
@@ -139,6 +141,9 @@ public class ValidateExpressionToolButton extends Button {
 			box.setMessage(e.getCause().getMessage());
 			box.setText(e.getCause().getMessage());
 			box.open();
+		}
+		catch (ClassNotFoundException classNotFoundException) {
+			new CustomMessageBox(SWT.ERROR, "Cannot find validation jar in build path", Messages.ERROR_TITLE).open();
 		}
 	}
 	

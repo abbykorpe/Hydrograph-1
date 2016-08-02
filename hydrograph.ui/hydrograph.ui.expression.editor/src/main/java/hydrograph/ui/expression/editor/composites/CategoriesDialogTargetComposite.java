@@ -53,9 +53,10 @@ public class CategoriesDialogTargetComposite extends Composite {
 	 * Create the composite.
 	 * 
 	 * @param parent
+	 * @param categoriesDialogSourceComposite 
 	 * @param style
 	 */
-	public CategoriesDialogTargetComposite(Composite parent, int style) {
+	public CategoriesDialogTargetComposite(Composite parent, CategoriesDialogSourceComposite categoriesDialogSourceComposite, int style) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 
@@ -71,29 +72,35 @@ public class CategoriesDialogTargetComposite extends Composite {
 
 		createDelButton(upperComposite);
 
-		targetList = new List(this, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		targetList = new List(this, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION|SWT.V_SCROLL|SWT.H_SCROLL);
 		targetList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		loadPackagesFromPropertyFileSettingFolder();
 
 		addDropSupport();
+		
+		linkSourceAndTarget(categoriesDialogSourceComposite);
 	}
 
-	private void loadPackagesFromPropertyFileSettingFolder() {
+	private void linkSourceAndTarget(CategoriesDialogSourceComposite categoriesDialogSourceComposite) {
+		categoriesDialogSourceComposite.setTargetComposite(this);
+	}
+
+	public void loadPackagesFromPropertyFileSettingFolder() {
 		Properties properties = new Properties();
 		IFolder folder = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getFolder(
 				PathConstant.PROJECTS_SETTINGS_FOLDER);
 		IFile file = folder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
 		try {
 			LOGGER.debug("Loading property file");
+			targetList.removeAll();
 			if (file.getLocation().toFile().exists()) {
 				FileInputStream inStream = new FileInputStream(file.getLocation().toString());
-				properties.loadFromXML(inStream);
-
+				properties.load(inStream);
 				for (Object key : properties.keySet()) {
 					String jarFileName = StringUtils.trim(StringUtils.substringAfter((String) key, Constants.DASH));
 					if (BuildExpressionEditorDataSturcture.INSTANCE.getIPackageFragment(jarFileName) != null) {
-						targetList.add((String) key);
+						targetList.add((String) key+SWT.SPACE+Constants.DASH+properties.getProperty((String)key));
 					}
 				}
 			}

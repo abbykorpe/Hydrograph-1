@@ -57,7 +57,7 @@ public class CategoriesUpperComposite extends Composite {
 		
 		btnAddPackages = new Button(this, SWT.NONE);
 		btnAddPackages.setText(ADD_CATEGORIES);
-		btnAddPackages.setVisible(true);
+		btnAddPackages.setVisible(false);
 		createSearchTextBox(this);
 		
 		addListnersToAddPackageButton(parent);

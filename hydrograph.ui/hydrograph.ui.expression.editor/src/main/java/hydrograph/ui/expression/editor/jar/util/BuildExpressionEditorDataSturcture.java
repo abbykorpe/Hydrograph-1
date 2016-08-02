@@ -112,20 +112,14 @@ public class BuildExpressionEditorDataSturcture {
 		Properties properties = new Properties();
 		IFolder folder=getCurrentProject().getFolder(PathConstant.PROJECTS_SETTINGS_FOLDER);
 		IFile file = folder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
-		System.out.println("sdasd");
 		try {
 			LOGGER.debug("Loading property file");
 			if (file.getLocation().toFile().exists()) {
 				FileInputStream inStream = new FileInputStream(file.getLocation().toString());
-				properties.loadFromXML(inStream);
+				properties.load(inStream);
 				
 				for(Object key:properties.keySet()){
-					String jarFileName=StringUtils.trim(StringUtils.substringAfter((String)key, Constants.DASH));
-					String packageName=StringUtils.trim(StringUtils.substringBefore((String)key, Constants.DASH));
-					
-					if(StringUtils.isNotBlank(packageName) && StringUtils.isNotBlank(jarFileName)){
-						loadUserDefinedClassesInClassRepo(jarFileName,packageName );
-					}
+						loadUserDefinedClassesInClassRepo(properties.getProperty((String)key),(String)key);
 				}
 			}
 		} catch (IOException |RuntimeException exception) {
