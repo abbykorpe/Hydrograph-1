@@ -49,7 +49,7 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 			gd_defaultELTTextBox.horizontalIndent=2;
 		}
 		else{
-			gd_defaultELTTextBox.horizontalIndent=-2;
+			gd_defaultELTTextBox.horizontalIndent=1;
 		}
 		
 		

@@ -39,9 +39,8 @@ public class ELTDefaultCombo extends AbstractELTWidget {
 		GridData gd_defaultELTTextBox = new GridData(SWT.FILL, SWT.FILL, false,
 				false, 1, 1);
 		gd_defaultELTTextBox.widthHint = textboxWidth;
-		gd_defaultELTTextBox.horizontalIndent=-2;
+		gd_defaultELTTextBox.horizontalIndent=1;
 		defaultELTcom.setLayoutData(gd_defaultELTTextBox);
-		gd_defaultELTTextBox.horizontalIndent = -2;
 
 		widget = defaultELTcom;
 	}
