@@ -188,7 +188,7 @@ public class FilterValidator {
 			new BigDecimal(value);
 		}
 		else if(FilterConstants.TYPE_DATE.equals(type)){
-			SimpleDateFormat sdf = new SimpleDateFormat(FilterConstants.YYYY_MM_DD); 
+			SimpleDateFormat sdf = new SimpleDateFormat(FilterConstants.DATE_FORMAT); 
 			sdf.parse(value);
 		}
 		return true;
