@@ -14,6 +14,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -104,7 +105,12 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		buttonDecorator = WidgetUtility.addDecorator(
 				(Control) eltDefaultButton.getSWTWidgetControl(),
 				Messages.bind(Messages.EmptyValueNotification, runtimeConfig.getLabel()));
-		buttonDecorator.setMarginWidth(3);
+		if (OSValidator.isMac()) {
+			buttonDecorator.setMarginWidth(-2);
+		}
+		else{
+			buttonDecorator.setMarginWidth(3);
+		}
 		setDecoratorsVisibility();
 
 		try {

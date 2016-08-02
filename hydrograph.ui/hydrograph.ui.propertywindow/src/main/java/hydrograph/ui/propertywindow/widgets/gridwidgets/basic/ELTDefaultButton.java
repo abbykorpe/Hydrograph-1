@@ -14,6 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.gridwidgets.basic;
 
+import hydrograph.ui.common.util.OSValidator;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -52,9 +54,10 @@ public class ELTDefaultButton extends AbstractELTWidget{
 		defaultELTButton = new Button(container, SWT.CENTER);
 		GridData gd_defaultELTButton = new GridData(SWT.FILL, SWT.CENTER, grabExcessSpace, false, 1, 1);
 		gd_defaultELTButton.widthHint = buttonWidth;
-		//gd_defaultELTButton.horizontalIndent=-3;
+		if (OSValidator.isMac()) {
+		gd_defaultELTButton.horizontalIndent=-3;
+		}
 		gd_defaultELTButton.heightHint = buttonHeight;
-		//gd_defaultELTButton.horizontalIndent=-3;
 		defaultELTButton.setLayoutData(gd_defaultELTButton);
 		defaultELTButton.setText(buttonText);
 		
