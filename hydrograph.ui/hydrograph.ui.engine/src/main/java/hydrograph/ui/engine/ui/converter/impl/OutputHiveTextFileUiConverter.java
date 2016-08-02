@@ -18,6 +18,8 @@ import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohivetextfile.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -74,7 +76,7 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 		}else{
 			propertyMap.put(PropertyNameConstants.EXTERNAL_TABLE_PATH.value(),"");
 		}
-//		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
+		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(hiveTextfile.getStrict(), PropertyNameConstants.STRICT.value()));
 		if (hiveTextfile.getDelimiter() != null)
@@ -100,33 +102,33 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 	/*
 	 * returns Partition keys list
 	 */
-//	private List<String> getPartitionKeys() {
-//		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
-//		property = new ArrayList<String>();
-//		hiveTextfile = (HiveTextFile) typeBaseComponent;
-//		HivePartitionFieldsType typeHivePartitionFields = hiveTextfile.getPartitionKeys();
-//		if (typeHivePartitionFields != null) {
-//			if(typeHivePartitionFields.getField()!=null){
-//			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
-//			property.add(partitionFieldBasicType.getName());
-//			if(partitionFieldBasicType.getField()!=null)
-//			{
-//				getKey(partitionFieldBasicType);
-//			}
-//			}
-//		}
-//		return property;
-//	}
-//	
-//	private void getKey(PartitionFieldBasicType partition)
-//	{
-//		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
-//				property.add(partitionFieldBasicType1.getName());
-//				if(partitionFieldBasicType1.getField()!=null)
-//				{
-//					getKey(partitionFieldBasicType1);
-//				}
-//	}
+	private List<String> getPartitionKeys() {
+		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
+		property = new ArrayList<String>();
+		hiveTextfile = (HiveTextFile) typeBaseComponent;
+		HivePartitionFieldsType typeHivePartitionFields = hiveTextfile.getPartitionKeys();
+		if (typeHivePartitionFields != null) {
+			if(typeHivePartitionFields.getField()!=null){
+			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
+			property.add(partitionFieldBasicType.getName());
+			if(partitionFieldBasicType.getField()!=null)
+			{
+				getKey(partitionFieldBasicType);
+			}
+			}
+		}
+		return property;
+	}
+	
+	private void getKey(PartitionFieldBasicType partition)
+	{
+		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
+				property.add(partitionFieldBasicType1.getName());
+				if(partitionFieldBasicType1.getField()!=null)
+				{
+					getKey(partitionFieldBasicType1);
+				}
+	}
 
 
 	@Override
