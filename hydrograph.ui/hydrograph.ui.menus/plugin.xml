@@ -377,11 +377,7 @@
                       mnemonic ="R">
                </command>
             </menu>
-            <command
-                  commandId="org.eclipse.ui.edit.text.openLocalFile"
-                  id="hydrograph.ui.menus.FileMenu.OpenFile"
-                  label="Open File..."
-                  mnemonic="e">
+            <command                  commandId="org.eclipse.ui.edit.text.openLocalFile"                  icon="icons/folder_o.png"                  id="hydrograph.ui.menus.FileMenu.OpenFile"                  label="Open File..."                  mnemonic="e">
             </command>
             <separator
                   name="hydrograph.ui.graph.separator1"
@@ -397,12 +393,7 @@
                   name="hydrograph.ui.graph.separator2"
                   visible="true">
             </separator>
-            <command
-                  commandId="org.eclipse.ui.file.save"
-                  id="hydrograph.ui.menus.FileMenu.SaveFile"
-                  label="Save"
-                  style="push"
-                     mnemonic ="S">
+            <command                  commandId="org.eclipse.ui.file.save"                  disabledIcon="icons/dis_save.png"                  icon="icons/save_o.png"                  id="hydrograph.ui.menus.FileMenu.SaveFile"                  label="Save"                  mnemonic="S"                  style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.file.saveAs"
@@ -411,10 +402,7 @@
                   style="push"
                   mnemonic ="A">
             </command>
-            <command
-                  commandId="org.eclipse.ui.file.saveAll"
-                  label="Save All"
-                  style="push">
+            <command                  commandId="org.eclipse.ui.file.saveAll"                  icon="icons/saveAll_o.png"                  label="Save All"                  style="push">
             </command>
             <separator
                   name="hydrograph.ui.graph.separator3"
