@@ -57,6 +57,7 @@ import org.eclipse.jdt.ui.actions.OpenNewClassWizardAction;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -366,6 +367,9 @@ public class FilterOperationClassUtility  {
 		Text fileName = (Text) fileNameTextBox.getSWTWidgetControl();
 		fileName.setSize(10, 100);
 
+		GridData layoutData = (GridData)fileName.getLayoutData();
+		layoutData.horizontalIndent=5;
+		
 		AbstractELTWidget browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(20);
 		eltSuDefaultSubgroupComposite.attachWidget(browseButton);
 		browseBtn=(Button)browseButton.getSWTWidgetControl();

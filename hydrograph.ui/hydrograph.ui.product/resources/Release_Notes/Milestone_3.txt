@@ -55,6 +55,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 40.#757 [Vibhor Tyagi]  Find Functionality: When user clicks on 'All' button located in find window then focus is shifting to last instance in grid view whereas it remains same in other two views.
 41.#519 [Akhilesh Joshi]In Engine xml generated from UI, ‘Description’ given in schema grid is not getting saved. Also fromSocketType attribute for outSocket is not getting generated.
 42.#... [Shrirang Kumbhar] implemeneted AutoSync in Transform component.
+43.#508 [Akhilesh Joshi]Error decorator is not properly visible in the application property window.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

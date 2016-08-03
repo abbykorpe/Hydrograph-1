@@ -238,7 +238,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		windowControls = new LinkedHashMap<>();
 		gridViewData = new LinkedList<>();
 		formattedViewData = new LinkedList<>();
-		sortOrder=SortOrder.ASC;
+		sortOrder=SortOrder.DSC;
 		
 		ascending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
 		descending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
