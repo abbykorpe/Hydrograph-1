@@ -926,7 +926,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					tableViewer.setInput(schemaGridRowList);
 					tableViewer.refresh();
 					enableDisableButtons(schemaGridRowListToImport.size());
-					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.IMPORTED_SCHEMA);
+					MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION);
+					box.setMessage(Messages.IMPORTED_SCHEMA);
+					box.setText(" Information");
+					box.open();
 					showHideErrorSymbol(applySchemaValidationRule());
 				}
 				scrolledComposite.setMinSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
