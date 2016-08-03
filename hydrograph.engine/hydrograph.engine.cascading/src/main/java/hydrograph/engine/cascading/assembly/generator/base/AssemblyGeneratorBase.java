@@ -42,16 +42,16 @@ public abstract class AssemblyGeneratorBase implements GeneratorBase  {
 	// public abstract AssemblyEntityBase getEntity();
 
 	/**
-	 * Creates the bhs assembly
+	 * Creates the Hydrograph assembly
 	 * 
 	 * @param componentParameters
 	 */
 	public abstract void createAssembly(ComponentParameters componentParameters);
 
 	/**
-	 * Returns the bhs assembly object
+	 * Returns the Hydrograph assembly object
 	 * 
-	 * @return the bhs assembly object
+	 * @return the Hydrograph assembly object
 	 */
 	public abstract BaseComponent getAssembly();
 }
