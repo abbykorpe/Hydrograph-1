@@ -1,14 +1,14 @@
 /*******************************************************************************
- *  Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *  http://www.apache.org/licenses/LICENSE-2.0
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  * http://www.apache.org/licenses/LICENSE-2.0
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *******************************************************************************/
 package hydrograph.server.sqlquery.lingualquery.generator;
 
@@ -108,7 +108,7 @@ public class LingualQueryCreatorTest {
 	@Test
 	public void itShouldGenerateLingualQuery() {
 
-		remoteFilterJson.setCondition("(f1  not in ('1') and f2 = '2012-01-10 00:00:00') or (f3=23.23 and f4=1234.123)");
+		remoteFilterJson.setCondition("(f1  not in ('1') and f2 = '2012-01-10') or (f3=23.23 and f4=1234.123)");
 
 		ANTLRInputStream stream = new ANTLRInputStream(remoteFilterJson.getCondition());
 		QueryParserLexer lexer = new QueryParserLexer(stream);
@@ -118,14 +118,14 @@ public class LingualQueryCreatorTest {
 		LingualQueryCreator customVisitor = new LingualQueryCreator(remoteFilterJson.getSchema());
 		String lingualExpression = customVisitor.visit(parser.eval());
 		Assert.assertEquals(
-				"((\"f1\" is not null and \"f1\" not in('1'))  and  \"f2\" = timestamp '2012-01-09 18:30:00')  or  (\"f3\" = cast(23.23 as float)  and  \"f4\" = cast(1234.123 as double))",
+				"((\"f1\" is not null and \"f1\" not in('1'))  and  \"f2\" = date '2012-01-10')  or  (\"f3\" = cast(23.23 as float)  and  \"f4\" = cast(1234.123 as double))",
 				lingualExpression);
 	}
 
 	@Test
 	public void itShouldGenerateLingualQueryWithNotLikeClause() {
 
-		remoteFilterJson.setCondition("(f1 not like 'condition' and f2 = '2012-01-10 00:00:00') or (f3=23.23 and f4=1234.123)");
+		remoteFilterJson.setCondition("(f1 not like 'condition' and f2 = '2012-01-10') or (f3=23.23 and f4=1234.123)");
 
 		ANTLRInputStream stream = new ANTLRInputStream(remoteFilterJson.getCondition());
 		QueryParserLexer lexer = new QueryParserLexer(stream);
@@ -135,7 +135,7 @@ public class LingualQueryCreatorTest {
 		LingualQueryCreator customVisitor = new LingualQueryCreator(remoteFilterJson.getSchema());
 		String lingualExpression = customVisitor.visit(parser.eval());
 		Assert.assertEquals(
-				"((\"f1\" is not null and \"f1\" not like 'condition')  and  \"f2\" = timestamp '2012-01-09 18:30:00')  or  (\"f3\" = cast(23.23 as float)  and  \"f4\" = cast(1234.123 as double))",
+				"((\"f1\" is not null and \"f1\" not like 'condition')  and  \"f2\" = date '2012-01-10')  or  (\"f3\" = cast(23.23 as float)  and  \"f4\" = cast(1234.123 as double))",
 				lingualExpression);
 	}
 

@@ -1,16 +1,19 @@
 /*******************************************************************************
- *  Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *  http://www.apache.org/licenses/LICENSE-2.0
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  * http://www.apache.org/licenses/LICENSE-2.0
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *******************************************************************************/
+// Generated from QueryParser.g4 by ANTLR 4.4
 package hydrograph.server.sqlquery.parser.antlr;
+
+
 import java.util.List;
 
 import org.antlr.v4.runtime.FailedPredicateException;
@@ -32,134 +35,138 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
+import org.antlr.v4.runtime.FailedPredicateException;
+import org.antlr.v4.runtime.NoViableAltException;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.RuntimeMetaData;
+import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+import org.antlr.v4.runtime.tree.TerminalNode;
+
+@SuppressWarnings({ "all", "warnings", "unchecked", "unused", "cast" })
 public class QueryParserParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5.3", RuntimeMetaData.VERSION); }
+	static {
+		RuntimeMetaData.checkVersion("4.4", RuntimeMetaData.VERSION);
+	}
 
 	protected static final DFA[] _decisionToDFA;
-	protected static final PredictionContextCache _sharedContextCache =
-		new PredictionContextCache();
-	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
-		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, FieldIdentifier=24, 
-		Identifier=25, WS=26;
-	public static final int
-		RULE_eval = 0, RULE_expression = 1, RULE_leftBrace = 2, RULE_rightBrace = 3, 
-		RULE_specialexpr = 4, RULE_andOr = 5, RULE_condition = 6, RULE_javaiden = 7, 
-		RULE_fieldname = 8;
-	public static final String[] ruleNames = {
-		"eval", "expression", "leftBrace", "rightBrace", "specialexpr", "andOr", 
-		"condition", "javaiden", "fieldname"
-	};
+	protected static final PredictionContextCache _sharedContextCache = new PredictionContextCache();
+	public static final int T__22 = 1, T__21 = 2, T__20 = 3, T__19 = 4, T__18 = 5, T__17 = 6, T__16 = 7, T__15 = 8,
+			T__14 = 9, T__13 = 10, T__12 = 11, T__11 = 12, T__10 = 13, T__9 = 14, T__8 = 15, T__7 = 16, T__6 = 17,
+			T__5 = 18, T__4 = 19, T__3 = 20, T__2 = 21, T__1 = 22, T__0 = 23, FieldIdentifier = 24, Identifier = 25,
+			WS = 26;
+	public static final String[] tokenNames = { "<INVALID>", "' and '", "'NOT IN'", "'like'", "'LIKE'", "'not like'",
+			"' OR '", "'not in'", "'>='", "';'", "'<'", "'='", "'>'", "'BETWEEN'", "'<='", "'<>'", "'IN'", "'in'",
+			"' or '", "'('", "'between'", "')'", "' AND '", "'NOT LIKE'", "FieldIdentifier", "Identifier", "WS" };
+	public static final int RULE_eval = 0, RULE_expression = 1, RULE_leftBrace = 2, RULE_rightBrace = 3,
+			RULE_specialexpr = 4, RULE_andOr = 5, RULE_condition = 6, RULE_javaiden = 7, RULE_fieldname = 8;
+	public static final String[] ruleNames = { "eval", "expression", "leftBrace", "rightBrace", "specialexpr", "andOr",
+			"condition", "javaiden", "fieldname" };
 
-	private static final String[] _LITERAL_NAMES = {
-		null, "';'", "'('", "')'", "'in'", "'not in'", "'between'", "'like'", 
-		"'not like'", "'IN'", "'NOT IN'", "'BETWEEN'", "'LIKE'", "'NOT LIKE'", 
-		"' or '", "' and '", "' OR '", "' AND '", "'='", "'<'", "'<='", "'>'", 
-		"'>='", "'<>'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		"FieldIdentifier", "Identifier", "WS"
-	};
-	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
-
-	/**
-	 * @deprecated Use {@link #VOCABULARY} instead.
-	 */
-	@Deprecated
-	public static final String[] tokenNames;
-	static {
-		tokenNames = new String[_SYMBOLIC_NAMES.length];
-		for (int i = 0; i < tokenNames.length; i++) {
-			tokenNames[i] = VOCABULARY.getLiteralName(i);
-			if (tokenNames[i] == null) {
-				tokenNames[i] = VOCABULARY.getSymbolicName(i);
-			}
-
-			if (tokenNames[i] == null) {
-				tokenNames[i] = "<INVALID>";
-			}
-		}
+	@Override
+	public String getGrammarFileName() {
+		return "QueryParser.g4";
 	}
 
 	@Override
-	@Deprecated
 	public String[] getTokenNames() {
 		return tokenNames;
 	}
 
 	@Override
-
-	public Vocabulary getVocabulary() {
-		return VOCABULARY;
+	public String[] getRuleNames() {
+		return ruleNames;
 	}
 
 	@Override
-	public String getGrammarFileName() { return "QueryParser.g4"; }
+	public String getSerializedATN() {
+		return _serializedATN;
+	}
 
 	@Override
-	public String[] getRuleNames() { return ruleNames; }
-
-	@Override
-	public String getSerializedATN() { return _serializedATN; }
-
-	@Override
-	public ATN getATN() { return _ATN; }
+	public ATN getATN() {
+		return _ATN;
+	}
 
 	public QueryParserParser(TokenStream input) {
 		super(input);
-		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
+		_interp = new ParserATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
 	}
+
 	public static class EvalContext extends ParserRuleContext {
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public List<LeftBraceContext> leftBrace() {
-			return getRuleContexts(LeftBraceContext.class);
-		}
-		public LeftBraceContext leftBrace(int i) {
-			return getRuleContext(LeftBraceContext.class,i);
-		}
-		public List<AndOrContext> andOr() {
-			return getRuleContexts(AndOrContext.class);
-		}
-		public AndOrContext andOr(int i) {
-			return getRuleContext(AndOrContext.class,i);
-		}
 		public List<RightBraceContext> rightBrace() {
 			return getRuleContexts(RightBraceContext.class);
 		}
-		public RightBraceContext rightBrace(int i) {
-			return getRuleContext(RightBraceContext.class,i);
+
+		public List<LeftBraceContext> leftBrace() {
+			return getRuleContexts(LeftBraceContext.class);
 		}
+
+		public List<AndOrContext> andOr() {
+			return getRuleContexts(AndOrContext.class);
+		}
+
 		public EvalContext eval() {
-			return getRuleContext(EvalContext.class,0);
+			return getRuleContext(EvalContext.class, 0);
 		}
+
+		public LeftBraceContext leftBrace(int i) {
+			return getRuleContext(LeftBraceContext.class, i);
+		}
+
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class, i);
+		}
+
+		public AndOrContext andOr(int i) {
+			return getRuleContext(AndOrContext.class, i);
+		}
+
+		public RightBraceContext rightBrace(int i) {
+			return getRuleContext(RightBraceContext.class, i);
+		}
+
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+
 		public EvalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_eval; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_eval;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterEval(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterEval(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitEval(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitEval(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitEval(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitEval(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -179,156 +186,172 @@ public class QueryParserParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			{
-			setState(22);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==T__1) {
 				{
-				{
-				setState(19);
-				leftBrace();
-				}
-				}
-				setState(24);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(25);
-			expression();
-			setState(42);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(26);
-					andOr();
-					setState(30);
+					setState(22);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-					while (_la==T__1) {
+					while (_la == T__4) {
 						{
-						{
-						setState(27);
-						leftBrace();
+							{
+								setState(19);
+								leftBrace();
+							}
 						}
-						}
-						setState(32);
+						setState(24);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					}
-					setState(33);
+					setState(25);
 					expression();
-					setState(37);
+					setState(42);
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
-					while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-						if ( _alt==1 ) {
+					_alt = getInterpreter().adaptivePredict(_input, 3, _ctx);
+					while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+						if (_alt == 1) {
 							{
-							{
-							setState(34);
-							rightBrace();
+								{
+									setState(26);
+									andOr();
+									setState(30);
+									_errHandler.sync(this);
+									_la = _input.LA(1);
+									while (_la == T__4) {
+										{
+											{
+												setState(27);
+												leftBrace();
+											}
+										}
+										setState(32);
+										_errHandler.sync(this);
+										_la = _input.LA(1);
+									}
+									setState(33);
+									expression();
+									setState(37);
+									_errHandler.sync(this);
+									_alt = getInterpreter().adaptivePredict(_input, 2, _ctx);
+									while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+										if (_alt == 1) {
+											{
+												{
+													setState(34);
+													rightBrace();
+												}
+											}
+										}
+										setState(39);
+										_errHandler.sync(this);
+										_alt = getInterpreter().adaptivePredict(_input, 2, _ctx);
+									}
+								}
 							}
-							} 
 						}
-						setState(39);
+						setState(44);
 						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input, 3, _ctx);
 					}
+					setState(48);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 4, _ctx);
+					while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+						if (_alt == 1) {
+							{
+								{
+									setState(45);
+									rightBrace();
+								}
+							}
+						}
+						setState(50);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input, 4, _ctx);
 					}
-					} 
 				}
-				setState(44);
+				_ctx.stop = _input.LT(-1);
+				setState(55);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
-			}
-			setState(48);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(45);
-					rightBrace();
+				_alt = getInterpreter().adaptivePredict(_input, 5, _ctx);
+				while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
+					if (_alt == 1) {
+						if (_parseListeners != null)
+							triggerExitRuleEvent();
+						_prevctx = _localctx;
+						{
+							{
+								_localctx = new EvalContext(_parentctx, _parentState);
+								pushNewRecursionContext(_localctx, _startState, RULE_eval);
+								setState(51);
+								if (!(precpred(_ctx, 1)))
+									throw new FailedPredicateException(this, "precpred(_ctx, 1)");
+								setState(52);
+								match(T__14);
+							}
+						}
 					}
-					} 
+					setState(57);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 5, _ctx);
 				}
-				setState(50);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			}
-			}
-			_ctx.stop = _input.LT(-1);
-			setState(55);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( _parseListeners!=null ) triggerExitRuleEvent();
-					_prevctx = _localctx;
-					{
-					{
-					_localctx = new EvalContext(_parentctx, _parentState);
-					pushNewRecursionContext(_localctx, _startState, RULE_eval);
-					setState(51);
-					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(52);
-					match(T__0);
-					}
-					} 
-				}
-				setState(57);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
-			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			unrollRecursionContexts(_parentctx);
 		}
 		return _localctx;
 	}
 
 	public static class ExpressionContext extends ParserRuleContext {
+		public JavaidenContext javaiden() {
+			return getRuleContext(JavaidenContext.class, 0);
+		}
+
+		public FieldnameContext fieldname(int i) {
+			return getRuleContext(FieldnameContext.class, i);
+		}
+
+		public SpecialexprContext specialexpr() {
+			return getRuleContext(SpecialexprContext.class, 0);
+		}
+
 		public List<FieldnameContext> fieldname() {
 			return getRuleContexts(FieldnameContext.class);
 		}
-		public FieldnameContext fieldname(int i) {
-			return getRuleContext(FieldnameContext.class,i);
-		}
+
 		public ConditionContext condition() {
-			return getRuleContext(ConditionContext.class,0);
+			return getRuleContext(ConditionContext.class, 0);
 		}
-		public SpecialexprContext specialexpr() {
-			return getRuleContext(SpecialexprContext.class,0);
-		}
-		public JavaidenContext javaiden() {
-			return getRuleContext(JavaidenContext.class,0);
-		}
+
 		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_expression; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_expression;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterExpression(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterExpression(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitExpression(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitExpression(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitExpression(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitExpression(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -338,53 +361,45 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
-			fieldname();
-			setState(64);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
-			case 1:
-				{
-				setState(59);
-				condition();
-				setState(62);
-				switch (_input.LA(1)) {
-				case Identifier:
-					{
-					setState(60);
-					javaiden();
+				setState(58);
+				fieldname();
+				setState(64);
+				switch (getInterpreter().adaptivePredict(_input, 7, _ctx)) {
+				case 1: {
+					setState(59);
+					condition();
+					setState(62);
+					switch (_input.LA(1)) {
+					case Identifier: {
+						setState(60);
+						javaiden();
 					}
-					break;
-				case FieldIdentifier:
-					{
-					setState(61);
-					fieldname();
+						break;
+					case FieldIdentifier: {
+						setState(61);
+						fieldname();
 					}
+						break;
+					default:
+						throw new NoViableAltException(this);
+					}
+				}
 					break;
-				default:
-					throw new NoViableAltException(this);
 				}
+				setState(67);
+				switch (getInterpreter().adaptivePredict(_input, 8, _ctx)) {
+				case 1: {
+					setState(66);
+					specialexpr();
 				}
-				break;
-			}
-			setState(67);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
-			case 1:
-				{
-				setState(66);
-				specialexpr();
+					break;
 				}
-				break;
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -394,19 +409,30 @@ public class QueryParserParser extends Parser {
 		public LeftBraceContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_leftBrace; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_leftBrace;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterLeftBrace(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterLeftBrace(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitLeftBrace(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitLeftBrace(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitLeftBrace(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitLeftBrace(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -416,16 +442,14 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
-			match(T__1);
+				setState(69);
+				match(T__4);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -435,19 +459,30 @@ public class QueryParserParser extends Parser {
 		public RightBraceContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_rightBrace; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_rightBrace;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterRightBrace(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterRightBrace(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitRightBrace(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitRightBrace(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitRightBrace(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitRightBrace(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -457,59 +492,67 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(71);
-			match(T__2);
+				setState(71);
+				match(T__2);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
 	}
 
 	public static class SpecialexprContext extends ParserRuleContext {
-		public LeftBraceContext leftBrace() {
-			return getRuleContext(LeftBraceContext.class,0);
+		public RightBraceContext rightBrace() {
+			return getRuleContext(RightBraceContext.class, 0);
 		}
+
+		public LeftBraceContext leftBrace() {
+			return getRuleContext(LeftBraceContext.class, 0);
+		}
+
 		public List<JavaidenContext> javaiden() {
 			return getRuleContexts(JavaidenContext.class);
 		}
-		public JavaidenContext javaiden(int i) {
-			return getRuleContext(JavaidenContext.class,i);
-		}
-		public RightBraceContext rightBrace() {
-			return getRuleContext(RightBraceContext.class,0);
-		}
+
 		public AndOrContext andOr() {
-			return getRuleContext(AndOrContext.class,0);
+			return getRuleContext(AndOrContext.class, 0);
 		}
-		public List<FieldnameContext> fieldname() {
-			return getRuleContexts(FieldnameContext.class);
+
+		public JavaidenContext javaiden(int i) {
+			return getRuleContext(JavaidenContext.class, i);
 		}
-		public FieldnameContext fieldname(int i) {
-			return getRuleContext(FieldnameContext.class,i);
-		}
+
 		public SpecialexprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_specialexpr; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_specialexpr;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterSpecialexpr(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterSpecialexpr(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitSpecialexpr(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitSpecialexpr(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitSpecialexpr(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitSpecialexpr(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -520,175 +563,131 @@ public class QueryParserParser extends Parser {
 		try {
 			setState(133);
 			switch (_input.LA(1)) {
-			case T__3:
-				enterOuterAlt(_localctx, 1);
-				{
+			case T__6:
+				enterOuterAlt(_localctx, 1); {
 				setState(73);
-				match(T__3);
+				match(T__6);
 				setState(74);
 				leftBrace();
 				setState(75);
 				javaiden();
 				setState(76);
 				rightBrace();
-				}
+			}
 				break;
-			case T__4:
-				enterOuterAlt(_localctx, 2);
-				{
+			case T__16:
+				enterOuterAlt(_localctx, 2); {
 				setState(78);
-				match(T__4);
+				match(T__16);
 				setState(79);
 				leftBrace();
 				setState(80);
 				javaiden();
 				setState(81);
 				rightBrace();
-				}
+			}
 				break;
-			case T__5:
-				enterOuterAlt(_localctx, 3);
-				{
+			case T__3:
+				enterOuterAlt(_localctx, 3); {
 				setState(83);
-				match(T__5);
-				setState(86);
-				switch (_input.LA(1)) {
-				case Identifier:
-					{
-					setState(84);
-					javaiden();
-					}
-					break;
-				case FieldIdentifier:
-					{
-					setState(85);
-					fieldname();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				setState(88);
+				match(T__3);
+				setState(84);
+				javaiden();
+				setState(85);
 				andOr();
-				setState(91);
-				switch (_input.LA(1)) {
-				case Identifier:
-					{
-					setState(89);
-					javaiden();
-					}
-					break;
-				case FieldIdentifier:
-					{
-					setState(90);
-					fieldname();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
+				setState(86);
+				javaiden();
+			}
 				break;
-			case T__6:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(93);
-				match(T__6);
-				setState(95);
+			case T__20:
+				enterOuterAlt(_localctx, 4); {
+				setState(88);
+				match(T__20);
+				setState(90);
 				_la = _input.LA(1);
-				if (_la==T__1) {
+				if (_la == T__4) {
 					{
-					setState(94);
-					leftBrace();
+						setState(89);
+						leftBrace();
 					}
 				}
 
-				setState(97);
+				setState(92);
 				javaiden();
-				setState(99);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
-				case 1:
-					{
-					setState(98);
+				setState(94);
+				switch (getInterpreter().adaptivePredict(_input, 10, _ctx)) {
+				case 1: {
+					setState(93);
 					rightBrace();
-					}
+				}
 					break;
 				}
+			}
+				break;
+			case T__18:
+				enterOuterAlt(_localctx, 5); {
+				setState(96);
+				match(T__18);
+				setState(98);
+				_la = _input.LA(1);
+				if (_la == T__4) {
+					{
+						setState(97);
+						leftBrace();
+					}
 				}
+
+				setState(100);
+				javaiden();
+				setState(102);
+				switch (getInterpreter().adaptivePredict(_input, 12, _ctx)) {
+				case 1: {
+					setState(101);
+					rightBrace();
+				}
+					break;
+				}
+			}
 				break;
 			case T__7:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(101);
+				enterOuterAlt(_localctx, 6); {
+				setState(104);
 				match(T__7);
-				setState(103);
-				_la = _input.LA(1);
-				if (_la==T__1) {
-					{
-					setState(102);
-					leftBrace();
-					}
-				}
-
 				setState(105);
+				leftBrace();
+				setState(106);
 				javaiden();
 				setState(107);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
-				case 1:
-					{
-					setState(106);
-					rightBrace();
-					}
-					break;
-				}
-				}
+				rightBrace();
+			}
 				break;
-			case T__8:
-				enterOuterAlt(_localctx, 6);
-				{
+			case T__21:
+				enterOuterAlt(_localctx, 7); {
 				setState(109);
-				match(T__8);
+				match(T__21);
 				setState(110);
 				leftBrace();
 				setState(111);
 				javaiden();
 				setState(112);
 				rightBrace();
-				}
-				break;
-			case T__9:
-				enterOuterAlt(_localctx, 7);
-				{
-				setState(114);
-				match(T__9);
-				setState(115);
-				leftBrace();
-				setState(116);
-				javaiden();
-				setState(117);
-				rightBrace();
-				}
+			}
 				break;
 			case T__10:
-				enterOuterAlt(_localctx, 8);
-				{
+				enterOuterAlt(_localctx, 8); {
 				setState(119);
 				match(T__10);
 				setState(122);
 				switch (_input.LA(1)) {
-				case Identifier:
-					{
+				case Identifier: {
 					setState(120);
 					javaiden();
-					}
+				}
 					break;
-				case FieldIdentifier:
-					{
+				case FieldIdentifier: {
 					setState(121);
 					fieldname();
-					}
+				}
 					break;
 				default:
 					throw new NoViableAltException(this);
@@ -697,51 +696,45 @@ public class QueryParserParser extends Parser {
 				andOr();
 				setState(127);
 				switch (_input.LA(1)) {
-				case Identifier:
-					{
+				case Identifier: {
 					setState(125);
 					javaiden();
-					}
+				}
 					break;
-				case FieldIdentifier:
-					{
+				case FieldIdentifier: {
 					setState(126);
 					fieldname();
-					}
+				}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				}
+			}
 				break;
-			case T__11:
-				enterOuterAlt(_localctx, 9);
-				{
+			case T__19:
+				enterOuterAlt(_localctx, 9); {
 				setState(129);
 				match(T__11);
 				setState(130);
 				javaiden();
-				}
+			}
 				break;
-			case T__12:
-				enterOuterAlt(_localctx, 10);
-				{
+			case T__0:
+				enterOuterAlt(_localctx, 10); {
 				setState(131);
 				match(T__12);
 				setState(132);
 				javaiden();
-				}
+			}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -751,19 +744,30 @@ public class QueryParserParser extends Parser {
 		public AndOrContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_andOr; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_andOr;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterAndOr(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterAndOr(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitAndOr(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitAndOr(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitAndOr(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitAndOr(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -774,21 +778,19 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(135);
-			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16))) != 0)) ) {
-			_errHandler.recoverInline(this);
-			} else {
+				setState(135);
+				_la = _input.LA(1);
+				if (!((((_la) & ~0x3f) == 0
+						&& ((1L << _la) & ((1L << T__22) | (1L << T__17) | (1L << T__5) | (1L << T__1))) != 0))) {
+					_errHandler.recoverInline(this);
+				}
 				consume();
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -798,19 +800,30 @@ public class QueryParserParser extends Parser {
 		public ConditionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_condition; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_condition;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterCondition(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterCondition(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitCondition(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitCondition(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitCondition(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitCondition(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -821,47 +834,60 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(137);
-			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22))) != 0)) ) {
-			_errHandler.recoverInline(this);
-			} else {
+				setState(137);
+				_la = _input.LA(1);
+				if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__13) | (1L << T__12)
+						| (1L << T__11) | (1L << T__9) | (1L << T__8))) != 0))) {
+					_errHandler.recoverInline(this);
+				}
 				consume();
 			}
-			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
 	}
 
 	public static class JavaidenContext extends ParserRuleContext {
-		public List<TerminalNode> Identifier() { return getTokens(QueryParserParser.Identifier); }
+		public List<TerminalNode> Identifier() {
+			return getTokens(QueryParserParser.Identifier);
+		}
+
 		public TerminalNode Identifier(int i) {
 			return getToken(QueryParserParser.Identifier, i);
 		}
+
 		public JavaidenContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_javaiden; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_javaiden;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterJavaiden(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterJavaiden(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitJavaiden(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitJavaiden(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitJavaiden(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitJavaiden(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -872,57 +898,68 @@ public class QueryParserParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(140); 
-			_errHandler.sync(this);
-			_alt = 1;
-			do {
-				switch (_alt) {
-				case 1:
-					{
-					{
-					setState(139);
-					match(Identifier);
-					}
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				setState(142); 
+				setState(140);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
-			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
+				_alt = 1;
+				do {
+					switch (_alt) {
+					case 1: {
+						{
+							setState(139);
+							match(Identifier);
+						}
+					}
+						break;
+					default:
+						throw new NoViableAltException(this);
+					}
+					setState(142);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input, 18, _ctx);
+				} while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
 	}
 
 	public static class FieldnameContext extends ParserRuleContext {
-		public TerminalNode FieldIdentifier() { return getToken(QueryParserParser.FieldIdentifier, 0); }
+		public TerminalNode FieldIdentifier() {
+			return getToken(QueryParserParser.FieldIdentifier, 0);
+		}
+
 		public FieldnameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_fieldname; }
+
+		@Override
+		public int getRuleIndex() {
+			return RULE_fieldname;
+		}
+
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).enterFieldname(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).enterFieldname(this);
 		}
+
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof QueryParserListener ) ((QueryParserListener)listener).exitFieldname(this);
+			if (listener instanceof QueryParserListener)
+				((QueryParserListener) listener).exitFieldname(this);
 		}
+
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof QueryParserVisitor ) return ((QueryParserVisitor<? extends T>)visitor).visitFieldname(this);
-			else return visitor.visitChildren(this);
+			if (visitor instanceof QueryParserVisitor)
+				return ((QueryParserVisitor<? extends T>) visitor).visitFieldname(this);
+			else
+				return visitor.visitChildren(this);
 		}
 	}
 
@@ -932,16 +969,14 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(144);
-			match(FieldIdentifier);
+				setState(144);
+				match(FieldIdentifier);
 			}
-		}
-		catch (RecognitionException re) {
+		} catch (RecognitionException re) {
 			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
-		}
-		finally {
+		} finally {
 			exitRule();
 		}
 		return _localctx;
@@ -950,10 +985,11 @@ public class QueryParserParser extends Parser {
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 0:
-			return eval_sempred((EvalContext)_localctx, predIndex);
+			return eval_sempred((EvalContext) _localctx, predIndex);
 		}
 		return true;
 	}
+
 	private boolean eval_sempred(EvalContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
@@ -1005,8 +1041,7 @@ public class QueryParserParser extends Parser {
 		"\17\3\2\2\2\u008d\u008f\7\33\2\2\u008e\u008d\3\2\2\2\u008f\u0090\3\2\2"+
 		"\2\u0090\u008e\3\2\2\2\u0090\u0091\3\2\2\2\u0091\21\3\2\2\2\u0092\u0093"+
 		"\7\32\2\2\u0093\23\3\2\2\2\25\30 \',\629@BEX]aeim|\u0081\u0087\u0090";
-	public static final ATN _ATN =
-		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+	public static final ATN _ATN = new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
 		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
 		for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {

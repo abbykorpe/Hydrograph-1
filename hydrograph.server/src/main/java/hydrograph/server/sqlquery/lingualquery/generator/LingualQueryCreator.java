@@ -1,23 +1,19 @@
 /*******************************************************************************
- *  Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *  http://www.apache.org/licenses/LICENSE-2.0
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  * http://www.apache.org/licenses/LICENSE-2.0
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *******************************************************************************/
 package hydrograph.server.sqlquery.lingualquery.generator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -59,7 +55,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		fieldName = "\"" + fieldName + "\"";
 
 		if (dataType.toLowerCase().contains("date")) {
-			expr = generateTimestampSyntax(ctx, expr, fieldName, dataType);
+			expr = generateDateSyntax(ctx, expr, fieldName, dataType);
 		} else if (dataType.toLowerCase().contains("float")) {
 			expr = generateFloatSytntax(ctx, expr, fieldName, dataType);
 		} else if (dataType.toLowerCase().contains("double")) {
@@ -80,10 +76,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ getLeftBrace(ctx.specialexpr())
-					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
-							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
-							: generateIdentifierText(ctx.specialexpr().javaiden(), 0)))
+					+ getLeftBrace(ctx.specialexpr()) + generateIdentifierText(ctx.specialexpr().javaiden(), 0)
 					+ generateBetweenText(ctx.specialexpr(), dataType) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 		} else {
@@ -105,9 +98,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
-							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
-							: generateIdentifierText(ctx.specialexpr().javaiden(), 0)))
+					+ generateIdentifierText(ctx.specialexpr().javaiden(), 0)
 					+ generateBetweenText(ctx.specialexpr(), dataType) + (notPresent ? ")" : "");
 		} else {
 			if (ctx.javaiden() != null) {
@@ -128,10 +119,8 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ getLeftBrace(ctx.specialexpr())
-					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
-							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
-							: " cast(" + generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as double) "))
+					+ getLeftBrace(ctx.specialexpr()) + " cast("
+					+ generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as double) "
 					+ generateBetweenText(ctx.specialexpr(), dataType) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 		} else {
@@ -145,7 +134,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		return expr;
 	}
 
-	private String generateTimestampSyntax(QueryParserParser.ExpressionContext ctx, String expr, String fieldName,
+	private String generateDateSyntax(QueryParserParser.ExpressionContext ctx, String expr, String fieldName,
 			String dataType) {
 		if (ctx.condition() == null && ctx.specialexpr() != null) {
 			boolean notPresent = isNotClausePresentInExpression(ctx.specialexpr().getText());
@@ -161,48 +150,14 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 					+ (notPresent ? ")" : "");
 		} else {
 			if (ctx.javaiden() != null) {
-				expr = fieldName + " " + ctx.condition().getText() + " timestamp " + getZonewiseGeneratedTimestamp(generateIdentifierText(ctx.javaiden())) + "";
+				expr = fieldName + " " + ctx.condition().getText() + " date " + ctx.javaiden().getText() + "";
 			} else {
 				expr = fieldName + " " + ctx.condition().getText() + " \"" + ctx.fieldname().get(1).getText() + "\"";
 			}
 		}
 		return expr;
 	}
-	private String generateIdentifierText(JavaidenContext javaiden) {
-		String iden = "";
-		int i = 0;
-		for (TerminalNode identifier : javaiden.Identifier()) {
-			if (i == 0)
-				iden = iden + identifier.getText();
-			else
-				iden = iden + " " + identifier.getText();
-			i++;
-		}
-		return iden;
-	}
 
-	private static String getZonewiseGeneratedTimestamp(String timestampValue) {
-		TimeZone timezone = TimeZone.getDefault();
-		int zoneOffset = timezone.getRawOffset();
-
-		timestampValue = timestampValue.substring(1, timestampValue.length() - 1);
-
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = null;
-
-		try {
-			date = formatter.parse(timestampValue);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		Long timestampInMillis = date.getTime();
-		long timestampasperzone = timestampInMillis - zoneOffset;
-
-		Date newtimestamp = new Date(timestampasperzone);
-		return "'" + formatter.format(newtimestamp) + "'";
-	}
-	
 	private String generateFloatSytntax(QueryParserParser.ExpressionContext ctx, String expr, String fieldName,
 			String dataType) {
 		if (ctx.condition() == null && ctx.specialexpr() != null) {
@@ -211,10 +166,8 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 				expr = generateNotClauseForField(fieldName);
 			}
 			expr += fieldName + " " + addSpace(ctx.specialexpr().getChild(0).getText())
-					+ getLeftBrace(ctx.specialexpr())
-					+ ((ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
-							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
-							: " cast(" + generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as float) "))
+					+ getLeftBrace(ctx.specialexpr()) + " cast("
+					+ generateIdentifierText(ctx.specialexpr().javaiden(), 0) + " as float) "
 					+ generateBetweenText(ctx.specialexpr(), dataType) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 
@@ -256,23 +209,15 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		datType = datType.toLowerCase();
 		if (isBetweenPresent(specialexprContext.getText())) {
 			expr = getAndOr(specialexprContext) + " ";
-			String fieldName = "";
 			if (datType.contains("date")) {
 				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
 						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
 						: "date " + generateIdentifierText(specialexprContext.javaiden(), 1);
-			} else if (datType.contains("float")) {
-				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
-						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
-						: "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as float)";
+			} else if (datType.contains("float")) {				expr += "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as float)";
 			} else if (datType.contains("double")) {
-				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
-						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
-						: "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as double)";
+				expr += "cast(" + generateIdentifierText(specialexprContext.javaiden(), 1) + " as double)";
 			} else {
-				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
-						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
-						: generateIdentifierText(specialexprContext.javaiden(), 1);
+				expr += generateIdentifierText(specialexprContext.javaiden(), 1);
 			}
 		}
 		return expr;
