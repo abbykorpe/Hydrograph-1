@@ -377,11 +377,7 @@
                       mnemonic ="R">
                </command>
             </menu>
-            <command
-                  commandId="org.eclipse.ui.edit.text.openLocalFile"
-                  id="hydrograph.ui.menus.FileMenu.OpenFile"
-                  label="Open File..."
-                  mnemonic="e">
+            <command                  commandId="org.eclipse.ui.edit.text.openLocalFile"                  icon="icons/folder_o.png"                  id="hydrograph.ui.menus.FileMenu.OpenFile"                  label="Open File..."                  mnemonic="e">
             </command>
             <separator
                   name="hydrograph.ui.graph.separator1"
@@ -397,12 +393,7 @@
                   name="hydrograph.ui.graph.separator2"
                   visible="true">
             </separator>
-            <command
-                  commandId="org.eclipse.ui.file.save"
-                  id="hydrograph.ui.menus.FileMenu.SaveFile"
-                  label="Save"
-                  style="push"
-                     mnemonic ="S">
+            <command                  commandId="org.eclipse.ui.file.save"                  disabledIcon="icons/dis_save.png"                  icon="icons/save_o.png"                  id="hydrograph.ui.menus.FileMenu.SaveFile"                  label="Save"                  mnemonic="S"                  style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.file.saveAs"
@@ -411,10 +402,7 @@
                   style="push"
                   mnemonic ="A">
             </command>
-            <command
-                  commandId="org.eclipse.ui.file.saveAll"
-                  label="Save All"
-                  style="push">
+            <command                  commandId="org.eclipse.ui.file.saveAll"                  icon="icons/saveAll_o.png"                  label="Save All"                  style="push">
             </command>
             <separator
                   name="hydrograph.ui.graph.separator3"
@@ -447,11 +435,7 @@
                id="com.bitwsie.edit.menu"
                label="Edit"
                mnemonic ="E">
-            <command
-                  commandId="org.eclipse.ui.edit.undo"
-                  label="Undo"
-                  style="push"
-                  mnemonic ="U">
+            <command                  commandId="org.eclipse.ui.edit.undo"                  disabledIcon="icons/dis_undo.png"                  icon="icons/undo_o.png"                  label="Undo"                  mnemonic="U"                  style="push">
                <visibleWhen>
                   <with
                         variable="selection">
@@ -461,43 +445,23 @@
                   </with>
                </visibleWhen>
             </command>
-            <command
-                  commandId="org.eclipse.ui.edit.redo"
-                  label="Redo"
-                  style="push"
-                  mnemonic ="R">
+            <command                  commandId="org.eclipse.ui.edit.redo"                  disabledIcon="icons/dis_redo.png"                  icon="icons/redo_o.png"                  label="Redo"                  mnemonic="R"                  style="push">
             </command>
             <separator
                   name="hydrograph.ui.menus.separator1"
                   visible="true">
             </separator>
-            <command
-                  commandId="org.eclipse.ui.edit.cut"
-                  label="Cut"
-                  style="push"
-                  mnemonic ="t">
+            <command                  commandId="org.eclipse.ui.edit.cut"                  disabledIcon="icons/dis_cut.png"                  icon="icons/cut_o.png"                  label="Cut"                  mnemonic="t"                  style="push">
             </command>
-            <command
-                  commandId="org.eclipse.ui.edit.copy"
-                  label="Copy"
-                  style="push"
-                  mnemonic ="C">
+            <command                  commandId="org.eclipse.ui.edit.copy"                  disabledIcon="icons/disable_copy_icon.png"                  icon="icons/enable_copy_icon.png"                  label="Copy"                  mnemonic="C"                  style="push">
             </command>
-            <command
-                  commandId="org.eclipse.ui.edit.paste"
-                  label="Paste"
-                  style="push"
-                  mnemonic ="P">
+            <command                  commandId="org.eclipse.ui.edit.paste"                  disabledIcon="icons/dis_paste.png"                  icon="icons/paste_o.png"                  label="Paste"                  mnemonic="P"                  style="push">
             </command>
             <separator
                   name="hydrograph.ui.menus.separator2"
                   visible="true">
             </separator>
-            <command
-                  commandId="org.eclipse.ui.edit.delete"
-                  label="Delete"
-                  style="push"
-                  mnemonic ="D">
+            <command                  commandId="org.eclipse.ui.edit.delete"                  icon="icons/delete.png"                  label="Delete"                  mnemonic="D"                  style="push">
             </command>
             <command
                   commandId="org.eclipse.ui.edit.selectAll"
