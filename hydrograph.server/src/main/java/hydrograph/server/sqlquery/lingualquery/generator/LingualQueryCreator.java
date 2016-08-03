@@ -12,8 +12,12 @@
  *******************************************************************************/
 package hydrograph.server.sqlquery.lingualquery.generator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -55,7 +59,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		fieldName = "\"" + fieldName + "\"";
 
 		if (dataType.toLowerCase().contains("date")) {
-			expr = generateDateSyntax(ctx, expr, fieldName, dataType);
+			expr = generateTimestampSyntax(ctx, expr, fieldName, dataType);
 		} else if (dataType.toLowerCase().contains("float")) {
 			expr = generateFloatSytntax(ctx, expr, fieldName, dataType);
 		} else if (dataType.toLowerCase().contains("double")) {
@@ -141,7 +145,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		return expr;
 	}
 
-	private String generateDateSyntax(QueryParserParser.ExpressionContext ctx, String expr, String fieldName,
+	private String generateTimestampSyntax(QueryParserParser.ExpressionContext ctx, String expr, String fieldName,
 			String dataType) {
 		if (ctx.condition() == null && ctx.specialexpr() != null) {
 			boolean notPresent = isNotClausePresentInExpression(ctx.specialexpr().getText());
@@ -152,19 +156,53 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 					+ getLeftBrace(ctx.specialexpr())
 					+ (ctx.specialexpr().fieldname() != null && ctx.specialexpr().fieldname().size() > 0
 							? "\"" + ctx.specialexpr().fieldname().get(0).getText() + "\""
-							: "date " + generateIdentifierText(ctx.specialexpr().javaiden(), 0))
+							: "timestamp " + getZonewiseGeneratedTimestamp(generateIdentifierText(ctx.specialexpr().javaiden(), 0)))
 					+ generateBetweenText(ctx.specialexpr(), dataType.toLowerCase()) + getRightBrace(ctx.specialexpr())
 					+ (notPresent ? ")" : "");
 		} else {
 			if (ctx.javaiden() != null) {
-				expr = fieldName + " " + ctx.condition().getText() + " date " + ctx.javaiden().getText() + "";
+				expr = fieldName + " " + ctx.condition().getText() + " timestamp " + getZonewiseGeneratedTimestamp(generateIdentifierText(ctx.javaiden())) + "";
 			} else {
 				expr = fieldName + " " + ctx.condition().getText() + " \"" + ctx.fieldname().get(1).getText() + "\"";
 			}
 		}
 		return expr;
 	}
+	private String generateIdentifierText(JavaidenContext javaiden) {
+		String iden = "";
+		int i = 0;
+		for (TerminalNode identifier : javaiden.Identifier()) {
+			if (i == 0)
+				iden = iden + identifier.getText();
+			else
+				iden = iden + " " + identifier.getText();
+			i++;
+		}
+		return iden;
+	}
 
+	private static String getZonewiseGeneratedTimestamp(String timestampValue) {
+		TimeZone timezone = TimeZone.getDefault();
+		int zoneOffset = timezone.getRawOffset();
+
+		timestampValue = timestampValue.substring(1, timestampValue.length() - 1);
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+
+		try {
+			date = formatter.parse(timestampValue);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		Long timestampInMillis = date.getTime();
+		long timestampasperzone = timestampInMillis - zoneOffset;
+
+		Date newtimestamp = new Date(timestampasperzone);
+		return "'" + formatter.format(newtimestamp) + "'";
+	}
+	
 	private String generateFloatSytntax(QueryParserParser.ExpressionContext ctx, String expr, String fieldName,
 			String dataType) {
 		if (ctx.condition() == null && ctx.specialexpr() != null) {
@@ -190,29 +228,6 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		return expr;
 	}
 
-	// private String generateBetweenText(SpecialexprContext specialexprContext,
-	// String datType) {
-	// String expr = "";
-	// datType = datType.toLowerCase();
-	// if (isBetweenPresent(specialexprContext.getText())) {
-	// String field = specialexprContext.fieldname() != null &&
-	// specialexprContext.fieldname().size()>0
-	// ? "\""+specialexprContext.fieldname().get(0).getText()+"\""
-	// :generateIdentifierText(specialexprContext.javaiden(), 1);
-	// expr = getAndOr(specialexprContext)+" ";
-	// if (datType.contains("date")) {
-	// expr += "date " + field;
-	// } else if (datType.contains("float")) {
-	// expr += "cast(" + field + " as float)";
-	// } else if (datType.contains("double")) {
-	// expr += "cast(" + field + " as double)";
-	// } else {
-	// expr += field;
-	// }
-	// }
-	// return expr;
-	// }
-
 	private String generateBetweenText(SpecialexprContext specialexprContext, String datType) {
 		String expr = "";
 		datType = datType.toLowerCase();
@@ -222,7 +237,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 			if (datType.contains("date")) {
 				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
 						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""
-						: "date " + generateIdentifierText(specialexprContext.javaiden(), 1);
+						: "timestamp " + getZonewiseGeneratedTimestamp(generateIdentifierText(specialexprContext.javaiden(), 1));
 			} else if (datType.contains("float")) {
 				expr += specialexprContext.fieldname() != null && specialexprContext.fieldname().size() > 0
 						? "\"" + specialexprContext.fieldname().get(1).getText() + "\""

@@ -11,26 +11,14 @@
  *  limitations under the License.
  *******************************************************************************/
 package hydrograph.server.sqlquery.parser.antlr;
-import java.util.List;
-
-import org.antlr.v4.runtime.FailedPredicateException;
-import org.antlr.v4.runtime.NoViableAltException;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.RuntimeMetaData;
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.Vocabulary;
-import org.antlr.v4.runtime.VocabularyImpl;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNDeserializer;
-import org.antlr.v4.runtime.atn.ParserATNSimulator;
-import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
+import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class QueryParserParser extends Parser {
@@ -515,7 +503,7 @@ public class QueryParserParser extends Parser {
 		enterRule(_localctx, 8, RULE_specialexpr);
 		int _la;
 		try {
-			setState(133);
+			setState(128);
 			switch (_input.LA(1)) {
 			case T__3:
 				enterOuterAlt(_localctx, 1);
@@ -673,59 +661,29 @@ public class QueryParserParser extends Parser {
 				{
 				setState(119);
 				match(T__10);
-				setState(122);
-				switch (_input.LA(1)) {
-				case Identifier:
-					{
-					setState(120);
-					javaiden();
-					}
-					break;
-				case FieldIdentifier:
-					{
-					setState(121);
-					fieldname();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				setState(124);
+				setState(120);
+				javaiden();
+				setState(121);
 				andOr();
-				setState(127);
-				switch (_input.LA(1)) {
-				case Identifier:
-					{
-					setState(125);
-					javaiden();
-					}
-					break;
-				case FieldIdentifier:
-					{
-					setState(126);
-					fieldname();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
+				setState(122);
+				javaiden();
 				}
 				break;
 			case T__11:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(129);
+				setState(124);
 				match(T__11);
-				setState(130);
+				setState(125);
 				javaiden();
 				}
 				break;
 			case T__12:
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(131);
+				setState(126);
 				match(T__12);
-				setState(132);
+				setState(127);
 				javaiden();
 				}
 				break;
@@ -771,7 +729,7 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(135);
+			setState(130);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -818,7 +776,7 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(137);
+			setState(132);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -869,7 +827,7 @@ public class QueryParserParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(140); 
+			setState(135); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -877,7 +835,7 @@ public class QueryParserParser extends Parser {
 				case 1:
 					{
 					{
-					setState(139);
+					setState(134);
 					match(Identifier);
 					}
 					}
@@ -885,9 +843,9 @@ public class QueryParserParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(142); 
+				setState(137); 
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			}
 		}
@@ -929,7 +887,7 @@ public class QueryParserParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(144);
+			setState(139);
 			match(FieldIdentifier);
 			}
 		}
@@ -960,7 +918,7 @@ public class QueryParserParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\34\u0095\4\2\t\2"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\34\u0090\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\3\2\3"+
 		"\2\7\2\27\n\2\f\2\16\2\32\13\2\3\2\3\2\3\2\7\2\37\n\2\f\2\16\2\"\13\2"+
 		"\3\2\3\2\7\2&\n\2\f\2\16\2)\13\2\7\2+\n\2\f\2\16\2.\13\2\3\2\7\2\61\n"+
@@ -968,40 +926,38 @@ public class QueryParserParser extends Parser {
 		"\3A\n\3\5\3C\n\3\3\3\5\3F\n\3\3\4\3\4\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6"+
 		"\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6Y\n\6\3\6\3\6\3\6\5\6^\n\6\3\6\3\6\5\6"+
 		"b\n\6\3\6\3\6\5\6f\n\6\3\6\3\6\5\6j\n\6\3\6\3\6\5\6n\n\6\3\6\3\6\3\6\3"+
-		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6}\n\6\3\6\3\6\3\6\5\6\u0082"+
-		"\n\6\3\6\3\6\3\6\3\6\5\6\u0088\n\6\3\7\3\7\3\b\3\b\3\t\6\t\u008f\n\t\r"+
-		"\t\16\t\u0090\3\n\3\n\3\n\2\3\2\13\2\4\6\b\n\f\16\20\22\2\4\3\2\20\23"+
-		"\3\2\24\31\u00a6\2\24\3\2\2\2\4<\3\2\2\2\6G\3\2\2\2\bI\3\2\2\2\n\u0087"+
-		"\3\2\2\2\f\u0089\3\2\2\2\16\u008b\3\2\2\2\20\u008e\3\2\2\2\22\u0092\3"+
-		"\2\2\2\24\30\b\2\1\2\25\27\5\6\4\2\26\25\3\2\2\2\27\32\3\2\2\2\30\26\3"+
-		"\2\2\2\30\31\3\2\2\2\31\33\3\2\2\2\32\30\3\2\2\2\33,\5\4\3\2\34 \5\f\7"+
-		"\2\35\37\5\6\4\2\36\35\3\2\2\2\37\"\3\2\2\2 \36\3\2\2\2 !\3\2\2\2!#\3"+
-		"\2\2\2\" \3\2\2\2#\'\5\4\3\2$&\5\b\5\2%$\3\2\2\2&)\3\2\2\2\'%\3\2\2\2"+
-		"\'(\3\2\2\2(+\3\2\2\2)\'\3\2\2\2*\34\3\2\2\2+.\3\2\2\2,*\3\2\2\2,-\3\2"+
-		"\2\2-\62\3\2\2\2.,\3\2\2\2/\61\5\b\5\2\60/\3\2\2\2\61\64\3\2\2\2\62\60"+
-		"\3\2\2\2\62\63\3\2\2\2\639\3\2\2\2\64\62\3\2\2\2\65\66\f\3\2\2\668\7\3"+
-		"\2\2\67\65\3\2\2\28;\3\2\2\29\67\3\2\2\29:\3\2\2\2:\3\3\2\2\2;9\3\2\2"+
-		"\2<B\5\22\n\2=@\5\16\b\2>A\5\20\t\2?A\5\22\n\2@>\3\2\2\2@?\3\2\2\2AC\3"+
-		"\2\2\2B=\3\2\2\2BC\3\2\2\2CE\3\2\2\2DF\5\n\6\2ED\3\2\2\2EF\3\2\2\2F\5"+
-		"\3\2\2\2GH\7\4\2\2H\7\3\2\2\2IJ\7\5\2\2J\t\3\2\2\2KL\7\6\2\2LM\5\6\4\2"+
-		"MN\5\20\t\2NO\5\b\5\2O\u0088\3\2\2\2PQ\7\7\2\2QR\5\6\4\2RS\5\20\t\2ST"+
-		"\5\b\5\2T\u0088\3\2\2\2UX\7\b\2\2VY\5\20\t\2WY\5\22\n\2XV\3\2\2\2XW\3"+
-		"\2\2\2YZ\3\2\2\2Z]\5\f\7\2[^\5\20\t\2\\^\5\22\n\2][\3\2\2\2]\\\3\2\2\2"+
-		"^\u0088\3\2\2\2_a\7\t\2\2`b\5\6\4\2a`\3\2\2\2ab\3\2\2\2bc\3\2\2\2ce\5"+
-		"\20\t\2df\5\b\5\2ed\3\2\2\2ef\3\2\2\2f\u0088\3\2\2\2gi\7\n\2\2hj\5\6\4"+
-		"\2ih\3\2\2\2ij\3\2\2\2jk\3\2\2\2km\5\20\t\2ln\5\b\5\2ml\3\2\2\2mn\3\2"+
-		"\2\2n\u0088\3\2\2\2op\7\13\2\2pq\5\6\4\2qr\5\20\t\2rs\5\b\5\2s\u0088\3"+
-		"\2\2\2tu\7\f\2\2uv\5\6\4\2vw\5\20\t\2wx\5\b\5\2x\u0088\3\2\2\2y|\7\r\2"+
-		"\2z}\5\20\t\2{}\5\22\n\2|z\3\2\2\2|{\3\2\2\2}~\3\2\2\2~\u0081\5\f\7\2"+
-		"\177\u0082\5\20\t\2\u0080\u0082\5\22\n\2\u0081\177\3\2\2\2\u0081\u0080"+
-		"\3\2\2\2\u0082\u0088\3\2\2\2\u0083\u0084\7\16\2\2\u0084\u0088\5\20\t\2"+
-		"\u0085\u0086\7\17\2\2\u0086\u0088\5\20\t\2\u0087K\3\2\2\2\u0087P\3\2\2"+
-		"\2\u0087U\3\2\2\2\u0087_\3\2\2\2\u0087g\3\2\2\2\u0087o\3\2\2\2\u0087t"+
-		"\3\2\2\2\u0087y\3\2\2\2\u0087\u0083\3\2\2\2\u0087\u0085\3\2\2\2\u0088"+
-		"\13\3\2\2\2\u0089\u008a\t\2\2\2\u008a\r\3\2\2\2\u008b\u008c\t\3\2\2\u008c"+
-		"\17\3\2\2\2\u008d\u008f\7\33\2\2\u008e\u008d\3\2\2\2\u008f\u0090\3\2\2"+
-		"\2\u0090\u008e\3\2\2\2\u0090\u0091\3\2\2\2\u0091\21\3\2\2\2\u0092\u0093"+
-		"\7\32\2\2\u0093\23\3\2\2\2\25\30 \',\629@BEX]aeim|\u0081\u0087\u0090";
+		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6\u0083"+
+		"\n\6\3\7\3\7\3\b\3\b\3\t\6\t\u008a\n\t\r\t\16\t\u008b\3\n\3\n\3\n\2\3"+
+		"\2\13\2\4\6\b\n\f\16\20\22\2\4\3\2\20\23\3\2\24\31\u009f\2\24\3\2\2\2"+
+		"\4<\3\2\2\2\6G\3\2\2\2\bI\3\2\2\2\n\u0082\3\2\2\2\f\u0084\3\2\2\2\16\u0086"+
+		"\3\2\2\2\20\u0089\3\2\2\2\22\u008d\3\2\2\2\24\30\b\2\1\2\25\27\5\6\4\2"+
+		"\26\25\3\2\2\2\27\32\3\2\2\2\30\26\3\2\2\2\30\31\3\2\2\2\31\33\3\2\2\2"+
+		"\32\30\3\2\2\2\33,\5\4\3\2\34 \5\f\7\2\35\37\5\6\4\2\36\35\3\2\2\2\37"+
+		"\"\3\2\2\2 \36\3\2\2\2 !\3\2\2\2!#\3\2\2\2\" \3\2\2\2#\'\5\4\3\2$&\5\b"+
+		"\5\2%$\3\2\2\2&)\3\2\2\2\'%\3\2\2\2\'(\3\2\2\2(+\3\2\2\2)\'\3\2\2\2*\34"+
+		"\3\2\2\2+.\3\2\2\2,*\3\2\2\2,-\3\2\2\2-\62\3\2\2\2.,\3\2\2\2/\61\5\b\5"+
+		"\2\60/\3\2\2\2\61\64\3\2\2\2\62\60\3\2\2\2\62\63\3\2\2\2\639\3\2\2\2\64"+
+		"\62\3\2\2\2\65\66\f\3\2\2\668\7\3\2\2\67\65\3\2\2\28;\3\2\2\29\67\3\2"+
+		"\2\29:\3\2\2\2:\3\3\2\2\2;9\3\2\2\2<B\5\22\n\2=@\5\16\b\2>A\5\20\t\2?"+
+		"A\5\22\n\2@>\3\2\2\2@?\3\2\2\2AC\3\2\2\2B=\3\2\2\2BC\3\2\2\2CE\3\2\2\2"+
+		"DF\5\n\6\2ED\3\2\2\2EF\3\2\2\2F\5\3\2\2\2GH\7\4\2\2H\7\3\2\2\2IJ\7\5\2"+
+		"\2J\t\3\2\2\2KL\7\6\2\2LM\5\6\4\2MN\5\20\t\2NO\5\b\5\2O\u0083\3\2\2\2"+
+		"PQ\7\7\2\2QR\5\6\4\2RS\5\20\t\2ST\5\b\5\2T\u0083\3\2\2\2UX\7\b\2\2VY\5"+
+		"\20\t\2WY\5\22\n\2XV\3\2\2\2XW\3\2\2\2YZ\3\2\2\2Z]\5\f\7\2[^\5\20\t\2"+
+		"\\^\5\22\n\2][\3\2\2\2]\\\3\2\2\2^\u0083\3\2\2\2_a\7\t\2\2`b\5\6\4\2a"+
+		"`\3\2\2\2ab\3\2\2\2bc\3\2\2\2ce\5\20\t\2df\5\b\5\2ed\3\2\2\2ef\3\2\2\2"+
+		"f\u0083\3\2\2\2gi\7\n\2\2hj\5\6\4\2ih\3\2\2\2ij\3\2\2\2jk\3\2\2\2km\5"+
+		"\20\t\2ln\5\b\5\2ml\3\2\2\2mn\3\2\2\2n\u0083\3\2\2\2op\7\13\2\2pq\5\6"+
+		"\4\2qr\5\20\t\2rs\5\b\5\2s\u0083\3\2\2\2tu\7\f\2\2uv\5\6\4\2vw\5\20\t"+
+		"\2wx\5\b\5\2x\u0083\3\2\2\2yz\7\r\2\2z{\5\20\t\2{|\5\f\7\2|}\5\20\t\2"+
+		"}\u0083\3\2\2\2~\177\7\16\2\2\177\u0083\5\20\t\2\u0080\u0081\7\17\2\2"+
+		"\u0081\u0083\5\20\t\2\u0082K\3\2\2\2\u0082P\3\2\2\2\u0082U\3\2\2\2\u0082"+
+		"_\3\2\2\2\u0082g\3\2\2\2\u0082o\3\2\2\2\u0082t\3\2\2\2\u0082y\3\2\2\2"+
+		"\u0082~\3\2\2\2\u0082\u0080\3\2\2\2\u0083\13\3\2\2\2\u0084\u0085\t\2\2"+
+		"\2\u0085\r\3\2\2\2\u0086\u0087\t\3\2\2\u0087\17\3\2\2\2\u0088\u008a\7"+
+		"\33\2\2\u0089\u0088\3\2\2\2\u008a\u008b\3\2\2\2\u008b\u0089\3\2\2\2\u008b"+
+		"\u008c\3\2\2\2\u008c\21\3\2\2\2\u008d\u008e\7\32\2\2\u008e\23\3\2\2\2"+
+		"\23\30 \',\629@BEX]aeim\u0082\u008b";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

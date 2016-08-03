@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-import cascading.lingual.type.SQLDateCoercibleType;
+import cascading.lingual.type.SQLTimestampCoercibleType;
 import hydrograph.server.debug.lingual.LingualFilter;
 import hydrograph.server.debug.lingual.json.RemoteFilterJson;
 import hydrograph.server.debug.utilities.Constants;
@@ -518,7 +518,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				for (int i = 0; i < remoteFilterJson.getSchema().size(); i++) {
 					Class clazz = Class.forName(remoteFilterJson.getSchema().get(i).getDataTypeValue());
 					if (clazz.getSimpleName().toString().equalsIgnoreCase("Date")) {
-						type = new SQLDateCoercibleType();
+						type = new SQLTimestampCoercibleType();
 					} else {
 						type = clazz;
 					}
