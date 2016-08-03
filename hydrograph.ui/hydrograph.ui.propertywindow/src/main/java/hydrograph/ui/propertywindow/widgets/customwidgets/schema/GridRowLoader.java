@@ -168,7 +168,10 @@ public class GridRowLoader {
 		}
 		catch (Exception e) {
 			grids.clear();
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
+			box.setText("Error");
+			box.open();
 			logger.error(Messages.IMPORT_XML_ERROR);
 			return null;
 		}
@@ -277,17 +280,26 @@ public class GridRowLoader {
 			
 				
 				exportFile(schemaGridRowList, schema);
-				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA);
+				MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION);
+				box.setMessage(Messages.EXPORTED_SCHEMA);
+				box.setText("Information");
+				box.open();
 			}else{
 				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
 				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
 		} catch (JAXBException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n" +
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n" +
 					((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
+			box.setText("Error");
+			box.open();
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
+			box.setText("Error");
+			box.open();
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 
@@ -309,12 +321,19 @@ public class GridRowLoader {
 				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
 		} catch (JAXBException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n" 
-					+ ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n" + ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
+			box.setText("Error");
+			box.open();
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"
 					+e.getMessage());
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n" +e.getMessage());
+			box.setText("Error");
+			box.open();
+			
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 

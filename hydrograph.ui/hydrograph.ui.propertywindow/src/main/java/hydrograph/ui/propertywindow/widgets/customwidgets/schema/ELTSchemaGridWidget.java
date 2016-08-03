@@ -928,7 +928,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					enableDisableButtons(schemaGridRowListToImport.size());
 					MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION);
 					box.setMessage(Messages.IMPORTED_SCHEMA);
-					box.setText(" Information");
+					box.setText("Information");
 					box.open();
 					showHideErrorSymbol(applySchemaValidationRule());
 				}
