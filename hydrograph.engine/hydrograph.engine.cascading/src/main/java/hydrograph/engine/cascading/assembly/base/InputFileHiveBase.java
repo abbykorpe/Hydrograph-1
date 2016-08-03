@@ -86,6 +86,8 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 	@Override
 	protected void createAssembly() {
 		fieldsCreator = new InputOutputFieldsAndTypesCreator<HiveEntityBase>(hiveEntityBase);
+		validateDateFormatInHive(fieldsCreator.getFieldNames(), fieldsCreator.getFieldDataTypes(),
+				fieldsCreator.getFieldFormat());
 		generateTapsAndPipes(); // exception handled separately within
 		try {
 			flowDef = flowDef.addSource(pipe, hiveTap);
@@ -112,6 +114,26 @@ public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 			LOG.error("Error in creating assembly for component '" + hiveEntityBase.getComponentId() + "', Error: "
 					+ e.getMessage(), e);
 			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * This method will validate date format for Hive component. It will throw
+	 * an exception if unsupported date format is used.
+	 * 
+	 * @param fieldNames
+	 * @param datatypes
+	 * @param dateformat
+	 */
+	private void validateDateFormatInHive(String[] fieldNames, String[] datatypes, String[] dateformat) {
+		for (int i = 0; i < datatypes.length; i++) {
+			if ((datatypes[i].toLowerCase().contains("date") && !dateformat[i].contains("yyyy-MM-dd"))
+					|| (datatypes[i].toLowerCase().contains("timestamp")
+							&& !dateformat[i].contains("yyyy-MM-dd HH:mm:ss"))) {
+				throw new RuntimeException("Component: \"" + hiveEntityBase.getComponentId() + "\" - Field \""
+						+ fieldNames[i] + "\" has unsupported date format \"" + dateformat[i]
+						+ "\". Hive supports only \"yyyy-MM-dd\" format for date datatype and \"yyyy-MM-dd HH:mm:ss\" format for timestamp datatype.");
+			}
 		}
 	}
 
