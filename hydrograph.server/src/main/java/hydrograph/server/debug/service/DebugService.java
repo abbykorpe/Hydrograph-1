@@ -45,13 +45,13 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 
 import cascading.lingual.type.SQLTimestampCoercibleType;
+import hydrograph.server.debug.antlr.parser.QueryParserLexer;
+import hydrograph.server.debug.antlr.parser.QueryParserParser;
 import hydrograph.server.debug.lingual.LingualFilter;
 import hydrograph.server.debug.lingual.json.RemoteFilterJson;
+import hydrograph.server.debug.lingual.querygenerator.LingualQueryCreator;
 import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.debug.utilities.ServiceUtilities;
-import hydrograph.server.sqlquery.lingualquery.generator.LingualQueryCreator;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserLexer;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserParser;
 import spark.Request;
 import spark.Response;
 import spark.Route;

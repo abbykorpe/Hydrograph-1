@@ -10,7 +10,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *******************************************************************************/
-package hydrograph.server.sqlquery.lingualquery.generator;
+package hydrograph.server.debug.lingual.querygenerator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,12 +21,12 @@ import java.util.TimeZone;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import hydrograph.server.debug.antlr.parser.QueryParserBaseVisitor;
+import hydrograph.server.debug.antlr.parser.QueryParserParser;
+import hydrograph.server.debug.antlr.parser.QueryParserVisitor;
+import hydrograph.server.debug.antlr.parser.QueryParserParser.JavaidenContext;
+import hydrograph.server.debug.antlr.parser.QueryParserParser.SpecialexprContext;
 import hydrograph.server.debug.lingual.json.GridRow;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserBaseVisitor;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserParser;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserParser.JavaidenContext;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserParser.SpecialexprContext;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserVisitor;
 
 /**
  * Created by bhaveshs on 6/22/2016.

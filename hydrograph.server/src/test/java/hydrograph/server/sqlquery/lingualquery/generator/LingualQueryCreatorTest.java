@@ -21,11 +21,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import hydrograph.server.debug.antlr.parser.QueryParserLexer;
+import hydrograph.server.debug.antlr.parser.QueryParserParser;
 import hydrograph.server.debug.lingual.json.GridRow;
 import hydrograph.server.debug.lingual.json.JobDetails;
 import hydrograph.server.debug.lingual.json.RemoteFilterJson;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserLexer;
-import hydrograph.server.sqlquery.parser.antlr.QueryParserParser;
+import hydrograph.server.debug.lingual.querygenerator.LingualQueryCreator;
 
 /**
  * Created by bhaveshs on 6/22/2016.
