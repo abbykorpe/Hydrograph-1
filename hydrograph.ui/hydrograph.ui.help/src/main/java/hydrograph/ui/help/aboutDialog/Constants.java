@@ -22,8 +22,10 @@ package hydrograph.ui.help.aboutDialog;
 public class Constants {
 	
 	public static final String ABOUT_TEXT="Hydrograph for ETL Developers\n\nVersion: Hydrograph Service Release 1 \t\t";
-	public static final String ABOUT_DIALOG_IMAGE_PATH="icons/alt_about.gif";
-	public static final String ABOUT_DIALOG_FEATURE_IMAGE_PATH="icons/app_icon.png";
+	public static final String ABOUT_DIALOG_IMAGE_PATH="icons/about_img.gif";
+	public static final String ABOUT_DIALOG_FEATURE_IMAGE_PATH="icons/about_img.png";
 	public static final String ABOUT_DIALOG_IMAGE_BUNDLE_NAME="hydrograph.ui.perspective";
+	public static final String ABOUT_LICENSE_INFO ="Apache License, Version 2.0 \nhttp://www.apache.org/licenses/LICENSE-2.0" ;
+	public static final String ABOUT_COPYRIGHT_INFO= "©Copyright 2016 Hydrograph. All rights reserved. \n Published - Capital One Services, LLC and Bitwise, Inc.";
 	
 }

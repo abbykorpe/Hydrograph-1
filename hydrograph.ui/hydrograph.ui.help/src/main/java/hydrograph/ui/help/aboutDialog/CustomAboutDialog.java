@@ -16,6 +16,7 @@ package hydrograph.ui.help.aboutDialog;
 
 import hydrograph.ui.help.Activator;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -30,11 +31,14 @@ import org.eclipse.jface.resource.JFaceColors;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -50,6 +54,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.internal.about.AboutFeaturesButtonManager;
@@ -88,6 +93,8 @@ public class CustomAboutDialog extends TrayDialog {
 	private AboutTextManager aboutTextManager;
 
 	private AboutItem item;
+	private GridData data_1;
+	private String ABOUT_HEADER_TEXT="Hydrograph";
 
 	/**
 	 * Create an instance of the AboutDialog for the given window.
@@ -163,6 +170,8 @@ public class CustomAboutDialog extends TrayDialog {
 			Bundle bundle = Platform.getBundle(Constants.ABOUT_DIALOG_IMAGE_BUNDLE_NAME);
 			URL fullPathString = BundleUtility.find(bundle,Constants.ABOUT_DIALOG_IMAGE_PATH);
 			aboutImage=ImageDescriptor.createFromURL(fullPathString).createImage();
+			
+			parent.getShell().setMinimumSize(450, 267);
 
 			// if the about image is small enough, then show the text
 			if (aboutImage == null
@@ -175,7 +184,8 @@ public class CustomAboutDialog extends TrayDialog {
 					if(StringUtils.isBlank(buildNumber)){
 						buildNumber = Platform.getBundle(Activator.PLUGIN_ID).getVersion().toString();
 					}
-					item = AboutTextManager.scan(aboutText + "\n" + "Build Number: " + buildNumber);
+					item = AboutTextManager.scan(aboutText + "\n" + "Build Number : " + buildNumber + "\n \n"+"License Information : " + Constants.ABOUT_LICENSE_INFO 
+							+ "\n \n " +Constants.ABOUT_COPYRIGHT_INFO + "\n \n");
 				}
 			}
 
@@ -241,10 +251,11 @@ public class CustomAboutDialog extends TrayDialog {
 			imageLabel.setBackground(background);
 			imageLabel.setForeground(foreground);
 
-			GridData data = new GridData();
+			GridData data = new GridData(SWT.FILL,SWT.FILL,true,true,0,0);
 			data.horizontalAlignment = GridData.FILL;
-			data.verticalAlignment = GridData.BEGINNING;
-			data.grabExcessHorizontalSpace = false;
+			data.verticalAlignment = GridData.FILL;
+			data.grabExcessHorizontalSpace = true;
+			data.grabExcessVerticalSpace = true;
 			imageLabel.setLayoutData(data);
 			imageLabel.setImage(aboutImage);
 			topContainerHeightHint = Math.max(topContainerHeightHint, aboutImage.getBounds().height);
@@ -300,12 +311,13 @@ public class CustomAboutDialog extends TrayDialog {
 		// override any layout inherited from createDialogArea 
 		layout = new GridLayout();
 		bottom.setLayout(layout);
-		data = new GridData();
-		data.horizontalAlignment = SWT.FILL;
-		data.verticalAlignment = SWT.FILL;
-		data.grabExcessHorizontalSpace = true;
+		data_1 = new GridData();
+		data_1.heightHint = 0;
+		data_1.horizontalAlignment = SWT.FILL;
+		data_1.verticalAlignment = SWT.FILL;
+		data_1.grabExcessHorizontalSpace = true;
 
-		bottom.setLayoutData(data);
+		bottom.setLayoutData(data_1);
 
 		createFeatureImageButtonRow(bottom);
 
@@ -349,6 +361,24 @@ public class CustomAboutDialog extends TrayDialog {
 		text.setBackground(background);
 		text.setForeground(foreground);
 		text.setMargins(TEXT_MARGIN, TEXT_MARGIN, TEXT_MARGIN, 0);
+		
+		text.addMouseListener(new MouseAdapter() {
+				
+				@Override
+				public void mouseDown(MouseEvent e) 
+				{
+					try {
+						int offset = text.getOffsetAtLocation(new Point (e.x, e.y));
+						StyleRange style1 = text.getStyleRangeAtOffset(offset);
+						if (style1 != null && style1.underline) {
+							PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL("https://github.com/capitalone/Hydrograph"));
+						}
+					} catch (IllegalArgumentException | PartInitException | MalformedURLException a) {
+						a.printStackTrace();
+					}
+					
+				}
+			});
 
 		aboutTextManager = new AboutTextManager(text);
 		aboutTextManager.setItem(item);
@@ -357,6 +387,30 @@ public class CustomAboutDialog extends TrayDialog {
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		text.setLayoutData(gd);
+		
+		int[] rangesArray=new int[text.getRanges().length+2];
+		rangesArray[0]=(item.getText().indexOf(ABOUT_HEADER_TEXT));
+		rangesArray[1]=ABOUT_HEADER_TEXT.length();
+		
+		for(int index=2;index<rangesArray.length;index++){
+			rangesArray[index]=text.getRanges()[index-2];
+		}
+		
+		StyleRange[] styleRanges=new StyleRange[text.getStyleRanges().length+1];
+		
+		StyleRange style = new StyleRange();
+		style.start=rangesArray[rangesArray.length-2];
+		style.length=rangesArray[rangesArray.length-1];
+		style.underline = true;
+		style.foreground=new Color (null,0, 0, 128);		
+		styleRanges[0]=style;
+		
+		for(int index=1;index<styleRanges.length;index++){
+			styleRanges[index]=text.getStyleRanges()[index-1];
+		}
+		
+		
+		text.setStyleRanges(rangesArray, styleRanges);
 	}
 
 	/**
@@ -385,7 +439,7 @@ public class CustomAboutDialog extends TrayDialog {
 	}
 
 	private void createFeatureImageButtonRow(Composite parent) {
-		Composite featureContainer = new Composite(parent, SWT.NONE);
+		/*Composite featureContainer = new Composite(parent, SWT.NONE);
 		RowLayout rowLayout = new RowLayout();
 		rowLayout.wrap = true;
 		featureContainer.setLayout(rowLayout);
@@ -398,7 +452,9 @@ public class CustomAboutDialog extends TrayDialog {
 		Button button = new Button(featureContainer, SWT.FLAT | SWT.PUSH);
 		Image image=ImageDescriptor.createFromURL(fullPathString).createImage();
 		button.setImage(image);
-		images.add(image);
+		images.add(image);*/
+		setDialogHelpAvailable(true);
+		setHelpAvailable(true);
 	}
 
 
