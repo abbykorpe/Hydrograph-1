@@ -57,6 +57,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 42.#... [Shrirang Kumbhar] implemeneted AutoSync in Transform component.
 43.#508 [Akhilesh Joshi]Error decorator is not properly visible in the application property window.
 44.#482 [Prateem Tadas] Transform Component: 'CopyFields' Function Need to be Removed from Operation Class List
+45.#369 [Akhilesh Joshi]Parameter Dialog Window : Content Save Warning Does not Prompt While switching from Parameter File view To parameter files 
+46.#368	[Akhilesh Joshi]Parameter Dialog: Accepting Null Parameter Name  
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
