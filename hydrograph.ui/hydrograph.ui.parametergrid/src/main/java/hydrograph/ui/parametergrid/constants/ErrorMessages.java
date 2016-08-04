@@ -40,6 +40,9 @@ public class ErrorMessages extends NLS{
 	public static String UNABLE_TO_REMOVE_JOB_SPECIFIC_FILE;
 	public static String UNABLE_To_WRITE_PROJECT_METADAT_FILE;
 	public static String SELECT_ROW_TO_DELETE;
+	public static String NAME_VALUE_CANNOT_BE_BLANK;
+	public static String BLANK_PARAMETER_WILL_BE_LOST;
+	public static String WARNING;
 	
 	static {
 		// initialize resource bundle

@@ -133,12 +133,12 @@ public class MultiParameterFileDialog extends Dialog {
 
 	private static final String DROP_BOX_TEXT = "\nDrop parameter file here to delete";
 	private boolean okPressed;
-
+	private boolean ifNotified = false;
 	private static final Base64 base64 = new Base64();
 	private Composite container_1;
 	
 	private static final String TABLE_TYPE_KEY="TABLE_TYPE";
-
+	IStructuredSelection previousSelection = null;
 	/**
 	 * Create the dialog.
 	 * 
@@ -671,7 +671,7 @@ public class MultiParameterFileDialog extends Dialog {
 		composite_1.setLayout(new GridLayout(1, false));
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
-
+		
 		parameterTableViewer = new TableViewer(composite_1, SWT.BORDER
 				| SWT.FULL_SELECTION | SWT.MULTI);
 		Table table_2 = parameterTableViewer.getTable();
@@ -680,8 +680,10 @@ public class MultiParameterFileDialog extends Dialog {
 		table_2.setHeaderVisible(true);
 		parameterTableViewer.setContentProvider(new ArrayContentProvider());
 		parameterTableViewer.setData(TABLE_TYPE_KEY, "parameterTableViewer");
-		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(
+		final TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(
 				parameterTableViewer, SWT.NONE);
+		ColumnViewerToolTipSupport.enableFor(parameterTableViewer,
+				ToolTip.NO_RECREATE);
 		TableColumn tblclmnParameterName_1 = tableViewerColumn_3.getColumn();
 		tblclmnParameterName_1.setWidth(190);
 		tblclmnParameterName_1
@@ -690,11 +692,35 @@ public class MultiParameterFileDialog extends Dialog {
 				parameterTableViewer,
 				MultiParameterFileDialogConstants.PARAMETER_NAME));
 		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
+			
+			@Override
+			public String getToolTipText(Object element) {
+				Parameter p = (Parameter) element;
+				if(StringUtils.isEmpty(p.getParameterName())){
+					return ErrorMessages.NAME_VALUE_CANNOT_BE_BLANK;
+				}
+				else{
+				return null;
+				}
+			}
+			
+		   
+			
 			@Override
 			public String getText(Object element) {
 				Parameter p = (Parameter) element;
 				return p.getParameterName();
 			}
+			
+			@Override
+			public Color getBackground(Object element) {
+				Parameter p = (Parameter) element;
+				if(StringUtils.isEmpty(p.getParameterName())){
+					return new Color(Display.getCurrent(),0xFF, 0xDD, 0xDD);
+				}
+				return super.getBackground(element);
+			}
+			
 		});
 
 		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(
@@ -796,7 +822,7 @@ public class MultiParameterFileDialog extends Dialog {
 		setTableLayoutToMappingTable(parameterTableViewer);
 	}
 
-	private void saveParameters() {
+	private boolean saveParameters() {
 		if (!parameterFileTextBox.getText().isEmpty()) {
 			String currentFilePath = (String) parameterTableViewer
 					.getData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE);
@@ -804,17 +830,29 @@ public class MultiParameterFileDialog extends Dialog {
 					currentFilePath);
 			Map<String, String> parameterMap = new LinkedHashMap<>();
 			for (Parameter parameter : parameters) {
+				if(StringUtils.isEmpty(parameter.getParameterName())){
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+					messageBox.setText(ErrorMessages.WARNING);
+					messageBox.setMessage(ErrorMessages.BLANK_PARAMETER_WILL_BE_LOST);
+					int response = messageBox.open();
+					if (response != SWT.OK) {
+						return false;
+					}
+				}else{
 				parameterMap.put(parameter.getParameterName(),
 						parameter.getParameterValue());
+				}
 			}
 			try {
 				parameterFileManager.storeParameters(parameterMap);
+				ifNotified = false;
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
 
 		populateParameterSearchBox();
+		return true;
 	}
 
 	private Composite createParameterFileViewOuterComposite(Composite container) {
@@ -997,17 +1035,28 @@ public class MultiParameterFileDialog extends Dialog {
 
 		filePathTableViewer
 				.addSelectionChangedListener(new ISelectionChangedListener() {
-
+					
 					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
+						if(!ifNotified){
+						if(!saveParameters()){
+							ifNotified = true;
+							filePathTableViewer.setSelection(previousSelection);
+							ifNotified=false;
+							return;
+						}
 						IStructuredSelection selection = (IStructuredSelection) filePathTableViewer
 								.getSelection();
 						ParameterFile selectedFile = (ParameterFile) selection
 								.getFirstElement();
 						if (selectedFile != null) {
+							previousSelection = (IStructuredSelection) filePathTableViewer.getSelection();;
 							populateViewParameterFileBox(selectedFile);
 						}
-
+						}
+						else{
+							return;
+						}
 					}
 				});
 
@@ -1078,6 +1127,9 @@ public class MultiParameterFileDialog extends Dialog {
 		browseBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				if(!saveParameters()){
+					return;
+				}
 				FileDialog fileDialog = new FileDialog(browseBtn.getShell(),SWT.OPEN|SWT.MULTI);
 				fileDialog.setText(MultiParameterFileDialogConstants.OPEN_FILE_DIALOG_NAME);
 
