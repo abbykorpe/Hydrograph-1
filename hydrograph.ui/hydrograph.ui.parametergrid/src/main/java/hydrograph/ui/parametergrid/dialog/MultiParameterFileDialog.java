@@ -695,10 +695,9 @@ public class MultiParameterFileDialog extends Dialog {
 			
 			@Override
 			public String getToolTipText(Object element) {
-				// TODO Auto-generated method stub
 				Parameter p = (Parameter) element;
 				if(StringUtils.isEmpty(p.getParameterName())){
-					return "Name value can not be blank";
+					return ErrorMessages.NAME_VALUE_CANNOT_BE_BLANK;
 				}
 				else{
 				return null;
@@ -710,8 +709,6 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public String getText(Object element) {
 				Parameter p = (Parameter) element;
-				if(StringUtils.isEmpty(p.getParameterName())){
-				}
 				return p.getParameterName();
 			}
 			
@@ -835,8 +832,8 @@ public class MultiParameterFileDialog extends Dialog {
 			for (Parameter parameter : parameters) {
 				if(StringUtils.isEmpty(parameter.getParameterName())){
 					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-					messageBox.setText("Warning");
-					messageBox.setMessage("The paramter name is blank and will be lost");
+					messageBox.setText(ErrorMessages.WARNING);
+					messageBox.setMessage(ErrorMessages.BLANK_PARAMETER_WILL_BE_LOST);
 					int response = messageBox.open();
 					if (response != SWT.OK) {
 						return false;
@@ -1053,7 +1050,6 @@ public class MultiParameterFileDialog extends Dialog {
 						ParameterFile selectedFile = (ParameterFile) selection
 								.getFirstElement();
 						if (selectedFile != null) {
-							System.out.println(selectedFile.toString());
 							previousSelection = (IStructuredSelection) filePathTableViewer.getSelection();;
 							populateViewParameterFileBox(selectedFile);
 						}
