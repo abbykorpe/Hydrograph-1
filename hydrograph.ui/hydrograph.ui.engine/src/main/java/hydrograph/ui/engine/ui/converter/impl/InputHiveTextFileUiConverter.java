@@ -13,8 +13,19 @@
 
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
+import hydrograph.engine.jaxb.ihivetextfile.PartitionColumn;
+import hydrograph.engine.jaxb.ihivetextfile.PartitionFieldBasicType;
+import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
+import hydrograph.ui.datastructure.property.InputHivePartitionKeyValues;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
@@ -25,26 +36,12 @@ import hydrograph.ui.graph.model.components.IHiveTextFile;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.ihivetextfile.FieldBasicType;
-import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFieldsType;
-import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
-import hydrograph.engine.jaxb.ihivetextfile.PartitionColumn;
-import hydrograph.engine.jaxb.ihivetextfile.PartitionFieldBasicType;
-import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 /**
  * The class InputHiveTextFileUiConverter
  * 
@@ -56,7 +53,9 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputHiveTextFileUiConverter.class);
 	private HiveTextFile hiveTextfile;
-	private LinkedHashMap<String, Object> property;
+	private InputHivePartitionKeyValues hivePartitionKeyValues;
+	private List<String> partitionKeys;
+	
 
 	public InputHiveTextFileUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -103,15 +102,18 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 	/*
 	 * returns Partition keys list
 	 */
-	private LinkedHashMap<String, Object> getPartitionKeys() {
+	private InputHivePartitionKeyValues getPartitionKeys() {
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
-		property = new LinkedHashMap<String, Object>();
+		
+		hivePartitionKeyValues= new InputHivePartitionKeyValues();
+		partitionKeys=new ArrayList<>();
+		
 		hiveTextfile = (HiveTextFile) typeBaseComponent;
 		HivePartitionFieldsType typeHivePartitionFields = hiveTextfile.getPartitionKeys();
 		if (typeHivePartitionFields != null) {
 			if(typeHivePartitionFields.getField()!=null){
 			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
-			property.put(partitionFieldBasicType.getName(),null);
+			partitionKeys.add(partitionFieldBasicType.getName());
 			if(partitionFieldBasicType.getField()!=null)
 			{
 				getKey(partitionFieldBasicType);
@@ -119,13 +121,7 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 			}
 		}
 		
-		Set<String> keys=new HashSet<String>();
-		if(property!=null)
-		{
-		keys=property.keySet();
-		}
-		List <String>list= new ArrayList<String>();
-		list.addAll(keys);
+	
 		List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
 
 		HivePartitionFilterType hivePartitionFilterType=hiveTextfile.getPartitionFilter();
@@ -147,16 +143,17 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 			}
 			
 		}
-		property.put(list.get(0),inputHivePartitionColumn);
+		hivePartitionKeyValues.setKey(partitionKeys);
+		hivePartitionKeyValues.setKeyValues(inputHivePartitionColumn);
 			}
-		return property;
+		return hivePartitionKeyValues;
 		
 	}
 	
 	private void getKey(PartitionFieldBasicType partition)
 	{
 		PartitionFieldBasicType partitionFieldBasicType1 = partition.getField();
-		property.put(partitionFieldBasicType1.getName(),null);
+		partitionKeys.add(partitionFieldBasicType1.getName());
 				if(partitionFieldBasicType1.getField()!=null)
 				{
 					getKey(partitionFieldBasicType1);

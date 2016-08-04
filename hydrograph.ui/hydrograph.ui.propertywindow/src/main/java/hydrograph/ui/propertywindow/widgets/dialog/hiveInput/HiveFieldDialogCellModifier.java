@@ -1,4 +1,3 @@
-
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +12,13 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
+package hydrograph.ui.propertywindow.widgets.dialog.hiveInput;
 
-import java.util.ArrayList;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.propertywindow.messages.Messages;
+
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -77,13 +78,16 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 	}
 
 	private int getIndex(String property) {
-		Map<String, List<String>> map=	(Map<String, List<String>>) viewer.getData("Map");
-		List<String> list=new ArrayList<>(map.keySet());
-		return list.indexOf(property);
+		
+		List<FilterProperties> list=(List<FilterProperties> ) viewer.getData(Constants.PARTITION_KEYS);
+		FilterProperties properties = new FilterProperties();
+		properties.setPropertyname(property);
+		
+		return list.indexOf(properties);
 		
 	}
 
-	/**
+	/** 
 	 * Modifies the element
 	 * 
 	 * @param element
@@ -96,7 +100,7 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 	public void modify(Object element, String property, Object value) {
 		
 		Label errorLabel=(Label) viewer.getData("Error"); 
-		
+		errorLabel.setText(Messages.HIVE_FIELD_DIALOG_ERROR);
 		if (element instanceof Item){
 			element = ((Item) element).getData();
 		}
@@ -108,8 +112,9 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 			if(StringUtils.isBlank(row.getRowFields().get(0))){
 				errorLabel.setVisible(true);
 				break;
-			}else
+			}else{
 				errorLabel.setVisible(false);
+			}
 		}
 		viewer.refresh();
 	}

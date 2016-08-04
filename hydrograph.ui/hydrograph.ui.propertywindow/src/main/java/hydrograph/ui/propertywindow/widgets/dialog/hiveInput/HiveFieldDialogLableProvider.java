@@ -12,7 +12,7 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.propertywindow.widgets.hiveInput.dialog;
+package hydrograph.ui.propertywindow.widgets.dialog.hiveInput;
 
 
 

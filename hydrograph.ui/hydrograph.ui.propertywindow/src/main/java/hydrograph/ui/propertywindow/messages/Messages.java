@@ -246,7 +246,11 @@ public class Messages extends NLS {
 	public static String HIVE_FIELD_DIALOG_ERROR;
 	public static String EMPTY_TARGET_FIELD_ERROR;
 	public static String PARTI_KEY_VALUE_DIALOG_NAME;
-	
+	public static String HIVE_PARTI_SEQ_ERROR;
+	public static String HIVE_PARTI_KEY_VALUE_ADD_TOOLTIP;
+	public static String HIVE_PARTI_KEY_VALUE_DEL_TOOLTIP;
+	public static String HIVE_PARTI_KEY_CHECKBOX_NAME;
+	public static String HIVE_PARTI_KEY_DEL_TOOLTIP;
 	
 	static {
 		// initialize resource bundle
