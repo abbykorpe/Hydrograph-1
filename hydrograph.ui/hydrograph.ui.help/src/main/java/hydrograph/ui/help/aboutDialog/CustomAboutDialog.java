@@ -15,6 +15,7 @@
 package hydrograph.ui.help.aboutDialog;
 
 import hydrograph.ui.help.Activator;
+import hydrograph.ui.help.Messages;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,8 +40,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -72,7 +71,6 @@ import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
 
-
 /**
  *Creates Custom AboutDialog of Application
  * @author Bitwise
@@ -101,7 +99,6 @@ public class CustomAboutDialog extends TrayDialog {
 
 	private AboutItem item;
 	private GridData data_1;
-	private String ABOUT_HEADER_TEXT="Hydrograph";
 	private AboutBundleGroupData[] bundleGroupInfos;
 
 	/**
@@ -186,7 +183,7 @@ public class CustomAboutDialog extends TrayDialog {
 			// if the about image is small enough, then show the text
 			if (aboutImage == null
 					|| aboutImage.getBounds().width <= MAX_IMAGE_WIDTH_FOR_TEXT) {
-				String aboutText=Constants.ABOUT_TEXT;
+				String aboutText = Messages.ABOUT_TEXT;
 
 
 				if (aboutText != null) {
@@ -194,8 +191,8 @@ public class CustomAboutDialog extends TrayDialog {
 					if(StringUtils.isBlank(buildNumber)){
 						buildNumber = Platform.getBundle(Activator.PLUGIN_ID).getVersion().toString();
 					}
-					item = AboutTextManager.scan(aboutText + "\n" + "Build Number : " + buildNumber + "\n \n"+"License Information : " + Constants.ABOUT_LICENSE_INFO 
-							+ "\n \n " +Constants.ABOUT_COPYRIGHT_INFO + "\n \n");
+					item = AboutTextManager.scan(aboutText + "\n" + "Build Number : " + buildNumber + "\n \n"+"License Information : " + Messages.ABOUT_LICENSE_INFO 
+							+ "\n \n " +Messages.ABOUT_COPYRIGHT_INFO + "\n \n");
 				}
 			}
 
@@ -379,7 +376,7 @@ public class CustomAboutDialog extends TrayDialog {
 						int offset = text.getOffsetAtLocation(new Point (e.x, e.y));
 						StyleRange style1 = text.getStyleRangeAtOffset(offset);
 						if (style1 != null && style1.underline) {
-							PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL("https://github.com/capitalone/Hydrograph"));
+							PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(Messages.HYDROGRAPH_URL));
 						}
 					} catch (IllegalArgumentException | PartInitException | MalformedURLException a) {
 						a.printStackTrace();
@@ -397,8 +394,8 @@ public class CustomAboutDialog extends TrayDialog {
 		text.setLayoutData(gd);
 		
 		int[] rangesArray=new int[text.getRanges().length+2];
-		rangesArray[0]=(item.getText().indexOf(ABOUT_HEADER_TEXT));
-		rangesArray[1]=ABOUT_HEADER_TEXT.length();
+		rangesArray[0]=(item.getText().indexOf(Messages.ABOUT_HEADER_TEXT));
+		rangesArray[1]=Messages.ABOUT_HEADER_TEXT.length();
 		
 		for(int index=2;index<rangesArray.length;index++){
 			rangesArray[index]=text.getRanges()[index-2];
@@ -476,7 +473,7 @@ public class CustomAboutDialog extends TrayDialog {
 			        try {
 			            handlerService.executeCommand("org.eclipse.ui.help.displayHelp", null);
 			        } catch (Exception ex) {
-			            throw new RuntimeException("command with id \"org.eclipse.ui.help.displayHelp\" not found");
+			            throw new RuntimeException("Help File Not Found!");
 			        }
 			    }
 			}); 
@@ -487,10 +484,9 @@ public class CustomAboutDialog extends TrayDialog {
 	    layout.numColumns++;
 	    layout.makeColumnsEqualWidth = false;
 
-	    Button b = createButton(parent, IDialogConstants.OK_ID,
+	    Button ok = createButton(parent, IDialogConstants.OK_ID,
 	                IDialogConstants.OK_LABEL, true);
-	        b.setFocus();	 
-			
+	        ok.setFocus();	 
 	       
 	    }  
 	}

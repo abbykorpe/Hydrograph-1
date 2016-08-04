@@ -11,16 +11,24 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
-package hydrograph.ui.help.aboutDialog;
+package hydrograph.ui.help;
 
-/**
- * NOTE : Do not change/modify values for below constants(not even space) until you know 
- * where it is affecting the behavior 
- * @author Bitwise
- */
-public class Constants {
-	public static final String ABOUT_DIALOG_IMAGE_PATH="icons/about_img.gif";
-	public static final String ABOUT_DIALOG_FEATURE_IMAGE_PATH="icons/help.png";
-	public static final String ABOUT_DIALOG_IMAGE_BUNDLE_NAME="hydrograph.ui.perspective";
+import org.eclipse.osgi.util.NLS;
+
+public class Messages extends NLS {
+	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
+
+	public static String ABOUT_LICENSE_INFO;
+	public static String ABOUT_COPYRIGHT_INFO;
+	public static String ABOUT_TEXT;
+	public static String ABOUT_HEADER_TEXT;
+	public static String HYDROGRAPH_URL;
+
+	static {
+		// initialize resource bundle
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+	}
+
+	private Messages() {
+	}
 }
