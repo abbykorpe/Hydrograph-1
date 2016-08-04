@@ -67,7 +67,7 @@ public class GenerateRecordAssembly extends BaseComponent<GenerateRecordEntity> 
 	@Override
 	protected void createAssembly() {
 		try {
-		fieldsCreator = new InputOutputFieldsAndTypesCreator<GenerateRecordEntity>(generateRecordEntity);
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<GenerateRecordEntity>(generateRecordEntity);
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipes, tap);
 
@@ -99,13 +99,14 @@ public class GenerateRecordAssembly extends BaseComponent<GenerateRecordEntity> 
 		// initializing each pipe and tap
 		tap = new MemorySourceTap(tupleGenerator, generateDataEntity.getInputFields(),
 				generateDataEntity.getRecordCount());
-		pipes = new Pipe(ComponentHelper.getComponentName("generateRecord",generateRecordEntity.getComponentId(),generateRecordEntity.getOutSocketList().get(0).getSocketId()));
+		pipes = new Pipe(ComponentHelper.getComponentName("generateRecord", generateRecordEntity.getComponentId(),
+				generateRecordEntity.getOutSocketList().get(0).getSocketId()));
 		setHadoopProperties(pipes.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());
 	}
 
 	@Override
 	public void initializeEntity(GenerateRecordEntity assemblyEntityBase) {
-		this.generateRecordEntity=assemblyEntityBase;
-	}	
+		this.generateRecordEntity = assemblyEntityBase;
+	}
 }

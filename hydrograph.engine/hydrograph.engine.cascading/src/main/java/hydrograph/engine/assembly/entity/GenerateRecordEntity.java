@@ -21,7 +21,7 @@ import java.util.List;
 
 public class GenerateRecordEntity extends InputOutputEntityBase{
 
-	private Integer recordCount;
+	private Long recordCount;
 	private List<OutSocket> outSocketList;
 	private List<SchemaField> fieldsList;
 
@@ -41,11 +41,11 @@ public class GenerateRecordEntity extends InputOutputEntityBase{
 		this.fieldsList = fieldsList;
 	}
 
-	public Integer getRecordCount() {
+	public Long getRecordCount() {
 		return recordCount;
 	}
 
-	public void setRecordCount(Integer recordCount) {
+	public void setRecordCount(Long recordCount) {
 		this.recordCount = recordCount;
 	}
 	
