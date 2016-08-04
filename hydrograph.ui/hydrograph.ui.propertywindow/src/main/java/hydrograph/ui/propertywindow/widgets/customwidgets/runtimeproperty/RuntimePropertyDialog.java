@@ -274,12 +274,15 @@ public class RuntimePropertyDialog extends Dialog {
             
 			@Override
 			public void mouseUp(MouseEvent e) {
+				int index= tableViewer.getTable().getSelectionIndex();
 				IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();				
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					tableViewer.remove(selectedObject);
 					propertyList.remove(selectedObject);
 					isAnyUpdatePerformed = true;
+					tableViewer.getTable().setSelection(index-1);
+					tableViewer.refresh();
 				}
 				if (propertyList.size() < 1) {
 					deleteButton.setEnabled(false);

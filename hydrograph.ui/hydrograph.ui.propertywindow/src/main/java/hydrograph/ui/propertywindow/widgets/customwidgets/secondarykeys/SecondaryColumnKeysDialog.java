@@ -427,12 +427,15 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
+				int index = targetTableViewer.getTable().getSelectionIndex(); 
 				IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					targetTableViewer.remove(selectedObject);
 					propertyList.remove(selectedObject);
 					isAnyUpdatePerformed = true;
+					targetTableViewer.getTable().setSelection(index - 1);
+					targetTableViewer.refresh();
 				}
 				if (propertyList.size() < 1) {
 					deleteButton.setEnabled(false);
