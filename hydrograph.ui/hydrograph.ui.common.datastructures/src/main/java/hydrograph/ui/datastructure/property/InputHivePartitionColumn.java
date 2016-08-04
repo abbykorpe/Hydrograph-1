@@ -14,7 +14,11 @@
 package hydrograph.ui.datastructure.property;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
-
+/**
+ * 
+ * @author Bitwise
+ *
+ */
 public class InputHivePartitionColumn  implements IDataStructure{
 	InputHivePartitionColumn inputHivePartitionColumn;
 	String name;
@@ -39,23 +43,25 @@ public class InputHivePartitionColumn  implements IDataStructure{
 	public void setValue(String value) {
 		this.value = value;
 	}
-	/**
-	 * @author Bitwise
-	 * 
-	 */
+	
 	@Override
 	public Object clone() {
 		
 		InputHivePartitionColumn column= new InputHivePartitionColumn();
 		column.setName(this.name);
-		column.setValue(this.value);
+		column.setValue(this.value);	
 		column.setInputHivePartitionColumn(getClonedObject(this.inputHivePartitionColumn));
+		
 		
 		return column;
 	}
 	
 	private InputHivePartitionColumn getClonedObject(InputHivePartitionColumn column){
 		
+		if(null==column){
+			return column;
+		}
+				
 		InputHivePartitionColumn clonedColumn= new InputHivePartitionColumn();
 		
 		clonedColumn.setName(column.getName());
@@ -67,4 +73,13 @@ public class InputHivePartitionColumn  implements IDataStructure{
 		
 		return clonedColumn;
 	}
+	
+
+ @Override
+ public String toString() {
+	 StringBuilder builder = new StringBuilder();
+		builder.append(" InputHivePartitionColumn [name=" + getName() + ", value=" + getValue()+",InputHivePartitionColumn="+getInputHivePartitionColumn());
+		builder.append("]");
+		return builder.toString();
+}
 }

@@ -14,9 +14,8 @@
 package hydrograph.ui.validators.impl;
 
 
-import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
+import hydrograph.ui.datastructure.property.InputHivePartitionKeyValues;
 
-import java.util.List;
 import java.util.Map;
 
 public class HiveKeyFieldsValidationRule implements IValidator {
@@ -33,8 +32,8 @@ public class HiveKeyFieldsValidationRule implements IValidator {
 	@Override
 	public boolean validate(Object object, String propertyName) {
 		if (object != null) {
-			Map<String, List<InputHivePartitionColumn>> keyFieldList = (Map<String, List<InputHivePartitionColumn>>) object;
-			if (keyFieldList.keySet().size()> 0) {
+		InputHivePartitionKeyValues keyFieldList = (InputHivePartitionKeyValues) object;
+			if (keyFieldList.getKey().size()> 0) {
 				return true;
 			}
 		}

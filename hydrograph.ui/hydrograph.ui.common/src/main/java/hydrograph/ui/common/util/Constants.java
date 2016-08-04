@@ -238,4 +238,6 @@ public class Constants {
 	// Temporary property names of component 
 	public static String SCHEMA_FIELD_SEQUENCE = "schema_field_sequence";
 	public static String COPY_FROM_INPUT_PORT_PROPERTY = "Copy of ";
+	//Hive input partition key
+	public static String PARTITION_KEYS="PartitionKeys";
 }

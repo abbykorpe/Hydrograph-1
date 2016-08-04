@@ -16,22 +16,27 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
+import hydrograph.ui.datastructure.property.InputHivePartitionKeyValues;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.hiveInput.dialog.FieldDialogWithAddValue;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.HivePartitionKeyValueDialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.widgets.Display;
-
+/**
+ * 
+ * @author Bitwise
+ *
+ */
 public class HiveInputSingleColumnWidget extends SingleColumnWidget {
 	
-	private Map<String,List<InputHivePartitionColumn>> fieldMap;
+	
+	private InputHivePartitionKeyValues hivePartitionKeyValues;
 
 	public HiveInputSingleColumnWidget(
 			ComponentConfigrationProperty componentConfigProp,
@@ -68,30 +73,38 @@ public class HiveInputSingleColumnWidget extends SingleColumnWidget {
 	@Override
 	protected void onDoubleClick() {
 		
-		FieldDialogWithAddValue fieldDialog=new FieldDialogWithAddValue(Display.getCurrent().getActiveShell(), propertyDialogButtonBar);
+		HivePartitionKeyValueDialog fieldDialog=new HivePartitionKeyValueDialog(Display.getCurrent().getActiveShell(), propertyDialogButtonBar);
 		fieldDialog.setComponentName(gridConfig.getComponentName());
 		if (getProperties().get(propertyName) == null) {
-			setProperties(propertyName, new LinkedHashMap<>());
+			
+			InputHivePartitionKeyValues inputHivePartitionKeyValues = new InputHivePartitionKeyValues();
+			List<String> keys= new ArrayList<>();
+			List<InputHivePartitionColumn> keyValues = new ArrayList<>();
+			inputHivePartitionKeyValues.setKey(keys);
+			inputHivePartitionKeyValues.setKeyValues(keyValues);
+			
+			setProperties(propertyName, (InputHivePartitionKeyValues)inputHivePartitionKeyValues);
 		}
-		fieldDialog.setFieldDialogRuntimeProperties(fieldMap);
+		fieldDialog.setRuntimePropertySet(hivePartitionKeyValues);
 		fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
 		fieldDialog.open();
-		setProperties(propertyName,fieldDialog.getFieldDialogRuntimeProperties());
+		setProperties(propertyName,fieldDialog.getRuntimePropertySet());
 	
 	}
 	
 	
 	public LinkedHashMap<String, Object> getProperties() {
 		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-		property.put(propertyName, fieldMap);
+		property.put(propertyName, this.hivePartitionKeyValues);
 		return property;
 	}
 	
 	
 	private void setProperties(String propertyName, Object properties) {
+		
 		this.propertyName = propertyName;
-		this.fieldMap = (Map<String,List<InputHivePartitionColumn>>)properties;
-
+		this.hivePartitionKeyValues = (InputHivePartitionKeyValues)properties;
+		
 	}
 
 }

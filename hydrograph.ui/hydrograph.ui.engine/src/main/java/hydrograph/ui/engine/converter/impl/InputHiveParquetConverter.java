@@ -27,6 +27,7 @@ import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
+import hydrograph.ui.datastructure.property.InputHivePartitionKeyValues;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.InputConverter;
 import hydrograph.ui.graph.model.Component;
@@ -34,11 +35,8 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -81,11 +79,10 @@ public class InputHiveParquetConverter extends InputConverter {
 	private void checkPartitionFilter()
 	{
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
-			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			List<String> fieldValueSet = new ArrayList<String>();
-			fieldValueSet.addAll(property.keySet());
-				if(!fieldValueSet.isEmpty()){
-					List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.get(fieldValueSet.get(0));
+			InputHivePartitionKeyValues property =(InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			
+				if(!property.getKeyValues().isEmpty()){
+					List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.getKeyValues();
 						if(!inputHivePartitionColumn.isEmpty()){
 							parquetHive.setPartitionFilter(getPartitionFilter(inputHivePartitionColumn));
 						}
@@ -120,12 +117,17 @@ public class InputHiveParquetConverter extends InputConverter {
 		partc.setName(partitionColumn_rec.getName());
 		partc.setValue(partitionColumn_rec.getValue());
 		pcol.setPartitionColumn(partc);
+		}
+		
 		if(partitionColumn_rec.getInputHivePartitionColumn()!=null){
-			if(StringUtils.isNotBlank(partitionColumn_rec.getInputHivePartitionColumn().getValue())){
+			if(StringUtils.isNotBlank(partitionColumn_rec.getValue()))
+			{
 				addPartitionColumn(partitionColumn_rec,partc);
+			}else{
+				addPartitionColumn(partitionColumn_rec,pcol);	
 			}
 		}
-		}
+		
 	}
 	
 	/*
@@ -165,9 +167,9 @@ public class InputHiveParquetConverter extends InputConverter {
 	 */
 	private HivePartitionFieldsType getPartitionKeys() {
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
-			LinkedHashMap<String, Object> property = (LinkedHashMap<String, Object>) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			Set<String> fieldValueSet = new HashSet<String>();
-			fieldValueSet=(Set<String>) property.keySet();
+			InputHivePartitionKeyValues property = (InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			List<String> fieldValueSet = new ArrayList<String>();
+			fieldValueSet=(List<String>) property.getKey();
 			
 			HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
 			PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();

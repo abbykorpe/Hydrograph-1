@@ -21,6 +21,7 @@ import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.HiveFieldDialogHelper;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
@@ -28,14 +29,11 @@ import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvide
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -268,7 +266,7 @@ public class HiveOutputFieldDialog extends Dialog {
 	}
 	
 	protected void checkFieldsOnStartup() {
-		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
+		HiveFieldDialogHelper.INSTANCE.compareAndChangeColor(getTargetTableViewer(),sourceFieldsList);
 		
 	}
 
@@ -565,7 +563,7 @@ public class HiveOutputFieldDialog extends Dialog {
 		for (String fieldName : getformatedData((String) event.data))
 				addNewProperty(targetTableViewer, fieldName);
 		enableControlButons();
-		FieldCompareUtility.INSTANCE.compareAndChangeColor(getTargetTableViewer().getTable().getItems(),sourceFieldsList);
+		HiveFieldDialogHelper.INSTANCE.compareAndChangeColor(getTargetTableViewer(),sourceFieldsList);
 	}
 
 	public void createSourceTable(Composite container) {
@@ -740,7 +738,7 @@ public class HiveOutputFieldDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		TableItem[] items = getTargetTableViewer().getTable().getItems();
+		
 		if (validate()) {
 			fieldNameList.clear();
 			for (FilterProperties temp : propertyList) {
@@ -751,8 +749,8 @@ public class HiveOutputFieldDialog extends Dialog {
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
 			
-			if(!FieldCompareUtility.INSTANCE.compareAndChangeColor(items,sourceFieldsList)){
-				int rc=FieldCompareUtility.INSTANCE.Message_Dialog();
+			if(!HiveFieldDialogHelper.INSTANCE.compareAndChangeColor(getTargetTableViewer(),sourceFieldsList)){
+				int rc=HiveFieldDialogHelper.INSTANCE.Message_Dialog();
 				   if(rc==0){
 					   super.okPressed();
 				   }

@@ -5,6 +5,7 @@ Sr.No. <date> - [developer names] - description
 1.   <22-jul-16> [Sonia Raheja]   - Added Between operator support on fields of data viewer.
 2.   <25-jul-16> [Vibhor Tyagi]   - Find: If user search for any text or string then find window should display count of the text/string matches in the current filter window.
 3.   <26-jul-16> [Akhilesh Joshi] - Display filter option for filter window and removed apply button.
+4.   <4-Aug-16>  [Prateem Tadas]  - Redesign of Partition key dialog.
 
 =====================================================================================================
 Issues/Defects fixed:
