@@ -68,9 +68,6 @@
 		<tns:interface
 			class="hydrograph.engine.transformation.userfunctions.base.TransformBase" name="TRANSFORM" />
 		<tns:stdOperation
-			class="hydrograph.engine.transformation.userfunctions.transform.CopyFields"
-			name="CopyFields" />
-		<tns:stdOperation
 			class="hydrograph.engine.transformation.userfunctions.transform.RegexSplitTransform"
 			name="RegexSplitTransform" />
 	</tns:operations>
