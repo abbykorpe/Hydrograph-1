@@ -43,7 +43,7 @@ public class GenerateRecordAssemblyTest {
 
 		GenerateRecordEntity generateRecordEntity = new GenerateRecordEntity();
 		generateRecordEntity.setComponentId("generate_data");
-		generateRecordEntity.setRecordCount(10);
+		generateRecordEntity.setRecordCount(new Long(10));
 		List<SchemaField> fieldList = new ArrayList<SchemaField>();
 		SchemaField sf1 = new SchemaField("f1", "java.lang.String");
 		sf1.setFieldLength(5);
