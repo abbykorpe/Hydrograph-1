@@ -51,7 +51,6 @@ public class JobInfo {
 	}
 
 	/**Processes the CascadingStats to generate the component Statistics
-	 * @author saketm
 	 * @param cascadingStats
 	 * @throws ElementGraphNotFoundException
 	 */
@@ -86,7 +85,6 @@ public class JobInfo {
 					generateAndUpdateComponentRecordCount(scope, cascadingStats, componentInfo,
 							eachConnectedComponentId);
 					setStatus(componentInfo, cascadingStats);
-					System.out.println("Component status is : "+ componentInfo);
 				}
 			}
 		}
@@ -213,8 +211,6 @@ public class JobInfo {
 	}
 
 	/**Method returns the current status of all components
-	 * 
-	 * @author saketm
 	 * @return List of ComponentInfo
 	 */
 	public Collection<ComponentInfo> getstatus() {
@@ -222,8 +218,6 @@ public class JobInfo {
 	}
 
 	/**ElementGraphNotFoundException 
-	 * @author saketm
-	 *
 	 */
 	public class ElementGraphNotFoundException extends Exception {
 
