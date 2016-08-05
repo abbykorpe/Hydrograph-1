@@ -527,19 +527,9 @@ public class FilterHelper {
 					for (int index = 0; index < numberOfTokens; index++) {
 						if (FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType)) {
 							try {
-								String debugFileName = debugDataViewer.getDebugFileName();
-								String debugFileLocation = debugDataViewer.getDebugFileLocation();
-								Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
-										.getFieldsFromSchema(debugFileLocation + debugFileName
-												+ AdapterConstants.SCHEMA_FILE_EXTENTION);
-								SimpleDateFormat formatter = null;
-								for (Field field : dataViewerFileSchema.getField()) {
-									if (field.getName().equalsIgnoreCase(fieldName)) {
-										formatter = new SimpleDateFormat(field.getFormat());
-									}
-								}
-								Date parsedDate = formatter.parse(tokenizer.nextToken());
-								formatter.applyPattern(AdapterConstants.DATE_FORMAT);
+								Fields dataViewerFileSchema = getSchema();
+								SimpleDateFormat formatter = getDateFormatter(fieldName, dataViewerFileSchema);
+								Date parsedDate = getParsedDate(tokenizer.nextToken(), formatter);
 								temp.append(FilterConstants.SINGLE_QOUTE).append(formatter.format(parsedDate))
 										.append(FilterConstants.SINGLE_QOUTE);
 							} catch (ParseException e) {
@@ -567,19 +557,9 @@ public class FilterHelper {
 				if (!isDisplayPressed) {
 					if (FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType)) {
 						try {
-							String debugFileName = debugDataViewer.getDebugFileName();
-							String debugFileLocation = debugDataViewer.getDebugFileLocation();
-							Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
-									.getFieldsFromSchema(debugFileLocation + debugFileName
-											+ AdapterConstants.SCHEMA_FILE_EXTENTION);
-							SimpleDateFormat formatter = null;
-							for (Field field : dataViewerFileSchema.getField()) {
-								if (field.getName().equalsIgnoreCase(fieldName)) {
-									formatter = new SimpleDateFormat(field.getFormat());
-								}
-							}
-							Date parsedDate = formatter.parse(value);
-							formatter.applyPattern(AdapterConstants.DATE_FORMAT);
+							Fields dataViewerFileSchema = getSchema();
+							SimpleDateFormat formatter = getDateFormatter(fieldName, dataViewerFileSchema);
+							Date parsedDate = getParsedDate(value, formatter);
 							return FilterConstants.SINGLE_QOUTE + formatter.format(parsedDate)
 									+ FilterConstants.SINGLE_QOUTE;
 						} catch (ParseException e) {
@@ -603,6 +583,31 @@ public class FilterHelper {
 				return value;
 			}
 		}
+	}
+
+	private Date getParsedDate(String nextToken, SimpleDateFormat formatter) throws ParseException {
+		Date parsedDate = formatter.parse(nextToken);
+		formatter.applyPattern(AdapterConstants.DATE_FORMAT);
+		return parsedDate;
+	}
+
+	private SimpleDateFormat getDateFormatter(String fieldName, Fields dataViewerFileSchema) {
+		SimpleDateFormat formatter = null;
+		for (Field field : dataViewerFileSchema.getField()) {
+			if (field.getName().equalsIgnoreCase(fieldName)) {
+				formatter = new SimpleDateFormat(field.getFormat());
+			}
+		}
+		return formatter;
+	}
+
+	private Fields getSchema() {
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+				.getFieldsFromSchema(debugFileLocation + debugFileName
+						+ AdapterConstants.SCHEMA_FILE_EXTENTION);
+		return dataViewerFileSchema;
 	}
 
 	private boolean validateCombo(CCombo combo){

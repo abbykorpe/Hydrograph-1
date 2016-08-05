@@ -245,8 +245,6 @@ public class DataViewerAdapter {
 							}
 							SimpleDateFormat desiredDateFormat = new SimpleDateFormat(format);
 							String timestampDate = desiredDateFormat.format(zoneLessDate);
-							System.out.println(time);
-							System.out.println("'" + timestampDate + "'");
 							row.add(new RowField(timestampDate));
 							timeStampIndex++;
 							timeStampColumn = true;
