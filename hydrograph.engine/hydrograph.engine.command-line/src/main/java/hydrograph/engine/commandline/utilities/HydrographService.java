@@ -10,44 +10,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.assembly.context;
+package hydrograph.engine.commandline.utilities;
 
-public class RecordFilterContext {
+import java.util.ArrayList;
+import java.util.List;
 
-	private Object filterHandler;
-	private String counterName;
-	private Object filterClass;
-	
-	private static final String COUNTER_GROUP = "com.hydrograph.customgroup";
+import hydrograph.engine.execution.tracking.ComponentInfo;
+import hydrograph.engine.execution.tracking.JobInfo;
 
+public class HydrographService {
+	private HydrographExecution execution;
 
-
-	public Object getFilterClass() {
-		return filterClass;
+	public HydrographService() {
+		execution = new HydrographExecution();
 	}
 
-	public void setFilterClass(Object filterClass) {
-		this.filterClass = filterClass;
+	public void executeGraph(String[] args) throws Exception {
+			execution.run(args);
+		
 	}
 
-	public static String getCounterGroup() {
-		return COUNTER_GROUP;
-	}
-	
-	public String getCounterName() {
-		return counterName;
+	public List<ComponentInfo> getStatus() {
+		return new ArrayList<>(JobInfo.getInstance().getstatus());
 	}
 
-	public void setCounterName(String counterName) {
-		this.counterName = counterName;
-	}
-
-	public Object getHandlerContext() {
-		return filterHandler;
-	}
-
-	public void setHandlerContext(Object prepare) {
-		this.filterHandler = prepare;
+	public void kill() {
+		execution.kill();
 	}
 
 }

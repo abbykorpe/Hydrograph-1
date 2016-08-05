@@ -12,14 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
-import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.core.helper.JAXBTraversal;
-import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
-
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,6 +22,12 @@ import org.apache.hadoop.mapred.JobConf;
 
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
+import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
+import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.helper.JAXBTraversal;
+import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
 
 @SuppressWarnings("rawtypes")
 public class RuntimeContext {
@@ -40,6 +40,7 @@ public class RuntimeContext {
 	private LinkedHashMap<String, ComponentParameters> tempPathParameters;
 	private Properties hadoopProperties;
 	private AssemblyGeneratorFactory assemblyGeneratorFactory;
+	private Map<String, FlowContext> flowContext;
 
 	public RuntimeContext(HydrographJob hydrographJob, JAXBTraversal traversal,
 			Properties hadoopProps,
@@ -50,6 +51,7 @@ public class RuntimeContext {
 		this.assemblyGeneratorFactory = assemblyGeneratorFactory;
 		this.hadoopConfProvider = new HadoopConfigProvider(hadoopProps);
 		tempPathParameters = new LinkedHashMap<String, ComponentParameters>();
+		this.flowContext = new HashMap<String, FlowContext>();
 	}
 
 	public JobConf getJobConf() {
@@ -115,6 +117,14 @@ public class RuntimeContext {
 
 	public ComponentParameters getTempPathParameter(String string) {
 		return tempPathParameters.get(string);
+	}
+	
+	public Map<String, FlowContext> getFlowContext() {
+		return flowContext;
+	}
+
+	public void setFlowContext(String phase, FlowContext flowContext) {
+		this.flowContext.put(phase, flowContext);
 	}
 
 }

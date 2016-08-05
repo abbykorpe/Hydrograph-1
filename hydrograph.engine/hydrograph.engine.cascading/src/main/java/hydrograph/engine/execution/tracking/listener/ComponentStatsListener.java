@@ -10,23 +10,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.core.core;
+package hydrograph.engine.execution.tracking.listener;
 
-import java.util.Properties;
+import cascading.stats.CascadingStats;
+import cascading.stats.CascadingStats.Status;
+import cascading.stats.StatsListener;
+import hydrograph.engine.execution.tracking.JobInfo;
+import hydrograph.engine.execution.tracking.JobInfo.ElementGraphNotFoundException;
 
-import org.apache.commons.cli.ParseException;
+public class ComponentStatsListener implements StatsListener {
 
-public interface HydrographRuntimeService {
-
-	public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath);
-
-	public void prepareToExecute();
-
-	public void execute();
-
-	public void oncomplete();
-	
-	public void kill();
+	@Override
+	public void notify(CascadingStats stats, Status fromStatus, Status toStatus) {
+		try {
+			JobInfo.getInstance().storeComponentStats(stats);
+		} catch (ElementGraphNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }

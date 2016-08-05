@@ -12,12 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.constants.ComponentLinkType;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,6 +28,9 @@ import cascading.pipe.SubAssembly;
 import cascading.property.ConfigDef;
 import cascading.property.ConfigDef.Mode;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.cascading.assembly.constants.ComponentLinkType;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
 /**
  * @author gurdits
@@ -154,6 +154,10 @@ public abstract class BaseComponent<T extends AssemblyEntityBase> extends
 
 	public Map<String, Fields> getAllOutFields() {
 		return outFieldsMap;
+	}
+	
+	public  Collection<HashMap<String, Pipe>> getAllOutLinkForAssembly() {
+		return  outLinksMap.values();
 	}
 
 	private void setOutLinksToTails() {
