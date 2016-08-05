@@ -26,5 +26,7 @@ public interface HydrographRuntimeService {
 	public void execute();
 
 	public void oncomplete();
+	
+	public void kill();
 
 }

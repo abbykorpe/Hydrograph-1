@@ -109,5 +109,12 @@ public class HydrographExecution {
 		runtimeService = (HydrographRuntimeService) generalUtilities
 				.loadAndInitClass(propertiesLoader.getRuntimeServiceClassName());
 	}
+	
+	/**
+	 * Method to kill the job
+	 */
+	public void kill() {
+		runtimeService.kill();
+	}
 
 }

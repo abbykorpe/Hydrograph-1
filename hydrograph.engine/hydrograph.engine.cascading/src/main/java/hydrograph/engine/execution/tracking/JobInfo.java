@@ -224,7 +224,7 @@ public class JobInfo {
 	 * @author saketm
 	 *
 	 */
-	protected class ElementGraphNotFoundException extends Exception {
+	public class ElementGraphNotFoundException extends Exception {
 
 		private static final long serialVersionUID = 4691438024426481804L;
 
