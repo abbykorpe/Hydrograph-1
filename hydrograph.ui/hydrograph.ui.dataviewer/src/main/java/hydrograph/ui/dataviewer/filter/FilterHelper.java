@@ -525,7 +525,7 @@ public class FilterHelper {
 					int numberOfTokens = tokenizer.countTokens();
 					temp.append(FilterConstants.OPEN_BRACKET); 
 					for (int index = 0; index < numberOfTokens; index++) {
-						if (FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType)) {
+						if (FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType) && !isDisplayPressed) {
 							try {
 								Fields dataViewerFileSchema = getSchema();
 								SimpleDateFormat formatter = getDateFormatter(fieldName, dataViewerFileSchema);
