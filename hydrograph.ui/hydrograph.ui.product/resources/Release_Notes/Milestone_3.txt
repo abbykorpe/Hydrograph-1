@@ -60,6 +60,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 44.#482 [Prateem Tadas] Transform Component: 'CopyFields' Function Need to be Removed from Operation Class List
 45.#369 [Akhilesh Joshi]Parameter Dialog Window : Content Save Warning Does not Prompt While switching from Parameter File view To parameter files 
 46.#368	[Akhilesh Joshi]Parameter Dialog: Accepting Null Parameter Name  
+47.#521 [Nikhil Deokar] Updated File menu icons to be in sync with coolbar
+48.#522 [Nikhil Deokar] Updated Edit menu icons to be in sync with coolbar 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
