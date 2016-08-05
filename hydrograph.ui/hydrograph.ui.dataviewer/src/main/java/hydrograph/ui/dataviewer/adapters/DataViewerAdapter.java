@@ -229,7 +229,22 @@ public class DataViewerAdapter {
 							Long time = parsedDate.getTime();
 							long zoneLessTime = time - zoneOffset;
 							Date zoneLessDate = new Date(zoneLessTime);
-							String timestampDate = formatter.format(zoneLessDate);
+							String debugFileName = debugDataViewer.getDebugFileName();
+							String debugFileLocation = debugDataViewer.getDebugFileLocation();
+							Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+									.getFieldsFromSchema(debugFileLocation + debugFileName
+											+ AdapterConstants.SCHEMA_FILE_EXTENTION);
+							int counter = 1;
+							String format = "";
+							for (Field field : dataViewerFileSchema.getField()) {
+								if (index == counter) {
+									format = field.getFormat();
+									break;
+								}
+								counter++;
+							}
+							SimpleDateFormat desiredDateFormat = new SimpleDateFormat(format);
+							String timestampDate = desiredDateFormat.format(zoneLessDate);
 							System.out.println(time);
 							System.out.println("'" + timestampDate + "'");
 							row.add(new RowField(timestampDate));
@@ -237,7 +252,7 @@ public class DataViewerAdapter {
 							timeStampColumn = true;
 							break;
 						} catch (ParseException e) {
-							logger.error("Error while parsing the date value", e);
+							logger.error("Error while parsing date value", e);
 						}
 					}
 				}

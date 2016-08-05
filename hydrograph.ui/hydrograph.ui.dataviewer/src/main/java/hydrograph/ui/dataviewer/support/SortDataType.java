@@ -96,9 +96,7 @@ public enum SortDataType {
 	DATE {
 		@Override
 		protected int compareTo(String cell_1, String cell_2, String dateFormat) {
-			// no matter what format user has provided in job, Engine will always return yyyy-MM-dd
-			final String DATE_FORMAT = "yyyy-MM-dd";
-			DateFormat format = new SimpleDateFormat(DATE_FORMAT);
+			DateFormat format = new SimpleDateFormat(dateFormat);
 			Date date1 = null;
 			Date date2 = null;
 			try {
