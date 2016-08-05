@@ -32,11 +32,11 @@ public class JobInfo {
 
 	private final String COUNTER_GROUP = "com.hydrograph.customgroup";
 	private Map<String, ComponentInfo> componentInfoMap = new HashMap<>();
-	private final Map<String, Pipe> componentPipeMap = ComponentPipeMapping.getComponentToPipeMapping();
-	private final Map<String, String> pipeComponentMap = createReverseMap(componentPipeMap);
-	private final Map<String, String> componentFilterMap = ComponentPipeMapping.getComopnentsAndFilterMap();
-	private List<String> filterList = new ArrayList<String>(componentFilterMap.values());
-	private final Map<String, List<String>> componentSocketMap = ComponentPipeMapping.getComponentSocketMap();
+	private Map<String, Pipe> componentPipeMap;
+	private Map<String, String> pipeComponentMap;
+	private Map<String, String> componentFilterMap;
+	private List<String> filterList;
+	private Map<String, List<String>> componentSocketMap;
 
 	private static volatile JobInfo jobInfo;
 
@@ -50,12 +50,22 @@ public class JobInfo {
 		return jobInfo;
 	}
 
-	/**Processes the CascadingStats to generate the component Statistics
+	/**
+	 * Processes the CascadingStats to generate the component Statistics
+	 * 
 	 * @param cascadingStats
 	 * @throws ElementGraphNotFoundException
 	 */
 	public synchronized void storeComponentStats(CascadingStats<?> cascadingStats)
 			throws ElementGraphNotFoundException {
+		// componentInfoMap = new HashMap<>();
+		if (componentPipeMap == null) {
+			componentPipeMap = ComponentPipeMapping.getComponentToPipeMapping();
+			pipeComponentMap = createReverseMap(componentPipeMap);
+			componentFilterMap = ComponentPipeMapping.getComopnentsAndFilterMap();
+			filterList = new ArrayList<String>(componentFilterMap.values());
+			componentSocketMap = ComponentPipeMapping.getComponentSocketMap();
+		}
 		generateStats(cascadingStats);
 	}
 
@@ -210,14 +220,17 @@ public class JobInfo {
 		}
 	}
 
-	/**Method returns the current status of all components
+	/**
+	 * Method returns the current status of all components
+	 * 
 	 * @return List of ComponentInfo
 	 */
 	public Collection<ComponentInfo> getstatus() {
 		return componentInfoMap.values();
 	}
 
-	/**ElementGraphNotFoundException 
+	/**
+	 * ElementGraphNotFoundException
 	 */
 	public class ElementGraphNotFoundException extends Exception {
 

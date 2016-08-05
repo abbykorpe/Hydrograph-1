@@ -36,10 +36,10 @@ public class RecordFilter extends BaseOperation<RecordFilterContext>implements F
 	private String counterName;
 	private String filterClassName;
 
-	public RecordFilter(RecordFilterHandlerBase selectCustomHandler, String pervName) {
+	public RecordFilter(RecordFilterHandlerBase selectCustomHandler, String previousName) {
 
 		this.filterHandler = selectCustomHandler;
-		this.counterName = pervName;
+		this.counterName = previousName;
 		this.filterClassName = ((FilterCustomHandler) filterHandler).getTransformClass();
 	}
 
