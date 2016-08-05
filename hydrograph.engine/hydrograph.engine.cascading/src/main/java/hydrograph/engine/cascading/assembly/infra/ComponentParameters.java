@@ -12,24 +12,24 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.infra;
 
-import hydrograph.engine.cascading.debug.DebugPoint;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.apache.hadoop.mapred.JobConf;
 
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
-
-
 //import hydrograph.engine.assembly.entity.elements.CopyOfInSocket;
 import cascading.flow.FlowDef;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.cascading.debug.DebugPoint;
 
 public class ComponentParameters {
 
 	private static final String OUTPUT_FIELDS_KEY = "output_fields";
 	private static final String INPUT_FIELDS_KEY = "input_fields";
+	private static final String SCHEMA_FIELDS_KEY = "schema_fields";
 	private static final String INPUT_PIPES_KEY = "input_pipes";
 	private static final String FLOW_DEF_KEY = "flow_def";
 	private static final String INSOCKET_ID = "inSocket_id";
@@ -81,6 +81,9 @@ public class ComponentParameters {
 		addParameterToList(input, INPUT_FIELDS_KEY);
 
 	}
+	public void addSchemaFields(Set<SchemaField> input) {
+		addParameterToList(input, SCHEMA_FIELDS_KEY);
+	}
 	
 	public void addDebugPoints(ArrayList<DebugPoint> input) {
 		addParameterToList(input, DEBUG_POINTS_KEY);
@@ -112,6 +115,10 @@ public class ComponentParameters {
 
 	public Fields getInputFields() {
 		return getParameterfromList(INPUT_FIELDS_KEY);
+	}
+	
+	public Set<SchemaField> getSchemaFields() {
+		return getParameterfromList(SCHEMA_FIELDS_KEY);
 	}
 	
 	public ArrayList<DebugPoint> getDebugPoints() {
