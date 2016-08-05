@@ -86,6 +86,7 @@ public class JobInfo {
 					generateAndUpdateComponentRecordCount(scope, cascadingStats, componentInfo,
 							eachConnectedComponentId);
 					setStatus(componentInfo, cascadingStats);
+					System.out.println("Component status is : "+ componentInfo);
 				}
 			}
 		}
