@@ -62,4 +62,5 @@ public class FilterConstants {
 	public static final String ROW_INDEX = "rowIndex";
 	public static final String CONDITIONAL_EDITOR = "conditional_editor";
 	public static final String VALUE2TEXTBOX = "value2TextBox";
+	public static final String VALUE1TEXTBOX = "value1TextBox";
 }
