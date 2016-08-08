@@ -12,17 +12,21 @@
  *******************************************************************************/
 package hydrograph.engine.utilities;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.hadoop.mapred.JobConf;
+
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.integration.FlowContext;
 import hydrograph.engine.cascading.integration.RuntimeContext;
 import hydrograph.engine.core.helper.LinkGenerator;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-
-import java.util.List;
-
-import org.apache.hadoop.mapred.JobConf;
-
+import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
+import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 
 //import hydrograph.engine.assembly.entity.elements.CopyOfInSocket;
 
@@ -45,9 +49,8 @@ public class ComponentParameterBuilder {
 		private FlowContext flowContext;
 		private RuntimeContext runtimeContext;
 
-		public Builder(String componentId,
-				ComponentParameters componentParameters,
-				FlowContext flowContext, RuntimeContext runtimeContext) {
+		public Builder(String componentId, ComponentParameters componentParameters, FlowContext flowContext,
+				RuntimeContext runtimeContext) {
 			this.componentParameters = componentParameters;
 			this.componentId = componentId;
 			this.flowContext = flowContext;
@@ -55,29 +58,20 @@ public class ComponentParameterBuilder {
 		}
 
 		public Builder setInputFields() {
-			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext
-					.getHydrographJob().getJAXBObject());
-			List<? extends TypeBaseInSocket> inSocketList = linkGenerator
-					.getLink().get(componentId).getInSocket();
+			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext.getHydrographJob().getJAXBObject());
+			List<? extends TypeBaseInSocket> inSocketList = linkGenerator.getLink().get(componentId).getInSocket();
 
 			BaseComponent assembly;
 
 			for (TypeBaseInSocket fromSocket : inSocketList) {
-				assembly = flowContext.getAssemblies().get(
-						fromSocket.getFromComponentId());
+				assembly = flowContext.getAssemblies().get(fromSocket.getFromComponentId());
 				componentParameters.addInputFields(assembly.getOutFields(
-						fromSocket.getFromSocketType() != null ? fromSocket
-								.getFromSocketType() : "out", fromSocket
-								.getFromSocketId(), fromSocket
-								.getFromComponentId()));
-				componentParameters
-						.addCopyOfInSocket(
-								fromSocket.getId(),
-								assembly.getOutFields(
-										fromSocket.getFromSocketType() != null ? fromSocket
-												.getFromSocketType() : "out",
-										fromSocket.getFromSocketId(),
-										fromSocket.getFromComponentId()));
+						fromSocket.getFromSocketType() != null ? fromSocket.getFromSocketType() : "out",
+						fromSocket.getFromSocketId(), fromSocket.getFromComponentId()));
+				componentParameters.addCopyOfInSocket(fromSocket.getId(),
+						assembly.getOutFields(
+								fromSocket.getFromSocketType() != null ? fromSocket.getFromSocketType() : "out",
+								fromSocket.getFromSocketId(), fromSocket.getFromComponentId()));
 			}
 			return this;
 		}
@@ -89,23 +83,31 @@ public class ComponentParameterBuilder {
 		}
 
 		public Builder setInputPipes() {
-			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext
-					.getHydrographJob().getJAXBObject());
-			List<? extends TypeBaseInSocket> inSocketList = linkGenerator
-					.getLink().get(componentId).getInSocket();
+			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext.getHydrographJob().getJAXBObject());
+			List<? extends TypeBaseInSocket> inSocketList = linkGenerator.getLink().get(componentId).getInSocket();
 
 			BaseComponent assembly;
 
 			for (TypeBaseInSocket fromSocket : inSocketList) {
-				assembly = flowContext.getAssemblies().get(
-						fromSocket.getFromComponentId());
+				assembly = flowContext.getAssemblies().get(fromSocket.getFromComponentId());
 				componentParameters.addInputPipe(assembly.getOutLink(
-						fromSocket.getFromSocketType() != null ? fromSocket
-								.getFromSocketType() : "out", fromSocket
-								.getFromSocketId(), fromSocket
-								.getFromComponentId()));
+						fromSocket.getFromSocketType() != null ? fromSocket.getFromSocketType() : "out",
+						fromSocket.getFromSocketId(), fromSocket.getFromComponentId()));
 				componentParameters.addinSocketId(fromSocket.getId());
 				componentParameters.addinSocketType(fromSocket.getType());
+			}
+			return this;
+		}
+
+		public Builder setSchemaFields() {
+			
+			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext.getHydrographJob().getJAXBObject());
+			List<? extends TypeBaseInSocket> inSocketList = linkGenerator.getLink().get(componentId).getInSocket();
+
+			for (TypeBaseInSocket fromSocket : inSocketList) {
+				componentParameters.addSchemaFields(new SchemaFieldHandler(
+						runtimeContext.getHydrographJob().getJAXBObject().getInputsOrOutputsOrStraightPulls())
+						.getSchemaFieldMap().get(fromSocket.getFromComponentId() + "_" + fromSocket.getFromSocketId()));
 			}
 			return this;
 		}
