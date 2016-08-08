@@ -112,6 +112,7 @@ public class Messages extends NLS{
 	public static String NO_MATCHING_RECORDS;
 	public static String DISPLAY;
 	public static String DISPLAY_TOOLTIP;
+	public static String COMMA_SEPERATED_VALUE;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

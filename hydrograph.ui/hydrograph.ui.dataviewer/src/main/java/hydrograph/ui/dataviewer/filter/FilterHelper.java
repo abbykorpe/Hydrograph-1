@@ -236,15 +236,27 @@ public class FilterHelper {
 			public void widgetSelected(SelectionEvent e) {
 				CCombo source = (CCombo) e.getSource();
 				TableItem tableItem = getTableItem(source);
-				Text text = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
+				Text text2 = (Text) tableItem.getData(FilterConstants.VALUE2TEXTBOX);
+				Text text1 = (Text) tableItem.getData(FilterConstants.VALUE1TEXTBOX);
 				String selectedValue = source.getItem(source.getSelectionIndex());
-				enableAndDisableValue2TextBox(selectedValue, text);
+				showToolTip(text1, selectedValue);
+				enableAndDisableValue2TextBox(selectedValue, text2);
 				processConditionalOperator(source, conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 			}
+		
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		};
 		return listener;
+	}
+	
+	private void showToolTip(Text text1, String selectedValue) {
+		if (StringUtils.equalsIgnoreCase(selectedValue, FilterConstants.IN)
+				|| StringUtils.equalsIgnoreCase(selectedValue, FilterConstants.NOT_IN)) {
+			text1.setToolTipText(Messages.COMMA_SEPERATED_VALUE);
+		} else {
+			text1.setToolTipText("");
+		}
 	}
 	
 	private TableItem getTableItem(CCombo source) {
