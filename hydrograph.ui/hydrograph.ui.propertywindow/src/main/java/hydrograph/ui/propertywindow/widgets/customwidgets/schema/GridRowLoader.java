@@ -157,21 +157,23 @@ public class GridRowLoader {
 
 		} catch (JAXBException e1) {
 			grids.clear();
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage());
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage());
+			box.setText("Error");
+			box.open();
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return null;
 		}catch (DuplicateFieldException e1) {
 			grids.clear();
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", e1.getMessage());
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(e1.getMessage());
+			box.setText("Error");
+			box.open();
 			logger.error(e1.getMessage());
 			return null;
 		}
 		catch (Exception e) {
 			grids.clear();
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
-			box.setText("Error");
-			box.open();
 			logger.error(Messages.IMPORT_XML_ERROR);
 			return null;
 		}
@@ -327,8 +329,6 @@ public class GridRowLoader {
 			box.open();
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.EXPORT_XML_ERROR+" -\n"
-					+e.getMessage());
 			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
 			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n" +e.getMessage());
 			box.setText("Error");
