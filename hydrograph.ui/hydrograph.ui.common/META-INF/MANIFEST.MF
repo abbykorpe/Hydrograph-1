@@ -24,5 +24,7 @@ Export-Package: hydrograph.ui.common.component.config,
  hydrograph.ui.common.debug.service,
  hydrograph.ui.common.schema,
  hydrograph.ui.common.util
-Import-Package: org.apache.commons.lang,
+Import-Package: hydrograph.ui.datastructure.property,
+ hydrograph.ui.datastructure.property.mapping,
+ org.apache.commons.lang,
  org.junit

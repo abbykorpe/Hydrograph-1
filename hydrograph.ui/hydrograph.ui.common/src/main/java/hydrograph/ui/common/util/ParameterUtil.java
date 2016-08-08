@@ -13,6 +13,12 @@
 
 package hydrograph.ui.common.util;
 
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,5 +83,43 @@ public class ParameterUtil {
 		}
 		return false;
 	}
+	
+	public static void addPrefixSuffixToParameterFields(FilterProperties fieldToBeParameterize,TransformMapping transformMapping)
+	{
+		
+		boolean isParameter=true;
+		List<MappingSheetRow> mappingSheetRowList=transformMapping.getMappingSheetRows();
+		for(MappingSheetRow mappingSheetRow:mappingSheetRowList)
+		{
+			for(FilterProperties filterProperties:mappingSheetRow.getOutputList())
+			{
+				if(filterProperties==fieldToBeParameterize)
+				{
+					isParameter=false;
+					break;
+				}	
+					
+			}
+			if(!isParameter)
+			break;	
+		}
+		if(isParameter)
+		{
+			for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+			{
+				if(nameValueProperty.getFilterProperty()==fieldToBeParameterize)
+				{
+				isParameter=false;
+				break;
+				}
+			}	
+		}
+		if(isParameter && !(isParameter(fieldToBeParameterize.getPropertyname()))
+			&& StringUtils.isNotBlank(fieldToBeParameterize.getPropertyname()))
+		{
+			fieldToBeParameterize.setPropertyname(Constants.PARAMETER_PREFIX+fieldToBeParameterize.getPropertyname()+Constants.PARAMETER_SUFFIX);
+		}	
+	}
+	
 	
 }
