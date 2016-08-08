@@ -62,6 +62,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 46.#368	[Akhilesh Joshi]Parameter Dialog: Accepting Null Parameter Name  
 47.#521 [Nikhil Deokar] Updated File menu icons to be in sync with coolbar
 48.#522 [Nikhil Deokar] Updated Edit menu icons to be in sync with coolbar 
+49.#1010 [Sonia Raheja] Filter window: Tooltip indicating the allowed data format is required
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
