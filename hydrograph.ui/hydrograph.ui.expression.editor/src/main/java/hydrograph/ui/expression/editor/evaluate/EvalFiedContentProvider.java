@@ -11,17 +11,34 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.expression.editor;
+package hydrograph.ui.expression.editor.evaluate;
 
-public class PathConstant {
-	public static final String OPERATOR_CONFIG_FILE = "resources/expression_operator.properties";
-	public static final String DELETE_BUTTON_IMAGE = "resources/icons/delete.png";
-	public static final String INTELLISENCE_IMAGE = "/icons/intellisense_icon.png";
-	public static final String EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES = "expression_Editor_externalJars.properties";
+import java.util.List;
+
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+
+public class EvalFiedContentProvider implements IStructuredContentProvider {
+
+	/**
+	 * Returns the Person objects
+	 */
+	public Object[] getElements(Object inputElement) {
+		return ((List) inputElement).toArray();
+	}
 
 	
-	// Runtime ELT-Project specific paths
-	public static final String PROJECT_LIB_FOLDER = "lib";
-	public static final String PROJECTS_SETTINGS_FOLDER = ".settings";
-	public static final String TEMP_BUILD_PATH_SETTINGS_FOLDER = ".settings/tempClassPathSourceFolder";
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

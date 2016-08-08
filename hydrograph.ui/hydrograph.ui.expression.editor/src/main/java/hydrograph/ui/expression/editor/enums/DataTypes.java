@@ -13,9 +13,19 @@
 
 package hydrograph.ui.expression.editor.enums;
 
+import hydrograph.ui.expression.editor.evaluate.InvalidDataTypeValueException;
+import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HydrographCompletionProposalComputer;
+import hydrograph.ui.logging.factory.LogFactory;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+
 
 public enum DataTypes {
+	
 	
 	Integer("I","integer") {
 		@Override
@@ -31,6 +41,16 @@ public enum DataTypes {
 		@Override
 		protected Class<?> getDataTypeClass() {
 			return java.lang.Integer.class;
+		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			try {
+				return java.lang.Integer.parseInt(inputValue);
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Requires integer value.");
+			}
 		}
 	},
 	Float("F","float") {
@@ -48,6 +68,16 @@ public enum DataTypes {
 		protected Class<?> getDataTypeClass() {
 			return java.lang.Float.class;
 		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			try {
+				return java.lang.Float.parseFloat(inputValue);
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Requires float value.");
+			}
+		}
 	},
 	Double("D","double") {
 		@Override
@@ -63,6 +93,16 @@ public enum DataTypes {
 		@Override
 		protected Class<?> getDataTypeClass() {
 			return java.lang.Double.class;
+		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			try {
+				return java.lang.Double.parseDouble(inputValue);
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Requires double value.");
+			}
 		}
 	},
 	Long("J","long") {
@@ -80,6 +120,16 @@ public enum DataTypes {
 		protected Class<?> getDataTypeClass() {
 			return java.lang.Long.class;
 		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			try {
+				return java.lang.Long.parseLong(inputValue);
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Requires long value.");
+			}
+		}
 	},
 	Short("S","short") {
 		@Override
@@ -95,6 +145,16 @@ public enum DataTypes {
 		@Override
 		protected Class<?> getDataTypeClass() {
 			return java.lang.Short.class;
+		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			try {
+				return java.lang.Long.parseLong(inputValue);
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Requires short value.");
+			}
 		}
 	},
 	Boolean("Z","boolean") {
@@ -113,6 +173,16 @@ public enum DataTypes {
 		protected Class<?> getDataTypeClass() {
 			return java.lang.Boolean.class;
 		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			try {
+				return java.lang.Boolean.parseBoolean(inputValue);
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Requires boolean value.");
+			}
+		}
 	},
 	
 	Void("V","void") {
@@ -130,12 +200,17 @@ public enum DataTypes {
 		protected Class<?> getDataTypeClass() {
 			return java.lang.Void.class;
 		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			return null;
+		}
 	},
 	
 	String("S","String") {
 		@Override
 		public String getDefaultValue() {
-			return "";
+			return "Hydrograph";
 		}
 
 		@Override
@@ -147,7 +222,42 @@ public enum DataTypes {
 		protected Class<?> getDataTypeClass() {
 			return java.lang.String.class;
 		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			return inputValue;
+		}
+	},
+	
+	Date("Date","Date") {
+		@Override
+		public String getDefaultValue() {
+				return "2016-08-12";
+		}
+
+		@Override
+		protected String getDataTypeName() {
+			return "Date";
+		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.util.Date.class;
+		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+			final String DATE_FORMAT = "yyyy-MM-dd";
+			DateFormat format = new SimpleDateFormat(DATE_FORMAT);
+			try {
+				return format.parse(inputValue);
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Required date format is "+DATE_FORMAT);
+			}
+		}
 	};
+	
 
 	private final String reflectionValue;
 	private String dataType;
@@ -155,6 +265,7 @@ public enum DataTypes {
 	protected abstract String getDefaultValue();
 	protected abstract String getDataTypeName();
 	protected abstract Class<?> getDataTypeClass();
+	protected abstract Object validateValue(String inputValue,String fieldName)throws InvalidDataTypeValueException;
 	
 	DataTypes(String value,String dataType) {
 		this.reflectionValue = value;
@@ -165,9 +276,19 @@ public enum DataTypes {
 		return reflectionValue;
 	}
 
-	public static String getDefaulltValuefromString(String value) {
+	public static String getDefaulltValuefromReflectionDataTypeString(String value) {
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.reflectionValue, value)) {
+				return dataType.getDefaultValue();
+			}
+		}
+		
+		return value;
+	}
+	
+	public static String getDefaulltValuefromDataTypesSimpleName(String value) {
+		for (DataTypes dataType : DataTypes.values()) {
+			if (StringUtils.equalsIgnoreCase(dataType.dataType, value)) {
 				return dataType.getDefaultValue();
 			}
 		}
@@ -187,6 +308,15 @@ public enum DataTypes {
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.dataType, dataTypeName)) {
 				return dataType.getDataTypeClass();
+			}
+		}
+		return null;
+	}
+	
+	public static Object validateInputeAndGetEquivalentObject(String inputValue,String fieldName,String dataTypeSimpleName) throws InvalidDataTypeValueException{
+		for (DataTypes dataType : DataTypes.values()) {
+			if (StringUtils.equalsIgnoreCase(dataType.dataType, dataTypeSimpleName)) {
+				return dataType.validateValue(inputValue, fieldName);
 			}
 		}
 		return null;

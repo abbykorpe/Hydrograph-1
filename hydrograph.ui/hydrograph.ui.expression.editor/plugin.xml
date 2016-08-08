@@ -22,5 +22,13 @@
             class="hydrograph.ui.expression.editor.javasourceviewerconfiguration.HydrographCompletionProposalComputer">
       </javaCompletionProposalComputer>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="hydrograph.ui.expression.editor.pages.AddExternalJarPage"
+            id="hydrograph.ui.expression.editor.page1"
+            name="Expression Jars">
+      </page>
+   </extension>
 
 </plugin>

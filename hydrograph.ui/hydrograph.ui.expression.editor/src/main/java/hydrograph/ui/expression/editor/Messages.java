@@ -17,6 +17,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
+	public static String VALID_EXPRESSION_TITLE;
 	public static String CANNOT_OPEN_EDITOR;
 	public static String MESSAGE_TO_EXIT_WITHOUT_SAVE;
 	public static String JAVA_DOC_NOT_AVAILABLE;
@@ -25,7 +26,11 @@ public class Messages extends NLS {
 	public static String ERROR_TITLE;
 	public static String JAR_FILE_COPY_ERROR;
 	public static String DUPLICATE_JAR_FILE_COPY_ERROR;
-	
+	public static String INVALID_EXPRESSION_TITLE;
+	public static String ERROR_OCCURRED_WHILE_EVALUATING_EXPRESSION;
+	public static String TITLE_FOR_PROBLEM_IN_LOADING_EXPRESSION_EDITOR;
+	public static String ERROR_WHILE_LOADING_CONFIGURATIONS_FOR_EXTERNAL_JOBS;
+	public static String EXPRESSION_EDITOR_TITLE;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

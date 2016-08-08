@@ -29,5 +29,7 @@ public class Constants {
 	public static final String CLOSING_BRACKET = ")";
 	public static final String DASH = "-";
 	public static final String DEFAULT_SEARCH_TEXT = "Search";
+	public static final String EXPRESSION_JAR_FILE_NAME = "hydrograph.engine.expression";
+	public static final String SPACE = " ";
 
 }

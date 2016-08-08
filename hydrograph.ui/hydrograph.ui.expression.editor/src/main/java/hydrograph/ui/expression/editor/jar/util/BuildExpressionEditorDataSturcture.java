@@ -1,13 +1,13 @@
 package hydrograph.ui.expression.editor.jar.util;
 
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
 import hydrograph.ui.expression.editor.repo.ClassRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -15,16 +15,21 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.internal.Workbench;
 import org.slf4j.Logger;
 
 public class BuildExpressionEditorDataSturcture {
@@ -91,14 +96,26 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 	public IProject getCurrentProject() {
-		String path = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-				.getEditorInput().getToolTipText();
-		IPath iPath = new Path(path);
-		IProject[] iProject = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		for (IProject project : iProject) {
-			if (StringUtils.equals(iPath.segment(0), project.getName())) {
-				return project;
-			}
+		
+		 ISelectionService selectionService = Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();    
+		 ISelection selection = selectionService.getSelection();    
+		        IProject project = null;    
+		        if(selection instanceof IStructuredSelection) {    
+		            Object element = ((IStructuredSelection)selection).getFirstElement();    
+		            if (element instanceof IProject) {    
+		                project= ((IResource)element).getProject();    
+		            } else
+		            	project =getProjectFromActiveGraph();
+		        }     
+		        return project;  
+	}
+
+	private IProject getProjectFromActiveGraph() {
+		IEditorInput editorInput=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
+		if(editorInput instanceof IFileEditorInput){
+			return ((IFileEditorInput)editorInput).getFile().getProject();
+		}else if(editorInput instanceof FileStoreEditorInput){
+			new CustomMessageBox(SWT.ERROR ,Messages.ERROR_WHILE_LOADING_CONFIGURATIONS_FOR_EXTERNAL_JOBS,Messages.TITLE_FOR_PROBLEM_IN_LOADING_EXPRESSION_EDITOR).open();
 		}
 		return null;
 	}
@@ -129,3 +146,14 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 }
+
+//String path = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+//.getEditorInput().getToolTipText();
+//IPath iPath = new Path(path);
+//IProject[] iProject = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+//for (IProject project : iProject) {
+//	if (StringUtils.equals(iPath.segment(0), project.getName())) {
+//		return project;
+//	}
+//}
+//return null;

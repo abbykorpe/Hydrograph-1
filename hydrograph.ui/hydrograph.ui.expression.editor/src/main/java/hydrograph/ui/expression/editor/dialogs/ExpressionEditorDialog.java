@@ -22,6 +22,8 @@ import hydrograph.ui.expression.editor.composites.ExpressionEditorComposite;
 import hydrograph.ui.expression.editor.composites.FunctionsComposite;
 import hydrograph.ui.expression.editor.repo.ClassRepo;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,10 @@ public class ExpressionEditorDialog extends Dialog {
 	private String newExpressionText;
 	private String oldExpressionText;
 	private Map<String, Class<?>> fieldMap;
-	
+	private Composite container;
+	public static ExpressionEditorDialog CURRENT_INSTANCE;
+	private SashForm containerSashForm;
+	private SashForm upperSashForm;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -64,12 +69,13 @@ public class ExpressionEditorDialog extends Dialog {
 	public ExpressionEditorDialog(Shell parentShell, Map<String, Class<?>> fieldMap,String oldExpressionText) {
 		
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.MAX | SWT.RESIZE );
+		setShellStyle(SWT.CLOSE | SWT.MAX );
 		this.fieldMap=fieldMap;
 		this.selectedInputFields=new ArrayList<>(fieldMap.keySet());
 		javaLineStyler=new JavaLineStyler(selectedInputFields);
 		this.oldExpressionText=oldExpressionText;
-	}
+		CURRENT_INSTANCE=this;
+	}	
 	
 
 	/**
@@ -78,16 +84,16 @@ public class ExpressionEditorDialog extends Dialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite container = (Composite) super.createDialogArea(parent);
+		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
 		
-		SashForm containerSashForm = new SashForm(container, SWT.VERTICAL);
+		containerSashForm = new SashForm(container, SWT.VERTICAL);
 		containerSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		Composite upperComposite = new Composite(containerSashForm, SWT.BORDER);
 		upperComposite.setLayout(new GridLayout(1, false));
 		
-		SashForm upperSashForm = new SashForm(upperComposite, SWT.NONE);
+		upperSashForm = new SashForm(upperComposite, SWT.NONE);
 		upperSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		availableFieldsComposite=new AvailableFieldsComposite(upperSashForm, SWT.NONE, expressionEditorTextBox ,selectedInputFields);
@@ -119,6 +125,7 @@ public class ExpressionEditorDialog extends Dialog {
 		expressionEditorTextBox.setFocus();
 		expressionEditorTextBox.setText(oldExpressionText);
 		expressionEditorTextBox.setData(FIELD_DATA_TYPE_MAP,fieldMap);
+		getShell().setMaximized(true);
 	}
 
 	/**
@@ -136,7 +143,11 @@ public class ExpressionEditorDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(897, 477);
+		container.getShell().layout(true, true);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		final Point newSize = container.getShell().computeSize(screenSize.width, screenSize.height, true);
+		container.getShell().setSize(newSize);
+		return newSize;
 	}
 	
 	public boolean close() {
@@ -171,4 +182,12 @@ public class ExpressionEditorDialog extends Dialog {
 	public String getExpressionText() {
 		return newExpressionText;
 	}
+	public SashForm getUpperSashForm() {
+		return upperSashForm;
+	}
+	public SashForm getContainerSashForm() {
+		return containerSashForm;
+	}
+	
+	
 }

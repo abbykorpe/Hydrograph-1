@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
@@ -41,6 +42,7 @@ public class ExpressionEditorComposite extends Composite {
 
 	private SourceViewer viewer;
 	private StyledText expressionEditor;
+	private Canvas canvas;
 	
 	/**
 	 * Create the composite.
@@ -51,29 +53,30 @@ public class ExpressionEditorComposite extends Composite {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 		
-		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayout(new GridLayout(10, false));
-		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_composite.widthHint = 477;
+		Composite toolBarComposite = new Composite(this, SWT.NONE);
+		toolBarComposite.setLayout(new GridLayout(10, false));
+		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 0);
+//		gd_composite.widthHint = 477;
 		gd_composite.heightHint = 39;
-		composite.setLayoutData(gd_composite);
+		toolBarComposite.setLayoutData(gd_composite);
 		
-		viewer = SourceViewer.createViewerWithVariables(this, SWT.BORDER | SWT.MULTI );
+		viewer = SourceViewer.createViewerWithVariables(this, SWT.NONE| SWT.MULTI );
 		
 		expressionEditor = viewer.getTextWidget();
-		intializeEditor(expressionEditor, javaLineStyler);
-		expressionEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-		createToolBar(composite);
+		intializeEditor(expressionEditor, javaLineStyler,toolBarComposite);
+		
+		createToolBar(toolBarComposite);
 		
 		
 		
 	}
 	
-	private void intializeEditor(StyledText expressionEditor, JavaLineStyler javaLineStyler) {
+	private void intializeEditor(StyledText expressionEditor, JavaLineStyler javaLineStyler,Composite toolBarComposite) {
 		expressionEditor.setWordWrap(false);
 		expressionEditor.addLineStyleListener(javaLineStyler);
 		expressionEditor.setFont(new Font(null,"Arial", 10, SWT.NORMAL));
+		expressionEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
+		expressionEditor.getSize();
 		addDropSupport();
 	}
 	

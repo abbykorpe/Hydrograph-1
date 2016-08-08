@@ -13,9 +13,14 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
+import hydrograph.ui.expression.editor.evaluate.EvaluateDialog;
+
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 
 public class EvaluateExpressionToolButton extends Button {
@@ -28,6 +33,25 @@ public class EvaluateExpressionToolButton extends Button {
 		super(composite, style);
 		setText(ITEM_TEXT);
 		this.expressionEditor=expressionEditor;
+		addSelectionListener();
+	}
+
+
+	private void addSelectionListener() {
+		this.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				EvaluateDialog dialog = new EvaluateDialog(Display.getCurrent().getActiveShell(), expressionEditor);
+				setEnabled(false);
+				dialog.open();
+				if (!e.widget.isDisposed())
+					setEnabled(true);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {/*Do-Nothing*/}
+		});
 	}
 
 

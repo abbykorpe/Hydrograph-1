@@ -13,10 +13,12 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
+import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +26,8 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.tools.Diagnostic;
@@ -32,129 +35,152 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
 
+@SuppressWarnings("restriction")
 public class ValidateExpressionToolButton extends Button {
 
+	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR = "compile";
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ValidateExpressionToolButton.class);
+	private static final String VALID_EXPRESSION = "Success";
+	public static final String HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS = "hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI";
 	private static final String ITEM_TEXT = "Validate";
 	private StyledText expressionEditor;
-	
+
 	public ValidateExpressionToolButton(Composite composite, int style, StyledText expressionEditor) {
 		super(composite, style);
 		setText(ITEM_TEXT);
-		this.expressionEditor=expressionEditor;
+		this.expressionEditor = expressionEditor;
 		addSelectionListener();
 	}
 
 	private void addSelectionListener() {
-		addSelectionListener(new SelectionListener() {
-			
+		addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				validateExpresion(expressionEditor);
+				validation(expressionEditor);
 			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {/*Do-Nothing*/}
 		});
 	}
 
-	protected void checkSubclass() {
-		// Allow subclassing
-	}
+	protected void checkSubclass() {/* Allow subclassing*/}
 
-	@SuppressWarnings("unchecked")
-	public void validateExpresion(StyledText expressionStyledText) {
-
-		Map<String,Class<?>> fieldMap =(Map<String, Class<?>>) expressionStyledText.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP);
+	@SuppressWarnings({ "unchecked"})
+	public static DiagnosticCollector<JavaFileObject> compileExpresion(StyledText expressionStyledText)
+			throws JavaModelException, InvocationTargetException, ClassNotFoundException, MalformedURLException,IllegalAccessException, IllegalArgumentException {
+		LOGGER.debug("Compiling expression using Java-Compiler");
+		String expressiontext=getExpressionText(expressionStyledText.getText());
+		Map<String, Class<?>> fieldMap = (Map<String, Class<?>>) expressionStyledText.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP);
 		DiagnosticCollector<JavaFileObject> diagnostics = null;
-		IPackageFragmentRoot[] packageFragments;
-		String transfromJarPath=null;
-		try {
-			IJavaProject iJavaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject());
-			packageFragments = iJavaProject.getAllPackageFragmentRoots();
-			URL[] superSetURLs=new URL[packageFragments.length+1];
-			for (int i=0;i<superSetURLs.length-1;i++) {
-				if(transfromJarPath!=null){
-					IPath iPath=packageFragments[i].getPath();
-					iPath.isAbsolute();
-					transfromJarPath=transfromJarPath+";"+getAbsolutePathForJars(iPath);
-					}
-				else
-					transfromJarPath=getAbsolutePathForJars(packageFragments[i].getPath());
-					superSetURLs[i]=packageFragments[i].getPath().toFile().toURI().toURL();
-					
-					System.out.println("==========="+packageFragments[i].getElementName()+"===========");
+		Object[] returObj=getBuildPathForMethodInvocation() ;
+		List<URL> urlList=(List<URL>) returObj[0];
+		String transfromJarPath = (String) returObj[1];
+		ClassLoader child = new URLClassLoader(urlList.toArray(new URL[urlList.size()]));
+		Class<?> class1 = Class.forName(HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS, true, child);
+		Method[] methods = class1.getDeclaredMethods();
+		for (Method method : methods) {
+			if (method.getParameterTypes().length == 4 && StringUtils.equals(method.getName(), COMPILE_METHOD_OF_EXPRESSION_JAR)) {
+				method.getDeclaringClass().getClassLoader();
+				
+				diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressiontext,
+						fieldMap, transfromJarPath, null);
+				break;
 			}
-			superSetURLs[superSetURLs.length-1]=new File("C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\EXPR_TEST\\properties\\UserFunctions.properties").toURI().toURL();
-					ClassLoader child = new URLClassLoader(superSetURLs);
-					Class<?> class1 = Class.forName("hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI",true, child);
-					Method[] methods = class1.getDeclaredMethods();
-					for (Method method : methods) {
-						if (method.getParameterTypes().length ==4 && StringUtils.equals(method.getName(), "compile")) {
-//							transfromJarPath=transfromJarPath+";"+"C:\\WorkSpace\\runtime-com.bitwise.app.perspective.product\\EXPR_TEST\\properties\\UserFunctions.properties";
-							diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressionStyledText.getText(),fieldMap,transfromJarPath,null);
-							break;
-						}
-					}
-			if (diagnostics != null && !diagnostics.getDiagnostics().isEmpty()) {
-//				String message="";
-//				for (Diagnostic diagnostic2 : diagnostics.getDiagnostics()) {
-//					message=message+diagnostic2.getMessage(null)
-//							+"\n Start:"+(diagnostic2.getColumnNumber()-351)+"\n, End"+(diagnostic2.getEndPosition()-351)+
-//							"\n\n====================================\n\n";
-//					
-//					expressionStyledText.setSelection((int)diagnostic2.getColumnNumber()-352, (int)diagnostic2.getEndPosition()-351);
-//				}
-//				MessageBox box = new MessageBox(Display.getCurrent().getActiveShell());
-//				box.setMessage(message);
-//				box.open();
-			}else{
-				MessageBox box = new MessageBox(Display.getCurrent().getActiveShell());
-				box.setMessage("Success");
-				box.open();
-			}
-
-		} catch (JavaModelException |  MalformedURLException | IllegalAccessException
-				| IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-			MessageBox box = new MessageBox(new Shell(SWT.NONE));
-			box.setMessage(e.getCause().getMessage());
-			box.setText(e.getCause().getMessage());
-			box.open();
 		}
-		catch (ClassNotFoundException classNotFoundException) {
-			new CustomMessageBox(SWT.ERROR, "Cannot find validation jar in build path", Messages.ERROR_TITLE).open();
-		}
+		return diagnostics;
 	}
-	
-	public static String getAbsolutePathForJars(IPath iPath){
-		String absolutePath=iPath.toString();
-		File file=iPath.toFile();
-		if(!file.exists()){
-			String workspacePath=ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-			absolutePath=workspacePath+iPath.toString();
+
+
+	private static String getExpressionText(String expressionText) {
+		StringBuffer buffer=new StringBuffer(expressionText);
+		if(buffer.indexOf("\t\treturn \n")>-1){
+			
+		}
+		
+		return buffer.toString();
+	}
+
+	public static String getAbsolutePathForJars(IPath iPath) {
+		String absolutePath = iPath.toString();
+		File file = iPath.toFile();
+		if (!file.exists()) {
+			String workspacePath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+			absolutePath = workspacePath + iPath.toString();
 		}
 		return absolutePath;
 	}
-	
+
+	private void validation(StyledText expressionEditor) {
+		try {
+			DiagnosticCollector<JavaFileObject> diagnostics = compileExpresion(expressionEditor);
+			if (diagnostics != null && !diagnostics.getDiagnostics().isEmpty())
+				showDiagnostics(diagnostics);
+			else {
+				new CustomMessageBox(SWT.ICON_INFORMATION, VALID_EXPRESSION, Messages.VALID_EXPRESSION_TITLE).open();
+			}
+		} catch (JavaModelException | MalformedURLException | IllegalAccessException | IllegalArgumentException exception) {
+			LOGGER.error("Exception occurred while compiling expression",exception);
+			new CustomMessageBox(SWT.ERROR, exception.getCause().getMessage(), Messages.INVALID_EXPRESSION_TITLE).open();
+		} catch (InvocationTargetException exception) {
+			if(exception.getCause()!=null && StringUtils.isNotBlank(exception.getCause().getMessage()))
+				new CustomMessageBox(SWT.ERROR, exception.getCause().getMessage(), Messages.INVALID_EXPRESSION_TITLE).open();
+			LOGGER.error("Exception occurred while invoking compile method for compiling expression",exception);
+		} catch (ClassNotFoundException classNotFoundException) {
+			new CustomMessageBox(SWT.ERROR, "Cannot find validation jar in build path", Messages.INVALID_EXPRESSION_TITLE).open();
+		}
+	}
+
+	private void showDiagnostics(DiagnosticCollector<JavaFileObject> diagnostics) {
+		String message;
+		for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
+			if (StringUtils.equals(diagnostic.getKind().name(), Diagnostic.Kind.ERROR.name())) {
+				message = diagnostic.getMessage(null);
+				new CustomMessageBox(SWT.ERROR, message, Messages.INVALID_EXPRESSION_TITLE).open();
+			} else {
+				new CustomMessageBox(SWT.ICON_INFORMATION, VALID_EXPRESSION, Messages.VALID_EXPRESSION_TITLE).open();
+			}
+			break;
+		}
+	}
+
+	public static Object[] getBuildPathForMethodInvocation() throws JavaModelException, MalformedURLException {
+		String transfromJarPath = null;
+		Object[] returnObj=new Object[2];
+		IJavaProject iJavaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject());
+		List<URL> urlList = new ArrayList<>();
+		for (IPackageFragmentRoot iPackageFragmentRoot : iJavaProject.getAllPackageFragmentRoots()) {
+			if (iPackageFragmentRoot instanceof JarPackageFragmentRoot) {
+				URL url = null;
+				if (!iPackageFragmentRoot.isExternal()) {
+					url = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()
+							.getFile(iPackageFragmentRoot.getPath().removeFirstSegments(1)).getLocation().toFile()
+							.toURI().toURL();
+					urlList.add(url);
+				} else {
+					url = iPackageFragmentRoot.getPath().toFile().toURI().toURL();
+					urlList.add(url);
+				}
+				if (transfromJarPath == null)
+					transfromJarPath = url.getPath() + Constants.SEMICOLON;
+				else
+					transfromJarPath = transfromJarPath + url.getPath() + Constants.SEMICOLON;
+			}
+		}
+		returnObj[0]=urlList;
+		returnObj[1]=transfromJarPath;
+		return returnObj;
+	}
 }

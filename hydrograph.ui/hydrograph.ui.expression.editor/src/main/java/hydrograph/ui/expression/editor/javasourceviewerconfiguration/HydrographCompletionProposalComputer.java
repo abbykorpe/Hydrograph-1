@@ -2,6 +2,7 @@ package hydrograph.ui.expression.editor.javasourceviewerconfiguration;
 
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.datastructure.ClassDetails;
 import hydrograph.ui.expression.editor.datastructure.MethodDetails;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
@@ -96,7 +97,9 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 			String displayLabel;
 			String replacementString;
 			List<ClassDetails> classList = ClassRepo.INSTANCE.getClassList();
-			ImageData imageData=new ImageData(XMLConfigUtil.CONFIG_FILES_PATH +"/icons/16x16_8bit.bmp");
+			ImageData imageData=new ImageData(XMLConfigUtil.CONFIG_FILES_PATH +PathConstant.INTELLISENCE_IMAGE);
+			Image image=new Image(Display.getCurrent(),imageData);
+			
 			for (ClassDetails classDetails : classList) {
 				if (!classDetails.isUserDefined()) {
 					List<MethodDetails> methodlist = classDetails.getMethodList();
@@ -105,13 +108,13 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 						replacementString = methodDetails.getPlaceHolder();
 
 						HydrographCompletionProposal customProposal=new HydrographCompletionProposal(replacementString,offset-prefix.length(),replacementLength,replacementString.length(),
-			        			new Image(Display.getCurrent(),imageData),displayLabel,null,null);
+								image,displayLabel,null,null);
 			        	customProposal.setType(CUSTOM_TYPE);
 			        	proposals.add(customProposal);
 					}
 				}
 			}
-			addAvailableFieldsProposals(textViewer,imageData,proposals,prefix,offset,replacementLength);
+			addAvailableFieldsProposals(textViewer,image,proposals,prefix,offset,replacementLength);
 		} catch (RuntimeException exception) {
 			LOGGER.error("Error occurred while building custom proposals", exception);
 		}
@@ -121,15 +124,16 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 	
 	
 	@SuppressWarnings("unchecked")
-	private void addAvailableFieldsProposals(ITextViewer textViewer,ImageData imageData, List<ICompletionProposal> proposals,String prefix, int offset,int replacementLength) {
+	private void addAvailableFieldsProposals(ITextViewer textViewer,Image image, List<ICompletionProposal> proposals,String prefix, int offset,int replacementLength) {
 		Map<String,Class<?>> fieldMap=(Map<String, Class<?>>)textViewer.getTextWidget().getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP); 
 		
 		for(Entry<String, Class<?>> entry:fieldMap.entrySet()){
 			String display = entry.getKey()+SWT.SPACE+Constants.DASH+entry.getValue().getSimpleName();
 			String replacementString=SWT.SPACE+entry.getKey()+SWT.SPACE;
 			HydrographCompletionProposal customProposal=new HydrographCompletionProposal(replacementString,offset-prefix.length(),replacementLength,replacementString.length(),
-        			new Image(Display.getCurrent(),imageData),display,null,null);
+					image,display,null,null);
         	customProposal.setType(CUSTOM_TYPE);
+        	
         	proposals.add(customProposal);
 		}
 	}

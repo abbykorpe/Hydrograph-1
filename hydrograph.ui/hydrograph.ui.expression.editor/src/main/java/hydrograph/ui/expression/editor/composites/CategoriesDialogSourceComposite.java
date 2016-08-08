@@ -19,6 +19,7 @@ import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.dialogs.AddCategoreisDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
+import hydrograph.ui.expression.editor.pages.AddExternalJarPage;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -67,7 +68,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 	private Combo comboJarList;
 	private List targetList;
 	private CategoriesDialogTargetComposite targetComposite;
-	private AddCategoreisDialog addCategoreisDialog;
+	private AddExternalJarPage addCategoreisDialog;
 	protected String[] filters=new String[]{"*.jar"};
 	/**
 	 * Create the composite.
@@ -76,7 +77,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 	 * @param addCategoreisDialog 
 	 * @param style
 	 */
-	public CategoriesDialogSourceComposite(Composite parent, AddCategoreisDialog addCategoreisDialog, int style) {
+	public CategoriesDialogSourceComposite(Composite parent, AddExternalJarPage addCategoreisDialog, int style) {
 		super(parent, style);
 		this.addCategoreisDialog=addCategoreisDialog;
 		setLayout(new GridLayout(1, false));
