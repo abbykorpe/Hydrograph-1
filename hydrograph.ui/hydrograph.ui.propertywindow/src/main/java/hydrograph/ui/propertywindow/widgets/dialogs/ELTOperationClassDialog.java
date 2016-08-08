@@ -201,7 +201,12 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		Table table_2 = nameValueTableViewer.getTable();
 		GridData gd_table_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_table_2.heightHint = 180;
-		gd_table_2.widthHint = 504;
+		if(OSValidator.isMac()){
+		gd_table_2.widthHint = 507;
+		}
+		else{
+			gd_table_2.widthHint =504; 
+		}
 		table_2.setLayoutData(gd_table_2);
 		setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),

@@ -91,6 +91,8 @@ public class FilterOperationClassUtility  {
 	private String componentName;
 	private String fileNameTextBoxValue;
 	private final String OPERATION_CLASS = "Operation Class";
+	ELTDefaultButton emptyButton;
+	AbstractELTWidget browseButton;
 	private FilterOperationClassUtility(){
 		
 	}
@@ -370,7 +372,12 @@ public class FilterOperationClassUtility  {
 		GridData layoutData = (GridData)fileName.getLayoutData();
 		layoutData.horizontalIndent=6;
 		
-		AbstractELTWidget browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(20);
+		if(OSValidator.isMac()){
+			browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(35);
+		}else{
+			browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(25);
+		}
+		
 		eltSuDefaultSubgroupComposite.attachWidget(browseButton);
 		browseBtn=(Button)browseButton.getSWTWidgetControl();
 
@@ -382,8 +389,12 @@ public class FilterOperationClassUtility  {
 		eltSuDefaultSubgroupComposite2.createContainerWidget();
 		eltSuDefaultSubgroupComposite2.numberOfBasicWidgets(3);
 
-
-		ELTDefaultButton emptyButton = new ELTDefaultButton("").buttonWidth(89);
+		if(OSValidator.isMac()){
+			 emptyButton = new ELTDefaultButton("").buttonWidth(92);
+		}
+		else{
+			emptyButton = new ELTDefaultButton("").buttonWidth(89);
+		}
 		eltSuDefaultSubgroupComposite2.attachWidget(emptyButton);
 		emptyButton.visible(false);
 
