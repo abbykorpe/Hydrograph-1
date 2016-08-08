@@ -185,7 +185,7 @@ public class LingualQueryCreator extends QueryParserBaseVisitor<String> implemen
 		TimeZone timezone = TimeZone.getDefault();
 		int zoneOffset = timezone.getRawOffset();
 
-		timestampValue = timestampValue.substring(1, timestampValue.length() - 1);
+		timestampValue = timestampValue.replace("'", "");
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = null;
