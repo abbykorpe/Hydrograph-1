@@ -18,8 +18,8 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 
@@ -51,7 +51,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class ELTJoinConfigGrid extends Dialog {
 
-	private int inputPortValue = ELTJoinWidget.value;
+	private int inputPortValue;
 	private List<String> ITEMS = Arrays.asList(Constants.TRUE, Constants.FALSE);
 	private List<JoinConfigProperty> tempraryConfigPropertyList;
 	private List<JoinConfigProperty> joinConfigPropertyList;
@@ -60,6 +60,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	private Label editLableAsButton;
 	private Map<String, List<String>> propagatedFiledNames;
 	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
+	private Component component;
 
 	/**
 	 * Create the dialog.
@@ -69,12 +70,14 @@ public class ELTJoinConfigGrid extends Dialog {
 	 * @param validationStatus
 	 */
 	public ELTJoinConfigGrid(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar,
-			List<JoinConfigProperty> configProperty) {
+			List<JoinConfigProperty> configProperty,Component component) {
 		super(parentShell);
 
 		this.joinConfigPropertyList = configProperty;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		copyAll(configProperty);
+		this.component=component;
+		
 	}
 
 	private List<JoinConfigProperty> copyAll(List<JoinConfigProperty> configProperty) {
@@ -122,7 +125,10 @@ public class ELTJoinConfigGrid extends Dialog {
 		eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER, new int[] { 337, 2, 205, 23 }, "Record Required", false);
 
 		scrolledComposite.setContent(composite_1);
-
+		
+		String count=(String)component.getProperties().get("inPortCount");
+		inputPortValue=Integer.valueOf(count);
+		
 		if (tempraryConfigPropertyList != null && tempraryConfigPropertyList.isEmpty()) {
 			for (int i = 0; i < inputPortValue; i++) {
 				tempraryConfigPropertyList.add(new JoinConfigProperty());

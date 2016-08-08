@@ -26,9 +26,11 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -71,7 +73,7 @@ public class ELTJoinWidget extends AbstractWidget {
 	 */
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-
+		
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
@@ -99,7 +101,7 @@ public class ELTJoinWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ELTJoinConfigGrid eltJoinConfigGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton
-						.getSWTWidgetControl()).getShell(), propertyDialogButtonBar, configProperty);
+						.getSWTWidgetControl()).getShell(), propertyDialogButtonBar, configProperty,getComponent());
 				eltJoinConfigGrid.setPropagatedFieldProperty(SchemaPropagationHelper.INSTANCE
 						.getFieldsForFilterWidget(getComponent()));
 				eltJoinConfigGrid.open();
