@@ -12,24 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
-import hydrograph.engine.core.core.HydrographDebugInfo;
-import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.core.core.HydrographRuntimeService;
-import hydrograph.engine.core.helper.JAXBTraversal;
-import hydrograph.engine.core.props.PropertiesLoader;
-import hydrograph.engine.flow.utils.FlowManipulationContext;
-import hydrograph.engine.flow.utils.FlowManipulationHandler;
-import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.schemapropagation.SchemaFieldHandler;
-import hydrograph.engine.utilities.GeneralUtilities;
-import hydrograph.engine.utilities.HiveConfigurationMapping;
-
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -47,6 +32,21 @@ import org.slf4j.LoggerFactory;
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
 import cascading.property.AppProps;
+import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
+import hydrograph.engine.core.core.HydrographDebugInfo;
+import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.core.HydrographRuntimeService;
+import hydrograph.engine.core.helper.JAXBTraversal;
+import hydrograph.engine.core.props.PropertiesLoader;
+import hydrograph.engine.execution.tracking.ComponentPipeMapping;
+import hydrograph.engine.execution.tracking.listener.ExecutionTrackingListener;
+import hydrograph.engine.flow.utils.FlowManipulationContext;
+import hydrograph.engine.flow.utils.FlowManipulationHandler;
+import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.schemapropagation.SchemaFieldHandler;
+import hydrograph.engine.utilities.GeneralUtilities;
+import hydrograph.engine.utilities.HiveConfigurationMapping;
 
 @SuppressWarnings({ "rawtypes" })
 public class HydrographRuntime implements HydrographRuntimeService {
@@ -160,6 +160,11 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		}
 
 		for (Cascade cascade : runtimeContext.getCascade()) {
+			if (ExecutionTrackingListener.isTrackingPluginPresent()) {
+				ComponentPipeMapping.generateComponentToPipeMap(runtimeContext.getFlowContext());
+				ComponentPipeMapping.generateComponentToFilterMap(runtimeContext);
+				ExecutionTrackingListener.addListener(cascade);
+			}
 			cascade.complete();
 		}
 
@@ -287,5 +292,18 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		public HydrographRuntimeException(Throwable e) {
 			super(e);
 		}
+	}
+	
+	/**
+	 * Method to kill the job
+	 */
+	@Override
+	public void kill() {
+		if (runtimeContext.getCascade() != null) {
+			for (Cascade cascade : runtimeContext.getCascade()) {
+				cascade.stop();
+			}
+		} else
+			System.exit(0);
 	}
 }

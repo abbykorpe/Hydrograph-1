@@ -10,23 +10,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.core.core;
+package hydrograph.engine.execution.tracking.plugin;
 
-import java.util.Properties;
+import cascading.flow.FlowProcess;
+import cascading.operation.BaseOperation;
+import cascading.operation.Filter;
+import cascading.operation.FilterCall;
+import cascading.operation.OperationCall;
+import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 
-import org.apache.commons.cli.ParseException;
+public class Counter extends BaseOperation<RecordFilterContext>implements Filter<RecordFilterContext> {
 
-public interface HydrographRuntimeService {
+	@Override
+	public boolean isRemove(FlowProcess flowProcess, FilterCall<RecordFilterContext> call) {
+		flowProcess.increment(call.getContext().getCounterGroup(), call.getContext().getCounterName(), 1);
+		return false;
+	}
 
-	public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath);
-
-	public void prepareToExecute();
-
-	public void execute();
-
-	public void oncomplete();
-	
-	public void kill();
 
 }

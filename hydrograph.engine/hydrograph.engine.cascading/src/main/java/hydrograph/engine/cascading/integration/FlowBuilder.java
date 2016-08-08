@@ -91,7 +91,7 @@ public class FlowBuilder {
 			}
 			cascades[phaseIndex] = (new CascadeConnector().connect(flowContext
 					.getCascadeDef().setName(flowName + "_" + phaseIndex)));
-
+			runtimeContext.setFlowContext(phase, flowContext);
 		}
 		runtimeContext.setCascade(cascades);
 

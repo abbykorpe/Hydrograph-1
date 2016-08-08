@@ -36,7 +36,7 @@
 
 	<operations id="trans" phase="0" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<operation id="operation1" class="hydrograph.engine.core.userfuntions.Filter">
+		<operation id="operation1" class="hydrograph.engine.userfunctions.Filter">
 			<inputFields>
 				<field name="Choice" inSocketId="in0" />
 			</inputFields>

@@ -54,10 +54,11 @@ public class FlowManipulationHandler {
 			throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e);
 		}
 
-		for (Object pluginClass : properties.keySet()) {
-			jaxbComponents = executePlugin(pluginClass.toString(), flowManipulationContext);
+		for (Object pluginName : properties.keySet()) {
+			jaxbComponents = executePlugin(properties.get(pluginName).toString(), flowManipulationContext);
 			flowManipulationContext.setJaxbMainGraph(jaxbComponents);
 		}
+
 
 		return getJaxbObject();
 	}

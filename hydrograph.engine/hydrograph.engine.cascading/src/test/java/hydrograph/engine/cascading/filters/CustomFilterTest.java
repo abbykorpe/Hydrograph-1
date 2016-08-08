@@ -45,7 +45,7 @@ public class CustomFilterTest {
 		RecordFilterHandlerBase filterHandler = new FilterCustomHandler(inputFields,
 				"hydrograph.engine.cascading.test.customtransformclasses.CustomFilter", properties);
 
-		Filter filter = new RecordFilter(filterHandler);
+		Filter filter = new RecordFilter(filterHandler,null);
 
 		Plunger plunger = new Plunger();
 		Data data = new DataBuilder(new Fields("id", "name", "surname")).addTuple(101, "abc", "pqr")
