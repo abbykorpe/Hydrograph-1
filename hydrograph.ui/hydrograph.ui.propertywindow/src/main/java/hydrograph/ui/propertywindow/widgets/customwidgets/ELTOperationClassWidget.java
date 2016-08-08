@@ -14,8 +14,14 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
+import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
+import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -24,12 +30,15 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
+import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.RuntimePropertyDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -49,6 +58,9 @@ public class ELTOperationClassWidget extends AbstractWidget {
 	private OperationClassProperty operationClassProperty;
 	private ELTOperationClassDialog eltOperationClassDialog;
 	private List<NameValueProperty> nameValuePropertyList;
+	private ELTRadioButton operationRadioButton;
+	private ELTRadioButton expressionRadioButton;
+	
 	/**
 	 * Instantiates a new ELT operation class widget.
 	 * 
@@ -68,7 +80,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		nameValuePropertyList=new ArrayList<>(); 
 		this.operationClassProperty = (OperationClassProperty) componentConfigrationProperty.getPropertyValue();
 		if(operationClassProperty == null){
-			operationClassProperty = new OperationClassProperty(Messages.CUSTOM, "", false, "",nameValuePropertyList);
+			operationClassProperty = new OperationClassProperty(Messages.CUSTOM, "", false, "",nameValuePropertyList,null);
 		}
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
@@ -82,20 +94,46 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		final ELTDefaultSubgroupComposite runtimeComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
 		runtimeComposite.createContainerWidget();
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable(Messages.OPERATION_CALSS_LABEL); 
+		runtimeComposite.numberOfBasicWidgets(3);
+
+		operationRadioButton = new ELTRadioButton(Messages.OPERATION_CALSS_LABEL);
+		runtimeComposite.attachWidget(operationRadioButton);
+		operationRadioButton.visible(true);
+		setPropertyHelpWidget((Control) operationRadioButton.getSWTWidgetControl());
+		addSelectionListenerOnOperation();
+		
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(""); 
 		runtimeComposite.attachWidget(defaultLable1);
 		
-		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
+		ELTDefaultLable defaultLable2 = new ELTDefaultLable(""); 
+		runtimeComposite.attachWidget(defaultLable2);
+		
+		expressionRadioButton = new ELTRadioButton("Expression Editor");
+		runtimeComposite.attachWidget(expressionRadioButton);
+		expressionRadioButton.visible(true);
+		setPropertyHelpWidget((Control) expressionRadioButton.getSWTWidgetControl());
+		addSelectionListenerOnExpression();
 		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
 				Messages.EDIT_BUTTON_LABEL).grabExcessHorizontalSpace(false);
 		runtimeComposite.attachWidget(eltDefaultButton);
+		
+		initialize();
 		
 		setToolTipMessage(Messages.OperationClassBlank);
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				if(((Button) expressionRadioButton.getSWTWidgetControl()).getSelection()){
+					operationClassProperty.setExpression(true);
+					operationClassProperty.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
+					operationClassProperty.getExpressionEditorData().getSelectedInputFieldsForExpression()
+							.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(null,getInputSchema()));
+					LaunchExpressionEditor launchExpressionEditor=new LaunchExpressionEditor();
+					launchExpressionEditor.launchExpressionEditor(operationClassProperty.getExpressionEditorData());
+						
+				}else{
 				OperationClassProperty oldOperationClassProperty=operationClassProperty.clone();
 				eltOperationClassDialog = new ELTOperationClassDialog(
 						runtimeComposite.getContainerControl().getShell(), propertyDialogButtonBar,
@@ -117,8 +155,19 @@ public class ELTOperationClassWidget extends AbstractWidget {
 				if(eltOperationClassDialog.isNoPressed()){
 					propertyDialog.pressCancel();
 				}
+				
+				
+			}
 				showHideErrorSymbol(widgets);
 				super.widgetSelected(e);
+			}
+
+			private ComponentsOutputSchema getInputSchema() {
+				ComponentsOutputSchema componentsOutputSchema=null;
+				for(Link link:getComponent().getTargetConnections()){
+					componentsOutputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+				}
+				return componentsOutputSchema;
 			}
 			
 		});
@@ -136,6 +185,51 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		return validateAgainstValidationRule(operationClassProperty);
 	}
 
+	public void initialize()
+	{
+		if(operationClassProperty.isExpression())
+		{
+			((Button) expressionRadioButton.getSWTWidgetControl()).setSelection(true);
+		}else{
+			((Button) operationRadioButton.getSWTWidgetControl()).setSelection(true);
+		}
+	}
+	
+	public void addSelectionListenerOnOperation(){
+		((Button) operationRadioButton.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(((Button) operationRadioButton.getSWTWidgetControl()).getSelection()){
+					operationClassProperty.setExpression(false);
+				}else
+					operationClassProperty.setExpression(true);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {/*Do-Nothing*/}
+		});
+	}
+	
+	
+	public void addSelectionListenerOnExpression(){
+		
+		((Button) expressionRadioButton.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(((Button) expressionRadioButton.getSWTWidgetControl()).getSelection()){
+					operationClassProperty.setExpression(true);
+				}else
+					operationClassProperty.setExpression(false);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {/*Do-Nothing*/}
+		} );
+	}
 
 
 	@Override

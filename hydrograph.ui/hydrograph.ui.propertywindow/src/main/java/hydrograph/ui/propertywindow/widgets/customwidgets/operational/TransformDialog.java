@@ -15,7 +15,6 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
-
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
@@ -43,7 +42,7 @@ import hydrograph.ui.propertywindow.widgets.utility.DragDropUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-import hydrograph.ui.propertywindow.widgets.customwidgets.operational.ExpressionComposite;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -72,7 +71,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -111,6 +109,9 @@ import org.eclipse.swt.widgets.Widget;
  */
 public class TransformDialog extends Dialog implements IOperationClassDialog {
 
+	private static final String PLEASE_SELECT_PARAMETER_FIELD_S_ONLY = "Please select Parameter field(s) only";
+	private static final String OUTPUT_FIELD = "OutputField";
+	private static final String EXPRESSION_TEXT_BOX = "expressionTextBox";
 	private static final String OUTPUT_DELETE_BUTTON = "outputDeleteButton";
 	private static final String OUTPUT_ADD_BUTTON = "outputAddButton";
 	private static final String OPERATION_OUTPUT_FIELD_TABLE_VIEWER = "operationOutputFieldTableViewer";
@@ -199,6 +200,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		errorLabelList=new ArrayList<>();
 		duplicateOperationInputFieldMap=new HashMap<String,List<String>>();
 		duplicateFieldMap=new HashMap<String,List<String>>();
+		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
 		optionToSelect=true;
 	}  
 
@@ -296,18 +298,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			public void mouseUp(MouseEvent e) {
 				FilterProperties filterproperties = new FilterProperties();
 				filterproperties.setPropertyname("");
-
-				if (!transformMapping.getOutputFieldList().contains(filterproperties)) {
-
 					transformMapping.getOutputFieldList().add(filterproperties);
 					((List<FilterProperties>)outputFieldViewer.getInput()).add(filterproperties);
 					outputFieldViewer.refresh();
-					
 					int i = ((List<FilterProperties>)outputFieldViewer.getInput()).size() == 0 ? ((List<FilterProperties>)outputFieldViewer.getInput()).size()
 							:((List<FilterProperties>)outputFieldViewer.getInput()).size() - 1;
 					outputFieldViewer.editElement(outputFieldViewer.getElementAt(i), 0);
-
-				}
 			}
 
 		});
@@ -327,28 +323,37 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				Table table = outputFieldViewer.getTable();
 				int temp = table.getSelectionIndex();
 				int[] indexs = table.getSelectionIndices();
-				if (temp == -1) {
+				if (temp == -1) 
+				{
 				WidgetUtility.errorMessage(Messages.SelectRowToDelete);
-				  
-				} else {
-					
-					List<FilterProperties> tempList = new ArrayList<FilterProperties >();
+                } 
+				else 
+				{
+					boolean isParameter=true;
+					List<FilterProperties> fieldsToBeDelete = new ArrayList<FilterProperties >();
 					for (int index : indexs) {
-						tempList.add(((List<FilterProperties>)outputFieldViewer.getInput()).get(index));
+						fieldsToBeDelete.add(((List<FilterProperties>)outputFieldViewer.getInput()).get(index));
 					}
-					
-					if(!transformMapping.getOutputFieldList().containsAll(tempList))
+					for(FilterProperties filterProperties:fieldsToBeDelete)
 					{
-						WidgetUtility.errorMessage(Messages.OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE);
+						if(!ParameterUtil.isParameter(filterProperties.getPropertyname()))
+						{
+							isParameter=false;
+							break;
+						}	
+					}
+					if(!isParameter)
+					{
+					 WidgetUtility.errorMessage
+				   (PLEASE_SELECT_PARAMETER_FIELD_S_ONLY);
 					}	
 					else
 					{	
-						table.remove(indexs);
-					for(FilterProperties filterProperties:tempList)
+					table.remove(indexs);
+					for(FilterProperties filterProperties:fieldsToBeDelete)
 					{		
 						transformMapping.getOutputFieldList().remove(filterProperties);
 					}
-					
 					}
 					refreshOutputTable();
             	}
@@ -361,14 +366,16 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		setTableViewer(outputFieldViewer, outputFieldComposite, new String[] { Messages.OUTPUT_FIELD },
 				new ELTFilterContentProvider(), new OperationLabelProvider());
 		outputFieldViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer));
+		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer,transformDialog));
 		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
 		refreshOutputTable();
 		setIsOperationInputFieldDuplicate();
 		showHideValidationMessage();
 		addControlListener(outputFieldViewer.getTable());
 	}
-
+   
+	
+	
 	private void addControlListener(Table table) {
 		table.addControlListener(new ControlAdapter() {
 			@Override
@@ -413,7 +420,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		expandBar.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		expandBar.setVisible(true);
 		expandBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
-
+		
 		
 		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
@@ -424,12 +431,18 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				createOperationOrExpressionSelectDialog();
+				if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
+				{	
+				createOperationOrExpressionSelectDialog();	
 				if(expressionOrOperationClassSelectDialog.isOkPressed())
 				{	
 					optionToSelect=expressionOrOperationClassSelectDialog.getOptionToSelect();	
 					addOperations();
 				}
+				}
+				else
+				addOperations();	
+				
 			}
 		});
 
@@ -452,8 +465,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					operationClassDeleteDialog.open();
 					refreshOutputTable();
 					showHideValidationMessage();
+					
 
 				}
+				scrolledComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 		});
 
@@ -642,23 +657,33 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
         addControlListener(errorTableViewer.getTable());
 	}
 
-	private void addExpandItem(ScrolledComposite scrollBarComposite, MappingSheetRow mappingSheetRow, String operationID) 
+	private void addExpandItem(final ScrolledComposite scrollBarComposite, MappingSheetRow mappingSheetRow, String operationID) 
 	{
     	ExpandItem expandItem = new ExpandItem(expandBar, SWT.V_SCROLL);
 		expandItem.setExpanded(true);
 		expandItem.setHeight(230);
+		expandBar.addListener(SWT.MouseUp, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				scrollBarComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			}
+		});
 		if (operationID != null)
 			expandItem.setText(operationID);
     if(mappingSheetRow.isExpression())
     {	
     	ExpressionComposite expressionComposite=new ExpressionComposite(expandBar,SWT.NONE,mappingSheetRow,getComponent()); 
     	expandItem.setControl(expressionComposite);
-    	expressionComposite.getText().setText(expandItem.getText());
-    	expressionComposite.getText().setData(expandItem);
-    	expandItem.setData(expressionComposite.getText());
+    	expressionComposite.getExpressionIdTextBox().setText(expandItem.getText());
+    	expressionComposite.getExpressionIdTextBox().setData(expandItem);
+    	expandItem.setData(expressionComposite.getExpressionIdTextBox());
     	expandItem.setData(IS_PARAM,expressionComposite.getIsParamButton());
-    	attachModifyListenerToIdTextBox(mappingSheetRow, expressionComposite.getText());
-    	attachFocusListenerToIdTextBox(expressionComposite.getText());
+    	expandItem.setData(EXPRESSION_TEXT_BOX,expressionComposite.getExressionTextBox());
+    	expandItem.setData(OUTPUT_FIELD,expressionComposite.getOutputFieldTextBox());
+    	addModifyListenerToOperationClassAndExpressionTextBox(expressionComposite.getExressionTextBox());
+    	attachModifyListenerToIdTextBox(mappingSheetRow, expressionComposite.getExpressionIdTextBox());
+    	attachFocusListenerToIdTextBox(expressionComposite.getExpressionIdTextBox());
     	addIsParamSelectionListener(expressionComposite.getIsParamButton(), mappingSheetRow);
     	operationalInputFieldTableViewer=expressionComposite.getTableViewer();
     	operationalInputFieldTableViewer = setTableViewer(operationalInputFieldTableViewer,
@@ -669,10 +694,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	 operationalInputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalInputFieldTableViewer, this,mappingSheetRow));
     	 operationalInputFieldTableViewer.setLabelProvider(new ELTFilterLabelProvider());
     	 attachFocuListenerToParamaterTextBox(expressionComposite.getParameterTextBox());
-    	 addModifyListenerToOutputField(expressionComposite.getOutputFieldTextBox(),mappingSheetRow);
+    	 addModifyAndFocusListenerToOutputField(expressionComposite.getOutputFieldTextBox(),mappingSheetRow);
          DragDropTransformOpImp dragDropTransformOpImpnew = new DragDropTransformOpImp(this,transformMapping,mappingSheetRow.getInputFields(),true,true,operationalInputFieldTableViewer);
  		 DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
  		 intializeFunctionalityToExpressionWidget(expressionComposite,mappingSheetRow,operationalInputFieldTableViewer);
+ 		 showHideValidationMessage();
  	
      }
     else
@@ -689,6 +715,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		TableViewer opTableViewer=createOperationOutputFieldTable(expandItemComposite, mappingSheetRow);
         	expandItem.setData(OUTPUT_TABLE_VIEWER, opTableViewer);
     }
+       
         scrollBarComposite.setContent(expandBar);
 		scrollBarComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     
@@ -730,12 +757,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		operationClassTextBox = new Text(innerComposite, SWT.BORDER);
 		operationClassTextBox.setBounds(104, 91, 150, 21);
 		operationClassTextBox.setEditable(false);
-		operationClassTextBox.addModifyListener(new ModifyListener() {
-		   @Override
-			public void modifyText(ModifyEvent e) {
-			 showHideValidationMessage();
-			}
-		});
+		addModifyListenerToOperationClassAndExpressionTextBox(operationClassTextBox);
 		
 		expandItem.setData(OPERATION_CLASS_TEXT_BOX,operationClassTextBox);
 		mappingSheetRow.setOperationID(operationIDTextBox.getText());
@@ -897,6 +919,15 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}
 	}
 
+	private void addModifyListenerToOperationClassAndExpressionTextBox(Text textBox) {
+		textBox.addModifyListener(new ModifyListener() {
+		   @Override
+			public void modifyText(ModifyEvent e) {
+			 showHideValidationMessage();
+			}
+		});
+	}
+
 	private void attachFocusListenerToIdTextBox(Text operationIDTextBox) {
 		operationIDTextBox.addFocusListener(new FocusListener() {
 			
@@ -952,8 +983,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				String parameterText=textBox.getText();
 				parameterText=StringUtils.replace(StringUtils.replace(parameterText, Constants.PARAMETER_PREFIX, ""),Constants.PARAMETER_SUFFIX,"");
 				textBox.setText(parameterText);
-				
-				
 			}
 		});
 	}
@@ -1114,6 +1143,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				Text expressionIdTextBox=(Text) isParam.getData("expressionIdTextBox");
 				Button browseButton=(Button) isParam.getData("expressionEditorButton");
 				Text outputFieldTextBox=(Text) isParam.getData("outputFieldTextBox");
+				Text expressionTextBox=(Text) isParam.getData("expressionTextBox");
 				Text parameterTextBox=(Text)isParam.getData("parameterTextBox");
 				if(isParam.getSelection())
 				{
@@ -1121,11 +1151,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					{
 						parameterTextBox.setEnabled(true);
 						mappingSheetRow.setWholeOperationParameter(true);
+						mappingSheetRow.getExpressionEditorData().setExpression("");
+						mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
 						tableViewer.getTable().clearAll();
 						tableViewer.getTable().setEnabled(false);
 						addButton.setEnabled(false);
 						deleteButton.setEnabled(false);
 						expressionIdTextBox.setEnabled(false);
+						expressionTextBox.setText("");
 						browseButton.setEnabled(false);
 						outputFieldTextBox.setText("");
 						outputFieldTextBox.setEnabled(false);
@@ -1140,6 +1173,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				else
 				{
 					parameterTextBox.setText("");
+					outputFieldTextBox.setText("");
+					expressionTextBox.setText("");
 					parameterTextBox.setEnabled(false);
 					mappingSheetRow.setWholeOperationParameter(false);
 					tableViewer.getTable().setEnabled(true);
@@ -1154,49 +1189,28 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 	}
 	
-	public void refreshOutputTable() {
-		  
-		validatorOutputFields = new ArrayList<>();
+	public void refreshOutputTable() 
+	{
 		finalSortedList=new ArrayList<>();
-		  for (Map.Entry<String, List<FilterProperties>> entry: temporaryOutputFieldMap.entrySet()) {
-			  for(FilterProperties filterproperty :entry.getValue())
-			  {
-				  if(!ParameterUtil.isParameter(filterproperty.getPropertyname()))
-				  validatorOutputFields.add(filterproperty);
-			  }  
-		 }
-		validatorOutputFields.clear();
 		temporaryOutputFieldMap.clear();
-		
 		temporaryOutputFieldMap
 				.put("MapAndPassThroughFields",convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()));
 		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
 			temporaryOutputFieldMap.put(mappingSheetRow1.getOperationID(),mappingSheetRow1.getOutputList());
 
 		}
-		
-		for (MappingSheetRow mappingSheetRow1 : transformMapping.getMappingSheetRows()) {
-			List<FilterProperties> operationOutputFieldList=mappingSheetRow1.getOutputList();
-			List<FilterProperties> nonParameterOutputFieldList=new ArrayList<>();  
-            for(FilterProperties filterProperties : operationOutputFieldList)
-            {
-                  if(!ParameterUtil.isParameter(filterProperties.getPropertyname()) && StringUtils.isNotBlank(filterProperties.getPropertyname()))
-                	  nonParameterOutputFieldList.add(filterProperties);
-                 
-            } 
-            SchemaSyncUtility.INSTANCE.unionFilter(nonParameterOutputFieldList,validatorOutputFields);
-
-		}
-		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), validatorOutputFields);
-		SchemaSyncUtility.INSTANCE.unionFilter(convertNameValueToFilterProperties(transformMapping.getMapAndPassthroughField()),
-				validatorOutputFields);
 		backwardJobComapatabilityCode();   
+		for(FilterProperties filterProperties:transformMapping.getOutputFieldList())
+		{
+		 ParameterUtil.addPrefixSuffixToParameterFields(filterProperties,transformMapping);
+				
+		}	
 		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), finalSortedList);
+		
 	    outputFieldViewer.setInput(finalSortedList);
 		outputFieldViewer.refresh();
 		mappingTableViewer.refresh();
 	}
-	
 	
     /**
      * temporaray method for backward Job compatability
@@ -1249,6 +1263,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		Set<String> setToCheckDuplicates = new HashSet<String>();
 		int index = 0;
+		if(duplicateFieldMap!=null)
+		duplicateFieldMap.clear();
 		for (Map.Entry<String, List<FilterProperties>> entry: temporaryOutputFieldListTemp.entrySet()) 
 		{
 			List<FilterProperties>  temporaryOutputFieldList=entry.getValue();
@@ -1296,7 +1312,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		   setErrorMessageForDuplicateOutputField();
 		   setErrorMessageForDuplicateInputField(); 
 		   setErrorMessageForInvalidMapFields();
-		   Set<String> setToCheckDuplicates = setErrorMessageIfOperationClassBlankOrOperationIDDuplicate(); 	
+		   Set<String> setToCheckDuplicates = showErrorIfOperationClassOrExpressionBlankOrOperationIDDuplicate(); 	
      	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	       errorTableViewer.refresh();
 	       errorLabelList.clear();
@@ -1328,34 +1344,53 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     		}
     	}
     }
-    private Set<String> setErrorMessageIfOperationClassBlankOrOperationIDDuplicate() 
+
+    private Set<String> showErrorIfOperationClassOrExpressionBlankOrOperationIDDuplicate() 
     {
 	    Set<String> setToCheckDuplicates = new HashSet<String>();
 		 for(ExpandItem item:expandBar.getItems() )
 		{
 			Text operationClassTextBox=(Text)item.getData(OPERATION_CLASS_TEXT_BOX);
+			Text expressionTextBox=(Text)item.getData(EXPRESSION_TEXT_BOX);
 			Button isParam=(Button)item.getData(IS_PARAM);
+			Text outputFieldTextBox=(Text)item.getData(OUTPUT_FIELD);
 			Text idTextBox=(Text)item.getData();
 			if(operationClassTextBox!=null)
 			{
 			   if(StringUtils.isBlank(operationClassTextBox.getText()) && !isParam.getSelection())
 			   {
-				errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
-			    errorLabel.setVisible(true); 
-				errorLabel.setText("Operation Class must not be blank for"+" "+idTextBox.getText()); 	
-				errorLabelList.add(errorLabel);
+				intializeErrorLabelObject(idTextBox,"Operation Class must not be blank for");
 			    }
 			}
+			if(expressionTextBox!=null)
+			{
+				if(StringUtils.isBlank(expressionTextBox.getText()) && !isParam.getSelection())
+			   {
+				intializeErrorLabelObject(idTextBox,"Expression must not be blank for");
+			   }
+				
+			}
+			if(outputFieldTextBox!=null)
+			{
+				if(StringUtils.isBlank(outputFieldTextBox.getText()) && !isParam.getSelection())
+				 {
+					intializeErrorLabelObject(idTextBox,"Output Field must not be blank for");
+				 }
+			}	
 			if(!setToCheckDuplicates.add(idTextBox.getText())&&!isParam.getSelection())
 			{
-				errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
-			    errorLabel.setVisible(true); 
-				errorLabel.setText("Duplicate Operation Id"+" "+idTextBox.getText()); 	
-				errorLabelList.add(errorLabel);
+				intializeErrorLabelObject(idTextBox,"Duplicate Operation Id");
 			}	
 		}
 	 return setToCheckDuplicates;
    }
+
+	private void intializeErrorLabelObject(Text idTextBox,String errorMessage) {
+		errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+		errorLabel.setVisible(true); 
+		errorLabel.setText(errorMessage+" "+idTextBox.getText()); 	
+		errorLabelList.add(errorLabel);
+	}
 
    private void setErrorMessageForDuplicateInputField() {
 	if(!duplicateOperationInputFieldMap.isEmpty())
@@ -1500,7 +1535,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 	}
     
-private void addModifyListenerToOutputField(Text outputFieldTextBox2,final MappingSheetRow mappingSheetRow) {
+private void addModifyAndFocusListenerToOutputField(Text outputFieldTextBox2,final MappingSheetRow mappingSheetRow) {
+	 
 	outputFieldTextBox2.addFocusListener(new FocusAdapter() {
 		
 		@Override
@@ -1519,9 +1555,13 @@ private void addModifyListenerToOutputField(Text outputFieldTextBox2,final Mappi
 					FilterProperties filterProperties=new FilterProperties();	
 					filterProperties.setPropertyname(textBox.getText());
 				    mappingSheetRow.getOutputList().add(filterProperties);
+				    transformMapping.getOutputFieldList().add(filterProperties);
 				}
 				else
+				{	
 				mappingSheetRow.getOutputList().get(0).setPropertyname(textBox.getText());	
+				
+				}
 			}
 		});
 	}
@@ -1701,12 +1741,9 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
 	protected static void addTextEditor(Table table, CellEditor[] cellEditor, int position) {
 
 		cellEditor[position] = new TextCellEditor(table, SWT.COLOR_GREEN);
-
 	}
 	
-	/**
-	 * Sync transform fields with outer schema.
-	 */
+	
 	private void syncTransformFieldsWithSchema() {
 		
 		List<FilterProperties> filterProperties = convertSchemaToFilterProperty();
@@ -1714,47 +1751,26 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
 		{
 		return;
 		} 	
-		List<FilterProperties> finalSortedList=new ArrayList<>();
+		
 		SchemaSyncUtility.INSTANCE.removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
-		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty();
+		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+		List<NameValueProperty> outputFileds= SchemaSyncUtility.INSTANCE.getComponentSchemaAsProperty(schema.getGridRow());
 		SchemaSyncUtility.INSTANCE.filterCommonMapFields(outputFileds, transformMapping);
+		Map<Integer,FilterProperties> indexValueParameterMap=SchemaSyncUtility.INSTANCE.retainIndexAndValueOfParameterFields
+				(transformMapping.getOutputFieldList());
 		transformMapping.getOutputFieldList().clear();
-		addOperationFieldAndMapPassthroughfieldToOutputField();
-		sortOutputFieldToMatchSchemaSequence(filterProperties, finalSortedList);
+		SchemaSyncUtility.INSTANCE.addOperationFieldAndMapPassthroughfieldToOutputField(transformMapping);
+		List<FilterProperties> finalSortedList=SchemaSyncUtility.INSTANCE.
+				sortOutputFieldToMatchSchemaSequence(filterProperties,transformMapping);
 		transformMapping.getOutputFieldList().clear();
 		transformMapping.getOutputFieldList().addAll(finalSortedList);
+		SchemaSyncUtility.INSTANCE.addParamtereFieldsToSameIndexAsBeforePull(indexValueParameterMap,transformMapping);
 		refreshOutputTable();
 		for(ExpandItem item:expandBar.getItems())
 		{
-			TableViewer t=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
-			t.refresh();
-		}
-	}
-
-	private void sortOutputFieldToMatchSchemaSequence(
-			List<FilterProperties> filterProperties,
-			List<FilterProperties> finalSortedList) {
-		for(int i=0;i<filterProperties.size();i++)
-		{
-			for(FilterProperties f:transformMapping.getOutputFieldList())
-			{
-				if(f.equals(filterProperties.get(i)))
-				{
-					finalSortedList.add(f);
-					break;
-				}
-			}
-		}
-	}
-
-	private void addOperationFieldAndMapPassthroughfieldToOutputField() {
-		for(MappingSheetRow row:transformMapping.getMappingSheetRows())
-		{
-			transformMapping.getOutputFieldList().addAll(row.getOutputList());
-		}	
-		for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
-		{
-			transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
+			TableViewer tableViewer=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
+			if(tableViewer!=null)
+			tableViewer.refresh();
 		}
 	}
 
@@ -1769,8 +1785,10 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
 			}
 			for(ExpandItem item:expandBar.getItems())
 			{
-				TableViewer t=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
-				t.refresh();
+				
+				TableViewer tableViewer=(TableViewer)item.getData(OUTPUT_TABLE_VIEWER);
+				if(tableViewer!=null)
+				tableViewer.refresh();
 			}
 			transformMapping.getMapAndPassthroughField().clear();
 			mappingTableViewer.refresh();
@@ -1780,26 +1798,6 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
 		}
 		return filterProperties.isEmpty();
 	}
-	
-	/**
-	 * Convert schema to name value property of map fields. 
-	 * @return list
-	 */
-	private List<NameValueProperty> getComponentSchemaAsProperty(){
-		List<NameValueProperty> outputFileds = new ArrayList<>();
-		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-		if(schema!=null){
-			for (GridRow gridRow : schema.getGridRow()) {
-				NameValueProperty nameValueProperty = new NameValueProperty();
-				nameValueProperty.setPropertyName("");
-				nameValueProperty.setPropertyValue(gridRow.getFieldName());
-				nameValueProperty.getFilterProperty().setPropertyname(gridRow.getFieldName());
-				outputFileds.add(nameValueProperty);
-			}
-		}
-		return outputFileds;
-	}
-	
 	/**
 	 * convert schema to filter property 
 	 * @return  list
@@ -1824,7 +1822,6 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
 
 			}
 		}
-
 		List<FilterProperties> inputFieldList = new ArrayList<>();
 		List<FilterProperties> outputList = new ArrayList<>();
 		List<NameValueProperty> nameValueProperty = new ArrayList<>();
@@ -1859,12 +1856,11 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
         }
         else
         {
-        	
-        	mappingSheetRow = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
+            mappingSheetRow = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
     				nameValueProperty, false, "", false, "",false,null);
         }
 		
-		transformMapping.getMappingSheetRows().add(mappingSheetRow);
+        transformMapping.getMappingSheetRows().add(mappingSheetRow);
 
 		addExpandItem(scrolledComposite, mappingSheetRow, operationID);
 	}

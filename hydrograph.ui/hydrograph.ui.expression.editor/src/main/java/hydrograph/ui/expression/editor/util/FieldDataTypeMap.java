@@ -33,8 +33,14 @@ public class FieldDataTypeMap {
 	public Map<String, Class<?>> createFieldDataTypeMap(List<String> selectedInputFields,
 			ComponentsOutputSchema outputSchema) {
 		Map<String, Class<?>> fieldMap = new LinkedHashMap<String, Class<?>>();
-		for(String fieldName:selectedInputFields){
-			fieldMap.put(fieldName, getFieldDataType(fieldName, outputSchema));
+		if(selectedInputFields!=null){
+			for(String fieldName:selectedInputFields){
+				fieldMap.put(fieldName, getFieldDataType(fieldName, outputSchema));
+			}
+		}else if(outputSchema!=null){
+			for(GridRow gridRow:outputSchema.getBasicGridRowsOutputFields()){
+				fieldMap.put(gridRow.getFieldName(), getFieldDataType(gridRow.getFieldName(), outputSchema));
+			}
 		}
 		return fieldMap;
 	}

@@ -148,7 +148,6 @@ public class Messages extends NLS {
 	public static String ERROR;
 	public static String PARAMETER_ERROR;
 	public static String ATTACH_LISTENER_ERROR;
-	public static String OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE;
 	public static String FIELD_MAPPING;
 	public static String OPERATION_CLASS;
 	public static String OUTPUT_FIELD;

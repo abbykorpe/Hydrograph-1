@@ -61,11 +61,22 @@ public class TransformMappingValidationRule implements IValidator{
 		{
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
+				if(!mappingSheetRow.isExpression())
+				{	
 				if(StringUtils.isBlank(mappingSheetRow.getOperationClassPath()))
 				{
 					 errorMessage = propertyName + "Operation class is blank in"+" "+mappingSheetRow.getOperationID();		
 					 return false;
 				}
+				}
+				else if(mappingSheetRow.isExpression())
+				{
+					if(StringUtils.isBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
+					{
+						 errorMessage = propertyName + "Expression is blank in"+" "+mappingSheetRow.getOperationID();		
+						 return false;
+					}
+				}	
 				if(mappingSheetRow.getOutputList().isEmpty())
 				{
 					 errorMessage = propertyName + "Operation field(s) are empty";		

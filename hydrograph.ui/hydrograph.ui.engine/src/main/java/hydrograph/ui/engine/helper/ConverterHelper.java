@@ -87,18 +87,18 @@ public class ConverterHelper {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
 		List<Object> operationList = new ArrayList<>();
 		if (transformPropertyGrid != null) {
-			List<MappingSheetRow> transformOperations = transformPropertyGrid.getMappingSheetRows();
-			if (transformOperations != null) {
+			List<MappingSheetRow> mappingsheetRowList = transformPropertyGrid.getMappingSheetRows();
+			if (mappingsheetRowList != null) {
 				int OperationID = 0;
-				for (MappingSheetRow transformOperation : transformOperations) {
-					if(!transformOperation.isWholeOperationParameter()){
-						Object operation = getOperationOrExpression(transformOperation,OperationID,schemaGridRows);
+				for (MappingSheetRow mappingsheetRow : mappingsheetRowList) {
+					if(!mappingsheetRow.isWholeOperationParameter()){
+						Object operation = getOperationOrExpression(mappingsheetRow,OperationID,schemaGridRows);
 						if( operation != null){
 							operationList.add(operation);
 							OperationID++;
 						}
 					}else{
-						addWholeOperationParam(transformOperation);
+						addWholeOperationParam(mappingsheetRow);
 					}
 				}
 			}			
@@ -125,7 +125,7 @@ public class ConverterHelper {
             {
             TypeTransformExpression expression=new TypeTransformExpression();
             expression.setId(mappingSheetRow.getOperationID());
-            expression.setInputFields(getOperationInputFields(mappingSheetRow));
+            expression.setInputFields(getExpressionInputFields(mappingSheetRow));
             expression.setProperties(getOperationProperties(mappingSheetRow.getNameValueProperty()));
             expression.setOutputFields(getExpressionOutputField(mappingSheetRow,schemaGridRows));
             if(StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
@@ -168,7 +168,40 @@ public class ConverterHelper {
 		}	
 		return properties;
 	}
+    
+	private TypeOperationInputFields getExpressionInputFields(MappingSheetRow mappingSheetRow) {
+		TypeOperationInputFields inputFields = null;
+		if (mappingSheetRow != null && !mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression().isEmpty()) {
+			inputFields = new TypeOperationInputFields();
 
+			if (!hasAllStringsInListAsParams(mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression())) {	
+				for (String field : mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression()){
+					if(!ParameterUtil.isParameter(field)){
+						TypeInputField typeInputField = new TypeInputField();
+						typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+						typeInputField.setName(field.trim());
+						inputFields.getField().add(typeInputField);
+					}else{
+						addParamTag(ID, field,
+								ComponentXpathConstants.TRANSFORM_INPUT_FIELDS.value().replace("$operationId", mappingSheetRow.getOperationID()), false);
+					}
+				}
+			}else
+			{
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypeInputField typeInputField = new TypeInputField();
+				typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+				typeInputField.setName("");
+				inputFields.getField().add(typeInputField);
+				for (String field : mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression()){
+					parameterFieldNames.append(field.trim() + " ");
+				}
+				addParamTag(ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.TRANSFORM_INPUT_FIELDS.value().replace("$operationId", mappingSheetRow.getOperationID()), true);
+			}
+		}
+		return inputFields;
+	}
 	private TypeOperationInputFields getOperationInputFields(MappingSheetRow mappingSheetRow) {
 		TypeOperationInputFields inputFields = null;
 		if (mappingSheetRow != null && !mappingSheetRow.getInputFields().isEmpty()) {

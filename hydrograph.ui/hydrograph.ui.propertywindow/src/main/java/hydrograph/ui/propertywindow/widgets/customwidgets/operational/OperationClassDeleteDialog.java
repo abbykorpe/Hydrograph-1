@@ -140,8 +140,23 @@ public class OperationClassDeleteDialog extends Dialog {
 				if (expandItem.getText().equals(object.toString())) {
 					expandItem.setExpanded(false);
 					for (int i = 0; i < mappingSheetRowList.size(); i++) {
-						if (mappingSheetRowList.get(i).getOperationID().equals(object.toString())) {
-							outerOutputList.removeAll(mappingSheetRowList.get(i).getOutputList());
+						if (mappingSheetRowList.get(i).getOperationID().equals(object.toString())) 
+						{
+						for(FilterProperties filterProperties:mappingSheetRowList.get(i).getOutputList())
+							{	
+							int index=-1;	
+							for(int j=0;j<outerOutputList.size();j++)
+							{
+								if(outerOutputList.get(j)==filterProperties)
+								{
+									index=j;
+									break;
+								}	
+							}
+							if(index!=-1)
+							outerOutputList.remove(index);
+							}
+							
 							mappingSheetRowList.remove(i);
 							break;
 						}

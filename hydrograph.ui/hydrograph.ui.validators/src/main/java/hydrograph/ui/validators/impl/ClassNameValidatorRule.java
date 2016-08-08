@@ -53,7 +53,19 @@ public class ClassNameValidatorRule implements IValidator {
 			errorMessage = "Invalid parameter value";
 			return false;
 		}
+		
 		OperationClassProperty operationClassProperty = (OperationClassProperty) object; 
+		if(operationClassProperty.isExpression())
+		{
+			if(StringUtils.isBlank(operationClassProperty.getExpressionEditorData().getExpression()))
+			{
+				errorMessage = "Expression should not be blank";
+				return false;	
+			}	
+			return true;
+		}
+		else
+		{	
 		String operationClassPath = operationClassProperty.getOperationClassPath();
 		if(StringUtils.isBlank(operationClassPath)){
 			errorMessage = "Field should not be empty";
@@ -77,6 +89,7 @@ public class ClassNameValidatorRule implements IValidator {
 			else{
 				return true;
 			}
+		}
 		}
 	}
 }

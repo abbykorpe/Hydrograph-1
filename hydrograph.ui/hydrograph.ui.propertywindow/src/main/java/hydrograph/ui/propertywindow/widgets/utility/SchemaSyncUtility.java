@@ -14,6 +14,7 @@
 package hydrograph.ui.propertywindow.widgets.utility;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
@@ -29,9 +30,10 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -107,7 +109,7 @@ public class SchemaSyncUtility {
 	 */
 	public List<FilterProperties> unionFilter(List<FilterProperties> list1, List<FilterProperties> list2) {
 	    for (FilterProperties filterProperties : list1) {
-	    	if(!list2.contains(filterProperties))
+	    	if(!list2.contains(filterProperties) && StringUtils.isNotBlank(filterProperties.getPropertyname()))
 	    		list2.add(filterProperties);
 	    }
 	    return list2;
@@ -253,6 +255,7 @@ public class SchemaSyncUtility {
 			List<FilterProperties> outputFieldList) {
 		List<String> outputFields = new ArrayList<>();
 		for (FilterProperties fileFilterProperty : outputFieldList) {
+			if(!(ParameterUtil.isParameter(fileFilterProperty.getPropertyname())))
 			outputFields.add(fileFilterProperty.getPropertyname());
 		}
 		return outputFields;
@@ -410,128 +413,70 @@ public class SchemaSyncUtility {
 		}
 		return lookupMapOutputs;
 	}
-
+    
+  
 	private void pushSchemaToTransformMapping(
 			Component component, List<GridRow> schemaGridRowList) {
-		
 		TransformMapping transformMapping = (TransformMapping) component.getProperties().get(OPERATION);
-		List<NameValueProperty> mapAndPassthroughFieldCopy = new LinkedList<>();
-		mapAndPassthroughFieldCopy.addAll(transformMapping.getMapAndPassthroughField());		
-		List<String> operationFieldList = getOperationFieldList(transformMapping);
-		
-		clearMapAndPassFieldsFromOriginalDataStructure(transformMapping);
-		
-		List<String> schemaFieldList = getSchemaFieldList(schemaGridRowList);
-		if(schemaFieldList.size() == 0){
-			return;
-		}
-		
-		List<String> tempOpertionFieldList = new LinkedList<>();
-		adjustMapAndPassFields(transformMapping, mapAndPassthroughFieldCopy,
-				operationFieldList, schemaFieldList, tempOpertionFieldList);
-		operationFieldList.removeAll(tempOpertionFieldList);
-		deleteOperationField(transformMapping,operationFieldList);
-		arrangeMapAndPassFieldsWithOldSequence(mapAndPassthroughFieldCopy,transformMapping);
-	}
-
-	private void arrangeMapAndPassFieldsWithOldSequence(
-			List<NameValueProperty> mapAndPassthroughFieldCopy,
-			TransformMapping transformMapping) {
-		
-		List<NameValueProperty> tempMapAndPassthroughField = new LinkedList<>();
-		tempMapAndPassthroughField.addAll(transformMapping.getMapAndPassthroughField());
-				
-		transformMapping.getMapAndPassthroughField().clear();
-		
-		for(NameValueProperty nameValueProperty: mapAndPassthroughFieldCopy){
-			if(tempMapAndPassthroughField.contains(nameValueProperty)){
-				transformMapping.getMapAndPassthroughField().add(nameValueProperty);
-			}
-		}
-		List<NameValueProperty> newMapAndPassthroughField = getNewlyAddedFields(mapAndPassthroughFieldCopy,tempMapAndPassthroughField);
-		transformMapping.getMapAndPassthroughField().addAll(newMapAndPassthroughField);
-	}
-
-	private List<NameValueProperty> getNewlyAddedFields(
-			List<NameValueProperty> mapAndPassthroughFieldCopy,
-			List<NameValueProperty> mapAndPassthroughField) {
-		List<NameValueProperty> newMapAndPassthroughField = new LinkedList<>();
-		newMapAndPassthroughField.addAll(mapAndPassthroughField);
-		newMapAndPassthroughField.removeAll(mapAndPassthroughFieldCopy);
-		return newMapAndPassthroughField;
-	}
-
-	private void clearMapAndPassFieldsFromOriginalDataStructure(
-			TransformMapping transformMapping) {
-		transformMapping.getMapAndPassthroughField().clear();
+		List<FilterProperties> filterProperties=convertSchemaToFilterProperty(schemaGridRowList);
+		removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
+		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty(schemaGridRowList);
+		filterCommonMapFields(outputFileds, transformMapping);
+		Map<Integer,FilterProperties> indexValueParameterMap=retainIndexAndValueOfParameterFields
+				(transformMapping.getOutputFieldList());
 		transformMapping.getOutputFieldList().clear();
+		addOperationFieldAndMapPassthroughfieldToOutputField(transformMapping);
+		List<FilterProperties> sortedList=sortOutputFieldToMatchSchemaSequence(filterProperties,transformMapping);
+		transformMapping.getOutputFieldList().clear();
+		transformMapping.getOutputFieldList().addAll(sortedList);
+		addParamtereFieldsToSameIndexAsBeforePull(indexValueParameterMap,transformMapping);
+	
 	}
-
-	private void adjustMapAndPassFields(TransformMapping transformMapping,
-			List<NameValueProperty> mapAndPassthroughFieldCopy,
-			List<String> operationFieldList, List<String> schemaFieldList,
-			List<String> tempOpertionFieldList) {
-		for(String fieldName:schemaFieldList){
-			FilterProperties filterProperties = new FilterProperties();
-			filterProperties.setPropertyname(fieldName);
-			transformMapping.getOutputFieldList().add(filterProperties);
-				
-			if(!operationFieldList.contains(fieldName)){
-				NameValueProperty row = getMappingAndPassThroughTableItem(mapAndPassthroughFieldCopy,fieldName);
-				if(row!=null){
-					transformMapping.getMapAndPassthroughField().add(row);
-				}else{
-					row=new NameValueProperty();					
-					row.setPropertyName("");
-					row.setPropertyValue(fieldName);				
-					transformMapping.getMapAndPassthroughField().add(row);
-				}
-			}else{
-				tempOpertionFieldList.add(fieldName);
-			}
+	
+	public void addOperationFieldAndMapPassthroughfieldToOutputField(TransformMapping transformMapping) {
+		for(MappingSheetRow row:transformMapping.getMappingSheetRows())
+		{
+			transformMapping.getOutputFieldList().addAll(row.getOutputList());
+		}	
+		for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+		{
+			transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
 		}
 	}
 	
-	private void deleteOperationField(TransformMapping transformMapping,
-			List<String> operationFieldListTobeDelete) {
-		for(String fieldName:operationFieldListTobeDelete){
-			for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows()){
-				List<FilterProperties> outputFieldList = mappingSheetRow.getOutputList();
-				Iterator<FilterProperties> iterator = outputFieldList.iterator();
-				while(iterator.hasNext()){
-					FilterProperties filterProperties = iterator.next();
-					if(StringUtils.equals(filterProperties.getPropertyname(), fieldName)){
-						iterator.remove();
-					}
+	public List<FilterProperties> sortOutputFieldToMatchSchemaSequence(
+			List<FilterProperties> filterProperties,
+			TransformMapping transformMapping) {
+		List<FilterProperties> finalSortedList=new ArrayList<>();
+		for(int i=0;i<filterProperties.size();i++)
+		{
+			for(FilterProperties filterProperty:transformMapping.getOutputFieldList())
+			{
+				if(filterProperty.equals(filterProperties.get(i)))
+				{
+					finalSortedList.add(filterProperty);
+					break;
 				}
-			}	
-		}
-	}
-
-	private List<String> getOperationFieldList(TransformMapping transformMapping) {
-		List<String> operationFieldList = new LinkedList<>();
-		
-		for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows()){
-			List<FilterProperties> outputFieldList = mappingSheetRow.getOutputList();
-			for(FilterProperties field: outputFieldList){
-				operationFieldList.add(field.getPropertyname());
-			}
-		}		
-		return operationFieldList;
-	}
-
-	private NameValueProperty getMappingAndPassThroughTableItem(
-			List<NameValueProperty> mapAndPassthroughFieldCopy, String fieldName) {
-
-		for(NameValueProperty nameValueProperty: mapAndPassthroughFieldCopy){
-			if(StringUtils.equals(nameValueProperty.getPropertyValue(), fieldName)){
-				return nameValueProperty;
 			}
 		}
-		
-		return null;
+		return finalSortedList;
 	}
-
+	
+	public void addParamtereFieldsToSameIndexAsBeforePull(
+			Map<Integer, FilterProperties> indexValueParameterMap,TransformMapping transformMapping) {
+       for(Map.Entry<Integer, FilterProperties> entry:indexValueParameterMap.entrySet())
+       {
+    	   if(transformMapping.getOutputFieldList().size()>=entry.getKey())
+    	   {
+    	   transformMapping.getOutputFieldList().add(entry.getKey(),entry.getValue());
+    	   }
+    	   else
+    	   {
+    		   transformMapping.getOutputFieldList().add(transformMapping.getOutputFieldList().size(),entry.getValue());
+    	   }	   
+    		   
+       }  
+	}
 	public List<FilterProperties> convertSchemaToFilterProperty(List<GridRow> schemaGridRowList){
 		List<FilterProperties> outputFileds = new ArrayList<>();
 			for (GridRow gridRow : schemaGridRowList) {
@@ -573,8 +518,22 @@ public class SchemaSyncUtility {
 				NameValueProperty nameValueProperty = new NameValueProperty();
 				nameValueProperty.setPropertyName("");
 				nameValueProperty.setPropertyValue(gridRow.getFieldName());
+				nameValueProperty.getFilterProperty().setPropertyname(gridRow.getFieldName());
 				outputFileds.add(nameValueProperty);
 			}
 		return outputFileds;
+	}
+	
+	public Map<Integer,FilterProperties> retainIndexAndValueOfParameterFields(List<FilterProperties> filterProperties)
+	{
+		Map<Integer,FilterProperties> indexAndValueOfParameter=new HashMap<Integer,FilterProperties>();
+		for(FilterProperties filterProperty:filterProperties)
+		{
+			if(ParameterUtil.isParameter(filterProperty.getPropertyname()))
+				{
+				indexAndValueOfParameter.put(filterProperties.indexOf(filterProperty), filterProperty);
+				}		
+		}
+		return indexAndValueOfParameter;
 	}
 }

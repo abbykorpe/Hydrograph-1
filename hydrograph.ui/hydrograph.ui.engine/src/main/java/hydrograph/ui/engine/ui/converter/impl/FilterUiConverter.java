@@ -14,6 +14,7 @@
 package hydrograph.ui.engine.ui.converter.impl;
 
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeInputField;
+import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 /**
@@ -53,7 +55,7 @@ public class FilterUiConverter extends TransformUiConverter{
 
 		filter = (Filter) typeBaseComponent;
 		
-		propertyMap.put(PropertyNameConstants.OPERATION_CLASS.value(),getOperationClass());
+		propertyMap.put(PropertyNameConstants.OPERATION_CLASS.value(),getOperationClassOrExpression());
 		propertyMap.put(PropertyNameConstants.OPERATION_FILEDS.value(), getOperationFileds());
 		
 		
@@ -65,29 +67,57 @@ public class FilterUiConverter extends TransformUiConverter{
 		
 	}
 
-	private OperationClassProperty getOperationClass() {
+	private OperationClassProperty getOperationClassOrExpression() {
 		OperationClassProperty operationClassProperty=null;
 		String clazz=null;
+		
 		if(filter.getOperationOrExpression()!=null && filter.getOperationOrExpression().size()!=0){
 //			clazz=filter.getOperationOrExpression().get(0).getClazz();
-			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.isParameter(clazz));
+		    if(filter.getOperationOrExpression().get(0) instanceof TypeTransformOperation)
+		    {	
+			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.isParameter(clazz),false,null);
+		    }
+		    else if(filter.getOperationOrExpression().get(0) instanceof TypeTransformExpression)
+		    {
+		     TypeTransformExpression typeTransformExpression=(TypeTransformExpression)filter.getOperationOrExpression().get(0);
+		     ExpressionEditorData expressionEditorData=new ExpressionEditorData(typeTransformExpression.getExpr());
+		     operationClassProperty=new OperationClassProperty(null,null, false,true,expressionEditorData);
+		    }
 		}
 		return operationClassProperty;
 	}
 
 
 	private List<String> getOperationFileds() {
-		List<String> componentOperationFileds=null;
+		List<String> componentOperationFileds=new ArrayList<>();;
 		
-			for(Object object:filter.getOperationOrExpression()){
-			if(object instanceof TypeTransformOperation){
+			for(Object object:filter.getOperationOrExpression())
+			{
+			 if(object instanceof TypeTransformOperation)
+			 {
 				TypeTransformOperation transformOperation=(TypeTransformOperation) object;
-				if(transformOperation.getInputFields()!=null){
-					componentOperationFileds=new ArrayList<>();
-						for(TypeInputField inputFileds:transformOperation.getInputFields().getField()){
+				if(transformOperation.getInputFields()!=null)
+				{
+					
+						for(TypeInputField inputFileds:transformOperation.getInputFields().getField())
+						{
 							componentOperationFileds.add(inputFileds.getName());
-				}
-			}}}
+				        }
+			     }
+			  }
+			 else if(object instanceof TypeTransformExpression)
+			 {
+				 TypeTransformExpression transformExpression=(TypeTransformExpression) object;
+				 if(transformExpression.getInputFields()!=null)
+				 {
+					for(TypeInputField inputFileds:transformExpression.getInputFields().getField())
+					{
+						componentOperationFileds.add(inputFileds.getName());
+			        }
+					 
+				 }	 
+			 }	 
+			}
 			return componentOperationFileds;
 	}
 	
