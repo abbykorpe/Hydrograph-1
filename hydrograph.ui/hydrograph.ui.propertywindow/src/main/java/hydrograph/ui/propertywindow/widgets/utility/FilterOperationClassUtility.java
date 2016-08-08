@@ -90,7 +90,7 @@ public class FilterOperationClassUtility  {
 	private Button btnCheckButton;
 	private String componentName;
 	private String fileNameTextBoxValue;
-
+	private final String OPERATION_CLASS = "Operation Class";
 	private FilterOperationClassUtility(){
 		
 	}
@@ -357,7 +357,7 @@ public class FilterOperationClassUtility  {
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(5);
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.OPERATION_CALSS_LABEL);
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(OPERATION_CLASS);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		eltSuDefaultSubgroupComposite.attachWidget(combo);
@@ -368,7 +368,7 @@ public class FilterOperationClassUtility  {
 		fileName.setSize(10, 100);
 
 		GridData layoutData = (GridData)fileName.getLayoutData();
-		layoutData.horizontalIndent=5;
+		layoutData.horizontalIndent=6;
 		
 		AbstractELTWidget browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(20);
 		eltSuDefaultSubgroupComposite.attachWidget(browseButton);
@@ -383,7 +383,7 @@ public class FilterOperationClassUtility  {
 		eltSuDefaultSubgroupComposite2.numberOfBasicWidgets(3);
 
 
-		ELTDefaultButton emptyButton = new ELTDefaultButton("").buttonWidth(75);
+		ELTDefaultButton emptyButton = new ELTDefaultButton("").buttonWidth(89);
 		eltSuDefaultSubgroupComposite2.attachWidget(emptyButton);
 		emptyButton.visible(false);
 

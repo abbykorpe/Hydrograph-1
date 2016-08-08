@@ -170,8 +170,11 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		FilterOperationClassUtility.INSTANCE.setComponentName(componentName);
 		isParameterCheckBox = (Button) isParameterCheckbox.getSWTWidgetControl();
 		alphanumericDecorator = WidgetUtility.addDecorator(fileName, Messages.CHARACTERSET);
+		alphanumericDecorator.setMarginWidth(2);
 		emptyDecorator = WidgetUtility.addDecorator(fileName, Messages.OperationClassBlank);
+		emptyDecorator.setMarginWidth(2);
 		parameterDecorator = WidgetUtility.addDecorator(fileName, Messages.PARAMETER_ERROR);
+		parameterDecorator.setMarginWidth(2);
 
 		buttonComposite = new Composite(container, SWT.NONE);
 		GridData gd_composite_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -184,15 +187,17 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		gd_nameValueComposite.widthHint = 526;
 		gd_nameValueComposite.heightHint = 220;
 		nameValueComposite.setLayoutData(gd_nameValueComposite);
-
-		nameValueComposite.setLayout(new GridLayout(1, false));
+		GridLayout name_gd = new GridLayout(1, false);
+		name_gd.marginWidth=0;
+		name_gd.marginRight=0;
+		nameValueComposite.setLayout(name_gd);
 
 		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.MULTI);
 		Table table_2 = nameValueTableViewer.getTable();
 		GridData gd_table_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_table_2.heightHint = 180;
-		gd_table_2.widthHint = 499;
+		gd_table_2.widthHint = 504;
 		table_2.setLayoutData(gd_table_2);
 		transformDialog.setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
@@ -200,10 +205,10 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
 		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(this,nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(mappingSheetRow.getNameValueProperty());
-		table_2.getColumn(0).setWidth(252);
-		table_2.getColumn(1).setWidth(259);
+		table_2.getColumn(0).setWidth(259);
+		table_2.getColumn(1).setWidth(262);
 
-		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "");
+		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 380, 17, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -226,7 +231,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		});
 
-		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "");
+		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 410, 17, 20, 15 }, "");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -253,7 +258,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		});
 
-		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "");
+		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 440, 17, 20, 15 }, "");
 		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -273,7 +278,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			}
 
 		});
-		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "");
+		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 470, 17, 20, 15 }, "");
 		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);	
