@@ -83,7 +83,6 @@
 		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys">
-			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"

@@ -31,6 +31,7 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -64,7 +65,11 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 		if(StringUtils.isNotBlank((String)properties.get(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()))){
 			hiveTextfile.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
-		hiveTextfile.setPartitionKeys(getPartitionKeys());
+		
+		if(null!=((List<String>)properties.get(PropertyNameConstants.PARTITION_KEYS.value()))){
+			hiveTextfile.setPartitionKeys(getPartitionKeys());
+		}
+		
 		HiveTextFile.Delimiter delimiter = new HiveTextFile.Delimiter();
 		delimiter.setValue((String) properties.get(PropertyNameConstants.DELIMITER.value()));
 		HiveTextFile.Quote quote = new HiveTextFile.Quote();

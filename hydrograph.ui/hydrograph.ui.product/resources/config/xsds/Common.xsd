@@ -282,13 +282,6 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
-		<enumeration value="HIVE_KEY_FIELDS_VALIDATOR">
-			 <annotation>
-		          <appinfo> 
-		            <jaxb:typesafeEnumMember name="HiveKeyFieldsValidationRule" />
-		          </appinfo>
-        	</annotation>
-		</enumeration>
 	</restriction>
 	</simpleType>
 </schema>

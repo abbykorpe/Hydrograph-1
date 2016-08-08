@@ -168,6 +168,7 @@ public class InputHiveParquetConverter extends InputConverter {
 	private HivePartitionFieldsType getPartitionKeys() {
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
 			InputHivePartitionKeyValues property = (InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			if(!property.getKey().isEmpty()){
 			List<String> fieldValueSet = new ArrayList<String>();
 			fieldValueSet=(List<String>) property.getKey();
 			
@@ -185,6 +186,7 @@ public class InputHiveParquetConverter extends InputConverter {
 				}
 			}
 			return hivePartitionFieldsType;
+		 }
 		}
 		return null;
 	}

@@ -15,7 +15,9 @@
 package hydrograph.ui.help.aboutDialog;
 
 import hydrograph.ui.help.Activator;
+import hydrograph.ui.help.Messages;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -30,11 +32,16 @@ import org.eclipse.jface.resource.JFaceColors;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -42,16 +49,19 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchCommandConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.internal.WorkbenchMessages;
+import org.eclipse.ui.internal.about.AboutBundleGroupData;
 import org.eclipse.ui.internal.about.AboutFeaturesButtonManager;
 import org.eclipse.ui.internal.about.AboutItem;
 import org.eclipse.ui.internal.about.AboutTextManager;
@@ -60,7 +70,6 @@ import org.eclipse.ui.internal.util.BundleUtility;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
-
 
 /**
  *Creates Custom AboutDialog of Application
@@ -73,6 +82,7 @@ public class CustomAboutDialog extends TrayDialog {
 	private final static int TEXT_MARGIN = 5;
 
 	private final static int DETAILS_ID = IDialogConstants.CLIENT_ID + 1;
+	private final static int HELP_ID = IDialogConstants.HELP_ID;
 
 	private String productName;
 
@@ -88,6 +98,8 @@ public class CustomAboutDialog extends TrayDialog {
 	private AboutTextManager aboutTextManager;
 
 	private AboutItem item;
+	private GridData data_1;
+	private AboutBundleGroupData[] bundleGroupInfos;
 
 	/**
 	 * Create an instance of the AboutDialog for the given window.
@@ -104,6 +116,8 @@ public class CustomAboutDialog extends TrayDialog {
 		if (productName == null) {
 			productName = WorkbenchMessages.AboutDialog_defaultProductName;
 		}
+		
+       // setDialogHelpAvailable(true);
 	}
 
 	/*
@@ -143,7 +157,7 @@ public class CustomAboutDialog extends TrayDialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(NLS.bind(WorkbenchMessages.AboutDialog_shellTitle,productName ));
-
+		
 	}
 
 	/**
@@ -163,11 +177,13 @@ public class CustomAboutDialog extends TrayDialog {
 			Bundle bundle = Platform.getBundle(Constants.ABOUT_DIALOG_IMAGE_BUNDLE_NAME);
 			URL fullPathString = BundleUtility.find(bundle,Constants.ABOUT_DIALOG_IMAGE_PATH);
 			aboutImage=ImageDescriptor.createFromURL(fullPathString).createImage();
+			
+			parent.getShell().setMinimumSize(450, 267);
 
 			// if the about image is small enough, then show the text
 			if (aboutImage == null
 					|| aboutImage.getBounds().width <= MAX_IMAGE_WIDTH_FOR_TEXT) {
-				String aboutText=Constants.ABOUT_TEXT;
+				String aboutText = Messages.ABOUT_TEXT;
 
 
 				if (aboutText != null) {
@@ -175,7 +191,8 @@ public class CustomAboutDialog extends TrayDialog {
 					if(StringUtils.isBlank(buildNumber)){
 						buildNumber = Platform.getBundle(Activator.PLUGIN_ID).getVersion().toString();
 					}
-					item = AboutTextManager.scan(aboutText + "\n" + "Build Number: " + buildNumber);
+					item = AboutTextManager.scan(aboutText + "\n" + "Build Number : " + buildNumber + "\n \n"+"License Information : " + Messages.ABOUT_LICENSE_INFO 
+							+ "\n \n " +Messages.ABOUT_COPYRIGHT_INFO + "\n \n");
 				}
 			}
 
@@ -241,10 +258,11 @@ public class CustomAboutDialog extends TrayDialog {
 			imageLabel.setBackground(background);
 			imageLabel.setForeground(foreground);
 
-			GridData data = new GridData();
+			GridData data = new GridData(SWT.FILL,SWT.FILL,true,true,0,0);
 			data.horizontalAlignment = GridData.FILL;
-			data.verticalAlignment = GridData.BEGINNING;
-			data.grabExcessHorizontalSpace = false;
+			data.verticalAlignment = GridData.FILL;
+			data.grabExcessHorizontalSpace = true;
+			data.grabExcessVerticalSpace = true;
 			imageLabel.setLayoutData(data);
 			imageLabel.setImage(aboutImage);
 			topContainerHeightHint = Math.max(topContainerHeightHint, aboutImage.getBounds().height);
@@ -300,14 +318,13 @@ public class CustomAboutDialog extends TrayDialog {
 		// override any layout inherited from createDialogArea 
 		layout = new GridLayout();
 		bottom.setLayout(layout);
-		data = new GridData();
-		data.horizontalAlignment = SWT.FILL;
-		data.verticalAlignment = SWT.FILL;
-		data.grabExcessHorizontalSpace = true;
+		data_1 = new GridData();
+		data_1.heightHint = 0;
+		data_1.horizontalAlignment = SWT.FILL;
+		data_1.verticalAlignment = SWT.FILL;
+		data_1.grabExcessHorizontalSpace = true;
 
-		bottom.setLayoutData(data);
-
-		createFeatureImageButtonRow(bottom);
+		bottom.setLayoutData(data_1);
 
 		// spacer
 		bar = new Label(bottom, SWT.NONE);
@@ -331,7 +348,7 @@ public class CustomAboutDialog extends TrayDialog {
 		text = new StyledText(parent, style);
 		configureText(parent);
 		if (hasFocus) {
-			text.setFocus();
+			//text.setFocus();
 		}
 		text.setSelection(selection);
 	}
@@ -349,6 +366,24 @@ public class CustomAboutDialog extends TrayDialog {
 		text.setBackground(background);
 		text.setForeground(foreground);
 		text.setMargins(TEXT_MARGIN, TEXT_MARGIN, TEXT_MARGIN, 0);
+		
+		text.addMouseListener(new MouseAdapter() {
+				
+				@Override
+				public void mouseDown(MouseEvent e) 
+				{
+					try {
+						int offset = text.getOffsetAtLocation(new Point (e.x, e.y));
+						StyleRange style1 = text.getStyleRangeAtOffset(offset);
+						if (style1 != null && style1.underline) {
+							PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(Messages.HYDROGRAPH_URL));
+						}
+					} catch (IllegalArgumentException | PartInitException | MalformedURLException a) {
+						a.printStackTrace();
+					}
+					
+				}
+			});
 
 		aboutTextManager = new AboutTextManager(text);
 		aboutTextManager.setItem(item);
@@ -357,6 +392,30 @@ public class CustomAboutDialog extends TrayDialog {
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		text.setLayoutData(gd);
+		
+		int[] rangesArray=new int[text.getRanges().length+2];
+		rangesArray[0]=(item.getText().indexOf(Messages.ABOUT_HEADER_TEXT));
+		rangesArray[1]=Messages.ABOUT_HEADER_TEXT.length();
+		
+		for(int index=2;index<rangesArray.length;index++){
+			rangesArray[index]=text.getRanges()[index-2];
+		}
+		
+		StyleRange[] styleRanges=new StyleRange[text.getStyleRanges().length+1];
+		
+		StyleRange style = new StyleRange();
+		style.start=rangesArray[rangesArray.length-2];
+		style.length=rangesArray[rangesArray.length-1];
+		style.underline = true;
+		style.foreground=new Color (null,0, 0, 128);		
+		styleRanges[0]=style;
+		
+		for(int index=1;index<styleRanges.length;index++){
+			styleRanges[index]=text.getStyleRanges()[index-1];
+		}
+		
+		
+		text.setStyleRanges(rangesArray, styleRanges);
 	}
 
 	/**
@@ -384,24 +443,6 @@ public class CustomAboutDialog extends TrayDialog {
 
 	}
 
-	private void createFeatureImageButtonRow(Composite parent) {
-		Composite featureContainer = new Composite(parent, SWT.NONE);
-		RowLayout rowLayout = new RowLayout();
-		rowLayout.wrap = true;
-		featureContainer.setLayout(rowLayout);
-		GridData data = new GridData();
-		data.horizontalAlignment = GridData.FILL;
-		featureContainer.setLayoutData(data);
-		//add image on about dialog
-		Bundle bundle = Platform.getBundle(Constants.ABOUT_DIALOG_IMAGE_BUNDLE_NAME);
-		URL fullPathString = BundleUtility.find(bundle,Constants.ABOUT_DIALOG_FEATURE_IMAGE_PATH);
-		Button button = new Button(featureContainer, SWT.FLAT | SWT.PUSH);
-		Image image=ImageDescriptor.createFromURL(fullPathString).createImage();
-		button.setImage(image);
-		images.add(image);
-	}
-
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -411,13 +452,44 @@ public class CustomAboutDialog extends TrayDialog {
 		return true;
 	}
 	
-	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		// create OK and Cancel buttons by default
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Button button =  createButton(parent, 0, "", false); 
+		Bundle bundle = Platform.getBundle(Constants.ABOUT_DIALOG_IMAGE_BUNDLE_NAME);
+		URL fullPathString = BundleUtility.find(bundle,Constants.ABOUT_DIALOG_FEATURE_IMAGE_PATH);
+		button.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, false));
+		button.setToolTipText("Help");
+		Image image = ImageDescriptor.createFromURL(fullPathString).createImage();
+		button.setImage(image);
+		images.add(image);		
+		 
+		button.addSelectionListener(new SelectionAdapter() {
+			   @Override
+			    public void widgetSelected(SelectionEvent e) {
+			    	IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+								.getActivePart();
+			    	IHandlerService handlerService = (IHandlerService)workbenchPart.getSite()
+			                .getService(IHandlerService.class);
+			        try {
+			            handlerService.executeCommand("org.eclipse.ui.help.displayHelp", null);
+			        } catch (Exception ex) {
+			            throw new RuntimeException("Help File Not Found!");
+			        }
+			    }
+			}); 
+		
+		Label l = new Label(parent, SWT.NONE);
+	    l.setLayoutData(new GridData());
+	    GridLayout layout = (GridLayout) parent.getLayout();
+	    layout.numColumns++;
+	    layout.makeColumnsEqualWidth = false;
+
+	    Button ok = createButton(parent, IDialogConstants.OK_ID,
+	                IDialogConstants.OK_LABEL, true);
+	        ok.setFocus();	 
+	       
+	    }  
 	}
-}
 
 
 

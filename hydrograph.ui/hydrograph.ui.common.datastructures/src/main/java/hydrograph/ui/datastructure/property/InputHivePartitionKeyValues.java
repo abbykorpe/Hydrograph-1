@@ -47,15 +47,24 @@ public class InputHivePartitionKeyValues implements IDataStructure {
 		
 	InputHivePartitionKeyValues inputHivePartitionKeyValues = new InputHivePartitionKeyValues();
 	
-	List<String> forCloneKeys = new ArrayList<>(this.key);
+	List<String> forCloneKeys =null;
 	
-	List<InputHivePartitionColumn> forCloneKeyValues = new ArrayList<>();
-		
+	if(null!=key){
+     forCloneKeys=new ArrayList<>(this.key);
+	}
+	
+	List<InputHivePartitionColumn> forCloneKeyValues = null;
+	
+	if(null!=keyValues) {
+	 
+	 forCloneKeyValues= new ArrayList<>();
 	 for (InputHivePartitionColumn inputHivePartitionColumn : this.keyValues) {
 	
 		 forCloneKeyValues.add((InputHivePartitionColumn) inputHivePartitionColumn.clone());
 	
 	 }
+	
+	}
 	
 	inputHivePartitionKeyValues.setKey(forCloneKeys);
 	inputHivePartitionKeyValues.setKeyValues(forCloneKeyValues);
