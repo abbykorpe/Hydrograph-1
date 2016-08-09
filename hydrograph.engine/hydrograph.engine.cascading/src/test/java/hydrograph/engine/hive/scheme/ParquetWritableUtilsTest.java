@@ -55,7 +55,7 @@ public class ParquetWritableUtilsTest {
 			Tuple tuple = new Tuple();
 			tuple.add(new Integer(1));
 			tuple.add(new String("hive"));
-			tuple.add(new BigDecimal(1.2));
+			tuple.add(BigDecimal.valueOf(1.2));
 			Tuple tuple2 = new Tuple(new String("parquet"), new String(
 					"cascading"));
 			tuple.add(tuple2);

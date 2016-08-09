@@ -15,15 +15,6 @@
  */
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
-import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
-import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
-import hydrograph.engine.utilities.HiveConfigurationMapping;
-
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
@@ -33,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.operation.regex.RegexFilter;
-import cascading.scheme.Scheme;
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
@@ -41,6 +31,14 @@ import cascading.tap.hive.HiveTableDescriptor;
 import cascading.tap.hive.HiveTableDescriptor.Factory;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
+import hydrograph.engine.assembly.entity.base.HiveEntityBase;
+import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
+import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
+import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
+import hydrograph.engine.utilities.HiveConfigurationMapping;
 
 public class InputFileHiveTextAssembly extends InputFileHiveBase {
 
@@ -52,8 +50,6 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	private static final long serialVersionUID = -2946197683137950707L;
 
 	protected InputFileHiveTextEntity inputHiveFileEntity;
-	@SuppressWarnings("rawtypes")
-	protected Scheme scheme;
 	private HiveTextTableDescriptor tableDesc;
 
 	private static Logger LOG = LoggerFactory

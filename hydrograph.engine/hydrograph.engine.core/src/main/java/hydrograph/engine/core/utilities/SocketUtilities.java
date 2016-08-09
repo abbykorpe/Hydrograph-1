@@ -42,8 +42,7 @@ public class SocketUtilities {
 
 	public static TypeBaseComponent updateComponentInSocket(
 			TypeBaseComponent oldComponent, String fromCompId, String fromSocketId, String newfromCompId, String newfromSocketId) {
-		// No need to check InputEntityBase
-		List<? extends TypeBaseInSocket> inSocketList = new ArrayList<TypeBaseInSocket>();
+
 		if (oldComponent instanceof TypeOutputComponent) {
 			for (int i = 0; i < ((TypeOutputComponent) oldComponent).getInSocket()
 					.size(); i++) {
@@ -137,14 +136,5 @@ public class SocketUtilities {
 				return typeBaseOutSocket;
 		}
 		return null;
-	}
-
-	public static void getOutSocketFields(TypeBaseOutSocket typeBaseOutSocket) {
-
-		if (typeBaseOutSocket instanceof TypeOperationsOutSocket) {
-			TypeOperationsOutSocket outSocketList = (TypeOperationsOutSocket) typeBaseOutSocket;
-			List<Object> x = outSocketList
-					.getPassThroughFieldOrOperationFieldOrMapField();
-		}
 	}
 }
