@@ -126,7 +126,7 @@ public class ELTJoinConfigGrid extends Dialog {
 
 		scrolledComposite.setContent(composite_1);
 		
-		String count=(String)component.getProperties().get("inPortCount");
+		String count=(String)component.getProperties().get(Constants.INPUT_PORT_COUNT_PROPERTY);
 		inputPortValue=Integer.valueOf(count);
 		
 		if (tempraryConfigPropertyList != null && tempraryConfigPropertyList.isEmpty()) {
