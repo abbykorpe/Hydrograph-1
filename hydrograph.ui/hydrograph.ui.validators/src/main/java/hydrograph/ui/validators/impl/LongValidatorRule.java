@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 
 public class LongValidatorRule implements IValidator{
 
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(IntegerValidatorRule.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LongValidatorRule.class);
 	private String errorMessage;
 	
 	@Override
@@ -49,7 +49,7 @@ public class LongValidatorRule implements IValidator{
 		}
 		catch(NumberFormatException exception){
 			logger.trace("Failed to parse value from {}, {}", propertyName, exception);
-			errorMessage = "Invalid integer value";
+			errorMessage = "Invalid long value";
 			return false;
 		}
 		return true;
