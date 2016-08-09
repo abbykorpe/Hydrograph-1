@@ -63,6 +63,9 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 47.#521 [Nikhil Deokar] Updated File menu icons to be in sync with coolbar
 48.#522 [Nikhil Deokar] Updated Edit menu icons to be in sync with coolbar 
 49.#1010 [Sonia Raheja] Filter window: Tooltip indicating the allowed data format is required
+50.#680 [Rushikesh Pawale] Resized import and export XML window size.
+51.#537 [Rushikesh Pawale] Added validation to restrict input count upto 10 digits and changed datatype from integer to long.
+52.#660 [Rushikesh Pawale] Input Ports are now Increased/Decreased in Join Configuration and Join Mapping Window on Apply button.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
