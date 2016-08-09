@@ -218,5 +218,20 @@ public class LingualQueryCreatorTest {
 		String lingualExpression = customVisitor.visit(parser.eval());
 		Assert.assertEquals("\"f1\" = \"f2\"  AND  \"f1\" <> \"f2\"  and  \"f3\" > \"f4\"", lingualExpression);
 	}
+	
+	@Test
+	public void itShouldGenerateLingualQueryForBetweenClauseAndTimestampDataType() {
+
+		remoteFilterJson.setCondition("f2 between '1999-12-31 18:30:00' AND '2000-01-11 18:30:00'");
+
+		ANTLRInputStream stream = new ANTLRInputStream(remoteFilterJson.getCondition());
+		QueryParserLexer lexer = new QueryParserLexer(stream);
+		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+		QueryParserParser parser = new QueryParserParser(tokenStream);
+		parser.removeErrorListeners();
+		LingualQueryCreator customVisitor = new LingualQueryCreator(remoteFilterJson.getSchema());
+		String lingualExpression = customVisitor.visit(parser.eval());
+		Assert.assertEquals("\"f2\" between timestamp '1999-12-31 13:00:00' AND  timestamp '2000-01-11 13:00:00'", lingualExpression);
+	}
 
 }
