@@ -100,15 +100,11 @@ public class GridRowLoader {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
 				
 				if(!schemaFile.getName().contains("."))	{
-					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
-					messageBox.setText("Error");
 					logger.error(Messages.IMPORT_XML_IMPROPER_EXTENSION);
 					throw new Exception(Messages.IMPORT_XML_IMPROPER_EXTENSION);
 					}
 				
 				if(!(schemaFile.getPath().endsWith(".schema")) && !(schemaFile.getPath().endsWith(".xml"))){
-					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
-					messageBox.setText("Error");
 					logger.error(Messages.IMPORT_XML_INCORRECT_FILE);
 					throw new Exception(Messages.IMPORT_XML_INCORRECT_FILE);
 					}
@@ -174,6 +170,10 @@ public class GridRowLoader {
 		}
 		catch (Exception e) {
 			grids.clear();
+			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+			box.setMessage(Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
+			box.setText("Error");
+			box.open();
 			logger.error(Messages.IMPORT_XML_ERROR);
 			return null;
 		}
@@ -266,15 +266,11 @@ public class GridRowLoader {
 			if(StringUtils.isNotBlank(schemaFile.getPath())){
 				
 				if(!schemaFile.getName().contains("."))	{
-					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
-					messageBox.setText("Error");
 					logger.error(Messages.EXPORT_XML_IMPROPER_EXTENSION);
 					throw new Exception(Messages.EXPORT_XML_IMPROPER_EXTENSION);
 					}
 				
 				if(!(schemaFile.getPath().endsWith(".schema")) && !(schemaFile.getPath().endsWith(".xml"))){
-					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
-					messageBox.setText("Error");
 					logger.error(Messages.EXPORT_XML_INCORRECT_FILE);
 					throw new Exception(Messages.EXPORT_XML_INCORRECT_FILE);
 					}
