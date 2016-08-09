@@ -289,6 +289,14 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
+		<enumeration value="LONG_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="LongValidatorRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		
 	</restriction>
 	</simpleType>
 </schema>
