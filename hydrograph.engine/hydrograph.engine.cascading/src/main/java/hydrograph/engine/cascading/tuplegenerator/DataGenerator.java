@@ -467,9 +467,9 @@ public class DataGenerator {
 		return calendar.getTimeInMillis();
 	}
 
-	private static boolean isTimestampPresentInDateFormat(String dateFormat) {
-		dateFormat = dateFormat.toLowerCase();
-		if (dateFormat.contains("hh") || dateFormat.contains("mm") || dateFormat.contains("ss")) {
+	private static boolean isTimestampPresentInDateFormat(String dateFormat) {		
+		if (dateFormat.contains("HH") || dateFormat.contains("hh") || dateFormat.contains("mm")
+				|| dateFormat.contains("ss")) {
 			return true;
 		}
 		return false;
