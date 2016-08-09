@@ -590,9 +590,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					List<NameValueProperty> tempList = new ArrayList<NameValueProperty >();
 					for (int index : indexs) {
 						tempList.add(transformMapping.getMapAndPassthroughField().get(index));
-						if(index > 0){
-							mappingTableViewer.editElement(mappingTableViewer.getElementAt(index-1), 0);
-						}
 					}
 					for(NameValueProperty nameValueProperty:tempList)
 					{	
