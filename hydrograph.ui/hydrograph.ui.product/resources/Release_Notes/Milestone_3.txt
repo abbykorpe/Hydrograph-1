@@ -67,7 +67,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 51.#537 [Rushikesh Pawale] Added validation to restrict input count upto 10 digits and changed datatype from integer to long.
 52.#660 [Rushikesh Pawale] Input Ports are now Increased/Decreased in Join Configuration and Join Mapping Window on Apply button.
 51.#982 [Akhilesh Joshi] MacBook Pro - Browse Button is not Appeared Correctly on Operation Window
- 
+52.#1007[Akhilesh Joshi]Hive Output : Compoent Size Goes on Increasing On Copy Paste
+53.#1012[Ashika Holkar] External Schema: Project Window while export/importing Schema Only Displays ' Select Schema File(.schema)'
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

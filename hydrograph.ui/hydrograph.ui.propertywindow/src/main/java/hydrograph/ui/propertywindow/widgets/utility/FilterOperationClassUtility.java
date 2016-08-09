@@ -176,7 +176,7 @@ public class FilterOperationClassUtility  {
 	private void browseSchemaSelectionDialog(String filterExtension, Text fileName) {
 		String externalSchemaTextBoxValue = "";
 		ExternalSchemaFileSelectionDialog dialog = new ExternalSchemaFileSelectionDialog("Project",
-				"Select Schema File (.schema)",  new String[]{filterExtension,Extensions.XML.toString()}, this);
+				"Select Schema File (.schema or.xml)",  new String[]{filterExtension,Extensions.XML.toString()}, this);
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			String file = fileNameTextBoxValue;
 			IResource resource = (IResource) dialog.getFirstResult();
