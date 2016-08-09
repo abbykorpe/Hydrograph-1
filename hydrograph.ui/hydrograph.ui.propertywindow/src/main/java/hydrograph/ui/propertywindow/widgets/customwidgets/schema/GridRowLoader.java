@@ -57,7 +57,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -82,7 +81,13 @@ public class GridRowLoader {
 		this.schemaFile = schemaFile;
 	}
 
-	
+	public static void showMessageBox(String message,String header,int SWT_Type)
+	{
+		MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT_Type);
+		box.setMessage(message);
+		box.setText(header);
+		box.open();
+	}
 	
 	/**
 	 * The method import schema rows from schema file into schema grid.
@@ -153,27 +158,18 @@ public class GridRowLoader {
 
 		} catch (JAXBException e1) {
 			grids.clear();
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage());
-			box.setText("Error");
-			box.open();
+			showMessageBox(Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage(),"Error",SWT.ERROR);
 			logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 			return null;
 		}catch (DuplicateFieldException e1) {
 			grids.clear();
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(e1.getMessage());
-			box.setText("Error");
-			box.open();
+			showMessageBox(e1.getMessage(),"Error", SWT.ERROR);
 			logger.error(e1.getMessage());
 			return null;
 		}
 		catch (Exception e) {
 			grids.clear();
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage());
-			box.setText("Error");
-			box.open();
+			showMessageBox(Messages.IMPORT_XML_ERROR+" -\n"+e.getMessage(),"Error",SWT.ERROR);
 			logger.error(Messages.IMPORT_XML_ERROR);
 			return null;
 		}
@@ -278,26 +274,17 @@ public class GridRowLoader {
 			
 				
 				exportFile(schemaGridRowList, schema);
-				MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION);
-				box.setMessage(Messages.EXPORTED_SCHEMA);
-				box.setText("Information");
-				box.open();
+				showMessageBox(Messages.EXPORTED_SCHEMA,"Information",SWT.ICON_INFORMATION);
 			}else{
 				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
 				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
 		} catch (JAXBException e) {
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n" +
-					((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
-			box.setText("Error");
-			box.open();
+			showMessageBox(Messages.EXPORT_XML_ERROR+" -\n" +
+					((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()),"Error",SWT.ERROR);
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage());
-			box.setText("Error");
-			box.open();
+			showMessageBox(Messages.EXPORT_XML_ERROR+" -\n"+e.getMessage(),"Error",SWT.ERROR);
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 
@@ -319,17 +306,10 @@ public class GridRowLoader {
 				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
 		} catch (JAXBException e) {
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n" + ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()));
-			box.setText("Error");
-			box.open();
+			showMessageBox(Messages.EXPORT_XML_ERROR+" -\n" + ((e.getCause() != null)? e.getLinkedException().getMessage():e.getMessage()),"Error",SWT.ERROR);
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}catch (Exception e) {
-			MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			box.setMessage(Messages.EXPORT_XML_ERROR+" -\n" +e.getMessage());
-			box.setText("Error");
-			box.open();
-			
+			showMessageBox(Messages.EXPORT_XML_ERROR+" -\n" +e.getMessage(),"Error",SWT.ERROR);
 			logger.error(Messages.EXPORT_XML_ERROR);
 		}
 
