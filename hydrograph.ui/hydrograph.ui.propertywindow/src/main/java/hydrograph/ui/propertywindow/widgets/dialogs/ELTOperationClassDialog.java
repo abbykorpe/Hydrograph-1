@@ -259,9 +259,6 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 					for (int index : indexs) {
 						tempList.add(operationClassProperty.getNameValuePropertyList().get(index));
 					}
-					if(temp > 0){
-						nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(temp-1), 0);
-					}
 					operationClassProperty.getNameValuePropertyList().removeAll(tempList);
 					applyButton.setEnabled(true);
 				}
