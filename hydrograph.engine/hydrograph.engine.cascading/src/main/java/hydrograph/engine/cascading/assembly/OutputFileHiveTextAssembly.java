@@ -21,7 +21,6 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.scheme.Scheme;
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
@@ -46,8 +45,6 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase<OutputFileHiv
 	private static final long serialVersionUID = -4413173479628531160L;
 	private HiveTextTableDescriptor tableDesc;
 	protected OutputFileHiveTextEntity outputFileHiveTextEntity;
-	@SuppressWarnings("rawtypes")
-	protected Scheme scheme;
 
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputFileHiveTextAssembly.class);

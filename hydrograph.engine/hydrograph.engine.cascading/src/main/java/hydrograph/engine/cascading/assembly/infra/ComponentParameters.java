@@ -25,7 +25,7 @@ import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.debug.DebugPoint;
 
-public class ComponentParameters {
+public class ComponentParameters implements Cloneable {
 
 	private static final String OUTPUT_FIELDS_KEY = "output_fields";
 	private static final String INPUT_FIELDS_KEY = "input_fields";

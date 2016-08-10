@@ -34,7 +34,6 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 	private static final long serialVersionUID = 4184919036703029509L;
 	private OutputFileSequenceFormatEntity outputFileSequenceFormatEntity;
 	FlowDef flowDef;
-	String filePathToWrite = outputFileSequenceFormatEntity.getPath();
 	Pipe tailPipe;
 	@SuppressWarnings("rawtypes")
 	Tap outTap;
@@ -46,6 +45,11 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 		super(outputFileSequenceFormatEntity, componentParameters);
 	}
 
+	@Override
+	public void initializeEntity(OutputFileSequenceFormatEntity assemblyEntityBase) {
+		this.outputFileSequenceFormatEntity = assemblyEntityBase;
+	}
+	
 	@Override
 	protected void createAssembly() {
 		try {
@@ -65,7 +69,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 
 	private void prepareAssembly() {
 		flowDef = componentParameters.getFlowDef();
-		filePathToWrite = componentParameters.getPathUri();
+		String filePathToWrite = componentParameters.getPathUri();
 		tailPipe = componentParameters.getInputPipe();
 		try {
 			prepareScheme();
@@ -81,10 +85,4 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 
 		scheme = new SequenceFile(componentParameters.getInputFields());
 	}
-
-	@Override
-	public void initializeEntity(OutputFileSequenceFormatEntity assemblyEntityBase) {
-		this.outputFileSequenceFormatEntity = assemblyEntityBase;
-	}
-
 }

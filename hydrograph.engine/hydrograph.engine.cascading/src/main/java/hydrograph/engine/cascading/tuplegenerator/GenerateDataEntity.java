@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 import cascading.tuple.Fields;
 
-public class GenerateDataEntity implements Serializable {
+public class GenerateDataEntity implements Serializable, Cloneable {
 
 	/**
 	 * 
