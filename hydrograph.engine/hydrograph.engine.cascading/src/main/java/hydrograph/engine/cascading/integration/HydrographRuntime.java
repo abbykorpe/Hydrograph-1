@@ -88,8 +88,6 @@ public class HydrographRuntime implements HydrographRuntimeService {
 				hydrographDebugInfo,schemaFieldHandler, jobId, basePath);
 
 		hydrographJob = FlowManipulationHandler.execute(flowManipulationContext);
-		
-		schemaFieldHandler=new SchemaFieldHandler(hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
 		if (hydrographJob.getJAXBObject().getRuntimeProperties() != null
 				&& hydrographJob.getJAXBObject().getRuntimeProperties()
