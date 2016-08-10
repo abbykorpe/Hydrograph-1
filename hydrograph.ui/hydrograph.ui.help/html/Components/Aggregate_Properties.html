@@ -20,8 +20,6 @@
 
 <p><font face="verdana, geneva, sans-serif"><span style="font-size: 28px;">Aggregate Properties</span></font></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">Hydrograph Release Version 1.0</span></span></p>
-
 <p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size: 14px;"><b>Properties</b>&nbsp;for the Aggregate component can be viewed by Double click-&gt;component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, scale etc. </span></span></p>
 
 <p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>General Properties:</b> </span></font></p>
@@ -51,30 +49,31 @@
 </ul>
 	<p><img alt="" src="../images/Aggregate_Secondary_keys.png" /></p>
 <ul>	
-<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Aggregate</b> - Edit option opens up the Aggregate mapping view, where the user can select the input fields needed for the aggregation operations, write custom operation classes (or select already existing standard operation classes) to use these input fields and then extract the output fields all in the same grid view. Click on <a href="http://Operation Class">Operation Class</a></span></span>&nbsp;<span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">provided in the Operation Class section of the Help content to know more about creating and using Standard classes here.</span></span></font></p></span></span></li>
+<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Aggregate</b> - Edit option opens up the '<a href="Aggregate_Operation_Editor.html">Operation Editor</a>' view, where the user can select the input fields needed for the aggregation operations, write custom operation classes (or select already existing standard operation classes) to use these input fields and then extract the output fields all in the same grid view. Click on <a href="http://Operation Class">Operation Class</a></span></span>&nbsp;<span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">provided in the Operation Class section of the Help content to know more about creating and using Standard classes here.</span></span></font></p></span></span></li>
 </ul>
-	<p><img alt="" src="../images/Aggregate_Mapping_View.png" /></p>
+	<p><img alt="" src="../images/Aggregate_Mapping_View.png" width="100%"/></p>
 <ul>
 	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric number starting from 0 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
-	
 </ul>
 
 <p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>Schema tab: </b></span></font></p>
 
 <p><img alt="" src="../images/Aggregate_Properties_Schema.png" /></p>
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Schema Types</b></span></span></p>
+<span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">
+<p>User can define record structure of Aggregate component in this tab by specifying below attributes.</p>
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Internal</b> - User is provided a Grid to enter the internal schema of the Output Delimited file.</span></span></li>
-	<ul><li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Name</b> - User needs to enter all the Field names in this column</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Data type</b> - By default "string" Data type has been selected for any field added to the Grid. User can select from different Data type values like "integer", "double", "float" etc.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Date Format</b> - User can specify desired date format like "YY-DD-MM", "YYYYMMDD" etc for a date field in this column.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Scale</b> - Scale for a double, float or bigdecimal field can be specified here.</span></span></li></ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Length</b> - Length denotes the maximum number of characters that a particular Output field may contain.</span></span></li></ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>External</b> - User can provide an external Hydrograph Schema file of XML format. A text box is provided to either manually type or use the Browse button to select the schema file from File system. The External schema file path is resolved during run time and replaced with the contents of the file in the Job XML.</span></span></li>
-</ul>	
-
-<p>&nbsp;</p>
-
+	<li><b>Field Name</b> - User needs to enter all the field names in this column</li>
+	<li><b>Data type</b> - By default "String" data type has been selected for any field added to the Grid. User can select from different data type values like "Integer", "Double", "Float" etc.</li>
+	<li><b>Scale</b> - Scale for a Double, Float or BigDecimal field can be specified here.</li>
+	<li><b>Scale Type</b> – Scale Type accepts values as implicit or explicit for BigDecimal field and none for other data types. Explicit considers the length of '.' and implicit ignores length of '.' for the BigDecimal field.</li>
+	<li><b>Date Format</b> - User can specify desired date format. Refer to <a href="../references/Java_Date_Formats.html">java date formats</a> page for acceptable date formats.</li>
+	<li><b>Precision</b> – User can specify precision for the field.</li>
+	<li><b>Field Description</b> – User can specify description for the field.</li>
+</ul>
+<p>
+<b>Pull Schema</b> – User can click on Pull Schema and the fields defined in Operation Editor's output, will be pulled here.
+</p>
+</span>
 <ul>
 </ul>
 </body>
