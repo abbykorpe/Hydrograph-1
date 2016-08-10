@@ -12,10 +12,8 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -112,7 +110,6 @@ public class ExpressionComposite extends Composite {
 		expressionTextBox = new Text(composite, SWT.BORDER);
 		expressionTextBox.setEditable(false);
 		expressionTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
 		browseButton= new Button(composite, SWT.NONE);
 		GridData gd_button = new GridData(SWT.CENTER, SWT.FILL, true, false, 1, 1);
 		gd_button.minimumWidth = 30;
