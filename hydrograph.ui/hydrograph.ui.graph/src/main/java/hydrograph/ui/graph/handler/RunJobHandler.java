@@ -14,7 +14,6 @@
 package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
@@ -24,9 +23,6 @@ import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -62,12 +58,9 @@ public class RunJobHandler{
 		String localJobID = consoleName;
 
 		if (validateGraphProperties()){
-			if(isConfirmedByUser()){
 				JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
-			}
 				
 		}else{
-		
 			JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
 		}
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();		
@@ -100,19 +93,6 @@ public class RunJobHandler{
 		}
 
 		return retValue;
-	}
-
-	private boolean isConfirmedByUser() {
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
-				| SWT.NO);
-		messageBox.setMessage(Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB);
-		messageBox.setText(Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE);
-		int response = messageBox.open();
-		if (response == SWT.YES) {
-			return true;
-		} else {			
-			return false; 
-		}
 	}
 
 }

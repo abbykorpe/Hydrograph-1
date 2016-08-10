@@ -12,12 +12,14 @@
  ******************************************************************************/
 package hydrograph.ui.graph.handler;
 
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -57,12 +59,14 @@ public class JobHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		if(isConfirmedByUser()){
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 		if(runConfigDialog.isDebug()){
 			new DebugHandler().execute(runConfigDialog);
 		}
 		else{
 			new RunJobHandler().execute(runConfigDialog);
+		}
 		}
 		return null;
 	}
@@ -76,6 +80,19 @@ public class JobHandler extends AbstractHandler {
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
 		runConfigDialog.open();
 		return runConfigDialog;
+	}
+	
+private boolean isConfirmedByUser() {
+		
+		MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(),Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE, null,
+				Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB, MessageDialog.QUESTION, new String[] { "Yes",
+		  "No" }, 0);
+		int response = messageDialog.open();
+		 if(response == 0){
+	        	return true;
+	        } else {
+	        	return false;
+	        }
 	}
 
 }
