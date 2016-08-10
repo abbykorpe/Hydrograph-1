@@ -61,6 +61,9 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 		prepareAssembly();
 		Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileMixedScheme",
 				outputFileMixedSchemeEntity.getComponentId(), ""), tailPipe);
+		setOutLink("output","NoSocketId",
+				outputFileMixedSchemeEntity.getComponentId(), sinkPipe, componentParameters
+				.getInputFieldsList().get(0));
 		setHadoopProperties(outTap.getStepConfigDef());
 		setHadoopProperties(sinkPipe.getStepConfigDef());
 		flowDef = componentParameters.getFlowDef().addTailSink(sinkPipe, outTap);

@@ -58,6 +58,9 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 			prepareAssembly();
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileSequenceFormat",
 					outputFileSequenceFormatEntity.getComponentId(), ""), tailPipe);
+			setOutLink("output","NoSocketId",
+					outputFileSequenceFormatEntity.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);
