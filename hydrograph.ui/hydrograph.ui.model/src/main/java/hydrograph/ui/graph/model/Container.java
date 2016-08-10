@@ -85,7 +85,12 @@ public class Container extends Model {
 				componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height + ModelConstants.componentOneLineLabelMargin));
 				component.setComponentLabelMargin(ModelConstants.componentTwoLineLabelMargin);
 			}
-			
+			else{
+				if(labelLength<ModelConstants.compLabelOneLineLengthLimit){
+				component.setSize(new Dimension(component.getSize().width,80));
+				}
+			}
+				
 			component.setComponentLabel(compNewName);
 			
 			if (component.isNewInstance()) {
