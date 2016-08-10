@@ -90,9 +90,8 @@ public class FilterOperationClassUtility  {
 	private Button btnCheckButton;
 	private String componentName;
 	private String fileNameTextBoxValue;
-	private final String OPERATION_CLASS = "Operation Class";
-	ELTDefaultButton emptyButton;
-	AbstractELTWidget browseButton;
+	private ELTDefaultButton emptyButton;
+	private AbstractELTWidget browseButton;
 	private FilterOperationClassUtility(){
 		
 	}
@@ -359,7 +358,7 @@ public class FilterOperationClassUtility  {
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(5);
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(OPERATION_CLASS);
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.OPERATION_CLASS);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		eltSuDefaultSubgroupComposite.attachWidget(combo);
