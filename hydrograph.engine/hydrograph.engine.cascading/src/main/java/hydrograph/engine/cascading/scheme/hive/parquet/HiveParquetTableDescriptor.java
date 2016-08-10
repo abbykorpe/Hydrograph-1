@@ -186,7 +186,7 @@ public class HiveParquetTableDescriptor extends HiveTableDescriptor {
 		if (isPartitioned())
 			verifyPartitionKeys();
 
-		if (columnNames.length == 0 || columnTypes.length == 0
+		if (columnNames ==null || columnTypes ==null || columnNames.length == 0 || columnTypes.length == 0
 				|| columnNames.length != columnTypes.length)
 			throw new IllegalArgumentException(
 					"columnNames and columnTypes cannot be empty and must have the same size");

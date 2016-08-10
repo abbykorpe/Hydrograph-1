@@ -51,8 +51,6 @@ public class HivePartWrite {
 		Properties properties = new Properties();
 		properties.putAll(conf.getValByRegex(".*"));
 
-		DateType dateType = new DateType("yyyy-MM-dd");
-
 		Fields fields = new Fields("a", "b", "c").applyTypes(String.class,
 				String.class, String.class);
 
