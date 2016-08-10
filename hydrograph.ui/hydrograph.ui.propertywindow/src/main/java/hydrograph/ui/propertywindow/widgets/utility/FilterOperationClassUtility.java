@@ -90,7 +90,8 @@ public class FilterOperationClassUtility  {
 	private Button btnCheckButton;
 	private String componentName;
 	private String fileNameTextBoxValue;
-
+	private ELTDefaultButton emptyButton;
+	private AbstractELTWidget browseButton;
 	private FilterOperationClassUtility(){
 		
 	}
@@ -174,7 +175,7 @@ public class FilterOperationClassUtility  {
 	private void browseSchemaSelectionDialog(String filterExtension, Text fileName) {
 		String externalSchemaTextBoxValue = "";
 		ExternalSchemaFileSelectionDialog dialog = new ExternalSchemaFileSelectionDialog("Project",
-				"Select Schema File (.schema)",  new String[]{filterExtension,Extensions.XML.toString()}, this);
+				"Select Schema File (.schema or.xml)",  new String[]{filterExtension,Extensions.XML.toString()}, this);
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			String file = fileNameTextBoxValue;
 			IResource resource = (IResource) dialog.getFirstResult();
@@ -357,7 +358,7 @@ public class FilterOperationClassUtility  {
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(5);
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.OPERATION_CALSS_LABEL);
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.OPERATION_CLASS);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		eltSuDefaultSubgroupComposite.attachWidget(combo);
@@ -368,9 +369,14 @@ public class FilterOperationClassUtility  {
 		fileName.setSize(10, 100);
 
 		GridData layoutData = (GridData)fileName.getLayoutData();
-		layoutData.horizontalIndent=5;
+		layoutData.horizontalIndent=6;
 		
-		AbstractELTWidget browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(20);
+		if(OSValidator.isMac()){
+			browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(35);
+		}else{
+			browseButton = new ELTDefaultButton(Messages.BROWSE_BUTTON_TEXT).buttonWidth(25);
+		}
+		
 		eltSuDefaultSubgroupComposite.attachWidget(browseButton);
 		browseBtn=(Button)browseButton.getSWTWidgetControl();
 
@@ -382,8 +388,12 @@ public class FilterOperationClassUtility  {
 		eltSuDefaultSubgroupComposite2.createContainerWidget();
 		eltSuDefaultSubgroupComposite2.numberOfBasicWidgets(3);
 
-
-		ELTDefaultButton emptyButton = new ELTDefaultButton("").buttonWidth(75);
+		if(OSValidator.isMac()){
+			 emptyButton = new ELTDefaultButton("").buttonWidth(92);
+		}
+		else{
+			emptyButton = new ELTDefaultButton("").buttonWidth(89);
+		}
 		eltSuDefaultSubgroupComposite2.attachWidget(emptyButton);
 		emptyButton.visible(false);
 
