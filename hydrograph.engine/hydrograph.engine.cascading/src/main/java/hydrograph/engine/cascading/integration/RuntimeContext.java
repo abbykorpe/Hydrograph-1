@@ -28,6 +28,7 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
+import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 
 @SuppressWarnings("rawtypes")
 public class RuntimeContext {
@@ -41,19 +42,25 @@ public class RuntimeContext {
 	private Properties hadoopProperties;
 	private AssemblyGeneratorFactory assemblyGeneratorFactory;
 	private Map<String, FlowContext> flowContext;
+	private SchemaFieldHandler schemaFieldHandler;
 
 	public RuntimeContext(HydrographJob hydrographJob, JAXBTraversal traversal,
 			Properties hadoopProps,
-			AssemblyGeneratorFactory assemblyGeneratorFactory) {
+			AssemblyGeneratorFactory assemblyGeneratorFactory, SchemaFieldHandler schemaFieldHandler) {
 		this.hydrographJob = hydrographJob;
 		this.traversal = traversal;
 		this.hadoopProperties = hadoopProps;
 		this.assemblyGeneratorFactory = assemblyGeneratorFactory;
 		this.hadoopConfProvider = new HadoopConfigProvider(hadoopProps);
+		this.schemaFieldHandler=schemaFieldHandler;
 		tempPathParameters = new LinkedHashMap<String, ComponentParameters>();
 		this.flowContext = new HashMap<String, FlowContext>();
 	}
 
+	
+	public SchemaFieldHandler getSchemaFieldHandler(){
+		return schemaFieldHandler;
+	}
 	public JobConf getJobConf() {
 		return hadoopConfProvider.getJobConf();
 	}
