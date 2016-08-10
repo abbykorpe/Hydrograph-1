@@ -36,8 +36,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubg
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.RuntimePropertyDialog;
-import org.eclipse.swt.widgets.Display;
+import hydrograph.ui.common.util.OSValidator;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -108,7 +107,11 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		ELTDefaultLable defaultLable2 = new ELTDefaultLable(""); 
 		runtimeComposite.attachWidget(defaultLable2);
 		
-		expressionRadioButton = new ELTRadioButton("Expression Editor");
+		if(OSValidator.isMac()){
+			expressionRadioButton = new ELTRadioButton(Messages.MAC_EXPRESSION_EDITIOR_LABEL);
+		}else {
+		expressionRadioButton = new ELTRadioButton(Messages.WINDOWS_EXPRESSION_EDITIOR_LABEL);
+		}
 		runtimeComposite.attachWidget(expressionRadioButton);
 		expressionRadioButton.visible(true);
 		setPropertyHelpWidget((Control) expressionRadioButton.getSWTWidgetControl());

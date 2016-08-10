@@ -35,6 +35,7 @@ Import-Package: hydrograph.ui.common.util,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.observable.value,
+ org.eclipse.gef.commands,
  org.eclipse.ui.forms.widgets
 Export-Package: hydrograph.ui.propertywindow,
  hydrograph.ui.propertywindow.adapters,

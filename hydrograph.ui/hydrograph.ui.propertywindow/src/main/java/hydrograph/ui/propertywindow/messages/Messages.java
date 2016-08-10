@@ -27,6 +27,8 @@ public class Messages extends NLS {
 	public static String COULD_NOT_SAVE_PROPERTY_SHEET;
 	public static String INVALID_MAPPING;
 	public static String OPERATION_CALSS_LABEL;
+	public static String WINDOWS_EXPRESSION_EDITIOR_LABEL;
+	public static String MAC_EXPRESSION_EDITIOR_LABEL;
 	public static String EDIT_BUTTON_LABEL;
 	public static String OPEARTION_CLASS_OPEN_BUTTON_MESSAGE;
 	public static String OPEN_BUTTON_LABEL;

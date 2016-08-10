@@ -45,6 +45,8 @@ import hydrograph.ui.propertywindow.widgets.utility.TransformMappingFeatureUtili
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import hydrograph.ui.propertywindow.transform.viewdata.TransformViewDataDialog;
+import hydrograph.ui.propertywindow.widgets.customwidgets.operational.ExpressionComposite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -177,6 +179,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private boolean optionToSelect;
 	private List<FilterProperties> finalSortedList;
 	private Set<Integer> outputFieldIndices = new LinkedHashSet<Integer>();
+	private Shell parentShell;
 	/**
     * @param parentShell
     * @param component
@@ -192,6 +195,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		isNoButtonPressed = false;
 		this.component = component;
 		this.widgetConfig = widgetConfig;
+		this.parentShell = parentShell;
 		this.transformDialog = this;
 		temporaryOutputFieldMap=new HashMap<String,List<FilterProperties>>();
 		errorLabelList=new ArrayList<>();
@@ -482,7 +486,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		expandBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 		
 		
-		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 184, 10, 20, 15 }, "");
+		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,42,30,30,25);
@@ -506,7 +510,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 
-		final Button deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 220, 10, 20, 15 },"");
+		final Button deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 165, 10, 20, 15 },"");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,40,28,30,25);
 		deleteLabel.setImage(deleteImage);
@@ -534,9 +538,22 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		Label lblOperationsControl = new Label(topAddButtonComposite, SWT.NONE);
 		lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
-		lblOperationsControl.setBounds(50, 10, 129, 28);
+		lblOperationsControl.setBounds(0, 10, 129, 25);
 		lblOperationsControl.setText(Messages.OPERATION_CONTROL);
-
+		
+		final Button viewTransform = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] {200,10,95,15}, "View Transform");
+		viewTransform.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(viewTransform,100,30,95,25);
+		viewTransform.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void  widgetSelected(SelectionEvent e) {
+				TransformViewDataDialog transformViewDataDialog = new TransformViewDataDialog(parentShell);
+				transformViewDataDialog.getMappingSheet(transformMapping.getMappingSheetRows(),transformMapping.getMapAndPassthroughField());
+				transformViewDataDialog.open();
+			}
+			
+		});
+		
 		if (!transformMapping.getMappingSheetRows().isEmpty()) {
 			for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
 				 optionToSelect=mappingSheetRow.isExpression();
