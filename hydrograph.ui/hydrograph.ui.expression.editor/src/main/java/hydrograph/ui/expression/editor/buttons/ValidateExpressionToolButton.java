@@ -15,6 +15,7 @@ package hydrograph.ui.expression.editor.buttons;
 
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.PathConstant;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
@@ -35,6 +36,8 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
@@ -53,6 +56,7 @@ import org.slf4j.Logger;
 @SuppressWarnings("restriction")
 public class ValidateExpressionToolButton extends Button {
 
+	private static final String RETURN_STATEMENT = "\t\treturn \n";
 	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR = "compile";
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ValidateExpressionToolButton.class);
 	private static final String VALID_EXPRESSION = "Success";
@@ -88,15 +92,16 @@ public class ValidateExpressionToolButton extends Button {
 		Object[] returObj=getBuildPathForMethodInvocation() ;
 		List<URL> urlList=(List<URL>) returObj[0];
 		String transfromJarPath = (String) returObj[1];
+		String propertyFilePath= (String) returObj[2];
 		ClassLoader child = new URLClassLoader(urlList.toArray(new URL[urlList.size()]));
 		Class<?> class1 = Class.forName(HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS, true, child);
+		Thread.currentThread().setContextClassLoader(child);
 		Method[] methods = class1.getDeclaredMethods();
 		for (Method method : methods) {
 			if (method.getParameterTypes().length == 4 && StringUtils.equals(method.getName(), COMPILE_METHOD_OF_EXPRESSION_JAR)) {
 				method.getDeclaringClass().getClassLoader();
-				
-				diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressiontext,
-						fieldMap, transfromJarPath, null);
+				diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressiontext,propertyFilePath,
+						fieldMap, transfromJarPath);
 				break;
 			}
 		}
@@ -104,13 +109,14 @@ public class ValidateExpressionToolButton extends Button {
 	}
 
 
-	private static String getExpressionText(String expressionText) {
+	public static String getExpressionText(String expressionText) {
 		StringBuffer buffer=new StringBuffer(expressionText);
-		if(buffer.indexOf("\t\treturn \n")>-1){
-			
+		int startIndex=buffer.indexOf(RETURN_STATEMENT);
+		if(startIndex>-1){
+			buffer.delete(0, startIndex);
+			buffer.delete(0, buffer.indexOf("\n"));
 		}
-		
-		return buffer.toString();
+		return StringUtils.trim(buffer.toString());
 	}
 
 	public static String getAbsolutePathForJars(IPath iPath) {
@@ -158,11 +164,11 @@ public class ValidateExpressionToolButton extends Button {
 
 	public static Object[] getBuildPathForMethodInvocation() throws JavaModelException, MalformedURLException {
 		String transfromJarPath = null;
-		Object[] returnObj=new Object[2];
+		Object[] returnObj=new Object[3];
 		IJavaProject iJavaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject());
 		List<URL> urlList = new ArrayList<>();
 		for (IPackageFragmentRoot iPackageFragmentRoot : iJavaProject.getAllPackageFragmentRoots()) {
-			if (iPackageFragmentRoot instanceof JarPackageFragmentRoot) {
+			if (iPackageFragmentRoot instanceof JarPackageFragmentRoot || iPackageFragmentRoot.getElementName().equals("src")) {
 				URL url = null;
 				if (!iPackageFragmentRoot.isExternal()) {
 					url = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()
@@ -178,9 +184,25 @@ public class ValidateExpressionToolButton extends Button {
 				else
 					transfromJarPath = transfromJarPath + url.getPath() + Constants.SEMICOLON;
 			}
+			
+			
 		}
+		
 		returnObj[0]=urlList;
 		returnObj[1]=transfromJarPath;
+		returnObj[2]=getPropertyFilePath(iJavaProject);
 		return returnObj;
+	}
+
+	private static String getPropertyFilePath(IJavaProject project) {
+		LOGGER.debug("Adding UserFunctions.propertis file URL to build-path");
+		IFolder settingFolder=project.getProject().getFolder(PathConstant.PROJECT_RESOURCES_FOLDER);
+		if(settingFolder.exists()){
+			IFile file=settingFolder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
+			if(file.exists()){
+				return file.getLocation().toString();
+			}
+		}
+		return Constants.EMPTY_STRING;
 	}
 }

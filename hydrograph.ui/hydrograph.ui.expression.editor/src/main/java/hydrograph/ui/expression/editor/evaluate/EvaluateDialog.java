@@ -13,18 +13,25 @@
 
 package hydrograph.ui.expression.editor.evaluate;
 
+import java.util.List;
 import java.util.Map;
 
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -50,7 +57,7 @@ public class EvaluateDialog extends Dialog {
 	private Button evaluateButton;
 	private EvaluateDialog evaluateDialog;
 	private Table table_1;
-	private Text searchText;
+	private Text searchTextBox;
 	private EvalDialogFieldTable evalDialogFieldTable;
 
 	/**
@@ -110,8 +117,10 @@ public class EvaluateDialog extends Dialog {
 	}
 
 	private void createSearchTextBox(Composite fieldTableComposite) {
-		searchText = new Text(fieldTableComposite, SWT.BORDER);
-		searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		searchTextBox = new Text(fieldTableComposite, SWT.BORDER);
+		searchTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		searchTextBox.setForeground(new Color(null,128,128,128));
+		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
 	}
 
 	
@@ -150,7 +159,7 @@ public class EvaluateDialog extends Dialog {
 				if(true){
 					 try {
 						Object[] returnObject=evalDialogFieldTable.validateDataTypeValues();
-						String object=evaluateExpression.invokeEvaluateFunctionFromJar(expressionEditor.getText(),(String[]) returnObject[0],(Object[])returnObject[1]);
+						String object=evaluateExpression.invokeEvaluateFunctionFromJar(ValidateExpressionToolButton.getExpressionText(expressionEditor.getText()),(String[]) returnObject[0],(Object[])returnObject[1]);
 						if(object!=null){
 							showOutput(object);
 					}

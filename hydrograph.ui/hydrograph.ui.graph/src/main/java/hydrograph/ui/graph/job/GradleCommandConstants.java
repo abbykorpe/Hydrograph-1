@@ -45,6 +45,7 @@ public class GradleCommandConstants {
 	public static final String GPARAM_JOB_BASE_PATH=" -PbasePath=";
 	public static final String GPARAM_UNIQUE_JOB_ID=" -PjobId=";
 	public static final String GPARAM_MOVE_PARAM_FILE=" -PmoveParameterFile=";
+	public static final String GPARAM_RESOUCES_FILES=" -PmoveResourceFile=";
 	public static final String GPARAM_MOVE_SCHEMA_FILES=" -PmoveExternalSchemaFiles=";
 	public static final String GPARAM_MOVE_SUBJOB_FILES=" -PmoveSubJobFiles=";
 	public static final String GPARAM_MOVE_JAR=" -PmoveJar=";
@@ -55,6 +56,7 @@ public class GradleCommandConstants {
 	public static final String GPARAM_EXECUTION_TRACKING_PORT=" -PexecutionTrackingPort=";
 	
 	public static final String REMOTE_FIXED_DIRECTORY_PARAM="param";
+	public static final String REMOTE_FIXED_DIRECTORY_RESOURCES="resources";
 	public static final String REMOTE_FIXED_DIRECTORY_LIB="lib";
 	public static final String DAEMON_ENABLE=" -Dorg.gradle.daemon=true";
 	public static final String KILL_GRADLE_DAEMON="gradle --stop";

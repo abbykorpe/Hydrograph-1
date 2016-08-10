@@ -17,6 +17,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -68,8 +69,10 @@ public class AddExternalJarPage extends PropertyPage implements
 
 	public boolean createPropertyFileForSavingData()  {
 		IProject iProject=BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
-		IFolder iFolder=iProject.getFolder(PathConstant.PROJECTS_SETTINGS_FOLDER);
+		IFolder iFolder=iProject.getFolder(PathConstant.PROJECT_RESOURCES_FOLDER);
 		Properties properties=new Properties();
+		FileOutputStream file=null;
+		boolean isFileCreated=false;
 		try {
 			if(!iFolder.exists()){
 				iFolder.create(true, true, new NullProgressMonitor());
@@ -80,13 +83,22 @@ public class AddExternalJarPage extends PropertyPage implements
 				properties.setProperty(packageName,jarFileName );
 			}
 			
-			FileOutputStream file=new FileOutputStream(iFolder.getLocation().toString()+File.separator+PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
+			file=new FileOutputStream(iFolder.getLocation().toString()+File.separator+PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
 			properties.store(file, "");
-			return true;
+			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE,new NullProgressMonitor());
+			isFileCreated= true;
 		} catch (IOException | CoreException exception) {
 			LOGGER.error("Exception occurred while saving jar file path at projects setting folder",exception);
 		}
-		return false;
+		finally{
+			if(file!=null)
+				try {
+					file.close();
+				} catch (IOException e) {
+					LOGGER.warn("IOException occurred while closing output-stream of file",e);
+				}
+		}
+		return isFileCreated;
 	}
 	
 	@Override

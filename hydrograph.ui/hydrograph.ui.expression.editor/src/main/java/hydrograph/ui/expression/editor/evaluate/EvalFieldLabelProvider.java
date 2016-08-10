@@ -50,6 +50,8 @@ public class EvalFieldLabelProvider  implements ITableLabelProvider {
 		case 0:
 			return property.getFieldName();
 		case 1:
+			return property.getDataType();
+		case 2:
 			return property.getFieldValue();
 		}
 		return null;

@@ -31,5 +31,6 @@ public class Constants {
 	public static final String DEFAULT_SEARCH_TEXT = "Search";
 	public static final String EXPRESSION_JAR_FILE_NAME = "hydrograph.engine.expression";
 	public static final String SPACE = " ";
+	public static final String ASTRISK = "*";
 
 }

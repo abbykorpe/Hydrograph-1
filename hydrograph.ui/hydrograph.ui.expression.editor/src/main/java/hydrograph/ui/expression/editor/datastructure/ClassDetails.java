@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 
 public class ClassDetails {
 
+	private static final String PACKAGE_NAME_HEADER = "\n\tPackage Name :: ";
+	private static final String JAR_FILE_NAME_HEADER = "\n\tJar File Name :: ";
 	private boolean isUserDefined;
 	private String displayName;
 	private String packageName="";
@@ -77,14 +79,14 @@ public class ClassDetails {
 
 	private void updateJavaDoc(String jarFileName, String packageName) {
 		StringBuffer buffer=new StringBuffer();
-		buffer.append("\n\tJar File Name :: "+jarFileName);
-		buffer.append("\n\tPackage Name :: "+packageName);
+		buffer.append(JAR_FILE_NAME_HEADER+jarFileName);
+		buffer.append(PACKAGE_NAME_HEADER+packageName);
 		javaDoc=buffer.toString()+"\n"+javaDoc;
 	}
 
 	private boolean isMethodDepricated(IMethod iMethod) throws JavaModelException {
 		for (IAnnotation annotation : iMethod.getAnnotations()) {
-			if (annotation.getElementName() == "java.lang.Deprecated") {
+			if (annotation.getElementName() == Deprecated.class.getCanonicalName()) {
 				return true;
 			}
 		}

@@ -13,10 +13,13 @@
 
 package hydrograph.ui.expression.editor.launcher;
 
+import java.util.ArrayList;
+
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.PathConstant;
+import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
@@ -89,7 +92,9 @@ public class LaunchExpressionEditor {
 	}
 
 	private void saveProperty(ExpressionEditorData expressionEditorData, String expressionText) {
-		expressionEditorData.setExpression(expressionText);
+		expressionEditorData.setExpression(ValidateExpressionToolButton.getExpressionText(expressionText));
+		expressionEditorData.getfieldsUsedInExpression().clear();
+		expressionEditorData.getfieldsUsedInExpression().addAll(new ArrayList<>(expressionEditorData.getSelectedInputFieldsForExpression().keySet()));
 	}
 	
 	private IPath createTemprarySourceFolder(){
@@ -108,7 +113,8 @@ public class LaunchExpressionEditor {
 	}
 	
 	private void cleanUp() throws JavaModelException{
-		JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()).setRawClasspath(oldClasspathEntry, new NullProgressMonitor());
+//		JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()).setRawClasspath(oldClasspathEntry, new NullProgressMonitor());
+		System.gc();
 		removeTemprarySourceFolder();
 	}
 	

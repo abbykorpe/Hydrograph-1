@@ -38,8 +38,8 @@ public class MethodDetails {
 		if (indexOfPlaceHolder != -1 && iMethod.getParameterNames() != null && iMethod.getParameterNames().length > 0) {
 			buffer = buffer.delete(0, indexOfPlaceHolder + 4);
 			buffer = buffer.delete(buffer.indexOf("\n")+1, buffer.capacity());
-			if(StringUtils.contains(buffer.toString(),iMethod.getElementName())){
-				placeHolder = className + Constants.DOT + StringUtils.trim(buffer.toString());
+			if(StringUtils.contains(buffer.toString(), className + Constants.DOT+iMethod.getElementName())){
+				placeHolder = StringUtils.trim(buffer.toString());
 			}
 			else
 				placeHolder = createDefaultPlaceHolder(iMethod, className);
@@ -48,14 +48,6 @@ public class MethodDetails {
 		}
 	}
 
-	private void createPlaceHolder(IMethod iMethod, String className) throws JavaModelException {
-		placeHolder = className + Constants.DOT + signature;
-		if (iMethod.getParameterNames() != null && iMethod.getParameterNames().length != 0) {
-
-		}
-	}
-
-	
 
 	private String createSignature(IMethod iMethod) throws JavaModelException {
 		StringBuffer buffer = new StringBuffer();

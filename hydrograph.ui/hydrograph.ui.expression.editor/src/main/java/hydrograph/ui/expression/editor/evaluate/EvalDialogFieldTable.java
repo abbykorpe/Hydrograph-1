@@ -32,16 +32,21 @@ import org.eclipse.swt.widgets.TableColumn;
 
 public class EvalDialogFieldTable {
 
+	private static final String FIELD_VALUE_COLUMN = "Value";
+	private static final String FIELD_NAME_COLUMN = "Field Name";
+	static final String ORIGINAL_INPUT_LIST_KEY = "originalInputList";
 	private Table table;
 	private TableViewer tableViewer;
 	private List<FieldNameAndValue> propertyList;
 	private TableColumn fieldValueColumn;
 	private TableColumn fieldNameColumn;
 	public static final String FIELD_NAME_PROPERTY = "FIELD_NAME_PROPERTY";
+	public static final String FIELD_DATATYPE_PROPERTY = "FIELD_DATATYPE_PROPERTY";
 	public static final String FIELD_VALUE_PROPERTY = "FIELD_VALUE_PROPERTY";
 
 	
-	private static final String[] PROPS = { FIELD_NAME_PROPERTY, FIELD_VALUE_PROPERTY };
+	private static final String[] PROPS = { FIELD_NAME_PROPERTY, FIELD_DATATYPE_PROPERTY ,FIELD_VALUE_PROPERTY };
+	private static final String FIELD_DATATYPE_COLUMN = "Data Type";
 
 	EvalDialogFieldTable createFieldTable(Composite fieldTableComposite,Map<String,Class<?>> fieldMap) {
 		
@@ -55,12 +60,17 @@ public class EvalDialogFieldTable {
 		table.setLinesVisible(true);
 		
 		fieldNameColumn = new TableColumn(table, SWT.NONE);
-		fieldNameColumn.setWidth(370);
-		fieldNameColumn.setText("Field Name");
+		fieldNameColumn.setWidth(300);
+		fieldNameColumn.setText(FIELD_NAME_COLUMN);
 		
 		fieldValueColumn = new TableColumn(table, SWT.NONE);
+		fieldValueColumn.setWidth(70);
+		fieldValueColumn.setText(FIELD_DATATYPE_COLUMN);
+
+		fieldValueColumn = new TableColumn(table, SWT.NONE);
 		fieldValueColumn.setWidth(148);
-		fieldValueColumn.setText("Value");
+		fieldValueColumn.setText(FIELD_VALUE_COLUMN);
+		
 		
 		tableViewer.setContentProvider(new EvalFiedContentProvider());
 		tableViewer.setLabelProvider(new EvalFieldLabelProvider());
@@ -75,8 +85,9 @@ public class EvalDialogFieldTable {
 
 	private void createCellEditors() {
 		final CellEditor fieldNameeditor = new TextCellEditor(table);
+		final CellEditor fieldDataTypeeeditor = new TextCellEditor(table);
 		final CellEditor fieldValueeditor = new TextCellEditor(table);
-		CellEditor[] editors = new CellEditor[] { fieldNameeditor, fieldValueeditor };
+		CellEditor[] editors = new CellEditor[] { fieldNameeditor, fieldDataTypeeeditor ,fieldValueeditor };
 		tableViewer.setColumnProperties(PROPS);
 		tableViewer.setCellModifier(new FieldNameAndValueCellModifier(tableViewer));
 		tableViewer.setCellEditors(editors);
@@ -105,6 +116,10 @@ public class EvalDialogFieldTable {
 		fieldNames[propertyList.indexOf(fieldNameAndValue)]=fieldNameAndValue.getFieldName();
 		}
 		return new Object[]{fieldNames,fieldValues};
+	}
+	
+	TableViewer getTableViewer() {
+		return tableViewer;
 	}
 	
 }

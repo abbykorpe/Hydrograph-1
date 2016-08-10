@@ -89,7 +89,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 	public void loadPackagesFromPropertyFileSettingFolder() {
 		Properties properties = new Properties();
 		IFolder folder = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getFolder(
-				PathConstant.PROJECTS_SETTINGS_FOLDER);
+				PathConstant.PROJECT_RESOURCES_FOLDER);
 		IFile file = folder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
 		try {
 			LOGGER.debug("Loading property file");

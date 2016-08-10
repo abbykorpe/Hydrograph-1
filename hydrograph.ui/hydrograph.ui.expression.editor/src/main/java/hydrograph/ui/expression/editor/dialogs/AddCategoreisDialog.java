@@ -111,7 +111,7 @@ public class AddCategoreisDialog extends Dialog {
 	
 	public boolean createPropertyFileForSavingData()  {
 		IProject iProject=BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
-		IFolder iFolder=iProject.getFolder(PathConstant.PROJECTS_SETTINGS_FOLDER);
+		IFolder iFolder=iProject.getFolder(PathConstant.PROJECT_RESOURCES_FOLDER);
 		Properties properties=new Properties();
 		try {
 			if(!iFolder.exists()){

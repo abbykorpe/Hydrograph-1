@@ -23,6 +23,7 @@ import org.eclipse.osgi.util.NLS;
  */
 public class CustomMessages extends NLS {
 	private static final String BUNDLE_NAME = "hydrograph.ui.project.structure.messages"; //$NON-NLS-1$
+	public static String ProjectSupport_RESOURCES;
 	public static String ProjectSupport_GLOBAL_PARAM;
 	public static String ProjectSupport_JOBS;
 	public static String ProjectSupport_PARAM;

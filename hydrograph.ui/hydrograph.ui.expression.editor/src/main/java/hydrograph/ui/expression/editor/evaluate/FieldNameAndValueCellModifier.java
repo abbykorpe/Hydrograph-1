@@ -68,7 +68,9 @@ public class FieldNameAndValueCellModifier implements ICellModifier {
 		FieldNameAndValue fieldNameAndValue = (FieldNameAndValue) element;
 
 		if (EvalDialogFieldTable.FIELD_NAME_PROPERTY.equals(property)) {
+			return fieldNameAndValue.getFieldName();
 
+		} else if (EvalDialogFieldTable.FIELD_DATATYPE_PROPERTY.equals(property)) {
 			return fieldNameAndValue.getFieldName();
 
 		} else if (EvalDialogFieldTable.FIELD_VALUE_PROPERTY.equals(property))
@@ -96,7 +98,7 @@ public class FieldNameAndValueCellModifier implements ICellModifier {
 		if (StringUtils.equals(EvalDialogFieldTable.FIELD_NAME_PROPERTY, property)) {
 			fieldNameAndValue.setFieldName((String) value);
 		} else if (StringUtils.equals(EvalDialogFieldTable.FIELD_VALUE_PROPERTY, property)) {
-				fieldNameAndValue.setFieldValue((String) value);
+			fieldNameAndValue.setFieldValue((String) value);
 		}
 
 		viewer.refresh();

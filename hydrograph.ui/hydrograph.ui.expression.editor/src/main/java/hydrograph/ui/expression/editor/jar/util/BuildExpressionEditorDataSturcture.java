@@ -127,7 +127,7 @@ public class BuildExpressionEditorDataSturcture {
 	
 	private void loadClassesFromSettingsFolder() {
 		Properties properties = new Properties();
-		IFolder folder=getCurrentProject().getFolder(PathConstant.PROJECTS_SETTINGS_FOLDER);
+		IFolder folder=getCurrentProject().getFolder(PathConstant.PROJECT_RESOURCES_FOLDER);
 		IFile file = folder.getFile(PathConstant.EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES);
 		try {
 			LOGGER.debug("Loading property file");
@@ -136,13 +136,15 @@ public class BuildExpressionEditorDataSturcture {
 				properties.load(inStream);
 				
 				for(Object key:properties.keySet()){
-						loadUserDefinedClassesInClassRepo(properties.getProperty((String)key),(String)key);
+					String packageName=StringUtils.remove((String)key,Constants.DOT+Constants.ASTRISK);
+					if(StringUtils.isNotBlank(properties.getProperty((String)key)) && StringUtils.isNotBlank(packageName)){
+						loadUserDefinedClassesInClassRepo(properties.getProperty((String)key),packageName);
+					}
 				}
 			}
 		} catch (IOException |RuntimeException exception) {
 			LOGGER.error("Exception occurred while loading jar files from projects setting folder",exception);
 		}
-
 	}
 
 }
