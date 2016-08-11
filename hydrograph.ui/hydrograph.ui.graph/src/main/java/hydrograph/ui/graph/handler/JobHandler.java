@@ -12,13 +12,20 @@
  ******************************************************************************/
 package hydrograph.ui.graph.handler;
 
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * JobHandler Handles both debug and normal run.
@@ -57,6 +64,20 @@ public class JobHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		if(validateGraphProperties()){
+		if(confirmationFromUser()){
+			executeJob();
+		}
+		}
+		else {
+			executeJob();
+		}
+		return null;
+	
+	}
+	
+	public void executeJob()
+	{
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 		if(runConfigDialog.isDebug()){
 			new DebugHandler().execute(runConfigDialog);
@@ -64,7 +85,6 @@ public class JobHandler extends AbstractHandler {
 		else{
 			new RunJobHandler().execute(runConfigDialog);
 		}
-		return null;
 	}
 
 	/**
@@ -76,6 +96,47 @@ public class JobHandler extends AbstractHandler {
 		RunConfigDialog runConfigDialog = new RunConfigDialog(Display.getDefault().getActiveShell());
 		runConfigDialog.open();
 		return runConfigDialog;
+	}
+	
+private boolean confirmationFromUser() {
+		
+		MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(),Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE, null,
+				Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB, MessageDialog.QUESTION, new String[] { "Yes",
+		  "No" }, 0);
+		int response = messageDialog.open();
+		 if(response == 0){
+	        	return true;
+	        } else {
+	        	return false;
+	        }
+	}
+
+	private boolean validateGraphProperties() {
+		Map<String, String> graphPropertiesMap = null;
+		boolean retValue = false;
+		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI
+				.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+	
+		if (null != editor) {
+	
+			graphPropertiesMap = (Map<String, String>) editor.getContainer()
+					.getGraphRuntimeProperties();
+	
+			for (String key : graphPropertiesMap.keySet()) {
+	
+				if (StringUtils.isBlank(graphPropertiesMap.get(key))) {
+	
+					retValue = true;
+	
+					break;
+				}
+	
+			}
+	
+		}
+	
+		return retValue;
 	}
 
 }
