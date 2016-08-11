@@ -143,8 +143,10 @@ public class WidgetHelper {
 	public WidgetConfig getNoOfRecordsWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_NO_OF_RECORDS);
+		textBoxConfig.setCharacterLimit(10);
 		addTextBoxListeners(textBoxConfig);
 		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}

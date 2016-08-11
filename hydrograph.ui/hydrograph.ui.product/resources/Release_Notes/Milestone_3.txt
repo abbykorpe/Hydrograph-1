@@ -62,7 +62,15 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 46.#368	[Akhilesh Joshi]Parameter Dialog: Accepting Null Parameter Name  
 47.#521 [Nikhil Deokar] Updated File menu icons to be in sync with coolbar
 48.#522 [Nikhil Deokar] Updated Edit menu icons to be in sync with coolbar 
-49.#1002 [Prateem Tadas] Property Window : 'Partition keys' field is mendatory.
+49.#1010 [Sonia Raheja] Filter window: Tooltip indicating the allowed data format is required
+50.#680 [Rushikesh Pawale] Resized import and export XML window size.
+51.#537 [Rushikesh Pawale] Added validation to restrict input count upto 10 digits and changed datatype from integer to long.
+52.#660 [Rushikesh Pawale] Input Ports are now Increased/Decreased in Join Configuration and Join Mapping Window on Apply button.
+53.#982 [Akhilesh Joshi] MacBook Pro - Browse Button is not Appeared Correctly on Operation Window
+54.#1007[Akhilesh Joshi]Hive Output : Compoent Size Goes on Increasing On Copy Paste
+55.#1012[Ashika Holkar] External Schema: Project Window while export/importing Schema Only Displays ' Select Schema File(.schema)'
+56.#164 [Vibhor Tyagi] Transform Editor: User should be able to delete multiple rows by selecting rows with control keys in schema grid
+57.#1002 [Prateem Tadas] Property Window : 'Partition keys' field is mendatory. 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

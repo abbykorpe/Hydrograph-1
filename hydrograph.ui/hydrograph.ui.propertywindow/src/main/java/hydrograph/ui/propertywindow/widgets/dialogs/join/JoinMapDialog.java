@@ -25,7 +25,6 @@ import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
@@ -100,7 +99,7 @@ public class JoinMapDialog extends Dialog {
 	private JoinMappingGrid joinMappingGrid;
 	private List<List<FilterProperties>> inputPorts;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	private int inputPortValue = ELTJoinWidget.value;
+	private int inputPortValue;
 	private TableViewer mappingTableViewer;
 	private List<LookupMapProperty> mappingTableItemList;
 	private Map<String, Button> radioButtonMap;
@@ -864,7 +863,8 @@ public class JoinMapDialog extends Dialog {
 
 	private void populateInputFieldExpandBarSection(ExpandBar expandBar) {
 		List<FilterProperties> inputPortFieldList = null;
-
+		String count=(String)component.getProperties().get(Constants.INPUT_PORT_COUNT_PROPERTY);
+		inputPortValue=Integer.valueOf(count);
 		for (int i = 0; i < inputPortValue; i++) {
 			if (joinMappingGrid != null) {
 				if (joinMappingGrid.getLookupInputProperties() != null

@@ -16,6 +16,9 @@ package hydrograph.ui.propertywindow.widgets.utility;
 
 import hydrograph.ui.propertywindow.messages.Messages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -40,6 +43,7 @@ import org.eclipse.swt.widgets.TableColumn;
  */
 public class WidgetUtility {
 	private static final String ERROR = "Error";
+	private static final String ERROR_MESSAGE = "Please Select row to delete";
 	
 
 	private WidgetUtility(){
@@ -163,5 +167,53 @@ public class WidgetUtility {
 	 */
 	public static void addComboBox(Table table, CellEditor[] cellEditor, String[] data, int position){
 		cellEditor[position] = new ComboBoxCellEditor(table, data,SWT.READ_ONLY);		
+	}
+	
+	/**
+	 * Set the cursor on delete the row from table.
+	 * @param tableViewer
+	 * @param gridList
+	 */
+	public static void setCursorOnDeleteRow(TableViewer tableViewer, List<?> gridList){
+		Table table = tableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		if (table.getSelectionIndex() == -1) {
+			WidgetUtility.errorMessage(ERROR_MESSAGE);
+		} else {
+			table.remove(indexes);
+			List listOfItemsToRemove= new ArrayList();
+			for (int index : indexes) { 
+				listOfItemsToRemove.add(gridList.get(index));
+			}
+			gridList.removeAll(listOfItemsToRemove);
+			
+		//highlight after deletion
+		if(indexes.length == 1 && gridList.size() > 0){//only one item is deleted
+			if(gridList.size() == 1){//list contains only one element
+				table.select(0);// select the first element
+				tableViewer.editElement(tableViewer.getElementAt(0), 0);
+			}
+			else if(gridList.size() == indexes[0]){//deleted last item 
+				table.select(gridList.size() - 1);//select the last element which now at the end of the list
+				tableViewer.editElement(tableViewer.getElementAt(gridList.size() - 1), 0);
+			}
+			else if(gridList.size() > indexes[0]){//deleted element from middle of the list
+				table.select( indexes[0] == 0 ? 0 : (indexes[0] - 1) );//select the element from at the previous location
+				tableViewer.editElement(tableViewer.getElementAt(indexes[0] == 0 ? 0 : (indexes[0] - 1)), 0);
+			}
+		}
+		else if(indexes.length >= 2){//multiple items are selected for deletion
+			if(indexes[0] == 0){//delete from 0 to ...
+				if(gridList.size() >= 1){//list contains only one element
+					table.select(0);//select the remaining element
+					tableViewer.editElement(tableViewer.getElementAt(0), 0);
+				}
+			}
+			else{//delete started from element other than 0th element
+				table.select((indexes[0])-1);//select element before the start of selection   
+				tableViewer.editElement(tableViewer.getElementAt((indexes[0])-1), 0);
+			}
+		}
+	  }
 	}
 }

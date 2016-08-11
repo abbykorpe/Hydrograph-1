@@ -45,10 +45,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -59,6 +68,8 @@ import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -66,20 +77,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
-
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
 
 public class ELTOperationClassDialog extends Dialog implements IOperationClassDialog {
 
@@ -174,8 +174,11 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		FilterOperationClassUtility.INSTANCE.setComponentName(componentName);
 		isParameterCheckBox = (Button) isParameterCheckbox.getSWTWidgetControl();
 		alphanumericDecorator = WidgetUtility.addDecorator(fileName, Messages.CHARACTERSET);
+		alphanumericDecorator.setMarginWidth(2);
 		emptyDecorator = WidgetUtility.addDecorator(fileName, Messages.OperationClassBlank);
+		emptyDecorator.setMarginWidth(2);
 		parameterDecorator = WidgetUtility.addDecorator(fileName, Messages.PARAMETER_ERROR);
+		parameterDecorator.setMarginWidth(2);
 
 		buttonComposite = new Composite(container, SWT.NONE);
 		GridData gd_composite_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -188,15 +191,22 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		gd_nameValueComposite.widthHint = 526;
 		gd_nameValueComposite.heightHint = 251;
 		nameValueComposite.setLayoutData(gd_nameValueComposite);
-
-		nameValueComposite.setLayout(new GridLayout(1, false));
+		GridLayout name_gd = new GridLayout(1, false);
+		name_gd.marginWidth=0;
+		name_gd.marginRight=0;
+		nameValueComposite.setLayout(name_gd);
 
 		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.MULTI);
 		Table table_2 = nameValueTableViewer.getTable();
 		GridData gd_table_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_table_2.heightHint = 180;
-		gd_table_2.widthHint = 499;
+		if(OSValidator.isMac()){
+		gd_table_2.widthHint = 507;
+		}
+		else{
+			gd_table_2.widthHint =504; 
+		}
 		table_2.setLayoutData(gd_table_2);
 		setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
@@ -204,10 +214,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
 		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(operationClassProperty.getNameValuePropertyList());
-		table_2.getColumn(0).setWidth(252);
-		table_2.getColumn(1).setWidth(259);
+		table_2.getColumn(0).setWidth(259);
+		table_2.getColumn(1).setWidth(262);
 
-		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 360, 17, 20, 15 }, "");
+		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 380, 17, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -230,7 +240,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 
-		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 390, 17, 20, 15 }, "");
+		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 410, 17, 20, 15 }, "");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -247,7 +257,6 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 					table.remove(indexs);
 					ArrayList tempList = new ArrayList();
 					for (int index : indexs) {
-
 						tempList.add(operationClassProperty.getNameValuePropertyList().get(index));
 					}
 					operationClassProperty.getNameValuePropertyList().removeAll(tempList);
@@ -257,7 +266,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 
-		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 420, 17, 20, 15 }, "");
+		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 440, 17, 20, 15 }, "");
 		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -278,7 +287,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 		
-		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 450, 17, 20, 15 }, "");
+		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 470, 17, 20, 15 }, "");
 		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
