@@ -13,8 +13,6 @@
 
 package hydrograph.ui.expression.editor.launcher;
 
-import java.util.ArrayList;
-
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
@@ -25,6 +23,8 @@ import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturctu
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -34,9 +34,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.Message;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.internal.ole.win32.COSERVERINFO;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 

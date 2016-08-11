@@ -116,7 +116,6 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 				+ TrackingDisplayUtils.INSTANCE.getPortFromPreference()
 				+ GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH+"\""+userFunctionsPropertyFile;;
 		logger.info("Gradle Command: {}", exeCommond);
-		
 		return exeCommond;
 	}
 

@@ -188,9 +188,9 @@ public class ValidateExpressionToolButton extends Button {
 					}
 				else{
 					if(OSValidator.isMac() || OSValidator.isUnix())
-						transfromJarPath = url.getPath() + Constants.COLON;
+						transfromJarPath = transfromJarPath + url.getPath() + Constants.COLON;
 					else
-						transfromJarPath = url.getPath() + Constants.SEMICOLON;
+						transfromJarPath = transfromJarPath + url.getPath() + Constants.SEMICOLON;
 					}
 				}
 			}
