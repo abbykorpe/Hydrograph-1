@@ -171,7 +171,7 @@ public class ExpressionComposite extends Composite {
 		Composite composite_4 = new Composite(this, SWT.NONE);
 		composite_4.setLayout(new GridLayout(1, false));
 		GridData gd_composite_4 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_composite_4.widthHint = 115;
+		gd_composite_4.widthHint = 159;
 		composite_4.setLayoutData(gd_composite_4);
 		new Label(composite_4, SWT.NONE);
 		new Label(composite_4, SWT.NONE);

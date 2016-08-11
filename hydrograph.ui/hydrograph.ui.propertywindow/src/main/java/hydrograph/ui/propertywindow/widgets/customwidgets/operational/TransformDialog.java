@@ -109,7 +109,6 @@ import org.eclipse.swt.widgets.Widget;
  */
 public class TransformDialog extends Dialog implements IOperationClassDialog {
 
-	private static final String OPERATION_ID_TEXT_BOX2 = "OperationIDTextBox";
 	private static final String PLEASE_SELECT_PARAMETER_FIELD_S_ONLY = "Please select Parameter field(s) only";
 	private static final String OUTPUT_FIELD = "OutputField";
 	private static final String EXPRESSION_TEXT_BOX = "expressionTextBox";
@@ -138,8 +137,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private ExpandBar expandBar = null;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private PropertyDialogButtonBar propertyDialogButtonBar;
-	private Text operationClassTextBox;
-	private Text operationIDTextBox;
 	private boolean isYesButtonPressed;
 	private boolean isNoButtonPressed;
 	private boolean cancelPressed;
@@ -147,12 +144,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Table tableViewerTable;
 	private Component component;
 	private WidgetConfig widgetConfig;
-	private Text text;
-	private Button isParam;
 	private TableViewer operationalInputFieldTableViewer;
 	private TableViewer operationalOutputFieldTableViewer;
-	private Button operationInputaddButton;
-	private Button operationInputDeleteButton;
 	private ScrolledComposite scrolledComposite;
 	private TableViewer inputFieldTableViewer;
 	private TableViewer mappingTableViewer;
@@ -391,7 +384,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	}
    
 	private void addListenerForRowHighlighting(
-			ExpressionComposite expressionComposite ) {
+			ExpressionComposite expressionComposite ) 
+	{
 		expressionComposite.addMouseListener(new MouseAdapter() {
 			
 			@Override
@@ -443,6 +437,69 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 	}
 	
+	
+	private void addListenerForRowHighlightingForOperationComposite(
+			OperationClassComposite operationClassComposite ) {
+		operationClassComposite.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				Composite composite=(Composite)e.widget;
+				OperationClassComposite operationClassComposite=(OperationClassComposite)composite;
+				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(operationClassComposite.getOperationIdTextBox(),
+					inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
+			}
+		});
+    	operationClassComposite.getOperationIdTextBox().getParent().addMouseListener(new MouseAdapter() {
+			public void mouseUp(MouseEvent e) {
+				Composite composite=(Composite)e.widget;
+				OperationClassComposite operationClassComposite=(OperationClassComposite)composite.getParent();
+				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(operationClassComposite.getOperationIdTextBox(),
+						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
+				
+			}
+		});
+    	operationClassComposite.getInputTableViewer().getControl().addMouseListener(new MouseAdapter() 
+    	{
+    		public void mouseUp(MouseEvent e) {
+				Composite composite=(Composite)e.widget;
+				OperationClassComposite operationClassComposite=(OperationClassComposite)composite.getParent().getParent();
+				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(operationClassComposite.getOperationIdTextBox(),
+						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
+				
+			}
+		});
+    	operationClassComposite.getOutputTableViewer().getControl().addMouseListener(new MouseAdapter() 
+    	{
+    		public void mouseUp(MouseEvent e) {
+				Composite composite=(Composite)e.widget;
+				OperationClassComposite operationClassComposite=(OperationClassComposite)composite.getParent().getParent();
+				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(operationClassComposite.getOperationIdTextBox(),
+						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
+				
+			}
+		});
+    	operationClassComposite.getAddButtonInputTable().getParent().addMouseListener(new MouseAdapter() 
+    	{
+    		public void mouseUp(MouseEvent e) {
+				Composite composite=(Composite)e.widget;
+				OperationClassComposite operationClassComposite=(OperationClassComposite)composite.getParent().getParent();
+				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(operationClassComposite.getOperationIdTextBox(),
+						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
+				
+			}
+		});
+    	operationClassComposite.getAddButtonOutputTable().getParent().addMouseListener(new MouseAdapter() 
+    	{
+    		public void mouseUp(MouseEvent e) {
+				Composite composite=(Composite)e.widget;
+				OperationClassComposite operationClassComposite=(OperationClassComposite)composite.getParent().getParent();
+				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(operationClassComposite.getOperationIdTextBox(),
+						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
+				
+			}
+		});
+	}
 	
 	private void addControlListener(Table table) {
 		table.addControlListener(new ControlAdapter() {
@@ -828,147 +885,258 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
      }
     else
     {
-    	Composite expandItemComposite = new Composite(expandBar, SWT.NONE);
-		expandItemComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		expandItemComposite.setVisible(true);
-		expandItem.setControl(expandItemComposite);
-		expandItemComposite.setLayout(new GridLayout(3, false));
-        operationalInputFieldTableViewer = createOperationInputFieldTable(expandItemComposite, mappingSheetRow);
-		createMiddleWidgets(expandItemComposite, expandItem, mappingSheetRow);
-		TableViewer operationOTableViewer=createOperationOutputFieldTable(expandItemComposite, mappingSheetRow);
-        expandItem.setData(OUTPUT_TABLE_VIEWER, operationOTableViewer);
+    	OperationClassComposite operationClassComposite=new OperationClassComposite(expandBar, SWT.NONE,mappingSheetRow);
+    	expandItem.setControl(operationClassComposite);
+		expandItem.setData(OUTPUT_TABLE_VIEWER, operationClassComposite.getOutputTableViewer());
+		expandItem.setData(operationClassComposite.getOperationIdTextBox());
+		expandItem.setData(IS_PARAM,operationClassComposite.getBtnIsParam());
+		expandItem.setData(OPERATION_CLASS_TEXT_BOX, operationClassComposite.getOperationTextBox());
+		operationClassComposite.getOperationIdTextBox().setText(expandItem.getText());
+		operationClassComposite.getOperationIdTextBox().setData(expandItem); 
+		addListenerForRowHighlightingForOperationComposite(operationClassComposite);
+		addModifyListenerToOperationClassAndExpressionTextBox(operationClassComposite.getOperationTextBox());
+		attachModifyListenerToIdTextBox(mappingSheetRow, operationClassComposite.getOperationIdTextBox());
+		attachFocusListenerToIdTextBox(operationClassComposite.getOperationIdTextBox());
+		addIsParamSelectionListenerForOperationClassWidget(operationClassComposite.getBtnIsParam(), mappingSheetRow);
+		operationalInputFieldTableViewer=operationClassComposite.getInputTableViewer();
+    	operationalInputFieldTableViewer = setTableViewer(operationalInputFieldTableViewer,
+    			 operationalInputFieldTableViewer.getControl().getParent(), new String[] {Messages.INNER_OPERATION_INPUT_FIELD },
+				new ELTFilterContentProvider(), new OperationLabelProvider());
+    	 operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+    	 operationalInputFieldTableViewer.setInput(mappingSheetRow.getInputFields());
+    	 operationalInputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalInputFieldTableViewer, this,mappingSheetRow));
+    	 operationalInputFieldTableViewer.setLabelProvider(new ELTFilterLabelProvider());
+    	 CellEditor[] editor=operationalInputFieldTableViewer.getCellEditors();
+ 		 fieldNameDecorator = WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_SHOULD_NOT_BE_BLANK);
+ 		 isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
+ 		 editors[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
+		 isFieldNameAlphanumericDecorator.setMarginWidth(8);
+		 fieldNameDecorator.setMarginWidth(8);
+ 		 
+ 		 operationalOutputFieldTableViewer=operationClassComposite.getOutputTableViewer();
+    	 operationalOutputFieldTableViewer = setTableViewer(operationalOutputFieldTableViewer,
+    			 operationalOutputFieldTableViewer.getControl().getParent(), new String[] {Messages.INNER_OPERATION_OUTPUT_FIELD },
+				new ELTFilterContentProvider(), new OperationLabelProvider());
+    	 operationalOutputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+    	 operationalOutputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalOutputFieldTableViewer, this));
+    	 operationalOutputFieldTableViewer.setInput(mappingSheetRow.getOutputList());
+    	 operationalOutputFieldTableViewer.setLabelProvider(new ELTFilterLabelProvider());
+    	 attachFocuListenerToParamaterTextBox(operationClassComposite.getParameterTextBox());
+    	 addSelectionListenerToBrowseButton(operationClassComposite);
+    	 operationClassComposite.getBrowseButton().setData(Messages.MAPPING_SHEET,mappingSheetRow);
+    	 operationClassComposite.getBrowseButton().setData(OPERATION_CLASS_TEXT_BOX, operationClassComposite.getOperationTextBox());
+    	 DragDropTransformOpImp dragDropTransformOpImpnew = new DragDropTransformOpImp(this,
+				 temporaryOutputFieldMap,
+				mappingSheetRow.getOutputList(), mappingSheetRow.getInputFields(), true,
+				operationalInputFieldTableViewer, operationalOutputFieldTableViewer,transformMapping.getOutputFieldList());
+ 		 DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
+    	 intializeFunctionalityToOperationClassWidget
+    	 (operationClassComposite, mappingSheetRow, operationalInputFieldTableViewer, operationalOutputFieldTableViewer);
+    	 showHideValidationMessage();
     }
        
         scrollBarComposite.setContent(expandBar);
 		scrollBarComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
+
+	private void addSelectionListenerToBrowseButton(
+			final OperationClassComposite operationClassComposite) {
+		operationClassComposite.getBrowseButton().addSelectionListener(new SelectionAdapter() {
+    			
+ 			@Override
+ 			public void widgetSelected(SelectionEvent e) {
+ 				MappingSheetRow orignalMappingSheetRow = (MappingSheetRow) ((Button) e.widget).getData(Messages.MAPPING_SHEET);
+ 				Text operationClassTextBox=(Text)((Button)e.widget).getData(OPERATION_CLASS_TEXT_BOX);
+ 				MappingSheetRow oldMappingSheetRow = (MappingSheetRow) orignalMappingSheetRow.clone();
+ 				OperationClassDialog operationClassDialog = new OperationClassDialog(operationClassComposite.getBrowseButton().getShell(), component
+ 						.getComponentName(), orignalMappingSheetRow, propertyDialogButtonBar, widgetConfig,
+ 						transformDialog);
+ 				operationClassDialog.open();
+ 				operationClassTextBox.setText(operationClassDialog.getMappingSheetRow().getOperationClassPath());
+ 				orignalMappingSheetRow.setComboBoxValue(operationClassDialog.getMappingSheetRow().getComboBoxValue());
+ 				orignalMappingSheetRow.setOperationClassPath(operationClassDialog.getMappingSheetRow()
+ 						.getOperationClassPath());
+ 				orignalMappingSheetRow.setClassParameter(operationClassDialog.getMappingSheetRow().isClassParameter());
+                
+ 				orignalMappingSheetRow.setOperationClassFullPath(operationClassDialog.getMappingSheetRow()
+ 						.getOperationClassFullPath());
+ 				if (operationClassDialog.isCancelPressed() && (!(operationClassDialog.isApplyPressed()))) {
+ 					orignalMappingSheetRow.setNameValueProperty(oldMappingSheetRow.getNameValueProperty());
+ 				}
+ 				if (operationClassDialog.isNoPressed())
+ 					pressCancel();
+ 				if (operationClassDialog.isYesPressed())
+ 					pressOK();
+ 				super.widgetSelected(e);
+ 			}
+
+ 		});
+	}
 	
-	private void intializeFunctionalityToExpressionWidget(ExpressionComposite expressionComposite,MappingSheetRow mappingSheetRow,TableViewer operationalInputFieldTableViewer)
+	private void intializeFunctionalityToOperationClassWidget
+	(OperationClassComposite operationClassComposite,MappingSheetRow mappingSheetRow,
+			TableViewer operationalInputFieldTableViewer,
+			TableViewer operationOutputFieldTableViewer)
+	{
+		Button inputddButton=operationClassComposite.getAddButtonInputTable();
+		addButtonListener(mappingSheetRow,operationalInputFieldTableViewer,inputddButton);
+		Button inputDeleteButton=operationClassComposite.getDeletButtonInputTable();
+		deleteButtonListener(mappingSheetRow, operationalInputFieldTableViewer, inputDeleteButton);
+		Button outputAddButton=operationClassComposite.getAddButtonOutputTable();
+		Button outputDeleteButton=operationClassComposite.getDeletButtonOutputTable();
+		addButtonListenerForOperationClassComposite(mappingSheetRow, operationOutputFieldTableViewer, outputAddButton);
+		deleteButtonListenerForOperationClassWidget(mappingSheetRow, operationOutputFieldTableViewer, outputDeleteButton);
+	}
+	
+	
+	
+	
+	private void intializeFunctionalityToExpressionWidget
+	(ExpressionComposite expressionComposite,MappingSheetRow mappingSheetRow,TableViewer operationalInputFieldTableViewer)
 	{
 		Button addButton=expressionComposite.getAddButton();
 		addButtonListener(mappingSheetRow,operationalInputFieldTableViewer,addButton);
 		Button deleteButton=expressionComposite.getDeletButton();
 		deleteButtonListener(mappingSheetRow, operationalInputFieldTableViewer, deleteButton);
 	}
-	
-	private void createMiddleWidgets(Composite expandItemComposite, ExpandItem expandItem,
-			final MappingSheetRow mappingSheetRow) {
 
-		Composite innerComposite = new Composite(expandItemComposite, SWT.NONE);
-		GridData gd_fileSelectComposite = new GridData(SWT.CENTER, SWT.FILL, true, true, 1, 1);
-		gd_fileSelectComposite.heightHint = 29;
-		gd_fileSelectComposite.widthHint = 360;
-		innerComposite.setLayoutData(gd_fileSelectComposite);
-        
-		Label operationIDLabel = new Label(innerComposite, SWT.NONE);
-		operationIDLabel.setBounds(24, 28, 74, 30);
-		operationIDLabel.setText(Messages.OPERATION_ID);
-		
-		operationIDTextBox = new Text(innerComposite, SWT.BORDER);
-		operationIDTextBox.setBounds(104, 28, 150, 21);
-		operationIDTextBox.setText(expandItem.getText());
-        operationIDTextBox.setData(expandItem);
-		expandItem.setData(operationIDTextBox);
-		attachModifyListenerToIdTextBox(mappingSheetRow,operationIDTextBox);
-		attachFocusListenerToIdTextBox(operationIDTextBox);
-		operationIDTextBox.getParent().getParent().setData(OPERATION_ID_TEXT_BOX2,operationIDTextBox);
-        operationIDTextBox.getParent().addMouseListener(new MouseAdapter() {
-			public void mouseUp(MouseEvent e) 
-			{
-				Composite composite=(Composite)e.widget;
-				Text text=(Text)composite.getParent().getData(OPERATION_ID_TEXT_BOX2);
-				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(text,
-						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
+	private void addModifyListenerToOperationClassAndExpressionTextBox(Text textBox) {
+		textBox.addModifyListener(new ModifyListener() {
+		   @Override
+			public void modifyText(ModifyEvent e) {
+			 showHideValidationMessage();
 			}
 		});
-       
-		Label operationClassLabel = new Label(innerComposite, SWT.NONE);
-		operationClassLabel.setBounds(24, 94, 62, 35);
-		operationClassLabel.setText(Messages.OP_CLASS);
-		
-		operationClassTextBox = new Text(innerComposite, SWT.BORDER);
-		operationClassTextBox.setBounds(104, 91, 150, 21);
-		operationClassTextBox.setEditable(false);
-		addModifyListenerToOperationClassAndExpressionTextBox(operationClassTextBox);
-		
-		expandItem.setData(OPERATION_CLASS_TEXT_BOX,operationClassTextBox);
-		mappingSheetRow.setOperationID(operationIDTextBox.getText());
-		
-		final Button browseButton = new Button(innerComposite, SWT.NONE);
-		browseButton.addSelectionListener(new SelectionAdapter() {
+	}
+
+	private void attachFocusListenerToIdTextBox(Text operationIDTextBox) {
+		operationIDTextBox.addFocusListener(new FocusListener() {
+			
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void focusLost(FocusEvent e) {
+				Text textBox = (Text) e.widget;
+				if(StringUtils.isBlank(textBox.getText()))
+				{
+					textBox.setText((String) textBox.getData(Messages.PERVIOUS_VALUE));
+				}	
+				showHideValidationMessage();
 			}
-		});
-		browseButton.setBounds(284, 91, 35, 21);
-		browseButton.setText("...");
-		browseButton.setData(Messages.MAPPING_SHEET,mappingSheetRow);
-		browseButton.setData(OPERATION_CLASS_TEXT_BOX, operationClassTextBox);
-		browseButton.addSelectionListener(new SelectionAdapter() {
-		
+			
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				MappingSheetRow orignalMappingSheetRow = (MappingSheetRow) ((Button) e.widget).getData(Messages.MAPPING_SHEET);
-				Text operationClassTextBox=(Text)((Button)e.widget).getData(OPERATION_CLASS_TEXT_BOX);
-				MappingSheetRow oldMappingSheetRow = (MappingSheetRow) orignalMappingSheetRow.clone();
-				OperationClassDialog operationClassDialog = new OperationClassDialog(browseButton.getShell(), component
-						.getComponentName(), orignalMappingSheetRow, propertyDialogButtonBar, widgetConfig,
-						transformDialog);
-				operationClassDialog.open();
-				operationClassTextBox.setText(operationClassDialog.getMappingSheetRow().getOperationClassPath());
-				orignalMappingSheetRow.setComboBoxValue(operationClassDialog.getMappingSheetRow().getComboBoxValue());
-				orignalMappingSheetRow.setOperationClassPath(operationClassDialog.getMappingSheetRow()
-						.getOperationClassPath());
-				orignalMappingSheetRow.setClassParameter(operationClassDialog.getMappingSheetRow().isClassParameter());
-               
-				orignalMappingSheetRow.setOperationClassFullPath(operationClassDialog.getMappingSheetRow()
-						.getOperationClassFullPath());
-				if (operationClassDialog.isCancelPressed() && (!(operationClassDialog.isApplyPressed()))) {
-					orignalMappingSheetRow.setNameValueProperty(oldMappingSheetRow.getNameValueProperty());
-				}
-				if (operationClassDialog.isNoPressed())
-					pressCancel();
-				if (operationClassDialog.isYesPressed())
-					pressOK();
-				super.widgetSelected(e);
+			public void focusGained(FocusEvent e) {
+				Text textBox=(Text) e.widget;
+				textBox.setData(Messages.PERVIOUS_VALUE,textBox.getText());
 			}
-
 		});
+	}
 
-		Label lblParameter = new Label(innerComposite, SWT.NONE);
-		lblParameter.setBounds(24, 157, 55, 15);
-		lblParameter.setText(Messages.PARAMETER_LABEL);
 
-		text = new Text(innerComposite, SWT.BORDER);
-		text.setBounds(104, 151, 150, 21);
-		text.setEnabled(mappingSheetRow.isWholeOperationParameter());
-		if (mappingSheetRow.getWholeOperationParameterValue() != null)
-			text.setText(mappingSheetRow.getWholeOperationParameterValue());
-
-		text.addModifyListener(new ModifyListener() {
+	private void attachModifyListenerToIdTextBox(
+			final MappingSheetRow mappingSheetRow,Text operationIDTextBox) {
+		operationIDTextBox.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Text t = (Text) e.widget;
-				mappingSheetRow.setWholeOperationParameterValue(t.getText());
+				Text textBox = (Text) e.widget;
 
+				ExpandItem expandItem = (ExpandItem) textBox.getData();
+
+				expandItem.setText(textBox.getText());
+				mappingSheetRow.setOperationID(textBox.getText());
 			}
 		});
-		
-		attachFocuListenerToParamaterTextBox(text);
+	}
 
-		isParam = new Button(innerComposite, SWT.CHECK);
-		isParam.setData(PARAMETER_TEXT_BOX, text);
-		isParam.setData(OPERATION_CLASS_TEXT_BOX, operationClassTextBox);
-		isParam.setData(OPERATION_ID_TEXT_BOX, operationIDTextBox);
-		isParam.setData(BTN_NEW_BUTTON, browseButton);
-		isParam.setData(OPERATION_INPUT_FIELD_TABLE_VIEWER, operationalInputFieldTableViewer);
-		isParam.setData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER, operationalOutputFieldTableViewer);
-		isParam.setData(INPUT_ADD_BUTTON, operationInputaddButton);
-		isParam.setData(INPUT_DELETE_BUTTON, operationInputDeleteButton);
-		isParam.setSelection(mappingSheetRow.isWholeOperationParameter());
+	private void attachFocuListenerToParamaterTextBox(Text text) {
+		text.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				Text textBox=(Text)e.widget;
+				String parameterText=textBox.getText();
+				parameterText=StringUtils.replace(StringUtils.replace(parameterText,Constants.PARAMETER_PREFIX , ""),Constants.PARAMETER_SUFFIX,"");
+				textBox.setText(Constants.PARAMETER_PREFIX+parameterText+Constants.PARAMETER_SUFFIX);
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				Text textBox=(Text)e.widget;
+				String parameterText=textBox.getText();
+				parameterText=StringUtils.replace(StringUtils.replace(parameterText, Constants.PARAMETER_PREFIX, ""),Constants.PARAMETER_SUFFIX,"");
+				textBox.setText(parameterText);
+			}
+		});
+	}
+	private void deleteButtonListenerForOperationClassWidget(
+			final MappingSheetRow mappingSheetRow,
+			final TableViewer operationOutputtableViewer, Button deleteLabel) {
+		deleteLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
+		deleteLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				Table table = operationOutputtableViewer.getTable();
+				int temp = table.getSelectionIndex();
+				int[] indexs = table.getSelectionIndices();
+				mappingSheetRow.getOutputList().size();
+				if (temp == -1) {
+					WidgetUtility.errorMessage(Messages.SelectRowToDelete);
+				} else {
+					table.remove(indexs);
 
-		isParam.addSelectionListener(new SelectionAdapter() {
+					List<FilterProperties> tempList = new ArrayList<FilterProperties>();
+					for (int index : indexs) {
+						tempList.add(mappingSheetRow.getOutputList().get(index));
+					}
+					for(FilterProperties filterProperties: tempList)
+					{	
+					mappingSheetRow.getOutputList().remove(filterProperties);
+					int index=-1;	
+					for(int j=0;j<transformMapping.getOutputFieldList().size();j++)
+					{
+						if(transformMapping.getOutputFieldList().get(j)==filterProperties)
+						{
+							index=j;
+							break;
+						}	
+					}
+					if(index!=-1)
+					transformMapping.getOutputFieldList().remove(index);
+					
+					}
+					refreshOutputTable();
+					showHideValidationMessage();
+				}
+			}
+
+		});
+	}
+
+	private void addButtonListenerForOperationClassComposite(
+			final MappingSheetRow mappingSheetRow,
+			final TableViewer operationOutputtableViewer, Button addLabel) {
+		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
+		addLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				FilterProperties f = new FilterProperties();
+				f.setPropertyname("");
+
+				if (!mappingSheetRow.getOutputList().contains(f)) {
+
+					mappingSheetRow.getOutputList().add(f);
+					operationOutputtableViewer.refresh();
+					int i = mappingSheetRow.getOutputList().size() == 0 ? mappingSheetRow.getOutputList().size()
+							: mappingSheetRow.getOutputList().size() - 1;
+					operationalOutputFieldTableViewer.editElement(operationOutputtableViewer.getElementAt(i), 0);
+					component.setLatestChangesInSchema(false);
+				}
+			}
+
+		});
+	}
+    private void addIsParamSelectionListenerForOperationClassWidget(Button btnIsParam,final MappingSheetRow mappingSheetRow)
+    {
+    	btnIsParam.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
@@ -1041,249 +1209,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				}
 			}
 
-		});
-		isParam.setBounds(284, 156, 93, 16);
-		isParam.setText(Messages.IS_PARAM);
-		expandItem.setData(IS_PARAM, isParam);
-		
-     	if (mappingSheetRow.getOperationClassPath() != null){
-		 operationClassTextBox.setText(mappingSheetRow.getOperationClassPath());
-		}
-	}
-
-	private void addModifyListenerToOperationClassAndExpressionTextBox(Text textBox) {
-		textBox.addModifyListener(new ModifyListener() {
-		   @Override
-			public void modifyText(ModifyEvent e) {
-			 showHideValidationMessage();
-			}
-		});
-	}
-
-	private void attachFocusListenerToIdTextBox(Text operationIDTextBox) {
-		operationIDTextBox.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				Text textBox = (Text) e.widget;
-				if(StringUtils.isBlank(textBox.getText()))
-				{
-					textBox.setText((String) textBox.getData(Messages.PERVIOUS_VALUE));
-				}	
-				showHideValidationMessage();
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				Text textBox=(Text) e.widget;
-				textBox.setData(Messages.PERVIOUS_VALUE,textBox.getText());
-			}
-		});
-	}
-
-
-	private void attachModifyListenerToIdTextBox(
-			final MappingSheetRow mappingSheetRow,Text operationIDTextBox) {
-		operationIDTextBox.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				Text textBox = (Text) e.widget;
-
-				ExpandItem expandItem = (ExpandItem) textBox.getData();
-
-				expandItem.setText(textBox.getText());
-				mappingSheetRow.setOperationID(textBox.getText());
-			}
-		});
-	}
-
-	private void attachFocuListenerToParamaterTextBox(Text text) {
-		text.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				Text textBox=(Text)e.widget;
-				String parameterText=textBox.getText();
-				parameterText=StringUtils.replace(StringUtils.replace(parameterText,Constants.PARAMETER_PREFIX , ""),Constants.PARAMETER_SUFFIX,"");
-				textBox.setText(Constants.PARAMETER_PREFIX+parameterText+Constants.PARAMETER_SUFFIX);
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				Text textBox=(Text)e.widget;
-				String parameterText=textBox.getText();
-				parameterText=StringUtils.replace(StringUtils.replace(parameterText, Constants.PARAMETER_PREFIX, ""),Constants.PARAMETER_SUFFIX,"");
-				textBox.setText(parameterText);
-			}
-		});
-	}
-    
-	
-	private TableViewer createOperationOutputFieldTable(Composite expandItemComposite, final MappingSheetRow mappingSheetRow) {
-
-		Composite operationalOutputFieldComposite = new Composite(expandItemComposite, SWT.NONE);
-		GridData gd_operationalOutputFieldComposite = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
-		gd_operationalOutputFieldComposite.widthHint = 156;
-		operationalOutputFieldComposite.setLayoutData(gd_operationalOutputFieldComposite);
-
-		 operationalOutputFieldTableViewer = new TableViewer(operationalOutputFieldComposite,
-				SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
-		final TableViewer operationOutputtableViewer = setTableViewer(operationalOutputFieldTableViewer,
-				operationalOutputFieldComposite, new String[] { Messages.INNER_OPERATION_OUTPUT_FIELD },
-				new ELTFilterContentProvider(), new OperationLabelProvider());
-		operationOutputtableViewer.getTable().setBounds(0, 25, 156, 182);
-		operationOutputtableViewer.getTable().getColumn(0).setWidth(152);
-
-		operationOutputtableViewer.setLabelProvider(new ELTFilterLabelProvider());
-		isParam.setData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER, operationOutputtableViewer);
-
-		operationOutputtableViewer.setCellModifier(new ELTCellModifier(operationOutputtableViewer, this));
-		operationOutputtableViewer.setInput(mappingSheetRow.getOutputList());
-        
-		CellEditor[] editor=operationOutputtableViewer.getCellEditors();
-		fieldNameDecorator = WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_SHOULD_NOT_BE_BLANK);
-		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
-		editor[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
-		isFieldNameAlphanumericDecorator.setMarginWidth(8);
-		fieldNameDecorator.setMarginWidth(8);
-		operationOutputtableViewer.getControl().addMouseListener(new MouseAdapter() {
-			
-			@Override
-			public void mouseUp(MouseEvent e) {
-				Composite composite=(Composite)e.widget;
-				Text text=(Text)composite.getParent().getParent().getData(OPERATION_ID_TEXT_BOX2);
-				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(text,
-						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
-				
-			}
-		});
-		operationOutputtableViewer.getTable().addMouseListener(new MouseAdapter() {
-			
-			@Override
-			public void mouseDown(MouseEvent e) {
-				isFieldNameAlphanumericDecorator.hide();
-			}
-		});
-		
-		operationalOutputFieldComposite.addMouseListener(new MouseAdapter() 
-        {
-			public void mouseUp(MouseEvent e) {
-				Composite composite=(Composite)e.widget;
-				Text text=(Text)composite.getParent().getData(OPERATION_ID_TEXT_BOX2);
-				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(text,
-						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
-			}
-		});
-		DragDropTransformOpImp dragDropTransformOpImpnew = new DragDropTransformOpImp(this,
-				 temporaryOutputFieldMap,
-				mappingSheetRow.getOutputList(), mappingSheetRow.getInputFields(), true,
-				operationalInputFieldTableViewer, operationOutputtableViewer,transformMapping.getOutputFieldList());
-		DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
-
-		Button addLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20, 15 },"");
-		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
-		addLabel.setImage(addImage);
-		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
-		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
-		addLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				FilterProperties f = new FilterProperties();
-				f.setPropertyname("");
-
-				if (!mappingSheetRow.getOutputList().contains(f)) {
-
-					mappingSheetRow.getOutputList().add(f);
-					operationOutputtableViewer.refresh();
-					int i = mappingSheetRow.getOutputList().size() == 0 ? mappingSheetRow.getOutputList().size()
-							: mappingSheetRow.getOutputList().size() - 1;
-					operationalOutputFieldTableViewer.editElement(operationOutputtableViewer.getElementAt(i), 0);
-					component.setLatestChangesInSchema(false);
-				}
-			}
-
-		});
-
-		
-		Button deleteLabel = widget.buttonWidget(operationalOutputFieldComposite, SWT.CENTER,new int[] { 90, -1, 20, 15 }, "");
-		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		deleteLabel.setImage(deleteImage);
-		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
-		deleteLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
-		deleteLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				Table table = operationOutputtableViewer.getTable();
-				int temp = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				mappingSheetRow.getOutputList().size();
-				if (temp == -1) {
-					WidgetUtility.errorMessage(Messages.SelectRowToDelete);
-				} else {
-					table.remove(indexs);
-
-					List<FilterProperties> tempList = new ArrayList<FilterProperties>();
-					for (int index : indexs) {
-						tempList.add(mappingSheetRow.getOutputList().get(index));
-					}
-					for(FilterProperties filterProperties: tempList)
-					{	
-					mappingSheetRow.getOutputList().remove(filterProperties);
-					int index=-1;	
-					for(int j=0;j<transformMapping.getOutputFieldList().size();j++)
-					{
-						if(transformMapping.getOutputFieldList().get(j)==filterProperties)
-						{
-							index=j;
-							break;
-						}	
-					}
-					if(index!=-1)
-					transformMapping.getOutputFieldList().remove(index);
-					
-					}
-					refreshOutputTable();
-					showHideValidationMessage();
-				}
-			}
-
-		});
-		isParam.setData(OUTPUT_ADD_BUTTON, addLabel);
-		isParam.setData(OUTPUT_DELETE_BUTTON, deleteLabel);
-		if (mappingSheetRow.isWholeOperationParameter()) {
-			Button text = (Button) isParam;
-			Text parameterTextBox = (Text) text.getData(PARAMETER_TEXT_BOX);
-			TableViewer operationInputFieldTableViewer = (TableViewer) text.getData(OPERATION_INPUT_FIELD_TABLE_VIEWER);
-			TableViewer operationalOutputFieldTableViewer = (TableViewer) text.getData(OPERATION_OUTPUT_FIELD_TABLE_VIEWER);
-			Text operationClassTextBox = (Text) text.getData(OPERATION_CLASS_TEXT_BOX);
-			Text operationIDTextBox = (Text) text.getData(OPERATION_ID_TEXT_BOX);
-			Button btnNewButton = (Button) text.getData(BTN_NEW_BUTTON);
-			Button inputAdd = (Button) text.getData(INPUT_ADD_BUTTON);
-
-			Button inputDelete = (Button) text.getData(INPUT_DELETE_BUTTON);
-			Button outputAdd = (Button) text.getData(OUTPUT_ADD_BUTTON);
-			Button outputDelete = (Button) text.getData(OUTPUT_DELETE_BUTTON);
-			parameterTextBox.setEnabled(true);
-
-			operationInputFieldTableViewer.getTable().setEnabled(false);
-
-			operationalOutputFieldTableViewer.getTable().setEnabled(false);
-			operationClassTextBox.setEnabled(false);
-
-			operationIDTextBox.setEnabled(false);
-
-			btnNewButton.setEnabled(false);
-			inputAdd.setEnabled(false);
-			inputDelete.setEnabled(false);
-
-			outputAdd.setEnabled(false);
-			outputDelete.setEnabled(false);
-
-		}
-    return operationOutputtableViewer;
-	}
-    
+		});	
+    }
 	private void addIsParamSelectionListener(Button btnIsParam,final MappingSheetRow mappingSheetRow) {
 		btnIsParam.addSelectionListener(new SelectionAdapter()
 		{
@@ -1606,74 +1533,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}
 		return filterProperties;
 	}
-
-	private TableViewer createOperationInputFieldTable(Composite expandItemComposite,
-			final MappingSheetRow mappingSheetRow) {
-		Composite operationInputFieldComposite = new Composite(expandItemComposite, SWT.NONE);
-		GridData gd_operationInputFieldComposite = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
-		gd_operationInputFieldComposite.widthHint = 156;
-		gd_operationInputFieldComposite.heightHint = 216;
-		
-		operationInputFieldComposite.setLayoutData(gd_operationInputFieldComposite);
-
-		TableViewer operationInputFieldTableViewer = new TableViewer(operationInputFieldComposite, SWT.BORDER
-				| SWT.FULL_SELECTION | SWT.MULTI);
-		final TableViewer operationalInputFieldTableViewer = setTableViewer(operationInputFieldTableViewer,
-				operationInputFieldComposite, new String[] { Messages.INNER_OPERATION_INPUT_FIELD },
-				new ELTFilterContentProvider(), new OperationLabelProvider());
-
-		operationalInputFieldTableViewer.setLabelProvider(new ELTFilterLabelProvider());
-        
-		operationalInputFieldTableViewer.setInput(mappingSheetRow.getInputFields());
-		operationalInputFieldTableViewer.getTable().setBounds(0, 25, 156, 182);
-		operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(152);
-		operationalInputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalInputFieldTableViewer, this,mappingSheetRow));
-		CellEditor[] editor=operationalInputFieldTableViewer.getCellEditors();
-		fieldNameDecorator = WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_SHOULD_NOT_BE_BLANK);
-		isFieldNameAlphanumericDecorator=WidgetUtility.addDecorator(editor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
-		
-		editors[0].setValidator(new TransformCellEditorFieldValidator(fieldNameDecorator,isFieldNameAlphanumericDecorator));
-		operationInputaddButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 60, -1, 20,15 }, "");
-		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
-		operationInputaddButton.setImage(addImage);
-		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(operationInputaddButton,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
-		operationInputaddButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
-		
-		operationInputDeleteButton = widget.buttonWidget(operationInputFieldComposite, SWT.CENTER, new int[] { 90, -1,20, 15 }, "");
-		 Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		 operationInputDeleteButton.setImage(deleteImage);
-		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(operationInputDeleteButton,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
-		operationInputDeleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
-		
-		isFieldNameAlphanumericDecorator.setMarginWidth(8);
-		fieldNameDecorator.setMarginWidth(8);
-		
-		addButtonListener(mappingSheetRow, operationalInputFieldTableViewer,operationInputaddButton);
-		
-		operationalInputFieldTableViewer.getControl().addMouseListener(new MouseAdapter() {
-			
-			@Override
-			public void mouseUp(MouseEvent e) {
-				Composite composite=(Composite)e.widget;
-				Text text=(Text)composite.getParent().getParent().getData(OPERATION_ID_TEXT_BOX2);
-				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(text,
-						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
-				
-			}
-		});
-		operationInputFieldComposite.addMouseListener(new MouseAdapter() 
-        {
-			public void mouseUp(MouseEvent e) {
-				Composite composite=(Composite)e.widget;
-				Text text=(Text)composite.getParent().getData(OPERATION_ID_TEXT_BOX2);
-				TransformMappingFeatureUtility.INSTANCE.highlightInputAndOutputFields(text,
-						inputFieldTableViewer,outputFieldViewer,transformMapping,finalSortedList);
-			}
-		});
-		deleteButtonListener(mappingSheetRow, operationalInputFieldTableViewer,operationInputDeleteButton);
-		return operationalInputFieldTableViewer;
-	}
-
+	
 	private void deleteButtonListener(final MappingSheetRow mappingSheetRow,
 			final TableViewer operationalInputFieldTableViewer,Widget button) {
 		button.addListener(SWT.MouseUp,new Listener(){

@@ -102,19 +102,8 @@ public class HydrographJavaCompletionProcessor extends JavaCompletionProcessor{
 
         });
 		return newProposals;
-//        return filterHydroGraphProposals(proposals);
     }
-
-	private List<ICompletionProposal> filterHydroGraphProposals(List<ICompletionProposal> proposals){
-		List<ICompletionProposal> completionProposals=new ArrayList<ICompletionProposal>();
-		for(ICompletionProposal completionProposal:proposals){
-			if((completionProposal instanceof HydrographCompletionProposal)){
-				completionProposals.add(completionProposal);
-			}
-		}
-		return completionProposals;
-	}
-
+	
 	@Override
     protected ContentAssistInvocationContext createContext(ITextViewer viewer, int offset) 
 	{
