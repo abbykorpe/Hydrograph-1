@@ -423,7 +423,7 @@ public class RuntimePropertyDialog extends Dialog {
 
 	// Method for creating Table
 	private void createTable(Composite composite) {
-		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION|SWT.NO_SCROLL | SWT.V_SCROLL);
 		tableViewer.setData(Constants.WINDOW_TITLE, windowLabel);
 		table = tableViewer.getTable();
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);

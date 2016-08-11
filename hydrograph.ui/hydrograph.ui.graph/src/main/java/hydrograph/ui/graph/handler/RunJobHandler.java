@@ -20,9 +20,6 @@ import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -57,42 +54,10 @@ public class RunJobHandler{
 		String canvasName = consoleName;
 		String localJobID = consoleName;
 
-		if (validateGraphProperties()){
-				JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
-				
-		}else{
-			JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
-		}
+		JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
+		
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
-	}
-	
-	private boolean validateGraphProperties() {
-		Map<String, String> graphPropertiesMap = null;
-		boolean retValue = false;
-		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI
-				.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-
-		if (null != editor) {
-
-			graphPropertiesMap = (Map<String, String>) editor.getContainer()
-					.getGraphRuntimeProperties();
-
-			for (String key : graphPropertiesMap.keySet()) {
-
-				if (StringUtils.isBlank(graphPropertiesMap.get(key))) {
-
-					retValue = true;
-
-					break;
-				}
-
-			}
-
-		}
-
-		return retValue;
 	}
 
 }
