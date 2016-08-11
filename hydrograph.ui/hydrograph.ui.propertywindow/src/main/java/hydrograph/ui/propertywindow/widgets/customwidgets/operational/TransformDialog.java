@@ -48,6 +48,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -120,6 +121,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private static final String IS_PARAM="isParam"; 
 	private static final String OUTPUT_TABLE_VIEWER="OutputTableViewer";
 	
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -171,7 +173,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Integer macButtonHeight = 30;
 	private List<FilterProperties> validatorOutputFields;
 	private List<FilterProperties> finalSortedList;
-	
+	private Set<Integer> outputFieldIndices = new LinkedHashSet<Integer>();
 	/**
 	 * @param parentShell
 	 * @param component
@@ -1192,7 +1194,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	public Map<String,List<String>> getDuplicateOutputFieldMap(Map<String,List<FilterProperties> > temporaryOutputFieldListTemp) {
 		
 		Set<String> setToCheckDuplicates = new HashSet<String>();
-		
+		int index = 0;
 		for (Map.Entry<String, List<FilterProperties>> entry: temporaryOutputFieldListTemp.entrySet()) 
 		{
 			List<FilterProperties>  temporaryOutputFieldList=entry.getValue();
@@ -1200,12 +1202,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			for (FilterProperties filterProperties : temporaryOutputFieldList) {
 			if (!setToCheckDuplicates.add(filterProperties.getPropertyname())) {
 				duplicateFields.add(filterProperties.getPropertyname());
+				outputFieldIndices.add(index);
 			}
-			
+			index++;
 		}
-			duplicateFieldMap.put(entry.getKey(),duplicateFields);		
+			duplicateFieldMap.put(entry.getKey(),duplicateFields);	
 		}
-		
 		return duplicateFieldMap;
 	}
 
@@ -1239,14 +1241,39 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		{
 		   setErrorMessageForDuplicateOutputField();
 		   setErrorMessageForDuplicateInputField(); 
+		   setErrorMessageForInvalidMapFields();
 		   Set<String> setToCheckDuplicates = setErrorMessageIfOperationClassBlankOrOperationIDDuplicate(); 	
      	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	       errorTableViewer.refresh();
 	       errorLabelList.clear();
 	       setToCheckDuplicates.clear();
+	       outputFieldIndices.clear();
 		}
 	}
-
+    
+    private void setErrorMessageForInvalidMapFields(){
+    	List<String> inputFieldNames = new ArrayList<String>();
+    	for(InputField inputField:transformMapping.getInputFields()){
+    		inputFieldNames.add(inputField.getFieldName());
+    	}
+    	
+    	for(int i = 0 ;i< transformMapping.getMapAndPassthroughField().size();i++){
+    		if(!inputFieldNames.contains(transformMapping.getMapAndPassthroughField().get(i).getPropertyName())){
+    		    errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+    			errorLabel.setVisible(true);
+    			errorLabel.setText("Field '"+transformMapping.getMapAndPassthroughField().get(i).getPropertyName()+"' is not present in Input Fields"); 
+    			errorLabelList.add(errorLabel);
+    			outputFieldIndices.add(i);
+    		}
+    	}
+    	for(int indices=0 ; indices<mappingTableViewer.getTable().getItemCount();indices++){
+    		if(outputFieldIndices.contains(indices)){
+    			mappingTableViewer.getTable().getItem(indices).setForeground(new Color(Display.getDefault(), 255,0,0));
+    		}else{
+    			mappingTableViewer.getTable().getItem(indices).setForeground(new Color(Display.getDefault(), 0, 0, 0));
+    		}
+    	}
+    }
     private Set<String> setErrorMessageIfOperationClassBlankOrOperationIDDuplicate() 
     {
 	    Set<String> setToCheckDuplicates = new HashSet<String>();

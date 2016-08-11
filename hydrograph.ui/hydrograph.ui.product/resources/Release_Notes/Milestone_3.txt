@@ -72,6 +72,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 56.#164 [Vibhor Tyagi] Transform Editor: User should be able to delete multiple rows by selecting rows with control keys in schema grid
 57.#1002 [Prateem Tadas] Property Window : 'Partition keys' field is mendatory. 
 58.#494 [Rushikesh Pawale] Graph properties window appears before Run Configuration Settings window.
+59.#420 [Akhilesh Joshi] Aggregate Component: Error bubble is not getting displayed if user delete/ modify schema in the input component and then directly clicks on "pull from transform" button located on the schema tab of aggregate component
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
