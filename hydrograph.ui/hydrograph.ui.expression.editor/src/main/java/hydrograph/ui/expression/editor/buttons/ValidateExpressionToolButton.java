@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.PathConstant;
@@ -179,14 +180,20 @@ public class ValidateExpressionToolButton extends Button {
 					url = iPackageFragmentRoot.getPath().toFile().toURI().toURL();
 					urlList.add(url);
 				}
-				if (transfromJarPath == null)
-					transfromJarPath = url.getPath() + Constants.SEMICOLON;
-				else
-					transfromJarPath = transfromJarPath + url.getPath() + Constants.SEMICOLON;
+				if (transfromJarPath == null){
+					if(OSValidator.isMac() || OSValidator.isUnix())
+						transfromJarPath = url.getPath() + Constants.COLON;
+					else
+						transfromJarPath = url.getPath() + Constants.SEMICOLON;
+					}
+				else{
+					if(OSValidator.isMac() || OSValidator.isUnix())
+						transfromJarPath = url.getPath() + Constants.COLON;
+					else
+						transfromJarPath = url.getPath() + Constants.SEMICOLON;
+					}
+				}
 			}
-			
-			
-		}
 		
 		returnObj[0]=urlList;
 		returnObj[1]=transfromJarPath;
