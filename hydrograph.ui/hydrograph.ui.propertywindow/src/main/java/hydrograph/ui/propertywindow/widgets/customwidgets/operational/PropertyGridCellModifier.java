@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -123,6 +122,7 @@ public class PropertyGridCellModifier implements ICellModifier {
 				nameValueProperty.setPropertyValue((String)value);
 			}
 			nameValueProperty.setPropertyName(((String) value).trim());
+			transformDialog.showHideValidationMessage();
 		}
 
 		if (PROPERTY_VALUE.equals(property))
