@@ -113,6 +113,3 @@ public class OutputOracleAssemblyGenerator extends OutputAssemblyGeneratorBase {
 		return outputOracleAssembly;
 	}
 }
-	
-
-	

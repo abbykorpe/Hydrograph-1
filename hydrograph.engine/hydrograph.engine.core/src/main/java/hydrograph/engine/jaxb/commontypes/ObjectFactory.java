@@ -296,5 +296,4 @@ public class ObjectFactory {
     public TypeProperties.Property createTypePropertiesProperty() {
         return new TypeProperties.Property();
     }
-
 }
