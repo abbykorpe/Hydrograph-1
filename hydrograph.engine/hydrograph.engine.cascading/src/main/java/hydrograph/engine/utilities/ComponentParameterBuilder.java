@@ -100,14 +100,13 @@ public class ComponentParameterBuilder {
 		}
 
 		public Builder setSchemaFields() {
-			
+
 			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext.getHydrographJob().getJAXBObject());
 			List<? extends TypeBaseInSocket> inSocketList = linkGenerator.getLink().get(componentId).getInSocket();
 
 			for (TypeBaseInSocket fromSocket : inSocketList) {
-				componentParameters.addSchemaFields(new SchemaFieldHandler(
-						runtimeContext.getHydrographJob().getJAXBObject().getInputsOrOutputsOrStraightPulls())
-						.getSchemaFieldMap().get(fromSocket.getFromComponentId() + "_" + fromSocket.getFromSocketId()));
+				componentParameters.addSchemaFields(runtimeContext.getSchemaFieldHandler().getSchemaFieldMap()
+						.get(fromSocket.getFromComponentId() + "_" + fromSocket.getFromSocketId()));
 			}
 			return this;
 		}
