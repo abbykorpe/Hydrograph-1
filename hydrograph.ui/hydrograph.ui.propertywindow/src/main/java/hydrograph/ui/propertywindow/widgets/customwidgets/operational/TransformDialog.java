@@ -181,6 +181,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private List<FilterProperties> finalSortedList;
 	private Set<Integer> outputFieldIndices = new LinkedHashSet<Integer>();
 	private Shell parentShell;
+	private Button deleteLabel;
+	private Button addLabel;
+	private Button viewTransform;
 	/**
     * @param parentShell
     * @param component
@@ -487,7 +490,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		expandBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 		
 		
-		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "");
+		addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,43,30,30,25);
@@ -510,10 +513,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				
 			}
 		});
-
-		final Button deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 165, 10, 20, 15 },"");
+		
+		if(OSValidator.isMac()){
+			deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 165, 11, 20, 15 },"");
+		}else{
+			deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 165, 10, 20, 15 },"");
+		}
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,43,28,30,25);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,44,28,30,25);
 		deleteLabel.setImage(deleteImage);
 		deleteLabel.setToolTipText(Messages.DELETE_OPERATION_CONTROL);
 		deleteLabel.addMouseListener(new MouseAdapter() {
@@ -538,19 +545,23 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 
 		Label lblOperationsControl = new Label(topAddButtonComposite, SWT.NONE);
-		lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
-		lblOperationsControl.setBounds(0, 10, 129, 25);
+		if(OSValidator.isMac()){
+			lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 13, SWT.NORMAL));
+			lblOperationsControl.setBounds(0, 15, 129, 25);
+		}else {
+			lblOperationsControl.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+			lblOperationsControl.setBounds(0, 10, 129, 25);
+		}
 		lblOperationsControl.setText(Messages.OPERATION_CONTROL);
 		
-		
-		
-		final Button viewTransform = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] {205,10,95,15}, "View Transform");
 		if(OSValidator.isMac()){
-		viewTransform.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+			viewTransform = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] {205,10,95,15}, "View Transform");
+			viewTransform.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		} else{
+			viewTransform = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] {200,10,95,15}, "View Transform");
 			viewTransform.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		}
-		SchemaButtonsSyncUtility.INSTANCE.buttonSize(viewTransform,100,30,95,25);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(viewTransform,105,29,95,25);
 		viewTransform.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void  widgetSelected(SelectionEvent e) {
