@@ -467,12 +467,42 @@ public class DataGenerator {
 		return calendar.getTimeInMillis();
 	}
 
-	private static boolean isTimestampPresentInDateFormat(String dateFormat) {		
-		if (dateFormat.contains("HH") || dateFormat.contains("hh") || dateFormat.contains("mm")
-				|| dateFormat.contains("ss")) {
-			return true;
+	/**
+	 * Checks if the date format passed in the parameter contains time elements
+	 * (hh, mm, ss)
+	 * 
+	 * @param dateFormat
+	 *            the date format to check
+	 * @return <b>true</b> if time elements (hh, mm, ss) are present in the date
+	 *         format <br/>
+	 *         <b>false</b> if time elements (hh, mm, ss) are not present in the
+	 *         date format
+	 */
+
+	private static boolean isTimestampPresentInDateFormat(String dateFormat) {
+		SimpleDateFormat actualSDF = new SimpleDateFormat(dateFormat);
+		actualSDF.setLenient(false);
+
+		// date format without time for comparison
+		String dateFormatForComparison = "dd/MM/yyyy";
+		SimpleDateFormat sdfComparison = new SimpleDateFormat(dateFormatForComparison);
+		actualSDF.setLenient(false);
+
+		Calendar cal = sdfComparison.getCalendar();
+
+		Date d = cal.getTime(); // get current date with time
+		Date d1 = null, d2 = null;
+		try {
+			// convert using date format specified by user
+			d1 = actualSDF.parse(actualSDF.format(d));
+
+			// convert using our date format, without time
+			d2 = sdfComparison.parse(sdfComparison.format(d));
+		} catch (Exception e) {
+			// This exception will never be thrown as we are parsing system
+			// generated date
 		}
-		return false;
+		return !d1.equals(d2); // compare user's date with out date.
 	}
 
 	// Double
