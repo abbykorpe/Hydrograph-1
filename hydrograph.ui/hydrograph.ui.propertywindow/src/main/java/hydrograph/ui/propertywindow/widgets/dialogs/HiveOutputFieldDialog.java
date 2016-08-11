@@ -28,7 +28,6 @@ import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvide
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,7 +40,6 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
@@ -418,12 +416,6 @@ public class HiveOutputFieldDialog extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				/*IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
-					Object selectedObject = iterator.next();
-					targetTableViewer.remove(selectedObject);
-					propertyList.remove(selectedObject);
-				}*/
 				
 				WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
 				isAnyUpdatePerformed = true;
