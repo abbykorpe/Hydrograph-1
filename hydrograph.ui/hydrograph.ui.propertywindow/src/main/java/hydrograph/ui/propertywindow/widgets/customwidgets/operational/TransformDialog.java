@@ -326,7 +326,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					
 					List<FilterProperties> tempList = new ArrayList<FilterProperties >();
 					for (int index : indexs) {
-
 						tempList.add(((List<FilterProperties>)outputFieldViewer.getInput()).get(index));
 					}
 					
@@ -590,7 +589,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					table.remove(indexs);
 					List<NameValueProperty> tempList = new ArrayList<NameValueProperty >();
 					for (int index : indexs) {
-
 						tempList.add(transformMapping.getMapAndPassthroughField().get(index));
 					}
 					for(NameValueProperty nameValueProperty:tempList)
@@ -998,7 +996,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 					List<FilterProperties> tempList = new ArrayList<FilterProperties>();
 					for (int index : indexs) {
-
 						tempList.add(mappingSheetRow.getOutputList().get(index));
 					}
 					for(FilterProperties filterProperties: tempList)
@@ -1406,9 +1403,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					table.remove(indexs);
 					List<FilterProperties> tempList = new ArrayList<FilterProperties>();
 					for (int index : indexs) {
-
 						tempList.add(mappingSheetRow.getInputFields().get(index));
-						
 					}
 					  for(FilterProperties filterProperties:tempList)
 					  {
