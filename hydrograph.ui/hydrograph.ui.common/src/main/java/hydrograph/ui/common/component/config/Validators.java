@@ -51,7 +51,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="SORT_KEY_FIELDS_VALIDATOR"/>
  *     &lt;enumeration value="TRANSFORM_MAPPING_VALIDATOR"/>
  *     &lt;enumeration value="RUNTIME_PROPERTY_VALIDATOR"/>
- *     &lt;enumeration value="HIVE_KEY_FIELDS_VALIDATOR"/>
  *     &lt;enumeration value="HIVE_PARQUET_VALIDATOR"/>
  *     &lt;enumeration value="LONG_VALIDATOR"/>
  *   &lt;/restriction>
@@ -99,11 +98,9 @@ public enum Validators {
     TransformMappingValidationRule("TRANSFORM_MAPPING_VALIDATOR"),
     @XmlEnumValue("RUNTIME_PROPERTY_VALIDATOR")
     RuntimePropertyValueValidationRule("RUNTIME_PROPERTY_VALIDATOR"),
-    @XmlEnumValue("HIVE_KEY_FIELDS_VALIDATOR")
-    HiveKeyFieldsValidationRule("HIVE_KEY_FIELDS_VALIDATOR"),
     @XmlEnumValue("LONG_VALIDATOR")
     LongValidatorRule("LONG_VALIDATOR");
-    
+
     
     private final String value;
 

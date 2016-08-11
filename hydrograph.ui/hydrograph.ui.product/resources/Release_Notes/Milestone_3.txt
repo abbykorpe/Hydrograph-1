@@ -70,6 +70,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 54.#1007[Akhilesh Joshi]Hive Output : Compoent Size Goes on Increasing On Copy Paste
 55.#1012[Ashika Holkar] External Schema: Project Window while export/importing Schema Only Displays ' Select Schema File(.schema)'
 56.#164 [Vibhor Tyagi] Transform Editor: User should be able to delete multiple rows by selecting rows with control keys in schema grid
+57.#1002 [Prateem Tadas] Property Window : 'Partition keys' field is mendatory. 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

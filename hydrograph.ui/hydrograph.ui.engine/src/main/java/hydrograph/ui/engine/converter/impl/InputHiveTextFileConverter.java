@@ -91,8 +91,6 @@ public class InputHiveTextFileConverter extends InputConverter {
 	{
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
 			InputHivePartitionKeyValues property =(InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			
-			
 				if(!property.getKeyValues().isEmpty()){
 				List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.getKeyValues();
 					if(!inputHivePartitionColumn.isEmpty()){
@@ -186,7 +184,8 @@ public class InputHiveTextFileConverter extends InputConverter {
 			
 			InputHivePartitionKeyValues hivePartitionKeyValues = (
 					InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			
+			if(!hivePartitionKeyValues.getKey().isEmpty()){
+				
 			List<String> fieldValueSet = new ArrayList<String>();
 			fieldValueSet=(List<String>) hivePartitionKeyValues.getKey();
 			
@@ -204,6 +203,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 					}
 			}
 			return hivePartitionFieldsType;
+		 }
 		}
 		return null;
 	}
