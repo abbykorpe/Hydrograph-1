@@ -34,10 +34,13 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TableViewer;
@@ -356,6 +359,7 @@ public class HiveOutputFieldDialog extends Dialog {
 					propertyList.set(index2, filter);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 + 1);
+					checkFieldsOnStartup();
 				}
 			}
 		});
@@ -396,6 +400,7 @@ public class HiveOutputFieldDialog extends Dialog {
 					propertyList.set(index2, filter);
 					targetTableViewer.refresh();
 					targetTable.setSelection(index1 - 1);
+					checkFieldsOnStartup();
 				}
 			}
 		});
@@ -429,6 +434,7 @@ public class HiveOutputFieldDialog extends Dialog {
 					upButton.setEnabled(false);
 					downButton.setEnabled(false);
 				} 
+				checkFieldsOnStartup();
 			}
 
 		});
@@ -454,6 +460,7 @@ public class HiveOutputFieldDialog extends Dialog {
 				targetTable.getParent().setFocus();
 				addNewProperty(targetTableViewer, null);
 				enableControlButons();
+				checkFieldsOnStartup();
 			}
 
 		});
@@ -491,6 +498,7 @@ public class HiveOutputFieldDialog extends Dialog {
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewProperty(targetTableViewer, null);
 				enableControlButons();
+				checkFieldsOnStartup();
 			}
 
 			@Override
@@ -535,7 +543,8 @@ public class HiveOutputFieldDialog extends Dialog {
 		targetTableViewer.setColumnProperties(PROPS);
 		targetTableViewer.setCellModifier(new ELTCellModifier(targetTableViewer));
 		targetTableViewer.setCellEditors(editors);
-
+		
+		
 		loadProperties(targetTableViewer);
 		
 		if (propertyList.size() != 0) {
@@ -572,6 +581,7 @@ public class HiveOutputFieldDialog extends Dialog {
 				if(sourceTable.getSelection().length==1){
 				addNewProperty(targetTableViewer, sourceTable.getSelection()[0].getText());
 				enableControlButons();
+				checkFieldsOnStartup();
 				}
 			}
 		});
