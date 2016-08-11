@@ -15,6 +15,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
@@ -489,7 +490,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		final Button addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addLabel.setImage(addImage);
-		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,42,30,30,25);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,43,30,30,25);
 		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
 		
 		addLabel.addMouseListener(new MouseAdapter() {
@@ -512,7 +513,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 		final Button deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 165, 10, 20, 15 },"");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,40,28,30,25);
+		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,43,28,30,25);
 		deleteLabel.setImage(deleteImage);
 		deleteLabel.setToolTipText(Messages.DELETE_OPERATION_CONTROL);
 		deleteLabel.addMouseListener(new MouseAdapter() {
@@ -541,8 +542,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		lblOperationsControl.setBounds(0, 10, 129, 25);
 		lblOperationsControl.setText(Messages.OPERATION_CONTROL);
 		
-		final Button viewTransform = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] {200,10,95,15}, "View Transform");
-		viewTransform.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
+		
+		
+		final Button viewTransform = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] {205,10,95,15}, "View Transform");
+		if(OSValidator.isMac()){
+		viewTransform.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		} else{
+			viewTransform.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
+		}
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(viewTransform,100,30,95,25);
 		viewTransform.addSelectionListener(new SelectionAdapter() {
 			@Override
