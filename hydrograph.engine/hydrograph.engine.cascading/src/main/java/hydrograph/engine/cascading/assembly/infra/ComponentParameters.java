@@ -121,6 +121,10 @@ public class ComponentParameters {
 		return getParameterfromList(SCHEMA_FIELDS_KEY);
 	}
 	
+	public ArrayList<Set<SchemaField>> getSchemaFieldList() {
+		return getEntireList(SCHEMA_FIELDS_KEY);
+	}
+	
 	public ArrayList<DebugPoint> getDebugPoints() {
 		return getParameterfromList(DEBUG_POINTS_KEY);
 	}

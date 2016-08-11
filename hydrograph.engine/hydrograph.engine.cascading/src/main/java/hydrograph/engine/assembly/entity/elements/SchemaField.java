@@ -247,4 +247,88 @@ public class SchemaField implements Cloneable {
 		}
 		return null;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fieldDataType == null) ? 0 : fieldDataType.hashCode());
+		result = prime * result + ((fieldDefaultValue == null) ? 0 : fieldDefaultValue.hashCode());
+		result = prime * result + ((fieldFormat == null) ? 0 : fieldFormat.hashCode());
+		result = prime * result + ((fieldFromRangeValue == null) ? 0 : fieldFromRangeValue.hashCode());
+		result = prime * result + fieldLength;
+		result = prime * result + ((fieldLengthDelimiter == null) ? 0 : fieldLengthDelimiter.hashCode());
+		result = prime * result + ((fieldName == null) ? 0 : fieldName.hashCode());
+		result = prime * result + fieldPrecision;
+		result = prime * result + fieldScale;
+		result = prime * result + ((fieldScaleType == null) ? 0 : fieldScaleType.hashCode());
+		result = prime * result + ((fieldToRangeValue == null) ? 0 : fieldToRangeValue.hashCode());
+		result = prime * result + ((typeFieldLengthDelimiter == null) ? 0 : typeFieldLengthDelimiter.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SchemaField other = (SchemaField) obj;
+		if (fieldDataType == null) {
+			if (other.fieldDataType != null)
+				return false;
+		} else if (!fieldDataType.equals(other.fieldDataType))
+			return false;
+		if (fieldDefaultValue == null) {
+			if (other.fieldDefaultValue != null)
+				return false;
+		} else if (!fieldDefaultValue.equals(other.fieldDefaultValue))
+			return false;
+		if (fieldFormat == null) {
+			if (other.fieldFormat != null)
+				return false;
+		} else if (!fieldFormat.equals(other.fieldFormat))
+			return false;
+		if (fieldFromRangeValue == null) {
+			if (other.fieldFromRangeValue != null)
+				return false;
+		} else if (!fieldFromRangeValue.equals(other.fieldFromRangeValue))
+			return false;
+		if (fieldLength != other.fieldLength)
+			return false;
+		if (fieldLengthDelimiter == null) {
+			if (other.fieldLengthDelimiter != null)
+				return false;
+		} else if (!fieldLengthDelimiter.equals(other.fieldLengthDelimiter))
+			return false;
+		if (fieldName == null) {
+			if (other.fieldName != null)
+				return false;
+		} else if (!fieldName.equals(other.fieldName))
+			return false;
+		if (fieldPrecision != other.fieldPrecision)
+			return false;
+		if (fieldScale != other.fieldScale)
+			return false;
+		if (fieldScaleType == null) {
+			if (other.fieldScaleType != null)
+				return false;
+		} else if (!fieldScaleType.equals(other.fieldScaleType))
+			return false;
+		if (fieldToRangeValue == null) {
+			if (other.fieldToRangeValue != null)
+				return false;
+		} else if (!fieldToRangeValue.equals(other.fieldToRangeValue))
+			return false;
+		if (typeFieldLengthDelimiter == null) {
+			if (other.typeFieldLengthDelimiter != null)
+				return false;
+		} else if (!typeFieldLengthDelimiter.equals(other.typeFieldLengthDelimiter))
+			return false;
+		return true;
+	}
+	
+	
 }
