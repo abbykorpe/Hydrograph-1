@@ -1239,6 +1239,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		{
 		   setErrorMessageForDuplicateOutputField();
 		   setErrorMessageForDuplicateInputField(); 
+		   setErrorMessageForInvalidMapFields();
 		   Set<String> setToCheckDuplicates = setErrorMessageIfOperationClassBlankOrOperationIDDuplicate(); 	
      	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	       errorTableViewer.refresh();
@@ -1246,7 +1247,22 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	       setToCheckDuplicates.clear();
 		}
 	}
-
+    
+    private void setErrorMessageForInvalidMapFields(){
+    	List<String> inputFieldNames = new ArrayList<String>();
+    	for(InputField inputField:transformMapping.getInputFields()){
+    		inputFieldNames.add(inputField.getFieldName());
+    	}
+    	
+    	for(NameValueProperty propertyName : transformMapping.getMapAndPassthroughField()){
+    		if(!inputFieldNames.contains(propertyName.getPropertyName())){
+    		    errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+    			errorLabel.setVisible(true);
+    			errorLabel.setText("Field '"+propertyName.getPropertyName()+"' is not present in Input Fields"); 
+    			errorLabelList.add(errorLabel);
+    		}
+    	}
+    }
     private Set<String> setErrorMessageIfOperationClassBlankOrOperationIDDuplicate() 
     {
 	    Set<String> setToCheckDuplicates = new HashSet<String>();
