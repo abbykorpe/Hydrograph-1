@@ -86,6 +86,33 @@ public class JobScpAndProcessUtility {
 				+ job.getPassword();
 		return command;
 	}
+	
+	/**
+	 * Gradle command to SCP project jar at remote server.
+	 * @param job
+	 * @return command
+	 */
+	public  String getScpCommandForMovingLibFolderJarFiles(Job job) {
+		String command = GradleCommandConstants.GCMD_SCP_LIB_FOLDER_JAR_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
+				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
+				+ job.getPassword();
+		return command;
+	}
+	
+	
+	/**
+	 * Gradle command to SCP project jar at remote server.
+	 * @param job
+	 * @return command
+	 */
+	public  String getScpCommandForMovingUserFunctionsPropertyFile(Job job) {
+		String command = GradleCommandConstants.GCMD_SCP_USER_FUNCTIONS_PROPERTY_FILE + GradleCommandConstants.GPARAM_HOST + job.getHost()
+				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
+				+ job.getPassword();
+		return command;
+	}
+	
+	
 	/**
 	 * Gradle command to SCP job xml at remote server.
 	 * @param xmlPath
@@ -120,29 +147,32 @@ public class JobScpAndProcessUtility {
 	 * @param xmlPath
 	 * @param debugXmlPath
 	 * @param paramFile
+	 * @param userFunctionsPropertyFile 
 	 * @param job
 	 * @return command
 	 */
-	public  String getExecututeJobCommand(String xmlPath,String debugXmlPath, String paramFile, Job job) {
+	public  String getExecututeJobCommand(String xmlPath,String debugXmlPath, String paramFile, String userFunctionsPropertyFile, Job job) {
 		String command="";
 		if(!"".equalsIgnoreCase(debugXmlPath.trim())){
-			command = GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE
-					+ GradleCommandConstants.GPARAM_HOST + job.getHost() + GradleCommandConstants.GPARAM_USERNAME
+			command=GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB+ GradleCommandConstants.DAEMON_ENABLE
+					+ GradleCommandConstants.GPARAM_HOST + job.getHost() + GradleCommandConstants.GPARAM_USERNAME 
 					+ job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD + job.getPassword()
-					+ GradleCommandConstants.GPARAM_PARAM_FILE + "\"" + paramFile + "\""
-					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1]
-					+ GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1]
-					+ GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath()
-					+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId()
-					+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack();
+					+ GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
+					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] 
+					+ GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] 
+					+ GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() 
+					+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId() 
+					+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack()
+					+ GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH+userFunctionsPropertyFile;
 		}else{
-			command = GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE
-					+ GradleCommandConstants.GPARAM_HOST + job.getHost() + GradleCommandConstants.GPARAM_USERNAME
-					+ job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD + job.getPassword()
-					+ GradleCommandConstants.GPARAM_PARAM_FILE + "\"" + paramFile + "\""
-					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1]
-					+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId()
-					+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack();
+				command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE
+					+ GradleCommandConstants.GPARAM_HOST + job.getHost() + GradleCommandConstants.GPARAM_USERNAME 
+					+ job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD + job.getPassword() 
+					+ GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
+					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] 
+					+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
+					+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack()
+					+ GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH+userFunctionsPropertyFile;
 		}
 		logger.debug("Gradle Command: {}", command);
 		return command;
@@ -200,7 +230,8 @@ public class JobScpAndProcessUtility {
 		
 		return  GradleCommandConstants.GCMD_CREATE_DIRECTORIES+ GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath +GradleCommandConstants.GPARAM_MOVE_PARAM_FILE +project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_PARAM + GradleCommandConstants.GPARAM_MOVE_SCHEMA_FILES + schemaFiles + GradleCommandConstants.GPARAM_MOVE_SUBJOB_FILES + subJobFiles + GradleCommandConstants.GPARAM_MOVE_JAR + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_LIB ;
+				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath +GradleCommandConstants.GPARAM_MOVE_PARAM_FILE +project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_PARAM + GradleCommandConstants.GPARAM_MOVE_SCHEMA_FILES + schemaFiles + GradleCommandConstants.GPARAM_MOVE_SUBJOB_FILES + subJobFiles + GradleCommandConstants.GPARAM_MOVE_JAR + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_LIB 
+				+ GradleCommandConstants.GPARAM_RESOUCES_FILES + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_RESOURCES;
 	}
 
 	/**

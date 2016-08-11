@@ -82,14 +82,15 @@ public class EvaluateExpression {
 		try {
 		returnObj = ValidateExpressionToolButton.getBuildPathForMethodInvocation();
 		List<URL> urlList=(List<URL>) returnObj[0];
+		String userFunctionsPropertyFileName=(String) returnObj[2];
 		ClassLoader child = new URLClassLoader(urlList.toArray(new URL[urlList.size()]));
 		Class<?> class1 = Class.forName(ValidateExpressionToolButton.HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS,true, child);
 		Method[] methods = class1.getDeclaredMethods();
 		for (Method method : methods) {
-			if (method.getParameterTypes().length == 3
+			if (method.getParameterTypes().length == 4
 					&& StringUtils.equals(method.getName(), EVALUATE_METHOD_OF_EXPRESSION_JAR)) {
 				method.getDeclaringClass().getClassLoader();
-				output = String.valueOf(method.invoke(null, expression,fieldNames,values));
+				output = String.valueOf(method.invoke(null, expression,userFunctionsPropertyFileName,fieldNames,values));
 				break;
 			}
 		}

@@ -89,9 +89,7 @@ task scpJarFiles(dependsOn: ['build']) {
         	    println '#Gradle failed to execute task#'
         	    gradleException.printStackTrace();
         	}
-
-
-    }
+        	}
 }
 
 scpJarFiles.onlyIf {
@@ -99,6 +97,74 @@ scpJarFiles.onlyIf {
     project.hasProperty('username')
     project.hasProperty('password')
 }
+
+task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
+	 /* Code for moving user-functions properties file from project resources folder to remote */
+	doLast {
+	println 'Copying Resources files...'
+
+        def resourcesFile
+        def resourcesName
+        def resourcesFiles = files {
+			def path1 =project.projectDir.path+'/resources'
+            file(path1).listFiles()
+        }
+		
+	try {
+			resourcesFiles.each {
+            File file ->
+                resourcesFile = file.absolutePath
+				 println 'Copying ' + file.name
+               	scpToRemoteServer(resourcesFile, project.name+"/resources",username,host,password,properties.remoteDirectory)
+        	}
+      			
+    	    } catch (Exception gradleException) {
+        	    println '#Gradle failed to execute task#'
+        	    gradleException.printStackTrace();
+        	}
+    }
+}
+scpUserFunctionsPropertyFile.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+}
+
+
+task scpLibFolderJarFiles(dependsOn: ['build'] ){
+
+	/* Code for moving jar files from project lib folder to remote */
+doLast {	
+	println 'Copying library files...'
+
+        def otherJarFile
+        def otherJarName
+		println project.projectDir.path
+        def otherJarFiles = files {
+			def path1 =project.projectDir.path+'/lib'
+            file(path1).listFiles()
+        }
+		
+	try {
+			otherJarFiles.each {
+            File file ->
+                otherJarFile = file.absolutePath
+				 println 'Copying ' + file.name
+               	scpToRemoteServer(otherJarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
+        	}
+      			
+    	    } catch (Exception gradleException) {
+        	    println '#Gradle failed to execute task#'
+        	    gradleException.printStackTrace();
+        	}
+}
+}
+scpLibFolderJarFiles.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+}
+
 
 task scpJobXML() {
  		  doLast {
@@ -160,6 +226,26 @@ task executeRemoteJob() {
                 jarFile = file.absolutePath
                 jarName = file.name
         }
+        /*Code to append projects lib folder jar files to jarFileName*/
+        
+        def otherJarFile
+        def otherJarFileName
+        def otherJarFileNames = ''
+        
+        def otherJarFileList = files {
+			file(project.projectDir.path+'/lib').listFiles()
+        }
+        
+        otherJarFileList.each	{
+        	File file ->
+        	otherJarFile = file.absolutePath
+        	otherJarFileName =  file.name
+        	otherJarFileNames = otherJarFileNames+ "," + "lib/"+ otherJarFileName 
+        }
+        if(otherJarFileName != ''){
+        	jarName= jarName + otherJarFileNames 
+        }
+        
 
        def parameterFiles = parameterFile.split(',');
        def unixParameterFileList = "";
@@ -175,10 +261,10 @@ task executeRemoteJob() {
 			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
 		}
 
-        		
-		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking  + " -udfpath " + udfpath
 		println "Executing command: "+command
-   		sshToRemoteServer(host,username,password,command)
+		
+		sshToRemoteServer(host,username,password,command)
     }
 }
 
@@ -210,6 +296,26 @@ task executeDebugRemoteJob() {
                 jarName = file.name
         }
 
+		 /*Code to append projects lib folder jar files to jarFileName*/
+        
+        def otherJarFile
+        def otherJarFileName
+        def otherJarFileNames = ''
+        
+        def otherJarFileList = files {
+			file(project.projectDir.path+'/lib').listFiles()
+        }
+        
+        otherJarFileList.each	{
+        	File file ->
+        	otherJarFile = file.absolutePath
+        	otherJarFileName =  file.name
+        	otherJarFileNames = otherJarFileNames+ "," + "lib/"+ otherJarFileName 
+        }
+        if(otherJarFileName != ''){
+        	jarName= jarName + otherJarFileNames 
+        }
+	
         def parameterFiles = parameterFile.split(',');
         def unixParameterFileList = "";
 
@@ -229,9 +335,7 @@ task executeDebugRemoteJob() {
         def basePath = basePath;
         def isExecutionTracking = isExecutionTracking;
         
-        
-       
-        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath+ " -isexecutiontracking " + isExecutionTracking
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath + "-udfpath" + udfpath  + " -isexecutiontracking " + isExecutionTracking
         println "Executing command: "+command
 		sshToRemoteServer(host,username,password,command)
     }
@@ -272,9 +376,15 @@ def getArgsForRunJob() {
         println jobId
     }
     
+    if (project.hasProperty("udfpath")) {
+        argsArray[6] = "-udfpath"
+        if(udfpath==null)
+        	udfpath=''
+        argsArray[7] = udfpath
+    }
     if(project.hasProperty("isExecutionTracking")){
-        argsArray[6] = "-isexecutiontracking"
-        argsArray[7] = isExecutionTracking
+        argsArray[8] = "-isexecutiontracking"
+        argsArray[9] = isExecutionTracking
         println isExecutionTracking
     }
     
@@ -342,10 +452,14 @@ def getArgsForDebugRunJob() {
         argsArray[9] = basePath
         println basePath
     }
+    if (project.hasProperty("udfpath")) {
+        argsArray[10] = "-udfpath"
+        argsArray[11] = udfpath
+    }
 
 	if(project.hasProperty("isExecutionTracking")){
-        argsArray[10] = "-isexecutiontracking"
-        argsArray[11] = isExecutionTracking
+        argsArray[12] = "-isexecutiontracking"
+        argsArray[13] = isExecutionTracking
         println isExecutionTracking
     }
     
@@ -378,7 +492,7 @@ killRemoteJob.onlyIf {
 task createDirectories(){
 	 doLast{
          	println "Executing createDirectories..."
- 			def  command="mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+","+moveSubJobFiles+"}"
+ 			def  command="mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+","+moveSubJobFiles+","+moveResourceFile+"}"
  			sshToRemoteServer(host,username,password,command)
 		}
 }
@@ -486,5 +600,4 @@ def sshToRemoteServer(def host, def username, def password,def executeCommand ){
             println '#Gradle failed to execute task#'
             gradleException.printStackTrace();
         }
-
 }

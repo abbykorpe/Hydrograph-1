@@ -76,9 +76,8 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	 */
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
-		
-		String paramFile, Job job,
-		DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
+			 String paramFile,String userFunctionsPropertyFile, Job job,
+			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 
 		Session session=null;
 		if(isExecutionTrackingOn()){
@@ -180,6 +179,28 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			closeWebSocketConnection(session);
 			return;
 		}
+		// ----------------------------- Code to copy jar files of project's lib folder 
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getScpCommandForMovingLibFolderJarFiles(job);
+		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
+			releaseResources(job, gefCanvas, joblogger);
+			return;
+		}
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			return;
+		}
+
+		
+		// ----------------------------- Code to copy user-functions property file from resource folder 
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getScpCommandForMovingUserFunctionsPropertyFile(job);
+		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+		if (JobStatus.FAILED.equals(job.getJobStatus())) {
+			releaseResources(job, gefCanvas, joblogger);
+			return;
+		}
+		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			return;
+		}
 
 		// ----------------------------- Code to copy parameter file
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getParameterFileScpCommand(paramFile, job);
@@ -195,7 +216,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		}
 
 		// ----------------------------- Execute job
-		gradleCommand = JobScpAndProcessUtility.INSTANCE.getExecututeJobCommand(xmlPath, debugXmlPath, paramFile, job);
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getExecututeJobCommand(xmlPath, debugXmlPath, paramFile,userFunctionsPropertyFile, job);
 		job.setJobStatus(JobStatus.SSHEXEC);
 		isRunning=true;
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
@@ -351,7 +372,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	
 	
 	@Override
-	public void launchJob(String xmlPath, String paramFile, Job job,
+	public void launchJob(String xmlPath, String paramFile,String userFunctionsPropertyFile, Job job,
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		
 	}

@@ -54,6 +54,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -61,6 +63,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
@@ -241,9 +244,32 @@ public class JobManager {
 		DataViewerUtility.INSTANCE.deletePreviousRunsBasePathDebugFiles(previouslyExecutedJobs.get(job.getConsoleName()));
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(previouslyExecutedJobs.get(job.getConsoleName()));
 		
-		launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles,subJobList);
+		launchJob(job, gefCanvas, parameterGrid, xmlPath,getUserFunctionsPropertertyFile() ,externalSchemaFiles,subJobList);
 	}
 
+	protected String getUserFunctionsPropertertyFile() {
+		String userFunctionsPropertyFileRelativePath="";
+		IProject project=getCurrentProjectFromActiveGraph();
+		if(project!=null){
+			IFolder folder=project.getFolder("resources");
+			if(folder.exists()){
+				IFile file=folder.getFile("UserFunctions.properties");
+				if(file.exists()){
+					userFunctionsPropertyFileRelativePath=file.getProjectRelativePath().toString();
+				}
+			}
+		}
+		return userFunctionsPropertyFileRelativePath;
+	}
+
+	private static IProject getCurrentProjectFromActiveGraph() {
+		IEditorInput editorInput=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
+		if(editorInput instanceof IFileEditorInput){
+			return ((IFileEditorInput)editorInput).getFile().getProject();
+		}
+		return null;
+	}
+	
 	/**
 	 * This method responsible to run the job in debug mode
 	 * @param job
@@ -296,7 +322,7 @@ public class JobManager {
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(previouslyExecutedJobs.get(job.getConsoleName()));
 		
 		previouslyExecutedJobs.put(job.getConsoleName(), job);
-		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,externalSchemaFiles,subJobList);
+		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,getUserFunctionsPropertertyFile() ,externalSchemaFiles,subJobList);
 		
 	}
 	
@@ -311,14 +337,14 @@ public class JobManager {
 	 * @param subJobList
 	 */
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
+			final String xmlPath,final String userFunctionsPropertertyFile,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
 			job.setExecutionTrack(isExecutionTracking());
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new RemoteJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles, subJobList);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(),userFunctionsPropertertyFile ,job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 			}).start();
 		} else {
@@ -329,7 +355,7 @@ public class JobManager {
 				public void run() {
 					job.setExecutionTrack(isExecutionTracking());
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), userFunctionsPropertertyFile ,job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 			}).start();
 		}
@@ -348,14 +374,14 @@ public class JobManager {
 	 * @param subJobList
 	 */
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
-			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
+			final String xmlPath, final String debugXmlPath,final String userFunctionsPropertertyFile,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
 			setLocalMode(false);
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugRemoteJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath,  parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath,  parameterGrid.getParameterFilesForExecution(),userFunctionsPropertertyFile, job, gefCanvas,externalSchemaFiles,subJobList);
 				}
 
 			}).start();
@@ -365,7 +391,7 @@ public class JobManager {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugLocalJobLauncher();
-					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, externalSchemaFiles,subJobList);
+					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, parameterGrid.getParameterFilesForExecution(),userFunctionsPropertertyFile ,job, gefCanvas, externalSchemaFiles,subJobList);
 				}
 			}).start();
 		}

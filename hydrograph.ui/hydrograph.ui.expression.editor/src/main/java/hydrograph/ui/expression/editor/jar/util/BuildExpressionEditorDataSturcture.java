@@ -96,7 +96,6 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 	public IProject getCurrentProject() {
-		
 		 ISelectionService selectionService = Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();    
 		 ISelection selection = selectionService.getSelection();    
 		        IProject project = null;    
