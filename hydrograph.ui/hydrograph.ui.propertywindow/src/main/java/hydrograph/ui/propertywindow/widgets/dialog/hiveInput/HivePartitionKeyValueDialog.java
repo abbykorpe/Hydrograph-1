@@ -26,11 +26,11 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.Proper
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -44,7 +44,6 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
@@ -807,28 +806,17 @@ public class HivePartitionKeyValueDialog extends Dialog {
 private void attachDeleteButtonListener(final Button deleteButton) {
 		deleteButton.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Nothing to do
-			}
-
+			public void mouseDoubleClick(MouseEvent e) {}
 			@Override
-			public void mouseDown(MouseEvent e) {
-				// Nothing to do
-			}
-
+			public void mouseDown(MouseEvent e) {	}
 			@Override
 			public void mouseUp(MouseEvent e) {
-				IStructuredSelection selection = (IStructuredSelection) targetTableViewer
-						.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator
-						.hasNext();) {
-					Object selectedObject = iterator.next();
-					targetTableViewer.remove(selectedObject);
-					propertyList.remove(selectedObject);
-					isAnyUpdatePerformed = true;
-					checkTargetFieldsSequence();
-					refreshKeyValueColums(propertyList,true);
-				}
+				WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
+				isAnyUpdatePerformed = true;
+				targetTableViewer.refresh();
+				checkTargetFieldsSequence();
+				refreshKeyValueColums(propertyList,true);
+				
 				if (propertyList.size() < 1) {
 					deleteButton.setEnabled(false);
 				}
@@ -1154,25 +1142,15 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 	 */
 	private SelectionListener deleteButtonListner(final Button keyValueDelButton) {
 	       SelectionListener listener = new SelectionListener() {
-				
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					
+					WidgetUtility.setCursorOnDeleteRow(keyValueTableViewer, keyValues);
 					isAnyUpdatePerformed=true;
+					keyValueTableViewer.refresh();
 					
-					IStructuredSelection selection = (IStructuredSelection) keyValueTableViewer.getSelection();				
-					for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
-						Object selectedObject = iterator.next();
-						keyValueTableViewer.remove(selectedObject);
-						keyValues.remove(selectedObject);
-						
-					}
 					if (keyValues.size() < 1) {
 						keyValueDelButton.setEnabled(false);
 					} 
-					
-				
-					
 				}
 				
 				@Override

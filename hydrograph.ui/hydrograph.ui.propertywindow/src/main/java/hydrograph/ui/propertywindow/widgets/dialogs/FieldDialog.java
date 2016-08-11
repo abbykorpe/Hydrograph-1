@@ -411,13 +411,6 @@ public class FieldDialog extends Dialog {
 			}
 			@Override
 			public void mouseUp(MouseEvent e) {
-			/*	int index = targetTableViewer.getTable().getSelectionIndex(); 
-				IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
-				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
-					Object selectedObject = iterator.next();
-					targetTableViewer.remove(selectedObject);
-					propertyList.remove(selectedObject);
-				}*/
 				WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
 				isAnyUpdatePerformed = true;
 				targetTableViewer.refresh();

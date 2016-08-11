@@ -25,6 +25,7 @@ import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.HiveFieldDialogHelp
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -417,13 +418,18 @@ public class HiveOutputFieldDialog extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
+				/*IStructuredSelection selection = (IStructuredSelection) targetTableViewer.getSelection();
 				for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 					Object selectedObject = iterator.next();
 					targetTableViewer.remove(selectedObject);
 					propertyList.remove(selectedObject);
-					isAnyUpdatePerformed = true;
-				}
+				}*/
+				
+				WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
+				isAnyUpdatePerformed = true;
+				targetTableViewer.refresh();
+				
+				
 				if (propertyList.size() < 1) {
 					deleteButton.setEnabled(false);
 				} 

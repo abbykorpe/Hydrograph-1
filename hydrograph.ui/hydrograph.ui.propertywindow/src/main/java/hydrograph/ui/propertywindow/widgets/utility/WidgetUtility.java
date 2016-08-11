@@ -14,11 +14,10 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import hydrograph.ui.propertywindow.messages.Messages;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.propertywindow.messages.Messages;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
@@ -44,6 +43,7 @@ import org.eclipse.swt.widgets.TableColumn;
  */
 public class WidgetUtility {
 	private static final String ERROR = "Error";
+	private static final String ERROR_MESSAGE = "Please Select row to delete";
 	
 
 	private WidgetUtility(){
@@ -178,7 +178,7 @@ public class WidgetUtility {
 		Table table = tableViewer.getTable();
 		int[] indexes = table.getSelectionIndices();
 		if (table.getSelectionIndex() == -1) {
-			WidgetUtility.errorMessage("Please Select row to delete");
+			WidgetUtility.errorMessage(ERROR_MESSAGE);
 		} else {
 			table.remove(indexes);
 			List listOfItemsToRemove= new ArrayList();
