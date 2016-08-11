@@ -65,13 +65,13 @@ public class StringComparisionsTest {
 	
 	@Test
 	public void testStringComparisionOnDecimalWithString() {
-		BigDecimal input = new BigDecimal(10.05);
+		BigDecimal input = BigDecimal.valueOf(10.05);
 		Assert.assertEquals("not matched", new Integer(0), stringCompare(input, "10.05"));
 	}
 	
 	@Test
 	public void testStringComparisionOnDecimalWithDecimal() {
-		BigDecimal input = new BigDecimal(5);
-		Assert.assertEquals("not matched", new Integer(1), stringCompare(input, new BigDecimal(0)));
+		BigDecimal input = BigDecimal.valueOf(5);
+		Assert.assertEquals("not matched", new Integer(1), stringCompare(input, BigDecimal.valueOf(0)));
 	}
 }

@@ -42,10 +42,11 @@ public class SchemaFieldHandler {
 		jaxbGraph = jaxbGraphlist;
 		componentMap = new HashMap<String, TypeBaseComponent>();
 		schemaFields = new LinkedHashMap<String, Set<SchemaField>>();
+		generateSchemaFields();
 	}
 
 	public Map<String, Set<SchemaField>> getSchemaFieldMap() {
-		generateSchemaFields();
+		
 		return schemaFields;
 	}
 
