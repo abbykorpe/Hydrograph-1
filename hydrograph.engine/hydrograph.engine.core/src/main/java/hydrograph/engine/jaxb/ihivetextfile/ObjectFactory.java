@@ -42,46 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HivePathType }
-     * 
-     */
-    public HivePathType createHivePathType() {
-        return new HivePathType();
-    }
-
-    /**
-     * Create an instance of {@link HiveType }
-     * 
-     */
-    public HiveType createHiveType() {
-        return new HiveType();
-    }
-
-    /**
-     * Create an instance of {@link PartitionFieldBasicType }
-     * 
-     */
-    public PartitionFieldBasicType createPartitionFieldBasicType() {
-        return new PartitionFieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeInputHiveTextFileDelimitedBase }
-     * 
-     */
-    public TypeInputHiveTextFileDelimitedBase createTypeInputHiveTextFileDelimitedBase() {
-        return new TypeInputHiveTextFileDelimitedBase();
-    }
-
-    /**
-     * Create an instance of {@link PartitionColumn }
-     * 
-     */
-    public PartitionColumn createPartitionColumn() {
-        return new PartitionColumn();
-    }
-
-    /**
      * Create an instance of {@link HivePartitionFieldsType }
      * 
      */
@@ -90,11 +50,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link HivePathType }
+     * 
+     */
+    public HivePathType createHivePathType() {
+        return new HivePathType();
+    }
+
+    /**
      * Create an instance of {@link TypeInputHiveTextDelimitedOutSocket }
      * 
      */
     public TypeInputHiveTextDelimitedOutSocket createTypeInputHiveTextDelimitedOutSocket() {
         return new TypeInputHiveTextDelimitedOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputHiveTextFileDelimitedBase }
+     * 
+     */
+    public TypeInputHiveTextFileDelimitedBase createTypeInputHiveTextFileDelimitedBase() {
+        return new TypeInputHiveTextFileDelimitedBase();
     }
 
     /**
@@ -111,6 +87,30 @@ public class ObjectFactory {
      */
     public HivePartitionFilterType createHivePartitionFilterType() {
         return new HivePartitionFilterType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionColumn }
+     * 
+     */
+    public PartitionColumn createPartitionColumn() {
+        return new PartitionColumn();
+    }
+
+    /**
+     * Create an instance of {@link HiveType }
+     * 
+     */
+    public HiveType createHiveType() {
+        return new HiveType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionFieldBasicType }
+     * 
+     */
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
     }
 
 }

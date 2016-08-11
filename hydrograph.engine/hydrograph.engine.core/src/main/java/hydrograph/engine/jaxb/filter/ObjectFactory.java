@@ -42,35 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFilterOperationInputFields }
+     * Create an instance of {@link TypeFilterInSocket }
      * 
      */
-    public TypeFilterOperationInputFields createTypeFilterOperationInputFields() {
-        return new TypeFilterOperationInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeFilterOperationInputField }
-     * 
-     */
-    public TypeFilterOperationInputField createTypeFilterOperationInputField() {
-        return new TypeFilterOperationInputField();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
-     * 
-     */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
-    }
-
-    /**
-     * Create an instance of {@link TypeFilterOutSocket }
-     * 
-     */
-    public TypeFilterOutSocket createTypeFilterOutSocket() {
-        return new TypeFilterOutSocket();
+    public TypeFilterInSocket createTypeFilterInSocket() {
+        return new TypeFilterInSocket();
     }
 
     /**
@@ -82,11 +58,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFilterInSocket }
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
-    public TypeFilterInSocket createTypeFilterInSocket() {
-        return new TypeFilterInSocket();
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
+     * Create an instance of {@link TypeFilterOperationInputField }
+     * 
+     */
+    public TypeFilterOperationInputField createTypeFilterOperationInputField() {
+        return new TypeFilterOperationInputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeFilterOutSocket }
+     * 
+     */
+    public TypeFilterOutSocket createTypeFilterOutSocket() {
+        return new TypeFilterOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeFilterOperationInputFields }
+     * 
+     */
+    public TypeFilterOperationInputFields createTypeFilterOperationInputFields() {
+        return new TypeFilterOperationInputFields();
     }
 
 }

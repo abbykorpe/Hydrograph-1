@@ -42,27 +42,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeMysqlRecord }
+     * 
+     */
+    public TypeMysqlRecord createTypeMysqlRecord() {
+        return new TypeMysqlRecord();
+    }
+
+    /**
      * Create an instance of {@link DatabaseType }
      * 
      */
     public DatabaseType createDatabaseType() {
         return new DatabaseType();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputMysqlOutSocket }
-     * 
-     */
-    public TypeOutputMysqlOutSocket createTypeOutputMysqlOutSocket() {
-        return new TypeOutputMysqlOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputMysqlBase }
-     * 
-     */
-    public TypeOutputMysqlBase createTypeOutputMysqlBase() {
-        return new TypeOutputMysqlBase();
     }
 
     /**
@@ -74,11 +66,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeLoadChoice }
+     * Create an instance of {@link TypeOutputMysqlBase }
      * 
      */
-    public TypeLoadChoice createTypeLoadChoice() {
-        return new TypeLoadChoice();
+    public TypeOutputMysqlBase createTypeOutputMysqlBase() {
+        return new TypeOutputMysqlBase();
     }
 
     /**
@@ -90,11 +82,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeMysqlRecord }
+     * Create an instance of {@link TypeLoadChoice }
      * 
      */
-    public TypeMysqlRecord createTypeMysqlRecord() {
-        return new TypeMysqlRecord();
+    public TypeLoadChoice createTypeLoadChoice() {
+        return new TypeLoadChoice();
     }
 
     /**
@@ -103,6 +95,14 @@ public class ObjectFactory {
      */
     public TypeUpdateKeys createTypeUpdateKeys() {
         return new TypeUpdateKeys();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputMysqlOutSocket }
+     * 
+     */
+    public TypeOutputMysqlOutSocket createTypeOutputMysqlOutSocket() {
+        return new TypeOutputMysqlOutSocket();
     }
 
 }

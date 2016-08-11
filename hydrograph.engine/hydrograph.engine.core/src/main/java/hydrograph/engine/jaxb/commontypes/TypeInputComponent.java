@@ -63,8 +63,8 @@ import hydrograph.engine.jaxb.itfs.TypeInputFileSequenceBase;
     hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase.class,
     TypeInputHiveTextFileDelimitedBase.class,
     TypeMixedBase.class,
-    TypeInputFileDelimitedSubjob.class,
     hydrograph.engine.jaxb.ifsubjob.TypeInputFileDelimitedBase.class,
+    TypeInputFileDelimitedSubjob.class,
     TypeInputMysqlBase.class,
     TypeInputRedshiftBase.class,
     TypeInputOracleBase.class

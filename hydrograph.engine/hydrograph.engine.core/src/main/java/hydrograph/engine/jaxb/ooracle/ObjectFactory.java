@@ -50,6 +50,46 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutputOracleOutSocket }
+     * 
+     */
+    public TypeOutputOracleOutSocket createTypeOutputOracleOutSocket() {
+        return new TypeOutputOracleOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypePriamryKeys }
+     * 
+     */
+    public TypePriamryKeys createTypePriamryKeys() {
+        return new TypePriamryKeys();
+    }
+
+    /**
+     * Create an instance of {@link TypeOracleField }
+     * 
+     */
+    public TypeOracleField createTypeOracleField() {
+        return new TypeOracleField();
+    }
+
+    /**
+     * Create an instance of {@link TypeLoadChoice }
+     * 
+     */
+    public TypeLoadChoice createTypeLoadChoice() {
+        return new TypeLoadChoice();
+    }
+
+    /**
+     * Create an instance of {@link TypeUpdateKeys }
+     * 
+     */
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
+    }
+
+    /**
      * Create an instance of {@link TypeOracleRecord }
      * 
      */
@@ -63,46 +103,6 @@ public class ObjectFactory {
      */
     public TypeOutputOracleBase createTypeOutputOracleBase() {
         return new TypeOutputOracleBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeOracleField }
-     * 
-     */
-    public TypeOracleField createTypeOracleField() {
-        return new TypeOracleField();
-    }
-
-    /**
-     * Create an instance of {@link TypePriamryKeys }
-     * 
-     */
-    public TypePriamryKeys createTypePriamryKeys() {
-        return new TypePriamryKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeLoadChoice }
-     * 
-     */
-    public TypeLoadChoice createTypeLoadChoice() {
-        return new TypeLoadChoice();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputOracleOutSocket }
-     * 
-     */
-    public TypeOutputOracleOutSocket createTypeOutputOracleOutSocket() {
-        return new TypeOutputOracleOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeUpdateKeys }
-     * 
-     */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
     }
 
 }

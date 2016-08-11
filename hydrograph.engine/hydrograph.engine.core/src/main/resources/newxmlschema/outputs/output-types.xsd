@@ -353,7 +353,7 @@
 					<xs:element name="loadType" type="ooracle:type-load-choice"
 						minOccurs="0" />
 					<xs:element name="batchSize" type="cmn:element-value-integer-type"
-						minOccurs="1" maxOccurs="1" />	
+						minOccurs="1" maxOccurs="1" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>

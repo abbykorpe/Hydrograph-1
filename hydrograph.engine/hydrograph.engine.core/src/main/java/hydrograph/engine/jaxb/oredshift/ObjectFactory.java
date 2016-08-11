@@ -42,27 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputRedshiftBase }
-     * 
-     */
-    public TypeOutputRedshiftBase createTypeOutputRedshiftBase() {
-        return new TypeOutputRedshiftBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeLoadChoice }
-     * 
-     */
-    public TypeLoadChoice createTypeLoadChoice() {
-        return new TypeLoadChoice();
-    }
-
-    /**
      * Create an instance of {@link TypeOutputRedshiftInSocket }
      * 
      */
     public TypeOutputRedshiftInSocket createTypeOutputRedshiftInSocket() {
         return new TypeOutputRedshiftInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputRedshiftBase }
+     * 
+     */
+    public TypeOutputRedshiftBase createTypeOutputRedshiftBase() {
+        return new TypeOutputRedshiftBase();
     }
 
     /**
@@ -79,6 +71,14 @@ public class ObjectFactory {
      */
     public TypeRedshiftField createTypeRedshiftField() {
         return new TypeRedshiftField();
+    }
+
+    /**
+     * Create an instance of {@link TypeLoadChoice }
+     * 
+     */
+    public TypeLoadChoice createTypeLoadChoice() {
+        return new TypeLoadChoice();
     }
 
     /**

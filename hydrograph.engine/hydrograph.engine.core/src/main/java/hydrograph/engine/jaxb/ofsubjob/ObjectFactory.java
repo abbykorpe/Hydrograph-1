@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputFileDelimitedSubjob }
-     * 
-     */
-    public TypeOutputFileDelimitedSubjob createTypeOutputFileDelimitedSubjob() {
-        return new TypeOutputFileDelimitedSubjob();
-    }
-
-    /**
      * Create an instance of {@link TypeOutputDelimitedInSocket }
      * 
      */
     public TypeOutputDelimitedInSocket createTypeOutputDelimitedInSocket() {
         return new TypeOutputDelimitedInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputFileDelimitedSubjob }
+     * 
+     */
+    public TypeOutputFileDelimitedSubjob createTypeOutputFileDelimitedSubjob() {
+        return new TypeOutputFileDelimitedSubjob();
     }
 
     /**

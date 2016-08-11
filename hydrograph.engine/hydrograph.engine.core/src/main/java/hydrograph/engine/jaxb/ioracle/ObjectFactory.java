@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputOracleOutSocket }
-     * 
-     */
-    public TypeInputOracleOutSocket createTypeInputOracleOutSocket() {
-        return new TypeInputOracleOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeInputOracleBase }
      * 
      */
     public TypeInputOracleBase createTypeInputOracleBase() {
         return new TypeInputOracleBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputOracleOutSocket }
+     * 
+     */
+    public TypeInputOracleOutSocket createTypeInputOracleOutSocket() {
+        return new TypeInputOracleOutSocket();
     }
 
 }
