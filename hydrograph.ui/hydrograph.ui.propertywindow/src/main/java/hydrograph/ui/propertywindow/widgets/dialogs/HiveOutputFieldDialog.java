@@ -794,7 +794,7 @@ public class HiveOutputFieldDialog extends Dialog {
 	
 	@Override
 	public boolean close() {
-		if(okPressed){
+		if(!okPressed){
 			cancelPressed();			
 			return closeDialog;
 		}else{
