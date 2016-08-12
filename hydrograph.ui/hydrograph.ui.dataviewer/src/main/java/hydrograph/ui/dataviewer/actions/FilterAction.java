@@ -39,7 +39,6 @@ import org.slf4j.Logger;
 public class FilterAction extends Action {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterAction.class);
 	private static final String LABEL="Filter";
-	private static final String SCHEMA_FILE_EXTENTION=".xml";
 	
 	private DebugDataViewer debugDataViewer;
 	private FilterConditions filterConditions;

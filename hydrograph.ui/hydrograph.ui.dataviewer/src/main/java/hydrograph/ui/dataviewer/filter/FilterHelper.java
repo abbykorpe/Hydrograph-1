@@ -22,6 +22,7 @@ import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -478,7 +478,7 @@ public class FilterHelper {
 			
 			enableAndDisableNextButtonOfDataViewer();
 			
-		} catch (SQLException exception) {
+		} catch (SQLException|IOException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}
 	}

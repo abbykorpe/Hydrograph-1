@@ -200,7 +200,7 @@ public class DataViewerAdapter {
 		columnCount = resultSet.getMetaData().getColumnCount();
 	}
 
-	public void initializeTableData() throws SQLException  {
+	public void initializeTableData() throws SQLException, IOException  {
 		List<Integer> timeStampColumnIndexList=getTimeStampColumnIndexList();
 		viewerData.clear();
 		
@@ -264,7 +264,7 @@ public class DataViewerAdapter {
 		results.close();
 	}
 
-	private List<Integer> getTimeStampColumnIndexList() {
+	private List<Integer> getTimeStampColumnIndexList() throws IOException {
 		List<Integer> timeStampColumnIndexList=new ArrayList<Integer>();
 		try {
 			String dataTypeString=getType(databaseName).replaceAll(AdapterConstants.DATE,AdapterConstants.TIMESTAMP);
@@ -278,6 +278,7 @@ public class DataViewerAdapter {
 			}
 		} catch (IOException ioException) {
 			logger.error("Error while counting no of columns of TimeStamp type",ioException);
+			throw ioException;
 		}
 		return timeStampColumnIndexList;
 	}
