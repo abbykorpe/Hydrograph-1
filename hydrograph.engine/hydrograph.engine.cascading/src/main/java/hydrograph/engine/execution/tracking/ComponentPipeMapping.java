@@ -24,18 +24,20 @@ import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.integration.FlowContext;
 import hydrograph.engine.cascading.integration.RuntimeContext;
-import hydrograph.engine.core.entity.LinkInfo;
+import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
+import hydrograph.engine.core.utilities.SocketUtilities;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
+import hydrograph.engine.jaxb.operationstypes.Filter;
 
 public class ComponentPipeMapping {
 
-	private static List<String> actualComponents = new ArrayList<String>();
 	private static Map<String, List<String>> componentSocketMap = new HashMap<String, List<String>>();
-	private static Map<String, String> comopnentsAndFilterMap = new HashMap<String, String>();
 	private static Map<String, Pipe> componentToPipeMapping = new HashMap<String, Pipe>();
-	private static List<String> filterList = new ArrayList<String>();
+	private static Map<String, List<String>> componentAndPreviousMap = new HashMap<String, List<String>>();
+	private static List<String> listOfFilterComponent = new ArrayList<String>();
 
 	public static void generateComponentToPipeMap(Map<String, FlowContext> flowContextMap) {
 		for (FlowContext flowContext : flowContextMap.values()) {
@@ -60,43 +62,46 @@ public class ComponentPipeMapping {
 						.getOutputSocketFromComponentId(eachComponentId);
 				List<? extends TypeBaseInSocket> inSockets = jaxbTraversal
 						.getInputSocketFromComponentId(eachComponentId);
-				generateComponentFilterMapForInputSocket(jaxbTraversal, eachComponentId, outSockets, inSockets);
-				generateComponentFilterMapForOutputSocket(jaxbTraversal, eachComponentId, outSockets);
+				generateComponentAndPreviousMap(runtimeContext.getHydrographJob(), eachComponentId, outSockets,
+						inSockets);
 
 			}
+			System.out.println();
 		}
 	}
 
-	private static void generateComponentFilterMapForOutputSocket(JAXBTraversal jaxbTraversal, String eachComponentId,
-			List<? extends TypeBaseOutSocket> outSockets) {
-		for (TypeBaseOutSocket typeBaseOutSocket : outSockets) {
-			addComponentAndSocketInMap(eachComponentId, typeBaseOutSocket.getId());
-
-			LinkInfo linkInfo = jaxbTraversal.getPhaseLinkFromOutputSocket(eachComponentId, typeBaseOutSocket);
-			if (!filterList.contains(eachComponentId)) {
-				filterList.add(linkInfo.getComponentId());
-				actualComponents.add(linkInfo.getSourceComponentId() + "_" + linkInfo.getOutSocketId());
-				comopnentsAndFilterMap.put(linkInfo.getSourceComponentId() + "_" + linkInfo.getOutSocketId(),
-						linkInfo.getComponentId() + "_out0");
-			}
-		}
-	}
-
-	private static void generateComponentFilterMapForInputSocket(JAXBTraversal jaxbTraversal, String eachComponentId,
+	private static void generateComponentAndPreviousMap(HydrographJob hydrographJob, String eachComponentId,
 			List<? extends TypeBaseOutSocket> outSockets, List<? extends TypeBaseInSocket> inSockets) {
+		List<String> PreviousComponents = new ArrayList<String>();
 		if (outSockets.size() == 0) {
-			for (TypeBaseInSocket typeBaseInSocket : inSockets) {
-				addComponentAndSocketInMap(eachComponentId, typeBaseInSocket.getId());
+			for (TypeBaseInSocket inSocket : inSockets) {
+				addComponentAndSocketInMap(eachComponentId, "NoSocketId");
+			}
+		}
+		for (TypeBaseOutSocket outSocket : outSockets) {
+			addComponentAndSocketInMap(eachComponentId, outSocket.getId());
+		}
 
-				LinkInfo linkInfo = jaxbTraversal.getPhaseLinkFromInputSocket(typeBaseInSocket);
-				if (filterList.contains(linkInfo.getSourceComponentId())) {
-					actualComponents.add(linkInfo.getComponentId() + "_" + linkInfo.getInSocketId());
-					comopnentsAndFilterMap.put(linkInfo.getComponentId() + "_" + linkInfo.getInSocketId(),
-							linkInfo.getSourceComponentId() + "_out0");
+		if (inSockets.size() == 0) {
+			componentAndPreviousMap.put(eachComponentId, null);
+		}
+		componentAndPreviousMap.put(eachComponentId, PreviousComponents);
+		for (TypeBaseInSocket currentComponentInSocket : inSockets) {
+			List<TypeBaseComponent> allComponents = hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls();
+			for (TypeBaseComponent previousComponent : allComponents) {
+				List<? extends TypeBaseOutSocket> previousOutSockets = SocketUtilities
+						.getOutSocketList(previousComponent);
+				for (TypeBaseOutSocket previousOutSocket : previousOutSockets) {
+					if (previousComponent.getId().equals(currentComponentInSocket.getFromComponentId())
+							&& currentComponentInSocket.getFromSocketId().equals(previousOutSocket.getId())) {
+						PreviousComponents.add(previousComponent.getId() + "_" + previousOutSocket.getId());
+					}
 				}
 			}
+
 		}
 	}
+
 
 	private static void addComponentAndSocketInMap(String componentId, String socketId) {
 		if (componentSocketMap.containsKey(componentId)) {
@@ -109,13 +114,10 @@ public class ComponentPipeMapping {
 		}
 	}
 
-	public static List<String> getActualComponents() {
-		return actualComponents;
+	public static void generateFilterList(Filter generatedFilter) {
+		listOfFilterComponent.add(generatedFilter.getId());
 	}
 
-	public static List<String> getHydrographFilterComponents() {
-		return filterList;
-	}
 
 	public static Map<String, Pipe> getComponentToPipeMapping() {
 		return componentToPipeMapping;
@@ -125,7 +127,11 @@ public class ComponentPipeMapping {
 		return componentSocketMap;
 	}
 
-	public static Map<String, String> getComopnentsAndFilterMap() {
-		return comopnentsAndFilterMap;
+	public static Map<String, List<String>> getComponentAndPreviousMap() {
+		return componentAndPreviousMap;
+	}
+	
+	public static List<String> getListOfFilterComponent() {
+		return listOfFilterComponent;
 	}
 }

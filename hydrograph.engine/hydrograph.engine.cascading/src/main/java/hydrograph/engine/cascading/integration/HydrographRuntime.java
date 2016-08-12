@@ -38,8 +38,8 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.props.PropertiesLoader;
-import hydrograph.engine.execution.tracking.ComponentPipeMapping;
 import hydrograph.engine.execution.tracking.listener.ExecutionTrackingListener;
+import hydrograph.engine.execution.tracking.plugin.ExecutionTrackingPlugin;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
 import hydrograph.engine.flow.utils.FlowManipulationHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
@@ -159,11 +159,11 @@ public class HydrographRuntime implements HydrographRuntimeService {
 					+ " option is provided so skipping execution");
 			return;
 		}
-
+		if (ExecutionTrackingListener.isTrackingPluginPresent()) {
+			ExecutionTrackingPlugin.generateMapsForExecutionTracking(runtimeContext);
+		}
 		for (Cascade cascade : runtimeContext.getCascade()) {
 			if (ExecutionTrackingListener.isTrackingPluginPresent()) {
-				ComponentPipeMapping.generateComponentToPipeMap(runtimeContext.getFlowContext());
-				ComponentPipeMapping.generateComponentToFilterMap(runtimeContext);
 				ExecutionTrackingListener.addListener(cascade);
 			}
 			cascade.complete();
