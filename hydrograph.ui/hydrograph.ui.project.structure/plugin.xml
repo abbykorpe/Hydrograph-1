@@ -129,6 +129,11 @@
             wizardId="hydrograph.ui.project.structure.wizard">
          <enablement></enablement>
       </commonWizard>
+      <commonWizard
+            type="new"
+            wizardId="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
+         <enablement></enablement>
+      </commonWizard>
    </extension>
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">

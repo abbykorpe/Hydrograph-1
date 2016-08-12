@@ -22,7 +22,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 11.#1028 [Rushikesh Pawale] Rearranged add/delete/up/down buttons for Schema Tab of all Output Components as a result Import and Export XML Buttons are now properly visible. 
 12.#1014 [Rushikesh Pawale] Rearranged pull schema button for Schema Tab for all Transform Components to match with location of schema tab of input and output components.
 13.#1057[Ashika Holkar]Subjob : Job Failed with SAXParseException
-
+14.#523 [Ashika Holkar] UI Issue: Class option is not present in the project explorer right click menu
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
