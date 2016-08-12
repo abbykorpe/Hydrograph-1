@@ -169,7 +169,12 @@ public class ValidateExpressionToolButton extends Button {
 		IJavaProject iJavaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject());
 		List<URL> urlList = new ArrayList<>();
 		for (IPackageFragmentRoot iPackageFragmentRoot : iJavaProject.getAllPackageFragmentRoots()) {
-			if (iPackageFragmentRoot instanceof JarPackageFragmentRoot || iPackageFragmentRoot.getElementName().equals("src")) {
+			if (!iPackageFragmentRoot.isExternal()
+					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.JAR_FILE_NAME)
+					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.ANTLR_JAR_FILE_NAME)
+					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.BEAN_SHELLJAR_FILE_NAME)
+					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.SL4JLOG)
+					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.EXPRESSION_JAR_FILE_NAME)) {
 				URL url = null;
 				if (!iPackageFragmentRoot.isExternal()) {
 					url = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()
@@ -180,20 +185,23 @@ public class ValidateExpressionToolButton extends Button {
 					url = iPackageFragmentRoot.getPath().toFile().toURI().toURL();
 					urlList.add(url);
 				}
-				if (transfromJarPath == null){
-					if(OSValidator.isMac() || OSValidator.isUnix())
-						transfromJarPath = url.getPath() + Constants.COLON;
-					else
-						transfromJarPath = url.getPath() + Constants.SEMICOLON;
-					}
-				else{
-					if(OSValidator.isMac() || OSValidator.isUnix())
-						transfromJarPath = transfromJarPath + url.getPath() + Constants.COLON;
-					else
-						transfromJarPath = transfromJarPath + url.getPath() + Constants.SEMICOLON;
+
+				if (!iPackageFragmentRoot.isExternal()
+						|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.JAR_FILE_NAME)) {
+					if (transfromJarPath == null) {
+						if (OSValidator.isMac() || OSValidator.isUnix())
+							transfromJarPath = url.getPath() + Constants.COLON;
+						else
+							transfromJarPath = url.getPath() + Constants.SEMICOLON;
+					} else {
+						if (OSValidator.isMac() || OSValidator.isUnix())
+							transfromJarPath = transfromJarPath + url.getPath() + Constants.COLON;
+						else
+							transfromJarPath = transfromJarPath + url.getPath() + Constants.SEMICOLON;
 					}
 				}
 			}
+		}
 		
 		returnObj[0]=urlList;
 		returnObj[1]=transfromJarPath;
