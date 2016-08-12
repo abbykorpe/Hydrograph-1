@@ -260,7 +260,6 @@ public class JobInfo {
 	public Collection<ComponentInfo> getstatus() {
 		return componentInfoMap.values();
 	}
-	
 
 	/**
 	 * ElementGraphNotFoundException
