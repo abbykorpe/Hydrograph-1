@@ -87,29 +87,28 @@ public class JobInfo {
 				String currentComponentId = getComponentIdFromComponentSocketID(currentComponent_SocketId);
 				if (!isComponentGeneratedFilter(currentComponentId)) {
 					getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats, currentComponentId);
-					createComponentInfoForComponent(cascadingStats, currentComponent_SocketId, currentComponentId);
-					generateStatsForOutputComponent(currentComponentId);
+					createComponentInfoForComponent(currentComponent_SocketId, cascadingStats);
+					generateStatsForOutputComponent(currentComponent_SocketId, cascadingStats);
 				}
 			}
 		}
 	}
 
-	private void generateStatsForOutputComponent(String currentComponentId) {
+	private void generateStatsForOutputComponent(String currentComponent_SocketId, CascadingStats<?> cascadingStats) {
+		String currentComponentId = getComponentIdFromComponentSocketID(currentComponent_SocketId);
 		ComponentInfo currentComponentInfo = componentInfoMap.get(currentComponentId);
 		List<String> previousComponents = new ArrayList<String>();
 		Collection<List<String>> previousComponentLists = componentAndPreviousMap.values();
 		for (List<String> previousComponentList : previousComponentLists) {
 			previousComponents.addAll(previousComponentList);
 		}
-		if (!previousComponents.contains(currentComponentId)) {
-			// The Component is Output
-			for (String previousComponent_SocketID : componentAndPreviousMap.get(currentComponentId)) {
-				if (componentInfoMap.get(getComponentIdFromComponentSocketID(previousComponent_SocketID)) != null) {
-					ComponentInfo previousComponentInfo = componentInfoMap
-							.get(getComponentIdFromComponentSocketID(previousComponent_SocketID));
-					Map<String, Long> previousRecordCountPerSocket = previousComponentInfo.getProcessedRecords();
-					long recordCount = previousRecordCountPerSocket
-							.get(getSocketIdFromComponentSocketID(previousComponent_SocketID));
+		if (!previousComponents.contains(currentComponent_SocketId)) {
+			for (String previousGeneratedfilter : componentAndPreviousMap.get(currentComponentId)) {
+				for (String previousComponent_SocketID : componentAndPreviousMap
+						.get(getComponentIdFromComponentSocketID(previousGeneratedfilter))) {
+					long recordCount = 0;
+					String previousPipeName = componentPipeMap.get(previousComponent_SocketID).getName();
+					recordCount = cascadingStats.getCounterValue(COUNTER_GROUP, previousPipeName);
 					currentComponentInfo.setProcessedRecordCount("NoSocketId", recordCount);
 				}
 			}
@@ -128,8 +127,7 @@ public class JobInfo {
 			for (String previousComponentId_SocketId : previousComponentId_SocketIds) {
 				String previousPipeName = pipeComponentMap.get(previousComponentId_SocketId);
 				if (!AllPipes.contains(previousPipeName) && previousPipeName != null) {
-					createComponentInfoForComponent(cascadingStats, previousComponentId_SocketId,
-							getComponentIdFromComponentSocketID(previousComponentId_SocketId));
+					createComponentInfoForComponent(previousComponentId_SocketId, cascadingStats);
 					getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats,
 							getComponentIdFromComponentSocketID(previousComponentId_SocketId));
 				}
@@ -137,13 +135,13 @@ public class JobInfo {
 		}
 	}
 
-	private void createComponentInfoForComponent(CascadingStats<?> cascadingStats, String currentComponent_SocketId,
-			String currentComponentId) {
+	private void createComponentInfoForComponent(String component_SocketId, CascadingStats<?> cascadingStats) {
 		ComponentInfo componentInfo = null;
+		String currentComponentId = getComponentIdFromComponentSocketID(component_SocketId);
 		if (currentComponentId != null) {
 			if (componentInfoMap.containsKey(currentComponentId)) {
 				componentInfo = componentInfoMap.get(currentComponentId);
-				componentInfo.setStatusPerSocketMap(getSocketIdFromComponentSocketID(currentComponent_SocketId),
+				componentInfo.setStatusPerSocketMap(getSocketIdFromComponentSocketID(component_SocketId),
 						cascadingStats.getStatus());
 			} else {
 				componentInfo = new ComponentInfo();
@@ -201,16 +199,16 @@ public class JobInfo {
 		return null;
 	}
 
-	private void generateAndUpdateComponentRecordCount(CascadingStats<?> flowNodeStats, ComponentInfo componentInfo,
+	private void generateAndUpdateComponentRecordCount(CascadingStats<?> cascadingStats, ComponentInfo componentInfo,
 			String ComponentId) {
 		for (String socketId : componentSocketMap.get(ComponentId)) {
 			long recordCount = 0;
-			for (String counter : flowNodeStats.getCountersFor(COUNTER_GROUP)) {
+			for (String counter : cascadingStats.getCountersFor(COUNTER_GROUP)) {
 				String componentIdANdSocketId = pipeComponentMap.get(counter);
 				if ((getComponentIdFromComponentSocketID(componentIdANdSocketId) != null
 						&& getComponentIdFromComponentSocketID(componentIdANdSocketId).equals(ComponentId))
 						&& socketId.equals(getSocketIdFromComponentSocketID(componentIdANdSocketId))) {
-					recordCount = flowNodeStats.getCounterValue(COUNTER_GROUP, counter);
+					recordCount = cascadingStats.getCounterValue(COUNTER_GROUP, counter);
 					componentInfo.setProcessedRecordCount(socketId, recordCount);
 				}
 			}

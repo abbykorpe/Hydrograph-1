@@ -66,7 +66,6 @@ public class ComponentPipeMapping {
 						inSockets);
 
 			}
-			System.out.println();
 		}
 	}
 
