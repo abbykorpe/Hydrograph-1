@@ -16,7 +16,7 @@ package hydrograph.ui.engine.ui.util;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.ui.common.util.CanvasDataAdpater;
+import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.parsing.XMLParser;
@@ -270,12 +270,12 @@ public class UiConverterUtil {
 
 	private void storeParameterData(IFile parameterFile, String jobXmlData) {
 		LOGGER.debug("Creating Parameter(i.e *properties) File at {}", parameterFile.getFullPath());
-		CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(jobXmlData);
+		CanvasDataAdapter canvasDataAdapter = new CanvasDataAdapter(jobXmlData);
 		String defaultParameterValue = "";
 		Properties properties = new Properties();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		for (String parameter : canvasDataAdpater.getParameterList()) {
+		for (String parameter : canvasDataAdapter.getParameterList()) {
 			properties.setProperty(parameter, defaultParameterValue);
 		}
 		try {

@@ -34,8 +34,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+
 /**
- * 
+ *  The Class XMLUtil is used for xml utility operations.
  * @author Bitwise
  *
  */

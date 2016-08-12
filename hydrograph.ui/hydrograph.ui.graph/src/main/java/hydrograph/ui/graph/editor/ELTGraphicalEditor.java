@@ -18,7 +18,7 @@ import hydrograph.ui.common.component.config.Component;
 import hydrograph.ui.common.interfaces.console.IHydrographConsole;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
-import hydrograph.ui.common.util.CanvasDataAdpater;
+import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -989,8 +989,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public List<String> getLatestParameterList() {
 		String canvasData =getXMLString();		
-		CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(canvasData);
-		return canvasDataAdpater.getParameterList();
+		CanvasDataAdapter canvasDataAdapter = new CanvasDataAdapter(canvasData);
+		return canvasDataAdapter.getParameterList();
 	}
 
 	private Map<String, String> getCurrentParameterMap() {

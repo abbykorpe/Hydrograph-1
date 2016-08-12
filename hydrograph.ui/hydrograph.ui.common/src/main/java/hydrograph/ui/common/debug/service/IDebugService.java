@@ -14,7 +14,15 @@
 
 package hydrograph.ui.common.debug.service;
 
+/**
+ * The Interface IDebugService.
+ * 
+ * @author Bitwise
+ */
 public interface IDebugService {
 
+	/**
+	 * Delete debug files.
+	 */
 	public void deleteDebugFiles();
 }

@@ -24,6 +24,11 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * The Class ComponentCacheUtil used for caching component's properties and validators.
+ * 
+ * @author Bitwise
+ */
 public class ComponentCacheUtil {
 	public static final ComponentCacheUtil INSTANCE = new ComponentCacheUtil();
 	
@@ -33,6 +38,13 @@ public class ComponentCacheUtil {
 	private final Map<String, Map<String, List<String>>> validatorCache = new LinkedHashMap<>();
 	
 	
+	/**
+	 * Gets the properties.
+	 * 
+	 * @param componentName
+	 *            the component name
+	 * @return the properties
+	 */
 	//TODO : refine for nested properties
 	public Map<String, Object> getProperties(String componentName) {
 		Map<String, Object> propertyMap = null;
@@ -54,6 +66,15 @@ public class ComponentCacheUtil {
 		return cloneTheMap(propertyMap);
 	}
 	
+	/**
+	 * Gets the validators for property.
+	 * 
+	 * @param componentName
+	 *            the component name
+	 * @param propertyName
+	 *            the property name
+	 * @return the validators for property
+	 */
 	public List<String> getValidatorsForProperty(String componentName, String propertyName){
 		if(validatorCache.containsKey(componentName)){
 			Map<String, List<String>> propertyValidatorMap = validatorCache.get(componentName);

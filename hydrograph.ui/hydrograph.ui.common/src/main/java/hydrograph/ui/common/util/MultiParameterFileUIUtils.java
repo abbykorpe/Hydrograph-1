@@ -19,8 +19,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+/**
+ * The Class MultiParameterFileUIUtils, utility class for managing parameter files.
+ * 
+ * @author Bitwise
+ */
 public class MultiParameterFileUIUtils {
 		
+	/**
+	 * Gets the active project location.
+	 * 
+	 * @return the active project location
+	 */
 	public static String getActiveProjectLocation() {
 		IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActivePart();
