@@ -532,8 +532,8 @@ public class FilterHelper {
 								Date parsedDate = getParsedDate(tokenizer.nextToken(), formatter);
 								temp.append(FilterConstants.SINGLE_QOUTE).append(formatter.format(parsedDate))
 										.append(FilterConstants.SINGLE_QOUTE);
-							} catch (ParseException e) {
-								logger.error("Error while parsing date value", e);
+							} catch (ParseException parseException) {
+								logger.error("Error while parsing date value", parseException);
 							}
 						}
 						else
@@ -562,8 +562,8 @@ public class FilterHelper {
 							Date parsedDate = getParsedDate(value, formatter);
 							return FilterConstants.SINGLE_QOUTE + formatter.format(parsedDate)
 									+ FilterConstants.SINGLE_QOUTE;
-						} catch (ParseException e) {
-							logger.error("Error while parsing date value",e);
+						} catch (ParseException parseException) {
+							logger.error("Error while parsing date value",parseException);
 						}
 					} else {
 						return FilterConstants.SINGLE_QOUTE + value + FilterConstants.SINGLE_QOUTE;

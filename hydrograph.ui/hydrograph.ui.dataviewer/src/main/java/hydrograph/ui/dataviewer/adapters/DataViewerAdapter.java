@@ -249,8 +249,8 @@ public class DataViewerAdapter {
 							timeStampIndex++;
 							timeStampColumn = true;
 							break;
-						} catch (ParseException e) {
-							logger.error("Error while parsing date value", e);
+						} catch (ParseException pe) {
+							logger.error("Error while parsing date value", pe);
 						}
 					}
 				}
@@ -276,8 +276,8 @@ public class DataViewerAdapter {
 					timeStampColumnIndexList.add(i+1); 
 				}
 			}
-		} catch (IOException e) {
-			logger.error("Error while counting no of columns of TimeStamp type",e);
+		} catch (IOException ioException) {
+			logger.error("Error while counting no of columns of TimeStamp type",ioException);
 		}
 		return timeStampColumnIndexList;
 	}
