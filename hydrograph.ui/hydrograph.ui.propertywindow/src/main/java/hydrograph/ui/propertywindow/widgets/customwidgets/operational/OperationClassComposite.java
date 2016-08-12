@@ -122,10 +122,8 @@ public class OperationClassComposite extends Composite {
 		parameterTextBox.setText(mappingSheetRow.getWholeOperationParameterValue());
 		btnIsParam= new Button(composite, SWT.CHECK);
 		btnIsParam.setAlignment(SWT.CENTER);
-		btnIsParam.setText("is Param");
+		btnIsParam.setText(Messages.IS_PARAM);
 		GridData gd_btnIsParam = new GridData(SWT.CENTER, SWT.FILL, true, false, 1, 1);
-		gd_btnIsParam.heightHint = 12;
-		gd_btnIsParam.widthHint = 28;
 		gd_btnIsParam.minimumWidth = 60;
 		btnIsParam.setLayoutData(gd_btnIsParam);
 		btnIsParam.setSelection(mappingSheetRow.isWholeOperationParameter());
