@@ -58,6 +58,7 @@ import org.xml.sax.SAXException;
  * 	<li>Component</li>
  * 	<li>Policy</li>
  * </ul>
+ * @author Bitwise
  */
 public class XMLConfigUtil {
 	private Logger logger=LogFactory.INSTANCE.getLogger(XMLConfigUtil.class);
@@ -115,6 +116,13 @@ public class XMLConfigUtil {
 		}
 	}
 
+	/**
+	 * Gets the component.
+	 * 
+	 * @param componentName
+	 *            the component name
+	 * @return the component
+	 */
 	public Component getComponent(String componentName){
 			return map.get(componentName);
 	}
@@ -162,6 +170,17 @@ public class XMLConfigUtil {
 		return filenameFilter;
 	}
 
+	/**
+	 * Gets the policy config.
+	 * 
+	 * @return the policy config
+	 * @throws RuntimeException
+	 *             the runtime exception
+	 * @throws SAXException
+	 *             the SAX exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public PolicyConfig getPolicyConfig() throws RuntimeException, SAXException, IOException {
 		if(policyConfig !=null){
 			return policyConfig;

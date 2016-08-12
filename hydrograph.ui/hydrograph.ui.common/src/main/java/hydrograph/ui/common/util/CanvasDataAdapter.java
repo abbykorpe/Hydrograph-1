@@ -14,25 +14,35 @@
  
 package hydrograph.ui.common.util;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.IAdaptable;
-
-public class CanvasDataAdpater {
+/**
+ * The Class CanvasDataAdapter used for storing canvas data in XML format.
+ * 
+ * @author Bitwise
+ */
+public class CanvasDataAdapter {
 	private List<String> parameterList;
 	private String canvasData;
 	
-	public CanvasDataAdpater(String canvasData){
+	/**
+	 * Instantiates a new canvas data adapter.
+	 * 
+	 * @param canvasData
+	 *            the canvas data
+	 */
+	public CanvasDataAdapter(String canvasData){
 		this.canvasData = canvasData;
 		//parameterList = new ArrayList<>();
 		parameterList = new LinkedList<>();
 	}
 	
+	/**
+	 * Fetch data.
+	 */
 	public void fetchData(){
 		Pattern parameterPattren = Pattern.compile("@\\{(.*?)\\}");
 		Matcher matcher = parameterPattren.matcher(canvasData);
@@ -42,6 +52,11 @@ public class CanvasDataAdpater {
 		}
 	}
 	
+	/**
+	 * Gets the parameter list.
+	 * 
+	 * @return the parameter list
+	 */
 	public List<String> getParameterList(){
 		fetchData();
 		/*IProject project = (IProject)((IAdaptable)firstElement).getAdapter(IProject.class);

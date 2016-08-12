@@ -14,7 +14,7 @@
  
 package hydrograph.ui.graph.utility;
 
-import hydrograph.ui.common.util.CanvasDataAdpater;
+import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.engine.util.ConverterUtil;
@@ -396,9 +396,9 @@ public class SubJobUtility {
 			parameterPropertyMap = new HashMap<String, String>();
 		}
 		String content = getCurrentEditor().getStringValueFromXMLFile(subJobJobFileIPath);
-		CanvasDataAdpater canvasDataAdpater = new CanvasDataAdpater(content);
-		canvasDataAdpater.fetchData();
-		for (String parameterName : canvasDataAdpater.getParameterList()) {
+		CanvasDataAdapter canvasDataAdapter = new CanvasDataAdapter(content);
+		canvasDataAdapter.fetchData();
+		for (String parameterName : canvasDataAdapter.getParameterList()) {
 			if (!parameterPropertyMap.containsKey(parameterName))
 				parameterPropertyMap.put(parameterName, "");
 		}

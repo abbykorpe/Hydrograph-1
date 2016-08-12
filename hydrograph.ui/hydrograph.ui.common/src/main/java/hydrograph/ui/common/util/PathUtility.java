@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.Path;
 
 /**
  *  Utility class to check path is absolute.
+ *  @author Bitwise
  */
 public class PathUtility {
 	
