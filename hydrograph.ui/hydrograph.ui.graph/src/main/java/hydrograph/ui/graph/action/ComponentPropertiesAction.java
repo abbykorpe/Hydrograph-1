@@ -56,9 +56,12 @@ public class ComponentPropertiesAction extends SelectionAction{
 		super.run();
 		IStructuredSelection currentSelectedComponent = (IStructuredSelection) getSelection();
 		if (currentSelectedComponent.getFirstElement() instanceof ComponentEditPart) {
-			Object componentModel = ((ComponentEditPart) currentSelectedComponent.getFirstElement()).getCastedModel();
+			ComponentEditPart componentEditPart = ((ComponentEditPart) currentSelectedComponent.getFirstElement());
+			Object componentModel=componentEditPart.getCastedModel();
 			ELTPropertyWindow eltPropertyWindow = new ELTPropertyWindow(componentModel);
-			eltPropertyWindow.open();
+			eltPropertyWindow.open(); 
+			
+			componentEditPart.updateComponentView(eltPropertyWindow);
 		}
 	}
 }
