@@ -124,7 +124,7 @@ public class OperationClassComposite extends Composite {
 		btnIsParam.setAlignment(SWT.CENTER);
 		btnIsParam.setText(Messages.IS_PARAM);
 		GridData gd_btnIsParam = new GridData(SWT.CENTER, SWT.FILL, true, false, 1, 1);
-		gd_btnIsParam.minimumWidth = 60;
+		gd_btnIsParam.minimumWidth = 70;
 		btnIsParam.setLayoutData(gd_btnIsParam);
 		btnIsParam.setSelection(mappingSheetRow.isWholeOperationParameter());
 		

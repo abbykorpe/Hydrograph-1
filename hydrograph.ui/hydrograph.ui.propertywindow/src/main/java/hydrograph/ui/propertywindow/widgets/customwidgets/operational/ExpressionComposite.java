@@ -164,7 +164,7 @@ public class ExpressionComposite extends Composite {
 		parameterTextBox.setText(mappingSheetRow.getWholeOperationParameterValue());	
 		btnIsParam= new Button(composite, SWT.CHECK);
 		GridData gd_btnIsParam = new GridData(SWT.CENTER, SWT.FILL, true, false, 1, 1);
-		gd_btnIsParam.minimumWidth = 60;
+		gd_btnIsParam.minimumWidth = 70;
 		btnIsParam.setLayoutData(gd_btnIsParam);
 		btnIsParam.setText("Is Param");
 		btnIsParam.setSelection(mappingSheetRow.isWholeOperationParameter());
