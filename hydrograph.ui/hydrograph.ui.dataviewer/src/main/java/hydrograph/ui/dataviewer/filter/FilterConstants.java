@@ -57,7 +57,7 @@ public class FilterConstants {
 	public static final String AND = "AND";
 	public static final String OR = "OR";
 	
-	public static final String YYYY_MM_DD = "yyyy-MM-dd";
+	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
 	public static final String ROW_INDEX = "rowIndex";
 	public static final String CONDITIONAL_EDITOR = "conditional_editor";

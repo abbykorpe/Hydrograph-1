@@ -36,6 +36,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -43,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -128,7 +133,7 @@ public class DataViewerAdapter {
 	private void createConnection() throws ClassNotFoundException, SQLException, IOException {
 		Class.forName(AdapterConstants.CSV_DRIVER_CLASS);
 		Properties properties = new Properties();
-		properties.put(AdapterConstants.COLUMN_TYPES, getType(databaseName));
+		properties.put(AdapterConstants.COLUMN_TYPES, getType(databaseName).replaceAll(AdapterConstants.DATE,AdapterConstants.TIMESTAMP));
 		connection = DriverManager.getConnection(AdapterConstants.CSV_DRIVER_CONNECTION_PREFIX + databaseName,properties);
 		statement = connection.createStatement();
 	}
@@ -195,7 +200,8 @@ public class DataViewerAdapter {
 		columnCount = resultSet.getMetaData().getColumnCount();
 	}
 
-	public void initializeTableData() throws SQLException  {
+	public void initializeTableData() throws SQLException, IOException  {
+		List<Integer> timeStampColumnIndexList=getTimeStampColumnIndexList();
 		viewerData.clear();
 		
 		String sql;
@@ -208,16 +214,73 @@ public class DataViewerAdapter {
 		}
 		ResultSet results = statement.executeQuery(sql);
 		int rowIndex = 1;
+		
 		while (results.next()) {
 			List<RowField> row = new LinkedList<>();
+			int timeStampIndex = 1;
 			for (int index = 1; index <= columnCount; index++) {
-				row.add(new RowField(results.getString(index)));
+				boolean timeStampColumn = false;
+				for (int i = timeStampIndex; i <= timeStampColumnIndexList.size(); i++) {
+					if (index == timeStampColumnIndexList.get(i - 1)) {
+						try {
+							int zoneOffset = TimeZone.getDefault().getRawOffset();
+							SimpleDateFormat formatter = new SimpleDateFormat(AdapterConstants.DATE_FORMAT);
+							Date parsedDate = formatter.parse(results.getString(index));
+							Long time = parsedDate.getTime();
+							long zoneLessTime = time - zoneOffset;
+							Date zoneLessDate = new Date(zoneLessTime);
+							String debugFileName = debugDataViewer.getDebugFileName();
+							String debugFileLocation = debugDataViewer.getDebugFileLocation();
+							Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+									.getFieldsFromSchema(debugFileLocation + debugFileName
+											+ AdapterConstants.SCHEMA_FILE_EXTENTION);
+							int counter = 1;
+							String format = "";
+							for (Field field : dataViewerFileSchema.getField()) {
+								if (index == counter) {
+									format = field.getFormat();
+									break;
+								}
+								counter++;
+							}
+							SimpleDateFormat desiredDateFormat = new SimpleDateFormat(format);
+							String timestampDate = desiredDateFormat.format(zoneLessDate);
+							row.add(new RowField(timestampDate));
+							timeStampIndex++;
+							timeStampColumn = true;
+							break;
+						} catch (ParseException pe) {
+							logger.error("Error while parsing date value", pe);
+						}
+					}
+				}
+				if (!timeStampColumn)
+					row.add(new RowField(results.getString(index)));
 			}
 			viewerData.add(new RowData(row, rowIndex));
 			rowIndex++;
 		}
 
 		results.close();
+	}
+
+	private List<Integer> getTimeStampColumnIndexList() throws IOException {
+		List<Integer> timeStampColumnIndexList=new ArrayList<Integer>();
+		try {
+			String dataTypeString=getType(databaseName).replaceAll(AdapterConstants.DATE,AdapterConstants.TIMESTAMP);
+			String[] dataTypes=dataTypeString.split(",");
+			for(int i=0;i<dataTypes.length;i++)
+			{
+				if(dataTypes[i].equalsIgnoreCase(AdapterConstants.TIMESTAMP))
+				{
+					timeStampColumnIndexList.add(i+1); 
+				}
+			}
+		} catch (IOException ioException) {
+			logger.error("Error while counting no of columns of TimeStamp type",ioException);
+			throw ioException;
+		}
+		return timeStampColumnIndexList;
 	}
 
 

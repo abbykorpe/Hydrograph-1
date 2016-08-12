@@ -16,6 +16,7 @@ package hydrograph.ui.dataviewer.actions;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.FieldDataTypes;
 import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.dataviewer.constants.AdapterConstants;
 import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.filter.FilterConditionsDialog;
 import hydrograph.ui.dataviewer.filter.FilterHelper;
@@ -38,7 +39,6 @@ import org.slf4j.Logger;
 public class FilterAction extends Action {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FilterAction.class);
 	private static final String LABEL="Filter";
-	private static final String SCHEMA_FILE_EXTENTION=".xml";
 	
 	private DebugDataViewer debugDataViewer;
 	private FilterConditions filterConditions;
@@ -90,7 +90,7 @@ public class FilterAction extends Action {
 		String debugFileLocation = debugDataViewer.getDebugFileLocation();
 
 		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation
-				+ debugFileName + SCHEMA_FILE_EXTENTION);
+				+ debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION);
 		for (Field field : dataViewerFileSchema.getField()) {
 			FieldDataTypes fieldDataTypes = field.getType();
 			fieldsAndTypes.put(field.getName(), fieldDataTypes.value());

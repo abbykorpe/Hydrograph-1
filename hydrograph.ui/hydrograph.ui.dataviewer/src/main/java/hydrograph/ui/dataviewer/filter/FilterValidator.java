@@ -12,6 +12,11 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.dataviewer.constants.AdapterConstants;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.math.BigDecimal;
@@ -39,7 +44,7 @@ public class FilterValidator {
 	private List<String> relationalList = Arrays.asList(new String[]{FilterConstants.AND, FilterConstants.OR});
 	
 	
-	public boolean isAllFilterConditionsValid(List<Condition> conditionList, Map<String, String> fieldsAndTypes, String[] fieldNames){
+	public boolean isAllFilterConditionsValid(List<Condition> conditionList, Map<String, String> fieldsAndTypes, String[] fieldNames, DebugDataViewer debugDataViewer){
 		Map<String, String[]> conditionalOperatorsMap = FilterHelper.INSTANCE.getTypeBasedOperatorMap();
 		
 		for (int index = 0; index < conditionList.size(); index++) {
@@ -104,13 +109,13 @@ public class FilterValidator {
 					}
 				}
 				else if(StringUtils.isNotBlank(value1)){
-				if(!validateDataBasedOnTypes(type, value1, condition.getConditionalOperator())){
+				if(!validateDataBasedOnTypes(type, value1, condition.getConditionalOperator(),debugDataViewer,fieldName)){
 					return false;
 				}
 			}
 			if (condition.getConditionalOperator().equalsIgnoreCase(FilterConstants.BETWEEN)) {
 				if (StringUtils.isNotBlank(value2)) {
-					if (!validateDataBasedOnTypes(type, value2, condition.getConditionalOperator())) {
+					if (!validateDataBasedOnTypes(type, value2, condition.getConditionalOperator(),debugDataViewer,fieldName)) {
 						return false;
 					}
 				}
@@ -133,7 +138,7 @@ public class FilterValidator {
 	return false;
 } 
 	
-	public boolean validateDataBasedOnTypes(String type, String value, String conditionalOperator){
+	public boolean validateDataBasedOnTypes(String type, String value, String conditionalOperator, DebugDataViewer debugDataViewer, String fieldName){
 		try{
 			if(FilterConstants.IN.equalsIgnoreCase(conditionalOperator) ||
 					FilterConstants.NOT_IN.equalsIgnoreCase(conditionalOperator)){
@@ -141,15 +146,15 @@ public class FilterValidator {
 					StringTokenizer tokenizer = new StringTokenizer(value, FilterConstants.DELIM_COMMA);
 					int numberOfTokens = tokenizer.countTokens();
 					for (int index = 0; index < numberOfTokens; index++) {
-						validate(type, tokenizer.nextToken());
+						validate(type, tokenizer.nextToken(),debugDataViewer,fieldName);
 					}
 				}
 			}
 			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
-				validate(type, value);
+				validate(type, value,debugDataViewer,fieldName);
 			}
 			else{
-				validate(type, value);
+				validate(type, value,debugDataViewer,fieldName);
 			}
 		}
 		catch(Exception exception){
@@ -159,7 +164,7 @@ public class FilterValidator {
 		return true;
 	}
 
-	private boolean validate(String type, String value) throws ParseException {
+	private boolean validate(String type, String value, DebugDataViewer debugDataViewer, String fieldName) throws ParseException {
 		if(FilterConstants.TYPE_BOOLEAN.equals(type)){
 			Boolean convertedBoolean = Boolean.valueOf(value);
 			if(!StringUtils.equalsIgnoreCase(convertedBoolean.toString(), value)){
@@ -188,8 +193,18 @@ public class FilterValidator {
 			new BigDecimal(value);
 		}
 		else if(FilterConstants.TYPE_DATE.equals(type)){
-			SimpleDateFormat sdf = new SimpleDateFormat(FilterConstants.YYYY_MM_DD); 
-			sdf.parse(value);
+			String debugFileName = debugDataViewer.getDebugFileName();
+			String debugFileLocation = debugDataViewer.getDebugFileLocation();
+			Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + 
+					debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION);
+			for (Field field : dataViewerFileSchema.getField()) {
+					if(field.getName().equalsIgnoreCase(fieldName))
+					{
+						SimpleDateFormat sdf = new SimpleDateFormat(field.getFormat()); 
+						sdf.parse(value);
+					}
+			}
+			
 		}
 		return true;
 		

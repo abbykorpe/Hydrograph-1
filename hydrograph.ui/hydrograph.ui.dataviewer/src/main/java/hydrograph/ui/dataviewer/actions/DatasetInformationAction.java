@@ -13,11 +13,20 @@
 package hydrograph.ui.dataviewer.actions;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.FieldDataTypes;
+import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.AdapterConstants;
 import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDetail;
 import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDialog;
+import hydrograph.ui.dataviewer.filter.FilterHelper;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
@@ -74,8 +83,29 @@ public class DatasetInformationAction extends Action {
 			datasetInformationDetail.setSizeOfData(Integer.toString(viewDataPreferences.getFileSize()));
 			datasetInformationDetail.setUserName(jobDetails.getUsername());
 			datasetInformationDetailDialog.setData(datasetInformationDetail,debugDataViewer,jobDetails);
-			datasetInformationDetail.setLocalFilter(debugDataViewer.getLocalCondition());
-			datasetInformationDetail.setRemoteFilter(debugDataViewer.getRemoteCondition());
+		if (debugDataViewer.getConditions() != null) {
+			StringBuffer remoteFilterCondition = FilterHelper.INSTANCE.getCondition(debugDataViewer.getConditions()
+					.getRemoteConditions(), getFieldsAndTypes(), debugDataViewer.getConditions()
+					.getRemoteGroupSelectionMap(), true);
+			StringBuffer localFilterCondition = FilterHelper.INSTANCE.getCondition(debugDataViewer.getConditions()
+					.getLocalConditions(), getFieldsAndTypes(), debugDataViewer.getConditions()
+					.getLocalGroupSelectionMap(), true);
+			datasetInformationDetail.setLocalFilter(localFilterCondition.toString());
+			datasetInformationDetail.setRemoteFilter(remoteFilterCondition.toString());
+		}
 			datasetInformationDetailDialog.open();
+	}
+	private Map<String, String> getFieldsAndTypes() {
+		Map<String, String> fieldsAndTypes = new HashMap<>();
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation
+				+ debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION);
+		for (Field field : dataViewerFileSchema.getField()) {
+			FieldDataTypes fieldDataTypes = field.getType();
+			fieldsAndTypes.put(field.getName(), fieldDataTypes.value());
+		}
+		return fieldsAndTypes;
 	}
 }

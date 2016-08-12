@@ -26,4 +26,7 @@ public class AdapterConstants {
 	public static final String CSV = ".csv";
 	public static final String SCHEMA_FILE_EXTENTION=".xml";
 	public static final String COLUMN_TYPES = "columnTypes";
+	public static final String DATE="Date";
+	public static final String TIMESTAMP="TimeStamp";
+	public static final String DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
 }

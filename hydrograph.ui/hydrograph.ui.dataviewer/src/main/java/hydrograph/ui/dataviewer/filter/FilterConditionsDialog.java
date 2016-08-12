@@ -244,7 +244,8 @@ public class FilterConditionsDialog extends Dialog {
 		styledTextRemote=new StyledText(compositeStyledText, SWT.NONE|SWT.V_SCROLL );
 		GridData gd_styledTextRemote=new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
 		styledTextRemote.setLayoutData(gd_styledTextRemote);
-		styledTextRemote.setText(debugDataViewer.getRemoteCondition());
+		StringBuffer remoteFilterCondition=FilterHelper.INSTANCE.getCondition(remoteConditionsList, fieldsAndTypes,remoteGroupSelectionMap,true);
+		styledTextRemote.setText(remoteFilterCondition.toString());
 		styledTextRemote.setWordWrap(true);
 		styledTextRemote.setEditable(false);
 		
@@ -410,7 +411,8 @@ public class FilterConditionsDialog extends Dialog {
 		styledTextLocal=new StyledText(compositeStyledText, SWT.NONE|SWT.V_SCROLL );
 		GridData gd_styledTextLocal=new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
 		styledTextLocal.setLayoutData(gd_styledTextLocal);
-		styledTextLocal.setText(debugDataViewer.getLocalCondition());
+		StringBuffer localFilterCondition=FilterHelper.INSTANCE.getCondition(localConditionsList, fieldsAndTypes,localGroupSelectionMap,true);
+		styledTextLocal.setText(localFilterCondition.toString());
 		styledTextLocal.setWordWrap(true);
 		styledTextLocal.setEditable(false);
 		

@@ -12,15 +12,23 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.AdapterConstants;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
+import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -155,7 +163,7 @@ public class FilterHelper {
 	
 	private void toggleSaveDisplayButton(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
 			final String[] fieldNames, final Button saveButton, final Button displayButton) {
-		if(FilterValidator.INSTANCE.isAllFilterConditionsValid(conditionsList, fieldsAndTypes, fieldNames)){
+		if(FilterValidator.INSTANCE.isAllFilterConditionsValid(conditionsList, fieldsAndTypes, fieldNames,debugDataViewer)){
 			saveButton.setEnabled(true);
 			displayButton.setEnabled(true);
 		}
@@ -399,7 +407,7 @@ public class FilterHelper {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			
-				StringBuffer buffer = getCondition(conditionsList, fieldsAndTypes, groupSelectionMap);
+				StringBuffer buffer = getCondition(conditionsList, fieldsAndTypes, groupSelectionMap,false);
 				
 				logger.debug("Query String : " + buffer);
 				if(dataset.equalsIgnoreCase(Messages.DOWNLOADED)){	
@@ -470,7 +478,7 @@ public class FilterHelper {
 			
 			enableAndDisableNextButtonOfDataViewer();
 			
-		} catch (SQLException exception) {
+		} catch (SQLException|IOException exception) {
 			logger.error("Error occuring while showing local filtered data",exception);
 		}
 	}
@@ -505,7 +513,7 @@ public class FilterHelper {
 		this.debugDataViewer=debugDataViewer;
 	}
 	
-	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes) {
+	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes, boolean isDisplayPressed) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
 		if((FilterConstants.TYPE_STRING.equalsIgnoreCase(dataType) || FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType) 
@@ -517,7 +525,22 @@ public class FilterHelper {
 					int numberOfTokens = tokenizer.countTokens();
 					temp.append(FilterConstants.OPEN_BRACKET); 
 					for (int index = 0; index < numberOfTokens; index++) {
-						temp.append(FilterConstants.SINGLE_QOUTE).append(tokenizer.nextToken()).append(FilterConstants.SINGLE_QOUTE);
+						if (FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType) && !isDisplayPressed) {
+							try {
+								Fields dataViewerFileSchema = getSchema();
+								SimpleDateFormat formatter = getDateFormatter(fieldName, dataViewerFileSchema);
+								Date parsedDate = getParsedDate(tokenizer.nextToken(), formatter);
+								temp.append(FilterConstants.SINGLE_QOUTE).append(formatter.format(parsedDate))
+										.append(FilterConstants.SINGLE_QOUTE);
+							} catch (ParseException parseException) {
+								logger.error("Error while parsing date value", parseException);
+							}
+						}
+						else
+						{
+							temp.append(FilterConstants.SINGLE_QOUTE).append(tokenizer.nextToken())
+							.append(FilterConstants.SINGLE_QOUTE);
+						}
 						if(index < numberOfTokens - 1){
 							temp.append(FilterConstants.DELIM_COMMA);
 						}
@@ -531,7 +554,25 @@ public class FilterHelper {
 				}
 			}
 			else{
-				return FilterConstants.SINGLE_QOUTE + value + FilterConstants.SINGLE_QOUTE;
+				if (!isDisplayPressed) {
+					if (FilterConstants.TYPE_DATE.equalsIgnoreCase(dataType)) {
+						try {
+							Fields dataViewerFileSchema = getSchema();
+							SimpleDateFormat formatter = getDateFormatter(fieldName, dataViewerFileSchema);
+							Date parsedDate = getParsedDate(value, formatter);
+							return FilterConstants.SINGLE_QOUTE + formatter.format(parsedDate)
+									+ FilterConstants.SINGLE_QOUTE;
+						} catch (ParseException parseException) {
+							logger.error("Error while parsing date value",parseException);
+						}
+					} else {
+						return FilterConstants.SINGLE_QOUTE + value + FilterConstants.SINGLE_QOUTE;
+					}
+					return null;
+				} else {
+					return FilterConstants.SINGLE_QOUTE + value + FilterConstants.SINGLE_QOUTE;
+				}
+				
 			}
 		}
 		else{
@@ -542,6 +583,31 @@ public class FilterHelper {
 				return value;
 			}
 		}
+	}
+
+	private Date getParsedDate(String nextToken, SimpleDateFormat formatter) throws ParseException {
+		Date parsedDate = formatter.parse(nextToken);
+		formatter.applyPattern(AdapterConstants.DATE_FORMAT);
+		return parsedDate;
+	}
+
+	private SimpleDateFormat getDateFormatter(String fieldName, Fields dataViewerFileSchema) {
+		SimpleDateFormat formatter = null;
+		for (Field field : dataViewerFileSchema.getField()) {
+			if (field.getName().equalsIgnoreCase(fieldName)) {
+				formatter = new SimpleDateFormat(field.getFormat());
+			}
+		}
+		return formatter;
+	}
+
+	private Fields getSchema() {
+		String debugFileName = debugDataViewer.getDebugFileName();
+		String debugFileLocation = debugDataViewer.getDebugFileLocation();
+		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE
+				.getFieldsFromSchema(debugFileLocation + debugFileName
+						+ AdapterConstants.SCHEMA_FILE_EXTENTION);
+		return dataViewerFileSchema;
 	}
 
 	private boolean validateCombo(CCombo combo){
@@ -556,7 +622,7 @@ public class FilterHelper {
 	
 	private boolean validateText(Text text, String fieldName, Map<String, String> fieldsAndTypes, String conditionalOperator) {
 		String type = FilterValidator.INSTANCE.getType(fieldName, fieldsAndTypes);
-		if((StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText(), conditionalOperator)) ||
+		if((StringUtils.isNotBlank(text.getText()) && FilterValidator.INSTANCE.validateDataBasedOnTypes(type, text.getText(), conditionalOperator,debugDataViewer,fieldName)) ||
 				FilterValidator.INSTANCE.validateField(fieldsAndTypes,text.getText(),fieldName)){
 			text.setBackground(new Color(null, 255, 255, 255));
 			return true;
@@ -581,7 +647,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				styledTextRemote.setText(getCondition(conditionsList,fieldsAndTypes, groupSelectionMap).toString());
+				styledTextRemote.setText(getCondition(conditionsList,fieldsAndTypes, groupSelectionMap,true).toString());
 			}
 			
 			@Override
@@ -597,7 +663,7 @@ public class FilterHelper {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				styledTextLocal.setText(getCondition(conditionsList,fieldsAndTypes, groupSelectionMap).toString());
+				styledTextLocal.setText(getCondition(conditionsList,fieldsAndTypes, groupSelectionMap,true).toString());
 			}
 
 			@Override
@@ -607,8 +673,8 @@ public class FilterHelper {
 		return listner;
 	}
 	
-	private StringBuffer getCondition(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
-			final Map<Integer, List<List<Integer>>> groupSelectionMap) {
+	public StringBuffer getCondition(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
+			final Map<Integer, List<List<Integer>>> groupSelectionMap,boolean isDisplayPressed) {
 		
 		//put number of elements in the list
 		//1 2 3 4 5
@@ -669,12 +735,12 @@ public class FilterHelper {
 						.append(condition.getConditionalOperator())
 						.append(FilterConstants.SINGLE_SPACE)
 						.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
-								condition.getConditionalOperator(), fieldsAndTypes))
+								condition.getConditionalOperator(), fieldsAndTypes,isDisplayPressed))
 						.append(FilterConstants.SINGLE_SPACE)
 						.append(FilterConstants.AND)
 						.append(FilterConstants.SINGLE_SPACE)
 						.append(getConditionValue(condition.getFieldName(), condition.getValue2(),
-								condition.getConditionalOperator(), fieldsAndTypes));
+								condition.getConditionalOperator(), fieldsAndTypes,isDisplayPressed));
 			} else {
 				conditionString
 						.append(condition.getFieldName())
@@ -682,7 +748,7 @@ public class FilterHelper {
 						.append(condition.getConditionalOperator())
 						.append(FilterConstants.SINGLE_SPACE)
 						.append(getConditionValue(condition.getFieldName(), condition.getValue1(),
-								condition.getConditionalOperator(), fieldsAndTypes));
+								condition.getConditionalOperator(), fieldsAndTypes,isDisplayPressed));
 			}
 			int index = actualStringList.indexOf(String.valueOf(item));
 			actualStringList.set(index, conditionString.toString());
