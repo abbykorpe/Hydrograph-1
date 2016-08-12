@@ -603,7 +603,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			public void controlResized(ControlEvent e) {
 				Shell shell = (Shell) e.getSource();
 				Rectangle schemaTable = shell.getClientArea();
-				compositeOfOutsideTable.heightHint = tableHeight + (schemaTable.height - 640);
+				compositeOfOutsideTable.heightHint = tableHeight + (schemaTable.height - 670);
 			}
 
 			@Override

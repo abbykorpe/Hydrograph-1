@@ -78,6 +78,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 62.#943 [Shrirang Kumbhar] Import XML : Copy of Port in1 is getting Mapped in Join Mapping Dialog Window Though Original Job Has Fields from Both the Ports in Mapping
 63.#996 [Nikhil Deokar] Subjob : Updated option Text and removed extra Icons
 64.#358 [Rakesh Kanchalwar] - Workspace selection window on startup
+65.#1021[Akhilesh Joshi] Schema Tab: Pop-up Windows name should be in sync. Proper window name is required if schema is already up to date and user tries to pull schema
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
