@@ -13,8 +13,8 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Launching Hydrograph on Windows" link_to="xml/Installation and Configuration/installation.xml#LaunchingHydrographOnWindows">
-   <topic href="html/Installation and Configuration/Launching_Accelero_on_Windows.html" label="Launching Hydrograph on Windows">
+<toc label="Launching Hydrograph on Macintosh" link_to="xml/Installation and Configuration/installation.xml#LaunchingHydrographOnMacintosh">
+   <topic href="html/Installation and Configuration/Launching_Hydrograph_on_Macintosh.html" label="Launching Hydrograph on Macintosh">
    </topic> 
 	
 </toc>
