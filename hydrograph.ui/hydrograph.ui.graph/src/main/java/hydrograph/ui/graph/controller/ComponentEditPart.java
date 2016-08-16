@@ -316,7 +316,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		
 		// Opens Property Window only on Double click.
 		if (req.getType().equals(RequestConstants.REQ_OPEN)) {
-			String currentStatus=(String) getCastedModel().getProperties().get(Component.Props.VALIDITY_STATUS.getValue());
 			ComponentFigure componentFigure=((ComponentEditPart)this).getComponentFigure();
 			componentFigure.terminateToolTipTimer();
 			ELTPropertyWindow eltPropertyWindow = new ELTPropertyWindow(getModel());
@@ -330,28 +329,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			} 
 			if(eltPropertyWindow.isPropertyChanged())
 			{updateSubjobVersion();}
-			adjustComponentFigure(getCastedModel(), getComponentFigure());
 			
-			changePortSettings();
+			updateComponentView(eltPropertyWindow);
 			
-			adjustComponentLabelPosition();
-			
-			if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus)){
-				updateComponentStatus();			
-			}
-			refresh();
-			
-			adjustExistingPorts();
-
-			selectPorts();
-			if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof ELTGraphicalEditor){
-				ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-				if(eltPropertyWindow.isPropertyChanged()){
-					eltGraphicalEditor.setDirty(true);
-					getCastedModel().updateTooltipInformation();
-				}
-			}
-			refreshComponentStatusOfAllComponent();
 			super.performRequest(req);
 		}
 	}
@@ -640,7 +620,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			}
 		}
 	}
-	
+	/**
+	 * Updates the status of a component.
+	 */
 	public void updateComponentStatus(){
 		Component component = this.getCastedModel();
 		LinkedHashMap<String, Object> properties = component.getProperties();
@@ -649,6 +631,38 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			((ComponentFigure)this.getFigure()).setStatus((String)properties.get(statusName));
 			this.getFigure().repaint();
 		}
+	}
+	
+	/**
+	 * Updates/refresh's the status, label position, port settings and tool tip information of a component.
+	 * 
+	 * @param eltPropertyWindow ELTPropertyWindow instance is passed
+	 */
+	public void updateComponentView(ELTPropertyWindow eltPropertyWindow)
+	{
+		String currentStatus=(String) getCastedModel().getProperties().get(Component.Props.VALIDITY_STATUS.getValue());
+		adjustComponentFigure(getCastedModel(), getComponentFigure());
+		
+		changePortSettings();
+		
+		adjustComponentLabelPosition();
+		
+		if(!StringUtils.equals(Constants.UPDATE_AVAILABLE,currentStatus)){
+			updateComponentStatus();			
+		}
+		refresh();
+		
+		adjustExistingPorts();
+
+		selectPorts();
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof ELTGraphicalEditor){
+			ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			if(eltPropertyWindow.isPropertyChanged()){
+				eltGraphicalEditor.setDirty(true);
+				getCastedModel().updateTooltipInformation();
+			}
+		}
+		refreshComponentStatusOfAllComponent();
 	}
 	
 	

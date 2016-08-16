@@ -868,7 +868,7 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(743, 595);
+		return new Point(652, 595);
 	}
 
 	
