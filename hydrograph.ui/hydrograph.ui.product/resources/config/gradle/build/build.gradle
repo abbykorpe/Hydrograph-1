@@ -14,7 +14,7 @@
 apply plugin: 'java'
 sourceCompatibility = 1.7
 version = '1.0'
-def hydrographExecution='hydrograph.engine.commandline.utilities.HydrographExecution'
+def hydrographExecution='hydrograph.execution.tracking.client.main.HydrographMain'
 
 repositories {
     maven {
@@ -54,9 +54,11 @@ ext.hiveVersion = '1.2.0'
 
 dependencies {
 
-    compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.9-SNAPSHOT')
+  	compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.9-wip')
 
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
+    
+    compile(group: 'hydrograph.execution.tracking', name: 'hydrograph.execution.tracking.server', version: '0.0.5')
 }
 
 test {
@@ -173,9 +175,9 @@ task executeRemoteJob() {
 			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
 		}
 
-        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList
+        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+" -jobid "+jobId+ " -isexecutiontracking " + isExecutionTracking
 		
-		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking
    		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -225,9 +227,11 @@ task executeDebugRemoteJob() {
         def debugXmlFileName = debugJobXML.substring(debugJobXML.lastIndexOf("/") + 1);
         def jobId = jobId;
         def basePath = basePath;
+        def isExecutionTracking = isExecutionTracking;
         
-        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath
-        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath
+        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath + " -isexecutiontracking " + isExecutionTracking
+       
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath+ " -isexecutiontracking " + isExecutionTracking
 		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -246,7 +250,7 @@ task executeLocalJob(dependsOn: ['build', 'classes'], type: JavaExec) {
         errorOutput = System.err
         classpath += transformFiles + configurations.compile
         def argsArray = getArgsForRunJob()
-        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'']
+        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]]
 
     }
 }
@@ -261,6 +265,18 @@ def getArgsForRunJob() {
         argsArray[2] = "-paramfiles"
         argsArray[3] = parameterFile
     }
+     if(project.hasProperty("jobId")){
+        argsArray[4] = "-jobid"
+        argsArray[5] = jobId
+        println jobId
+    }
+    
+    if(project.hasProperty("isExecutionTracking")){
+        argsArray[6] = "-isexecutiontracking"
+        argsArray[7] = isExecutionTracking
+        println isExecutionTracking
+    }
+    
     return argsArray
 }
 
@@ -284,13 +300,13 @@ task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
         classpath += transformFiles + configurations.compile
         def argsArray = getArgsForDebugRunJob()
         args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+
-                argsArray[8]+'',''+argsArray[9]+'']
+                argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]]
 
     }
 }
 
 def getArgsForDebugRunJob() {
-    def argsArray = new String[10]
+    def argsArray = new String[12]
     if (project.hasProperty("jobXML")) {
         argsArray[0] = "-xmlpath"
         argsArray[1] = jobXML
@@ -318,6 +334,12 @@ def getArgsForDebugRunJob() {
         argsArray[8] = "-basepath"
         argsArray[9] = basePath
         println basePath
+    }
+
+	if(project.hasProperty("isExecutionTracking")){
+        argsArray[10] = "-isexecutiontracking"
+        argsArray[11] = isExecutionTracking
+        println isExecutionTracking
     }
 
     return argsArray

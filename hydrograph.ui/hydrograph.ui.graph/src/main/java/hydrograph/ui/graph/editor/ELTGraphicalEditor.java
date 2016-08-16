@@ -42,8 +42,10 @@ import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
 import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
 import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
 import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.handler.DebugHandler;
@@ -54,6 +56,7 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.model.CompStatus;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.utility.CanvasUtils;
@@ -82,6 +85,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -457,7 +461,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 							enableRunJob(false);
 						}else{
                             ((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-                            ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+                            //((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
                            	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 							}
 						}
@@ -869,6 +873,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
+
+		if(this.uniqueJobId!=null){
+			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(this.uniqueJobId);
+		}else{
+			TrackingDisplayUtils.INSTANCE.clearTrackingStatus();
+		}
 
 		try {
 			if(container!=null)
@@ -1589,7 +1599,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	public String getJobId() {
-		return uniqueJobId;
+		if(uniqueJobId!=null){
+			return uniqueJobId;
+		}else{
+			return "";
+		}
 	}
  
 	public Container deleteSubjobProperties(Container container) {

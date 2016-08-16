@@ -15,9 +15,9 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
-import hydrograph.ui.graph.handler.RunJobHandler;
-import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -27,6 +27,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
+import javax.websocket.Session;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -44,11 +48,22 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(LocalJobLauncher.class);
 	private static final String BUILD_SUCCESSFUL="BUILD SUCCESSFUL";
 	private static final String BUILD_FAILED="BUILD FAILED";
-	private static final String JOB_FAILED="JOB FAILED";
 	private static final String JOB_COMPLETED_SUCCESSFULLY="JOB COMPLETED SUCCESSFULLY";
+	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
+	private static final String JOB_FAILED="JOB FAILED";
 
 	@Override
 	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
+		Session session=null;
+
+		if(isExecutionTracking()){
+			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
+			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
+					webSocketLocalHost);
+		if(hydrographServerConnection.getSelection() == 1){
+			return;
+		}
+		} 
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -57,9 +72,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 		job.setJobStatus(JobStatus.RUNNING);
 		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-		
-		gradleCommand = getExecututeJobCommand(xmlPath, paramFile);
+		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
 		job.setJobStatus(JobStatus.SUCCESS);
@@ -70,13 +83,21 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
+		if (session != null) {
+			try {
+				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
+				session.close(closeReason);
+				logger.info("Session closed");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
 	}
 
 	private void executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas) {
 		ProcessBuilder processBuilder = JobScpAndProcessUtility.INSTANCE.getProcess(project, gradleCommand);
 		try {
 			Process process = processBuilder.start();
-
 			job.setLocalJobProcess(process);
 			JobLogger joblogger = initJobLogger(gefCanvas,true,true);
 
@@ -88,9 +109,14 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		}
 	}
 
-	private String getExecututeJobCommand(String xmlPath, String paramFile) {
-		return GradleCommandConstants.GCMD_EXECUTE_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\""+ GradleCommandConstants.GPARAM_JOB_XML +   "\""+ xmlPath.split("/", 2)[1] +"\"" +
-				GradleCommandConstants.GPARAM_LOCAL_JOB;
+	private String getExecututeJobCommand(String xmlPath, String paramFile, Job job) {
+		
+		String exeCommond = GradleCommandConstants.GCMD_EXECUTE_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\""+ GradleCommandConstants.GPARAM_JOB_XML +   "\""+ xmlPath.split("/", 2)[1] +"\"" +
+		GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId() + 
+		GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING + job.isExecutionTrack();
+		logger.info("Gradle Command: {}", exeCommond);
+		
+		return exeCommond;
 	}
 
 	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job) {
@@ -103,14 +129,24 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 			String line = null;
 
 			while ((line = reader.readLine()) != null) {
+				if (line.contains("Gradle build daemon has been stopped.")) {
+					job.setJobStatus(JobStatus.KILLED);
+					joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
+					break;
+				}else if(line.contains(JOB_FAILED)){
+					job.setJobStatus(JobStatus.FAILED);
+				}
+				
 				if(!line.contains(BUILD_SUCCESSFUL) && !line.contains(BUILD_FAILED)){
 					joblogger.logMessage(line);
 				}else{
-					if(line.contains(BUILD_FAILED)){
-						joblogger.logMessage(JOB_FAILED);
-					}else{
-						joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
-					}
+					if (job.getJobStatus().equalsIgnoreCase(JobStatus.KILLED)){
+							joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
+						} else if(job.getJobStatus().equalsIgnoreCase(JobStatus.FAILED)){
+							joblogger.logMessage(JOB_FAILED);
+						}else{
+							joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
+						}
 				}
 			}
 		} catch (IOException e) {
@@ -133,7 +169,11 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
 			 String paramFile, Job job,
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
-		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void killJob(Job jobToKill) {
+		JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
 	}
 }

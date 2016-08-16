@@ -43,6 +43,10 @@
             id="hydrograph.ui.propertywindow.graphProperties"
             name="Graph Properties">
       </command>
+      <command
+            id="hydrograph.ui.graph.command.exectrackconsole"
+            name="Execution Tracking Console">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -54,6 +58,18 @@
        			 <equals value="hydrograph.ui.graph.etlgraphicaleditor"/>
    			 </with>
 </activeWhen>
+      </handler>
+      <handler
+            class="hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler"
+            commandId="hydrograph.ui.graph.command.exectrackconsole">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="hydrograph.ui.graph.etlgraphicaleditor">
+               </equals>
+            </with>
+         </activeWhen>
       </handler>
       <handler
             class="hydrograph.ui.graph.handler.StopJobHandler"
@@ -209,6 +225,12 @@
             name="hydrograph.ui.graph.separator4">
       </separator>
       <command
+            commandId="hydrograph.ui.graph.command.exectrackconsole"
+            icon="resources/icons/execution_tracking_console.png"
+            label="Execution Tracking Console"
+            style="push">
+      </command>
+      <command
             commandId="hydrograph.ui.graph.command.removedebug"
             icon="resources/icons/remove_debug.png"
             label="Remove Watchers"
@@ -334,5 +356,13 @@
                 value="org.eclipse.core.resources.IFile">
           </instanceof></enablement>
     </deleteParticipant>
+ </extension>
+ <extension
+       point="org.eclipse.ui.preferencePages">
+    <page
+          class="hydrograph.ui.graph.execution.tracking.preferences.ExecutionTrackPreference"
+          id="org.eclipse.ui.window.preferences"
+          name="execution Tracking">
+    </page>
  </extension>
 </plugin>

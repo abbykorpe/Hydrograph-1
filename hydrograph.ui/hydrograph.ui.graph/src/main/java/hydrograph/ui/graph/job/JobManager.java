@@ -19,7 +19,13 @@ import hydrograph.ui.common.util.MultiParameterFileUIUtils;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
@@ -40,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -47,14 +54,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.websocket.Session;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.swt.SWT;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
@@ -81,6 +89,8 @@ public class JobManager {
 	private Map<String,DebugDataViewer> dataViewerMap;		
 	private Map<String,Job> previouslyExecutedJobs;
 	private String activeCanvas;
+	private Map<String,ExecutionTrackingConsole> executionTrackingConsoles;
+	
 	
 	public boolean isLocalMode() {
 		return localMode;
@@ -102,9 +112,19 @@ public class JobManager {
 		this.dataViewerMap = dataViewerMap2;
 	}
 	
+	public Map<String, ExecutionTrackingConsole> getExecutionTrackingConsoles() {
+		return executionTrackingConsoles;
+	}
+
+	public void setExecutionTrackingConsoles(
+			Map<String, ExecutionTrackingConsole> executionTrackingConsoles) {
+		this.executionTrackingConsoles = executionTrackingConsoles;
+	}
+	
 	private JobManager() {
 		previouslyExecutedJobs = new LinkedHashMap<>();
 		runningJobsMap = new LinkedHashMap<>();
+		executionTrackingConsoles = new LinkedHashMap<>();
 	}
 	
 	/**
@@ -130,9 +150,14 @@ public class JobManager {
 	 *            - {@link Job}
 	 */
 	void addJob(Job job) {
+		
+		//openJobTrackingConsole(job);
+		
 		runningJobsMap.put(job.getLocalJobID(), job);
+		
 		logger.debug("Added job " + job.getCanvasName() + " to job map");
 	}
+
 
 	/**
 	 * Deregister job with Job Manager
@@ -185,6 +210,7 @@ public class JobManager {
 		}
 		logger.debug("property File :" + parameterGrid.getParameterFilesForExecution());
 
+		TrackingDisplayUtils.INSTANCE.clearTrackingStatus();
 		final String xmlPath = getJobXMLPath();
 		if (xmlPath == null){
 			WidgetUtility.errorMessage(Messages.OPEN_GRAPH_TO_RUN);
@@ -193,6 +219,14 @@ public class JobManager {
 
 		String clusterPassword = getClusterPassword(runConfigDialog);
 
+		String uniqueJobID = "";
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		try {
+			uniqueJobID = eltGraphicalEditor.generateUniqueJobId();
+		} catch (NoSuchAlgorithmException e) {
+			logger.error(e.getMessage(), e);
+		}
+		job.setUniqueJobId(uniqueJobID);
 		job.setUsername(runConfigDialog.getUsername());
 		job.setPassword(clusterPassword);
 		job.setHost(runConfigDialog.getHost());
@@ -233,7 +267,8 @@ public class JobManager {
 			return;
 		}
 		logger.debug("property File :" + parameterGrid.getParameterFilesForExecution());
-
+	
+		TrackingDisplayUtils.INSTANCE.clearTrackingStatus(job.getUniqueJobId());
 		final String xmlPath = getJobXMLPath();
 		String debugXmlPath = getJobDebugXMLPath();
 		if (xmlPath == null){
@@ -277,24 +312,24 @@ public class JobManager {
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
+			job.setExecutionTrack(isExecutionTracking());
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new RemoteJobLauncher();
-					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
+					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles, subJobList);
 				}
-
 			}).start();
 		} else {
 			setLocalMode(true);
+			
 			new Thread(new Runnable() {
-
 				@Override
 				public void run() {
+					job.setExecutionTrack(isExecutionTracking());
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
 					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas,externalSchemaFiles,subJobList);
 				}
-
 			}).start();
 		}
 	}
@@ -313,6 +348,7 @@ public class JobManager {
 	 */
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
+		Session session = null;
 		if (job.isRemoteMode()) {
 			setLocalMode(false);
 			new Thread(new Runnable() {
@@ -325,17 +361,15 @@ public class JobManager {
 			}).start();
 		} else {
 			setLocalMode(true);
-			//ViewDataServiceInitiator.startService();
 			new Thread(new Runnable() {
-
 				@Override
 				public void run() {
 					AbstractJobLauncher jobLauncher = new DebugLocalJobLauncher();
 					jobLauncher.launchJobInDebug(xmlPath, debugXmlPath, parameterGrid.getParameterFilesForExecution(), job, gefCanvas, externalSchemaFiles,subJobList);
 				}
-
 			}).start();
 		}
+
 	}
 	
 	private String getClusterPassword(RunConfigDialog runConfigDialog) {
@@ -444,22 +478,21 @@ public class JobManager {
 	 */
 	public void killJob(String jobId) {	
 		Job jobToKill = runningJobsMap.get(jobId);
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		if(jobToKill.isRemoteMode()){
-			MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() , SWT.ICON_WARNING | SWT.YES | SWT.NO);
-			messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
-			messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
-			if(messageBox.open() == SWT.YES){
-				jobToKill.setJobStatus(JobStatus.KILLED);
+			if(jobToKill.isDebugMode()){
+				AbstractJobLauncher killObj = new DebugRemoteJobLauncher();
+				killObj.killJob(jobToKill);
 			}else{
-				if(runningJobsMap.get(jobId) != null){
-					((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
-				}
+				AbstractJobLauncher killObj = new RemoteJobLauncher();
+				killObj.killJob(jobToKill);
 			}
-		}		
+		}else{
+				AbstractJobLauncher killObj = new LocalJobLauncher();
+				killObj.killJob(jobToKill);	
+		}
 	}
 
-	private JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
+	public JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
 		final JobLogger joblogger = new JobLogger(gefCanvas.getActiveProject(), gefCanvas.getJobName());
 		return joblogger;
 	}
@@ -505,7 +538,7 @@ public class JobManager {
 		}
 	}
 
-	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
+	public void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())){
@@ -640,4 +673,11 @@ public class JobManager {
 		return "";
 	}
 	
+	public boolean isExecutionTracking(){
+		boolean isExeTracking = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
+				ExecutionPreferenceConstants.EXECUTION_TRACKING, true, null);
+		
+		return isExeTracking;
+	}
+
 }

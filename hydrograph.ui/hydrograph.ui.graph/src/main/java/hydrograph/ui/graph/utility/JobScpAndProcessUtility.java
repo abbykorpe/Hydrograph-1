@@ -13,25 +13,32 @@
 
 package hydrograph.ui.graph.utility;
 
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.job.GradleCommandConstants;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
@@ -52,7 +59,7 @@ public class JobScpAndProcessUtility {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobScpAndProcessUtility.class);
 	public static final JobScpAndProcessUtility INSTANCE = new JobScpAndProcessUtility();
-	
+
 	private JobScpAndProcessUtility(){
 		
 	}
@@ -62,7 +69,7 @@ public class JobScpAndProcessUtility {
 	 * @return command
 	 */
 	public  String getLibararyScpCommand(Job job) {
-		String command = GradleCommandConstants.GCMD_SCP_JAR + GradleCommandConstants.GPARAM_HOST + job.getHost()
+		String command = GradleCommandConstants.GCMD_SCP_JAR + GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword();
 		return command;
@@ -75,7 +82,7 @@ public class JobScpAndProcessUtility {
 	 * @return command
 	 */
 	public  String getJobXMLScpCommand(String xmlPath, String debugXmlPath, Job job) {
-		String command=GradleCommandConstants.GCMD_SCP_JOB_XML + GradleCommandConstants.GPARAM_HOST + job.getHost()
+		String command=GradleCommandConstants.GCMD_SCP_JOB_XML + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1];
 		
@@ -91,7 +98,7 @@ public class JobScpAndProcessUtility {
 	 * @return command
 	 */
 	public  String getParameterFileScpCommand(String paramFile, Job job) {
-		String command =GradleCommandConstants.GCMD_SCP_PARM_FILE + GradleCommandConstants.GPARAM_HOST + job.getHost()
+		String command =GradleCommandConstants.GCMD_SCP_PARM_FILE + GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"";
 		return command;
@@ -107,18 +114,19 @@ public class JobScpAndProcessUtility {
 	public  String getExecututeJobCommand(String xmlPath,String debugXmlPath, String paramFile, Job job) {
 		String command="";
 		if(!"".equalsIgnoreCase(debugXmlPath.trim())){
-			command=GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
+			command=GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB+ GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 					+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 					+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
 					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH 
-			+ job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId();
+			+ job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING +job.isExecutionTrack();
 		}else{
-				command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
+				command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
-				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1];
+				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
+				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING +job.isExecutionTrack();
 		}
-		
+		logger.debug("Gradle Command: {}", command);
 		return command;
 	}
 	
@@ -130,7 +138,7 @@ public class JobScpAndProcessUtility {
 	 */
 	public String getSchemaScpCommand(List<String> externalSchemaFiles,Job job) {
 			String externalSchema =  StringUtils.join(externalSchemaFiles, ",");
-			return  GradleCommandConstants.GCMD_SCP_SCHEMA_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
+			return  GradleCommandConstants.GCMD_SCP_SCHEMA_FILES + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SCHEMA +"\""+externalSchema+"\"";
 	}
@@ -144,7 +152,7 @@ public class JobScpAndProcessUtility {
 	 */
 	public String getSubjobScpCommand(List<String> subJobList,Job job) {
 			String subJobFiles =  StringUtils.join(subJobList, ",");
-			return  GradleCommandConstants.GCMD_SCP_SUBJOB_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
+			return  GradleCommandConstants.GCMD_SCP_SUBJOB_FILES+ GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SUBJOB +"\""+subJobFiles+"\"";
 	}
@@ -172,7 +180,7 @@ public class JobScpAndProcessUtility {
 		if(!subJobList.isEmpty()) 
 			subJobFiles = getCommaSeparatedDirectories(subJobList);
 		
-		return  GradleCommandConstants.GCMD_CREATE_DIRECTORIES+ GradleCommandConstants.GPARAM_HOST + job.getHost()
+		return  GradleCommandConstants.GCMD_CREATE_DIRECTORIES+ GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath +GradleCommandConstants.GPARAM_MOVE_PARAM_FILE +project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_PARAM + GradleCommandConstants.GPARAM_MOVE_SCHEMA_FILES + schemaFiles + GradleCommandConstants.GPARAM_MOVE_SUBJOB_FILES + subJobFiles + GradleCommandConstants.GPARAM_MOVE_JAR + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_LIB ;
 	}
@@ -340,6 +348,47 @@ public class JobScpAndProcessUtility {
 				}
 		  	}
 		}
+	}
+
+public void	killJobProcess(Job jobToKill){
+	
+		final Timer timer = new Timer();
+		String[] runCommand = new String[3];
+		if (OSValidator.isWindows()) {
+			String[] command = { Messages.CMD, "/c", GradleCommandConstants.KILL_GRADLE_DAEMON };
+			runCommand = command;
+
+		} else if (OSValidator.isMac()) {
+			String[] command = { Messages.SHELL, "-c", GradleCommandConstants.KILL_GRADLE_DAEMON };
+			runCommand = command;
+		}
+
+		final ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
+		processBuilder.redirectErrorStream(true);
+		jobToKill.setJobStatus(JobStatus.KILLED);
+		
+		DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+		JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+		JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
+		long killTime = System.currentTimeMillis();
+		final long end = killTime + Long.valueOf(Messages.KILLTIME);
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				if(System.currentTimeMillis() < end) {
+					try {
+						processBuilder.start();
+					} catch (IOException e) {
+						logger.info("Fail to run kill process.");
+					}
+				}else{
+					timer.cancel();
+				}
+
+			}
+		};
+		timer.schedule(task, 0l, 1000);
+		TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
 	}
 	
 }

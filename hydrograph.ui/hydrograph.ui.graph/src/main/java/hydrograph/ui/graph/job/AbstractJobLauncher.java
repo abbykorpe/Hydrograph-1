@@ -15,6 +15,9 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -24,6 +27,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -40,6 +44,9 @@ import org.slf4j.Logger;
 abstract public class AbstractJobLauncher {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(AbstractJobLauncher.class);
 	
+	public String webSocketRemoteUrl = TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl();
+	public String webSocketLocalHost = TrackingDisplayUtils.INSTANCE.getWebSocketLocalHost();
+
 	/**
 	 * 
 	 * Launch job
@@ -100,4 +107,15 @@ abstract public class AbstractJobLauncher {
 		
 		return joblogger;
 	}
+	
+	abstract public void killJob(Job jobToKill);
+	
+	public boolean isExecutionTracking(){
+		boolean isExeTracking = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
+				ExecutionPreferenceConstants.EXECUTION_TRACKING, true, null);
+		
+		return isExeTracking;
+	}
+
+	
 }

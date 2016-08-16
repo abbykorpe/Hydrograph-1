@@ -14,23 +14,34 @@
  
 package hydrograph.ui.graph.controller;
 
+import hydrograph.ui.graph.figure.ELTFigureConstants;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.policy.LinkEditPolicy;
 import hydrograph.ui.graph.policy.LinkEndPointEditPolicy;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.draw2d.Connection;
+import org.eclipse.draw2d.ConnectionEndpointLocator;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RoutingAnimator;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Display;
 
 
 /**
  * The Class LinkEditPart.
+ * @author Bitwise
  */
 public class LinkEditPart extends AbstractConnectionEditPart
 		implements PropertyChangeListener {
@@ -90,10 +101,56 @@ public class LinkEditPart extends AbstractConnectionEditPart
 	 * PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent event) {
-		// String property = event.getPropertyName();
-		// if (Connection.LINESTYLE_PROP.equals(property)) {
-		// ((PolylineConnection) getFigure()).setLineStyle(((Connection)
-		// getModel()).getLineStyle());
-		// }
+		String prop = event.getPropertyName();
+		if ("record_count".equals(prop))
+		{
+			refreshVisuals();
+		} 
+	}
+	
+	@Override
+	protected void refreshVisuals() {
+		Connection connection = (Connection) getFigure();
+		Boolean labelAlreadyExists = false;
+		Font font = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.NORMAL);
+		for(Object figure:connection.getChildren()){
+			if(figure instanceof Label){
+				labelAlreadyExists = true;
+				((Label) figure).setFont(font);
+				((Label) figure).setText(getCastedModel().getRecordCount());
+			}
+		}
+		if(!labelAlreadyExists){
+			Label endLabel = new Label(getCastedModel().getRecordCount());
+			endLabel.setFont(font);
+			endLabel.setText(getCastedModel().getRecordCount());
+			ConnectionEndpointLocator ce = new ConnectionEndpointLocator(connection, false);
+			connection.add(endLabel,ce);
+		}
+		
+		connection.repaint();
+	}
+	
+	public void clearRecordCountAtPort(){
+		List<Figure> labels = new ArrayList<>(); 
+		Connection connection = (Connection) getFigure();
+		for(Object figure:connection.getChildren()){
+			if(figure instanceof Label){
+				labels.add((Figure) figure);
+			}
+		}
+		for (Figure figure : labels) {
+			connection.remove(figure);
+		}
+	}
+	
+	public void addZeroRecordCountAtPort(){
+		Connection connection = (Connection) getFigure();
+		Font font = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.NORMAL);
+		Label endLabel = new Label(getCastedModel().getRecordCount());
+		endLabel.setFont(font);
+		endLabel.setText("0");
+		ConnectionEndpointLocator ce = new ConnectionEndpointLocator(connection, false);
+		connection.add(endLabel,ce);
 	}
 }

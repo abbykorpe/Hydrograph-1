@@ -22,7 +22,7 @@ package hydrograph.ui.graph.figure;
  */
 public interface Validator {
 	
-	public void setStatus(String status);
+	public void setPropertyStatus(String status);
 	
-	public String getStatus();
+	public String getPropertyStatus();
 }

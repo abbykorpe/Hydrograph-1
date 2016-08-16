@@ -143,7 +143,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 				graphUtility.updateVersionOfSubjob(getCastedModel());
 		}
 		String status = (String) properties.get(Component.Props.VALIDITY_STATUS.getValue());
-		((ComponentFigure)figure).setStatus(status);
+		((ComponentFigure)figure).setPropertyStatus(status);
 		return figure;
 	}
 
@@ -238,7 +238,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 		String prop = evt.getPropertyName();
 		if (Component.Props.SIZE_PROP.eq(prop)
-				|| Component.Props.LOCATION_PROP.eq(prop)) {
+				|| Component.Props.LOCATION_PROP.eq(prop) || Component.Props.EXECUTION_STATUS.eq(prop)) {
 			refreshVisuals();
 		} else if (Component.Props.OUTPUTS.eq(prop)) {
 			refreshSourceConnections();
@@ -291,7 +291,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this,
 				getFigure(), bounds);
 		
-		
+		componentFigure.updateComponentStatus(getCastedModel().getStatus());
+		componentFigure.repaint();
+		 
 		if(component.getTooltipInformation() == null){
 			addTooltipInfoToComponent();
 		}
@@ -628,7 +630,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		LinkedHashMap<String, Object> properties = component.getProperties();
 		String statusName = Component.Props.VALIDITY_STATUS.getValue();
 		if(properties.containsKey(statusName)){
-			((ComponentFigure)this.getFigure()).setStatus((String)properties.get(statusName));
+			((ComponentFigure)this.getFigure()).setPropertyStatus((String)properties.get(statusName));
 			this.getFigure().repaint();
 		}
 	}

@@ -14,15 +14,23 @@
  
 package hydrograph.ui.graph;
 
+import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
+import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.logging.factory.LogFactory;
+
+import java.util.Iterator;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
 
 // TODO: Auto-generated Javadoc
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(Activator.class);
 	// Merge
 	// The plug-in ID
 	public static final String PLUGIN_ID = "hydrograph.ui.graph"; //$NON-NLS-1$
@@ -53,6 +61,14 @@ public class Activator extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		
+		Iterator<ExecutionTrackingConsole> execTrackWindowsIterator = JobManager.INSTANCE.getExecutionTrackingConsoles().values().iterator();
+		while(execTrackWindowsIterator.hasNext()){
+			ExecutionTrackingConsole window = execTrackWindowsIterator.next();
+			window.close();
+		}
+		
+		ExecutionTrackingFileLogger.INSTANCE.disposeLogger();
 		super.stop(context);
 	}
 
