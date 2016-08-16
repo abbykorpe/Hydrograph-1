@@ -76,6 +76,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 60.#998 [Sonia Raheja]Date should be displayed as per format defined by user in schema.
 61.#1016 [Prateem Tadas] Partition Keys Window: Fields are not Getting Highlighted When They Are Not in Sequence
 62.#943 [Shrirang Kumbhar] Import XML : Copy of Port in1 is getting Mapped in Join Mapping Dialog Window Though Original Job Has Fields from Both the Ports in Mapping
+62.#996 [Nikhil Deokar] Subjob : Updated option Text and removed extra Icons
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
