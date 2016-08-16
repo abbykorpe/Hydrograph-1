@@ -32,8 +32,8 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
 /**
- * 
- * Utility to scp files
+ * The class SCPUtility
+ * Provides utility methods to copy files using scp
  * 
  * @author Bitwise
  * 

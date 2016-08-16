@@ -26,8 +26,8 @@ import org.eclipse.swt.widgets.Display;
 
 
 /**
- * 
- * Action For selecting columns
+ * The class SelectColumnAction.
+ * Action for selecting columns displayed in view data window.
  * 
  * @author Bitwise
  *

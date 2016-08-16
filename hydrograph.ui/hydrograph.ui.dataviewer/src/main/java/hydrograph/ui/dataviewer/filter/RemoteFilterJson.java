@@ -19,7 +19,8 @@ import hydrograph.ui.datastructure.property.GridRow;
 import java.util.List;
 
 /**
- * Job and Filter Condition details to be shared as json string
+ * The Class RemoteFilterJson.
+ * Provides mechanism for creating json strings for Job and Filter Conditions.
  * @author Bitwise
  *
  */
@@ -29,6 +30,18 @@ public class RemoteFilterJson{
 	private int fileSize;
 	private JobDetails jobDetails;
 	
+	/**
+	 * Instantiates a new remote filter json.
+	 * 
+	 * @param condition
+	 *            the condition
+	 * @param schema
+	 *            the schema
+	 * @param fileSize
+	 *            the file size
+	 * @param jobDetails
+	 *            the job details
+	 */
 	public RemoteFilterJson(String condition, List<GridRow> schema, int fileSize, JobDetails jobDetails) {
 		this.condition = condition;
 		this.schema = schema;
@@ -36,27 +49,78 @@ public class RemoteFilterJson{
 		this.jobDetails = jobDetails;
 	}
 
+	/**
+	 * Gets the condition.
+	 * 
+	 * @return the condition
+	 */
 	public String getCondition() {
 		return condition;
 	}
+	
+	/**
+	 * Sets the condition.
+	 * 
+	 * @param condition
+	 *            the new condition
+	 */
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
+	
+	/**
+	 * Gets the schema.
+	 * 
+	 * @return the schema
+	 */
 	public List<GridRow> getSchema() {
 		return schema;
 	}
+	
+	/**
+	 * Sets the schema.
+	 * 
+	 * @param schema
+	 *            the new schema
+	 */
 	public void setSchema(List<GridRow> schema) {
 		this.schema = schema;
 	}
+	
+	/**
+	 * Gets the file size.
+	 * 
+	 * @return the file size
+	 */
 	public int getFileSize() {
 		return fileSize;
 	}
+	
+	/**
+	 * Sets the file size.
+	 * 
+	 * @param fileSize
+	 *            the new file size
+	 */
 	public void setFileSize(int fileSize) {
 		this.fileSize = fileSize;
 	}
+	
+	/**
+	 * Gets the job details.
+	 * 
+	 * @return the job details
+	 */
 	public JobDetails getJobDetails() {
 		return jobDetails;
 	}
+	
+	/**
+	 * Sets the job details.
+	 * 
+	 * @param jobDetails
+	 *            the new job details
+	 */
 	public void setJobDetails(JobDetails jobDetails) {
 		this.jobDetails = jobDetails;
 	}

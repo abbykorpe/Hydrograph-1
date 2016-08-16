@@ -13,7 +13,8 @@
 package hydrograph.ui.dataviewer.filter;
 
 /**
- * Constants class for Data Viewer Filter Window 
+ * The Class FilterConstants.
+ * Provides the constant values for Data Viewer Filter Window 
  * @author Bitwise
  *
  */

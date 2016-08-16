@@ -14,7 +14,8 @@
 package hydrograph.ui.dataviewer.constants;
 
 /**
- * Menus constants
+ * The Class MenuConstants.
+ * Provides the constant values for the View Data Window Menu.
  * 
  * @author Bitwise
  *

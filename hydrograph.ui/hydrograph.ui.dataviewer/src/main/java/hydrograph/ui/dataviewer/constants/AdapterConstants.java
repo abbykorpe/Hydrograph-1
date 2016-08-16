@@ -14,8 +14,8 @@
 package hydrograph.ui.dataviewer.constants;
 
 /**
- * 
- * AdapterConstants class hold constants for Data viewer adapter
+ * The Class AdapterConstants.
+ * Holds the constants for Data viewer adapter.
  * 
  * @author Bitwise
  *

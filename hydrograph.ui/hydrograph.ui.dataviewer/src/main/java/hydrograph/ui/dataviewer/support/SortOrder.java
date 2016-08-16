@@ -12,12 +12,13 @@
  ******************************************************************************/
 package hydrograph.ui.dataviewer.support;
 
+
 /**
+ * The Enum SortOrder.
  * 
  * Specifies sort order
  * 
  * @author Bitwise
- *
  */
 public enum SortOrder{
 	ASC,

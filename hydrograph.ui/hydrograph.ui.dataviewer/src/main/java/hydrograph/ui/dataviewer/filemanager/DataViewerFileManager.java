@@ -42,8 +42,8 @@ import com.google.gson.Gson;
 import com.jcraft.jsch.JSchException;
 
 /**
- * 
- * DataViewerFileManager is responsible to download debug file in data viewer workspace
+ * The Class DataViewerFileManager.
+ * Responsible to download debug file in data viewer workspace
  * 
  * @author Bitwise
  *
@@ -59,11 +59,20 @@ public class DataViewerFileManager {
 	private double debugFileSizeInKB;
 	
 	
+	/**
+	 * Instantiates a new data viewer file manager.
+	 * 
+	 * @param jobDetails
+	 *            the job details
+	 */
 	public DataViewerFileManager(JobDetails jobDetails) {
 		super();
 		this.jobDetails = jobDetails;
 	}
 	
+	/**
+	 * Instantiates a new data viewer file manager.
+	 */
 	public DataViewerFileManager(){
 	}
 
@@ -184,14 +193,29 @@ public class DataViewerFileManager {
 		return filterJson;
 	}
 	
+	/**
+	 * Gets the data viewer file path.
+	 * 
+	 * @return the data viewer file path
+	 */
 	public String getDataViewerFilePath() {
 		return dataViewerFilePath;
 	}
 
+	/**
+	 * Gets the data viewer file name.
+	 * 
+	 * @return the data viewer file name
+	 */
 	public String getDataViewerFileName() {
 		return dataViewerFileName;
 	}
 
+	/**
+	 * Gets the debug file size.
+	 * 
+	 * @return the debug file size
+	 */
 	public double getDebugFileSize() {
 		return debugFileSizeInKB;
 	}

@@ -20,8 +20,9 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import org.eclipse.jface.action.Action;
 
 /**
+ * The Class ResetColumnsAction.
  * 
- * Reset column selection
+ * Responsible for resetting the columns to default in the Select Column Action.
  * 
  * @author Bitwise
  *

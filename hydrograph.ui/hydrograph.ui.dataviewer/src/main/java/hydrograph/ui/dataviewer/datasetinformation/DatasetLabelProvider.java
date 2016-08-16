@@ -22,7 +22,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * DatasetLabelProvider class is used to display columns
+ * The Class DatasetLabelProvider.
+ * Provides column labels for the view data window.
  * @author Bitwise
  */
 

@@ -68,6 +68,7 @@ import org.slf4j.Logger;
 import com.google.gson.Gson;
 
 /**
+ * The Class FilterHelper.
  * Helper class for Filter Window
  * @author Bitwise
  *
@@ -81,10 +82,23 @@ public class FilterHelper {
 	private FilterConditionsDialog filterConditionsDialog;
 	private String SCHEMA_FILE_EXTENTION=".xml";
 	private String localCondition = "";
+	
+	/**
+	 * Sets the local condition.
+	 * 
+	 * @param localCondition
+	 *            the new local condition
+	 */
 	public void setLocalCondition(String localCondition) {
 		this.localCondition = localCondition;
 	}
 
+	/**
+	 * Sets the remote condition.
+	 * 
+	 * @param remoteCondition
+	 *            the new remote condition
+	 */
 	public void setRemoteCondition(String remoteCondition) {
 		this.remoteCondition = remoteCondition;
 	}
@@ -94,6 +108,11 @@ public class FilterHelper {
 	private FilterHelper() {
 	}
 	
+	/**
+	 * Gets the type based operator map.
+	 * 
+	 * @return the type based operator map
+	 */
 	public Map<String, String[]> getTypeBasedOperatorMap(){
 		Map<String, String[]> typeBasedConditionalOperators = new HashMap<String, String[]>();
 		String[] NUMERIC_CONDITIONS = new String[]{FilterConstants.GREATER_THAN, FilterConstants.FIELD_GREATER_THAN,
@@ -120,6 +139,21 @@ public class FilterHelper {
 		return typeBasedConditionalOperators;
 	}
 	
+	/**
+	 * Gets the text box value 1 listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the text box value 1 listener
+	 */
 	public  Listener getTextBoxValue1Listener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		Listener listener = new Listener() {
@@ -137,6 +171,21 @@ public class FilterHelper {
 		return listener;
 	}
 	
+	/**
+	 * Gets the text box value 2 listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the text box value 2 listener
+	 */
 	public  Listener getTextBoxValue2Listener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		Listener listener = new Listener() {
@@ -153,10 +202,21 @@ public class FilterHelper {
 		};
 		return listener;
 	}
+	
+	/**
+	 * Gets the local condition.
+	 * 
+	 * @return the local condition
+	 */
 	public String getLocalCondition() {
 		return localCondition;
 	}
 
+	/**
+	 * Gets the remote condition.
+	 * 
+	 * @return the remote condition
+	 */
 	public String getRemoteCondition() {
 		return remoteCondition;
 	}
@@ -173,6 +233,23 @@ public class FilterHelper {
 		}
 	}
 	
+	/**
+	 * Gets the field name selection listener.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the field name selection listener
+	 */
 	public SelectionListener getFieldNameSelectionListener(final TableViewer tableViewer, final List<Condition> conditionsList,
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		SelectionListener listener = new SelectionListener() {
@@ -207,6 +284,23 @@ public class FilterHelper {
 		return listener;
 	}
 	
+	/**
+	 * Gets the field name modify listener.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the field name modify listener
+	 */
 	public ModifyListener getFieldNameModifyListener(final TableViewer tableViewer, final List<Condition> conditionsList,
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		ModifyListener listener = new ModifyListener() {
@@ -236,6 +330,21 @@ public class FilterHelper {
 		return listener;
 	}
 	
+	/**
+	 * Gets the conditional operator selection listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the conditional operator selection listener
+	 */
 	public SelectionListener getConditionalOperatorSelectionListener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		SelectionListener listener = new SelectionListener() {
@@ -273,6 +382,21 @@ public class FilterHelper {
 		return tableItem;
 	}
 	
+	/**
+	 * Gets the conditional operator modify listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the conditional operator modify listener
+	 */
 	public ModifyListener getConditionalOperatorModifyListener(final List<Condition> conditionsList, 
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		ModifyListener listener = new ModifyListener() {
@@ -336,6 +460,21 @@ public class FilterHelper {
 		toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 	}
 	
+	/**
+	 * Gets the relational op selection listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the relational op selection listener
+	 */
 	public SelectionListener getRelationalOpSelectionListener(final List<Condition> conditionsList,  
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		SelectionListener listener = new SelectionListener() {
@@ -352,6 +491,21 @@ public class FilterHelper {
 		return listener;
 	}
 	
+	/**
+	 * Gets the relational op modify listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param saveButton
+	 *            the save button
+	 * @param displayButton
+	 *            the display button
+	 * @return the relational op modify listener
+	 */
 	public ModifyListener getRelationalOpModifyListener(final List<Condition> conditionsList,  
 			final Map<String, String> fieldsAndTypes, final String[] fieldNames, final Button saveButton, final Button displayButton) {
 		ModifyListener listener = new ModifyListener() {
@@ -377,6 +531,19 @@ public class FilterHelper {
 		toggleSaveDisplayButton(conditionsList, fieldsAndTypes, fieldNames, saveButton, displayButton);
 	}
 	
+	/**
+	 * Adds the button listener.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param dummyList
+	 *            the dummy list
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @return the selection listener
+	 */
 	public SelectionListener addButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList, 
 			final List<Condition> dummyList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap) {
 		SelectionListener listener = new SelectionListener() {
@@ -399,6 +566,25 @@ public class FilterHelper {
 	}
 	
 	
+	/**
+	 * Gets the save button listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param dataset
+	 *            the dataset
+	 * @param originalFilterConditions
+	 *            the original filter conditions
+	 * @param retainRemoteFilter
+	 *            the retain remote filter
+	 * @param retainLocalFilter
+	 *            the retain local filter
+	 * @return the save button listener
+	 */
 	public SelectionListener getSaveButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
 			final Map<Integer,List<List<Integer>>> groupSelectionMap, final String dataset,final FilterConditions originalFilterConditions,
 			final RetainFilter retainRemoteFilter,final RetainFilter retainLocalFilter) {
@@ -492,6 +678,13 @@ public class FilterHelper {
 			}
 	}
 
+	/**
+	 * Creates the json object for remote filter.
+	 * 
+	 * @param buffer
+	 *            the buffer
+	 * @return the string
+	 */
 	public String createJsonObjectForRemoteFilter(String buffer) {
 		Gson gson=new Gson();
 		RemoteFilterJson remoteFilterJson = new RemoteFilterJson(buffer,
@@ -504,15 +697,44 @@ public class FilterHelper {
 	}
 	
 
+	/**
+	 * Sets the data viewer adapter.
+	 * 
+	 * @param dataViewerAdapter
+	 *            the data viewer adapter
+	 * @param filterConditionsDialog
+	 *            the filter conditions dialog
+	 */
 	public void setDataViewerAdapter(DataViewerAdapter dataViewerAdapter, FilterConditionsDialog filterConditionsDialog) {
 		this.dataViewerAdapter=dataViewerAdapter;
 		this.filterConditionsDialog=filterConditionsDialog;
 	}
 
+	/**
+	 * Sets the debug data viewer.
+	 * 
+	 * @param debugDataViewer
+	 *            the new debug data viewer
+	 */
 	public void setDebugDataViewer(DebugDataViewer debugDataViewer) {
 		this.debugDataViewer=debugDataViewer;
 	}
 	
+	/**
+	 * Gets the condition value.
+	 * 
+	 * @param fieldName
+	 *            the field name
+	 * @param value
+	 *            the value
+	 * @param conditional
+	 *            the conditional
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param isDisplayPressed
+	 *            the is display pressed
+	 * @return the condition value
+	 */
 	protected String getConditionValue(String fieldName, String value, String conditional, Map<String, String> fieldsAndTypes, boolean isDisplayPressed) {
 		String trimmedCondition = StringUtils.trim(conditional);
 		String dataType = fieldsAndTypes.get(fieldName);
@@ -632,6 +854,13 @@ public class FilterHelper {
 		}
 	}
 
+	/**
+	 * Clone list.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @return the list
+	 */
 	public List<Condition> cloneList(List<Condition> conditionsList) {
 		List<Condition> tempList = new ArrayList<>();
 		for (Condition condition : conditionsList) {
@@ -641,6 +870,19 @@ public class FilterHelper {
 		return tempList;
 	}
 
+	/**
+	 * Gets the remote display button listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param styledTextRemote
+	 *            the styled text remote
+	 * @return the remote display button listener
+	 */
 	public SelectionListener getRemoteDisplayButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
 			final Map<Integer,List<List<Integer>>> groupSelectionMap,final StyledText styledTextRemote) {
 		SelectionListener listner = new SelectionListener() {
@@ -657,6 +899,19 @@ public class FilterHelper {
 		return listner;
 	}
 
+	/**
+	 * Gets the local display button listener.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param styledTextLocal
+	 *            the styled text local
+	 * @return the local display button listener
+	 */
 	public SelectionListener getLocalDisplayButtonListener(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
 			final Map<Integer,List<List<Integer>>> groupSelectionMap,final StyledText styledTextLocal) {
 		SelectionListener listner = new SelectionListener() {
@@ -673,6 +928,19 @@ public class FilterHelper {
 		return listner;
 	}
 	
+	/**
+	 * Gets the condition.
+	 * 
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param isDisplayPressed
+	 *            the is display pressed
+	 * @return the condition
+	 */
 	public StringBuffer getCondition(final List<Condition> conditionsList, final Map<String, String> fieldsAndTypes,
 			final Map<Integer, List<List<Integer>>> groupSelectionMap,boolean isDisplayPressed) {
 		
@@ -770,6 +1038,13 @@ public class FilterHelper {
 	}
 	
 	
+	/**
+	 * Gets the retain button listener.
+	 * 
+	 * @param retainFilter
+	 *            the retain filter
+	 * @return the retain button listener
+	 */
 	public SelectionListener getRetainButtonListener(final RetainFilter retainFilter) {
 		SelectionListener listner = new SelectionListener() {
 			
@@ -786,6 +1061,17 @@ public class FilterHelper {
 		return listner;
 	}
    
+	/**
+	 * Gets the adds the at end listener.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param conditionList
+	 *            the condition list
+	 * @param dummyList
+	 *            the dummy list
+	 * @return the adds the at end listener
+	 */
 	public SelectionAdapter getAddAtEndListener(final TableViewer tableViewer, final List<Condition> conditionList, 
 			final List<Condition> dummyList) {
 	    return new SelectionAdapter() {
@@ -799,6 +1085,17 @@ public class FilterHelper {
 	    };
 	}
 	
+	/**
+	 * Check button listener.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param btnAddGrp
+	 *            the btn add grp
+	 * @return the selection listener
+	 */
 	public SelectionListener checkButtonListener(final TableViewer tableViewer,
 			final List<Condition> conditionsList, final Button btnAddGrp) {
 		SelectionListener listener = new SelectionListener() {
@@ -846,6 +1143,15 @@ public class FilterHelper {
 		return retval;
 	}
 	
+	/**
+	 * Validat user group selection.
+	 * 
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param selectionList
+	 *            the selection list
+	 * @return true, if successful
+	 */
 	public boolean validatUserGroupSelection(Map<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
 		boolean retValue=true;
 		for (int key : groupSelectionMap.keySet()) {
@@ -888,6 +1194,15 @@ public class FilterHelper {
 	}
 	
 	
+	/**
+	 * Checks if is column modifiable.
+	 * 
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param selectionList
+	 *            the selection list
+	 * @return true, if is column modifiable
+	 */
 	public boolean isColumnModifiable(TreeMap<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
 		boolean retValue = false;
 		for(int i=groupSelectionMap.lastKey();i>=0;i--){
@@ -907,6 +1222,13 @@ public class FilterHelper {
 		return retValue;
 	}
 	
+	/**
+	 * Creates the error dialog.
+	 * 
+	 * @param errorMessage
+	 *            the error message
+	 * @return the message box
+	 */
 	public MessageBox createErrorDialog(String errorMessage) {
 		MessageBox messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);
 		messageBox.setMessage(errorMessage);
@@ -914,6 +1236,13 @@ public class FilterHelper {
 		return messageBox;
 	}
 	
+	/**
+	 * Gets the color.
+	 * 
+	 * @param colorIndex
+	 *            the color index
+	 * @return the color
+	 */
 	public Color getColor(int colorIndex){
 		Map<Integer,Color> colorMap = new HashMap<>();
 		colorMap.put(0, new Color(null,255,196,196)); // Light yellow
@@ -926,6 +1255,19 @@ public class FilterHelper {
 	   return colorMap.get(colorIndex);
 	}
 	
+	/**
+	 * Refresh group selections.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param indexOfRow
+	 *            the index of row
+	 * @param addOrDeleteRow
+	 *            the add or delete row
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @return true, if successful
+	 */
 	public boolean refreshGroupSelections(TableViewer tableViewer, int indexOfRow,String addOrDeleteRow,
 		TreeMap<Integer,List<List<Integer>>> groupSelectionMap){
 		boolean isRemoveColumn = false;
@@ -953,7 +1295,7 @@ public class FilterHelper {
 							if(grp.size()==1){
 								grp.clear();
 							}
-							if(reArrangeGroupsAfterDeleteRow(groupSelectionMap, grp)&& groupSelectionMap.lastKey()!=key){
+							if(rearrangeGroupsAfterDeleteRow(groupSelectionMap, grp)&& groupSelectionMap.lastKey()!=key){
 								grp.clear();
 							}
 							List tempList=new ArrayList<>(); 
@@ -978,7 +1320,16 @@ public class FilterHelper {
 		return isRemoveColumn;
 	}
 			
-	public void reArrangeGroups(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,List<Integer> selectionList) {
+	
+	/**
+	 * Rearrange groups.
+	 * 
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param selectionList
+	 *            the selection list
+	 */
+	public void rearrangeGroups(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,List<Integer> selectionList) {
 		List<Integer> tempList = new ArrayList<>();
 		int lastKey=groupSelectionMap.lastKey();
 		for (int i = lastKey; i >= 0; i--) {
@@ -997,7 +1348,17 @@ public class FilterHelper {
 		}
 	}
 	
-	public boolean reArrangeGroupsAfterDeleteRow(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
+	
+	/**
+	 * Rearrange groups after delete row.
+	 * 
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param selectionList
+	 *            the selection list
+	 * @return true, if successful
+	 */
+	public boolean rearrangeGroupsAfterDeleteRow(TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
 			List<Integer> selectionList) {
 		boolean retValue = false;
 		int lastKey = groupSelectionMap.lastKey();
@@ -1016,6 +1377,12 @@ public class FilterHelper {
 		return retValue;
 	}
 
+	/**
+	 * Dispose all columns.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 */
 	public void disposeAllColumns(TableViewer tableViewer){
 		TableColumn[] columns = tableViewer.getTable().getColumns();
 		TableItem[] items = tableViewer.getTable().getItems();
@@ -1027,7 +1394,14 @@ public class FilterHelper {
 		}
 	}	
 	 
-	 public void reArrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
+	
+ 	/**
+		 * Rearrange group columns.
+		 * 
+		 * @param groupSelectionMap
+		 *            the group selection map
+		 */
+	 public void rearrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
 		 Map<Integer, List<List<Integer>>> tempMap = new TreeMap<Integer, List<List<Integer>>>(groupSelectionMap);
 		 for(int key:tempMap.keySet()){
 			  List<List<Integer>> groups = tempMap.get(key);

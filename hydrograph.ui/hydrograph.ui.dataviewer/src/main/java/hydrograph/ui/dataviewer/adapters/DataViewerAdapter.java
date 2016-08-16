@@ -52,8 +52,8 @@ import java.util.TimeZone;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 /**
- * 
- * DataViewerAdapter is responsible to make data available to DataViewer whenever required
+ * The Class DataViewerAdapter.
+ * Responsible for making watcher data available to DataViewer whenever required.
  * 
  * @author Bitwise
  *
@@ -80,6 +80,26 @@ public class DataViewerAdapter {
 	private String filterCondition;
 	private DebugDataViewer debugDataViewer;
 
+	/**
+	 * Instantiates a new data viewer adapter.
+	 * 
+	 * @param databaseName
+	 *            the database name
+	 * @param tableName
+	 *            the table name
+	 * @param PAGE_SIZE
+	 *            the page size
+	 * @param INITIAL_OFFSET
+	 *            the initial offset
+	 * @param debugDataViewer
+	 *            the debug data viewer
+	 * @throws ClassNotFoundException
+	 *             the class not found exception
+	 * @throws SQLException
+	 *             the SQL exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, 
 			DebugDataViewer debugDataViewer) 
 					throws ClassNotFoundException, SQLException, IOException {
@@ -95,6 +115,28 @@ public class DataViewerAdapter {
 		initializeAdapter();
 	}
 	
+	/**
+	 * Instantiates a new data viewer adapter.
+	 * 
+	 * @param databaseName
+	 *            the database name
+	 * @param tableName
+	 *            the table name
+	 * @param PAGE_SIZE
+	 *            the page size
+	 * @param INITIAL_OFFSET
+	 *            the initial offset
+	 * @param debugDataViewer
+	 *            the debug data viewer
+	 * @param filterCondition
+	 *            the filter condition
+	 * @throws ClassNotFoundException
+	 *             the class not found exception
+	 * @throws SQLException
+	 *             the SQL exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public DataViewerAdapter(String databaseName, String tableName, int PAGE_SIZE, long INITIAL_OFFSET, 
 			DebugDataViewer debugDataViewer,String filterCondition) 
 					throws ClassNotFoundException, SQLException, IOException {
@@ -168,6 +210,12 @@ public class DataViewerAdapter {
 		return typeString.toString();
 	}
 	
+	/**
+	 * Sets the filter condition.
+	 * 
+	 * @param filterCondition
+	 *            the new filter condition
+	 */
 	public void setFilterCondition(String filterCondition) {
 		this.filterCondition = filterCondition;
 	}
@@ -200,6 +248,14 @@ public class DataViewerAdapter {
 		columnCount = resultSet.getMetaData().getColumnCount();
 	}
 
+	/**
+	 * Initialize table data.
+	 * 
+	 * @throws SQLException
+	 *             the SQL exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public void initializeTableData() throws SQLException, IOException  {
 		List<Integer> timeStampColumnIndexList=getTimeStampColumnIndexList();
 		viewerData.clear();

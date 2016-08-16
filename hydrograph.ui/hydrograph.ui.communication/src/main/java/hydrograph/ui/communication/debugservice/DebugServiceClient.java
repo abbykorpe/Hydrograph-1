@@ -25,8 +25,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 /**
- * 
- * Debug service client responsible for requesting debug service to get or delete debug files
+ * The Class DebugServiceClient.
+ * This is responsible for requesting debug service to get or delete debug files.
  * 
  * @author Bitwise
  *

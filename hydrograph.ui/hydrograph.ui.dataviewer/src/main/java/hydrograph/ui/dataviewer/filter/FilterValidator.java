@@ -32,7 +32,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 /**
- * Validator class for Filter Window
+ * The Class FilterValidator.
+ * Provides validations for Filter Window
  * @author Bitwise
  *
  */
@@ -44,6 +45,19 @@ public class FilterValidator {
 	private List<String> relationalList = Arrays.asList(new String[]{FilterConstants.AND, FilterConstants.OR});
 	
 	
+	/**
+	 * Checks if all filter conditions are valid.
+	 * 
+	 * @param conditionList
+	 *            the condition list
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param fieldNames
+	 *            the field names
+	 * @param debugDataViewer
+	 *            the debug data viewer
+	 * @return true, if is all filter conditions valid
+	 */
 	public boolean isAllFilterConditionsValid(List<Condition> conditionList, Map<String, String> fieldsAndTypes, String[] fieldNames, DebugDataViewer debugDataViewer){
 		Map<String, String[]> conditionalOperatorsMap = FilterHelper.INSTANCE.getTypeBasedOperatorMap();
 		
@@ -125,11 +139,31 @@ public class FilterValidator {
 		return true;
 	}
 	
+	/**
+	 * Gets the type.
+	 * 
+	 * @param fieldName
+	 *            the field name
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @return the type
+	 */
 	public String getType(String fieldName, Map<String, String> fieldsAndTypes){
 		String type = fieldsAndTypes.get(fieldName);
 		return type;
 	}
 	
+	/**
+	 * Validate field.
+	 * 
+	 * @param fieldsAndTypes
+	 *            the fields and types
+	 * @param value
+	 *            the value
+	 * @param field
+	 *            the field
+	 * @return true, if successful
+	 */
 	public boolean validateField(Map<String,String> fieldsAndTypes, String value ,String field){
 		List<String> columnList = new ArrayList<String>(fieldsAndTypes.keySet());
 		if(columnList.contains(value) && fieldsAndTypes.get(value).equals(fieldsAndTypes.get(field))){
@@ -138,6 +172,21 @@ public class FilterValidator {
 	return false;
 } 
 	
+	/**
+	 * Validate data based on types.
+	 * 
+	 * @param type
+	 *            the type
+	 * @param value
+	 *            the value
+	 * @param conditionalOperator
+	 *            the conditional operator
+	 * @param debugDataViewer
+	 *            the debug data viewer
+	 * @param fieldName
+	 *            the field name
+	 * @return true, if successful
+	 */
 	public boolean validateDataBasedOnTypes(String type, String value, String conditionalOperator, DebugDataViewer debugDataViewer, String fieldName){
 		try{
 			if(FilterConstants.IN.equalsIgnoreCase(conditionalOperator) ||

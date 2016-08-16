@@ -15,7 +15,8 @@ package hydrograph.ui.dataviewer.constants;
 import org.eclipse.swt.graphics.Color;
 
 /**
- * Color constants
+ * The Class DataViewerColors.
+ * Provides Color constants to be used in watcher windows.
  * 
  * @author Bitwise
  *

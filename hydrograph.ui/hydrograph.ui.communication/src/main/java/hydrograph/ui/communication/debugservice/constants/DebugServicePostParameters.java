@@ -14,8 +14,8 @@
 package hydrograph.ui.communication.debugservice.constants;
 
 /**
- * 
- * The class to hold constants for debug service post method
+ * The class DebugServicePostParameters.
+ * Used to hold constants for debug service post methods
  * 
  * @author Bitwise
  *

@@ -57,7 +57,7 @@ public class DatasetInformationDialog extends Dialog {
 	
 	
 	private Table table;
-	private DatasetInformationDetail datasetInformationDetail;
+	private DatasetInformationVO datasetInformationVO;
 	private DebugDataViewer debugDataViewer;
 	private JobDetails jobDetails;
 	private String debugFileLocation;
@@ -119,42 +119,42 @@ public class DatasetInformationDialog extends Dialog {
 		genralTabDatacomposite.setLayout(new GridLayout(2, false));
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.VIEW_DATA_FILE);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getViewDataFilePath());
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getViewDataFilePath());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.EDGE_NODE);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getEdgeNode());
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getEdgeNode());
 	
 		if(jobDetails.isRemote()){
 			createLabel(genralTabDatacomposite,DatasetInformationConstants.USERNAME);
-			setLabelValue(genralTabDatacomposite,datasetInformationDetail.getUserName());
+			setLabelValue(genralTabDatacomposite,datasetInformationVO.getUserName());
 		}
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.LOCALCHUNKDATA);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getChunkFilePath());
+		createLabel(genralTabDatacomposite,DatasetInformationConstants.LOCAL_CHUNK_DATA);
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getChunkFilePath());
 		
         createLabel(genralTabDatacomposite,DatasetInformationConstants.ORIGINAL_FILE_SIZE);
-	    setLabelValue(genralTabDatacomposite,datasetInformationDetail.getAcctualFileSize());
+	    setLabelValue(genralTabDatacomposite,datasetInformationVO.getAcctualFileSize());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.FILESIZE);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getSizeOfData());
+		createLabel(genralTabDatacomposite,DatasetInformationConstants.FILE_SIZE);
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getSizeOfData());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.NOOFRECORDS);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getNoOfRecords());
+		createLabel(genralTabDatacomposite,DatasetInformationConstants.NUMBER_OF_RECORDS);
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getNoOfRecords());
 		
-		createLabel(genralTabDatacomposite,DatasetInformationConstants.PAGESIZE);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getPageSize());
+		createLabel(genralTabDatacomposite,DatasetInformationConstants.PAGE_SIZE);
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getPageSize());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.DELIMETER);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getDelimeter());
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getDelimeter());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.QUOTE);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getQuote());
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getQuote());
 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.DOWNLOADED_FILTER_CONDITION);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getLocalFilter());
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getLocalFilter());
 		 		
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.ORIGINAL_FILTER_CONDITION);
-		setLabelValue(genralTabDatacomposite,datasetInformationDetail.getRemoteFilter());
+		setLabelValue(genralTabDatacomposite,datasetInformationVO.getRemoteFilter());
 		
 		TabItem tbtmSchema = new TabItem(tabFolder, SWT.NONE);
 		tbtmSchema.setText(DatasetInformationConstants.SCHEMA);
@@ -174,17 +174,17 @@ public class DatasetInformationDialog extends Dialog {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		
-		createTableViewerColumns(tableViewer,DatasetInformationConstants.FEILDNAME);
+		createTableViewerColumns(tableViewer,DatasetInformationConstants.FEILD_NAME);
 		
-		createTableViewerColumns(tableViewer,DatasetInformationConstants.DATATYPE);
+		createTableViewerColumns(tableViewer,DatasetInformationConstants.DATA_TYPE);
 		
-		createTableViewerColumns(tableViewer,DatasetInformationConstants.DATEFORMAT);
+		createTableViewerColumns(tableViewer,DatasetInformationConstants.DATE_FORMAT);
 		
 		createTableViewerColumns(tableViewer,DatasetInformationConstants.PRECISION);
 	
 		createTableViewerColumns(tableViewer,DatasetInformationConstants.SCALE);
 		
-		createTableViewerColumns(tableViewer,DatasetInformationConstants.SCALETYPE);
+		createTableViewerColumns(tableViewer,DatasetInformationConstants.SCALE_TYPE);
 		
 		final TableViewerColumn tableViewerColumn=createTableViewerColumns(tableViewer,DatasetInformationConstants.DESCRIPTION);
 		
@@ -321,11 +321,11 @@ public class DatasetInformationDialog extends Dialog {
 
 	/**
 	 * Set the objects for the dataset information window
-	 * @param datasetInformationDetail,debugDataViewer,jobDetails
+	 * @param datasetInformationVO,debugDataViewer,jobDetails
 	 */
-	public void setData(DatasetInformationDetail datasetInformationDetail,DebugDataViewer debugDataViewer,JobDetails jobDetails) {
+	public void setData(DatasetInformationVO datasetInformationVO,DebugDataViewer debugDataViewer,JobDetails jobDetails) {
 		this.debugDataViewer = debugDataViewer;
-		this.datasetInformationDetail=datasetInformationDetail;
+		this.datasetInformationVO=datasetInformationVO;
 		this.jobDetails = jobDetails;
 	}
 }

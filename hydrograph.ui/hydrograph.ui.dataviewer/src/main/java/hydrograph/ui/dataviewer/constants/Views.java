@@ -14,8 +14,8 @@
 package hydrograph.ui.dataviewer.constants;
 
 /**
- * 
- * Constants for Data viewer views
+ * The Class Views.
+ * Provides the constant values for Data viewer views.
  * 
  * @author Bitwise
  *

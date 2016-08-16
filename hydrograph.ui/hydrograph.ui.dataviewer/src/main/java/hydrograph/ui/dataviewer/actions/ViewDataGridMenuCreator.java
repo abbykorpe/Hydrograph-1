@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
 /**
- * 
+ * The Class ViewDataGridMenuCreator.
  * Creates drop down menu to switch view on coolbar
  * 
  * @author Bitwise

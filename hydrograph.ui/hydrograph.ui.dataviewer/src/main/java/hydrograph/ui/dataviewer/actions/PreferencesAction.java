@@ -13,19 +13,31 @@
 
 package hydrograph.ui.dataviewer.actions;
 
-import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferencesVO;
 import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferencesDialog;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * The Class PreferencesAction.
+ * Responsible for displaying View Data preferences window.
+ * 
+ * @author Bitwise
+ */
 public class PreferencesAction extends Action {
-	private ViewDataPreferences viewDataPreferences;
+	private ViewDataPreferencesVO viewDataPreferencesVO;
 	private DebugDataViewer debugDataViewer;
 	
 	private static final String LABEL="&Preferences";
 	
+	/**
+	 * Instantiates a new preferences action.
+	 * 
+	 * @param debugDataViewer
+	 *            the debug data viewer
+	 */
 	public PreferencesAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
@@ -33,9 +45,9 @@ public class PreferencesAction extends Action {
 	}
 	@Override
 	public void run() {
-		viewDataPreferences=debugDataViewer.getViewDataPreferences();
+		viewDataPreferencesVO=debugDataViewer.getViewDataPreferences();
 		ViewDataPreferencesDialog viewDataPreferencesDialog=new ViewDataPreferencesDialog(new Shell());
-		viewDataPreferencesDialog.setViewDataPreferences(viewDataPreferences);
+		viewDataPreferencesDialog.setViewDataPreferences(viewDataPreferencesVO);
 		viewDataPreferencesDialog.open();
 	}
 }

@@ -21,7 +21,7 @@ import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
-import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferencesVO;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import com.jcraft.jsch.JSchException;
 
 /**
- * 
+ * The Class ReloadAction.
  * ReloadAction reloads the data from debug file based on file size and page size preferences from internal preference window
  * 
  * @author Bitwise
@@ -54,11 +54,18 @@ public class ReloadAction extends Action {
 
 	private JobDetails jobDetails;
 	private DebugDataViewer debugDataViewer;
-	private ViewDataPreferences viewDataPreferences;	
+	private ViewDataPreferencesVO viewDataPreferencesVO;	
 	private static final String LABEL = "&Reload";
 
 	private Integer lastDownloadedFileSize;
 	public boolean ifFilterReset = false;
+	
+	/**
+	 * Instantiates a new reload action.
+	 * 
+	 * @param debugDataViewer
+	 *            the debug data viewer
+	 */
 	public ReloadAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
@@ -66,7 +73,7 @@ public class ReloadAction extends Action {
 	}
 
 	private String getDebugFilePathFromDebugService() throws IOException {
-		return DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Integer.toString(viewDataPreferences.getFileSize())).trim();
+		return DebugServiceClient.INSTANCE.getDebugFile(jobDetails, Integer.toString(viewDataPreferencesVO.getFileSize())).trim();
 	}
 	
 	private void deleteCSVDebugDataFile() {		
@@ -88,7 +95,7 @@ public class ReloadAction extends Action {
 	@Override
 	public void run() {
 		
-		viewDataPreferences = debugDataViewer.getViewDataPreferences();
+		viewDataPreferencesVO = debugDataViewer.getViewDataPreferences();
 		DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
 		Job job = new Job(Messages.LOADING_DEBUG_FILE) {
 			@Override
@@ -96,7 +103,7 @@ public class ReloadAction extends Action {
 				
 				debugDataViewer.disbleDataViewerUIControls();
 				
-				if(lastDownloadedFileSize!=viewDataPreferences.getFileSize() || ifFilterReset){
+				if(lastDownloadedFileSize!=viewDataPreferencesVO.getFileSize() || ifFilterReset){
 					int returnCode=downloadDebugFile();	
 					
 					if(StatusConstants.ERROR == returnCode){
@@ -106,15 +113,15 @@ public class ReloadAction extends Action {
 				
 				try {
 					closeExistingDebugFileConnection();
-					if(lastDownloadedFileSize!=viewDataPreferences.getFileSize()|| ifFilterReset){
-						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),true);	
+					if(lastDownloadedFileSize!=viewDataPreferencesVO.getFileSize()|| ifFilterReset){
+						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferencesVO.getPageSize(),true);	
 
 
 						
 
 					}else{
 						SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
-						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferences.getPageSize(),false);
+						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferencesVO.getPageSize(),false);
 						if(selectColumnAction.getSelectedColumns().size()!=0){
 							debugDataViewer.getDataViewerAdapter().setColumnList(selectColumnAction.getSelectedColumns());
 						}
@@ -139,11 +146,11 @@ public class ReloadAction extends Action {
 						debugDataViewer.getStatusManager().enableInitialPaginationContols();
 						debugDataViewer.getStatusManager().clearJumpToPageText();
 						updateDataViewerViews();
-						if(lastDownloadedFileSize!=viewDataPreferences.getFileSize() || ifFilterReset){
+						if(lastDownloadedFileSize!=viewDataPreferencesVO.getFileSize() || ifFilterReset){
 							debugDataViewer.submitRecordCountJob();
 							setIfFilterReset(false);
 						}					
-						lastDownloadedFileSize = viewDataPreferences.getFileSize();
+						lastDownloadedFileSize = viewDataPreferencesVO.getFileSize();
 						DataViewerUtility.INSTANCE.resetSort(debugDataViewer);
 						debugDataViewer.redrawTableCursor();
 					}
@@ -256,9 +263,21 @@ public class ReloadAction extends Action {
 		this.debugDataViewer.getDataViewerAdapter().closeConnection();
 	}
 	
+	/**
+	 * Gets the if filter reset.
+	 * 
+	 * @return the if filter reset
+	 */
 	public boolean getIfFilterReset(){
 		return ifFilterReset;
 	}
+	
+	/**
+	 * Sets the if filter reset.
+	 * 
+	 * @param ifFilterReset
+	 *            the new if filter reset
+	 */
 	public void setIfFilterReset(boolean ifFilterReset){
 		this.ifFilterReset = ifFilterReset;
 	}

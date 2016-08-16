@@ -31,7 +31,8 @@ import org.slf4j.Logger;
 
 
 /**
- * This class is used for schema file operations at watchers
+ * The Class ViewDataSchemaHelper.
+ * Used for schema file operations at watchers
  *  
  * @author  Bitwise
  *

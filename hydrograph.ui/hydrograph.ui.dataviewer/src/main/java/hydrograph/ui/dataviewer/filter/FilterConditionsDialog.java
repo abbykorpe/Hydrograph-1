@@ -64,8 +64,10 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.custom.StyledText;
+
 /**
- * Dialog for Data Viewer Filter conditions
+ * The Class FilterConditionsDialog.
+ * Provides Dialog for Data Viewer Filter conditions.
  * @author Bitwise
  *
  */
@@ -1151,13 +1153,30 @@ public class FilterConditionsDialog extends Dialog {
 						groupSelectionMap.put(i + 1, tempMap.get(i));
 					}
 					retVal=true;
-					FilterHelper.INSTANCE.reArrangeGroups(groupSelectionMap, selectionList);
+					FilterHelper.INSTANCE.rearrangeGroups(groupSelectionMap, selectionList);
 				}
 			} 
 		}
 		return retVal;  
 	}
 	
+	/**
+	 * Removes the button listener.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param dummyList
+	 *            the dummy list
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param btnAddGrp
+	 *            the btn add grp
+	 * @param isRemote
+	 *            the is remote
+	 * @return the selection listener
+	 */
 	public SelectionListener removeButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList,
 			final List<Condition> dummyList, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap, final Button btnAddGrp,final boolean isRemote) {
 		SelectionListener listener = new SelectionListener() {
@@ -1177,7 +1196,7 @@ public class FilterConditionsDialog extends Dialog {
 					items[removeIndex].dispose();
 					
 					if(isRemoveAllColumns){
-						FilterHelper.INSTANCE.reArrangeGroupColumns(groupSelectionMap);
+						FilterHelper.INSTANCE.rearrangeGroupColumns(groupSelectionMap);
 					}
 					
 					FilterHelper.INSTANCE.disposeAllColumns(tableViewer);
@@ -1193,30 +1212,69 @@ public class FilterConditionsDialog extends Dialog {
 		return listener;
 	}
 	
+	/**
+	 * Gets the original filter conditions.
+	 * 
+	 * @return the original filter conditions
+	 */
 	public FilterConditions getOriginalFilterConditions() {
 		return originalFilterConditions;
 	}
 
+	/**
+	 * Sets the original filter conditions.
+	 * 
+	 * @param originalFilterConditions
+	 *            the new original filter conditions
+	 */
 	public void setOriginalFilterConditions(
 			FilterConditions originalFilterConditions) {
 		this.originalFilterConditions = originalFilterConditions;
 	}
 
+	/**
+	 * Sets the debug data viewer adapter and viewer.
+	 * 
+	 * @param adapter
+	 *            the adapter
+	 * @param dataViewer
+	 *            the data viewer
+	 * @throws ClassNotFoundException
+	 *             the class not found exception
+	 * @throws SQLException
+	 *             the SQL exception
+	 */
 	public void setDebugDataViewerAdapterAndViewer(DataViewerAdapter adapter, DebugDataViewer dataViewer)
 			throws ClassNotFoundException, SQLException {
 		dataViewerAdapter = adapter;
 		debugDataViewer = dataViewer;
 	}
 
+	/**
+	 * Gets the conditions.
+	 * 
+	 * @return the conditions
+	 */
 	public FilterConditions getConditions(){
 		return originalFilterConditions;
 		
 	}
 
+	/**
+	 * Gets the local conditions list.
+	 * 
+	 * @return the local conditions list
+	 */
 	public List<Condition> getLocalConditionsList() {
 		return localConditionsList;
 	}
 
+	/**
+	 * Sets the local conditions list.
+	 * 
+	 * @param localConditionsList
+	 *            the new local conditions list
+	 */
 	public void setLocalConditionsList(List<Condition> localConditionsList) {
 		this.localConditionsList = localConditionsList;
 	}
@@ -1227,6 +1285,23 @@ public class FilterConditionsDialog extends Dialog {
 		close();
 	}
 	
+	/**
+	 * Clear groups listner.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param clearGroups
+	 *            the clear groups
+	 * @param btnAddGrp
+	 *            the btn add grp
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param isRemote
+	 *            the is remote
+	 * @return the selection listener
+	 */
 	public SelectionListener clearGroupsListner(final TableViewer tableViewer, final TreeMap<Integer, List<List<Integer>>> groupSelectionMap,
 			final Button clearGroups, final Button btnAddGrp, final  List<Condition> conditionsList,final boolean isRemote) {
 		SelectionListener listener = new SelectionListener() {
@@ -1262,6 +1337,27 @@ public class FilterConditionsDialog extends Dialog {
 	  
 	
 	
+	/**
+	 * Gets the clear button listener.
+	 * 
+	 * @param tableViewer
+	 *            the table viewer
+	 * @param conditionsList
+	 *            the conditions list
+	 * @param dummyList
+	 *            the dummy list
+	 * @param originalFilterConditions
+	 *            the original filter conditions
+	 * @param isRemote
+	 *            the is remote
+	 * @param retainButton
+	 *            the retain button
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 * @param btnAddGrp
+	 *            the btn add grp
+	 * @return the clear button listener
+	 */
 	public SelectionListener getClearButtonListener(final TableViewer tableViewer, final List<Condition> conditionsList,
 			final List<Condition> dummyList, final FilterConditions originalFilterConditions, final boolean isRemote,final Button retainButton,
 			final TreeMap<Integer,List<List<Integer>>> groupSelectionMap,final Button btnAddGrp) {
@@ -1321,34 +1417,72 @@ public class FilterConditionsDialog extends Dialog {
 		return listner;
 	}
 	
-	public boolean ifSetLocalFilter(){
+	
+	
+	/**
+	 * Checks if local filter is set.
+	 * 
+	 * @return true, if local filter is set
+	 */
+	public boolean isLocalFilterSet(){
 		return retainLocalFilter.getRetainFilter();
 		
 	}
 	
-	public boolean ifSetRemoteFilter(){
+	
+	/**
+	 * Checks if remote filter is set.
+	 * 
+	 * @return true, if remote filter is set
+	 */
+	public boolean isRemoteFilterSet(){
 		
 		return retainRemoteFilter.getRetainFilter();
 	}
 	
 	
+	/**
+	 * Gets the remote conditions list.
+	 * 
+	 * @return the remote conditions list
+	 */
 	public List<Condition> getRemoteConditionsList() {
 		return remoteConditionsList;
 	}
 
+	/**
+	 * Sets the remote conditions list.
+	 * 
+	 * @param remoteConditionsList
+	 *            the new remote conditions list
+	 */
 	public void setRemoteConditionsList(List<Condition> remoteConditionsList) {
 		this.remoteConditionsList = remoteConditionsList;
 	}
 
+	/**
+	 * Gets the filter conditions.
+	 * 
+	 * @return the filter conditions
+	 */
 	public FilterConditions getFilterConditions() {
 		return originalFilterConditions;
 	}
 	
+	/**
+	 * Gets the local group selections.
+	 * 
+	 * @return the local group selections
+	 */
 	public Map<Integer, List<List<Integer>>> getLocalGroupSelections(){
 		
 		return localGroupSelectionMap;
 	}
 	
+    /** Gets the remote group selections.
+	 * 
+	 * @return the remote group selections
+	 */
     public Map<Integer, List<List<Integer>>> getRemoteGroupSelections(){
 		
 		return remoteGroupSelectionMap;

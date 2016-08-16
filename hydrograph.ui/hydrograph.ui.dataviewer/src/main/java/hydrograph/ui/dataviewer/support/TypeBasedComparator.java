@@ -20,7 +20,8 @@ import java.util.Comparator;
 
 
 /**
- * Type specific Comparator
+ * The Class TypeBasedComparator.
+ * Provides mechanism for Type specific Comparator
  * @author Bitwise
  *
  */

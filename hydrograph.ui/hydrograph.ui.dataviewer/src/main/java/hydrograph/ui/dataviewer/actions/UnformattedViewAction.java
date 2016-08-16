@@ -18,8 +18,8 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import org.eclipse.jface.action.Action;
 
 /**
- *  
- * Shows unformatted view
+ *  The Class UnformattedViewAction.
+ * Responsible for showing unformatted view for watcher data.
  * 
  * @author Bitwise
  *

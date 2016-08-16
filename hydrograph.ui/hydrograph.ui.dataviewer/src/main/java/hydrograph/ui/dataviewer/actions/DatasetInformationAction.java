@@ -22,10 +22,10 @@ import hydrograph.ui.common.schema.FieldDataTypes;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.AdapterConstants;
-import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDetail;
+import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationVO;
 import hydrograph.ui.dataviewer.datasetinformation.DatasetInformationDialog;
 import hydrograph.ui.dataviewer.filter.FilterHelper;
-import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferencesVO;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
@@ -33,7 +33,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * This class is responsible to show information for View Data debug file
+ * The Class DatasetInformationAction.
+ * Responsible to show information for View Data debug file
  * @author Bitwise
  */
 
@@ -56,7 +57,7 @@ public class DatasetInformationAction extends Action {
 	@Override
 	public void run() {
 		
-			ViewDataPreferences viewDataPreferences;
+			ViewDataPreferencesVO viewDataPreferencesVO;
 			DataViewerAdapter csvAdapter;
 			String debugFileLocation= new String();
 			String debugFileName="";
@@ -67,22 +68,22 @@ public class DatasetInformationAction extends Action {
 			debugFileName = debugDataViewer.getDebugFileName();
 			downloadedFileSize = debugDataViewer.getDownloadedFileSize();
 			csvAdapter=debugDataViewer.getDataViewerAdapter();
-			viewDataPreferences=debugDataViewer.getViewDataPreferences();
+			viewDataPreferencesVO=debugDataViewer.getViewDataPreferences();
   	
 			DatasetInformationDialog datasetInformationDetailDialog = new DatasetInformationDialog(Display.getCurrent().getActiveShell());
  
-			DatasetInformationDetail datasetInformationDetail = new DatasetInformationDetail();
-			datasetInformationDetail.setChunkFilePath(debugFileLocation + debugFileName + DEBUG_DATA_FILE_EXTENTION);
-			datasetInformationDetail.setDelimeter(viewDataPreferences.getDelimiter());
-			datasetInformationDetail.setEdgeNode(jobDetails.getHost());
-			datasetInformationDetail.setNoOfRecords(Long.toString(csvAdapter.getRowCount()));
-			datasetInformationDetail.setPageSize(Integer.toString(viewDataPreferences.getPageSize()));
-			datasetInformationDetail.setAcctualFileSize(String.valueOf(downloadedFileSize));
-			datasetInformationDetail.setQuote(viewDataPreferences.getQuoteCharactor());
-			datasetInformationDetail.setViewDataFilePath(jobDetails.getBasepath());
-			datasetInformationDetail.setSizeOfData(Integer.toString(viewDataPreferences.getFileSize()));
-			datasetInformationDetail.setUserName(jobDetails.getUsername());
-			datasetInformationDetailDialog.setData(datasetInformationDetail,debugDataViewer,jobDetails);
+			DatasetInformationVO datasetInformationVO = new DatasetInformationVO();
+			datasetInformationVO.setChunkFilePath(debugFileLocation + debugFileName + DEBUG_DATA_FILE_EXTENTION);
+			datasetInformationVO.setDelimeter(viewDataPreferencesVO.getDelimiter());
+			datasetInformationVO.setEdgeNode(jobDetails.getHost());
+			datasetInformationVO.setNoOfRecords(Long.toString(csvAdapter.getRowCount()));
+			datasetInformationVO.setPageSize(Integer.toString(viewDataPreferencesVO.getPageSize()));
+			datasetInformationVO.setAcctualFileSize(String.valueOf(downloadedFileSize));
+			datasetInformationVO.setQuote(viewDataPreferencesVO.getQuoteCharactor());
+			datasetInformationVO.setViewDataFilePath(jobDetails.getBasepath());
+			datasetInformationVO.setSizeOfData(Integer.toString(viewDataPreferencesVO.getFileSize()));
+			datasetInformationVO.setUserName(jobDetails.getUsername());
+			datasetInformationDetailDialog.setData(datasetInformationVO,debugDataViewer,jobDetails);
 		if (debugDataViewer.getConditions() != null) {
 			StringBuffer remoteFilterCondition = FilterHelper.INSTANCE.getCondition(debugDataViewer.getConditions()
 					.getRemoteConditions(), getFieldsAndTypes(), debugDataViewer.getConditions()
@@ -90,8 +91,8 @@ public class DatasetInformationAction extends Action {
 			StringBuffer localFilterCondition = FilterHelper.INSTANCE.getCondition(debugDataViewer.getConditions()
 					.getLocalConditions(), getFieldsAndTypes(), debugDataViewer.getConditions()
 					.getLocalGroupSelectionMap(), true);
-			datasetInformationDetail.setLocalFilter(localFilterCondition.toString());
-			datasetInformationDetail.setRemoteFilter(remoteFilterCondition.toString());
+			datasetInformationVO.setLocalFilter(localFilterCondition.toString());
+			datasetInformationVO.setRemoteFilter(remoteFilterCondition.toString());
 		}
 			datasetInformationDetailDialog.open();
 	}

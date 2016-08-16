@@ -49,7 +49,8 @@ import org.slf4j.Logger;
 
 
 /**
- * The Class FindViewDataDialog
+ * The Class FindViewDataDialog.
+ * Provides Dialog for Data Viewer Find functionality. 
  * @author Bitwise
  *
  */
@@ -573,6 +574,13 @@ public class FindViewDataDialog extends Dialog{
 		});
 	}
 
+	/**
+	 * Open.
+	 * 
+	 * @param findAction
+	 *            the find action
+	 * @return the int
+	 */
 	public int open(FindAction findAction) {
 		this.findAction=findAction;
 		findAction.isOpened=true;

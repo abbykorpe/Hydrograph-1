@@ -18,8 +18,9 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import org.eclipse.jface.action.Action;
 
 /**
+ * The Class GridViewAction.
  * 
- * Shows Grid view
+ * Responsible for displaying Grid view for watcher data.
  * 
  * @author Bitwise
  *

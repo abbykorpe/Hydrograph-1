@@ -52,7 +52,9 @@ import org.eclipse.ui.PlatformUI;
 
 
 /**
- * View Data Preference
+ * The Class ViewDataPreference.
+ * Creates View Data Preferences window.
+ * 
  * @author Bitwise
  *
  */

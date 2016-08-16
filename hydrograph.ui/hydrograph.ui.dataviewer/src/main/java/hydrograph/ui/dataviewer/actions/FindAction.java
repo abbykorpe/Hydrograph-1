@@ -21,8 +21,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * 
- * FindAction responsible to find text from currently selected view
+ * The Class FindAction.
+ * Provides the mechanism to find the text from currently selected view
  * 
  * @author Bitwise
  *
