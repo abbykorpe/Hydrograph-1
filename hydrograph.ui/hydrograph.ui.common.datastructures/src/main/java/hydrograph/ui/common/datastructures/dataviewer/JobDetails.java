@@ -13,7 +13,7 @@
 package hydrograph.ui.common.datastructures.dataviewer;
 
 /**
- * 
+ * The Class JobDetails
  * Data structure to hold debug service client information
  * 
  * @author Bitwise
@@ -32,6 +32,28 @@ public class JobDetails {
 
 	private boolean isRemote;
 
+	/**
+	 * Instantiates a new job details.
+	 * 
+	 * @param host
+	 *            the host
+	 * @param port
+	 *            the port
+	 * @param username
+	 *            the username
+	 * @param password
+	 *            the password
+	 * @param basepath
+	 *            the basepath
+	 * @param uniqueJobID
+	 *            the unique job ID
+	 * @param componentID
+	 *            the component ID
+	 * @param componentSocketID
+	 *            the component socket ID
+	 * @param isRemote
+	 *            the is remote
+	 */
 	public JobDetails(String host, String port, String username, String password, String basepath, String uniqueJobID,
 			String componentID, String componentSocketID, boolean isRemote) {
 		this.host = host;
@@ -46,46 +68,91 @@ public class JobDetails {
 	}
 	
 
+	/**
+	 * Gets the host.
+	 * 
+	 * @return the host
+	 */
 	public String getHost() {
 		return host;
 	}
 
 
+	/**
+	 * Gets the port.
+	 * 
+	 * @return the port
+	 */
 	public String getPort() {
 		return port;
 	}
 
 
+	/**
+	 * Gets the username.
+	 * 
+	 * @return the username
+	 */
 	public String getUsername() {
 		return username;
 	}
 
 
+	/**
+	 * Gets the password.
+	 * 
+	 * @return the password
+	 */
 	public String getPassword() {
 		return password;
 	}
 
 
+	/**
+	 * Gets the basepath.
+	 * 
+	 * @return the basepath
+	 */
 	public String getBasepath() {
 		return basepath;
 	}
 
 
+	/**
+	 * Gets the unique job ID.
+	 * 
+	 * @return the unique job ID
+	 */
 	public String getUniqueJobID() {
 		return uniqueJobID;
 	}
 
 
+	/**
+	 * Gets the component ID.
+	 * 
+	 * @return the component ID
+	 */
 	public String getComponentID() {
 		return componentID;
 	}
 
 
+	/**
+	 * Gets the component socket ID.
+	 * 
+	 * @return the component socket ID
+	 */
 	public String getComponentSocketID() {
 		return componentSocketID;
 	}
 
 
+	/**
+	 * Checks if is remote.
+	 * 
+	 * @return true, if is remote
+	 */
 	public boolean isRemote() {
 		return isRemote;
 	}

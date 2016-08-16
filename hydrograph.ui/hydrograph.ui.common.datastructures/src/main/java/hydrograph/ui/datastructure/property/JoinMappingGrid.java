@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The Class JoinMappingGrid.
+ * Holds data required for showing Join Mapping Grid.
+ * 
+ * @author Bitwise
+ */
 public class JoinMappingGrid implements IDataStructure{
 	
 	private Boolean isSelected;
@@ -30,33 +36,87 @@ public class JoinMappingGrid implements IDataStructure{
 	private List<FilterProperties> clonedInnerLookupInputProperties;
 	private List<List<FilterProperties>> clonedLookupInputProperties;
 	
+	/**
+	 * Instantiates a new join mapping grid.
+	 */
 	public JoinMappingGrid() {
 		lookupMapProperties = new ArrayList<>();
 		lookupInputProperties = new ArrayList<>();
 		isSelected = Boolean.FALSE;
 	}	
 	
+	/**
+	 * Gets the button text.
+	 * 
+	 * @return the button text
+	 */
 	public String getButtonText() {
 		return buttonText;
 	}
+	
+	/**
+	 * Sets the button text.
+	 * 
+	 * @param buttonText
+	 *            the new button text
+	 */
 	public void setButtonText(String buttonText) {
 		this.buttonText = buttonText;
 	}
+	
+	/**
+	 * Checks if is selected.
+	 * 
+	 * @return the boolean
+	 */
 	public Boolean isSelected() {
 		return isSelected;
 	}
+	
+	/**
+	 * Sets the checks if is selected.
+	 * 
+	 * @param isSelected
+	 *            the new checks if is selected
+	 */
 	public void setIsSelected(Boolean isSelected) {
 		this.isSelected = isSelected;
 	}
+	
+	/**
+	 * Gets the lookup input properties.
+	 * 
+	 * @return the lookup input properties
+	 */
 	public List<List<FilterProperties>> getLookupInputProperties() {
 		return lookupInputProperties;
 	}
+	
+	/**
+	 * Sets the lookup input properties.
+	 * 
+	 * @param lookupInputProperties
+	 *            the new lookup input properties
+	 */
 	public void setLookupInputProperties(List<List<FilterProperties>> lookupInputProperties) {
 		this.lookupInputProperties = lookupInputProperties;
 	}
+	
+	/**
+	 * Gets the lookup map properties.
+	 * 
+	 * @return the lookup map properties
+	 */
 	public List<LookupMapProperty> getLookupMapProperties() {
 		return lookupMapProperties;
 	}
+	
+	/**
+	 * Sets the lookup map properties.
+	 * 
+	 * @param lookupMapProperties
+	 *            the new lookup map properties
+	 */
 	public void setLookupMapProperties(List<LookupMapProperty> lookupMapProperties) {
 		this.lookupMapProperties = lookupMapProperties;
 	}

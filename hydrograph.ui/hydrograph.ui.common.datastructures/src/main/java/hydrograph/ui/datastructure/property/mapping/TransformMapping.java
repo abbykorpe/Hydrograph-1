@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The class is a data structure to to save aggregate and transform mapping sheet 
  * 
@@ -36,6 +37,9 @@ public class TransformMapping implements IDataStructure{
 	private List<NameValueProperty> mapAndPassthroughField;
 	private List<FilterProperties> outputFieldList;
 	
+	/**
+	 * Instantiates a new transform mapping.
+	 */
 	public TransformMapping() {
 		inputFields = new LinkedList<>();
 		mappingSheetRows = new LinkedList<>();
@@ -43,23 +47,56 @@ public class TransformMapping implements IDataStructure{
 		outputFieldList=new ArrayList<>();
 	}
 
+	/**
+	 * Gets the map and passthrough field.
+	 * 
+	 * @return the map and passthrough field
+	 */
 	public List<NameValueProperty> getMapAndPassthroughField() {
 		return mapAndPassthroughField;
 	}
 
+	/**
+	 * Sets the map and passthrough field.
+	 * 
+	 * @param mapAndPassthroughField
+	 *            the new map and passthrough field
+	 */
 	public void setMapAndPassthroughField(List<NameValueProperty> mapAndPassthroughField) {
 		this.mapAndPassthroughField = mapAndPassthroughField;
 	}
     
+	/**
+	 * Gets the output field list.
+	 * 
+	 * @return the output field list
+	 */
 	public List<FilterProperties> getOutputFieldList() {
 		return outputFieldList;
 	}
 
+    /** Sets the output field list.
+	 * 
+	 * @param outputFieldList
+	 *            the new output field list
+	 */
     public void setOutputFieldList(List<FilterProperties> outputFieldList) {
 		this.outputFieldList = outputFieldList;
 	}
 
 
+	/**
+	 * Instantiates a new transform mapping.
+	 * 
+	 * @param inputFields
+	 *            the input fields
+	 * @param mappingSheetRows
+	 *            the mapping sheet rows
+	 * @param nameValueProperties
+	 *            the name value properties
+	 * @param outputFieldList
+	 *            the output field list
+	 */
 	public TransformMapping(List<InputField> inputFields,
 			List<MappingSheetRow> mappingSheetRows,List<NameValueProperty> nameValueProperties,List<FilterProperties> outputFieldList ) {
 		this.inputFields = inputFields;

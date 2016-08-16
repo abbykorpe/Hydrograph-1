@@ -19,10 +19,12 @@ import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Control;
 
+
 /**
+ * The Interface ComponentCanvas.
+ * Base interface for Component tooltip related tasks on Hydrograph Canvas.
  * 
- * Component canvas.
- *
+ * @author Bitwise
  */
 public interface ComponentCanvas {
 	/**

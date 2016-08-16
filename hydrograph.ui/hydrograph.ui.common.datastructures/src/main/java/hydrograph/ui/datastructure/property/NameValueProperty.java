@@ -15,9 +15,12 @@
 package hydrograph.ui.datastructure.property;
 
 
+
 /**
+ * The Class NameValueProperty.
+ * Used for storing property names and their values for components.
+ * 
  * @author Bitwise
- *
  */
 public class NameValueProperty extends PropertyField{
 
@@ -25,6 +28,9 @@ public class NameValueProperty extends PropertyField{
 	private String propertyValue;
 	private FilterProperties filterProperty;
 	
+	/**
+	 * Instantiates a new name value property.
+	 */
 	public NameValueProperty() 
 	{
 		filterProperty=new FilterProperties();

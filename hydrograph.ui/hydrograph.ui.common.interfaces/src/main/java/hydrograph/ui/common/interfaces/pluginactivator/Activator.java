@@ -17,6 +17,12 @@ package hydrograph.ui.common.interfaces.pluginactivator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+/**
+ * The Class Activator.
+ * The activator class controls the plug-in life cycle
+ * 
+ * @author Bitwise
+ */
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;

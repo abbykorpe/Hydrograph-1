@@ -16,6 +16,12 @@ package hydrograph.ui.datastructure.property;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
+/**
+ * The Class LookupConfigProperty.
+ * Holds the Lookup component's configuration w.r.t. portIndex, joinKey and recordRequired.
+ * 
+ * @author Bitwise
+ */
 public class LookupConfigProperty implements IDataStructure{
 	
 	private Boolean isSelected;
@@ -23,33 +29,86 @@ public class LookupConfigProperty implements IDataStructure{
 	private String lookupPort;
 	private String lookupKey;
 	
+	/**
+	 * Instantiates a new lookup config property.
+	 */
 	public LookupConfigProperty(){
 		lookupPort="in0";
 		isSelected = Boolean.FALSE;
 	}
 	
+	/**
+	 * Checks if is selected.
+	 * 
+	 * @return the boolean
+	 */
 	public Boolean isSelected() {
 		return isSelected;
 	}
+	
+	/**
+	 * Sets the selected.
+	 * 
+	 * @param isSelected
+	 *            the new selected
+	 */
 	public void setSelected(Boolean isSelected) {
 		this.isSelected = isSelected;
 	}
+	
+	/**
+	 * Gets the driver key.
+	 * 
+	 * @return the driver key
+	 */
 	public String getDriverKey() {
 		return driverKey;
 	}
+	
+	/**
+	 * Sets the driver key.
+	 * 
+	 * @param driverKey
+	 *            the new driver key
+	 */
 	public void setDriverKey(String driverKey) {
 		this.driverKey = driverKey;
 	}
+	
+	/**
+	 * Gets the lookup key.
+	 * 
+	 * @return the lookup key
+	 */
 	public String getLookupKey() {
 		return lookupKey;
 	}
+	
+	/**
+	 * Sets the lookup key.
+	 * 
+	 * @param lookupKey
+	 *            the new lookup key
+	 */
 	public void setLookupKey(String lookupKey) {
 		this.lookupKey = lookupKey;
 	}
 	
+	/**
+	 * Gets the lookup port.
+	 * 
+	 * @return the lookup port
+	 */
 	public String getLookupPort() {
 		return lookupPort;
 	}
+	
+	/**
+	 * Sets the lookup port.
+	 * 
+	 * @param lookupPort
+	 *            the new lookup port
+	 */
 	public void setLookupPort(String lookupPort) {
 		this.lookupPort = lookupPort;
 	}

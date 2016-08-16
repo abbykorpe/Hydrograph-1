@@ -16,18 +16,36 @@ package hydrograph.ui.datastructure.property;
 
 
 
+/**
+ * The Class JoinConfigProperty.
+ * Holds the Join component's configuration w.r.t. portIndex, joinKey and recordRequired.
+ * @author Bitwise
+ */
 public class JoinConfigProperty implements Cloneable{
 	
 	private String portIndex;
 	private String joinKey;
 	private Integer recordRequired;
 	
+	/**
+	 * Instantiates a new join config property.
+	 */
 	public JoinConfigProperty() {
 		portIndex = "";
 		joinKey = "";
 		recordRequired = 0;
 	}
 	
+	/**
+	 * Instantiates a new join config property.
+	 * 
+	 * @param portIndex
+	 *            the port index
+	 * @param joinKey
+	 *            the join key
+	 * @param joinType
+	 *            the join type
+	 */
 	public JoinConfigProperty(String portIndex,String joinKey, Integer joinType) {
 		this.portIndex =portIndex;
 		this.joinKey=joinKey;
@@ -35,24 +53,60 @@ public class JoinConfigProperty implements Cloneable{
 	}
 	
 
+	/**
+	 * Gets the port index.
+	 * 
+	 * @return the port index
+	 */
 	public String getPortIndex() {
 		return portIndex;
 	}
+	
+	/**
+	 * Sets the port index.
+	 * 
+	 * @param portIndex
+	 *            the new port index
+	 */
 	public void setPortIndex(String portIndex) {
 		this.portIndex = portIndex;
 	}
+	
+	/**
+	 * Gets the join key.
+	 * 
+	 * @return the join key
+	 */
 	public String getJoinKey() {
 		return joinKey;
 	}
+	
+	/**
+	 * Sets the join key.
+	 * 
+	 * @param joinKey
+	 *            the new join key
+	 */
 	public void setJoinKey(String joinKey) {
 		this.joinKey = joinKey;
 	}
 
 	
+	/**
+	 * Gets the record required.
+	 * 
+	 * @return the record required
+	 */
 	public Integer getRecordRequired() {
 		return recordRequired;
 	}
 
+	/**
+	 * Sets the record required.
+	 * 
+	 * @param recordRequired
+	 *            the new record required
+	 */
 	public void setRecordRequired(Integer recordRequired) {
 		this.recordRequired = recordRequired;
 	}

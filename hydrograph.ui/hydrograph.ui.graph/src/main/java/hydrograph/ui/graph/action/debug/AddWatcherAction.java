@@ -16,7 +16,6 @@ package hydrograph.ui.graph.action.debug;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.action.LimitValueGrid;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
@@ -41,7 +40,6 @@ import org.eclipse.ui.PlatformUI;
 public class AddWatcherAction extends SelectionAction{
 
 	private Long limitValue;
-	private boolean watcherSelection;
 	private boolean isWatcher;
 	
 	public AddWatcherAction(IWorkbenchPart part) {
@@ -66,14 +64,6 @@ public class AddWatcherAction extends SelectionAction{
 		}
 	}
 	
-	private void limitValueGrid(){
-		Shell parentShell = new Shell();
-		LimitValueGrid customLimitValueGrid = new LimitValueGrid(parentShell);
-		customLimitValueGrid.open();
-		limitValue = customLimitValueGrid.getLimitValue();
-		watcherSelection = customLimitValueGrid.isOkselection();
-		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
-	}
 
 	private void addWatchPoint(List<Object> selectedObjects) {
  

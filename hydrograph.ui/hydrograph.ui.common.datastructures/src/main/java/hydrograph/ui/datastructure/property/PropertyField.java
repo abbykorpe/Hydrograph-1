@@ -14,6 +14,12 @@
  
 package hydrograph.ui.datastructure.property;
 
+/**
+ * The Class PropertyField.
+ * This base class for component's property related data structures.
+ * 
+ * @author Bitwise
+ */
 public abstract class PropertyField {
 
 }

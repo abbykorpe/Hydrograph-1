@@ -17,7 +17,8 @@ package hydrograph.ui.datastructure.property;
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 /**
- * THE Class MatchValueProperty
+ * The Class MatchValueProperty
+ * Stores Match property for the Lookup component.
  * 
  * @author Bitwise
  *

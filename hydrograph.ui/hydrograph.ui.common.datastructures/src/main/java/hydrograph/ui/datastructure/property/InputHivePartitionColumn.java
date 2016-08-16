@@ -14,32 +14,72 @@
 package hydrograph.ui.datastructure.property;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+
 /**
+ * The Class InputHivePartitionColumn.
+ * Pojo used for storing Hive Partition key and values.
  * 
  * @author Bitwise
- *
  */
 public class InputHivePartitionColumn  implements IDataStructure{
 	InputHivePartitionColumn inputHivePartitionColumn;
 	String name;
 	String value;
 	
+	/**
+	 * Gets the input hive partition column.
+	 * 
+	 * @return the input hive partition column
+	 */
 	public InputHivePartitionColumn getInputHivePartitionColumn() {
 		return inputHivePartitionColumn;
 	}
+	
+	/**
+	 * Sets the input hive partition column.
+	 * 
+	 * @param inputHivePartitionColumn
+	 *            the new input hive partition column
+	 */
 	public void setInputHivePartitionColumn(
 			InputHivePartitionColumn inputHivePartitionColumn) {
 		this.inputHivePartitionColumn = inputHivePartitionColumn;
 	}
+	
+	/**
+	 * Gets the name.
+	 * 
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
+	
+	/**
+	 * Sets the name.
+	 * 
+	 * @param name
+	 *            the new name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/**
+	 * Gets the value.
+	 * 
+	 * @return the value
+	 */
 	public String getValue() {
 		return value;
 	}
+	
+	/**
+	 * Sets the value.
+	 * 
+	 * @param value
+	 *            the new value
+	 */
 	public void setValue(String value) {
 		this.value = value;
 	}

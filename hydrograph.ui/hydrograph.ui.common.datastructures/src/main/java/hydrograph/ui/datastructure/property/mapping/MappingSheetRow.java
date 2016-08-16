@@ -46,14 +46,35 @@ public class MappingSheetRow implements IDataStructure {
 	
 	
 
+	/**
+	 * Gets the operation class full path.
+	 * 
+	 * @return the operation class full path
+	 */
 	public String getOperationClassFullPath() {
 		return operationClassFullPath;
 	}
 
+	/**
+	 * Sets the operation class full path.
+	 * 
+	 * @param operationClassFullPath
+	 *            the new operation class full path
+	 */
 	public void setOperationClassFullPath(String operationClassFullPath) {
 		this.operationClassFullPath = operationClassFullPath;
 	}
 
+	/**
+	 * Instantiates a new mapping sheet row.
+	 * 
+	 * @param input
+	 *            the input
+	 * @param operationClass
+	 *            the operation class
+	 * @param outputList
+	 *            the output list
+	 */
 	public MappingSheetRow(List<FilterProperties> input,
 			OperationClassProperty   operationClass,
 			List<FilterProperties> outputList) {
@@ -63,6 +84,30 @@ public class MappingSheetRow implements IDataStructure {
 
 	}
 
+	/**
+	 * Instantiates a new mapping sheet row.
+	 * 
+	 * @param input
+	 *            the input
+	 * @param outputList
+	 *            the output list
+	 * @param operationId
+	 *            the operation id
+	 * @param comBoxValue
+	 *            the com box value
+	 * @param operationClassPath
+	 *            the operation class path
+	 * @param nameValueProperty
+	 *            the name value property
+	 * @param isClassParameter
+	 *            the is class parameter
+	 * @param wholeOperationParameterValue
+	 *            the whole operation parameter value
+	 * @param isWholeOperationParameter
+	 *            the is whole operation parameter
+	 * @param operationClassFullPath
+	 *            the operation class full path
+	 */
 	public MappingSheetRow(List<FilterProperties> input,
 			List<FilterProperties> outputList,
 			String operationId,
@@ -87,6 +132,24 @@ public class MappingSheetRow implements IDataStructure {
 		
     }
 	
+	/**
+	 * Instantiates a new mapping sheet row.
+	 * 
+	 * @param input
+	 *            the input
+	 * @param outputList
+	 *            the output list
+	 * @param comBoxValue
+	 *            the com box value
+	 * @param operationClassPath
+	 *            the operation class path
+	 * @param isClassParameter
+	 *            the is class parameter
+	 * @param operationId
+	 *            the operation id
+	 * @param nameValueProperty
+	 *            the name value property
+	 */
 	public MappingSheetRow(List<FilterProperties> input, List<FilterProperties> outputList, String comBoxValue,String operationClassPath,boolean isClassParameter,String operationId,
 			 List<NameValueProperty> nameValueProperty) 
 	{
@@ -101,55 +164,136 @@ public class MappingSheetRow implements IDataStructure {
 	
 	
 
+   /** Checks if is whole operation parameter.
+	 * 
+	 * @return true, if is whole operation parameter
+	 */
    public boolean isWholeOperationParameter() {
 		return isWholeOperationParameter;
 	}
 
+	/**
+	 * Sets the whole operation parameter.
+	 * 
+	 * @param isWholeOperationParameter
+	 *            the new whole operation parameter
+	 */
 	public void setWholeOperationParameter(boolean isWholeOperationParameter) {
 		this.isWholeOperationParameter = isWholeOperationParameter;
 	}
 
+	/**
+	 * Gets the whole operation parameter value.
+	 * 
+	 * @return the whole operation parameter value
+	 */
 	public String getWholeOperationParameterValue() {
 		return wholeOperationParameterValue;
 	}
 
+	/**
+	 * Sets the whole operation parameter value.
+	 * 
+	 * @param wholeOperationParameterValue
+	 *            the new whole operation parameter value
+	 */
 	public void setWholeOperationParameterValue(String wholeOperationParameterValue) {
 		this.wholeOperationParameterValue = wholeOperationParameterValue;
 	}
 
+	/**
+	 * Gets the name value property.
+	 * 
+	 * @return the name value property
+	 */
 	public List<NameValueProperty> getNameValueProperty() {
 		return nameValuePropertyList;
 	}
 
+	/**
+	 * Sets the name value property.
+	 * 
+	 * @param nameValueProperty
+	 *            the new name value property
+	 */
 	public void setNameValueProperty(List<NameValueProperty> nameValueProperty) {
 		this.nameValuePropertyList = nameValueProperty;
 	}
 
+	/**
+	 * Gets the operation ID.
+	 * 
+	 * @return the operation ID
+	 */
 	public String getOperationID() {
 		return operationId;
 	}
 
+	/**
+	 * Sets the operation ID.
+	 * 
+	 * @param operaionId
+	 *            the new operation ID
+	 */
 	public void setOperationID(String operaionId) {
 		this.operationId = operaionId;
 	}
 
 	
 	
+	/**
+	 * Gets the combo box value.
+	 * 
+	 * @return the combo box value
+	 */
 	public String getComboBoxValue() {
 		return comboBoxValue;
 	}
+	
+	/**
+	 * Sets the combo box value.
+	 * 
+	 * @param comboBoxValue
+	 *            the new combo box value
+	 */
 	public void setComboBoxValue(String comboBoxValue) {
 		this.comboBoxValue = comboBoxValue;
 	}
+	
+	/**
+	 * Gets the operation class path.
+	 * 
+	 * @return the operation class path
+	 */
 	public String getOperationClassPath() {
 		return operationClassPath;
 	}
+	
+	/**
+	 * Sets the operation class path.
+	 * 
+	 * @param operationClassPath
+	 *            the new operation class path
+	 */
 	public void setOperationClassPath(String operationClassPath) {
 		this.operationClassPath = operationClassPath;
 	}
+	
+	/**
+	 * Checks if is parameter.
+	 * 
+	 * @return true, if is parameter
+	 */
 	public boolean isParameter() {
 		return isWholeOperationParameter;
 	}
+	
+	/**
+	 * Sets the parameter.
+	 * 
+	 * @param isParameter
+	 *            the new parameter
+	 */
 	public void setParameter(boolean isParameter) {
 		this.isWholeOperationParameter = isParameter;
 	}
@@ -215,10 +359,21 @@ public class MappingSheetRow implements IDataStructure {
 		this.outputList = outputList;
 	}
 	
+	/**
+	 * Checks if is class parameter.
+	 * 
+	 * @return true, if is class parameter
+	 */
 	public boolean isClassParameter() {
 		return isClassParameter;
 	}
 
+	/**
+	 * Sets the class parameter.
+	 * 
+	 * @param isClassParameter
+	 *            the new class parameter
+	 */
 	public void setClassParameter(boolean isClassParameter) {
 		this.isClassParameter = isClassParameter;
 	}

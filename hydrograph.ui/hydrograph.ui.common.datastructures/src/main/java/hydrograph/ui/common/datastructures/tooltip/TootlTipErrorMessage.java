@@ -14,16 +14,38 @@
  
 package hydrograph.ui.common.datastructures.tooltip;
 
+
+/**
+ * The Class TootlTipErrorMessage.
+ * This POJO holds tooltip error messages that will be displayed for component properties.
+ * 
+ * @author Bitwise
+ */
 public class TootlTipErrorMessage {
 	String errorMessage;
 	
+	/**
+	 * Instantiates a new tootl tip error message.
+	 */
 	public TootlTipErrorMessage() {
 		errorMessage = "";
 	}
 
+	/**
+	 * Gets the error message.
+	 * 
+	 * @return the error message
+	 */
 	public String getErrorMessage(){
 		return errorMessage;
 	}
+	
+	/**
+	 * Sets the error message.
+	 * 
+	 * @param message
+	 *            the new error message
+	 */
 	public void setErrorMessage(String message){
 		errorMessage = message;
 	}

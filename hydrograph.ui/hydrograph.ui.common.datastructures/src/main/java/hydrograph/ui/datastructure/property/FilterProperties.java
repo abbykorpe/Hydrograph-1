@@ -16,12 +16,30 @@ package hydrograph.ui.datastructure.property;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
+/**
+ * The Class FilterProperties.
+ * This class is used to maintain properties names for component.
+ * 
+ * @author Bitwise
+ */
 public class FilterProperties implements IDataStructure {
 	String propertyname;
+	
+	/**
+	 * Gets the propertyname.
+	 * 
+	 * @return the propertyname
+	 */
 	public String getPropertyname() {
 		return propertyname;
 	}
 
+	/**
+	 * Sets the propertyname.
+	 * 
+	 * @param propertyname
+	 *            the new propertyname
+	 */
 	public void setPropertyname(String propertyname) {
 		this.propertyname = propertyname;
 	}

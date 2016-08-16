@@ -25,7 +25,8 @@ import org.apache.commons.lang.StringUtils;
 
 
 /**
- * This Schema class contains accessors methods.
+ * The Class Schema
+ * This Schema class contains accessors methods for component schema.
  * 
  * @author Bitwise
  */
@@ -37,34 +38,70 @@ public class Schema implements IDataStructure{
 	private List<GridRow> gridRow;
 	private List<GridRow> clonedGridRow;
    
+	/**
+	 * Instantiates a new schema.
+	 */
 	public Schema(){
 		isExternal =false;
 	}
 	
+	/**
+	 * Gets the external schema path.
+	 * 
+	 * @return the external schema path
+	 */
 	public String getExternalSchemaPath() {
 		return externalSchemaPath;
 	}
 
+	/**
+	 * Sets the external schema path.
+	 * 
+	 * @param externalSchemaPath
+	 *            the new external schema path
+	 */
 	public void setExternalSchemaPath(String externalSchemaPath) {
 		if(StringUtils.startsWith(externalSchemaPath, RELATIVE_PATH_PREFIX))
 			externalSchemaPath=StringUtils.replace(externalSchemaPath, RELATIVE_PATH_PREFIX,"");
 		this.externalSchemaPath = externalSchemaPath;
 	}
 
+	/**
+	 * Gets the checks if is external.
+	 * 
+	 * @return the checks if is external
+	 */
 	public Boolean getIsExternal() {
 		return isExternal;
 	}
 
+	/**
+	 * Sets the checks if is external.
+	 * 
+	 * @param isExternalPath
+	 *            the new checks if is external
+	 */
 	public void setIsExternal(Boolean isExternalPath) {
 		this.isExternal = isExternalPath;
 	}
 
+	/**
+	 * Gets the grid row.
+	 * 
+	 * @return the grid row
+	 */
 	public List<GridRow> getGridRow() {
 		if(gridRow==null)
 			gridRow=new ArrayList<>();
 		return gridRow;
 	}
 
+	/**
+	 * Sets the grid row.
+	 * 
+	 * @param gridRow
+	 *            the new grid row
+	 */
 	public void setGridRow(List<GridRow> gridRow) {
 		this.gridRow = gridRow;
 	}
