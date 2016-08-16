@@ -620,8 +620,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			}
 		}
 	}
-	
-	//Updates the status of a component
+	/**
+	 * Updates the status of a component.
+	 */
 	public void updateComponentStatus(){
 		Component component = this.getCastedModel();
 		LinkedHashMap<String, Object> properties = component.getProperties();
@@ -632,7 +633,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 	}
 	
-	// Updates/refresh's the status, label position, port settings and tool tip information of a component.
+	/**
+	 * @param ELTPropertyWindow
+	 * Updates/refresh's the status, label position, port settings and tool tip information of a component.
+	 */
 	public void updateComponentView(ELTPropertyWindow eltPropertyWindow)
 	{
 		String currentStatus=(String) getCastedModel().getProperties().get(Component.Props.VALIDITY_STATUS.getValue());
