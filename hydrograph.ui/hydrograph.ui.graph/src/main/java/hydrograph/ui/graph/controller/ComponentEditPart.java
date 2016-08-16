@@ -634,8 +634,9 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	}
 	
 	/**
-	 * @param eltPropertyWindow ELTPropertyWindow instance is passed
 	 * Updates/refresh's the status, label position, port settings and tool tip information of a component.
+	 * 
+	 * @param eltPropertyWindow ELTPropertyWindow instance is passed
 	 */
 	public void updateComponentView(ELTPropertyWindow eltPropertyWindow)
 	{
