@@ -78,9 +78,6 @@ public class SubJobOpenAction extends SelectionAction{
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setText(Constants.SUBJOB_OPEN); 
 		setId(Constants.SUBJOB_OPEN);
-		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
-		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
-		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
 		setEnabled(false);
 	}
 

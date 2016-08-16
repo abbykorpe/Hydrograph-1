@@ -159,8 +159,8 @@ public class Constants {
 	public static final String UNUSED_AND_INPUT_PORT_COUNT_PROPERTY = "inPortCount|unusedPortCount";
 	public static final String SUBJOB_ALREADY_PRESENT_IN_CANVAS = " - already present in canvas.";
 	public static final String PATH_PROPERTY_NAME = "path";
-	public static final String SUBJOB_CREATE = "create";
-	public static final String SUBJOB_OPEN = "open"; 	
+	public static final String SUBJOB_CREATE = "Create";
+	public static final String SUBJOB_OPEN = "Open"; 	
 	public static final String SUBJOB_ACTION = "SubJob";
 	public static final String SUBJOB_ACTION_ToolTip = "Path operations";
 	public static final String STANDALONE_SUBJOB = "StandAlone_Subjob";
@@ -171,7 +171,7 @@ public class Constants {
 	public static final String XML_EXTENSION=".xml";
 	public static final String JOB_EXTENSION_FOR_IPATH="job";
 	public static final String XML_EXTENSION_FOR_IPATH="xml";
-	public static final String SUBJOB_UPDATE = "refresh";
+	public static final String SUBJOB_UPDATE = "Refresh";
 	public static final String JOIN_KEYS_WINDOW_TITLE = "Join Key(s)";
 	public static final String LOOKUP_KEYS_WINDOW_TITLE = "Lookup Key(s)";
 	
