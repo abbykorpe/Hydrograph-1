@@ -149,6 +149,9 @@ public class FilterValidator {
 						validate(type, tokenizer.nextToken(),debugDataViewer,fieldName);
 					}
 				}
+				else {
+					validate(type, value, debugDataViewer, fieldName);
+				}
 			}
 			else if (FilterConstants.BETWEEN.equalsIgnoreCase(conditionalOperator)) {
 				validate(type, value,debugDataViewer,fieldName);
