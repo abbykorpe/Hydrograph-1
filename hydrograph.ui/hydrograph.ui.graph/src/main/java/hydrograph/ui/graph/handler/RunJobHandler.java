@@ -69,8 +69,6 @@ public class RunJobHandler{
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		String canvasName = consoleName;
 		String localJobID = consoleName;
-		
-		startExecutionTrackingService() ;
 
 		JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
 		
@@ -78,53 +76,4 @@ public class RunJobHandler{
 		return null;
 	}
 
-	private void startExecutionTrackingService() {
-		if (OSValidator.isWindows()) {
-			try {
-			String command = "java -cp " + getInstallationPathForExeTrack()
-					+ EXECUTION_TRACK_START;
-			ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
-					"/c", command });
-				Runtime.getRuntime().exec(command);
-				
-				//builder.start();
-				
-			} catch (Exception e) {
-				logger.info("Failed to start web socket server");
-			}
-		}
-	}
-
-	
-	private String getExecutionTrackingServiceJar() {
-		String exeTrackServiceJar = null;
-		try {
-			FileReader fileReader = new FileReader(
-					XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
-			Properties properties = new Properties();
-			properties.load(fileReader);
-			if (StringUtils.isNotBlank(properties
-					.getProperty(EXECUTION_TRACK_SERVICE))) {
-				exeTrackServiceJar = properties
-						.getProperty(EXECUTION_TRACK_SERVICE);
-			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not exists", e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-		return exeTrackServiceJar;
-	}
-
-	private String getInstallationPathForExeTrack() {
-		String path = Platform.getInstallLocation().getURL().getPath();
-		String executionTraJar = getExecutionTrackingServiceJar();
-		if (StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/")
-				&& OSValidator.isWindows()) {
-			path = StringUtils.substring(path, 1);
-		}
-		return path + "config/service/" + executionTraJar;
-	}
-
-	
 }

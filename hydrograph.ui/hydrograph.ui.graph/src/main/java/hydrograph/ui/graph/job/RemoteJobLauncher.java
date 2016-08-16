@@ -70,6 +70,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
 					webSocketRemoteUrl);
 		if(hydrographServerConnection.getSelection() == 1){
+			closeWebSocketConnection(session);
 			return;
 		}
 		} 
@@ -88,9 +89,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 
@@ -109,9 +112,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
+				closeWebSocketConnection(session);
 				return;
 			}
 			if (JobStatus.KILLED.equals(job.getJobStatus())) {
+				closeWebSocketConnection(session);
 				return;
 			}
 		}
@@ -131,9 +136,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
+				closeWebSocketConnection(session);
 				return;
 			}
 			if (JobStatus.KILLED.equals(job.getJobStatus())) {
+				closeWebSocketConnection(session);
 				return;
 			}
 		}
@@ -142,9 +149,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, true, true);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 		// ----------------------------- Code to copy job xml
@@ -152,9 +161,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 
@@ -163,9 +174,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 
@@ -177,29 +190,20 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			isRunning=false;
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 			isRunning=false;
+			closeWebSocketConnection(session);
 			return;
 		}
 
 		job.setJobStatus(JobStatus.SUCCESS);
 		releaseResources(job, gefCanvas, joblogger);
-		
-		if (session != null) {
-			try {
-				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
-				session.close(closeReason);
-				logger.info("Session closed");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-
+		closeWebSocketConnection(session);
 	}
 
 	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
@@ -307,6 +311,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			joblogger.logMessage(JOB_FAILED);
 		}
+		
 	}
 
 	@Override
@@ -347,5 +352,19 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		} else {
 			JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
 		}
+	}
+	
+	private void closeWebSocketConnection(Session session){
+		if (session != null) {
+			try {
+				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
+				session.close(closeReason);
+				logger.info("Session closed");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+
 	}
 }

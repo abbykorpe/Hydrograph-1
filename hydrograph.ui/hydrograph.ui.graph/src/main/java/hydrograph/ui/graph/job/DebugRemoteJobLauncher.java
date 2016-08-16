@@ -107,9 +107,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 		
@@ -127,9 +129,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 		}
@@ -148,9 +152,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
+				closeWebSocketConnection(session);
 				return;
 			}
 			if (JobStatus.KILLED.equals(job.getJobStatus())) {
+				closeWebSocketConnection(session);
 				return;
 			}
 		}
@@ -159,9 +165,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, true, true);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 		// ----------------------------- Code to copy job xml
@@ -169,9 +177,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 
@@ -180,9 +190,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			closeWebSocketConnection(session);
 			return;
 		}
 
@@ -193,12 +205,14 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			closeWebSocketConnection(session);
 			isRunning=false;
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
+			closeWebSocketConnection(session);
 			isRunning=false;
 			return;
 		}
@@ -206,15 +220,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		job.setJobStatus(JobStatus.SUCCESS);
 		releaseResources(job, gefCanvas, joblogger);
 		isRunning=false;
-		if (session != null) {
-			try {
-				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
-				session.close(closeReason);
-				logger.info("Session closed");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		closeWebSocketConnection(session);
 	}
 	
 	/**
@@ -389,5 +395,20 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
 		}
 	}
+	
+	private void closeWebSocketConnection(Session session){
+		if (session != null) {
+			try {
+				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
+				session.close(closeReason);
+				logger.info("Session closed");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+
+	}
+
 
 }

@@ -14,6 +14,7 @@
 package hydrograph.ui.graph.execution.tracking.connection;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.StopJobHandler;
@@ -25,11 +26,13 @@ import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 
 import javax.websocket.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -43,7 +46,7 @@ public class HydrographServerConnection {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(HydrographServerConnection.class);
 	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
-	
+	int counter =0;
 	private int selection;
 	
 	
@@ -54,27 +57,76 @@ public class HydrographServerConnection {
 	 * @param url
 	 * @return Session 
 	 */
-	public Session connectToServer(final Job job, String jobID, String url) {
+	public Session connectToLocalServer(final Job job, String jobID, String url) {
+		Session session=null;
 		try {
+			counter++;
 			HydrographUiClientSocket socket = new HydrographUiClientSocket();
 			ClientManager clientManager = ClientManager.createClient();
-			Session session =clientManager.connectToServer(socket, new URI(url));
+			session =clientManager.connectToServer(socket, new URI(url));
 			socket.sendMessage(getJson(jobID));
 			return session;
  
 		} catch (Throwable t) {
+			
+			return reConnectToServer(job, jobID, url);
+		}
+	}
+	
+	/**
+	 * Instantiates HydrographUiClientSocket and establishes connection with server in order to get execution status.
+	 * @param job
+	 * @param jobID
+	 * @param url
+	 * @return Session 
+	 */
+	public Session connectToServer(final Job job, String jobID, String url) {
+		Session session=null;
+		try {
+			HydrographUiClientSocket socket = new HydrographUiClientSocket();
+			ClientManager clientManager = ClientManager.createClient();
+			session =clientManager.connectToServer(socket, new URI(url));
+			socket.sendMessage(getJson(jobID));
+			return session;
+ 
+		} catch (Throwable t) {
+			
+			Display.getDefault().asyncExec(new Runnable() {			
+				@Override
+				public void run() {
+					messageDialogForExecutionTracking(job,Display.getDefault().getActiveShell());
+					
+				}});
+				logger.error("Error while connection to server");
+		}
+		return session;
+	}
+
+
+	public Session reConnectToServer(final Job job, String jobID, String url) {
+			Session session=null;
+			String portId="";
+			try {
+				portId = DebugHelper.INSTANCE.getServicePortPID(Integer.parseInt(TrackingDisplayUtils.INSTANCE.restServicePort()));
+			} catch (NumberFormatException | IOException e) {
+				e.printStackTrace();
+			}
+			TrackingDisplayUtils.INSTANCE.reStartExecutionTrackingService(portId) ;
+			session=connectToServer(job,jobID,url);
+			if(session==null){
+			if(counter>2){
 			Display.getDefault().asyncExec(new Runnable() {			
 			@Override
 			public void run() {
 				messageDialogForExecutionTracking(job,Display.getDefault().getActiveShell());
 				
 			}});
-		
-			logger.error("Error while connection to server");  
+			logger.error("Error while connection to server");
+			}
 		}
-		return null;
+			return session;
 	}
-	
+
 	
 	/**
 	 * Instantiates HydrographUiClientSocket and establishes connection with server in order to kill the job.
