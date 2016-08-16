@@ -20,21 +20,48 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 
 
+/**
+ * The Class OperationField.
+ * Used for handling operation names on the property and its child windows.
+ * 
+ * @author Bitwise
+ */
 public class OperationField extends PropertyField implements IDataStructure{
 	
 	private String name;
 	
+	/**
+	 * Instantiates a new operation field.
+	 */
 	public OperationField() {
 		
 	}
 	
+	/**
+	 * Instantiates a new operation field.
+	 * 
+	 * @param name
+	 *            the name
+	 */
 	public OperationField(String name) {
 		this.name=name;
 	}
+	
+	/**
+	 * Gets the name.
+	 * 
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Sets the name.
+	 * 
+	 * @param name
+	 *            the new name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}

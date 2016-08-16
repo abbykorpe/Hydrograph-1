@@ -14,19 +14,50 @@
  
 package hydrograph.ui.datastructure.property;
 
+/**
+ * The Class OperationSystemProperties.
+ * Used to store client Operation System details.
+ * 
+ * @author Bitwise
+ */
 public class OperationSystemProperties extends PropertyField{
 	private boolean isChecked;
 	private String opSysValue;
 	
+	/**
+	 * Checks if is checked.
+	 * 
+	 * @return true, if is checked
+	 */
 	public boolean isChecked() {
 		return isChecked;
 	}
+	
+	/**
+	 * Sets the checked.
+	 * 
+	 * @param isChecked
+	 *            the new checked
+	 */
 	public void setChecked(boolean isChecked) {
 		this.isChecked = isChecked;
 	}
+	
+	/**
+	 * Gets the op sys value.
+	 * 
+	 * @return the op sys value
+	 */
 	public String getOpSysValue() {
 		return opSysValue;
 	}
+	
+	/**
+	 * Sets the op sys value.
+	 * 
+	 * @param opSysValue
+	 *            the new op sys value
+	 */
 	public void setOpSysValue(String opSysValue) {
 		this.opSysValue = opSysValue;
 	}

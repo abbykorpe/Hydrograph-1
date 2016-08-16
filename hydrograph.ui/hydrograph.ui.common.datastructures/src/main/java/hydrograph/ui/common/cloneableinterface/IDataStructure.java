@@ -14,6 +14,18 @@
  
 package hydrograph.ui.common.cloneableinterface;
 
+/**
+ * The Interface IDataStructure.
+ * This is base interface in the data structures plugin.
+ * 
+ * @author Bitwise
+ */
 public interface IDataStructure extends Cloneable{
+	
+	/**
+	 * Clone.
+	 * 
+	 * @return the object
+	 */
 	public Object clone();
 }

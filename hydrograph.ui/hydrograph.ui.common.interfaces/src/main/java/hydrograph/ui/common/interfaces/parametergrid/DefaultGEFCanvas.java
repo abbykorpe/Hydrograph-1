@@ -16,17 +16,91 @@ package hydrograph.ui.common.interfaces.parametergrid;
 
 import java.util.List;
 
+/**
+ * The Interface DefaultGEFCanvas.
+ * A base interface for Hydrograph canvas related tasks.
+ * 
+ * @author Bitwise
+ */
 public interface DefaultGEFCanvas {
+	
+	/**
+	 * Gets the parameter file.
+	 * 
+	 * @return the parameter file
+	 */
 	public String getParameterFile();
+	
+	/**
+	 * Gets the XML string.
+	 * 
+	 * @return the XML string
+	 */
 	public String getXMLString();
+	
+	/**
+	 * Gets the latest parameter list.
+	 * 
+	 * @return the latest parameter list
+	 */
 	public List<String> getLatestParameterList();
+	
+	/**
+	 * Gets the current parameter file path.
+	 * 
+	 * @return the current parameter file path
+	 */
 	public String getCurrentParameterFilePath();
+	
+	/**
+	 * Sets the current parameter file path.
+	 * 
+	 * @param currentParameterFilePath
+	 *            the new current parameter file path
+	 */
 	public void setCurrentParameterFilePath(String currentParameterFilePath);
+	
+	/**
+	 * Gets the active project.
+	 * 
+	 * @return the active project
+	 */
 	public String getActiveProject();
+	
+	/**
+	 * Gets the job name.
+	 * 
+	 * @return the job name
+	 */
 	public String getJobName();
+	
+	/**
+	 * Disable running job resource.
+	 */
 	public void disableRunningJobResource();
+	
+	/**
+	 * Enable running job resource.
+	 */
 	public void enableRunningJobResource();
+	
+	/**
+	 * Sets the stop button status.
+	 * 
+	 * @param enabled
+	 *            the new stop button status
+	 */
 	public void setStopButtonStatus(boolean enabled);
+	
+	/**
+	 * Gets the stop button status.
+	 * 
+	 * @return the stop button status
+	 */
 	public boolean getStopButtonStatus();
+	
+	/**
+	 * Restore menu tool context items state.
+	 */
 	public void restoreMenuToolContextItemsState(); 
 }

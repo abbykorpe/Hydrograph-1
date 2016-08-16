@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The Class LookupMappingGrid.
+ * Holds data required for showing Lookup Mapping Grid.
+ * 
+ * @author Bitwise
+ */
 public class LookupMappingGrid  implements IDataStructure{
 	private List<List<FilterProperties>> lookupInputProperties;   //left side
 	private List<List<FilterProperties>> clonedLookupInputProperties; 
@@ -27,25 +33,51 @@ public class LookupMappingGrid  implements IDataStructure{
 	private List<LookupMapProperty> lookupMapProperties; //right side grid
 	private List<LookupMapProperty> clonedLookupMapProperties;
 	
-	//TODO
 
 
 	
+	/**
+	 * Instantiates a new lookup mapping grid.
+	 */
 	public LookupMappingGrid() {
 		lookupInputProperties = new ArrayList<>();
 		lookupMapProperties = new ArrayList<>();
 	}
 	
+	/**
+	 * Gets the lookup map properties.
+	 * 
+	 * @return the lookup map properties
+	 */
 	public List<LookupMapProperty> getLookupMapProperties() {
 		return lookupMapProperties;
 	}
+	
+	/**
+	 * Sets the lookup map properties.
+	 * 
+	 * @param lookupMapProperties
+	 *            the new lookup map properties
+	 */
 	public void setLookupMapProperties(List<LookupMapProperty> lookupMapProperties) {
 		this.lookupMapProperties = lookupMapProperties;
 	}
 
+	/**
+	 * Gets the lookup input properties.
+	 * 
+	 * @return the lookup input properties
+	 */
 	public List<List<FilterProperties>> getLookupInputProperties() {
 		return lookupInputProperties;
 	}
+	
+	/**
+	 * Sets the lookup input properties.
+	 * 
+	 * @param lookupInputProperties
+	 *            the new lookup input properties
+	 */
 	public void setLookupInputProperties(List<List<FilterProperties>> lookupInputProperties) {
 		this.lookupInputProperties = lookupInputProperties;
 	}

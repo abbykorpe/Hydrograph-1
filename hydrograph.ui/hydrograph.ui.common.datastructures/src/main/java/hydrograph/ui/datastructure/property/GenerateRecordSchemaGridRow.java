@@ -27,26 +27,59 @@ public class GenerateRecordSchemaGridRow extends FixedWidthGridRow {
 	private String rangeTo;
 	private String defaultValue;
 
+	/**
+	 * Gets the range from.
+	 * 
+	 * @return the range from
+	 */
 	public String getRangeFrom() {
 		return rangeFrom;
 	}
 
+	/**
+	 * Sets the range from.
+	 * 
+	 * @param rangeFrom
+	 *            the new range from
+	 */
 	public void setRangeFrom(String rangeFrom) {
 		this.rangeFrom = rangeFrom;
 	}
 
+	/**
+	 * Gets the range to.
+	 * 
+	 * @return the range to
+	 */
 	public String getRangeTo() {
 		return rangeTo;
 	}
 
+	/**
+	 * Sets the range to.
+	 * 
+	 * @param rangeTo
+	 *            the new range to
+	 */
 	public void setRangeTo(String rangeTo) {
 		this.rangeTo = rangeTo;
 	}
 
+	/**
+	 * Gets the default value.
+	 * 
+	 * @return the default value
+	 */
 	public String getDefaultValue() {
 		return defaultValue;
 	}
 
+	/**
+	 * Sets the default value.
+	 * 
+	 * @param defaultValue
+	 *            the new default value
+	 */
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
 	}

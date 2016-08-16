@@ -24,17 +24,40 @@ public class FixedWidthGridRow extends GridRow{
 	private String length="";
 	protected String delimiter="";
 
+	/**
+	 * Gets the length.
+	 * 
+	 * @return the length
+	 */
 	public String getLength() {
 		return length;
 	}
 
+	/**
+	 * Sets the length.
+	 * 
+	 * @param length
+	 *            the new length
+	 */
 	public void setLength(String length) {
 		this.length = length;
 	}
 	
+	/**
+	 * Gets the delimiter.
+	 * 
+	 * @return the delimiter
+	 */
 	public String getDelimiter() {
 		return delimiter;
 	}
+	
+	/**
+	 * Sets the delimiter.
+	 * 
+	 * @param delimiter
+	 *            the new delimiter
+	 */
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}

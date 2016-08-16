@@ -16,28 +16,51 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
- * 
+ * The Class InputHivePartitionKeyValues.
+ * Used to manage Hive component's partition keys and values.
  * @author Bitwise
- *
  */
 public class InputHivePartitionKeyValues implements IDataStructure {
 
 	private List<String> key;
 	private List<InputHivePartitionColumn> keyValues;
 	
+	/**
+	 * Gets the key.
+	 * 
+	 * @return the key
+	 */
 	public List<String> getKey() {
 		return key;
 	}
 
+	/**
+	 * Sets the key.
+	 * 
+	 * @param key
+	 *            the new key
+	 */
 	public void setKey(List<String> key) {
 		this.key = key;
 	}
 
+	/**
+	 * Gets the key values.
+	 * 
+	 * @return the key values
+	 */
 	public List<InputHivePartitionColumn> getKeyValues() {
 		return keyValues;
 	}
 
+	/**
+	 * Sets the key values.
+	 * 
+	 * @param keyValues
+	 *            the new key values
+	 */
 	public void setKeyValues(List<InputHivePartitionColumn> keyValues) {
 		this.keyValues = keyValues;
 	}

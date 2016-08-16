@@ -19,6 +19,7 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 /**
  * The Class GridRow.
+ * Represents a row in the Schema grid of the component properties window.
  * 
  * @author Bitwise
  */
@@ -34,73 +35,173 @@ public class GridRow implements IDataStructure {
 		private String precision;
 		private String description = "";
 		
+		/**
+		 * Gets the data type value.
+		 * 
+		 * @return the data type value
+		 */
 		public String getDataTypeValue() {
 			return dataTypeValue;
 		}
 
+		/**
+		 * Sets the data type value.
+		 * 
+		 * @param dataTypeValue
+		 *            the new data type value
+		 */
 		public void setDataTypeValue(String dataTypeValue) {
 			this.dataTypeValue = dataTypeValue;
 		}
 
+		/**
+		 * Gets the scale.
+		 * 
+		 * @return the scale
+		 */
 		public String getScale() {
 			return scale;
 		}
 
+		/**
+		 * Sets the scale.
+		 * 
+		 * @param scale
+		 *            the new scale
+		 */
 		public void setScale(String scale) {
 			this.scale = scale;
 		}
 		
+		/**
+		 * Gets the scale type value.
+		 * 
+		 * @return the scale type value
+		 */
 		public String getScaleTypeValue() {
 			return scaleTypeValue;
 		}
 
+		/**
+		 * Sets the scale type value.
+		 * 
+		 * @param scaleTypeValue
+		 *            the new scale type value
+		 */
 		public void setScaleTypeValue(String scaleTypeValue) {
 			this.scaleTypeValue = scaleTypeValue;
 		}
+		
+		/**
+		 * Gets the field name.
+		 * 
+		 * @return the field name
+		 */
 		public String getFieldName() {
 			return fieldName;
 		}
 
+		/**
+		 * Sets the field name.
+		 * 
+		 * @param fieldName
+		 *            the new field name
+		 */
 		public void setFieldName(String fieldName) {
 			this.fieldName = fieldName;
 		}
 
+		/**
+		 * Gets the date format.
+		 * 
+		 * @return the date format
+		 */
 		public String getDateFormat() {
 			return dateFormat;
 		}
 
+		/**
+		 * Sets the date format.
+		 * 
+		 * @param dateFormat
+		 *            the new date format
+		 */
 		public void setDateFormat(String dateFormat) {
 			this.dateFormat = dateFormat;
 		}
 
+		/**
+		 * Gets the data type.
+		 * 
+		 * @return the data type
+		 */
 		public Integer getDataType() {
 			return dataType;
 		}
 
+		/**
+		 * Sets the data type.
+		 * 
+		 * @param dataType
+		 *            the new data type
+		 */
 		public void setDataType(Integer dataType) {
 			this.dataType = dataType;
 		}
 		
+		/**
+		 * Gets the scale type.
+		 * 
+		 * @return the scale type
+		 */
 		public Integer getScaleType() {
 			return scaleType;
 		}
 
+		/**
+		 * Sets the scale type.
+		 * 
+		 * @param scaleType
+		 *            the new scale type
+		 */
 		public void setScaleType(Integer scaleType) {
 			this.scaleType = scaleType;
 		}
 
+		/**
+		 * Gets the precision.
+		 * 
+		 * @return the precision
+		 */
 		public String getPrecision() {
 			return precision;
 		}
 
+		/**
+		 * Sets the precision.
+		 * 
+		 * @param precision
+		 *            the new precision
+		 */
 		public void setPrecision(String precision) {
 			this.precision = precision;
 		}
 
+		/**
+		 * Gets the description.
+		 * 
+		 * @return the description
+		 */
 		public String getDescription() {
 			return description;
 		}
 
+		/**
+		 * Sets the description.
+		 * 
+		 * @param description
+		 *            the new description
+		 */
 		public void setDescription(String description) {
 			this.description = description;
 		}

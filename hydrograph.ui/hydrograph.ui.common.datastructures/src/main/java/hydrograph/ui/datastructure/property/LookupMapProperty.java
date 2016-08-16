@@ -18,20 +18,51 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 
 	
+/**
+ * The Class LookupMapProperty.
+ * Used to manage source-output fields in Lookup component.
+ * 
+ * @author Bitwise
+ */
 public class LookupMapProperty implements IDataStructure {
 	
 	private String Source_Field;
 	private String Output_Field;
 	
+	/**
+	 * Gets the source field.
+	 * 
+	 * @return the source field
+	 */
 	public String getSource_Field() {
 		return Source_Field;
 	}
+	
+	/**
+	 * Sets the source field.
+	 * 
+	 * @param source_Field
+	 *            the new source field
+	 */
 	public void setSource_Field(String source_Field) {
 		Source_Field = source_Field;
 	}
+	
+	/**
+	 * Gets the output field.
+	 * 
+	 * @return the output field
+	 */
 	public String getOutput_Field() {
 		return Output_Field;
 	}
+	
+	/**
+	 * Sets the output field.
+	 * 
+	 * @param output_Field
+	 *            the new output field
+	 */
 	public void setOutput_Field(String output_Field) {
 		Output_Field = output_Field;
 	}

@@ -14,6 +14,12 @@
  
 package hydrograph.ui.common.datastructures.tooltip;
 
+/**
+ * The Class PropertyToolTipInformation.
+ * This is used to store tooltip information for component properties.
+ * 
+ * @author Bitwise
+ */
 public class PropertyToolTipInformation {
 	private String propertyName;
 	private Object propertyValue;
@@ -21,6 +27,16 @@ public class PropertyToolTipInformation {
 	private String tooltipDataType;
 	private String errorMessage=null;
 	
+	/**
+	 * Instantiates a new property tool tip information.
+	 * 
+	 * @param propertyName
+	 *            the property name
+	 * @param showAsTooltip
+	 *            the show as tooltip
+	 * @param tooltipDataType
+	 *            the tooltip data type
+	 */
 	public PropertyToolTipInformation(String propertyName, String showAsTooltip,
 			String tooltipDataType) {
 		super();
@@ -29,30 +45,67 @@ public class PropertyToolTipInformation {
 		this.tooltipDataType = tooltipDataType;
 	}
 
+	/**
+	 * Checks if property can be shown as tooltip.
+	 * 
+	 * @return true, if is show as tooltip
+	 */
 	public boolean isShowAsTooltip() {
 		return Boolean.parseBoolean(showAsTooltip);
 	}
 
+	/**
+	 * Gets the tooltip data type.
+	 * 
+	 * @return the tooltip data type
+	 */
 	public String getTooltipDataType() {
 		return tooltipDataType;
 	}
 
+	/**
+	 * Gets the property name.
+	 * 
+	 * @return the property name
+	 */
 	public String getPropertyName() {
 		return propertyName;
 	}
 
+	/**
+	 * Gets the property value.
+	 * 
+	 * @return the property value
+	 */
 	public Object getPropertyValue() {
 		return propertyValue;
 	}
 
+	/**
+	 * Sets the property value.
+	 * 
+	 * @param propertyValue
+	 *            the new property value
+	 */
 	public void setPropertyValue(Object propertyValue) {
 		this.propertyValue = propertyValue;
 	}
 	
+	/**
+	 * Gets the error message.
+	 * 
+	 * @return the error message
+	 */
 	public String getErrorMessage() {
 		return errorMessage;
 	}
 
+	/**
+	 * Sets the error message.
+	 * 
+	 * @param errorMessage
+	 *            the new error message
+	 */
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}

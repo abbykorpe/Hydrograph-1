@@ -24,6 +24,7 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 /**
  * The Class OperationClassProperty.
+ * Holds details of the operation class for the transform components.
  * 
  * @author Bitwise
  */
