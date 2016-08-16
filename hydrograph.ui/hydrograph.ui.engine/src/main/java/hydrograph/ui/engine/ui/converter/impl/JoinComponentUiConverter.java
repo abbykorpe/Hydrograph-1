@@ -39,9 +39,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Converts XML to UI object
+ * 
+ * @author Bitwise
+ *
+ */
 public class JoinComponentUiConverter extends TransformUiConverter {
 
 	private Join join;
@@ -118,12 +124,6 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		return recordRequiredNumber;
 	}
 
-	private String getSize() {
-		Dimension newSize = uiComponent.getSize();
-		uiComponent.setSize(newSize.expand(inPortCounter * 15, inPortCounter * 15));
-		return String.valueOf(inPortCounter);
-	}
-
 	protected void getInPort(TypeOperationsComponent operationsComponent) {
 		LOGGER.debug("Generating InPut Ports for -{}", componentName);
 		if (operationsComponent.getInSocket() != null) {
@@ -152,16 +152,23 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		LOGGER.debug("Generating OutPut Ports for -{}", componentName);
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
-					if(StringUtils.equalsIgnoreCase(Constants.UNUSED_SOCKET_TYPE, outSocket.getType()))
-						unusedPortCounter++;
+				
+				if(StringUtils.equalsIgnoreCase(Constants.UNUSED_SOCKET_TYPE, outSocket.getType())){
+					unusedPortCounter++;
+				}
+					
 				uiComponent.engageOutputPort(outSocket.getId());
-				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
-						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
+				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null && 
+					!outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
+					
 					propertyMap.put(Constants.JOIN_MAP_FIELD, getJoinMappingGrid(outSocket));
 					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
-				} else if(outSocket.getCopyOfInsocket()!=null){
+					
+				} else if(outSocket.getCopyOfInsocket()!=null && 
+				     StringUtils.equalsIgnoreCase(outSocket.getType(), Constants.OUTPUT_SOCKET_TYPE)){
 					JoinMappingGrid joinMappingGrid = new JoinMappingGrid();
-					joinMappingGrid.setButtonText(Constants.COPY_FROM_INPUT_PORT_PROPERTY+outSocket.getCopyOfInsocket().getInSocketId());
+					joinMappingGrid.setButtonText(Constants.COPY_FROM_INPUT_PORT_PROPERTY + 
+												  outSocket.getCopyOfInsocket().getInSocketId());
 					joinMappingGrid.setIsSelected(true);
 					propertyMap.put(Constants.JOIN_MAP_FIELD,joinMappingGrid);
 					copySchemaFromInputPort(outSocket.getCopyOfInsocket().getInSocketId());
@@ -175,8 +182,6 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		}
 			
 	}
-
-
 
 	private JoinMappingGrid getJoinMappingGrid(TypeOperationsOutSocket outSocket) {
 		String dot_separator = ".";
