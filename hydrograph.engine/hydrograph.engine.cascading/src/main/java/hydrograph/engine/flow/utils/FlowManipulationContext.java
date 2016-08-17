@@ -76,10 +76,12 @@ public class FlowManipulationContext {
 		return jaxbMainGraph;
 	}
 	
-	
+	public SchemaFieldHandler getSchemaFieldHandler(){
+		return schemaFieldMap;
+	}
 
-	public void setSchemaFieldMap(SchemaFieldHandler schemaFieldMap) {
-		this.schemaFieldMap = schemaFieldMap;
+	public void setSchemaFieldMap(SchemaFieldHandler schemaFieldHandler) {
+		this.schemaFieldMap = schemaFieldHandler;
 	}
 
 	public void setJaxbMainGraph(List<TypeBaseComponent> jaxbMainGraph) {
