@@ -19,7 +19,9 @@ package hydrograph.ui.graph.execution.tracking.preferences;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -134,9 +136,13 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		if(trackingFieldEditor.getBooleanValue()){
 			logPathEditor.setEnabled(true, composite_2);
 			portFieldEditor.setEnabled(true, composite_3);
+			((ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler())
+				.setExecutionTrackingConsoleEnabled(false);
 		}else{
 			logPathEditor.setEnabled(false, composite_2);
 			portFieldEditor.setEnabled(false, composite_3);
+			((ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler())
+				.setExecutionTrackingConsoleEnabled(true);
 		}
 		
 		trackingFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {

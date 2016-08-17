@@ -16,7 +16,6 @@ package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
@@ -27,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
@@ -170,17 +171,29 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
 	}
 	
-	private void closeWebSocketConnection(Session session ){
-		if (session != null  && session.isOpen()) {
-			try {
-				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
-				session.close(closeReason);
-				logger.info("Session closed");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	private void closeWebSocketConnection(final Session session ){
+		
+		final Timer timer = new Timer();
+		
+		TimerTask timerTask = new TimerTask() {
 			
-		}
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if (session != null  && session.isOpen()) {
+					try {
+						CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
+						session.close(closeReason);
+						logger.info("Session closed");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					timer.cancel();
+				}
+			}
+		};
+		timer.schedule(timerTask, 10000);
+		
 
 	}
 }

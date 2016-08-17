@@ -32,7 +32,6 @@ import java.util.Collections;
 
 import javax.websocket.Session;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -126,11 +125,11 @@ public class HydrographServerConnection {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 		}
-		if (session == null && !session.isOpen()){
+		//if (session == null && !session.isOpen()){
 			session = connectToServer(job, jobID, url);
-		}
+		//}
 		
-		if (session == null && !session.isOpen()) {
+		if (session == null || !session.isOpen()) {
 			if (counter > 4) {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override

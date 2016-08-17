@@ -13,11 +13,15 @@
 
 package hydrograph.ui.graph.execution.tracking.handlers;
 
+import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.utils.ExecutionTrackingConsoleUtils;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * 
@@ -27,12 +31,36 @@ import org.eclipse.core.commands.ExecutionException;
  *
  */
 public class ExecutionTrackingConsoleHandler extends AbstractHandler{
+	
+	public ExecutionTrackingConsoleHandler() {
+		//setBaseEnabled(true);
+		RunStopButtonCommunicator.ExecutionTrackingConsole.setHandler(this);
+	}
+	
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {	
-		
+		/*((ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler())
+		.setExecutionTrackingConsoleEnabled(isExecutionTracking());*/
 		ExecutionTrackingConsoleUtils.INSTANCE.openExecutionTrackingConsole();
 		
 		return null;
 	}
 
+	/**
+	 * 
+	 * Enable/Disable stop button
+	 * 
+	 * @param enable
+	 */
+	public void setExecutionTrackingConsoleEnabled(boolean enable) {
+		setBaseEnabled(enable);
+	}
+	
+	public boolean isExecutionTracking(){
+		boolean isExeTracking = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
+				ExecutionPreferenceConstants.EXECUTION_TRACKING, true, null);
+		
+		return isExeTracking;
+	}
 }

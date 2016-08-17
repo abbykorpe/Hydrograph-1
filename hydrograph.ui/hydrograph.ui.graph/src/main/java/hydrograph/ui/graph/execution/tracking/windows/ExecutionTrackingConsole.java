@@ -4,7 +4,6 @@ package hydrograph.ui.graph.execution.tracking.windows;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.execution.tracking.constants.MenuConstants;
-import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.handlers.ActionFactory;
 import hydrograph.ui.graph.execution.tracking.handlers.ClearConsoleAction;

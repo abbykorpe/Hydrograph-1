@@ -22,7 +22,6 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;

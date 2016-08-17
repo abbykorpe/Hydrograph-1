@@ -66,7 +66,20 @@ public enum RunStopButtonCommunicator{
 		void setAbstractHandler(AbstractHandler abstractHandler){
 			this.abstractHandler = abstractHandler;
 		}	
+	},
+	ExecutionTrackingConsole{
+
+		private AbstractHandler abstractHandler;
+		
+		AbstractHandler getAbstractHandler() {
+			return abstractHandler;
+		}
+		void setAbstractHandler(AbstractHandler abstractHandler){
+			this.abstractHandler = abstractHandler;
+		}	
+		
 	};
+	
 	
 	abstract AbstractHandler getAbstractHandler();
 	abstract void setAbstractHandler(AbstractHandler abstractHandler);
