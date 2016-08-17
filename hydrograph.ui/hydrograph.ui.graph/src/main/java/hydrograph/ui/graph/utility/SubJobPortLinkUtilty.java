@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -52,26 +53,29 @@ public class SubJobPortLinkUtilty {
 	 InputSubjobComponent inputSubComponent=new InputSubjobComponent();
 	 for (Map.Entry<Component,Integer> entry : cacheInputSubjobComp.entrySet()) {
 	   		inputSubComponent.setProperties(new LinkedHashMap<String,Object>());
-					for(int j=0;j<entry.getValue();j++) {
-						Link linkNew = new Link();
-						linkNew.setTarget(entry.getKey());
-						linkNew.setSource(inputSubComponent); 
-						if(entry.getKey() instanceof UnionallComponent){
-							linkNew.setTargetTerminal(Constants.FIXED_INSOCKET_ID);
-						}
-						else{
-							linkNew.setTargetTerminal(Constants.INPUT_SOCKET_TYPE + j);
-						}
-						linkNew.setSourceTerminal(Constants.OUTPUT_SOCKET_TYPE + outPort);
-						entry.getKey().connectInput(linkNew);
-						inputSubComponent.connectOutput(linkNew);
-						outPort++; 
-					}	
-					
-					inputSubComponent.getProperties().put(Constants.TYPE, Constants.INPUT_SUBJOB);							   	
-				   	container.addSubJobChild((Component) entry.getKey());
-				   	clipboardList.remove(entry.getKey());						
+	   		List<Link> linkedList = entry.getKey().getTargetConnections();
+	   		int inputLinksCountForEntry = linkedList.size();
+	   		
+	   		if(inputLinksCountForEntry == 0){
+				for(int j=0;j<entry.getValue();j++) {
+					createNewLink(entry, inputSubComponent, outPort, j);
+					outPort++;
 				}
+			}else if(inputLinksCountForEntry < entry.getValue()){
+				for(int j=0;j<entry.getValue();j++) {
+					for (int i = 0; i < inputLinksCountForEntry; i++){
+						if(!linkedList.get(i).getTargetTerminal().equalsIgnoreCase(Constants.INPUT_SOCKET_TYPE + j)){
+							createNewLink(entry, inputSubComponent, outPort, j);
+							outPort++;
+						}
+					}
+				}
+			}
+			inputSubComponent.getProperties().put(Constants.TYPE, Constants.INPUT_SUBJOB);							   	
+			container.addSubJobChild((Component) entry.getKey());
+			clipboardList.remove(entry.getKey());						
+		}
+	 
 	   	if(cacheInputSubjobComp.size()>0){
 	   		inputSubComponent.getProperties().put(Constants.NAME, Constants.INPUT_SUBJOB);
 	   		inputSubComponent.setComponentLabel(Constants.INPUT_SUBJOB);
@@ -86,6 +90,21 @@ public class SubJobPortLinkUtilty {
 	}
 
 	
+	private static void createNewLink(Entry<Component, Integer> entry, InputSubjobComponent inputSubComponent, int outPort, int j) {
+		Link linkNew = new Link();
+		linkNew.setTarget(entry.getKey());
+		linkNew.setSource(inputSubComponent); 
+		if(entry.getKey() instanceof UnionallComponent){
+			linkNew.setTargetTerminal(Constants.FIXED_INSOCKET_ID);
+		}else{
+			linkNew.setTargetTerminal(Constants.INPUT_SOCKET_TYPE + j);
+		}
+		linkNew.setSourceTerminal(Constants.OUTPUT_SOCKET_TYPE + outPort);
+		entry.getKey().connectInput(linkNew);
+		inputSubComponent.connectOutput(linkNew);
+	}
+
+
 	/**
 	 * Adds the output sub graph component and link.
 	 *

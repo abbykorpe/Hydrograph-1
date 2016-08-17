@@ -79,6 +79,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 63.#996 [Nikhil Deokar] Subjob : Updated option Text and removed extra Icons
 64.#358 [Rakesh Kanchalwar] - Workspace selection window on startup
 65.#1021[Akhilesh Joshi] Schema Tab: Pop-up Windows name should be in sync. Proper window name is required if schema is already up to date and user tries to pull schema
+66.#1033[Nikhil Deokar] Subjob : Fixed issue of Dummy Port is Getting added
 67.#669 [Shrirang Kumbhar] Validation Need To be Added When Schema from Mapping Fields are Not in Sync With Schema Tab 
 68.#330 [Shrirang Kumbhar] Parameter Grid: Search functionality - User should be able to search by parameter name or by parameter value only, not by Paramter Files
 69.#973 [Shrirang Kumbhar] Sync schema: When user add mapping in mapping table and press autosync. It enables apply and when we press cancel it still saves the mapping changes. The same happens in case of pull button  
