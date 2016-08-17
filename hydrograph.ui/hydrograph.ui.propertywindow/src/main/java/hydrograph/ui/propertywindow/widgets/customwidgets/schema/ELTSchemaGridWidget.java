@@ -724,7 +724,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
 								SWT.ICON_INFORMATION);
 						messageBox.setMessage(Messages.SCHEMA_IS_UPTO_DATE_MESSAGE);
-						messageBox.setText(Messages.SCHEMA_IS_UPTO_DATE_MESSAGE);
+						messageBox.setText(Messages.PULL_SCHEMA_MESSAGE_TITLE);
 						messageBox.open();
 					}
 				} else {

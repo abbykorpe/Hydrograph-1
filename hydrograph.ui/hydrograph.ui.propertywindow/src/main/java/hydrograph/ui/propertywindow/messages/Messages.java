@@ -251,6 +251,7 @@ public class Messages extends NLS {
 	public static String HIVE_PARTI_KEY_VALUE_DEL_TOOLTIP;
 	public static String HIVE_PARTI_KEY_CHECKBOX_NAME;
 	public static String HIVE_PARTI_KEY_DEL_TOOLTIP;
+	public static String PULL_SCHEMA_MESSAGE_TITLE;
 	
 	static {
 		// initialize resource bundle
