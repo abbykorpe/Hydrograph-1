@@ -16,24 +16,24 @@
          point="org.eclipse.ui.commands">
      
       <command
-            id="com.bitwise.window.console"
+            id="hydrograph.ui.window.console"
             name="console">
       </command>
       <command
-            id="com.bitwise.window.ETLNavigator"
+            id="hydrograph.ui.window.ETLNavigator"
             name="ETLNavigator">
       </command>
       <command
-            id="com.bitwise.window.palette"
+            id="hydrograph.ui.window.palette"
             name="Palette">
       </command>
       <command
-            id="com.bitwise.window.portLabels.showHide"
+            id="hydrograph.ui.window.portLabels.showHide"
             name="ShowHidePortLabels">
       </command>
      <command
-	         id="com.bitwise.help.aboutaccelero"
-            name="About Accelero">
+	         id="hydrograph.ui.help.aboutHydrograph"
+            name="About Hydrograph">
      </command>
      <command
            id="hydrograph.ui.menus.new.newFilterClass"
@@ -52,15 +52,15 @@
          point="org.eclipse.ui.handlers">
       <handler
             class="hydrograph.ui.menus.handlers.ConsoleHandler"
-            commandId="com.bitwise.window.console">
+            commandId="hydrograph.ui.window.console">
       </handler>
       <handler
             class="hydrograph.ui.menus.handlers.ProjectExplorerHandler"
-            commandId="com.bitwise.window.ETLNavigator">
+            commandId="hydrograph.ui.window.ETLNavigator">
       </handler>
       <handler
             class="hydrograph.ui.menus.handlers.PaletteHandler"
-            commandId="com.bitwise.window.palette">
+            commandId="hydrograph.ui.window.palette">
       </handler>
       <handler
             class="hydrograph.ui.menus.handlers.DeleteHandler"
@@ -204,11 +204,11 @@
       </handler>
       <handler
             class="hydrograph.ui.menus.handlers.ShowHidePortLabelsHandler"
-            commandId="com.bitwise.window.portLabels.showHide">
+            commandId="hydrograph.ui.window.portLabels.showHide">
       </handler>
        <handler
             class="hydrograph.ui.menus.handlers.AboutDialogHandler"
-            commandId="com.bitwise.help.aboutaccelero">
+            commandId="hydrograph.ui.help.aboutHydrograph">
        </handler>
        <handler
              class="hydrograph.ui.menus.handlers.DeleteHandler"
@@ -290,7 +290,7 @@
             allPopups="false"
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
-               commandId="com.bitwise.menuBar.open"
+               commandId="hydrograph.ui.menuBar.open"
                id="hydrograph.ui.menus.FileMenu"
                label="File"
                 mnemonic ="F">
@@ -485,24 +485,24 @@
                label="Window"
                mnemonic ="W" >
             <command
-                  commandId="com.bitwise.window.console"
+                  commandId="hydrograph.ui.window.console"
                   label="Console"
                   style="push"
                   mnemonic ="C">
             </command>
             <command
-                  commandId="com.bitwise.window.ETLNavigator"
+                  commandId="hydrograph.ui.window.ETLNavigator"
                   label="Project Explorer"
                   style="push"
                   mnemonic ="E">
             </command>
             <command
-                  commandId="com.bitwise.window.palette"
+                  commandId="hydrograph.ui.window.palette"
                   label="Palette"
                   mnemonic ="t">
             </command>
             <command
-                  commandId="com.bitwise.window.portLabels.showHide"
+                  commandId="hydrograph.ui.window.portLabels.showHide"
                   label="Show/Hide Port Labels"
                   style="toggle"
                   mnemonic ="S">
@@ -540,7 +540,7 @@
                    mnemonic ="H">
            </command>
           <command
-                  commandId="com.bitwise.help.aboutaccelero"
+                  commandId="hydrograph.ui.help.aboutHydrograph"
                  label="About Hydrograph"
                   style="push"
                   mnemonic ="A">
@@ -563,19 +563,19 @@
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="com.bitwise.window.palette"
+            commandId="hydrograph.ui.window.palette"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+P">
       </key>
       <key
-            commandId="com.bitwise.window.ETLNavigator"
+            commandId="hydrograph.ui.window.ETLNavigator"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+E">
       </key>
       <key
-            commandId="com.bitwise.window.portLabels.showHide"
+            commandId="hydrograph.ui.window.portLabels.showHide"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+S">

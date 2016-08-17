@@ -65,7 +65,7 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="menu:hydrograph.ui.menus.WindowMenu?after=com.bitwise.window.palette">
+            locationURI="menu:hydrograph.ui.menus.WindowMenu?after=hydrograph.ui.window.palette">
          <menu
                id="hydrograph.ui.menus.WindowMenu.Perspective"
                label="Perspective"

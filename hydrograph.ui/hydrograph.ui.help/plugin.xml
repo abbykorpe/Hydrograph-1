@@ -22,7 +22,7 @@
             primary="true">
       </toc>
       <toc
-            file="xml/Introduction/WhatIsAccelero.xml">
+            file="xml/Introduction/WhatIsHydrograph.xml">
       </toc>
       <toc
             file="xml/Introduction/howItWorks.xml">
@@ -227,13 +227,13 @@
             file="xml/Components/uniqueSequence.xml">
       </toc>
       <toc
-            file="xml/Installation and Configuration/launchingAcceleroOnWindows.xml">
+            file="xml/Installation and Configuration/launchingHydrographOnWindows.xml">
       </toc>
       <toc
             file="xml/Installation and Configuration/prerequisitesForMacintosh.xml">
       </toc>
       <toc
-            file="xml/Installation and Configuration/launchingAcceleroOnMacintosh.xml">
+            file="xml/Installation and Configuration/launchingHydrographOnMacintosh.xml">
       </toc>
       <toc
             file="html/How To Steps/How_To_Parameterize_Component_Properties.html">
