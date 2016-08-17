@@ -16,11 +16,12 @@ package hydrograph.ui.dataviewer.constants;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * 
- * Messages class holds constants for messages to show 
+ * The Class Messages.
+ * This is a message bundle class holding constants for various messages displayed in view Data
+ * functionality.
  * 
  * @author Bitwise
- *
+ * 
  */
 public class Messages extends NLS{
 	private static final String BUNDLE_NAME = "resources.messages";

@@ -18,7 +18,7 @@ import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.RowField;
-import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferencesVO;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -45,7 +45,8 @@ import org.slf4j.Logger;
 import com.opencsv.CSVWriter;
 
 /**
- * This class is responsible for exporting watcher data
+ * The Class ExportAction.
+ * Responsible for exporting watcher data into CSV or user defined format.
  * 
  * @author Bitwise
  *
@@ -70,10 +71,10 @@ public class ExportAction extends Action {
 
 	@Override
 	public void run() {
-		ViewDataPreferences viewDataPreferences = debugDataViewer.getViewDataPreferences();
-		delimiter = viewDataPreferences.getDelimiter();
-		quoteCharactor = viewDataPreferences.getQuoteCharactor();
-		headerEnabled = viewDataPreferences.getIncludeHeaders();
+		ViewDataPreferencesVO viewDataPreferencesVO = debugDataViewer.getViewDataPreferences();
+		delimiter = viewDataPreferencesVO.getDelimiter();
+		quoteCharactor = viewDataPreferencesVO.getQuoteCharactor();
+		headerEnabled = viewDataPreferencesVO.getIncludeHeaders();
 		TableViewer tableViewer = debugDataViewer.getTableViewer();
 		List<RowData> eachRowData = getListOfRowData(tableViewer);
 		List<String[]> exportedfileDataList = new ArrayList<String[]>();

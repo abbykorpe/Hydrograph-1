@@ -28,8 +28,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * 
- * Copy action
+ * The class CopyAction.
+ * Used to copy contents from view data window.
  * 
  * @author Bitwise
  *

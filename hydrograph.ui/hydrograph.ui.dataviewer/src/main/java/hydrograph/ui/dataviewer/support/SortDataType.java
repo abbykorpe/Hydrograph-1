@@ -23,12 +23,11 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 
+
 /**
- * 
- * This class specifies sort data type and their compare logic
- * 
+ * The Enum SortDataType.
+ * Specifies sort data type and their compare logics.
  * @author Bitwise
- *
  */
 public enum SortDataType {
 	

@@ -50,7 +50,7 @@ public class ActionFactory {
 		ReloadAction reloadAction = new ReloadAction(debugDataViewer);
 		PreferencesAction preferencesAction= new PreferencesAction(debugDataViewer);
 		DatasetInformationAction datasetInformationAction = new DatasetInformationAction(debugDataViewer);
-		ResetSort resetSort = new ResetSort(debugDataViewer);
+		ResetSortAction resetSortAction = new ResetSortAction(debugDataViewer);
 		SelectColumnAction selectColumnAction= new SelectColumnAction(debugDataViewer);
 		AutoExpandColumnsAction autoExpandColumnsAction = new AutoExpandColumnsAction(debugDataViewer);
 		ClearFilterAction clearFilterAction= new ClearFilterAction(debugDataViewer);
@@ -68,7 +68,7 @@ public class ActionFactory {
 		actionMap.put(ReloadAction.class.getName(), reloadAction);
 		actionMap.put(PreferencesAction.class.getName(), preferencesAction);
 		actionMap.put(DatasetInformationAction.class.getName(), datasetInformationAction);
-		actionMap.put(ResetSort.class.getName(), resetSort);
+		actionMap.put(ResetSortAction.class.getName(), resetSortAction);
 		actionMap.put(SelectColumnAction.class.getName(),selectColumnAction);
 		actionMap.put(AutoExpandColumnsAction.class.getName(),autoExpandColumnsAction);
 		actionMap.put(ClearFilterAction.class.getName(), clearFilterAction);
@@ -86,6 +86,12 @@ public class ActionFactory {
 		return actionMap.get(action);
 	}
 	
+	/**
+	 * Enable all actions.
+	 * 
+	 * @param enabled
+	 *            the enabled
+	 */
 	public void enableAllActions(boolean enabled){
 		for(String action: actionMap.keySet()){
 			actionMap.get(action).setEnabled(enabled);

@@ -14,8 +14,8 @@
 package hydrograph.ui.dataviewer.datastructures;
 
 /**
- * 
- * Table cell representation
+ * The Class RowField.
+ * Provides table cell representation for views used in View Data functionality.
  * 
  * @author Bitwise
  *

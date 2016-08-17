@@ -22,15 +22,14 @@ import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.dataviewer.actions.ResetSort;
+import hydrograph.ui.dataviewer.actions.ResetSortAction;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
- * 
- * Data viewer utility class.
- * This class holds utility method specific to Data viewer UI only.
+ * The Class DataViewerUtility.
+ * Data viewer utility class that holds utility methods specific to Data viewer UI.
  * 
  * @author Bitwise
  *
@@ -55,9 +54,16 @@ public class DataViewerUtility {
 		}
 		debugDataViewer.getDataViewLoader().updateDataViewLists();
 		debugDataViewer.getDataViewLoader().reloadloadViews();
-		debugDataViewer.getActionFactory().getAction(ResetSort.class.getName()).setEnabled(false);
+		debugDataViewer.getActionFactory().getAction(ResetSortAction.class.getName()).setEnabled(false);
 	}
 	
+	/**
+	 * Gets the schema.
+	 * 
+	 * @param csvDebugFileName
+	 *            the csv debug file name
+	 * @return the schema
+	 */
 	public List<GridRow> getSchema(String csvDebugFileName) {
 		List<GridRow> gridRowList = new ArrayList<>();
 

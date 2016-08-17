@@ -16,8 +16,8 @@ package hydrograph.ui.dataviewer.constants;
 import org.eclipse.swt.graphics.Point;
 
 /**
- * 
- * Constants for controls on Data viewer
+ * The Class ControlConstants.
+ * Provides the constants for controls on Data viewer
  * 
  * @author Bitwise
  *

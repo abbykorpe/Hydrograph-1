@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 
 /**
  * The Class StyledTextEventListener
+ * This Listener is used in View Data Find window text area. 
  * @author Bitwise
  *
  */

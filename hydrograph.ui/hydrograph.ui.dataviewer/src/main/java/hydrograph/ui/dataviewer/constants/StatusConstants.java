@@ -14,8 +14,8 @@
 package hydrograph.ui.dataviewer.constants;
 
 /**
- * 
- * Status constants
+ * The Class StatusConstants.
+ * Provides  the constant values for status codes.
  * 
  * @author Bitwise
  *

@@ -18,8 +18,9 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import org.eclipse.jface.action.Action;
 
 /**
+ * The Class FormattedViewAction.
  * 
- * Shows formated view
+ * Responsible for displaying formatted view for watcher data.
  * 
  * @author Bitwise
  *

@@ -17,9 +17,22 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 import org.eclipse.jface.action.Action;
 
+/**
+ * The Class HorizontalViewAction.
+ * Responsible for displaying horizontal view ( transpose of Grid view ) for watcher data.
+ * 
+ * @author Bitwise
+ */
 public class HorizontalViewAction extends Action{
 	
 	private static final String LABEL="Horizontal View";
+	
+	/**
+	 * Instantiates a new horizontal view action.
+	 * 
+	 * @param debugDataViewer
+	 *            the debug data viewer
+	 */
 	public HorizontalViewAction( DebugDataViewer debugDataViewer) {
 		super(LABEL);
 	}

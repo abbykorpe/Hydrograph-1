@@ -13,10 +13,11 @@
 package hydrograph.ui.dataviewer.datasetinformation;
 
 /**
- * This class stores the values of Data set Information Window
+ * The Class DatasetInformationVO.
+ * This is a value object class storing the values of Dataset Information Window fields.
  * @author Bitwise
  */
-public class DatasetInformationDetail {
+public class DatasetInformationVO {
 	private String viewDataFilePath="";
 	private String chunkFilePath="";
 	private String sizeOfData;

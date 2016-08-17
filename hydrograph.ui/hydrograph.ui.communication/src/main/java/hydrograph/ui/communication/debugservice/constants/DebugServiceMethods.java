@@ -14,8 +14,8 @@
 package hydrograph.ui.communication.debugservice.constants;
 
 /**
- * 
- * This class hold debug service method calls
+ * The class DebugServiceMethods.
+ * This class holds debug service endpoints.
  * 
  * @author Bitwise
  *

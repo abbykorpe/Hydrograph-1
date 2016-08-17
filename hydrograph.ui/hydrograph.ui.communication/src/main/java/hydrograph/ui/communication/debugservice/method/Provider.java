@@ -23,8 +23,8 @@ import hydrograph.ui.communication.debugservice.constants.DebugServicePostParame
 import org.apache.commons.httpclient.methods.PostMethod;
 
 /**
- * 
- * This class provides post methods for Debug service
+ * The class Provider
+ * Provides handle for Debug service post methods
  * 
  * @author Bitwise
  *

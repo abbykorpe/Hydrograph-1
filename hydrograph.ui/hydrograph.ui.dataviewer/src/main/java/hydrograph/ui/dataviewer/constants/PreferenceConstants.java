@@ -15,7 +15,8 @@ package hydrograph.ui.dataviewer.constants;
 
 /**
  * 
- * PreferenceConstants class holds preference page constants
+ * The Class PreferenceConstants.
+ * Holds preference page constants.
  * 
  * @author Bitwise
  *

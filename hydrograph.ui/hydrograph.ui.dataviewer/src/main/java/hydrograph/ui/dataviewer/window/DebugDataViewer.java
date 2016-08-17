@@ -33,7 +33,7 @@ import hydrograph.ui.dataviewer.actions.GridViewAction;
 import hydrograph.ui.dataviewer.actions.PreferencesAction;
 import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.actions.ResetColumnsAction;
-import hydrograph.ui.dataviewer.actions.ResetSort;
+import hydrograph.ui.dataviewer.actions.ResetSortAction;
 import hydrograph.ui.dataviewer.actions.SelectAllAction;
 import hydrograph.ui.dataviewer.actions.SelectColumnAction;
 import hydrograph.ui.dataviewer.actions.UnformattedViewAction;
@@ -52,7 +52,7 @@ import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.filemanager.DataViewerFileManager;
 import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.listeners.DataViewerListeners;
-import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferences;
+import hydrograph.ui.dataviewer.preferencepage.ViewDataPreferencesVO;
 import hydrograph.ui.dataviewer.support.SortDataType;
 import hydrograph.ui.dataviewer.support.SortOrder;
 import hydrograph.ui.dataviewer.support.StatusManager;
@@ -131,8 +131,8 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 /**
- * 
- * Data viewer window
+ * The Class DebugDataViewer.
+ * Builds Data viewer window
  * 
  * @author Bitwise
  *
@@ -163,7 +163,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 	private DataViewLoader dataViewLoader;
 	private DataViewerListeners dataViewerListeners;
-	private ViewDataPreferences viewDataPreferences = new ViewDataPreferences();
+	private ViewDataPreferencesVO viewDataPreferencesVO = new ViewDataPreferencesVO();
 
 	private static final String DELIMITER = "delimiter";
 	private static final String QUOTE_CHARACTOR = "quoteCharactor";
@@ -703,7 +703,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						statusManager.getStatusLineManager().getProgressMonitor().done();
 						statusManager.setStatus(status);
 						statusManager.enableJumpPagePanel(true);
-						actionFactory.getAction(ResetSort.class.getName()).setEnabled(false);
+						actionFactory.getAction(ResetSortAction.class.getName()).setEnabled(false);
 						actionFactory.getAction(ClearFilterAction.class.getName()).setEnabled(false);
 					}
 				});
@@ -1341,7 +1341,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					dataViewLoader.syncOtherViewsDataWithGridViewData();
 					dataViewLoader.reloadloadViews();
 					recentlySortedColumn = ((TableColumn)e.widget);
-					actionFactory.getAction(ResetSort.class.getName()).setEnabled(true);
+					actionFactory.getAction(ResetSortAction.class.getName()).setEnabled(true);
 					sortedColumnName=((TableColumn)e.widget).getText();
 				}
 				
@@ -1473,7 +1473,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		viewMenu.add(actionFactory.getAction(UnformattedViewAction.class.getName()));
 		viewMenu.add(new Separator());
 		viewMenu.add(actionFactory.getAction(ReloadAction.class.getName()));
-		viewDataPreferences = getViewDataPreferencesFromPreferenceFile();
+		viewDataPreferencesVO = getViewDataPreferencesFromPreferenceFile();
 		viewMenu.add(actionFactory.getAction(PreferencesAction.class.getName()));
 	}
 
@@ -1487,7 +1487,7 @@ public class DebugDataViewer extends ApplicationWindow {
 			actionFactory = new ActionFactory(this);
 		}
 		
-		dataMenu.add(actionFactory.getAction(ResetSort.class.getName()));
+		dataMenu.add(actionFactory.getAction(ResetSortAction.class.getName()));
 		dataMenu.add(actionFactory.getAction(FilterAction.class.getName()));
 		dataMenu.add(actionFactory.getAction(ClearFilterAction.class.getName()));
 	}
@@ -1496,9 +1496,9 @@ public class DebugDataViewer extends ApplicationWindow {
 	 * 
 	 * Get data viewer preferences from preference file
 	 * 
-	 * @return {@link ViewDataPreferences}
+	 * @return {@link ViewDataPreferencesVO}
 	 */
-	public ViewDataPreferences getViewDataPreferencesFromPreferenceFile() {
+	public ViewDataPreferencesVO getViewDataPreferencesFromPreferenceFile() {
 		boolean includeHeaderValue = false;
 		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 		String delimiter = eclipsePreferences.get(DELIMITER, DEFAULT);
@@ -1511,9 +1511,9 @@ public class DebugDataViewer extends ApplicationWindow {
 		includeHeaderValue = includeHeader.equalsIgnoreCase(DEFAULT) ? true : false;
 		fileSize = fileSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_FILE_SIZE : fileSize;
 		pageSize = pageSize.equalsIgnoreCase(DEFAULT) ? DEFAULT_PAGE_SIZE : pageSize;
-		ViewDataPreferences viewDataPreferences = new ViewDataPreferences(delimiter, quoteCharactor,
+		ViewDataPreferencesVO viewDataPreferencesVO = new ViewDataPreferencesVO(delimiter, quoteCharactor,
 				includeHeaderValue, Integer.parseInt(fileSize), Integer.parseInt(pageSize));
-		return viewDataPreferences;
+		return viewDataPreferencesVO;
 	}
 
 	/**
@@ -1543,7 +1543,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		 * actionFactory.getAction(FilterAction.class.getName()));
 		 */
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.RESET_SORT),
-				actionFactory.getAction(ResetSort.class.getName()));
+				actionFactory.getAction(ResetSortAction.class.getName()));
 		
 		addtoolbarAction(toolBarManager,(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON),
 				actionFactory.getAction(SelectColumnAction.class.getName()));
@@ -1672,10 +1672,10 @@ public class DebugDataViewer extends ApplicationWindow {
 	 * 
 	 * Get View Data Preferences
 	 * 
-	 * @return {@link ViewDataPreferences}
+	 * @return {@link ViewDataPreferencesVO}
 	 */
-	public ViewDataPreferences getViewDataPreferences() {
-		return viewDataPreferences;
+	public ViewDataPreferencesVO getViewDataPreferences() {
+		return viewDataPreferencesVO;
 	}
 
 	@Override

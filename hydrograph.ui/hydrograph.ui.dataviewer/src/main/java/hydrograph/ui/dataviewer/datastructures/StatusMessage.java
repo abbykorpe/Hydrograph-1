@@ -14,8 +14,8 @@
 package hydrograph.ui.dataviewer.datastructures;
 
 /**
- * 
- * Status message to be displayed in status bar
+ * The Class StatusMessage.
+ * Provides the Status message to be displayed in status bar of the View Data Windows.
  * 
  * @author Bitwise
  *

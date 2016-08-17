@@ -13,17 +13,29 @@
 package hydrograph.ui.dataviewer.filter;
 
 /**
- * Retain Filter Flag
+ * The Class RetainFilter.
+ * Stores the Retain Filter Flag for View Data Filters.
  * @author Bitwise
  *
  */
 public class RetainFilter {
 	private boolean retainFilter=false;
 
+	/**
+	 * Gets the retain filter.
+	 * 
+	 * @return the retain filter
+	 */
 	public boolean getRetainFilter() {
 		return retainFilter;
 	}
 
+	/**
+	 * Sets the retain filter.
+	 * 
+	 * @param retainFilter
+	 *            the new retain filter
+	 */
 	public void setRetainFilter(boolean retainFilter) {
 		this.retainFilter = retainFilter;
 	}

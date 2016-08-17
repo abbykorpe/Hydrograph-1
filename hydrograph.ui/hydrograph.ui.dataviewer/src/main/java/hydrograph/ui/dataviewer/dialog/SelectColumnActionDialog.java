@@ -44,8 +44,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * 
- * SelectColumnActionDialog allows to choose columns to be visible in data viewer
+ * The Class SelectColumnActionDialog.
+ * Provides mechanism for selecting columns to be displayed in data viewer.
  * 
  * @author Bitwise
  *
@@ -66,9 +66,9 @@ public class SelectColumnActionDialog extends Dialog {
 	private Image descending = new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	private boolean isAllColumnsAsce = false;
 	private boolean isSelectedColumnsAsce = false;
-	Button sortAll;
-	Button sortSelected;
-	Comparator comparator = Collections.reverseOrder();
+	private Button sortAll;
+	private Button sortSelected;
+	private Comparator comparator = Collections.reverseOrder();
 	/**
 	 * @param parentShell
 	 * @param selectColumnAction

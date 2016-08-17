@@ -27,7 +27,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * Data viewer status and controls manager
+ * The Class StatusManager.
+ * Provides mechanism for Data viewer status and controls manager
  * 
  * @author Bitwise
  *

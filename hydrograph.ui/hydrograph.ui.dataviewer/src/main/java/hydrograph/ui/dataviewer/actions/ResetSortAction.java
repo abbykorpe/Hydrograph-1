@@ -19,17 +19,17 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import org.eclipse.jface.action.Action;
 
 /**
- * 
- * Reset sort action
+ * The Class ResetSortAction
+ * Responsible for resetting the sorting applied in view data window.
  * 
  * @author Bitwise
  *
  */
-public class ResetSort extends Action {
+public class ResetSortAction extends Action {
 
 	private DebugDataViewer debugDataViewer;
 	private static final String LABEL = "Re&set Sort";
-	public ResetSort(DebugDataViewer debugDataViewer) {
+	public ResetSortAction(DebugDataViewer debugDataViewer) {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
 	}

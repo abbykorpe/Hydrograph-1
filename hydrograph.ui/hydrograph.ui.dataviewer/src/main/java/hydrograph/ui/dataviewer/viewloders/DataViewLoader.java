@@ -26,6 +26,13 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StyledText;
 
+/**
+ * The Class DataViewLoader.
+ * Used for reloading Data Watcher Window.
+ * 
+ * 
+ * @author Bitwise
+ */
 public class DataViewLoader {
 
 	private static final String RECORD = "Record: ";
@@ -42,6 +49,28 @@ public class DataViewLoader {
 	private DataViewerAdapter dataViewerAdapter;
 	private CTabFolder tabFolder;
 
+	/**
+	 * Instantiates a new data view loader.
+	 * 
+	 * @param unformattedViewTextarea
+	 *            the unformatted view textarea
+	 * @param formattedViewTextarea
+	 *            the formatted view textarea
+	 * @param horizontalViewTableViewer
+	 *            the horizontal view table viewer
+	 * @param gridViewTableViewer
+	 *            the grid view table viewer
+	 * @param gridViewData
+	 *            the grid view data
+	 * @param formattedViewData
+	 *            the formatted view data
+	 * @param unformattedViewData
+	 *            the unformatted view data
+	 * @param dataViewerAdapter
+	 *            the data viewer adapter
+	 * @param tabFolder
+	 *            the tab folder
+	 */
 	public DataViewLoader(StyledText unformattedViewTextarea, StyledText formattedViewTextarea,
 			TableViewer horizontalViewTableViewer, TableViewer gridViewTableViewer, List<RowData> gridViewData,
 			List<RowData> formattedViewData, List<RowData> unformattedViewData, DataViewerAdapter dataViewerAdapter, CTabFolder tabFolder) {

@@ -32,6 +32,7 @@ import org.eclipse.jface.action.Action;
 import org.slf4j.Logger;
 
 /**
+ * The Class FilterAction.
  * Action class to initiate the Filter Window
  * @author Bitwise
  *
@@ -62,12 +63,12 @@ public class FilterAction extends Action {
 			if(filterConditionsDialog.open() !=1){
 					filterConditions.setLocalCondition(FilterHelper.INSTANCE.getLocalCondition());
 					filterConditions.setLocalConditions(filterConditionsDialog.getLocalConditionsList());
-					filterConditions.setRetainLocal(filterConditionsDialog.ifSetLocalFilter());
+					filterConditions.setRetainLocal(filterConditionsDialog.isLocalFilterSet());
 					filterConditions.setLocalGroupSelectionMap(filterConditionsDialog.getLocalGroupSelections());
 					
 					filterConditions.setRemoteCondition(FilterHelper.INSTANCE.getRemoteCondition());
 					filterConditions.setRemoteConditions(filterConditionsDialog.getRemoteConditionsList());
-					filterConditions.setRetainRemote(filterConditionsDialog.ifSetRemoteFilter());
+					filterConditions.setRetainRemote(filterConditionsDialog.isRemoteFilterSet());
 					filterConditions.setRemoteGroupSelectionMap(filterConditionsDialog.getRemoteGroupSelections());
 					
 					filterConditionsDialog.setOriginalFilterConditions(filterConditions);

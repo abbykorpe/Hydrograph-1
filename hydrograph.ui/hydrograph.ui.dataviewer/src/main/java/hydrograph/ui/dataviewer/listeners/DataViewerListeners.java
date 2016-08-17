@@ -43,8 +43,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 /**
- * 
- * DataViewerListeners holds all listener for Data viewer
+ * The Class DataViewerListeners.
+ * DataViewerListeners holds all listener for Data viewer Windows.
  * 
  * @author Bitwise
  * 

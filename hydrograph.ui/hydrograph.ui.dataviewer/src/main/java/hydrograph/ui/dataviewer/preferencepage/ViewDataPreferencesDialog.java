@@ -68,7 +68,7 @@ public class ViewDataPreferencesDialog extends Dialog {
 	private Button includeHeardersCheckBox;
 	private Text fileSizeTextBox;
 	private Text pageSizeTextBox;
-	private ViewDataPreferences viewDataPreferences;
+	private ViewDataPreferencesVO viewDataPreferencesVO;
 	private ControlDecoration pageSizeIntegerDecorator;
 	private ControlDecoration fileSizeIntegerDecorator;
 	private ControlDecoration fileSizeEmptyDecorator;
@@ -142,11 +142,11 @@ public class ViewDataPreferencesDialog extends Dialog {
 
 		pageSizeTextBox = new Text(composite, SWT.BORDER);
 		pageSizeTextBox.setBounds(414, 58, 76, 21);
-		delimiterTextBox.setText(viewDataPreferences.getDelimiter());
-		quoteCharactorTextBox.setText(viewDataPreferences.getQuoteCharactor());
-		includeHeardersCheckBox.setSelection(viewDataPreferences.getIncludeHeaders());
-		fileSizeTextBox.setText(Integer.toString(viewDataPreferences.getFileSize()));
-		pageSizeTextBox.setText(Integer.toString(viewDataPreferences.getPageSize()));
+		delimiterTextBox.setText(viewDataPreferencesVO.getDelimiter());
+		quoteCharactorTextBox.setText(viewDataPreferencesVO.getQuoteCharactor());
+		includeHeardersCheckBox.setSelection(viewDataPreferencesVO.getIncludeHeaders());
+		fileSizeTextBox.setText(Integer.toString(viewDataPreferencesVO.getFileSize()));
+		pageSizeTextBox.setText(Integer.toString(viewDataPreferencesVO.getPageSize()));
 		fileSizeIntegerDecorator = addDecorator(fileSizeTextBox, Messages.NUMERIC_VALUE_ACCPECTED);
 		pageSizeIntegerDecorator = addDecorator(pageSizeTextBox, Messages.NUMERIC_VALUE_ACCPECTED);
 		fileSizeEmptyDecorator = addDecorator(fileSizeTextBox, Messages.FILE_SIZE_BLANK);
@@ -374,11 +374,11 @@ public class ViewDataPreferencesDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		viewDataPreferences.setDelimiter(delimiterTextBox.getText());
-		viewDataPreferences.setQuoteCharactor(quoteCharactorTextBox.getText());
-		viewDataPreferences.setIncludeHeaders(includeHeardersCheckBox.getSelection());
-		viewDataPreferences.setFileSize(Integer.parseInt(fileSizeTextBox.getText()));
-		viewDataPreferences.setPageSize(Integer.parseInt(pageSizeTextBox.getText()));
+		viewDataPreferencesVO.setDelimiter(delimiterTextBox.getText());
+		viewDataPreferencesVO.setQuoteCharactor(quoteCharactorTextBox.getText());
+		viewDataPreferencesVO.setIncludeHeaders(includeHeardersCheckBox.getSelection());
+		viewDataPreferencesVO.setFileSize(Integer.parseInt(fileSizeTextBox.getText()));
+		viewDataPreferencesVO.setPageSize(Integer.parseInt(pageSizeTextBox.getText()));
 		super.okPressed();
 	}
 
@@ -459,12 +459,12 @@ public class ViewDataPreferencesDialog extends Dialog {
 		}
 	}
 	
-	public void setViewDataPreferences(ViewDataPreferences viewDataPreferences) {
-		this.viewDataPreferences = viewDataPreferences;
+	public void setViewDataPreferences(ViewDataPreferencesVO viewDataPreferencesVO) {
+		this.viewDataPreferencesVO = viewDataPreferencesVO;
 	}
 
-	public ViewDataPreferences getViewDataPreferences() {
-		return viewDataPreferences;
+	public ViewDataPreferencesVO getViewDataPreferences() {
+		return viewDataPreferencesVO;
 	}
 
 	private ControlDecoration addDecorator(Control control, String message) {

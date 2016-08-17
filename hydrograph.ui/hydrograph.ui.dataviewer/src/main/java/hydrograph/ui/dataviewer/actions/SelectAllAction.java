@@ -18,9 +18,8 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 /**
- * 
- * 
- * Select all action 
+ * The Class SelectAllAction.
+ * Responsible for 'select All' functionality on view data window.
  * 
  * @author Bitwise
  *

@@ -16,7 +16,8 @@ package hydrograph.ui.dataviewer.datastructures;
 import java.util.List;
 
 /**
- * Table Row representation 
+ * The Class RowData.
+ * Provides Table Row representation for views used in View Data functionality.  
  * 
  * @author Bitwise
  *

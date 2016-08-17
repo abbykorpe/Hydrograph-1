@@ -18,12 +18,12 @@ import java.util.List;
 
 /**
  * 
- * Class to build basic sql query.
- * And has only functionality to form query to
- * Select columns from given table and given limit and offset with multiple where clause(with logical AND)
+ * The Class ViewDataQueryBuilder. 
+ * Used to build basic sql query and has only functionality to form query to Select
+ * columns from given table and given limit and offset with multiple where clause(with logical AND)
  * 
  * @author Bitwise
- *
+ * 
  */
 public class ViewDataQueryBuilder {
 
