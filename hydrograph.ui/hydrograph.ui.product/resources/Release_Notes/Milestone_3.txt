@@ -1,4 +1,4 @@
-=====================================================================================================
+﻿=====================================================================================================
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
@@ -77,6 +77,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 61.#1016 [Prateem Tadas] Partition Keys Window: Fields are not Getting Highlighted When They Are Not in Sequence
 62.#943 [Shrirang Kumbhar] Import XML : Copy of Port in1 is getting Mapped in Join Mapping Dialog Window Though Original Job Has Fields from Both the Ports in Mapping
 63.#996 [Nikhil Deokar] Subjob : Updated option Text and removed extra Icons
+64.#358 [Rakesh Kanchalwar] - Workspace selection window on startup
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
