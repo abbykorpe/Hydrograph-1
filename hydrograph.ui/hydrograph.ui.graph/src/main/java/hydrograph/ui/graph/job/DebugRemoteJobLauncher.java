@@ -397,7 +397,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	}
 	
 	private void closeWebSocketConnection(Session session){
-		if (session != null) {
+		if (session != null  && session.isOpen()) {
 			try {
 				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
 				session.close(closeReason);

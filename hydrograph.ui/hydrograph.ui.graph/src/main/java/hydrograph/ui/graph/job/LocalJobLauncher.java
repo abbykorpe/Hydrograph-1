@@ -170,8 +170,8 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
 	}
 	
-	private void closeWebSocketConnection(Session session){
-		if (session != null) {
+	private void closeWebSocketConnection(Session session ){
+		if (session != null  && session.isOpen()) {
 			try {
 				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
 				session.close(closeReason);

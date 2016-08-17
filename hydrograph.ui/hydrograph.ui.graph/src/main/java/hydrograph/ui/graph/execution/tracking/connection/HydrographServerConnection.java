@@ -44,144 +44,173 @@ import com.google.gson.Gson;
 
 public class HydrographServerConnection {
 
-	private static Logger logger = LogFactory.INSTANCE.getLogger(HydrographServerConnection.class);
+	private static Logger logger = LogFactory.INSTANCE
+			.getLogger(HydrographServerConnection.class);
 	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
-	int counter =0;
+	int counter = 0;
 	private int selection;
-	
-	
+
 	/**
-	 * Instantiates HydrographUiClientSocket and establishes connection with server in order to get execution status.
+	 * Instantiates HydrographUiClientSocket and establishes connection with
+	 * server in order to get execution status.
+	 * 
 	 * @param job
 	 * @param jobID
 	 * @param url
-	 * @return Session 
+	 * @return Session
 	 */
 	public Session connectToLocalServer(final Job job, String jobID, String url) {
-		Session session=null;
+		Session session = null;
 		try {
 			counter++;
 			HydrographUiClientSocket socket = new HydrographUiClientSocket();
 			ClientManager clientManager = ClientManager.createClient();
-			session =clientManager.connectToServer(socket, new URI(url));
+			session = clientManager.connectToServer(socket, new URI(url));
 			socket.sendMessage(getJson(jobID));
 			return session;
- 
+
 		} catch (Throwable t) {
-			
-			return reConnectToServer(job, jobID, url);
+
+			return reConnectToServer(job, jobID, url,session);
 		}
 	}
-	
+
 	/**
-	 * Instantiates HydrographUiClientSocket and establishes connection with server in order to get execution status.
+	 * Instantiates HydrographUiClientSocket and establishes connection with
+	 * server in order to get execution status.
+	 * 
 	 * @param job
 	 * @param jobID
 	 * @param url
-	 * @return Session 
+	 * @return Session
 	 */
 	public Session connectToServer(final Job job, String jobID, String url) {
-		Session session=null;
+		Session session = null;
+		counter++;
 		try {
 			HydrographUiClientSocket socket = new HydrographUiClientSocket();
 			ClientManager clientManager = ClientManager.createClient();
-			session =clientManager.connectToServer(socket, new URI(url));
+			session = clientManager.connectToServer(socket, new URI(url));
 			socket.sendMessage(getJson(jobID));
 			return session;
- 
+
 		} catch (Throwable t) {
-			
-			Display.getDefault().asyncExec(new Runnable() {			
-				@Override
-				public void run() {
-					messageDialogForExecutionTracking(job,Display.getDefault().getActiveShell());
-					
-				}});
+			if (counter > 2) {
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							messageDialogForExecutionTracking(job, Display
+									.getDefault().getActiveShell());
+
+						}
+					});
+					logger.error("Error while connection to server");
+				}else{
+					session = connectToServer(job, jobID, url);
+
+			}
+			return session;
+		}
+	}
+
+	public Session reConnectToServer(final Job job, String jobID, String url,Session session) {
+		String portId = "";
+		try {
+			portId = DebugHelper.INSTANCE.getServicePortPID(Integer
+					.parseInt(TrackingDisplayUtils.INSTANCE.restServicePort()));
+		} catch (NumberFormatException | IOException e) {
+			e.printStackTrace();
+		}
+		TrackingDisplayUtils.INSTANCE.reStartExecutionTrackingService(portId);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+		}
+		if (session == null && !session.isOpen()){
+			session = connectToServer(job, jobID, url);
+		}
+		
+		if (session == null && !session.isOpen()) {
+			if (counter > 4) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						messageDialogForExecutionTracking(job, Display
+								.getDefault().getActiveShell());
+
+					}
+				});
 				logger.error("Error while connection to server");
+			}
 		}
 		return session;
 	}
 
-
-	public Session reConnectToServer(final Job job, String jobID, String url) {
-			Session session=null;
-			String portId="";
-			try {
-				portId = DebugHelper.INSTANCE.getServicePortPID(Integer.parseInt(TrackingDisplayUtils.INSTANCE.restServicePort()));
-			} catch (NumberFormatException | IOException e) {
-				e.printStackTrace();
-			}
-			TrackingDisplayUtils.INSTANCE.reStartExecutionTrackingService(portId) ;
-			session=connectToServer(job,jobID,url);
-			if(session==null){
-			if(counter>2){
-			Display.getDefault().asyncExec(new Runnable() {			
-			@Override
-			public void run() {
-				messageDialogForExecutionTracking(job,Display.getDefault().getActiveShell());
-				
-			}});
-			logger.error("Error while connection to server");
-			}
-		}
-			return session;
-	}
-
-	
 	/**
-	 * Instantiates HydrographUiClientSocket and establishes connection with server in order to kill the job.
+	 * Instantiates HydrographUiClientSocket and establishes connection with
+	 * server in order to kill the job.
+	 * 
 	 * @param jobID
 	 * @param url
 	 * @return Session
 	 * @throws Throwable
 	 */
-	public Session connectToKillJob(String jobID,String url) throws Throwable {
-		
+	public Session connectToKillJob(String jobID, String url) throws Throwable {
+
 		try {
 
 			HydrographUiClientSocket socket = new HydrographUiClientSocket();
 			ClientManager clientManager = ClientManager.createClient();
-			Session session =clientManager.connectToServer(socket, new URI(url));
+			Session session = clientManager.connectToServer(socket,
+					new URI(url));
 			socket.sendMessage(getKillReq(jobID));
 			Thread.sleep(3000);
 			return session;
- 
+
 		} catch (Throwable t) {
-			throw t; 
+			throw t;
 		}
 	}
-	
-	private String getJson(String jobID){
-		ExecutionStatus executionStatus = new ExecutionStatus(Collections.EMPTY_LIST);
+
+	private String getJson(String jobID) {
+		ExecutionStatus executionStatus = new ExecutionStatus(
+				Collections.EMPTY_LIST);
 		executionStatus.setJobId(jobID);
 		executionStatus.setType("get");
 		Gson gson = new Gson();
 		return gson.toJson(executionStatus);
 	}
-	private String getKillReq(String jobID){
-		ExecutionStatus executionStatus = new ExecutionStatus(Collections.EMPTY_LIST);
+
+	private String getKillReq(String jobID) {
+		ExecutionStatus executionStatus = new ExecutionStatus(
+				Collections.EMPTY_LIST);
 		executionStatus.setJobId(jobID);
 		executionStatus.setType("kill");
 		Gson gson = new Gson();
 		return gson.toJson(executionStatus);
 	}
-	
-	
+
 	/**
-	 * Opens a message dialog in case if there are issues while making connection to server.
+	 * Opens a message dialog in case if there are issues while making
+	 * connection to server.
+	 * 
 	 * @param job
 	 */
-	public void messageDialogForExecutionTracking(Job job,Shell shell){
+	public void messageDialogForExecutionTracking(Job job, Shell shell) {
 		String portNo = TrackingDisplayUtils.INSTANCE.getPortFromPreference();
-		String msg = "Execution tracking can't be displayed as connection refused on host: "+job.getHost()+" with port no: "+portNo;
-		MessageDialog dialog = new MessageDialog(shell, "Warning", null, msg, SWT.ICON_WARNING, new String[]{"Continue", "Kill Job"}, 0);
+		String msg = "Execution tracking can't be displayed as connection refused on host: "
+				+ job.getHost() + " with port no: " + portNo;
+		MessageDialog dialog = new MessageDialog(shell, "Warning", null, msg,
+				SWT.ICON_WARNING, new String[] { "Continue", "Kill Job" }, 0);
 		selection = dialog.open();
-		switch(selection){
+		switch (selection) {
 		case 0:
 			break;
 		case 1:
-			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler())
+					.setStopJobEnabled(false);
+			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE
+					.getComponentCanvas();
 			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
 			joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
 			JobScpAndProcessUtility.INSTANCE.killJobProcess(job);
@@ -189,11 +218,12 @@ public class HydrographServerConnection {
 			break;
 		}
 	}
-	
+
 	/**
-	 * @return the choice either continue / kill job from Execution tracking dialog.
+	 * @return the choice either continue / kill job from Execution tracking
+	 *         dialog.
 	 */
-	public int getSelection(){
+	public int getSelection() {
 		return selection;
 	}
 }

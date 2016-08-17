@@ -151,11 +151,10 @@ public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
 			try {
 			String command = "java -cp " + getInstallationPathForExeTrack()
 					+ EXECUTION_TRACK_START;
-			ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
+				ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
 					"/c", command });
-				Runtime.getRuntime().exec(command);
 				
-				//builder.start();
+				builder.start();
 				
 			} catch (Exception e) {
 				logger.info("Failed to start web socket server");
@@ -166,7 +165,8 @@ public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
 	public  void reStartExecutionTrackingService(String pid ) {
 		if (OSValidator.isWindows()) {
 			try {
-			String command = "Taskkill /PID " + getServicePortPID()+ " /F";
+			logger.info("Taskkill /PID :"+pid);
+			String command = "Taskkill /PID " + pid+ " /F";
 			ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
 					"/c", command });
 			builder.start();
