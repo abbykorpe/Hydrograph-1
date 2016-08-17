@@ -362,7 +362,7 @@
     <page
           class="hydrograph.ui.graph.execution.tracking.preferences.ExecutionTrackPreference"
           id="org.eclipse.ui.window.preferences"
-          name="execution Tracking">
+          name="Execution Tracking">
     </page>
  </extension>
 </plugin>
