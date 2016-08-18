@@ -363,7 +363,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	@Override
 	public void killJob(Job jobToKill) {
 		
-		if (isRunning) {
+		/*if (isRunning) {
 			Session session = null;
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
@@ -393,7 +393,8 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		else
 		{
 			JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
-		}
+		}*/
+		JobScpAndProcessUtility.INSTANCE.killRemoteJobProcess(jobToKill);
 	}
 	
 	private void closeWebSocketConnection(Session session){

@@ -20,25 +20,33 @@ import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.GradleCommandConstants;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.JobStatus;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.websocket.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
@@ -46,6 +54,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 /**
@@ -350,9 +361,9 @@ public class JobScpAndProcessUtility {
 		}
 	}
 
-public void	killJobProcess(Job jobToKill){
-	
-		final Timer timer = new Timer();
+	public void	killRemoteJobProcess(Job jobToKill){
+
+		/*final Timer timer = new Timer();
 		String[] runCommand = new String[3];
 		if (OSValidator.isWindows()) {
 			String[] command = { Messages.CMD, "/c", GradleCommandConstants.KILL_GRADLE_DAEMON };
@@ -366,7 +377,7 @@ public void	killJobProcess(Job jobToKill){
 		final ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
 		processBuilder.redirectErrorStream(true);
 		jobToKill.setJobStatus(JobStatus.KILLED);
-		
+
 		DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
 		JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
 		JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
@@ -387,8 +398,103 @@ public void	killJobProcess(Job jobToKill){
 
 			}
 		};
-		timer.schedule(task, 0l, 1000);
-		TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
+		timer.schedule(task, 0l, 1000);*/
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				SWT.ICON_WARNING | SWT.YES | SWT.NO);
+		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
+		messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
+		if (messageBox.open() == SWT.YES) {
+			jobToKill.setJobStatus(JobStatus.KILLED);
+			Session session = null;
+			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
+			try {
+				String remoteUrl = TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl();
+				session = hydrographServerConnection.connectToKillJob(jobToKill.getUniqueJobId(), remoteUrl);
+				Thread.sleep(8000);
+			} catch (Throwable e1) {
+				showMessageBox(e1.getMessage(),"Error", SWT.ERROR);
+				logger.error(e1.getMessage());
+			} finally {
+				if (session != null) {
+					try {
+						session.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
+		}
 	}
 	
+	public void	killLocalJobProcess(Job jobToKill){
+
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				SWT.ICON_WARNING | SWT.YES | SWT.NO);
+		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
+		messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
+		if (messageBox.open() == SWT.YES) {
+			jobToKill.setJobStatus(JobStatus.KILLED);
+			Session session = null;
+			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
+			try {
+				System.out.println("Trying to kill local job");
+				String localUrl = TrackingDisplayUtils.INSTANCE.getWebSocketLocalHost();
+				session = hydrographServerConnection.connectToKillJob(jobToKill.getUniqueJobId(), localUrl);
+				Thread.sleep(8000);
+			} catch (Throwable e1) {
+				showMessageBox(e1.getMessage(),"Error while killing", SWT.ERROR);
+				logger.error(e1.getMessage());
+			} finally {
+				if (session != null) {
+					try {
+						session.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
+		}
+	}
+	
+	private void showMessageBox(String message,String header,int SWT_Type)
+	{
+		MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT_Type);
+		box.setMessage(message);
+		box.setText(header);
+		box.open();
+	}
+	
+	public void	killLocalJobProcessUsingCmdjps(final Job jobToKill){
+
+		jobToKill.setJobStatus(JobStatus.KILLED);
+
+		DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+		JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+		JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
+		try {
+			Process process = Runtime.getRuntime().exec("jps -m");
+			InputStream stream = process.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+				if(line.contains(jobToKill.getUniqueJobId())){
+					logger.debug("Trying to kill the job using taskkill for local");
+					jobToKill.setJobStatus(JobStatus.KILLED);
+					String[] jpsOutput = line.split(" ");
+					Process killProcess = Runtime.getRuntime().exec("TASKKILL /F /PID "+ jpsOutput[0]);
+					break;
+				}
+			}
+		} catch (IOException e) {
+			logger.info("Fail to run kill process.");
+		}
+		TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
+	}
+
+
 }

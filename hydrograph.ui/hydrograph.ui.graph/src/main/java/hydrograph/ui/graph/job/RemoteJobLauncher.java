@@ -324,7 +324,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void killJob(Job jobToKill) {
-		if (isRunning) {
+		/*if (isRunning) {
 			Session session = null;
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
 			try {
@@ -351,7 +351,8 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			}
 		} else {
 			JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
-		}
+		}*/
+		JobScpAndProcessUtility.INSTANCE.killRemoteJobProcess(jobToKill);
 	}
 	
 	private void closeWebSocketConnection(Session session){

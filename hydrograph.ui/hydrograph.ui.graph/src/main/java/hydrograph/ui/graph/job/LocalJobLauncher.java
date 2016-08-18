@@ -168,7 +168,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void killJob(Job jobToKill) {
-		JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
+		JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
 	}
 	
 	private void closeWebSocketConnection(final Session session ){
