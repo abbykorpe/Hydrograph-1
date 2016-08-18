@@ -392,8 +392,16 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		}*/
 		JobScpAndProcessUtility.INSTANCE.killRemoteJobProcess(jobToKill);
 	}
-	
+	/**
+	 * Close Websocket connection Connection
+	 * @param session
+	 */
 	private void closeWebSocketConnection(Session session){
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+		}
+
 		if (session != null  && session.isOpen()) {
 			try {
 				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");

@@ -68,11 +68,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public static final String PORT_NUMBER = "PORT_NO";
 	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
 	
-	private static final String EXECUTION_TRACK_START = " hydrograph.execution.tracking.server.websocket.StartServer";
-	public static final String EXECUTION_TRACK_SERVICE = "EXECUTION_TRACK_SERVICE";
-	public static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
-
-	
 	/**
 	 * Instantiates a new application workbench window advisor.
 	 * 
@@ -130,7 +125,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		} catch (IOException exception) {
 			logger.error("Failure in IO", exception);
 		}
-		startExecutionTrackingService();
 	}
 	
 	private void serviceInitiator() throws IOException{
@@ -287,49 +281,4 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		return path + "config/service/config" ;
 	}
 	
-	public  void startExecutionTrackingService() {
-		if (OSValidator.isWindows()) {
-			try {
-			String command = "java -cp " + getInstallationPathForExeTrack()
-					+ EXECUTION_TRACK_START;
-			ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
-					"/c", command });
-			builder.start();
-				
-			} catch (Exception e) {
-				logger.info("Failed to start web socket server");
-			}
-		}
-	}
-
-	
-	private String getExecutionTrackingServiceJar() {
-		String exeTrackServiceJar = null;
-		try {
-			FileReader fileReader = new FileReader(
-					XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
-			Properties properties = new Properties();
-			properties.load(fileReader);
-			if (StringUtils.isNotBlank(properties
-					.getProperty(EXECUTION_TRACK_SERVICE))) {
-				exeTrackServiceJar = properties
-						.getProperty(EXECUTION_TRACK_SERVICE);
-			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not exists", e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-		return exeTrackServiceJar;
-	}
-
-	private String getInstallationPathForExeTrack() {
-		String path = Platform.getInstallLocation().getURL().getPath();
-		String executionTraJar = getExecutionTrackingServiceJar();
-		if (StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/")
-				&& OSValidator.isWindows()) {
-			path = StringUtils.substring(path, 1);
-		}
-		return path + "config/service/" + executionTraJar;
-	}
 }

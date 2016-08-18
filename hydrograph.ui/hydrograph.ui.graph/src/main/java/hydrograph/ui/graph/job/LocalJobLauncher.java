@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
@@ -60,7 +58,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 		if(isExecutionTracking()){
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
-			session = hydrographServerConnection.connectToLocalServer(job, job.getUniqueJobId(), 
+			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
 					webSocketLocalHost);
 		if(hydrographServerConnection.getSelection() == 1){
 			closeWebSocketConnection(session);
@@ -85,7 +83,6 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
 		}
-		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
 		closeWebSocketConnection(session);
@@ -176,29 +173,25 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
 	}
 	
+	/**
+	 * Close Websocket connection Connection
+	 * @param session
+	 */
 	private void closeWebSocketConnection(final Session session ){
-		
-		final Timer timer = new Timer();
-		
-		TimerTask timerTask = new TimerTask() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				if (session != null  && session.isOpen()) {
-					try {
-						CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
-						session.close(closeReason);
-						logger.info("Session closed");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					timer.cancel();
-				}
-			}
-		};
-		timer.schedule(timerTask, 10000);
-		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+		}
 
+		if (session != null && session.isOpen()) {
+			try {
+				CloseReason closeReason = new CloseReason(
+						CloseCodes.NORMAL_CLOSURE, "Session Closed");
+				session.close(closeReason);
+				logger.info("Session closed");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

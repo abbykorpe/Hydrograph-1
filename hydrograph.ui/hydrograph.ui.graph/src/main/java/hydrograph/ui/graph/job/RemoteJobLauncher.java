@@ -18,7 +18,6 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
@@ -33,15 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.websocket.CloseReason;
-import javax.websocket.Session;
 import javax.websocket.CloseReason.CloseCodes;
+import javax.websocket.Session;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 
@@ -354,8 +350,16 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		}*/
 		JobScpAndProcessUtility.INSTANCE.killRemoteJobProcess(jobToKill);
 	}
-	
+
+	/**
+	 * 
+	 * @param session
+	 */
 	private void closeWebSocketConnection(Session session){
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+		}
 		if (session != null  && session.isOpen()) {
 			try {
 				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
