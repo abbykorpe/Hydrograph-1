@@ -47,4 +47,4 @@ Export-Package: hydrograph.ui.graph.controller,
  hydrograph.ui.graph.editor,
  hydrograph.ui.graph.job
 Bundle-ClassPath: .,
- libs/hydrograph.execution.tracking.server.jar
+ libs/hydrograph.server.execution.tracking.jar

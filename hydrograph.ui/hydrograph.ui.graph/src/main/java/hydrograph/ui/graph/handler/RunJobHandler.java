@@ -13,10 +13,7 @@
 
 package hydrograph.ui.graph.handler;
 
-import hydrograph.execution.tracking.server.websocket.StartServer;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
@@ -24,13 +21,6 @@ import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 

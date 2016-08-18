@@ -58,7 +58,7 @@ dependencies {
 
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     
-    compile(group: 'hydrograph.execution.tracking', name: 'hydrograph.execution.tracking.server', version: '0.0.8')
+    compile(group: 'hydrograph.execution.tracking', name: 'hydrograph.execution.tracking.server', version: '1.0.0')
 }
 
 test {
