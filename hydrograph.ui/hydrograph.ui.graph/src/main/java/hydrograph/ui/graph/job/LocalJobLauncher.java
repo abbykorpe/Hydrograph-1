@@ -17,6 +17,7 @@ package hydrograph.ui.graph.job;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
 import hydrograph.ui.graph.handler.JobHandler;
+import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -74,6 +75,8 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 		job.setJobStatus(JobStatus.RUNNING);
 		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
+		
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
@@ -170,6 +173,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	public void killJob(Job jobToKill) {
 		//JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
 		JobScpAndProcessUtility.INSTANCE.killLocalJobProcessUsingCmdjps(jobToKill);
+		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
 	}
 	
 	private void closeWebSocketConnection(final Session session ){

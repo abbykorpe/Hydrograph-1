@@ -13,17 +13,10 @@
 
 package hydrograph.ui.graph.execution.tracking.connection;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
-import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.graph.utility.CanvasUtils;
-import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
-import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;

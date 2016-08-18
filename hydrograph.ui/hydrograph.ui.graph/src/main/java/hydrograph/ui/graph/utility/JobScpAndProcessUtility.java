@@ -425,6 +425,9 @@ public class JobScpAndProcessUtility {
 					}
 				}
 			}
+			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+			JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
 			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
 		}
 	}
@@ -457,7 +460,9 @@ public class JobScpAndProcessUtility {
 					}
 				}
 			}
-			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
+			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+			JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
 		}
 	}
 	
@@ -514,6 +519,7 @@ public class JobScpAndProcessUtility {
 				logger.info("Fail to run kill process.");
 			}
 		}
+		
 	}
 
 }
