@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.Platform;
 public class ExecutionTrackingConsoleHandler extends AbstractHandler{
 	
 	public ExecutionTrackingConsoleHandler() {
-		//setBaseEnabled(true);
 		RunStopButtonCommunicator.ExecutionTrackingConsole.setHandler(this);
 	}
 	

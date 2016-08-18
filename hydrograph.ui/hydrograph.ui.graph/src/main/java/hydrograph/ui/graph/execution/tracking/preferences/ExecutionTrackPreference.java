@@ -136,13 +136,11 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		if(trackingFieldEditor.getBooleanValue()){
 			logPathEditor.setEnabled(true, composite_2);
 			portFieldEditor.setEnabled(true, composite_3);
-			((ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler())
-				.setExecutionTrackingConsoleEnabled(false);
+			setEnableExecutionTrackConsole(false);
 		}else{
 			logPathEditor.setEnabled(false, composite_2);
 			portFieldEditor.setEnabled(false, composite_3);
-			((ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler())
-				.setExecutionTrackingConsoleEnabled(true);
+			setEnableExecutionTrackConsole(true);
 		}
 		
 		trackingFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
@@ -161,6 +159,12 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		return null;
 	}
 
+	private void setEnableExecutionTrackConsole(boolean enable){
+		ExecutionTrackingConsoleHandler  consoleHandler=(ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler();
+		if(consoleHandler!= null){
+			consoleHandler.setExecutionTrackingConsoleEnabled(enable);
+		}
+	}
 	
 	private void validationForIntegerField(String value, IntegerFieldEditor editor, String message){
 		if(StringUtils.isBlank(value) || !value.matches("\\d+") || Integer.parseInt(value) < 1){

@@ -1,5 +1,6 @@
 package hydrograph.ui.graph.execution.tracking.logger;
 
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
@@ -32,7 +33,7 @@ public class ExecutionTrackingFileLogger {
 	
 	private ExecutionTrackingFileLogger(){
 		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
-		defaultJobTrackingLogDirectory=Platform.getInstallLocation().getURL().getPath() + "config\\logger\\JobTrackingLog";
+		defaultJobTrackingLogDirectory=Platform.getInstallLocation().getURL().getPath() + getLoggerPath();
 		jobTrackingLogDirectory = eclipsePreferences.get(ExecutionPreferenceConstants.TRACKING_LOG_PATH, defaultJobTrackingLogDirectory);
 		jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
 				
@@ -41,6 +42,19 @@ public class ExecutionTrackingFileLogger {
 		createJobTrackingLogDirectory();
 	}
 
+	private String getLoggerPath(){
+		String dirPath = null;
+		if(OSValidator.isWindows()){
+			dirPath = "config//logger//JobTrackingLog";
+		}else if(OSValidator.isMac()){
+			dirPath = "config\\logger\\JobTrackingLog";
+		}else if(OSValidator.isUnix()){
+			dirPath = "config\\logger\\JobTrackingLog";
+		}
+		return dirPath;
+	}
+	
+	
 	private void createJobTrackingLogDirectory() {
 		File file = new File(jobTrackingLogDirectory);
 		if (!file.exists()) {
