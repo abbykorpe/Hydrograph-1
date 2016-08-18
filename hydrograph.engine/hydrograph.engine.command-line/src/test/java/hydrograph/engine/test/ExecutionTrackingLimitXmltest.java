@@ -44,7 +44,7 @@ public class ExecutionTrackingLimitXmltest {
 	public void itShouldTestOutputComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("output1"),"output1");
 		Assert.assertEquals(statusHelper.getCurrentStatus("output1"),"SUCCESSFUL");
-		Assert.assertEquals(statusHelper.getProcessedRecords("output1").get("in0"),new Long(0));
-		Assert.assertEquals(statusHelper.getStatusPerSocketMap("output1").get("in0"),"SUCCESSFUL");
+		Assert.assertEquals(statusHelper.getProcessedRecords("output1").get("NoSocketId"),new Long(1));
+		Assert.assertEquals(statusHelper.getStatusPerSocketMap("output1").get("NoSocketId"),"SUCCESSFUL");
 	}
 }

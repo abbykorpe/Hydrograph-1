@@ -45,15 +45,15 @@ public class ExecutionTrackingFilterXmltest {
 	public void itShouldTestOutputComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("output1"),"output1");
 		Assert.assertEquals(statusHelper.getCurrentStatus("output1"),"SUCCESSFUL");
-		Assert.assertEquals(statusHelper.getProcessedRecords("output1").get("in0"),new Long(0));
-		Assert.assertEquals(statusHelper.getStatusPerSocketMap("output1").get("in0"),"SUCCESSFUL");
+		Assert.assertEquals(statusHelper.getProcessedRecords("output1").get("NoSocketId"),new Long(2));
+		Assert.assertEquals(statusHelper.getStatusPerSocketMap("output1").get("NoSocketId"),"SUCCESSFUL");
 	}
 	@Test
 	public void itShouldTestUnusedOutputComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("unusedOutput"),"unusedOutput");
 		Assert.assertEquals(statusHelper.getCurrentStatus("unusedOutput"),"SUCCESSFUL");
-		Assert.assertEquals(statusHelper.getProcessedRecords("unusedOutput").get("in0"),new Long(0));
-		Assert.assertEquals(statusHelper.getStatusPerSocketMap("unusedOutput").get("in0"),"SUCCESSFUL");
+		Assert.assertEquals(statusHelper.getProcessedRecords("unusedOutput").get("NoSocketId"),new Long(2));
+		Assert.assertEquals(statusHelper.getStatusPerSocketMap("unusedOutput").get("NoSocketId"),"SUCCESSFUL");
 	}
 	
 }

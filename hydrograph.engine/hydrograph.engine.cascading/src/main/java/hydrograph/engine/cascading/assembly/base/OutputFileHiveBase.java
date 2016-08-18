@@ -120,6 +120,9 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName(getComponentType(hiveEntityBase),
 					hiveEntityBase.getComponentId(), ""), tailPipe);
 			sinkPipe = new Rename(sinkPipe, new Fields(outputFields), new Fields(convertLowerCase(outputFields)));
+			setOutLink("output","NoSocketId",
+					hiveEntityBase.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(hiveTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, hiveTap);
