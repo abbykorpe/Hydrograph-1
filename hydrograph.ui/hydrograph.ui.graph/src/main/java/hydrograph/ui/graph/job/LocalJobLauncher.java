@@ -123,7 +123,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 			String line = null;
 
 			while ((line = reader.readLine()) != null) {
-				if (line.contains("Gradle build daemon has been stopped.")) {
+				if (line.contains("SUCCESS: The process with PID") && line.contains("has been terminated")) {
 					job.setJobStatus(JobStatus.KILLED);
 					joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
 					break;
@@ -168,7 +168,8 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void killJob(Job jobToKill) {
-		JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
+		//JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
+		JobScpAndProcessUtility.INSTANCE.killLocalJobProcessUsingCmdjps(jobToKill);
 	}
 	
 	private void closeWebSocketConnection(final Session session ){

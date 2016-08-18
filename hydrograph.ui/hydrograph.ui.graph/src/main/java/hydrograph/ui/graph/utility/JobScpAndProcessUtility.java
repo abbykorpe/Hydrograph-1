@@ -43,8 +43,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.websocket.Session;
 
@@ -70,6 +68,9 @@ public class JobScpAndProcessUtility {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobScpAndProcessUtility.class);
 	public static final JobScpAndProcessUtility INSTANCE = new JobScpAndProcessUtility();
+	private static final String JPS_COMMAND_TO_FIND_JAVA_PROCESES = "jps -m";
+	private static final String WINDOWS_COMMAND_TO_KILL_PROCESS = "TASKKILL /F /PID ";
+	private static final String MAC_COMMAND_TO_KILL_PROCESS = "kill -9 ";
 
 	private JobScpAndProcessUtility(){
 		
@@ -440,7 +441,7 @@ public class JobScpAndProcessUtility {
 			Session session = null;
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
 			try {
-				System.out.println("Trying to kill local job");
+				logger.info("Trying to kill local job");
 				String localUrl = TrackingDisplayUtils.INSTANCE.getWebSocketLocalHost();
 				session = hydrographServerConnection.connectToKillJob(jobToKill.getUniqueJobId(), localUrl);
 				Thread.sleep(8000);
@@ -470,31 +471,49 @@ public class JobScpAndProcessUtility {
 	
 	public void	killLocalJobProcessUsingCmdjps(final Job jobToKill){
 
-		jobToKill.setJobStatus(JobStatus.KILLED);
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				SWT.ICON_WARNING | SWT.YES | SWT.NO);
+		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
+		messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
+		if (messageBox.open() == SWT.YES) {
+			jobToKill.setJobStatus(JobStatus.KILLED);
 
-		DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
-		JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
-		JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
-		try {
-			Process process = Runtime.getRuntime().exec("jps -m");
-			InputStream stream = process.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			String line = null;
+			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+			JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
+			try {
+				Process	process = Runtime.getRuntime().exec(JPS_COMMAND_TO_FIND_JAVA_PROCESES);
+				
+				InputStream stream = process.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+				String line = null;
 
-			while ((line = reader.readLine()) != null) {
-				if(line.contains(jobToKill.getUniqueJobId())){
-					logger.debug("Trying to kill the job using taskkill for local");
-					jobToKill.setJobStatus(JobStatus.KILLED);
-					String[] jpsOutput = line.split(" ");
-					Process killProcess = Runtime.getRuntime().exec("TASKKILL /F /PID "+ jpsOutput[0]);
-					break;
+				while ((line = reader.readLine()) != null) {
+					if(line.contains(jobToKill.getUniqueJobId())){
+						logger.debug("Trying to kill the job using taskkill for local");
+						jobToKill.setJobStatus(JobStatus.KILLED);
+						String[] jpsOutput = line.split(" ");
+						Process killProcess = null;
+						if (OSValidator.isWindows()) {
+							killProcess = Runtime.getRuntime().exec(WINDOWS_COMMAND_TO_KILL_PROCESS+ jpsOutput[0]);
+						}else if (OSValidator.isMac()){
+							killProcess = Runtime.getRuntime().exec(MAC_COMMAND_TO_KILL_PROCESS+jpsOutput[0]);
+						}
+						InputStream streamKill = killProcess.getInputStream();
+						BufferedReader readerKill = new BufferedReader(new InputStreamReader(streamKill));
+						String lineKill = null;
+						while ((lineKill = readerKill.readLine()) != null) {
+							logger.info("Kill log: "+lineKill);
+							joblogger.logMessage(lineKill);
+						}
+						break;
+					}
 				}
+			} catch (IOException e) {
+				logger.info("Fail to run kill process.");
 			}
-		} catch (IOException e) {
-			logger.info("Fail to run kill process.");
 		}
-		TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
 	}
-
 
 }
