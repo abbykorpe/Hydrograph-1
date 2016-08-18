@@ -134,7 +134,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		flowBuilder = new FlowBuilder();
 
 		runtimeContext = new RuntimeContext(hydrographJob, traversal,
-				hadoopProperties, assemblyGeneratorFactory,schemaFieldHandler);
+				hadoopProperties, assemblyGeneratorFactory,flowManipulationContext.getSchemaFieldHandler());
 
 		LOG.info("Graph '"
 				+ runtimeContext.getHydrographJob().getJAXBObject().getName()
