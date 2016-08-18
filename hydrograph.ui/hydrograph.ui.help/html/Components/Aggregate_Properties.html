@@ -9,72 +9,68 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
  
- 
 <!doctype html>
 <html>
 <head>
 	<title>Aggregate Properties</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-<p><strong><span style="color:#FF0000;"><img alt="" src="../images/app_icon.png" /></span></strong><span style="color:#FF0000;">Hydrograph Help</span></p>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 28px;">Aggregate Properties</span></font></p>
+<p><span class="header">Aggregate Properties</span></p>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size: 14px;"><b>Properties</b>&nbsp;for the Aggregate component can be viewed by Double click-&gt;component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, scale etc. </span></span></p>
+<p><span><b>Properties</b>&nbsp;for the Aggregate component can be viewed by double clicking the component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema tab displays the option to accept the field schema i.e. field name, data type, scale etc. </span></p>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>General Properties:</b> </span></font></p>
+<p><span><b>General Properties</b></span></p>
 
 <p><img alt="" src="../images/Aggregate_Properties_General.png" /></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Display</b></span></span></p>
+<p><span><b>Display</b></span></p>
 
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Name</b> - The Name field will specify the name of the component as desired by the user</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Base Type</b> - Base Type signifies the basic operation area of the component. In this case it is of Base Type Transform.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Aggregate.</span></span></li>
+	<li><span><b>Name</b> - The Name field specifies the name of the component</span></li>
+	<li><span><b>Base Type</b> - Base Type signifies the category of the component. Aggregate is of base type Transform. This is a non editable field.</span></li>
+	<li><span><b>Type</b> - Type defines the type of component within the category. This typically is the name of the component. This is a non editable field.</span></li>
 </ul>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Configuration</b></span></span></p>
+<p><span style="font-family:verdana,geneva,sans-serif; font-size:14px;"><b>Configuration</b></span></p>
 
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Aggregate component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></span></li>
+	<li><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to this Aggregate component at run time. User is required to enter the Property Name and Property Value in the runtime properties grid.</span></li>
 </ul>
 	<p><img alt="" src="../images/Runtime_Properties_Grid.png" /></p>
-<ul>	
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Key Field</b> - Key Field opens up a grid to accept the key fields that will be used to group the data fields for performing aggregation operations</span></span></li>
+<ul>
+	<li><span><b>Key Field</b> - Key Field opens up a grid that accepts the key fields for the aggregation operations. The records are grouped based on these key fields. The records are always sorted in ascending order on keys.</span></li>
 </ul>
 	<p><img alt="" src="../images/Aggregate_Key_Field.png" /></p>
 <ul>	
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Secondary Keys</b> - Secondary keys opens up a grid that accepts the columns that will be used for ordering the output of Aggregation. Here, user can specify the Sort Order which can be either Ascending or Descending. By default the sort order is Ascending(Asc).</span></span></li>
+	<li><span><b>Secondary Keys</b> - Secondary keys opens up a grid that accepts the secondary key fields for the aggregation operations. Secondary key fields are used for ordering the input records within the groups defined by the 'Key Fields'. The user can specify the sort order for secondary key fields. The sort order can be either Ascending or Descending. The default sort order is ascending (Asc).</span></li>
 </ul>
 	<p><img alt="" src="../images/Aggregate_Secondary_keys.png" /></p>
 <ul>	
-<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Aggregate</b> - Edit option opens up the '<a href="Aggregate_Operation_Editor.html">Operation Editor</a>' view, where the user can select the input fields needed for the aggregation operations, write custom operation classes (or select already existing standard operation classes) to use these input fields and then extract the output fields all in the same grid view. Click on <a href="http://Operation Class">Operation Class</a></span></span>&nbsp;<span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">provided in the Operation Class section of the Help content to know more about creating and using Standard classes here.</span></span></font></p></span></span></li>
+<li><span><b>Aggregate</b> - Edit button opens up the '<a href="Aggregate_Operation_Editor.html">Operation Editor</a>' view, where the user can define the custom aggregation operation. The user can select the input fields needed for the aggregation operation, write custom operation classes (or select existing standard operation classes), extract the output fields all in the same view. Check <a href="Aggregate_Operation_Class.html">Operation Class</a> to know more about creating custom classes and using standard classes for aggregation operations.</span></li>
 </ul>
 	<p><img alt="" src="../images/Aggregate_Mapping_View.png" width="100%"/></p>
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric number starting from 0 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
+	<li><span><b>Phase</b> - Phase accepts a numeric number starting from 0 and signifies the phase this component will execute in. The default value for phase is 0.</span></li>
 </ul>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>Schema tab: </b></span></font></p>
+<p><span><b>Schema tab: </b></span></p>
 
 <p><img alt="" src="../images/Aggregate_Properties_Schema.png" /></p>
-<span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">
-<p>User can define record structure of Aggregate component in this tab by specifying below attributes.</p>
+
+<p><span>User can define the schema for the out port of Aggregate component in this tab by specifying below attributes.</span></p>
 <ul>
-	<li><b>Field Name</b> - User needs to enter all the field names in this column</li>
-	<li><b>Data type</b> - By default "String" data type has been selected for any field added to the Grid. User can select from different data type values like "Integer", "Double", "Float" etc.</li>
-	<li><b>Scale</b> - Scale for a Double, Float or BigDecimal field can be specified here.</li>
-	<li><b>Scale Type</b> – Scale Type accepts values as implicit or explicit for BigDecimal field and none for other data types. Explicit considers the length of '.' and implicit ignores length of '.' for the BigDecimal field.</li>
-	<li><b>Date Format</b> - User can specify desired date format. Refer to <a href="../references/Java_Date_Formats.html">java date formats</a> page for acceptable date formats.</li>
-	<li><b>Precision</b> – User can specify precision for the field.</li>
-	<li><b>Field Description</b> – User can specify description for the field.</li>
+	<li><span><b>Field Name</b> - The name for the field.</span></li>
+	<li><span><b>Data type</b> - The data type for the field. The default data type is "String".</span></li>
+	<li><span><b>Scale</b> - The number of digits to the right of decimal point. Scale is defined for Double, Float or BigDecimal field.</span></li>
+	<li><span><b>Scale Type</b> – Scale Type accepts values as implicit or explicit for BigDecimal field and none for other data types. Explicit considers the length of '.' in precision and implicit ignores length of '.' precision for the BigDecimal field.</span></li>
+	<li><span><b>Date Format</b> - The format for date data type. Refer to <a href="../references/Java_Date_Formats.html">java date formats</a> page for acceptable date formats.</span></li>
+	<li><span><b>Precision</b> – The number of significant digits (all digits except leading zeros and trailing zeros after decimal point).</span></li>
+	<li><span><b>Field Description</b> – The description for the field.</span></li>
 </ul>
 <p>
-<b>Pull Schema</b> – User can click on Pull Schema and the fields defined in Operation Editor's output, will be pulled here.
+	<span><b>Pull Schema</b> – The schema defined in Operation Editor's output, will be pulled to the schema tab.</span>
 </p>
-</span>
-<ul>
-</ul>
 </body>
 </html>

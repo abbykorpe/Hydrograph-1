@@ -13,32 +13,43 @@
 <html>
 <head>
 	<title>Aggregate Operation Editor</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-<p><strong><span style="color:#FF0000;"><img alt="" src="../images/app_icon.png" /></span></strong><span style="color:#FF0000;">Hydrograph Help</span></p>
+<p><span class="header">Aggregate Operation Editor</span></p>
 
-<p><span style="font-family:verdana,geneva,sans-serif; font-size: 28px;">Aggregate Operation Editor</span></p>
-
-<span style="font-family:verdana,geneva,sans-serif; font-size: 14px;"><p><b>Operation editor</b>&nbsp;for the Aggregate component can be viewed by clicking the Edit button next to Aggregate property on General tab. Input fields arriving from the input port are available in the input fields grid on the left.</p>
-<p>The '<b>Operation Control</b>' allows users to add multiple aggregation operations. Each operation is displayed in the window below 'Operation Control'.</p>
-<p>Each operation has input fields and output fields.</p>
-<p><b>Map Fields</b> table allows user to specify pass-through and map fields.</p>
-</span>
+<p><span><b>Operation editor</b>&nbsp;for the Aggregate component can be viewed by clicking the Edit button next to Aggregate property on General tab. Input fields arriving from the input port are available in the input fields grid on the left.</span></p>
+<p><span>The '<b>Operation Control</b>' allows users to add multiple aggregation operations. Each operation is displayed in the window below 'Operation Control'.</span></p>
+<p><span>Each operation has input fields and output fields.</span></p>
+<p><span><b>Map Fields</b> table in the bottom section allows user to specify pass-through and map fields.</span></p>
 
 <p><img alt="Aggregate operation editor" src="../images/Aggregate_Mapping_View1.png" width = "100%" /></p>
-<p style="text-align:center; font-family:verdana,geneva,sans-serif; font-size: 14px;"><b>Fig. 1</b></p>
-<p><span style="font-family:verdana,geneva,sans-serif; font-size: 14px;">User can drag and drop single or multiple fields in the mapping grid. Those fields that are passed as is in the output are Passthrough fields. Whereas, fields renamed in the output are Map fields or in simple sense aliases for the corresponding input field.  In the below example, 'empno' is passed as Passthrough fields whereas, 'dep_depno' is passed as a Map field.</span></p>
+<p class="center"><span>Fig 1</span></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">User can specify his own Custom aggregate operation class, or use one of the standard operation classes from the drop-down provided. </span></span></p>
-<p><img alt="" src="../images/Aggregate_Mapping_View3.png" /></p>
-<p><img alt="" src="../images/Aggregate_Mapping_View4.png" /></p>
-<p><img alt="" src="../images/Aggregate_Mapping_View5.png" /></p>
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">On dragging an input field and specifying an operation class the input fields become operation input fields and the corresponding output fields are passed as operation output fields. The operation input fields are used in the operation class specified by the user.</span></span></p>
-<p><img alt="" src="../images/Aggregate_Mapping_View6.png" /></p>
-
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">Output fields are visible in the schema grid along with their specified datatypes in case of map and passthrough fields. In case of operation fields, default string datatype is assigned and user needs to change the datatype accordingly.</span></span></p>
-<p><img alt="" src="../images/Aggregate_Mapping_View7.png" /></p>
+<p><span><b>Input Fields Grid</b></span></p>
+<p><span>The input fields grid list all the fields available on the input port of the aggregate component. This list is populated automatically.</span></p>
+<p><span><b>Operation Window</b></span></p>
+<p><span>The operation window defines one aggregation operation. The aggregation operation has following fields (mandatory fields are marked in <b>bold</b>):</span>
 <ul>
+	<li><span><b>Operation input fields</b>: These fields are passed as input to the operation. User can drag the required fields from the available fields in 'Input Fields' grid on the left.</span></li>
+	<li><span><b>Operation output fields</b>: These fields are the output of the operation. User has to manually add / edit this list based on the output of the operation.
+	<br />
+	These fields are automatically added to the 'Output Fields' grid on the right. The 'Output Fields' grid contains the combined output of all the operations along with the pass-through and map fields.</span></li>
+	<li><span><b>Operation Class</b>: The fully qualified Java class name which implements the aggregation operation. User can specify custom aggregate operation class, or use one of the standard operation classes from the drop-down provided. Check <a href="Aggregate_Operation_Class.html">Aggregate Operation Class</a> page for more details.</span></li>
+	<li><span>Operation properties: User can pass additional properties to the operation from the properties grid in the 'Operation Class' window (ref Fig 2). These property values are available for use in the Java class.</span></li>
+	<li><span>Parameter name: The entire operation can be parameterized. The parameter name for this operation should be specified here. The parameter value should be the entire xml tag representing the operation in the target xml.</span></li>
 </ul>
+
+<p class="center"><img alt="Fig 2" src="../images/Aggregate_Operation_Class_Window.png" /></p>
+<p class="center"><span>Fig 2</span></p>
+
+<p><span><b>Map Fields</b></span></p>
+<span>User can drag and drop single or multiple fields in the mapping grid. Alternatively, user can also use the 'add', 'delete' buttons above the map fields grid to add or delete fields manually. The fields that are passed <i>as-is</i> in the output are pass-through fields. Whereas, fields renamed in the output are map fields.</span></p>
+
+<p><span><b>Output Fields</b></span></p>
+<p><span>The output fields grid contains the operation output fields of all the operations as well pass-through and map fields. The operation output fields, pass-through fields and map fields are automatically added in the output fields grid.</span></p>
+<p><span>User can also opt to pull the schema from the schema tab (i.e. the out port of aggregate component). The current list of fields in output fields gird is overwritten with the fields in schema tab.</span></p>
+<p><span>If there are new fields schema tab that are not available in any of the operation output or map fields, a new entry is added in map fields grid with the new field name as target and a blank source field.</span></p>
+<p><span>If the fields currently present in output fields list, which either came from operation output fields or from pass-through or map fields, are not present in the schema tab, those fields are deleted from the output fields list. Their corresponding entries in either operation output fields grid or map fields grid are also deleted.</span></p>
 </body>
 </html>
