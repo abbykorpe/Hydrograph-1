@@ -200,22 +200,7 @@ public class HydrographServerConnection {
 		String msg = "Execution tracking can't be displayed as connection refused on host: "
 				+ job.getHost() + " with port no: " + portNo;
 		MessageDialog dialog = new MessageDialog(shell, "Warning", null, msg,
-				SWT.ICON_WARNING, new String[] { "Continue", "Kill Job" }, 0);
-		selection = dialog.open();
-		switch (selection) {
-		case 0:
-			break;
-		case 1:
-			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler())
-					.setStopJobEnabled(false);
-			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE
-					.getComponentCanvas();
-			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
-			joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
-			JobScpAndProcessUtility.INSTANCE.killJobProcess(job);
-			logger.debug("Job Killed");
-			break;
-		}
+				SWT.ICON_WARNING, new String[] { "" }, 0);
 	}
 
 	/**
