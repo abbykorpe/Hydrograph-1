@@ -1,4 +1,4 @@
-package hydrograph.engine.test;
+package hydrograph.engine.helper;
 
 import java.util.List;
 import java.util.Map;
@@ -8,21 +8,10 @@ import hydrograph.engine.execution.tracking.ComponentInfo;
 public class StatusHelper {
 
 	List<ComponentInfo> status;
-//	static ComponentInfo compInfo;
-//	static String componentID;
-//	static String componentStatus;
 	
 	public StatusHelper(List<ComponentInfo> statusList){
 		status = statusList;
 	}
-	
-	/*public static void generateComponentStatus(List<ComponentInfo> status) {
-		for (ComponentInfo componentInfo : status) {
-			compInfo = componentInfo;
-			componentID = compInfo.getComponentId();
-			componentStatus = compInfo.getCurrentStatus();
-		}
-	}*/
 	
 	public String getComponentId(String compId){
 		for (ComponentInfo componentInfo : status) {

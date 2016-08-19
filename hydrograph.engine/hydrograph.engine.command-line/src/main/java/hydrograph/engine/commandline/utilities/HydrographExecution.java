@@ -17,7 +17,6 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
@@ -25,6 +24,7 @@ import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
+import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.utilities.GeneralUtilities;
 
 public class HydrographExecution {
@@ -67,6 +67,10 @@ public class HydrographExecution {
 				XmlParsingUtils.getBasePath(args));
 		prepareToExecute();
 		finalExecute();
+	}
+	
+	public JobInfo getJobInfo(){
+		return (JobInfo) runtimeService.getJobInfo();
 	}
 
 	private HydrographJob createHydrographJob(String[] args) throws JAXBException {

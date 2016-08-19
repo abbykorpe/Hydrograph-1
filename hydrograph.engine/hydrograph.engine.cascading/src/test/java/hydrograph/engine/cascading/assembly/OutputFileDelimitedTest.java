@@ -83,6 +83,7 @@ public class OutputFileDelimitedTest {
 		ComponentParameters cpOutput = new ComponentParameters();
 		cpOutput.addInputPipe(pipes);
 		cpOutput.setFlowDef(flowDef);
+		cpOutput.addInputFields(fields);
 
 		new OutputFileDelimitedAssembly(entity, cpOutput);
 

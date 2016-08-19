@@ -86,6 +86,7 @@ public class OutputFileFixedWidthTest {
 		ComponentParameters cpOutput = new ComponentParameters();
 		cpOutput.addInputPipe(pipes);
 		cpOutput.setFlowDef(flowDef);
+		cpOutput.addInputFields(fields);
 
 		new OutputFileFixedWidthAssembly(entity, cpOutput);
 

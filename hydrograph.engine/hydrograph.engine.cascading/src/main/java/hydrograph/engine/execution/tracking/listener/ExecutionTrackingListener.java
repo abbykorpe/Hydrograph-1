@@ -15,9 +15,11 @@ package hydrograph.engine.execution.tracking.listener;
 import java.io.IOException;
 
 import cascading.cascade.Cascade;
+import cascading.cascade.CascadeListener;
 import cascading.flow.Flow;
 import cascading.stats.FlowNodeStats;
 import cascading.stats.FlowStepStats;
+import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.utilities.OrderedProperties;
 import hydrograph.engine.utilities.OrderedPropertiesHelper;
 
@@ -32,9 +34,10 @@ public class ExecutionTrackingListener {
 	/** Method to add listener if execution tracking is enabled
 	 *  also checks whether execution is done on local or cluster mode.  
 	 *  @param cascade
+	 * @param jobInfo 
 	 */
-	public static void addListener(Cascade cascade) {
-		ComponentStatsListener statsListener = new ComponentStatsListener();
+	public static void addListener(Cascade cascade, JobInfo jobInfo) {
+		ComponentStatsListener statsListener = new ComponentStatsListener(jobInfo);
 		for (Flow<?> flow : cascade.getFlows()) {
 			for (FlowStepStats flowStepStats : flow.getFlowStats().getFlowStepStats()) {
 				if (isLocalFlowExecution(cascade)) {
@@ -77,4 +80,5 @@ public class ExecutionTrackingListener {
 		checkTrackingPlugin();
 		return isPluginPresent;
 	}
+	
 }

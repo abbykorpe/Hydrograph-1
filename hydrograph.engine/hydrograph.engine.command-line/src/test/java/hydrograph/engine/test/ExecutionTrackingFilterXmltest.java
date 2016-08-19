@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import hydrograph.engine.commandline.utilities.HydrographService;
+import hydrograph.engine.helper.StatusHelper;
 
 public class ExecutionTrackingFilterXmltest {
 

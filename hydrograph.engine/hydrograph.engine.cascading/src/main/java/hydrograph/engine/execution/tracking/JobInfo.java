@@ -39,18 +39,6 @@ public class JobInfo {
 	private List<String> AllPipes;
 	private static List<String> listOfFilterComponent;
 
-	private static volatile JobInfo jobInfo;
-
-	public static JobInfo getInstance() {
-		if (jobInfo == null) {
-			synchronized (JobInfo.class) {
-				if (jobInfo == null)
-					jobInfo = new JobInfo();
-			}
-		}
-		return jobInfo;
-	}
-
 	/**
 	 * Processes the CascadingStats to generate the component Statistics
 	 * 
@@ -125,11 +113,19 @@ public class JobInfo {
 		if (componentAndPreviousMap.containsKey(currentComponentId)) {
 			List<String> previousComponentId_SocketIds = componentAndPreviousMap.get(currentComponentId);
 			for (String previousComponentId_SocketId : previousComponentId_SocketIds) {
-				String previousPipeName = pipeComponentMap.get(previousComponentId_SocketId);
-				if (!AllPipes.contains(previousPipeName) && previousPipeName != null) {
-					createComponentInfoForComponent(previousComponentId_SocketId, cascadingStats);
-					getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats,
-							getComponentIdFromComponentSocketID(previousComponentId_SocketId));
+				if (isComponentGeneratedFilter(getComponentIdFromComponentSocketID(
+						getComponentFromPipe(componentPipeMap.get(previousComponentId_SocketId).getName())))) {
+					List<String> prePreviousComponentId_SocketIds = componentAndPreviousMap
+							.get(getComponentIdFromComponentSocketID(getComponentFromPipe(
+									componentPipeMap.get(previousComponentId_SocketId).getName())));
+					for (String prePreviousComponentId_SocketId : prePreviousComponentId_SocketIds) {
+						String previousPipeName = componentPipeMap.get(prePreviousComponentId_SocketId).getName();
+						if (!AllPipes.contains(previousPipeName) && previousPipeName != null) {
+							createComponentInfoForComponent(prePreviousComponentId_SocketId, cascadingStats);
+							getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats,
+									getComponentIdFromComponentSocketID(prePreviousComponentId_SocketId));
+						}
+					}
 				}
 			}
 		}
@@ -264,6 +260,7 @@ public class JobInfo {
 	public Collection<ComponentInfo> getstatus() {
 		return componentInfoMap.values();
 	}
+	
 
 	/**
 	 * ElementGraphNotFoundException

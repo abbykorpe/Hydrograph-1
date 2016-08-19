@@ -53,6 +53,7 @@ public class DiscardAssemblyTest {
 		ComponentParameters parameters = new ComponentParameters();
 		parameters.addInputPipe(pipes);
 		parameters.setFlowDef(flowDef);
+		parameters.addInputFields(fields);
 
 		new DiscardAssembly(entity, parameters);
 

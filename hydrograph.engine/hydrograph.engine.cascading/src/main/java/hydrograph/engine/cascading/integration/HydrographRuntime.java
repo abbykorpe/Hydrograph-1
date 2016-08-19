@@ -38,6 +38,7 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.props.PropertiesLoader;
+import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.execution.tracking.listener.ExecutionTrackingListener;
 import hydrograph.engine.execution.tracking.plugin.ExecutionTrackingPlugin;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
@@ -52,6 +53,7 @@ import hydrograph.engine.utilities.HiveConfigurationMapping;
 public class HydrographRuntime implements HydrographRuntimeService {
 
 	private Properties hadoopProperties = new Properties();
+	private JobInfo jobInfo;
 	private FlowBuilder flowBuilder;
 	private RuntimeContext runtimeContext;
 	private String[] args;
@@ -157,7 +159,8 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		}
 		for (Cascade cascade : runtimeContext.getCascade()) {
 			if (ExecutionTrackingListener.isTrackingPluginPresent()) {
-				ExecutionTrackingListener.addListener(cascade);
+				jobInfo=new JobInfo();
+				ExecutionTrackingListener.addListener(cascade,jobInfo);
 			}
 			cascade.complete();
 		}
@@ -167,6 +170,11 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	public void oncomplete() {
 		flowBuilder.cleanup(runtimeContext);
 
+	}
+	
+	@Override
+	public Object getJobInfo(){
+		return jobInfo;
 	}
 
 	public Cascade[] getFlow() {
