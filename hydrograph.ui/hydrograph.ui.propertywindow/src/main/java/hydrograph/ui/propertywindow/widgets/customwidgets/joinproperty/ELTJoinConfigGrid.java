@@ -229,7 +229,14 @@ public class ELTJoinConfigGrid extends Dialog {
 	@Override
 	protected void okPressed() {
 		joinConfigPropertyList.clear();
-		joinConfigPropertyList.addAll(tempraryConfigPropertyList);
+		
+		List<JoinConfigProperty> tempraryConfigPropList=new ArrayList<JoinConfigProperty>();
+		for(int i=0;i<inputPortValue;i++)
+		{
+			tempraryConfigPropList.add(tempraryConfigPropertyList.get(i));
+		}
+		
+		joinConfigPropertyList.addAll(tempraryConfigPropList);
 		super.okPressed();
 	}
 

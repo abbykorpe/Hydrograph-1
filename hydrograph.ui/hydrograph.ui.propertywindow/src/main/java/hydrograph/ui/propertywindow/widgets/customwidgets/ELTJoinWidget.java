@@ -14,6 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -30,6 +31,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubg
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -114,9 +116,28 @@ public class ELTJoinWidget extends AbstractWidget {
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
+		removeExtraRecordsOfJoinConfig();
 		property.put(propertyName, configProperty);
 		return property;
 	}
+	
+	/**
+	 * Removes extra records of Join configuration window which are more than Input Count on Apply button.
+	 */
+	public void removeExtraRecordsOfJoinConfig(){
+		String count=(String)getComponent().getProperties().get(Constants.INPUT_PORT_COUNT_PROPERTY);
+		int inputPortValue=Integer.valueOf(count);
+		if(configProperty != null && !configProperty.isEmpty()){
+			if(configProperty.size()>inputPortValue){
+			ListIterator <JoinConfigProperty>itr =configProperty.listIterator(inputPortValue);
+				while(itr.hasNext()){
+					itr.next();
+					itr.remove();
+				}
+			}
+		}
+	}
+	
 	@Override
 	public boolean isWidgetValid() {
 	 return validateAgainstValidationRule(configProperty);
