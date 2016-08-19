@@ -53,8 +53,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.websocket.Session;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -347,7 +345,6 @@ public class JobManager {
 	 */
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath, final String debugXmlPath,final List<String> externalSchemaFiles,final List<String> subJobList) {
-		Session session = null;
 		if (job.isRemoteMode()) {
 			setLocalMode(false);
 			new Thread(new Runnable() {

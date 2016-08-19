@@ -131,6 +131,9 @@ public class LinkEditPart extends AbstractConnectionEditPart
 		connection.repaint();
 	}
 	
+	/**
+	 * Clear record count from job canvas after rerun or refresh.
+	 */
 	public void clearRecordCountAtPort(){
 		List<Figure> labels = new ArrayList<>(); 
 		Connection connection = (Connection) getFigure();
@@ -139,18 +142,9 @@ public class LinkEditPart extends AbstractConnectionEditPart
 				labels.add((Figure) figure);
 			}
 		}
-		for (Figure figure : labels) {
-			connection.remove(figure);
+		for (Figure label : labels) {
+			connection.remove(label);
 		}
 	}
 	
-	public void addZeroRecordCountAtPort(){
-		Connection connection = (Connection) getFigure();
-		Font font = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.NORMAL);
-		Label endLabel = new Label(getCastedModel().getRecordCount());
-		endLabel.setFont(font);
-		endLabel.setText("0");
-		ConnectionEndpointLocator ce = new ConnectionEndpointLocator(connection, false);
-		connection.add(endLabel,ce);
-	}
 }

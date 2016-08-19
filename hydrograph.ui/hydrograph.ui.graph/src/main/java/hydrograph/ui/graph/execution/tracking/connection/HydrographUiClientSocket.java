@@ -13,11 +13,6 @@
 
 package hydrograph.ui.graph.execution.tracking.connection;
 
-/**
- * The Class HydrographUiClientSocket.
- * @author Bitwise
- */
-
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -59,20 +54,38 @@ import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
+/**
+ * The Class HydrographUiClientSocket is use to get get execution tracking status and update the job canvas.
+ */
 @ClientEndpoint
 public class HydrographUiClientSocket {
 
+	/** The session. */
 	private Session session;
+	
+	/** The logger. */
 	private Logger logger = LogFactory.INSTANCE.getLogger(HydrographUiClientSocket.class);
 
+	/**
+	 * On open.
+	 *
+	 * @param session the session
+	 */
 	@OnOpen
 	public void onOpen(Session session) {
 		logger.info("Connected to server");
 		this.session = session;
 	}
   
+	/**
+	 * 
+	 * Called by web socket server, message contain execution tracking status that updated on job canvas.
+	 *
+	 * @param message the message
+	 * @param session the session
+	 */
 	@OnMessage
-	public void onText(String message, Session session) { 
+	public void updateJobTrackingStatus(String message, Session session) { 
 		
 		
 		
@@ -93,7 +106,11 @@ public class HydrographUiClientSocket {
 					}
 				}
 			}
-
+			/**
+			 * Update component status and processed record 
+			 * @param executionStatus
+			 * @param editor
+			 */
 			private void updateEditorWithCompStatus(
 					ExecutionStatus executionStatus, ELTGraphicalEditor editor) {
 				Map<String, SubjobDetails> componentNameAndLink = new HashMap();
@@ -135,7 +152,6 @@ public class HydrographUiClientSocket {
 						}
 					}
 				}
-				System.out.println("Start file reading");
 				ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null);
 			}
 
@@ -254,11 +270,22 @@ public class HydrographUiClientSocket {
          });
 	}
 
+	/**
+	 * On close.
+	 *
+	 * @param reason the reason
+	 * @param session the session
+	 */
 	@OnClose
 	public void onClose(CloseReason reason, Session session) {
 		logger.info("Closing a WebSocket due to {}", reason.getReasonPhrase());
 	} 
 
+	/**
+	 * Send message.
+	 *
+	 * @param str the str
+	 */
 	public void sendMessage(String str) {
 		try {
 			session.getBasicRemote().sendText(str);
@@ -268,6 +295,11 @@ public class HydrographUiClientSocket {
 		}
 	}
 
+	/**
+	 * Push execution status to execution tracking console.
+	 *
+	 * @param executionStatus the execution status
+	 */
 	private void pushExecutionStatusToExecutionTrackingConsole(
 			ExecutionStatus executionStatus) {
 		
@@ -278,6 +310,12 @@ public class HydrographUiClientSocket {
 		}
 	}
 
+	/**
+	 * Gets the job id.
+	 *
+	 * @param executionStatus the execution status
+	 * @return the job id
+	 */
 	private String getJobID(ExecutionStatus executionStatus) {
 		String jobId = executionStatus.getJobId();
 		jobId = StringUtils.substringBeforeLast(jobId, "_");
@@ -285,6 +323,12 @@ public class HydrographUiClientSocket {
 		return jobId;
 	}
 
+	/**
+	 * Update execution tracking console.
+	 *
+	 * @param executionStatus the execution status
+	 * @param console the console
+	 */
 	private void updateExecutionTrackingConsole(
 			final ExecutionStatus executionStatus,
 			final ExecutionTrackingConsole console) {

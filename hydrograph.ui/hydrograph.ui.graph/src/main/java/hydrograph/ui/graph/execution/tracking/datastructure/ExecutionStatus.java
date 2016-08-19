@@ -13,21 +13,12 @@
 
 package hydrograph.ui.graph.execution.tracking.datastructure;
 
+
+import java.util.List;
+
 /**
  * The Class ExecutionStatus, contains information about status of all components.
  * @author Bitwise
- */
-
-import java.util.List;
-import java.util.List;
-
-/**
- * @author kanchank
- *
- */
-/**
- * @author kanchank
- *
  */
 public class ExecutionStatus {
 	private List<ComponentStatus> componentStatus;

@@ -37,7 +37,7 @@ public class Job {
 	private String uniqueJobId;
 	private String portNumber;
 	private String debugFilePath;
-	private boolean isExecutionTrack=true;
+	private boolean isExecutionTrackOn=true;
 	
 	public Job(String localJobID,String consoleName, String canvasName, String ipAddress,String userId, String basePath, String password) {
 		this.localJobID = localJobID;
@@ -214,11 +214,11 @@ public class Job {
 
 
 	public boolean isExecutionTrack() {
-		return isExecutionTrack;
+		return isExecutionTrackOn;
 	}
 
 	public void setExecutionTrack(boolean isExecutionTrack) {
-		this.isExecutionTrack = isExecutionTrack;
+		this.isExecutionTrackOn = isExecutionTrack;
 	}	
 	
 	

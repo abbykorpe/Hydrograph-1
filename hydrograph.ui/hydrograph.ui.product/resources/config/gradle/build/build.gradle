@@ -14,7 +14,7 @@
 apply plugin: 'java'
 sourceCompatibility = 1.7
 version = '1.0'
-def hydrographExecution='hydrograph.execution.tracking.client.main.HydrographMain'
+def hydrographExecution='hydrograph.server.execution.tracking.client.main.HydrographMain'
 
 repositories {
     maven {
@@ -58,7 +58,7 @@ dependencies {
 
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     
-    compile(group: 'hydrograph.execution.tracking', name: 'hydrograph.execution.tracking.server', version: '1.0.0')
+    compile(group: 'hydrograph.execution.tracking', name: 'hydrograph.execution.tracking.server', version: '1.0.1')
 }
 
 test {

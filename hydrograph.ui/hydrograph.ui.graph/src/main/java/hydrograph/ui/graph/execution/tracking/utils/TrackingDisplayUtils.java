@@ -13,11 +13,6 @@
 
 package hydrograph.ui.graph.execution.tracking.utils;
 
-/**
- * The Class TrackingDisplayUtils.
- * @author Bitwise
- */
-
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.Activator;
@@ -46,72 +41,125 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TrackingDisplayUtils.
+ */
 public class TrackingDisplayUtils {
 
-	
-public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
-	
+	/** The instance. */
+	public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
+
+	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(TrackingDisplayUtils.class);
+	
+	/** The Constant PORT_NUMBER. */
 	public static final String PORT_NUMBER = "EXECUTION_TRACKING_PORT";
+	
+	/** The Constant REMOTE_URL. */
 	public static final String REMOTE_URL = "WEBSOCKET_REMOTE_URL";
-	public static final String LOCAL_URL = "WEBSOCKET_LOCAL_URL";
-	public static final String WEBSOCKET_ROUTE = "WEBSOCKET_ROUTE";
 	
+	/** The Constant LOCAL_URL. */
+	public static final String LOCAL_URL = "WEBSOCKET_LOCAL_HOST";
+	
+	/** The Constant WEBSOCKET_ROUTE. */
+	public static final String WEBSOCKET_ROUTE = "WEBSOCKET_UI_ROUTE";
+
+	/** The Constant EXECUTION_TRACK_START. */
 	private static final String EXECUTION_TRACK_START = " hydrograph.execution.tracking.server.websocket.StartServer";
-	public static final String EXECUTION_TRACK_SERVICE = "EXECUTION_TRACK_SERVICE";
+	
+	/** The Constant EXECUTION_TRACK_SERVICE. */
+	public static final String EXECUTION_TRACK_SERVICE = "EXECUTION_TRACK_SERVICE_JAR";
+	
+	/** The Constant EXECUTION_TRACKING_PORT. */
 	public static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
+	
+	/** The Constant PROPERY_FILE_PATH. */
 	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
+	
+	/** The Constant EXECUTION_TRACKING_PROPERY_FILE. */
+	public static final String EXECUTION_TRACKING_PROPERY_FILE = "/service/socket-server.properties";
 
+	/** The remote host. */
 	private String remoteHost;
-	private String localHost;
-	private String websocketRoute ;
-	
 
-	private TrackingDisplayUtils(){}
-	
+	/** The local host. */
+	private String localHost;
+
+	/** The websocket route. */
+	private String websocketRoute;
+
+	/**
+	 * Instantiates a new tracking display utils.
+	 */
+	private TrackingDisplayUtils() {
+	}
+
 	/**
 	 * Clears the status of all components. Also Initiates record count to 0.
 	 */
 	public void clearTrackingStatus() {
 
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().getActiveEditor();
-		if(editor!=null && editor instanceof ELTGraphicalEditor)
-		{
+		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI
+				.getWorkbench().getWorkbenchWindows()[0].getActivePage()
+				.getActiveEditor();
+		if (editor != null && editor instanceof ELTGraphicalEditor) {
 			clearTrackingStatusForEditor(editor);
 		}
 	}
-	
+
+	/**
+	 * Clear tracking status.
+	 * 
+	 * @param jobId
+	 *            the job id
+	 */
 	public void clearTrackingStatus(String jobId) {
 
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().getActiveEditor();
-		if(editor!=null && editor instanceof ELTGraphicalEditor && (editor.getJobId().equals(jobId)))
-		{
+		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI
+				.getWorkbench().getWorkbenchWindows()[0].getActivePage()
+				.getActiveEditor();
+		if (editor != null && editor instanceof ELTGraphicalEditor
+				&& (editor.getJobId().equals(jobId))) {
 			clearTrackingStatusForEditor(editor);
 		}
 	}
 
+	/**
+	 * Clear tracking status for editor.
+	 * 
+	 * @param editor
+	 *            the editor
+	 */
 	private void clearTrackingStatusForEditor(ELTGraphicalEditor editor) {
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); 
-				ite.hasNext();)
-		{
+		GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
+				.getAdapter(GraphicalViewer.class);
+		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry()
+				.values().iterator(); ite.hasNext();) {
 			EditPart editPart = (EditPart) ite.next();
-			if(editPart instanceof ComponentEditPart){
-				Component component = ((ComponentEditPart)editPart).getCastedModel();
+			if (editPart instanceof ComponentEditPart) {
+				Component component = ((ComponentEditPart) editPart)
+						.getCastedModel();
 				component.updateStatus(CompStatus.BLANK.value());
-			}else if(editPart instanceof LinkEditPart){
-				((LinkEditPart)editPart).clearRecordCountAtPort();
+			} else if (editPart instanceof LinkEditPart) {
+				((LinkEditPart) editPart).clearRecordCountAtPort();
 			}
 		}
 	}
 
-	public String getExecutiontrackingPortNo(){
+	/**
+	 * Gets the executiontracking port no.
+	 * 
+	 * @return the executiontracking port no
+	 */
+	public String getExecutiontrackingPortNo() {
 		String portNumber = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
+			FileReader fileReader = new FileReader(
+					XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty(PORT_NUMBER))){
+			if (StringUtils.isNotBlank(properties.getProperty(PORT_NUMBER))) {
 				portNumber = properties.getProperty(PORT_NUMBER);
 				remoteHost = properties.getProperty(REMOTE_URL);
 				localHost = properties.getProperty(LOCAL_URL);
@@ -123,61 +171,90 @@ public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
 			logger.error(e.getMessage(), e);
 		}
 		return portNumber;
-	} 
-	
-	
-	public String getWebSocketRemoteUrl(){
+	}
+
+	/**
+	 * Gets the web socket remote url.
+	 * 
+	 * @return the web socket remote url
+	 */
+	public String getWebSocketRemoteUrl() {
 		String portNo = getPortFromPreference();
 		String remoteUrl = remoteHost + portNo + websocketRoute;
 		return remoteUrl;
 	}
-	
-	public String getWebSocketLocalHost(){
+
+	/**
+	 * Gets the web socket local host.
+	 * 
+	 * @return the web socket local host
+	 */
+	public String getWebSocketLocalHost() {
 		String portNo = getPortFromPreference();
 		String localUrl = localHost + portNo + websocketRoute;
 		return localUrl;
-		
+
 	}
-	
-	public String getPortFromPreference(){
-		String portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_PORT_NO, 
+
+	/**
+	 * Gets the port from preference.
+	 * 
+	 * @return the port from preference
+	 */
+	public String getPortFromPreference() {
+		String portNo = Platform.getPreferencesService().getString(
+				Activator.PLUGIN_ID,
+				ExecutionPreferenceConstants.TRACKING_PORT_NO,
 				getExecutiontrackingPortNo(), null);
-		
+
 		return portNo;
 	}
-	
-	public  void startExecutionTrackingService() {
+
+	/**
+	 * Start execution tracking service.
+	 */
+	public void startExecutionTrackingService() {
 		if (OSValidator.isWindows()) {
 			try {
-			String command = "java -cp " + getInstallationPathForExeTrack()
-					+ EXECUTION_TRACK_START;
-				ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
-					"/c", command });
-				
+				String command = "java -cp " + getInstallationPathForExeTrack()
+						+ EXECUTION_TRACK_START;
+				ProcessBuilder builder = new ProcessBuilder(new String[] {
+						"cmd", "/c", command });
+
 				builder.start();
-				
+
 			} catch (Exception e) {
 				logger.info("Failed to start web socket server");
 			}
 		}
 	}
 
-	public  void reStartExecutionTrackingService(String pid ) {
+	/**
+	 * Re start execution tracking service.
+	 * 
+	 * @param pid
+	 *            the pid
+	 */
+	public void reStartExecutionTrackingService(String pid) {
 		if (OSValidator.isWindows()) {
 			try {
-			logger.info("Taskkill /PID :"+pid);
-			String command = "Taskkill /PID " + pid+ " /F";
-			ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
-					"/c", command });
-			builder.start();
-			startExecutionTrackingService();
+				logger.info("Taskkill /PID :" + pid);
+				String command = "Taskkill /PID " + pid + " /F";
+				ProcessBuilder builder = new ProcessBuilder(new String[] {
+						"cmd", "/c", command });
+				builder.start();
+				startExecutionTrackingService();
 			} catch (Exception e) {
 				logger.info("Failed to start web socket server");
 			}
 		}
 	}
 
-	
+	/**
+	 * Gets the execution tracking service jar.
+	 * 
+	 * @return the execution tracking service jar
+	 */
 	private String getExecutionTrackingServiceJar() {
 		String exeTrackServiceJar = null;
 		try {
@@ -198,6 +275,11 @@ public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
 		return exeTrackServiceJar;
 	}
 
+	/**
+	 * Gets the installation path for exe track.
+	 * 
+	 * @return the installation path for exe track
+	 */
 	private String getInstallationPathForExeTrack() {
 		String path = Platform.getInstallLocation().getURL().getPath();
 		String executionTraJar = getExecutionTrackingServiceJar();
@@ -209,16 +291,20 @@ public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
 	}
 
 	/**
-	 * This function used to return Rest Service port Number which running on local
-	 *
+	 * This function used to return Rest Service port Number which running on
+	 * local.
+	 * 
+	 * @return the string
 	 */
-	public static String restServicePort(){
+	public static String restServicePort() {
 		String portNumber = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
+			FileReader fileReader = new FileReader(
+					XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty(EXECUTION_TRACK_SERVICE))){
+			if (StringUtils.isNotBlank(properties
+					.getProperty(EXECUTION_TRACK_SERVICE))) {
 				portNumber = properties.getProperty(EXECUTION_TRACKING_PORT);
 			}
 		} catch (FileNotFoundException e) {
@@ -226,28 +312,32 @@ public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		
+
 		return portNumber;
 	}
 
 	/**
-	 * This function will be return process ID which running on defined port
-	 *
+	 * This function will be return process ID which running on defined port.
+	 * 
+	 * @return the service port pid
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public String getServicePortPID() throws IOException{
+	public String getServicePortPID() throws IOException {
 		int portNumber = Integer.parseInt(restServicePort());
-		if(OSValidator.isWindows()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c" ,"netstat -a -o -n |findstr :"+portNumber});
-			Process process =builder.start();
+		if (OSValidator.isWindows()) {
+			ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
+					"/c", "netstat -a -o -n |findstr :" + portNumber });
+			Process process = builder.start();
 			InputStream inputStream = process.getInputStream();
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			BufferedReader bufferedReader = new BufferedReader(
+					new InputStreamReader(inputStream));
 			String str = bufferedReader.readLine();
-			str=StringUtils.substringAfter(str, "LISTENING");
-			str=StringUtils.trim(str);
+			str = StringUtils.substringAfter(str, "LISTENING");
+			str = StringUtils.trim(str);
 			return str;
 		}
 		return "";
 	}
-
 
 }

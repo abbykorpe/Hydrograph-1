@@ -32,21 +32,30 @@ import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
+/**
+ * Class HydrographServerConnection. use to connect web-socket server for execution tracking status.
+ * @author Bitwise
+ */
 public class HydrographServerConnection {
 
+	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE
 			.getLogger(HydrographServerConnection.class);
-	int counter = 0;
+
+	/** The counter. */
+	private int counter = 0;
+	
+	/** The selection. */
 	private int selection;
 
 
 	/**
 	 * Instantiates HydrographUiClientSocket and establishes connection with
 	 * server in order to get execution status.
-	 * 
-	 * @param job
-	 * @param jobID
-	 * @param url
+	 *
+	 * @param job the job
+	 * @param jobID the job id
+	 * @param url the url
 	 * @return Session
 	 */
 	public Session connectToServer(final Job job, String jobID, String url) {
@@ -60,7 +69,7 @@ public class HydrographServerConnection {
 			return session;
 
 		} catch (Throwable t) {
-			if (counter > 4) {
+			if (counter > 2) {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
@@ -81,11 +90,11 @@ public class HydrographServerConnection {
 	/**
 	 * Instantiates HydrographUiClientSocket and establishes connection with
 	 * server in order to kill the job.
-	 * 
-	 * @param jobID
-	 * @param url
+	 *
+	 * @param jobID the job id
+	 * @param url the url
 	 * @return Session
-	 * @throws Throwable
+	 * @throws Throwable the throwable
 	 */
 	public Session connectToKillJob(String jobID, String url) throws Throwable {
 
@@ -104,6 +113,12 @@ public class HydrographServerConnection {
 		}
 	}
 
+	/**
+	 * Gets the status req.
+	 *
+	 * @param jobID the job id
+	 * @return the status req
+	 */
 	private String getStatusReq(String jobID) {
 		ExecutionStatus executionStatus = new ExecutionStatus(
 				Collections.EMPTY_LIST);
@@ -113,6 +128,12 @@ public class HydrographServerConnection {
 		return gson.toJson(executionStatus);
 	}
 
+	/**
+	 * Gets the kill req.
+	 *
+	 * @param jobID the job id
+	 * @return the kill req
+	 */
 	private String getKillReq(String jobID) {
 		ExecutionStatus executionStatus = new ExecutionStatus(
 				Collections.EMPTY_LIST);
@@ -125,8 +146,9 @@ public class HydrographServerConnection {
 	/**
 	 * Opens a message dialog in case if there are issues while making
 	 * connection to server.
-	 * 
-	 * @param job
+	 *
+	 * @param job the job
+	 * @param shell the shell
 	 */
 	public void messageDialogForExecutionTracking(Job job, Shell shell) {
 		String portNo = TrackingDisplayUtils.INSTANCE.getPortFromPreference();
@@ -137,6 +159,8 @@ public class HydrographServerConnection {
 	}
 
 	/**
+	 * Gets the selection.
+	 *
 	 * @return the choice either continue / kill job from Execution tracking
 	 *         dialog.
 	 */

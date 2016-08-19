@@ -77,7 +77,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFile, Job job,	DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		Session session=null;
 
-		if(isExecutionTracking()){
+		if(isExecutionTrackingOn()){
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
 			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
 					webSocketLocalHost);
@@ -146,7 +146,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE  + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
 				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() 
 				+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
-				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING + job.isExecutionTrack();
+				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack();
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	@Override
 	public void killJob(Job jobToKill) {
 		//JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);	
-		JobScpAndProcessUtility.INSTANCE.killLocalJobProcessUsingCmdjps(jobToKill);
+		JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
 	}
 	/**
 	 * Close Websocket connection Connection

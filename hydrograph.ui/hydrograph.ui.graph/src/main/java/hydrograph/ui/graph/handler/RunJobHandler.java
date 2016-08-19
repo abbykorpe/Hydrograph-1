@@ -18,11 +18,9 @@ import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
-import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
 
 /**
  * Handler use to run the job using gradle command.
@@ -32,12 +30,7 @@ import org.slf4j.Logger;
  * @since 2015-10-27
  */
 public class RunJobHandler{
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(RunJobHandler.class);
 
-	private static final String EXECUTION_TRACK_START = " hydrograph.execution.tracking.server.websocket.StartServer";
-	public static final String EXECUTION_TRACK_SERVICE = "EXECUTION_TRACK_SERVICE";
-	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
-	
 	private Job getJob(String localJobID, String consoleName, String canvasName) {
 		return new Job(localJobID, consoleName, canvasName, null, null, null, null);
 	}

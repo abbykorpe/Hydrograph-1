@@ -26,18 +26,31 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * The Class ExecutionTrackingConsole use to display execution tracking log.
+ * @author Bitwise
+ */
 public class ExecutionTrackingConsole extends ApplicationWindow {
+	
+	/** The styled text. */
 	private StyledText styledText;
+	
+	/** The console name. */
 	private String consoleName;
+	
+	/** The action factory. */
 	private ActionFactory actionFactory;
+	
+	/** The status line manager. */
 	private StatusLineManager statusLineManager;
 	
 	/**
-	 * Create the application window,
+	 * Create the application window,.
+	 *
+	 * @param consoleName the console name
 	 */
 	public ExecutionTrackingConsole(String consoleName) {
 		super(null);
-		createActions();
 		addCoolBar(SWT.FLAT);
 		addMenuBar();
 		addStatusLine();
@@ -47,7 +60,9 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 
 	/**
 	 * Create contents of the application window.
-	 * @param parent
+	 *
+	 * @param parent the parent
+	 * @return the control
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
@@ -64,12 +79,6 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		return container;
 	}
 
-	/**
-	 * Create the actions.
-	 */
-	private void createActions() {
-		// Create the actions
-	}
 
 	/**
 	 * Create the menu manager.
@@ -84,6 +93,11 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		return menuManager;
 	}
 	
+	/**
+	 * Creates the window menu.
+	 *
+	 * @param menuManager the menu manager
+	 */
 	private void createWindowMenu(MenuManager menuManager) {
 		MenuManager windowMenu = createMenu(menuManager, MenuConstants.WINDOW);
 		menuManager.add(windowMenu);
@@ -96,6 +110,13 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		windowMenu.add(actionFactory.getAction(ClearConsoleAction.class.getName()));
 	}
 
+	/**
+	 * Creates the menu.
+	 *
+	 * @param menuManager the menu manager
+	 * @param menuName the menu name
+	 * @return the menu manager
+	 */
 	private MenuManager createMenu(MenuManager menuManager, String menuName) {
 		MenuManager menu = new MenuManager(menuName);
 		menuManager.add(menu);
@@ -105,6 +126,8 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	
 	/**
 	 * Create the coolbar manager.
+	 *
+	 * @param style the style
 	 * @return the coolbar manager
 	 */
 	@Override
@@ -122,6 +145,13 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	}
 	
 	
+	/**
+	 * Addtoolbar action.
+	 *
+	 * @param toolBarManager the tool bar manager
+	 * @param imagePath the image path
+	 * @param action the action
+	 */
 	private void addtoolbarAction(ToolBarManager toolBarManager, final String imagePath, Action action) {
 
 		ImageDescriptor exportImageDescriptor = new ImageDescriptor() {
@@ -147,7 +177,8 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 
 	/**
 	 * Configure the shell.
-	 * @param newShell
+	 *
+	 * @param newShell the new shell
 	 */
 	@Override
 	protected void configureShell(Shell newShell) {
@@ -157,12 +188,20 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 
 	/**
 	 * Return the initial size of the window.
+	 *
+	 * @return the initial size
 	 */
 	@Override
 	protected Point getInitialSize() {
 		return new Point(401, 300);
 	}
 	
+	/**
+	 * Sets the status.
+	 *
+	 * @param executionStatus the execution status
+	 * @param stringBuilder the string builder
+	 */
 	public void setStatus(ExecutionStatus executionStatus, StringBuilder stringBuilder){
 		
 		//StringBuilder stringBuilder = new StringBuilder();
@@ -203,12 +242,18 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		}
 	}
 	
+	/**
+	 * Clear console.
+	 */
 	public void clearConsole(){
 		if(styledText!=null && !styledText.isDisposed()){
 			styledText.setText("");
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.window.ApplicationWindow#close()
+	 */
 	@Override
 	public boolean close() {
 		JobManager.INSTANCE.getExecutionTrackingConsoles().remove(consoleName.replace(".", "_"));

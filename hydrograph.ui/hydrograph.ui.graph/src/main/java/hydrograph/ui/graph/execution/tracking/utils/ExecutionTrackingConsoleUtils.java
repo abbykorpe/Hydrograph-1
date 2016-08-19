@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.graph.execution.tracking.utils;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
@@ -25,13 +38,27 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+
+/**
+ * The Class ExecutionTrackingConsoleUtils.
+ * @author Bitwise
+ */
 public class ExecutionTrackingConsoleUtils {
+	
+	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ExecutionTrackingConsoleUtils.class);
 
+	/** The instance. */
 	public static ExecutionTrackingConsoleUtils INSTANCE = new ExecutionTrackingConsoleUtils();
 	
+	/**
+	 * Instantiates a new execution tracking console utils.
+	 */
 	private ExecutionTrackingConsoleUtils(){}
 	
+	/**
+	 * Open execution tracking console.
+	 */
 	public void openExecutionTrackingConsole(){
 		String localJobId = getLocalJobId();
 		if(StringUtils.isBlank(localJobId)){
@@ -41,14 +68,17 @@ public class ExecutionTrackingConsoleUtils {
 		if(!isConsoleAlreadyOpen(localJobId)){
 			if(!JobManager.INSTANCE.isJobRunning(localJobId)){
 				openExecutionTrackingConsoleWindow(localJobId);
-				//MessageBox.INSTANCE.showMessage(MessageBox.INFO, "Can not show Execution Tracking Console.\nThe job " + localJobId + " is not in execution");
-				//return;
 			}
 		}
 		
 		openExecutionTrackingConsoleWindow(localJobId);
 	}
 	
+	/**
+	 * Open execution tracking console.
+	 *
+	 * @param localJobId the local job id
+	 */
 	public void openExecutionTrackingConsole(String localJobId){
 		
 		if(StringUtils.isBlank(localJobId)){
@@ -58,14 +88,18 @@ public class ExecutionTrackingConsoleUtils {
 		if(!isConsoleAlreadyOpen(localJobId)){
 			if(!JobManager.INSTANCE.isJobRunning(localJobId)){
 				openExecutionTrackingConsoleWindow(localJobId);
-				//MessageBox.INSTANCE.showMessage(MessageBox.INFO, "Can not show Execution Tracking Console.\nThe job " + localJobId + " is not in execution");
-				//return;
 			}
 		}
 		
 		openExecutionTrackingConsoleWindow(localJobId);
 	}
 	
+	/**
+	 * Checks if is console already open.
+	 *
+	 * @param localJobId the local job id
+	 * @return true, if is console already open
+	 */
 	private boolean isConsoleAlreadyOpen(String localJobId){
 		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(localJobId.replace(".", "_"));
 		if(console==null){
@@ -78,6 +112,11 @@ public class ExecutionTrackingConsoleUtils {
 		return true;
 	}
 	
+	/**
+	 * Open execution tracking console window.
+	 *
+	 * @param localJobId the local job id
+	 */
 	private void openExecutionTrackingConsoleWindow(String localJobId) {
 		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(localJobId.replace(".", "_"));
 		if(console==null){
@@ -96,6 +135,11 @@ public class ExecutionTrackingConsoleUtils {
 		console.setStatus(null, readFile(null, getUniqueJobId()));
 	}
 
+	/**
+	 * Gets the local job id.
+	 *
+	 * @return the local job id
+	 */
 	private String getLocalJobId() {
 		DefaultGEFCanvas canvas = CanvasUtils.INSTANCE.getComponentCanvas();
 		
@@ -108,6 +152,13 @@ public class ExecutionTrackingConsoleUtils {
 		return jobId;
 	}
 	
+	/**
+	 * Read log file.
+	 *
+	 * @param executionStatus the execution status
+	 * @param uniqueJobId the unique job id
+	 * @return the string builder
+	 */
 	public StringBuilder readFile(ExecutionStatus executionStatus, String uniqueJobId){
 		String jobId = "";
 		if(executionStatus != null){
@@ -125,9 +176,7 @@ public class ExecutionTrackingConsoleUtils {
 				builder.append(System.lineSeparator());
 			    line = bufferedReader.readLine();
 			}
-			String s = builder.toString();
-			System.out.println(""+s);
-				return builder;
+			return builder;
 			} catch (FileNotFoundException exception) {
 				logger.error("File not found", exception.getMessage());
 			} catch (IOException exception) {
@@ -136,6 +185,11 @@ public class ExecutionTrackingConsoleUtils {
 			return null;
 	}
 
+	/**
+	 * Gets the log path.
+	 *
+	 * @return the log path
+	 */
 	private String getLogPath(){
 		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 		String defaultJobTrackingLogDirectory=Platform.getInstallLocation().getURL().getPath() + "config/logger/JobTrackingLog";
@@ -143,6 +197,11 @@ public class ExecutionTrackingConsoleUtils {
 		return jobTrackingLogDirectory = jobTrackingLogDirectory + "/";
 	}
 
+	/**
+	 * Gets the unique job id.
+	 *
+	 * @return the unique job id
+	 */
 	private String getUniqueJobId(){
 		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();

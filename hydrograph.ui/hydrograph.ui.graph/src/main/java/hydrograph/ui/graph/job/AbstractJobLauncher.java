@@ -110,7 +110,11 @@ abstract public class AbstractJobLauncher {
 	
 	abstract public void killJob(Job jobToKill);
 	
-	public boolean isExecutionTracking(){
+	/**
+	 * Check is tracking enabled or not
+	 * @return
+	 */
+	public boolean isExecutionTrackingOn(){
 		boolean isExeTracking = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
 				ExecutionPreferenceConstants.EXECUTION_TRACKING, true, null);
 		

@@ -81,7 +81,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 
 		Session session=null;
 
-		if(isExecutionTracking()){
+		if(isExecutionTrackingOn()){
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
 			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
 					webSocketRemoteUrl);

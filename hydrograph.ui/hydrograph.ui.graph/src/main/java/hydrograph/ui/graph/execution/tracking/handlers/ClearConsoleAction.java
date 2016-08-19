@@ -13,24 +13,34 @@
 
 package hydrograph.ui.graph.execution.tracking.handlers;
 
-/**
- * The Class ClearConsoleAction.
- * @author Bitwise
- */
-
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 
 import org.eclipse.jface.action.Action;
 
+/**
+ * The Class ClearConsoleAction.
+ */
 public class ClearConsoleAction extends Action{
+	
+	/** The execution tracking console. */
 	private ExecutionTrackingConsole executionTrackingConsole;
+	
+	/** The Constant LABEL. */
 	private static final String LABEL="&Clear Console";
 	
+	/**
+	 * Instantiates a new clear console action.
+	 *
+	 * @param executionTrackingConsole the execution tracking console
+	 */
 	public ClearConsoleAction(ExecutionTrackingConsole executionTrackingConsole){
 		super(LABEL);
 		this.executionTrackingConsole = executionTrackingConsole;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.action.Action#run()
+	 */
 	@Override
 	public void run() {
 		executionTrackingConsole.clearConsole();

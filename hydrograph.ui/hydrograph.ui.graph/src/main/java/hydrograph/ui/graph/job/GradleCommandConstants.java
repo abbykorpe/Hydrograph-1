@@ -51,7 +51,7 @@ public class GradleCommandConstants {
 	public static final String GPARAM_MOVE_SCHEMA=" -PexternalSchemaFiles=";
 	public static final String GPARAM_MOVE_SUBJOB=" -PsubJobFiles=";
 	
-	public static final String GPARAM_IS_EXECUTION_TRACKING=" -PisExecutionTracking=";
+	public static final String GPARAM_IS_EXECUTION_TRACKING_ON=" -PisExecutionTracking=";
 	
 	public static final String REMOTE_FIXED_DIRECTORY_PARAM="param";
 	public static final String REMOTE_FIXED_DIRECTORY_LIB="lib";

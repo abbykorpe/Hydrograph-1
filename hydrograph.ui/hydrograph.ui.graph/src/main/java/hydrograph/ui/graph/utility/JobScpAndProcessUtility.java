@@ -130,13 +130,13 @@ public class JobScpAndProcessUtility {
 					+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 					+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
 					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH 
-			+ job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING +job.isExecutionTrack();
+			+ job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack();
 		}else{
 				command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
 				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
-				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING +job.isExecutionTrack();
+				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack();
 		}
 		logger.debug("Gradle Command: {}", command);
 		return command;
@@ -432,40 +432,6 @@ public class JobScpAndProcessUtility {
 		}
 	}
 	
-	public void	killLocalJobProcess(Job jobToKill){
-
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				SWT.ICON_WARNING | SWT.YES | SWT.NO);
-		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
-		messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
-		if (messageBox.open() == SWT.YES) {
-			jobToKill.setJobStatus(JobStatus.KILLED);
-			Session session = null;
-			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
-			try {
-				logger.info("Trying to kill local job");
-				String localUrl = TrackingDisplayUtils.INSTANCE.getWebSocketLocalHost();
-				session = hydrographServerConnection.connectToKillJob(jobToKill.getUniqueJobId(), localUrl);
-				Thread.sleep(8000);
-			} catch (Throwable e1) {
-				showMessageBox(e1.getMessage(),"Error while killing", SWT.ERROR);
-				logger.error(e1.getMessage());
-			} finally {
-				if (session != null) {
-					try {
-						session.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
-			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
-			JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
-		}
-	}
-	
 	private void showMessageBox(String message,String header,int SWT_Type)
 	{
 		MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT_Type);
@@ -474,7 +440,7 @@ public class JobScpAndProcessUtility {
 		box.open();
 	}
 	
-	public void	killLocalJobProcessUsingCmdjps(final Job jobToKill){
+	public void	killLocalJobProcess(final Job jobToKill){
 
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
