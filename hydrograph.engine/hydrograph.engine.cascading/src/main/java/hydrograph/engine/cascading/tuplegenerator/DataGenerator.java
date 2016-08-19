@@ -488,7 +488,7 @@ public class DataGenerator {
 		SimpleDateFormat sdfComparison = new SimpleDateFormat(dateFormatForComparison);
 		actualSDF.setLenient(false);
 
-		Calendar cal = sdfComparison.getCalendar();
+		Calendar cal = Calendar.getInstance();
 
 		Date d = cal.getTime(); // get current date with time
 		Date d1 = null, d2 = null;
