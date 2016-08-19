@@ -73,6 +73,9 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 			Pipe sinkPipe = new Pipe(
 					ComponentHelper.getComponentName("outputFileParquet", outputFileParquetEntity.getComponentId(), ""),
 					tailPipe);
+			setOutLink("output","NoSocketId",
+					outputFileParquetEntity.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);

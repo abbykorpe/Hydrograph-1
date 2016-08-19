@@ -54,6 +54,9 @@ public class DiscardAssembly extends BaseComponent<DiscardEntity> {
 
 			nullTap = new NullTap();
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("discard", discardEntity.getComponentId(),""), inputPipes);
+			setOutLink("output","NoSocketId",
+					discardEntity.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 
 			flowDef = flowDef.addTailSink(sinkPipe, nullTap);

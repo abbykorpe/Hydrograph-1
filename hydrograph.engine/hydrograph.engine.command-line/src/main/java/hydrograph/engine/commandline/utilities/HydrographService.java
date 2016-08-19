@@ -20,18 +20,15 @@ import hydrograph.engine.execution.tracking.JobInfo;
 
 public class HydrographService {
 	private HydrographExecution execution;
-
 	public HydrographService() {
 		execution = new HydrographExecution();
 	}
 
 	public void executeGraph(String[] args) throws Exception {
 			execution.run(args);
-		
 	}
-
 	public List<ComponentInfo> getStatus() {
-		return new ArrayList<>(JobInfo.getInstance().getstatus());
+		return new ArrayList<>(execution.getJobInfo().getstatus());
 	}
 
 	public void kill() {

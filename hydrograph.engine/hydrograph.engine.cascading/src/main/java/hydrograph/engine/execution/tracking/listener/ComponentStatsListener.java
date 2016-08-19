@@ -19,11 +19,16 @@ import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.execution.tracking.JobInfo.ElementGraphNotFoundException;
 
 public class ComponentStatsListener implements StatsListener {
+	
+	private JobInfo jobInfo;
+	public  ComponentStatsListener(JobInfo jobInfo) {
+	this.jobInfo=jobInfo;
+	}
 
 	@Override
 	public void notify(CascadingStats stats, Status fromStatus, Status toStatus) {
 		try {
-			JobInfo.getInstance().storeComponentStats(stats);
+			jobInfo.storeComponentStats(stats);
 		} catch (ElementGraphNotFoundException e) {
 			throw new RuntimeException(e);
 		}

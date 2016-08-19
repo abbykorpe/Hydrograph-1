@@ -24,7 +24,9 @@ import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
 import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
+import hydrograph.engine.cascading.integration.RuntimeContext;
 import hydrograph.engine.core.utilities.SocketUtilities;
+import hydrograph.engine.execution.tracking.ComponentPipeMapping;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
 import hydrograph.engine.flow.utils.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -44,9 +46,11 @@ import hydrograph.engine.jaxb.operationstypes.Filter;
 public class ExecutionTrackingPlugin implements ManipulatorListener {
 	List<TypeBaseComponent> jaxbObjectList = new ArrayList<TypeBaseComponent>();
 	Map<String, Set<SchemaField>> schemaFieldsMap;
-	
-	/* 
-	 * @see hydrograph.engine.flow.utils.ManipulatorListener#execute(hydrograph.engine.flow.utils.FlowManipulationContext)
+
+
+	/*
+	 * @see hydrograph.engine.flow.utils.ManipulatorListener#execute(hydrograph.
+	 * engine.flow.utils.FlowManipulationContext)
 	 */
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
@@ -66,7 +70,8 @@ public class ExecutionTrackingPlugin implements ManipulatorListener {
 				trackContext.setFromOutSocketId(outSocket.getSocketId());
 				trackContext.setFromOutSocketType(outSocket.getSocketType());
 				Filter newFilter = generateFilterAfterEveryComponent(trackContext);
-
+				
+				ComponentPipeMapping.generateFilterList(newFilter);
 				// add Filter to existing component
 				TypeBaseComponent component = TrackComponentUtils.getComponent(jaxbObjectList,
 						trackContext.getFromComponentId(), trackContext.getFromOutSocketId());
@@ -76,7 +81,7 @@ public class ExecutionTrackingPlugin implements ManipulatorListener {
 				jaxbObjectList.add(newFilter);
 			}
 		}
-		
+
 		return jaxbObjectList;
 	}
 
@@ -171,4 +176,10 @@ public class ExecutionTrackingPlugin implements ManipulatorListener {
 		}
 
 	}
+
+	public static void generateMapsForExecutionTracking(RuntimeContext runtimeContext) {
+		ComponentPipeMapping.generateComponentToPipeMap(runtimeContext.getFlowContext());
+		ComponentPipeMapping.generateComponentToFilterMap(runtimeContext);
+	}
+
 }

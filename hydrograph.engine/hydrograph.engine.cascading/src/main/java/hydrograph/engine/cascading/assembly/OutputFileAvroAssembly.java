@@ -74,6 +74,9 @@ public class OutputFileAvroAssembly extends BaseComponent<OutputFileAvroEntity> 
 		prepareScheme();
 		Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileAvro",outputFileAvroEntity.getComponentId(),""),
 				tailPipe);
+		setOutLink("output","NoSocketId",
+				outputFileAvroEntity.getComponentId(), sinkPipe, componentParameters
+				.getInputFieldsList().get(0));
 		setHadoopProperties(outTap.getStepConfigDef());
 		setHadoopProperties(sinkPipe.getStepConfigDef());
 		flowDef = flowDef.addTailSink(sinkPipe, outTap);

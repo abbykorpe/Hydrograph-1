@@ -73,6 +73,9 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 			prepareAssembly();
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileFixedWidth",
 					outputFileFixedWidthEntity.getComponentId(), ""), tailPipe);
+			setOutLink("output","NoSocketId",
+					outputFileFixedWidthEntity.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);
