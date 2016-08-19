@@ -31,7 +31,6 @@ import org.eclipse.ui.PlatformUI;
  */
 public class RunJobHandler{
 
-
 	private Job getJob(String localJobID, String consoleName, String canvasName) {
 		return new Job(localJobID, consoleName, canvasName, null, null, null, null);
 	}

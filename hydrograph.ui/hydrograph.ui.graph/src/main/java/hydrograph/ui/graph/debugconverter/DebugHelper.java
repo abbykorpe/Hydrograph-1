@@ -154,8 +154,7 @@ public class DebugHelper {
 	 * This function will be return process ID which running on defined port
 	 *
 	 */
-	public String getServicePortPID() throws IOException{
-		int portNumber = Integer.parseInt(restServicePort());
+	public String getServicePortPID(int portNumber) throws IOException{
 		if(OSValidator.isWindows()){
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c" ,"netstat -a -o -n |findstr :"+portNumber});
 			Process process =builder.start();

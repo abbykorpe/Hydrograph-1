@@ -22,8 +22,8 @@ import java.util.Map;
 
 import org.eclipse.draw2d.Graphics;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Link.
  * 
@@ -52,7 +52,9 @@ public class Link extends Model {
 	private Component target;
 
 	private String sourceTerminal, targetTerminal;
-
+	
+	@XStreamOmitField
+	private String recordCount;
 	/**
 	 * Instantiates a new link.
 	 */
@@ -227,6 +229,15 @@ public class Link extends Model {
 	
 	private void updateSubjobVersionForAnyUpdation(Link link) {
 		link.getSource().getParent().updateSubjobVersion();
+	}
+	
+	public String getRecordCount() {
+		return recordCount;
+	}
+	
+	public void updateRecordCount(String count) {
+		this.recordCount = count;
+		firePropertyChange("record_count", null, count);
 	}
 
 }

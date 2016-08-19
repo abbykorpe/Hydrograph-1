@@ -64,8 +64,13 @@ public abstract class Component extends Model {
 	 * @author Bitwise
 	 */
 	public static enum Props {
-		NAME_PROP("name"), LOCATION_PROP("Location"), SIZE_PROP("Size"), INPUTS(
-				"inputs"), OUTPUTS("outputs"), VALIDITY_STATUS("validityStatus");
+		NAME_PROP("name"), 
+		LOCATION_PROP("Location"), 
+		SIZE_PROP("Size"), 
+		INPUTS("inputs"), 
+		OUTPUTS("outputs"), 
+		VALIDITY_STATUS("validityStatus"),
+		EXECUTION_STATUS("executionStatus");
 
 		private String value;
 
@@ -146,6 +151,9 @@ public abstract class Component extends Model {
 	@XStreamOmitField
 	private Object componentEditPart;
 	
+	@XStreamOmitField
+	private CompStatus status;
+	
 	/**
 	 * Instantiates a new component.
 	 */
@@ -176,6 +184,7 @@ public abstract class Component extends Model {
 				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
+		status = CompStatus.BLANK;
 	}
 
 	/**
@@ -1397,6 +1406,20 @@ public abstract class Component extends Model {
 		this.componentEditPart = componentEditPart;
 	}	
 	
+	
+	public void updateStatus(String currentStatus) {
+		status = CompStatus.fromValue(currentStatus);
+		firePropertyChange(Props.EXECUTION_STATUS.getValue(), null, currentStatus);
+	}
+
+	public CompStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(CompStatus status) {
+		this.status = status;
+	}			  
+
 	/**
 	 * Validates all the properties of component and updates its validity status accordingly.
 	 *  

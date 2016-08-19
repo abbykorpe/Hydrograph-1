@@ -26,6 +26,7 @@ import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
+import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.action.ComponentHelpAction;
 import hydrograph.ui.graph.action.ComponentPropertiesAction;
 import hydrograph.ui.graph.action.ContributionItemManager;
@@ -44,6 +45,9 @@ import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
+import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
+import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.handler.DebugHandler;
@@ -101,6 +105,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
@@ -399,8 +404,15 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
 		((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
+		((ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler())
+		.setExecutionTrackingConsoleEnabled(isExecutionTracking());
 	}
 
+	public boolean isExecutionTracking(){
+		boolean isExeTracking = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
+				ExecutionPreferenceConstants.EXECUTION_TRACKING, true, null);
+		return isExeTracking;
+	}
 	
 	
 	@Override
@@ -457,7 +469,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 							enableRunJob(false);
 						}else{
                             ((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-                            ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+                            //((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
                            	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 							}
 						}
@@ -869,6 +881,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
+
+		if(this.uniqueJobId!=null){
+			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(this.uniqueJobId);
+		}else{
+			TrackingDisplayUtils.INSTANCE.clearTrackingStatus();
+		}
 
 		try {
 			if(container!=null)
@@ -1589,7 +1607,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	public String getJobId() {
-		return uniqueJobId;
+		if(uniqueJobId!=null){
+			return uniqueJobId;
+		}else{
+			return "";
+		}
 	}
  
 	public Container deleteSubjobProperties(Container container) {

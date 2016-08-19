@@ -14,23 +14,19 @@
  
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.joblogger.JobLogger;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 
 
 /**
  * 
  * The class is responsible to kill running job
  * 
- * @author bitwise
+ * @author Bitwise
  * 
  */
 public class StopJobHandler extends AbstractHandler {
@@ -40,16 +36,10 @@ public class StopJobHandler extends AbstractHandler {
 		RunStopButtonCommunicator.StopJob.setHandler(this);
 	}
 
-	private DefaultGEFCanvas getComponentCanvas() {
-		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
-			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.getActiveEditor();
-		else
-			return null;
-	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		JobManager.INSTANCE.killJob(JobManager.INSTANCE.getActiveCanvas());
 		
 		return null;

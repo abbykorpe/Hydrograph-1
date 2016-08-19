@@ -62,8 +62,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues."; //$NON-NLS-1$
 	private static final int DPI_COORDINATE=96;
 	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
-	
+
 	public static final String SERVICE_JAR = "SERVICE_JAR";
+
 	public static final String PORT_NUMBER = "PORT_NO";
 	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
 	
@@ -119,7 +120,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 				}
 			}
 		}
-		
 		try {
 			serviceInitiator();
 		} catch (IOException exception) {
@@ -280,4 +280,5 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		
 		return path + "config/service/config" ;
 	}
+	
 }

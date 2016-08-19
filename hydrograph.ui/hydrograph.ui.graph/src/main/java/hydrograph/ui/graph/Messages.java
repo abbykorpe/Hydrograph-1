@@ -83,7 +83,15 @@ public class Messages extends NLS {
 
 	public static String CONFIRM_FOR_GRAPH_PROPS_RUN_JOB;
 	public static String CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE;
+	public static String KILLTIME;
 
+	public static String NO_ACTIVE_GRAPHICAL_EDITOR;
+	public static String OUTPUT_SUBJOB_COMPONENT;
+	public static String INPUT_SUBJOB_COMPONENT;
+	public static String IN_PORT_TYPE;
+	public static String OUT_PORT_TYPE;
+	
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

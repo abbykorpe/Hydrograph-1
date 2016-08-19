@@ -18,6 +18,7 @@ import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.model.CompStatus;
 import hydrograph.ui.graph.model.Component.ValidityStatus;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
 import hydrograph.ui.graph.model.PortDetails;
@@ -87,7 +88,7 @@ public class ComponentFigure extends Figure implements Validator {
 	private String canvasIconPath;
 	private Image canvasIcon;
 
-	private String status;
+	private String propertyStatus;
 
 	private Map<String, PropertyToolTipInformation> propertyToolTipInformation;
 	private ComponentCanvas componentCanvas;
@@ -98,7 +99,7 @@ public class ComponentFigure extends Figure implements Validator {
 	private Runnable timer;
 
 	private String acronym;
-
+	private CompStatus componentStatus;
 	private LinkedHashMap<String, Object> componentProperties;
 
 	/**
@@ -323,7 +324,7 @@ public class ComponentFigure extends Figure implements Validator {
 		graphics.fillRoundRectangle(q, 5, 5);
 
 		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
-		drawStatus(graphics);
+		drawPropertyStatus(graphics);
 
 		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
 
@@ -337,24 +338,56 @@ public class ComponentFigure extends Figure implements Validator {
 				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))),
 						new Point(q.width - 14, q.height+ getComponentLabelMargin()-20));
 		}
+		
+		trackExecution(graphics);
 	}
 
+	private void trackExecution(Graphics graphics) {
+		Image compStatusImage = null;
+		Rectangle rectangle = getBounds().getCopy();
+		if(componentStatus!=null){
+
+			if (componentStatus.equals(CompStatus.BLANK)){
+				compStatusImage = null;
+			}else if (componentStatus.equals(CompStatus.PENDING)){
+				//setBackgroundColor(ELTColorConstants.BG_COMPONENT);
+				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_PENDING_ICON);
+			}else if (componentStatus.equals(CompStatus.RUNNING)){
+				//setBackgroundColor(ELTColorConstants.COMP_RUNNING_COLOR);
+				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_RUNNING_ICON);
+			}else if (componentStatus.equals(CompStatus.SUCCESSFUL)){
+				//setBackgroundColor(ELTColorConstants.COMP_COMPLETED_COLOR);
+				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_SUCCESS_ICON);
+			}else if (componentStatus.equals(CompStatus.FAILED)){
+				//setBackgroundColor(ELTColorConstants.COMP_FAILED_COLOR);
+				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_FAILED_ICON);
+			}
+		}
+		if (compStatusImage != null) {
+			graphics.drawImage(compStatusImage, new Point (8, rectangle.height - 22));
+		}
+	}
+
+	public void updateComponentStatus(CompStatus status){
+		componentStatus = status;
+	}
+	
 	/**
 	 * Draws the status image to right corner of the component
 	 * 
 	 * @param graphics
 	 */
-	private void drawStatus(Graphics graphics) {
+	private void drawPropertyStatus(Graphics graphics) {
 		Image statusImage = null;
 		Rectangle rectangle = getBounds().getCopy();
-		if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(ValidityStatus.WARN.name())) {
+		if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.WARN.name())) {
 			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_WARN_ICON);
-		} else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(ValidityStatus.ERROR.name())) {
+		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.ERROR.name())) {
 			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON);
-		} else if (StringUtils.isNotBlank(getStatus()) && getStatus().equals(Constants.UPDATE_AVAILABLE)) {
+		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(Constants.UPDATE_AVAILABLE)) {
 			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_UPDATE_ICON);
 		}
-		logger.debug("Component has {} status.", getStatus());
+		logger.debug("Component has {} property status.", getPropertyStatus());
 		if (statusImage != null) {
 			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
 		}
@@ -438,13 +471,13 @@ public class ComponentFigure extends Figure implements Validator {
 	}
 
 	@Override
-	public String getStatus() {
-		return status;
+	public String getPropertyStatus() {
+		return propertyStatus;
 	}
 
 	@Override
-	public void setStatus(String status) {
-		this.status = status;
+	public void setPropertyStatus(String status) {
+		this.propertyStatus = status;
 	}
 
 	/**

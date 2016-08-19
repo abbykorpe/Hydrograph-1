@@ -14,13 +14,17 @@
 package hydrograph.ui.graph.debug.service;
 
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.UnknownHostException;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
@@ -34,9 +38,13 @@ import org.slf4j.Logger;
 public class ViewDataServiceInitiator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataServiceInitiator.class);
 	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
+	public static final String SERVICE_JAR = "SERVICE_JAR";
+	public static final String PORT_NUMBER = "PORT_NO";
+	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
+
 	public static void startService(){	
 		try{
-			String portId=DebugHelper.INSTANCE.getServicePortPID();
+			String portId=DebugHelper.INSTANCE.getServicePortPID(Integer.parseInt(restServicePort()));
 			if(StringUtils.isBlank(portId)){
 				startServer();	
 			}			
@@ -106,5 +114,28 @@ public class ViewDataServiceInitiator {
 		return path + "config/service" ;
 	}
 	
+	
+	/**
+	 * This function used to return Rest Service port Number which running on local
+	 *
+	 */
+	public static String restServicePort(){
+		String portNumber = null;
+		try {
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
+			Properties properties = new Properties();
+			properties.load(fileReader);
+			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
+				portNumber = properties.getProperty(PORT_NUMBER);
+			}
+		} catch (FileNotFoundException e) {
+			logger.error("File not exists", e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		
+		return portNumber;
+	}
+
 	
 }

@@ -15,6 +15,7 @@
 package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
@@ -26,6 +27,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
+import javax.websocket.Session;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -52,6 +57,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	
 	/** The Constant JOB_COMPLETED_SUCCESSFULLY. */
 	private static final String JOB_COMPLETED_SUCCESSFULLY="JOB COMPLETED SUCCESSFULLY";
+	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
 	
 	
 	/**
@@ -69,6 +75,17 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	 */
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFile, Job job,	DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
+		Session session=null;
+
+		if(isExecutionTrackingOn()){
+			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
+			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
+					webSocketLocalHost);
+		if(hydrographServerConnection.getSelection() == 1){
+			closeWebSocketConnection(session);
+			return;
+		}
+		} 
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -77,7 +94,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 
 		job.setJobStatus(JobStatus.RUNNING);
 		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 		
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, debugXmlPath,job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
@@ -89,7 +106,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		}
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
-		
+		closeWebSocketConnection(session);		
 	}
 
 	/**
@@ -126,8 +143,10 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	 * @return the executute job command
 	 */
 	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, Job job) {
-		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
-				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId();
+		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE  + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
+				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() 
+				+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
+				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack();
 	}
 	
 	/**
@@ -147,16 +166,24 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 			String line = null;
 
 			while ((line = reader.readLine()) != null) {
+				if (line.contains("Gradle build daemon has been stopped.")) {
+					job.setJobStatus(JobStatus.KILLED);
+					joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
+					break;
+				}else if(line.contains(JOB_FAILED)){
+					job.setJobStatus(JobStatus.FAILED);
+				}
+				
 				if(!line.contains(BUILD_SUCCESSFUL) && !line.contains(BUILD_FAILED)){
 					joblogger.logMessage(line);
 				}else{
-					if(line.contains(BUILD_FAILED)){
-						joblogger.logMessage(JOB_FAILED);
-					}else{
-						joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
-						JobManager.INSTANCE.enableRunJob(true);
-						//((DebugHandler) RunStopButtonCommunicator.RunDebugJob.getHandler()).setDebugJobEnabled(true);
-					}
+					if (job.getJobStatus().equalsIgnoreCase(JobStatus.KILLED)){
+							joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
+						} else if(job.getJobStatus().equalsIgnoreCase(JobStatus.FAILED)){
+							joblogger.logMessage(JOB_FAILED);
+						}else{
+							joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
+						}
 				}
 			}
 		} catch (IOException e) {
@@ -180,4 +207,33 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		
 	}
+
+	@Override
+	public void killJob(Job jobToKill) {
+		//JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);	
+		JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
+	}
+	/**
+	 * Close Websocket connection Connection
+	 * @param session
+	 */
+	private void closeWebSocketConnection(Session session){
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+		}
+
+		if (session != null  && session.isOpen()) {
+			try {
+				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Session Closed");
+				session.close(closeReason);
+				logger.info("Session closed");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+
+	}
+
 }

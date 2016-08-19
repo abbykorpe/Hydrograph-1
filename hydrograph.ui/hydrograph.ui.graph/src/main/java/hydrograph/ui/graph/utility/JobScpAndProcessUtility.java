@@ -13,25 +13,38 @@
 
 package hydrograph.ui.graph.utility;
 
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.GradleCommandConstants;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.job.JobStatus;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.websocket.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
@@ -39,6 +52,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 /**
@@ -52,7 +68,10 @@ public class JobScpAndProcessUtility {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobScpAndProcessUtility.class);
 	public static final JobScpAndProcessUtility INSTANCE = new JobScpAndProcessUtility();
-	
+	private static final String JPS_COMMAND_TO_FIND_JAVA_PROCESES = "jps -m";
+	private static final String WINDOWS_COMMAND_TO_KILL_PROCESS = "TASKKILL /F /PID ";
+	private static final String MAC_COMMAND_TO_KILL_PROCESS = "kill -9 ";
+
 	private JobScpAndProcessUtility(){
 		
 	}
@@ -62,7 +81,7 @@ public class JobScpAndProcessUtility {
 	 * @return command
 	 */
 	public  String getLibararyScpCommand(Job job) {
-		String command = GradleCommandConstants.GCMD_SCP_JAR + GradleCommandConstants.GPARAM_HOST + job.getHost()
+		String command = GradleCommandConstants.GCMD_SCP_JAR + GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword();
 		return command;
@@ -75,7 +94,7 @@ public class JobScpAndProcessUtility {
 	 * @return command
 	 */
 	public  String getJobXMLScpCommand(String xmlPath, String debugXmlPath, Job job) {
-		String command=GradleCommandConstants.GCMD_SCP_JOB_XML + GradleCommandConstants.GPARAM_HOST + job.getHost()
+		String command=GradleCommandConstants.GCMD_SCP_JOB_XML + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1];
 		
@@ -91,7 +110,7 @@ public class JobScpAndProcessUtility {
 	 * @return command
 	 */
 	public  String getParameterFileScpCommand(String paramFile, Job job) {
-		String command =GradleCommandConstants.GCMD_SCP_PARM_FILE + GradleCommandConstants.GPARAM_HOST + job.getHost()
+		String command =GradleCommandConstants.GCMD_SCP_PARM_FILE + GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"";
 		return command;
@@ -107,18 +126,19 @@ public class JobScpAndProcessUtility {
 	public  String getExecututeJobCommand(String xmlPath,String debugXmlPath, String paramFile, Job job) {
 		String command="";
 		if(!"".equalsIgnoreCase(debugXmlPath.trim())){
-			command=GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
+			command=GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB+ GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 					+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 					+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
 					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH 
-			+ job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId();
+			+ job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack();
 		}else{
-				command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
+				command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
-				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1];
+				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
+				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack();
 		}
-		
+		logger.debug("Gradle Command: {}", command);
 		return command;
 	}
 	
@@ -130,7 +150,7 @@ public class JobScpAndProcessUtility {
 	 */
 	public String getSchemaScpCommand(List<String> externalSchemaFiles,Job job) {
 			String externalSchema =  StringUtils.join(externalSchemaFiles, ",");
-			return  GradleCommandConstants.GCMD_SCP_SCHEMA_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
+			return  GradleCommandConstants.GCMD_SCP_SCHEMA_FILES + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SCHEMA +"\""+externalSchema+"\"";
 	}
@@ -144,7 +164,7 @@ public class JobScpAndProcessUtility {
 	 */
 	public String getSubjobScpCommand(List<String> subJobList,Job job) {
 			String subJobFiles =  StringUtils.join(subJobList, ",");
-			return  GradleCommandConstants.GCMD_SCP_SUBJOB_FILES + GradleCommandConstants.GPARAM_HOST + job.getHost()
+			return  GradleCommandConstants.GCMD_SCP_SUBJOB_FILES+ GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_MOVE_SUBJOB +"\""+subJobFiles+"\"";
 	}
@@ -172,7 +192,7 @@ public class JobScpAndProcessUtility {
 		if(!subJobList.isEmpty()) 
 			subJobFiles = getCommaSeparatedDirectories(subJobList);
 		
-		return  GradleCommandConstants.GCMD_CREATE_DIRECTORIES+ GradleCommandConstants.GPARAM_HOST + job.getHost()
+		return  GradleCommandConstants.GCMD_CREATE_DIRECTORIES+ GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
 				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
 				+ job.getPassword() + GradleCommandConstants.GPARAM_JOB_XML + xmlPath +GradleCommandConstants.GPARAM_MOVE_PARAM_FILE +project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_PARAM + GradleCommandConstants.GPARAM_MOVE_SCHEMA_FILES + schemaFiles + GradleCommandConstants.GPARAM_MOVE_SUBJOB_FILES + subJobFiles + GradleCommandConstants.GPARAM_MOVE_JAR + project+"/"+GradleCommandConstants.REMOTE_FIXED_DIRECTORY_LIB ;
 	}
@@ -341,5 +361,131 @@ public class JobScpAndProcessUtility {
 		  	}
 		}
 	}
+
+	public void	killRemoteJobProcess(Job jobToKill){
+
+		/*final Timer timer = new Timer();
+		String[] runCommand = new String[3];
+		if (OSValidator.isWindows()) {
+			String[] command = { Messages.CMD, "/c", GradleCommandConstants.KILL_GRADLE_DAEMON };
+			runCommand = command;
+
+		} else if (OSValidator.isMac()) {
+			String[] command = { Messages.SHELL, "-c", GradleCommandConstants.KILL_GRADLE_DAEMON };
+			runCommand = command;
+		}
+
+		final ProcessBuilder processBuilder = new ProcessBuilder(runCommand);
+		processBuilder.redirectErrorStream(true);
+		jobToKill.setJobStatus(JobStatus.KILLED);
+
+		DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+		JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+		JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
+		long killTime = System.currentTimeMillis();
+		final long end = killTime + Long.valueOf(Messages.KILLTIME);
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				if(System.currentTimeMillis() < end) {
+					try {
+						processBuilder.start();
+					} catch (IOException e) {
+						logger.info("Fail to run kill process.");
+					}
+				}else{
+					timer.cancel();
+				}
+
+			}
+		};
+		timer.schedule(task, 0l, 1000);*/
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				SWT.ICON_WARNING | SWT.YES | SWT.NO);
+		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
+		messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
+		if (messageBox.open() == SWT.YES) {
+			jobToKill.setJobStatus(JobStatus.KILLED);
+			Session session = null;
+			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
+			try {
+				String remoteUrl = TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl();
+				session = hydrographServerConnection.connectToKillJob(jobToKill.getUniqueJobId(), remoteUrl);
+				Thread.sleep(8000);
+			} catch (Throwable e1) {
+				showMessageBox(e1.getMessage(),"Error", SWT.ERROR);
+				logger.error(e1.getMessage());
+			} finally {
+				if (session != null) {
+					try {
+						session.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+			JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
+			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
+		}
+	}
 	
+	private void showMessageBox(String message,String header,int SWT_Type)
+	{
+		MessageBox box=new MessageBox(Display.getCurrent().getActiveShell(), SWT_Type);
+		box.setMessage(message);
+		box.setText(header);
+		box.open();
+	}
+	
+	public void	killLocalJobProcess(final Job jobToKill){
+
+		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				SWT.ICON_WARNING | SWT.YES | SWT.NO);
+		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
+		messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
+		if (messageBox.open() == SWT.YES) {
+			jobToKill.setJobStatus(JobStatus.KILLED);
+
+			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
+			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
+			JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
+			try {
+				Process	process = Runtime.getRuntime().exec(JPS_COMMAND_TO_FIND_JAVA_PROCESES);
+				
+				InputStream stream = process.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+				String line = null;
+
+				while ((line = reader.readLine()) != null) {
+					if(line.contains(jobToKill.getUniqueJobId())){
+						logger.debug("Trying to kill the job using taskkill for local");
+						jobToKill.setJobStatus(JobStatus.KILLED);
+						String[] jpsOutput = line.split(" ");
+						Process killProcess = null;
+						if (OSValidator.isWindows()) {
+							killProcess = Runtime.getRuntime().exec(WINDOWS_COMMAND_TO_KILL_PROCESS+ jpsOutput[0]);
+						}else if (OSValidator.isMac()){
+							killProcess = Runtime.getRuntime().exec(MAC_COMMAND_TO_KILL_PROCESS+jpsOutput[0]);
+						}
+						InputStream streamKill = killProcess.getInputStream();
+						BufferedReader readerKill = new BufferedReader(new InputStreamReader(streamKill));
+						String lineKill = null;
+						while ((lineKill = readerKill.readLine()) != null) {
+							logger.info("Kill log: "+lineKill);
+							joblogger.logMessage(lineKill);
+						}
+						break;
+					}
+				}
+			} catch (IOException e) {
+				logger.info("Fail to run kill process.");
+			}
+		}
+		
+	}
+
 }
