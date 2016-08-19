@@ -156,7 +156,7 @@ public class TrackingDisplayUtils {
 		String portNumber = null;
 		try {
 			FileReader fileReader = new FileReader(
-					XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
+					XMLConfigUtil.CONFIG_FILES_PATH + EXECUTION_TRACKING_PROPERY_FILE);
 			Properties properties = new Properties();
 			properties.load(fileReader);
 			if (StringUtils.isNotBlank(properties.getProperty(PORT_NUMBER))) {
