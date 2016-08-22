@@ -131,7 +131,7 @@ public class ExecutionTrackingFileLogger {
 		}
 		
 		stringBuilder.append("============================================================================\n");
-		logger.info(stringBuilder.toString());
+		//logger.info(stringBuilder.toString());
 		return stringBuilder.toString();
 	}
 
