@@ -13,10 +13,10 @@
 package hydrograph.engine.commandline.utilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import hydrograph.engine.execution.tracking.ComponentInfo;
-import hydrograph.engine.execution.tracking.JobInfo;
 
 public class HydrographService {
 	private HydrographExecution execution;
@@ -28,7 +28,10 @@ public class HydrographService {
 			execution.run(args);
 	}
 	public List<ComponentInfo> getStatus() {
-		return new ArrayList<>(execution.getJobInfo().getstatus());
+		if(execution.getJobInfo()!=null)
+			return new ArrayList<>(execution.getJobInfo().getstatus());
+		else
+			return Collections.emptyList();
 	}
 
 	public void kill() {
