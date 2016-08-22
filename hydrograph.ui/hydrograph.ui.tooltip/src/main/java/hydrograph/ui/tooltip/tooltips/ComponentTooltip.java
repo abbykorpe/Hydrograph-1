@@ -14,6 +14,7 @@
 package hydrograph.ui.tooltip.tooltips;
 
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
+import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.WordUtils;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.text.AbstractInformationControl;
@@ -36,6 +38,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -45,8 +48,6 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
-
-import org.apache.commons.lang.StringUtils;
 /**
  * 
  * Class for component tooltip
@@ -85,6 +86,8 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	private static final String SCHEMA="schema";
 	private static final String EXTERNAL_SCHEMA_PATH="External schema path : ";
 	private static final String IN_PORT_COUNT="inPortCount|unusedPortCount";
+	
+	private static final String ISSUE_PROPERTY_NAME="Other Issues";
 	
 	/**
 	 * 
@@ -406,17 +409,35 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	 * @param propertyInfo
 	 */
 	private void addPropertyToToolTip(final Composite container, PropertyToolTipInformation propertyInfo) {
+		if (StringUtils.equalsIgnoreCase(ISSUE_PROPERTY_NAME, propertyInfo.getPropertyName())) {
+			addTooltipWindowSplitter(container);
+
+			Label lblTextProperty = addPropertyInTooltipWindow(container, propertyInfo);
+			
+			lblTextProperty.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		} else {
+			Label lblTextProperty = addPropertyInTooltipWindow(container, propertyInfo);
+
+			showErrors(propertyInfo, lblTextProperty);
+		}
+	}
+
+	private Label addPropertyInTooltipWindow(final Composite container, PropertyToolTipInformation propertyInfo) {
 		Label lblTextProperty = new Label(container, SWT.NONE);
 		String propertyNameCapitalized = getCapitalizedName(propertyInfo);
-		
+
 		logger.debug("ComponentTooltip.addPropertyToToolTip() - propertyInfo=" + propertyInfo.toString());
-		
+
 		addText(propertyInfo, lblTextProperty, propertyNameCapitalized);
-		
+
 		lblTextProperty.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		lblTextProperty.addListener(SWT.MouseUp, getMouseClickListener(container));
-		
-		showErrors(propertyInfo, lblTextProperty);
+		return lblTextProperty;
+	}
+
+	private void addTooltipWindowSplitter(final Composite container) {
+		Label separator = new Label(container, SWT.HORIZONTAL | SWT.SEPARATOR);
+		separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	/**
