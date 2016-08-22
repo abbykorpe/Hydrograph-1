@@ -76,17 +76,17 @@ public class SubMenuAction extends Action implements SelectionListener
                   for (int i = 0; i < actions.length; i++)
                   {
                     MenuItem item = new MenuItem(menu, SWT.NONE);
+                    item.setText(actions[i].getText());
+                    if (actions[i].getImageDescriptor() != null)
+                        item.setImage(actions[i].getImageDescriptor().createImage());
+                    
                     if (actions[i] == null || !actions[i].isEnabled() && hideDisabled)
                     {	                    
-                    	item.setText(actions[i].getText());
                     	item.setEnabled(false);
-                    	continue;
+                       	continue;
                	 	}
 
                     item.setData(new Integer(i));
-                    item.setText(actions[i].getText());
-                    if (actions[i].getImageDescriptor() != null)
-                        item.setImage(actions[i].getImageDescriptor().createImage()); 
                     item.addSelectionListener(actionInstance);
                 }
                 return menu;

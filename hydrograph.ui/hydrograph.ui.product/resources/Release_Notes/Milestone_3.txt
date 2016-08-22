@@ -83,6 +83,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 67.#669 [Shrirang Kumbhar] Validation Need To be Added When Schema from Mapping Fields are Not in Sync With Schema Tab 
 68.#330 [Shrirang Kumbhar] Parameter Grid: Search functionality - User should be able to search by parameter name or by parameter value only, not by Paramter Files
 69.#973 [Shrirang Kumbhar] Sync schema: When user add mapping in mapping table and press autosync. It enables apply and when we press cancel it still saves the mapping changes. The same happens in case of pull button  
+70.#1064[Nikhil Deokar] Subjob: Fixed issue of Input Subjob Links From Input Subjob to Subsequent Component
+71.#1059[Nikhil Deokar] Subjob: Disabled 'Refresh' Icon was not present
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
