@@ -122,7 +122,6 @@ public class ExecutionTrackingFileLogger {
 		}
 		stringBuilder.append("Job ID " + executionStatus.getJobId() + "\n");
 		stringBuilder.append("Job Type: " + executionStatus.getType() + "\n");
-		stringBuilder.append("Job Status: " + executionStatus.getJobStatus() + "\n");
 		
 		for(ComponentStatus componentStatus : executionStatus.getComponentStatus()){
 			stringBuilder.append("-------------------------------------\n");
@@ -132,7 +131,7 @@ public class ExecutionTrackingFileLogger {
 		}
 		
 		stringBuilder.append("============================================================================\n");
-		logger.info(stringBuilder.toString());
+		//logger.info(stringBuilder.toString());
 		return stringBuilder.toString();
 	}
 

@@ -28,9 +28,6 @@ public class ExecutionStatus {
 	/** The type. */
 	private String type;
 	
-	/** The job status. */
-	private String jobStatus;
-
 	/**
 	 * Instantiates a new execution status.
 	 *
@@ -77,23 +74,6 @@ public class ExecutionStatus {
 		this.componentStatus = componentStatus;
 	}
 
-	/**
-	 * Gets the job status.
-	 *
-	 * @return the job status
-	 */
-	public String getJobStatus() {
-		return jobStatus;
-	}
-
-	/**
-	 * Sets the job status.
-	 *
-	 * @param jobStatus the new job status
-	 */
-	public void setJobStatus(String jobStatus) {
-		this.jobStatus = jobStatus;
-	}
 
 	/**
 	 * Gets the job id.
@@ -118,8 +98,7 @@ public class ExecutionStatus {
 	 */
 	@Override
 	public String toString() {
-		return "ExecutionStatus [componentStatus=" + componentStatus + ", jobId=" + jobId + ", type=" + type
-				+ ", jobStatus=" + jobStatus + "]";
+		return "ExecutionStatus [componentStatus=" + componentStatus + ", jobId=" + jobId + ", type=" + type;
 	}
 	
 

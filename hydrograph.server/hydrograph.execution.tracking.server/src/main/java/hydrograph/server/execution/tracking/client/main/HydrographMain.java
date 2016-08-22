@@ -99,8 +99,7 @@ public class HydrographMain {
 			try {
 				ClientManager client = ClientManager.createClient();
 				final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
-				session = client.connectToServer(socket,
-						new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
+				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
 
 				TimerTask task = new TimerTask() {
 					@Override
