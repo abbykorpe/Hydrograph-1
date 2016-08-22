@@ -429,6 +429,8 @@ public class JobScpAndProcessUtility {
 			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
 			JobManager.INSTANCE.releaseResources(jobToKill, gefCanvas, joblogger);
 			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(jobToKill.getUniqueJobId());
+		}else{
+			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 		}
 	}
 	
@@ -442,12 +444,12 @@ public class JobScpAndProcessUtility {
 	
 	public void	killLocalJobProcess(final Job jobToKill){
 
-		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 		MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				SWT.ICON_WARNING | SWT.YES | SWT.NO);
 		messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
 		messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
 		if (messageBox.open() == SWT.YES) {
+			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			jobToKill.setJobStatus(JobStatus.KILLED);
 
 			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
@@ -484,6 +486,8 @@ public class JobScpAndProcessUtility {
 			} catch (IOException e) {
 				logger.info("Fail to run kill process.");
 			}
+		}else{
+			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 		}
 		
 	}

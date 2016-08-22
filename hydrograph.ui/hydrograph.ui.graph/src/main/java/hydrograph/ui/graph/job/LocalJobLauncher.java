@@ -169,9 +169,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void killJob(Job jobToKill) {
-		//JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
 		JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
-		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
 	}
 	
 	/**

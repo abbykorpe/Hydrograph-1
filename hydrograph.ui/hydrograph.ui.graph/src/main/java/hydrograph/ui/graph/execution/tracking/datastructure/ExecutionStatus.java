@@ -24,8 +24,6 @@ public class ExecutionStatus {
 	private List<ComponentStatus> componentStatus;
 	private String jobId;
 	private String type;
-	private String jobStatus;
-
 	
 
 	public ExecutionStatus(List<ComponentStatus> componentStatus) {
@@ -64,21 +62,6 @@ public class ExecutionStatus {
 	}
 
 	
-	/**
-	 * @return current status of the job
-	 */
-	public String getJobStatus() {
-		return jobStatus;
-	}
-
-	/**
-	 * set job status 
-	 * @param jobStatus
-	 */
-	public void setJobStatus(String jobStatus) {
-		this.jobStatus = jobStatus;
-	}
-
 	
 	/**
 	 * @return Job ID
@@ -98,8 +81,7 @@ public class ExecutionStatus {
 
 	@Override
 	public String toString() {
-		return "ExecutionStatus [componentStatus=" + componentStatus + ", jobId=" + jobId + ", type=" + type
-				+ ", jobStatus=" + jobStatus + "]";
+		return "ExecutionStatus [componentStatus=" + componentStatus + ", jobId=" + jobId + ", type=" + type+ "]";
 	}
 	
 	
