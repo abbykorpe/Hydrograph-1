@@ -332,10 +332,6 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		keyValueDelButton.addSelectionListener(deleteButtonListner(keyValueDelButton));
 		keyValueDelButton.setToolTipText(Messages.HIVE_PARTI_KEY_VALUE_DEL_TOOLTIP);
 		
-		if(keyValues.size()==0){
-			keyValueDelButton.setEnabled(false);
-		}
-		
 		keyValueTableViewer = new TableViewer(partkeyValueComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		
 		Table table = keyValueTableViewer.getTable();
@@ -346,6 +342,10 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		keyValueTableViewer.setCellModifier(new HiveFieldDialogCellModifier(keyValueTableViewer));
 		
 		loadKeyValueProperties(keyValueTableViewer);
+		
+		if(keyValues.size()==0){
+			keyValueDelButton.setEnabled(false);
+		}
 		
 		if(keyValues.size()>0){
 			

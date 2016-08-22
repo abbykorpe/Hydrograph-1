@@ -14,7 +14,7 @@
  
 package hydrograph.ui.graph.model.components;
 
-import hydrograph.ui.graph.model.categories.InputCategory;
+import hydrograph.ui.graph.model.categories.OutputCategory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -22,7 +22,7 @@ import hydrograph.ui.graph.model.categories.InputCategory;
  * 
  * @author eyy445
  */
-public class OHiveTextFile extends InputCategory {
+public class OHiveTextFile extends OutputCategory {
 
 	/**
 	 * Instantiates a new Output Hive TextFile.
