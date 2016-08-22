@@ -64,7 +64,7 @@ public class ExecutionTrackingFileLogger {
 		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
 		defaultJobTrackingLogDirectory=Platform.getInstallLocation().getURL().getPath() + getLoggerPath();
 		jobTrackingLogDirectory = eclipsePreferences.get(ExecutionPreferenceConstants.TRACKING_LOG_PATH, defaultJobTrackingLogDirectory);
-		jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
+		//jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
 				
 		executionTrackingLoggers = new HashMap<>();
 		
@@ -81,7 +81,7 @@ public class ExecutionTrackingFileLogger {
 		if(OSValidator.isWindows()){
 			dirPath = "config//logger//JobTrackingLog";
 		}else if(OSValidator.isMac()){
-			dirPath = "config\\logger\\JobTrackingLog";
+			dirPath = "config//logger//JobTrackingLog";
 		}else if(OSValidator.isUnix()){
 			dirPath = "config\\logger\\JobTrackingLog";
 		}
@@ -129,6 +129,11 @@ public class ExecutionTrackingFileLogger {
 	 */
 	private BufferedWriter getExecutionStatusLogger(String uniqJobId) {
 		BufferedWriter bufferedWriter = executionTrackingLoggers.get(uniqJobId);		
+		if(OSValidator.isWindows()){
+			jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
+		}else if(OSValidator.isMac()){
+			jobTrackingLogDirectory = jobTrackingLogDirectory + "//";
+		}
 		if(bufferedWriter==null){
 			try{
 				 FileWriter fileWriter = new FileWriter(jobTrackingLogDirectory + uniqJobId + ExecutionTrackingLogFileExtention, true);
@@ -154,7 +159,6 @@ public class ExecutionTrackingFileLogger {
 		}
 		stringBuilder.append("Job ID: " + executionStatus.getJobId() + "\n");
 		stringBuilder.append("Job Type: " + executionStatus.getType() + "\n");
-		stringBuilder.append("Job Status: " + executionStatus.getJobStatus() + "\n");
 		
 		for(ComponentStatus componentStatus : executionStatus.getComponentStatus()){
 			stringBuilder.append("-------------------------------------\n");

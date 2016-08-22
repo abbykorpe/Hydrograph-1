@@ -78,6 +78,7 @@ public class HydrographServerConnection {
 
 						}
 					});
+					
 					logger.error("Error while connection to server");
 				}else{
 					session = connectToServer(job, jobID, url);

@@ -469,7 +469,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 							enableRunJob(false);
 						}else{
                             ((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-                            //((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
+                            ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
                            	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 							}
 						}
