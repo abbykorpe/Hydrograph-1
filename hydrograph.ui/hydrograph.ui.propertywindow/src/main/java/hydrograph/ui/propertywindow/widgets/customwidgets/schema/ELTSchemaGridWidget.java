@@ -1497,19 +1497,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		ELTGridDetails eLTDetails = (ELTGridDetails) helper
 				.get(HelperType.SCHEMA_GRID);
 		eLTDetails.setGrids(schemaGridRowList);
-		Schema originalSchemaObject = (Schema) getComponent().getProperties()
-				.get(Constants.SCHEMA_PROPERTY_NAME);
-
-		if (originalSchemaObject == null) {
-			originalSchemaObject = new Schema();
-			originalSchemaObject.setGridRow(schemaGridRowList);
-			originalSchemaObject.setIsExternal(false);
-			originalSchemaObject.setExternalSchemaPath("");
-		} else {
-			originalSchemaObject.getGridRow().clear();
-			originalSchemaObject.getGridRow().addAll(schemaGridRowList);
-		}
-
+		
 		tableViewer.refresh();
 	}
 

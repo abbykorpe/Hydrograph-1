@@ -14,7 +14,6 @@
  
 package hydrograph.ui.propertywindow.propertydialog;
 
-import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
@@ -25,7 +24,6 @@ import hydrograph.ui.propertywindow.constants.ELTProperties;
 import hydrograph.ui.propertywindow.messagebox.ConfirmCancelMessageBox;
 import hydrograph.ui.propertywindow.property.ELTComponenetProperties;
 import hydrograph.ui.propertywindow.property.Property;
-import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.validators.ComponentValidator;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
