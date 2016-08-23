@@ -59,8 +59,8 @@ public class DataGeneratorTest {
 
 	@Test
 	public void testGetRandomIntegerOfSpecificLength() {
-		int num = DataGenerator.getRandomInteger(10);
-		assertEquals(10, String.valueOf(num).length());
+		int num = DataGenerator.getRandomInteger(9);
+		assertEquals(9, String.valueOf(num).length());
 	}
 
 	@Test
@@ -147,7 +147,7 @@ public class DataGeneratorTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testGetDefaultDateForInvalidDate() {
-		String date = DataGenerator.getDefaultDate("yyyy-MM-dd", "2012-49-49");
+		String date = DataGenerator.getDefaultDate("yyyy-MM-dd", null);
 		assertTrue(date.equals("2012-01-01"));
 	}
 
