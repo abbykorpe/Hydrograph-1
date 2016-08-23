@@ -44,7 +44,6 @@ import org.slf4j.Logger;
 abstract public class AbstractJobLauncher {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(AbstractJobLauncher.class);
 	
-	public String webSocketRemoteUrl = TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl();
 	public String webSocketLocalHost = TrackingDisplayUtils.INSTANCE.getWebSocketLocalHost();
 
 	/**

@@ -20,6 +20,7 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.CompStatus;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -161,7 +162,6 @@ public class TrackingDisplayUtils {
 			properties.load(fileReader);
 			if (StringUtils.isNotBlank(properties.getProperty(PORT_NUMBER))) {
 				portNumber = properties.getProperty(PORT_NUMBER);
-				remoteHost = properties.getProperty(REMOTE_URL);
 				localHost = properties.getProperty(LOCAL_URL);
 				websocketRoute = properties.getProperty(WEBSOCKET_ROUTE);
 			}
@@ -178,9 +178,9 @@ public class TrackingDisplayUtils {
 	 * 
 	 * @return the web socket remote url
 	 */
-	public String getWebSocketRemoteUrl() {
+	public String getWebSocketRemoteUrl(Job job) {
 		String portNo = getPortFromPreference();
-		String remoteUrl = remoteHost + portNo + websocketRoute;
+		String remoteUrl = "ws://" + job.getHost() + portNo + websocketRoute;
 		return remoteUrl;
 	}
 
