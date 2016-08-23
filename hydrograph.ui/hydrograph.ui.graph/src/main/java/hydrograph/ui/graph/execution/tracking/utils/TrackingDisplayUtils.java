@@ -42,7 +42,6 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TrackingDisplayUtils.
  */
@@ -56,9 +55,6 @@ public class TrackingDisplayUtils {
 	
 	/** The Constant PORT_NUMBER. */
 	public static final String PORT_NUMBER = "EXECUTION_TRACKING_PORT";
-	
-	/** The Constant REMOTE_URL. */
-	public static final String REMOTE_URL = "WEBSOCKET_REMOTE_URL";
 	
 	/** The Constant LOCAL_URL. */
 	public static final String LOCAL_URL = "WEBSOCKET_LOCAL_HOST";
@@ -89,7 +85,8 @@ public class TrackingDisplayUtils {
 
 	/** The websocket route. */
 	private String websocketRoute;
-
+	public static final String WEB_SOCKET = "ws://";
+	public static final String COLON = ":";
 	/**
 	 * Instantiates a new tracking display utils.
 	 */
@@ -180,7 +177,7 @@ public class TrackingDisplayUtils {
 	 */
 	public String getWebSocketRemoteUrl(Job job) {
 		String portNo = getPortFromPreference();
-		String remoteUrl = "ws://" + job.getHost() + portNo + websocketRoute;
+		String remoteUrl = WEB_SOCKET + job.getHost() + COLON + portNo + websocketRoute;
 		return remoteUrl;
 	}
 
