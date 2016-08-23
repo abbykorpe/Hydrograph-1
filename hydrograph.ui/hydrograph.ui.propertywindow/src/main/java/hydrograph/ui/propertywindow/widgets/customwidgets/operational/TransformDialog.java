@@ -622,7 +622,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		viewTransform.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void  widgetSelected(SelectionEvent e) {
-				TransformViewDataDialog transformViewDataDialog = new TransformViewDataDialog(parentShell);
+				TransformViewDataDialog transformViewDataDialog = new TransformViewDataDialog(Display.getCurrent().getActiveShell());
 				transformViewDataDialog.getMappingSheet(transformMapping.getMappingSheetRows(),transformMapping.getMapAndPassthroughField());
 				transformViewDataDialog.open();
 			}

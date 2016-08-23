@@ -69,7 +69,7 @@ public class ExpressionEditorDialog extends Dialog {
 	public ExpressionEditorDialog(Shell parentShell, Map<String, Class<?>> fieldMap,String oldExpressionText) {
 		
 		super(parentShell);
-		setShellStyle(SWT.CLOSE);
+		setShellStyle(SWT.CLOSE|SWT.APPLICATION_MODAL);
 		this.fieldMap=fieldMap;
 		this.selectedInputFields=new ArrayList<>(fieldMap.keySet());
 		javaLineStyler=new JavaLineStyler(selectedInputFields);

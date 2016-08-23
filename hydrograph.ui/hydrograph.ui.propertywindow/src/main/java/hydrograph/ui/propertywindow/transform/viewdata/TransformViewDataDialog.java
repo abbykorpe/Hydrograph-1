@@ -49,6 +49,7 @@ import org.eclipse.swt.widgets.Shell;
 public class TransformViewDataDialog extends Dialog {
 
 	
+	private static final String COPY_BUTTON_TOOL_TIP = "Copy";
 	private List<MappingSheetRow> mappingRowList;
 	private List<NameValueProperty> mapAndPassthroughField;
 	private StyledText styledText;
@@ -61,7 +62,7 @@ public class TransformViewDataDialog extends Dialog {
 	 */
 	public TransformViewDataDialog(Shell parentShell) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP |SWT.MAX | SWT.APPLICATION_MODAL | SWT.RESIZE);
+		setShellStyle(SWT.CLOSE |SWT.MAX | SWT.RESIZE| SWT.APPLICATION_MODAL);
 		
 	}
 
@@ -317,6 +318,7 @@ public class TransformViewDataDialog extends Dialog {
 	 
 	    	Image copyImage =new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + TransformViewDataDialogConstants.COPY_ICON);
 	    	copyButton.setImage(copyImage);
+	    	copyButton.setToolTipText(COPY_BUTTON_TOOL_TIP);
 	    	copyButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
