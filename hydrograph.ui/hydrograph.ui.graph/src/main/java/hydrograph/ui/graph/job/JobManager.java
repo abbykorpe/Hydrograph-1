@@ -175,7 +175,6 @@ public class JobManager {
 	public void enableRunJob(boolean enabled) {
 		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
-		//((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
 	}
 	
 	/**
