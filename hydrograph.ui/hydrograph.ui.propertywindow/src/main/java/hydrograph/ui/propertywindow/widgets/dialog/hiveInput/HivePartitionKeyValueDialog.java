@@ -1049,11 +1049,11 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 	@Override
 	protected void cancelPressed() {
 		if (isAnyUpdatePerformed) {
-			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+			int style = SWT.APPLICATION_MODAL | SWT.OK | SWT.CANCEL;
 			MessageBox messageBox = new MessageBox(getShell(), style);
 			messageBox.setText(Messages.INFORMATION); //$NON-NLS-1$
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
-			if (messageBox.open() == SWT.YES) {
+			if (messageBox.open() == SWT.OK) {
 				closeDialog = super.close();
 			}
 		} else {
