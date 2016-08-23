@@ -30,7 +30,7 @@ public class DataGeneratorTest {
 
 	private static Logger LOG = LoggerFactory
 			.getLogger(DataGeneratorTest.class);
-	
+
 	@Test
 	public void testGetRandomString() {
 		String str = DataGenerator.getRandomString();
@@ -100,8 +100,8 @@ public class DataGeneratorTest {
 
 	@Test
 	public void testGetDefaultBigDecimal() {
-		BigDecimal bdNum = DataGenerator.getDefaultBigDecimal(BigDecimal.valueOf(
-				123456.789), 4);
+		BigDecimal bdNum = DataGenerator.getDefaultBigDecimal(
+				BigDecimal.valueOf(123456.789), 4);
 		assertTrue(bdNum.toString().equals("123456.7890"));
 	}
 
@@ -114,15 +114,15 @@ public class DataGeneratorTest {
 
 	@Test
 	public void testGetFromBigDecimal() {
-		BigDecimal bdNum = DataGenerator.getFromBigDecimal(BigDecimal.valueOf(
-				125.125), 2);
+		BigDecimal bdNum = DataGenerator.getFromBigDecimal(
+				BigDecimal.valueOf(125.125), 2);
 		assertTrue(bdNum.compareTo(BigDecimal.valueOf(125.125)) == 1);
 	}
 
 	@Test
 	public void testGetBigDecimalBetween() {
-		BigDecimal bdNum = DataGenerator.getBigDecimalBetween(BigDecimal.valueOf(
-				125.125), BigDecimal.valueOf(200.01), 2);
+		BigDecimal bdNum = DataGenerator.getBigDecimalBetween(
+				BigDecimal.valueOf(125.125), BigDecimal.valueOf(200.01), 2);
 		assertTrue(bdNum.compareTo(BigDecimal.valueOf(125.125)) == 1
 				&& bdNum.compareTo(BigDecimal.valueOf(200.01)) == -1);
 	}
@@ -145,10 +145,9 @@ public class DataGeneratorTest {
 		assertTrue(date.equals(expectedDate));
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = RuntimeException.class)
 	public void testGetDefaultDateForInvalidDate() {
-		String date = DataGenerator.getDefaultDate("yyyy-MM-dd", null);
-		assertTrue(date.equals("2012-01-01"));
+		String date = DataGenerator.getDefaultDate("yyyy-MM-dd", "2012-49-49");
 	}
 
 	@Test
