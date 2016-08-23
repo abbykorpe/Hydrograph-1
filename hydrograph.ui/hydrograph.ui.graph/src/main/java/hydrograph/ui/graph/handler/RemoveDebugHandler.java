@@ -59,7 +59,7 @@ public class RemoveDebugHandler extends AbstractHandler{
 				comp.clearWatcherMap();
 				setRemoveWatcherEnabled(false);
 			} else if(editPart instanceof PortEditPart){
-				((PortEditPart)editPart).getPortFigure().removeWatchColor();
+				((PortEditPart)editPart).getPortFigure().removeWatcherColor();
 				((PortEditPart)editPart).getPortFigure().setWatched(false);
 				((PortEditPart)editPart).getCastedModel().setWatched(false);
 			}

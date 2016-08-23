@@ -575,7 +575,7 @@ public class FindViewDataDialog extends Dialog{
 	}
 
 	/**
-	 * Open.
+	 * Opens the find child window for the View Data window.
 	 * 
 	 * @param findAction
 	 *            the find action

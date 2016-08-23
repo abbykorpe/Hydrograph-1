@@ -1062,7 +1062,7 @@ public class FilterHelper {
 	}
    
 	/**
-	 * Gets the adds the at end listener.
+	 * Gets the adds-at-the-end listener.
 	 * 
 	 * @param tableViewer
 	 *            the table viewer
@@ -1144,7 +1144,7 @@ public class FilterHelper {
 	}
 	
 	/**
-	 * Validat user group selection.
+	 * Validate user group selection.
 	 * 
 	 * @param groupSelectionMap
 	 *            the group selection map
@@ -1152,7 +1152,7 @@ public class FilterHelper {
 	 *            the selection list
 	 * @return true, if successful
 	 */
-	public boolean validatUserGroupSelection(Map<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
+	public boolean validateUserGroupSelection(Map<Integer,List<List<Integer>>> groupSelectionMap,List<Integer> selectionList){
 		boolean retValue=true;
 		for (int key : groupSelectionMap.keySet()) {
 			List<List<Integer>> groups = groupSelectionMap.get(key);
@@ -1195,7 +1195,7 @@ public class FilterHelper {
 	
 	
 	/**
-	 * Checks if is column modifiable.
+	 * Checks if column is modifiable.
 	 * 
 	 * @param groupSelectionMap
 	 *            the group selection map
@@ -1395,12 +1395,12 @@ public class FilterHelper {
 	}	
 	 
 	
- 	/**
-		 * Rearrange group columns.
-		 * 
-		 * @param groupSelectionMap
-		 *            the group selection map
-		 */
+	/**
+	 * Rearrange group columns.
+	 * 
+	 * @param groupSelectionMap
+	 *            the group selection map
+	 */
 	 public void rearrangeGroupColumns(TreeMap<Integer, List<List<Integer>>> groupSelectionMap){
 		 Map<Integer, List<List<Integer>>> tempMap = new TreeMap<Integer, List<List<Integer>>>(groupSelectionMap);
 		 for(int key:tempMap.keySet()){

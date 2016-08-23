@@ -84,7 +84,7 @@ public class AddWatcherAction extends SelectionAction{
 		List<PortEditPart> portEdit = editPart.getChildren();
 		for(AbstractGraphicalEditPart part : portEdit){
 			if(part instanceof PortEditPart && ((PortEditPart)part).getCastedModel().getTerminal().equals(portName)){
-					((PortEditPart)part).getPortFigure().changeWatchColor();
+					((PortEditPart)part).getPortFigure().changeWatcherColor();
 					((PortEditPart)part).getCastedModel().setWatched(true);
 					((PortEditPart)part).getPortFigure().setWatched(true);
 					((PortEditPart)part).getPortFigure().repaint();

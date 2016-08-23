@@ -21,9 +21,11 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.TextFlow;
 
+
 /**
- * TooltipFigure class which will display the tooltip. This Figure extends a
- * FlowPage and adds to it a TextFlow where the tooltip’s message is written
+ * The Class TooltipFigure.
+ * TooltipFigure class which will display the tooltip. This Figure extends a FlowPage and adds
+ * to it a TextFlow where the tooltip’s message is written
  * 
  * @author Bitwise
  */
@@ -31,6 +33,9 @@ public class TooltipFigure extends FlowPage implements IFigure {
 	private final Border TOOLTIP_BORDER = new MarginBorder(0, 2, 1, 0);
 	private final TextFlow message;
 
+	/**
+	 * Instantiates a new tooltip figure.
+	 */
 	public TooltipFigure() {
 		setOpaque(true);
 		setBorder(TOOLTIP_BORDER);
@@ -47,6 +52,12 @@ public class TooltipFigure extends FlowPage implements IFigure {
 		return d;
 	}
 
+	/**
+	 * Sets the tooltip message.
+	 * 
+	 * @param txt
+	 *            the new message
+	 */
 	public void setMessage(String txt) {
 		message.setText(txt);
 		revalidate();

@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.Color;
 
 /**
  * The Class ELTColorConstants.
+ * Provides Colors for various parts of the component.
  * 
  * @author Bitwise
  */

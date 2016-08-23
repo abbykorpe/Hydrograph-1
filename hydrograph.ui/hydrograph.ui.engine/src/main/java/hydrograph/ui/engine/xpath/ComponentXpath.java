@@ -46,6 +46,7 @@ import org.xml.sax.SAXException;
 
 /**
  * The class ComponentXpath
+ * Used to create XPaht objects for UI components.
  * 
  * @author Bitwise
  * 
@@ -64,6 +65,13 @@ public class ComponentXpath {
 		return xpathMap;
 	}
 
+	/**
+	 * Adds the parameters in the Target XML.
+	 * 
+	 * @param out
+	 *            the out
+	 * @return the byte array output stream
+	 */
 	public ByteArrayOutputStream addParameters(ByteArrayOutputStream out) {
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(out.toByteArray());
 		try {
@@ -141,6 +149,21 @@ public class ComponentXpath {
 		}
 	}
 	
+	/**
+	 * Creates the Xpath instance.
+	 * 
+	 * @param inputStream
+	 *            the input stream
+	 * @param file
+	 *            the file
+	 * @return the x path
+	 * @throws ParserConfigurationException
+	 *             the parser configuration exception
+	 * @throws SAXException
+	 *             the SAX exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public XPath createXPathInstance(ByteArrayInputStream inputStream, File file) throws ParserConfigurationException,
 			SAXException, IOException {
 		LOGGER.debug("Invoking X-Path instance");

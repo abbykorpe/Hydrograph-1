@@ -25,6 +25,7 @@ import org.eclipse.draw2d.geometry.Point;
 
 /**
  * The Class FixedConnectionAnchor.
+ * Implementation for connection anchor used for linking 2 components in canvas.
  * 
  * @author Bitwise
  */
@@ -92,26 +93,58 @@ public class FixedConnectionAnchor extends AbstractConnectionAnchor {
 		return point;
 	}
 		
+	/**
+	 * Gets the terminal.
+	 * 
+	 * @return the terminal
+	 */
 	public String getTerminal() {
 		return terminal;
 	}
 
+	/**
+	 * Gets the alignment.
+	 * 
+	 * @return the alignment
+	 */
 	public String getAlignment() {
 		return alignment;
 	}
 
+	/**
+	 * Gets the sequence.
+	 * 
+	 * @return the sequence
+	 */
 	public int getSequence() {
 		return sequence;
 	}
 
+	/**
+	 * Sets the allow multiple links.
+	 * 
+	 * @param allowMultipleLinks
+	 *            the new allow multiple links
+	 */
 	public void setAllowMultipleLinks(boolean allowMultipleLinks) {
 		this.allowMultipleLinks = allowMultipleLinks;
 	}
 
+	/**
+	 * Sets the link mandatory.
+	 * 
+	 * @param linkMandatory
+	 *            the new link mandatory
+	 */
 	public void setLinkMandatory(boolean linkMandatory) {
 		this.linkMandatory = linkMandatory;
 	}
 
+	/**
+	 * Gets the total ports of this type.
+	 * 
+	 * @return the total ports of this type
+	 */
 	public int getTotalPortsOfThisType() {
 		return totalPortsOfThisType;
 	}

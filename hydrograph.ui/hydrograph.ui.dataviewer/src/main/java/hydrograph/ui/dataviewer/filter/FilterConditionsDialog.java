@@ -1140,7 +1140,7 @@ public class FilterConditionsDialog extends Dialog {
 			groupSelectionMap.put(0, grpList);
 			retVal=true;
 		} else {
-			if (FilterHelper.INSTANCE.validatUserGroupSelection(groupSelectionMap, selectionList)) {
+			if (FilterHelper.INSTANCE.validateUserGroupSelection(groupSelectionMap, selectionList)) {
 				if(FilterHelper.INSTANCE.isColumnModifiable(groupSelectionMap, selectionList)){
 					retVal=true;
 				}else{

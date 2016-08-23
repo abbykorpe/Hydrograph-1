@@ -13,8 +13,12 @@
 
 package hydrograph.ui.engine.xpath;
 
+
 /**
- * @author Bitwise This class is used to hold component's properties attribute and name
+ * The Class ComponentsAttributeAndValue.
+ * Used to hold component's properties attribute and name
+ * 
+ * @author Bitwise
  */
 public class ComponentsAttributeAndValue {
 	

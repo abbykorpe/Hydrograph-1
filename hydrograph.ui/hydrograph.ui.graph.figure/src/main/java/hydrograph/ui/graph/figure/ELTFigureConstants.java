@@ -17,6 +17,7 @@ package hydrograph.ui.graph.figure;
 
 /**
  * The Class ELTFigureConstants.
+ * Contains constant values used by Component Figure classes.
  * 
  * @author Bitwise
  */
