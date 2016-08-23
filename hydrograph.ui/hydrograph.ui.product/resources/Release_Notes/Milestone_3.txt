@@ -79,8 +79,6 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 63.#996 [Nikhil Deokar] Subjob : Updated option Text and removed extra Icons
 64.#358 [Rakesh Kanchalwar] - Workspace selection window on startup
 65.#1021[Akhilesh Joshi] Schema Tab: Pop-up Windows name should be in sync. Proper window name is required if schema is already up to date and user tries to pull schema
-<<<<<<< HEAD
-=======
 66.#1033[Nikhil Deokar] Subjob : Fixed issue of Dummy Port is Getting added
 67.#669 [Shrirang Kumbhar] Validation Need To be Added When Schema from Mapping Fields are Not in Sync With Schema Tab 
 68.#330 [Shrirang Kumbhar] Parameter Grid: Search functionality - User should be able to search by parameter name or by parameter value only, not by Paramter Files
@@ -88,7 +86,6 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 70.#1064[Nikhil Deokar] Subjob: Fixed issue of Input Subjob Links From Input Subjob to Subsequent Component
 71.#1059[Nikhil Deokar] Subjob: Disabled 'Refresh' Icon was not present
 72.#1073[Vibhor Tyagi] Watcher Icon on Coolbar is Getting Enabled Though Job Does not Have Watcher
->>>>>>> fixed 1073 issue
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
