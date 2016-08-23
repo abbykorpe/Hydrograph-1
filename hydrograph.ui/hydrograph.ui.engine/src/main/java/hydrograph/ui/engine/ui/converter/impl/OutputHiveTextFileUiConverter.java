@@ -94,7 +94,7 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 		
 		uiComponent.setComponentLabel(hiveTextfile.getId());
 		uiComponent.setType(UIComponentsConstants.HIVE_TEXTFILE.value());
-		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
+		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(hiveTextfile.getId());
