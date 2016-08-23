@@ -586,9 +586,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		if(transformSchemaType){
 			createButtonComposite(container.getContainerControl());
 			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
-			if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
-				createPullInternallyPropagatedSchema(container.getContainerControl());
-			}
 		}
 		else{
 
@@ -613,7 +610,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		populateSchemaTypeWidget();
 	}
-	
+	/**
+	 * creates group of add,delete,up,down buttons and pull schema button
+	 */
 	private ELTSchemaSubgroupComposite createButtonComposite(Composite containerControl){
 		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(containerControl);
 
@@ -627,6 +626,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			ELTDefaultLable defaultLable = new ELTDefaultLable("");
 			buttonSubGroup.attachWidget(defaultLable);
 		}
+		
+		if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
+			buttonSubGroup.numberOfBasicWidgets(6);
+			createPullInternallyPropagatedSchema(buttonSubGroup);
+			ELTDefaultLable defaultLable = new ELTDefaultLable("");
+			buttonSubGroup.attachWidget(defaultLable);
+		}
+		
 		addAddButton(buttonSubGroup);
 		addDeleteButton(buttonSubGroup);
 		addUpButton(buttonSubGroup);
@@ -767,14 +774,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return true;
 	}
 
-	// Adds the browse button
-	private void createPullInternallyPropagatedSchema(Composite containerControl) {
-		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
-		eltSuDefaultSubgroupComposite.createContainerWidget();
-		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(2);
+	/**
+	 * Adds the pull schema button
+	 */
+	private void createPullInternallyPropagatedSchema(ELTSchemaSubgroupComposite containerControl) {
 		ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_SCHEMA);
 		btnPull.buttonWidth(150);
-		eltSuDefaultSubgroupComposite.attachWidget(btnPull);
+		containerControl.attachWidget(btnPull);
 		((Button)btnPull.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {				
