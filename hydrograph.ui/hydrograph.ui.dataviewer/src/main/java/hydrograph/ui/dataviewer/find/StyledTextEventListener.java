@@ -55,13 +55,13 @@ public class StyledTextEventListener {
 		int lastIndex = StringUtils.lastIndexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), prevLineIndex-1);
 		
 		if(lastIndex < 0 ){
-			styledText.setSelection(prevLineIndex);
 			prevLineIndex = styledText.getText().length() - 1;
-			nextLineIndex = 0;
+			prevLineIndex= StringUtils.lastIndexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), prevLineIndex-1);
+			styledText.setSelection(prevLineIndex);
+			setStyledRange(styledText, prevLineIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
+			nextLineIndex = prevLineIndex + 1;
 			return new int[]{prevLineIndex,nextLineIndex};
 		}else{
-			setStyledRange(styledText, prevLineIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			
 			setStyledRange(styledText, lastIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 			styledText.setSelection(lastIndex);
 			prevLineIndex = lastIndex;
@@ -84,13 +84,13 @@ public class StyledTextEventListener {
 		int txtIndex = StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), nextLineIndex);
 		
 		if(txtIndex < 0){
+			nextLineIndex = 0;
+			prevLineIndex =  StringUtils.indexOf(StringUtils.lowerCase(styledText.getText()), StringUtils.lowerCase(text), nextLineIndex);
+			nextLineIndex = prevLineIndex + 1;
 			styledText.setSelection(prevLineIndex);
 			setStyledRange(styledText, prevLineIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
-			nextLineIndex =0;
 			return new int[]{prevLineIndex,nextLineIndex};
 		}else{
-			setStyledRange(styledText, prevLineIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			
 			setStyledRange(styledText, txtIndex, text.length(), null, Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
 			styledText.setSelection(txtIndex);
 			prevLineIndex = txtIndex;
