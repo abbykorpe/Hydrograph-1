@@ -56,7 +56,7 @@ public class DataGenerator {
 	private static int generateFixedLengthNumber(int length) {
 		int fromRangeVal = (int) Math.pow(10, (length - 1));
 		int toRangeVal = (int) (Math.pow(10, length) - 1);
-		return DataGenerator.getIntegerBetween(fromRangeVal, toRangeVal);
+		return DataGenerator.getIntegerBetween(-fromRangeVal, toRangeVal);
 	}
 
 	/**
