@@ -381,22 +381,13 @@ public class StringFunctions {
 	 *         {@code null} if any of the values specified in
 	 *         {@code appendValue} is {@code null}
 	 */
-	public static String stringConcat(String inputValue, String... appendValue) {
+	public static String stringConcat(String inputValue, String appendValue) {
 		if (inputValue == null)
 			return null;
 		if (appendValue == null)
 			return null;
 
-		String input = "" + inputValue;
-
-		for (String str : appendValue) {
-			if (str == null)
-				return null;
-
-			input += str;
-		}
-
-		return input;
+		return inputValue.concat(appendValue);
 	}
 
 	/**
