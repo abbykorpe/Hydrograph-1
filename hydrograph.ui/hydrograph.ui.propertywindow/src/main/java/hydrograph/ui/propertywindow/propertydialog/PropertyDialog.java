@@ -24,6 +24,7 @@ import hydrograph.ui.propertywindow.constants.ELTProperties;
 import hydrograph.ui.propertywindow.messagebox.ConfirmCancelMessageBox;
 import hydrograph.ui.propertywindow.property.ELTComponenetProperties;
 import hydrograph.ui.propertywindow.property.Property;
+import hydrograph.ui.propertywindow.validators.ComponentValidator;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
@@ -40,7 +41,6 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -207,6 +207,9 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			}
 		}
 		isPropertyWindowValid = windowValidityStaus;
+		
+		validateComponentState();
+		
 		updateComponentValidityStatus();
 		
 		propertyChanged=true;
@@ -322,12 +325,18 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			propertyChanged = true;
 
 		isPropertyWindowValid = windowValidityStaus;
+		
+		validateComponentState();
+		
 		updateComponentValidityStatus();
 
 		okPressed = true;
 		if (verifiedSchema){
 			super.okPressed();
 		}
+		
+		
+		
 	}
 
 	
@@ -352,6 +361,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			}
 		}
 		isPropertyWindowValid = windowValidityStaus;
+		validateComponentState();
 		updateComponentValidityStatus();
 		if (applyButton.isEnabled()) {
 			if (!isCancelButtonPressed) {
@@ -366,6 +376,12 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			}
 		} else {
 			closeDialog = super.close();
+		}
+	}
+
+	private void validateComponentState() {
+		if(!ComponentValidator.INSTANCE.validate(component)){
+			isPropertyWindowValid = false;
 		}
 	}
 

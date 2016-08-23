@@ -253,6 +253,8 @@ public class Messages extends NLS {
 	public static String HIVE_PARTI_KEY_DEL_TOOLTIP;
 	public static String PULL_SCHEMA_MESSAGE_TITLE;
 	
+	public static String SCHEMA_IS_NOT_IN_SYNC_WITH_MAPPING;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

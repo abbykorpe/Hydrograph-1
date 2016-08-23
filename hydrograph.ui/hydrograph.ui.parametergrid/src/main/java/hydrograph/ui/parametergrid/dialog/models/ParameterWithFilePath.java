@@ -78,6 +78,6 @@ public class ParameterWithFilePath extends Parameter{
 }
 	@Override
 	public String toString() {
-		return parameterFile + "\n" + super.toString();
+		return super.toString();
 	}	
 }
