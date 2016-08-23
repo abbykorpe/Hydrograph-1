@@ -136,11 +136,11 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		if(trackingFieldEditor.getBooleanValue()){
 			logPathEditor.setEnabled(true, composite_2);
 			portFieldEditor.setEnabled(true, composite_3);
-			setEnableExecutionTrackConsole(false);
+			//setEnableExecutionTrackConsole(true);
 		}else{
 			logPathEditor.setEnabled(false, composite_2);
 			portFieldEditor.setEnabled(false, composite_3);
-			setEnableExecutionTrackConsole(true);
+			//setEnableExecutionTrackConsole(false);
 		}
 		
 		trackingFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
@@ -149,9 +149,11 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 				if(!trackingFieldEditor.getBooleanValue()){
 					logPathEditor.setEnabled(false, composite_2);
 					portFieldEditor.setEnabled(false, composite_3);
+					setEnableExecutionTrackConsole(false);
 				}else{
 					logPathEditor.setEnabled(true, composite_2);
 					portFieldEditor.setEnabled(true, composite_3);
+					setEnableExecutionTrackConsole(true);
 				}
 			}
 		});
