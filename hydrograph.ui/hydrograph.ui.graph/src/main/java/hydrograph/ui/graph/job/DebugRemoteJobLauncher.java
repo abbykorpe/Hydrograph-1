@@ -18,6 +18,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
@@ -80,11 +81,10 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 
 		Session session=null;
-
 		if(isExecutionTrackingOn()){
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
 			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
-					webSocketRemoteUrl);
+					TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl(job));
 			if(hydrographServerConnection.getSelection() == 1){
 				return;
 			}

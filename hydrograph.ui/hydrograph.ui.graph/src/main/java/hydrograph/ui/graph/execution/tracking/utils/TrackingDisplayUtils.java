@@ -20,6 +20,7 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.CompStatus;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -41,7 +42,6 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TrackingDisplayUtils.
  */
@@ -55,9 +55,6 @@ public class TrackingDisplayUtils {
 	
 	/** The Constant PORT_NUMBER. */
 	public static final String PORT_NUMBER = "EXECUTION_TRACKING_PORT";
-	
-	/** The Constant REMOTE_URL. */
-	public static final String REMOTE_URL = "WEBSOCKET_REMOTE_URL";
 	
 	/** The Constant LOCAL_URL. */
 	public static final String LOCAL_URL = "WEBSOCKET_LOCAL_HOST";
@@ -88,7 +85,8 @@ public class TrackingDisplayUtils {
 
 	/** The websocket route. */
 	private String websocketRoute;
-
+	public static final String WEB_SOCKET = "ws://";
+	public static final String COLON = ":";
 	/**
 	 * Instantiates a new tracking display utils.
 	 */
@@ -161,7 +159,6 @@ public class TrackingDisplayUtils {
 			properties.load(fileReader);
 			if (StringUtils.isNotBlank(properties.getProperty(PORT_NUMBER))) {
 				portNumber = properties.getProperty(PORT_NUMBER);
-				remoteHost = properties.getProperty(REMOTE_URL);
 				localHost = properties.getProperty(LOCAL_URL);
 				websocketRoute = properties.getProperty(WEBSOCKET_ROUTE);
 			}
@@ -178,9 +175,9 @@ public class TrackingDisplayUtils {
 	 * 
 	 * @return the web socket remote url
 	 */
-	public String getWebSocketRemoteUrl() {
+	public String getWebSocketRemoteUrl(Job job) {
 		String portNo = getPortFromPreference();
-		String remoteUrl = remoteHost + portNo + websocketRoute;
+		String remoteUrl = WEB_SOCKET + job.getHost() + COLON + portNo + websocketRoute;
 		return remoteUrl;
 	}
 

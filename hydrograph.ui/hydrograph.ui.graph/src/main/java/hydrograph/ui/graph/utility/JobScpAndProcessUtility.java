@@ -410,7 +410,7 @@ public class JobScpAndProcessUtility {
 			Session session = null;
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
 			try {
-				String remoteUrl = TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl();
+				String remoteUrl = TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl(jobToKill);
 				session = hydrographServerConnection.connectToKillJob(jobToKill.getUniqueJobId(), remoteUrl);
 				Thread.sleep(8000);
 			} catch (Throwable e1) {
