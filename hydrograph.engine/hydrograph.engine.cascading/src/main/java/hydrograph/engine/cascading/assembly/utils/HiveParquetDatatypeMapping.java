@@ -19,8 +19,8 @@ import hydrograph.engine.utilities.Constants;
 public enum HiveParquetDatatypeMapping {
 
 	STRING(DataType.COMMON), INTEGER(DataType.INTEGER), DATE(DataType.DATE), LONG(
-			DataType.LONG), BOOLEAN(DataType.COMMON), FLOAT(DataType.COMMON), DOUBLE(
-			DataType.COMMON), SHORT(DataType.SHORT), BIGDECIMAL(
+			DataType.LONG), BIGINT(DataType.LONG), BOOLEAN(DataType.COMMON), FLOAT(
+			DataType.COMMON), DOUBLE(DataType.COMMON), SHORT(DataType.SHORT), BIGDECIMAL(
 			DataType.BIGDECIMAL), TIMESTAMP(DataType.TIMESTAMP);
 
 	private final DataType hiveType;

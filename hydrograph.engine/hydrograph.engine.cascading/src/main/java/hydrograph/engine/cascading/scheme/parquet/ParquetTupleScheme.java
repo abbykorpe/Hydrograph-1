@@ -162,9 +162,9 @@ public class ParquetTupleScheme extends
 			Tap<JobConf, RecordReader, OutputCollector> tap, JobConf jobConf) {
 		jobConf.setOutputFormat(DeprecatedParquetOutputFormat.class);
 
-		jobConf.set(TupleWriteSupport.PARQUET_CASCADING_SCHEMA, parquetSchema);
+		jobConf.set(ParquetTupleWriter.PARQUET_CASCADING_SCHEMA, parquetSchema);
 		ParquetOutputFormat.setWriteSupportClass(jobConf,
-				TupleWriteSupport.class);
+				ParquetTupleWriter.class);
 	}
 
 	@SuppressWarnings("unchecked")

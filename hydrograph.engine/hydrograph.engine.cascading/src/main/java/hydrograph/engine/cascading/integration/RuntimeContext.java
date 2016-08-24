@@ -12,14 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
-import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.core.helper.JAXBTraversal;
-import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
-
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,6 +22,13 @@ import org.apache.hadoop.mapred.JobConf;
 
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
+import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
+import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.helper.JAXBTraversal;
+import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
+import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 
 @SuppressWarnings("rawtypes")
 public class RuntimeContext {
@@ -40,18 +41,26 @@ public class RuntimeContext {
 	private LinkedHashMap<String, ComponentParameters> tempPathParameters;
 	private Properties hadoopProperties;
 	private AssemblyGeneratorFactory assemblyGeneratorFactory;
+	private Map<String, FlowContext> flowContext;
+	private SchemaFieldHandler schemaFieldHandler;
 
 	public RuntimeContext(HydrographJob hydrographJob, JAXBTraversal traversal,
 			Properties hadoopProps,
-			AssemblyGeneratorFactory assemblyGeneratorFactory) {
+			AssemblyGeneratorFactory assemblyGeneratorFactory, SchemaFieldHandler schemaFieldHandler) {
 		this.hydrographJob = hydrographJob;
 		this.traversal = traversal;
 		this.hadoopProperties = hadoopProps;
 		this.assemblyGeneratorFactory = assemblyGeneratorFactory;
 		this.hadoopConfProvider = new HadoopConfigProvider(hadoopProps);
+		this.schemaFieldHandler=schemaFieldHandler;
 		tempPathParameters = new LinkedHashMap<String, ComponentParameters>();
+		this.flowContext = new HashMap<String, FlowContext>();
 	}
 
+	
+	public SchemaFieldHandler getSchemaFieldHandler(){
+		return schemaFieldHandler;
+	}
 	public JobConf getJobConf() {
 		return hadoopConfProvider.getJobConf();
 	}
@@ -115,6 +124,14 @@ public class RuntimeContext {
 
 	public ComponentParameters getTempPathParameter(String string) {
 		return tempPathParameters.get(string);
+	}
+	
+	public Map<String, FlowContext> getFlowContext() {
+		return flowContext;
+	}
+
+	public void setFlowContext(String phase, FlowContext flowContext) {
+		this.flowContext.put(phase, flowContext);
 	}
 
 }

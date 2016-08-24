@@ -12,13 +12,8 @@
  */
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.UnionAllEntity;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.functions.CopyFields;
-import hydrograph.engine.utilities.ComponentHelper;
-
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +22,12 @@ import cascading.pipe.Each;
 import cascading.pipe.Merge;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.UnionAllEntity;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.functions.CopyFields;
+import hydrograph.engine.utilities.ComponentHelper;
 
 public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 
@@ -54,7 +55,9 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 
 			ArrayList<Fields> fieldList = componentParameters
 					.getInputFieldsList();
-
+			
+			validateInputFields();
+		
 			Pipe[] inputPipes = alignfields(
 					componentParameters.getInputPipes(), fieldList);
 
@@ -65,12 +68,39 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 
 			setOutLink("out", unionAllEntity.getOutSocket().getSocketId(),
 					unionAllEntity.getComponentId(), outPipe, fieldList.get(0));
-		} catch (Exception e) {
+		} catch (SchemaMismatchException e) {
+			LOG.error(e.getMessage(), e);
+			throw new SchemaMismatchException(e);
+		}
+		catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage());
 		}
 
 	}
+
+	private void validateInputFields() throws SchemaMismatchException {
+		ArrayList<Set<SchemaField>> schemaFieldList = componentParameters.getSchemaFieldList();
+		Set<SchemaField> refSchema = schemaFieldList.get(0);
+		
+		for (int i = 1; i < schemaFieldList.size(); i++) {
+
+			if (refSchema.size() != schemaFieldList.get(i).size()) {
+				throw new SchemaMismatchException("Component:" + unionAllEntity.getComponentId()
+						+ " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.");
+			}
+		}
+
+		for (int i = 1; i < schemaFieldList.size(); i++) {
+
+			if (!refSchema.containsAll(schemaFieldList.get(i))) {
+				throw new SchemaMismatchException("Component:" + unionAllEntity.getComponentId()
+						+ " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.");
+			}
+		}
+
+	}
+	
 
 	private Pipe[] alignfields(ArrayList<Pipe> arrayList,
 			ArrayList<Fields> fieldList) {
@@ -78,7 +108,7 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 		int i = 0;
 		for (Pipe eachPipe : arrayList) {
 			inputPipes[i] = new Each(eachPipe, fieldList.get(i),
-					new CopyFields(fieldList.get(i)), Fields.RESULTS);
+					new CopyFields(fieldList.get(0)), Fields.RESULTS);
 			i++;
 		}
 		return inputPipes;
@@ -87,6 +117,18 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 	@Override
 	public void initializeEntity(UnionAllEntity assemblyEntityBase) {
 		this.unionAllEntity = assemblyEntityBase;
+	}
+	
+	public class SchemaMismatchException extends RuntimeException{
+		
+		public SchemaMismatchException(String msg) {
+			super(msg);
+		}
+		
+		public SchemaMismatchException(Throwable e) {
+			super(e);
+		}
+		
 	}
 
 }

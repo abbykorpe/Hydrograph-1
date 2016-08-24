@@ -75,6 +75,9 @@ public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimit
 					"Creating output file delimited assembly for '" + outputFileDelimitedEntity.getComponentId() + "'");
 			prepareAssembly();
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileDelimited",outputFileDelimitedEntity.getComponentId(),""), tailPipe);
+			setOutLink("output","NoSocketId",
+					outputFileDelimitedEntity.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);

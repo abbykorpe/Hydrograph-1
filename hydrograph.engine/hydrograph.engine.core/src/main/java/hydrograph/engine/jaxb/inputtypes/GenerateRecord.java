@@ -37,7 +37,7 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                 &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}long" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
@@ -121,7 +121,7 @@ public class GenerateRecord
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}long" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -134,17 +134,17 @@ public class GenerateRecord
     public static class RecordCount {
 
         @XmlAttribute(name = "value")
-        protected Integer value;
+        protected Long value;
 
         /**
          * Gets the value of the value property.
          * 
          * @return
          *     possible object is
-         *     {@link Integer }
+         *     {@link Long }
          *     
          */
-        public Integer getValue() {
+        public Long getValue() {
             return value;
         }
 
@@ -153,10 +153,10 @@ public class GenerateRecord
          * 
          * @param value
          *     allowed object is
-         *     {@link Integer }
+         *     {@link Long }
          *     
          */
-        public void setValue(Integer value) {
+        public void setValue(Long value) {
             this.value = value;
         }
 

@@ -34,7 +34,6 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 	private static final long serialVersionUID = 4184919036703029509L;
 	private OutputFileSequenceFormatEntity outputFileSequenceFormatEntity;
 	FlowDef flowDef;
-	String filePathToWrite = outputFileSequenceFormatEntity.getPath();
 	Pipe tailPipe;
 	@SuppressWarnings("rawtypes")
 	Tap outTap;
@@ -47,6 +46,11 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 	}
 
 	@Override
+	public void initializeEntity(OutputFileSequenceFormatEntity assemblyEntityBase) {
+		this.outputFileSequenceFormatEntity = assemblyEntityBase;
+	}
+	
+	@Override
 	protected void createAssembly() {
 		try {
 			LOG.trace("Creating output file sequence format assembly for '"
@@ -54,6 +58,9 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 			prepareAssembly();
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileSequenceFormat",
 					outputFileSequenceFormatEntity.getComponentId(), ""), tailPipe);
+			setOutLink("output","NoSocketId",
+					outputFileSequenceFormatEntity.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(outTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, outTap);
@@ -65,7 +72,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 
 	private void prepareAssembly() {
 		flowDef = componentParameters.getFlowDef();
-		filePathToWrite = componentParameters.getPathUri();
+		String filePathToWrite = componentParameters.getPathUri();
 		tailPipe = componentParameters.getInputPipe();
 		try {
 			prepareScheme();
@@ -81,10 +88,4 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 
 		scheme = new SequenceFile(componentParameters.getInputFields());
 	}
-
-	@Override
-	public void initializeEntity(OutputFileSequenceFormatEntity assemblyEntityBase) {
-		this.outputFileSequenceFormatEntity = assemblyEntityBase;
-	}
-
 }

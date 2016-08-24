@@ -78,7 +78,7 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 						.getOperation().getOperationClass(), filterEntity
 						.getOperation().getOperationProperties(), isUnused);
 
-		RecordFilter selectCustomFilter = new RecordFilter(filterCustomHandler);
+		RecordFilter selectCustomFilter = new RecordFilter(filterCustomHandler,componentParameters.getInputPipe().getName());
 
 		setHadoopProperties(filterPipe.getStepConfigDef());
 

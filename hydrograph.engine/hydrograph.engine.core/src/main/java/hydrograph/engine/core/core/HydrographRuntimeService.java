@@ -26,5 +26,9 @@ public interface HydrographRuntimeService {
 	public void execute();
 
 	public void oncomplete();
+	
+	public Object getJobInfo();
+	
+	public void kill();
 
 }

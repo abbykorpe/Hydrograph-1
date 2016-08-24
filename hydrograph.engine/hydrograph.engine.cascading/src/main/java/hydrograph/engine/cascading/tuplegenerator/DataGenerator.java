@@ -14,9 +14,9 @@ package hydrograph.engine.cascading.tuplegenerator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -27,8 +27,7 @@ import org.slf4j.LoggerFactory;
 public class DataGenerator {
 
 	private static DataFactory dataFactory = new DataFactory();
-	private static final Logger LOG = LoggerFactory
-			.getLogger(DataGenerator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataGenerator.class);
 
 	// String
 	public static String getRandomString() {
@@ -57,7 +56,7 @@ public class DataGenerator {
 	private static int generateFixedLengthNumber(int length) {
 		int fromRangeVal = (int) Math.pow(10, (length - 1));
 		int toRangeVal = (int) (Math.pow(10, length) - 1);
-		return DataGenerator.getIntegerBetween(fromRangeVal, toRangeVal);
+		return DataGenerator.getIntegerBetween(-fromRangeVal, toRangeVal);
 	}
 
 	/**
@@ -163,8 +162,7 @@ public class DataGenerator {
 	 * @return A random big decimal value with specified scale and length
 	 */
 	public static BigDecimal getRandomBigDecimal(int scale, int length) {
-		return new BigDecimal(generateFixedLengthNumber(length - 1))
-				.movePointLeft(scale);
+		return new BigDecimal(generateFixedLengthNumber(length - 1)).movePointLeft(scale);
 	}
 
 	/**
@@ -177,8 +175,7 @@ public class DataGenerator {
 	 *            The scale of the resultant big decimal value
 	 * @return
 	 */
-	public static BigDecimal getDefaultBigDecimal(BigDecimal defaultVal,
-			int scale) {
+	public static BigDecimal getDefaultBigDecimal(BigDecimal defaultVal, int scale) {
 		return defaultVal.setScale(scale, RoundingMode.HALF_UP);
 	}
 
@@ -196,8 +193,7 @@ public class DataGenerator {
 	 * @return
 	 */
 	public static BigDecimal getToBigDecimal(BigDecimal toRangeVal, int scale) {
-		return getBigDecimalBetween(BigDecimal.valueOf(Double.MIN_VALUE),
-				toRangeVal, scale);
+		return getBigDecimalBetween(BigDecimal.valueOf(Double.MIN_VALUE), toRangeVal, scale);
 	}
 
 	/**
@@ -213,10 +209,8 @@ public class DataGenerator {
 	 *         specified scale
 	 * @return
 	 */
-	public static BigDecimal getFromBigDecimal(BigDecimal fromRangeVal,
-			int scale) {
-		return getBigDecimalBetween(fromRangeVal,
-				BigDecimal.valueOf(Double.MAX_VALUE), scale);
+	public static BigDecimal getFromBigDecimal(BigDecimal fromRangeVal, int scale) {
+		return getBigDecimalBetween(fromRangeVal, BigDecimal.valueOf(Double.MAX_VALUE), scale);
 	}
 
 	/**
@@ -232,10 +226,9 @@ public class DataGenerator {
 	 *            The scale of the resultant big decimal value
 	 * @return A random big decimal value between the specified range
 	 */
-	public static BigDecimal getBigDecimalBetween(BigDecimal fromRangeVal,
-			BigDecimal toRangeVal, int scale) {
-		BigDecimal randomBigDecimal = fromRangeVal.add(new BigDecimal(Math
-				.random()).multiply(toRangeVal.subtract(fromRangeVal)));
+	public static BigDecimal getBigDecimalBetween(BigDecimal fromRangeVal, BigDecimal toRangeVal, int scale) {
+		BigDecimal randomBigDecimal = fromRangeVal
+				.add(new BigDecimal(Math.random()).multiply(toRangeVal.subtract(fromRangeVal)));
 		return randomBigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
 	}
 
@@ -253,10 +246,13 @@ public class DataGenerator {
 	}
 
 	private static long getRandomDateTime() {
-		long beginTime = Timestamp.valueOf("1970-01-01 00:00:00").getTime();
-		long endTime = Timestamp.valueOf("2099-12-31 23:59:59").getTime();
-		return dataFactory.getDateBetween(new Date(beginTime),
-				new Date(endTime)).getTime();
+		Calendar cal1 = Calendar.getInstance();
+		cal1.set(1970, 01, 01);
+		long beginTime = cal1.getTimeInMillis();
+		Calendar cal2 = Calendar.getInstance();
+		cal2.set(2099, 12, 31);
+		long endTime = cal2.getTimeInMillis();
+		return dataFactory.getDateBetween(new Date(beginTime), new Date(endTime)).getTime();
 	}
 
 	/**
@@ -288,8 +284,9 @@ public class DataGenerator {
 	 * @return
 	 */
 	public static String getFromDate(String dateFormat, String fromDate) {
-		Date dt = dataFactory.getDateBetween(parseDate(dateFormat, fromDate),
-				new Date(Timestamp.valueOf("2020-12-31 00:00:00").getTime()));
+		Calendar cal = Calendar.getInstance();
+		cal.set(2020, 12, 31);
+		Date dt = dataFactory.getDateBetween(parseDate(dateFormat, fromDate), cal.getTime());
 		return formatDate(dateFormat, dt);
 	}
 
@@ -307,9 +304,9 @@ public class DataGenerator {
 	 * @return
 	 */
 	public static String getToDate(String dateFormat, String toDate) {
-		Date dt = dataFactory.getDateBetween(
-				new Date(Timestamp.valueOf("1970-01-01 00:00:00").getTime()),
-				parseDate(dateFormat, toDate));
+		Calendar cal = Calendar.getInstance();
+		cal.set(1970, 01, 01);
+		Date dt = dataFactory.getDateBetween(cal.getTime(), parseDate(dateFormat, toDate));
 		return formatDate(dateFormat, dt);
 	}
 
@@ -326,10 +323,8 @@ public class DataGenerator {
 	 *            this value
 	 * @return A random date value between the specified range
 	 */
-	public static String getDateBetween(String dateFormat, String fromDate,
-			String toDate) {
-		Date dt = getDateBetween(parseDate(dateFormat, fromDate),
-				parseDate(dateFormat, toDate));
+	public static String getDateBetween(String dateFormat, String fromDate, String toDate) {
+		Date dt = getDateBetween(parseDate(dateFormat, fromDate), parseDate(dateFormat, toDate));
 		return formatDate(dateFormat, dt);
 	}
 
@@ -345,7 +340,17 @@ public class DataGenerator {
 	private static String formatDate(String dateFormat, Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 		sdf.setLenient(false);
-		return sdf.format(date);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		if (!isTimestampPresentInDateFormat(dateFormat)) {
+			calendar.clear(Calendar.HOUR);
+			calendar.clear(Calendar.HOUR_OF_DAY);
+			calendar.clear(Calendar.AM_PM);
+			calendar.clear(Calendar.MINUTE);
+			calendar.clear(Calendar.SECOND);
+			calendar.clear(Calendar.MILLISECOND);
+		}
+		return sdf.format(calendar.getTime());
 	}
 
 	private static Date getDateBetween(final Date minDate, final Date maxDate) {
@@ -363,11 +368,9 @@ public class DataGenerator {
 		try {
 			return sdf.parse(date);
 		} catch (ParseException e) {
-			// e.printStackTrace();
 			LOG.error("Error while parsing date " + date, e);
+			throw new RuntimeException(e);
 		}
-
-		return null;
 	}
 
 	// Long Date
@@ -410,8 +413,9 @@ public class DataGenerator {
 	 * @return
 	 */
 	public static long getFromLongDate(String dateFormat, String fromDate) {
-		Date dt = dataFactory.getDateBetween(parseDate(dateFormat, fromDate),
-				new Date(Timestamp.valueOf("2020-12-31 00:00:00").getTime()));
+		Calendar cal = Calendar.getInstance();
+		cal.set(2020, 12, 31);
+		Date dt = dataFactory.getDateBetween(parseDate(dateFormat, fromDate), cal.getTime());
 		return dt.getTime();
 	}
 
@@ -429,9 +433,9 @@ public class DataGenerator {
 	 * @return
 	 */
 	public static long getToLongDate(String dateFormat, String toDate) {
-		Date dt = dataFactory.getDateBetween(
-				new Date(Timestamp.valueOf("1970-01-01 00:00:00").getTime()),
-				parseDate(dateFormat, toDate));
+		Calendar cal = Calendar.getInstance();
+		cal.set(1970, 01, 01);
+		Date dt = dataFactory.getDateBetween(cal.getTime(), parseDate(dateFormat, toDate));
 		return dt.getTime();
 	}
 
@@ -448,11 +452,57 @@ public class DataGenerator {
 	 *            this value
 	 * @return A random date as {@code long}, between the specified range
 	 */
-	public static long getLongDateBetween(String dateFormat, String fromDate,
-			String toDate) {
-		Date dt = getDateBetween(parseDate(dateFormat, fromDate),
-				parseDate(dateFormat, toDate));
-		return dt.getTime();
+	public static long getLongDateBetween(String dateFormat, String fromDate, String toDate) {
+		Date dt = getDateBetween(parseDate(dateFormat, fromDate), parseDate(dateFormat, toDate));
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(dt);
+		if (!isTimestampPresentInDateFormat(dateFormat)) {
+			calendar.clear(Calendar.HOUR);
+			calendar.clear(Calendar.HOUR_OF_DAY);
+			calendar.clear(Calendar.AM_PM);
+			calendar.clear(Calendar.MINUTE);
+			calendar.clear(Calendar.SECOND);
+			calendar.clear(Calendar.MILLISECOND);
+		}
+		return calendar.getTimeInMillis();
+	}
+
+	/**
+	 * Checks if the date format passed in the parameter contains time elements
+	 * (hh, mm, ss)
+	 * 
+	 * @param dateFormat
+	 *            the date format to check
+	 * @return <b>true</b> if time elements (hh, mm, ss) are present in the date
+	 *         format <br/>
+	 *         <b>false</b> if time elements (hh, mm, ss) are not present in the
+	 *         date format
+	 */
+
+	private static boolean isTimestampPresentInDateFormat(String dateFormat) {
+		SimpleDateFormat actualSDF = new SimpleDateFormat(dateFormat);
+		actualSDF.setLenient(false);
+
+		// date format without time for comparison
+		String dateFormatForComparison = "dd/MM/yyyy";
+		SimpleDateFormat sdfComparison = new SimpleDateFormat(dateFormatForComparison);
+		actualSDF.setLenient(false);
+
+		Calendar cal = Calendar.getInstance();
+
+		Date d = cal.getTime(); // get current date with time
+		Date d1 = null, d2 = null;
+		try {
+			// convert using date format specified by user
+			d1 = actualSDF.parse(actualSDF.format(d));
+
+			// convert using our date format, without time
+			d2 = sdfComparison.parse(sdfComparison.format(d));
+		} catch (Exception e) {
+			// This exception will never be thrown as we are parsing system
+			// generated date
+		}
+		return !d1.equals(d2); // compare user's date with out date.
 	}
 
 	// Double

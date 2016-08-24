@@ -91,7 +91,7 @@ public class FlowBuilder {
 			}
 			cascades[phaseIndex] = (new CascadeConnector().connect(flowContext
 					.getCascadeDef().setName(flowName + "_" + phaseIndex)));
-
+			runtimeContext.setFlowContext(phase, flowContext);
 		}
 		runtimeContext.setCascade(cascades);
 
@@ -116,20 +116,20 @@ public class FlowBuilder {
 			if (assemblyGeneratorBase instanceof InputAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
-						.setFlowdef().setJobConf().build();
+						.setFlowdef().setJobConf().setSchemaFields().build();
 			} else if (assemblyGeneratorBase instanceof OutputAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
-						.setFlowdef().setInputPipes().setInputFields().build();
+						.setFlowdef().setInputPipes().setSchemaFields().setInputFields().build();
 			} else if (assemblyGeneratorBase instanceof StraightPullAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
-						.setFlowdef().setJobConf().setInputPipes()
+						.setFlowdef().setJobConf().setInputPipes().setSchemaFields()
 						.setInputFields().build();
 			} else if (assemblyGeneratorBase instanceof OperationAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
-						.setFlowdef().setJobConf().setInputPipes()
+						.setFlowdef().setJobConf().setInputPipes().setSchemaFields()
 						.setInputFields().build();
 			} else if (assemblyGeneratorBase instanceof CommandComponentGeneratorBase) {
 				CommandComponentGeneratorBase command = ((CommandComponentGeneratorBase) assemblyGeneratorBase)

@@ -21,6 +21,14 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * The runtime representation of a record. This class holds the fields and their
+ * values for one record (row). This class exposes getter / setter methods to
+ * manipulate the values of those fields.
+ * 
+ * @author bitwise
+ *
+ */
 public class ReusableRow implements Comparable<ReusableRow> {
 
 	private ArrayList<String> fields;
@@ -357,8 +365,7 @@ public class ReusableRow implements Comparable<ReusableRow> {
 		if (value instanceof Date) {
 			Date date = (Date) value;
 			values.set(fieldPos.get(fieldName), date.getTime());
-		} else if (value == null
-				|| (value instanceof String && ((String) value).equals(""))) {
+		} else if (value == null || (value instanceof String && ((String) value).equals(""))) {
 			values.set(fieldPos.get(fieldName), null);
 		}
 	}
@@ -375,8 +382,7 @@ public class ReusableRow implements Comparable<ReusableRow> {
 		if (value instanceof Date) {
 			Date date = (Date) value;
 			values.set(index, date.getTime());
-		} else if (value == null
-				|| (value instanceof String && ((String) value).equals(""))) {
+		} else if (value == null || (value instanceof String && ((String) value).equals(""))) {
 			values.set(index, null);
 		}
 	}
@@ -424,8 +430,7 @@ public class ReusableRow implements Comparable<ReusableRow> {
 	 *            The format in which the date value is to be fetched
 	 * @return The value of the field as string
 	 */
-	public String getDate(String fieldName, String dateFormat)
-			throws ParseException {
+	public String getDate(String fieldName, String dateFormat) throws ParseException {
 		verifyFieldExists(fieldName);
 		int index = fieldPos.get(fieldName);
 		if (values.get(index) != null) {

@@ -15,6 +15,32 @@ package hydrograph.engine.cascading.assembly.context;
 public class RecordFilterContext {
 
 	private Object filterHandler;
+	private String counterName;
+	private Object filterClass;
+	
+	private static final String COUNTER_GROUP = "com.hydrograph.customgroup";
+
+
+
+	public Object getFilterClass() {
+		return filterClass;
+	}
+
+	public void setFilterClass(Object filterClass) {
+		this.filterClass = filterClass;
+	}
+
+	public static String getCounterGroup() {
+		return COUNTER_GROUP;
+	}
+	
+	public String getCounterName() {
+		return counterName;
+	}
+
+	public void setCounterName(String counterName) {
+		this.counterName = counterName;
+	}
 
 	public Object getHandlerContext() {
 		return filterHandler;

@@ -70,6 +70,7 @@ public class OutputFileParquetFileTest {
 		ComponentParameters cpOutput = new ComponentParameters();
 		cpOutput.addInputPipe(pipes);
 		cpOutput.setFlowDef(flowDef);
+		cpOutput.addInputFields(fields);
 
 		new OutputFileParquetAssembly(entity, cpOutput);
 

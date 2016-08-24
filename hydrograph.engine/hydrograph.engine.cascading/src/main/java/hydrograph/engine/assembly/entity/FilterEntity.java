@@ -21,8 +21,6 @@ import java.util.List;
 
 public class FilterEntity extends OperationEntityBase {
 
-	private Operation operation;
-
 	/*
 	 * @param operation the operation to set
 	 */
@@ -36,6 +34,9 @@ public class FilterEntity extends OperationEntityBase {
 	 * @return the operation
 	 */
 	public Operation getOperation() {
+		if(getOperationsList() == null){
+			return null;
+		}
 		return this.getOperationsList().get(0);
 	}
 
@@ -53,10 +54,11 @@ public class FilterEntity extends OperationEntityBase {
 		str.append(super.toString());
 
 		if (isOperationPresent()) {
-			str.append(getNumOperations()
-					+ " operation(s) present, Operation info: ");
-			if (operation != null) {
-				str.append(operation.toString());
+			if (getOperation() != null) {
+				str.append(getNumOperations() + " operation(s) present, Operation info: ");
+				str.append(getOperation().toString());
+			} else {
+				str.append("Operation not present\n");
 			}
 		} else {
 			str.append("Operation not present\n");

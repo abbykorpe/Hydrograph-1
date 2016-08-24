@@ -503,7 +503,7 @@ public class CustomCascadingToAvro {
 			return Schema.createEnum(fieldTypes[0].getName(), null, null,
 					enumNames);
 		} else if (fieldTypes[0] == Date.class) {
-			return AvroSerdeUtils.getSchemaFor("{" + "\"type\":\""
+			return AvroSchemaUtils.getSchemaFor("{" + "\"type\":\""
 					+ AvroSerDe.AVRO_LONG_TYPE_NAME + "\","
 					+ "\"logicalType\":\"" + AvroSerDe.DATE_TYPE_NAME + "\"}");
 
@@ -514,7 +514,7 @@ public class CustomCascadingToAvro {
 			else
 				precision = String.valueOf(fieldScale);
 			String scale = String.valueOf(fieldScale);
-			return AvroSerdeUtils.getSchemaFor("{" + "\"type\":\"bytes\","
+			return AvroSchemaUtils.getSchemaFor("{" + "\"type\":\"bytes\","
 					+ "\"logicalType\":\"decimal\"," + "\"precision\":"
 					+ precision + "," + "\"scale\":" + scale + "}");
 		} else {

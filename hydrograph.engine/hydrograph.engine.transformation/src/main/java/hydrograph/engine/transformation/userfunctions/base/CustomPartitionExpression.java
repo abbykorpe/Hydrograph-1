@@ -14,7 +14,46 @@ package hydrograph.engine.transformation.userfunctions.base;
 
 import java.util.Properties;
 
+/**
+ * The CustomPartitionExpression interface is the base interface for all the
+ * custom classes defined for transformations in partition by expression
+ * component in Hydrograph. This interface exposes methods that enable users to
+ * perform custom partition operation.
+ * <p>
+ * For a sample implementation of this interface refer any class under
+ * {@link hydrograph.engine.transformation.userfunctions.partition} package.
+ * </p>
+ * 
+ * @author bitwise
+ *
+ */
 public interface CustomPartitionExpression {
-	public String getPartition(ReusableRow keys, int numOfPartitions);
+
+	/**
+	 * This method is called before processing the first record in the input.
+	 * This method can be called for initialization / instantiation of of
+	 * artifacts to be used in the partition operation.
+	 * 
+	 * @param props
+	 *            the properties object which holds the operation properties
+	 *            passed in xml. The individual properties are wrapped as
+	 *            key-value pairs in the props object.
+	 */
 	public void prepare(Properties props);
+
+	/**
+	 * This method is the operation function and is called for each input row.
+	 * The custom partitioning logic should be written in this function.
+	 * <p>
+	 * This method should return the partition key 
+	 * </p>
+	 * 
+	 * @param inputRow
+	 *            the {@link ReusableRow} object that holds the current input
+	 *            row for the operation.
+	 * @param numOfPartitions
+	 *            the number of partitions expected from this operation
+	 * @return the partition key
+	 */
+	public String getPartition(ReusableRow inputRow, int numOfPartitions);
 }

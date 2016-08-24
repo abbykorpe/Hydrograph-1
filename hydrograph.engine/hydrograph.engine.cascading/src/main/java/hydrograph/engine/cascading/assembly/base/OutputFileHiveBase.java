@@ -63,6 +63,7 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	}
 
 	public abstract void castHiveEntityFromBase(HiveEntityBase hiveEntityBase);
+
 	/**
 	 * This method will create the table descriptor and scheme to write the data
 	 * to Hive Table. In this method, table descriptor and scheme will be
@@ -111,12 +112,17 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	@Override
 	protected void createAssembly() {
 		fieldsCreator = new InputOutputFieldsAndTypesCreator<HiveEntityBase>(hiveEntityBase);
+		validateDateFormatInHive(fieldsCreator.getFieldNames(), fieldsCreator.getFieldDataTypes(),
+				fieldsCreator.getFieldFormat());
 		prepareAssembly(); // exception handled separately within
 
 		try {
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName(getComponentType(hiveEntityBase),
 					hiveEntityBase.getComponentId(), ""), tailPipe);
-			sinkPipe=new Rename(sinkPipe, new Fields(outputFields), new Fields(convertLowerCase(outputFields)));
+			sinkPipe = new Rename(sinkPipe, new Fields(outputFields), new Fields(convertLowerCase(outputFields)));
+			setOutLink("output","NoSocketId",
+					hiveEntityBase.getComponentId(), sinkPipe, componentParameters
+					.getInputFieldsList().get(0));
 			setHadoopProperties(hiveTap.getStepConfigDef());
 			setHadoopProperties(sinkPipe.getStepConfigDef());
 			flowDef = flowDef.addTailSink(sinkPipe, hiveTap);
@@ -126,6 +132,27 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * This method will validate date format for Hive component. It will throw
+	 * an exception if unsupported date format is used.
+	 * 
+	 * @param fieldNames
+	 * @param datatypes
+	 * @param dateformat
+	 */
+	private void validateDateFormatInHive(String[] fieldNames, String[] datatypes, String[] dateformat) {
+		for (int i = 0; i < datatypes.length; i++) {
+			if ((datatypes[i].toLowerCase().contains("date") && !dateformat[i].contains("yyyy-MM-dd"))
+					|| (datatypes[i].toLowerCase().contains("timestamp")
+							&& !dateformat[i].contains("yyyy-MM-dd HH:mm:ss"))) {
+				throw new RuntimeException("Component: \"" + hiveEntityBase.getComponentId() + "\" - Field \""
+						+ fieldNames[i] + "\" has unsupported date format \"" + dateformat[i]
+						+ "\". Hive supports only \"yyyy-MM-dd\" format for date datatype and \"yyyy-MM-dd HH:mm:ss\" format for timestamp datatype.");
+			}
+		}
+	}
+
 	protected String[] convertLowerCase(String[] fields) {
 		String[] convertedfields = new String[fields.length];
 		int i = 0;
@@ -147,5 +174,5 @@ public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseC
 	public Path getHiveExternalTableLocationPath(String externalPath) {
 		return externalPath == null ? null : new Path(externalPath);
 	}
-	
+
 }

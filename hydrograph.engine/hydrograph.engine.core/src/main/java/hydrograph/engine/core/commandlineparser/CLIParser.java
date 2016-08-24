@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.core.commandlineparser;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.apache.commons.cli.BasicParser;
@@ -133,7 +134,7 @@ public class CLIParser {
 					if (propNameAndValue.length != 2 || propNameAndValue[0].trim().length() == 0
 							|| propNameAndValue[1].length() == 0) {
 
-						throw new CommandOptionException("Command line parameter " + propNameAndValue
+						throw new CommandOptionException("Command line parameter " + Arrays.toString(propNameAndValue)
 								+ " is not in correct syntax. It should be param=value");
 
 					}
