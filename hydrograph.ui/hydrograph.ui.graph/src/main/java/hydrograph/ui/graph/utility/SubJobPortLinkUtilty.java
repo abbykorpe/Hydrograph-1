@@ -19,6 +19,7 @@ import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.CloneComponent;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.UnionallComponent;
@@ -128,6 +129,9 @@ public class SubJobPortLinkUtilty {
 							linkNew.setTargetTerminal(Constants.INPUT_SOCKET_TYPE+inPort);
 							entry.getKey().connectOutput(linkNew);
 							outSubComponent.connectInput(linkNew);
+							if(entry.getKey() instanceof CloneComponent){
+								rearrangeLinkNumbers(entry.getKey());
+							}
 							outSubComponent.getProperties().put(Constants.TYPE, Constants.OUTPUT_SUBJOB);			
 							inPort++;
 		   					}		   					
@@ -152,6 +156,13 @@ public class SubJobPortLinkUtilty {
 		   	return outSubComponent;
 		}
 		 
+	private static void rearrangeLinkNumbers(Component component) {
+		for(Link link:component.getSourceConnections()){
+			link.setLinkNumber(component.getSourceConnections().indexOf(link));
+		}
+	}
+
+
 	/**
 	 * Gets the max x coordinate.
 	 *
