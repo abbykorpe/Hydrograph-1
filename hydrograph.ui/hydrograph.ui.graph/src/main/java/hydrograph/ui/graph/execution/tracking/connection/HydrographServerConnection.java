@@ -69,7 +69,7 @@ public class HydrographServerConnection {
 			return session;
 
 		} catch (Throwable t) {
-			if (counter > 2) {
+			if (counter > 1) {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
@@ -156,7 +156,8 @@ public class HydrographServerConnection {
 		String msg = "Execution tracking can't be displayed as connection refused on host: "
 				+ job.getHost() + " with port no: " + portNo;
 		MessageDialog dialog = new MessageDialog(shell, "Warning", null, msg,
-				SWT.ICON_WARNING, new String[] { "" }, 0);
+				SWT.ICON_WARNING, new String[] { "OK" }, 0);
+		dialog.open();
 	}
 
 	/**

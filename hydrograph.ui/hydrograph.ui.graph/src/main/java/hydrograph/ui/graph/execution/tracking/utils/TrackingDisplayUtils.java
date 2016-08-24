@@ -337,4 +337,20 @@ public class TrackingDisplayUtils {
 		return "";
 	}
 
+	/**
+	 * 
+	 * Return tools Installation path
+	 * 
+	 * @return {@link String}
+	 */
+	public String getInstallationPath() {
+		String installationPath = XMLConfigUtil.CONFIG_FILES_PATH + "/logger/JobTrackingLog";
+		if (OSValidator.isWindows()) {
+			if (installationPath.startsWith("/")) {
+				installationPath = installationPath.replaceFirst("/", "").replace("/", "\\");
+			}
+		}
+		return installationPath;
+
+	}
 }
