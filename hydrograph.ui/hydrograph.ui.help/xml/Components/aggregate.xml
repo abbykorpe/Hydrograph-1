@@ -16,10 +16,10 @@
 <toc label="Aggregate" link_to="xml\Components\components.xml#Aggregate"> 
 	<topic label="Properties"  href="html/Components/Aggregate_Properties.html"> 
 	</topic>
- <topic href="html/Components/Aggregate_Mapping_View.html" label="Mapping View">
+ <topic href="html/Components/Aggregate_Operation_Editor.html" label="Operation Editor">
  </topic>
- <topic href="html/concepts/maintopic.html" label="Operation Class">
+ <topic href="html/Components/Aggregate_Operation_Class.html" label="Operation Class">
  </topic>
- <topic href="html/concepts/maintopic.html" label="Validations">
+ <topic href="html/Components/Aggregate_Validations.html" label="Validations">
  </topic>
 </toc>
