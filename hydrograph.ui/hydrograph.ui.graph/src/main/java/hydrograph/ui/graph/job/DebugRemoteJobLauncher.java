@@ -99,7 +99,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		JobLogger joblogger;
 		
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,externalSchemaFiles,subJobList);
-		
+		enableLockedResources(gefCanvas);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);

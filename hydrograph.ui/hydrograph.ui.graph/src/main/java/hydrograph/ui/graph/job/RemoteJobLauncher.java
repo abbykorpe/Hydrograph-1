@@ -82,6 +82,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles),new ArrayList<>(subJobList));
 
+		enableLockedResources(gefCanvas);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);

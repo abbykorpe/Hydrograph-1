@@ -96,6 +96,7 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 		((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 		
+		enableLockedResources(gefCanvas);
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, debugXmlPath,job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
@@ -104,7 +105,6 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
 		}
-		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
 		closeWebSocketConnection(session);		
 	}
