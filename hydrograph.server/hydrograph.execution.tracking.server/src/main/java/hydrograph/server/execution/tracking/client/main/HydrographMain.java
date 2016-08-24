@@ -66,20 +66,29 @@ public class HydrographMain {
 		HydrographMain hydrographMain = new HydrographMain();
 		Session session = null;
 		String[] argsList = args;
+		String 	trackingClientSocketPort = null;
 		boolean isExecutionTracking = false;
 
 		List<String> argumentList = Arrays.asList(args);
 		final String jobId = hydrographMain.getJobId(argumentList);
 
+		logger.info("Argument List: " + argumentList.toString());
+		
+		trackingClientSocketPort = hydrographMain.getTrackingClientSocketPort(argumentList);
+		
+		
 		if (argumentList.contains(Constants.IS_TRACKING_ENABLE)) {
 			int index = argumentList.indexOf(Constants.IS_TRACKING_ENABLE);
 			isExecutionTracking = Boolean.valueOf(argsList[index + 1]);
 			argumentList = argumentList.subList(0, index);
 			argsList = argumentList.toArray(new String[argumentList.size()]);
 		}
+
+
 		final String[] argsFinalList = argsList;
 
 		logger.debug("Execution tracking enabled - " + isExecutionTracking);
+		logger.info("Tracking Client Port: " + trackingClientSocketPort);
 
 		final Timer timer = new Timer();
 
@@ -93,7 +102,7 @@ public class HydrographMain {
 		if (isExecutionTracking) {
 			final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
 
-			session = hydrographMain.connectToServer(socket, jobId);
+			session = hydrographMain.connectToServer(socket, jobId, trackingClientSocketPort);
 			/**
 			 * If tracking enable, start to post execution tracking status.
 			 */
@@ -182,11 +191,25 @@ public class HydrographMain {
 		return null;
 	}
 	
-	private Session connectToServer(HydrographEngineCommunicatorSocket socket,String jobId){
+	/**
+	 * Gets the tracking socket port number.
+	 *
+	 * @param argumentList
+	 *            the argument list
+	 * @return the job id
+	 */
+	private String getTrackingClientSocketPort(List<String> argumentList) {
+		if (argumentList.contains(Constants.TRACKING_CLIENT_SOCKET_PORT)) {
+			return argumentList.get(argumentList.indexOf(Constants.TRACKING_CLIENT_SOCKET_PORT) + 1);
+		}
+		return null;
+	}
+	
+	private Session connectToServer(HydrographEngineCommunicatorSocket socket,String jobId, String trackingClientSocketPort){
 		ClientManager client = ClientManager.createClient();
 		Session session=null;
 			try {
-				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
+				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl(trackingClientSocketPort) + jobId));
 				socket.sendMessage(getConnectionReq(jobId));
 			} catch (DeploymentException e) {
 				logger.error("Fail to connect to server",e);

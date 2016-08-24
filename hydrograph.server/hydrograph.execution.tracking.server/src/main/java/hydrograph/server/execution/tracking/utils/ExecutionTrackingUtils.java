@@ -118,8 +118,11 @@ public class ExecutionTrackingUtils {
 	 *
 	 * @return the tracking url
 	 */
-	public String getTrackingUrl() {
-		String url = host + portNo + route;
+	public String getTrackingUrl(String trackingClientSocketPort) {
+		String clientSocketPort = (trackingClientSocketPort == null)? portNo : trackingClientSocketPort;
+		String url = host + clientSocketPort + route;
+		
+		logger.info("Hydrograph Execution Tracking URL: " + url);
 		return url;
 	}
 
