@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class PortFigure.
+ * Represents the figure class for the component ports.
  * 
  * @author Bitwise
  */
@@ -124,28 +125,78 @@ public class PortFigure extends Figure {
 				getBounds().setSize(new Dimension(24,16));
 			}		
 		}
+	
+	/**
+	 * Gets the port color.
+	 * 
+	 * @return the port color
+	 */
 	public Color getPortColor() {
 		return portColor;
 	}
+	
+	/**
+	 * Gets the tooltip figure.
+	 * 
+	 * @return the tooltip figure
+	 */
 	public TooltipFigure getTooltipFigure() {
 		return tooltipFigure;
 	}
+	
+	/**
+	 * Gets the label of port.
+	 * 
+	 * @return the label of port
+	 */
 	public String getLabelOfPort() {
 		return labelOfPort;
 	}
+	
+	/**
+	 * Sets the label of port.
+	 * 
+	 * @param label
+	 *            the new label of port
+	 */
 	public void setLabelOfPort(String label) {
 		this.labelOfPort=label;
 	}
+	
+	/**
+	 * Checks if port is watched.
+	 * 
+	 * @return true, if port is watched
+	 */
 	public boolean isWatched() {
 		return isWatched;
 	}
+	
+	/**
+	 * Sets the watched.
+	 * 
+	 * @param isWatched
+	 *            the new watched
+	 */
 	public void setWatched(boolean isWatched) {
 		this.isWatched = isWatched;
 	}
 	
+	/**
+	 * Checks if portlabels can be displayed..
+	 * 
+	 * @return true, if portlabels can be displayed.
+	 */
 	public boolean isDisplayPortlabels() {
 		return displayPortLabels;
 	}
+	
+	/**
+	 * Sets whether to display portlabels. If set to true, port labels will be displayed in canvas.
+	 * 
+	 * @param toggleValue
+	 *            the new display portlabels
+	 */
 	public void setDisplayPortlabels(boolean toggleValue) {
 		PortFigure.displayPortLabels = toggleValue;
 	}
@@ -213,21 +264,35 @@ public class PortFigure extends Figure {
 
 	}
 
+	/**
+	 * Select port on the canvas by changing the background color of the port.
+	 */
 	public void selectPort() {
 		if(!isWatched)
 		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER_SELECTED);
 	}
 
+	/**
+	 * Deselect port by reverting the background color of the port.
+	 */
 	public void deSelectPort() {
 		if(!isWatched)
 		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
 	}
 
-	public void changeWatchColor(){
+	/**
+	 * Change watcher color.
+	 * Typically when user adds the watcher on this port.
+	 */
+	public void changeWatcherColor(){
 		setBackgroundColor(ELTColorConstants.WATCH_COLOR);
 	}
 	
-	public void removeWatchColor(){
+	/**
+	 * Removes the watcher color.
+	 * Typically when user removes the watcher on this port.
+	 */
+	public void removeWatcherColor(){
 		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
 	}
 	@Override
@@ -239,14 +304,29 @@ public class PortFigure extends Figure {
 
 	}
 
+	/**
+	 * Gets the handle bounds.
+	 * 
+	 * @return the handle bounds
+	 */
 	public Rectangle getHandleBounds() {
 		return getBounds().getCopy();
 	}
 
+	/**
+	 * Gets the terminal.
+	 * 
+	 * @return the terminal
+	 */
 	public String getTerminal() {
 		return terminal;
 	}
 
+	/**
+	 * Gets the anchor.
+	 * 
+	 * @return the anchor
+	 */
 	public FixedConnectionAnchor getAnchor() {
 		return anchor;
 	}
@@ -260,10 +340,21 @@ public class PortFigure extends Figure {
 				+ "\n******************************************\n";
 	}
 
+	/**
+	 * Sets the tooltip text to be displayed for this port.
+	 * 
+	 * @param tooltipText
+	 *            the new tooltip text
+	 */
 	public void setTooltipText(String tooltipText) {
 		tooltipFigure.setMessage(tooltipText);
 	}
 
+	/**
+	 * Gets the tool tip figure.
+	 * 
+	 * @return the tool tip figure
+	 */
 	public TooltipFigure getToolTipFigure() {
 		return tooltipFigure;
 	}

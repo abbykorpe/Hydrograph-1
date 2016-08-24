@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class ComponentLabelFigure.
+ * Represents the component label displayed on the component in canvas.
  * 
  * @author Bitwise
  */

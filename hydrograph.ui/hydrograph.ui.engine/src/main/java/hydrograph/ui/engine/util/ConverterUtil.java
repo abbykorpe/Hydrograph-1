@@ -48,8 +48,12 @@ import org.slf4j.Logger;
 
 
 
+
 /**
  * The Class ConverterUtil.
+ * This class has utility methods for generating target XML using UI objects.
+ * 
+ * @author Bitwise
  */
 public class ConverterUtil {
 	
@@ -67,7 +71,7 @@ public class ConverterUtil {
 	}
 	
 	/**
-	 * Convert container to xml.
+	 * Convert UI objects to target xml.
 	 *
 	 * @param container
 	 * @param validate
@@ -110,7 +114,7 @@ public class ConverterUtil {
 	}
 
 	/**
-	 * Marshall.
+	 * Marshall UI objects to target XML.
 	 *
 	 * @param graph
 	 * @param validate

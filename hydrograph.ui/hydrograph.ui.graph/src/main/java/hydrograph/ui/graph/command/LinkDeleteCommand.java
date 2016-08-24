@@ -134,7 +134,7 @@ public class LinkDeleteCommand extends Command{
 					{
 						if(part instanceof PortEditPart){
 							if(((PortEditPart)part).getCastedModel().getTerminal().equals(sourcePort.getTerminal())){
-								((PortEditPart)part).getPortFigure().removeWatchColor();
+								((PortEditPart)part).getPortFigure().removeWatcherColor();
 								((PortEditPart)part).getPortFigure().setWatched(false);
 							} 
 						}

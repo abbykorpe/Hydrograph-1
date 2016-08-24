@@ -17,6 +17,7 @@ package hydrograph.ui.graph.figure;
 
 /**
  * The Interface Validator.
+ * Base interface for validating the properties of the components and their values.
  * 
  * @author Bitwise
  */

@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Color;
 
 /**
  * The Class ComponentBorder.
+ * Used to provide borders to the components in the canvas.
  * 
  * @author Bitwise
  */
@@ -124,10 +125,21 @@ public class ComponentBorder extends AbstractBorder {
 		
 	}
 
+	/**
+	 * Gets the label margin.
+	 * 
+	 * @return the label margin
+	 */
 	public int getLabelMargin() {
 		return labelMargin;
 	}
 
+	/**
+	 * Sets the label margin.
+	 * 
+	 * @param labelMargin
+	 *            the new label margin
+	 */
 	public void setLabelMargin(int labelMargin) {
 		this.labelMargin = labelMargin;
 	}

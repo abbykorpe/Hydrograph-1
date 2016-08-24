@@ -17,9 +17,12 @@ package hydrograph.ui.graph.figure;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-// TODO: Auto-generated Javadoc
+
 /**
+ * The Class Activator.
  * The activator class controls the plug-in life cycle
+ * 
+ * @author Bitwise
  */
 public class Activator extends AbstractUIPlugin {
 

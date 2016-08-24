@@ -368,6 +368,12 @@ public class ComponentFigure extends Figure implements Validator {
 		}
 	}
 
+	/**
+	 * Update component status.
+	 * 
+	 * @param status
+	 *            the status
+	 */
 	public void updateComponentStatus(CompStatus status){
 		componentStatus = status;
 	}
@@ -408,11 +414,11 @@ public class ComponentFigure extends Figure implements Validator {
 	/**
 	 * Gets the connection anchor name.
 	 * 
-	 * @param c
-	 *            the c
+	 * @param connectionAnchor
+	 *            the connectionAnchor
 	 * @return the connection anchor name
 	 */
-	public String getConnectionAnchorName(ConnectionAnchor c) {
+	public String getConnectionAnchorName(ConnectionAnchor connectionAnchor) {
 
 		Set<String> keys = connectionAnchors.keySet();
 		String key;
@@ -420,7 +426,7 @@ public class ComponentFigure extends Figure implements Validator {
 
 		while (it.hasNext()) {
 			key = it.next();
-			if (connectionAnchors.get(key).equals(c))
+			if (connectionAnchors.get(key).equals(connectionAnchor))
 				return key;
 		}
 		return null;
@@ -440,25 +446,25 @@ public class ComponentFigure extends Figure implements Validator {
 	}
 
 	/**
-	 * Gets the source connection anchor at.
+	 * Gets the source connection anchor at given point.
 	 * 
-	 * @param p
-	 *            the p
-	 * @return the source connection anchor at
+	 * @param point
+	 *            the point
+	 * @return the source connection anchor at given point.
 	 */
-	public ConnectionAnchor getSourceConnectionAnchorAt(Point p) {
-		return closestAnchor(p, outputConnectionAnchors);
+	public ConnectionAnchor getSourceConnectionAnchorAt(Point point) {
+		return closestAnchor(point, outputConnectionAnchors);
 	}
 
 	/**
 	 * Gets the target connection anchor at.
 	 * 
-	 * @param p
-	 *            the p
+	 * @param point
+	 *            the point
 	 * @return the target connection anchor at
 	 */
-	public ConnectionAnchor getTargetConnectionAnchorAt(Point p) {
-		return closestAnchor(p, inputConnectionAnchors);
+	public ConnectionAnchor getTargetConnectionAnchorAt(Point point) {
+		return closestAnchor(point, inputConnectionAnchors);
 	}
 
 	@Override
@@ -482,7 +488,7 @@ public class ComponentFigure extends Figure implements Validator {
 
 	/**
 	 * 
-	 * Returns true if height of the component incremented
+	 * Returns true if the height of the component is incremented
 	 * 
 	 * @return
 	 */
@@ -492,7 +498,7 @@ public class ComponentFigure extends Figure implements Validator {
 
 	/**
 	 * 
-	 * Set incremented height
+	 * Set whether height of the component is incremented
 	 * 
 	 * @param incrementedHeight
 	 */
