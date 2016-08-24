@@ -50,7 +50,7 @@ public class ExecutionTrackingConsoleUtils {
 	public static ExecutionTrackingConsoleUtils INSTANCE = new ExecutionTrackingConsoleUtils();
 	
 	/** The Constant ExecutionTrackingLogFileExtention. */
-	private static final String ExecutionTrackingLogFileExtention = ".log";
+	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".log";
 	
 	/**
 	 * Instantiates a new execution tracking console utils.
@@ -173,7 +173,7 @@ public class ExecutionTrackingConsoleUtils {
 			jobId = "R_" + jobId;
 		}
 		try {
-			String path = getLogPath() + jobId + ExecutionTrackingLogFileExtention;
+			String path = getLogPath() + jobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION;
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 			StringBuilder builder = new StringBuilder();
 			String line = bufferedReader.readLine();

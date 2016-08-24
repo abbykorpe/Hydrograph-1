@@ -39,18 +39,15 @@ import org.slf4j.Logger;
 public class ExecutionTrackingFileLogger {
 	
 	/** The Constant ExecutionTrackingLogFileExtention. */
-	private static final String ExecutionTrackingLogFileExtention = ".log";
-	private static final String ExecutionTrackingLocalMode = "L_";
-	private static final String ExecutionTrackingRemoteMode = "R_";
+	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".log";
+	private static final String EXECUTION_TRACKING_LOCAL_MODE = "L_";
+	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
 
 	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ExecutionTrackingFileLogger.class);
 	
 	/** The Constant INSTANCE. */
 	public static final ExecutionTrackingFileLogger INSTANCE = new ExecutionTrackingFileLogger();
-	
-	/** The default job tracking log directory. */
-	private String defaultJobTrackingLogDirectory;
 	
 	/** The job tracking log directory. */
 	private String jobTrackingLogDirectory;;
@@ -111,9 +108,9 @@ public class ExecutionTrackingFileLogger {
 	private BufferedWriter getExecutionStatusLogger(String uniqJobId, boolean isLocalMode) {
 		BufferedWriter bufferedWriter = executionTrackingLoggers.get(uniqJobId);	
 		if(isLocalMode){
-			uniqJobId = ExecutionTrackingLocalMode + uniqJobId;
+			uniqJobId = EXECUTION_TRACKING_LOCAL_MODE + uniqJobId;
 		}else{
-			uniqJobId = ExecutionTrackingRemoteMode + uniqJobId;
+			uniqJobId = EXECUTION_TRACKING_REMOTE_MODE + uniqJobId;
 		}
 		if(OSValidator.isWindows()){
 			jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
@@ -122,7 +119,7 @@ public class ExecutionTrackingFileLogger {
 		}
 		if(bufferedWriter==null){
 			try{
-				 FileWriter fileWriter = new FileWriter(jobTrackingLogDirectory + uniqJobId + ExecutionTrackingLogFileExtention, true);
+				 FileWriter fileWriter = new FileWriter(jobTrackingLogDirectory + uniqJobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION, true);
 				 bufferedWriter = new BufferedWriter(fileWriter);
 				 executionTrackingLoggers.put(uniqJobId, bufferedWriter);
 			}catch (Exception e) {
