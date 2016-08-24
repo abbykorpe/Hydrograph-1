@@ -21,14 +21,14 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathNotFoundException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import cascading.lingual.type.SQLDateCoercibleType;
 
@@ -38,9 +38,9 @@ import cascading.lingual.type.SQLDateCoercibleType;
 
 public class LingualSchemaCreatorTest {
 
-	static JSONParser jsonParser;
+	static JsonParser jsonParser;
 	static Object obj;
-	static JSONObject jsonObject;
+	static JsonObject JsonObject;
 	static String tableName = "test";
 	static String stereotypeName = "test_stereo";
 	static String inputPath = "testData/Input/JobId/Input1_out0";
@@ -49,61 +49,61 @@ public class LingualSchemaCreatorTest {
 	static String resultSchema = "resultschema";
 
 	@BeforeClass
-	public static void init() throws ClassNotFoundException, IOException, ParseException {
+	public static void init() throws ClassNotFoundException, IOException {
 
 		String fieldNames[] = { "f1", "f2", "f3", "f4" };
 		Type[] fieldTypes = { String.class, new SQLDateCoercibleType(), new SQLDateCoercibleType(), BigDecimal.class };
 
-		new LingualSchemaCreator().createCatalog(linugalMetaDataPath, processingSchema,  tableName,
-				stereotypeName, inputPath, fieldNames, fieldTypes);
+		new LingualSchemaCreator().createCatalog(linugalMetaDataPath, processingSchema, tableName, stereotypeName,
+				inputPath, fieldNames, fieldTypes);
 
-		jsonParser = new JSONParser();
+		jsonParser = new JsonParser();
 		FileReader file = new FileReader("testData/MetaData/.lingual/catalog");
 		obj = jsonParser.parse(file);
-		jsonObject = (JSONObject) obj;
+		JsonObject = (JsonObject) obj;
 		file.close();
 	}
 
 	@Test
 	public void itShouldTestHadoop2Mr1Platform() {
 
-		//given
+		// given
 		String expectedPlatform = "hadoop2-mr1";
-		
+
 		// when
-		String platformName = (String) jsonObject.get("platformName");
+		String platformName = JsonObject.get("platformName").getAsString();
 
 		// then
 		Assert.assertTrue(expectedPlatform.equals(platformName));
 	}
 
 	@Test
-	public void itShouldTestExistenceOfSchema() throws ParseException {
+	public void itShouldTestExistenceOfSchema() {
 		// given
 		String expectedLingualSchema = "lingualschema";
 		String expectedResultSchema = "resultSchema";
 
 		// when
-		JSONObject lingualSchObj = getLingualSchema(processingSchema);
-		JSONObject resultSchObj = getLingualSchema(resultSchema);
-		
+		JsonObject lingualSchObj = getLingualSchema(processingSchema);
+		JsonObject resultSchObj = getLingualSchema(resultSchema);
+
 		// then
-		Assert.assertTrue(expectedLingualSchema.equals(lingualSchObj.get("name").toString()));
-		Assert.assertTrue(expectedResultSchema.equals(resultSchObj.get("name").toString()));
+		Assert.assertTrue(expectedLingualSchema.equals(lingualSchObj.get("name").getAsString()));
+		Assert.assertTrue(expectedResultSchema.equals(resultSchObj.get("name").getAsString()));
 	}
 
 	@Test
-	public void itShouldTestStereoTypeNameOfLingualSchema() throws ParseException {
+	public void itShouldTestStereoTypeNameOfLingualSchema() {
 		// given
 		String expectedStereotypeName = "test_stereo";
 
 		// when
-		JSONObject lingualSchema = getLingualSchema(processingSchema);
-		JSONArray jsonArray = (JSONArray) lingualSchema.get("stereotypes");
+		JsonObject lingualSchema = getLingualSchema(processingSchema);
+		JsonArray jsonArray = (JsonArray) lingualSchema.get("stereotypes");
 		String stereotypeName = null;
 		for (Object obj : jsonArray) {
-			JSONObject jsonObj = (JSONObject) obj;
-			stereotypeName = (String) jsonObj.get("name");
+			JsonObject jsonObj = (JsonObject) obj;
+			stereotypeName = jsonObj.get("name").getAsString();
 		}
 
 		// then
@@ -112,43 +112,41 @@ public class LingualSchemaCreatorTest {
 	}
 
 	@Test
-	public void itShouldTestFieldNameAndFieldType() throws ParseException {
+	public void itShouldTestFieldNameAndFieldType() {
 		// given
-		String expectedFieldName = "[\"f1\",\"f2\",\"f3\",\"f4\"]";
-		String expectedFieldType = "[\"java.lang.String\",\"cascading.lingual.type.SQLDateCoercibleType\",\"cascading.lingual.type.SQLDateCoercibleType\",\"java.math.BigDecimal\"]";
+		String expectedFieldName = "f1, f2, f3, f4";
+		String expectedFieldType = "java.lang.String, cascading.lingual.type.SQLDateCoercibleType, cascading.lingual.type.SQLDateCoercibleType, java.math.BigDecimal";
 		String fieldName = null;
 		String fieldType = null;
 
 		// when
-		JSONObject lingualSchema = getLingualSchema(processingSchema);
-		JSONArray jsonArray = (JSONArray) lingualSchema.get("stereotypes");
-		for (Object obj : jsonArray) {
-			JSONObject jsonObj = (JSONObject) obj;
-			JSONObject rootSchema1 = (JSONObject) jsonParser.parse(jsonObj.get("fields").toString());
-			fieldName = rootSchema1.get("names").toString();
-			fieldType = rootSchema1.get("types").toString();
-		}
+		JsonObject lingualSchema = getLingualSchema(processingSchema);
+		JsonArray jsonArray = lingualSchema.get("stereotypes").getAsJsonArray();
+		String actualFields = getConvertedArrayToString(
+				jsonArray.get(0).getAsJsonObject().getAsJsonObject("fields").getAsJsonArray("names"));
+		String actualTypes = getConvertedArrayToString(
+				jsonArray.get(0).getAsJsonObject().getAsJsonObject("fields").getAsJsonArray("types"));
 
 		// then
-		Assert.assertEquals(expectedFieldName, fieldName);
-		Assert.assertEquals(expectedFieldType, fieldType);
+		Assert.assertEquals(expectedFieldName, actualFields);
+		Assert.assertEquals(expectedFieldType, actualTypes);
 	}
 
 	@Test
-	public void itShouldTestLingualSchemaTableName_StereoTypeFor_Identifier_ForTable() throws ParseException {
+	public void itShouldTestLingualSchemaTableName_StereoTypeFor_Identifier_ForTable() {
 		// given
 		String expectedIdentifier = "testData/Input/JobId/Input1_out0";
 		String expectedTableName = "test";
 		String expectedStereotypeName = "test_stereo";
 
-		// when 
-		JSONObject lingualSchema = getLingualSchema(processingSchema);
-		JSONObject childTableObject = (JSONObject) lingualSchema.get("childTables");
-		JSONObject tableObject = (JSONObject) jsonParser.parse(childTableObject.get("test").toString());
+		// when
+		JsonObject lingualSchema = getLingualSchema(processingSchema);
+		JsonObject childTableObject = lingualSchema.get("childTables").getAsJsonObject();
+		JsonObject tableObject = childTableObject.getAsJsonObject("test");
 
-		String identifier = tableObject.get("identifier").toString();
-		String tableName = tableObject.get("name").toString();
-		String stereotypeName = tableObject.get("stereotypeName").toString();
+		String identifier = tableObject.get("identifier").getAsString();
+		String tableName = tableObject.get("name").getAsString();
+		String stereotypeName = tableObject.get("stereotypeName").getAsString();
 
 		// then
 		Assert.assertEquals(expectedIdentifier, identifier);
@@ -156,16 +154,24 @@ public class LingualSchemaCreatorTest {
 		Assert.assertEquals(expectedStereotypeName, stereotypeName);
 	}
 
-	private JSONObject getLingualSchema(String schema) throws ParseException {
-		JSONObject childSchema = getChildSchema();
-		JSONObject lingualSchema = (JSONObject) jsonParser.parse(childSchema.get(schema).toString());
+	private String getConvertedArrayToString(JsonArray array) {
+		String string = "";
+		for (int i = 0; i < array.size(); i++)
+			string += (i == array.size() - 1) ? array.get(i).getAsString() : array.get(i).getAsString() + ", ";
+
+		return string;
+	}
+
+	private JsonObject getLingualSchema(String schema) {
+		JsonObject childSchema = getChildSchema();
+		JsonObject lingualSchema = (JsonObject) jsonParser.parse(childSchema.get(schema).toString());
 		return lingualSchema;
 	}
 
-	private JSONObject getChildSchema() throws ParseException {
-		JSONObject rootSchema = (JSONObject) jsonParser.parse(jsonObject.get("rootSchemaDef").toString());
-		String default1 = (String) rootSchema.get("defaultProtocol");
-		JSONObject childSchema = (JSONObject) jsonParser.parse(rootSchema.get("childSchemas").toString());
+	private JsonObject getChildSchema() {
+		JsonObject rootSchema = (JsonObject) jsonParser.parse(JsonObject.get("rootSchemaDef").toString());
+		String default1 = rootSchema.get("defaultProtocol").getAsString();
+		JsonObject childSchema = (JsonObject) jsonParser.parse(rootSchema.get("childSchemas").toString());
 		return childSchema;
 	}
 
