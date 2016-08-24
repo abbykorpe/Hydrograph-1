@@ -188,14 +188,11 @@ public class HydrographMain {
 				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
 				socket.sendMessage(getConnectionReq(jobId));
 			} catch (DeploymentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.info("Fail to connect to server");
 			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.info("Fail to connect to server");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.info("Fail to connect to server");
 			}
 			
 		
