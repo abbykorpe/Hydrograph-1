@@ -54,7 +54,7 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 	
 	public ExecutionTrackPreference() {
 		super();
-		setPreferenceStore(PlatformUI.getWorkbench().getPreferenceStore());
+		setPreferenceStore(PlatformUI.getPreferenceStore());
 	}
 	
 	/**

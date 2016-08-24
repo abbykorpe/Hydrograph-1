@@ -52,6 +52,11 @@ public class ExecutionTrackingConsoleUtils {
 	/** The Constant ExecutionTrackingLogFileExtention. */
 	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".log";
 	
+	private static final String EXECUTION_TRACKING_LOCAL_MODE = "L_";
+
+	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
+
+	
 	/**
 	 * Instantiates a new execution tracking console utils.
 	 */
@@ -168,9 +173,9 @@ public class ExecutionTrackingConsoleUtils {
 			jobId = uniqueJobId;
 		}
 		if(isLocalMode){
-			jobId = "L_" + jobId;
+			jobId = EXECUTION_TRACKING_LOCAL_MODE + jobId;
 		}else{
-			jobId = "R_" + jobId;
+			jobId = EXECUTION_TRACKING_REMOTE_MODE + jobId;
 		}
 		try {
 			String path = getLogPath() + jobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION;
