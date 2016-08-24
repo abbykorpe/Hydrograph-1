@@ -254,6 +254,9 @@ public class Messages extends NLS {
 	public static String PULL_SCHEMA_MESSAGE_TITLE;
 	
 	public static String SCHEMA_IS_NOT_IN_SYNC_WITH_MAPPING;
+	public static String PARAMETER_GRID_SAVE_TOOLTIP;
+	public static String PARAMETER_GRID_BROWSE_TOOLTIP;
+	public static String PARAMETER_GRID_RELOAD_TOOLTIP;
 	
 	static {
 		// initialize resource bundle
