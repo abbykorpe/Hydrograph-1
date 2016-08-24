@@ -343,7 +343,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 			@Override
 			public void keyPressed(KeyEvent event){
-				if(((event.stateMask & SWT.CTRL) != 0 
+				if(((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0 
 						&& (event.keyCode == SWT.ARROW_DOWN || event.keyCode == SWT.ARROW_LEFT
 						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP))){
 					
