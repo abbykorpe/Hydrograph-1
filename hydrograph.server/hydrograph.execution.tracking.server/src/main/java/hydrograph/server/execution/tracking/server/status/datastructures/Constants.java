@@ -26,5 +26,5 @@ public class Constants {
 	public static final String POST="post";
 	public static final String GET="get";
 	public static final String KILL="kill";
-	public static final long DELAY_TIME=3000;
+	public static final long DELAY_TIME=7000;
 }

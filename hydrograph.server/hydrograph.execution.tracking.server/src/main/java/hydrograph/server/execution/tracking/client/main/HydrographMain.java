@@ -201,7 +201,7 @@ public class HydrographMain {
 	}
 	
 	private static String getConnectionReq(String jobId){
-		ExecutionStatus executionStatus = new ExecutionStatus(Collections.EMPTY_LIST);
+		ExecutionStatus executionStatus = new ExecutionStatus(Collections.<ComponentStatus> emptyList());
 		executionStatus.setJobId(jobId);
 		executionStatus.setType(Constants.POST);
 		Gson gson = new Gson();

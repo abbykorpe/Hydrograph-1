@@ -54,7 +54,7 @@ public class ExecutionTrackingUtils {
 	/** The port no. */
 	private String portNo = "8877";
 	
-	public long statusFrequency = 2000;
+	private long statusFrequency = 2000;
 	
 	/** The Constant INSTANCE. */
 	public static final ExecutionTrackingUtils INSTANCE = new ExecutionTrackingUtils();
