@@ -62,8 +62,8 @@ public class WidgetHelper {
 	public WidgetConfig getDelimiterWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_DELIMITER);
-		textBoxConfig.setGrabExcessSpace(true);
 		addDelimiterTextBoxListeners(textBoxConfig);
+		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
 	
@@ -73,7 +73,7 @@ public class WidgetHelper {
 	public WidgetConfig getQuoteWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_QUOTE);
-		textBoxConfig.setGrabExcessSpace(true);
+		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
 	
