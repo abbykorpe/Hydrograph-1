@@ -313,7 +313,7 @@ task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
 }
 
 def getArgsForDebugRunJob() {
-    def argsArray = new String[12]
+    def argsArray = new String[13]
     if (project.hasProperty("jobXML")) {
         argsArray[0] = "-xmlpath"
         argsArray[1] = jobXML
