@@ -17,7 +17,6 @@ package hydrograph.ui.graph.execution.tracking.preferences;
  * @author Bitwise
  */
 import hydrograph.ui.dataviewer.constants.Messages;
-import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
@@ -136,11 +135,9 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		if(trackingFieldEditor.getBooleanValue()){
 			logPathEditor.setEnabled(true, composite_2);
 			portFieldEditor.setEnabled(true, composite_3);
-			//setEnableExecutionTrackConsole(true);
 		}else{
 			logPathEditor.setEnabled(false, composite_2);
 			portFieldEditor.setEnabled(false, composite_3);
-			//setEnableExecutionTrackConsole(false);
 		}
 		
 		trackingFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
@@ -184,7 +181,7 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 	public void init(IWorkbench workbench) {
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		preferenceStore.setDefault(ExecutionPreferenceConstants.EXECUTION_TRACKING, true);
-		preferenceStore.setDefault(ExecutionPreferenceConstants.TRACKING_LOG_PATH, Utils.INSTANCE.getInstallationPath());
+		preferenceStore.setDefault(ExecutionPreferenceConstants.TRACKING_LOG_PATH, TrackingDisplayUtils.INSTANCE.getInstallationPath());
 		preferenceStore.setDefault(ExecutionPreferenceConstants.TRACKING_PORT_NO, TrackingDisplayUtils.INSTANCE.getExecutiontrackingPortNo());
 		
 		setPreferenceStore(preferenceStore);

@@ -32,8 +32,6 @@ import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -50,6 +48,9 @@ public class ExecutionTrackingConsoleUtils {
 
 	/** The instance. */
 	public static ExecutionTrackingConsoleUtils INSTANCE = new ExecutionTrackingConsoleUtils();
+	
+	/** The Constant ExecutionTrackingLogFileExtention. */
+	private static final String ExecutionTrackingLogFileExtention = ".log";
 	
 	/**
 	 * Instantiates a new execution tracking console utils.
@@ -132,7 +133,7 @@ public class ExecutionTrackingConsoleUtils {
 			console.getShell().setBounds(originalBoundsClone);		
 			console.getShell().setActive();	
 		}
-		console.setStatus(null, readFile(null, getUniqueJobId()));
+		console.setStatus(null, readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode()));
 	}
 
 	/**
@@ -159,15 +160,20 @@ public class ExecutionTrackingConsoleUtils {
 	 * @param uniqueJobId the unique job id
 	 * @return the string builder
 	 */
-	public StringBuilder readFile(ExecutionStatus executionStatus, String uniqueJobId){
+	public StringBuilder readFile(ExecutionStatus executionStatus, String uniqueJobId, boolean isLocalMode){
 		String jobId = "";
 		if(executionStatus != null){
 			jobId = executionStatus.getJobId();	
 		}else{
 			jobId = uniqueJobId;
 		}
+		if(isLocalMode){
+			jobId = "L_" + jobId;
+		}else{
+			jobId = "R_" + jobId;
+		}
 		try {
-			String path = getLogPath() + jobId + ".log";
+			String path = getLogPath() + jobId + ExecutionTrackingLogFileExtention;
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 			StringBuilder builder = new StringBuilder();
 			String line = bufferedReader.readLine();
@@ -191,9 +197,8 @@ public class ExecutionTrackingConsoleUtils {
 	 * @return the log path
 	 */
 	private String getLogPath(){
-		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
-		String defaultJobTrackingLogDirectory=Platform.getInstallLocation().getURL().getPath() + "config/logger/JobTrackingLog";
-		String jobTrackingLogDirectory = eclipsePreferences.get(ExecutionPreferenceConstants.TRACKING_LOG_PATH, defaultJobTrackingLogDirectory);
+		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
+				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
 		return jobTrackingLogDirectory = jobTrackingLogDirectory + "/";
 	}
 

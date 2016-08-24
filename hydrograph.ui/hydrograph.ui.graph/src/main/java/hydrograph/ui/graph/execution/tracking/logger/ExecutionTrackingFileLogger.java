@@ -18,6 +18,7 @@ import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedWriter;
@@ -29,8 +30,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.slf4j.Logger;
 
 
@@ -41,6 +40,8 @@ public class ExecutionTrackingFileLogger {
 	
 	/** The Constant ExecutionTrackingLogFileExtention. */
 	private static final String ExecutionTrackingLogFileExtention = ".log";
+	private static final String ExecutionTrackingLocalMode = "L_";
+	private static final String ExecutionTrackingRemoteMode = "R_";
 
 	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ExecutionTrackingFileLogger.class);
@@ -61,33 +62,14 @@ public class ExecutionTrackingFileLogger {
 	 * Instantiates a new execution tracking file logger.
 	 */
 	private ExecutionTrackingFileLogger(){
-		IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
-		defaultJobTrackingLogDirectory=Platform.getInstallLocation().getURL().getPath() + getLoggerPath();
-		jobTrackingLogDirectory = eclipsePreferences.get(ExecutionPreferenceConstants.TRACKING_LOG_PATH, defaultJobTrackingLogDirectory);
-		//jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
+		jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
+				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
 				
 		executionTrackingLoggers = new HashMap<>();
 		
 		createJobTrackingLogDirectory();
 	}
 
-	/**
-	 * Gets the logger path.
-	 *
-	 * @return the logger path
-	 */
-	private String getLoggerPath(){
-		String dirPath = null;
-		if(OSValidator.isWindows()){
-			dirPath = "config//logger//JobTrackingLog";
-		}else if(OSValidator.isMac()){
-			dirPath = "config//logger//JobTrackingLog";
-		}else if(OSValidator.isUnix()){
-			dirPath = "config\\logger\\JobTrackingLog";
-		}
-		return dirPath;
-	}
-	
 	
 	/**
 	 * Creates the job tracking log directory.
@@ -105,14 +87,13 @@ public class ExecutionTrackingFileLogger {
 	 * @param uniqJobId the uniq job id
 	 * @param executionStatus the execution status
 	 */
-	public void log(String uniqJobId,ExecutionStatus executionStatus){
+	public void log(String uniqJobId,ExecutionStatus executionStatus, boolean isLocalMode){
 		String executionStatusString = getExecutionStatusInString(executionStatus);
 		if(StringUtils.isBlank(executionStatusString)){
 			return;
 		}
 		
-		BufferedWriter executionTrackingLogger = getExecutionStatusLogger(uniqJobId);
-		
+		BufferedWriter executionTrackingLogger = getExecutionStatusLogger(uniqJobId, isLocalMode);
 		try {
 			executionTrackingLogger.write(executionStatusString);
 			executionTrackingLogger.flush();
@@ -127,8 +108,13 @@ public class ExecutionTrackingFileLogger {
 	 * @param uniqJobId the uniq job id
 	 * @return the execution status logger
 	 */
-	private BufferedWriter getExecutionStatusLogger(String uniqJobId) {
-		BufferedWriter bufferedWriter = executionTrackingLoggers.get(uniqJobId);		
+	private BufferedWriter getExecutionStatusLogger(String uniqJobId, boolean isLocalMode) {
+		BufferedWriter bufferedWriter = executionTrackingLoggers.get(uniqJobId);	
+		if(isLocalMode){
+			uniqJobId = ExecutionTrackingLocalMode + uniqJobId;
+		}else{
+			uniqJobId = ExecutionTrackingRemoteMode + uniqJobId;
+		}
 		if(OSValidator.isWindows()){
 			jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
 		}else if(OSValidator.isMac()){

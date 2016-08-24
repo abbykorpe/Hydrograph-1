@@ -118,7 +118,8 @@ public class HydrographUiClientSocket {
 				{
 					pushExecutionStatusToExecutionTrackingConsole(executionStatus);
 					
-					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus);
+					
+					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
 
 					if(editor!=null && editor instanceof ELTGraphicalEditor && (editor.getJobId().equals(executionStatus.getJobId())))
 					{
@@ -152,7 +153,7 @@ public class HydrographUiClientSocket {
 						}
 					}
 				}
-				ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null);
+				ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
 			}
 
 			private void updateStatusCountForSubjobComponent(
@@ -337,7 +338,7 @@ public class HydrographUiClientSocket {
 			@Override
 			public void run() {
 				console.clearConsole();
-				console.setStatus(executionStatus, ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null));
+				console.setStatus(executionStatus, ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode()));
 			}
 		});
 	}
