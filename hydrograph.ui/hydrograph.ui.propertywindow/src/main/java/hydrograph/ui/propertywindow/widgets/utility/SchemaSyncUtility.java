@@ -251,13 +251,17 @@ public class SchemaSyncUtility {
 		return outputFieldList;
 	}
 	
-	private List<String> getOutputFieldsFromTransformMapping(
-			List<FilterProperties> outputFieldList) {
-		List<String> outputFields = new ArrayList<>();
-		for (FilterProperties fileFilterProperty : outputFieldList) {
-			if(!(ParameterUtil.isParameter(fileFilterProperty.getPropertyname())))
-			outputFields.add(fileFilterProperty.getPropertyname());
-		}
+	private List<String> getOutputFieldsFromTransformMapping(List<FilterProperties> outputFieldList) 
+	{
+		 List<String> outputFields = new ArrayList<>();
+		 for (FilterProperties fileFilterProperty : outputFieldList) 
+		 {
+			if(StringUtils.isNotBlank(fileFilterProperty.getPropertyname())
+					&&!(ParameterUtil.isParameter(fileFilterProperty.getPropertyname())))
+			{
+				outputFields.add(fileFilterProperty.getPropertyname());
+			}	
+		 }
 		return outputFields;
 	}
 
