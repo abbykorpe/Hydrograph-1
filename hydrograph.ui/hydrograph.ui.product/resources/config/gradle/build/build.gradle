@@ -175,9 +175,9 @@ task executeRemoteJob() {
 			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
 		}
 
-        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+" -jobid "+jobId+ " -isexecutiontracking " + isExecutionTracking
-		
-		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking
+        		
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
+		println "Executing command: "+command
    		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -229,9 +229,10 @@ task executeDebugRemoteJob() {
         def basePath = basePath;
         def isExecutionTracking = isExecutionTracking;
         
-        println "executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList + " -debugxmlpath " + debugJobXML + " -jobid " + jobId + " -basepath " + basePath + " -isexecutiontracking " + isExecutionTracking
+        
        
-        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath+ " -isexecutiontracking " + isExecutionTracking
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath+ " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
+        println "Executing command: "+command
 		sshToRemoteServer(host,username,password,command)
     }
 }
@@ -250,7 +251,7 @@ task executeLocalJob(dependsOn: ['build', 'classes'], type: JavaExec) {
         errorOutput = System.err
         classpath += transformFiles + configurations.compile
         def argsArray = getArgsForRunJob()
-        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]]
+        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+argsArray[8]+'',''+argsArray[9]]
 
     }
 }
@@ -277,6 +278,12 @@ def getArgsForRunJob() {
         println isExecutionTracking
     }
     
+    if(project.hasProperty("executionTrackingPort")){
+        argsArray[8] = "-trackingclientsocketport"
+        argsArray[9] = executionTrackingPort
+        println " executionTrackingPort is: "+executionTrackingPort
+    }
+    
     return argsArray
 }
 
@@ -300,13 +307,13 @@ task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
         classpath += transformFiles + configurations.compile
         def argsArray = getArgsForDebugRunJob()
         args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+
-                argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]]
+                argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]+'',''+argsArray[12]+'',''+argsArray[13]]
 
     }
 }
 
 def getArgsForDebugRunJob() {
-    def argsArray = new String[12]
+    def argsArray = new String[14]
     if (project.hasProperty("jobXML")) {
         argsArray[0] = "-xmlpath"
         argsArray[1] = jobXML
@@ -341,6 +348,13 @@ def getArgsForDebugRunJob() {
         argsArray[11] = isExecutionTracking
         println isExecutionTracking
     }
+    
+     if(project.hasProperty("executionTrackingPort")){
+        argsArray[12] = "-trackingclientsocketport"
+        argsArray[13] = executionTrackingPort
+        println " trackingclientsocketport is: "+executionTrackingPort
+    }
+    
 
     return argsArray
 }
