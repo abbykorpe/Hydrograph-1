@@ -15,14 +15,17 @@ package hydrograph.server.execution.tracking.client.main;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 import javax.websocket.CloseReason;
+import javax.websocket.DeploymentException;
 import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
@@ -60,12 +63,13 @@ public class HydrographMain {
 	 */
 	public static void main(String[] args) throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
+		HydrographMain hydrographMain = new HydrographMain();
 		Session session = null;
 		String[] argsList = args;
 		boolean isExecutionTracking = false;
 
 		List<String> argumentList = Arrays.asList(args);
-		final String jobId = getJobId(argumentList);
+		final String jobId = hydrographMain.getJobId(argumentList);
 
 		if (argumentList.contains(Constants.IS_TRACKING_ENABLE)) {
 			int index = argumentList.indexOf(Constants.IS_TRACKING_ENABLE);
@@ -83,28 +87,29 @@ public class HydrographMain {
 		 * Start new thread to run job
 		 */
 		final HydrographService execution = new HydrographService();
-		executeGraph(latch, jobId, argsFinalList, timer, execution);
 		
-		/**
-		 * If tracking enable, start to post execution tracking status.
-		 */
-		sendExecutionTrackingStatus(latch, session, isExecutionTracking, jobId, timer, execution);
+		hydrographMain.executeGraph(latch, jobId, argsFinalList, timer, execution);
+		
+		if (isExecutionTracking) {
+			final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
+
+			session = hydrographMain.connectToServer(socket, jobId);
+			/**
+			 * If tracking enable, start to post execution tracking status.
+			 */
+			hydrographMain.sendExecutionTrackingStatus(latch, session, jobId, timer, execution,socket);
+		}
 	}
 
 	
-	private static void sendExecutionTrackingStatus(final CountDownLatch latch, Session session,
-			boolean isExecutionTracking, final String jobId, final Timer timer, final HydrographService execution)
+	private void sendExecutionTrackingStatus(final CountDownLatch latch, Session session,final String jobId, final Timer timer, final HydrographService execution,final HydrographEngineCommunicatorSocket socket)
 			throws IOException {
-		if (isExecutionTracking) {
 			try {
-				ClientManager client = ClientManager.createClient();
-				final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
-				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
-
 				TimerTask task = new TimerTask() {
 					@Override
 					public void run() {
 						List<ComponentInfo> componentInfos = execution.getStatus();
+						if(!componentInfos.isEmpty()){
 						List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
 						for (ComponentInfo componentInfo : componentInfos) {
 							ComponentStatus componentStatus = new ComponentStatus(componentInfo.getComponentId(),
@@ -123,8 +128,9 @@ public class HydrographMain {
 							timer.cancel();
 						}
 					}
+					}
 				};
-				timer.schedule(task, 0l, Constants.STATUS_FREQ);
+				timer.schedule(task, 0l, ExecutionTrackingUtils.INSTANCE.getStatusFrequency());
 				latch.await();
 			} catch (Throwable t) {
 				logger.error("Failure in job - " + jobId, t);
@@ -136,10 +142,9 @@ public class HydrographMain {
 					session.close(closeReason);
 				}
 			}
-		}
 	}
 
-	private static void executeGraph(final CountDownLatch latch, final String jobId, final String[] argsFinalList,
+	private void executeGraph(final CountDownLatch latch, final String jobId, final String[] argsFinalList,
 			final Timer timer, final HydrographService execution) {
 		new Thread(new Runnable() {
 			public void run() {
@@ -170,10 +175,37 @@ public class HydrographMain {
 	 *            the argument list
 	 * @return the job id
 	 */
-	private static String getJobId(List<String> argumentList) {
+	private String getJobId(List<String> argumentList) {
 		if (argumentList.contains(Constants.JOBID_KEY)) {
 			return argumentList.get(argumentList.indexOf(Constants.JOBID_KEY) + 1);
 		}
 		return null;
+	}
+	
+	private Session connectToServer(HydrographEngineCommunicatorSocket socket,String jobId){
+		ClientManager client = ClientManager.createClient();
+		Session session=null;
+			try {
+				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
+				socket.sendMessage(getConnectionReq(jobId));
+			} catch (DeploymentException e) {
+				logger.error("Fail to connect to server",e);
+			} catch (URISyntaxException e) {
+				logger.error("Fail to connect to server",e);
+			} catch (IOException e) {
+				logger.error("Fail to connect to server",e);
+			}
+			
+		
+		return session;
+
+	}
+	
+	private String getConnectionReq(String jobId){
+		ExecutionStatus executionStatus = new ExecutionStatus(Collections.<ComponentStatus> emptyList());
+		executionStatus.setJobId(jobId);
+		executionStatus.setType(Constants.POST);
+		Gson gson = new Gson();
+		return gson.toJson(executionStatus);
 	}
 }

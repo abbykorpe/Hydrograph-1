@@ -42,6 +42,8 @@ public class ExecutionTrackingUtils {
 	
 	/** The Constant TRACKING_ROUTE. */
 	private static final String TRACKING_ROUTE = "WEBSOCKET_ROUTE";
+	
+	private static final String STATUS_FREQUENCY = "STATUS_FREQUENCY";
 
 	/** The route. */
 	private String route = "/executionTracking/engine-client";
@@ -51,6 +53,8 @@ public class ExecutionTrackingUtils {
 	
 	/** The port no. */
 	private String portNo = "8877";
+	
+	private long statusFrequency = 2000;
 	
 	/** The Constant INSTANCE. */
 	public static final ExecutionTrackingUtils INSTANCE = new ExecutionTrackingUtils();
@@ -95,6 +99,7 @@ public class ExecutionTrackingUtils {
 				portNo = properties.getProperty(PORT_NO);
 				host = properties.getProperty(LOCAL_URL);
 				route = properties.getProperty(TRACKING_ROUTE);
+				statusFrequency = Long.parseLong(properties.getProperty(STATUS_FREQUENCY));
 			}
 
 			return properties.getProperty("path");
@@ -126,4 +131,11 @@ public class ExecutionTrackingUtils {
 	public String getPortNo() {
 		return portNo;
 	}
+
+	
+	public long getStatusFrequency() {
+		return statusFrequency;
+	}
+	
+	
 }
