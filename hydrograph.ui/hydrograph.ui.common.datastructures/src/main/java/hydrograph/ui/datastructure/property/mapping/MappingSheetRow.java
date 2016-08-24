@@ -454,6 +454,7 @@ public class MappingSheetRow implements IDataStructure {
 		result = prime * result + ((operationClassPath == null) ? 0 : operationClassPath.hashCode());
 		result = prime * result + ((operationId == null) ? 0 : operationId.hashCode());
 		result = prime * result + ((outputList == null) ? 0 : outputList.hashCode());
+		result = prime * result + ((expressionEditorData == null) ? 0 : expressionEditorData.hashCode());
 		result = prime * result
 				+ ((wholeOperationParameterValue == null) ? 0 : wholeOperationParameterValue.hashCode());
 		return result;
@@ -506,6 +507,11 @@ public class MappingSheetRow implements IDataStructure {
 			if (other.wholeOperationParameterValue != null)
 				return false;
 		} else if (!wholeOperationParameterValue.equals(other.wholeOperationParameterValue))
+			return false;
+		if(expressionEditorData==null){
+			if(other.expressionEditorData!=null)
+			return false;	
+		}else if(!expressionEditorData.equals(other.expressionEditorData))
 			return false;
 		return true;
 	}
