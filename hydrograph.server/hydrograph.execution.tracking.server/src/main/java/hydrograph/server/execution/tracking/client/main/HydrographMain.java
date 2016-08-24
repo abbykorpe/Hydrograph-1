@@ -15,14 +15,17 @@ package hydrograph.server.execution.tracking.client.main;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 import javax.websocket.CloseReason;
+import javax.websocket.DeploymentException;
 import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
@@ -83,28 +86,29 @@ public class HydrographMain {
 		 * Start new thread to run job
 		 */
 		final HydrographService execution = new HydrographService();
+		
 		executeGraph(latch, jobId, argsFinalList, timer, execution);
 		
-		/**
-		 * If tracking enable, start to post execution tracking status.
-		 */
-		sendExecutionTrackingStatus(latch, session, isExecutionTracking, jobId, timer, execution);
+		if (isExecutionTracking) {
+			final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
+
+			session = connectToServer(socket, jobId);
+			/**
+			 * If tracking enable, start to post execution tracking status.
+			 */
+			sendExecutionTrackingStatus(latch, session, jobId, timer, execution,socket);
+		}
 	}
 
 	
-	private static void sendExecutionTrackingStatus(final CountDownLatch latch, Session session,
-			boolean isExecutionTracking, final String jobId, final Timer timer, final HydrographService execution)
+	private static void sendExecutionTrackingStatus(final CountDownLatch latch, Session session,final String jobId, final Timer timer, final HydrographService execution,final HydrographEngineCommunicatorSocket socket)
 			throws IOException {
-		if (isExecutionTracking) {
 			try {
-				ClientManager client = ClientManager.createClient();
-				final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
-				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
-
 				TimerTask task = new TimerTask() {
 					@Override
 					public void run() {
 						List<ComponentInfo> componentInfos = execution.getStatus();
+						if(!componentInfos.isEmpty()){
 						List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
 						for (ComponentInfo componentInfo : componentInfos) {
 							ComponentStatus componentStatus = new ComponentStatus(componentInfo.getComponentId(),
@@ -123,8 +127,9 @@ public class HydrographMain {
 							timer.cancel();
 						}
 					}
+					}
 				};
-				timer.schedule(task, 0l, Constants.STATUS_FREQ);
+				timer.schedule(task, 0l, ExecutionTrackingUtils.INSTANCE.getStatusFrequency());
 				latch.await();
 			} catch (Throwable t) {
 				logger.error("Failure in job - " + jobId, t);
@@ -136,7 +141,6 @@ public class HydrographMain {
 					session.close(closeReason);
 				}
 			}
-		}
 	}
 
 	private static void executeGraph(final CountDownLatch latch, final String jobId, final String[] argsFinalList,
@@ -175,5 +179,35 @@ public class HydrographMain {
 			return argumentList.get(argumentList.indexOf(Constants.JOBID_KEY) + 1);
 		}
 		return null;
+	}
+	
+	private static Session connectToServer(HydrographEngineCommunicatorSocket socket,String jobId){
+		ClientManager client = ClientManager.createClient();
+		Session session=null;
+			try {
+				session = client.connectToServer(socket,new URI(ExecutionTrackingUtils.INSTANCE.getTrackingUrl() + jobId));
+				socket.sendMessage(getConnectionReq(jobId));
+			} catch (DeploymentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
+		return session;
+
+	}
+	
+	private static String getConnectionReq(String jobId){
+		ExecutionStatus executionStatus = new ExecutionStatus(Collections.EMPTY_LIST);
+		executionStatus.setJobId(jobId);
+		executionStatus.setType(Constants.POST);
+		Gson gson = new Gson();
+		return gson.toJson(executionStatus);
 	}
 }
