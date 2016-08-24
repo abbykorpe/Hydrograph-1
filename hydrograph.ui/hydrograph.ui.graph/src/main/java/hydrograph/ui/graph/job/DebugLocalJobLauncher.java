@@ -16,6 +16,7 @@ package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
@@ -143,10 +144,15 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 	 * @return the executute job command
 	 */
 	private String getExecututeJobCommand(String xmlPath, String paramFile, String debugXmlPath, Job job) {
-		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE  + GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML +  xmlPath.split("/", 2)[1] +
-				GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath() 
-				+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
-				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack();
+		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE
+				+ GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML
+				+ xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_LOCAL_JOB
+				+ GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1]
+				+ GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath()
+				+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId()
+				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack()
+				+ GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT
+				+ TrackingDisplayUtils.INSTANCE.getPortFromPreference();
 	}
 	
 	/**

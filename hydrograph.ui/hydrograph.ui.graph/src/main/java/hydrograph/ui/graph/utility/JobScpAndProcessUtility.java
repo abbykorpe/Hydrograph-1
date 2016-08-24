@@ -126,17 +126,27 @@ public class JobScpAndProcessUtility {
 	public  String getExecututeJobCommand(String xmlPath,String debugXmlPath, String paramFile, Job job) {
 		String command="";
 		if(!"".equalsIgnoreCase(debugXmlPath.trim())){
-			command=GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB+ GradleCommandConstants.DAEMON_ENABLE + GradleCommandConstants.GPARAM_HOST + job.getHost()
-					+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-					+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
-					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_JOB_BASE_PATH 
-			+ job.getBasePath() + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack();
+			command = GradleCommandConstants.GCMD_EXECUTE_DEBUG_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE
+					+ GradleCommandConstants.GPARAM_HOST + job.getHost() + GradleCommandConstants.GPARAM_USERNAME
+					+ job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD + job.getPassword()
+					+ GradleCommandConstants.GPARAM_PARAM_FILE + "\"" + paramFile + "\""
+					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1]
+					+ GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1]
+					+ GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath()
+					+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId()
+					+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack()
+					+ GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT
+					+ TrackingDisplayUtils.INSTANCE.getPortFromPreference();
 		}else{
-				command =GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE+ GradleCommandConstants.GPARAM_HOST + job.getHost()
-				+ GradleCommandConstants.GPARAM_USERNAME + job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD
-				+ job.getPassword() + GradleCommandConstants.GPARAM_PARAM_FILE +"\""+ paramFile+"\""
-				+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID +job.getUniqueJobId()
-				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON +job.isExecutionTrack();
+			command = GradleCommandConstants.GCMD_EXECUTE_REMOTE_JOB + GradleCommandConstants.DAEMON_ENABLE
+					+ GradleCommandConstants.GPARAM_HOST + job.getHost() + GradleCommandConstants.GPARAM_USERNAME
+					+ job.getUsername() + GradleCommandConstants.GPARAM_PASSWORD + job.getPassword()
+					+ GradleCommandConstants.GPARAM_PARAM_FILE + "\"" + paramFile + "\""
+					+ GradleCommandConstants.GPARAM_JOB_XML + xmlPath.split("/", 2)[1]
+					+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId()
+					+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack()
+					+ GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT
+					+ TrackingDisplayUtils.INSTANCE.getPortFromPreference();
 		}
 		logger.debug("Gradle Command: {}", command);
 		return command;
