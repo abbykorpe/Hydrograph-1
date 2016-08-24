@@ -584,16 +584,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
 		if(transformSchemaType){
+			createButtonComposite(container.getContainerControl());
 			createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
-			if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
-				createPullInternallyPropagatedSchema(container.getContainerControl());
-			}
 		}
 		else{
 
 			createSchemaTypesSection(container.getContainerControl());
-			if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
-				createPullPropagtedSchemaButton(container.getContainerControl());
+			createButtonComposite(container.getContainerControl());
 			createSchemaGridSection(container.getContainerControl(), 250, 360);
 			createExternalSchemaSection(container.getContainerControl());
 		}
@@ -613,14 +610,42 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		populateSchemaTypeWidget();
 	}
+	/**
+	 * creates group of add,delete,up,down buttons and pull schema button
+	 */
+	private ELTSchemaSubgroupComposite createButtonComposite(Composite containerControl){
+		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(containerControl);
 
-	private void createPullPropagtedSchemaButton(Composite containerControl) {
-		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
-		eltSuDefaultSubgroupComposite.createContainerWidget();
-		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(2);
+		buttonSubGroup.createContainerWidget();
+
+		buttonSubGroup.numberOfBasicWidgets(4);
+		
+		if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT)){
+			buttonSubGroup.numberOfBasicWidgets(6);
+			createPullPropagtedSchemaButton(buttonSubGroup);
+			ELTDefaultLable defaultLable = new ELTDefaultLable("");
+			buttonSubGroup.attachWidget(defaultLable);
+		}
+		
+		if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
+			buttonSubGroup.numberOfBasicWidgets(6);
+			createPullInternallyPropagatedSchema(buttonSubGroup);
+			ELTDefaultLable defaultLable = new ELTDefaultLable("");
+			buttonSubGroup.attachWidget(defaultLable);
+		}
+		
+		addAddButton(buttonSubGroup);
+		addDeleteButton(buttonSubGroup);
+		addUpButton(buttonSubGroup);
+		addDownButton(buttonSubGroup);
+		
+		return buttonSubGroup;
+	}
+
+	private void createPullPropagtedSchemaButton(ELTSchemaSubgroupComposite containerControl) {
 		ELTDefaultButton pullButtonForOuputComponents = new ELTDefaultButton("Pull Schema");
 		pullButtonForOuputComponents.buttonWidth(150);
-		eltSuDefaultSubgroupComposite.attachWidget(pullButtonForOuputComponents);
+		containerControl.attachWidget(pullButtonForOuputComponents);
 		((Button)pullButtonForOuputComponents.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -749,14 +774,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		return true;
 	}
 
-	// Adds the browse button
-	private void createPullInternallyPropagatedSchema(Composite containerControl) {
-		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
-		eltSuDefaultSubgroupComposite.createContainerWidget();
-		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(2);
+	/**
+	 * Adds the pull schema button
+	 */
+	private void createPullInternallyPropagatedSchema(ELTSchemaSubgroupComposite containerControl) {
 		ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_SCHEMA);
 		btnPull.buttonWidth(150);
-		eltSuDefaultSubgroupComposite.attachWidget(btnPull);
+		containerControl.attachWidget(btnPull);
 		((Button)btnPull.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {				
@@ -1095,19 +1119,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 */
 	public TableViewer createSchemaGridSection(Composite container, int height,
 			int width) {
-
-		ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(
-				container);
-
-		buttonSubGroup.createContainerWidget();
-
-		buttonSubGroup.numberOfBasicWidgets(4);
-	
-
-		addAddButton(buttonSubGroup);
-		addDeleteButton(buttonSubGroup);
-		addUpButton(buttonSubGroup);
-		addDownButton(buttonSubGroup);
 
 		ELTSchemaTableComposite gridSubGroup = new ELTSchemaTableComposite(
 				container);
