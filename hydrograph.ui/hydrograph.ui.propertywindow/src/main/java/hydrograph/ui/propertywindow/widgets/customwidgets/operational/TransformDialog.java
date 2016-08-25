@@ -1394,6 +1394,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		   setErrorMessageForDuplicateOutputField();
 		   setErrorMessageForDuplicateInputField(); 
 		   setErrorMessageForInvalidMapFields();
+		   setErrorMessageIfExpressionIsNotValid();
 		   Set<String> setToCheckDuplicates = showErrorIfOperationClassOrExpressionBlankOrOperationIDDuplicate(); 	
      	   errorTableViewer.getTable().setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	       errorTableViewer.refresh();
@@ -1403,7 +1404,23 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}
 	}
     
-    private void setErrorMessageForInvalidMapFields(){
+    private void setErrorMessageIfExpressionIsNotValid() 
+    {
+    	for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
+    	{	
+	   	if(mappingSheetRow.isExpression()&&
+	   			StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression())
+	   		    &&!(mappingSheetRow.getExpressionEditorData().isValid()))
+	   	{
+	   		errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
+			errorLabel.setVisible(true);
+			errorLabel.setText(mappingSheetRow.getExpressionEditorData().getErrorMessage()+" for "+mappingSheetRow.getOperationID()); 
+			errorLabelList.add(errorLabel);
+	   	}	
+    	}
+	}
+
+	private void setErrorMessageForInvalidMapFields(){
     	List<String> inputFieldNames = new ArrayList<String>();
     	for(InputField inputField:transformMapping.getInputFields()){
     		inputFieldNames.add(inputField.getFieldName());

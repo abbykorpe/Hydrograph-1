@@ -175,6 +175,7 @@ public class ExpressionEditorDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		oldExpressionText=expressionEditorTextBox.getText();
+		newExpressionText=oldExpressionText;
 		super.okPressed();
 	}
 	
