@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.evaluate.EvaluateDialog;
 
 import org.eclipse.swt.custom.StyledText;
@@ -32,6 +33,7 @@ public class EvaluateExpressionToolButton extends Button {
 	public EvaluateExpressionToolButton(Composite composite, int style,StyledText expressionEditor) {
 		super(composite, style);
 		setText(ITEM_TEXT);
+		setToolTipText(Messages.EVALUATE_BUTTON_TOOLTIP);
 		this.expressionEditor=expressionEditor;
 		addSelectionListener();
 	}

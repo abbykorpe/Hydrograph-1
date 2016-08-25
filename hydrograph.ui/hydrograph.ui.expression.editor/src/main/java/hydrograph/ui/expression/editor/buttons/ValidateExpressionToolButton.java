@@ -68,6 +68,7 @@ public class ValidateExpressionToolButton extends Button {
 	public ValidateExpressionToolButton(Composite composite, int style, StyledText expressionEditor) {
 		super(composite, style);
 		setText(ITEM_TEXT);
+		setToolTipText(Messages.VALIDATE_BUTTON_TOOLTIP);
 		this.expressionEditor = expressionEditor;
 		addSelectionListener();
 	}
@@ -84,11 +85,10 @@ public class ValidateExpressionToolButton extends Button {
 	protected void checkSubclass() {/* Allow subclassing*/}
 
 	@SuppressWarnings({ "unchecked"})
-	public static DiagnosticCollector<JavaFileObject> compileExpresion(StyledText expressionStyledText)
+	public static DiagnosticCollector<JavaFileObject> compileExpresion(String expressionStyledText,Map<String, Class<?>> fieldMap)
 			throws JavaModelException, InvocationTargetException, ClassNotFoundException, MalformedURLException,IllegalAccessException, IllegalArgumentException {
 		LOGGER.debug("Compiling expression using Java-Compiler");
-		String expressiontext=getExpressionText(expressionStyledText.getText());
-		Map<String, Class<?>> fieldMap = (Map<String, Class<?>>) expressionStyledText.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP);
+		String expressiontext=expressionStyledText;
 		DiagnosticCollector<JavaFileObject> diagnostics = null;
 		Object[] returObj=getBuildPathForMethodInvocation() ;
 		List<URL> urlList=(List<URL>) returObj[0];
@@ -132,7 +132,8 @@ public class ValidateExpressionToolButton extends Button {
 
 	private void validation(StyledText expressionEditor) {
 		try {
-			DiagnosticCollector<JavaFileObject> diagnostics = compileExpresion(expressionEditor);
+			DiagnosticCollector<JavaFileObject> diagnostics = compileExpresion(expressionEditor.getText(),
+					(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP));
 			if (diagnostics != null && !diagnostics.getDiagnostics().isEmpty())
 				showDiagnostics(diagnostics);
 			else {

@@ -37,6 +37,7 @@ public class Constants {
 	public static final String ANTLR_JAR_FILE_NAME = "antlr4-runtime";
 	public static final String BEAN_SHELLJAR_FILE_NAME = "bsh-";
 	public static final String SL4JLOG = "slf4j-api";
+	public static final java.lang.String NULL_STRING = "null";
 
 
 }

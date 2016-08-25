@@ -31,6 +31,11 @@ public class Messages extends NLS {
 	public static String TITLE_FOR_PROBLEM_IN_LOADING_EXPRESSION_EDITOR;
 	public static String ERROR_WHILE_LOADING_CONFIGURATIONS_FOR_EXTERNAL_JOBS;
 	public static String EXPRESSION_EDITOR_TITLE;
+	public static String EXPRESSION_EDITOR_EVALUATE_DIALOG_TITLE;
+	public static String EVALUATE_BUTTON_TOOLTIP;
+	public static String VALIDATE_BUTTON_TOOLTIP;
+	public static String WORD_WRAP_BUTTON_TOOLTIP;
+	public static String OPERATORS_TOOLTIP;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

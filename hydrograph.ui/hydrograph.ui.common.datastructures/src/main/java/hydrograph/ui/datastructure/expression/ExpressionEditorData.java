@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ExpressionEditorData implements IDataStructure {
+	private boolean isValid;
+	private String errorMessage="Invalid expression";
 	private String expression;
 	private List<String> fieldsUsedInExpression;
 	private Map<String,Class<?>> selectedInputFieldsForExpression;
@@ -71,6 +73,23 @@ public class ExpressionEditorData implements IDataStructure {
 		result = prime * result + ((fieldsUsedInExpression == null) ? 0 : fieldsUsedInExpression.hashCode());
 		return result;
     }
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	
+	public boolean isValid() {
+		return isValid;
+	}
+	
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
+	}
+	
 	@Override
 	public ExpressionEditorData clone() {
 		String clonedExpression=this.expression;

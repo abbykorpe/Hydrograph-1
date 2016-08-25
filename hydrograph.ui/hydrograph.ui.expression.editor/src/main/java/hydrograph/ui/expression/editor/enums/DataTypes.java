@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.enums;
 
+import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.evaluate.InvalidDataTypeValueException;
 import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HydrographCompletionProposalComputer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -165,7 +166,6 @@ public enum DataTypes {
 
 		@Override
 		protected String getDataTypeName() {
-			// TODO Auto-generated method stub
 			return "boolean";
 		}
 
@@ -237,7 +237,7 @@ public enum DataTypes {
 
 		@Override
 		protected String getDataTypeName() {
-			return "Date";
+			return java.util.Date.class.getSimpleName();
 		}
 
 		@Override
@@ -314,6 +314,8 @@ public enum DataTypes {
 	}
 	
 	public static Object validateInputeAndGetEquivalentObject(String inputValue,String fieldName,String dataTypeSimpleName) throws InvalidDataTypeValueException{
+		if(inputValue ==null || StringUtils.equals(Constants.NULL_STRING, inputValue))
+			return null;
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.dataType, dataTypeSimpleName)) {
 				return dataType.validateValue(inputValue, fieldName);

@@ -15,6 +15,7 @@ package hydrograph.ui.expression.editor.evaluate;
 
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
+import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,6 +25,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -53,7 +55,8 @@ public class EvaluateExpression {
 	boolean isValidExpression() {
 		try {
 			DiagnosticCollector<JavaFileObject> diagnosticCollector = ValidateExpressionToolButton
-					.compileExpresion(expressionEditor);
+					.compileExpresion(expressionEditor.getText(),
+							(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP));
 			if (diagnosticCollector != null && !diagnosticCollector.getDiagnostics().isEmpty()) {
 				for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
 					if (StringUtils.equals(diagnostic.getKind().name(), Diagnostic.Kind.ERROR.name())) {

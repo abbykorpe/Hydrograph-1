@@ -13,6 +13,8 @@
 
 package hydrograph.ui.expression.editor.buttons;
 
+import hydrograph.ui.expression.editor.Messages;
+
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -28,6 +30,7 @@ public class WordWrapToolCheckButton extends Button {
 		super(composite, style);
 		this.expressionEditor = expressionEditor;
 		setText(ITEM_TEXT);
+		setToolTipText(Messages.WORD_WRAP_BUTTON_TOOLTIP);
 		setSelection(false);
 		this.addSelectionListener();
 	}

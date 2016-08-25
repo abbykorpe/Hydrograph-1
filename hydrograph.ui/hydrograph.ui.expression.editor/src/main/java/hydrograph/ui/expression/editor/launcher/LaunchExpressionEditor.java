@@ -48,8 +48,7 @@ public class LaunchExpressionEditor {
 			BuildExpressionEditorDataSturcture.INSTANCE
 					.createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
 			ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(Display.getCurrent()
-					.getActiveShell(), expressionEditorData.getSelectedInputFieldsForExpression(),
-					expressionEditorData.getExpression());
+					.getActiveShell(), expressionEditorData);
 			int returnCode = expressionEditorDialog.open();
 			if (returnCode == 0) {
 				saveProperty(expressionEditorData, expressionEditorDialog.getExpressionText());

@@ -43,6 +43,8 @@ public class OperatorToolCombo extends Combo {
 		this.expressionEditor = expressionEditor;
 		this.add(ITEM_TEXT);
 		this.select(0);
+		setToolTipText(Messages.OPERATORS_TOOLTIP);
+		
 		loadDropDownItems();
 		
 		addSelectionListener();
