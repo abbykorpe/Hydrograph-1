@@ -54,11 +54,13 @@ public class StartServer {
 		Server server = new Server("localhost", Integer.parseInt(portNo), "/", TrackingSocketServer.class);
 		try {
 			server.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			logger.info("Please press a key to stop the server.");
-	        reader.readLine();
+			Thread.currentThread().join();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			logger.info("Stopping server...");
+			server.stop();
 		}
 	}
 }
