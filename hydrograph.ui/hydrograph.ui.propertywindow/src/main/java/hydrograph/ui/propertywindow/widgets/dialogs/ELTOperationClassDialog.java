@@ -224,8 +224,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		nameValueTableViewer.setInput(operationClassProperty.getNameValuePropertyList());
 		table_2.getColumn(0).setWidth(259);
 		table_2.getColumn(1).setWidth(262);
-
-		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 325, 17, 20, 15 }, "");
+		
+		Button addButton;
+		if(OSValidator.isMac()){
+			addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 318, 17, 20, 15 }, "");
+		}else{
+			addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 325, 17, 20, 15 }, "");
+		}
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -267,7 +272,12 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			public void mouseDown(MouseEvent e) {
 			}
 		});
-		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 355, 17, 20, 15 }, "");
+		Button deleteButton;
+		if(OSValidator.isMac()){
+			deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 348, 17, 20, 15 }, "");
+		}else{
+			deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 355, 17, 20, 15 }, "");
+		}
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -292,8 +302,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			}
 
 		});
-
-		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 385, 17, 20, 15 }, "");
+		
+		Button upButton;
+		if(OSValidator.isMac()){
+			upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 378, 17, 20, 15 }, "");
+		}else{
+			upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 385, 17, 20, 15 }, "");
+		}
 		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -314,7 +329,12 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 		
-		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 415, 17, 20, 15 }, "");
+		Button downButton;
+		if(OSValidator.isMac()){
+			downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 408, 17, 20, 15 }, "");
+		}else{
+			downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 415, 17, 20, 15 }, "");
+		}
 		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
