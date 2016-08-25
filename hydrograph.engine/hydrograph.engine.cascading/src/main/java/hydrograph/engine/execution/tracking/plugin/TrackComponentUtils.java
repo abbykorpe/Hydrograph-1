@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package hydrograph.engine.execution.tracking.plugin;
 
 import java.util.Collections;
@@ -27,9 +39,9 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 
-public class TrackComponentUtils {
+class TrackComponentUtils {
 	
-	public static TypeBaseInSocket getStraightPullInSocket(String formComponentId, String outSocketId,
+	 static TypeBaseInSocket getStraightPullInSocket(String formComponentId, String outSocketId,
 			String outSocketType) {
 		TypeBaseInSocket baseInSocket = new TypeBaseInSocket();
 		baseInSocket.setFromComponentId(formComponentId);
@@ -39,7 +51,7 @@ public class TrackComponentUtils {
 		return baseInSocket;
 	}
 
-	public static TypeOperationsOutSocket getStraightPullOutSocket(String id, String inSocketId) {
+	 static TypeOperationsOutSocket getStraightPullOutSocket(String id, String inSocketId) {
 		TypeOperationsOutSocket operationOutSocket = new TypeOperationsOutSocket();
 		operationOutSocket.setId(id);
 		TypeOutSocketAsInSocket typeOutSocketAsInSocket = new TypeOutSocketAsInSocket();
@@ -48,7 +60,7 @@ public class TrackComponentUtils {
 		return operationOutSocket;
 	}
 
-	public static String generateUniqueComponentId(String compId, String socketId,
+	 static String generateUniqueComponentId(String compId, String socketId,
 			List<TypeBaseComponent> typeBaseComponents) {
 		String newComponentID = compId + "_" + socketId;
 		for (int i = 0; i < typeBaseComponents.size(); i++) {
@@ -59,7 +71,7 @@ public class TrackComponentUtils {
 		return newComponentID;
 	}
 
-	public static TypeBaseComponent getComponent(List<TypeBaseComponent> jaxbGraph, String compId,
+	 static TypeBaseComponent getComponent(List<TypeBaseComponent> jaxbGraph, String compId,
 			String socketId) {
 		for (TypeBaseComponent component : jaxbGraph) {
 			for (TypeBaseInSocket inSocket : SocketUtilities.getInSocketList(component)) {
@@ -73,7 +85,7 @@ public class TrackComponentUtils {
 				+ " are not properly configured");
 	}
 	
-	public static Filter generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
+	 static Filter generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
 			Map<String, Set<SchemaField>> schemaFieldsMap) {
 		Filter filter = new Filter();
 		TypeTransformOperation filterOperation = new TypeTransformOperation();
@@ -100,7 +112,7 @@ public class TrackComponentUtils {
 		return filter;
 	}
 
-	public static List<OutSocket> getOutSocketListofComponent(TypeBaseComponent typeBaseComponent) {
+	 static List<OutSocket> getOutSocketListofComponent(TypeBaseComponent typeBaseComponent) {
 		if (typeBaseComponent instanceof TypeInputComponent) {
 			TypeInputComponent typeInputComponent = (TypeInputComponent) typeBaseComponent;
 			return InputEntityUtils.extractOutSocket(typeInputComponent.getOutSocket());
@@ -118,7 +130,7 @@ public class TrackComponentUtils {
 		return Collections.emptyList();
 	}
 	
-	public static boolean isLocalFlowExecution(Cascade cascade) {
+	 static boolean isLocalFlowExecution(Cascade cascade) {
 		Flow<?> flow = cascade.getFlows().get(0);
 		// PlatformInfo PlatformInfo = flow.getPlatformInfo();
 		return flow.stepsAreLocal();

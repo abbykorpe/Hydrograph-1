@@ -153,6 +153,12 @@ public class GeneralUtilities {
 	}
 	
 
+	/**
+	 * To check execution tracking is enable.
+	 * 
+	 * @param executionTrackingKey
+	 * @return an string containing execution tracking class
+	 */
 	public static String getExecutionTrackingClass(String executionTrackingKey) {
 		OrderedProperties properties = new OrderedProperties();
 		try {

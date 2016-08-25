@@ -171,7 +171,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	}
 
 	@Override
-	public Object getExecutionTracking() {
+	public Object getExecutionStatus() {
 		if (executionTrackingListener != null)
 			return executionTrackingListener.getStatus();
 		return null;

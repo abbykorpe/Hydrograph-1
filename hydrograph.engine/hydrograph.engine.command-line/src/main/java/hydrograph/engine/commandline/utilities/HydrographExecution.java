@@ -70,11 +70,10 @@ public class HydrographExecution {
 				XmlParsingUtils.getBasePath(args));
 		prepareToExecute();
 		finalExecute();
-		getExecutionTracking();
 	}
 	
-	public List<ComponentInfo> getExecutionTracking(){
-		return (List<ComponentInfo>) runtimeService.getExecutionTracking();
+	public List<ComponentInfo> getExecutionStatus(){
+		return (List<ComponentInfo>) runtimeService.getExecutionStatus();
 	}
 
 	private HydrographJob createHydrographJob(String[] args) throws JAXBException {
