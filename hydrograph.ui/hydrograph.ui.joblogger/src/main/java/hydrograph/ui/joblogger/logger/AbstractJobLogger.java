@@ -20,12 +20,13 @@ import hydrograph.ui.logging.factory.LogFactory;
 import org.slf4j.Logger;
 
 
+
 /**
- * 
- * Abstract job logger. Each job logger must extend this class
+ * The Class AbstractJobLogger.
+ * <p>
+ * Abstract job logger. Each job logger must extend this class.
  * 
  * @author Bitwise
- *
  */
 public abstract class AbstractJobLogger {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(AbstractJobLogger.class);

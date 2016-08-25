@@ -17,6 +17,12 @@ package hydrograph.ui.joblogger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+/**
+ * The Class Activator.
+ * The activator class controls the plug-in life cycle
+ * 
+ * @author Bitwise
+ */
 public class Activator implements BundleActivator {
 	public static final String PLUGIN_ID = "hydrograph.ui.joblogger";
 

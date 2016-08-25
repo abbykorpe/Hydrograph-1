@@ -17,8 +17,13 @@ package hydrograph.ui.logging;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+
 /**
+ * The Class Activator.
+ * <p>
  * The activator class controls the plug-in life cycle
+ * 
+ * @author Bitwise
  */
 public class Activator extends AbstractUIPlugin {
 

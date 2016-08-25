@@ -29,6 +29,13 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.Loader;
 
+/**
+ * A factory for creating Logger objects.
+ * <p>
+ * All Hydrograph plugin classes need to use this factory class to create loggers.
+ * 
+ * @author Bitwise
+ */
 public class LogFactory {
 	final public String CLASSIC_FILE = "logback.xml";
     final public String LOG_DIR = "config/logger/";
@@ -40,6 +47,13 @@ public class LogFactory {
     	writeLogsOnFileAndConsole();
     }
     
+	/**
+	 * Gets the logger.
+	 * 
+	 * @param clazz
+	 *            the clazz
+	 * @return the logger
+	 */
     public Logger getLogger(Class<?> clazz){
     	return LoggerFactory.getLogger(clazz.getName());
     }
