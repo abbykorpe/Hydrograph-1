@@ -38,9 +38,7 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.props.PropertiesLoader;
-import hydrograph.engine.execution.tracking.JobInfo;
-import hydrograph.engine.execution.tracking.listener.ExecutionTrackingListener;
-import hydrograph.engine.execution.tracking.plugin.ExecutionTrackingPlugin;
+import hydrograph.engine.flow.utils.ExecutionTrackingListener;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
 import hydrograph.engine.flow.utils.FlowManipulationHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
@@ -48,12 +46,14 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.utilities.GeneralUtilities;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
+import hydrograph.engine.utilities.UserClassLoader;
 
 @SuppressWarnings({ "rawtypes" })
 public class HydrographRuntime implements HydrographRuntimeService {
 
+	final String EXECUTION_TRACKING = "hydrograph.execution.tracking";
 	private Properties hadoopProperties = new Properties();
-	private JobInfo jobInfo;
+	private ExecutionTrackingListener executionTrackingListener;
 	private FlowBuilder flowBuilder;
 	private RuntimeContext runtimeContext;
 	private String[] args;
@@ -83,11 +83,11 @@ public class HydrographRuntime implements HydrographRuntimeService {
 
 		hadoopProperties.putAll(config);
 
-		SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(hydrographJob.getJAXBObject()
-				.getInputsOrOutputsOrStraightPulls());
-		
-		flowManipulationContext = new FlowManipulationContext(hydrographJob,
-				hydrographDebugInfo,schemaFieldHandler, jobId, basePath);
+		SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(
+				hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
+
+		flowManipulationContext = new FlowManipulationContext(hydrographJob, hydrographDebugInfo, schemaFieldHandler,
+				jobId, basePath);
 
 		hydrographJob = FlowManipulationHandler.execute(flowManipulationContext);
 
@@ -154,14 +154,12 @@ public class HydrographRuntime implements HydrographRuntimeService {
 			LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION + " option is provided so skipping execution");
 			return;
 		}
-		if (ExecutionTrackingListener.isTrackingPluginPresent()) {
-			ExecutionTrackingPlugin.generateMapsForExecutionTracking(runtimeContext);
+		if (GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
+			executionTrackingListener = (ExecutionTrackingListener) UserClassLoader.loadAndInitClass(
+					GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING), "execution tracking");
+			executionTrackingListener.addListener(runtimeContext);
 		}
 		for (Cascade cascade : runtimeContext.getCascade()) {
-			if (ExecutionTrackingListener.isTrackingPluginPresent()) {
-				jobInfo=new JobInfo();
-				ExecutionTrackingListener.addListener(cascade,jobInfo);
-			}
 			cascade.complete();
 		}
 	}
@@ -171,10 +169,12 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		flowBuilder.cleanup(runtimeContext);
 
 	}
-	
+
 	@Override
-	public Object getJobInfo(){
-		return jobInfo;
+	public Object getExecutionTracking() {
+		if (executionTrackingListener != null)
+			return executionTrackingListener.getStatus();
+		return null;
 	}
 
 	public Cascade[] getFlow() {

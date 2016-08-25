@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cascading.cascade.Cascade;
+import cascading.flow.Flow;
+import cascading.stats.CascadingStats;
+import cascading.stats.FlowNodeStats;
+import cascading.stats.FlowStepStats;
+import cascading.stats.CascadingStats.Status;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
@@ -26,7 +32,11 @@ import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
 import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.cascading.integration.RuntimeContext;
 import hydrograph.engine.core.utilities.SocketUtilities;
+import hydrograph.engine.execution.tracking.ComponentInfo;
 import hydrograph.engine.execution.tracking.ComponentPipeMapping;
+import hydrograph.engine.execution.tracking.JobInfo;
+import hydrograph.engine.execution.tracking.JobInfo.ElementGraphNotFoundException;
+import hydrograph.engine.flow.utils.ExecutionTrackingListener;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
 import hydrograph.engine.flow.utils.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -43,10 +53,11 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 
-public class ExecutionTrackingPlugin implements ManipulatorListener {
-	List<TypeBaseComponent> jaxbObjectList = new ArrayList<TypeBaseComponent>();
-	Map<String, Set<SchemaField>> schemaFieldsMap;
+public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTrackingListener {
 
+	private List<TypeBaseComponent> jaxbObjectList = new ArrayList<TypeBaseComponent>();
+	private Map<String, Set<SchemaField>> schemaFieldsMap;
+	private JobInfo jobInfo;
 
 	/*
 	 * @see hydrograph.engine.flow.utils.ManipulatorListener#execute(hydrograph.
@@ -54,7 +65,6 @@ public class ExecutionTrackingPlugin implements ManipulatorListener {
 	 */
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
-		// TODO Auto-generated method stub
 		TrackContext trackContext;
 		List<TypeBaseComponent> orginalComponentList = manipulationContext.getJaxbMainGraph();
 		jaxbObjectList.addAll(orginalComponentList);
@@ -62,15 +72,16 @@ public class ExecutionTrackingPlugin implements ManipulatorListener {
 
 		for (Iterator<TypeBaseComponent> iterator = orginalComponentList.iterator(); iterator.hasNext();) {
 			TypeBaseComponent typeBaseComponent = (TypeBaseComponent) iterator.next();
-			List<OutSocket> outSocketList = getOutSocketListofComponent(typeBaseComponent);
+			List<OutSocket> outSocketList = TrackComponentUtils.getOutSocketListofComponent(typeBaseComponent);
 			for (OutSocket outSocket : outSocketList) {
 				trackContext = new TrackContext();
 				trackContext.setFromComponentId(typeBaseComponent.getId());
 				trackContext.setPhase(typeBaseComponent.getPhase());
 				trackContext.setFromOutSocketId(outSocket.getSocketId());
 				trackContext.setFromOutSocketType(outSocket.getSocketType());
-				Filter newFilter = generateFilterAfterEveryComponent(trackContext);
-				
+				Filter newFilter = TrackComponentUtils.generateFilterAfterEveryComponent(trackContext, jaxbObjectList,
+						schemaFieldsMap);
+
 				ComponentPipeMapping.generateFilterList(newFilter);
 				// add Filter to existing component
 				TypeBaseComponent component = TrackComponentUtils.getComponent(jaxbObjectList,
@@ -85,101 +96,40 @@ public class ExecutionTrackingPlugin implements ManipulatorListener {
 		return jaxbObjectList;
 	}
 
-	private Filter generateFilterAfterEveryComponent(TrackContext trackContext) {
-		Filter filter = new Filter();
-		TypeTransformOperation filterOperation = new TypeTransformOperation();
 
-		Set<SchemaField> schemaFields = schemaFieldsMap
-				.get(trackContext.getFromComponentId() + "_" + trackContext.getFromOutSocketId());
-
-		TypeOperationInputFields typeOperationInputFields = new TypeOperationInputFields();
-		TypeInputField typeInputField = new TypeInputField();
-		typeInputField.setInSocketId(trackContext.getFromOutSocketId());
-		typeInputField.setName(schemaFields.iterator().next().getFieldName());
-		typeOperationInputFields.getField().add(typeInputField);
-
-		filterOperation.setInputFields(typeOperationInputFields);
-		filterOperation.setClazz(Counter.class.getCanonicalName());
-		filter.setId(TrackComponentUtils.generateUniqueComponentId(trackContext.getFromComponentId(),
-				"generatedHydrographFilter", jaxbObjectList));
-		filter.setPhase(trackContext.getPhase());
-		filter.getInSocket().add(TrackComponentUtils.getStraightPullInSocket(trackContext.getFromComponentId(),
-				trackContext.getFromOutSocketId(), trackContext.getFromOutSocketType()));
-
-		filter.getOutSocket().add(TrackComponentUtils.getStraightPullOutSocket("out0", "in0"));
-		filter.getOperation().add(filterOperation);
-		return filter;
+	@Override
+	public void notify(CascadingStats stats, Status fromStatus, Status toStatus) {
+		try {
+			jobInfo.storeComponentStats(stats);
+		} catch (ElementGraphNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	private List<OutSocket> getOutSocketListofComponent(TypeBaseComponent typeBaseComponent) {
-		// TODO Auto-generated method stub
-		if (typeBaseComponent instanceof TypeInputComponent) {
-			TypeInputComponent typeInputComponent = (TypeInputComponent) typeBaseComponent;
-			return InputEntityUtils.extractOutSocket(typeInputComponent.getOutSocket());
-		} else if (typeBaseComponent instanceof TypeOutputComponent) {
-			return Collections.emptyList();
-		} else if (typeBaseComponent instanceof TypeStraightPullComponent) {
-			TypeStraightPullComponent typeStraightPullComponent = (TypeStraightPullComponent) typeBaseComponent;
-			return StraightPullEntityUtils.extractOutSocketList(typeStraightPullComponent.getOutSocket());
-		} else if (typeBaseComponent instanceof TypeOperationsComponent) {
-			TypeOperationsComponent typeOperationsComponent = (TypeOperationsComponent) typeBaseComponent;
-			return OperationEntityUtils.extractOutSocketList(typeOperationsComponent.getOutSocket());
-		} else if (typeBaseComponent instanceof TypeCommandComponent) {
-			return Collections.emptyList();
-		}
-		return Collections.emptyList();
-	}
-
-	public static class TrackComponentUtils {
-		public static TypeBaseInSocket getStraightPullInSocket(String formComponentId, String outSocketId,
-				String outSocketType) {
-			TypeBaseInSocket baseInSocket = new TypeBaseInSocket();
-			baseInSocket.setFromComponentId(formComponentId);
-			baseInSocket.setFromSocketId(outSocketId);
-			baseInSocket.setFromSocketType(outSocketType);
-			baseInSocket.setId("in0");
-			return baseInSocket;
-		}
-
-		private static TypeOperationsOutSocket getStraightPullOutSocket(String id, String inSocketId) {
-			TypeOperationsOutSocket operationOutSocket = new TypeOperationsOutSocket();
-			operationOutSocket.setId(id);
-			TypeOutSocketAsInSocket typeOutSocketAsInSocket = new TypeOutSocketAsInSocket();
-			typeOutSocketAsInSocket.setInSocketId(inSocketId);
-			operationOutSocket.setCopyOfInsocket(typeOutSocketAsInSocket);
-			return operationOutSocket;
-		}
-
-		public static String generateUniqueComponentId(String compId, String socketId,
-				List<TypeBaseComponent> typeBaseComponents) {
-			String newComponentID = compId + "_" + socketId;
-			for (int i = 0; i < typeBaseComponents.size(); i++) {
-				if (newComponentID.equalsIgnoreCase(typeBaseComponents.get(i).getId())) {
-					newComponentID += "_" + i;
-				}
-			}
-			return newComponentID;
-		}
-
-		public static TypeBaseComponent getComponent(List<TypeBaseComponent> jaxbGraph, String compId,
-				String socketId) {
-			for (TypeBaseComponent component : jaxbGraph) {
-				for (TypeBaseInSocket inSocket : SocketUtilities.getInSocketList(component)) {
-					if (inSocket.getFromComponentId().equalsIgnoreCase(compId)
-							&& inSocket.getFromSocketId().equalsIgnoreCase(socketId)) {
-						return component;
+	@Override
+	public void addListener(RuntimeContext runtimeContext) {
+		jobInfo = new JobInfo();
+		for (Cascade cascade : runtimeContext.getCascade())
+			for (Flow<?> flow : cascade.getFlows()) {
+				for (FlowStepStats flowStepStats : flow.getFlowStats().getFlowStepStats()) {
+					if (TrackComponentUtils.isLocalFlowExecution(cascade)) {
+						flowStepStats.addListener(this);
+					} else {
+						for (FlowNodeStats flowNodeStats : flowStepStats.getFlowNodeStats()) {
+							flowNodeStats.addListener(this);
+						}
 					}
 				}
 			}
-			throw new RuntimeException("debug FromComponent id: " + compId + " or Socket id: " + socketId
-					+ " are not properly configured");
-		}
-
-	}
-
-	public static void generateMapsForExecutionTracking(RuntimeContext runtimeContext) {
 		ComponentPipeMapping.generateComponentToPipeMap(runtimeContext.getFlowContext());
 		ComponentPipeMapping.generateComponentToFilterMap(runtimeContext);
+	}
+
+	
+
+	@Override
+	public List<ComponentInfo> getStatus() {
+		return jobInfo.getstatus();
 	}
 
 }

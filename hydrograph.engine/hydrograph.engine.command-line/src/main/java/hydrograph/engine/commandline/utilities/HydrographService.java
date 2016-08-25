@@ -28,8 +28,8 @@ public class HydrographService {
 			execution.run(args);
 	}
 	public List<ComponentInfo> getStatus() {
-		if(execution.getJobInfo()!=null)
-			return new ArrayList<>(execution.getJobInfo().getstatus());
+		if(execution.getExecutionTracking()!=null)
+			return new ArrayList<>(execution.getExecutionTracking());
 		else
 			return Collections.emptyList();
 	}
@@ -37,5 +37,4 @@ public class HydrographService {
 	public void kill() {
 		execution.kill();
 	}
-
 }

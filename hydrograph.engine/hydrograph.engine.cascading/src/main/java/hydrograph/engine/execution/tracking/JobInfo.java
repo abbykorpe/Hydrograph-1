@@ -257,8 +257,8 @@ public class JobInfo {
 	 * 
 	 * @return List of ComponentInfo
 	 */
-	public Collection<ComponentInfo> getstatus() {
-		return componentInfoMap.values();
+	public List<ComponentInfo> getstatus() {
+		return new ArrayList<>(componentInfoMap.values());
 	}
 
 	/**

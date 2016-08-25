@@ -10,28 +10,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.execution.tracking.listener;
+package hydrograph.engine.userfunctions;
 
-import cascading.stats.CascadingStats;
-import cascading.stats.CascadingStats.Status;
-import cascading.stats.StatsListener;
-import hydrograph.engine.execution.tracking.JobInfo;
-import hydrograph.engine.execution.tracking.JobInfo.ElementGraphNotFoundException;
+import java.util.ArrayList;
+import java.util.Properties;
 
-public class ComponentStatsListener implements StatsListener {
-	
-	private JobInfo jobInfo;
-	public  ComponentStatsListener(JobInfo jobInfo) {
-	this.jobInfo=jobInfo;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+import hydrograph.engine.transformation.userfunctions.base.TransformBase;
+
+public class TransformTest implements TransformBase {
+
+	@Override
+	public void prepare(Properties props, ArrayList<String> inputFields, ArrayList<String> outputFields) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void notify(CascadingStats stats, Status fromStatus, Status toStatus) {
-		try {
-			jobInfo.storeComponentStats(stats);
-		} catch (ElementGraphNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+	public void transform(ReusableRow inputRow, ReusableRow outputRow) {
+		outputRow.setField("new_name", inputRow.getField("name"));
+	}
+
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
