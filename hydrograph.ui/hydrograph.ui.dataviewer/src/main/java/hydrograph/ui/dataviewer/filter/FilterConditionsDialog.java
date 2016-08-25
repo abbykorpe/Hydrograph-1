@@ -188,7 +188,7 @@ public class FilterConditionsDialog extends Dialog {
 		Composite container = (Composite) super.createDialogArea(parent);
 		parent.getShell().setText(Messages.DATA_VIEWER + " " + Messages.FILTER);
 		container.setLayout(new GridLayout(1, false));
-		
+		container.getShell().setMinimumSize(850,355);
 		Composite mainComposite = new Composite(container, SWT.NONE);
 		mainComposite.setLayout(new GridLayout(1, false));
 		GridData gdMainComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
