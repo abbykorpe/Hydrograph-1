@@ -127,6 +127,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -243,6 +244,7 @@ import org.xml.sax.SAXException;
 		private Composite tableViewerComposite;
 		private Composite tableComposite;
 		protected String componentType;
+		private boolean ctrlKeyPressed = false;
 		/**
 		 * Adds the validators.
 		 */
@@ -1223,6 +1225,18 @@ import org.xml.sax.SAXException;
 						upButton.getSWTWidgetControl(),
 						downButton.getSWTWidgetControl());
 				
+				eltTable.attachListener(
+						ListenerFactory.Listners.GRID_KEY_LISTENER.getListener(),
+						propertyDialogButtonBar, helper, table,
+						deleteButton.getSWTWidgetControl(),
+						upButton.getSWTWidgetControl(),
+						downButton.getSWTWidgetControl());
+						
+				for (CellEditor editor:editors){
+					addShortcutKeyListener(editor.getControl());
+				}
+				addShortcutKeyListener(table);
+				
 				
 				
 				
@@ -1391,24 +1405,28 @@ import org.xml.sax.SAXException;
 			 
 				@Override
 				public void mouseDown(MouseEvent e) {
-					propertyDialogButtonBar.enableApplyButton(true);
-					int[] indexes=table.getSelectionIndices();
-					for(int index :indexes)
-					{
-	
-						if (index > 0) {
-							Collections.swap((List)schemaGridRowList,index ,index-1);
-							tableViewer.refresh();
-	
-						}
-					}	
-					
+					moveRowUp();
 				}
 			 
 			
 			});
 	
 				
+		}
+		
+		private void moveRowUp()
+		{
+			propertyDialogButtonBar.enableApplyButton(true);
+			int[] indexes=table.getSelectionIndices();
+			for(int index :indexes)
+			{
+
+				if (index > 0) {
+					Collections.swap((List)schemaGridRowList,index ,index-1);
+					tableViewer.refresh();
+
+				}
+			}	
 		}
 	
 		private void addDownButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -1423,22 +1441,27 @@ import org.xml.sax.SAXException;
 				 
 				@Override
 				public void mouseDown(MouseEvent e) {
-					propertyDialogButtonBar.enableApplyButton(true);
-					int[] indexes = table.getSelectionIndices();
-					for (int i = indexes.length - 1; i > -1; i--) {
-	
-						if (indexes[i] < schemaGridRowList.size() - 1) {
-							Collections.swap((List)schemaGridRowList,indexes[i] ,indexes[i]+1);
-							tableViewer.refresh();
-	
-						}
-					
-				}
-			 
+					moveRowDown();
 				}
 			});
 			
 			
+		}
+		
+		private void moveRowDown()
+		{
+			propertyDialogButtonBar.enableApplyButton(true);
+			int[] indexes = table.getSelectionIndices();
+			for (int i = indexes.length - 1; i > -1; i--) {
+
+				if (indexes[i] < schemaGridRowList.size() - 1) {
+					Collections.swap((List)schemaGridRowList,indexes[i] ,indexes[i]+1);
+					tableViewer.refresh();
+
+				}
+			
+		}
+	 
 		}
 	
 		public List<GridRow> getSchemaGridRowList() {
@@ -1621,5 +1644,35 @@ import org.xml.sax.SAXException;
 	
 	public String getComponentType() {
 		return componentType;
+	}
+	
+	private void addShortcutKeyListener (Control currentControl) {
+		logger.info("currentControl is: " + currentControl);
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}									
+								
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					logger.info("Key pressed is arrow up");
+					moveRowUp();			
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					logger.info("Key pressed is arrow down");
+					moveRowDown();
+				}
+			}
+		});
 	}
 	}

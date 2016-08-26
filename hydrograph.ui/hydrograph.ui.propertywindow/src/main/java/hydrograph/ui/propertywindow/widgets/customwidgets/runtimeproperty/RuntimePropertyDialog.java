@@ -36,6 +36,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -95,6 +97,10 @@ public class RuntimePropertyDialog extends Dialog {
 	private boolean okPressed;
 	private boolean okPressedAfterUpdate;
 	private static final String INFORMATION="Information";
+	private static final String PROPERTY_TABLE = "PROPERTY_TABLE";
+	private static final Character KEY_D = 'd';
+	private static final Character KEY_N = 'n';
+	private boolean ctrlKeyPressed = false;
 	/**
 	 * Create the dialog.
 	 * 
@@ -207,106 +213,133 @@ public class RuntimePropertyDialog extends Dialog {
 	private void attachDownButtonListerner(Button downButton) {
 		
 		downButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
+			
             @Override
 			public void mouseUp(MouseEvent e) {
-				index1 = table.getSelectionIndex();
-
-				if (index1 < propertyList.size() - 1) {
-					String text = tableViewer.getTable().getItem(index1).getText(0);
-					String text1 = tableViewer.getTable().getItem(index1).getText(1);
-
-					index2 = index1 + 1;
-
-					String data = tableViewer.getTable().getItem(index2).getText(0);
-					String data1 = tableViewer.getTable().getItem(index2).getText(1);
-
-					RuntimeProperties p = new RuntimeProperties();
-					p.setPropertyName(data);
-					p.setPropertyValue(data1);
-					propertyList.set(index1, p);
-					p = new RuntimeProperties();
-					p.setPropertyName(text);
-					p.setPropertyValue(text1);
-					propertyList.set(index2, p);
-					tableViewer.refresh();
-					table.setSelection(index1 + 1);
-				}
-			}
+            	moveRowDown();
+            }
 		});
 
+	}
+	
+	private void moveRowDown()
+	{
+		int index1 = 0, index2 = 0;
+		index1 = table.getSelectionIndex();
+
+		if (index1 < propertyList.size() - 1) {
+			String text = tableViewer.getTable().getItem(index1).getText(0);
+			String text1 = tableViewer.getTable().getItem(index1).getText(1);
+
+			index2 = index1 + 1;
+
+			String data = tableViewer.getTable().getItem(index2).getText(0);
+			String data1 = tableViewer.getTable().getItem(index2).getText(1);
+
+			RuntimeProperties p = new RuntimeProperties();
+			p.setPropertyName(data);
+			p.setPropertyValue(data1);
+			propertyList.set(index1, p);
+			p = new RuntimeProperties();
+			p.setPropertyName(text);
+			p.setPropertyValue(text1);
+			propertyList.set(index2, p);
+			tableViewer.refresh();
+			table.setSelection(index1 + 1);
+		}
+	
 	}
 
 	private void attachUpButtonListener(Button upButton) {
 		upButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
+			
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = table.getSelectionIndex();
-
-				if (index1 > 0) {
-					String text = tableViewer.getTable().getItem(index1).getText(0);
-					String text1 = tableViewer.getTable().getItem(index1).getText(1);
-					index2 = index1 - 1;
-					String data = tableViewer.getTable().getItem(index2).getText(0);
-					String data2 = tableViewer.getTable().getItem(index2).getText(1);
-
-					RuntimeProperties p = new RuntimeProperties();
-					p.setPropertyName(data);
-					p.setPropertyValue(data2);
-					propertyList.set(index1, p);
-					p = new RuntimeProperties();
-					p.setPropertyName(text);
-					p.setPropertyValue(text1);
-					propertyList.set(index2, p);
-					tableViewer.refresh();
-					table.setSelection(index1 - 1);
-				}
+				moveRowUp();
 			}
 		});
 
 	}
 
+	private void moveRowUp()
+	{
+		int index1 = 0, index2 = 0;
+		index1 = table.getSelectionIndex();
+
+		if (index1 > 0) {
+			String text = tableViewer.getTable().getItem(index1).getText(0);
+			String text1 = tableViewer.getTable().getItem(index1).getText(1);
+			index2 = index1 - 1;
+			String data = tableViewer.getTable().getItem(index2).getText(0);
+			String data2 = tableViewer.getTable().getItem(index2).getText(1);
+
+			RuntimeProperties p = new RuntimeProperties();
+			p.setPropertyName(data);
+			p.setPropertyValue(data2);
+			propertyList.set(index1, p);
+			p = new RuntimeProperties();
+			p.setPropertyName(text);
+			p.setPropertyValue(text1);
+			propertyList.set(index2, p);
+			tableViewer.refresh();
+			table.setSelection(index1 - 1);
+		}
+	
+	}
 	private void attachDeleteButtonListener(final Button deleteButton) {
 		deleteButton.addMouseListener(new MouseAdapter() {
             
 			@Override
 			public void mouseUp(MouseEvent e) {
-				WidgetUtility.setCursorOnDeleteRow(tableViewer, propertyList);
-				isAnyUpdatePerformed = true;
-				tableViewer.refresh();
-				
-				if (propertyList.size() < 1) {
-					deleteButton.setEnabled(false);
-				} 
-				if (propertyList.size()<= 1) {
-					upButton.setEnabled(false);
-					downButton.setEnabled(false);
-				} 
+				deleteRow();
 			}
 
 		});
 
+	}
+	
+	private void deleteRow()
+	{
+
+		WidgetUtility.setCursorOnDeleteRow(tableViewer, propertyList);
+		isAnyUpdatePerformed = true;
+		tableViewer.refresh();
+		
+		if (propertyList.size() < 1) {
+			deleteButton.setEnabled(false);
+		} 
+		if (propertyList.size()<= 1) {
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		} 
+	
 	}
 
 	private void attachAddButtonListern(Button addButton) {
 		addButton.addMouseListener(new MouseAdapter() {
             @Override
 			public void mouseUp(MouseEvent e) {
-				table.getParent().setFocus();
-				tableViewer.getControl().getShell().setFocus();
-				addNewProperty(tableViewer);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				}
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
-			}
+            	addNewRow();
+            }
 
 		});
+	}
+	
+	private void addNewRow()
+	{
+
+		table.getParent().setFocus();
+		tableViewer.getControl().getShell().setFocus();
+		addNewProperty(tableViewer);
+		if (propertyList.size() >= 1) {
+			deleteButton.setEnabled(true);
+		}
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
+	
 	}
 
 	/**
@@ -449,6 +482,8 @@ public class RuntimePropertyDialog extends Dialog {
 				lblPropertyError.setVisible(false);
 			}
 		});
+		
+		attachShortcutListner(PROPERTY_TABLE);
 		tableViewer.getTable().addTraverseListener(new TraverseListener() {
 			@Override
 			public void keyTraversed(TraverseEvent e) {
@@ -508,7 +543,53 @@ public class RuntimePropertyDialog extends Dialog {
 			upButton.setEnabled(true);
 			downButton.setEnabled(true);
 		}
+		attachShortcutListner(PROPERTY_NAME);
+		attachShortcutListner(PROPERTY_VALUE);
 
+	}
+	
+	private void attachShortcutListner(String controlName){
+		Control currentControl;
+				
+		if (controlName == PROPERTY_NAME)
+			currentControl = tableViewer.getCellEditors()[0].getControl();
+		else if(controlName == PROPERTY_VALUE)
+			currentControl = tableViewer.getCellEditors()[1].getControl();
+		else
+			currentControl = table;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+					deleteRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+					addNewRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp();				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown();
+				}
+			}
+		});
 	}
 
 	/**

@@ -50,6 +50,8 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -105,6 +107,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private Button upButton;
 	private Button downButton;
 	private static final String INFORMATION="Information";
+	
+	private static final String PROPERTY_TABLE = "PROPERTY_TABLE";
+	private static final Character KEY_D = 'd';
+	private static final Character KEY_N = 'n';
+	private boolean ctrlKeyPressed = false;
+	private static final String PROPERTY_NAME = "PROPERTY_NAME";
+	private static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
@@ -216,7 +225,133 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				enableControlButtons();
 			}
 		});
+		attachShortcutListner(PROPERTY_TABLE);
+		attachShortcutListner(PROPERTY_NAME);
+		attachShortcutListner(PROPERTY_VALUE);
 
+	}
+	
+	private void attachShortcutListner(String controlName){
+		Control currentControl;
+				
+		if (controlName == PROPERTY_NAME)
+			currentControl = targetTableViewer.getCellEditors()[0].getControl();
+		else if(controlName == PROPERTY_VALUE)
+			currentControl = targetTableViewer.getCellEditors()[1].getControl();
+		else
+			currentControl = targetTable;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+					deleteRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+					addNewRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp();				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown();
+				}
+			}
+		});
+	}
+	
+	private void deleteRow(){
+
+		WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
+		isAnyUpdatePerformed = true;
+		targetTableViewer.refresh();
+		if (propertyList.size() < 1) {
+			deleteButton.setEnabled(false);
+		}
+		if (propertyList.size()<= 1) {
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		} 
+	
+	}
+
+	
+	private void addNewRow(){
+
+		addNewProperty(targetTableViewer, null);
+		enableControlButtons();
+	
+	}
+	
+	private void moveRowUp(){
+		int index1 = 0, index2 = 0;
+		index1 = targetTable.getSelectionIndex();
+		String text = targetTableViewer.getTable().getItem(index1).getText(0);
+		String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
+
+		if (index1 > 0) {
+			index2 = index1 - 1;
+			String data = targetTableViewer.getTable().getItem(index2).getText(0);
+			String data2 = targetTableViewer.getTable().getItem(index2).getText(1);
+
+			SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
+			p.setColumnName(data);
+			p.setSortOrder(data2);
+			propertyList.set(index1, p);
+
+			p = new SecondaryColumnKeysInformation();
+			p.setColumnName(text);
+			p.setSortOrder(text1);
+			propertyList.set(index2, p);
+			targetTableViewer.refresh();
+			targetTable.setSelection(index1 - 1);
+
+		}
+	
+		
+	}
+	
+	private void moveRowDown(){
+		int index1 = 0, index2 = 0;
+
+		index1 = targetTable.getSelectionIndex();
+		String text = targetTableViewer.getTable().getItem(index1).getText(0);
+		String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
+
+		if (index1 < propertyList.size()) {
+			index2 = index1 + 1;
+
+			String data = targetTableViewer.getTable().getItem(index2).getText(0);
+			String data1 = targetTableViewer.getTable().getItem(index2).getText(1);
+
+			SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
+			p.setColumnName(data);
+			p.setSortOrder(data1);
+			propertyList.set(index1, p);
+
+			p = new SecondaryColumnKeysInformation();
+			p.setColumnName(text);
+			p.setSortOrder(text1);
+			propertyList.set(index2, p);
+			targetTableViewer.refresh();
+			targetTable.setSelection(index1 + 1);
+		}
+	
 	}
 
 	private void attachTargetTableListeners() {
@@ -357,32 +492,10 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private void attachDownButtonListerner(Button downButton) {
 		downButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
        
 			@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = targetTable.getSelectionIndex();
-				String text = targetTableViewer.getTable().getItem(index1).getText(0);
-				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
-
-				if (index1 < propertyList.size()) {
-					index2 = index1 + 1;
-
-					String data = targetTableViewer.getTable().getItem(index2).getText(0);
-					String data1 = targetTableViewer.getTable().getItem(index2).getText(1);
-
-					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-					p.setColumnName(data);
-					p.setSortOrder(data1);
-					propertyList.set(index1, p);
-
-					p = new SecondaryColumnKeysInformation();
-					p.setColumnName(text);
-					p.setSortOrder(text1);
-					propertyList.set(index2, p);
-					targetTableViewer.refresh();
-					targetTable.setSelection(index1 + 1);
-				}
+				moveRowDown();
 			}
 		});
 
@@ -390,33 +503,11 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private void attachUpButtonListener(Button upButton) {
 		upButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
 
         	@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = targetTable.getSelectionIndex();
-				String text = targetTableViewer.getTable().getItem(index1).getText(0);
-				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
-
-				if (index1 > 0) {
-					index2 = index1 - 1;
-					String data = targetTableViewer.getTable().getItem(index2).getText(0);
-					String data2 = targetTableViewer.getTable().getItem(index2).getText(1);
-
-					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-					p.setColumnName(data);
-					p.setSortOrder(data2);
-					propertyList.set(index1, p);
-
-					p = new SecondaryColumnKeysInformation();
-					p.setColumnName(text);
-					p.setSortOrder(text1);
-					propertyList.set(index2, p);
-					targetTableViewer.refresh();
-					targetTable.setSelection(index1 - 1);
-
-				}
-			}
+        		moveRowUp();
+        	}
 		});
 
 	}
@@ -426,16 +517,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
-				WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
-				isAnyUpdatePerformed = true;
-				targetTableViewer.refresh();
-				if (propertyList.size() < 1) {
-					deleteButton.setEnabled(false);
-				}
-				if (propertyList.size()<= 1) {
-					upButton.setEnabled(false);
-					downButton.setEnabled(false);
-				} 
+				deleteRow();
 			}
 
 		});
@@ -447,8 +529,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
-				addNewProperty(targetTableViewer, null);
-				enableControlButtons();
+				addNewRow();
 			}
 
 		});
