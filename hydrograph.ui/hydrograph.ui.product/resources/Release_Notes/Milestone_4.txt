@@ -26,6 +26,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 15.#1057[Ashika Holkar]Subjob : Job Failed with SAXParseException 
 16.#536 [Rushikesh Pawale] Matched Text box size for the Delimiter, Quote with the phase text box size.
 17.#329 [Rushikesh Pawale] Added Tool tips on buttons in parameter Grid Window.        
+18.#541 [Ashika Holkar] Schema header getting scrolled away 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
