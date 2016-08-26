@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -44,6 +45,8 @@ public class ExecutionTrackingUtils {
 	private static final String TRACKING_ROUTE = "WEBSOCKET_ROUTE";
 	
 	private static final String STATUS_FREQUENCY = "STATUS_FREQUENCY";
+	
+	private static final long defaultStatusFrequency = 2000;
 
 	/** The route. */
 	private String route = "/executionTracking/engine-client";
@@ -54,7 +57,7 @@ public class ExecutionTrackingUtils {
 	/** The port no. */
 	private String portNo = "8877";
 	
-	private long statusFrequency = 2000;
+	private long statusFrequency = defaultStatusFrequency;
 	
 	/** The Constant INSTANCE. */
 	public static final ExecutionTrackingUtils INSTANCE = new ExecutionTrackingUtils();
@@ -99,7 +102,12 @@ public class ExecutionTrackingUtils {
 				portNo = properties.getProperty(PORT_NO);
 				host = properties.getProperty(LOCAL_URL);
 				route = properties.getProperty(TRACKING_ROUTE);
+				try {
 				statusFrequency = Long.parseLong(properties.getProperty(STATUS_FREQUENCY));
+				} catch (NumberFormatException e) {
+					statusFrequency = defaultStatusFrequency;
+					logger.error("Error while parsing the " + STATUS_FREQUENCY + " property. Setting it to the default value.");
+				}
 			}
 
 			return properties.getProperty("path");

@@ -1,32 +1,75 @@
 #!/bin/bash
 
-#*******************************************************************************
-#  Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#  http://www.apache.org/licenses/LICENSE-2.0
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
-#*******************************************************************************
+#********************************************************************************
+# * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+# * Licensed under the Apache License, Version 2.0 (the "License");
+# * you may not use this file except in compliance with the License.
+# * You may obtain a copy of the License at
+# * http://www.apache.org/licenses/LICENSE-2.0
+# * Unless required by applicable law or agreed to in writing, software
+# * distributed under the License is distributed on an "AS IS" BASIS,
+# * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# * See the License for the specific language governing permissions and
+# * limitations under the License.
+# ******************************************************************************
 
+
+#IMPORTANT: Please update the following paths for your environment for successful 
+#           execution of the script.
+SERVER_JAR_PATH=./bin
+LIB_PATH=./lib
+LOG_PATH=./log
+LIBJARS=""
+SERVER_JAR="hydrograph.server.debug.service"
+
+export LIBPATHS=""
+export LIBJARS=""
+export MAINJAR=""
 
 SERVICE_ID="NULL"
 ts="`date +%Y%m%d%H%M%S`"
-FILE_PATH="./log/"
 FILE_NAME="debugService$ts.log";
 PID_FILE="debugService.pid";
 PID=-1
 SERVICE_START_IND=0
-function check_status {
+
+
+
+#*********function declarations************
+
+appendLibJars(){
+
+  LIB_FOLDER=$1
+  
+  for JARFILE in `ls -1 ${LIB_FOLDER}/*.jar`
+	do
+				if [ -n "$LIBJARS" ]; then
+						LIBJARS=${LIBJARS},$JARFILE
+				else
+						LIBJARS=$JARFILE
+				fi
+		done
+ }
+
+
+setMainJar(){
+
+MAINJAR=$SERVER_JAR_PATH/$SERVER_JAR
+
+#if main jar is not found then raise error
+if [ ! -f "$MAINJAR" ]; then
+   echo "ERROR:Main executable jar is not found at path ${SERVER_JAR_PATH}. Exiting."
+   exit 1
+fi
+}
+
+
+check_status() {
 SUPRESS=$1
 SERVICE_START_IND=0
-if [ -f $PID_FILE ]; then
-        PID=`cat $PID_FILE`;
-        if $(ps -ef | awk '{ print $2 }' | grep ${PID} > /dev/null)
+if [ -f ${LOG_PATH}/${PID_FILE} ]; then
+        PID=`cat ${LOG_PATH}/${PID_FILE}`;
+        if $(ps -ef | awk '{ print $2 }' | grep -w ${PID} > /dev/null)
         then
           if [ "$SUPRESS" == "" ]; then
           echo "Hydrograph debug service is running as PID=$PID"
@@ -43,31 +86,51 @@ return 0
 }
 
 function print_help {
+		echo "============================"
         echo "Hydrograph UI Debug Service"
+		echo "============================"
         echo "Starts the Hydrograph Debug Service to enable debugging on development environments."
         echo "*Only one instance of the service should be present on the server"
         echo ""
         echo "Usage:"
         echo "hydrographDebugService.sh [status|start|stop|restart]"
         echo ""
-        echo "To view the logs, please check out $FILE_PATH"
+        echo "To view the logs, please check out $LOG_PATH"
 }
 
-function start_service {
+start_service () {
+
+                setMainJar
+
+                echo "Main jar has been set to $MAINJAR"
+
+                #set jars automatically. User need not specify it
+                appendLibJars $LIB_PATH
+
+                if [ -n "$LIBPATHS" ]; then
+                   echo "Lib paths are specified. Setting libsjars and hadoop classpath accordingly."
+
+                   LIBJARS=${LIBJARS},$LIBPATHS
+
+
+                fi
+                   COLONSEPERATED="`echo "$LIBJARS"|tr ',' ':'`"
+
         SUPRESS=$1
         check_status $SUPRESS
         if [ $SERVICE_START_IND -eq 0 ]; then
                 echo "Starting Debug Service"
-                java -jar sts_elt_dbg_svc.jar > $FILE_PATH$FILE_NAME &
+                echo "java -jar ${MAINJAR} -libjars $LIBJARS"
+                hadoop jar "$MAINJAR" -cp "$LIBJARS" > $LOG_PATH/$FILE_NAME &
                 SERVICE_ID=$!
-                echo $SERVICE_ID > $PID_FILE
+                echo $SERVICE_ID > ${LOG_PATH}/${PID_FILE}
                 echo "Service $SERVICE_ID started successfully!"
         else
                 echo "Service $PID already running!"
         fi
         }
 
-function stop_service {
+stop_service() {
         SUPRESS=$1
         if ! check_status $SUPRESS
         then
@@ -75,7 +138,7 @@ function stop_service {
                 if [ $PID -eq -1 ]; then
                         echo "No previously running service was found!"
                 else
-                        kill -9 $PID
+                        kill $PID
                         if [ $? -eq 0 ]; then
                                 echo "Service $PID stopped successfully!"
                                 return 0
@@ -84,6 +147,10 @@ function stop_service {
         fi
         return 1
 }
+
+
+#*********Execution starts from here************
+
 
 
 
