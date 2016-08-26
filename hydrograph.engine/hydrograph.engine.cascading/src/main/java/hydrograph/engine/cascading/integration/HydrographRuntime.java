@@ -170,6 +170,10 @@ public class HydrographRuntime implements HydrographRuntimeService {
 
 	}
 
+	/**
+	 * Returns the statistics of components in a job.
+	 * @see hydrograph.engine.execution.tracking.ComponentInfo
+	 */
 	@Override
 	public Object getExecutionStatus() {
 		if (executionTrackingListener != null)

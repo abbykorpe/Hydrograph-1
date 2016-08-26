@@ -13,7 +13,6 @@
 package hydrograph.engine.execution.tracking.plugin;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +21,11 @@ import java.util.Set;
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
 import cascading.stats.CascadingStats;
+import cascading.stats.CascadingStats.Status;
 import cascading.stats.FlowNodeStats;
 import cascading.stats.FlowStepStats;
-import cascading.stats.CascadingStats.Status;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
-import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
-import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.cascading.integration.RuntimeContext;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.execution.tracking.ComponentInfo;
@@ -40,17 +36,6 @@ import hydrograph.engine.flow.utils.ExecutionTrackingListener;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
 import hydrograph.engine.flow.utils.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 
 public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTrackingListener {
@@ -106,6 +91,10 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 		}
 	}
 
+	/** 
+	 * Adds Listener on a job for execution tracking
+	 * @see hydrograph.engine.flow.utils.ExecutionTrackingListener#addListener(hydrograph.engine.cascading.integration.RuntimeContext)
+	 */
 	@Override
 	public void addListener(RuntimeContext runtimeContext) {
 		jobInfo = new JobInfo();
