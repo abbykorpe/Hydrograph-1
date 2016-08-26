@@ -65,5 +65,29 @@ public class UserClassLoader {
 		}
 
 	}
+	
+	public static Object loadAndInitClass(String className,String classTypeForMags) {
+
+		@SuppressWarnings("rawtypes")
+		Class loadedClass;
+
+		try {
+			loadedClass = Class.forName(className);
+		} catch (Exception e) {
+
+			throw new CustomTransformException("Given "+classTypeForMags+" class "
+					+ className + " could not be loaded.", e);
+		}
+
+		try {
+			return loadedClass.newInstance();
+		} catch (Exception e) {
+
+			throw new CustomTransformException("Given "+classTypeForMags+" class "
+					+ className + " could not be instantiated.", e);
+
+		}
+
+	}
 
 }

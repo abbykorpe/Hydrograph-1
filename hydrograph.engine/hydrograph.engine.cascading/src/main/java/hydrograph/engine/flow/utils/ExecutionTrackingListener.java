@@ -10,31 +10,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.test;
+package hydrograph.engine.flow.utils;
 
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.List;
 
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-import hydrograph.engine.transformation.userfunctions.base.TransformBase;
+import cascading.stats.StatsListener;
+import hydrograph.engine.cascading.integration.RuntimeContext;
+import hydrograph.engine.execution.tracking.ComponentInfo;
 
-public class TransformTest implements TransformBase {
+public interface ExecutionTrackingListener extends StatsListener {
 
-	@Override
-	public void prepare(Properties props, ArrayList<String> inputFields, ArrayList<String> outputFields) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void transform(ReusableRow inputRow, ReusableRow outputRow) {
-		outputRow.setField("new_name", inputRow.getField("name"));
-	}
-
-	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void addListener(RuntimeContext runtimeContext);
+	
+	public List<ComponentInfo> getStatus();
+	
 }

@@ -14,8 +14,6 @@ package hydrograph.engine.core.core;
 
 import java.util.Properties;
 
-import org.apache.commons.cli.ParseException;
-
 public interface HydrographRuntimeService {
 
 	public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
@@ -27,7 +25,7 @@ public interface HydrographRuntimeService {
 
 	public void oncomplete();
 	
-	public Object getJobInfo();
+	public Object getExecutionStatus();
 	
 	public void kill();
 
