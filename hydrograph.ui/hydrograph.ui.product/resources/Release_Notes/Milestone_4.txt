@@ -23,6 +23,9 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 12.#1014 [Rushikesh Pawale] Rearranged pull schema button for Schema Tab for all Transform Components to match with location of schema tab of input and output components.
 13.#1057[Ashika Holkar]Subjob : Job Failed with SAXParseException
 14.#523 [Ashika Holkar] UI Issue: Class option is not present in the project explorer right click menu
+15.#1057[Ashika Holkar]Subjob : Job Failed with SAXParseException 
+16.#536 [Rushikesh Pawale] Matched Text box size for the Delimiter, Quote with the phase text box size.
+17.#329 [Rushikesh Pawale] Added Tool tips on buttons in parameter Grid Window.        
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
