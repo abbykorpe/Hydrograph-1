@@ -13,20 +13,15 @@ public class ExecutionTrackingNormalizeXmlTest {
 
 	static HydrographService hydrographService;
 	static StatusHelper statusHelper;
-	private static Logger LOG = LoggerFactory.getLogger(ExecutionTrackingFilterXmltest.class);
-	
+
 	@BeforeClass
-	public static void hydrographService() {
+	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/NormalizeExample.xml" };
-		try {
-			hydrographService = new HydrographService();
-			hydrographService.executeGraph(args);
-			statusHelper = new StatusHelper(hydrographService.getStatus());
-		} catch (Exception e) {
-			LOG.error("",e);
-		}
+		hydrographService = new HydrographService();
+		hydrographService.executeGraph(args);
+		statusHelper = new StatusHelper(hydrographService.getStatus());
 	}
-	
+
 	@Test
 	public void itShouldTestInput1Component() {
 		Assert.assertEquals(statusHelper.getComponentId("input1"), "input1");
@@ -34,7 +29,7 @@ public class ExecutionTrackingNormalizeXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("input1").get("out0"), new Long(9));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("input1").get("out0"), "SUCCESSFUL");
 	}
-	
+
 	@Test
 	public void itShouldTestNormalizeComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("normalize"), "normalize");
@@ -42,7 +37,7 @@ public class ExecutionTrackingNormalizeXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("normalize").get("out0"), new Long(11));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("normalize").get("out0"), "SUCCESSFUL");
 	}
-	
+
 	@Test
 	public void itShouldTestOutputComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("output1"), "output1");
@@ -50,5 +45,5 @@ public class ExecutionTrackingNormalizeXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("output1").get("NoSocketId"), new Long(11));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("output1").get("NoSocketId"), "SUCCESSFUL");
 	}
-	
+
 }

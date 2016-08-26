@@ -13,16 +13,11 @@ public class ExecutionTrackingCloneXmlTest {
 	static StatusHelper statusHelper;
 
 	@BeforeClass
-	public static void hydrographService() {
+	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/Clone.xml" };
-		try {
-			hydrographService = new HydrographService();
-			hydrographService.executeGraph(args);
-			statusHelper = new StatusHelper(hydrographService.getStatus());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		hydrographService = new HydrographService();
+		hydrographService.executeGraph(args);
+		statusHelper = new StatusHelper(hydrographService.getStatus());
 	}
 
 	@Test

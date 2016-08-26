@@ -13,20 +13,15 @@ public class ExecutionTrackingRemoveDupXmlTest {
 
 	static HydrographService hydrographService;
 	static StatusHelper statusHelper;
-	private static Logger LOG = LoggerFactory.getLogger(ExecutionTrackingFilterXmltest.class);
-	
+
 	@BeforeClass
-	public static void hydrographService() {
+	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/RemoveDupsExample.xml" };
-		try {
-			hydrographService = new HydrographService();
-			hydrographService.executeGraph(args);
-			statusHelper = new StatusHelper(hydrographService.getStatus());
-		} catch (Exception e) {
-			LOG.error("",e);
-		}
+		hydrographService = new HydrographService();
+		hydrographService.executeGraph(args);
+		statusHelper = new StatusHelper(hydrographService.getStatus());
 	}
-	
+
 	@Test
 	public void itShouldTestInput1Component() {
 		Assert.assertEquals(statusHelper.getComponentId("input1"), "input1");
@@ -34,7 +29,7 @@ public class ExecutionTrackingRemoveDupXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("input1").get("out0"), new Long(4));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("input1").get("out0"), "SUCCESSFUL");
 	}
-	
+
 	@Test
 	public void itShouldTestRemoveDupComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("dedup"), "dedup");
@@ -44,7 +39,7 @@ public class ExecutionTrackingRemoveDupXmlTest {
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("dedup").get("out0"), "SUCCESSFUL");
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("dedup").get("out1"), "SUCCESSFUL");
 	}
-	
+
 	@Test
 	public void itShouldTestOutput1Component() {
 		Assert.assertEquals(statusHelper.getComponentId("output1"), "output1");
@@ -52,7 +47,7 @@ public class ExecutionTrackingRemoveDupXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("output1").get("NoSocketId"), new Long(2));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("output1").get("NoSocketId"), "SUCCESSFUL");
 	}
-	
+
 	@Test
 	public void itShouldTestOutput2Component() {
 		Assert.assertEquals(statusHelper.getComponentId("output2"), "output2");

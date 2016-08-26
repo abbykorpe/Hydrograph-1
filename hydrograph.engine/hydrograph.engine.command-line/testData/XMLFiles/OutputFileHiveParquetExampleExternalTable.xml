@@ -47,7 +47,7 @@
 		<databaseName value="d1External" />
 		<tableName value="t1ExternalTable" />
 		<!-- Create externalTablePath folder hierarchy before running this xml -->
-		<externalTablePath uri="C:/HiveParquet" />
+		<externalTablePath uri="/HiveParquet" />
 	</outputs>
 </p:graph>
 	

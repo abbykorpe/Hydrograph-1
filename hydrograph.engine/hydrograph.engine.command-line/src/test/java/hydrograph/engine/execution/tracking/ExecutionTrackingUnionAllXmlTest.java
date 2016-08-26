@@ -10,23 +10,18 @@ import hydrograph.engine.commandline.utilities.HydrographService;
 import hydrograph.engine.helper.StatusHelper;
 
 public class ExecutionTrackingUnionAllXmlTest {
-	
+
 	static HydrographService hydrographService;
 	static StatusHelper statusHelper;
-	private static Logger LOG = LoggerFactory.getLogger(ExecutionTrackingFilterXmltest.class);
-	
+
 	@BeforeClass
-	public static void hydrographService() {
+	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/UnionAllExample.xml" };
-		try {
-			hydrographService = new HydrographService();
-			hydrographService.executeGraph(args);
-			statusHelper = new StatusHelper(hydrographService.getStatus());
-		} catch (Exception e) {
-			LOG.error("",e);
-		}
+		hydrographService = new HydrographService();
+		hydrographService.executeGraph(args);
+		statusHelper = new StatusHelper(hydrographService.getStatus());
 	}
-	
+
 	@Test
 	public void itShouldTestInput1Component() {
 		Assert.assertEquals(statusHelper.getComponentId("input1"), "input1");
@@ -42,7 +37,7 @@ public class ExecutionTrackingUnionAllXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("input2").get("out0"), new Long(5));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("input2").get("out0"), "SUCCESSFUL");
 	}
-	
+
 	@Test
 	public void itShouldTestGatherComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("gather"), "gather");
@@ -50,7 +45,7 @@ public class ExecutionTrackingUnionAllXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("gather").get("sdf"), new Long(8));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("gather").get("sdf"), "SUCCESSFUL");
 	}
-	
+
 	@Test
 	public void itShouldTestOutputComponent() {
 		Assert.assertEquals(statusHelper.getComponentId("output1"), "output1");
@@ -58,5 +53,5 @@ public class ExecutionTrackingUnionAllXmlTest {
 		Assert.assertEquals(statusHelper.getProcessedRecords("output1").get("NoSocketId"), new Long(8));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("output1").get("NoSocketId"), "SUCCESSFUL");
 	}
-	
+
 }
