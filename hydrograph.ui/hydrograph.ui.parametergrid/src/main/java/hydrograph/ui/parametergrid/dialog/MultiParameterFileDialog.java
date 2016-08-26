@@ -13,10 +13,12 @@
 
 package hydrograph.ui.parametergrid.dialog;
 
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.common.util.XMLUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.constants.ErrorMessages;
 import hydrograph.ui.parametergrid.constants.MessageType;
@@ -26,11 +28,11 @@ import hydrograph.ui.parametergrid.dialog.models.ParameterWithFilePath;
 import hydrograph.ui.parametergrid.dialog.support.ParameterEditingSupport;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
 import hydrograph.ui.parametergrid.utils.SWTResourceManager;
-import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,8 +50,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationException;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -103,9 +108,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 
 /**
  * 
@@ -126,6 +130,7 @@ public class MultiParameterFileDialog extends Dialog {
 	private Text parameterFileTextBox;
 	private SashForm mainSashForm;
 	private List<ParameterFile> parameterFiles;
+	private List<ParameterFile> jobLevelParamterFiles;
 	private List<Parameter> parameters;
 	private List<ParameterWithFilePath> parameterSearchBoxItems;
 	private List<ParameterWithFilePath> parameterSearchBoxItemsFixed;
@@ -178,7 +183,8 @@ public class MultiParameterFileDialog extends Dialog {
 		this.activeProjectLocation = activeProjectLocation;
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
 				| SWT.RESIZE | SWT.MAX );
-
+		
+		jobLevelParamterFiles = new ArrayList<>();
 	}
 
 	/**
@@ -218,24 +224,39 @@ public class MultiParameterFileDialog extends Dialog {
 
 	private ParameterFile getJobSpecificFile() {
 		ParameterFile jobSpecificFile = null;
-		for (ParameterFile filePath : parameterFiles) {
-			if (filePath.isJobSpecificFile()) {
-				jobSpecificFile = filePath;
+		for (ParameterFile paramterFile : parameterFiles) {
+			if (paramterFile.getFileType().equals(ParamterFileTypes.JOB_SPECIFIC)) {
+				jobSpecificFile = paramterFile;
 				break;
 			}
 		}
 		return jobSpecificFile;
 	}
+	
+	private String getParamterFileLocation(ParameterFile parameterFile){
+		String paramterFileLocation;;
+		if(parameterFile.getFileType().equals(ParamterFileTypes.JOB_LEVEL)){
+			paramterFileLocation = activeProjectLocation + File.separator
+					+ MultiParameterFileDialogConstants.JOB_PARAMETER_DIRECTORY_NAME + File.separator + parameterFile.getFileName() ;
+		}else if(parameterFile.getFileType().equals(ParamterFileTypes.PROJECT_LEVEL)){
+			paramterFileLocation = activeProjectLocation + File.separator
+					+ MultiParameterFileDialogConstants.GLOBAL_PARAMETER_DIRECTORY_NAME + File.separator + parameterFile.getFileName();
+		}else{
+			paramterFileLocation = activeProjectLocation + File.separator
+					+ MultiParameterFileDialogConstants.JOB_PARAMETER_DIRECTORY_NAME + File.separator + parameterFile.getFileName() + ".properties" ;
+		}
+		return paramterFileLocation;
+	}
 
-	private void populateViewParameterFileBox(ParameterFile file) {
-		parameterFileTextBox.setText(file.getPath());
+	private void populateViewParameterFileBox(ParameterFile parameterFile) {
+		//parameterFileTextBox.setText(file.getPath());
 		try {
 			ParameterFileManager parameterFileManager = new ParameterFileManager(
-					file.getPath());
+					getParamterFileLocation(parameterFile));
 			Map<String, String> parameterMap = new LinkedHashMap<>();
 			parameterMap = parameterFileManager.getParameterMap();
 			setGridData(parameters, parameterMap);
-			parameterTableViewer.setData("CURRENT_PARAM_FILE", file.getPath());
+			parameterTableViewer.setData("CURRENT_PARAM_FILE", getParamterFileLocation(parameterFile));
 		} catch (IOException ioException) {
 
 			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR
@@ -504,16 +525,16 @@ public class MultiParameterFileDialog extends Dialog {
 		parameterSearchBoxItems.clear();
 		parameterSearchBoxItemsFixed.clear();
 
-		for (ParameterFile filePath : parameterFiles) {
+		for (ParameterFile parameterFile : parameterFiles) {
 			try {
 				ParameterFileManager parameterFileManager = new ParameterFileManager(
-						filePath.getPath());
+						getParamterFileLocation(parameterFile));
 				Map<String, String> parameterMap = new LinkedHashMap<>();
 				parameterMap = parameterFileManager.getParameterMap();
 
 				for (String paramater : parameterMap.keySet()) {
 					ParameterWithFilePath parameterWithFilePath = new ParameterWithFilePath(
-							paramater, parameterMap.get(paramater), filePath);
+							paramater, parameterMap.get(paramater), parameterFile);
 
 					if (!parameterSearchBoxItems
 							.contains(parameterWithFilePath))
@@ -566,7 +587,6 @@ public class MultiParameterFileDialog extends Dialog {
 				false, 1, 1));
 
 		Button btnAdd_1 = new Button(composite_8, SWT.NONE);
-		btnAdd_1.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		btnAdd_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnAdd_1.addSelectionListener(new SelectionAdapter() {
@@ -584,7 +604,6 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnDelete = new Button(composite_8, SWT.NONE);
-		btnDelete.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		btnDelete.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnDelete.addSelectionListener(new SelectionAdapter() {
@@ -613,7 +632,6 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnUp = new Button(composite_8, SWT.NONE);
-		btnUp.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		btnUp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1,
 				1));
 		btnUp.addSelectionListener(new SelectionAdapter() {
@@ -637,7 +655,6 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnDown = new Button(composite_8, SWT.NONE);
-		btnDown.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		btnDown.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnDown.addSelectionListener(new SelectionAdapter() {
@@ -660,7 +677,6 @@ public class MultiParameterFileDialog extends Dialog {
 		btnDown.setImage(downButtonImage);
 
 		Button btnSave = new Button(composite_8, SWT.NONE);
-		btnSave.setToolTipText(Messages.PARAMETER_GRID_SAVE_TOOLTIP);
 		btnSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnSave.addSelectionListener(new SelectionAdapter() {
@@ -829,9 +845,10 @@ public class MultiParameterFileDialog extends Dialog {
 	}
 
 	private boolean saveParameters() {
-		if (!parameterFileTextBox.getText().isEmpty()) {
-			String currentFilePath = (String) parameterTableViewer
-					.getData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE);
+		String currentFilePath = (String) parameterTableViewer
+				.getData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE);
+		if (!StringUtils.isEmpty(currentFilePath)) {
+			
 			ParameterFileManager parameterFileManager = new ParameterFileManager(
 					currentFilePath);
 			Map<String, String> parameterMap = new LinkedHashMap<>();
@@ -973,6 +990,8 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 
 				parameterFiles.removeAll(filesToRemove);
+				jobLevelParamterFiles.retainAll(parameterFiles);
+				
 				filePathTableViewer.refresh();
 				populateParameterSearchBox();
 				populateViewParameterFileBox(jobSpecificFile);
@@ -1109,8 +1128,8 @@ public class MultiParameterFileDialog extends Dialog {
 
 			@Override
 			public Color getForeground(Object element) {
-				ParameterFile filePath = (ParameterFile) element;
-				if (filePath.isJobSpecificFile())
+				ParameterFile parameterFile = (ParameterFile) element;
+				if (parameterFile.getFileType().equals(ParamterFileTypes.JOB_SPECIFIC))
 					return new Color(Display.getDefault(), 0, 0, 255);
 				return super.getForeground(element);
 			}
@@ -1124,113 +1143,144 @@ public class MultiParameterFileDialog extends Dialog {
 
 		setTableLayoutToMappingTable(filePathTableViewer);
 	}
+	
+	private FileDialog initializeFileDialog(Shell shell) {
+		String[] filterExt = { "*.properties" };
+		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN | SWT.MULTI);
+		fileDialog.setText(MultiParameterFileDialogConstants.OPEN_FILE_DIALOG_NAME);				
+		fileDialog.setFilterExtensions(filterExt);
+		return fileDialog;
+	}
+	
+	private boolean importParamterFileToProject(String[] listOfFilesToBeImported, String source,String destination) {
 
+		for (String fileName : listOfFilesToBeImported) {
+			String absoluteFileName = source + fileName;
+			try {
+				FileUtils.copyFileToDirectory(new File(absoluteFileName), new File(destination));
+			} catch (IOException e1) {
+				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+				messageBox.setText(MessageType.ERROR.messageType());
+				messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE + " " + e1.getMessage());
+				messageBox.open();				
+				logger.error("Unable to copy prameter file in current project work space");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean isParamterFileNameExistInFileGrid(String[] listOfFilesToBeImported, ParamterFileTypes paramterFileTypes) {
+		if (ifDuplicate(listOfFilesToBeImported, paramterFileTypes)) {
+			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
+			messageBox.setText(MessageType.INFO.messageType());
+			messageBox.setMessage(ErrorMessages.FILE_EXIST);
+			messageBox.open();
+			return true;
+		}
+		return false;
+	}
+	
+	private String getFileLocation(String importedParamterFile) {
+		IPath iPath = new Path(importedParamterFile);
+		String importedFileLocation = iPath.removeLastSegments(1).toOSString() + "\\";
+		return importedFileLocation;
+	}
+	
+	private void updateParameterGridWindow(String[] listOfFilesToBeImported, String importLocation,ParamterFileTypes paramterFileTypes) {
+		for (String fileName : listOfFilesToBeImported) {
+			if (fileName != null) {
+				String absoluteFileName = importLocation + fileName;
+				parameterFileTextBox.setText(absoluteFileName);
+				parameterFiles.add(new ParameterFile(fileName, paramterFileTypes));
+				if(paramterFileTypes.equals(ParamterFileTypes.JOB_LEVEL)){
+					jobLevelParamterFiles.add(new ParameterFile(fileName, paramterFileTypes));
+				}
+				try {
+					ParameterFileManager parameterFileManager = new ParameterFileManager(absoluteFileName);
+					parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE,
+							absoluteFileName);
+					Map<String, String> parameterMap = new LinkedHashMap<>();
+					parameterMap = parameterFileManager.getParameterMap();
+					setGridData(parameters, parameterMap);
+				} catch (IOException ioException) {
+					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+					messageBox.setText(MessageType.ERROR.messageType());
+					messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE
+							+ ioException.getMessage());
+					messageBox.open();
+					logger.debug("Unable to populate parameter file", ioException.getMessage());
+				}
+				filePathTableViewer.refresh();
+				parameterTableViewer.refresh();
+				populateParameterSearchBox();
+			}
+		}
+		if(paramterFileTypes.equals(ParamterFileTypes.JOB_LEVEL)){
+			getComponentCanvas().addJobLevelParamterFiles(jobLevelParamterFiles);
+		}
+		parameterFileTextBox.setText("");
+	}
+	
+	private void addFilesToParamterGrid(Shell shell,String importDirectoryLocation,ParamterFileTypes paramterFileTypes) {
+		String importLocation = activeProjectLocation + File.separator + importDirectoryLocation + File.separator;
+		
+		if (!saveParameters()) {
+			return;
+		}
+
+		String[] listOfFilesToBeImported ;
+		String fileToBeImport;
+		if(parameterFileTextBox.getText().isEmpty()){
+			FileDialog fileDialog = initializeFileDialog(shell);
+			fileToBeImport = fileDialog.open();
+			if (StringUtils.isBlank(fileToBeImport)) {
+				return;
+			}
+			listOfFilesToBeImported = fileDialog.getFileNames();
+		}else{
+			java.nio.file.Path path = Paths.get(parameterFileTextBox.getText());
+			listOfFilesToBeImported = new String[1];
+			listOfFilesToBeImported[0] = path.getFileName().toString();
+			fileToBeImport = parameterFileTextBox.getText();
+		}
+		
+		String locationOfFilesToBeImported = getFileLocation(fileToBeImport);
+		
+		if(!importParamterFileToProject(listOfFilesToBeImported, locationOfFilesToBeImported,importLocation)){
+			return;
+		}
+		
+		if(isParamterFileNameExistInFileGrid(listOfFilesToBeImported, paramterFileTypes)){
+			return;
+		}
+		
+		updateParameterGridWindow(listOfFilesToBeImported, importLocation,paramterFileTypes);
+	}
+	
 	private void createParameterFilesBoxButtonPanel(Composite composite_2) {
 		Composite composite = new Composite(composite_2, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,1, 1));
-		composite.setLayout(new GridLayout(4, false));
-		final Button browseBtn = new Button(composite, SWT.NONE);
-		browseBtn.setToolTipText(Messages.PARAMETER_GRID_BROWSE_TOOLTIP);
-		browseBtn.addSelectionListener(new SelectionAdapter() {
+		composite.setLayout(new GridLayout(5, false));
+		final Button btnAddProjectParam = new Button(composite, SWT.NONE);
+		btnAddProjectParam.setText("Add project param files");
+		btnAddProjectParam.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(!saveParameters()){
-					return;
-				}
-				FileDialog fileDialog = new FileDialog(browseBtn.getShell(),SWT.OPEN|SWT.MULTI);
-				fileDialog.setText(MultiParameterFileDialogConstants.OPEN_FILE_DIALOG_NAME);
-
-				if (activeProjectLocation != null) {
-					fileDialog.setFilterPath(activeProjectLocation+ "/"+ MultiParameterFileDialogConstants.GLOBAL_PARAMETER_DIRECTORY_NAME);
-				}
-				String absoluteFileName;
-				String[] filterExt = { "*.properties" };
-				fileDialog.setFilterExtensions(filterExt);
-				String firstFile = fileDialog.open();
-				if(StringUtils.isBlank(firstFile)){
-					return;
-				}
-				IPath iPath=new Path(firstFile);
-				String path= iPath.removeLastSegments(1).toOSString()+"\\";
-				if(ifDuplicate(fileDialog.getFileNames(),path))
-				{	
-					MessageBox messageBox = new MessageBox(new Shell(),
-					SWT.ICON_INFORMATION | SWT.OK);
-					messageBox.setText(MessageType.INFO.messageType());
-					messageBox.setMessage(ErrorMessages.FILE_EXIST);
-					messageBox.open();
-					return;
-				}
-				for(String fileName: fileDialog.getFileNames()){
-					if (fileName != null) {
-						absoluteFileName=path+fileName;
-						parameterFileTextBox.setText(absoluteFileName);
-						parameterFiles.add(new ParameterFile(fileName,
-							absoluteFileName,false));
-					try {
-							ParameterFileManager parameterFileManager = new ParameterFileManager(absoluteFileName);
-							parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE,absoluteFileName);
-							Map<String, String> parameterMap = new LinkedHashMap<>();
-							parameterMap = parameterFileManager.getParameterMap();
-							setGridData(parameters, parameterMap);
-					} catch (IOException ioException) {
-							MessageBox messageBox = new MessageBox(new Shell(),SWT.ICON_ERROR | SWT.OK);
-							messageBox.setText(MessageType.ERROR.messageType());
-							messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE+ ioException.getMessage());
-							messageBox.open();
-							logger.debug("Unable to populate parameter file",ioException.getMessage());
-					}
-
-					filePathTableViewer.refresh();
-					parameterTableViewer.refresh();
-					populateParameterSearchBox();
-				}
-			}
-			}
+				addFilesToParamterGrid(btnAddProjectParam.getShell(),MultiParameterFileDialogConstants.GLOBAL_PARAMETER_DIRECTORY_NAME,ParamterFileTypes.PROJECT_LEVEL);
+			}			
 		});
-		Image addImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
-		browseBtn.setImage(addImage);
-		
-
-		Button btnReload = new Button(composite, SWT.NONE);
-		btnReload.setToolTipText(Messages.PARAMETER_GRID_RELOAD_TOOLTIP);
-		btnReload.addSelectionListener(new SelectionAdapter() {
+				
+		Button btnAddJobParam = new Button(composite, SWT.NONE);
+		btnAddJobParam.setText("Add job param files");
+		btnAddJobParam.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
-				java.nio.file.Path path = Paths.get(parameterFileTextBox.getText());
-				java.nio.file.Path fileName = path.getFileName();
-				if (isExistInParameterFileList(path.toString())) {
-					return;
-				}
-				parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE,parameterFileTextBox.getText());
-				if (!parameterFileTextBox.getText().isEmpty()) {
-					try {
-						ParameterFileManager parameterFileManager = new ParameterFileManager(path.toString());
-						parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE,path.toString());
-						Map<String, String> parameterMap = new LinkedHashMap<>();
-						parameterMap = parameterFileManager.getParameterMap();
-						setGridData(parameters, parameterMap);
-						parameterFiles.add(new ParameterFile(fileName.toString(), path.toString(), false));
-						filePathTableViewer.refresh();
-						parameterTableViewer.refresh();
-						populateParameterSearchBox();
-
-					} catch (IOException ioException) {
-						MessageBox messageBox = new MessageBox(new Shell(),SWT.ICON_ERROR | SWT.OK);
-						messageBox.setText(MessageType.ERROR.messageType());
-						messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE+ ioException.getMessage());
-						messageBox.open();
-						logger.debug("Unable to populate parameter file",ioException.getMessage());
-					}
-				}
+				addFilesToParamterGrid(btnAddProjectParam.getShell(),MultiParameterFileDialogConstants.JOB_PARAMETER_DIRECTORY_NAME,ParamterFileTypes.JOB_LEVEL);
 			}
 		});
-		Image reloadImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD);
-		btnReload.setImage(reloadImage);
 		
 		Button btnUp_1 = new Button(composite, SWT.NONE);
-		btnUp_1.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		btnUp_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -1249,7 +1299,6 @@ public class MultiParameterFileDialog extends Dialog {
 		btnUp_1.setImage(upImage);
 		
 		Button btnDown_1 = new Button(composite, SWT.NONE);
-		btnDown_1.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		btnDown_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -1276,21 +1325,10 @@ public class MultiParameterFileDialog extends Dialog {
 		parameterFileTextBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL,true, true, 1, 1));
 	}
 
-	private boolean ifDuplicate(String file[], String path) {
-		String fileName = "";
+	private boolean ifDuplicate(String file[], ParamterFileTypes paramterFileTypes) {
 		for (int i = 0; i < file.length; i++) {
-			fileName = path + file[i];
-			 for (int j = 0; j < parameterFiles.size(); j++){
-				if(parameterFiles.get(j).getPath().equals(fileName))
-					return true;
-			 }
-		}
-		return false;
-	}
-	
-	private boolean isExistInParameterFileList(String firstFile) {
-		for (ParameterFile file : parameterFiles) {
-			if (firstFile.equals(file.getPath())) {
+			ParameterFile parameterFile = new ParameterFile(file[i], paramterFileTypes) ;
+			if(parameterFiles.contains(parameterFile)){
 				return true;
 			}
 		}
@@ -1337,6 +1375,9 @@ public class MultiParameterFileDialog extends Dialog {
 		List<ParameterFile> tempParameterFiles = new LinkedList<>();
 		tempParameterFiles.addAll(parameterFiles);
 
+		
+		tempParameterFiles.removeAll(jobLevelParamterFiles);
+		
 		saveParameters();
 
 		try {
@@ -1345,6 +1386,7 @@ public class MultiParameterFileDialog extends Dialog {
 					+ MultiParameterFileDialogConstants.PROJECT_METADATA_FILE);
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			tempParameterFiles.remove(getJobSpecificFile());
+			getComponentCanvas().addJobLevelParamterFiles(jobLevelParamterFiles);
 			oos.writeObject(tempParameterFiles);
 			oos.close();
 			fout.close();
@@ -1410,8 +1452,7 @@ public class MultiParameterFileDialog extends Dialog {
 		String activeParameterFiles = "";
 
 		for (ParameterFile parameterFile : parameterFiles) {
-			activeParameterFiles = activeParameterFiles
-					+ parameterFile.getPath() + ",";
+			activeParameterFiles = getParamterFileLocation(parameterFile) + ",";
 		}
 		if (activeParameterFiles.length() != 0)
 			return activeParameterFiles.substring(0,
@@ -1530,5 +1571,29 @@ public class MultiParameterFileDialog extends Dialog {
 			}
 			
 		}
+	}
+	
+	/**
+	 * 
+	 * Returns active editor as {@link DefaultGEFCanvas}
+	 * 
+	 * @return {@link DefaultGEFCanvas}
+	 */
+	private DefaultGEFCanvas getComponentCanvas() {
+		DefaultGEFCanvas activeEditor = (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if( activeEditor instanceof DefaultGEFCanvas){
+			return activeEditor;
+		}
+		else{
+			return null;
+		}
+	}
+	
+	public List<ParameterFile> getJobLevelParamterFiles() {
+		return jobLevelParamterFiles;
+	}
+	
+	public void setJobLevelParamterFiles(List list) {
+		this.jobLevelParamterFiles.addAll(list);
 	}
 }

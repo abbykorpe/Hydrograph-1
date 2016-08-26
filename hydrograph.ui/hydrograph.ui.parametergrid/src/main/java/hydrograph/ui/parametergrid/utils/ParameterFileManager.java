@@ -16,6 +16,7 @@ package hydrograph.ui.parametergrid.utils;
 
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -48,9 +49,15 @@ public class ParameterFileManager {
 	 */
 	public Map<String, String> getParameterMap() throws IOException{
 		Properties prop = new Properties();
-		prop.load(parameterFilePath);
 		
-		logger.debug("Fetched properties {} from file {}",prop.toString(),parameterFilePath);
+		File file = new File(parameterFilePath);
+		
+		if(file.exists()){
+			prop.load(parameterFilePath);
+			
+			logger.debug("Fetched properties {} from file {}",prop.toString(),parameterFilePath);
+		}
+		
 		return prop.getProperties();
 	}
 	
@@ -65,7 +72,11 @@ public class ParameterFileManager {
 		Properties prop = new Properties();
 		prop.setProperty(parameterMap);
 		
-		prop.store(parameterFilePath);
-		logger.debug("Saved properties {} to file {}", prop.toString(),parameterFilePath);
+		File file = new File(parameterFilePath);
+		
+		if(file.exists()){
+			prop.store(parameterFilePath);
+			logger.debug("Saved properties {} to file {}", prop.toString(),parameterFilePath);
+		}
 	}
 }

@@ -33,6 +33,7 @@ public class MultiParameterFileDialogConstants {
 	
 	public static final String CURRENT_PARAM_FILE="CURRENT_PARAM_FILE";
 	public static final String GLOBAL_PARAMETER_DIRECTORY_NAME="globalparam";
+	public static final String JOB_PARAMETER_DIRECTORY_NAME="param";
 	public static final String OPEN_FILE_DIALOG_NAME = "Open";
 	
 	public static final String UP_BUTTON_TEXT="Up";

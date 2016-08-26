@@ -102,5 +102,9 @@ public interface DefaultGEFCanvas {
 	/**
 	 * Restore menu tool context items state.
 	 */
-	public void restoreMenuToolContextItemsState(); 
+	public void restoreMenuToolContextItemsState();
+
+	public void addJobLevelParamterFiles(List jobLevelParamterFiles);
+
+	public List<Object> getJobLevelParamterFiles(); 
 }

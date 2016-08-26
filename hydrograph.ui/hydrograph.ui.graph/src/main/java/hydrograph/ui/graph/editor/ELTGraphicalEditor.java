@@ -215,6 +215,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private static final Color palatteTextColor=new Color(null,51,51,51);
 	
+	
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -252,7 +253,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
 		setDefaultToolUndoRedoStatus();
-		
 	}
 
 	/**
@@ -1704,5 +1704,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void restoreMenuToolContextItemsState() {
 		ContributionItemManager.UndoRedoDefaultBarManager.changeUndoRedoStatus(getViewer());
 	}
-
+	
+	@Override
+	public void addJobLevelParamterFiles(List jobLevelParamterFiles){
+		if(jobLevelParamterFiles.size() != getJobLevelParamterFiles().size()){
+			setDirty(true);
+		}
+		container.addJobLevelParamterFiles(jobLevelParamterFiles);
+	}
+	
+	@Override
+	public List<Object> getJobLevelParamterFiles() {
+		return container.getJobLevelParamterFiles();
+	}
 }

@@ -15,14 +15,15 @@ package hydrograph.ui.parametergrid.actions;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.MultiParameterFileUIUtils;
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.constants.ErrorMessages;
 import hydrograph.ui.parametergrid.constants.MessageType;
 import hydrograph.ui.parametergrid.constants.MultiParameterFileDialogConstants;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -71,23 +72,29 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		if (StringUtils.isBlank(getComponentCanvas().getParameterFile())){
-			MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
+		File jobSpecificParamFile = new File(getComponentCanvas().getParameterFile());
+		if(!jobSpecificParamFile.exists()){
+			try {
+				jobSpecificParamFile.createNewFile();
+			} catch (IOException e) {
+				logger.debug("Unable to create job specific file ", e);
+				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 
-			messageBox.setText(MessageType.ERROR.messageType());
-			messageBox.setMessage(ErrorMessages.SAVE_JOB_BEFORE_OPENING_PARAM_GRID);
-			messageBox.open();
-
-			logger.debug(ErrorMessages.SAVE_JOB_BEFORE_OPENING_PARAM_GRID);
-			return null;
+				messageBox.setText(MessageType.ERROR.messageType());
+				messageBox.setMessage(ErrorMessages.UNABLE_TO_POPULATE_PARAM_FILE + e.getMessage());
+				messageBox.open();
+			}
 		}
 
 		String activeProjectLocation = MultiParameterFileUIUtils.getActiveProjectLocation();
 
-		List<ParameterFile> parameterFileList = getParameterFileList(activeProjectLocation);
+		List parameterFileList = getParameterFileList(activeProjectLocation);
 
+		parameterFileList.addAll(getComponentCanvas().getJobLevelParamterFiles());
+		
 		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(new Shell(), activeProjectLocation);
 		parameterFileDialog.setParameterFiles(parameterFileList);
+		parameterFileDialog.setJobLevelParamterFiles(getComponentCanvas().getJobLevelParamterFiles());
 		parameterFileDialog.open();
 
 		return null;
@@ -107,12 +114,6 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 	}
 
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList, String activeProjectLocation) {
-		if (OSValidator.isWindows()){
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "\\"
-					+ PARAMETER_FILE_DIR + "\\" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
-		} else {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "/"
-					+ PARAMETER_FILE_DIR + "/" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
-		}
+		parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(),ParamterFileTypes.JOB_SPECIFIC));
 	}
 }

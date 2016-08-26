@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.ui,
  org.junit,
  hydrograph.ui.common.datastructures;bundle-version="0.0.1",
  org.apache.commons.lang;bundle-version="2.4.0",
- org.apache.commons.codec;bundle-version="1.3.0"
+ org.apache.commons.codec;bundle-version="1.3.0",
+ org.apache.commons.io;bundle-version="2.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.parametergrid.dialog,
