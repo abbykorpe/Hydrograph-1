@@ -19,6 +19,11 @@ import java.util.Map.Entry;
 
 import cascading.stats.CascadingStats.Status;
 
+/**
+ * ComponentInfo class to fill the statistics of components such as record count,current status
+ * @author Aniketmo
+ *
+ */
 public class ComponentInfo {
 
 	private String componentId;
@@ -26,34 +31,66 @@ public class ComponentInfo {
 	private Map<String, String> statusPerSocketMap = new HashMap<String, String>();
 	private Map<String, Long> mapofStats = new LinkedHashMap<String, Long>();
 
+	/**
+	 * @return the status of socket
+	 */
 	public Map<String, String> getStatusPerSocketMap() {
 		return statusPerSocketMap;
 	}
 
+	/**
+	 * @param scoketId
+	 * 				the socketId to set
+	 * @param status
+	 * 				the status to set
+	 */
 	public void setStatusPerSocketMap(String scoketId, Status status) {
 		statusPerSocketMap.put(scoketId, status.name());
 	}
 
+	/**
+	 * @return the record count
+	 */
 	public Map<String, Long> getProcessedRecords() {
 		return mapofStats;
 	}
 
+	/**
+	 * @param portid
+	 * 				the portid to set
+	 * @param recordCount
+	 * 					the recordCount to set
+	 */
 	public void setProcessedRecordCount(String portid, long recordCount) {
 		mapofStats.put(portid, recordCount);
 	}
 
+	/**
+	 * @return the current status of component
+	 */
 	public String getCurrentStatus() {
 		return currentStatus;
 	}
 
+	/**
+	 * @param currentStatus
+	 * 				the current status to set
+	 */
 	public void setCurrentStatus(String currentStatus) {
 		this.currentStatus = currentStatus;
 	}
 
+	/**
+	 * @return the componentId
+	 */
 	public String getComponentId() {
 		return componentId;
 	}
 
+	/**
+	 * @param componentId
+	 * 				the componentId to set
+	 */
 	public void setComponentId(String componentId) {
 		this.componentId = componentId;
 	}

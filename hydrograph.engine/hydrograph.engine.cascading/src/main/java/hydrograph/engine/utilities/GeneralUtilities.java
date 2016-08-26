@@ -15,8 +15,6 @@ package hydrograph.engine.utilities;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import hydrograph.engine.cascading.assembly.handlers.CustomTransformException;
-
 /**
  * This class was refactored from the
  * hydrograph.engine.core.utlities.GeneralUtilities class

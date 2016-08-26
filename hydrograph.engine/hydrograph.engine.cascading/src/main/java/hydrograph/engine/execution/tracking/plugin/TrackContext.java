@@ -22,34 +22,62 @@ public class TrackContext {
 	private String fromOutSocketType;
 	private String phase;
 
+	/**
+	 * @return the fromComponentId
+	 */
 	public String getFromComponentId() {
 		return fromComponentId;
 	}
 
+	/**
+	 * @param fromComponentId
+	 * 					fromComponentId to set
+	 */
 	public void setFromComponentId(String fromComponentId) {
 		this.fromComponentId = fromComponentId;
 	}
 
+	/**
+	 * @return the fromOutSocketId
+	 */
 	public String getFromOutSocketId() {
 		return fromOutSocketId;
 	}
 
+	/**
+	 * @param fromOutSocketId
+	 * 					fromOutSocketId to set
+	 */
 	public void setFromOutSocketId(String fromOutSocketId) {
 		this.fromOutSocketId = fromOutSocketId;
 	}
 
+	/**
+	 * @return the fromOutSocketType
+	 */
 	public String getFromOutSocketType() {
 		return fromOutSocketType;
 	}
 
+	/**
+	 * @param fromOutSocketType
+	 * 					fromOutSocketType to set
+	 */
 	public void setFromOutSocketType(String fromOutSocketType) {
 		this.fromOutSocketType = fromOutSocketType;
 	}
 
+	/**
+	 * @return the phase
+	 */
 	public String getPhase() {
 		return phase;
 	}
 
+	/**
+	 * @param phase
+	 * 			phase to set
+	 */
 	public void setPhase(String phase) {
 		this.phase = phase;
 	}
