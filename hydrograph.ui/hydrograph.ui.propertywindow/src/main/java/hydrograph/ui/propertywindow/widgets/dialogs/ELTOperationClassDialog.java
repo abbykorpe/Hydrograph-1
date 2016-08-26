@@ -202,7 +202,6 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		nameValueComposite.setLayout(name_gd);
 
 		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER );
-		nameValueTableViewer.getTable().getColumnCount();
 		Table table_2 = nameValueTableViewer.getTable();
 		
 		addResizbleListner(table_2);
@@ -226,58 +225,42 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		table_2.getColumn(1).setWidth(262);
 		
 		Button addButton;
+		int addButtonSize;
 		if(OSValidator.isMac()){
-			addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 318, 17, 20, 15 }, "");
+			addButtonSize=318;
 		}else{
-			addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 325, 17, 20, 15 }, "");
+			addButtonSize = 325;
 		}
+		addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { addButtonSize, 17, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				NameValueProperty nameValueProperty = new NameValueProperty();
-				nameValueProperty.setPropertyName("");
-				nameValueProperty.setPropertyValue("");
-				if (!operationClassProperty.getNameValuePropertyList().contains(nameValueProperty)) {
-					operationClassProperty.getNameValuePropertyList().add(nameValueProperty);
-					nameValueTableViewer.refresh();
-					int currentSize = operationClassProperty.getNameValuePropertyList().size();
-					int i = currentSize == 0 ? currentSize : currentSize - 1;
-					nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
-					applyButton.setEnabled(true);
-				}
-
+				addRow(nameValueTableViewer);
 			}
-
 		});
+		
 		table_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				NameValueProperty nameValueProperty = new NameValueProperty();
-				nameValueProperty.setPropertyName("");
-				nameValueProperty.setPropertyValue("");
-				if (!operationClassProperty.getNameValuePropertyList().contains(nameValueProperty)) {
-					operationClassProperty.getNameValuePropertyList().add(nameValueProperty);
-					nameValueTableViewer.refresh();
-					int currentSize = operationClassProperty.getNameValuePropertyList().size();
-					int i = currentSize == 0 ? currentSize : currentSize - 1;
-					nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
-					applyButton.setEnabled(true);
-				}
+				addRow(nameValueTableViewer);
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 			}
 		});
+		
 		Button deleteButton;
+		int deleteButtonSize;
 		if(OSValidator.isMac()){
-			deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 348, 17, 20, 15 }, "");
+			deleteButtonSize = 348;
 		}else{
-			deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 355, 17, 20, 15 }, "");
+			deleteButtonSize = 355;
 		}
+		deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { deleteButtonSize, 17, 20, 15 }, "");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -304,11 +287,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		});
 		
 		Button upButton;
+		int upButtonSize;
 		if(OSValidator.isMac()){
-			upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 378, 17, 20, 15 }, "");
+			upButtonSize = 378;
 		}else{
-			upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 385, 17, 20, 15 }, "");
+			upButtonSize = 385;
 		}
+		upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { upButtonSize, 17, 20, 15 }, "");
 		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -330,11 +315,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		});
 		
 		Button downButton;
+		int downButtonSize;
 		if(OSValidator.isMac()){
-			downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 408, 17, 20, 15 }, "");
+			downButtonSize = 408;
 		}else{
-			downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 415, 17, 20, 15 }, "");
+			downButtonSize = 415;
 		}
+		downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { downButtonSize, 17, 20, 15 }, "");
 		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -359,7 +346,18 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		populateWidget();
 		return container;
 	}
-
+	private void addRow(TableViewer nameValueTableViewer){
+		
+		NameValueProperty nameValueProperty = new NameValueProperty();
+		nameValueProperty.setPropertyName("");
+		nameValueProperty.setPropertyValue("");
+		if (!operationClassProperty.getNameValuePropertyList().contains(nameValueProperty)) {
+			operationClassProperty.getNameValuePropertyList().add(nameValueProperty);
+			nameValueTableViewer.refresh();
+			nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(operationClassProperty.getNameValuePropertyList().size() - 1), 0);
+			applyButton.setEnabled(true);
+		}
+	}
 	private void addResizbleListner(final Table table) {
 		table.addControlListener(new ControlListener() {
 			
