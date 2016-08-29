@@ -76,6 +76,12 @@ public class RunJobHandler{
 		return jobMap.containsKey(key);
 	}
 	
+	/**
+	 * Gets the job.
+	 *
+	 * @param key the job name
+	 * @return the job
+	 */
 	public static Job getJob(String key){
 		return jobMap.get(key);
 	}

@@ -1619,11 +1619,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				return "";
 			}
 		}else{
-			if(uniqueJobId!=null){
-				return uniqueJobId;
-			}else{
 				return "";
-			}
 		}
 	}
 
