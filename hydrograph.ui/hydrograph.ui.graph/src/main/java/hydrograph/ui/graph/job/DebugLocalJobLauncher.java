@@ -187,6 +187,8 @@ public class DebugLocalJobLauncher extends AbstractJobLauncher{
 							joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
 						} else if(job.getJobStatus().equalsIgnoreCase(JobStatus.FAILED)){
 							joblogger.logMessage(JOB_FAILED);
+						}else if(line.contains(BUILD_FAILED)){
+							joblogger.logMessage(BUILD_FAILED);
 						}else{
 							joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
 						}
