@@ -231,36 +231,14 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				NameValueProperty nameValueProperty = new NameValueProperty();
-				nameValueProperty.setPropertyName("");
-				nameValueProperty.setPropertyValue("");
-				if (!mappingSheetRow.getNameValueProperty().contains(nameValueProperty)) {
-					mappingSheetRow.getNameValueProperty().add(nameValueProperty);
-					nameValueTableViewer.refresh();
-					int currentSize = mappingSheetRow.getNameValueProperty().size();
-					int i = currentSize == 0 ? currentSize : currentSize - 1;
-					nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
-					applyButton.setEnabled(true);
-				}
-
+				addRow(nameValueTableViewer);
 			}
-
 		});
 		
 		table_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				NameValueProperty nameValueProperty = new NameValueProperty();
-				nameValueProperty.setPropertyName("");
-				nameValueProperty.setPropertyValue("");
-				if (!mappingSheetRow.getNameValueProperty().contains(nameValueProperty)) {
-					mappingSheetRow.getNameValueProperty().add(nameValueProperty);
-					nameValueTableViewer.refresh();
-					int currentSize = mappingSheetRow.getNameValueProperty().size();
-					int i = currentSize == 0 ? currentSize : currentSize - 1;
-					nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
-					applyButton.setEnabled(true);
-				}
+				addRow(nameValueTableViewer);
 			}
 
 			@Override
@@ -282,22 +260,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-
-				Table table = nameValueTableViewer.getTable();
-				int temp = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				if (temp == -1) {
-					WidgetUtility.errorMessage(Messages.SelectRowToDelete);
-				} else {
-					table.remove(indexs);
-					ArrayList tempList = new ArrayList();
-					for (int index : indexs) {
-
-						tempList.add(mappingSheetRow.getNameValueProperty().get(index));
-					}
-					mappingSheetRow.getNameValueProperty().removeAll(tempList);
-					applyButton.setEnabled(true);
-				}
+				WidgetUtility.setCursorOnDeleteRow(nameValueTableViewer, mappingSheetRow.getNameValueProperty());
 			}
 
 		});
@@ -375,6 +338,17 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	}
 
 
+	private void addRow(TableViewer nameValueTableViewer){
+		NameValueProperty nameValueProperty = new NameValueProperty();
+		nameValueProperty.setPropertyName("");
+		nameValueProperty.setPropertyValue("");
+		if (!mappingSheetRow.getNameValueProperty().contains(nameValueProperty)) {
+			mappingSheetRow.getNameValueProperty().add(nameValueProperty);
+			nameValueTableViewer.refresh();
+			nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(mappingSheetRow.getNameValueProperty().size() - 1), 0);
+			applyButton.setEnabled(true);
+		}
+	}
 	private void addResizbleListner(final Table table) {
 		table.addControlListener(new ControlListener() {
 			

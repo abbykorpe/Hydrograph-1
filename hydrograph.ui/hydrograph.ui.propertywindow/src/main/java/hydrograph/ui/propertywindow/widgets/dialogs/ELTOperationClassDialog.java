@@ -79,6 +79,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -125,6 +126,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private Integer macButtonHeight = 30;
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
+	private Label errorLabel; 
 
 	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig, String componentName) {
 		super(parentShell);
@@ -201,7 +203,8 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		name_gd.marginRight=0;
 		nameValueComposite.setLayout(name_gd);
 
-		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER );
+		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER |SWT.FULL_SELECTION
+				| SWT.MULTI);
 		Table table_2 = nameValueTableViewer.getTable();
 		
 		addResizbleListner(table_2);
@@ -219,7 +222,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
 				new OperationLabelProvider());
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
-		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(nameValueTableViewer,operationClassDialogButtonBar));
+		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(this,nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(operationClassProperty.getNameValuePropertyList());
 		table_2.getColumn(0).setWidth(259);
 		table_2.getColumn(1).setWidth(262);
@@ -238,7 +241,17 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				addRow(nameValueTableViewer);
+				NameValueProperty nameValueProperty = new NameValueProperty();
+				nameValueProperty.setPropertyName("");
+				nameValueProperty.setPropertyValue("");
+				if (!operationClassProperty.getNameValuePropertyList().contains(nameValueProperty)) {
+					operationClassProperty.getNameValuePropertyList().add(nameValueProperty);
+					nameValueTableViewer.refresh();
+					int currentSize = operationClassProperty.getNameValuePropertyList().size();
+					int i = currentSize == 0 ? currentSize : currentSize - 1;
+					nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
+					applyButton.setEnabled(true);
+				}
 			}
 		});
 		
@@ -267,21 +280,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-
-				Table table = nameValueTableViewer.getTable();
-				int temp = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				if (temp == -1) {
-					WidgetUtility.errorMessage(Messages.SelectRowToDelete);
-				} else {
-					table.remove(indexs);
-					ArrayList tempList = new ArrayList();
-					for (int index : indexs) {
-						tempList.add(operationClassProperty.getNameValuePropertyList().get(index));
-					}
-					operationClassProperty.getNameValuePropertyList().removeAll(tempList);
-					applyButton.setEnabled(true);
-				}
+				WidgetUtility.setCursorOnDeleteRow(nameValueTableViewer,operationClassProperty.getNameValuePropertyList());
 			}
 
 		});
@@ -342,7 +341,19 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			}
 
 		});
-
+		
+		Composite errorComposite=new Composite(container, SWT.NONE);
+		errorComposite.setLayout(new GridLayout(1,false));
+		GridData griddata=new GridData(SWT.TOP,SWT.TOP,false,false,1,1);
+		
+		errorComposite.setLayoutData(griddata);
+		
+		errorLabel=new Label(errorComposite,SWT.NONE);
+		errorLabel.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		errorLabel.setText(Messages.EmptyFiledNotification);
+		errorLabel.setVisible(false);
+		checkNameValueFieldBlankOrNot();
+		
 		populateWidget();
 		return container;
 	}
@@ -372,6 +383,36 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		
 	}
 
+	public  boolean checkNameValueFieldBlankOrNot()
+	{
+		if(!operationClassProperty.getNameValuePropertyList().isEmpty())
+		{
+			for(NameValueProperty nameValueProperty:operationClassProperty.getNameValuePropertyList())
+			{
+				if(StringUtils.isBlank(nameValueProperty.getPropertyName()) && StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+					errorLabel.setText(Messages.EmptyFiledNotification);
+					errorLabel.setVisible(true);
+					return false;
+				}	
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyName()))
+						{
+					errorLabel.setText(Messages.EmptyNameNotification);
+					errorLabel.setVisible(true);
+					return false;
+						}		
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+			        errorLabel.setText(Messages.EmptyValueNotification+"                   ");
+			        errorLabel.setVisible(true);
+			        return true;
+				}	
+			}	
+		}
+		errorLabel.setVisible(false);
+	  return true;
+	}
+	
 	public void pressOK() {
 		okPressed();
 		isYesPressed = true;
@@ -606,15 +647,17 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	
 	@Override
 	protected void okPressed() {
+		if(checkNameValueFieldBlankOrNot()){
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 				isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
 		okPressed=true;
 		super.okPressed();
+		}
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
-		if(buttonId == 3){
+		if(buttonId == 3 && checkNameValueFieldBlankOrNot()){
 			operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 					isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
 			applyButton.setEnabled(false);
