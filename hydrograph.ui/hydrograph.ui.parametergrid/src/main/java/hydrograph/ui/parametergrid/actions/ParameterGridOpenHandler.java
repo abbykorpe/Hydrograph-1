@@ -85,7 +85,7 @@ public class ParameterGridOpenHandler extends AbstractHandler {
 
 		String activeProjectLocation = MultiParameterFileUIUtils.getActiveProjectLocation();
 
-		List parameterFileList = getParameterFileList(activeProjectLocation);
+		List<ParameterFile> parameterFileList = getParameterFileList(activeProjectLocation);
 
 		parameterFileList.addAll(getComponentCanvas().getJobLevelParamterFiles());
 		

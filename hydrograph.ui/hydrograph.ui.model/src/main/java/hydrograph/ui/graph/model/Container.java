@@ -66,7 +66,7 @@ public class Container extends Model {
 	}
 	
 	
-	public void addJobLevelParamterFiles(List jobLevelParamterFiles){
+	public void addJobLevelParamterFiles(List<ParameterFile> jobLevelParamterFiles){
 		
 		if (this.jobLevelParamterFiles == null){
 			this.jobLevelParamterFiles = new ArrayList<>();
@@ -76,11 +76,11 @@ public class Container extends Model {
 		this.jobLevelParamterFiles.addAll(jobLevelParamterFiles);
 	}
 	
-	public List<Object> getJobLevelParamterFiles() {
+	public List<ParameterFile> getJobLevelParamterFiles() {
 		if (jobLevelParamterFiles == null){
 			jobLevelParamterFiles = new ArrayList<>();
 		}
-		List<Object> jobLevelParamterFiles = new ArrayList<>();
+		List<ParameterFile> jobLevelParamterFiles = new ArrayList<>();
 		jobLevelParamterFiles.addAll(this.jobLevelParamterFiles);
 		return jobLevelParamterFiles;
 	}

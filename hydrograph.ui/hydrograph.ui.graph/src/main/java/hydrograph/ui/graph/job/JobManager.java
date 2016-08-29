@@ -397,7 +397,7 @@ public class JobManager {
 	    String activeProjectLocation=MultiParameterFileUIUtils.getActiveProjectLocation();
 	 
 		
-		List filepathList = new LinkedList<>();
+		List<ParameterFile> filepathList = new LinkedList<>();
 		
 		updateParameterFileListWithJobSpecificFile(filepathList,activeProjectLocation);
 		

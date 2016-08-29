@@ -14,6 +14,8 @@
  
 package hydrograph.ui.common.interfaces.parametergrid;
 
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+
 import java.util.List;
 
 /**
@@ -110,7 +112,7 @@ public interface DefaultGEFCanvas {
 	 * 
 	 * @param jobLevelParamterFiles
 	 */
-	public void addJobLevelParamterFiles(List jobLevelParamterFiles);
+	public void addJobLevelParamterFiles(List<ParameterFile> jobLevelParamterFiles);
 
 	/**
 	 * 
@@ -118,5 +120,5 @@ public interface DefaultGEFCanvas {
 	 * 
 	 * @return
 	 */
-	public List<Object> getJobLevelParamterFiles(); 
+	public List<ParameterFile> getJobLevelParamterFiles(); 
 }

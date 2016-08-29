@@ -23,6 +23,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
@@ -1714,7 +1715,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 	
 	@Override
-	public List<Object> getJobLevelParamterFiles() {
+	public List<ParameterFile> getJobLevelParamterFiles() {
 		return container.getJobLevelParamterFiles();
 	}
 }
