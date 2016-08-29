@@ -176,7 +176,7 @@ task executeRemoteJob() {
 		}
 
         		
-		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking
 		println "Executing command: "+command
    		sshToRemoteServer(host,username,password,command)
     }
@@ -231,7 +231,7 @@ task executeDebugRemoteJob() {
         
         
        
-        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath+ " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath+ " -isexecutiontracking " + isExecutionTracking
         println "Executing command: "+command
 		sshToRemoteServer(host,username,password,command)
     }
