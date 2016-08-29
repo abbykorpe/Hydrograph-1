@@ -28,10 +28,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.jdt.internal.ui.refactoring.reorg.CopyToClipboardAction;
 import org.eclipse.ui.navigator.CommonNavigator;
 
+
 /**
+ * The Class CopyHandler.
+ * <p>
+ * Handler to Copy component from canvas and Project Explorer.
+ * 
  * @author Bitwise
- * Handler to Copy component from canvas and Project Explorer 
- *
  */
 public class CopyHandler extends AbstractHandler implements IHandler {
 

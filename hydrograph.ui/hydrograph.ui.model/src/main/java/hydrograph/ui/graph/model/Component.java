@@ -48,15 +48,15 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * The Class Component.
+ * <p>
+ * This is a base class in model tier for all types of Hydrograph components.
  * 
  * @author Bitwise
  */
 public abstract class Component extends Model {
 	
-	
 	/** The Constant logger. */
-	private static final Logger logger = LogFactory.INSTANCE
-			.getLogger(Component.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(Component.class);
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 2587870876576884352L;
@@ -114,13 +114,12 @@ public abstract class Component extends Model {
 		}
 
 		/**
-		 * Eq.
-		 * 
+		 * Checks if given value is equal to this component's property value.		 * 
 		 * @param property
 		 *            the property
 		 * @return true, if successful
 		 */
-		public boolean eq(String property) {
+		public boolean equalsTo(String property) {
 			return this.value.equals(property);
 		}
 	}
@@ -374,36 +373,64 @@ public abstract class Component extends Model {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns list of input ports.
 	 *
 	 * @return the inputport terminals
+=======
+	 * 
+	 * Returns list of input ports of this component.
+	 * 
+	 * @return
+>>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public List<String> getInputportTerminals() {
 		return inputportTerminals;
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * Set input port names.
 	 *
 	 * @param portTerminals the new inputport terminals
+=======
+	 * 
+	 * Set input ports for this component.
+	 * 
+	 * @param portTerminals
+>>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setInputportTerminals(List<String> portTerminals){
 		this.inputportTerminals=portTerminals;
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns list of output port.
 	 *
 	 * @return the output port terminals
+=======
+	 * 
+	 * Returns list of output ports for this component.
+	 * 
+	 * @return
+>>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public List<String> getOutputPortTerminals() {
 		return outputPortTerminals;
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * Set output ports.
 	 *
 	 * @param portTerminals the new output port terminals
+=======
+	 * 
+	 * Set output ports for this component.
+	 * 
+	 * @param portTerminals
+>>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setOutputPortTerminals(List<String> portTerminals) {
 		this.outputPortTerminals=portTerminals;

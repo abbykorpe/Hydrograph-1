@@ -33,10 +33,13 @@ import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.menus.UIElement;
 
+
 /**
- *Creates Show Hide Port Labels Handler 
+ * The Class ShowHidePortLabelsHandler.
+ * <p>
+ * Creates Show Hide Port Labels Handler
+ * 
  * @author Bitwise
- *
  */
 public class ShowHidePortLabelsHandler extends AbstractHandler implements IHandler,IElementUpdater {
 	private UIElement element;

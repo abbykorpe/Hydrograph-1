@@ -25,6 +25,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 
 
+/**
+ * The Class AboutDialogHandler.
+ * <p> This is a handler class for 'About' window in the Hydrograph Tool.
+ * 
+ * @author Bitwise
+ */
 public class AboutDialogHandler extends AbstractHandler implements IHandler {
 
 	@Override

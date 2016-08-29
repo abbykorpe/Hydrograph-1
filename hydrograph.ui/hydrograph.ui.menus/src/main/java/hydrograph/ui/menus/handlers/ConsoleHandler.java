@@ -25,10 +25,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.slf4j.Logger;
 
+
 /**
- *Creates Console Handler 
+ * The Class ConsoleHandler.
+ * <p>
+ * Creates Console Handler
+ * 
  * @author Bitwise
- *
  */
 public class ConsoleHandler extends AbstractHandler implements IHandler {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ConsoleHandler.class);

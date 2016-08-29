@@ -28,10 +28,17 @@ import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import hydrograph.ui.menus.messages.Messages;
 
+/**
+ * The Class NewCustomClassHandler.
+ * <p>
+ * Handler for creating new custom classes for Filter, Aggregate, Transform, Cumulate and Normalize components.
+ * 
+ * 
+ * @author Bitwise
+ */
 public class NewCustomClassHandler extends AbstractHandler implements IHandler {
 
-	private Logger logger = LogFactory.INSTANCE
-			.getLogger(NewCustomClassHandler.class);
+	private Logger logger = LogFactory.INSTANCE.getLogger(NewCustomClassHandler.class);
 	private static final String FILTER_CLASS = "hydrograph.ui.menus.new.newFilterClass";
 	private static final String AGGREGATOR_CLASS = "hydrograph.ui.menus.new.newAggClass";
 	private static final String TRANFORM_CLASS = "hydrograph.ui.menus.new.newTranformClass";

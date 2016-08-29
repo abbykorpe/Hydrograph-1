@@ -25,10 +25,21 @@ import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
 
 
+/**
+ * The Class ImportEngineXmlWizard.
+ * <p>
+ * This will open a wizard window for importing Engine (target) XML into Hydrograph so that user can view the respctive
+ * components on job canvas.
+ * 
+ * @author Bitwise
+ */
 public class ImportEngineXmlWizard extends Wizard implements IImportWizard {
 	private static final Logger lOGGEER = LogFactory.INSTANCE.getLogger(ImportEngineXmlWizard.class);
 	private ImportEngineXmlWizardPage mainPage;
 
+	/**
+	 * Instantiates a new import engine xml wizard.
+	 */
 	public ImportEngineXmlWizard() {
 		super();
 	}

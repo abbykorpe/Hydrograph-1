@@ -23,6 +23,13 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+/**
+ * The Class CutHandler.
+ * <p>
+ * Handler for cut functionality of components in canvas.
+ * 
+ * @author Bitwise
+ */
 public class CutHandler extends AbstractHandler implements IHandler {
 
 	IHandler copy = new CopyHandler();

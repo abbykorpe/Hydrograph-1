@@ -24,6 +24,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 
+/**
+ * The Class SelectAllHandler.
+ * <p>
+ * The Handler for Select All functionality in the canvas.
+ * 
+ * @author Bitwise
+ */
 public class SelectAllHandler extends AbstractHandler implements IHandler {
 
 	@Override
