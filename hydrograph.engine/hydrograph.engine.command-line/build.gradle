@@ -34,7 +34,6 @@ repositories {
 
 test {
     exclude '**/ExecutionTrackingJoinXmlTest*'
-    exclude '**/ExecutionTrackingPartitionByExpressionXmlTest*'
 }
 
 dependencies {

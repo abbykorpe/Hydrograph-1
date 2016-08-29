@@ -3,8 +3,6 @@ package hydrograph.engine.execution.tracking;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.commandline.utilities.HydrographService;
 import hydrograph.engine.helper.StatusHelper;
@@ -15,10 +13,15 @@ public class ExecutionTrackingPartitionByExpressionXmlTest {
 	static StatusHelper statusHelper;
 
 	@BeforeClass
-	public static void hydrographService() throws Exception {
+	public static void hydrographService() {
 		String[] args = { "-xmlpath", "testData/XMLFiles/PartitionByExpressionExample.xml" };
 		hydrographService = new HydrographService();
-		hydrographService.executeGraph(args);
+		try {
+			hydrographService.executeGraph(args);
+		} catch (Exception e) {	
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 		statusHelper = new StatusHelper(hydrographService.getStatus());
 	}
 

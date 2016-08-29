@@ -104,12 +104,12 @@ public class HydrographExecution {
 	private void finalExecute()  {
 		try {
 			runtimeService.execute();
+			LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
+					+ "' executed successfully!");
 		} finally {
 			LOG.info("Invoking on complete for cleanup");
 			runtimeService.oncomplete();
 		}
-		LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
-				+ "' executed successfully!");
 	}
 
 	private void loadService() {
