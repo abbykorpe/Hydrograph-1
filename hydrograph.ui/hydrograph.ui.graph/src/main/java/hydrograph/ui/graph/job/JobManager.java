@@ -18,6 +18,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.MultiParameterFileUIUtils;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
@@ -26,11 +27,11 @@ import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceCon
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.handler.JobHandler;
-import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
+import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
@@ -79,8 +80,6 @@ public class JobManager {
 	private Map<String, Job> runningJobsMap;
 	public static JobManager INSTANCE = new JobManager();
 	private boolean localMode;
-	private static final String PARAMETER_FILE_DIR="param";
-	private static final String PARAMETER_FILE_EXTENTION=".properties";
 	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
 	private Map<String,DebugDataViewer> dataViewerMap;		
@@ -402,6 +401,16 @@ public class JobManager {
 		
 		updateParameterFileListWithJobSpecificFile(filepathList,activeProjectLocation);
 		
+		File jobSpecificParamFile = new File(getComponentCanvas().getParameterFile());
+		if(!jobSpecificParamFile.exists()){
+			try {
+				jobSpecificParamFile.createNewFile();
+			} catch (IOException e) {
+				logger.debug("Unable to create job specific file ", e);
+				MessageBox.INSTANCE.showMessage(MessageBox.ERROR, Messages.UNABLE_TO_CREATE_JOB_SPECIFIC_FILE);
+			}
+		}
+		
 		try(ObjectInputStream ois= new ObjectInputStream(new FileInputStream(activeProjectLocation + PROJECT_METADATA_FILE))){			
 			filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
 		} catch (FileNotFoundException fileNotfoundException) {
@@ -411,21 +420,19 @@ public class JobManager {
 		} catch (ClassNotFoundException classNotFoundException) {
 			logger.debug("Unable to read file" , classNotFoundException);
 		}
+		
+		filepathList.addAll(getComponentCanvas().getJobLevelParamterFiles());
+		
 		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(Display.getDefault().getActiveShell(), activeProjectLocation);
 		parameterFileDialog.setParameterFiles(filepathList);
+		parameterFileDialog.setJobLevelParamterFiles(getComponentCanvas().getJobLevelParamterFiles());
 		parameterFileDialog.open();
 		
 		return parameterFileDialog;
 	}
 	
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList, String activeProjectLocation) {
-		if (OSValidator.isWindows()){
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "\\"
-					+ PARAMETER_FILE_DIR + "\\" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
-		} else {
-			parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), activeProjectLocation + "/"
-					+ PARAMETER_FILE_DIR + "/" + getComponentCanvas().getJobName() + PARAMETER_FILE_EXTENTION, true));
-		}
+		parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), ParamterFileTypes.JOB_SPECIFIC));
 	}
 
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {

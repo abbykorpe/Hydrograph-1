@@ -14,7 +14,9 @@ Require-Bundle: org.eclipse.core.runtime,
  hydrograph.ui.common.datastructures;bundle-version="0.0.1",
  org.apache.commons.lang,
  hydrograph.ui.validators;bundle-version="0.0.1",
- hydrograph.ui.logging;bundle-version="0.0.1"
+ hydrograph.ui.logging;bundle-version="0.0.1",
+ org.eclipse.swt;bundle-version="3.7.2",
+ org.eclipse.draw2d;bundle-version="3.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.engine.exceptions,

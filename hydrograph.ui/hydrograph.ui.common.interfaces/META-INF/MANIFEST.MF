@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface;bundle-version="3.7.0",
  org.eclipse.jface.databinding;bundle-version="1.5.0",
  org.eclipse.jface.text;bundle-version="3.7.2",
- hydrograph.ui.tooltip;bundle-version="0.0.1"
+ hydrograph.ui.tooltip;bundle-version="0.0.1",
+ hydrograph.ui.common.datastructures;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.common.interfaces.console,

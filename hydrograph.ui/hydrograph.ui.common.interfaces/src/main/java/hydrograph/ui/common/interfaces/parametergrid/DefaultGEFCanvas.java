@@ -14,6 +14,8 @@
  
 package hydrograph.ui.common.interfaces.parametergrid;
 
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+
 import java.util.List;
 
 /**
@@ -102,5 +104,21 @@ public interface DefaultGEFCanvas {
 	/**
 	 * Restore menu tool context items state.
 	 */
-	public void restoreMenuToolContextItemsState(); 
+	public void restoreMenuToolContextItemsState();
+
+	/**
+	 * 
+	 * Add job level parameter files in component canvas
+	 * 
+	 * @param jobLevelParamterFiles
+	 */
+	public void addJobLevelParamterFiles(List<ParameterFile> jobLevelParamterFiles);
+
+	/**
+	 * 
+	 * Get list of job level parameter files
+	 * 
+	 * @return
+	 */
+	public List<ParameterFile> getJobLevelParamterFiles(); 
 }

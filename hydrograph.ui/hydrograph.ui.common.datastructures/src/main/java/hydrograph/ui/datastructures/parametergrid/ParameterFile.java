@@ -14,6 +14,7 @@
 package hydrograph.ui.datastructures.parametergrid;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
 
 import java.io.Serializable;
 
@@ -28,14 +29,11 @@ import java.io.Serializable;
 public class ParameterFile  implements Serializable,IDataStructure{
 	private static final long serialVersionUID = 5403262912433893757L;
 	private String fileName;
-	private String path;
-	private boolean jobSpecificFile;
+	private ParamterFileTypes fileType;
 		
-	public ParameterFile(String fileName, String path, boolean jobSpecificFile) {
-		super();
+	public ParameterFile(String fileName, ParamterFileTypes fileType) {
 		this.fileName = fileName;
-		this.path = path;
-		this.jobSpecificFile = jobSpecificFile;
+		this.fileType = fileType;
 	}
 
 	/**
@@ -45,7 +43,7 @@ public class ParameterFile  implements Serializable,IDataStructure{
 	 * @return String
 	 */
 	public String getFilePathViewString(){
-		return this.fileName + " - " + this.path;
+		return this.fileName + " - " + fileType.toString();
 	}
 	
 	/**
@@ -68,57 +66,20 @@ public class ParameterFile  implements Serializable,IDataStructure{
 		this.fileName = fileName;
 	}
 
-	/**
-	 * 
-	 * Get parameter file path
-	 * 
-	 * @return
-	 */
-	public String getPath() {
-		return path;
+	public ParamterFileTypes getFileType() {
+		return fileType;
 	}
 
-	/**
-	 * 
-	 * Set parameter file path
-	 * 
-	 * @param String
-	 */
-	public void setPath(String path) {
-		this.path = path;
+	public void setFileType(ParamterFileTypes fileType) {
+		this.fileType = fileType;
 	}
 	
-	/**
-	 * 
-	 * Returns true if it is job specific parameter file
-	 * 
-	 * @return
-	 */
-	public boolean isJobSpecificFile() {
-		return jobSpecificFile;
-	}
-
-	/**
-	 * 
-	 * Set parameter file type
-	 * True - if it is job specific file
-	 * False - if it is normal parameter file
-	 * 
-	 * @param jobSpecificFile
-	 */
-	public void setJobSpecificFile(boolean jobSpecificFile) {
-		this.jobSpecificFile = jobSpecificFile;
-	}
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((fileName == null) ? 0 : fileName.hashCode());
-		result = prime * result + (jobSpecificFile ? 1231 : 1237);
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result + ((fileType == null) ? 0 : fileType.hashCode());
 		return result;
 	}
 
@@ -136,24 +97,22 @@ public class ParameterFile  implements Serializable,IDataStructure{
 				return false;
 		} else if (!fileName.equals(other.fileName))
 			return false;
-		if (jobSpecificFile != other.jobSpecificFile)
-			return false;
-		if (path == null) {
-			if (other.path != null)
-				return false;
-		} else if (!path.equals(other.path))
+		if (fileType != other.fileType)
 			return false;
 		return true;
 	}
 
 	@Override
 	public Object clone() {
-		ParameterFile filePath = new ParameterFile(this.fileName,this.path,this.jobSpecificFile);
+		ParameterFile filePath = new ParameterFile(this.fileName,this.fileType);
 		return filePath;
 	}
-	
+
 	@Override
 	public String toString() {
-		return fileName + "\n" + path ;
-	}	
+		return fileName + " - " + fileType;
+	}
+	
+	
+	
 }

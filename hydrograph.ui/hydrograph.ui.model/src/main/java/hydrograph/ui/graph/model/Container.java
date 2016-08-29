@@ -15,6 +15,7 @@
 package hydrograph.ui.graph.model;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.graph.model.helper.LoggerUtil;
 
 import java.util.ArrayList;
@@ -58,11 +59,31 @@ public class Container extends Model {
 	private long subjobVersion=1;
 	private Map<String,String> graphRuntimeProperties;
 	
+	private List<ParameterFile> jobLevelParamterFiles;
 	
 	public Container(){
 		
 	}
 	
+	
+	public void addJobLevelParamterFiles(List<ParameterFile> jobLevelParamterFiles){
+		
+		if (this.jobLevelParamterFiles == null){
+			this.jobLevelParamterFiles = new ArrayList<>();
+		}
+		
+		this.jobLevelParamterFiles.clear();
+		this.jobLevelParamterFiles.addAll(jobLevelParamterFiles);
+	}
+	
+	public List<ParameterFile> getJobLevelParamterFiles() {
+		if (jobLevelParamterFiles == null){
+			jobLevelParamterFiles = new ArrayList<>();
+		}
+		List<ParameterFile> jobLevelParamterFiles = new ArrayList<>();
+		jobLevelParamterFiles.addAll(this.jobLevelParamterFiles);
+		return jobLevelParamterFiles;
+	}
 	
 	/**
 	 * Add a component to this graph.
