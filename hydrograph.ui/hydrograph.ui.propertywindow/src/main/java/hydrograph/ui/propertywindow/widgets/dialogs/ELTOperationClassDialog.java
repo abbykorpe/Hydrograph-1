@@ -50,15 +50,19 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -75,6 +79,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -121,11 +126,12 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private Integer macButtonHeight = 30;
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
+	private Label errorLabel; 
 
 	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig, String componentName) {
 		super(parentShell);
 
-		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.CLOSE | SWT.TITLE |  SWT.WRAP | SWT.APPLICATION_MODAL|SWT.RESIZE);
 		this.operationClassProperty = operationClassProperty;
 		this.widgetConfig = widgetConfig;
 		this.componentName=componentName;
@@ -146,9 +152,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		container.getShell().setText(Messages.OPERATION_CLASS);
 		operationClassDialogButtonBar = new PropertyDialogButtonBar(container);
 		Composite composite = new Composite(container, SWT.BORDER);
-		GridData gd_composite = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
+		container.getShell().setMinimumSize(550, 400);
+		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 		gd_composite.heightHint = 104;
-		gd_composite.widthHint = 522;
+		gd_composite.widthHint = 450;
 		composite.setLayoutData(gd_composite);
 		composite.setLayout(new GridLayout(1, false));
 		AbstractELTWidget fileNameText = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(150);
@@ -181,14 +188,14 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		parameterDecorator.setMarginWidth(2);
 
 		buttonComposite = new Composite(container, SWT.NONE);
-		GridData gd_composite_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_composite_3 = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_composite_3.heightHint = 44;
-		gd_composite_3.widthHint = 525;
+		gd_composite_3.widthHint = 450;
 		buttonComposite.setLayoutData(gd_composite_3);
 
 		Composite nameValueComposite = new Composite(container, SWT.None);
-		GridData gd_nameValueComposite = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
-		gd_nameValueComposite.widthHint = 526;
+		GridData gd_nameValueComposite = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+		gd_nameValueComposite.widthHint = 450;
 		gd_nameValueComposite.heightHint = 251;
 		nameValueComposite.setLayoutData(gd_nameValueComposite);
 		GridLayout name_gd = new GridLayout(1, false);
@@ -196,11 +203,14 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		name_gd.marginRight=0;
 		nameValueComposite.setLayout(name_gd);
 
-		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER | SWT.FULL_SELECTION
+		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER |SWT.FULL_SELECTION
 				| SWT.MULTI);
 		Table table_2 = nameValueTableViewer.getTable();
-		GridData gd_table_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_table_2.heightHint = 180;
+		
+		addResizbleListner(table_2);
+		
+		GridData gd_table_2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_table_2.heightHint = 100;
 		if(OSValidator.isMac()){
 		gd_table_2.widthHint = 507;
 		}
@@ -212,12 +222,18 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
 				new OperationLabelProvider());
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
-		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(nameValueTableViewer,operationClassDialogButtonBar));
+		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(this,nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(operationClassProperty.getNameValuePropertyList());
 		table_2.getColumn(0).setWidth(259);
 		table_2.getColumn(1).setWidth(262);
-
-		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 380, 17, 20, 15 }, "");
+		
+		int addButtonSize;
+		if(OSValidator.isMac()){
+			addButtonSize=318;
+		}else{
+			addButtonSize = 325;
+		}
+		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { addButtonSize, 17, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -235,38 +251,45 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 					nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
 					applyButton.setEnabled(true);
 				}
-
+			}
+		});
+		
+		table_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				addRow(nameValueTableViewer);
 			}
 
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
 		});
-
-		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 410, 17, 20, 15 }, "");
+		
+		int deleteButtonSize;
+		if(OSValidator.isMac()){
+			deleteButtonSize = 348;
+		}else{
+			deleteButtonSize = 355;
+		}
+		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { deleteButtonSize, 17, 20, 15 }, "");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-
-				Table table = nameValueTableViewer.getTable();
-				int temp = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				if (temp == -1) {
-					WidgetUtility.errorMessage(Messages.SelectRowToDelete);
-				} else {
-					table.remove(indexs);
-					ArrayList tempList = new ArrayList();
-					for (int index : indexs) {
-						tempList.add(operationClassProperty.getNameValuePropertyList().get(index));
-					}
-					operationClassProperty.getNameValuePropertyList().removeAll(tempList);
-					applyButton.setEnabled(true);
-				}
+				WidgetUtility.setCursorOnDeleteRow(nameValueTableViewer,operationClassProperty.getNameValuePropertyList());
 			}
 
 		});
-
-		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 440, 17, 20, 15 }, "");
+		
+		int upButtonSize;
+		if(OSValidator.isMac()){
+			upButtonSize = 378;
+		}else{
+			upButtonSize = 385;
+		}
+		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { upButtonSize, 17, 20, 15 }, "");
 		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -287,7 +310,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 		});
 		
-		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 470, 17, 20, 15 }, "");
+		int downButtonSize;
+		if(OSValidator.isMac()){
+			downButtonSize = 408;
+		}else{
+			downButtonSize = 415;
+		}
+		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { downButtonSize, 17, 20, 15 }, "");
 		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
@@ -308,11 +337,78 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			}
 
 		});
-
+		
+		Composite errorComposite=new Composite(container, SWT.NONE);
+		errorComposite.setLayout(new GridLayout(1,false));
+		GridData griddata=new GridData(SWT.TOP,SWT.TOP,false,false,1,1);
+		
+		errorComposite.setLayoutData(griddata);
+		
+		errorLabel=new Label(errorComposite,SWT.NONE);
+		errorLabel.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		errorLabel.setText(Messages.EmptyFiledNotification);
+		errorLabel.setVisible(false);
+		checkNameValueFieldBlankOrNot();
+		
 		populateWidget();
 		return container;
 	}
+	private void addRow(TableViewer nameValueTableViewer){
+		
+		NameValueProperty nameValueProperty = new NameValueProperty();
+		nameValueProperty.setPropertyName("");
+		nameValueProperty.setPropertyValue("");
+		if (!operationClassProperty.getNameValuePropertyList().contains(nameValueProperty)) {
+			operationClassProperty.getNameValuePropertyList().add(nameValueProperty);
+			nameValueTableViewer.refresh();
+			nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(operationClassProperty.getNameValuePropertyList().size() - 1), 0);
+			applyButton.setEnabled(true);
+		}
+	}
+	private void addResizbleListner(final Table table) {
+		table.addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				table.getColumn(0).setWidth((table.getSize().x/2)-3);
+				table.getColumn(1).setWidth((table.getSize().x/2)-3);
+			}
+			
+			public void controlMoved(ControlEvent e) {/*do nothing*/}
+		});
+		
+	}
 
+	public  boolean checkNameValueFieldBlankOrNot()
+	{
+		if(!operationClassProperty.getNameValuePropertyList().isEmpty())
+		{
+			for(NameValueProperty nameValueProperty:operationClassProperty.getNameValuePropertyList())
+			{
+				if(StringUtils.isBlank(nameValueProperty.getPropertyName()) && StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+					errorLabel.setText(Messages.EmptyFiledNotification);
+					errorLabel.setVisible(true);
+					return false;
+				}	
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyName()))
+						{
+					errorLabel.setText(Messages.EmptyNameNotification);
+					errorLabel.setVisible(true);
+					return false;
+						}		
+				else if(StringUtils.isBlank(nameValueProperty.getPropertyValue()))
+				{
+			        errorLabel.setText(Messages.EmptyValueNotification+"                   ");
+			        errorLabel.setVisible(true);
+			        return true;
+				}	
+			}	
+		}
+		errorLabel.setVisible(false);
+	  return true;
+	}
+	
 	public void pressOK() {
 		okPressed();
 		isYesPressed = true;
@@ -521,7 +617,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 
 	public static void createTableColumns(Table table, String[] fields) {
 		for (String field : fields) {
-			TableColumn tableColumn = new TableColumn(table, SWT.LEFT);
+			TableColumn tableColumn = new TableColumn(table, SWT.FILL);
 			tableColumn.setText(field);
 
 			tableColumn.setWidth(100);
@@ -547,15 +643,17 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	
 	@Override
 	protected void okPressed() {
+		if(checkNameValueFieldBlankOrNot()){
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 				isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
 		okPressed=true;
 		super.okPressed();
+		}
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
-		if(buttonId == 3){
+		if(buttonId == 3 && checkNameValueFieldBlankOrNot()){
 			operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 					isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
 			applyButton.setEnabled(false);

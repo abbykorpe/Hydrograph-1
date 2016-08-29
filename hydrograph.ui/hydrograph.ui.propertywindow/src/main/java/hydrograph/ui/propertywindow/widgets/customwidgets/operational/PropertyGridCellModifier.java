@@ -18,7 +18,7 @@ import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-
+import hydrograph.ui.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
@@ -33,6 +33,7 @@ public class PropertyGridCellModifier implements ICellModifier {
 	private Viewer viewer;
 	TransformDialog transformDialog;
 	OperationClassDialog operationClassDialog; 
+	ELTOperationClassDialog eltOperationClassDialog;
 	/** The Constant PROPERTY_NAME. */
 	private static final String PROPERTY_NAME = "Source";
 
@@ -49,7 +50,8 @@ public class PropertyGridCellModifier implements ICellModifier {
 		this.viewer = viewer;
 	}
 
-	public PropertyGridCellModifier(Viewer viewer,PropertyDialogButtonBar propertyDialogButtonBar) {
+	public PropertyGridCellModifier(ELTOperationClassDialog eltOperationClassDialog,Viewer viewer,PropertyDialogButtonBar propertyDialogButtonBar) {
+		this.eltOperationClassDialog = eltOperationClassDialog;
 		this.viewer = viewer;
 		this.propertyDialogButtonBar=propertyDialogButtonBar;
 	}
@@ -152,7 +154,12 @@ public class PropertyGridCellModifier implements ICellModifier {
 			if(operationClassDialog!=null)
 			{
 			operationClassDialog.checkNameValueFieldBlankOrNot();	
-			}	
+			}
+			else{
+				if(eltOperationClassDialog!=null){
+					eltOperationClassDialog.checkNameValueFieldBlankOrNot();
+				}
+			}
 		}	
 		if(Messages.PROPERTY_VALUE.equals(property))
 		{	
@@ -163,7 +170,12 @@ public class PropertyGridCellModifier implements ICellModifier {
 			if(operationClassDialog!=null)
 			{
 			operationClassDialog.checkNameValueFieldBlankOrNot();	
-			}	
+			}
+			else{
+				if(eltOperationClassDialog!=null){
+					eltOperationClassDialog.checkNameValueFieldBlankOrNot();
+				}
+			}
 		}
 
 
