@@ -129,6 +129,8 @@ public class ExecutionTrackingUtils {
 	public String getTrackingUrl(String trackingClientSocketPort) {
 		if(trackingClientSocketPort == null){
 			getFilePath();
+		}else{
+			portNo=trackingClientSocketPort;
 		}
 		String url = host + portNo + route;
 		
