@@ -54,6 +54,7 @@ import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
+import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
@@ -1606,13 +1607,33 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public boolean getStopButtonStatus() {
 		return stopButtonStatus;
 	}
-
+	
 	public String getJobId() {
-		if(uniqueJobId!=null){
-			return uniqueJobId;
+		String currentJobName = this.getActiveProject() + "." + this.getJobName();
+		Job job = getJobInstance(currentJobName);
+		if(job!=null){
+			String jobID = job.getUniqueJobId();
+			if(jobID!=null){
+				return jobID;
+			}else{
+				return "";
+			}
 		}else{
-			return "";
+			if(uniqueJobId!=null){
+				return uniqueJobId;
+			}else{
+				return "";
+			}
 		}
+	}
+
+	private Job getJobInstance(String currentJobName) {
+		if(RunJobHandler.hasJob(currentJobName)){
+			return RunJobHandler.getJob(currentJobName);
+		}else if(DebugHandler.hasJob(currentJobName)){
+			return DebugHandler.getJob(currentJobName);
+		}
+		return null;
 	}
  
 	public Container deleteSubjobProperties(Container container) {
