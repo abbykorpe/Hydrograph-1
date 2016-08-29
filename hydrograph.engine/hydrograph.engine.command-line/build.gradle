@@ -34,6 +34,11 @@ repositories {
 
 test {
     exclude '**/ExecutionTrackingJoinXmlTest*'
+    testLogging {
+    showStandardStreams true
+    showStackTraces true
+    showExceptions true
+    }
 }
 
 dependencies {
