@@ -62,11 +62,14 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues."; //$NON-NLS-1$
 	private static final int DPI_COORDINATE=96;
 	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
-
+	private static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
+	private static final String EXECUTION_TRACK_SERVICE_JAR = "EXECUTION_TRACK_SERVICE_JAR";
+	
 	public static final String SERVICE_JAR = "SERVICE_JAR";
 
 	public static final String PORT_NUMBER = "PORT_NO";
 	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
+	public static final String TRACKING_PROPERY_FILE_PATH = "/service/socket-server.properties";
 	
 	/**
 	 * Instantiates a new application workbench window advisor.
@@ -179,6 +182,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		super.dispose();
 		try {
 			killPortProcess();
+			killTrackingPortProcess();
 		} catch (IOException e) {
 			logger.debug("Socket is not closed.");
 		}
@@ -192,14 +196,14 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	public void killPortProcess() throws IOException{
 		if(OSValidator.isWindows()){
-			if(StringUtils.isNotBlank(getServicePortPID())){
-				int portPID = Integer.parseInt(getServicePortPID());
+			if(StringUtils.isNotBlank(getServicePortPID(PROPERY_FILE_PATH,PORT_NUMBER,SERVICE_JAR))){
+				int portPID = Integer.parseInt(getServicePortPID(PROPERY_FILE_PATH,PORT_NUMBER,SERVICE_JAR));
 				ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPID});
 				builder.start();
 			}
 		}
 		else if(OSValidator.isMac()){
-			int portNumber = Integer.parseInt(restServicePort());
+			int portNumber = Integer.parseInt(getServicePortFromPropFile(PROPERY_FILE_PATH,PORT_NUMBER,SERVICE_JAR));
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", "lsof -P | grep :" + portNumber + " | awk '{print $2}' | xargs kill -9"});
 			builder.start();
 		}
@@ -209,8 +213,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	 * This function will be return process ID which running on defined port
 	 *
 	 */
-	public String getServicePortPID() throws IOException{
-		int portNumber = Integer.parseInt(restServicePort());
+	public String getServicePortPID(String propertyFile,String portNo,String serviceJar) throws IOException{
+		int portNumber = Integer.parseInt(getServicePortFromPropFile(propertyFile,portNo,serviceJar));
 		if(OSValidator.isWindows()){
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c" ,"netstat -a -o -n |findstr :"+portNumber});
 			Process process =builder.start();
@@ -228,14 +232,14 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	 * This function used to return Rest Service port Number which running on local
 	 *
 	 */
-	public String restServicePort(){
+	public String getServicePortFromPropFile(String propertyFile,String portNo,String serviceJar){
 		String portNumber = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + propertyFile);
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
-				portNumber = properties.getProperty(PORT_NUMBER);
+			if(StringUtils.isNotBlank(properties.getProperty(serviceJar))){
+				portNumber = properties.getProperty(portNo);
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not exists", e);
@@ -279,6 +283,21 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		}
 		
 		return path + "config/service/config" ;
+	}
+	
+	public void killTrackingPortProcess() throws IOException{
+		if(OSValidator.isWindows()){
+			if(StringUtils.isNotBlank(getServicePortPID(TRACKING_PROPERY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR))){
+				int portPID = Integer.parseInt(getServicePortPID(TRACKING_PROPERY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR));
+				ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPID});
+				builder.start();
+			}
+		}
+		else if(OSValidator.isMac()){
+			int portNumber = Integer.parseInt(getServicePortFromPropFile(TRACKING_PROPERY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR));
+			ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", "lsof -P | grep :" + portNumber + " | awk '{print $2}' | xargs kill -9"});
+			builder.start();
+		}
 	}
 	
 }
