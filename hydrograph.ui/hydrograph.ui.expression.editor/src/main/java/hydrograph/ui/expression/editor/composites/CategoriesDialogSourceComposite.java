@@ -41,6 +41,7 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.core.PackageFragmentRoot;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceAdapter;
@@ -69,6 +70,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 	private CategoriesDialogTargetComposite targetComposite;
 	private AddExternalJarPage addCategoreisDialog;
 	protected String[] filters = new String[] { "*.jar" };
+	private Button deleteButton;
 
 	/**
 	 * Create the composite.
@@ -90,9 +92,9 @@ public class CategoriesDialogSourceComposite extends Composite {
 
 		comboJarList = new Combo(headerComposite, SWT.READ_ONLY);
 		comboJarList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 0, 1));
-		loadComboJaraListFromBuildPath(comboJarList);
+		loadComboJarListFromBuildPath(comboJarList);
 		addListnersToCombo(comboJarList);
-
+		
 		createBrowseButton(headerComposite);
 		createDelButton(headerComposite);
 
@@ -106,6 +108,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 	private void createBrowseButton(Composite headerComposite) {
 		Button browseButton = new Button(headerComposite, SWT.NONE);
 		browseButton.setText("Browse");
+		browseButton.setToolTipText(Messages.EXTERNAL_JAR_DIALOG_BROWSE_BUTTON_TOOLTIP);
 		browseButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				IFolder libsFolder = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getFolder(
@@ -121,7 +124,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 							try {
 								newFile.create(new FileInputStream(file.getAbsoluteFile()), true, null);
 								addFileToBuildPath(newFile);
-								loadComboJaraListFromBuildPath(comboJarList);
+								loadComboJarListFromBuildPath(comboJarList);
 								sourcePackageList.removeAll();
 							} catch (FileNotFoundException | CoreException e1) {
 								LOGGER.error(
@@ -157,8 +160,9 @@ public class CategoriesDialogSourceComposite extends Composite {
 	}
 
 	private void createDelButton(Composite headerComposite) {
-		Button deleteButton = new Button(headerComposite, SWT.NONE);
+		deleteButton = new Button(headerComposite, SWT.NONE);
 		deleteButton.setBounds(0, 0, 75, 25);
+		deleteButton.setToolTipText(Messages.EXTERNAL_JAR_DIALOG_DELETE_BUTTON_TOOLTIP);
 		try {
 			deleteButton.setImage(new Image(null, ExpressionEditorUtil.INSTANCE
 					.getPropertyFilePath(PathConstant.DELETE_BUTTON_IMAGE)));
@@ -213,7 +217,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 			}
 
 			private void removeJarFromBuildPath(String jarName) throws CoreException {
-				LOGGER.error("Removing jar file" + jarName + "from build Path");
+				LOGGER.debug("Removing jar file" + jarName + "from build Path");
 				IJavaProject javaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE
 						.getCurrentProject());
 				IFile jarFile = javaProject.getProject().getFolder(PathConstant.PROJECT_LIB_FOLDER).getFile(jarName);
@@ -222,8 +226,6 @@ public class CategoriesDialogSourceComposite extends Composite {
 				if (jarFile.exists()) {
 					int index = 0;
 					for (IClasspathEntry classpathEntry : oldClasspathEntry) {
-						System.out.println("Old Path =" + classpathEntry.getPath() + "\n\tNew Path :"
-								+ jarFile.getFullPath());
 						if (classpathEntry.getPath().equals(jarFile.getFullPath())) {
 							continue;
 						}
@@ -271,35 +273,40 @@ public class CategoriesDialogSourceComposite extends Composite {
 				if (iPackageFragmentRoot != null) {
 					try {
 						for (IJavaElement iJavaElement : iPackageFragmentRoot.getChildren()) {
-							{
 								if (iJavaElement instanceof IPackageFragment) {
 									IPackageFragment packageFragment = (IPackageFragment) iJavaElement;
 									if (packageFragment.containsJavaResources()) {
 										sourcePackageList.add(packageFragment.getElementName());
 									}
 								}
-							}
 						}
 					} catch (JavaModelException javaModelException) {
 						LOGGER.warn("Error occurred while fetching packages from "
 								+ iPackageFragmentRoot.getElementName());
 					}
 				}
+				if(comboJarList.getSelectionIndex() ==0){
+					deleteButton.setEnabled(false);
+				}else{
+					deleteButton.setEnabled(true);
+				}
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {/* Do-Nothing */
-			}
+			public void widgetDefaultSelected(SelectionEvent e) { /*Do-nothing*/ }
 		});
 	}
 
-	private void loadComboJaraListFromBuildPath(Combo comboJarList) {
+	private void loadComboJarListFromBuildPath(Combo comboJarList) {
 		comboJarList.removeAll();
 		IProject iProject = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
 		try {
-			IPackageFragmentRoot[] fragmentRoot = JavaCore.create(iProject).getAllPackageFragmentRoots();
-			for (IPackageFragmentRoot iPackageFragmentRoot : fragmentRoot) {
-				System.out.println(iPackageFragmentRoot.getElementName());
+			IJavaProject iJavaProject = JavaCore.create(iProject);
+			PackageFragmentRoot srcfragmentRoot= getSrcPackageFragment(iJavaProject);
+			comboJarList.add(srcfragmentRoot.getElementName());
+			comboJarList.setData(String.valueOf(comboJarList.getItemCount() - 1), srcfragmentRoot);
+			
+			for (IPackageFragmentRoot iPackageFragmentRoot : iJavaProject.getAllPackageFragmentRoots()) {
 				if (isJarPresentInLibFolder(iPackageFragmentRoot.getPath())
 						&& iPackageFragmentRoot.getKind() != IPackageFragmentRoot.K_SOURCE) {
 					comboJarList.add(iPackageFragmentRoot.getElementName());
@@ -310,6 +317,17 @@ public class CategoriesDialogSourceComposite extends Composite {
 			LOGGER.error("Error occurred while loading engines-transform jar", javaModelException);
 		}
 
+	}
+
+	private PackageFragmentRoot getSrcPackageFragment(IJavaProject iJavaProject) throws JavaModelException {
+		for(IPackageFragmentRoot iPackageFragmentRoot:iJavaProject.getAllPackageFragmentRoots()){
+			if(iPackageFragmentRoot instanceof PackageFragmentRoot){
+				if(StringUtils.equals(iPackageFragmentRoot.getElementName(),Constants.SRC_FOLDER)){
+					return (PackageFragmentRoot) iPackageFragmentRoot;
+				}
+			}
+		}
+		return null;
 	}
 
 	private boolean isJarPresentInLibFolder(IPath path) {

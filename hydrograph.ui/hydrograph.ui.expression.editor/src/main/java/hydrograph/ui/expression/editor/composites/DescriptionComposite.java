@@ -13,9 +13,13 @@
 
 package hydrograph.ui.expression.editor.composites;
 
+import hydrograph.ui.expression.editor.browser.JavaDocBrowser;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -23,7 +27,7 @@ import org.eclipse.swt.widgets.Label;
 
 public class DescriptionComposite extends Composite {
 
-	private StyledText descriptionStyledText;
+	private JavaDocBrowser descriptionStyledText;
 	
 	/**
 	 * Create the composite.
@@ -46,11 +50,29 @@ public class DescriptionComposite extends Composite {
 		lblDescription.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
 		lblDescription.setText("Description");
 		
-		descriptionStyledText= new StyledText(this, SWT.BORDER|SWT.V_SCROLL|SWT.H_SCROLL);
-		descriptionStyledText.setEditable(false);
-		descriptionStyledText.setBackground(new Color(null,255, 255, 225));
+		
+		final Composite composite = new Composite(this, SWT.BORDER);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		composite.addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				descriptionStyledText.setSize(composite.getSize().x-5,composite.getSize().y);
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		descriptionStyledText=new JavaDocBrowser(composite,  SWT.NORMAL);
 		descriptionStyledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
+		descriptionStyledText.setBackground(new Color(null,255, 255, 225));
+		descriptionStyledText.setFont(new Font(null,"Arabic Transparent", 18, SWT.NORMAL));
+		
 		linkFunctionAndDescription(functionsComposite);
 		linkCategoriesAndDescription(categoriesComposite);
 	}
@@ -67,4 +89,5 @@ public class DescriptionComposite extends Composite {
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
+	
 }

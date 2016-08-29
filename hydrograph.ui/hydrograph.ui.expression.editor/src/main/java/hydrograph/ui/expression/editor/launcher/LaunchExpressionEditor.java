@@ -21,6 +21,7 @@ import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
+import hydrograph.ui.expression.editor.util.HeapDumper;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
@@ -44,11 +45,13 @@ public class LaunchExpressionEditor {
 	
 	public void launchExpressionEditor(ExpressionEditorData expressionEditorData){
 		LOGGER.debug("Initiating creation of Expression Editor");
+		System.gc();
 		if (intialize()) {
 			BuildExpressionEditorDataSturcture.INSTANCE
 					.createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
 			ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(Display.getCurrent()
 					.getActiveShell(), expressionEditorData);
+//			HeapDumper.dumpHeap("c:\\TEMP\\heap_dump_before_1_gc.log", false);
 			int returnCode = expressionEditorDialog.open();
 			if (returnCode == 0) {
 				saveProperty(expressionEditorData, expressionEditorDialog.getExpressionText());

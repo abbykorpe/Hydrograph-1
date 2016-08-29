@@ -36,6 +36,8 @@ public class Messages extends NLS {
 	public static String VALIDATE_BUTTON_TOOLTIP;
 	public static String WORD_WRAP_BUTTON_TOOLTIP;
 	public static String OPERATORS_TOOLTIP;
+	public static String EXTERNAL_JAR_DIALOG_BROWSE_BUTTON_TOOLTIP;
+	public static String EXTERNAL_JAR_DIALOG_DELETE_BUTTON_TOOLTIP;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

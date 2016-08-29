@@ -17,10 +17,13 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.core.SourceType;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -34,6 +37,7 @@ import org.slf4j.Logger;
 
 public class BuildExpressionEditorDataSturcture {
 
+	private static final String JAR_PACKAGE_FRAGMENT = "JarPackageFragment";
 	public static final BuildExpressionEditorDataSturcture INSTANCE = new BuildExpressionEditorDataSturcture();
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(BuildExpressionEditorDataSturcture.class);
 
@@ -47,7 +51,6 @@ public class BuildExpressionEditorDataSturcture {
 					for (IClassFile element : fragment.getClassFiles()) {
 						ClassRepo.INSTANCE.addClass(element,"","",false);
 					}
-
 				} else {
 					new CustomMessageBox(SWT.ERROR, Package + " Package not found in jar "
 							+ iPackageFragmentRoot.getElementName(), "ERROR").open();
@@ -59,19 +62,31 @@ public class BuildExpressionEditorDataSturcture {
 		loadClassesFromSettingsFolder();
 	}
 
+	@SuppressWarnings("restriction")
 	public boolean loadUserDefinedClassesInClassRepo(String jarFileName, String packageName) {
 		IPackageFragmentRoot iPackageFragmentRoot = getIPackageFragment(jarFileName);
 		try {
 			if (iPackageFragmentRoot != null) {
 				IPackageFragment fragment = iPackageFragmentRoot.getPackageFragment(packageName);
-				if (fragment != null) {
+				if (fragment != null && StringUtils.equals(fragment.getClass().getSimpleName(), JAR_PACKAGE_FRAGMENT)) {
 					for (IClassFile element : fragment.getClassFiles()) {
-						ClassRepo.INSTANCE.addClass(element,jarFileName,packageName, true);
+						ClassRepo.INSTANCE.addClass(element, jarFileName, packageName, true);
 					}
 					return true;
 				} else {
-					LOGGER.warn("Package not found in jar " + iPackageFragmentRoot.getElementName(), "ERROR");
+					for (IJavaElement element : fragment.getChildren()) {
+						if (element instanceof ICompilationUnit) {
+							for (IJavaElement javaElement : ((ICompilationUnit) element).getChildren()) {
+								if (javaElement instanceof SourceType) {
+									ClassRepo.INSTANCE.addClass((SourceType) javaElement, jarFileName, packageName,true);
+								}
+							}
+						}
+					}
+					return true;
 				}
+			} else {
+				LOGGER.warn("Package not found in jar " + iPackageFragmentRoot.getElementName(), "ERROR");
 			}
 		} catch (JavaModelException e) {
 			LOGGER.error("Error occurred while loading class from jar", e);
@@ -147,14 +162,3 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 }
-
-//String path = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-//.getEditorInput().getToolTipText();
-//IPath iPath = new Path(path);
-//IProject[] iProject = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-//for (IProject project : iProject) {
-//	if (StringUtils.equals(iPath.segment(0), project.getName())) {
-//		return project;
-//	}
-//}
-//return null;

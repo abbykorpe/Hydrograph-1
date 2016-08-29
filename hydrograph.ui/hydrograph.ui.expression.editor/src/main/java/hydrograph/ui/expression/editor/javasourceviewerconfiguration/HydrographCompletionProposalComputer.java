@@ -101,7 +101,7 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 			Image image=new Image(Display.getCurrent(),imageData);
 			
 			for (ClassDetails classDetails : classList) {
-				if (!classDetails.isUserDefined()) {
+//				if (!classDetails.isUserDefined()) {
 					List<MethodDetails> methodlist = classDetails.getMethodList();
 					for (MethodDetails methodDetails : methodlist) {
 						displayLabel = classDetails.getcName() + Constants.DOT + methodDetails.getSignature();
@@ -112,13 +112,14 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 			        	customProposal.setType(CUSTOM_TYPE);
 			        	proposals.add(customProposal);
 					}
-				}
+//				}
 			}
 			addAvailableFieldsProposals(textViewer,image,proposals,prefix,offset,replacementLength);
 		} catch (RuntimeException exception) {
 			LOGGER.error("Error occurred while building custom proposals", exception);
 		}
 		filterProposalsOnPrefix(prefix, proposals);
+		System.gc();
 		return proposals;
 	}
 	

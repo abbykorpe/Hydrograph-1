@@ -151,7 +151,7 @@ public class EvaluateDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				EvaluateExpression evaluateExpression=new EvaluateExpression(expressionEditor,outputConsole,evaluateDialog);
-				if(true){
+				if(evaluateExpression.isValidExpression()){
 					 try {
 						Object[] returnObject=evalDialogFieldTable.validateDataTypeValues();
 						String object=evaluateExpression.invokeEvaluateFunctionFromJar(ValidateExpressionToolButton.getExpressionText(expressionEditor.getText()),(String[]) returnObject[0],(Object[])returnObject[1]);

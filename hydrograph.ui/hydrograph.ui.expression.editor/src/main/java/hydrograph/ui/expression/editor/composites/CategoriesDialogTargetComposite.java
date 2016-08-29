@@ -100,7 +100,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 				for (Object key : properties.keySet()) {
 					String jarFileName = StringUtils.trim(StringUtils.substringAfter((String) key, Constants.DASH));
 					if (BuildExpressionEditorDataSturcture.INSTANCE.getIPackageFragment(jarFileName) != null) {
-						targetList.add((String) key+SWT.SPACE+Constants.DASH+properties.getProperty((String)key));
+						targetList.add((String) key+SWT.SPACE+Constants.DASH+SWT.SPACE+properties.getProperty((String)key));
 					}
 				}
 			}

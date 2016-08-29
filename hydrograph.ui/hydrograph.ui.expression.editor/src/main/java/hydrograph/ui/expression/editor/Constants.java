@@ -17,6 +17,7 @@ public class Constants {
 
 	public static final String CLASS_EXTENSION = ".class";
 	public static final String USER_DEFINED_SUFFIX = " - user defined";
+	public static final String SRC_CLASS_SUFFIX = " - src";
 	public static final String JAR_FILE_NAME = "hydrograph.engine.transformation";
 	public static final String PACKAGE_NAME = "hydrograph.engine.transformation.standardfunctions";
 	public static final String FIELD_SEPRATOR_FOR_DRAG_DROP = "#";
@@ -37,7 +38,10 @@ public class Constants {
 	public static final String ANTLR_JAR_FILE_NAME = "antlr4-runtime";
 	public static final String BEAN_SHELLJAR_FILE_NAME = "bsh-";
 	public static final String SL4JLOG = "slf4j-api";
-	public static final java.lang.String NULL_STRING = "null";
-
+	public static final String NULL_STRING = "null";
+	public static final String SRC_FOLDER = "src";
+	public static final String HTML_START_TAG="<html><body bgcolor=\"#FFFFE1\"><font size=\"2\">";
+	public static final String HTML_END_TAG="</font><br /></body></html>";
+	public static final String DATA_TYPE_PREFIX_FOR_SOUCE_CODE = "Q";
 
 }

@@ -299,9 +299,11 @@ public enum DataTypes {
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.reflectionValue, value)) {
 				return dataType.getDataTypeName();
+			}else if (StringUtils.containsIgnoreCase(value,dataType.toString())) {
+				return dataType.getDataTypeName();
 			}
 		}
-		return value;
+		return StringUtils.removeStart(value, Constants.DATA_TYPE_PREFIX_FOR_SOUCE_CODE);
 	}
 	
 	public static Class<?> getDataTypeClassfromString(String dataTypeName) {

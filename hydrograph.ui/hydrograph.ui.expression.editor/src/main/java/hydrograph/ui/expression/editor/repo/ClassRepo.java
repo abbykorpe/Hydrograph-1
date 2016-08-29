@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.internal.core.SourceType;
 
 public class ClassRepo {
 
@@ -16,6 +17,10 @@ public class ClassRepo {
 
 	public void addClass(IClassFile classFile, String jarFileName, String packageName, boolean isUserDefined) {
 		classList.add(new ClassDetails(classFile, jarFileName, packageName,isUserDefined));
+	}
+
+	public void addClass(SourceType javaFile, String jarFileName, String packageName, boolean isUserDefined) {
+		classList.add(new ClassDetails(javaFile, jarFileName, packageName,isUserDefined));
 	}
 
 	public List<ClassDetails> getClassList() {

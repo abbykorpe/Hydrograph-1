@@ -21,6 +21,7 @@ import hydrograph.ui.expression.editor.repo.ClassRepo;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -33,7 +34,7 @@ public class CategoriesComposite extends Composite {
 	public static final String KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST = "class";
 	private List classNamelist;
 	private List methodList;
-	private StyledText descriptionStyledText;
+	private Browser descriptionStyledText;
 	private FunctionsComposite functionsComposite;
 	private CategoriesUpperComposite categoriesUpperComposite;
 	/**
@@ -131,7 +132,7 @@ public class CategoriesComposite extends Composite {
 		loadClassesFromRepo();
 	}
 
-	public void setDescriptionStyledText(StyledText descriptionStyledText) {
+	public void setDescriptionStyledText(Browser descriptionStyledText) {
 		this.descriptionStyledText = descriptionStyledText;
 	}
 

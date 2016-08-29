@@ -19,61 +19,59 @@ import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.dnd.DragSourceAdapter;
 import org.eclipse.swt.dnd.DragSourceEvent;
-import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Table;
 
 public class FunctionsComposite extends Composite {
-	
+
 	private List methodList;
-	protected StyledText descriptionStyledText;
-	private FunctionsUpperComposite functionUppersComposite; 
-	
+	protected Browser descriptionStyledText;
+	private FunctionsUpperComposite functionUppersComposite;
+
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
-	 * @param categoriesComposite 
+	 * @param categoriesComposite
 	 * @param style
 	 */
 	public FunctionsComposite(Composite parent, CategoriesComposite categoriesComposite, int style) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
-		
+
 		functionUppersComposite = new FunctionsUpperComposite(this, SWT.BORDER);
 		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_composite.heightHint = 35;
 		functionUppersComposite.setLayoutData(gd_composite);
-		
-		methodList = new List(this, SWT.BORDER|SWT.V_SCROLL);
+
+		methodList = new List(this, SWT.BORDER | SWT.V_SCROLL);
 		methodList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		addDragSupport();
-	
+
 		linkFunctionAndClassComposite(categoriesComposite);
 		functionUppersComposite.setMethodList(methodList);
 		addListnersToMethodList(methodList);
 	}
 
-
 	private void addDragSupport() {
 		ExpressionEditorUtil.INSTANCE.getDragSource(methodList).addDragListener(new DragSourceAdapter() {
-			public void dragSetData(DragSourceEvent event) { 
-				MethodDetails methodDetails=(MethodDetails) methodList.getData(String.valueOf(methodList.getSelectionIndex()));
-				event.data=methodDetails.getPlaceHolder();
+			public void dragSetData(DragSourceEvent event) {
+				MethodDetails methodDetails = (MethodDetails) methodList.getData(String.valueOf(methodList
+						.getSelectionIndex()));
+				event.data = methodDetails.getPlaceHolder();
 			}
 		});
 	}
-
 
 	private void linkFunctionAndClassComposite(CategoriesComposite categoriesComposite) {
 		categoriesComposite.setMethodList(methodList);
@@ -81,36 +79,46 @@ public class FunctionsComposite extends Composite {
 	}
 
 	private void addListnersToMethodList(final List methodsList) {
-		methodsList.addMouseListener(new MouseListener() {
-			
+		methodsList.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void mouseUp(MouseEvent e) {/* Do-Nothing*/	}
-			
+			public void widgetSelected(SelectionEvent e) {
+				performSelectionActivity(methodsList);
+			}
+		});
+		
+		methodsList.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent e) {/*Do-Nothing*/}
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {/*Do-Nothing*/}
 			@Override
 			public void mouseDown(MouseEvent e) {
-				MethodDetails methodDetails=(MethodDetails) methodsList.getData(String.valueOf(methodsList.getSelectionIndex()));
-				if (methodDetails != null && StringUtils.isNotBlank(methodDetails.getJavaDoc())) {
-					descriptionStyledText.setText(methodDetails.getJavaDoc());
-				} else {
-					descriptionStyledText.setText(Messages.JAVA_DOC_NOT_AVAILABLE);
-				}
+				performSelectionActivity(methodsList);
 			}
 			
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {/* Do-Nothing*/	}
-		}); 
+		});
+	}
+
+	private void performSelectionActivity(List methodsList){
+		MethodDetails methodDetails = (MethodDetails) methodsList.getData(String.valueOf(methodsList
+				.getSelectionIndex()));
+		if (methodDetails != null && StringUtils.isNotBlank(methodDetails.getJavaDoc())) {
+			descriptionStyledText.setText(methodDetails.getJavaDoc());
+		} else {
+			descriptionStyledText.setText(Messages.JAVA_DOC_NOT_AVAILABLE);
+		}
 	}
 	
-	public void setDescriptionStyledText(StyledText descriptionStyledText){
-		this.descriptionStyledText=descriptionStyledText;
+	public void setDescriptionStyledText(Browser descriptionStyledText) {
+		this.descriptionStyledText = descriptionStyledText;
 	}
-	
+
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
-	
-	public void refresh(){
+
+	public void refresh() {
 		functionUppersComposite.refresh();
 	}
 

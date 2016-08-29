@@ -46,7 +46,7 @@ public class FieldDataTypeMap {
 	}
 
 	private Class<?> getFieldDataType(String field, ComponentsOutputSchema outputSchema) {
-		Class<?> clazz = null;
+		Class<?> clazz = String.class;
 		for (GridRow gridRow : outputSchema.getBasicGridRowsOutputFields()) {
 			if (StringUtils.equalsIgnoreCase(gridRow.getFieldName(), field)) {
 				clazz=DataTypes.getDataTypeClassfromString(ExpressionEditorUtil.INSTANCE.lastString(
