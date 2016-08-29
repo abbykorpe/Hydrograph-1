@@ -104,7 +104,19 @@ public interface DefaultGEFCanvas {
 	 */
 	public void restoreMenuToolContextItemsState();
 
+	/**
+	 * 
+	 * Add job level parameter files in component canvas
+	 * 
+	 * @param jobLevelParamterFiles
+	 */
 	public void addJobLevelParamterFiles(List jobLevelParamterFiles);
 
+	/**
+	 * 
+	 * Get list of job level parameter files
+	 * 
+	 * @return
+	 */
 	public List<Object> getJobLevelParamterFiles(); 
 }

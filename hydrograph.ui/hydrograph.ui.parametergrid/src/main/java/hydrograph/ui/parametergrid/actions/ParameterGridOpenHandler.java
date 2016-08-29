@@ -30,7 +30,6 @@ import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -51,8 +50,6 @@ import org.slf4j.Logger;
  */
 public class ParameterGridOpenHandler extends AbstractHandler {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterGridOpenHandler.class);
-	private static final String PARAMETER_FILE_DIR="param";
-	private static final String PARAMETER_FILE_EXTENTION=".properties";
 	/**
 	 * 
 	 * Returns active editor as {@link DefaultGEFCanvas}

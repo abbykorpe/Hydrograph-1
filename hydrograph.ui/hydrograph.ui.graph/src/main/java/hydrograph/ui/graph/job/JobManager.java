@@ -80,8 +80,6 @@ public class JobManager {
 	private Map<String, Job> runningJobsMap;
 	public static JobManager INSTANCE = new JobManager();
 	private boolean localMode;
-	private static final String PARAMETER_FILE_DIR="param";
-	private static final String PARAMETER_FILE_EXTENTION=".properties";
 	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
 	private Map<String,DebugDataViewer> dataViewerMap;		

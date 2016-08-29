@@ -28,8 +28,10 @@ import hydrograph.ui.engine.ui.repository.ParameterData;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.engine.ui.xygenration.CoordinateProcessor;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.ComponentLabel;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.ModelConstants;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -52,6 +54,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.draw2d.TextUtilities;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -109,6 +116,7 @@ public class UiConverterUtil {
 				UiConverter uiConverter = UiConverterFactory.INSTANCE.getUiConverter(typeBaseComponent, container);
 				uiConverter.prepareUIXML();
 				Component component = uiConverter.getComponent();
+				adjustComponentFigure(component);				
 				container.getChildren().add(component);
 			}
 			createLinks();
@@ -116,6 +124,18 @@ public class UiConverterUtil {
 		ImportedSchemaPropagation.INSTANCE.initiateSchemaPropagationAfterImport(container);
 		genrateUIXML(container, jobFile, parameterFile);
 		
+	}
+
+	private void adjustComponentFigure(Component component) {
+		Font font = new Font( Display.getDefault(), ModelConstants.labelFont, 10,
+				SWT.NORMAL );
+		int labelLength = TextUtilities.INSTANCE.getStringExtents(component.getComponentLabel().getLabelContents(), font).width;
+		if(labelLength >= ModelConstants.compLabelOneLineLengthLimit && component.getSize().height<96 ){
+			component.setSize(new Dimension(component.getSize().width, component.getSize().height + ModelConstants.componentOneLineLabelMargin));
+			ComponentLabel componentLabel = component.getComponentLabel();
+			componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height + ModelConstants.componentOneLineLabelMargin));
+			component.setComponentLabelMargin(ModelConstants.componentTwoLineLabelMargin);
+		}
 	}
 
 	/**
