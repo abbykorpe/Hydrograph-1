@@ -23,9 +23,11 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import hydrograph.server.execution.tracking.server.websocket.StartServer;
+import jodd.util.StringUtil;
 
 /**
  * The Class ExecutionTrackingUtils.
@@ -127,7 +129,7 @@ public class ExecutionTrackingUtils {
 	 * @return the tracking url
 	 */
 	public String getTrackingUrl(String trackingClientSocketPort) {
-		if(trackingClientSocketPort == null){
+		if(!StringUtils.isNotBlank(trackingClientSocketPort)){
 			getFilePath();
 		}else{
 			portNo=trackingClientSocketPort;
