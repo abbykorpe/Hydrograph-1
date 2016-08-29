@@ -15,7 +15,7 @@ package hydrograph.engine.cascading.assembly.handlers;
 import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
 import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
-import hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI;
+import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 
 import java.util.Arrays;
@@ -105,31 +105,25 @@ public class FilterCustomHandler implements RecordFilterHandlerBase {
 	@Override
 	public boolean isRemove(FilterCall<RecordFilterContext> call) {
 
-		CustomHandlerContext<FilterBase> context = (CustomHandlerContext<FilterBase>) call.getContext()
-				.getHandlerContext();
+		CustomHandlerContext<FilterBase> context = (CustomHandlerContext<FilterBase>) call
+				.getContext().getHandlerContext();
 
-		TupleEntry tupleEntry = call.getArguments();
-		// LOG.trace("calling isRemove method of: " +
-		// context.getSingleTransformInstance().getClass().getName());
+		LOG.trace("calling isRemove method of: "
+				+ context.getSingleTransformInstance().getClass().getName());
 
 		try {
-			if (operationExpression != null) {
-				Interpreter interpreter = new Interpreter();
-				for (int i = 0; i < inputFields.size(); i++) {
-					interpreter.set(String.valueOf(inputFields.get(i)), tupleEntry.getObject(inputFields.get(i)));
-				}
-				return isUnused ? !(boolean) interpreter.eval(ValidationAPI.getValidExpression(operationExpression))
-						: (boolean) interpreter.eval(ValidationAPI.getValidExpression(operationExpression));
-			} else {
-				boolean isRemove = context.getSingleTransformInstance().isRemove(ReusableRowHelper
-						.extractFromTuple(call.getArguments().getTuple(), context.getSingleInputRow()));
+			boolean isRemove = context.getSingleTransformInstance().isRemove(
+					ReusableRowHelper.extractFromTuple(call.getArguments()
+							.getTuple(), context.getSingleInputRow()));
 
-				return isUnused ? !isRemove : isRemove;
-			}
+			return isUnused ? !isRemove : isRemove;
 		} catch (Exception e) {
-			LOG.error("Exception in isRemove method of: " + context.getSingleTransformInstance().getClass().getName()
+			LOG.error("Exception in isRemove method of: "
+					+ context.getSingleTransformInstance().getClass().getName()
 					+ ".\nRow being processed: " + call.getArguments(), e);
-			throw new RuntimeException(e);
+			throw new RuntimeException("Exception in isRemove method of: "
+					+ context.getSingleTransformInstance().getClass().getName()
+					+ ".\nRow being processed: " + call.getArguments(), e);
 		}
 	}
 	@SuppressWarnings("unchecked")

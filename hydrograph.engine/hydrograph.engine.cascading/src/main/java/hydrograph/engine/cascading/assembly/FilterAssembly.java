@@ -31,7 +31,7 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.RecordFilter;
-import hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI;
+import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class FilterAssembly extends BaseComponent<FilterEntity> {
@@ -80,7 +80,6 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("filter",filterEntity.getComponentId() ,
 				 socketId), componentParameters.getInputPipe());
 		// validate expression
-				expressionValidate();
 		FilterCustomHandler filterCustomHandler = new FilterCustomHandler(
 				new Fields(filterEntity.getOperation()
 						.getOperationInputFields()), filterEntity
@@ -98,24 +97,7 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 				filterPipe, componentParameters.getInputFields());
 	}
 	
-	private void expressionValidate() {
-		if (filterEntity.getOperation().getExpression() != null) {
-			Map<String, Class<?>> schemaMap = new HashMap<String, Class<?>>();
-			try {
-				for (SchemaField schemaField : componentParameters.getSchemaFields()) {
-					schemaMap.put(schemaField.getFieldName(), Class.forName(schemaField.getFieldDataType()));
-				}
-				DiagnosticCollector<JavaFileObject> diagnostic = ValidationAPI
-						.compile(filterEntity.getOperation().getExpression(), schemaMap);
-				if (diagnostic.getDiagnostics().size() > 0) {
-					diagnostic.getDiagnostics().get(0).getMessage(null);
-					throw new RuntimeException(diagnostic.getDiagnostics().get(0).getMessage(null));
-				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	
 
 	@Override
 	public void initializeEntity(FilterEntity assemblyEntityBase) {
