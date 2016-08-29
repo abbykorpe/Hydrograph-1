@@ -15,137 +15,135 @@
 	package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 	
 	import hydrograph.ui.common.schema.Field;
-	import hydrograph.ui.common.schema.Fields;
-	import hydrograph.ui.common.util.Constants;
-	import hydrograph.ui.common.util.ImagePathConstant;
-	import hydrograph.ui.common.util.ParameterUtil;
-	import hydrograph.ui.common.util.XMLConfigUtil;
-	import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-	import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-	import hydrograph.ui.datastructure.property.FilterProperties;
-	import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-	import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-	import hydrograph.ui.datastructure.property.GridRow;
-	import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
-	import hydrograph.ui.datastructure.property.NameValueProperty;
-	import hydrograph.ui.datastructure.property.Schema;
-	import hydrograph.ui.graph.model.Link;
-	import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-	import hydrograph.ui.logging.factory.LogFactory;
-	import hydrograph.ui.propertywindow.Activator;
-	import hydrograph.ui.propertywindow.factory.ListenerFactory;
-	import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
-	import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
-	import hydrograph.ui.propertywindow.messages.Messages;
-	import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
-	import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
-	import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-	import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-	import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTable;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTableViewer;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaSubgroupComposite;
-	import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaTableComposite;
-	import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-	import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-	import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
-	import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
-	import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
-	import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
-	import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposite;
-	import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
-	import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
-	import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-	import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-	
-	import java.io.File;
-	import java.io.FileInputStream;
-	import java.io.FileNotFoundException;
-	import java.io.IOException;
-	import java.io.InputStream;
-	import java.lang.reflect.InvocationTargetException;
-	import java.util.ArrayList;
-	import java.util.Collections;
-	import java.util.Iterator;
-	import java.util.LinkedHashMap;
-	import java.util.LinkedList;
-	import java.util.List;
-	import java.util.Map;
-	import java.util.Map.Entry;
-	
-	import javax.xml.XMLConstants;
-	import javax.xml.bind.JAXBContext;
-	import javax.xml.bind.JAXBException;
-	import javax.xml.bind.Unmarshaller;
-	import javax.xml.transform.stream.StreamSource;
-	import javax.xml.validation.SchemaFactory;
-	import javax.xml.validation.Validator;
-	
-	import org.apache.commons.lang.StringUtils;
-	import org.eclipse.core.resources.IWorkspace;
-	import org.eclipse.core.resources.ResourcesPlugin;
-	import org.eclipse.core.runtime.IPath;
-	import org.eclipse.core.runtime.IStatus;
-	import org.eclipse.core.runtime.Path;
-	import org.eclipse.core.runtime.Platform;
-	import org.eclipse.core.runtime.Status;
-	import org.eclipse.jface.dialogs.MessageDialog;
-	import org.eclipse.jface.fieldassist.ControlDecoration;
-	import org.eclipse.jface.layout.TableColumnLayout;
-	import org.eclipse.jface.viewers.CellEditor;
-	import org.eclipse.jface.viewers.ColumnViewerEditor;
-	import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
-	import org.eclipse.jface.viewers.ColumnWeightData;
-	import org.eclipse.jface.viewers.ICellModifier;
-	import org.eclipse.jface.viewers.IStructuredContentProvider;
-	import org.eclipse.jface.viewers.ITableLabelProvider;
-	import org.eclipse.jface.viewers.StructuredSelection;
-	import org.eclipse.jface.viewers.TableViewer;
-	import org.eclipse.jface.viewers.TableViewerEditor;
-	import org.eclipse.swt.SWT;
-	import org.eclipse.swt.custom.ScrolledComposite;
-	import org.eclipse.swt.events.ControlEvent;
-	import org.eclipse.swt.events.ControlListener;
-	import org.eclipse.swt.events.FocusEvent;
-	import org.eclipse.swt.events.FocusListener;
-	import org.eclipse.swt.events.KeyEvent;
-	import org.eclipse.swt.events.KeyListener;
-	import org.eclipse.swt.events.ModifyEvent;
-	import org.eclipse.swt.events.ModifyListener;
-	import org.eclipse.swt.events.MouseAdapter;
-	import org.eclipse.swt.events.MouseEvent;
-	import org.eclipse.swt.events.SelectionAdapter;
-	import org.eclipse.swt.events.SelectionEvent;
-	import org.eclipse.swt.events.SelectionListener;
-	import org.eclipse.swt.graphics.Color;
-	import org.eclipse.swt.graphics.Rectangle;
-	import org.eclipse.swt.layout.GridData;
-	import org.eclipse.swt.layout.GridLayout;
-	import org.eclipse.swt.widgets.Button;
-	import org.eclipse.swt.widgets.Composite;
-	import org.eclipse.swt.widgets.Display;
-	import org.eclipse.swt.widgets.Label;
-	import org.eclipse.swt.widgets.Menu;
-	import org.eclipse.swt.widgets.MenuItem;
-	import org.eclipse.swt.widgets.MessageBox;
-	import org.eclipse.swt.widgets.Shell;
-	import org.eclipse.swt.widgets.Table;
-	import org.eclipse.swt.widgets.TableItem;
-	import org.eclipse.swt.widgets.Text;
-	import org.eclipse.ui.IEditorInput;
-	import org.eclipse.ui.IFileEditorInput;
-	import org.eclipse.ui.PlatformUI;
-	import org.eclipse.ui.forms.widgets.ColumnLayoutData;
-	import org.eclipse.ui.statushandlers.StatusManager;
-	import org.slf4j.Logger;
-	import org.xml.sax.SAXException;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.Activator;
+import hydrograph.ui.propertywindow.factory.ListenerFactory;
+import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
+import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
+import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTableViewer;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaTableComposite;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
+import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+import org.eclipse.ui.statushandlers.StatusManager;
+import org.slf4j.Logger;
+import org.xml.sax.SAXException;
 	
 	
 	/**
@@ -1181,6 +1179,7 @@
 			for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
 				table.getColumn(columnIndex).pack();
 				table.getColumn(columnIndex).setWidth(100);
+				
 			}
 			editors = gridWidgetBuilder.createCellEditorList(table, columns);
 			tableViewer.setCellEditors(editors);
@@ -1282,7 +1281,27 @@
 	
 			populateWidget();
 			tableViewerComposite.setSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
+			
+			arrangeTableViewerColumns();
+			
 			return tableViewer;
+		}
+
+		/**
+		 * Arrange the columns size in equal ratio
+		 */
+		private void arrangeTableViewerColumns() {
+			tableViewerComposite.addControlListener(new ControlAdapter() {
+				
+				@Override
+				public void controlResized(ControlEvent e) {
+					int width=tableViewerComposite.getSize().x/tableViewer.getTable().getColumnCount();
+					for(TableColumn tableColumn:tableViewer.getTable().getColumns()){
+						tableColumn.setWidth(width);
+					}
+				}
+			
+			});
 		}
 	
 		
