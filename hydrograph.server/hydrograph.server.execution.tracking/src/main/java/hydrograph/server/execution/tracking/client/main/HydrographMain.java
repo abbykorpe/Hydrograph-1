@@ -98,11 +98,12 @@ public class HydrographMain {
 		final HydrographService execution = new HydrographService();
 		
 		hydrographMain.executeGraph(latch, jobId, argsFinalList, timer, execution);
-		
-		if (isExecutionTracking) {
-			final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
 
-			session = hydrographMain.connectToServer(socket, jobId, trackingClientSocketPort);
+		final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
+
+		session = hydrographMain.connectToServer(socket, jobId, trackingClientSocketPort);
+
+		if (isExecutionTracking) {
 			/**
 			 * If tracking enable, start to post execution tracking status.
 			 */
