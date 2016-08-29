@@ -127,8 +127,10 @@ public class ExecutionTrackingUtils {
 	 * @return the tracking url
 	 */
 	public String getTrackingUrl(String trackingClientSocketPort) {
-		String clientSocketPort = (trackingClientSocketPort == null)? portNo : trackingClientSocketPort;
-		String url = host + clientSocketPort + route;
+		if(trackingClientSocketPort == null){
+			getFilePath();
+		}
+		String url = host + portNo + route;
 		
 		logger.info("Hydrograph Execution Tracking URL: " + url);
 		return url;
