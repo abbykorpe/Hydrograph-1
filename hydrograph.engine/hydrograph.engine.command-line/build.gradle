@@ -32,14 +32,7 @@ repositories {
     }
 }
 
-test {
-    exclude '**/ExecutionTrackingJoinXmlTest*'
-    testLogging {
-    showStandardStreams true
-    showStackTraces true
-    showExceptions true
-    }
-}
+
 
 dependencies {
     compile project(':hydrograph.engine.cascading')
