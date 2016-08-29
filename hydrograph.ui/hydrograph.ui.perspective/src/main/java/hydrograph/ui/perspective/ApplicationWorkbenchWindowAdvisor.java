@@ -68,8 +68,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public static final String SERVICE_JAR = "SERVICE_JAR";
 
 	public static final String PORT_NUMBER = "PORT_NO";
-	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
-	public static final String TRACKING_PROPERY_FILE_PATH = "/service/socket-server.properties";
+	public static final String PROPERTY_FILE_PATH = "/service/hydrograph-service.properties";
+	public static final String TRACKING_PROPERTY_FILE_PATH = "/service/socket-server.properties";
 	
 	/**
 	 * Instantiates a new application workbench window advisor.
@@ -196,14 +196,15 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	public void killPortProcess() throws IOException{
 		if(OSValidator.isWindows()){
-			if(StringUtils.isNotBlank(getServicePortPID(PROPERY_FILE_PATH,PORT_NUMBER,SERVICE_JAR))){
-				int portPID = Integer.parseInt(getServicePortPID(PROPERY_FILE_PATH,PORT_NUMBER,SERVICE_JAR));
+			String pid =getServicePortPID(PROPERTY_FILE_PATH,PORT_NUMBER,SERVICE_JAR);
+			if(StringUtils.isNotBlank(pid)){
+				int portPID = Integer.parseInt(pid);
 				ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPID});
 				builder.start();
 			}
 		}
 		else if(OSValidator.isMac()){
-			int portNumber = Integer.parseInt(getServicePortFromPropFile(PROPERY_FILE_PATH,PORT_NUMBER,SERVICE_JAR));
+			int portNumber = Integer.parseInt(getServicePortFromPropFile(PROPERTY_FILE_PATH,PORT_NUMBER,SERVICE_JAR));
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", "lsof -P | grep :" + portNumber + " | awk '{print $2}' | xargs kill -9"});
 			builder.start();
 		}
@@ -253,7 +254,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private String getRestServiceJar(){
 		String restServiceJar = null;
 		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
+			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERTY_FILE_PATH);
 			Properties properties = new Properties();
 			properties.load(fileReader);
 			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
@@ -287,14 +288,15 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	public void killTrackingPortProcess() throws IOException{
 		if(OSValidator.isWindows()){
-			if(StringUtils.isNotBlank(getServicePortPID(TRACKING_PROPERY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR))){
-				int portPID = Integer.parseInt(getServicePortPID(TRACKING_PROPERY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR));
+			String pid =getServicePortPID(TRACKING_PROPERTY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR);
+			if(StringUtils.isNotBlank(pid)){
+				int portPID = Integer.parseInt(pid);
 				ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPID});
 				builder.start();
 			}
 		}
 		else if(OSValidator.isMac()){
-			int portNumber = Integer.parseInt(getServicePortFromPropFile(TRACKING_PROPERY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR));
+			int portNumber = Integer.parseInt(getServicePortFromPropFile(TRACKING_PROPERTY_FILE_PATH,EXECUTION_TRACKING_PORT,EXECUTION_TRACK_SERVICE_JAR));
 			ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", "lsof -P | grep :" + portNumber + " | awk '{print $2}' | xargs kill -9"});
 			builder.start();
 		}
