@@ -66,7 +66,7 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 			hiveTextfile.setExternalTablePath(getHivePathType(PropertyNameConstants.EXTERNAL_TABLE_PATH.value()));
 		}
 		
-		if(null!=((List<String>)properties.get(PropertyNameConstants.PARTITION_KEYS.value()))){
+		if((properties.get(PropertyNameConstants.PARTITION_KEYS.value())) !=null && !((List<String>)properties.get(PropertyNameConstants.PARTITION_KEYS.value())).isEmpty()){
 			hiveTextfile.setPartitionKeys(getPartitionKeys());
 		}
 		
