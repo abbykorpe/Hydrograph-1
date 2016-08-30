@@ -86,21 +86,25 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 		operationCall.setContext(context);
 		int counter = -1;
 		for (TransformBase transformInstance : context.getTransformInstances()) {
-			counter = counter + 1;
-
-			LOG.trace("calling prepare method for: " + transformInstance.getClass().getName());
-			try {
-				transformInstance.prepare(props.get(counter), context.getInputRow(counter).getFieldNames(),
-						context.getOutputRow(counter).getFieldNames());
-			} catch (Exception e) {
-				LOG.error("Exception in prepare method of: " + transformInstance.getClass().getName()
-						+ ".\nArguments passed to prepare() method are: \nProperties: " + props + "\nInput Fields: "
-						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray()) + "\nOutput Fields: "
-						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray()), e);
-				throw new RuntimeException("Exception in prepare method of: " + transformInstance.getClass().getName()
-						+ ".\nArguments passed to prepare() method are: \nProperties: " + props + "\nInput Fields: "
-						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray()) + "\nOutput Fields: "
-						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray()), e);
+			if (transformInstance != null) {
+				counter = counter + 1;
+				LOG.trace("calling prepare method for: " + transformInstance.getClass().getName());
+				try {
+					transformInstance.prepare(props.get(counter), context.getInputRow(counter).getFieldNames(),
+							context.getOutputRow(counter).getFieldNames());
+				} catch (Exception e) {
+					LOG.error("Exception in prepare method of: " + transformInstance.getClass().getName()
+							+ ".\nArguments passed to prepare() method are: \nProperties: " + props + "\nInput Fields: "
+							+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+							+ "\nOutput Fields: "
+							+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray()), e);
+					throw new RuntimeException("Exception in prepare method of: "
+							+ transformInstance.getClass().getName()
+							+ ".\nArguments passed to prepare() method are: \nProperties: " + props + "\nInput Fields: "
+							+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
+							+ "\nOutput Fields: "
+							+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray()), e);
+				}
 			}
 		}
 	}
@@ -140,51 +144,48 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 		// context.getPassThroughRow(), context.getOperationRow());
 
 		int counter = -1;
-		for (String transformClass : transformClassNames) {
+		for (TransformBase transformInstance : context.getTransformInstances()) {
 			// for (TransformBase transformInstance :
 			// context.getTransformInstances()) {
 
-				counter = counter + 1;
-				// LOG.trace("calling transform method of: " +
-				// transformInstance.getClass().getName());
-				if (transformClass != null) {
-					TransformBase transformInstance = (TransformBase) UserClassLoader.loadAndInitClass(transformClass);
-					try {
-						transformInstance.transform(
-								ReusableRowHelper.extractFromTuple(fieldManupulatingHandler.getInputPositions(counter),
-										inputTuple, context.getInputRow(counter)),
-								context.getOutputRow(counter));
-					} catch (Exception e) {
-						LOG.error("Exception in tranform method of: " + transformInstance.getClass().getName()
-								+ ".\nRow being processed: " + call.getArguments(), e);
-						throw new RuntimeException(
-								"Exception in tranform method of: " + transformInstance.getClass().getName()
-										+ ".\nRow being processed: " + call.getArguments(),
-								e);
-					}
-				} else {
-					String fieldNames[] = new String[fieldManupulatingHandler.getOperationInputFields().get(counter)
-							.size()];
-					Object tuples[] = new Object[fieldManupulatingHandler.getOperationInputFields().get(counter)
-							.size()];
-					for (int i = 0; i < fieldManupulatingHandler.getOperationInputFields().get(counter).size(); i++) {
-						fieldNames[i] = String
-								.valueOf(fieldManupulatingHandler.getOperationInputFields().get(counter).get(i));
-						tuples[i] = inTupleEntry
-								.getObject(fieldManupulatingHandler.getOperationInputFields().get(counter).get(i));
-					}
-					try{
+			counter = counter + 1;
+			// LOG.trace("calling transform method of: " +
+			// transformInstance.getClass().getName());
+			if (transformInstance != null) {
+				try {
+					transformInstance.transform(
+							ReusableRowHelper.extractFromTuple(fieldManupulatingHandler.getInputPositions(counter),
+									inputTuple, context.getInputRow(counter)),
+							context.getOutputRow(counter));
+				} catch (Exception e) {
+					LOG.error("Exception in tranform method of: " + transformInstance.getClass().getName()
+							+ ".\nRow being processed: " + call.getArguments(), e);
+					throw new RuntimeException("Exception in tranform method of: "
+							+ transformInstance.getClass().getName() + ".\nRow being processed: " + call.getArguments(),
+							e);
+				}
+			} else {
+				String fieldNames[] = new String[fieldManupulatingHandler.getOperationInputFields().get(counter)
+						.size()];
+				Object tuples[] = new Object[fieldManupulatingHandler.getOperationInputFields().get(counter).size()];
+				for (int i = 0; i < fieldManupulatingHandler.getOperationInputFields().get(counter).size(); i++) {
+					fieldNames[i] = String
+							.valueOf(fieldManupulatingHandler.getOperationInputFields().get(counter).get(i));
+					tuples[i] = inTupleEntry
+							.getObject(fieldManupulatingHandler.getOperationInputFields().get(counter).get(i));
+				}
+				try {
 					context.getOutputRow(counter).setField(
 							fieldManupulatingHandler.getOperationOutputFields().get(counter).get(0).toString(),
 							(Comparable) context.getExpressionInstancesList().get(counter).execute(fieldNames, tuples));
-					}catch(Exception e){
-						LOG.error("Exception in tranform expression: " + context.getExpressionInstancesList().get(counter).getValidExpression()
-								+ ".\nRow being processed: " + call.getArguments(), e);
-						throw new RuntimeException(
-								"Exception in tranform expression: " + context.getExpressionInstancesList().get(counter).getValidExpression()
-										+ ".\nRow being processed: " + call.getArguments(),
-								e);
-					}
+				} catch (Exception e) {
+					LOG.error("Exception in tranform expression: "
+							+ context.getExpressionInstancesList().get(counter).getValidExpression()
+							+ ".\nRow being processed: " + call.getArguments(), e);
+					throw new RuntimeException("Exception in tranform expression: "
+							+ context.getExpressionInstancesList().get(counter).getValidExpression()
+							+ ".\nRow being processed: " + call.getArguments(), e);
+				}
 			}
 		}
 		// // set operation row, copy operation fields
@@ -209,10 +210,10 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 		CustomHandlerContext<TransformBase> context = call.getContext();
 
 		for (TransformBase transformInstance : context.getTransformInstances()) {
-
-			LOG.trace("calling cleanup method of: " + transformInstance.getClass().getName());
-
-			transformInstance.cleanup();
+			if (transformInstance != null) {
+				LOG.trace("calling cleanup method of: " + transformInstance.getClass().getName());
+				transformInstance.cleanup();
+			}
 		}
 	}
 
