@@ -43,5 +43,8 @@ public class Constants {
 	public static final String HTML_START_TAG="<html><body bgcolor=\"#FFFFE1\"><font size=\"2\">";
 	public static final String HTML_END_TAG="</font><br /></body></html>";
 	public static final String DATA_TYPE_PREFIX_FOR_SOUCE_CODE = "Q";
-
+	public static final String PACKAGE_NAME_HEADER = "\n\t<b>Package Name ::</b> ";
+	public static final String JAR_FILE_NAME_HEADER = "\n\t<b>Jar File Name ::</b> ";
+	public static final String HTML_NEW_LINE_TAG="</br>";
+	public static final String ALPHANUMERIC_REGEX="[\\w]*";
 }

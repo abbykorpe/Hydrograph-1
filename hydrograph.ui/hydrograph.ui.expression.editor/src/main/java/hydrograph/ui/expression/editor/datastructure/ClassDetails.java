@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.core.BinaryType;
 import org.eclipse.jdt.internal.core.SourceMethod;
 import org.eclipse.jdt.internal.core.SourceType;
 import org.slf4j.Logger;
@@ -21,22 +22,20 @@ import org.slf4j.Logger;
 @SuppressWarnings("restriction")
 public class ClassDetails {
 
-	private static final String PACKAGE_NAME_HEADER = "\n\t</br><b>Package Name ::</b> ";
-	private static final String JAR_FILE_NAME_HEADER = "\n\t<b>Jar File Name ::</b> ";
 	private boolean isUserDefined;
 	private String displayName;
-	private String packageName="";
-	private String jarName="";
+	private String packageName=Constants.EMPTY_STRING;
+	private String jarName=Constants.EMPTY_STRING;
 	private String cName;
 	private String javaDoc;
 	private List<MethodDetails> methodList = new ArrayList<MethodDetails>();
 
 	public ClassDetails(IClassFile classFile, String jarFileName, String packageName, boolean isUserDefined) {
 		Logger LOGGER = LogFactory.INSTANCE.getLogger(ClassDetails.class);
-		LOGGER.debug("Extracting methods from "+cName);
+		LOGGER.debug("Extracting methods from "+classFile.getElementName());
 	
 		try {
-			this.javaDoc = classFile.getAttachedJavadoc(null);
+			this.javaDoc=getJavaDoc(classFile);	
 			intialize(classFile,jarFileName,packageName, isUserDefined);
 			for (IJavaElement iJavaElement : classFile.getChildren()) {
 				if (iJavaElement instanceof IType) {
@@ -51,12 +50,23 @@ public class ClassDetails {
 		}
 	}
 
-	public ClassDetails(SourceType javaClassFile, String jarFileName, String packageName2, boolean isUserDefined) {
+	private String getJavaDoc(IClassFile classFile) throws JavaModelException {
+		BinaryType binaryType=(BinaryType)classFile.getType();
+		if(binaryType.getSource() !=null && binaryType.getJavadocRange()!=null){
+		String javaDoc=Constants.EMPTY_STRING;
+			javaDoc = StringUtils.substring(binaryType.getSource().toString(), 0, binaryType.getJavadocRange().getLength());
+		javaDoc = StringUtils.replaceEachRepeatedly(javaDoc, new String[] { "/*", "*/", "*" }, new String[] {
+				Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING });
+		}
+		return javaDoc;
+	}
+
+	public ClassDetails(SourceType javaClassFile, String jarFileName, String packageName, boolean isUserDefined) {
 		Logger LOGGER = LogFactory.INSTANCE.getLogger(ClassDetails.class);
 		LOGGER.debug("Extracting methods from " + cName);
 
 		try {
-			this.javaDoc = javaClassFile.getAttachedJavadoc(null);
+			this.javaDoc=getJavaDoc(javaClassFile);			
 			intialize(javaClassFile, jarFileName, packageName, isUserDefined);
 			for (IJavaElement iJavaElement : javaClassFile.getChildren()) {
 				if (iJavaElement instanceof SourceMethod) {
@@ -68,6 +78,14 @@ public class ClassDetails {
 		}
 	}
 
+	private String getJavaDoc(SourceType javaClassFile) throws JavaModelException {
+		StringBuffer source = new StringBuffer(javaClassFile.getSource());
+		String javaDoc = StringUtils.substring(source.toString(), 0, javaClassFile.getJavadocRange().getLength());
+		javaDoc = StringUtils.replaceEachRepeatedly(javaDoc, new String[] { "/*", "*/", "*" }, new String[] {
+				Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING });
+		return javaDoc;
+	}
+	
 	private void addMethodsToClass(IMethod iMethod) throws JavaModelException {
 		if (iMethod.isConstructor() || iMethod.isMainMethod() || isMethodDepricated(iMethod)) {
 			return;
@@ -121,14 +139,19 @@ public class ClassDetails {
 
 	private void updateJavaDocForSorceClass(String jarFileName, String packageName) {
 		StringBuffer buffer=new StringBuffer();
-		buffer.append(PACKAGE_NAME_HEADER+packageName);
+		buffer.append(Constants.PACKAGE_NAME_HEADER+packageName);
+		buffer.append(Constants.HTML_NEW_LINE_TAG);
+		buffer.append(Constants.HTML_NEW_LINE_TAG);
 		javaDoc=buffer.toString()+"\n"+javaDoc;
 	}
 
 	private void updateJavaDoc(String jarFileName, String packageName) {
 		StringBuffer buffer=new StringBuffer();
-		buffer.append(JAR_FILE_NAME_HEADER+jarFileName);
-		buffer.append(PACKAGE_NAME_HEADER+packageName);
+		buffer.append(Constants.JAR_FILE_NAME_HEADER+jarFileName);
+		buffer.append(Constants.HTML_NEW_LINE_TAG);
+		buffer.append(Constants.PACKAGE_NAME_HEADER+packageName);
+		buffer.append(Constants.HTML_NEW_LINE_TAG);
+		buffer.append(Constants.HTML_NEW_LINE_TAG);
 		javaDoc=buffer.toString()+"\n"+javaDoc;
 	}
 

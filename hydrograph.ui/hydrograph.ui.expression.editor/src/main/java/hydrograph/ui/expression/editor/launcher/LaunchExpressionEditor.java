@@ -21,7 +21,6 @@ import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.message.CustomMessageBox;
-import hydrograph.ui.expression.editor.util.HeapDumper;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
@@ -51,7 +50,6 @@ public class LaunchExpressionEditor {
 					.createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
 			ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(Display.getCurrent()
 					.getActiveShell(), expressionEditorData);
-//			HeapDumper.dumpHeap("c:\\TEMP\\heap_dump_before_1_gc.log", false);
 			int returnCode = expressionEditorDialog.open();
 			if (returnCode == 0) {
 				saveProperty(expressionEditorData, expressionEditorDialog.getExpressionText());
@@ -113,21 +111,20 @@ public class LaunchExpressionEditor {
 	}
 	
 	private void cleanUp() throws JavaModelException{
-//		JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()).setRawClasspath(oldClasspathEntry, new NullProgressMonitor());
 		System.gc();
-		removeTemprarySourceFolder();
+		removeTemprarySourcePackage();
 	}
 	
-	private void removeTemprarySourceFolder(){
-		IPath tempSrcFolder=new Path(PathConstant.TEMP_BUILD_PATH_SETTINGS_FOLDER);
-		IFolder  folder=BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getFolder(tempSrcFolder);
+	private void removeTemprarySourcePackage() {
+		IPath tempSrcFolder = new Path(PathConstant.TEMP_BUILD_PATH_COMPILATION_PACKAGE);
+		IFolder folder = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getFolder(tempSrcFolder);
 		try {
-		if(folder.exists()){
+			if (folder.exists()) {
 				folder.delete(true, new NullProgressMonitor());
 			}
 		} catch (CoreException e) {
-			LOGGER.error("CoreException occurred while removing temporary source folder",e);
+			LOGGER.error("CoreException occurred while removing temporary source folder", e);
 		}
-		LOGGER.debug("Removed temporary build path at "+PathConstant.TEMP_BUILD_PATH_SETTINGS_FOLDER);
+		LOGGER.debug("Removed temporary build path at " + PathConstant.TEMP_BUILD_PATH_SETTINGS_FOLDER);
 	}
 }

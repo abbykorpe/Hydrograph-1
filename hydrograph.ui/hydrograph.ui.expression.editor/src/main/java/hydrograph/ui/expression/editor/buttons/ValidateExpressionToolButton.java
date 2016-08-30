@@ -45,7 +45,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -60,7 +59,6 @@ public class ValidateExpressionToolButton extends Button {
 	private static final String RETURN_STATEMENT = "\t\treturn \n";
 	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR = "compile";
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ValidateExpressionToolButton.class);
-	private static final String VALID_EXPRESSION = "Success";
 	public static final String HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS = "hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI";
 	private static final String ITEM_TEXT = "Validate";
 	private StyledText expressionEditor;
@@ -137,7 +135,7 @@ public class ValidateExpressionToolButton extends Button {
 			if (diagnostics != null && !diagnostics.getDiagnostics().isEmpty())
 				showDiagnostics(diagnostics);
 			else {
-				new CustomMessageBox(SWT.ICON_INFORMATION, VALID_EXPRESSION, Messages.VALID_EXPRESSION_TITLE).open();
+				new CustomMessageBox(SWT.ICON_INFORMATION, Messages.VALID_EXPRESSION_TITLE, Messages.VALID_EXPRESSION_TITLE).open();
 			}
 		} catch (JavaModelException | MalformedURLException | IllegalAccessException | IllegalArgumentException exception) {
 			LOGGER.error("Exception occurred while compiling expression",exception);
@@ -158,7 +156,7 @@ public class ValidateExpressionToolButton extends Button {
 				message = diagnostic.getMessage(null);
 				new CustomMessageBox(SWT.ERROR, message, Messages.INVALID_EXPRESSION_TITLE).open();
 			} else {
-				new CustomMessageBox(SWT.ICON_INFORMATION, VALID_EXPRESSION, Messages.VALID_EXPRESSION_TITLE).open();
+				new CustomMessageBox(SWT.ICON_INFORMATION, Messages.VALID_EXPRESSION_TITLE, Messages.VALID_EXPRESSION_TITLE).open();
 			}
 			break;
 		}

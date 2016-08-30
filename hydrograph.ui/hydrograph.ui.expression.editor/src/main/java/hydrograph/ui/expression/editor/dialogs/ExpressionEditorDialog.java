@@ -191,7 +191,7 @@ public class ExpressionEditorDialog extends Dialog {
 	}
 
 	private boolean confirmToExitWithoutSave() {
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.YES
 				| SWT.NO);
 		messageBox.setMessage(Messages.MESSAGE_TO_EXIT_WITHOUT_SAVE);
 		messageBox.setText("Exiting expression editor");

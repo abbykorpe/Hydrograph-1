@@ -25,4 +25,5 @@ public class PathConstant {
 	public static final String PROJECT_LIB_FOLDER = "lib";
 	public static final String PROJECTS_SETTINGS_FOLDER = ".settings";
 	public static final String TEMP_BUILD_PATH_SETTINGS_FOLDER = ".settings/tempClassPathSourceFolder";
+	public static final String TEMP_BUILD_PATH_COMPILATION_PACKAGE = ".settings/tempClassPathSourceFolder/hydrograph";
 }

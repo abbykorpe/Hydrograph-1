@@ -10,6 +10,8 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
@@ -70,6 +72,7 @@ public class BuildExpressionEditorDataSturcture {
 				IPackageFragment fragment = iPackageFragmentRoot.getPackageFragment(packageName);
 				if (fragment != null && StringUtils.equals(fragment.getClass().getSimpleName(), JAR_PACKAGE_FRAGMENT)) {
 					for (IClassFile element : fragment.getClassFiles()) {
+						if( isValidCLassName(element.getElementName())) 
 						ClassRepo.INSTANCE.addClass(element, jarFileName, packageName, true);
 					}
 					return true;
@@ -77,7 +80,7 @@ public class BuildExpressionEditorDataSturcture {
 					for (IJavaElement element : fragment.getChildren()) {
 						if (element instanceof ICompilationUnit) {
 							for (IJavaElement javaElement : ((ICompilationUnit) element).getChildren()) {
-								if (javaElement instanceof SourceType) {
+								if (javaElement instanceof SourceType && isValidCLassName(javaElement.getElementName())) {
 									ClassRepo.INSTANCE.addClass((SourceType) javaElement, jarFileName, packageName,true);
 								}
 							}
@@ -94,6 +97,14 @@ public class BuildExpressionEditorDataSturcture {
 		return false;
 	}
 
+	private boolean isValidCLassName(String className) {
+		className = StringUtils.removeEndIgnoreCase(className, Constants.CLASS_EXTENSION);
+		Matcher matchs = Pattern.compile(Constants.ALPHANUMERIC_REGEX).matcher(className);
+		if(!matchs.matches())
+			return false;
+		return true;
+	}
+	
 	public IPackageFragmentRoot getIPackageFragment(String jarFileName) {
 		IProject iProject = getCurrentProject();
 		try {

@@ -30,6 +30,11 @@ public class FieldDataTypeMap {
 	
 	private FieldDataTypeMap() {}
 	
+	/**
+	 * @param selectedInputFields
+	 * @param outputSchema
+	 * @return
+	 */
 	public Map<String, Class<?>> createFieldDataTypeMap(List<String> selectedInputFields,
 			ComponentsOutputSchema outputSchema) {
 		Map<String, Class<?>> fieldMap = new LinkedHashMap<String, Class<?>>();

@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class AvailableFieldsComposite extends Composite {
-	private static final String AVAILABLE_INPUT_FIELDS = "Selected Input Fields";
+	private static final String AVAILABLE_INPUT_FIELDS = "Input Fields";
 	private Table table;
 	private TableColumn availableFieldsColumn ;
 	private List<String> inputFields;

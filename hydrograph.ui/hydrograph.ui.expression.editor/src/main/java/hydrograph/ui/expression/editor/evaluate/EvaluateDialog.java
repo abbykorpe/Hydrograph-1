@@ -101,7 +101,6 @@ public class EvaluateDialog extends Dialog {
 		
 		showOutput(OUTPUT);
 		
-		
 		return container;
 	}
 
@@ -142,6 +141,7 @@ public class EvaluateDialog extends Dialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 	evaluateButton = createButton(parent, IDialogConstants.NO_ID, "Evaluate", false);
+	evaluateButton.setFocus();
 	addListenerToEvaluateButton();
 	createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, false);
 	}

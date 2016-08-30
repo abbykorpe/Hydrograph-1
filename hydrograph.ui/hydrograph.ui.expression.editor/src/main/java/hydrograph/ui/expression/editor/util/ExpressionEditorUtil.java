@@ -31,6 +31,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
@@ -95,6 +96,7 @@ public class ExpressionEditorUtil {
 			
 			@Override
 			public void focusLost(FocusEvent e) {
+				searchTextBox.setForeground(new Color(null,128,128,128));
 				if(StringUtils.isBlank(searchTextBox.getText())){
 					searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
 				}
@@ -102,6 +104,7 @@ public class ExpressionEditorUtil {
 			
 			@Override
 			public void focusGained(FocusEvent e) {
+				searchTextBox.setForeground(new Color(null,0,0,0));
 				if(StringUtils.equalsIgnoreCase(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText())){
 					searchTextBox.setText(Constants.EMPTY_STRING);
 				}
