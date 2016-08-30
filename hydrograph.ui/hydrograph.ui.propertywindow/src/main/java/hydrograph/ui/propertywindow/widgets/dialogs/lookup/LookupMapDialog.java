@@ -22,6 +22,7 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
@@ -60,6 +61,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -110,14 +113,17 @@ public class LookupMapDialog extends Dialog {
 	private static final String IN1_HEADER = "Input Fields(in1)";
 	
 	private static final String PULL_TOOLTIP = "Pull schema";
-	private static final String ADD_TOOLTIP = "Add field";
-	private static final String DELETE_TOOLTIP = "Delete field";
-	private static final String UP_TOOLTIP = "Move field up";
-	private static final String DOWN_TOOLTIP = "Move field down";
 	
 	private static final String DIALOG_TITLE="Lookup Mapping Dialog";
 	private Table in1Table;
 	private Table in0Table;
+	
+	private static final Character KEY_D = 'd';
+	private static final Character KEY_N = 'n';
+	private boolean ctrlKeyPressed = false;
+	private Table table1;
+	private TableViewerColumn tableViewerColumn;
+	private TableViewerColumn tableViewerColumn_1;
 	
 	/**
 	 * Create the Lookup mapping dialog.
@@ -215,7 +221,7 @@ public class LookupMapDialog extends Dialog {
 		gl_mappingTableComposite2.horizontalSpacing = 0;
 		mappingTableComposite2.setLayout(gl_mappingTableComposite2);
 
-		Table table = createMappingTable(mappingTableComposite2);
+		table1 = createMappingTable(mappingTableComposite2);
 
 		addTabFunctionalityInMappingTable();
 		
@@ -223,8 +229,8 @@ public class LookupMapDialog extends Dialog {
 		
 		createOutputFieldColumnInMappingTable();
 
-		setTableLayoutToMappingTable(table);
-
+		setTableLayoutToMappingTable(table1);
+		
 		mappingTableViewer.setInput(mappingTableItemList);
 
 		attachDropFunctionalityToMappingTable();
@@ -232,6 +238,7 @@ public class LookupMapDialog extends Dialog {
 		mappingScrolledComposite.setContent(mappingTableComposite2);
 		mappingScrolledComposite.setMinSize(mappingTableComposite2.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
+		attachShortcutListner();
 	}
 
 	private void setTableLayoutToMappingTable(Table table) {
@@ -304,7 +311,7 @@ public class LookupMapDialog extends Dialog {
 	}
 
 	private void createOutputFieldColumnInMappingTable() {
-		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(
+		tableViewerColumn_1 = new TableViewerColumn(
 				mappingTableViewer, SWT.NONE);
 		TableColumn tblclmnPropertyValue = tableViewerColumn_1.getColumn();
 		tblclmnPropertyValue.setWidth(148);
@@ -375,7 +382,7 @@ public class LookupMapDialog extends Dialog {
 	}
 
 	private void createInputFieldColumnInMappingTable() {
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(
+		tableViewerColumn = new TableViewerColumn(
 				mappingTableViewer, SWT.NONE);
 		TableColumn tblclmnPropertyName = tableViewerColumn.getColumn();
 		tblclmnPropertyName.setWidth(169);
@@ -538,102 +545,126 @@ public class LookupMapDialog extends Dialog {
 		btnDown = new Button(composite_11, SWT.NONE);
 	Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown.setImage(downButtonImage);
-		btnDown.setToolTipText(DOWN_TOOLTIP);
+		btnDown.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = mappingTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int i = indexes.length - 1; i > -1; i--) {
-
-					if (indexes[i] < mappingTableItemList.size() - 1) {
-						Collections.swap(
-								(List<LookupMapProperty>) mappingTableItemList,
-								indexes[i], indexes[i] + 1);
-						mappingTableViewer.refresh();
-
-					}
-				}
-				refreshButtonStatus();
+				moveRowDown();
 			}
 		});
+	}
+	
+	private void moveRowDown()
+	{
+		Table table = mappingTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int i = indexes.length - 1; i > -1; i--) {
+
+			if (indexes[i] < mappingTableItemList.size() - 1) {
+				Collections.swap(
+						(List<LookupMapProperty>) mappingTableItemList,
+						indexes[i], indexes[i] + 1);
+				mappingTableViewer.refresh();
+
+			}
+		}
+		refreshButtonStatus();
+	
 	}
 
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
 		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		btnUp.setImage(upButtonImage);
-		btnUp.setToolTipText(UP_TOOLTIP);
+		btnUp.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = mappingTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int index : indexes) {
-
-					if (index > 0) {
-						Collections.swap(
-								(List<LookupMapProperty>) mappingTableItemList,
-								index, index - 1);
-						mappingTableViewer.refresh();
-					}
-				}
-				refreshButtonStatus();
+				moveRowUp();
 			}
 		});
+	}
+	
+	private void moveRowUp()
+	{
+		Table table = mappingTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int index : indexes) {
+
+			if (index > 0) {
+				Collections.swap(
+						(List<LookupMapProperty>) mappingTableItemList,
+						index, index - 1);
+				mappingTableViewer.refresh();
+			}
+		}
+		refreshButtonStatus();
+	
 	}
 
 	private void createDeleteButton(Composite composite_11) {
 		btnDelete = new Button(composite_11, SWT.NONE);
 		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		btnDelete.setImage(deleteButtonImage);
-		btnDelete.setToolTipText(DELETE_TOOLTIP);
+		btnDelete.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = mappingTableViewer.getTable();
-				int selectionIndex = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				if (selectionIndex == -1) {
-					WidgetUtility.errorMessage("Select Rows to delete");
-				} else {
-					table.remove(indexs);
-					int itemsRemoved=0;
-					for (int index : indexs) {
-						mappingTableItemList.remove(index-itemsRemoved);
-						if(index-itemsRemoved-1 != -1){
-							table.setSelection(index-itemsRemoved-1);
-						}else{
-							table.setSelection(0);
-						}
-						itemsRemoved++;
-					}
-					mappingTableViewer.refresh();
-				}
-				component.setLatestChangesInSchema(false);
-				refreshButtonStatus();
+				deleteRow();
 			}
 		});
+	}
+	
+	private void deleteRow()
+	{
+		Table table = mappingTableViewer.getTable();
+		int selectionIndex = table.getSelectionIndex();
+		int[] indexs = table.getSelectionIndices();
+		if (selectionIndex == -1) {
+			WidgetUtility.errorMessage("Select Rows to delete");
+		} else {
+			table.remove(indexs);
+			int itemsRemoved=0;
+			for (int index : indexs) {
+				mappingTableItemList.remove(index-itemsRemoved);
+				if(index-itemsRemoved-1 != -1){
+					table.setSelection(index-itemsRemoved-1);
+				}else{
+					table.setSelection(0);
+				}
+				itemsRemoved++;
+			}
+			mappingTableViewer.refresh();
+		}
+		component.setLatestChangesInSchema(false);
+		refreshButtonStatus();
+	
 	}
 
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
 		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		btnAdd.setImage(addButtonImage);
-		btnAdd.setToolTipText(ADD_TOOLTIP);
+		btnAdd.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				LookupMapProperty lookupMapProperty = new LookupMapProperty();
-				lookupMapProperty.setOutput_Field("");
-				lookupMapProperty.setSource_Field("");
-				mappingTableItemList.add(lookupMapProperty);
-				mappingTableViewer.refresh();
-				mappingTableViewer.editElement(lookupMapProperty, 0);
-				component.setLatestChangesInSchema(false);
-				refreshButtonStatus();
+				addNewRow();
 			}
 		});
+	}
+	
+	private void addNewRow()
+	{
+		LookupMapProperty lookupMapProperty = new LookupMapProperty();
+		lookupMapProperty.setOutput_Field("");
+		lookupMapProperty.setSource_Field("");
+		mappingTableItemList.add(lookupMapProperty);
+		mappingTableViewer.refresh();
+		mappingTableViewer.editElement(lookupMapProperty, 0);
+		component.setLatestChangesInSchema(false);
+		refreshButtonStatus();
+	
 	}
 
 	private Composite createOuterMostComposite(Composite container) {
@@ -902,5 +933,42 @@ public class LookupMapDialog extends Dialog {
 			btnUp.setEnabled(false);
 		}
 		
+	}
+	
+	private void attachShortcutListner(){
+		Control currentControl= table1;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+					deleteRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+					addNewRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp();				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown();
+				}
+			}
+		});
 	}
 }

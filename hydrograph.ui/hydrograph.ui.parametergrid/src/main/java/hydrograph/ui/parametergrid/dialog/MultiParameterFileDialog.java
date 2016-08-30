@@ -609,6 +609,10 @@ public class MultiParameterFileDialog extends Dialog {
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				//WidgetUtility.setCursorOnDeleteRow(parameterTableViewer, parameters);
+				//parameterTableViewer.refresh(); 
+				
+				
 				Table table = parameterTableViewer.getTable();
 				int selectionIndex = table.getSelectionIndex();
 				int[] indexs = table.getSelectionIndices();
@@ -624,6 +628,33 @@ public class MultiParameterFileDialog extends Dialog {
 					}
 					parameterTableViewer.getTable().removeAll();
 					parameterTableViewer.refresh();
+				}
+				
+				if(indexs.length == 1 && parameters.size() > 0){//only one item is deleted
+					if(parameters.size() == 1){//list contains only one element
+						table.select(0);// select the first element
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+					}
+					else if(parameters.size() == indexs[0]){//deleted last item 
+						table.select(parameters.size() - 1);//select the last element which now at the end of the list
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt(parameters.size() - 1), 0);
+					}
+					else if(parameters.size() > indexs[0]){//deleted element from middle of the list
+						table.select( indexs[0] == 0 ? 0 : (indexs[0] - 1) );//select the element from at the previous location
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt(indexs[0] == 0 ? 0 : (indexs[0] - 1)), 0);
+					}
+				}
+				else if(indexs.length >= 2){//multiple items are selected for deletion
+					if(indexs[0] == 0){//delete from 0 to ...
+						if(parameters.size() >= 1){//list contains only one element
+							table.select(0);//select the remaining element
+							parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+						}
+					}
+					else{//delete started from element other than 0th element
+						table.select((indexs[0])-1);//select element before the start of selection   
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt((indexs[0])-1), 0);
+					}
 				}
 			}
 		});

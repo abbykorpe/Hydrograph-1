@@ -108,12 +108,9 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private Button downButton;
 	private static final String INFORMATION="Information";
 	
-	private static final String PROPERTY_TABLE = "PROPERTY_TABLE";
 	private static final Character KEY_D = 'd';
 	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
-	private static final String PROPERTY_NAME = "PROPERTY_NAME";
-	private static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
@@ -152,7 +149,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		createSourceTable(composite_2);
 
 		createTargetTable(composite_2);
-
+		
+		attachShortcutListner();
 		addErrorLabel(container);
 
 		return container;
@@ -225,21 +223,11 @@ public class SecondaryColumnKeysDialog extends Dialog {
 				enableControlButtons();
 			}
 		});
-		attachShortcutListner(PROPERTY_TABLE);
-		attachShortcutListner(PROPERTY_NAME);
-		attachShortcutListner(PROPERTY_VALUE);
 
 	}
 	
-	private void attachShortcutListner(String controlName){
-		Control currentControl;
-				
-		if (controlName == PROPERTY_NAME)
-			currentControl = targetTableViewer.getCellEditors()[0].getControl();
-		else if(controlName == PROPERTY_VALUE)
-			currentControl = targetTableViewer.getCellEditors()[1].getControl();
-		else
-			currentControl = targetTable;
+	private void attachShortcutListner(){
+		Control currentControl= targetTable;
 		
 		currentControl.addKeyListener(new KeyListener() {						
 			

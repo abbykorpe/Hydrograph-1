@@ -36,18 +36,22 @@ import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -57,19 +61,18 @@ import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.widgets.Text;
 
 public class OperationClassDialog extends Dialog implements IOperationClassDialog {
 
@@ -110,6 +113,10 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Integer macButtonHeight = 30;
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
+	private static final Character KEY_D = 'd';
+	private static final Character KEY_N = 'n';
+	private boolean ctrlKeyPressed = false;
+	private Table table_2;
 
 	public OperationClassDialog(Shell parentShell, String componentName, MappingSheetRow mappingSheetRow,
 			PropertyDialogButtonBar propertyDialogButtonBar, WidgetConfig widgetConfig,TransformDialog transformDialog ) {
@@ -196,7 +203,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.MULTI);
-		Table table_2 = nameValueTableViewer.getTable();
+		table_2 = nameValueTableViewer.getTable();
 		addResizbleListner(table_2);
 		GridData gd_table_2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_table_2.heightHint = 100;
@@ -212,6 +219,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
 		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(this,nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(mappingSheetRow.getNameValueProperty());
+		attachShortcutListner(nameValueTableViewer);
 		table_2.getColumn(0).setWidth(259);
 		table_2.getColumn(1).setWidth(262);
 
@@ -224,18 +232,19 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { addButtonSize, 17, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
+		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				addRow(nameValueTableViewer);
+				addNewRow(nameValueTableViewer);
 			}
 		});
 		
 		table_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				addRow(nameValueTableViewer);
+				addNewRow(nameValueTableViewer);
 			}
 
 			@Override
@@ -252,11 +261,12 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { deleteButtonSize, 17, 20, 15 }, "");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
+		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				WidgetUtility.setCursorOnDeleteRow(nameValueTableViewer, mappingSheetRow.getNameValueProperty());
+				deleteRow(nameValueTableViewer);
 			}
 
 		});
@@ -270,20 +280,12 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { upButtonSize, 17, 20, 15 }, "");
 		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
+		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				Table table = nameValueTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int index : indexes) {
-
-					if (index > 0) {
-						Collections.swap(mappingSheetRow.getNameValueProperty(), index, index - 1);
-						nameValueTableViewer.refresh();
-						applyButton.setEnabled(true);
-					}
-				}
+				moveRowUp(nameValueTableViewer);
 			}
 
 		});
@@ -297,21 +299,12 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { downButtonSize, 17, 20, 15 }, "");
 		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
+		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);	
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				Table table = nameValueTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int i = indexes.length - 1; i > -1; i--) {
-
-					if (indexes[i] < mappingSheetRow.getNameValueProperty().size() - 1) {
-						Collections.swap(mappingSheetRow.getNameValueProperty(), indexes[i], indexes[i] + 1);
-						nameValueTableViewer.refresh();
-						applyButton.setEnabled(true);
-
-					}
-				}
+				moveRowDown(nameValueTableViewer);
 			}
 
 		});
@@ -331,8 +324,46 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		return container;
 	}
 
+	private void moveRowUp(TableViewer nameValueTableViewer)
+	{
 
-	private void addRow(TableViewer nameValueTableViewer){
+		Table table = nameValueTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int index : indexes) {
+
+			if (index > 0) {
+				Collections.swap(mappingSheetRow.getNameValueProperty(), index, index - 1);
+				nameValueTableViewer.refresh();
+				applyButton.setEnabled(true);
+			}
+		}
+	
+	}
+	
+	private void moveRowDown(TableViewer nameValueTableViewer)
+	{
+		Table table = nameValueTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int i = indexes.length - 1; i > -1; i--) {
+
+			if (indexes[i] < mappingSheetRow.getNameValueProperty().size() - 1) {
+				Collections.swap(mappingSheetRow.getNameValueProperty(), indexes[i], indexes[i] + 1);
+				nameValueTableViewer.refresh();
+				applyButton.setEnabled(true);
+
+			}
+		}
+	
+	}
+	
+	private void deleteRow(TableViewer nameValueTableViewer)
+	{
+		WidgetUtility.setCursorOnDeleteRow(nameValueTableViewer, mappingSheetRow.getNameValueProperty());
+		nameValueTableViewer.refresh();
+	
+	}
+	
+	private void addNewRow(TableViewer nameValueTableViewer){
 		NameValueProperty nameValueProperty = new NameValueProperty();
 		nameValueProperty.setPropertyName("");
 		nameValueProperty.setPropertyValue("");
@@ -639,6 +670,43 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		cancelPressed();
 	}
 
+	private void attachShortcutListner(final TableViewer nameValueTableViewer){
+		Control currentControl = table_2;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+					deleteRow(nameValueTableViewer);
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+					addNewRow(nameValueTableViewer);
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp(nameValueTableViewer);				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown(nameValueTableViewer);
+				}
+			}
+		});
+	}
+	
 	@Override
 	public boolean close() {
 		if(!isOkPressed){
