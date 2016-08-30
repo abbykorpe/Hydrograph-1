@@ -55,8 +55,7 @@ public class XmlParsingUtils {
 			throw new HydrographXMLInputServiceException(e);
 		}
 
-		String XMLprolog = (scan.findWithinHorizon("<\\?.*\\?>", 200) + "")
-				.replaceAll(" ", "");
+		String XMLprolog = (scan.findWithinHorizon("<\\?.*\\?>", 200) + "").replaceAll(" ", "");
 
 		String encoding;
 		if (XMLprolog.matches(".*encoding=\".*")) {
@@ -67,12 +66,11 @@ public class XmlParsingUtils {
 		}
 
 		scan.close();
-		
+
 		try {
 			FileEncodingEnum.valueOf(encoding.replaceAll("-", "_"));
 		} catch (IllegalArgumentException e) {
-			throw new HydrographXMLInputServiceException("Unrecognized encoding \""
-					+ encoding + "\" in XML file.");
+			throw new HydrographXMLInputServiceException("Unrecognized encoding \"" + encoding + "\" in XML file.");
 		}
 
 		return encoding;
@@ -114,6 +112,18 @@ public class XmlParsingUtils {
 
 	}
 
+	public static String getUDFPath(String[] args) {
+
+		String path = optionsProcessor.getUDFPath(args);
+
+		if (path != null) {
+			return path;
+		}
+
+		return path;
+
+	}
+
 	public static String getJobId(String[] args) {
 
 		String jobId = optionsProcessor.getJobId(args);
@@ -123,7 +133,7 @@ public class XmlParsingUtils {
 		}
 
 		if (jobId == null) {
-			//optional param
+			// optional param
 		}
 		return jobId;
 
@@ -138,7 +148,7 @@ public class XmlParsingUtils {
 		}
 
 		if (basePath == null) {
-			//optional param
+			// optional param
 		}
 		return basePath;
 

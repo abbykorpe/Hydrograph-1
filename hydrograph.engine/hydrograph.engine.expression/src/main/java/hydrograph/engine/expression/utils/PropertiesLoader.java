@@ -45,12 +45,14 @@ public class PropertiesLoader {
 	 * @throws IOException
 	 *             if there is a problem reading the properties file.
 	 */
-	public static Properties getOrderedProperties(String propertyFileName) throws IOException {
+	public static Properties getProperties(String propertyFileName) throws IOException {
 		// LOG.trace("Entering method : 'getProperties', file name: '" +
 		// propertyFileName + "'");
 		Properties properties = new Properties();
 		File file = new File(propertyFileName);
 		InputStream in;
+		if(!getFileExtension(file).equals("properties"))
+			throw new RuntimeException("file extension should be .properties");
 		if (file.isFile())
 			in = new FileInputStream(file);
 		else
@@ -78,4 +80,11 @@ public class PropertiesLoader {
 		}
 		return properties;
 	}
+	
+	private static String getFileExtension(File file) {
+        String fileName = file.getName();
+        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+        return fileName.substring(fileName.lastIndexOf(".")+1);
+        else return "";
+    }
 }

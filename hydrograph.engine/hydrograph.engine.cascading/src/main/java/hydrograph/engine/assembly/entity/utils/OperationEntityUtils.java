@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity.utils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import hydrograph.engine.assembly.entity.elements.Expression;
 import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
 import hydrograph.engine.assembly.entity.elements.KeyField;
@@ -21,6 +27,7 @@ import hydrograph.engine.assembly.entity.elements.OperationField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.PassThroughField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeExpressionField;
 import hydrograph.engine.jaxb.commontypes.TypeExpressionOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeInputField;
@@ -30,16 +37,10 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.join.TypeKeyFields;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * The utility class for entities of all operation type components. This class
@@ -498,6 +499,10 @@ public class OperationEntityUtils {
 				TypeOperationField typeOperationField = (TypeOperationField) field;
 				operationFieldList
 						.add(new OperationField(typeOperationField.getName(), typeOperationField.getOperationId()));
+			} else if (field instanceof TypeExpressionField) {
+				TypeExpressionField typeOperationField = (TypeExpressionField) field;
+				operationFieldList
+						.add(new OperationField(typeOperationField.getName(), typeOperationField.getExpressionId()));
 			}
 		}
 		return operationFieldList;

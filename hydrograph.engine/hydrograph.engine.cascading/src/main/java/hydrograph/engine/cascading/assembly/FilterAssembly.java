@@ -44,8 +44,7 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 	private FilterEntity filterEntity;
 	private static Logger LOG = LoggerFactory.getLogger(FilterAssembly.class);
 
-	public FilterAssembly(FilterEntity baseComponentEntity,
-			ComponentParameters parameters) {
+	public FilterAssembly(FilterEntity baseComponentEntity, ComponentParameters parameters) {
 		super(baseComponentEntity, parameters);
 	}
 
@@ -56,12 +55,9 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 				LOG.trace(filterEntity.toString());
 			}
 			for (OutSocket outSocket : filterEntity.getOutSocketList()) {
-				LOG.trace("Creating filter assembly for '"
-						+ filterEntity.getComponentId() + "' for socket: '"
-						+ outSocket.getSocketId() + "' of type: '"
-						+ outSocket.getSocketType() + "'");
-				createAssemblyFor(outSocket.getSocketId(),
-						outSocket.getSocketType());
+				LOG.trace("Creating filter assembly for '" + filterEntity.getComponentId() + "' for socket: '"
+						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
+				createAssemblyFor(outSocket.getSocketId(), outSocket.getSocketType());
 			}
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -77,31 +73,50 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 			isUnused = true;
 		}
 
-		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("filter",filterEntity.getComponentId() ,
-				 socketId), componentParameters.getInputPipe());
+		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("filter", filterEntity.getComponentId(), socketId),
+				componentParameters.getInputPipe());
 		// validate expression
+		ValidationAPI validationAPI = null;
+		if (filterEntity.getOperation().getOperationClass() == null) {
+			validationAPI = new ValidationAPI(filterEntity.getOperation().getExpression(),
+					componentParameters.getUDFPath());
+			expressionValidate(validationAPI);
+		}
 		FilterCustomHandler filterCustomHandler = new FilterCustomHandler(
-				new Fields(filterEntity.getOperation()
-						.getOperationInputFields()), filterEntity
-						.getOperation().getOperationClass(), filterEntity
-						.getOperation().getOperationProperties(), isUnused,filterEntity.getOperation().getExpression());
+				new Fields(filterEntity.getOperation().getOperationInputFields()),
+				filterEntity.getOperation().getOperationClass(), filterEntity.getOperation().getOperationProperties(),
+				isUnused, validationAPI);
 
-		RecordFilter selectCustomFilter = new RecordFilter(filterCustomHandler,componentParameters.getInputPipe().getName());
+		RecordFilter selectCustomFilter = new RecordFilter(filterCustomHandler,
+				componentParameters.getInputPipe().getName());
 
 		setHadoopProperties(filterPipe.getStepConfigDef());
 
-		filterPipe = new Each(filterPipe, new Fields(filterEntity
-				.getOperation().getOperationInputFields()), selectCustomFilter);
+		filterPipe = new Each(filterPipe, new Fields(filterEntity.getOperation().getOperationInputFields()),
+				selectCustomFilter);
 
-		setOutLink(socketType, socketId, filterEntity.getComponentId(),
-				filterPipe, componentParameters.getInputFields());
+		setOutLink(socketType, socketId, filterEntity.getComponentId(), filterPipe,
+				componentParameters.getInputFields());
 	}
-	
-	
+
+	private void expressionValidate(ValidationAPI validationAPI) {
+			Map<String, Class<?>> schemaMap = new HashMap<String, Class<?>>();
+			try {
+				for (SchemaField schemaField : componentParameters.getSchemaFields()) {
+					schemaMap.put(schemaField.getFieldName(), Class.forName(schemaField.getFieldDataType()));
+				}
+				DiagnosticCollector<JavaFileObject> diagnostic = validationAPI.compile(schemaMap);
+				if (diagnostic.getDiagnostics().size() > 0) {
+					throw new RuntimeException(diagnostic.getDiagnostics().get(0).getMessage(null));
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+	}
 
 	@Override
 	public void initializeEntity(FilterEntity assemblyEntityBase) {
-		this.filterEntity=assemblyEntityBase;
+		this.filterEntity = assemblyEntityBase;
 	}
 
 }

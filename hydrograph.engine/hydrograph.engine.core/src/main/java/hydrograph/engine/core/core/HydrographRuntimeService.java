@@ -17,7 +17,7 @@ import java.util.Properties;
 public interface HydrographRuntimeService {
 
 	public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath);
+			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath,String UDFPath);
 
 	/**
 	 * Prepares the execution flow before executing it.

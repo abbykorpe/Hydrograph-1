@@ -12,25 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.generator.base.AssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.generator.base.CommandComponentGeneratorBase;
-import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
-import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.generator.base.OutputAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.core.entity.LinkInfo;
-import hydrograph.engine.core.helper.JAXBTraversal;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
-import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
-import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
-import hydrograph.engine.utilities.ComponentParameterBuilder;
-import hydrograph.engine.utilities.PlatformHelper;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -51,6 +32,24 @@ import cascading.flow.tez.Hadoop2TezFlowConnector;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.hadoop.BigDecimalSerialization;
 import cascading.tuple.hadoop.TupleSerializationProps;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.generator.base.AssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.CommandComponentGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.OutputAssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.entity.LinkInfo;
+import hydrograph.engine.core.helper.JAXBTraversal;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
+import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
+import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
+import hydrograph.engine.utilities.ComponentParameterBuilder;
+import hydrograph.engine.utilities.PlatformHelper;
 
 @SuppressWarnings("rawtypes")
 public class FlowBuilder {
@@ -66,7 +65,6 @@ public class FlowBuilder {
 		JAXBTraversal traversal = runtimeContext.getTraversal();
 		Properties hadoopProps = runtimeContext.getHadoopProperties();
 		HydrographJob hydrographJob = runtimeContext.getHydrographJob();
-
 		addSerializations(hadoopProps);
 
 		FlowConnector flowConnector = PlatformHelper
@@ -129,7 +127,7 @@ public class FlowBuilder {
 			} else if (assemblyGeneratorBase instanceof OperationAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
-						.setFlowdef().setJobConf().setInputPipes()
+						.setFlowdef().setJobConf().setInputPipes().setUDFPath()
 						.setInputFields().setSchemaFields().build();
 			} else if (assemblyGeneratorBase instanceof CommandComponentGeneratorBase) {
 				CommandComponentGeneratorBase command = ((CommandComponentGeneratorBase) assemblyGeneratorBase)

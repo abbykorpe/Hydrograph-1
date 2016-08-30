@@ -43,13 +43,16 @@ public class ValidationAPI implements Serializable {
 	private String packageNames = "";
 	private String expr;
 
+	@SuppressWarnings("unused")
 	public ValidationAPI(String expression, String propertiesFilePath) {
 		if (propertiesFilePath != null && !propertiesFilePath.equals(""))
 			this.packageNames += generatePackageName(propertiesFilePath);
-		if (expression == null)
-			throw new RuntimeException("Expression must be present");
-		this.expr = expression;
-		this.packageNames += generatePackageName();
+		if ( expression != null && !expression.equals("")) {
+			this.expr = expression;
+			this.packageNames += generatePackageName();
+		}
+		else
+			throw new ExpressionNotFound("Expression is not found");
 	}
 
 	private String generatePackageName(String propertiesFile) {
@@ -57,7 +60,7 @@ public class ValidationAPI implements Serializable {
 
 		Properties properties = new Properties();
 		try {
-			properties = PropertiesLoader.getOrderedProperties(propertiesFile);
+			properties = PropertiesLoader.getProperties(propertiesFile);
 		} catch (IOException e) {
 			throw new RuntimeException("Error reading the properties file: USER_FUNCTIONS_PROPS" + e);
 		}
@@ -72,7 +75,7 @@ public class ValidationAPI implements Serializable {
 
 		Properties properties = new Properties();
 		try {
-			properties = PropertiesLoader.getOrderedProperties(USER_FUNCTIONS_PROPS);
+			properties = PropertiesLoader.getProperties(USER_FUNCTIONS_PROPS);
 		} catch (IOException e) {
 			throw new RuntimeException("Error reading the properties file: USER_FUNCTIONS_PROPS" + e);
 		}
@@ -189,17 +192,22 @@ public class ValidationAPI implements Serializable {
 
 	}
 
-	private Object execute(String[] fieldNames, Object[] data) {
+	/**
+	 * @param fieldNames
+	 *            values are {@link String} array which contains field name used
+	 *            in expression
+	 * @param data
+	 *            values are {@link Object} array which contains data used in
+	 *            expression
+	 * @return the object value {@link Object} w.r.t expression.
+	 * @throws EvalError 
+	 */
+	public Object execute(String[] fieldNames, Object[] data) throws EvalError {
 		Interpreter interpreter = new Interpreter();
-		try {
 			for (int i = 0; i < fieldNames.length; i++) {
 				interpreter.set(fieldNames[i], data[i]);
 			}
 			return interpreter.eval(getValidExpression());
-		} catch (EvalError e) {
-			throw new RuntimeException(e);
-		}
-
 	}
 
 	/**
@@ -221,7 +229,18 @@ public class ValidationAPI implements Serializable {
 	}
 
 	public static Object execute(String expression, String propertiesFilePath, String[] fieldNames, Object[] data) {
-		return new ValidationAPI(expression, propertiesFilePath).execute(fieldNames, data);
+		try {
+			return new ValidationAPI(expression, propertiesFilePath).execute(fieldNames, data);
+		} catch (EvalError e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public class ExpressionNotFound extends RuntimeException {
+		public ExpressionNotFound(String mags) {
+			super(mags);
+		}
+
 	}
 
 }

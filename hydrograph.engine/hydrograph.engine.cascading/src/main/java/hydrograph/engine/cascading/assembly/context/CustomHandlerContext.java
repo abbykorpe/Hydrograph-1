@@ -12,20 +12,21 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.context;
 
-import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
-import hydrograph.engine.cascading.utilities.ReusableRowHelper;
-import hydrograph.engine.cascading.utilities.TupleHelper;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-import hydrograph.engine.utilities.UserClassLoader;
-
 import java.util.ArrayList;
 
 import cascading.tuple.Fields;
 import cascading.tuple.TupleEntry;
+import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
+import hydrograph.engine.cascading.utilities.ReusableRowHelper;
+import hydrograph.engine.cascading.utilities.TupleHelper;
+import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+import hydrograph.engine.utilities.UserClassLoader;
 
 public class CustomHandlerContext<T> {
 
 	private ArrayList<T> transformInstances;
+	private ArrayList<ValidationAPI> exprValidationAPIList;
 
 	private ArrayList<ReusableRow> inputRows;
 	private ArrayList<ReusableRow> outputRows;
@@ -51,13 +52,25 @@ public class CustomHandlerContext<T> {
 		initialize(fieldManupulatingHandler.getOperationInputFields(),
 				fieldManupulatingHandler.getOperationOutputFields(), fieldManupulatingHandler.getPassThroughFields(),
 				fieldManupulatingHandler.getMapSourceFields(), fieldManupulatingHandler.getOutputFields(),
-				transformClassNames);
+				transformClassNames, null);
 	}
 
-	public CustomHandlerContext(Fields inputFields, String transformClassName) {
+	public CustomHandlerContext(FieldManupulatingHandler fieldManupulatingHandler,
+			ArrayList<String> transformClassNames, ArrayList<ValidationAPI> exprValidationObject) {
+
+		this.outputTupleEntry = (TupleHelper.initializeTupleEntry(fieldManupulatingHandler.getOutputFields()));
+
+		initialize(fieldManupulatingHandler.getOperationInputFields(),
+				fieldManupulatingHandler.getOperationOutputFields(), fieldManupulatingHandler.getPassThroughFields(),
+				fieldManupulatingHandler.getMapSourceFields(), fieldManupulatingHandler.getOutputFields(),
+				transformClassNames, exprValidationObject);
+	}
+
+	public CustomHandlerContext(Fields inputFields, String transformClassName, ValidationAPI exprValidationAPI) {
 
 		ArrayList<Fields> inputs = null;
 		ArrayList<String> classNames = null;
+		ArrayList<ValidationAPI> exprValidationObjectList = null;
 
 		if (inputFields != null) {
 			inputs = new ArrayList<Fields>();
@@ -68,8 +81,12 @@ public class CustomHandlerContext<T> {
 			classNames = new ArrayList<String>();
 			classNames.add(transformClassName);
 		}
+		if (exprValidationAPI != null) {
+			exprValidationObjectList = new ArrayList<ValidationAPI>();
+			exprValidationObjectList.add(exprValidationAPI);
+		}
 
-		initialize(inputs, null, null, null, classNames);
+		initialize(inputs, null, null, null, classNames, exprValidationObjectList);
 	}
 
 	public CustomHandlerContext(FieldManupulatingHandler fieldManupulatingHandler, String transformClassName) {
@@ -81,27 +98,34 @@ public class CustomHandlerContext<T> {
 			classNames = new ArrayList<String>();
 			classNames.add(transformClassName);
 		}
-		
+
 		initialize(fieldManupulatingHandler.getOperationInputFields(),
 				fieldManupulatingHandler.getOperationOutputFields(), fieldManupulatingHandler.getPassThroughFields(),
-				fieldManupulatingHandler.getMapSourceFields(), fieldManupulatingHandler.getOutputFields(),
-				classNames);
+				fieldManupulatingHandler.getMapSourceFields(), fieldManupulatingHandler.getOutputFields(), classNames,
+				null);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void initialize(ArrayList<Fields> operationInputFields, ArrayList<Fields> operationOutputFields,
-			Fields passThrough, Fields mapSourceFields, ArrayList<String> transformClassNames) {
+			Fields passThrough, Fields mapSourceFields, ArrayList<String> transformClassNames,
+			ArrayList<ValidationAPI> exprValidationObjectList) {
 
 		transformInstances = new ArrayList<T>();
 		inputRows = new ArrayList<ReusableRow>();
 		outputRows = new ArrayList<ReusableRow>();
+		exprValidationAPIList = new ArrayList<ValidationAPI>();
 
 		if (transformClassNames != null) {
 			for (String transformClassName : transformClassNames) {
-				if(transformClassName!=null)
-				transformInstances.add((T) UserClassLoader.loadAndInitClass(transformClassName));
+				if (transformClassName != null)
+					transformInstances.add((T) UserClassLoader.loadAndInitClass(transformClassName));
 
 			}
+		}
+
+		if (exprValidationObjectList != null) {
+			for (ValidationAPI validationAPI : exprValidationObjectList)
+				exprValidationAPIList.add(validationAPI);
 		}
 
 		if (operationInputFields != null) {
@@ -130,14 +154,26 @@ public class CustomHandlerContext<T> {
 	}
 
 	private void initialize(ArrayList<Fields> operationInputFields, ArrayList<Fields> operationOutputFields,
-			Fields passThrough, Fields mapSourceFields, Fields operationFields, ArrayList<String> transformClassNames) {
+			Fields passThrough, Fields mapSourceFields, Fields operationFields, ArrayList<String> transformClassNames,
+			ArrayList<ValidationAPI> exprValidationObjectList) {
 
-		initialize(operationInputFields, operationOutputFields, passThrough, mapSourceFields, transformClassNames);
+		initialize(operationInputFields, operationOutputFields, passThrough, mapSourceFields, transformClassNames,
+				exprValidationObjectList);
 		if (operationFields == null) {
 			operationRow = null;
 		} else {
 			operationRow = new ReusableRow(ReusableRowHelper.getListFromFields(operationFields));
 		}
+	}
+
+	public ArrayList<ValidationAPI> getExpressionInstancesList() {
+		return exprValidationAPIList;
+	}
+
+	public ValidationAPI getSingleExpressionInstances() {
+		if (exprValidationAPIList.size() > 0)
+			return exprValidationAPIList.get(0);
+		return null;
 	}
 
 	public T getTransformInstance(int index) {

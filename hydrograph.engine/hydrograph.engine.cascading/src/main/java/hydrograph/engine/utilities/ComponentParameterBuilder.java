@@ -130,6 +130,11 @@ public class ComponentParameterBuilder {
 			componentParameters.setFlowDef(flowContext.getFlowDef());
 			return this;
 		}
+		
+		public Builder setUDFPath() {
+			componentParameters.setUDFPath(runtimeContext.getUDFPath());
+			return this;
+		}
 
 		public ComponentParameters build() {
 			return new ComponentParameterBuilder(this).getComponentParameter();
