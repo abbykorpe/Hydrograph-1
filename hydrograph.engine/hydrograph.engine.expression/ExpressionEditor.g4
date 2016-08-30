@@ -61,9 +61,11 @@ LPAREN          : '(';
 RPAREN          : ')';
 DOT             : '.';
 
-functions : javaIdentifier (DOT javaIdentifier)? LPAREN functions (',' functions)* RPAREN
+functions : javaIdentifier (DOT functions)*
     |literal
     |javaIdentifier
+    | 'new'
+    | javaIdentifier LPAREN functions? (',' functions)* RPAREN
     ;
 
  literal
