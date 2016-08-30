@@ -41,17 +41,36 @@ import hydrograph.engine.jaxb.operationstypes.Filter;
 
 class TrackComponentUtils {
 	
-	 static TypeBaseInSocket getStraightPullInSocket(String formComponentId, String outSocketId,
+	 /**
+	 * Creates an object of type {@link TypeBaseInSocket} from component's fromComponentId,
+	 *   outSocketId and outSocketType
+	 * @param fromComponentId
+	 * 					fromComponentId to set in {@link TypeBaseInSocket} object
+	 * @param outSocketId
+	 * 					outSocketId to set in {@link TypeBaseInSocket} object
+	 * @param outSocketType
+	 * 					outSocketType to set in {@link TypeBaseInSocket} object
+	 * @return an object of type {@link TypeBaseInSocket}
+	 */
+	static TypeBaseInSocket getStraightPullInSocket(String fromComponentId, String outSocketId,
 			String outSocketType) {
 		TypeBaseInSocket baseInSocket = new TypeBaseInSocket();
-		baseInSocket.setFromComponentId(formComponentId);
+		baseInSocket.setFromComponentId(fromComponentId);
 		baseInSocket.setFromSocketId(outSocketId);
 		baseInSocket.setFromSocketType(outSocketType);
 		baseInSocket.setId("in0");
 		return baseInSocket;
 	}
 
-	 static TypeOperationsOutSocket getStraightPullOutSocket(String id, String inSocketId) {
+	 /**
+	 * Creates an object of type {@link TypeOperationsOutSocket} from id and inSocketId
+	 * @param id
+	 * 			id to set in in {@link TypeOperationsOutSocket} object
+	 * @param inSocketId
+	 * 				inSocketId to set in in {@link TypeOperationsOutSocket} object
+	 * @return an object of type {@link TypeOperationsOutSocket}
+	 */
+	static TypeOperationsOutSocket getStraightPullOutSocket(String id, String inSocketId) {
 		TypeOperationsOutSocket operationOutSocket = new TypeOperationsOutSocket();
 		operationOutSocket.setId(id);
 		TypeOutSocketAsInSocket typeOutSocketAsInSocket = new TypeOutSocketAsInSocket();
@@ -60,7 +79,17 @@ class TrackComponentUtils {
 		return operationOutSocket;
 	}
 
-	 static String generateUniqueComponentId(String compId, String socketId,
+	 /**
+	 * Generate UniqueComponentId for generated filter components
+	 * @param compId
+	 * 				compId to set
+	 * @param socketId
+	 * 				socketId to set
+	 * @param typeBaseComponents
+	 * 				- {@link TypeBaseComponent} to set
+	 * @return the UniqueComponentId 
+	 */
+	static String generateUniqueComponentId(String compId, String socketId,
 			List<TypeBaseComponent> typeBaseComponents) {
 		String newComponentID = compId + "_" + socketId;
 		for (int i = 0; i < typeBaseComponents.size(); i++) {
@@ -71,7 +100,17 @@ class TrackComponentUtils {
 		return newComponentID;
 	}
 
-	 static TypeBaseComponent getComponent(List<TypeBaseComponent> jaxbGraph, String compId,
+	 /**
+	 * Creates an object of type {@link TypeBaseComponent}
+	 * @param jaxbGraph
+	 * 				List of {@link TypeBaseComponent} object to set
+	 * @param compId
+	 * 				compId to set
+	 * @param socketId
+	 * 				socketId to set
+	 * @return the {@link TypeBaseComponent} object
+	 */
+	static TypeBaseComponent getComponent(List<TypeBaseComponent> jaxbGraph, String compId,
 			String socketId) {
 		for (TypeBaseComponent component : jaxbGraph) {
 			for (TypeBaseInSocket inSocket : SocketUtilities.getInSocketList(component)) {
@@ -85,7 +124,17 @@ class TrackComponentUtils {
 				+ " are not properly configured");
 	}
 	
-	 static Filter generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
+	 /**
+	 * Creates an object of type {@link Filter}
+	 * @param trackContext
+	 * 					- {@link TrackContext} to set
+	 * @param jaxbObjectList
+	 * 					- List of {@link TypeBaseComponent} object to set
+	 * @param schemaFieldsMap
+	 * 					 - Set of {@link SchemaField} object to set
+	 * @return the object of type {@link Filter}
+	 */
+	static Filter generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
 			Map<String, Set<SchemaField>> schemaFieldsMap) {
 		Filter filter = new Filter();
 		TypeTransformOperation filterOperation = new TypeTransformOperation();
@@ -112,7 +161,13 @@ class TrackComponentUtils {
 		return filter;
 	}
 
-	 static List<OutSocket> getOutSocketListofComponent(TypeBaseComponent typeBaseComponent) {
+	 /**
+	 * Creates a List of OutSocket object
+	 * @param typeBaseComponent
+	 * 					- {@link TypeBaseComponent} to set
+	 * @return the List of {@link OutSocket}
+	 */
+	static List<OutSocket> getOutSocketListofComponent(TypeBaseComponent typeBaseComponent) {
 		if (typeBaseComponent instanceof TypeInputComponent) {
 			TypeInputComponent typeInputComponent = (TypeInputComponent) typeBaseComponent;
 			return InputEntityUtils.extractOutSocket(typeInputComponent.getOutSocket());
@@ -130,7 +185,13 @@ class TrackComponentUtils {
 		return Collections.emptyList();
 	}
 	
-	 static boolean isLocalFlowExecution(Cascade cascade) {
+	 /**
+	 * Creates an object of type boolean to 
+	 * @param cascade
+	 * 				- {@link Cascade} to set
+	 * @return the job running is local or not
+	 */
+	static boolean isLocalFlowExecution(Cascade cascade) {
 		Flow<?> flow = cascade.getFlows().get(0);
 		// PlatformInfo PlatformInfo = flow.getPlatformInfo();
 		return flow.stepsAreLocal();

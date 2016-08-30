@@ -38,11 +38,13 @@ public class JobInfo {
 	private Map<String, List<String>> componentAndPreviousMap;
 	private List<String> AllPipes;
 	private static List<String> listOfFilterComponent;
+	private Map<String, Long> componentCounterMap;
 
 	/**
-	 * Processes the CascadingStats to generate the component Statistics
+	 * Method storeComponentStats processes the {@link CascadingStats} to generate the component statistics.
 	 * 
 	 * @param cascadingStats
+	 * 			- {@link CascadingStats} object
 	 * @throws ElementGraphNotFoundException
 	 */
 	public synchronized void storeComponentStats(CascadingStats<?> cascadingStats)
@@ -59,6 +61,7 @@ public class JobInfo {
 			componentAndPreviousMap = ComponentPipeMapping.getComponentAndPreviousMap();
 			AllPipes = new ArrayList<String>();
 			listOfFilterComponent = ComponentPipeMapping.getListOfFilterComponent();
+			componentCounterMap = new HashMap<String, Long>();
 		}
 	}
 
@@ -69,6 +72,11 @@ public class JobInfo {
 				AllPipes.add(scope.getName());
 			}
 		}
+
+		for (String counter : cascadingStats.getCountersFor(COUNTER_GROUP)) {
+			componentCounterMap.put(counter, cascadingStats.getCounterValue(COUNTER_GROUP, counter));
+		}
+
 		for (Scope scope : elementGraph.edgeSet()) {
 			String currentComponent_SocketId = getComponentFromPipe(scope.getName());
 			if (currentComponent_SocketId != null) {
@@ -198,15 +206,8 @@ public class JobInfo {
 	private void generateAndUpdateComponentRecordCount(CascadingStats<?> cascadingStats, ComponentInfo componentInfo,
 			String ComponentId) {
 		for (String socketId : componentSocketMap.get(ComponentId)) {
-			long recordCount = 0;
-			for (String counter : cascadingStats.getCountersFor(COUNTER_GROUP)) {
-				String componentIdANdSocketId = pipeComponentMap.get(counter);
-				if ((getComponentIdFromComponentSocketID(componentIdANdSocketId) != null
-						&& getComponentIdFromComponentSocketID(componentIdANdSocketId).equals(ComponentId))
-						&& socketId.equals(getSocketIdFromComponentSocketID(componentIdANdSocketId))) {
-					recordCount = cascadingStats.getCounterValue(COUNTER_GROUP, counter);
-					componentInfo.setProcessedRecordCount(socketId, recordCount);
-				}
+			if (componentCounterMap.containsKey(componentPipeMap.get(ComponentId + "_" + socketId).getName())) {
+				componentInfo.setProcessedRecordCount(socketId, componentCounterMap.get(componentPipeMap.get(ComponentId + "_" + socketId).getName()));
 			}
 		}
 	}
@@ -253,16 +254,17 @@ public class JobInfo {
 	}
 
 	/**
-	 * Method returns the current status of all components
+	 * Method getStatus returns the current status of all components
 	 * 
-	 * @return List of ComponentInfo
+	 * @return - List of ComponentInfo
 	 */
-	public List<ComponentInfo> getstatus() {
+	public List<ComponentInfo> getStatus() {
 		return new ArrayList<>(componentInfoMap.values());
 	}
 
+	
 	/**
-	 * ElementGraphNotFoundException
+	 * @author bitwise
 	 */
 	public class ElementGraphNotFoundException extends Exception {
 

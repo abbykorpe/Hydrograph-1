@@ -170,6 +170,10 @@ public class HydrographRuntime implements HydrographRuntimeService {
 
 	}
 
+	/**
+	 * Returns the statistics of components in a job.
+	 * @see hydrograph.engine.execution.tracking.ComponentInfo
+	 */
 	@Override
 	public Object getExecutionStatus() {
 		if (executionTrackingListener != null)
@@ -288,10 +292,12 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	@Override
 	public void kill() {
 		if (runtimeContext.getCascade() != null) {
+			LOG.info("Kill signal received.. killing the cascading jobs");
 			for (Cascade cascade : runtimeContext.getCascade()) {
 				cascade.stop();
 			}
 		} else
+			LOG.info("Kill signal received.. exiting code");
 			System.exit(0);
 	}
 }

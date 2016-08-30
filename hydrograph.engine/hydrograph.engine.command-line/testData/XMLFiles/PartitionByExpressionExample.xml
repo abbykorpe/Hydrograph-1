@@ -41,7 +41,7 @@
 		xsi:type="op:partitionByExpression">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<operation id="opt"
-			class="hydrograph.engine.cascading.test.customtransformclasses.PartitionExpressionTransaction">
+			class="hydrograph.engine.userfunctions.PartitionExpressionTransaction">
 			<inputFields>
 				<field name="transaction_type" inSocketId="in0" />
 			</inputFields>

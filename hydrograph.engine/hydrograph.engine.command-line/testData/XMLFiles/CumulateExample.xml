@@ -28,7 +28,7 @@
 				<field name="sal" type="java.math.BigDecimal" scale="2"/>
 			</schema>
 		</outSocket>
-		<path uri="testData\Input\Source1-delimited.txt" />
+		<path uri="testData/Input/Source1-delimited.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 	</inputs>
@@ -100,7 +100,7 @@
 				<field name="sum2" type="java.math.BigDecimal" scale="2"/>
 			</schema>
 		</inSocket>
-		<path uri="testData\output\CumulateOutput1" />
+		<path uri="testData/output/CumulateOutput1" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 	</outputs>

@@ -19,6 +19,14 @@ import java.util.Map.Entry;
 
 import cascading.stats.CascadingStats.Status;
 
+/**
+ * ComponentInfo class stores the current statistics of component such as
+ * component id, current status of component, record count per output
+ * socket,etc.
+ * 
+ * @author bitwise
+ *
+ */
 public class ComponentInfo {
 
 	private String componentId;
@@ -26,34 +34,71 @@ public class ComponentInfo {
 	private Map<String, String> statusPerSocketMap = new HashMap<String, String>();
 	private Map<String, Long> mapofStats = new LinkedHashMap<String, Long>();
 
+	/**
+	 * @return Status per outSocket of component.
+	 */
 	public Map<String, String> getStatusPerSocketMap() {
 		return statusPerSocketMap;
 	}
 
+	/**
+	 * Method setStatusPerSocketMap sets the status of outSocket of a
+	 * component.
+	 * 
+	 * @param scoketId
+	 *            - outSocketId of component.
+	 * @param status
+	 *            - Status of the pipe connected to the outSocket.
+	 */
 	public void setStatusPerSocketMap(String scoketId, Status status) {
 		statusPerSocketMap.put(scoketId, status.name());
 	}
 
+	/**
+	 * @return Record count per outSocketId of a component.
+	 */
 	public Map<String, Long> getProcessedRecords() {
 		return mapofStats;
 	}
 
-	public void setProcessedRecordCount(String portid, long recordCount) {
-		mapofStats.put(portid, recordCount);
+	/**
+	 * @param socketId
+	 *            - outSocketId of component.
+	 * @param recordCount
+	 *            - Record count of the outsocket.
+	 */
+	public void setProcessedRecordCount(String socketId, long recordCount) {
+		mapofStats.put(socketId, recordCount);
 	}
 
+	/**
+	 * @return Current status of component can be "Pending", "Running", "Failed"
+	 *         or "Successful".
+	 */
 	public String getCurrentStatus() {
 		return currentStatus;
 	}
 
+	/**
+	 * @param currentStatus
+	 *            Current status of component can be "Pending", "Running",
+	 *            "Failed" or "Successful".
+	 */
 	public void setCurrentStatus(String currentStatus) {
 		this.currentStatus = currentStatus;
 	}
 
+	/**
+	 * @return Component id of component
+	 */
 	public String getComponentId() {
 		return componentId;
 	}
 
+	/**
+	 * @param componentId
+	 *            - Component Id of component
+	 */
 	public void setComponentId(String componentId) {
 		this.componentId = componentId;
 	}

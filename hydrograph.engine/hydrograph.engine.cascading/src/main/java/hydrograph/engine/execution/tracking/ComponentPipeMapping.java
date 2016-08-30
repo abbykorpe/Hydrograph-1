@@ -38,7 +38,15 @@ public class ComponentPipeMapping {
 	private static Map<String, Pipe> componentToPipeMapping = new HashMap<String, Pipe>();
 	private static Map<String, List<String>> componentAndPreviousMap = new HashMap<String, List<String>>();
 	private static List<String> listOfFilterComponent = new ArrayList<String>();
+	private static final String outputSocket = "NoSocketId";
 
+	/**
+	 * Method generateComponentToPipeMap generates map of component with
+	 * corresponding pipe.
+	 * 
+	 * @param flowContextMap
+	 *            - Map of String and {@link FlowContext} to set
+	 */
 	public static void generateComponentToPipeMap(Map<String, FlowContext> flowContextMap) {
 		for (FlowContext flowContext : flowContextMap.values()) {
 			Map<String, BaseComponent<AssemblyEntityBase>> Assemblies = flowContext.getAssemblies();
@@ -51,7 +59,15 @@ public class ComponentPipeMapping {
 		}
 	}
 
-	public static void generateComponentToFilterMap(RuntimeContext runtimeContext) {
+	/**
+	 * Method generateComponentToFilterMap iterate over the phases and generates
+	 * map of component id and it's corresponding previous components id.
+	 * 
+	 * @param runtimeContext
+	 *            - {@link RuntimeContext} to extract the current and previous
+	 *            component
+	 */
+	public static void generateComponentAndPreviousrMap(RuntimeContext runtimeContext) {
 		JAXBTraversal jaxbTraversal = runtimeContext.getTraversal();
 		SortedSet<String> phases = jaxbTraversal.getFlowsNumber();
 
@@ -69,12 +85,26 @@ public class ComponentPipeMapping {
 		}
 	}
 
+	/**
+	 * Method generateComponentAndPreviousMap generates map of component and
+	 * their previous components.
+	 * 
+	 * @param hydrographJob
+	 *            - {@link HydrographJob} to get all components.
+	 * @param eachComponentId
+	 *            - Current componentId for which previous component id is
+	 *            stored.
+	 * @param outSockets
+	 *            - List of {@link TypeBaseOutSocket} of current component.
+	 * @param inSockets
+	 *            - List of {@link TypeBaseInSocket} of current component.
+	 */
 	private static void generateComponentAndPreviousMap(HydrographJob hydrographJob, String eachComponentId,
 			List<? extends TypeBaseOutSocket> outSockets, List<? extends TypeBaseInSocket> inSockets) {
 		List<String> PreviousComponents = new ArrayList<String>();
 		if (outSockets.size() == 0) {
 			for (TypeBaseInSocket inSocket : inSockets) {
-				addComponentAndSocketInMap(eachComponentId, "NoSocketId");
+				addComponentAndSocketInMap(eachComponentId, outputSocket);
 			}
 		}
 		for (TypeBaseOutSocket outSocket : outSockets) {
@@ -101,7 +131,14 @@ public class ComponentPipeMapping {
 		}
 	}
 
-
+	/**
+	 * Create a map of component and socket
+	 * 
+	 * @param componentId
+	 *            - componentId to set
+	 * @param socketId
+	 *            - socketId to set
+	 */
 	private static void addComponentAndSocketInMap(String componentId, String socketId) {
 		if (componentSocketMap.containsKey(componentId)) {
 			List<String> sockets = componentSocketMap.get(componentId);
@@ -113,23 +150,40 @@ public class ComponentPipeMapping {
 		}
 	}
 
+	/**
+	 * Generates a map of generated filter components
+	 * 
+	 * @param generatedFilter
+	 *            - generated filter component id.
+	 */
 	public static void generateFilterList(Filter generatedFilter) {
 		listOfFilterComponent.add(generatedFilter.getId());
 	}
 
-
+	/**
+	 * @return Map of component to Pipe.
+	 */
 	public static Map<String, Pipe> getComponentToPipeMapping() {
 		return componentToPipeMapping;
 	}
 
+	/**
+	 * @return Map of component to list of outSocketid.
+	 */
 	public static Map<String, List<String>> getComponentSocketMap() {
 		return componentSocketMap;
 	}
 
+	/**
+	 * @return Map of component to list of previous components.
+	 */
 	public static Map<String, List<String>> getComponentAndPreviousMap() {
 		return componentAndPreviousMap;
 	}
-	
+
+	/**
+	 * @return List of generated filter components.
+	 */
 	public static List<String> getListOfFilterComponent() {
 		return listOfFilterComponent;
 	}

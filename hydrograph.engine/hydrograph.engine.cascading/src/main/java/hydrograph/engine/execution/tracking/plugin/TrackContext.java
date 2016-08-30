@@ -12,9 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.execution.tracking.plugin;
 
-/**TrackContext Class to send the component data to ExecutionTrackingplugin
- * @author saketm
- *
+/**
+ * Class TrackContext stores the component data which is consumed by
+ * {@link ExecutionTrackingplugin}
+ * 
+ * @author bitwise
  */
 public class TrackContext {
 	private String fromComponentId;
@@ -22,34 +24,72 @@ public class TrackContext {
 	private String fromOutSocketType;
 	private String phase;
 
+	/**
+	 * Method getFromComponentId returns the previous component's id
+	 * 
+	 * @return fromComponentId
+	 */
 	public String getFromComponentId() {
 		return fromComponentId;
 	}
 
+	/**
+	 * Method setFromComponentId stores the previous component's id
+	 * 
+	 * @param fromComponentId
+	 *            - previous component's id
+	 */
 	public void setFromComponentId(String fromComponentId) {
 		this.fromComponentId = fromComponentId;
 	}
 
+	/**
+	 * Method getFromOutSocketId returns the previous components output socket
+	 * connected.
+	 * 
+	 * @return the fromOutSocketId - output socket id of previous component
+	 */
 	public String getFromOutSocketId() {
 		return fromOutSocketId;
 	}
 
+	/**
+	 * Method setFromOutSocketId stores the output socket of previous component
+	 * connected.
+	 * 
+	 * @param fromOutSocketId
+	 *            - output socket id of previous component
+	 */
 	public void setFromOutSocketId(String fromOutSocketId) {
 		this.fromOutSocketId = fromOutSocketId;
 	}
 
+	/**
+	 * @return the fromOutSocketType
+	 */
 	public String getFromOutSocketType() {
 		return fromOutSocketType;
 	}
 
+	/**
+	 * @param fromOutSocketType
+	 *            fromOutSocketType to set
+	 */
 	public void setFromOutSocketType(String fromOutSocketType) {
 		this.fromOutSocketType = fromOutSocketType;
 	}
 
+	/**
+	 * @return the phase
+	 */
 	public String getPhase() {
 		return phase;
 	}
 
+	/**
+	 * @param phase
+	 *            phase to set
+	 */
 	public void setPhase(String phase) {
 		this.phase = phase;
 	}

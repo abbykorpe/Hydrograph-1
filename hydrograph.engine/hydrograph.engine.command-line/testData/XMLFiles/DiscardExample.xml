@@ -27,7 +27,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData\Input\delimitedInputFile" />
+		<path uri="testData/Input/delimitedInputFile" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 	</inputs>

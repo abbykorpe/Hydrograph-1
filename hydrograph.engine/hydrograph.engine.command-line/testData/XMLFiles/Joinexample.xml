@@ -20,7 +20,7 @@
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
 <!-- 	<runtimeProperties>
-		<property name="cascading.planner.stats.path" value="testData\output\JoinDelimitedComponentsStats\plannerStats" />
+		<property name="cascading.planner.stats.path" value="testData/output/JoinDelimitedComponentsStats/plannerStats" />
 		<property name="cascading.planner.plan.path" value="testData\output\JoinDelimitedComponentsStats\plannerPlan" />
 		<property name="cascading.planner.plan.transforms.path"
 			value="testData\output\JoinDelimitedComponentsStats\plannerTransformPath" />
@@ -34,7 +34,7 @@
 				<!-- <field name="city1" type="java.lang.String" /> -->
 			</schema>
 		</outSocket>
-		<path uri="testData\Input\dep.txt" />
+		<path uri="testData/Input/dep.txt" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
@@ -47,7 +47,7 @@
 				<field name="fn" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData\Input\Copy_of_dep.txt" />
+		<path uri="testData/Input/Copy_of_dep.txt" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 	</inputs>
@@ -59,7 +59,7 @@
 				<field name="fn11" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData\Input\dep1.txt" />
+		<path uri="testData/Input/dep1.txt" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 	</inputs>
@@ -106,7 +106,7 @@
 				<field name="newname2" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData\output\JoinDelimitedComponents\out" />
+		<path uri="testData/output/JoinDelimitedComponents/out" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
@@ -120,7 +120,7 @@
 				<field name="fn" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData\output\JoinDelimitedComponents\unused0" />
+		<path uri="testData/output/JoinDelimitedComponents/unused0" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
@@ -134,7 +134,7 @@
 				<field name="name1" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData\output\JoinDelimitedComponents\unused1" />
+		<path uri="testData/output/JoinDelimitedComponents/unused1" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
