@@ -1072,7 +1072,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String jobId = getActiveProject() + "." + getJobName();
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE.getPreviouslyExecutedJobs().get(jobId));
 		
-		deleteDebugFiles();
+		deleteDebugFiles(jobId);
 		
 		Map<String, String> currentParameterMap = getCurrentParameterMap();
 		IFile file=opeSaveAsDialog();
@@ -1264,22 +1264,21 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE
 				.getPreviouslyExecutedJobs().get(jobId));
 
-		deleteDebugFiles();
+		deleteDebugFiles(jobId);
 		enableRunningJobResource() ;
 	}
 	
-	private void deleteDebugFiles() {
-		String currentJob = getEditorInput().getName().replace(Constants.JOB_EXTENSION, "");
-		Job job = DebugHandler.getJob(currentJob);
+	private void deleteDebugFiles(String jobID) {
+		Job job = DebugHandler.getJob(jobID);
 		deleteDebugFileFromWorkspace();
 		
 		if(job == null){
-			logger.debug("current job {} wasn't found in Debughandler's map",currentJob);
+			logger.debug("current job {} wasn't found in Debughandler's map",jobID);
 			return ;
 		}
 		deleteSchemaAndDataViewerFiles();
 		deleteBasePathDebugFiles(job);
-		DebugHandler.getJobMap().remove(currentJob);
+		DebugHandler.getJobMap().remove(jobID);
 	}
 
 	private void deleteDebugFileFromWorkspace() {

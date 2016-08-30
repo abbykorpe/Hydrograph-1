@@ -17,7 +17,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             class="hydrograph.ui.dataviewer.preferencepage.ViewDataPreference"
-            id="org.eclipse.ui.window.preferences"
+            id="hydrograph.ui.dataviewer"
             name="View Data">
       </page>
    </extension>
