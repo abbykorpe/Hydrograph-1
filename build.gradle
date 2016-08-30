@@ -1,0 +1,118 @@
+ext.eltVersion = '0.1.1-SNAPSHOT'
+//apply from: 'etc/publish.gradle'
+
+
+import java.text.SimpleDateFormat
+
+// use human readable date format
+ext.testDate = new SimpleDateFormat( "MMMM dd, yyyy" ).format( new Date() )
+
+allprojects {
+
+  apply plugin: 'java'
+  apply plugin: 'eclipse'
+  
+  test {
+    exclude '**/CascadingTestCase*'
+    exclude '**/DataGeneratorTest*'
+    exclude '**/InputFileHiveParquetFileTest*'
+    exclude '**/OutputFileHiveParquetFileTest*' 
+    exclude '**/InputFileHiveTextFileTest*'
+    exclude '**/OutputFileHiveTextFileTest*'
+    
+}
+
+  repositories {
+ 	maven {
+            credentials {
+                username 'admin'
+                password 'password'
+            }
+            url 'http://10.30.127.67:9091/artifactory/elt-test-local/'
+        }
+    mavenCentral()
+    maven{ url 'http://conjars.org/repo/' }
+     maven {
+        url 'http://maven.twttr.com/'
+    }
+    
+  }
+
+  // core dependencies - see settings.gradle for platform specific dependencies
+  dependencies {
+	runtime (group: 'com.bitwiseglobal', name: 'elt-cascading', version: eltVersion, classifier: 'tests' )
+	runtime (group: 'com.bitwiseglobal', name: 'elt-cascading', version: eltVersion)
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+  }
+}
+
+subprojects {
+
+  task unarchiveTest {
+    outputs.dir "$buildDir/classes/test/"
+  }
+
+  task buildHadoopJar(type: Jar, dependsOn: unarchiveTest) {
+    archiveName = "${rootProject.name}-${eltVersion}-remote-test.jar"
+   from sourceSets.test.output
+    doFirst {
+      into( 'lib' ) {
+        from configurations.testCompile
+        from configurations.runtime
+      }
+    }
+  }
+
+  unarchiveTest {
+
+    mkdir "$buildDir/classes/test/"
+    doLast {
+      // we only want the jars with test classifier
+      def jars = configurations.runtime.resolvedConfiguration.firstLevelModuleDependencies.findAll { dep ->
+        dep.name.contains( 'elt' )
+      }.collect { dep ->
+        dep.moduleArtifacts.collect { it.file }
+      }.flatten().findAll { file ->
+        file.toString().endsWith( '-tests.jar' )
+      }
+
+      jars.each { jarFile ->
+
+        def jar = zipTree( jarFile )
+
+        copy {
+          from jar
+          into "$buildDir/classes/test/"
+        }
+      }
+    }
+  }
+
+  test {
+    dependsOn << buildHadoopJar
+    dependsOn << cleanTest
+
+    forkEvery = 1
+	systemProperties[ 'test.data.path' ] = new String( "${buildDir}/classes/test/data/" )
+    doLast {
+        tarTestResults.execute()
+    }
+
+  }
+
+  task testInfo() << {
+    sourceSets.test.runtimeClasspath.each{ entry ->
+       println entry
+    }
+  }
+
+  task tarTestResults( type: Tar) {
+    compression = Compression.GZIP
+    from( testReportDir )
+    destinationDir = buildDir
+    archiveName = "test-results-0.1.tgz"
+  }
+
+}
+
+test.enabled = false; // disable root project tests
