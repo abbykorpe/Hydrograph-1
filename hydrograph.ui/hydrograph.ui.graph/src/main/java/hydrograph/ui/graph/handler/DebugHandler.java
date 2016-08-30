@@ -106,6 +106,19 @@ public class DebugHandler{
 	 */
 	public void addDebugJob(String jobId, Job debugJob){
 		jobMap.put(jobId, debugJob);
+		if(RunJobHandler.hasJob(jobId)){
+			RunJobHandler.removeJob(jobId);
+		}
+	}
+	
+	/**
+	 * Removes the job.
+	 *
+	 * @param key the job name
+	 * @return the job
+	 */
+	public static void removeJob(String jobId) {
+		jobMap.remove(jobId);
 		
 	}
 	
@@ -223,7 +236,7 @@ public class DebugHandler{
 		job.setPassword(clusterPassword);
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		 
-		addDebugJob(currentJobName, job);
+		addDebugJob(localJobID, job);
 		
 		JobManager.INSTANCE.executeJobInDebug(job, runConfigDialog.isRemoteMode(), runConfigDialog.getUsername());
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();	

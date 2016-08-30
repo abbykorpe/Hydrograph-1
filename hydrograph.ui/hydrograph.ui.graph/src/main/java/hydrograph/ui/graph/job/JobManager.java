@@ -234,7 +234,13 @@ public class JobManager {
 			externalSchemaFiles=Collections.EMPTY_LIST;
 			subJobList=Collections.EMPTY_LIST;
 		}
-		gefCanvas.disableRunningJobResource(); 
+		
+		gefCanvas.disableRunningJobResource();
+		
+		DataViewerUtility.INSTANCE.deletePreviousRunsDataviewCsvXmlFiles(previouslyExecutedJobs.get(job.getConsoleName()));
+		DataViewerUtility.INSTANCE.deletePreviousRunsBasePathDebugFiles(previouslyExecutedJobs.get(job.getConsoleName()));
+		DataViewerUtility.INSTANCE.closeDataViewerWindows(previouslyExecutedJobs.get(job.getConsoleName()));
+		
 		launchJob(job, gefCanvas, parameterGrid, xmlPath,externalSchemaFiles,subJobList);
 	}
 

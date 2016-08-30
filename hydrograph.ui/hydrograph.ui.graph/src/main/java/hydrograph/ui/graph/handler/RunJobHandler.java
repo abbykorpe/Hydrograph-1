@@ -39,6 +39,9 @@ public class RunJobHandler{
 	private Job generateJob(String localJobID, String consoleName, String canvasName) {
 		Job job = new Job(localJobID, consoleName, canvasName, null, null, null, null);
 		jobMap.put(localJobID, job);
+		if(DebugHandler.hasJob(localJobID)){
+			DebugHandler.removeJob(localJobID);
+		}
 		return job;
 	}
 
@@ -84,6 +87,17 @@ public class RunJobHandler{
 	 */
 	public static Job getJob(String key){
 		return jobMap.get(key);
+	}
+
+	/**
+	 * Removes the job.
+	 *
+	 * @param key the job name
+	 * @return the job
+	 */
+	public static void removeJob(String jobId) {
+		jobMap.remove(jobId);
+		
 	}
 
 }

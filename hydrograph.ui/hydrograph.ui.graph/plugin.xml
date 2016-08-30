@@ -361,7 +361,7 @@
        point="org.eclipse.ui.preferencePages">
     <page
           class="hydrograph.ui.graph.execution.tracking.preferences.ExecutionTrackPreference"
-          id="org.eclipse.ui.window.preferences"
+          id="hydrograph.ui.graph"
           name="Execution Tracking">
     </page>
  </extension>
