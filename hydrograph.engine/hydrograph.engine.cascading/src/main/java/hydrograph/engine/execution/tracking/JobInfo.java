@@ -41,9 +41,10 @@ public class JobInfo {
 	private Map<String, Long> componentCounterMap;
 
 	/**
-	 * Processes the CascadingStats to generate the component Statistics
+	 * Method storeComponentStats processes the {@link CascadingStats} to generate the component statistics.
 	 * 
 	 * @param cascadingStats
+	 * 			- {@link CascadingStats} object
 	 * @throws ElementGraphNotFoundException
 	 */
 	public synchronized void storeComponentStats(CascadingStats<?> cascadingStats)
@@ -253,16 +254,17 @@ public class JobInfo {
 	}
 
 	/**
-	 * Method returns the current status of all components
+	 * Method getStatus returns the current status of all components
 	 * 
-	 * @return List of ComponentInfo
+	 * @return - List of ComponentInfo
 	 */
-	public List<ComponentInfo> getstatus() {
+	public List<ComponentInfo> getStatus() {
 		return new ArrayList<>(componentInfoMap.values());
 	}
 
+	
 	/**
-	 * ElementGraphNotFoundException
+	 * @author bitwise
 	 */
 	public class ElementGraphNotFoundException extends Exception {
 

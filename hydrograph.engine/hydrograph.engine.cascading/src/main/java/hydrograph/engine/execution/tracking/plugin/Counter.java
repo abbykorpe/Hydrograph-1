@@ -16,17 +16,26 @@ import cascading.flow.FlowProcess;
 import cascading.operation.BaseOperation;
 import cascading.operation.Filter;
 import cascading.operation.FilterCall;
-import cascading.operation.OperationCall;
-import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 
+/**
+ * Class Counter generates a custom counter with the name of previous pipe
+ * connected to it.
+ * 
+ * @author bitwise
+ *
+ */
 public class Counter extends BaseOperation<RecordFilterContext>implements Filter<RecordFilterContext> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public boolean isRemove(FlowProcess flowProcess, FilterCall<RecordFilterContext> call) {
-		flowProcess.increment(call.getContext().getCounterGroup(), call.getContext().getCounterName(), 1);
+		flowProcess.increment(RecordFilterContext.getCounterGroup(), call.getContext().getCounterName(), 1);
 		return false;
 	}
-
 
 }

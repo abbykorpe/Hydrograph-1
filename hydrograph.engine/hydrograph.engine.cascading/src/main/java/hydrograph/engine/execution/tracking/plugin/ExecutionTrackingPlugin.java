@@ -43,11 +43,7 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 	private List<TypeBaseComponent> jaxbObjectList = new ArrayList<TypeBaseComponent>();
 	private Map<String, Set<SchemaField>> schemaFieldsMap;
 	private JobInfo jobInfo;
-
-	/*
-	 * @see hydrograph.engine.flow.utils.ManipulatorListener#execute(hydrograph.
-	 * engine.flow.utils.FlowManipulationContext)
-	 */
+	
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
 		TrackContext trackContext;
@@ -91,10 +87,6 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 		}
 	}
 
-	/** 
-	 * Adds Listener on a job for execution tracking
-	 * @see hydrograph.engine.flow.utils.ExecutionTrackingListener#addListener(hydrograph.engine.cascading.integration.RuntimeContext)
-	 */
 	@Override
 	public void addListener(RuntimeContext runtimeContext) {
 		jobInfo = new JobInfo();
@@ -111,14 +103,14 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 				}
 			}
 		ComponentPipeMapping.generateComponentToPipeMap(runtimeContext.getFlowContext());
-		ComponentPipeMapping.generateComponentToFilterMap(runtimeContext);
+		ComponentPipeMapping.generateComponentAndPreviousrMap(runtimeContext);
 	}
 
 	
 
 	@Override
 	public List<ComponentInfo> getStatus() {
-		return jobInfo.getstatus();
+		return jobInfo.getStatus();
 	}
 
 }

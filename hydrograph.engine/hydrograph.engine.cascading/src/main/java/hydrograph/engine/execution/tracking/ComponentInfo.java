@@ -20,8 +20,11 @@ import java.util.Map.Entry;
 import cascading.stats.CascadingStats.Status;
 
 /**
- * ComponentInfo class to fill the statistics of components such as record count,current status
- * @author Aniketmo
+ * ComponentInfo class stores the current statistics of component such as
+ * component id, current status of component, record count per output
+ * socket,etc.
+ * 
+ * @author bitwise
  *
  */
 public class ComponentInfo {
@@ -32,41 +35,45 @@ public class ComponentInfo {
 	private Map<String, Long> mapofStats = new LinkedHashMap<String, Long>();
 
 	/**
-	 * @return the status of socket
+	 * @return Status per outSocket of component.
 	 */
 	public Map<String, String> getStatusPerSocketMap() {
 		return statusPerSocketMap;
 	}
 
 	/**
+	 * Method setStatusPerSocketMap sets the status of outSocket of a
+	 * component.
+	 * 
 	 * @param scoketId
-	 * 				the socketId to set
+	 *            - outSocketId of component.
 	 * @param status
-	 * 				the status to set
+	 *            - Status of the pipe connected to the outSocket.
 	 */
 	public void setStatusPerSocketMap(String scoketId, Status status) {
 		statusPerSocketMap.put(scoketId, status.name());
 	}
 
 	/**
-	 * @return the record count
+	 * @return Record count per outSocketId of a component.
 	 */
 	public Map<String, Long> getProcessedRecords() {
 		return mapofStats;
 	}
 
 	/**
-	 * @param portid
-	 * 				the portid to set
+	 * @param socketId
+	 *            - outSocketId of component.
 	 * @param recordCount
-	 * 					the recordCount to set
+	 *            - Record count of the outsocket.
 	 */
-	public void setProcessedRecordCount(String portid, long recordCount) {
-		mapofStats.put(portid, recordCount);
+	public void setProcessedRecordCount(String socketId, long recordCount) {
+		mapofStats.put(socketId, recordCount);
 	}
 
 	/**
-	 * @return the current status of component
+	 * @return Current status of component can be "Pending", "Running", "Failed"
+	 *         or "Successful".
 	 */
 	public String getCurrentStatus() {
 		return currentStatus;
@@ -74,14 +81,15 @@ public class ComponentInfo {
 
 	/**
 	 * @param currentStatus
-	 * 				the current status to set
+	 *            Current status of component can be "Pending", "Running",
+	 *            "Failed" or "Successful".
 	 */
 	public void setCurrentStatus(String currentStatus) {
 		this.currentStatus = currentStatus;
 	}
 
 	/**
-	 * @return the componentId
+	 * @return Component id of component
 	 */
 	public String getComponentId() {
 		return componentId;
@@ -89,7 +97,7 @@ public class ComponentInfo {
 
 	/**
 	 * @param componentId
-	 * 				the componentId to set
+	 *            - Component Id of component
 	 */
 	public void setComponentId(String componentId) {
 		this.componentId = componentId;

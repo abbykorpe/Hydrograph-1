@@ -18,10 +18,28 @@ import cascading.stats.StatsListener;
 import hydrograph.engine.cascading.integration.RuntimeContext;
 import hydrograph.engine.execution.tracking.ComponentInfo;
 
+/**
+ * Interface ExecutionTrackingListener adds listener to the framework. It also
+ * provides updated status of execution.
+ * 
+ * @author bitwise
+ */
 public interface ExecutionTrackingListener extends StatsListener {
 
+	/**
+	 * Method addListener adds listener to the framework
+	 * 
+	 * @param runtimeContext
+	 *            - {@link RuntimeContext}
+	 */
 	public void addListener(RuntimeContext runtimeContext);
-	
+
+	/**
+	 * Method getStatus whenever invoked gives the current statistics of
+	 * components in Hydrograph.
+	 * 
+	 * @return List of {@link ComponentInfo}
+	 */
 	public List<ComponentInfo> getStatus();
-	
+
 }
