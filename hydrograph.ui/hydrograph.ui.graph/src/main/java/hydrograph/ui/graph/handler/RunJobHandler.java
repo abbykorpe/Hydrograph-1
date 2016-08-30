@@ -13,6 +13,9 @@
 
 package hydrograph.ui.graph.handler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
@@ -30,9 +33,13 @@ import org.eclipse.ui.PlatformUI;
  * @since 2015-10-27
  */
 public class RunJobHandler{
+	
+	private static Map<String,Job> jobMap = new HashMap<>();
 
-	private Job getJob(String localJobID, String consoleName, String canvasName) {
-		return new Job(localJobID, consoleName, canvasName, null, null, null, null);
+	private Job generateJob(String localJobID, String consoleName, String canvasName) {
+		Job job = new Job(localJobID, consoleName, canvasName, null, null, null, null);
+		jobMap.put(localJobID, job);
+		return job;
 	}
 
 	private DefaultGEFCanvas getComponentCanvas() {
@@ -53,10 +60,30 @@ public class RunJobHandler{
 		String canvasName = consoleName;
 		String localJobID = consoleName;
 
-		JobManager.INSTANCE.executeJob(getJob(localJobID, consoleName, canvasName), null,runConfigDialog);
+		JobManager.INSTANCE.executeJob(generateJob(localJobID, consoleName, canvasName), null,runConfigDialog);
 		
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
+	}
+	
+	/**
+	 * Checks if job has been run and its entry is present in the map.
+	 *
+	 * @param key the job name
+	 * @return boolean
+	 */
+	public static boolean hasJob(String key){
+		return jobMap.containsKey(key);
+	}
+	
+	/**
+	 * Gets the job.
+	 *
+	 * @param key the job name
+	 * @return the job
+	 */
+	public static Job getJob(String key){
+		return jobMap.get(key);
 	}
 
 }

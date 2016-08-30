@@ -78,6 +78,16 @@ public class DebugHandler{
 	}
 	
 	/**
+	 * Checks if job has been run and its entry is present in the map.
+	 *
+	 * @param key the job name
+	 * @return boolean
+	 */
+	public static boolean hasJob(String key){
+		return jobMap.containsKey(key);
+	}
+	
+	/**
 	 * Gets the job.
 	 *
 	 * @param jobName the job name
@@ -277,14 +287,4 @@ public class DebugHandler{
 		return jobMap;
 	}
 
-	/**
-	 * Sets the job map.
-	 *
-	 * @param jobMap the job map
-	 */
-	public static void setJobMap(Map<String, Job> jobMap) {
-		DebugHandler.jobMap = jobMap;
-	}
-
-	
 }
