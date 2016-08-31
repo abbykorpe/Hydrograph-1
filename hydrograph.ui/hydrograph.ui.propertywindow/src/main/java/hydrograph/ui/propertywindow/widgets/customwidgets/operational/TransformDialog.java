@@ -39,6 +39,7 @@ import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ErrorLabelProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.TransformMappingOutputTableCellModifier;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.utility.DragDropUtility;
@@ -167,8 +168,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Integer windowButtonHeight = 25;
 	private Integer macButtonWidth = 40;
 	private Integer macButtonHeight = 30;
-	private ExpressionOrOperationClassSelectDialog expressionOrOperationClassSelectDialog;
-	private boolean optionToSelect;
 	private List<FilterProperties> finalSortedList;
 	private Set<Integer> outputFieldIndices = new LinkedHashSet<Integer>();
 	private Shell parentShell;
@@ -196,8 +195,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		errorLabelList=new ArrayList<>();
 		duplicateOperationInputFieldMap=new HashMap<String,List<String>>();
 		duplicateFieldMap=new HashMap<String,List<String>>();
-		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
-		optionToSelect=true;
 	}  
 
 	/**
@@ -365,7 +362,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		setTableViewer(outputFieldViewer, outputFieldComposite, new String[] { Messages.OUTPUT_FIELD },
 				new ELTFilterContentProvider(), new OperationLabelProvider());
 		outputFieldViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-		outputFieldViewer.setCellModifier(new ELTCellModifier(outputFieldViewer,transformDialog));
+		outputFieldViewer.setCellModifier(new TransformMappingOutputTableCellModifier(outputFieldViewer,transformDialog));
 		outputFieldViewer.setLabelProvider(new ELTFilterLabelProvider());
 		refreshOutputTable();
 		setIsOperationInputFieldDuplicate();
@@ -543,8 +540,22 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	 	    			nameValuePropertyOperationClass, false, "", false, "",true,expressionEditorData,false);
 	 	    	transformMapping.getMappingSheetRows().add(mappingSheetRows.indexOf(mappingSheetRow)+1,
 	 	    			mappingSheetRowForExpression);	
-	 		}	
+	 		}
+	 		transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
+	 	}
+	 	if(!transformMapping.getMapAndPassthroughField().isEmpty()&&
+	 			transformMapping.getMapAndPassthroughField().get(0).getFilterProperty()==null)
+	 	{
+	 		backwardJobComapatabilityCode();	
+	 	}
+	 	for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+	 	{
+	 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
 	 	}	
+	 	List<FilterProperties> finalSortedList=SchemaSyncUtility.INSTANCE.
+	 	sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(), transformMapping);
+	 	transformMapping.getOutputFieldList().clear();
+	 	transformMapping.getOutputFieldList().addAll(finalSortedList);
 		
 	}
 	private void createOperationClassGrid(Composite parentComposite) {
@@ -657,11 +668,26 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			{	
 			List<MappingSheetRow> activeMappingSheetRow=TransformMappingFeatureUtility.INSTANCE.
 			getActiveMappingSheetRow(transformMapping.getMappingSheetRows());
-			
+			/**
+			 * backward Job compatabaility code
+			 */
+			if(activeMappingSheetRow.size()==0)
+			{
+				for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
+				{
+				mappingSheetRow.setActive(true);
+				}
+				activeMappingSheetRow=TransformMappingFeatureUtility.INSTANCE.
+						getActiveMappingSheetRow(transformMapping.getMappingSheetRows());
+			}	
+			 /**
+			  * execute if target xml imported or Job is backward
+			  */
 			if(activeMappingSheetRow.size()==transformMapping.getMappingSheetRows().size())
 			{
 			 addInactiveMappingSheetRowObject(transformMapping.getMappingSheetRows()); 
-			}	
+			}
+
 			for(int i=0;i<transformMapping.getMappingSheetRows().size();i++)
 			{
 				if(transformMapping.getMappingSheetRows().get(i).isExpression())
@@ -1437,7 +1463,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			temporaryOutputFieldMap.put(mappingSheetRow1.getOperationID(),mappingSheetRow1.getOutputList());
 
 		}
-		backwardJobComapatabilityCode();   
 		for(FilterProperties filterProperties:transformMapping.getOutputFieldList())
 		{
 		 ParameterUtil.addPrefixSuffixToParameterFields(filterProperties,transformMapping);
@@ -1456,22 +1481,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
      */
     private void backwardJobComapatabilityCode()
     {
-    	boolean isJobOld = false;
-    	for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
-    	{
-    		if(nameValueProperty.getFilterProperty()==null || StringUtils.isBlank(nameValueProperty.getFilterProperty().getPropertyname()))
-    		{
-    			isJobOld=true;
-    			break;
-    		}	
-    	}
-    	if(isJobOld)
-    	{
-    		for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
-    		{
-    		if(mappingSheetRow.isActive())	
-    		transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
-    		}
     		List<NameValueProperty> tempNameValuePropertyList=new ArrayList<>();
     		for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
     		{
@@ -1485,8 +1494,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     		transformMapping.getMapAndPassthroughField().clear();
     		transformMapping.getMapAndPassthroughField().addAll(tempNameValuePropertyList);
     		tempNameValuePropertyList.clear();
-    	}	
-    }
+    }	
+    
     
 	/**
 	 * @return finalsortedList

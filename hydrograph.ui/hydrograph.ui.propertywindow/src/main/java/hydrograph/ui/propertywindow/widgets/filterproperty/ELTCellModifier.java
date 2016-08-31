@@ -61,12 +61,7 @@ public class ELTCellModifier implements ICellModifier{
 
 	@Override
 	public boolean canModify(Object element, String property) {
-		FilterProperties filterProperties = (FilterProperties) element;
-		if(ParameterUtil.isParameter(filterProperties.getPropertyname()))
-		{
-			filterProperties.setPropertyname(StringUtils.replace(StringUtils.replace(filterProperties.getPropertyname(), Constants.PARAMETER_PREFIX, ""),Constants.PARAMETER_SUFFIX,""));
-		}		
-		return true;
+		return true;	
 	}
 
 	@Override

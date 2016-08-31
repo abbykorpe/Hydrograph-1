@@ -356,12 +356,14 @@ public abstract class TransformUiConverter extends UiConverter {
 				{
 					nameValueProperty.setPropertyName(((TypeInputField) property).getName());
 					nameValueProperty.setPropertyValue(((TypeInputField) property).getName());
+					nameValueProperty.getFilterProperty().setPropertyname(((TypeInputField) property).getName());
 					nameValueproperties.add(nameValueProperty);
 				}
 				else if(property instanceof TypeMapField )
 				{
 					nameValueProperty.setPropertyName(((TypeMapField) property).getSourceName());
 					nameValueProperty.setPropertyValue(((TypeMapField) property).getName());
+					nameValueProperty.getFilterProperty().setPropertyname(((TypeInputField) property).getName());
 					nameValueproperties.add(nameValueProperty);
 				}
 			}	
