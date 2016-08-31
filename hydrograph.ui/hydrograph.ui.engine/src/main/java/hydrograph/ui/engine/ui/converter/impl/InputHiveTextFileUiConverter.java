@@ -147,9 +147,9 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 			}
 			
 		}
+        }
 		hivePartitionKeyValues.setKey(partitionKeys);
 		hivePartitionKeyValues.setKeyValues(inputHivePartitionColumn);
-			}
 		return hivePartitionKeyValues;
 		
 	}

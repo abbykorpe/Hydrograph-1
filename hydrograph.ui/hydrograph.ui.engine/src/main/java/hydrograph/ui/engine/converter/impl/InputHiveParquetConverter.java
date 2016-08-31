@@ -80,7 +80,7 @@ public class InputHiveParquetConverter extends InputConverter {
 	{
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
 			InputHivePartitionKeyValues property =(InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			
+			if(property.getKeyValues()!=null){
 				if(!property.getKeyValues().isEmpty()){
 					List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.getKeyValues();
 						if(!inputHivePartitionColumn.isEmpty()){
@@ -88,6 +88,7 @@ public class InputHiveParquetConverter extends InputConverter {
 						}
 				}
 			}
+		}
 	}
 	
 	private HivePartitionFilterType getPartitionFilter(List<InputHivePartitionColumn> inputHivePartitionColumn){
@@ -168,6 +169,7 @@ public class InputHiveParquetConverter extends InputConverter {
 	private HivePartitionFieldsType getPartitionKeys() {
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
 			InputHivePartitionKeyValues property = (InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			if(property.getKey()!=null){
 			if(!property.getKey().isEmpty()){
 			List<String> fieldValueSet = new ArrayList<String>();
 			fieldValueSet=(List<String>) property.getKey();
@@ -186,6 +188,7 @@ public class InputHiveParquetConverter extends InputConverter {
 				}
 			}
 			return hivePartitionFieldsType;
+		 }
 		 }
 		}
 		return null;

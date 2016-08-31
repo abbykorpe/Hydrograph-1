@@ -138,9 +138,9 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 			}
 			
 		}
+     	}
 		hivePartitionKeyValues.setKey(partitionKeys);
 		hivePartitionKeyValues.setKeyValues(inputHivePartitionColumn);
-		}
 		return hivePartitionKeyValues;
 		
 	}
