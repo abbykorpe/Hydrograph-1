@@ -30,8 +30,10 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.websocket.ClientEndpoint;
@@ -62,9 +64,11 @@ public class HydrographUiClientSocket {
 
 	/** The session. */
 	private Session session;
-	
+
 	/** The logger. */
 	private Logger logger = LogFactory.INSTANCE.getLogger(HydrographUiClientSocket.class);
+
+	private String CLONE_COMPONENT_TYPE ="CloneComponent";
 
 	/**
 	 * On open.
@@ -76,7 +80,7 @@ public class HydrographUiClientSocket {
 		logger.info("Connected to server");
 		this.session = session;
 	}
-  
+
 	/**
 	 * 
 	 * Called by web socket server, message contain execution tracking status that updated on job canvas.
@@ -86,9 +90,9 @@ public class HydrographUiClientSocket {
 	 */
 	@OnMessage
 	public void updateJobTrackingStatus(String message, Session session) { 
-		
-		
-		
+
+
+
 		final String status = message; 
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
@@ -96,7 +100,7 @@ public class HydrographUiClientSocket {
 				ExecutionStatus executionStatus=gson.fromJson(status, ExecutionStatus.class);
 				IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
 				IEditorReference[] refs = page.getEditorReferences();
-				
+
 				for (IEditorReference ref : refs){
 					IEditorPart editor = ref.getEditor(false);
 					if(editor instanceof ELTGraphicalEditor){
@@ -117,8 +121,8 @@ public class HydrographUiClientSocket {
 				if(executionStatus!=null)
 				{
 					pushExecutionStatusToExecutionTrackingConsole(executionStatus);
-					
-					
+
+
 					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
 
 					if(editor!=null && editor instanceof ELTGraphicalEditor && (editor.getJobId().equals(executionStatus.getJobId())))
@@ -137,7 +141,7 @@ public class HydrographUiClientSocket {
 									StringBuilder subjobPrefix = new StringBuilder("");
 									populateSubjobRecordCount(componentNameAndLink,
 											component,subjobPrefix);
-									
+
 									int successCount=0;
 									updateStatusCountForSubjobComponent(
 											executionStatus,
@@ -167,38 +171,45 @@ public class HydrographUiClientSocket {
 					if(!pending){
 						updateComponentPending(component, componentStatus, running);
 					}
-					
+
 					if(!running){
 						updateComponentRunning(component, componentStatus, running);
 					} 
-					
+
 					if(componentStatus.getComponentId().contains(keySubjobName+".") && componentStatus.getCurrentStatus().equalsIgnoreCase(CompStatus.FAILED.value())){
 						component.updateStatus(CompStatus.FAILED.value());
 						break;
 					}
-					
+
 
 					if(!componentNameAndLink.isEmpty()){
 						for (Map.Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet())
 						{
-							if(componentStatus.getComponentId().equals(entry.getKey())){
+							if(entry.getKey().contains(componentStatus.getComponentId())){
+								List<String> portList = new ArrayList(componentStatus.getProcessedRecordCount().keySet());
+								for(String port: portList){
+									if((componentStatus.getComponentId()+"."+port).equals(entry.getKey())){
 
-								for(Link link: component.getSourceConnections()){ 
-									if(link.getSourceTerminal().toString().equals(((SubjobDetails)entry.getValue()).getTargetTerminal())){
-										link.updateRecordCount(componentStatus.getProcessedRecordCount().get(((SubjobDetails)entry.getValue()).getSourceTerminal()).toString());
+										for(Link link: component.getSourceConnections()){ 
+											if(link.getSourceTerminal().toString().equals(((SubjobDetails)entry.getValue()).getTargetTerminal())){
+												link.updateRecordCount(componentStatus.getProcessedRecordCount().get(((SubjobDetails)entry.getValue()).getSourceTerminal()).toString());
+											}
+										}
+										if(componentStatus.getCurrentStatus().equalsIgnoreCase(CompStatus.SUCCESSFUL.value())){
+											successCount++;
+										}
+
+										break;	
 									}
 								}
-								if(componentStatus.getCurrentStatus().equalsIgnoreCase(CompStatus.SUCCESSFUL.value())){
-									successCount++;
-								}
-
-								break;	
+							}else{
+								continue;
 							}
 						}
 					}
-					
-					
-					
+
+
+
 					if(successCount == componentNameAndLink.size()){
 						component.updateStatus(CompStatus.SUCCESSFUL.value());
 					}
@@ -207,8 +218,8 @@ public class HydrographUiClientSocket {
 
 			private void updateStatusCountForNormalComponent(
 					ExecutionStatus executionStatus, Component component) {
-				
-				
+
+
 				for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 					if(componentStatus.getComponentId().equals(component.getComponentLabel().getLabelContents())){
 						logger.info("Updating normal component {} status {}",component.getComponentLabel().getLabelContents(), componentStatus.getCurrentStatus());
@@ -221,54 +232,63 @@ public class HydrographUiClientSocket {
 					}
 				}
 			}
-			
+
 			private void populateSubjobRecordCount(
 					Map<String, SubjobDetails> componentNameAndLink, Component component,StringBuilder subjobPrefix) {
 				Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
-				for(Link link:outputSubjobComponent.getTargetConnections()){
-					Component componentPrevToOutput = link.getSource();
-					if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
-						subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
-						populateSubjobRecordCount(componentNameAndLink, componentPrevToOutput,subjobPrefix);
-					}else{
-					String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
-					
-					SubjobDetails subjobDetails = new SubjobDetails(link.getSourceTerminal(), portNumber);
-					
-						componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents(), subjobDetails);
+				if(outputSubjobComponent!=null){
+					for(Link link:outputSubjobComponent.getTargetConnections()){
+						Component componentPrevToOutput = link.getSource();
+						if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
+							subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
+							populateSubjobRecordCount(componentNameAndLink, componentPrevToOutput,subjobPrefix);
+						}else{
+							String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
+
+							SubjobDetails subjobDetails = new SubjobDetails(link.getSourceTerminal(), portNumber);
+							if(CLONE_COMPONENT_TYPE.equalsIgnoreCase(componentPrevToOutput.getComponentName())){
+								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+portNumber, subjobDetails);
+							}else{
+								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
+							}
 						}
+					}
 				}
 			}
-			
+
 			private void updateComponentPending(Component component, ComponentStatus componentStatus, boolean started) {
 				Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
-				for(Link link:inputSubjobComponent.getSourceConnections()){
-					Component componentNextToInput = link.getTarget();
-					//if componentNextToInput is pending
-					String compName = component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents();
-					if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.PENDING.value())){
-						component.updateStatus(CompStatus.PENDING.value());
-						started = true;
-						break;
+				if(inputSubjobComponent!=null){
+					for(Link link:inputSubjobComponent.getSourceConnections()){
+						Component componentNextToInput = link.getTarget();
+						//if componentNextToInput is pending
+						String compName = component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents();
+						if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.PENDING.value())){
+							component.updateStatus(CompStatus.PENDING.value());
+							started = true;
+							break;
+						}
 					}
 				}
 			}
 
 			private void updateComponentRunning(Component component, ComponentStatus componentStatus, boolean started) {
 				Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
-				for(Link link:inputSubjobComponent.getSourceConnections()){
-					Component componentNextToInput = link.getTarget();
-					//if componentNextToInput is running
-					String compName = component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents();
-					if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.RUNNING.value())){
-						component.updateStatus(CompStatus.RUNNING.value());
-						started = true;
-						break;
+				if(inputSubjobComponent!=null){
+					for(Link link:inputSubjobComponent.getSourceConnections()){
+						Component componentNextToInput = link.getTarget();
+						//if componentNextToInput is running
+						String compName = component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents();
+						if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.RUNNING.value())){
+							component.updateStatus(CompStatus.RUNNING.value());
+							started = true;
+							break;
+						}
 					}
 				}
 			}
-			
-         });
+
+		});
 	}
 
 	/**
@@ -303,7 +323,7 @@ public class HydrographUiClientSocket {
 	 */
 	private void pushExecutionStatusToExecutionTrackingConsole(
 			ExecutionStatus executionStatus) {
-		
+
 		String jobId = getJobID(executionStatus);		
 		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(jobId);
 		if(console!=null){
@@ -334,7 +354,7 @@ public class HydrographUiClientSocket {
 			final ExecutionStatus executionStatus,
 			final ExecutionTrackingConsole console) {
 		Display.getDefault().asyncExec(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				console.clearConsole();
