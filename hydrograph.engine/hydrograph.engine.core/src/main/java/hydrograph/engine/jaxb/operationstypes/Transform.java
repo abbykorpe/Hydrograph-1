@@ -30,7 +30,10 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  *     &lt;restriction base="{hydrograph/engine/jaxb/commontypes}type-operations-component">
  *       &lt;sequence>
  *         &lt;element name="inSocket" type="{hydrograph/engine/jaxb/transform}type-transform-in-socket"/>
- *         &lt;element name="operation" type="{hydrograph/engine/jaxb/transform}type-transform-operation" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;choice maxOccurs="unbounded">
+ *           &lt;element name="operation" type="{hydrograph/engine/jaxb/transform}type-transform-operation" maxOccurs="unbounded"/>
+ *           &lt;element name="expression" type="{hydrograph/engine/jaxb/commontypes}type-transform-expression" maxOccurs="unbounded"/>
+ *         &lt;/choice>
  *         &lt;element name="outSocket" type="{hydrograph/engine/jaxb/transform}type-transform-out-socket"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
@@ -42,7 +45,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "transform", namespace = "hydrograph/engine/jaxb/operationstypes")
+@XmlType(name = "transform")
 public class Transform
     extends TypeOperationsComponent
 {

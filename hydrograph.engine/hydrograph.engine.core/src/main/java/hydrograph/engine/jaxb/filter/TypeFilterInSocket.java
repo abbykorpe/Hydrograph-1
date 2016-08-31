@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-filter-in-socket", namespace = "hydrograph/engine/jaxb/filter")
+@XmlType(name = "type-filter-in-socket")
 public class TypeFilterInSocket
     extends TypeBaseInSocket
 {

@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-clone-out-socket", namespace = "hydrograph/engine/jaxb/clone")
+@XmlType(name = "type-clone-out-socket")
 public class TypeCloneOutSocket
     extends TypeStraightPullOutSocket
 {

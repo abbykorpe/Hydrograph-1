@@ -90,6 +90,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeExpressionField }
+     * 
+     */
+    public TypeExpressionField createTypeExpressionField() {
+        return new TypeExpressionField();
+    }
+
+    /**
      * Create an instance of {@link TypeOperationInputFields }
      * 
      */
@@ -119,6 +127,14 @@ public class ObjectFactory {
      */
     public TypeMapField createTypeMapField() {
         return new TypeMapField();
+    }
+
+    /**
+     * Create an instance of {@link TypeExpressionOutputFields }
+     * 
+     */
+    public TypeExpressionOutputFields createTypeExpressionOutputFields() {
+        return new TypeExpressionOutputFields();
     }
 
     /**
@@ -167,6 +183,14 @@ public class ObjectFactory {
      */
     public TypeTransformOperation createTypeTransformOperation() {
         return new TypeTransformOperation();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformExpression }
+     * 
+     */
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
     }
 
     /**

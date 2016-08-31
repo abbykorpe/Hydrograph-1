@@ -66,7 +66,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		config = PropertiesLoader.getInstance();
 		LOG.info("Invoking initialize on runtime service");
 		initialize(config.getRuntimeServiceProperties(), this.args, hydrographJob, new HydrographDebugInfo(null), null,
-				null);
+				null,null);
 		LOG.info("Preparation started");
 		prepareToExecute();
 		LOG.info("Preparation completed. Now starting execution");
@@ -77,7 +77,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	}
 
 	public void initialize(Properties config, String[] args, HydrographJob hydrographJob,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath) {
+			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath,String UDFPath) {
 
 		AppProps.setApplicationName(hadoopProperties, hydrographJob.getJAXBObject().getName());
 
@@ -132,7 +132,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		flowBuilder = new FlowBuilder();
 
 		runtimeContext = new RuntimeContext(hydrographJob, traversal, hadoopProperties, assemblyGeneratorFactory,
-				flowManipulationContext.getSchemaFieldHandler());
+				flowManipulationContext.getSchemaFieldHandler(),UDFPath);
 
 		LOG.info(
 				"Graph '" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "' initialized successfully");
@@ -162,6 +162,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		for (Cascade cascade : runtimeContext.getCascade()) {
 			cascade.complete();
 		}
+		executionTrackingListener.getStatus();
 	}
 
 	@Override

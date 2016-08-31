@@ -49,8 +49,9 @@ public class ComponentParameterBuilder {
 		private FlowContext flowContext;
 		private RuntimeContext runtimeContext;
 
-		public Builder(String componentId, ComponentParameters componentParameters, FlowContext flowContext,
-				RuntimeContext runtimeContext) {
+		public Builder(String componentId,
+				ComponentParameters componentParameters,
+				FlowContext flowContext, RuntimeContext runtimeContext) {
 			this.componentParameters = componentParameters;
 			this.componentId = componentId;
 			this.flowContext = flowContext;
@@ -58,24 +59,33 @@ public class ComponentParameterBuilder {
 		}
 
 		public Builder setInputFields() {
-			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext.getHydrographJob().getJAXBObject());
-			List<? extends TypeBaseInSocket> inSocketList = linkGenerator.getLink().get(componentId).getInSocket();
+			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext
+					.getHydrographJob().getJAXBObject());
+			List<? extends TypeBaseInSocket> inSocketList = linkGenerator
+					.getLink().get(componentId).getInSocket();
 
 			BaseComponent assembly;
 
 			for (TypeBaseInSocket fromSocket : inSocketList) {
-				assembly = flowContext.getAssemblies().get(fromSocket.getFromComponentId());
+				assembly = flowContext.getAssemblies().get(
+						fromSocket.getFromComponentId());
 				componentParameters.addInputFields(assembly.getOutFields(
-						fromSocket.getFromSocketType() != null ? fromSocket.getFromSocketType() : "out",
-						fromSocket.getFromSocketId(), fromSocket.getFromComponentId()));
-				componentParameters.addCopyOfInSocket(fromSocket.getId(),
-						assembly.getOutFields(
-								fromSocket.getFromSocketType() != null ? fromSocket.getFromSocketType() : "out",
-								fromSocket.getFromSocketId(), fromSocket.getFromComponentId()));
+						fromSocket.getFromSocketType() != null ? fromSocket
+								.getFromSocketType() : "out", fromSocket
+								.getFromSocketId(), fromSocket
+								.getFromComponentId()));
+				componentParameters
+						.addCopyOfInSocket(
+								fromSocket.getId(),
+								assembly.getOutFields(
+										fromSocket.getFromSocketType() != null ? fromSocket
+												.getFromSocketType() : "out",
+										fromSocket.getFromSocketId(),
+										fromSocket.getFromComponentId()));
 			}
 			return this;
 		}
-
+		
 		public Builder setJobConf() {
 			JobConf jobconf = runtimeContext.getJobConf();
 			componentParameters.addTempPath(jobconf);
@@ -83,16 +93,21 @@ public class ComponentParameterBuilder {
 		}
 
 		public Builder setInputPipes() {
-			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext.getHydrographJob().getJAXBObject());
-			List<? extends TypeBaseInSocket> inSocketList = linkGenerator.getLink().get(componentId).getInSocket();
+			LinkGenerator linkGenerator = new LinkGenerator(runtimeContext
+					.getHydrographJob().getJAXBObject());
+			List<? extends TypeBaseInSocket> inSocketList = linkGenerator
+					.getLink().get(componentId).getInSocket();
 
 			BaseComponent assembly;
 
 			for (TypeBaseInSocket fromSocket : inSocketList) {
-				assembly = flowContext.getAssemblies().get(fromSocket.getFromComponentId());
+				assembly = flowContext.getAssemblies().get(
+						fromSocket.getFromComponentId());
 				componentParameters.addInputPipe(assembly.getOutLink(
-						fromSocket.getFromSocketType() != null ? fromSocket.getFromSocketType() : "out",
-						fromSocket.getFromSocketId(), fromSocket.getFromComponentId()));
+						fromSocket.getFromSocketType() != null ? fromSocket
+								.getFromSocketType() : "out", fromSocket
+								.getFromSocketId(), fromSocket
+								.getFromComponentId()));
 				componentParameters.addinSocketId(fromSocket.getId());
 				componentParameters.addinSocketType(fromSocket.getType());
 			}
@@ -113,6 +128,11 @@ public class ComponentParameterBuilder {
 
 		public Builder setFlowdef() {
 			componentParameters.setFlowDef(flowContext.getFlowDef());
+			return this;
+		}
+		
+		public Builder setUDFPath() {
+			componentParameters.setUDFPath(runtimeContext.getUDFPath());
 			return this;
 		}
 

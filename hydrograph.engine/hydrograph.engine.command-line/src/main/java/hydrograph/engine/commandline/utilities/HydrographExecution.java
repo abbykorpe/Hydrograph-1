@@ -67,7 +67,7 @@ public class HydrographExecution {
 		bhsDebug = createHydrographDebugInfo(args);
 		initialization(args, hydrographJob, bhsDebug,
 				XmlParsingUtils.getJobId(args),
-				XmlParsingUtils.getBasePath(args));
+				XmlParsingUtils.getBasePath(args),XmlParsingUtils.getUDFPath(args));
 		prepareToExecute();
 		finalExecute();
 	}
@@ -89,11 +89,11 @@ public class HydrographExecution {
 	}
 
 	private void initialization(String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo bhsDebug, String jobId, String basePath) {
+			HydrographDebugInfo bhsDebug, String jobId, String basePath, String UDFPath) {
 		LOG.info("Invoking initialize on runtime service");
 		runtimeService.initialize(
 				propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
-				bhsDebug, jobId,basePath);
+				bhsDebug, jobId,basePath,UDFPath);
 	}
 
 	private void prepareToExecute()  {

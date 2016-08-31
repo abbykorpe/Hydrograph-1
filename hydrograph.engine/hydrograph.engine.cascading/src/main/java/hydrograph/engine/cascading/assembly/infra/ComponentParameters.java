@@ -39,6 +39,7 @@ public class ComponentParameters implements Cloneable {
 	private static final String TEMP_PATH_KEY = "temp_path_uri";
 	private static final String JOB_ID = "job_id";
 	private static final String BASE_PATH = "base_path";
+	private static final String UDF_PATH = "udf_path";
 	/**
 	 * 
 	 */
@@ -81,14 +82,15 @@ public class ComponentParameters implements Cloneable {
 		addParameterToList(input, INPUT_FIELDS_KEY);
 
 	}
+
 	public void addSchemaFields(Set<SchemaField> input) {
 		addParameterToList(input, SCHEMA_FIELDS_KEY);
 	}
-	
+
 	public void addDebugPoints(ArrayList<DebugPoint> input) {
 		addParameterToList(input, DEBUG_POINTS_KEY);
 	}
-	
+
 	public void addTempPath(JobConf input) {
 		addParameterToList(input, TEMP_PATH_KEY);
 	}
@@ -116,19 +118,19 @@ public class ComponentParameters implements Cloneable {
 	public Fields getInputFields() {
 		return getParameterfromList(INPUT_FIELDS_KEY);
 	}
-	
+
 	public Set<SchemaField> getSchemaFields() {
 		return getParameterfromList(SCHEMA_FIELDS_KEY);
 	}
-	
+
 	public ArrayList<Set<SchemaField>> getSchemaFieldList() {
 		return getEntireList(SCHEMA_FIELDS_KEY);
 	}
-	
+
 	public ArrayList<DebugPoint> getDebugPoints() {
 		return getParameterfromList(DEBUG_POINTS_KEY);
 	}
-	
+
 	public JobConf getJobConf() {
 		return getParameterfromList(TEMP_PATH_KEY);
 	}
@@ -223,17 +225,25 @@ public class ComponentParameters implements Cloneable {
 	public void setJobId(String jobId) {
 		addParameterToList(jobId, JOB_ID);
 	}
-	
-	public String getJobId(){
-		return  getParameterfromList(JOB_ID);
+
+	public String getJobId() {
+		return getParameterfromList(JOB_ID);
 	}
 
 	public void setBasePath(String basePath) {
 		addParameterToList(basePath, BASE_PATH);
 	}
-	
-	public String getBasePath(){
-		return  getParameterfromList(BASE_PATH);
+
+	public String getBasePath() {
+		return getParameterfromList(BASE_PATH);
+	}
+
+	public void setUDFPath(String UDFPath) {
+		addParameterToList(UDFPath, UDF_PATH);
+	}
+
+	public String getUDFPath() {
+		return getParameterfromList(UDF_PATH);
 	}
 
 }

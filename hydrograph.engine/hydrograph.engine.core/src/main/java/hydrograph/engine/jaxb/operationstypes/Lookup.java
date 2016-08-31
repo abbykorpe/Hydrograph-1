@@ -54,7 +54,7 @@ import hydrograph.engine.jaxb.lookup.TypeKeyFields;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "lookup", namespace = "hydrograph/engine/jaxb/operationstypes", propOrder = {
+@XmlType(name = "lookup", propOrder = {
     "keys",
     "match"
 })

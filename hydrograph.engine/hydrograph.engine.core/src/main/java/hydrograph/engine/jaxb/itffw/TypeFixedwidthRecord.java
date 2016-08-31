@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-fixedwidth-record", namespace = "hydrograph/engine/jaxb/itffw")
+@XmlType(name = "type-fixedwidth-record")
 public class TypeFixedwidthRecord
     extends TypeBaseRecord
 {

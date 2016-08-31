@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-component", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "type-base-component")
 @XmlSeeAlso({
     TypeInputComponent.class,
     TypeOutputComponent.class,

@@ -157,7 +157,7 @@ class TrackComponentUtils {
 				trackContext.getFromOutSocketId(), trackContext.getFromOutSocketType()));
 
 		filter.getOutSocket().add(TrackComponentUtils.getStraightPullOutSocket("out0", "in0"));
-		filter.getOperation().add(filterOperation);
+		filter.getOperationOrExpression().add(filterOperation);
 		return filter;
 	}
 

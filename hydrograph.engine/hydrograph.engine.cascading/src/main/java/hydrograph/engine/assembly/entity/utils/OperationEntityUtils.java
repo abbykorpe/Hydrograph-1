@@ -12,6 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity.utils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import hydrograph.engine.assembly.entity.elements.Expression;
 import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
 import hydrograph.engine.assembly.entity.elements.KeyField;
 import hydrograph.engine.assembly.entity.elements.MapField;
@@ -20,6 +27,8 @@ import hydrograph.engine.assembly.entity.elements.OperationField;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.PassThroughField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeExpressionField;
+import hydrograph.engine.jaxb.commontypes.TypeExpressionOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeInputField;
 import hydrograph.engine.jaxb.commontypes.TypeMapField;
@@ -28,15 +37,10 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
+import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.join.TypeKeyFields;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * The utility class for entities of all operation type components. This class
@@ -64,25 +68,65 @@ public class OperationEntityUtils {
 	 *         contains information of operation class, input fields, output
 	 *         fields and properties for one operation
 	 */
-	public static List<Operation> extractOperations(
-			List<TypeTransformOperation> jaxbOperationList) {
+	public static List<Operation> extractOperations(List<Object> jaxbOperationList) {
 
 		List<Operation> operationList = new ArrayList<Operation>();
 
-		for (TypeTransformOperation typeTransformOperation : jaxbOperationList) {
+		for (Object typeTransformOperation : jaxbOperationList) {
 			Operation operation = new Operation();
-			operation.setOperationId(typeTransformOperation.getId());
-			operation
-					.setOperationInputFields(extractOperationInputFields(typeTransformOperation
-							.getInputFields()));
-			operation
-					.setOperationOutputFields(extractOperationOutputFields(typeTransformOperation
-							.getOutputFields()));
-			operation.setOperationClass(typeTransformOperation.getClazz());
-			operation
-					.setOperationProperties(extractOperationProperties(typeTransformOperation
-							.getProperties()));
-			operationList.add(operation);
+			if (typeTransformOperation instanceof TypeTransformOperation) {
+				operation.setOperationId(((TypeTransformOperation) typeTransformOperation).getId());
+				operation.setOperationInputFields(extractOperationInputFields(
+						((TypeTransformOperation) typeTransformOperation).getInputFields()));
+				operation.setOperationOutputFields(extractOperationOutputFields(
+						((TypeTransformOperation) typeTransformOperation).getOutputFields()));
+				operation.setOperationClass(((TypeTransformOperation) typeTransformOperation).getClazz());
+				operation.setOperationProperties(
+						extractOperationProperties(((TypeTransformOperation) typeTransformOperation).getProperties()));
+				operationList.add(operation);
+			}else {
+				operation.setOperationId(((TypeTransformExpression) typeTransformOperation).getId());
+				operation.setOperationInputFields(extractOperationInputFields(
+						((TypeTransformExpression) typeTransformOperation).getInputFields()));
+				operation.setOperationOutputFields(new String[] { extractExpressionOutputFields(
+						((TypeTransformExpression) typeTransformOperation).getOutputFields()) });
+				operation.setExpression(((TypeTransformExpression) typeTransformOperation).getExpr());
+				operation.setOperationProperties(
+						extractOperationProperties(((TypeTransformExpression) typeTransformOperation).getProperties()));
+				operationList.add(operation);
+			}
+		}
+		return operationList;
+	}
+
+	/**
+	 * Extracts the operation list from the {@link Operation} object of type
+	 * {@link TypeTransformOperation}, passed as a parameter
+	 * 
+	 * @param jaxbOperationList
+	 *            the list of {@link TypeTransformOperation} objects which
+	 *            contain information of operations for the component
+	 * @return a list of {@link Operation} objects. Each object in the list
+	 *         contains information of operation class, input fields, output
+	 *         fields and properties for one operation
+	 */
+	public static List<Expression> extractExpression(List<Object> jaxbOperationList) {
+
+		List<Expression> operationList = new ArrayList<Expression>();
+
+		for (Object typeTransformOperation : jaxbOperationList) {
+			if (typeTransformOperation instanceof TypeTransformExpression) {
+				Expression operation = new Expression();
+				operation.setOperationId(((TypeTransformExpression) typeTransformOperation).getId());
+				operation.setOperationInputFields(extractOperationInputFields(
+						((TypeTransformExpression) typeTransformOperation).getInputFields()));
+				operation.setOperationOutputFields(extractExpressionOutputFields(
+						((TypeTransformExpression) typeTransformOperation).getOutputFields()));
+				operation.setExpression(((TypeTransformExpression) typeTransformOperation).getExpr());
+				operation.setOperationProperties(
+						extractOperationProperties(((TypeTransformExpression) typeTransformOperation).getProperties()));
+				operationList.add(operation);
+			}
 		}
 		return operationList;
 	}
@@ -99,8 +143,7 @@ public class OperationEntityUtils {
 	 *            operation properties for the component
 	 * @return a {@link Properties} object
 	 */
-	private static Properties extractOperationProperties(
-			TypeProperties typeProperties) {
+	private static Properties extractOperationProperties(TypeProperties typeProperties) {
 		Properties properties = new Properties();
 		if (typeProperties == null) {
 			return null;
@@ -110,8 +153,7 @@ public class OperationEntityUtils {
 
 		// Fetch all the properties passed to operation
 		for (Property eachProperty : typeProperties.getProperty()) {
-			properties.setProperty(eachProperty.getName(),
-					eachProperty.getValue());
+			properties.setProperty(eachProperty.getName(), eachProperty.getValue());
 		}
 
 		return properties;
@@ -129,15 +171,13 @@ public class OperationEntityUtils {
 	 *            information of operation input fields for the component
 	 * @return a string array containing the input fields for an operation
 	 */
-	private static String[] extractOperationInputFields(
-			TypeOperationInputFields typeOperationInputFields) {
+	private static String[] extractOperationInputFields(TypeOperationInputFields typeOperationInputFields) {
 		if (typeOperationInputFields == null) {
 			return null;
 		} else if (typeOperationInputFields.getField() == null) {
 			return null;
 		}
-		List<TypeInputField> typeInputFieldList = typeOperationInputFields
-				.getField();
+		List<TypeInputField> typeInputFieldList = typeOperationInputFields.getField();
 		String[] inputFields = new String[typeInputFieldList.size()];
 		int i = 0;
 		for (TypeInputField typeInputField : typeInputFieldList) {
@@ -158,22 +198,43 @@ public class OperationEntityUtils {
 	 *            information of operation output fields for the component
 	 * @return a string array containing the output fields for an operation
 	 */
-	private static String[] extractOperationOutputFields(
-			TypeOperationOutputFields typeOperationOutputFields) {
+	private static String[] extractOperationOutputFields(TypeOperationOutputFields typeOperationOutputFields) {
 
 		if (typeOperationOutputFields == null) {
 			return null;
 		} else if (typeOperationOutputFields.getField() == null) {
 			return null;
 		}
-		List<TypeBaseField> typeOutputFieldList = typeOperationOutputFields
-				.getField();
+		List<TypeBaseField> typeOutputFieldList = typeOperationOutputFields.getField();
 		String[] outputFields = new String[typeOutputFieldList.size()];
 		int i = 0;
 		for (TypeBaseField typeOutputField : typeOutputFieldList) {
 			outputFields[i++] = typeOutputField.getName();
 		}
 		return outputFields;
+
+	}
+
+	/**
+	 * Extracts the operation output fields from the
+	 * {@link TypeExpressionOutputFields} object passed as a parameter
+	 * <p>
+	 * The method returns {@code null} if the {@code TypeExpressionOutputFields}
+	 * parameter is null
+	 * 
+	 * @param TypeExpressionOutputFields
+	 *            the object of {@link TypeExpressionOutputFields} which contain
+	 *            information of operation output fields for the component
+	 * @return a string array containing the output fields for an operation
+	 */
+	private static String extractExpressionOutputFields(TypeExpressionOutputFields typeOperationOutputFields) {
+
+		if (typeOperationOutputFields == null) {
+			return null;
+		} else if (typeOperationOutputFields.getField() == null) {
+			return null;
+		}
+		return typeOperationOutputFields.getField().getName();
 
 	}
 
@@ -199,8 +260,7 @@ public class OperationEntityUtils {
 	 * @throws NullPointerException
 	 *             when {@code outSocket} is null
 	 */
-	public static List<String[]> extractOperationFieldsListFromSocket(
-			List<TypeOperationsOutSocket> outSocket)
+	public static List<String[]> extractOperationFieldsListFromSocket(List<TypeOperationsOutSocket> outSocket)
 			throws NullPointerException {
 
 		if (outSocket == null) {
@@ -211,15 +271,13 @@ public class OperationEntityUtils {
 
 		for (TypeOperationsOutSocket socket : outSocket) {
 			ArrayList<String> operationFields = new ArrayList<String>();
-			for (Object field : socket
-					.getPassThroughFieldOrOperationFieldOrMapField()) {
+			for (Object field : socket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 				if (field instanceof TypeOperationField) {
 					TypeOperationField operationField = (TypeOperationField) field;
 					operationFields.add(operationField.getName());
 				}
 			}
-			operationFieldsList.add(operationFields
-					.toArray(new String[operationFields.size()]));
+			operationFieldsList.add(operationFields.toArray(new String[operationFields.size()]));
 		}
 
 		return operationFieldsList;
@@ -240,8 +298,7 @@ public class OperationEntityUtils {
 	 * @throws NullPointerException
 	 *             when {@code outSocket} is null
 	 */
-	public static List<String[]> extractPassThroughFieldsListFromOutSocket(
-			List<TypeOperationsOutSocket> outSocket)
+	public static List<String[]> extractPassThroughFieldsListFromOutSocket(List<TypeOperationsOutSocket> outSocket)
 			throws NullPointerException {
 
 		if (outSocket == null) {
@@ -252,15 +309,13 @@ public class OperationEntityUtils {
 
 		for (TypeOperationsOutSocket socket : outSocket) {
 			ArrayList<String> passThroughFields = new ArrayList<String>();
-			for (Object field : socket
-					.getPassThroughFieldOrOperationFieldOrMapField()) {
+			for (Object field : socket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 				if (field instanceof TypeInputField) {
 					TypeInputField passThroughField = (TypeInputField) field;
 					passThroughFields.add(passThroughField.getName());
 				}
 			}
-			passThroughFieldsList.add(passThroughFields
-					.toArray(new String[passThroughFields.size()]));
+			passThroughFieldsList.add(passThroughFields.toArray(new String[passThroughFields.size()]));
 		}
 
 		return passThroughFieldsList;
@@ -283,8 +338,7 @@ public class OperationEntityUtils {
 	 * @throws NullPointerException
 	 *             when {@code outSocket} is null
 	 */
-	public static List<Map<String, String>> extractMapFieldsListFromOutSocket(
-			List<TypeOperationsOutSocket> outSocket)
+	public static List<Map<String, String>> extractMapFieldsListFromOutSocket(List<TypeOperationsOutSocket> outSocket)
 			throws NullPointerException {
 
 		if (outSocket == null) {
@@ -295,8 +349,7 @@ public class OperationEntityUtils {
 
 		for (TypeOperationsOutSocket socket : outSocket) {
 			Map<String, String> mapFields = new HashMap<String, String>();
-			for (Object field : socket
-					.getPassThroughFieldOrOperationFieldOrMapField()) {
+			for (Object field : socket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 				if (field instanceof TypeMapField) {
 					TypeMapField mapField = (TypeMapField) field;
 					mapFields.put(mapField.getSourceName(), mapField.getName());
@@ -320,8 +373,7 @@ public class OperationEntityUtils {
 	 * @throws NullPointerException
 	 *             when {@code outSocket} is null
 	 */
-	public static String[] extractSocketIdFromOutSocket(
-			List<TypeOperationsOutSocket> outSocket)
+	public static String[] extractSocketIdFromOutSocket(List<TypeOperationsOutSocket> outSocket)
 			throws NullPointerException {
 
 		if (outSocket == null) {
@@ -348,8 +400,7 @@ public class OperationEntityUtils {
 	 * @throws NullPointerException
 	 *             when {@code outSocket} is null
 	 */
-	public static String[] extractSocketTypeFromOutSocket(
-			List<TypeOperationsOutSocket> outSocket)
+	public static String[] extractSocketTypeFromOutSocket(List<TypeOperationsOutSocket> outSocket)
 			throws NullPointerException {
 
 		if (outSocket == null) {
@@ -376,8 +427,7 @@ public class OperationEntityUtils {
 	 *            runtime properties for the component
 	 * @return a {@link Properties} object
 	 */
-	public static Properties extractRuntimeProperties(
-			TypeProperties typeProperties) {
+	public static Properties extractRuntimeProperties(TypeProperties typeProperties) {
 
 		if (typeProperties == null) {
 			return null;
@@ -387,8 +437,7 @@ public class OperationEntityUtils {
 		Properties properties = new Properties();
 		// Fetch all the properties passed to operation
 		for (Property eachProperty : typeProperties.getProperty()) {
-			properties.setProperty(eachProperty.getName(),
-					eachProperty.getValue());
+			properties.setProperty(eachProperty.getName(), eachProperty.getValue());
 		}
 
 		return properties;
@@ -409,18 +458,15 @@ public class OperationEntityUtils {
 	 *             when {@code outSocket} is null
 	 */
 	private static List<PassThroughField> extractPassThroughFieldsListFromOutSockets(
-			TypeOperationsOutSocket typeOperationsOutSocket)
-			throws NullPointerException {
+			TypeOperationsOutSocket typeOperationsOutSocket) throws NullPointerException {
 		if (typeOperationsOutSocket == null) {
 			throw new NullPointerException("Out socket cannot be null");
 		}
 		List<PassThroughField> passThroughFieldsList = new ArrayList<PassThroughField>();
-		for (Object field : typeOperationsOutSocket
-				.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if (field instanceof TypeInputField) {
 				TypeInputField passThroughField = (TypeInputField) field;
-				PassThroughField passThroughFieldsObj = new PassThroughField(
-						passThroughField.getName(),
+				PassThroughField passThroughFieldsObj = new PassThroughField(passThroughField.getName(),
 						passThroughField.getInSocketId());
 				passThroughFieldsList.add(passThroughFieldsObj);
 			}
@@ -443,18 +489,20 @@ public class OperationEntityUtils {
 	 *             when {@code outSocket} is null
 	 */
 	private static List<OperationField> extractOperationFieldFromOutSockets(
-			TypeOperationsOutSocket typeOperationsOutSocket)
-			throws NullPointerException {
+			TypeOperationsOutSocket typeOperationsOutSocket) throws NullPointerException {
 		if (typeOperationsOutSocket == null) {
 			throw new NullPointerException("Out socket cannot be null");
 		}
 		List<OperationField> operationFieldList = new ArrayList<>();
-		for (Object field : typeOperationsOutSocket
-				.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if (field instanceof TypeOperationField) {
 				TypeOperationField typeOperationField = (TypeOperationField) field;
-				operationFieldList.add(new OperationField(typeOperationField
-						.getName(), typeOperationField.getOperationId()));
+				operationFieldList
+						.add(new OperationField(typeOperationField.getName(), typeOperationField.getOperationId()));
+			} else if (field instanceof TypeExpressionField) {
+				TypeExpressionField typeOperationField = (TypeExpressionField) field;
+				operationFieldList
+						.add(new OperationField(typeOperationField.getName(), typeOperationField.getExpressionId()));
 			}
 		}
 		return operationFieldList;
@@ -474,28 +522,26 @@ public class OperationEntityUtils {
 	 * @throws NullPointerException
 	 *             when {@code outSocket} is null
 	 */
-	private static List<MapField> extractMapFieldsListFromOutSockets(
-			TypeOperationsOutSocket typeOperationsOutSocket)
+	private static List<MapField> extractMapFieldsListFromOutSockets(TypeOperationsOutSocket typeOperationsOutSocket)
 			throws NullPointerException {
 
 		if (typeOperationsOutSocket == null) {
 			throw new NullPointerException("Out socket cannot be null");
 		}
 		List<MapField> mapFieldsList = new ArrayList<MapField>();
-		for (Object field : typeOperationsOutSocket
-				.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if (field instanceof TypeMapField) {
 				TypeMapField typeMapField = (TypeMapField) field;
-				MapField mapField = new MapField(typeMapField.getSourceName(),
-						typeMapField.getName(), typeMapField.getInSocketId());
+				MapField mapField = new MapField(typeMapField.getSourceName(), typeMapField.getName(),
+						typeMapField.getInSocketId());
 				mapFieldsList.add(mapField);
 			}
 		}
 		return mapFieldsList;
 	}
 
-	public static List<JoinKeyFields> extractKeyFieldsListFromOutSockets(
-			List<TypeKeyFields> list) throws NullPointerException {
+	public static List<JoinKeyFields> extractKeyFieldsListFromOutSockets(List<TypeKeyFields> list)
+			throws NullPointerException {
 
 		if (list == null) {
 			throw new NullPointerException("Out socket cannot be null");
@@ -512,8 +558,7 @@ public class OperationEntityUtils {
 				i++;
 			}
 
-			JoinKeyFields mapFields = new JoinKeyFields(
-					keyField.getInSocketId(), keyField.isRecordRequired(),
+			JoinKeyFields mapFields = new JoinKeyFields(keyField.getInSocketId(), keyField.isRecordRequired(),
 					fieldNames);
 			keyFieldsList.add(mapFields);
 		}
@@ -521,8 +566,7 @@ public class OperationEntityUtils {
 		return keyFieldsList;
 	}
 
-	public static List<OutSocket> extractOutSocketList(
-			List<TypeOperationsOutSocket> outSocket) {
+	public static List<OutSocket> extractOutSocketList(List<TypeOperationsOutSocket> outSocket) {
 
 		if (outSocket == null) {
 			throw new NullPointerException("Out socket cannot be null");
@@ -534,16 +578,12 @@ public class OperationEntityUtils {
 			OutSocket outSockets = new OutSocket(socket.getId());
 			if (socket.getType() != null)
 				outSockets.setSocketType(socket.getType());
-			outSockets
-					.setMapFieldsList(extractMapFieldsListFromOutSockets(socket));
-			outSockets
-					.setPassThroughFieldsList(extractPassThroughFieldsListFromOutSockets(socket));
-			outSockets
-					.setOperationFieldList(extractOperationFieldFromOutSockets(socket));
+			outSockets.setMapFieldsList(extractMapFieldsListFromOutSockets(socket));
+			outSockets.setPassThroughFieldsList(extractPassThroughFieldsListFromOutSockets(socket));
+			outSockets.setOperationFieldList(extractOperationFieldFromOutSockets(socket));
 			outSocketList.add(outSockets);
 			if (socket.getCopyOfInsocket() != null)
-				outSockets.setCopyOfInSocketId(socket.getCopyOfInsocket()
-						.getInSocketId());
+				outSockets.setCopyOfInSocketId(socket.getCopyOfInsocket().getInSocketId());
 		}
 
 		return outSocketList;
@@ -554,10 +594,10 @@ public class OperationEntityUtils {
 	 * public static Map<String, InSocket>
 	 * extractInSocketMap(List<TypeBaseInSocket> inSocketList) {
 	 * 
-	 * if (inSocketList == null) { throw new
-	 * NullPointerException("In socket cannot be null"); } Map<String, InSocket>
-	 * inSocketMap = new HashMap<String, InSocket>(); for (TypeBaseInSocket
-	 * inSocket : inSocketList) { InSocket socket = new
+	 * if (inSocketList == null) { throw new NullPointerException(
+	 * "In socket cannot be null"); } Map<String, InSocket> inSocketMap = new
+	 * HashMap<String, InSocket>(); for (TypeBaseInSocket inSocket :
+	 * inSocketList) { InSocket socket = new
 	 * InSocket(inSocket.getFromComponentId(), inSocket.getFromSocketId(),
 	 * inSocket.getId());
 	 * 
@@ -586,8 +626,7 @@ public class OperationEntityUtils {
 				i++;
 			}
 
-			JoinKeyFields mapFields = new JoinKeyFields(
-					keyField.getInSocketId(), true, fieldNames);
+			JoinKeyFields mapFields = new JoinKeyFields(keyField.getInSocketId(), true, fieldNames);
 			keyFieldsList.add(mapFields);
 		}
 
@@ -612,12 +651,10 @@ public class OperationEntityUtils {
 	 */
 	public static KeyField[] extractSecondaryKeyFields(
 			hydrograph.engine.jaxb.aggregate.TypeSecondaryKeyFields typeSecondaryKeyFields) {
-		if (typeSecondaryKeyFields == null
-				|| typeSecondaryKeyFields.getField() == null) {
+		if (typeSecondaryKeyFields == null || typeSecondaryKeyFields.getField() == null) {
 			return null;
 		}
-		KeyField[] keyFields = new KeyField[typeSecondaryKeyFields.getField()
-				.size()];
+		KeyField[] keyFields = new KeyField[typeSecondaryKeyFields.getField().size()];
 		int i = 0;
 		for (hydrograph.engine.jaxb.aggregate.TypeSecondayKeyFieldsAttributes eachTypeFieldName : typeSecondaryKeyFields
 				.getField()) {
@@ -654,8 +691,7 @@ public class OperationEntityUtils {
 		} else if (typePrimaryKeyFields.getField() == null) {
 			return null;
 		}
-		KeyField[] keyFields = new KeyField[typePrimaryKeyFields.getField()
-				.size()];
+		KeyField[] keyFields = new KeyField[typePrimaryKeyFields.getField().size()];
 		int i = 0;
 		for (TypeFieldName eachTypeFieldName : typePrimaryKeyFields.getField()) {
 			KeyField eachKeyField = new KeyField();
@@ -692,8 +728,7 @@ public class OperationEntityUtils {
 		} else if (typePrimaryKeyFields.getField() == null) {
 			return null;
 		}
-		KeyField[] keyFields = new KeyField[typePrimaryKeyFields.getField()
-				.size()];
+		KeyField[] keyFields = new KeyField[typePrimaryKeyFields.getField().size()];
 		int i = 0;
 		for (TypeFieldName eachTypeFieldName : typePrimaryKeyFields.getField()) {
 			KeyField eachKeyField = new KeyField();
@@ -723,12 +758,10 @@ public class OperationEntityUtils {
 	 */
 	public static KeyField[] extractSecondaryKeyFields(
 			hydrograph.engine.jaxb.cumulate.TypeSecondaryKeyFields typeSecondaryKeyFields) {
-		if (typeSecondaryKeyFields == null
-				|| typeSecondaryKeyFields.getField() == null) {
+		if (typeSecondaryKeyFields == null || typeSecondaryKeyFields.getField() == null) {
 			return null;
 		}
-		KeyField[] keyFields = new KeyField[typeSecondaryKeyFields.getField()
-				.size()];
+		KeyField[] keyFields = new KeyField[typeSecondaryKeyFields.getField().size()];
 		int i = 0;
 		for (hydrograph.engine.jaxb.cumulate.TypeSecondayKeyFieldsAttributes eachTypeFieldName : typeSecondaryKeyFields
 				.getField()) {

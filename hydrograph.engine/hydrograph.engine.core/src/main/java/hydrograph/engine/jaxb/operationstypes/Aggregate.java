@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.aggregate.TypeSecondaryKeyFields;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "aggregate", namespace = "hydrograph/engine/jaxb/operationstypes", propOrder = {
+@XmlType(name = "aggregate", propOrder = {
     "primaryKeys",
     "secondaryKeys"
 })

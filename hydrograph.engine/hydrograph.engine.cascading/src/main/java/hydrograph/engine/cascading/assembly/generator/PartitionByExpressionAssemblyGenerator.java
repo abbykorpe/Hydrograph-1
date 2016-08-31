@@ -62,12 +62,12 @@ public class PartitionByExpressionAssemblyGenerator extends OperationAssemblyGen
 		partitionByExpressionEntity.setPhase(jaxbPartitionByExpression.getPhase());
 
 		// check if operation is present
-		if (jaxbPartitionByExpression.getOperation() != null) {
+		if (jaxbPartitionByExpression.getOperationOrExpression() != null) {
 
 			LOG.trace("Operation present for PartitionByExpression component: " + jaxbPartitionByExpression.getId()
 					+ ", processing");
 			partitionByExpressionEntity.setOperation(
-					OperationEntityUtils.extractOperations(jaxbPartitionByExpression.getOperation()).get(0));
+					OperationEntityUtils.extractOperations(jaxbPartitionByExpression.getOperationOrExpression()).get(0));
 		} else {
 			LOG.trace("Operation not present for aggregate component: " + jaxbPartitionByExpression.getId()
 					+ ", skipped operation processing");

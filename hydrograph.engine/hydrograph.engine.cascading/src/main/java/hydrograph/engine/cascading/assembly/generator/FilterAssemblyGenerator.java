@@ -57,14 +57,14 @@ public class FilterAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		filterEntity.setPhase(jaxbFilter.getPhase());
 
 		// check if operation is present
-		if (jaxbFilter.getOperation() != null) {
+		if (jaxbFilter.getOperationOrExpression() != null) {
 			
 			LOG.trace("Operation(s) present for filter component: "
 					+ jaxbFilter.getId() + ", processing");
-			filterEntity.setNumOperations(jaxbFilter.getOperation().size());
+			filterEntity.setNumOperations(jaxbFilter.getOperationOrExpression().size());
 			filterEntity.setOperationPresent(true);
 			filterEntity.setOperation(OperationEntityUtils.extractOperations(
-					jaxbFilter.getOperation()).get(0));
+					jaxbFilter.getOperationOrExpression()).get(0));
 		} else {
 			LOG.trace("Operation not present for filter component: "
 					+ jaxbFilter.getId() + ", skipped operation processing");
