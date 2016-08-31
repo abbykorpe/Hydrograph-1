@@ -165,7 +165,7 @@ import org.xml.sax.SAXException;
 		public static final String FIELD_DESCRIPTION = Messages.FIELD_DESCRIPTION;
 		public static final String LENGTH = Messages.LENGTH;
 		public static final String DELIMITER = Messages.DELIMITER;
-	
+		public static int COLUMN_WIDTH=100;
 		public static final String RANGE_FROM = Messages.RANGE_FROM;
 		public static final String RANGE_TO = Messages.RANGE_TO;
 		public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
@@ -1178,7 +1178,7 @@ import org.xml.sax.SAXException;
 			// Set up the table
 			for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
 				table.getColumn(columnIndex).pack();
-				table.getColumn(columnIndex).setWidth(100);
+				table.getColumn(columnIndex).setWidth(COLUMN_WIDTH);
 				
 			}
 			editors = gridWidgetBuilder.createCellEditorList(table, columns);
@@ -1287,23 +1287,27 @@ import org.xml.sax.SAXException;
 			return tableViewer;
 		}
 
-		/**
-		 * Arrange the columns size in equal ratio
-		 */
-		private void arrangeTableViewerColumns() {
-			tableViewerComposite.addControlListener(new ControlAdapter() {
-				
-				@Override
-				public void controlResized(ControlEvent e) {
-					int width=tableViewerComposite.getSize().x/tableViewer.getTable().getColumnCount();
-					for(TableColumn tableColumn:tableViewer.getTable().getColumns()){
-						tableColumn.setWidth(width);
+	/**
+	 * Arrange the columns size in equal ratio
+	 */
+	private void arrangeTableViewerColumns() {
+		tableViewerComposite.addControlListener(new ControlAdapter() {
+
+			@Override
+			public void controlResized(ControlEvent e) {
+				int totalWidth = tableViewer.getTable().getColumnCount() * COLUMN_WIDTH;
+				int widthDifference = tableViewerComposite.getSize().x - totalWidth;
+
+				if (widthDifference > 0) {
+					widthDifference = widthDifference / tableViewer.getTable().getColumnCount();
+					for (TableColumn tableColumn : tableViewer.getTable().getColumns()) {
+						tableColumn.setWidth(COLUMN_WIDTH+widthDifference);
 					}
 				}
-			
-			});
-		}
-	
+			}
+
+		});
+	}	
 		
 		
 		
