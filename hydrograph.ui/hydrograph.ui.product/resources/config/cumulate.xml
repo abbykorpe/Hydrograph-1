@@ -78,10 +78,6 @@
 			name="CUMULATE" />
 		<tns:stdOperation class="hydrograph.engine.transformation.userfunctions.cumulate.Sum"
 			name="Sum" />
-		<tns:stdOperation class="hydrograph.engine.transformation.userfunctions.cumulate.Max"
-			name="Max" />
-		<tns:stdOperation class="hydrograph.engine.transformation.userfunctions.cumulate.Min"
-			name="Min" />
 		<tns:stdOperation
 			class="hydrograph.engine.transformation.userfunctions.cumulate.Count" name="Count" />
 		<tns:stdOperation

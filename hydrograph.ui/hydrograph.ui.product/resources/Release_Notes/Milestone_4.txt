@@ -30,7 +30,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 19.#1052 [Akhilesh Joshi] Operation class window updates 
 20.#509  [Akhilesh Joshi] Look and Feel of Operation Class window
 21.#1083 [Ashika Holkar] Hive components fail if partition key is not specified 
-
+22.#1129 [Ashika Holkar] Cumulate Component: Job is Getting Failed When User Selects Max/Min Operations in Operation Class
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
