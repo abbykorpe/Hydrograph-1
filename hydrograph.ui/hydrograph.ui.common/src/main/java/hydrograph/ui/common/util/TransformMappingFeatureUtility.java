@@ -12,8 +12,9 @@
  ******************************************************************************/
 
 
-package hydrograph.ui.propertywindow.widgets.utility;
+package hydrograph.ui.common.util;
 
+import hydrograph.ui.common.Messages;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
@@ -117,5 +118,15 @@ public class TransformMappingFeatureUtility {
 		{
 			setForegroundColorToBlack(inputtable, outputTable);
 		}	
+	}
+	public List<MappingSheetRow> getActiveMappingSheetRow(List<MappingSheetRow> mappingSheetRows)
+	{
+		List<MappingSheetRow> activeMappingSheetRow=new ArrayList<>();
+		for(MappingSheetRow mappingSheetRow:mappingSheetRows)
+		{
+			if(mappingSheetRow.isActive())
+			activeMappingSheetRow.add(mappingSheetRow);	
+		}
+		return activeMappingSheetRow;
 	}
 }

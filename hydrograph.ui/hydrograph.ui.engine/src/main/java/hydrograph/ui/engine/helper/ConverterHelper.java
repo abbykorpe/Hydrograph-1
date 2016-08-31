@@ -32,6 +32,7 @@ import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
@@ -87,7 +88,8 @@ public class ConverterHelper {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
 		List<Object> operationList = new ArrayList<>();
 		if (transformPropertyGrid != null) {
-			List<MappingSheetRow> mappingsheetRowList = transformPropertyGrid.getMappingSheetRows();
+			List<MappingSheetRow> mappingsheetRowList = TransformMappingFeatureUtility.INSTANCE.
+					getActiveMappingSheetRow(transformPropertyGrid.getMappingSheetRows());
 			if (mappingsheetRowList != null) {
 				int OperationID = 0;
 				for (MappingSheetRow mappingsheetRow : mappingsheetRowList) {

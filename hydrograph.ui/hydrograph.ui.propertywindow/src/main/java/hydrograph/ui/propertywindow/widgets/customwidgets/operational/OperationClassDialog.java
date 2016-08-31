@@ -544,7 +544,9 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
         	mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 			mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 			mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-			mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH),mappingSheetRow.isExpression(),null);
+			mappingSheetRow.getWholeOperationParameterValue(), 
+			mappingSheetRow.isWholeOperationParameter(),
+			(String)fileName.getData(PATH),mappingSheetRow.isExpression(),null,mappingSheetRow.isActive());
 		    isOkPressed=true;
 		    super.okPressed();
         }
@@ -586,7 +588,8 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),
 					mappingSheetRow.getOperationID(), operationClasses.getText(), fileName.getText(),
 					mappingSheetRow.getNameValueProperty(), isParameterCheckBox.getSelection(),
-					mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),(String)fileName.getData(PATH),mappingSheetRow.isExpression(),null);
+					mappingSheetRow.getWholeOperationParameterValue(), mappingSheetRow.isWholeOperationParameter(),
+					(String)fileName.getData(PATH),mappingSheetRow.isExpression(),null,mappingSheetRow.isActive());
 			applyButton.setEnabled(false);
 			isApplyPressed=true;
 		} else {

@@ -190,14 +190,15 @@ public abstract class TransformUiConverter extends UiConverter {
 				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformOperation),
 					getOutputFieldList(transformOperation),
 					getOperationClassName(transformOperation.getClazz()),transformOperation.getClazz(),
-					ParameterUtil.isParameter(transformOperation.getClazz()),transformOperation.getId(),getProperties(transformOperation),false,null)
+					ParameterUtil.isParameter(transformOperation.getClazz()),transformOperation.getId(),getProperties(transformOperation),false,null,true)
 				   );
              }
 			else if(item instanceof TypeTransformExpression)
 			{
 				TypeTransformExpression transformExpression=(TypeTransformExpression)item;
 				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
-						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,getExpressionEditorData(transformExpression))
+						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,getExpressionEditorData(transformExpression),
+						true)
 					   );
 			}	
 		}

@@ -45,11 +45,11 @@ public class MappingSheetRow implements IDataStructure {
 	private List<NameValueProperty> nameValuePropertyList;
     private String wholeOperationParameterValue;
     private String operationClassFullPath;
-	
-		private boolean isExpression;
+	private boolean isExpression;
 	private ExpressionEditorData expressionEditorData;
-
-	public boolean isExpression() {
+    private boolean isActive;
+	
+    public boolean isExpression() {
 		return isExpression;
 	}
 	/**
@@ -125,7 +125,8 @@ public class MappingSheetRow implements IDataStructure {
 			boolean isWholeOperationParameter,
 			String operationClassFullPath,
 			boolean isExpression,
-			ExpressionEditorData expressionEditorData
+			ExpressionEditorData expressionEditorData,
+			boolean isActive
 			) {
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -139,6 +140,7 @@ public class MappingSheetRow implements IDataStructure {
 		this.operationClassFullPath=operationClassFullPath;
 		this.isExpression=isExpression;
 		this.expressionEditorData=expressionEditorData;
+		this.isActive=isActive;
     }
 	
 	/**
@@ -160,7 +162,7 @@ public class MappingSheetRow implements IDataStructure {
 	 *            the name value property
 	 */
 	public MappingSheetRow(List<FilterProperties> input, List<FilterProperties> outputList, String comBoxValue,String operationClassPath,boolean isClassParameter,String operationId,
-			 List<NameValueProperty> nameValueProperty,boolean isExpression,ExpressionEditorData expressionEditorData) 
+			 List<NameValueProperty> nameValueProperty,boolean isExpression,ExpressionEditorData expressionEditorData,boolean isActive) 
 	{
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -171,6 +173,7 @@ public class MappingSheetRow implements IDataStructure {
 		this.setClassParameter(isClassParameter);
 		this.isExpression=isExpression;
 		this.expressionEditorData=expressionEditorData;
+		this.isActive=isActive;
 	}
 	
 	
@@ -396,6 +399,12 @@ public class MappingSheetRow implements IDataStructure {
 		this.isClassParameter = isClassParameter;
 	}
 	
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 	
 
 	@Override
@@ -405,6 +414,7 @@ public class MappingSheetRow implements IDataStructure {
 		List<NameValueProperty> nameValuePropertyList=new ArrayList<>();
 		
 		boolean isWholeOperationParameter=this.isWholeOperationParameter;
+		boolean isActive=this.isActive;
 		String wholeOperationParameterValue=this.wholeOperationParameterValue;
 		String comboBoxvalue=this.comboBoxValue;
 		String operationClasspath=this.operationClassPath;
@@ -425,14 +435,16 @@ public class MappingSheetRow implements IDataStructure {
 		}
 		MappingSheetRow mappingSheetRow;
 		if(isExpression)
-		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,isOperationClass,expressionEditorData.clone());
+		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,
+				nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,
+				isOperationClass,expressionEditorData.clone(),isActive);
 		else
-		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,isOperationClass,null);	
+		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,
+				nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,
+				isOperationClass,null,isActive);	
 		return mappingSheetRow;
 	}
-
-
-
+	
 	@Override
 	public String toString() {
 		return "MappingSheetRow [inputFields=" + inputFieldList + ", comboBoxValue=" + comboBoxValue
@@ -513,6 +525,8 @@ public class MappingSheetRow implements IDataStructure {
 			return false;	
 		}else if(!expressionEditorData.equals(other.expressionEditorData))
 			return false;
+		if(isActive!=other.isActive)
+		return false;	
 		return true;
 	}
 

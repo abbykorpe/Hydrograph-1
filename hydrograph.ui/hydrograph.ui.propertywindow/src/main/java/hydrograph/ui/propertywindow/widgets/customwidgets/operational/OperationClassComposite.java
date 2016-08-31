@@ -1,7 +1,9 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -15,6 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 public class OperationClassComposite extends Composite {
 
@@ -35,13 +39,16 @@ public class OperationClassComposite extends Composite {
 	private static final String OUTPUT_DELETE_BUTTON = "outputDeleteButton";
 	private static final String OUTPUT_ADD_BUTTON = "outputAddButton";
 	private static final String BTN_NEW_BUTTON = "btnNewButton";
+	private Button switchToExpressionButton;
+	private Button switchToClassButton;
+	private Label lblSwitchTo;
 	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public OperationClassComposite(Composite parent, int style,final MappingSheetRow mappingSheetRow) {
+	public OperationClassComposite(Composite parent, int style,final MappingSheetRow mappingSheetRow,Component component) {
 		super(parent, style);
 		setLayout(new GridLayout(3, false));
 		
@@ -49,19 +56,51 @@ public class OperationClassComposite extends Composite {
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayout(new GridLayout(4, false));
 		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_composite.heightHint = 181;
+		gd_composite.heightHint = 191;
 		gd_composite.widthHint = 272;
 		composite.setLayoutData(gd_composite);
 		new Label(composite, SWT.NONE);
+		
+		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
+		{
+		lblSwitchTo = new Label(composite, SWT.NONE);
+		lblSwitchTo.setText("Switch to");
+		
+		switchToClassButton = new Button(composite, SWT.RADIO);
+		switchToClassButton.setText("Class");
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
+		switchToClassButton.setSelection(true);
 		new Label(composite, SWT.NONE);
 		
+		switchToExpressionButton = new Button(composite, SWT.RADIO);
+		switchToExpressionButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Button toggleButton=(Button)e.widget;	
+				toggleButton.getParent().getParent().setVisible(false);
+			}
+		});
+		switchToExpressionButton.setText("Expression");
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		}
+		else
+		{
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			
+		}
 		Label lblExpression = new Label(composite, SWT.NONE);
 		GridData gd_lblExpression = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_lblExpression.minimumWidth = 70;
@@ -139,6 +178,8 @@ public class OperationClassComposite extends Composite {
          
 	}
     
+	
+
 	private void disabledWidgetsifWholeOperationIsParameter(Button isParam,boolean isWholeOperationParameter) 
 	{
 		if (isWholeOperationParameter) {
@@ -291,6 +332,15 @@ public class OperationClassComposite extends Composite {
 	public Button getBtnIsParam() {
 		return btnIsParam;
 	}
+    public Button getSwitchToExpressionButton()
+    {
+    return switchToExpressionButton;
+    }
+	public Button getSwitchToClassButton() {
+		return switchToClassButton;
+	}
+
+
 
 	@Override
 	protected void checkSubclass() {

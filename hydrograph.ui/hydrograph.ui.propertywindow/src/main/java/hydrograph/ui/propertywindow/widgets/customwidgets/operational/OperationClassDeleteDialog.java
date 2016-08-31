@@ -14,9 +14,11 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,18 +52,18 @@ public class OperationClassDeleteDialog extends Dialog {
 	private ExpandBar expandBar;
 	private CheckboxTableViewer checkboxTableViewer;
     private List<FilterProperties> outerOutputList;
-	
-    
+	private Component component;    
 	/**
 	 * @param parentShell
 	 * @param transformMapping
 	 * @param expandBar
 	 */
-	public OperationClassDeleteDialog(Shell parentShell, TransformMapping transformMapping, ExpandBar expandBar) {
+	public OperationClassDeleteDialog(Shell parentShell, TransformMapping transformMapping, ExpandBar expandBar,Component component) {
 		super(parentShell);
 		this.mappingSheetRowList =transformMapping.getMappingSheetRows();
 		this.expandBar = expandBar;
 		this.outerOutputList=transformMapping.getOutputFieldList();
+		this.component=component;
 	}
 
 	/**
@@ -105,6 +107,7 @@ public class OperationClassDeleteDialog extends Dialog {
 		checkboxTableViewer.setContentProvider(new TableContentProvider());
 		
 		for (MappingSheetRow m : mappingSheetRowList) {
+			if(m.isActive())
 			operationIdList.add(m.getOperationID());
 		}
 		checkboxTableViewer.setInput(operationIdList);
@@ -156,9 +159,23 @@ public class OperationClassDeleteDialog extends Dialog {
 							if(index!=-1)
 							outerOutputList.remove(index);
 							}
-							
-							mappingSheetRowList.remove(i);
-							break;
+						if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
+						{	
+							if(mappingSheetRowList.get(i).isExpression())
+							{
+								mappingSheetRowList.remove(i);
+								mappingSheetRowList.remove(i-1);
+								
+							}
+							else
+							{
+								mappingSheetRowList.remove(i+1);
+								mappingSheetRowList.remove(i);
+							}
+						}
+						else
+						mappingSheetRowList.remove(i);	
+						break;
 						}
 					}
 					expandItem.dispose();

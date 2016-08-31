@@ -2,6 +2,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -39,6 +40,9 @@ public class ExpressionComposite extends Composite {
 	private TableViewer tableViewer;
 	private Button addButton,deletButton,browseButton;
     private Button btnIsParam;
+    private Button switchToClassButton;
+    private Button switchToExpressionButton;
+    private Label lblNewLabel_1;
 	public ExpressionComposite(Composite parent, int style,final MappingSheetRow mappingSheetRow, final Component component) {
 		super(parent, style);
 		setLayout(new GridLayout(3, false));
@@ -72,19 +76,43 @@ public class ExpressionComposite extends Composite {
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayout(new GridLayout(4, false));
 		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_composite.heightHint = 181;
+		gd_composite.heightHint = 195;
 		gd_composite.widthHint = 184;
 		composite.setLayoutData(gd_composite);
 		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
+		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
+		{
+		lblNewLabel_1 = new Label(composite, SWT.NONE);
+		lblNewLabel_1.setText("Switch to");
+		
+		switchToClassButton = new Button(composite, SWT.RADIO);
+		switchToClassButton.setText("Class");
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		
+		switchToExpressionButton = new Button(composite, SWT.RADIO);
+		switchToExpressionButton.setText("Expression");
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		switchToExpressionButton.setSelection(true);
+		}
+		else
+		{
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			new Label(composite, SWT.NONE);
+			
+		}
 		Label lblExpression = new Label(composite, SWT.NONE);
 		GridData gd_lblExpression = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_lblExpression.minimumWidth = 70;
@@ -237,6 +265,10 @@ public class ExpressionComposite extends Composite {
 	}
 
 	
+	public Button getSwitchToClassButton() {
+		return switchToClassButton;
+	}
+
 	public Text getExpressionIdTextBox() {
 		return expressionIdTextBox;
 	}
@@ -263,6 +295,12 @@ public class ExpressionComposite extends Composite {
 	public Button getDeletButton() {
 		return deletButton;
 	}
+    
+	public Button getSwitchToExpressionButton() {
+		return switchToExpressionButton;
+	}
+
+
 
 	@Override
 	protected void checkSubclass() {
