@@ -17,6 +17,8 @@ import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
 import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeExpressionField;
+import hydrograph.engine.jaxb.commontypes.TypeExpressionOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeInputField;
 import hydrograph.engine.jaxb.commontypes.TypeMapField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationField;
@@ -26,9 +28,11 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
@@ -50,6 +54,7 @@ import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -79,22 +84,23 @@ public class ConverterHelper {
 		this.componentName = (String) properties.get(Constants.PARAM_NAME);
 	}
 
-	public List<TypeTransformOperation> getOperations(TransformMapping transformPropertyGrid, List<BasicSchemaGridRow> schemaGridRows) {
+	public List<Object> getOperationsOrExpression(TransformMapping transformPropertyGrid, List<BasicSchemaGridRow> schemaGridRows) {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
-		List<TypeTransformOperation> operationList = new ArrayList<>();
+		List<Object> operationList = new ArrayList<>();
 		if (transformPropertyGrid != null) {
-			List<MappingSheetRow> transformOperations = transformPropertyGrid.getMappingSheetRows();
-			if (transformOperations != null) {
+			List<MappingSheetRow> mappingsheetRowList = TransformMappingFeatureUtility.INSTANCE.
+					getActiveMappingSheetRow(transformPropertyGrid.getMappingSheetRows());
+			if (mappingsheetRowList != null) {
 				int OperationID = 0;
-				for (MappingSheetRow transformOperation : transformOperations) {
-					if(!transformOperation.isWholeOperationParameter()){
-						TypeTransformOperation operation = getOperation(transformOperation,OperationID,schemaGridRows);
+				for (MappingSheetRow mappingsheetRow : mappingsheetRowList) {
+					if(!mappingsheetRow.isWholeOperationParameter()){
+						Object operation = getOperationOrExpression(mappingsheetRow,OperationID,schemaGridRows);
 						if( operation != null){
 							operationList.add(operation);
 							OperationID++;
 						}
 					}else{
-						addWholeOperationParam(transformOperation);
+						addWholeOperationParam(mappingsheetRow);
 					}
 				}
 			}			
@@ -102,24 +108,54 @@ public class ConverterHelper {
 		return operationList;
 	}
 
-	private TypeTransformOperation getOperation(MappingSheetRow mappingSheetRow, int operationID, List<BasicSchemaGridRow> schemaGridRows) {
+	private Object getOperationOrExpression(MappingSheetRow mappingSheetRow, int operationID, List<BasicSchemaGridRow> schemaGridRows) {
 		if(mappingSheetRow != null){
-
+            if(!mappingSheetRow.isExpression())
+            {
 			TypeTransformOperation operation = new TypeTransformOperation();			
 			operation.setId(mappingSheetRow.getOperationID());
 			operation.setInputFields(getOperationInputFields(mappingSheetRow));				
 			operation.setProperties(getOperationProperties(mappingSheetRow.getNameValueProperty()));
 			operation.setOutputFields(getOperationOutputFields(mappingSheetRow,schemaGridRows));
 			if(StringUtils.isNotBlank(mappingSheetRow.getOperationClassPath()))
-				operation.setClazz(mappingSheetRow.getOperationClassPath());
+			{
+			operation.setClazz(mappingSheetRow.getOperationClassPath());
+			}
 			return operation;
-
+            }
+            else
+            {
+            TypeTransformExpression expression=new TypeTransformExpression();
+            expression.setId(mappingSheetRow.getOperationID());
+            expression.setInputFields(getExpressionInputFields(mappingSheetRow));
+            expression.setProperties(getOperationProperties(mappingSheetRow.getNameValueProperty()));
+            expression.setOutputFields(getExpressionOutputField(mappingSheetRow,schemaGridRows));
+            if(StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
+            {
+            	expression.setExpr(mappingSheetRow.getExpressionEditorData().getExpression());
+            }
+            return expression;
+            }	
 		}
-
 		return null;
 	}
 
+    private TypeExpressionOutputFields getExpressionOutputField(MappingSheetRow mappingSheetRow, List<BasicSchemaGridRow> schemaGrid)
+    {
+    	TypeExpressionOutputFields typeExpressionOutputFields=new TypeExpressionOutputFields();
+    	for(FilterProperties outputFieldName:mappingSheetRow.getOutputList())
+    	{
+    		for(GridRow gridRow : schemaGrid){
+				if(gridRow.getFieldName().equals(outputFieldName.getPropertyname())){					
 
+					typeExpressionOutputFields.setField(getSchemaGridTargetData(gridRow));
+					break;
+				}
+			}
+    	}	
+    	
+     return typeExpressionOutputFields;
+    }
 	private TypeProperties getOperationProperties(List<NameValueProperty> nameValueProperties) {
 		TypeProperties properties=null;
 		if(!nameValueProperties.isEmpty()){
@@ -134,7 +170,40 @@ public class ConverterHelper {
 		}	
 		return properties;
 	}
+    
+	private TypeOperationInputFields getExpressionInputFields(MappingSheetRow mappingSheetRow) {
+		TypeOperationInputFields inputFields = null;
+		if (mappingSheetRow != null && !mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression().isEmpty()) {
+			inputFields = new TypeOperationInputFields();
 
+			if (!hasAllStringsInListAsParams(mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression())) {	
+				for (String field : mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression()){
+					if(!ParameterUtil.isParameter(field)){
+						TypeInputField typeInputField = new TypeInputField();
+						typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+						typeInputField.setName(field.trim());
+						inputFields.getField().add(typeInputField);
+					}else{
+						addParamTag(ID, field,
+								ComponentXpathConstants.TRANSFORM_INPUT_FIELDS.value().replace("$operationId", mappingSheetRow.getOperationID()), false);
+					}
+				}
+			}else
+			{
+				StringBuffer parameterFieldNames = new StringBuffer();
+				TypeInputField typeInputField = new TypeInputField();
+				typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
+				typeInputField.setName("");
+				inputFields.getField().add(typeInputField);
+				for (String field : mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression()){
+					parameterFieldNames.append(field.trim() + " ");
+				}
+				addParamTag(ID, parameterFieldNames.toString(),
+						ComponentXpathConstants.TRANSFORM_INPUT_FIELDS.value().replace("$operationId", mappingSheetRow.getOperationID()), true);
+			}
+		}
+		return inputFields;
+	}
 	private TypeOperationInputFields getOperationInputFields(MappingSheetRow mappingSheetRow) {
 		TypeOperationInputFields inputFields = null;
 		if (mappingSheetRow != null && !mappingSheetRow.getInputFields().isEmpty()) {
@@ -234,15 +303,15 @@ public class ConverterHelper {
 		if(outSocketList.size()==0 || componenetSchema==null){
 			return;
 		}
-		List<Object> fields = outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField();
+		List<Object> fields = outSocketList.get(0).getPassThroughFieldOrOperationFieldOrExpressionField();
 		List<Object> newFieldList = new LinkedList<>();
 		
 		for(int index=0;index<componenetSchema.getGridRow().size();index++){
 			newFieldList.add(getField(componenetSchema.getGridRow().get(index).getFieldName(),fields));
 		}
 		
-		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField().clear();
-		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrMapField().addAll(newFieldList);
+		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrExpressionField().clear();
+		outSocketList.get(0).getPassThroughFieldOrOperationFieldOrExpressionField().addAll(newFieldList);
 	}
 	
 
@@ -264,6 +333,11 @@ public class ConverterHelper {
 					fieldToReturn = field;
 					break;
 				}
+			}else if(field instanceof TypeExpressionField){
+				if(StringUtils.equals(((TypeExpressionField)field).getName(), fieldName)){
+					fieldToReturn = field;
+					break;
+				}
 			}
 		}
 
@@ -277,17 +351,16 @@ public class ConverterHelper {
 		outSocket.setId(link.getSourceTerminal());
 		outSocketAsInsocket.setInSocketId(link.getTargetTerminal());
 		outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addPassThroughFields(transformMapping,gridRows));
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addMapFields(transformMapping,gridRows));
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(addOperationFields(transformMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(addPassThroughFields(transformMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(addMapFields(transformMapping,gridRows));
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(addOperationOrExpressionFields(transformMapping,gridRows));
 		addMapFieldParams(transformMapping);
 		addOutputFieldParams(transformMapping);
-		if (outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()) {
+		if (outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().isEmpty()) {
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 
 		}
 	}
-
 	private List<TypeInputField> addPassThroughFields(TransformMapping transformMapping, List<BasicSchemaGridRow> schemaGridRows) {
 		List<TypeInputField> typeOperationFieldsList = new ArrayList<>();
 		if (transformMapping != null) {	
@@ -404,19 +477,31 @@ public class ConverterHelper {
 		return typeMapFieldList;
 	}
 
-	private List<TypeOperationField> addOperationFields(TransformMapping transformMapping, List<BasicSchemaGridRow> gridRows) {
-		List<TypeOperationField> typeOperationFieldList = new ArrayList<>();
+	private List<Object> addOperationOrExpressionFields(TransformMapping transformMapping, List<BasicSchemaGridRow> gridRows) {
+		List<Object> typeOperationFieldList = new ArrayList<>();
 
 		if (transformMapping != null) {			
 			for(MappingSheetRow operationRow : transformMapping.getMappingSheetRows()){				
 
-				for(FilterProperties outputField : operationRow.getOutputList()){
-					if( !(ParameterUtil.isParameter(outputField.getPropertyname()))){
+				for(FilterProperties outputField : operationRow.getOutputList())
+				{
+					if(!operationRow.isExpression())
+					{	
+					if( !(ParameterUtil.isParameter(outputField.getPropertyname())))
+					 {
 						TypeOperationField typeOperationField = new TypeOperationField();
 						typeOperationField.setName(outputField.getPropertyname());
 						typeOperationField.setOperationId(operationRow.getOperationID());
-						typeOperationFieldList.add(typeOperationField);	
+					 	typeOperationFieldList.add(typeOperationField);	
+					 }
 					}
+					else
+					{
+						TypeExpressionField typeExpressionField=new TypeExpressionField();
+						typeExpressionField.setExpressionId(operationRow.getOperationID());
+						typeExpressionField.setName(operationRow.getOutputList().get(0).getPropertyname());
+						typeOperationFieldList.add(typeExpressionField);
+					}	
 				}
 
 

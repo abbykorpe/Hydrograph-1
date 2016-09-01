@@ -44,7 +44,7 @@ import hydrograph.engine.jaxb.operationstypes.Cumulate;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "cumulate-base", namespace = "hydrograph/engine/jaxb/cumulate")
+@XmlType(name = "cumulate-base")
 @XmlSeeAlso({
     Cumulate.class
 })

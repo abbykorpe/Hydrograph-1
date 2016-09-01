@@ -15,19 +15,24 @@ package hydrograph.ui.engine.ui.converter;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeExpressionField;
 import hydrograph.engine.jaxb.commontypes.TypeInputField;
 import hydrograph.engine.jaxb.commontypes.TypeMapField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationField;
+import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
+import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -114,7 +119,7 @@ public abstract class TransformUiConverter extends UiConverter {
 			for (TypeOperationsOutSocket outSocket : operationsComponent
 					.getOutSocket()) {
 				uiComponent.engageOutputPort(outSocket.getId());
-				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null){
+				if (outSocket.getPassThroughFieldOrOperationFieldOrExpressionField() != null){
 					propertyMap.put(Constants.PARAM_OPERATION,getUiPassThroughOrOperationFieldsOrMapFieldGrid(outSocket));
 					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
 					}
@@ -138,7 +143,7 @@ public abstract class TransformUiConverter extends UiConverter {
 		List<MappingSheetRow> mappingSheetRows = new LinkedList<>();
 
 		for (Object property : outSocket
-				.getPassThroughFieldOrOperationFieldOrMapField()) {
+				.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			MappingSheetRow mappingSheetRow = null;
 			if (property instanceof TypeInputField) {
 
@@ -170,21 +175,37 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	}
 
-	private void getOperationData(TransformMapping atMapping) {
-		List<TypeTransformOperation> typeTransformOpertaionList = ((TypeOperationsComponent) typeBaseComponent)
-				.getOperation();
+	private void getOperationData(TransformMapping atMapping) 
+	{
+		List<Object> typeTransformOpertaionList = ((TypeOperationsComponent) typeBaseComponent)
+				.getOperationOrExpression();
 
 		List<MappingSheetRow> mappingSheetRows = atMapping
 				.getMappingSheetRows();
-		for (TypeTransformOperation item : typeTransformOpertaionList) {
-
-			mappingSheetRows.add(new MappingSheetRow(getInputFieldList(item),
-					getOutputFieldList(item),
-					getOperationClassName(item.getClazz()),item.getClazz(),
-					ParameterUtil.isParameter(item.getClazz()),item.getId(),getProperties(item))
+		for (Object item : typeTransformOpertaionList) 
+		{
+			if(item instanceof TypeTransformOperation)
+			{
+				TypeTransformOperation transformOperation=(TypeTransformOperation)item;
+				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformOperation),
+					getOutputFieldList(transformOperation),
+					getOperationClassName(transformOperation.getClazz()),transformOperation.getClazz(),
+					ParameterUtil.isParameter(transformOperation.getClazz()),transformOperation.getId(),getProperties(transformOperation),false,null,true)
 				   );
-      }
+             }
+			else if(item instanceof TypeTransformExpression)
+			{
+				TypeTransformExpression transformExpression=(TypeTransformExpression)item;
+				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
+						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,getExpressionEditorData(transformExpression),
+						true)
+					   );
+			}	
+		}
+	}
 
+	private ExpressionEditorData getExpressionEditorData(TypeTransformExpression typeTransformExpression) {
+		return new ExpressionEditorData(typeTransformExpression.getExpr());
 	}
 
 	protected String getOperationClassName(String fullClassPath) {
@@ -203,12 +224,27 @@ public abstract class TransformUiConverter extends UiConverter {
 		return operationClassName;
 	}
 
-	private List<NameValueProperty> getProperties(TypeTransformOperation item)
+	private List<NameValueProperty> getProperties(Object item)
 	{
+		
+		
 		List<NameValueProperty> nameValueProperties=new LinkedList<>();
-		if(item!=null && item.getProperties()!=null)
+		
+		TypeProperties typeProperties = null;
+		if(item instanceof TypeTransformOperation)
 		{
-			for(Property property:item.getProperties().getProperty())
+			TypeTransformOperation	typeTransformOperation=(TypeTransformOperation)item;
+			typeProperties=typeTransformOperation.getProperties();
+		}	
+		else if(item instanceof TypeTransformExpression)
+		{
+			TypeTransformExpression	typeTransformExpression=(TypeTransformExpression)item;
+			typeProperties=typeTransformExpression.getProperties();
+		}	
+		
+		if(item!=null && typeProperties!=null)
+		{
+			for(Property property:typeProperties.getProperty())
 			{
 				NameValueProperty nameValueProperty=new NameValueProperty();
 				nameValueProperty.setPropertyName(property.getName());
@@ -221,14 +257,18 @@ public abstract class TransformUiConverter extends UiConverter {
 	
 	
 	
-	private List<FilterProperties> getOutputFieldList(TypeTransformOperation item) {
+	private List<FilterProperties> getOutputFieldList(Object item) {
 		List<FilterProperties> outputFieldList = new LinkedList<>();
-		if(item !=null ){
-			ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-			List<GridRow> gridRowList = new ArrayList<>();
-			if (item.getOutputFields() != null) {
-
-				for (TypeBaseField record : item.getOutputFields().getField()) {
+		
+		if(item !=null )
+		{
+		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
+		List<GridRow> gridRowList = new ArrayList<>();
+		if(item instanceof TypeTransformOperation)
+		{
+			TypeTransformOperation typeTransformOperation=(TypeTransformOperation)item;
+			if (typeTransformOperation.getOutputFields() != null) {
+                for (TypeBaseField record : typeTransformOperation.getOutputFields().getField()) {
 					GridRow gridRow=converterUiHelper.getFixedWidthSchema(record);
 					gridRowList.add(gridRow);
 					createPropagationDataForOperationFileds(gridRow);
@@ -238,7 +278,23 @@ public abstract class TransformUiConverter extends UiConverter {
 				}
 
 			}
+		}	
+		else if(item instanceof TypeTransformExpression)
+		{
+			TypeTransformExpression	typeTransformExpression=(TypeTransformExpression)item;
+			if (typeTransformExpression.getOutputFields() != null) 
+			{
+                    TypeBaseField record =typeTransformExpression.getOutputFields().getField();
+					GridRow gridRow=converterUiHelper.getFixedWidthSchema(record);
+					gridRowList.add(gridRow);
+					createPropagationDataForOperationFileds(gridRow);
+					FilterProperties filterProperties=new FilterProperties();
+					filterProperties.setPropertyname(record.getName());
+					outputFieldList.add(filterProperties);
+			}
+		}	
 		}
+	
 		return outputFieldList;
 	}
 
@@ -258,10 +314,22 @@ public abstract class TransformUiConverter extends UiConverter {
 		componentsOutputSchema.addSchemaFields(gridRow);
 	}
 
-	private List<FilterProperties> getInputFieldList(TypeTransformOperation item) {
+	private List<FilterProperties> getInputFieldList(Object item) {
+		 
+		TypeOperationInputFields typeOperationInputFields = null;
+		if(item instanceof TypeTransformOperation)
+		{
+			TypeTransformOperation	typeTransformOperation=(TypeTransformOperation)item;
+			typeOperationInputFields=typeTransformOperation.getInputFields();
+		}	
+		else if(item instanceof TypeTransformExpression)
+		{
+			TypeTransformExpression	typeTransformExpression=(TypeTransformExpression)item;
+			typeOperationInputFields=typeTransformExpression.getInputFields();
+		}	
 		List<FilterProperties> inputfieldList = new LinkedList<>();
-		if(item != null && item.getInputFields()!=null){
-			for (TypeInputField inputField : item.getInputFields().getField()) {
+		if(item != null && typeOperationInputFields!=null){
+			for (TypeInputField inputField : typeOperationInputFields.getField()) {
 				FilterProperties filterProperties=new FilterProperties();
 				filterProperties.setPropertyname(inputField.getName());
 				inputfieldList.add(filterProperties);
@@ -269,6 +337,8 @@ public abstract class TransformUiConverter extends UiConverter {
 		}		
 		return inputfieldList;
 	}
+	
+	
 	
 	private List<NameValueProperty> getMapAndPassThroughField()
 	{
@@ -279,19 +349,21 @@ public abstract class TransformUiConverter extends UiConverter {
 		for(TypeOperationsOutSocket typeOperationsOutSocket:xsdOpertaionList)
 		{
 			for (Object property : typeOperationsOutSocket
-					.getPassThroughFieldOrOperationFieldOrMapField())
+					.getPassThroughFieldOrOperationFieldOrExpressionField())
 			{
 				NameValueProperty nameValueProperty=new NameValueProperty();
 				if(property instanceof TypeInputField)
 				{
 					nameValueProperty.setPropertyName(((TypeInputField) property).getName());
 					nameValueProperty.setPropertyValue(((TypeInputField) property).getName());
+					nameValueProperty.getFilterProperty().setPropertyname(((TypeInputField) property).getName());
 					nameValueproperties.add(nameValueProperty);
 				}
 				else if(property instanceof TypeMapField )
 				{
 					nameValueProperty.setPropertyName(((TypeMapField) property).getSourceName());
 					nameValueProperty.setPropertyValue(((TypeMapField) property).getName());
+					nameValueProperty.getFilterProperty().setPropertyname(((TypeInputField) property).getName());
 					nameValueproperties.add(nameValueProperty);
 				}
 			}	
@@ -340,10 +412,10 @@ public abstract class TransformUiConverter extends UiConverter {
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) propertyMap
 				.get(Constants.SCHEMA_TO_PROPAGATE);
 		if (operationsOutSockets != null
-				&& !operationsOutSockets.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()) {
+				&& !operationsOutSockets.getPassThroughFieldOrOperationFieldOrExpressionField().isEmpty()) {
 			componentsOutputSchema = new ComponentsOutputSchema();
 			schemaFieldSequence = new ArrayList<>();
-			for (Object property : operationsOutSockets.getPassThroughFieldOrOperationFieldOrMapField()) {
+			for (Object property : operationsOutSockets.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 
 				if (property instanceof TypeInputField) {
 					schemaFieldSequence.add(((TypeInputField) property).getName());
@@ -359,6 +431,10 @@ public abstract class TransformUiConverter extends UiConverter {
 				} else if (property instanceof TypeOperationField) {
 					schemaFieldSequence.add(((TypeOperationField) property).getName());
 				}
+				 else if (property instanceof TypeExpressionField) 
+				    {
+						schemaFieldSequence.add(((TypeExpressionField) property).getName());
+					}
 			}
 		}
 		if (schemaMap == null) {

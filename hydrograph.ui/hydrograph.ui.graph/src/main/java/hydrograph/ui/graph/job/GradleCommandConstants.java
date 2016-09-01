@@ -1,3 +1,4 @@
+
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +46,7 @@ public class GradleCommandConstants {
 	public static final String GPARAM_JOB_BASE_PATH=" -PbasePath=";
 	public static final String GPARAM_UNIQUE_JOB_ID=" -PjobId=";
 	public static final String GPARAM_MOVE_PARAM_FILE=" -PmoveParameterFile=";
+	public static final String GPARAM_RESOUCES_FILES=" -PmoveResourceFile=";
 	public static final String GPARAM_MOVE_SCHEMA_FILES=" -PmoveExternalSchemaFiles=";
 	public static final String GPARAM_MOVE_SUBJOB_FILES=" -PmoveSubJobFiles=";
 	public static final String GPARAM_MOVE_JAR=" -PmoveJar=";
@@ -59,5 +61,8 @@ public class GradleCommandConstants {
 	public static final String DAEMON_ENABLE=" -Dorg.gradle.daemon=true";
 	public static final String KILL_GRADLE_DAEMON="gradle --stop";
 	
-	
+	public static final String GCMD_SCP_USER_FUNCTIONS_PROPERTY_FILE="gradle scpUserFunctionsPropertyFile ";
+	public static final String GCMD_SCP_LIB_FOLDER_JAR_FILES="gradle scpLibFolderJarFiles ";
+	public static final String REMOTE_FIXED_DIRECTORY_RESOURCES="resources";
+	public static final String GPARAM_USER_DEFINED_FUNCTIONS_PATH=" -Pudfpath=";
 }

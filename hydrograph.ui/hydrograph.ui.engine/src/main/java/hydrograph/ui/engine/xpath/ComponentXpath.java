@@ -126,14 +126,16 @@ public class ComponentXpath {
 
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				parentNode = nodeList.item(i);
+				if(parentNode!=null){
 				NodeList nNodeLst = (NodeList) nodeList.item(i);
 				for (int j = 0; j < nNodeLst.getLength(); j++) {
 					nNode = nNodeLst.item(j);
 					cloneNode = nNode.cloneNode(false);
 					cloneNode.setTextContent(entry.getValue().getNewNodeText());
 				}
+				if(cloneNode!=null)
 				parentNode.appendChild(cloneNode);
-			}
+			}}
 			// Remove empty node
 			if (removeEmtyNode)
 				for (int i = 0; i < nodeList.getLength(); i++) {

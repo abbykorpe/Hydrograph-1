@@ -645,7 +645,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	protected void okPressed() {
 		if(checkNameValueFieldBlankOrNot()){
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
-				isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
+				isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList(),null);
 		okPressed=true;
 		super.okPressed();
 		}
@@ -655,7 +655,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == 3 && checkNameValueFieldBlankOrNot()){
 			operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
-					isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList());
+					isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList(),null);
 			applyButton.setEnabled(false);
 			isApplyPressed=true;
 		}else{

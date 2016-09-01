@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-sequence-out-socket", namespace = "hydrograph/engine/jaxb/itfs")
+@XmlType(name = "type-input-sequence-out-socket")
 public class TypeInputSequenceOutSocket
     extends TypeInputOutSocket
 {

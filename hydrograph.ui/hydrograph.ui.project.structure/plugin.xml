@@ -143,5 +143,27 @@
             natureId="hydrograph.ui.project.structure.projectNature">
       </image>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="hydrograph.ui.project.structure.contribution1"
+            objectClass="org.eclipse.core.resources.IProject">
+         <menu
+               id="hydrograph.ui.project.structure.menu1"
+               label="Expession Jars"
+               path="additions">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="hydrograph.ui.project.structure.popup.actions.AddJarsForExpressionEditor"
+               enablesFor="1"
+               id="hydrograph.ui.project.structure.newAction"
+               label="Add"
+               menubarPath="hydrograph.ui.project.structure.menu1/group1">
+         </action>
+      </objectContribution>
+   </extension>
   
-</plugin>
+</plugin>	

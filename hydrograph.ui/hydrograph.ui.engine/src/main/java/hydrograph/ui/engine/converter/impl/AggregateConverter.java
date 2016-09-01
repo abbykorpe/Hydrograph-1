@@ -82,14 +82,14 @@ public class AggregateConverter extends TransformConverter {
 		super.prepareForXML();
 
 		Aggregate aggregate = (Aggregate) baseComponent;
-		aggregate.getOperation().addAll(getOperations());
+		aggregate.getOperationOrExpression().addAll(getOperations());
 		setPrimaryKeys(aggregate);
 		setSecondaryKeys(aggregate);
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(transformMapping, schemaGridRows);
+	protected List<Object> getOperations() {
+		return converterHelper.getOperationsOrExpression(transformMapping, schemaGridRows);
 	}
 
 	@Override

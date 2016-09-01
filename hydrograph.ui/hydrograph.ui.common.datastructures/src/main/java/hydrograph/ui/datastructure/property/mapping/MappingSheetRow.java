@@ -1,3 +1,4 @@
+
 /********************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,7 @@
 package hydrograph.ui.datastructure.property.mapping;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
@@ -43,9 +45,13 @@ public class MappingSheetRow implements IDataStructure {
 	private List<NameValueProperty> nameValuePropertyList;
     private String wholeOperationParameterValue;
     private String operationClassFullPath;
+	private boolean isExpression;
+	private ExpressionEditorData expressionEditorData;
+    private boolean isActive;
 	
-	
-
+    public boolean isExpression() {
+		return isExpression;
+	}
 	/**
 	 * Gets the operation class full path.
 	 * 
@@ -117,7 +123,10 @@ public class MappingSheetRow implements IDataStructure {
 			boolean isClassParameter,
 			String wholeOperationParameterValue,
 			boolean isWholeOperationParameter,
-			String operationClassFullPath
+			String operationClassFullPath,
+			boolean isExpression,
+			ExpressionEditorData expressionEditorData,
+			boolean isActive
 			) {
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -129,7 +138,9 @@ public class MappingSheetRow implements IDataStructure {
 		this.wholeOperationParameterValue=wholeOperationParameterValue;
 		this.isWholeOperationParameter=isWholeOperationParameter;
 		this.operationClassFullPath=operationClassFullPath;
-		
+		this.isExpression=isExpression;
+		this.expressionEditorData=expressionEditorData;
+		this.isActive=isActive;
     }
 	
 	/**
@@ -151,7 +162,7 @@ public class MappingSheetRow implements IDataStructure {
 	 *            the name value property
 	 */
 	public MappingSheetRow(List<FilterProperties> input, List<FilterProperties> outputList, String comBoxValue,String operationClassPath,boolean isClassParameter,String operationId,
-			 List<NameValueProperty> nameValueProperty) 
+			 List<NameValueProperty> nameValueProperty,boolean isExpression,ExpressionEditorData expressionEditorData,boolean isActive) 
 	{
 		this.inputFieldList = input;
 		this.outputList = outputList;
@@ -160,6 +171,9 @@ public class MappingSheetRow implements IDataStructure {
 		this.operationId=operationId;
 		this.nameValuePropertyList=nameValueProperty;
 		this.setClassParameter(isClassParameter);
+		this.isExpression=isExpression;
+		this.expressionEditorData=expressionEditorData;
+		this.isActive=isActive;
 	}
 	
 	
@@ -368,6 +382,13 @@ public class MappingSheetRow implements IDataStructure {
 		return isClassParameter;
 	}
 
+	public ExpressionEditorData getExpressionEditorData() {
+		return expressionEditorData;
+	}
+
+	public void setExpressionEditorData(ExpressionEditorData expressionEditorData) {
+		this.expressionEditorData = expressionEditorData;
+	}
 	/**
 	 * Sets the class parameter.
 	 * 
@@ -378,6 +399,12 @@ public class MappingSheetRow implements IDataStructure {
 		this.isClassParameter = isClassParameter;
 	}
 	
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 	
 
 	@Override
@@ -387,10 +414,12 @@ public class MappingSheetRow implements IDataStructure {
 		List<NameValueProperty> nameValuePropertyList=new ArrayList<>();
 		
 		boolean isWholeOperationParameter=this.isWholeOperationParameter;
+		boolean isActive=this.isActive;
 		String wholeOperationParameterValue=this.wholeOperationParameterValue;
 		String comboBoxvalue=this.comboBoxValue;
 		String operationClasspath=this.operationClassPath;
 		boolean isClassParamter=this.isClassParameter;
+		boolean isOperationClass=this.isExpression;
 		String operationId=this.operationId;
 		String operationClassFullPath=this.operationClassFullPath;
 		inputFieldList.addAll(this.inputFieldList);
@@ -404,13 +433,18 @@ public class MappingSheetRow implements IDataStructure {
 			nameValuePropertyList.add(clonedNameValueProperty);
 		}
 		}
-		MappingSheetRow mappingSheetRow = new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath);
-		
+		MappingSheetRow mappingSheetRow;
+		if(isExpression)
+		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,
+				nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,
+				isOperationClass,expressionEditorData.clone(),isActive);
+		else
+		mappingSheetRow= new MappingSheetRow(inputFieldList, outputList,operationId,comboBoxvalue,operationClasspath,
+				nameValuePropertyList,isClassParamter,wholeOperationParameterValue,isWholeOperationParameter,operationClassFullPath,
+				isOperationClass,null,isActive);	
 		return mappingSheetRow;
 	}
-
-
-
+	
 	@Override
 	public String toString() {
 		return "MappingSheetRow [inputFields=" + inputFieldList + ", comboBoxValue=" + comboBoxValue
@@ -432,6 +466,7 @@ public class MappingSheetRow implements IDataStructure {
 		result = prime * result + ((operationClassPath == null) ? 0 : operationClassPath.hashCode());
 		result = prime * result + ((operationId == null) ? 0 : operationId.hashCode());
 		result = prime * result + ((outputList == null) ? 0 : outputList.hashCode());
+		result = prime * result + ((expressionEditorData == null) ? 0 : expressionEditorData.hashCode());
 		result = prime * result
 				+ ((wholeOperationParameterValue == null) ? 0 : wholeOperationParameterValue.hashCode());
 		return result;
@@ -485,6 +520,13 @@ public class MappingSheetRow implements IDataStructure {
 				return false;
 		} else if (!wholeOperationParameterValue.equals(other.wholeOperationParameterValue))
 			return false;
+		if(expressionEditorData==null){
+			if(other.expressionEditorData!=null)
+			return false;	
+		}else if(!expressionEditorData.equals(other.expressionEditorData))
+			return false;
+		if(isActive!=other.isActive)
+		return false;	
 		return true;
 	}
 

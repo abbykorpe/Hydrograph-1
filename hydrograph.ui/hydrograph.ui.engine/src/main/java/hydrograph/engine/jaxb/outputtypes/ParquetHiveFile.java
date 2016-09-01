@@ -48,7 +48,7 @@ import hydrograph.engine.jaxb.ohiveparquet.TypeOutputFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "parquetHiveFile", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
+@XmlType(name = "parquetHiveFile", propOrder = {
     "partitionKeys",
     "databaseName",
     "tableName",

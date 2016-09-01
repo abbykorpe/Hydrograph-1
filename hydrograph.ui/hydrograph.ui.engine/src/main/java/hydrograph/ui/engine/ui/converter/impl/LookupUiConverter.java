@@ -177,8 +177,8 @@ protected void getOutPort(TypeOperationsComponent operationsComponent) {
 		if (operationsComponent.getOutSocket() != null) {
 			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
 				uiComponent.engageOutputPort(outSocket.getId());
-				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null
-						&& !outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
+				if (outSocket.getPassThroughFieldOrOperationFieldOrExpressionField() != null
+						&& !outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().isEmpty()){
 					propertyMap.put(Constants.LOOKUP_MAP_FIELD, getLookupMappingGrid(outSocket));
 					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
 					}
@@ -190,7 +190,7 @@ protected void getOutPort(TypeOperationsComponent operationsComponent) {
 		String dot_separator = ".";
 		LookupMapProperty lookupMapProperty = null;
 		LookupMappingGrid lookupMappingGrid = new LookupMappingGrid();
-		for (Object object : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object object : outSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if ((TypeInputField.class).isAssignableFrom(object.getClass())) {
 				TypeInputField inputField=(TypeInputField) object;
 				if (StringUtils.isNotBlank(inputField.getName()) && StringUtils.isNotBlank(inputField.getInSocketId())) {

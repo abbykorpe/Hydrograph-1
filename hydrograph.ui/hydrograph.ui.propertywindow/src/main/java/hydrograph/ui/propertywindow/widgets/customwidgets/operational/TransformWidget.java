@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -124,10 +125,10 @@ public class TransformWidget extends AbstractWidget {
 
 				TransformDialog transformDialog=new TransformDialog(new Shell(),getComponent(),widgetConfig,transformMapping);
 				
-				transformDialog.open();
+				int returncode=transformDialog.open();
 				outputList.clear();
                 outputList = transformDialog.getFinalSortedList();
-				if(transformDialog.isCancelPressed())
+				if(transformDialog.isCancelPressed()||returncode==1)
 				{
 					transformMapping=oldATMappings;
 				}
@@ -195,9 +196,10 @@ public class TransformWidget extends AbstractWidget {
 		{
 			
 		 List<GridRow> sortedList=new ArrayList<>();
-		 GridRow gridRowTemp = null;
+		
 		 for(int i=0;i<outputList.size();i++)
 		 {
+			 GridRow gridRowTemp = null;
 			 for(GridRow gridRow:getSchemaForInternalPropagation().getGridRow())
 			 {
 				 if(StringUtils.equals(gridRow.getFieldName(), outputList.get(i).getPropertyname()))

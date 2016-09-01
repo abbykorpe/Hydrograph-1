@@ -57,6 +57,7 @@
           <xs:choice maxOccurs="unbounded" minOccurs="1">
             <xs:element name="passThroughField" type="type-transform-operation-input-field" />
             <xs:element name="operationField" type="cmn:type-operation-field" />
+             <xs:element name="expressionField" type="cmn:type-expression-field" />
             <xs:element name="mapField" type="cmn:type-map-field" />
           </xs:choice>
         </xs:choice>
@@ -93,5 +94,6 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
+  
 
 </xs:schema>

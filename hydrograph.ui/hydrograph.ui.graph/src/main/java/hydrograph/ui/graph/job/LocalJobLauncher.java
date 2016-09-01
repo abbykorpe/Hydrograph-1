@@ -54,7 +54,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	private static final String JOB_FAILED="JOB FAILED";
 
 	@Override
-	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
+	public void launchJob(String xmlPath, String paramFile,String userFunctionsPropertyFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		Session session=null;
 
 		if(isExecutionTrackingOn()){
@@ -66,6 +66,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 			return;
 		}
 		} 
+	
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -77,7 +78,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 		
 		enableLockedResources(gefCanvas);
-		gradleCommand = getExecututeJobCommand(xmlPath, paramFile, job);
+		gradleCommand = getExecututeJobCommand(xmlPath, paramFile,userFunctionsPropertyFile, job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
 		job.setJobStatus(JobStatus.SUCCESS);
@@ -105,17 +106,16 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		}
 	}
 
-	private String getExecututeJobCommand(String xmlPath, String paramFile, Job job) {
-		
-		String exeCommond = GradleCommandConstants.GCMD_EXECUTE_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE
-				+ GradleCommandConstants.GPARAM_PARAM_FILE + "\"" + paramFile + "\""
-				+ GradleCommandConstants.GPARAM_JOB_XML + "\"" + xmlPath.split("/", 2)[1] + "\""
-				+ GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID
-				+ job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON
+	private String getExecututeJobCommand(String xmlPath, String paramFile, String userFunctionsPropertyFile, Job job) {
+		String exeCommond = GradleCommandConstants.GCMD_EXECUTE_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE 
+				+ GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\""
+				+ GradleCommandConstants.GPARAM_JOB_XML +   "\""+ xmlPath.split("/", 2)[1] +"\"" 
+				+ GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID 
+				+ job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON 
 				+ job.isExecutionTrack() + GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT
-				+ TrackingDisplayUtils.INSTANCE.getPortFromPreference();
+				+ TrackingDisplayUtils.INSTANCE.getPortFromPreference()
+				+ GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH+"\""+userFunctionsPropertyFile;;
 		logger.info("Gradle Command: {}", exeCommond);
-		
 		return exeCommond;
 	}
 
@@ -169,7 +169,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
-			 String paramFile, Job job,
+			 String paramFile,String userFunctionsPropertyFile, Job job,
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		
 	}

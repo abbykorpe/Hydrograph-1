@@ -74,12 +74,12 @@ public class NormalizeConverter extends TransformConverter {
 		super.prepareForXML();
 
 		Normalize normalize = (Normalize) baseComponent;
-		normalize.getOperation().addAll(getOperations());
+		normalize.getOperationOrExpression().addAll(getOperations());
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(atMapping,schemaGridRows);
+	protected List<Object> getOperations() {
+		return converterHelper.getOperationsOrExpression(atMapping,schemaGridRows);
 	}
 
 	@Override

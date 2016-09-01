@@ -35,8 +35,10 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -141,7 +143,7 @@ public class InputHiveTextFileConverter extends InputConverter {
 		}
 		
 	}
-	
+
 	/*
 	 * returns hiveType
 	 */

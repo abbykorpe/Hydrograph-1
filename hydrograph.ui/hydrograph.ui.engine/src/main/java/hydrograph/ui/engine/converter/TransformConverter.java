@@ -52,7 +52,7 @@ public abstract class TransformConverter extends Converter {
 	 * Returns {@link List} of classes of type {@link TypeTransformOperation} 
 	 * @return {@link List}
 	 */
-	protected abstract List<TypeTransformOperation> getOperations();
+	protected abstract List<Object> getOperations();
 	public abstract List<TypeBaseInSocket> getInSocket();
 	
 }

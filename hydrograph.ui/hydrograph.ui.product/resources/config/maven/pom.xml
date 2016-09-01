@@ -26,10 +26,13 @@
 	</repositories>
 	
 	<dependencies>
+		
 		<dependency>
 			<groupId>hydrograph</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
-			<version>0.14-wip</version>
+			<version>0.1.10-SNAPSHOT</version>
 		</dependency>
-	</dependencies>
+		
+	</dependencies> 
+	
 </project>

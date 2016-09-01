@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "type-lookup-insocket", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "type-lookup-insocket")
 @XmlEnum
 public enum TypeLookupInsocket {
 

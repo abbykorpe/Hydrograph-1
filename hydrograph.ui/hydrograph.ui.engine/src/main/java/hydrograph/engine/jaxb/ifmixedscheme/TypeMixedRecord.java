@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-mixed-record", namespace = "hydrograph/engine/jaxb/ifmixedscheme")
+@XmlType(name = "type-mixed-record")
 public class TypeMixedRecord
     extends TypeBaseRecord
 {

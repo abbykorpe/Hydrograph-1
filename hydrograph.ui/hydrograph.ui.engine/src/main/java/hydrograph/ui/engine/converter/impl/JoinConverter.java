@@ -147,7 +147,7 @@ public class JoinConverter extends TransformConverter {
 					outSocket.setId(link.getSourceTerminal());
 					outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 					outSocketList.add(outSocket);
-					outSocket.getPassThroughFieldOrOperationFieldOrMapField().addAll(
+					outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().addAll(
 							getLookupOrJoinOutputMapping(joinupPropertyGrid));
 				} else {
 					if (joinMappingGrid != null) {
@@ -173,8 +173,8 @@ public class JoinConverter extends TransformConverter {
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		List<TypeTransformOperation> operationList = new ArrayList<>();
+	protected List<Object> getOperations() {
+		List<Object> operationList = new ArrayList<>();
 		TypeTransformOperation operation = new TypeTransformOperation();
 		TypeOperationInputFields operationInputFields = new TypeOperationInputFields();
 		operationInputFields.getField().addAll(getOperationField());

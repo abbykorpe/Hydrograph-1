@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.filterproperty;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -60,7 +61,7 @@ public class ELTCellModifier implements ICellModifier{
 
 	@Override
 	public boolean canModify(Object element, String property) {
-		return true;
+		return true;	
 	}
 
 	@Override
@@ -107,11 +108,6 @@ public class ELTCellModifier implements ICellModifier{
 			transformDialog.getATMapping().getOutputFieldList().add(filterProperties);
 			transformDialog.refreshOutputTable();
             transformDialog.showHideValidationMessage();
-		 }
-			
-		 else if(StringUtils.equals(Messages.OUTPUT_FIELD,property))
-		 {
-				filterProperties.setPropertyname((String )value);	
 		 }
 		viewer.refresh();
 

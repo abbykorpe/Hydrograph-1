@@ -73,12 +73,12 @@ public class TransformComponentConverter extends TransformConverter {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Transform transform = (Transform) baseComponent;
-		transform.getOperation().addAll(getOperations());
+		transform.getOperationOrExpression().addAll(getOperations());
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(transformMapping,schemaGridRows);
+	protected List<Object> getOperations() {
+		return converterHelper.getOperationsOrExpression(transformMapping,schemaGridRows);
 	}
 
 	@Override

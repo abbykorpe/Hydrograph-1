@@ -147,7 +147,7 @@
 						minOccurs="0" />
 					<xs:element name="recordCount">
 						<xs:complexType>
-							<xs:attribute name="value" type="xs:long" />
+							<xs:attribute name="value" type="xs:int" />
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>

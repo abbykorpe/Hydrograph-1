@@ -13,6 +13,14 @@
 
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohiveparquet.PartitionFieldBasicType;
+import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -31,16 +39,6 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.ohiveparquet.FieldBasicType;
-import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
-import hydrograph.engine.jaxb.ohiveparquet.PartitionFieldBasicType;
-import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
 
 /**
  * The class OutputHiveParquetUiConverter
@@ -98,7 +96,7 @@ public class OutputHiveParquetUiConverter extends OutputUiConverter {
 	/*
 	 * returns Partition keys list
 	 */
-	private List<String> getPartitionKeys() {
+		private List<String> getPartitionKeys() {
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
 		property = new ArrayList<String>();
 		parquetHive = (ParquetHiveFile) typeBaseComponent;

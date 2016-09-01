@@ -10,7 +10,7 @@
       <programArgs>--launcher.defaultAction
 openFile
 --launcher.XXMaxPermSize
-512M</programArgs>
+1536M</programArgs>
       <programArgsMac>-startup
 ../Eclipse/plugins/org.eclipse.equinox.launcher_1.2.0.v20110502.jar
 --launcher.library
@@ -18,9 +18,9 @@ openFile
 org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 -vm
 /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/jli/libjli.dylib</programArgsMac>
-      <vmArgs>-Xms512m
+      <vmArgs>-Xms1536m
 
--Xmx1024m</vmArgs>
+-Xmx2048m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
@@ -56,6 +56,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="hydrograph.ui.common.datastructures"/>
       <plugin id="hydrograph.ui.common.interfaces"/>
       <plugin id="hydrograph.ui.engine"/>
+      <plugin id="hydrograph.ui.expression.editor"/>
       <plugin id="hydrograph.ui.graph"/>
       <plugin id="hydrograph.ui.graph.figure"/>
       <plugin id="hydrograph.ui.help"/>
@@ -78,7 +79,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.batik.util.gui"/>
-      <plugin id="org.apache.commons.beanutils" fragment=""/>
+      <plugin id="org.apache.commons.beanutils"/>
       <plugin id="org.apache.commons.el"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.jasper"/>
@@ -272,4 +273,3 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
    </configurations>
 
 </product>
-

@@ -83,14 +83,14 @@ public class CumulateConverter extends TransformConverter {
 		super.prepareForXML();
 
 		Cumulate cumulate = (Cumulate) baseComponent;
-		cumulate.getOperation().addAll(getOperations());
+		cumulate.getOperationOrExpression().addAll(getOperations());
 		setPrimaryKeys(cumulate);
 		setSecondaryKeys(cumulate);
 	}
 
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
-		return converterHelper.getOperations(transformMapping,schemaGridRows);
+	protected List<Object> getOperations() {
+		return converterHelper.getOperationsOrExpression(transformMapping,schemaGridRows);
 	}
 
 	@Override

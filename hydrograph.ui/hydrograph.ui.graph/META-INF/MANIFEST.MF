@@ -34,7 +34,8 @@ Require-Bundle: org.eclipse.ui,
  ch.qos.logback.classic,
  org.eclipse.core.expressions,
  hydrograph.ui.dataviewer;bundle-version="0.0.1",
- hydrograph.ui.communication;bundle-version="0.0.1"
+ hydrograph.ui.communication;bundle-version="0.0.1",
+ hydrograph.ui.expression.editor;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.jcraft.jsch;version="0.1.44",

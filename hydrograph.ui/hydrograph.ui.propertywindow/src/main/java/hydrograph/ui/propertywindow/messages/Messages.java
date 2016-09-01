@@ -27,6 +27,8 @@ public class Messages extends NLS {
 	public static String COULD_NOT_SAVE_PROPERTY_SHEET;
 	public static String INVALID_MAPPING;
 	public static String OPERATION_CALSS_LABEL;
+	public static String WINDOWS_EXPRESSION_EDITIOR_LABEL;
+	public static String MAC_EXPRESSION_EDITIOR_LABEL;
 	public static String EDIT_BUTTON_LABEL;
 	public static String OPEARTION_CLASS_OPEN_BUTTON_MESSAGE;
 	public static String OPEN_BUTTON_LABEL;
@@ -148,7 +150,6 @@ public class Messages extends NLS {
 	public static String ERROR;
 	public static String PARAMETER_ERROR;
 	public static String ATTACH_LISTENER_ERROR;
-	public static String OPERATION_MAP_OR_PASSTHROUGH_FIELD_S_CANNOT_BE_DELETED_FROM_OUTPUT_TABLE_PLEASE_DELETE_IT_FROM_RESPECTIVE_TABLE;
 	public static String FIELD_MAPPING;
 	public static String OPERATION_CLASS;
 	public static String OUTPUT_FIELD;

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 
 
 /**
@@ -36,6 +37,9 @@ public class OperationClassProperty implements IDataStructure{
 	private boolean isParameter;
 	private String operationClassFullPath;
 	private List<NameValueProperty> nameValuePropertyList;
+	private boolean isExpression;
+	private ExpressionEditorData expressionEditor ;
+	
 	/**
 	 * Instantiates a new operation class property.
 	 * 
@@ -44,10 +48,13 @@ public class OperationClassProperty implements IDataStructure{
 	 * @param isParameter
 	 *            the is parameter
 	 */
-	public OperationClassProperty(String comboBoxValue, String operationClassPath, boolean isParameter) {
+	public OperationClassProperty(String comboBoxValue, String operationClassPath, boolean isParameter,boolean isExpression,ExpressionEditorData expressionEditorData) {
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.comboBoxValue = comboBoxValue;
+		this.isExpression=isExpression;
+		this.expressionEditor=expressionEditorData;
+		
 	}
 	
 	
@@ -60,12 +67,16 @@ public class OperationClassProperty implements IDataStructure{
 	 * @param isParameter
 	 * @param operationClassFullPath
 	 */
-	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath,List<NameValueProperty> nameValuePropertyList ) {
+	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath,List<NameValueProperty> nameValuePropertyList ,ExpressionEditorData expressionEditorData) {
 		this.comboBoxValue=comboBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.operationClassFullPath=operationClassFullPath;
 		this.nameValuePropertyList=nameValuePropertyList;
+		if(expressionEditorData==null)
+		this.expressionEditor=new ExpressionEditorData("");
+		else
+		this.expressionEditor=expressionEditorData;
 	}
 	
 	/**
@@ -96,7 +107,28 @@ public class OperationClassProperty implements IDataStructure{
 	public void setParameter(boolean isParameter) {
 		this.isParameter = isParameter;
 	}
+	
+	public boolean isExpression() {
+		return isExpression;
+	}
 
+
+
+	public void setExpression(boolean isExpression) {
+		this.isExpression = isExpression;
+	}
+
+
+
+	public ExpressionEditorData getExpressionEditorData() {
+		return expressionEditor;
+	}
+
+
+
+	public void setExpressionEditor(ExpressionEditorData expressionEditor) {
+		this.expressionEditor = expressionEditor;
+	}
 	
 	/**
 	 * 
@@ -148,7 +180,10 @@ public class OperationClassProperty implements IDataStructure{
 		  nameValueProperties.add(nameValueProperty.clone());
 		}
 		}
-		return new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties);
+		OperationClassProperty clonedObject=new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties,expressionEditor.clone());
+		
+		clonedObject.setExpression(isExpression);
+		return clonedObject;
 	}
 	
 	@Override

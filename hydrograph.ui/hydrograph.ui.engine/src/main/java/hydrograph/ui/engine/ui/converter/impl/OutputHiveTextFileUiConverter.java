@@ -13,6 +13,14 @@
 
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
+import hydrograph.engine.jaxb.ohivetextfile.PartitionFieldBasicType;
+import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -31,17 +39,6 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.ohivetextfile.FieldBasicType;
-import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
-import hydrograph.engine.jaxb.ohivetextfile.PartitionFieldBasicType;
-import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
 /**
  * The class OutputHiveTextFileUiConverter
  * 

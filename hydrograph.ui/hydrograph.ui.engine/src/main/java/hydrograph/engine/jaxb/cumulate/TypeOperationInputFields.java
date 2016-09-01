@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operation-input-fields", namespace = "hydrograph/engine/jaxb/cumulate")
+@XmlType(name = "type-operation-input-fields")
 public class TypeOperationInputFields
     extends hydrograph.engine.jaxb.commontypes.TypeOperationInputFields
 {

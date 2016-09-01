@@ -158,9 +158,8 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 				}
 					
 				uiComponent.engageOutputPort(outSocket.getId());
-				if (outSocket.getPassThroughFieldOrOperationFieldOrMapField() != null && 
-					!outSocket.getPassThroughFieldOrOperationFieldOrMapField().isEmpty()){
-					
+				if (outSocket.getPassThroughFieldOrOperationFieldOrExpressionField() != null
+						&& !outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().isEmpty()){
 					propertyMap.put(Constants.JOIN_MAP_FIELD, getJoinMappingGrid(outSocket));
 					createPassThroughAndMappingFieldsForSchemaPropagation(outSocket);
 					
@@ -187,7 +186,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		String dot_separator = ".";
 		LookupMapProperty lookupMapProperty = null;
 		JoinMappingGrid joinMappingGrid = new JoinMappingGrid();
-		for (Object object : outSocket.getPassThroughFieldOrOperationFieldOrMapField()) {
+		for (Object object : outSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if ((TypeInputField.class).isAssignableFrom(object.getClass())) {
 				TypeInputField inputField=(TypeInputField) object;
 				if (StringUtils.isNotBlank(inputField.getName()) && StringUtils.isNotBlank(inputField.getInSocketId())) {

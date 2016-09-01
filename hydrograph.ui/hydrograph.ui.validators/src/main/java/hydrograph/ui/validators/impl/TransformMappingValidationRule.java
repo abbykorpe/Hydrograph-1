@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
+
+import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.ErrorObject;
@@ -47,7 +49,8 @@ public class TransformMappingValidationRule implements IValidator{
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}	
-		List<MappingSheetRow> mappingSheetRows=transformMapping.getMappingSheetRows();
+		List<MappingSheetRow> mappingSheetRows=TransformMappingFeatureUtility.INSTANCE.getActiveMappingSheetRow
+				(transformMapping.getMappingSheetRows());
 		List<NameValueProperty>  mapOrPassthroughfields = transformMapping.getMapAndPassthroughField();
 		
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
@@ -61,11 +64,22 @@ public class TransformMappingValidationRule implements IValidator{
 		{
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
+				if(!mappingSheetRow.isExpression())
+				{	
 				if(StringUtils.isBlank(mappingSheetRow.getOperationClassPath()))
 				{
 					 errorMessage = propertyName + "Operation class is blank in"+" "+mappingSheetRow.getOperationID();		
 					 return false;
 				}
+				}
+				else if(mappingSheetRow.isExpression())
+				{
+					if(StringUtils.isBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
+					{
+						 errorMessage = propertyName + "Expression is blank in"+" "+mappingSheetRow.getOperationID();		
+						 return false;
+					}
+				}	
 				if(mappingSheetRow.getOutputList().isEmpty())
 				{
 					 errorMessage = propertyName + "Operation field(s) are empty";		

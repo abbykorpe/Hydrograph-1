@@ -63,20 +63,20 @@ public class UniqueSequenceConverter extends TransformConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		List<TypeTransformOperation> operationsList = null;
+		List<Object> operationsList = null;
 		GenerateSequence generateSequence = (GenerateSequence) baseComponent;
 		operationsList = getOperations();
 		if (operationsList != null)
-			generateSequence.getOperation().addAll(operationsList);
+			generateSequence.getOperationOrExpression().addAll(operationsList);
 	}
 
 	/* *
 	 * This method creates operation field in target XML under UniqueSequence component.
 	 */
 	@Override
-	protected List<TypeTransformOperation> getOperations() {
+	protected List<Object> getOperations() {
 		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
-		List<TypeTransformOperation> operationList = null;
+		List<Object> operationList = null;
 		if (StringUtils.isNotBlank(newFieldName)) {
 			operationList = new ArrayList<>();
 			TypeTransformOperation operation = new TypeTransformOperation();
@@ -119,12 +119,12 @@ public class UniqueSequenceConverter extends TransformConverter {
 		TypeInputField inputField = new TypeInputField();
 		inputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 		inputField.setName(Constants.ADD_ALL_FIELDS_SYMBOL);
-		outSocket.getPassThroughFieldOrOperationFieldOrMapField().add(inputField);
+		outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().add(inputField);
 		if (StringUtils.isNotBlank(newFieldName)) {
 			TypeOperationField operationField = new TypeOperationField();
 			operationField.setName(newFieldName);
 			operationField.setOperationId(defaultOperationId);
-			outSocket.getPassThroughFieldOrOperationFieldOrMapField().add(operationField);
+			outSocket.getPassThroughFieldOrOperationFieldOrExpressionField().add(operationField);
 		}
 	}
 

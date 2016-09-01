@@ -58,8 +58,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	public  static boolean isRunning=false;
 
 	@Override
-	public void launchJob(String xmlPath, String paramFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
-
+	public void launchJob(String xmlPath, String paramFile,String userFunctionsPropertyFile, Job job, DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		Session session=null;
 		if(isExecutionTrackingOn()){
 			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
@@ -70,7 +69,6 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			return;
 		}
 		} 
-
 		String projectName = xmlPath.split("/", 2)[0];
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		job.setJobProjectDirectory(project.getLocation().toOSString());
@@ -153,6 +151,31 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			closeWebSocketConnection(session);
 			return;
 		}
+		
+		// ----------------------------- Code to copy jar files of project's lib folder 
+				gradleCommand = JobScpAndProcessUtility.INSTANCE.getScpCommandForMovingLibFolderJarFiles(job);
+				joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+				if (JobStatus.FAILED.equals(job.getJobStatus())) {
+					releaseResources(job, gefCanvas, joblogger);
+					return;
+				}
+				if (JobStatus.KILLED.equals(job.getJobStatus())) {
+					return;
+				}
+		
+				
+		// ----------------------------- Code to copy user-functions property file from resource folder 
+				gradleCommand = JobScpAndProcessUtility.INSTANCE.getScpCommandForMovingUserFunctionsPropertyFile(job);
+				joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+				if (JobStatus.FAILED.equals(job.getJobStatus())) {
+					releaseResources(job, gefCanvas, joblogger);
+					return;
+				}
+				if (JobStatus.KILLED.equals(job.getJobStatus())) {
+					return;
+				}
+		
+				
 		// ----------------------------- Code to copy job xml
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getJobXMLScpCommand(xmlPath,"", job);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
@@ -180,7 +203,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		}
 
 		// ----------------------------- Execute job
-		gradleCommand = JobScpAndProcessUtility.INSTANCE.getExecututeJobCommand(xmlPath,"", paramFile, job);
+		gradleCommand = JobScpAndProcessUtility.INSTANCE.getExecututeJobCommand(xmlPath,"", paramFile,userFunctionsPropertyFile, job);
 		job.setJobStatus(JobStatus.SSHEXEC);
 		isRunning=true;
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
@@ -313,7 +336,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 
 	@Override
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
-			String paramFile, Job job,
+			 String paramFile,String userFunctionsPropertyFile, Job job,
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
 		// TODO Auto-generated method stub
 
