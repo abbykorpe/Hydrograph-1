@@ -256,8 +256,12 @@ public class Messages extends NLS {
 	
 	public static String SCHEMA_IS_NOT_IN_SYNC_WITH_MAPPING;
 	public static String PARAMETER_GRID_SAVE_TOOLTIP;
-	public static String PARAMETER_GRID_BROWSE_TOOLTIP;
-	public static String PARAMETER_GRID_RELOAD_TOOLTIP;
+	
+	public static String ADD_KEY_SHORTCUT_TOOLTIP;
+	public static String DELETE_KEY_SHORTCUT_TOOLTIP;
+	public static String MOVE_KEY_SHORTCUT_TOOLTIP;
+	public static String MOVE_KEY_SHORTCUT_DOWN_TOOLTIP;
+	
 	
 	static {
 		// initialize resource bundle

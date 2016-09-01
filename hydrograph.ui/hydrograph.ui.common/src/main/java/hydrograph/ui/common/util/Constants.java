@@ -240,6 +240,7 @@ public class Constants {
 	public static String COPY_FROM_INPUT_PORT_PROPERTY = "Copy of ";
 	//Hive input partition key
 	public static String PARTITION_KEYS="PartitionKeys";
+
 	public static String INPUT_SUBJOB_TYPE="Input Socket for subjob";
 	public static String OUTPUT_SUBJOB_TYPE="Output Socket for subjob";
 
