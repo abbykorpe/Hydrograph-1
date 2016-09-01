@@ -118,8 +118,6 @@ public class LookupMapDialog extends Dialog {
 	private Table in1Table;
 	private Table in0Table;
 	
-	private static final Character KEY_D = 'd';
-	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
 	private Table table1;
 	private TableViewerColumn tableViewerColumn;
@@ -953,11 +951,11 @@ public class LookupMapDialog extends Dialog {
 					ctrlKeyPressed = true;
 				}
 								
-				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
 					deleteRow();
 				}
 				
-				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 					addNewRow();
 				}
 				

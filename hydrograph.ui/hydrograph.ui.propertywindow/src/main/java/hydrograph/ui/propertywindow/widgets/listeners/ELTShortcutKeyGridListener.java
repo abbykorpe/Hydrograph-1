@@ -13,6 +13,7 @@
 
 package hydrograph.ui.propertywindow.widgets.listeners;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -20,8 +21,10 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -44,8 +47,6 @@ public class ELTShortcutKeyGridListener extends ELTSelectionTaskListener {
 	private int rowSequence=0;
 	private boolean ctrlKeyPressed = false;
 	private boolean isKeyListenerAttached = false;
-	private static final Character KEY_N = 'n';
-	private static final Character KEY_D = 'd';
 	
 	@Override
 	public int getListenerType() {
@@ -88,7 +89,7 @@ public class ELTShortcutKeyGridListener extends ELTSelectionTaskListener {
 				ctrlKeyPressed = true;
 			}
 			
-			if (ctrlKeyPressed && event.keyCode == KEY_N){
+			if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 				propertyDialogButtonBar.enableApplyButton(true);							
 				table.getParent().getShell().setFocus();
 				((Button) widgets[1]).setEnabled(true);
@@ -104,7 +105,7 @@ public class ELTShortcutKeyGridListener extends ELTSelectionTaskListener {
 				((Component)helpers.get(HelperType.COMPONENT)).setLatestChangesInSchema(true);
 			}
 				
-			else if (ctrlKeyPressed && event.keyCode == KEY_D){
+			else if (ctrlKeyPressed && event.keyCode == Constants.KEY_D){
 				propertyDialogButtonBar.enableApplyButton(true);
 				ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);					
 				TableViewer tableViewer = gridDetails.getTableViewer();

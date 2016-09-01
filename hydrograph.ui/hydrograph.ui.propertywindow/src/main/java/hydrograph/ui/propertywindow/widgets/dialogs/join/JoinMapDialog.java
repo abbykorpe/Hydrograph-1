@@ -131,8 +131,6 @@ public class JoinMapDialog extends Dialog {
 	
 	private static final String INPUT_TABLE_COLUMN_TEXT="Input Fields";
 	private static final String DIALOG_TITLE="Join Mapping Dialog";
-	private static final Character KEY_D = 'd';
-	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
 	private Table table;
 	
@@ -743,11 +741,11 @@ public class JoinMapDialog extends Dialog {
 					ctrlKeyPressed = true;
 				}
 								
-				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
 					deleteRow();
 				}
 				
-				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 					addNewRow();
 				}
 				

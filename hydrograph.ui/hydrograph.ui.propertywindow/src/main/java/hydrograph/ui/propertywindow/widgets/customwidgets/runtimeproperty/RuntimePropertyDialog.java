@@ -71,11 +71,8 @@ import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 public class RuntimePropertyDialog extends Dialog {
 
 	private static final String ERROR = "ERROR";
-	private static final String PROPERTY_NAME = "PROPERTY_NAME";
-	private static final String PROPERTY_VALUE = "PROPERTY_VALUE";
-
 	
-	private static final String[] PROPS = { PROPERTY_NAME, PROPERTY_VALUE };
+	private static final String[] PROPS = { Constants.PROPERTY_NAME, Constants.PROPERTY_VALUE };
 
 	private String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
 	private String PROPERTY_NAME_BLANK_ERROR = Messages.EmptyNameNotification;
@@ -97,9 +94,6 @@ public class RuntimePropertyDialog extends Dialog {
 	private boolean okPressed;
 	private boolean okPressedAfterUpdate;
 	private static final String INFORMATION="Information";
-	private static final String PROPERTY_TABLE = "PROPERTY_TABLE";
-	private static final Character KEY_D = 'd';
-	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
 	/**
 	 * Create the dialog.
@@ -483,7 +477,7 @@ public class RuntimePropertyDialog extends Dialog {
 			}
 		});
 		
-		attachShortcutListner(PROPERTY_TABLE);
+		attachShortcutListner(Constants.PROPERTY_TABLE);
 		tableViewer.getTable().addTraverseListener(new TraverseListener() {
 			@Override
 			public void keyTraversed(TraverseEvent e) {
@@ -543,17 +537,17 @@ public class RuntimePropertyDialog extends Dialog {
 			upButton.setEnabled(true);
 			downButton.setEnabled(true);
 		}
-		attachShortcutListner(PROPERTY_NAME);
-		attachShortcutListner(PROPERTY_VALUE);
+		attachShortcutListner(Constants.PROPERTY_NAME);
+		attachShortcutListner(Constants.PROPERTY_VALUE);
 
 	}
 	
 	private void attachShortcutListner(String controlName){
 		Control currentControl;
 				
-		if (controlName == PROPERTY_NAME)
+		if (controlName == Constants.PROPERTY_NAME)
 			currentControl = tableViewer.getCellEditors()[0].getControl();
-		else if(controlName == PROPERTY_VALUE)
+		else if(controlName == Constants.PROPERTY_VALUE)
 			currentControl = tableViewer.getCellEditors()[1].getControl();
 		else
 			currentControl = table;
@@ -573,11 +567,11 @@ public class RuntimePropertyDialog extends Dialog {
 					ctrlKeyPressed = true;
 				}
 								
-				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
 					deleteRow();
 				}
 				
-				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 					addNewRow();
 				}
 				

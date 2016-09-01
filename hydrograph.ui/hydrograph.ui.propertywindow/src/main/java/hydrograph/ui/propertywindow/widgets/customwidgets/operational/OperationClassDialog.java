@@ -113,8 +113,6 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private Integer macButtonHeight = 30;
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
-	private static final Character KEY_D = 'd';
-	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
 	private Table table_2;
 
@@ -688,11 +686,11 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 					ctrlKeyPressed = true;
 				}
 								
-				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
 					deleteRow(nameValueTableViewer);
 				}
 				
-				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 					addNewRow(nameValueTableViewer);
 				}
 				

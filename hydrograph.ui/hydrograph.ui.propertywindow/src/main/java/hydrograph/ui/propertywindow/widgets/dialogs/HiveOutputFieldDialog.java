@@ -122,8 +122,6 @@ public class HiveOutputFieldDialog extends Dialog {
 
 	protected Button okButton;
 	private static final String INFORMATION="Information";
-	private static final Character KEY_D = 'd';
-	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
 	
 
@@ -353,7 +351,6 @@ public class HiveOutputFieldDialog extends Dialog {
 	private void moveRowDown()
 	{
 		int index1 = 0, index2 = 0;
-		index1 = targetTable.getSelectionIndex();
 		index1 = targetTable.getSelectionIndex();
 
 		if (index1 < propertyList.size() - 1) {
@@ -861,11 +858,11 @@ public class HiveOutputFieldDialog extends Dialog {
 					ctrlKeyPressed = true;
 				}
 								
-				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
 					deleteRow();
 				}
 				
-				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 					addNewRow();
 				}
 				

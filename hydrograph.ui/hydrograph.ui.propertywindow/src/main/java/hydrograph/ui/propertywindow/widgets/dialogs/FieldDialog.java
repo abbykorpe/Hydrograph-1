@@ -121,12 +121,7 @@ public class FieldDialog extends Dialog {
 
 	protected Button okButton;
 	private static final String INFORMATION="Information";
-	private static final String PROPERTY_TABLE = "PROPERTY_TABLE";
-	private static final Character KEY_D = 'd';
-	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
-	private static final String PROPERTY_NAME = "PROPERTY_NAME";
-	private static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
@@ -509,15 +504,15 @@ public class FieldDialog extends Dialog {
 			}
 
 		});
-		attachShortcutListner(PROPERTY_TABLE);
-		attachShortcutListner(PROPERTY_NAME);
+		attachShortcutListner(Constants.PROPERTY_TABLE);
+		attachShortcutListner(Constants.PROPERTY_NAME);
 
 	}
 	
 	private void attachShortcutListner(String controlName){
 		Control currentControl;
 				
-		if (controlName == PROPERTY_NAME)
+		if (controlName == Constants.PROPERTY_NAME)
 			currentControl = targetTableViewer.getCellEditors()[0].getControl();
 		else
 			currentControl = targetTable;
@@ -537,11 +532,11 @@ public class FieldDialog extends Dialog {
 					ctrlKeyPressed = true;
 				}
 								
-				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
 					deleteRow();
 				}
 				
-				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 					addNewRow();
 				}
 				

@@ -1218,34 +1218,31 @@ import org.xml.sax.SAXException;
 						ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(),
 						propertyDialogButtonBar, helper, editors[0].getControl());
 				
-				addButton.attachListener(
-						ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
-						propertyDialogButtonBar, helper, table,
-						deleteButton.getSWTWidgetControl(),
-						upButton.getSWTWidgetControl(),
-						downButton.getSWTWidgetControl());
-				
 				eltTable.attachListener(
 						ListenerFactory.Listners.GRID_KEY_LISTENER.getListener(),
 						propertyDialogButtonBar, helper, table,
 						deleteButton.getSWTWidgetControl(),
 						upButton.getSWTWidgetControl(),
 						downButton.getSWTWidgetControl());
+				
+				addButton.attachListener(
+						ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
+						propertyDialogButtonBar, helper, table,
+						deleteButton.getSWTWidgetControl(),
+						upButton.getSWTWidgetControl(),
+						downButton.getSWTWidgetControl());
 						
-				for (CellEditor editor:editors){
-					addShortcutKeyListener(editor.getControl());
-				}
-				addShortcutKeyListener(table);
-				
-				
-				
-				
 				deleteButton.attachListener(
 						ListenerFactory.Listners.GRID_DELETE_SELECTION
 								.getListener(), propertyDialogButtonBar, helper,
 						table, deleteButton.getSWTWidgetControl(), upButton
 								.getSWTWidgetControl(), downButton
 								.getSWTWidgetControl());
+				
+					for (CellEditor editor:editors){
+						addShortcutKeyListener(editor.getControl());
+					}
+					addShortcutKeyListener(table);
 	
 			} catch (Exception e) {
 				logger.error(Messages.ATTACH_LISTENER_ERROR, e);

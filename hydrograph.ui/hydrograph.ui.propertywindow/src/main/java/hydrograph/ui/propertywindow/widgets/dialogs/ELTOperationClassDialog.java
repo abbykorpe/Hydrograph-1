@@ -126,8 +126,6 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private Composite buttonComposite;
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private Label errorLabel; 
-	private static final Character KEY_D = 'd';
-	private static final Character KEY_N = 'n';
 	private boolean ctrlKeyPressed = false;
 	private Table table_2;
 
@@ -381,11 +379,11 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 					ctrlKeyPressed = true;
 				}
 								
-				if (ctrlKeyPressed && event.keyCode == KEY_D) {				
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
 					deleteRow(nameValueTableViewer);
 				}
 				
-				else if (ctrlKeyPressed && event.keyCode == KEY_N){
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
 					addNewRow(nameValueTableViewer);
 				}
 				
@@ -408,8 +406,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			operationClassProperty.getNameValuePropertyList().add(nameValueProperty);
 			nameValueTableViewer.refresh();
 			int currentSize = operationClassProperty.getNameValuePropertyList().size();
-			int i = currentSize == 0 ? currentSize : currentSize - 1;
-			nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(i), 0);
+			nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(currentSize), 0);
 			applyButton.setEnabled(true);
 		}
 
