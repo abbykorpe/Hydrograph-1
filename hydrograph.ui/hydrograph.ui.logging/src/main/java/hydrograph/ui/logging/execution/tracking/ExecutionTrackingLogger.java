@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.FileAppender;
 import ch.qos.logback.core.rolling.FixedWindowRollingPolicy;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
@@ -67,18 +68,10 @@ public class ExecutionTrackingLogger {
 	private Logger getNewLogger(String jobID,String fileLogLocation) {
 		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-        RollingFileAppender<ILoggingEvent> rfAppender = new RollingFileAppender<ILoggingEvent>();
-        rfAppender.setContext(loggerContext);
-        rfAppender.setFile(fileLogLocation);
-        FixedWindowRollingPolicy rollingPolicy = new FixedWindowRollingPolicy();
-        rollingPolicy.setContext(loggerContext);
-        
-        // rolling policies need to know their parent
-        // it's one of the rare cases, where a sub-component knows about its parent
-        rollingPolicy.setParent(rfAppender);
-        rollingPolicy.setFileNamePattern("executiontracking.%i.log.zip");
-        rollingPolicy.start();
-
+		FileAppender<ILoggingEvent> fileAppender = new FileAppender<>();
+		fileAppender.setContext(loggerContext);
+		fileAppender.setFile(fileLogLocation);
+		
         SizeBasedTriggeringPolicy<ILoggingEvent> triggeringPolicy = new SizeBasedTriggeringPolicy<ILoggingEvent>();
         triggeringPolicy.setMaxFileSize("10MB");
         triggeringPolicy.start();
@@ -87,16 +80,13 @@ public class ExecutionTrackingLogger {
         encoder.setContext(loggerContext);
         encoder.setPattern("%msg%n");
         encoder.start();
-
-        rfAppender.setEncoder(encoder);
-        rfAppender.setRollingPolicy(rollingPolicy);
-        rfAppender.setTriggeringPolicy(triggeringPolicy);
-
-        rfAppender.start();
+        
+        fileAppender.setEncoder(encoder);
+        fileAppender.start();
 
         // attach the rolling file appender to the logger of your choice
         Logger logbackLogger = loggerContext.getLogger(jobID);
-        ((ch.qos.logback.classic.Logger) logbackLogger).addAppender(rfAppender);
+        ((ch.qos.logback.classic.Logger) logbackLogger).addAppender(fileAppender);
         
         executionTrackingLoggers.put(jobID, logbackLogger);
         
