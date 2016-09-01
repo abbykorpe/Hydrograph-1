@@ -68,12 +68,16 @@ public class ParseSubjob {
 
 			mergeParentjobAndSubjob();
 			
-			updatePhaseInExpandedXmlDocument();
+			updatePhaseOfComponentsTillPhaseLevelInExpandedXmlDocument();
 		}
 		return parentXmlDocument;
 	}
 
-	private void updatePhaseInExpandedXmlDocument() {
+	/**
+	 * Updates the phase of components in the merged job till phaselevel. Phase level is the level of nesting of subjobs.
+	 * This method do not validate or updates the phase of components based on the source components.
+	 */
+	private void updatePhaseOfComponentsTillPhaseLevelInExpandedXmlDocument() {
 		// phaseLevel is the level of nesting of subjobs
 		int phaseLevel = getPhaseLevel(XmlUtilities.getXMLStringFromDocument(parentXmlDocument));
 		NodeList componentsWithPhaseAttribute = null;
@@ -84,7 +88,6 @@ public class ParseSubjob {
 			if (componentsWithPhaseAttribute != null
 					&& componentsWithPhaseAttribute.getLength() > 0) {
 				setPhaseOfComponentsUptoPhaselevel(phaseLevel,componentsWithPhaseAttribute);
-				updatePhaseBasedOnSourceComponent(phaseLevel,componentsWithPhaseAttribute);
 			} else {
 				throw new RuntimeException("Component tag does not have '"+ PHASE +"' attribute.");
 			}
@@ -92,82 +95,6 @@ public class ParseSubjob {
 		} catch (XPathExpressionException e) {
 			// this exception will never be thrown as XPATH is evaluted on the hardcoded value i.e PHASE
 			throw new RuntimeException(e);
-		}
-	}
-
-	/**Updates phase of component based on its source component
-	 * @param phaseLevel
-	 * @param componentsWithPhaseAttribute
-	 * @throws XPathExpressionException 
-	 */
-	private void updatePhaseBasedOnSourceComponent(int phaseLevel,
-			NodeList componentsWithPhaseAttribute) throws XPathExpressionException {
-		for (int componentWithPhase = 0; componentWithPhase < componentsWithPhaseAttribute
-				.getLength(); componentWithPhase++) {
-			String thisComponentPhase = componentsWithPhaseAttribute
-					.item(componentWithPhase).getAttributes().getNamedItem(PHASE).getNodeValue();
-			if (!isSubjobIOComponent(componentsWithPhaseAttribute
-					.item(componentWithPhase).getAttributes().getNamedItem(TYPE).getNodeValue())) {
-				NodeList childNodes = componentsWithPhaseAttribute.item(
-						componentWithPhase).getChildNodes();
-				for (int childNodeOfComponent = 0; childNodeOfComponent < childNodes
-						.getLength(); childNodeOfComponent++) {
-					if (childNodes.item(childNodeOfComponent).getNodeName().equals(INSOCKET)) {
-						// gets source component from inSocket
-						String fromComponentId = childNodes.item(childNodeOfComponent).getAttributes()
-								.getNamedItem(FROMCOMPONENTID).getNodeValue();
-						NodeList fromComponent = XmlUtilities
-								.getComponentsWithAttribute(parentXmlDocument,"id=\"" + fromComponentId + "\"");
-						if (!isSubjobIOComponent(fromComponent.item(0)
-								.getAttributes().getNamedItem(TYPE).getNodeValue())) {
-							// if source component is not of type subjobInput or subjobOutput
-							// update phase of this component according to the phase of source component 
-							if (fromComponent.item(0)
-									.getAttributes().getNamedItem(PHASE) != null){
-								String fromComponentPhase = fromComponent.item(0)
-										.getAttributes().getNamedItem(PHASE).getNodeValue();
-								for (int j = 0; j < phaseLevel; j++) {
-									if (Integer.parseInt(thisComponentPhase
-											.split("\\.")[j]) < Integer.parseInt(fromComponentPhase
-													.split("\\.")[j])) {
-										// if main phase is less than source component phase then throw error 
-										// else update the subphase of this component with the subphase of source component
-										if (j > 0) {
-											componentsWithPhaseAttribute
-											.item(componentWithPhase).getAttributes()
-											.getNamedItem(PHASE).setNodeValue(fromComponentPhase);
-										} else {
-											throw new RuntimeException(
-													"Phase of source component cannot be greater than target component. Source component '"
-															+ fromComponentId
-															+ "' has phase "
-															+ fromComponentPhase.split("\\.")[0]
-																	+ " and target component '"
-																	+ componentsWithPhaseAttribute
-																	.item(componentWithPhase)
-																	.getAttributes()
-																	.getNamedItem(ID)
-																	.getNodeValue()
-																	+ "' has phase "
-																	+ thisComponentPhase.split("\\.")[0]);
-										}
-									}
-								}
-							} else {
-								throw new RuntimeException(
-										"Phase attribute is not present for '"
-												+ fromComponent.item(0)
-														.getAttributes()
-														.getNamedItem(TYPE)
-														.getNodeValue()
-														.split(":")[1]
-												+ "' component with Id '"
-												+ fromComponentId + "'");
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 
