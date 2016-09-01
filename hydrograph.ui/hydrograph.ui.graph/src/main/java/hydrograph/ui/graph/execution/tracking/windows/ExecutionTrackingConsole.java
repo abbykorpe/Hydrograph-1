@@ -67,6 +67,7 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	@Override
 	protected Control createContents(Composite parent) {
 		getShell().setText("Execution tracking console - " + consoleName);
+		getShell().setBounds(50, 250, 450, 500);
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		{
