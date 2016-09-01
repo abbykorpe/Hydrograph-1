@@ -13,8 +13,16 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Aggregate Operation Class" link_to="xml/Operation Class/operationClass.xml#AggregateOperation" topic="html/gettingstarted/maintopic.html">
-   <topic href="html/gettingstarted/maintopic.html" label="Aggregate Operation Class">
-   </topic> 
-	
+<toc label="Operation Base Interface">
+   <topic href="html/Operation Base Interface/Aggregate/AggregateTransformBase.html" label="AggregateTransformBase">
+      <anchor id="AggregateTransformBase"/>
+   </topic>
+   <topic label="FilterBase">
+      <anchor id="FilterBase"/>
+   </topic>
+   <topic label="TransformBase">
+      <anchor id="TransformBase"/>
+   </topic>
+   <topic href="html/Operation Base Interface/ReusableRow.html" label="ReusableRow">
+   </topic>
 </toc>
