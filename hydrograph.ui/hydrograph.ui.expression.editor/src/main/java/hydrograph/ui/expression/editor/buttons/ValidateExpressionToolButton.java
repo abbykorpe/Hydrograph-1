@@ -59,7 +59,7 @@ public class ValidateExpressionToolButton extends Button {
 	private static final String RETURN_STATEMENT = "\t\treturn \n";
 	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR = "compile";
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ValidateExpressionToolButton.class);
-	public static final String HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS = "hydrograph.engine.expression.antlr.custom.visitor.ValidationAPI";
+	public static final String HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS =  "hydrograph.engine.expression.api.ValidationAPI";
 	private static final String ITEM_TEXT = "Validate";
 	private StyledText expressionEditor;
 

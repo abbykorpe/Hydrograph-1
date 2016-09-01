@@ -54,11 +54,13 @@ ext.hiveVersion = '1.2.0'
 
 dependencies {
 
-  	compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.14-wip')
+  	compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.10-SNAPSHOT')
 
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     
     compile(group: 'hydrograph', name: 'hydrograph.server.execution.tracking.server', version: '1.0.5')
+    
+    compile(group: 'hydrograph', name: 'hydrograph.engine.expression', version: '0.2.5')
 }
 
 test {
@@ -91,6 +93,7 @@ task scpJarFiles(dependsOn: ['build']) {
         	}
         	}
 }
+<<<<<<< HEAD
 
 scpJarFiles.onlyIf {
     project.hasProperty('host')
@@ -103,6 +106,20 @@ task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
 	doLast {
 	println 'Copying Resources files...'
 
+=======
+
+scpJarFiles.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+}
+
+task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
+	 /* Code for moving user-functions properties file from project resources folder to remote */
+	doLast {
+	println 'Copying Resources files...'
+
+>>>>>>> 096937751750f67dfca2fe44b5340d2198455446
         def resourcesFile
         def resourcesName
         def resourcesFiles = files {
@@ -355,13 +372,13 @@ task executeLocalJob(dependsOn: ['build', 'classes'], type: JavaExec) {
         errorOutput = System.err
         classpath += transformFiles + configurations.compile
         def argsArray = getArgsForRunJob()
-        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+argsArray[8]+'',''+argsArray[9]]
+        args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]]
 
     }
 }
 
 def getArgsForRunJob() {
-    def argsArray = new String[10]
+    def argsArray = new String[12]
     if (project.hasProperty("jobXML")) {
         argsArray[0] = "-xmlpath"
         argsArray[1] = jobXML
@@ -389,8 +406,8 @@ def getArgsForRunJob() {
     }
     
     if(project.hasProperty("executionTrackingPort")){
-        argsArray[8] = "-trackingclientsocketport"
-        argsArray[9] = executionTrackingPort
+        argsArray[10] = "-trackingclientsocketport"
+        argsArray[11] = executionTrackingPort
         println " executionTrackingPort is: "+executionTrackingPort
     }
     
@@ -417,13 +434,13 @@ task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
         classpath += transformFiles + configurations.compile
         def argsArray = getArgsForDebugRunJob()
         args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+
-                argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]+'',''+argsArray[12]+'',''+argsArray[13]]
+                argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]+'',''+argsArray[12]+'',''+argsArray[13]+'',''+argsArray[14]+'',''+argsArray[15]]
 
     }
 }
 
 def getArgsForDebugRunJob() {
-    def argsArray = new String[14]
+    def argsArray = new String[16]
     if (project.hasProperty("jobXML")) {
         argsArray[0] = "-xmlpath"
         argsArray[1] = jobXML
@@ -464,8 +481,8 @@ def getArgsForDebugRunJob() {
     }
     
      if(project.hasProperty("executionTrackingPort")){
-        argsArray[12] = "-trackingclientsocketport"
-        argsArray[13] = executionTrackingPort
+        argsArray[14] = "-trackingclientsocketport"
+        argsArray[15] = executionTrackingPort
         println " trackingclientsocketport is: "+executionTrackingPort
     }
     
