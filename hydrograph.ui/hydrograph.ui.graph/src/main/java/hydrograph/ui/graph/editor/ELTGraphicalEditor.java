@@ -83,9 +83,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -977,7 +979,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		 	byte[] secureRandom = random.getSeed(number);
 		    long milliSeconds = System.currentTimeMillis();
 		    String timeStampLong = Long.toString(milliSeconds);
-		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat("_"+timeStampLong);
+		    
+		    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat("_"+timeStampLong) + "_" + timeStamp;
 		    
 		    return uniqueJobId;
 	}

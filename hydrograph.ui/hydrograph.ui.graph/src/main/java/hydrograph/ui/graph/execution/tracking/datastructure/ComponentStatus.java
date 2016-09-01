@@ -95,8 +95,47 @@ public class ComponentStatus {
 	public Map<String, Long> getProcessedRecordCount() {
 		return processedRecordCount;
 	}
-	
-	
-	
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((componentId == null) ? 0 : componentId.hashCode());
+		result = prime * result + ((componentName == null) ? 0 : componentName.hashCode());
+		result = prime * result + ((currentStatus == null) ? 0 : currentStatus.hashCode());
+		result = prime * result + ((processedRecordCount == null) ? 0 : processedRecordCount.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ComponentStatus other = (ComponentStatus) obj;
+		if (componentId == null) {
+			if (other.componentId != null)
+				return false;
+		} else if (!componentId.equals(other.componentId))
+			return false;
+		if (componentName == null) {
+			if (other.componentName != null)
+				return false;
+		} else if (!componentName.equals(other.componentName))
+			return false;
+		if (currentStatus == null) {
+			if (other.currentStatus != null)
+				return false;
+		} else if (!currentStatus.equals(other.currentStatus))
+			return false;
+		if (processedRecordCount == null) {
+			if (other.processedRecordCount != null)
+				return false;
+		} else if (!processedRecordCount.equals(other.processedRecordCount))
+			return false;
+		return true;
+	}
 }

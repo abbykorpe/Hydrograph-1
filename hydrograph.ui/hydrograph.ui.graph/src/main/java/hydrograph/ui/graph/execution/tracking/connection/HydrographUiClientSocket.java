@@ -395,8 +395,9 @@ public class HydrographUiClientSocket {
 	 */
 	private String getJobID(ExecutionStatus executionStatus) {
 		String jobId = executionStatus.getJobId();
-		jobId = StringUtils.substringBeforeLast(jobId, "_");
-		jobId = StringUtils.substringBeforeLast(jobId, "_");
+		jobId = StringUtils.substringBeforeLast(
+					StringUtils.substringBeforeLast(
+							StringUtils.substringBeforeLast(jobId, "_"), "_"), "_");
 		return jobId;
 	}
 

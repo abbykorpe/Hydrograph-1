@@ -22,6 +22,8 @@ import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.logging.execution.tracking.ExecutionTrackingLogger;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
@@ -43,14 +45,17 @@ public class ExecutionTrackingFileLogger {
 	
 	/** The job tracking log directory. */
 	private String jobTrackingLogDirectory;;
-		
+
+	private Map<String,ExecutionStatus> lastExecutionStatus;
+	
 	/**
 	 * Instantiates a new execution tracking file logger.
 	 */
 	private ExecutionTrackingFileLogger(){
 
 		jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
-				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
+				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);			
+		lastExecutionStatus = new HashMap<>();
 		createJobTrackingLogDirectory();
 	}
 
@@ -75,6 +80,12 @@ public class ExecutionTrackingFileLogger {
 			file.mkdirs();
 		}
 	}
+
+	public void removeLastExecutionStatus(String jobID){
+		if(lastExecutionStatus.get(jobID)!=null){
+			lastExecutionStatus.remove(jobID);
+		}
+	}
 	
 	/**
 	 * Write the log
@@ -83,6 +94,12 @@ public class ExecutionTrackingFileLogger {
 	 * @param executionStatus the execution status
 	 */
 	public void log(String uniqJobId,ExecutionStatus executionStatus, boolean isLocalMode){
+		
+		if(lastExecutionStatus.get(uniqJobId)!=null && executionStatus.equals(lastExecutionStatus.get(uniqJobId))){
+			return;
+		}
+		lastExecutionStatus.put(uniqJobId, executionStatus);
+		
 		String executionStatusString = getExecutionStatusInString(executionStatus);
 		if(StringUtils.isBlank(executionStatusString)){
 			return;
