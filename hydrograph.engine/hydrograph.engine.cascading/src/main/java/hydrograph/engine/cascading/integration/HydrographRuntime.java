@@ -162,7 +162,6 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		for (Cascade cascade : runtimeContext.getCascade()) {
 			cascade.complete();
 		}
-		executionTrackingListener.getStatus();
 	}
 
 	@Override
