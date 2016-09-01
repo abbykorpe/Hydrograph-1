@@ -138,7 +138,9 @@ public class ExecutionTrackingConsoleUtils {
 			console.getShell().setBounds(originalBoundsClone);		
 			console.getShell().setActive();	
 		}
-		console.setStatus(null, readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode()));
+		if(StringUtils.isNotEmpty(getUniqueJobId())){
+			console.setStatus(null, readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode()));
+		}
 	}
 
 	/**
