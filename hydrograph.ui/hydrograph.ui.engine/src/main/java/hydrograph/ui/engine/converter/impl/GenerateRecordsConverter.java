@@ -74,7 +74,7 @@ public class GenerateRecordsConverter extends InputConverter {
 		String recordCountPropertyValue = (String) properties.get(Constants.PARAM_NO_OF_RECORDS);
 		if (StringUtils.isNotBlank(recordCountPropertyValue) && !recordCountPropertyValue.trim().isEmpty()) {
 			recordCount = new RecordCount();
-			recordCount.setValue(Integer.valueOf(recordCountPropertyValue));
+			recordCount.setValue(Long.valueOf(recordCountPropertyValue));
 		}
 		return recordCount;
 	}
