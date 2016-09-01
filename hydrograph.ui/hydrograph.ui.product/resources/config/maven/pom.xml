@@ -18,8 +18,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-<!-- commented for expression editor temprary build -->
-	<!-- <repositories>
+	<repositories>
 		<repository>
 			<id>mavenRepo</id>
 			<url>http://10.30.127.67:9091/artifactory/libs-release/</url>
@@ -33,63 +32,7 @@
 			<artifactId>hydrograph.engine.command-line</artifactId>
 			<version>0.1.10-SNAPSHOT</version>
 		</dependency>
-<<<<<<< HEAD
-		
-		<dependency>
-			<groupId>hydrograph</groupId>
-			<artifactId>hydrograph.engine.expression</artifactId>
-			<version>0.2.5</version>
-		</dependency>
 		
 	</dependencies> 
-=======
-	</dependencies>  -->
-	
-	<repositories>
-		<repository>
-			<id>mavenRepo</id>
-			<url>http://10.30.127.67:9091/artifactory/libs-release-local/</url>
-		</repository>
-	</repositories>
-
-	<dependencies>
-		<dependency>
-    		<groupId>hydrograph</groupId>
-    		<artifactId>hydrograph.engine.command-line</artifactId>
-    		<version>0.1.5</version>
-		</dependency>
-		   
-		<dependency>
-			<groupId>hydrograph</groupId>
-			<artifactId>hydrograph.engine.expression</artifactId>
-			<version>0.1.5</version>
-		</dependency>
-
-		<dependency> 
-			<groupId>hydrograph</groupId>
-			<artifactId>hydrograph.engine.core</artifactId>
-			<version>0.1.5</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>hydrograph</groupId>
-			<artifactId>hydrograph.engine.transformation</artifactId>
-			<version>0.1.5</version>
-		</dependency>
-	
-		<!-- <dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr4-runtime</artifactId>
-			<version>4.5.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.beanshell</groupId>
-			<artifactId>bsh</artifactId>
-			<version>2.0b5</version>
-		</dependency> -->
-
-</dependencies>
->>>>>>> 096937751750f67dfca2fe44b5340d2198455446
 	
 </project>

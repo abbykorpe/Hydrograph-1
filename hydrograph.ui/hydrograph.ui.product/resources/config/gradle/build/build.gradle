@@ -60,7 +60,6 @@ dependencies {
     
     compile(group: 'hydrograph', name: 'hydrograph.server.execution.tracking.server', version: '1.0.5')
     
-    compile(group: 'hydrograph', name: 'hydrograph.engine.expression', version: '0.2.5')
 }
 
 test {
@@ -93,7 +92,8 @@ task scpJarFiles(dependsOn: ['build']) {
         	}
         	}
 }
-<<<<<<< HEAD
+
+
 
 scpJarFiles.onlyIf {
     project.hasProperty('host')
@@ -106,20 +106,6 @@ task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
 	doLast {
 	println 'Copying Resources files...'
 
-=======
-
-scpJarFiles.onlyIf {
-    project.hasProperty('host')
-    project.hasProperty('username')
-    project.hasProperty('password')
-}
-
-task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
-	 /* Code for moving user-functions properties file from project resources folder to remote */
-	doLast {
-	println 'Copying Resources files...'
-
->>>>>>> 096937751750f67dfca2fe44b5340d2198455446
         def resourcesFile
         def resourcesName
         def resourcesFiles = files {
