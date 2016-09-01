@@ -751,6 +751,7 @@ public class DebugDataViewer extends ApplicationWindow {
 		tabFolder.setSelection(tbtmUnformattedView);
 		dataViewLoader.setUnformattedViewTextarea(unformattedViewTextarea);
 		dataViewLoader.reloadloadViews();
+		actionFactory.getAction(SelectColumnAction.class.getName()).setEnabled(false);
 	}
 
 	/**
