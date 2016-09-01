@@ -45,7 +45,7 @@
 				<xs:sequence>
 					<xs:element name="inSocket" type="transform:type-transform-in-socket"
 						minOccurs="1" maxOccurs="1" />
-					<xs:choice maxOccurs="unbounded" minOccurs="1">
+					<xs:choice maxOccurs="unbounded" minOccurs="0">
 						<xs:element name="operation" type="transform:type-transform-operation"
 							minOccurs="1" maxOccurs="unbounded" />
 						<xs:element name="expression" type="cmn:type-transform-expression"

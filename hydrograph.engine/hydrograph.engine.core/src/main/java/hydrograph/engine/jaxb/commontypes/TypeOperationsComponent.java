@@ -44,7 +44,7 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/commontypes}type-base-component">
  *       &lt;sequence>
  *         &lt;element name="inSocket" type="{hydrograph/engine/jaxb/commontypes}type-base-inSocket" maxOccurs="unbounded"/>
- *         &lt;choice maxOccurs="unbounded">
+ *         &lt;choice maxOccurs="unbounded" minOccurs="0">
  *           &lt;element name="operation" type="{hydrograph/engine/jaxb/commontypes}type-transform-operation" maxOccurs="unbounded" minOccurs="0"/>
  *           &lt;element name="expression" type="{hydrograph/engine/jaxb/commontypes}type-transform-expression" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;/choice>
