@@ -336,7 +336,7 @@ public class HydrographUiClientSocket {
 							if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.RUNNING.value())){
 								component.updateStatus(ComponentExecutionStatus.RUNNING.value());
 								runningStatusApplied = true;
-								break;
+								break; 
 							}
 						}
 					} 
