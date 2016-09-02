@@ -96,12 +96,14 @@ public class HydrographMain {
 		 * Start new thread to run job
 		 */
 		final HydrographService execution = new HydrographService();
-		
-		hydrographMain.executeGraph(latch, jobId, argsFinalList, timer, execution);
 
 		final HydrographEngineCommunicatorSocket socket = new HydrographEngineCommunicatorSocket(execution);
 
 		session = hydrographMain.connectToServer(socket, jobId, trackingClientSocketPort);
+
+		
+		hydrographMain.executeGraph(latch, jobId, argsFinalList, timer, execution);
+
 
 		if (isExecutionTracking) {
 			/**
