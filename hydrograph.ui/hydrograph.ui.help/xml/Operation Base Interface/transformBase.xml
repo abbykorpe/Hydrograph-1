@@ -13,8 +13,8 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Filter Operation Class" link_to="xml/Operation Class/operationClass.xml#FilterOperation" topic="html/gettingstarted/maintopic.html">
-   <topic href="html/gettingstarted/maintopic.html" label="Filter Operation Class">
+<toc label="Transform Operation Class" link_to="xml/Operation Base Interface/operationBaseInterface.xml#TransformBase" topic="html/Operation Base Interface/Transform/TransformBase.html">
+   <topic href="html/gettingstarted/maintopic.html" label="Transform Operation Class">
    </topic> 
 	
 </toc>

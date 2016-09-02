@@ -22,6 +22,9 @@
             primary="true">
       </toc>
       <toc
+            file="xml/Introduction/overview.xml">
+      </toc>
+      <toc
             file="xml/Introduction/WhatIsHydrograph.xml">
       </toc>
       <toc
@@ -134,20 +137,17 @@
             file="xml/Components/unionAll.xml">
       </toc>
       <toc
-            file="xml/Introduction/overview.xml">
-      </toc>
-      <toc
-            file="xml/Operation Class/operationClass.xml"
+            file="xml/Operation Base Interface/operationBaseInterface.xml"
             primary="true">
       </toc>
       <toc
-            file="xml/Operation Class/filterOperation.xml">
+            file="xml/Operation Base Interface/filterBase.xml">
       </toc>
       <toc
-            file="xml/Operation Class/aggregateOperation.xml">
+            file="xml/Operation Base Interface/aggregateTransformBase.xml">
       </toc>
       <toc
-            file="xml/Operation Class/transformOperation.xml">
+            file="xml/Operation Base Interface/transformBase.xml">
       </toc>
       <toc
             file="xml/How To Steps/howToSteps.xml"

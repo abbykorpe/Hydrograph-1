@@ -13,13 +13,43 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Aggregate" link_to="xml\Components\components.xml#Aggregate"> 
-	<topic label="Properties"  href="html/Components/Aggregate_Properties.html"> 
+<toc label="Aggregate" link_to="xml\Components\components.xml#Aggregate" topic="html/Components/Aggregate_Operation_Editor.html#input_fields_grid"> 
+	<topic label="Properties"  href="html/Components/Aggregate_Properties.html">
+    <topic href="html/Components/Aggregate_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/Aggregate_Properties.html#schema" label="Schema">
+    </topic>
+    <topic href="html/Components/Aggregate_Properties.html#validations" label="Validations">
+    </topic> 
 	</topic>
  <topic href="html/Components/Aggregate_Operation_Editor.html" label="Operation Editor">
+    <topic href="html/Components/Aggregate_Operation_Editor.html#input_fields_grid" label="Input Fields Grid">
+    </topic>
+    <topic href="html/Components/Aggregate_Operation_Editor.html#operation_window" label="Operation Window">
+    </topic>
+    <topic href="html/Components/Aggregate_Operation_Editor.html#map_fields_grid" label="Map Fields Grid">
+    </topic>
+    <topic href="html/Components/Aggregate_Operation_Editor.html#output_fields_grid" label="Output Fields Grid">
+    </topic>
  </topic>
- <topic href="html/Components/Aggregate_Operation_Class.html" label="Operation Class">
+ <topic href="html/Components/Aggregate_Operation_Class_Window.html" label="Operation Class Window">
+    <topic href="html/Components/Aggregate_Operation_Class_Window.html#in-built-operation-class" label="In built operation class">
+    </topic>
+    <topic href="html/Components/Aggregate_Operation_Class_Window.html#custom-operation-class" label="Custom built operation class">
+    </topic>
+    <topic href="html/Components/Aggregate_Operation_Class_Window.html#Operation_Properties_Grid" label="Operation Properties Grid">
+    </topic>
  </topic>
- <topic href="html/Components/Aggregate_Validations.html" label="Validations">
+ <topic href="html/Operation Base Interface/Aggregate/AggregateTransformBase.html" label="AggregateTransformBase">
+    <topic href="html/Operation Base Interface/Aggregate/Count.html" label="Count">
+    </topic>
+    <topic href="html/Operation Base Interface/Aggregate/Max.html" label="Max">
+    </topic>
+    <topic href="html/Operation Base Interface/Aggregate/Min.html" label="Min">
+    </topic>
+    <topic href="html/Operation Base Interface/Aggregate/StringAppend.html" label="StringAppend">
+    </topic>
+    <topic href="html/Operation Base Interface/Aggregate/Sum.html" label="Sum">
+    </topic>
  </topic>
 </toc>
