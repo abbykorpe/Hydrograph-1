@@ -14,12 +14,13 @@
 
 package hydrograph.ui.common.util;
 
-import hydrograph.ui.common.Messages;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Color;
@@ -51,6 +52,7 @@ public class TransformMappingFeatureUtility {
 			   if(filterProperties==innerFilterProperties)
 			   {
 				   listToBeReturn.add(innerFilterProperties);
+				   break;
 			   } 
 			   
 		   }  

@@ -163,6 +163,9 @@ public class ExpressionComposite extends Composite {
 					mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression()
 							.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(inputFieldNames, getInputSchema(component)));
 				}
+				else
+				mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
+
 				LaunchExpressionEditor launchExpressionEditor = new LaunchExpressionEditor();
 				launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getExpressionEditorData());
 				expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());

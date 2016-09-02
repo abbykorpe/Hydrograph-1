@@ -1,7 +1,6 @@
 package hydrograph.ui.datastructure.expression;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
-import hydrograph.ui.datastructure.property.FilterProperties;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -48,9 +47,7 @@ public class ExpressionEditorData implements IDataStructure {
    public boolean equals(Object obj) {
 	   if (this == obj)
 			return true;
-	   if (obj == null)
-			return false;
-	   if (getClass() != obj.getClass())
+	   if (obj == null||getClass() != obj.getClass())
 			return false;
 	   ExpressionEditorData other=(ExpressionEditorData)obj;
 	   if (expression == null) {
