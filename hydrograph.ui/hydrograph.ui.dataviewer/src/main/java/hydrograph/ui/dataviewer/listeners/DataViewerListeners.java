@@ -13,10 +13,12 @@
 
 package hydrograph.ui.dataviewer.listeners;
 
+import hydrograph.ui.dataviewer.actions.SelectColumnAction;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.constants.ControlConstants;
+import hydrograph.ui.dataviewer.constants.Views;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.support.StatusManager;
 import hydrograph.ui.dataviewer.utilities.DataViewerUtility;
@@ -116,6 +118,7 @@ public class DataViewerListeners {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				dataViewLoader.reloadloadViews();
+				disableColumnSelectionForUnformattedView(e); 
 			}
 
 			@Override
@@ -125,6 +128,15 @@ public class DataViewerListeners {
 		});
 	}
 
+	private void disableColumnSelectionForUnformattedView(
+			SelectionEvent e) {
+		if(e.item.getData("VIEW_NAME").equals(Views.UNFORMATTED_VIEW_NAME)){
+			debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName()).setEnabled(false);
+		}else{
+			debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName()).setEnabled(true);
+		}
+	}
+	
 	private void jumpPageListener() {
 		final Text jumpPageTextBox = ((Text) windowControls.get(ControlConstants.JUMP_TEXT));
 
