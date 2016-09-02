@@ -138,9 +138,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 					LaunchExpressionEditor launchExpressionEditor=new LaunchExpressionEditor();
 					String oldExpression=operationClassProperty.getExpressionEditorData().getExpression();
 					launchExpressionEditor.launchExpressionEditor(operationClassProperty.getExpressionEditorData());
-					if(StringUtils.equals(operationClassProperty.getExpressionEditorData().getExpression(), oldExpression)){
-						propertyDialogButtonBar.enableApplyButton(false);
-					}else{
+					if(!StringUtils.equals(operationClassProperty.getExpressionEditorData().getExpression(), oldExpression)){
 						propertyDialogButtonBar.enableApplyButton(true);
 					}
 						
