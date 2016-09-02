@@ -216,6 +216,8 @@ public class TransformWidget extends AbstractWidget {
 		 getSchemaForInternalPropagation().getGridRow().addAll(sortedList);
 		 sortedList.clear();
 		}
+		else
+		getSchemaForInternalPropagation().getGridRow().clear();	
 	}
 
 
