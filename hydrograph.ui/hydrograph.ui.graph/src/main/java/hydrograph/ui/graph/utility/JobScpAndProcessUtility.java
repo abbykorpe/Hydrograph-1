@@ -44,7 +44,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.websocket.CloseReason;
 import javax.websocket.Session;
+import javax.websocket.CloseReason.CloseCodes;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
@@ -71,6 +73,7 @@ public class JobScpAndProcessUtility {
 	private static final String JPS_COMMAND_TO_FIND_JAVA_PROCESES = "jps -m";
 	private static final String WINDOWS_COMMAND_TO_KILL_PROCESS = "TASKKILL /F /PID ";
 	private static final String MAC_COMMAND_TO_KILL_PROCESS = "kill -9 ";
+	private static final String JOB_KILLED_SUCCESSFULLY = "JOB KILLED SUCCESSFULLY";
 
 	private JobScpAndProcessUtility(){
 		
@@ -454,13 +457,7 @@ public class JobScpAndProcessUtility {
 				showMessageBox(e1.getMessage(),"Error", SWT.ERROR);
 				logger.error(e1.getMessage());
 			} finally {
-				if (session != null) {
-					try {
-						session.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+				closeWebSocketConnection(session);
 			}
 			DefaultGEFCanvas gefCanvas = CanvasUtils.INSTANCE.getComponentCanvas();
 			JobLogger joblogger = JobManager.INSTANCE.initJobLogger(gefCanvas);
@@ -516,6 +513,7 @@ public class JobScpAndProcessUtility {
 						while ((lineKill = readerKill.readLine()) != null) {
 							logger.info("Kill log: "+lineKill);
 							joblogger.logMessage(lineKill);
+							joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
 						}
 						break;
 					}
@@ -529,4 +527,26 @@ public class JobScpAndProcessUtility {
 		
 	}
 
+	/**
+	 * Close Websocket connection Connection
+	 * @param session
+	 */
+	private void closeWebSocketConnection(final Session session ){
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+		}
+
+		if (session != null && session.isOpen()) {
+			try {
+				CloseReason closeReason = new CloseReason(
+						CloseCodes.NORMAL_CLOSURE, "Session Closed");
+				session.close(closeReason);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
 }

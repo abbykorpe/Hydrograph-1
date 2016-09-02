@@ -270,7 +270,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				if (line.contains(Messages.CURRENT_JOB_ID)) {
 					try {
 						Long.parseLong((line.split("#")[1]).trim());
-						job.setRemoteJobProcessID((line.split("#")[1]).trim());
+						//job.setRemoteJobProcessID((line.split("#")[1]).trim());
 						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 
 					} catch (NumberFormatException e) {
@@ -285,14 +285,12 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 					job.setJobStatus(JobStatus.FAILED);
 				}
 
-				if (job.getRemoteJobProcessID() != null) {
-					if (JobStatus.KILLED.equals(job.getJobStatus())) {
-						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-						((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
-						JobManager.INSTANCE.killJob(job.getConsoleName(), gefCanvas);
-						joblogger.logMessage("Killing job with job remote process id: " + job.getRemoteJobProcessID());
-						break;
-					}
+				if (JobStatus.KILLED.equals(job.getJobStatus())) {
+					((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
+					((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
+					JobManager.INSTANCE.killJob(job.getConsoleName(), gefCanvas);
+					joblogger.logMessage("Killing job with job remote process id: " + job.getRemoteJobProcessID());
+					break;
 				}
 
 				if (!line.contains(BUILD_SUCCESSFUL)) {
@@ -313,19 +311,15 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			}
 		}
 
-		if (job.getRemoteJobProcessID() == null) {
 			if (JobStatus.KILLED.equals(job.getJobStatus())) {
 				joblogger.logMessage(JOB_KILLED_SUCCESSFULLY);
 				releaseResources(job, gefCanvas, joblogger);
 				JobManager.INSTANCE.removeJob(job.getLocalJobID());
 			}
-		}
 
-		if (job.getRemoteJobProcessID() != null) {
-			if (!JobStatus.KILLED.equals(job.getJobStatus()) && !JobStatus.FAILED.equals(job.getJobStatus())
-					&& !JobStatus.RUNNING.equals(job.getJobStatus())) {
-				joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
-			}
+		if (!JobStatus.KILLED.equals(job.getJobStatus()) && !JobStatus.FAILED.equals(job.getJobStatus())
+				&& !JobStatus.RUNNING.equals(job.getJobStatus())) {
+			joblogger.logMessage(JOB_COMPLETED_SUCCESSFULLY);
 		}
 
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
