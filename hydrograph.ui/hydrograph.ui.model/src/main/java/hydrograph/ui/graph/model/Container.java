@@ -247,11 +247,13 @@ public class Container extends Model {
 		if (!componentNames.isEmpty()) {
 			for (String componentName : componentNames) {
 				if (componentName.equalsIgnoreCase(newName)) {
-					duplicate = true;
+					
+				LoggerUtil.getLoger(this.getClass()).debug("Conainer.checkIfDuplicateComponentExists(): Duplicate component exists.");
+				return true;
 				}
 			}
 		}
-		return duplicate;
+		return false;
 	}
 
 	private int getMaximumSequenceNoFromComponentName() {
@@ -279,21 +281,7 @@ public class Container extends Model {
 		return componentNames;
 	}
 	
-	private boolean isUniqueCompName(String componentName) {
-		componentName = componentName.trim();
-		boolean result = true;
-
-		for (String cname : componentNames) {
-			if (cname.equalsIgnoreCase(componentName)) {
-				result = false;
-				break;
-			}
-
-		}
-		LoggerUtil.getLoger(this.getClass()).debug("Conainer.isUniqueCompName(): result: " + result);
-
-		return result;
-	}
+	
 	
 	/**
 	 * Return a HashTable of Component prefix as key and next suffix as value.
