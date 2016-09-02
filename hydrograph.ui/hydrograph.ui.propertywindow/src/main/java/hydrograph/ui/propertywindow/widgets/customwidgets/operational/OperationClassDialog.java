@@ -230,7 +230,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { addButtonSize, 17, 20, 15 }, "");
 		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
 		addButton.setImage(addImage);
-		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
+		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		addButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -259,7 +259,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { deleteButtonSize, 17, 20, 15 }, "");
 		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		deleteButton.setImage(deleteImage);
-		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
+		deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -278,7 +278,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { upButtonSize, 17, 20, 15 }, "");
 		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
 		upButton.setImage(upImage);
-		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
+		upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -297,7 +297,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { downButtonSize, 17, 20, 15 }, "");
 		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
 		downButton.setImage(downImage);
-		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
+		downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);	
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override

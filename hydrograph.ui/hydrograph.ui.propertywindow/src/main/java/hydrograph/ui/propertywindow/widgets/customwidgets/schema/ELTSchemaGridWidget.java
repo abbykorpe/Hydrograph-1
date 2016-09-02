@@ -224,11 +224,6 @@ import org.xml.sax.SAXException;
 		public final static String SCHEMA_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.SCHEMA_CONFIG_XSD_PATH;
 	
 		private ControlDecoration txtDecorator, decorator;
-	
-		private String addButtonTooltip = Messages.ADD_SCHEMA_TOOLTIP;
-		private String removeButtonTooltip = Messages.DELETE_SCHEMA_TOOLTIP;
-		private String upButtonTooltip = Messages.MOVE_SCHEMA_UP_TOOLTIP;
-		private String downButtonTooltip = Messages.MOVE_SCHEMA_DOWN_TOOLTIP;
 		
 		List<GridRow> copiedGridRows=new ArrayList<GridRow>();
 	
@@ -1381,7 +1376,7 @@ import org.xml.sax.SAXException;
 			SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 			buttonSubGroup.attachWidget(addButton);
 			addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
-			addButton.setToolTipText(addButtonTooltip);
+			addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		}
 	
 		private void addDeleteButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -1389,7 +1384,7 @@ import org.xml.sax.SAXException;
 			SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 			buttonSubGroup.attachWidget(deleteButton);
 			deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
-			deleteButton.setToolTipText(removeButtonTooltip);
+			deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		}
 	
 		private void addUpButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -1397,7 +1392,7 @@ import org.xml.sax.SAXException;
 			SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 			buttonSubGroup.attachWidget(upButton);
 			upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
-			upButton.setToolTipText(upButtonTooltip);
+			upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 			((Button)upButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {
 			 
 				@Override
@@ -1432,7 +1427,7 @@ import org.xml.sax.SAXException;
 			buttonSubGroup.attachWidget(downButton);
 	
 			downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
-			downButton.setToolTipText(downButtonTooltip);
+			downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 			
 			((Button)downButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {
 				 

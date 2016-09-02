@@ -543,7 +543,7 @@ public class LookupMapDialog extends Dialog {
 		btnDown = new Button(composite_11, SWT.NONE);
 	Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown.setImage(downButtonImage);
-		btnDown.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
+		btnDown.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -574,7 +574,7 @@ public class LookupMapDialog extends Dialog {
 		btnUp = new Button(composite_11, SWT.NONE);
 		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		btnUp.setImage(upButtonImage);
-		btnUp.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
+		btnUp.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -604,7 +604,7 @@ public class LookupMapDialog extends Dialog {
 		btnDelete = new Button(composite_11, SWT.NONE);
 		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		btnDelete.setImage(deleteButtonImage);
-		btnDelete.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
+		btnDelete.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -643,7 +643,7 @@ public class LookupMapDialog extends Dialog {
 		btnAdd = new Button(composite_11, SWT.NONE);
 		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		btnAdd.setImage(addButtonImage);
-		btnAdd.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
+		btnAdd.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
