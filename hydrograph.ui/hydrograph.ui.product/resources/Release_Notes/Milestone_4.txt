@@ -33,6 +33,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 22.#1129 [Ashika Holkar] Cumulate Component: Job is Getting Failed When User Selects Max/Min Operations in Operation Class
 23.#1124 [Rushikesh Pawale] Fixed issue to Close Input/Output Subjob component properties window
 24.#1121 [Rushikesh Pawale] Fixed issue of Input Hive Component while saving imported job.
+25.#673 [Kalyan Rajpoot] Select Column option in Menu Bar and Cool Bar Can be Disabled for Unformatted View
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
