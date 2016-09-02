@@ -68,15 +68,15 @@ public class HydrographEngineCommunicatorSocket {
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				if(execution!=null){
+				if (execution != null) {
 					logger.info("Job killed successfully");
 					execution.kill();
 					timer.cancel();
-				}else
-					logger.info("Try Fail");
+				}
 			}
+				
 		};
-		timer.schedule(task, 0l, 200);
+		timer.schedule(task, 0l, 600);
 
 		logger.info("Job killed Done");
 	}
@@ -96,7 +96,9 @@ public class HydrographEngineCommunicatorSocket {
 
 	public void sendMessage(String str) throws IOException {
 		logger.debug("CLIENT MESSAGE :"+str);
-		session.getBasicRemote().sendText(str);
+		if(session!=null){
+			session.getBasicRemote().sendText(str);
+		}
 	}
 
 	public ExecutionStatus getExecutionStatus() {
