@@ -62,7 +62,7 @@ public class TransformViewDataDialog extends Dialog {
 	 */
 	public TransformViewDataDialog(Shell parentShell) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE |SWT.MAX | SWT.RESIZE| SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.CLOSE| SWT.MIN|SWT.MAX|SWT.RESIZE| SWT.APPLICATION_MODAL);
 		
 	}
 

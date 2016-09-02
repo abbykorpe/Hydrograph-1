@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import hydrograph.ui.common.util.OSValidator;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -134,7 +136,13 @@ public class ELTOperationClassWidget extends AbstractWidget {
 					operationClassProperty.getExpressionEditorData().getSelectedInputFieldsForExpression()
 							.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(null,getInputSchema()));
 					LaunchExpressionEditor launchExpressionEditor=new LaunchExpressionEditor();
+					String oldExpression=operationClassProperty.getExpressionEditorData().getExpression();
 					launchExpressionEditor.launchExpressionEditor(operationClassProperty.getExpressionEditorData());
+					if(StringUtils.equals(operationClassProperty.getExpressionEditorData().getExpression(), oldExpression)){
+						propertyDialogButtonBar.enableApplyButton(false);
+					}else{
+						propertyDialogButtonBar.enableApplyButton(true);
+					}
 						
 				}else{
 				OperationClassProperty oldOperationClassProperty=operationClassProperty.clone();
