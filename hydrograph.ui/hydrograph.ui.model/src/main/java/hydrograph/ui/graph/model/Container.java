@@ -243,13 +243,12 @@ public class Container extends Model {
 	}
 
 	private boolean checkIfDuplicateComponentExists(String newName) {
-		boolean duplicate = false;
 		if (!componentNames.isEmpty()) {
 			for (String componentName : componentNames) {
 				if (componentName.equalsIgnoreCase(newName)) {
-					
-				LoggerUtil.getLoger(this.getClass()).debug("Conainer.checkIfDuplicateComponentExists(): Duplicate component exists.");
-				return true;
+					LoggerUtil.getLoger(this.getClass()).
+						debug("Conainer.checkIfDuplicateComponentExists(): Duplicate component exists.");
+					return true;
 				}
 			}
 		}
