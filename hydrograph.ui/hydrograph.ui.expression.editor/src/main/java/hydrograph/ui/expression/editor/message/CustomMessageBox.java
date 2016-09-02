@@ -1,20 +1,32 @@
 package hydrograph.ui.expression.editor.message;
 
-import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 
-public class CustomMessageBox extends MessageBox {
+public class CustomMessageBox  {
+
+	private int messageType;
+	private String message;
+	private String title;
 
 	public CustomMessageBox(int messageType,String message,String title) {
-		super(Display.getCurrent().getActiveShell(), messageType);
-		if(StringUtils.isNotBlank(message))
-			this.setMessage(message);
-		this.setText(title);
+		this.messageType=messageType;
+		this.message=message;
+		this.title=title;
 	}
 	
-	@Override
-	protected void checkSubclass() {
-		
+	public void open(){
+		if(messageType==SWT.ERROR){
+			MessageDialog.setDefaultOrientation(SWT.NONE);
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), title, message);
+		}
+		if(messageType==SWT.ICON_INFORMATION){
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), title, message);
+		}
+		if(messageType==SWT.ICON_WARNING){
+			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), title, message);
+		}
 	}
+	
 }

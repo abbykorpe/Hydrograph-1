@@ -19,6 +19,7 @@ import hydrograph.ui.propertywindow.messages.Messages;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -31,6 +32,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -136,16 +138,7 @@ public class WidgetUtility {
 	 * @return true, if successful
 	 */
 	public static boolean eltConfirmMessage(String message){
-		Shell shell = new Shell();
-		
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText(Messages.WARNING);
-	    messageBox.setMessage(message);
-	    int response = messageBox.open();
-	    if (response == SWT.YES){
-	    	return true;
-	    }
-	    return false;
+	    return MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), Messages.WARNING, message);
 	}
 
 	/**

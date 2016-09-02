@@ -40,6 +40,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -191,14 +192,7 @@ public class ExpressionEditorDialog extends Dialog {
 	}
 
 	private boolean confirmToExitWithoutSave() {
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.YES
-				| SWT.NO);
-		messageBox.setMessage(Messages.MESSAGE_TO_EXIT_WITHOUT_SAVE);
-		messageBox.setText("Exiting expression editor");
-		int response = messageBox.open();
-		if (response == SWT.YES)
-			return true;
-		return false;
+		return MessageDialog.openQuestion(Display.getCurrent().getActiveShell(), "Exiting expression editor",Messages.MESSAGE_TO_EXIT_WITHOUT_SAVE);
 	}
 
 	public String getExpressionText() {
