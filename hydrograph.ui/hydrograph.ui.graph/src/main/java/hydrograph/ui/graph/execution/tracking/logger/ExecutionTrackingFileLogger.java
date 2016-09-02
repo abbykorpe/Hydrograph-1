@@ -59,19 +59,27 @@ public class ExecutionTrackingFileLogger {
 	 * Instantiates a new execution tracking file logger.
 	 */
 	private ExecutionTrackingFileLogger(){
-		jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
-				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
-				
 		executionTrackingLoggers = new HashMap<>();
 		
 		createJobTrackingLogDirectory();
 	}
 
 	
+	private void initializeTrackingLogPath(){
+ 		jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
+ 				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
+ 		if(OSValidator.isWindows()){
+ 			jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
+ 		}else if(OSValidator.isMac()){
+ 			jobTrackingLogDirectory = jobTrackingLogDirectory + "//";
+ 		}
+ 	}
+	
 	/**
 	 * Creates the job tracking log directory.
 	 */
 	private void createJobTrackingLogDirectory() {
+		initializeTrackingLogPath();
 		File file = new File(jobTrackingLogDirectory);
 		if (!file.exists()) {
 			file.mkdirs();
@@ -106,6 +114,7 @@ public class ExecutionTrackingFileLogger {
 	 * @return the execution status logger
 	 */
 	private BufferedWriter getExecutionStatusLogger(String uniqJobId, boolean isLocalMode) {
+		initializeTrackingLogPath();
 		BufferedWriter bufferedWriter = executionTrackingLoggers.get(uniqJobId);	
 		if(isLocalMode){
 			uniqJobId = EXECUTION_TRACKING_LOCAL_MODE + uniqJobId;
