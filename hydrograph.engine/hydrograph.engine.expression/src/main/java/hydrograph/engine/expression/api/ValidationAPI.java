@@ -47,11 +47,10 @@ public class ValidationAPI implements Serializable {
 	public ValidationAPI(String expression, String propertiesFilePath) {
 		if (propertiesFilePath != null && !propertiesFilePath.equals(""))
 			this.packageNames += generatePackageName(propertiesFilePath);
-		if ( expression != null && !expression.equals("")) {
+		if (expression != null && !expression.equals("")) {
 			this.expr = expression;
 			this.packageNames += generatePackageName();
-		}
-		else
+		} else
 			throw new ExpressionNotFound("Expression is not found");
 	}
 
@@ -129,7 +128,7 @@ public class ValidationAPI implements Serializable {
 	 * @return a DiagnosticCollector of {@link JavaFileObject} objects which
 	 *         contains all the compile time information .
 	 */
-	public DiagnosticCollector<JavaFileObject> compile(Map<String, Class<?>> schemaFields) {
+	public DiagnosticCollector<JavaFileObject> transformCompiler(Map<String, Class<?>> schemaFields) {
 		String fields = "";
 		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
 		customExpressionVisitor.visit(generateAntlrTree());
@@ -139,11 +138,18 @@ public class ValidationAPI implements Serializable {
 			}
 		}
 
-		return CompileUtils.javaCompile(fields, expr, packageNames);
+		return CompileUtils.javaCompile(fields, expr, packageNames, "Object");
 
 	}
 
-	private DiagnosticCollector<JavaFileObject> compile(Map<String, Class<?>> schemaFields, String externalJarPath) {
+	/**
+	 * @param schemaFields
+	 *            of {@link Map} which contains field name as a key
+	 *            {@link String} and Data types as a value {@link Class}
+	 * @return a DiagnosticCollector of {@link JavaFileObject} objects which
+	 *         contains all the compile time information .
+	 */
+	public DiagnosticCollector<JavaFileObject> filterCompiler(Map<String, Class<?>> schemaFields) {
 		String fields = "";
 		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
 		customExpressionVisitor.visit(generateAntlrTree());
@@ -153,7 +159,37 @@ public class ValidationAPI implements Serializable {
 			}
 		}
 
-		return CompileUtils.javaCompile(fields, expr, externalJarPath, packageNames);
+		return CompileUtils.javaCompile(fields, expr, packageNames, "boolean");
+
+	}
+
+	private DiagnosticCollector<JavaFileObject> filterCompiler(Map<String, Class<?>> schemaFields,
+			String externalJarPath) {
+		String fields = "";
+		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
+		customExpressionVisitor.visit(generateAntlrTree());
+		for (String field : customExpressionVisitor.getFieldList()) {
+			if (schemaFields.get(field) != null) {
+				fields += ClassToDataTypeConversion.valueOf(schemaFields.get(field).getSimpleName()).getValue(field);
+			}
+		}
+
+		return CompileUtils.javaCompile(fields, expr, externalJarPath, packageNames, "boolean");
+
+	}
+
+	private DiagnosticCollector<JavaFileObject> transformCompiler(Map<String, Class<?>> schemaFields,
+			String externalJarPath) {
+		String fields = "";
+		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
+		customExpressionVisitor.visit(generateAntlrTree());
+		for (String field : customExpressionVisitor.getFieldList()) {
+			if (schemaFields.get(field) != null) {
+				fields += ClassToDataTypeConversion.valueOf(schemaFields.get(field).getSimpleName()).getValue(field);
+			}
+		}
+
+		return CompileUtils.javaCompile(fields, expr, externalJarPath, packageNames, "Object");
 
 	}
 
@@ -200,14 +236,14 @@ public class ValidationAPI implements Serializable {
 	 *            values are {@link Object} array which contains data used in
 	 *            expression
 	 * @return the object value {@link Object} w.r.t expression.
-	 * @throws EvalError 
+	 * @throws EvalError
 	 */
 	public Object execute(String[] fieldNames, Object[] data) throws EvalError {
 		Interpreter interpreter = new Interpreter();
-			for (int i = 0; i < fieldNames.length; i++) {
-				interpreter.set(fieldNames[i], data[i]);
-			}
-			return interpreter.eval(getValidExpression());
+		for (int i = 0; i < fieldNames.length; i++) {
+			interpreter.set(fieldNames[i], data[i]);
+		}
+		return interpreter.eval(getValidExpression());
 	}
 
 	/**
@@ -223,11 +259,44 @@ public class ValidationAPI implements Serializable {
 	 * @param externalJarPath
 	 * @return
 	 */
-	public static DiagnosticCollector<JavaFileObject> compile(String expression, String propertiesFilePath,
+	public static DiagnosticCollector<JavaFileObject> filterCompiler(String expression, String propertiesFilePath,
 			Map<String, Class<?>> schemaFields, String externalJarPath) {
-		return new ValidationAPI(expression, propertiesFilePath).compile(schemaFields, externalJarPath);
+		return new ValidationAPI(expression, propertiesFilePath).filterCompiler(schemaFields, externalJarPath);
 	}
 
+	/**
+	 * @param expression
+	 *            {@link String} is a construct made up of fields, operators,
+	 *            and method invocations
+	 * @param propertiesFilePath
+	 *            {@link String} is used to fetch the property file which
+	 *            contains custom classes imports.
+	 * @param schemaFields
+	 *            of {@link Map} which contains field name as a key
+	 *            {@link String} and Data types as a value {@link Class}
+	 * @param externalJarPath
+	 * @return
+	 */
+	public static DiagnosticCollector<JavaFileObject> transformCompiler(String expression, String propertiesFilePath,
+			Map<String, Class<?>> schemaFields, String externalJarPath) {
+		return new ValidationAPI(expression, propertiesFilePath).transformCompiler(schemaFields, externalJarPath);
+	}
+
+	/**
+	 * @param expression
+	 *            {@link String} is a construct made up of fields, operators,
+	 *            and method invocations
+	 * @param propertiesFilePath
+	 *            {@link String} is used to fetch the property file which
+	 *            contains custom classes imports.
+	 * @param fieldNames
+	 *            values are {@link String} array which contains field name used
+	 *            in expression
+	 * @param data
+	 *            values are {@link Object} array which contains data used in
+	 *            expression
+	 * @return
+	 */
 	public static Object execute(String expression, String propertiesFilePath, String[] fieldNames, Object[] data) {
 		try {
 			return new ValidationAPI(expression, propertiesFilePath).execute(fieldNames, data);

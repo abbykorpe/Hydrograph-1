@@ -116,7 +116,7 @@ public class OperationFieldsCreator<T extends OperationEntityBase> {
 				for (SchemaField schemaField : componentParameters.getSchemaFields()) {
 					schemaMap.put( schemaField.getFieldName(), Class.forName(schemaField.getFieldDataType()));
 				}
-				DiagnosticCollector<JavaFileObject> diagnostic = validationAPI.compile(schemaMap);
+				DiagnosticCollector<JavaFileObject> diagnostic = validationAPI.transformCompiler(schemaMap);
 				if (diagnostic.getDiagnostics().size() > 0) {
 					throw new RuntimeException(diagnostic.getDiagnostics().get(0).getMessage(null));
 				}

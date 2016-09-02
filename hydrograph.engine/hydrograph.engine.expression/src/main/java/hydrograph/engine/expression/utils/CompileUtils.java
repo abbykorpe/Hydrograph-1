@@ -51,15 +51,16 @@ public class CompileUtils {
 	 *         contains all the compile time information .
 	 */
 	public static DiagnosticCollector<JavaFileObject> javaCompile(String fields, String expression,
-			String packageName) {
+			String packageName,String returnTypeOfExprClass) {
 
-		StringWriter writer = generateRuntimeClass(fields, expression, packageName);
+		StringWriter writer = generateRuntimeClass(fields, expression, packageName,returnTypeOfExprClass);
 		JavaFileObject file = new JavaSourceFromString("Expression", writer.toString());
 		final Iterable<? extends JavaFileObject> sources = Arrays.asList(file);
 		task = compiler.getTask(null, manager, diagnostics, null, null, sources);
 		task.call();
 		return diagnostics;
 	}
+
 
 	/**
 	 * @param fields
@@ -75,9 +76,9 @@ public class CompileUtils {
 	 *         contains all the compile time information .
 	 */
 	public static DiagnosticCollector<JavaFileObject> javaCompile(String fields, String expression,
-			String externalJarPath, String packageName) {
+			String externalJarPath, String packageName,String returnTypeOfExprClass) {
 
-		StringWriter writer = generateRuntimeClass(fields, expression, packageName);
+		StringWriter writer = generateRuntimeClass(fields, expression, packageName,returnTypeOfExprClass);
 		JavaFileObject file = new JavaSourceFromString("Expression", writer.toString());
 		final Iterable<? extends JavaFileObject> sources = Arrays.asList(file);
 		if ((externalJarPath != null) && (!externalJarPath.isEmpty())) {
@@ -92,13 +93,16 @@ public class CompileUtils {
 
 	}
 
-	private static StringWriter generateRuntimeClass(String fields, String expression, String packageName) {
+	private static StringWriter generateRuntimeClass(String fields, String expression, String packageName,
+			String returnType) {
+		if (returnType == null || "".equals(returnType))
+			returnType = "object";
 		StringWriter writer = new StringWriter();
 		writer.append(packageName);
 		writer.append("class Expression {");
-		writer.append("public static Object validate(){ try{");
+		writer.append("public static  " + returnType + "  validate(){ try{");
 		writer.append(fields != null ? fields : "");
-		writer.append("return  " + expression + "}catch(Exception e){return null;}}");
+		writer.append("return  " + expression + "}catch(Exception e){throw new RuntimeException(e);}}");
 		writer.append("public static void main(String args[]) {");
 		writer.append("validate();");
 		writer.append("}");
