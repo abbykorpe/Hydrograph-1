@@ -90,6 +90,7 @@ public class ExpressionEditorData implements IDataStructure {
 	@Override
 	public ExpressionEditorData clone() {
 		String clonedExpression=this.expression;
+		boolean isValid=this.isValid;
 		List<String> clonedFieldsUsedInExpression = new ArrayList<>();
 		clonedFieldsUsedInExpression.addAll(this.fieldsUsedInExpression);
 		Map<String,Class<?>> clonedSelectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
@@ -98,7 +99,10 @@ public class ExpressionEditorData implements IDataStructure {
 		{
 			clonedSelectedInputFieldsForExpression.put(entry.getKey(), entry.getValue());
 		}	
-		return new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression);
+		ExpressionEditorData expressionEditorData=
+				new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression);
+		expressionEditorData.setValid(isValid);
+		return expressionEditorData;
 	}
 
 }
