@@ -86,6 +86,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
 		}
+		
 		refreshProject(gefCanvas);
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
 		closeWebSocketConnection(session);

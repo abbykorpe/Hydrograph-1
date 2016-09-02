@@ -580,7 +580,7 @@ public class JobManager {
 		}
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
 
-		joblogger.logJobEndInfo();
+		//joblogger.logJobEndInfo();
 		joblogger.close();
 		JobManager.INSTANCE.removeJob(job.getLocalJobID());
 	}
