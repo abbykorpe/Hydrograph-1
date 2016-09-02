@@ -20,6 +20,7 @@ import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.Graphics;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -35,6 +36,8 @@ public class Link extends Model {
 	/** Line drawing style for this connection. */
 	private int lineStyle = Graphics.LINE_SOLID;
 	private int linkNumber;
+	private String COMPONENT_FAIL_RECORD_COUNT="-1"; 
+	private String COMPONENT_FAIL_COUNT_DISPLAY="?";
 	/**
 	 * Used for indicating that a Connection with solid line style should be created.
 	 */
@@ -236,6 +239,7 @@ public class Link extends Model {
 	}
 	
 	public void updateRecordCount(String count) {
+		count = StringUtils.equalsIgnoreCase(COMPONENT_FAIL_RECORD_COUNT, count)? COMPONENT_FAIL_COUNT_DISPLAY : count;
 		this.recordCount = count;
 		firePropertyChange("record_count", null, count);
 	}

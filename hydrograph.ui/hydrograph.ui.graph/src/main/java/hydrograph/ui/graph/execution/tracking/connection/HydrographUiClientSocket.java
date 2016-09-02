@@ -26,10 +26,13 @@ import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.CompStatus;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,6 +47,10 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -164,12 +171,13 @@ public class HydrographUiClientSocket {
 					ExecutionStatus executionStatus,
 					Map<String, SubjobDetails> componentNameAndLink,
 					Component component, int successCount, String keySubjobName) {
+				boolean running = false;
+				boolean pending = false;
+
 				for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-					boolean running = false;
-					boolean pending = false;
 
 					if(!pending){
-						updateComponentPending(component, componentStatus, running);
+						updateComponentPending(component, componentStatus, pending);
 					}
 
 					if(!running){
@@ -256,7 +264,7 @@ public class HydrographUiClientSocket {
 				}
 			}
 
-			private void updateComponentPending(Component component, ComponentStatus componentStatus, boolean started) {
+			private void updateComponentPending(Component component, ComponentStatus componentStatus, boolean pendingStatusApplied) {
 				Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
 				if(inputSubjobComponent!=null){
 					for(Link link:inputSubjobComponent.getSourceConnections()){
@@ -265,14 +273,38 @@ public class HydrographUiClientSocket {
 						String compName = component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents();
 						if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.PENDING.value())){
 							component.updateStatus(CompStatus.PENDING.value());
-							started = true;
+							pendingStatusApplied = true;
 							break;
 						}
 					}
+				}else{
+					Container container = null;
+					String filePath=null;
+					filePath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+					IPath jobFileIPath = new Path(filePath);
+					if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
+						InputStream inp = null;
+						try {
+							inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+						} catch (CoreException e) {
+							logger.error("Not able to find subjob file", e);
+						}
+						container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
+						List<Component> subJobComponents = container.getChildren();
+						for(Component subJobComponent : subJobComponents){
+							String compName = component.getComponentLabel().getLabelContents()+"."+subJobComponent.getComponentLabel().getLabelContents();
+							if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.PENDING.value())){
+								component.updateStatus(CompStatus.PENDING.value());
+								pendingStatusApplied = true;
+								break;
+							}
+						}
+					} 
+					
 				}
 			}
 
-			private void updateComponentRunning(Component component, ComponentStatus componentStatus, boolean started) {
+			private void updateComponentRunning(Component component, ComponentStatus componentStatus, boolean runningStatusApplied) {
 				Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
 				if(inputSubjobComponent!=null){
 					for(Link link:inputSubjobComponent.getSourceConnections()){
@@ -281,10 +313,34 @@ public class HydrographUiClientSocket {
 						String compName = component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents();
 						if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.RUNNING.value())){
 							component.updateStatus(CompStatus.RUNNING.value());
-							started = true;
+							runningStatusApplied = true;
 							break;
 						}
 					}
+				}else{
+					Container container = null;
+					String filePath=null;
+					filePath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+					IPath jobFileIPath = new Path(filePath);
+					if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
+						InputStream inp = null;
+						try {
+							inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+						} catch (CoreException e) {
+							logger.error("Not able to find subjob file", e);
+						}
+						container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
+						List<Component> subJobComponents = container.getChildren();
+						for(Component subJobComponent : subJobComponents){
+							String compName = component.getComponentLabel().getLabelContents()+"."+subJobComponent.getComponentLabel().getLabelContents();
+							if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(CompStatus.RUNNING.value())){
+								component.updateStatus(CompStatus.RUNNING.value());
+								runningStatusApplied = true;
+								break;
+							}
+						}
+					} 
+					
 				}
 			}
 

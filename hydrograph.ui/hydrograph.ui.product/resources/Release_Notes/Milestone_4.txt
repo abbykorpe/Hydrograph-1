@@ -34,6 +34,14 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 23.#1124 [Rushikesh Pawale] Fixed issue to Close Input/Output Subjob component properties window
 24.#1121 [Rushikesh Pawale] Fixed issue of Input Hive Component while saving imported job.
 25.#673 [Kalyan Rajpoot] Select Column option in Menu Bar and Cool Bar Can be Disabled for Unformatted View
+26.#1128 [Kanchan Kauthale] Execution Status is not Being Tracked When Job Ran in Local Debug Mode
+27.#1125 [Kanchan Kauthale] Execution Tracking (Subjob) : Record Count is Not Displayed On Subjob Out Port
+28.#1115 [Kanchan Kauthale] Execution Tracking: Execution Status is not Being Tracked When Job Window is Re-opened While Job Execution is Going On
+29.#1114 [Kanchan Kauthale] Execution Tracking: Job is not Getting Killed if Execution Tracking Preference is Unchecked 
+30.#1106 [Rahul Mahajan]    Console Log: "Job Run Successfully" Displayed on Console Though Job is Failed
+31.#1100 [Kanchan Kauthale] XML Import: Execution Status is Not Being Displayed on Sub Job and Input components Upon Importing the Job
+32.#1087 [Kanchan Kauthale] Execution Tracking: Execution Status is not Getting Tracked When Jobs Ran on Multiple Server
+33.#1089 [Vibhor Tyagi]     Execution Tracking: Kill Job Issues
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
