@@ -46,7 +46,7 @@ import org.slf4j.Logger;
 /**
  * The class InputHiveTextFileUiConverter
  * 
- * @author eyy445
+ * @author Bitwise
  * 
  */
 
@@ -147,9 +147,9 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 			}
 			
 		}
+        }
 		hivePartitionKeyValues.setKey(partitionKeys);
 		hivePartitionKeyValues.setKeyValues(inputHivePartitionColumn);
-			}
 		return hivePartitionKeyValues;
 		
 	}

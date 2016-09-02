@@ -32,6 +32,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 21.#1083 [Ashika Holkar] Hive components fail if partition key is not specified 
 22.#1129 [Ashika Holkar] Cumulate Component: Job is Getting Failed When User Selects Max/Min Operations in Operation Class
 23.#1124 [Rushikesh Pawale] Fixed issue to Close Input/Output Subjob component properties window
+24.#1121 [Rushikesh Pawale] Fixed issue of Input Hive Component while saving imported job.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

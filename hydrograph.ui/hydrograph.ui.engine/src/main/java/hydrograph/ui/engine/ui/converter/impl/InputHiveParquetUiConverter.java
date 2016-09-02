@@ -46,7 +46,7 @@ import org.slf4j.Logger;
 /**
  * The class InputHiveParquetUiConverter
  * 
- * @author eyy445
+ * @author Bitwise
  * 
  */
 
@@ -98,49 +98,45 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 	 */
 	private InputHivePartitionKeyValues getPartitionKeys() {
 		LOGGER.debug("Fetching Input Hive Parquet-Partition-Keys-Properties for -{}", componentName);
-		
-		hivePartitionKeyValues= new InputHivePartitionKeyValues();
-		partitionKeys=new ArrayList<>();
-		
+
+		hivePartitionKeyValues = new InputHivePartitionKeyValues();
+		partitionKeys = new ArrayList<>();
+
 		parquetHive = (ParquetHiveFile) typeBaseComponent;
 		HivePartitionFieldsType typeHivePartitionFields = parquetHive.getPartitionKeys();
 		if (typeHivePartitionFields != null) {
-			if(typeHivePartitionFields.getField()!=null){
-			PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
-		      partitionKeys.add(partitionFieldBasicType.getName());
-			
-		      if(partitionFieldBasicType.getField()!=null)
-			{
-				getKey(partitionFieldBasicType);
-			}
+			if (typeHivePartitionFields.getField() != null) {
+				PartitionFieldBasicType partitionFieldBasicType = typeHivePartitionFields.getField();
+				partitionKeys.add(partitionFieldBasicType.getName());
+
+				if (partitionFieldBasicType.getField() != null) {
+					getKey(partitionFieldBasicType);
+				}
 			}
 		}
-		
+
 		List<InputHivePartitionColumn> inputHivePartitionColumn = new ArrayList<InputHivePartitionColumn>();
 
-		HivePartitionFilterType hivePartitionFilterType=parquetHive.getPartitionFilter();
-		
-     if(hivePartitionFilterType!=null){
-		List<PartitionColumn> partitionColumn=hivePartitionFilterType.getPartitionColumn();
+		HivePartitionFilterType hivePartitionFilterType = parquetHive.getPartitionFilter();
 
-		if(partitionColumn!=null)
-		{
-			for(PartitionColumn pc:partitionColumn)
-			{
-				InputHivePartitionColumn inputHivePartitionColumn3 = new InputHivePartitionColumn();
-				inputHivePartitionColumn3.setName(pc.getName());
-				inputHivePartitionColumn3.setValue(pc.getValue());
-			if(pc.getPartitionColumn()!=null)
-			{	
-				addFilterKey(pc,inputHivePartitionColumn3);
+		if (hivePartitionFilterType != null) {
+			List<PartitionColumn> partitionColumn = hivePartitionFilterType.getPartitionColumn();
+
+			if (partitionColumn != null) {
+				for (PartitionColumn pc : partitionColumn) {
+					InputHivePartitionColumn inputHivePartitionColumn3 = new InputHivePartitionColumn();
+					inputHivePartitionColumn3.setName(pc.getName());
+					inputHivePartitionColumn3.setValue(pc.getValue());
+					if (pc.getPartitionColumn() != null) {
+						addFilterKey(pc, inputHivePartitionColumn3);
+					}
+					inputHivePartitionColumn.add(inputHivePartitionColumn3);
+				}
+
 			}
-				inputHivePartitionColumn.add(inputHivePartitionColumn3);
-			}
-			
 		}
 		hivePartitionKeyValues.setKey(partitionKeys);
 		hivePartitionKeyValues.setKeyValues(inputHivePartitionColumn);
-		}
 		return hivePartitionKeyValues;
 		
 	}

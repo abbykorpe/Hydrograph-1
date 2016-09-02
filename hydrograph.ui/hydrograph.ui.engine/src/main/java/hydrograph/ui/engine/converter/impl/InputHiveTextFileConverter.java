@@ -35,10 +35,8 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -51,7 +49,7 @@ import org.slf4j.Logger;
 public class InputHiveTextFileConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveTextFileConverter.class);
-	Iterator itr;
+	Iterator<String> fieldIterator;
 	HiveTextFile hiveTextfile;
 
 	public InputHiveTextFileConverter(Component component) {
@@ -93,12 +91,14 @@ public class InputHiveTextFileConverter extends InputConverter {
 	{
 		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
 			InputHivePartitionKeyValues property =(InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
+			if(property.getKeyValues()!=null){
 				if(!property.getKeyValues().isEmpty()){
 				List<InputHivePartitionColumn> inputHivePartitionColumn=(List<InputHivePartitionColumn>)property.getKeyValues();
 					if(!inputHivePartitionColumn.isEmpty()){
 						hiveTextfile.setPartitionFilter(getPartitionFilter(inputHivePartitionColumn));
 					}
 				}
+			}
 		}
 	}
 	
@@ -179,42 +179,42 @@ public class InputHiveTextFileConverter extends InputConverter {
 	/*
 	 * returns HivePartitionFieldsType
 	 */
-	private HivePartitionFieldsType getPartitionKeys(){
-		
-		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null)
-		{
-			
-			InputHivePartitionKeyValues hivePartitionKeyValues = (
-					InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			if(!hivePartitionKeyValues.getKey().isEmpty()){
-				
-			List<String> fieldValueSet = new ArrayList<String>();
-			fieldValueSet=(List<String>) hivePartitionKeyValues.getKey();
-			
-			HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
-			PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();
-			hivePartitionFieldsType.setField(partitionFieldBasicType);
-	
-			if (fieldValueSet != null){
-				itr = fieldValueSet.iterator(); 
-					if(itr.hasNext()){
-					partitionFieldBasicType.setName((String)itr.next());
+	private HivePartitionFieldsType getPartitionKeys(){		
+		if (properties.get(PropertyNameConstants.PARTITION_KEYS.value()) != null) {
+
+			InputHivePartitionKeyValues hivePartitionKeyValues = (InputHivePartitionKeyValues) properties
+					.get(PropertyNameConstants.PARTITION_KEYS.value());
+			if (hivePartitionKeyValues.getKey() != null) {
+				if (!hivePartitionKeyValues.getKey().isEmpty()) {
+
+					List<String> fieldValueSet = new ArrayList<String>();
+					fieldValueSet = (List<String>) hivePartitionKeyValues.getKey();
+
+					HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
+					PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();
+					hivePartitionFieldsType.setField(partitionFieldBasicType);
+
+					if (fieldValueSet != null) {
+						fieldIterator = fieldValueSet.iterator();
+						if (fieldIterator.hasNext()) {
+							partitionFieldBasicType.setName((String) fieldIterator.next());
+						}
+						if (fieldIterator.hasNext()) {
+							addPartitionKey(partitionFieldBasicType);
+						}
 					}
-					if(itr.hasNext()){
-					addPartitionKey(partitionFieldBasicType);
-					}
+					return hivePartitionFieldsType;
+				}
 			}
-			return hivePartitionFieldsType;
-		 }
 		}
 		return null;
 	}
 	
 	private void addPartitionKey(PartitionFieldBasicType partfbasic){
 		PartitionFieldBasicType field = new PartitionFieldBasicType();
-		field.setName((String)itr.next());
+		field.setName((String)fieldIterator.next());
 		partfbasic.setField(field);
-			if(itr.hasNext()){
+			if(fieldIterator.hasNext()){
 			addPartitionKey(field);
 			}
 	}
