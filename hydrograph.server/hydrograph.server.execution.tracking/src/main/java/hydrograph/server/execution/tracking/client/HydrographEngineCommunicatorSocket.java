@@ -12,6 +12,9 @@
  ******************************************************************************/
 package hydrograph.server.execution.tracking.client;
 
+import hydrograph.engine.commandline.utilities.HydrographService;
+import hydrograph.server.execution.tracking.server.status.datastructures.ExecutionStatus;
+
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,10 +28,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
-
-import hydrograph.engine.commandline.utilities.HydrographService;
-import hydrograph.server.execution.tracking.server.status.datastructures.ExecutionStatus;
-import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
 
 /**
  * 
@@ -77,8 +76,6 @@ public class HydrographEngineCommunicatorSocket {
 				
 		};
 		timer.schedule(task, 0l, 600);
-
-		logger.info("Job killed Done");
 	}
 
 	@OnClose
