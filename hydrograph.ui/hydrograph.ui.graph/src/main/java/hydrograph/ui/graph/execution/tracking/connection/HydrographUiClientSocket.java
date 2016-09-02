@@ -244,7 +244,6 @@ public class HydrographUiClientSocket {
 			private void populateSubjobRecordCount(
 					Map<String, SubjobDetails> componentNameAndLink, Component component,StringBuilder subjobPrefix) {
 				Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
-				Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
 				if(outputSubjobComponent!=null){
 					for(Link link:outputSubjobComponent.getTargetConnections()){
 						Component componentPrevToOutput = link.getSource();
@@ -262,24 +261,6 @@ public class HydrographUiClientSocket {
 							}
 						}
 					}
-				}else if(inputSubjobComponent!=null){
-					for(Link link:inputSubjobComponent.getSourceConnections()){
-						Component componentNextToInput = link.getTarget();
-						if(Constants.SUBJOB_COMPONENT.equals(componentNextToInput.getComponentName())){
-							subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
-							populateSubjobRecordCount(componentNameAndLink, componentNextToInput,subjobPrefix);
-						}else{
-							String portNumber = link.getSourceTerminal().replace(Messages.OUT_PORT_TYPE, Messages.IN_PORT_TYPE);
-
-							SubjobDetails subjobDetails = new SubjobDetails(link.getTargetTerminal(), portNumber);
-							if(CLONE_COMPONENT_TYPE.equalsIgnoreCase(componentNextToInput.getComponentName())){
-								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents()+"."+portNumber, subjobDetails);
-							}else{
-								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
-							}
-						}
-					}
-
 				}
 			}
 
