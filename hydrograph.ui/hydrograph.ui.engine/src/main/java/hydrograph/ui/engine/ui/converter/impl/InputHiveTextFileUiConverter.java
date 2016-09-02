@@ -46,7 +46,7 @@ import org.slf4j.Logger;
 /**
  * The class InputHiveTextFileUiConverter
  * 
- * @author eyy445
+ * @author Bitwise
  * 
  */
 

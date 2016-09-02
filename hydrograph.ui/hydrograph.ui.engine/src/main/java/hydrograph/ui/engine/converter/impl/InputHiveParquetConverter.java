@@ -48,7 +48,7 @@ import org.slf4j.Logger;
 public class InputHiveParquetConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputHiveParquetConverter.class);
-	Iterator itr;
+	Iterator<String> fieldIterator;
 	ParquetHiveFile parquetHive;
 
 	public InputHiveParquetConverter(Component component) {
@@ -167,38 +167,39 @@ public class InputHiveParquetConverter extends InputConverter {
 	 * returns HivePartitionFieldsType
 	 */
 	private HivePartitionFieldsType getPartitionKeys() {
-		if(properties.get(PropertyNameConstants.PARTITION_KEYS.value())!=null){
-			InputHivePartitionKeyValues property = (InputHivePartitionKeyValues) properties.get(PropertyNameConstants.PARTITION_KEYS.value());
-			if(property.getKey()!=null){
-			if(!property.getKey().isEmpty()){
-			List<String> fieldValueSet = new ArrayList<String>();
-			fieldValueSet=(List<String>) property.getKey();
-			
-			HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
-			PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();
-			hivePartitionFieldsType.setField(partitionFieldBasicType);
-	
-			if (fieldValueSet != null){
-				itr = fieldValueSet.iterator(); 
-				if(itr.hasNext()){
-					partitionFieldBasicType.setName((String)itr.next());
-				}
-				if(itr.hasNext()){
-					addPartitionKey(partitionFieldBasicType);
+		if (properties.get(PropertyNameConstants.PARTITION_KEYS.value()) != null) {
+			InputHivePartitionKeyValues property = (InputHivePartitionKeyValues) properties
+					.get(PropertyNameConstants.PARTITION_KEYS.value());
+			if (property.getKey() != null) {
+				if (!property.getKey().isEmpty()) {
+					List<String> fieldValueSet = new ArrayList<String>();
+					fieldValueSet = (List<String>) property.getKey();
+
+					HivePartitionFieldsType hivePartitionFieldsType = new HivePartitionFieldsType();
+					PartitionFieldBasicType partitionFieldBasicType = new PartitionFieldBasicType();
+					hivePartitionFieldsType.setField(partitionFieldBasicType);
+
+					if (fieldValueSet != null) {
+						fieldIterator = fieldValueSet.iterator();
+						if (fieldIterator.hasNext()) {
+							partitionFieldBasicType.setName((String) fieldIterator.next());
+						}
+						if (fieldIterator.hasNext()) {
+							addPartitionKey(partitionFieldBasicType);
+						}
+					}
+					return hivePartitionFieldsType;
 				}
 			}
-			return hivePartitionFieldsType;
-		 }
-		 }
 		}
 		return null;
 	}
 	
 	private void addPartitionKey(PartitionFieldBasicType partfbasic){
 		PartitionFieldBasicType field = new PartitionFieldBasicType();
-		field.setName((String)itr.next());
+		field.setName((String)fieldIterator.next());
 		partfbasic.setField(field);
-		if(itr.hasNext()){
+		if(fieldIterator.hasNext()){
 			addPartitionKey(field);
 		}
 	}
