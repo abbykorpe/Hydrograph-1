@@ -1436,7 +1436,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				else
 				{
 					parameterTextBox.setText("");
-					outputFieldTextBox.setText("");
 					expressionTextBox.setText("");
 					parameterTextBox.setEnabled(false);
 					mappingSheetRow.setWholeOperationParameter(false);

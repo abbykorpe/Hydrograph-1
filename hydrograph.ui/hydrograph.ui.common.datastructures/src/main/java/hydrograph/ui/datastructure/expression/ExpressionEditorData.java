@@ -1,7 +1,6 @@
 package hydrograph.ui.datastructure.expression;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
-import hydrograph.ui.datastructure.property.FilterProperties;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -48,9 +47,7 @@ public class ExpressionEditorData implements IDataStructure {
    public boolean equals(Object obj) {
 	   if (this == obj)
 			return true;
-	   if (obj == null)
-			return false;
-	   if (getClass() != obj.getClass())
+	   if (obj == null||getClass() != obj.getClass())
 			return false;
 	   ExpressionEditorData other=(ExpressionEditorData)obj;
 	   if (expression == null) {
@@ -93,6 +90,7 @@ public class ExpressionEditorData implements IDataStructure {
 	@Override
 	public ExpressionEditorData clone() {
 		String clonedExpression=this.expression;
+		boolean isValid=this.isValid;
 		List<String> clonedFieldsUsedInExpression = new ArrayList<>();
 		clonedFieldsUsedInExpression.addAll(this.fieldsUsedInExpression);
 		Map<String,Class<?>> clonedSelectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
@@ -101,7 +99,10 @@ public class ExpressionEditorData implements IDataStructure {
 		{
 			clonedSelectedInputFieldsForExpression.put(entry.getKey(), entry.getValue());
 		}	
-		return new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression);
+		ExpressionEditorData expressionEditorData=
+				new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression);
+		expressionEditorData.setValid(isValid);
+		return expressionEditorData;
 	}
 
 }

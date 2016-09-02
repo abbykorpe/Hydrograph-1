@@ -20,7 +20,6 @@ import hydrograph.engine.jaxb.commontypes.TypeInputField;
 import hydrograph.engine.jaxb.commontypes.TypeMapField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
@@ -328,7 +327,7 @@ public abstract class TransformUiConverter extends UiConverter {
 			typeOperationInputFields=typeTransformExpression.getInputFields();
 		}	
 		List<FilterProperties> inputfieldList = new LinkedList<>();
-		if(item != null && typeOperationInputFields!=null){
+		if(typeOperationInputFields!=null){
 			for (TypeInputField inputField : typeOperationInputFields.getField()) {
 				FilterProperties filterProperties=new FilterProperties();
 				filterProperties.setPropertyname(inputField.getName());
