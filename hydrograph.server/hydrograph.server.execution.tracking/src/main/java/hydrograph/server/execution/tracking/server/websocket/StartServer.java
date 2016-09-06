@@ -13,14 +13,11 @@
 
 package hydrograph.server.execution.tracking.server.websocket;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import hydrograph.server.execution.tracking.server.TrackingSocketServer;
+import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
 
 import org.apache.log4j.Logger;
 import org.glassfish.tyrus.server.Server;
-
-import hydrograph.server.execution.tracking.server.TrackingSocketServer;
-import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
 
 /**
  * The Class StartServer.
@@ -39,7 +36,7 @@ public class StartServer {
 		
 		logger.info("*************Starting Server **************");
 		StartServer startServer = new StartServer();
-		ExecutionTrackingUtils.INSTANCE.getFilePath();
+		ExecutionTrackingUtils.INSTANCE.loadPropertyFile();
 		startServer.runServer(args.length != 0 ? args[0] : ExecutionTrackingUtils.INSTANCE.getPortNo());
 		logger.info("*************Server Stopped**************");
 		

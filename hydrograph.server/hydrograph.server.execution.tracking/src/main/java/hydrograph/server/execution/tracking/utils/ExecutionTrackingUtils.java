@@ -13,21 +13,20 @@
 
 package hydrograph.server.execution.tracking.utils;
 
+import hydrograph.server.execution.tracking.server.websocket.StartServer;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-
-import hydrograph.server.execution.tracking.server.websocket.StartServer;
-import jodd.util.StringUtil;
 
 /**
  * The Class ExecutionTrackingUtils.
@@ -61,6 +60,8 @@ public class ExecutionTrackingUtils {
 	
 	private long statusFrequency = defaultStatusFrequency;
 	
+	private String PROPERTY_FILE = "socket-server.properties";
+	
 	/** The Constant INSTANCE. */
 	public static final ExecutionTrackingUtils INSTANCE = new ExecutionTrackingUtils();
 
@@ -70,58 +71,6 @@ public class ExecutionTrackingUtils {
 	private ExecutionTrackingUtils() {
 	}
 
-	/**
-	 * Gets the file path.
-	 *
-	 * @return the file path
-	 */
-	public String getFilePath() {
-		int index = 0;
-		File file = null;
-		String dirPath = "";
-		try {
-			Path path = Paths.get(StartServer.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-			String filePath = path.toString();
-			if (OSValidator.isWindows()) {
-				index = filePath.lastIndexOf("\\");
-				dirPath = filePath.substring(0, index) + "\\socket-server.properties";
-			} else if (OSValidator.isMac()) {
-				index = filePath.lastIndexOf("/");
-				dirPath = filePath.substring(0, index) + "/socket-server.properties";
-			} else if (OSValidator.isUnix()) {
-				index = filePath.lastIndexOf("/");
-				dirPath = filePath.substring(0, index) + "/socket-server.properties";
-			}
-
-			logger.debug("Server config file Path - " + filePath);
-			Properties properties = new Properties();
-			file = new File(dirPath);
-			if (file.exists()) {
-				FileInputStream fileInputStream = new FileInputStream(file);
-				properties.load(fileInputStream);
-			}
-			if (!properties.isEmpty()) {
-				portNo = properties.getProperty(PORT_NO);
-				host = properties.getProperty(LOCAL_URL);
-				route = properties.getProperty(TRACKING_ROUTE);
-				try {
-				statusFrequency = Long.parseLong(properties.getProperty(STATUS_FREQUENCY));
-				} catch (NumberFormatException e) {
-					statusFrequency = defaultStatusFrequency;
-					logger.error("Error while parsing the " + STATUS_FREQUENCY + " property. Setting it to the default value.");
-				}
-			}
-
-			return properties.getProperty("path");
-		} catch (FileNotFoundException exception) {
-			logger.error("File not found:" + exception);
-		} catch (IOException exception) {
-			logger.error("IOException: " + exception);
-		} catch (URISyntaxException exception) {
-			logger.error("URISyntaxException: " + exception);
-		}
-		return "";
-	}
 
 	/**
 	 * Gets the tracking url.
@@ -130,7 +79,8 @@ public class ExecutionTrackingUtils {
 	 */
 	public String getTrackingUrl(String trackingClientSocketPort) {
 		if(!StringUtils.isNotBlank(trackingClientSocketPort)){
-			getFilePath();
+			//getFilePath();
+			loadPropertyFile();
 		}else{
 			portNo=trackingClientSocketPort;
 		}
@@ -154,5 +104,60 @@ public class ExecutionTrackingUtils {
 		return statusFrequency;
 	}
 	
+	public void loadPropertyFile(){
+		try {
+			Properties properties = new Properties();
+			FileInputStream stream = getExternalPropertyFilePath();
+			if(stream != null){
+				properties.load(stream);
+			}else {
+				InputStream inputStream = this.getClass().getResourceAsStream(getInternalPropertyFilePath());
+				properties.load(inputStream);
+			}
+			
+			if (!properties.isEmpty()) {
+				portNo = properties.getProperty(PORT_NO);
+				host = properties.getProperty(LOCAL_URL);
+				route = properties.getProperty(TRACKING_ROUTE);
+				String frequency = properties.getProperty(STATUS_FREQUENCY);
+				statusFrequency = Long.parseLong(frequency);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	private String getInternalPropertyFilePath(){
+		 	String filePath = "/"+PROPERTY_FILE;
+		return filePath;
+	}
+	
+	private FileInputStream getExternalPropertyFilePath(){
+		int index = 0;
+		String dirPath = "";
+		FileInputStream fileInputStream = null;
+		try {
+			Path path = Paths.get(StartServer.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+			String filePath = path.toString();
+			if (OSValidator.isWindows()) {
+				index = filePath.lastIndexOf("\\");
+				dirPath = filePath.substring(0, index) + "\\"+PROPERTY_FILE;
+			} else if (OSValidator.isMac()) {
+				index = filePath.lastIndexOf("/");
+				dirPath = filePath.substring(0, index) + "/"+PROPERTY_FILE;
+			} else if (OSValidator.isUnix()) {
+				index = filePath.lastIndexOf("/");
+				dirPath = filePath.substring(0, index) + "/"+PROPERTY_FILE;
+			}
+			File file = new File(dirPath);
+			if (file.exists()) {
+				fileInputStream = new FileInputStream(file);
+			}
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException exception) {
+			logger.debug("File not found:" + exception);
+		}
+		return fileInputStream;
+	}
 }
