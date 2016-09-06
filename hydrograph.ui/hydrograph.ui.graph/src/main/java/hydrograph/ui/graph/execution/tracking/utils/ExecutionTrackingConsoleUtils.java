@@ -108,12 +108,8 @@ public class ExecutionTrackingConsoleUtils {
 	 */
 	private boolean isConsoleAlreadyOpen(String localJobId){
 		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(localJobId.replace(".", "_"));
-		if(console==null){
+		if(console==null || console.getShell()==null){
 			return false;
-		}else{
-			if(console.getShell()==null){
-				return false;
-			}
 		}
 		return true;
 	}

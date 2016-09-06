@@ -359,7 +359,7 @@ public class HydrographUiClientSocket {
 	} 
 
 	/**
-	 * Send message.
+	 * Send message to remote server.
 	 *
 	 * @param str the str
 	 */

@@ -83,7 +83,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
 					webSocketLocalHost);
 		if(hydrographServerConnection.getSelection() == 1){
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		} 
@@ -107,7 +107,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 			JobManager.INSTANCE.enableRunJob(true);
 		}
 		refreshProject(gefCanvas);
-		closeWebSocketConnection(session);		
+		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 	}
 
 	/**
@@ -220,30 +220,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 
 	@Override
 	public void killJob(Job jobToKill) {
-		//JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);	
 		JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
-	}
-	/**
-	 * Close Websocket connection Connection
-	 * @param session
-	 */
-	private void closeWebSocketConnection(Session session){
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e1) {
-		}
-
-		if (session != null  && session.isOpen()) {
-			try {
-				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Session Closed");
-				session.close(closeReason);
-				logger.info("Session closed");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-
 	}
 
 }

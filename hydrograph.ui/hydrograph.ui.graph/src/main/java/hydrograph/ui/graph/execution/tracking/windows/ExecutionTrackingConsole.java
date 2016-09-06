@@ -205,38 +205,8 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	 */
 	public void setStatus(ExecutionStatus executionStatus, StringBuilder stringBuilder){
 		
-		//StringBuilder stringBuilder = new StringBuilder();
-		/*if(executionStatus==null){
-			return;
-		}*/
-		
 		statusLineManager.setMessage("");
 		
-		/*stringBuilder.append("Job ID " + executionStatus.getJobId() + "\n");
-		return new Point(801, 443);
-	}
-	
-	public void setStatus(ExecutionStatus executionStatus){
-		
-		StringBuilder stringBuilder = new StringBuilder();
-		if(executionStatus==null){
-			return;
-		}
-		
-		statusLineManager.setMessage("");
-		stringBuilder.append("Job ID " + executionStatus.getJobId() + "\n");
-		stringBuilder.append("Job Type: " + executionStatus.getType() + "\n");
-		stringBuilder.append("Job Status: " + executionStatus.getJobStatus() + "\n");
-		
-		for(ComponentStatus componentStatus : executionStatus.getComponentStatus()){
-			stringBuilder.append("-------------------------------------\n");
-			stringBuilder.append("Component ID: " + componentStatus.getComponentId() + "\n");
-			stringBuilder.append("Component Name: " + componentStatus.getComponentName() + "\n");
-			stringBuilder.append("Current Status: " + componentStatus.getCurrentStatus() + "\n");
-			stringBuilder.append("Processed record count: " + componentStatus.getProcessedRecordCount().toString() + "\n");
-		}*/
-		
-		//stringBuilder.append("============================================================================\n");		
 		if(styledText!=null && !styledText.isDisposed()){
 			styledText.append(stringBuilder.toString());
 			styledText.setTopIndex(styledText.getLineCount() - 1);

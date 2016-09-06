@@ -32,8 +32,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.websocket.CloseReason;
-import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.Session;
 
 import org.eclipse.core.resources.IProject;
@@ -65,7 +63,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
 					TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl(job));
 		if(hydrographServerConnection.getSelection() == 1){
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		} 
@@ -84,11 +82,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 
@@ -107,11 +105,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
-				closeWebSocketConnection(session);
+				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
 			if (JobStatus.KILLED.equals(job.getJobStatus())) {
-				closeWebSocketConnection(session);
+				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
 		}
@@ -131,11 +129,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
-				closeWebSocketConnection(session);
+				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
 			if (JobStatus.KILLED.equals(job.getJobStatus())) {
-				closeWebSocketConnection(session);
+				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
 		}
@@ -144,11 +142,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, true, true);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		
@@ -181,11 +179,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 
@@ -194,36 +192,33 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 
 		// ----------------------------- Execute job
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getExecututeJobCommand(xmlPath,"", paramFile,userFunctionsPropertyFile, job);
 		job.setJobStatus(JobStatus.SSHEXEC);
-		isRunning=true;
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
-			isRunning=false;
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-			isRunning=false;
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 
 		job.setJobStatus(JobStatus.SUCCESS);
 		releaseResources(job, gefCanvas, joblogger);
-		closeWebSocketConnection(session);
+		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 	}
 
 	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
@@ -270,7 +265,6 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				if (line.contains(Messages.CURRENT_JOB_ID)) {
 					try {
 						Long.parseLong((line.split("#")[1]).trim());
-						//job.setRemoteJobProcessID((line.split("#")[1]).trim());
 						((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
 
 					} catch (NumberFormatException e) {
@@ -332,62 +326,11 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	public void launchJobInDebug(String xmlPath, String debugXmlPath,
 			 String paramFile,String userFunctionsPropertyFile, Job job,
 			DefaultGEFCanvas gefCanvas,List<String> externalSchemaFiles,List<String> subJobList) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void killJob(Job jobToKill) {
-		/*if (isRunning) {
-			Session session = null;
-			HydrographServerConnection hydrographServerConnection = new HydrographServerConnection();
-			try {
-				String remoteUrl = TrackingDisplayUtils.INSTANCE.getWebSocketRemoteUrl();
-				session = hydrographServerConnection.connectToKillJob(jobToKill.getUniqueJobId(), remoteUrl);
-				Thread.sleep(8000);
-			} catch (Throwable e1) {
-				((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
-				MessageBox messageBox = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-						SWT.ICON_WARNING | SWT.YES | SWT.NO);
-				messageBox.setText(Messages.KILL_JOB_MESSAGEBOX_TITLE);
-				messageBox.setMessage(Messages.KILL_JOB_MESSAGE);
-				if (messageBox.open() == SWT.YES) {
-					jobToKill.setJobStatus(JobStatus.KILLED);
-				}
-			} finally {
-				if (session != null) {
-					try {
-						session.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		} else {
-			JobScpAndProcessUtility.INSTANCE.killJobProcess(jobToKill);
-		}*/
 		JobScpAndProcessUtility.INSTANCE.killRemoteJobProcess(jobToKill);
-	}
-
-	/**
-	 * 
-	 * @param session
-	 */
-	private void closeWebSocketConnection(Session session){
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e1) {
-		}
-		if (session != null  && session.isOpen()) {
-			try {
-				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
-				session.close(closeReason);
-				logger.info("Session closed");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-
 	}
 }

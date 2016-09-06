@@ -34,6 +34,10 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Properties;
 
+import javax.websocket.CloseReason;
+import javax.websocket.Session;
+import javax.websocket.CloseReason.CloseCodes;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.EditPart;
@@ -54,39 +58,36 @@ public class TrackingDisplayUtils {
 	private static Logger logger = LogFactory.INSTANCE.getLogger(TrackingDisplayUtils.class);
 	
 	/** The Constant PORT_NUMBER. */
-	public static final String PORT_NUMBER = "EXECUTION_TRACKING_PORT";
+	private static final String PORT_NUMBER = "EXECUTION_TRACKING_PORT";
 	
 	/** The Constant LOCAL_URL. */
-	public static final String LOCAL_URL = "WEBSOCKET_LOCAL_HOST";
+	private static final String LOCAL_URL = "WEBSOCKET_LOCAL_HOST";
 	
 	/** The Constant WEBSOCKET_ROUTE. */
-	public static final String WEBSOCKET_ROUTE = "WEBSOCKET_UI_ROUTE";
+	private static final String WEBSOCKET_ROUTE = "WEBSOCKET_UI_ROUTE";
 
 	/** The Constant EXECUTION_TRACK_START. */
 	private static final String EXECUTION_TRACK_START = " hydrograph.execution.tracking.server.websocket.StartServer";
 	
 	/** The Constant EXECUTION_TRACK_SERVICE. */
-	public static final String EXECUTION_TRACK_SERVICE = "EXECUTION_TRACK_SERVICE_JAR";
+	private static final String EXECUTION_TRACK_SERVICE = "EXECUTION_TRACK_SERVICE_JAR";
 	
 	/** The Constant EXECUTION_TRACKING_PORT. */
-	public static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
+	private static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
 	
 	/** The Constant PROPERY_FILE_PATH. */
-	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
+	private static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
 	
 	/** The Constant EXECUTION_TRACKING_PROPERY_FILE. */
-	public static final String EXECUTION_TRACKING_PROPERY_FILE = "/service/socket-server.properties";
-
-	/** The remote host. */
-	private String remoteHost;
+	private static final String EXECUTION_TRACKING_PROPERY_FILE = "/service/socket-server.properties";
 
 	/** The local host. */
 	private String localHost;
 
 	/** The websocket route. */
 	private String websocketRoute;
-	public static final String WEB_SOCKET = "ws://";
-	public static final String COLON = ":";
+	private static final String WEB_SOCKET = "ws://";
+	private static final String COLON = ":";
 	/**
 	 * Instantiates a new tracking display utils.
 	 */
@@ -351,6 +352,28 @@ public class TrackingDisplayUtils {
 			}
 		}
 		return installationPath;
+
+	}
+	
+	/**
+	 * 
+	 * @param session
+	 */
+	public void closeWebSocketConnection(Session session){
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+		}
+		if (session != null  && session.isOpen()) {
+			try {
+				CloseReason closeReason = new CloseReason(CloseCodes.NORMAL_CLOSURE,"Closed");
+				session.close(closeReason);
+				logger.info("Session closed");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
 
 	}
 }

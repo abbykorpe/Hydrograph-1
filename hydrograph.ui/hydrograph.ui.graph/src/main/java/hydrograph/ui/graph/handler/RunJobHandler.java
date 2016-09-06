@@ -13,15 +13,15 @@
 
 package hydrograph.ui.graph.handler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.ui.PlatformUI;
 

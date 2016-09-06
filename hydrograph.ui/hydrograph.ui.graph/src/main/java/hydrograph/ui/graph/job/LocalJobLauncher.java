@@ -62,7 +62,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 			session = hydrographServerConnection.connectToServer(job, job.getUniqueJobId(), 
 					webSocketLocalHost);
 		if(hydrographServerConnection.getSelection() == 1){
-			closeWebSocketConnection(session);
+			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		} 
@@ -89,7 +89,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		
 		refreshProject(gefCanvas);
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
-		closeWebSocketConnection(session);
+		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 	}
 
 	private void executeCommand(Job job, IProject project, String gradleCommand, DefaultGEFCanvas gefCanvas) {
@@ -178,27 +178,5 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	@Override
 	public void killJob(Job jobToKill) {
 		JobScpAndProcessUtility.INSTANCE.killLocalJobProcess(jobToKill);
-	}
-	
-	/**
-	 * Close Websocket connection Connection
-	 * @param session
-	 */
-	private void closeWebSocketConnection(final Session session ){
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e1) {
-		}
-
-		if (session != null && session.isOpen()) {
-			try {
-				CloseReason closeReason = new CloseReason(
-						CloseCodes.NORMAL_CLOSURE, "Session Closed");
-				session.close(closeReason);
-				logger.info("Session closed");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }
