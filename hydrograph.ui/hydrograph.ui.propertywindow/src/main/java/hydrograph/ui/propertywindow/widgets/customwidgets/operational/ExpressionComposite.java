@@ -313,6 +313,11 @@ public class ExpressionComposite extends Composite {
 		return componentsOutputSchema;
 	}
 
+	/**
+	 * Creates data-structure for expression-editor.
+	 * 
+	 * @return
+	 */
 	public ExpressionEditorData createExpressionEditorData() {
 		if (!mappingSheetRow.getInputFields().isEmpty()) {
 			List<String> inputFieldNames = new ArrayList<>();

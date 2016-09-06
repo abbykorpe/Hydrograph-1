@@ -56,6 +56,9 @@ public class ExpressionEditorStyledText extends StyledText{
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.eclipse.swt.custom.StyledText#insert(java.lang.String)
+     */
     @Override
     public void insert(String string) {
     	super.insert(string);

@@ -135,6 +135,13 @@ public class ExpressionEditorUtil {
 		return result;
 	}
 	
+	/**
+	 * This method validates the given expression and updates the expression-editor's datasturcture accordingly
+	 * 
+	 * @param expressionText
+	 * @param inputFields
+	 * @param expressionEditorData
+	 */
 	public static void validateExpression(String expressionText,Map<String, Class<?>> inputFields,ExpressionEditorData expressionEditorData ) {
 		DiagnosticCollector<JavaFileObject> diagnosticCollector = null;
 		try {

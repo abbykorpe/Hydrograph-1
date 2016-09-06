@@ -131,6 +131,14 @@ public class TransformMappingFeatureUtility {
 		}
 		return activeMappingSheetRow;
 	}
+	/**
+	 * This method is used to set cursor position at last row when any field is 
+	 * deleted from table-viewer
+	 * 
+	 * @param tableViewer
+	 * @param indexes
+	 * @param gridList
+	 */
 	public  void setCursorOnDeleteRow(TableViewer tableViewer,int[] indexes,List<?> gridList){
         Table table = tableViewer.getTable();
         //highlight after deletion
