@@ -1782,15 +1782,15 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 			private void removeInputFieldsFromExpressionEditiorData(MappingSheetRow mappingSheetRow,
 					String[] itemsToBeDeleted) {
-				boolean isInputFiledRemovedFromExpression = false;
+				boolean isInputFieldRemovedFromExpression = false;
 				ExpressionEditorData expressionEditorData = mappingSheetRow.getExpressionEditorData();
 				for (String item : itemsToBeDeleted) {
 					if (expressionEditorData.getfieldsUsedInExpression().remove(item)
 							| expressionEditorData.getSelectedInputFieldsForExpression().remove(item) != null) {
-						isInputFiledRemovedFromExpression = true;
+						isInputFieldRemovedFromExpression = true;
 					}
 				}
-				if (isInputFiledRemovedFromExpression) {
+				if (isInputFieldRemovedFromExpression) {
 					ExpressionEditorUtil.validateExpression(expressionEditorData.getExpression(),
 							expressionEditorData.getSelectedInputFieldsForExpression(), expressionEditorData);
 				}
