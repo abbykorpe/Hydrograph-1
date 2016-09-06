@@ -126,12 +126,12 @@ public class ExecutionTrackingUtils {
 				statusFrequency = Long.parseLong(frequency);
 			}
 		} catch (IOException exception) {
-			logger.debug("IOException" + exception);
+			logger.error("Failed to load properties file ", exception);
 		}
 	}
 	
 	private String getInternalPropertyFilePath(){
-		 	String filePath = "/"+PROPERTY_FILE;
+		 	String filePath = "/" + PROPERTY_FILE;
 		return filePath;
 	}
 	
@@ -144,22 +144,22 @@ public class ExecutionTrackingUtils {
 			String filePath = path.toString();
 			if (OSValidator.isWindows()) {
 				index = filePath.lastIndexOf("\\");
-				dirPath = filePath.substring(0, index) + "\\"+PROPERTY_FILE;
+				dirPath = filePath.substring(0, index) + "\\" + PROPERTY_FILE;
 			} else if (OSValidator.isMac()) {
 				index = filePath.lastIndexOf("/");
-				dirPath = filePath.substring(0, index) + "/"+PROPERTY_FILE;
+				dirPath = filePath.substring(0, index) + "/" + PROPERTY_FILE;
 			} else if (OSValidator.isUnix()) {
 				index = filePath.lastIndexOf("/");
-				dirPath = filePath.substring(0, index) + "/"+PROPERTY_FILE;
+				dirPath = filePath.substring(0, index) + "/" + PROPERTY_FILE;
 			}
 			File file = new File(dirPath);
 			if (file.exists()) {
 				fileInputStream = new FileInputStream(file);
 			}
 		} catch (URISyntaxException exception) {
-			logger.debug("URISyntaxException" + exception);
+			logger.error("File Path is not exist" + dirPath, exception);
 		} catch (FileNotFoundException exception) {
-			logger.debug("File not found:" + exception);
+			logger.error("File not found", exception);
 		}
 		return fileInputStream;
 	}
