@@ -4,6 +4,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
@@ -43,10 +44,13 @@ public class ExpressionComposite extends Composite {
     private Button switchToClassButton;
     private Button switchToExpressionButton;
     private Label lblNewLabel_1;
+	private MappingSheetRow mappingSheetRow;
+	private Component component;
 	public ExpressionComposite(Composite parent, int style,final MappingSheetRow mappingSheetRow, final Component component) {
 		super(parent, style);
 		setLayout(new GridLayout(3, false));
-		
+		this.mappingSheetRow=mappingSheetRow;
+		this.component=component;
 		Composite selectColumnComposite = new Composite(this, SWT.NONE);
 		selectColumnComposite.setLayout(new GridLayout(1, false));
 		GridData gd_selectColumnComposite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -154,22 +158,14 @@ public class ExpressionComposite extends Composite {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (!mappingSheetRow.getInputFields().isEmpty()) {
-					List<String> inputFieldNames = new ArrayList<>();
-					for (FilterProperties filterProperties : mappingSheetRow.getInputFields()) {
-						inputFieldNames.add(filterProperties.getPropertyname());
-					}
-					mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
-					mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression()
-							.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(inputFieldNames, getInputSchema(component)));
-				}
-				else
-				mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
+				createExpressionEditorData();
 
 				LaunchExpressionEditor launchExpressionEditor = new LaunchExpressionEditor();
 				launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getExpressionEditorData());
 				expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());
 			}
+
+			
 		});
 		
 		Label lblParameter = new Label(composite, SWT.NONE);
@@ -317,4 +313,24 @@ public class ExpressionComposite extends Composite {
 		return componentsOutputSchema;
 	}
 
+	/**
+	 * Creates data-structure for expression-editor.
+	 * 
+	 * @return
+	 */
+	public ExpressionEditorData createExpressionEditorData() {
+		if (!mappingSheetRow.getInputFields().isEmpty()) {
+			List<String> inputFieldNames = new ArrayList<>();
+			for (FilterProperties filterProperties : mappingSheetRow.getInputFields()) {
+				inputFieldNames.add(filterProperties.getPropertyname());
+			}
+			mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
+			mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression()
+					.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(inputFieldNames, getInputSchema(component)));
+		}
+		else
+		mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
+		
+		return mappingSheetRow.getExpressionEditorData();
+	}
 }

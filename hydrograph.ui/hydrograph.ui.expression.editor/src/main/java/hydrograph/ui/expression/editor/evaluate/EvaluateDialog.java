@@ -154,7 +154,7 @@ public class EvaluateDialog extends Dialog {
 				if(evaluateExpression.isValidExpression()){
 					 try {
 						Object[] returnObject=evalDialogFieldTable.validateDataTypeValues();
-						String object=evaluateExpression.invokeEvaluateFunctionFromJar(ValidateExpressionToolButton.getExpressionText(expressionEditor.getText()),(String[]) returnObject[0],(Object[])returnObject[1]);
+						String object=evaluateExpression.invokeEvaluateFunctionFromJar(expressionEditor.getText(),(String[]) returnObject[0],(Object[])returnObject[1]);
 						if(object!=null){
 							showOutput(object);
 					}

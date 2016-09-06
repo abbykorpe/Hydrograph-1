@@ -557,7 +557,7 @@ public class SourceViewer extends ProjectionViewer {
 	       buff.append(getImports());
 	       buff.append("public class " + VIEWER_CLASS_NAME + currentId + " {\n\n\n");
 	       buff.append("\tpublic " + "String" +"myFunction(){\n");
-		   buff.append("\t\treturn \n"); 
+		   buff.append(ExpressionEditorStyledText.RETURN_STATEMENT); 
 	       int length = buff.toString().length();
 	       String defaultValue = " ";
 //	       buff.append(defaultValue + "\n\n\n\t\n");

@@ -90,7 +90,7 @@ public class LaunchExpressionEditor {
 	}
 
 	private void saveProperty(ExpressionEditorData expressionEditorData, String expressionText) {
-		expressionEditorData.setExpression(ValidateExpressionToolButton.getExpressionText(expressionText));
+		expressionEditorData.setExpression(expressionText);
 		expressionEditorData.getfieldsUsedInExpression().clear();
 		expressionEditorData.getfieldsUsedInExpression().addAll(new ArrayList<>(expressionEditorData.getSelectedInputFieldsForExpression().keySet()));
 	}

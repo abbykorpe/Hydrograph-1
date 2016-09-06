@@ -13,16 +13,26 @@
 
 package hydrograph.ui.expression.editor.util;
 
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
+
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceAdapter;
@@ -123,5 +133,33 @@ public class ExpressionEditorUtil {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * This method validates the given expression and updates the expression-editor's datasturcture accordingly
+	 * 
+	 * @param expressionText
+	 * @param inputFields
+	 * @param expressionEditorData
+	 */
+	public static void validateExpression(String expressionText,Map<String, Class<?>> inputFields,ExpressionEditorData expressionEditorData ) {
+		DiagnosticCollector<JavaFileObject> diagnosticCollector = null;
+		try {
+			diagnosticCollector = ValidateExpressionToolButton
+					.compileExpresion(expressionText,inputFields);
+			if (diagnosticCollector != null && !diagnosticCollector.getDiagnostics().isEmpty()) {
+				for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
+					if (StringUtils.equals(diagnostic.getKind().name(), Diagnostic.Kind.ERROR.name())) {
+						expressionEditorData.setValid(false);
+						return;
+					}
+				}
+			}
+		} catch (JavaModelException | InvocationTargetException | ClassNotFoundException | MalformedURLException
+				| IllegalAccessException | IllegalArgumentException e) {
+			expressionEditorData.setValid(false);
+			return;
+		}
+		expressionEditorData.setValid(true);
 	}
 }

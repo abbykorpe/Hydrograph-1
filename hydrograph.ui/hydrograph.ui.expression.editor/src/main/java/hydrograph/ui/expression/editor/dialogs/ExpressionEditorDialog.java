@@ -23,6 +23,7 @@ import hydrograph.ui.expression.editor.composites.DescriptionComposite;
 import hydrograph.ui.expression.editor.composites.ExpressionEditorComposite;
 import hydrograph.ui.expression.editor.composites.FunctionsComposite;
 import hydrograph.ui.expression.editor.repo.ClassRepo;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -166,7 +167,8 @@ public class ExpressionEditorDialog extends Dialog {
 
 	public boolean close() {
 		if (preCloseActivity()) {
-			validateExpressionBeforeDispose();
+			ExpressionEditorUtil.validateExpression(expressionEditorTextBox.getText(),(Map<String, Class<?>>) expressionEditorTextBox
+					.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP),expressionEditorData);
 			ClassRepo.INSTANCE.flusRepo();
 			return super.close();
 		}
@@ -205,29 +207,6 @@ public class ExpressionEditorDialog extends Dialog {
 
 	public SashForm getContainerSashForm() {
 		return containerSashForm;
-	}
-
-	private void validateExpressionBeforeDispose() {
-		DiagnosticCollector<JavaFileObject> diagnosticCollector = null;
-		try {
-			diagnosticCollector = ValidateExpressionToolButton
-					.compileExpresion(expressionEditorTextBox.getText(),
-							(Map<String, Class<?>>) expressionEditorTextBox
-									.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP));
-			if (diagnosticCollector != null && !diagnosticCollector.getDiagnostics().isEmpty()) {
-				for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
-					if (StringUtils.equals(diagnostic.getKind().name(), Diagnostic.Kind.ERROR.name())) {
-						expressionEditorData.setValid(false);
-						return;
-					}
-				}
-			}
-		} catch (JavaModelException | InvocationTargetException | ClassNotFoundException | MalformedURLException
-				| IllegalAccessException | IllegalArgumentException e) {
-			expressionEditorData.setValid(false);
-			return;
-		}
-		expressionEditorData.setValid(true);
 	}
 
 }

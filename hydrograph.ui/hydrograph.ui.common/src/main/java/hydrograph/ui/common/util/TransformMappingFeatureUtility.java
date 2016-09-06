@@ -131,4 +131,43 @@ public class TransformMappingFeatureUtility {
 		}
 		return activeMappingSheetRow;
 	}
+	/**
+	 * This method is used to set cursor position at last row when any field is 
+	 * deleted from table-viewer
+	 * 
+	 * @param tableViewer
+	 * @param indexes
+	 * @param gridList
+	 */
+	public  void setCursorOnDeleteRow(TableViewer tableViewer,int[] indexes,List<?> gridList){
+        Table table = tableViewer.getTable();
+        //highlight after deletion
+        if(indexes.length == 1 && gridList.size() > 0){//only one item is deleted
+              if(gridList.size() == 1){//list contains only one element
+                    table.select(0);// select the first element
+                    tableViewer.editElement(tableViewer.getElementAt(0), 0);
+              }
+              else if(gridList.size() == indexes[0]){//deleted last item 
+                    table.select(gridList.size() - 1);//select the last element which now at the end of the list
+                    tableViewer.editElement(tableViewer.getElementAt(gridList.size() - 1), 0);
+              }
+              else if(gridList.size() > indexes[0]){//deleted element from middle of the list
+                    table.select( indexes[0] == 0 ? 0 : (indexes[0] - 1) );//select the element from at the previous location
+                    tableViewer.editElement(tableViewer.getElementAt(indexes[0] == 0 ? 0 : (indexes[0] - 1)), 0);
+              }
+        }
+        else if(indexes.length >= 2){//multiple items are selected for deletion
+              if(indexes[0] == 0){//delete from 0 to ...
+                    if(gridList.size() >= 1){//list contains only one element
+                          table.select(0);//select the remaining element
+                          tableViewer.editElement(tableViewer.getElementAt(0), 0);
+                    }
+              }
+              else{//delete started from element other than 0th element
+                    table.select((indexes[0])-1);//select element before the start of selection   
+                    tableViewer.editElement(tableViewer.getElementAt((indexes[0])-1), 0);
+              }
+        }
+    }
+
 }
