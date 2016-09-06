@@ -103,6 +103,10 @@ public class ExecutionTrackingUtils {
 		return statusFrequency;
 	}
 	
+	/**
+	 * This function will load property file to initialize the parameters values.
+	 *
+	 */
 	public void loadPropertyFile(){
 		try {
 			Properties properties = new Properties();
@@ -121,8 +125,8 @@ public class ExecutionTrackingUtils {
 				String frequency = properties.getProperty(STATUS_FREQUENCY);
 				statusFrequency = Long.parseLong(frequency);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			logger.debug("IOException" + exception);
 		}
 	}
 	
@@ -152,8 +156,8 @@ public class ExecutionTrackingUtils {
 			if (file.exists()) {
 				fileInputStream = new FileInputStream(file);
 			}
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+		} catch (URISyntaxException exception) {
+			logger.debug("URISyntaxException" + exception);
 		} catch (FileNotFoundException exception) {
 			logger.debug("File not found:" + exception);
 		}
