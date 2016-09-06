@@ -58,7 +58,7 @@ dependencies {
 
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     
-    compile(group: 'hydrograph', name: 'hydrograph.server.execution.tracking.server', version: '1.0.6')
+    compile(group: 'hydrograph', name: 'hydrograph.server.execution.tracking.server', version: '1.0.7')
 }
 
 test {
@@ -263,7 +263,7 @@ task executeRemoteJob() {
 			unixParameterFileList=unixParameterFileList.substring(0, unixParameterFileList.length() - 1);
 		}
 
-		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId + " -isexecutiontracking " + isExecutionTracking  + " -udfpath " + udfpath
+		def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId+" -udfpath " + udfpath + " -isexecutiontracking " + isExecutionTracking  +" -trackingclientsocketport " + executionTrackingPort
 		println "Executing command: "+command
 		
 		sshToRemoteServer(host,username,password,command)
@@ -337,7 +337,7 @@ task executeDebugRemoteJob() {
         def basePath = basePath;
         def isExecutionTracking = isExecutionTracking;
         
-        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath + "-udfpath" + udfpath  + " -isexecutiontracking " + isExecutionTracking
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath + "-udfpath" + udfpath  + " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
         println "Executing command: "+command
 		sshToRemoteServer(host,username,password,command)
     }

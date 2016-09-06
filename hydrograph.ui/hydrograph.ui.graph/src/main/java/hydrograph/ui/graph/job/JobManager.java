@@ -79,47 +79,104 @@ import org.slf4j.Logger;
  */
 public class JobManager {
 
+	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(JobManager.class);
+	
+	/** The running jobs map. */
 	private Map<String, Job> runningJobsMap;
+	
+	/** The instance. */
 	public static JobManager INSTANCE = new JobManager();
+	
+	/** The local mode. */
 	private boolean localMode;
+	
+	/** The Constant DEBUG_FILE_EXTENTION. */
 	private static final String DEBUG_FILE_EXTENTION="_debug.xml";
+	
+	/** The Constant PROJECT_METADATA_FILE. */
 	public static final String PROJECT_METADATA_FILE="\\project.metadata";
+	
+	/** The data viewer map. */
 	private Map<String,DebugDataViewer> dataViewerMap;		
+	
+	/** The previously executed jobs. */
 	private Map<String,Job> previouslyExecutedJobs;
+	
+	/** The active canvas. */
 	private String activeCanvas;
+	
+	/** The execution tracking consoles. */
 	private Map<String,ExecutionTrackingConsole> executionTrackingConsoles;
 	
 	
+	/**
+	 * Checks if is local mode.
+	 *
+	 * @return true, if is local mode
+	 */
 	public boolean isLocalMode() {
 		return localMode;
 	}
 
+	/**
+	 * Gets the previously executed jobs.
+	 *
+	 * @return the previously executed jobs
+	 */
 	public Map<String, Job> getPreviouslyExecutedJobs() {
 		return previouslyExecutedJobs;
 	}
 	
+	/**
+	 * Sets the local mode.
+	 *
+	 * @param localMode the new local mode
+	 */
 	public void setLocalMode(boolean localMode) {
 		this.localMode = localMode;
 	}
 	
+	/**
+	 * Gets the data viewer map.
+	 *
+	 * @return the data viewer map
+	 */
 	public Map<String, DebugDataViewer> getDataViewerMap() {
 		return dataViewerMap;
 	}
 
+	/**
+	 * Sets the data viewer map.
+	 *
+	 * @param dataViewerMap2 the data viewer map2
+	 */
 	public void setDataViewerMap(Map<String, DebugDataViewer> dataViewerMap2) {
 		this.dataViewerMap = dataViewerMap2;
 	}
 	
+	/**
+	 * Gets the execution tracking consoles.
+	 *
+	 * @return the execution tracking consoles
+	 */
 	public Map<String, ExecutionTrackingConsole> getExecutionTrackingConsoles() {
 		return executionTrackingConsoles;
 	}
 
+	/**
+	 * Sets the execution tracking consoles.
+	 *
+	 * @param executionTrackingConsoles the execution tracking consoles
+	 */
 	public void setExecutionTrackingConsoles(
 			Map<String, ExecutionTrackingConsole> executionTrackingConsoles) {
 		this.executionTrackingConsoles = executionTrackingConsoles;
 	}
 	
+	/**
+	 * Instantiates a new job manager.
+	 */
 	private JobManager() {
 		previouslyExecutedJobs = new LinkedHashMap<>();
 		runningJobsMap = new LinkedHashMap<>();
@@ -127,9 +184,8 @@ public class JobManager {
 	}
 	
 	/**
-	 * 
-	 * Returns active editor as {@link DefaultGEFCanvas}
-	 * 
+	 * Returns active editor as {@link DefaultGEFCanvas}.
+	 *
 	 * @return {@link DefaultGEFCanvas}
 	 */
 	private DefaultGEFCanvas getComponentCanvas() {		
@@ -142,11 +198,9 @@ public class JobManager {
 	}
 
 	/**
-	 * 
-	 * Register job with Job Manager
-	 * 
-	 * @param job
-	 *            - {@link Job}
+	 * Register job with Job Manager.
+	 *
+	 * @param job            - {@link Job}
 	 */
 	void addJob(Job job) {
 		
@@ -159,9 +213,9 @@ public class JobManager {
 
 
 	/**
-	 * Deregister job with Job Manager
-	 * 
-	 * @param canvasId
+	 * Deregister job with Job Manager.
+	 *
+	 * @param canvasId the canvas id
 	 */
 	void removeJob(String canvasId) {
 		runningJobsMap.remove(canvasId);
@@ -170,9 +224,9 @@ public class JobManager {
 
 	/**
 	 * Toggles state of Run and Stop button if enabled is true Run button will enable and stop button will disable if
-	 * enable is false Run button will disbale and stop will enable
-	 * 
-	 * @param enabled
+	 * enable is false Run button will disbale and stop will enable.
+	 *
+	 * @param enabled the enabled
 	 */
 	public void enableRunJob(boolean enabled) {
 		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
@@ -180,10 +234,11 @@ public class JobManager {
 	}
 	
 	/**
-	 * execute job
-	 * 
-	 * @param job
-	 *            - {@link Job} to execute
+	 * execute job.
+	 *
+	 * @param job            - {@link Job} to execute
+	 * @param uniqueJobId the unique job id
+	 * @param runConfigDialog the run config dialog
 	 */
 	public void executeJob(final Job job, String uniqueJobId,RunConfigDialog runConfigDialog) {
 		List<String> externalSchemaFiles;
@@ -247,6 +302,11 @@ public class JobManager {
 		launchJob(job, gefCanvas, parameterGrid, xmlPath,getUserFunctionsPropertertyFile() ,externalSchemaFiles,subJobList);
 	}
 
+	/**
+	 * Gets the user functions properterty file.
+	 *
+	 * @return the user functions properterty file
+	 */
 	protected String getUserFunctionsPropertertyFile() {
 		String userFunctionsPropertyFileRelativePath="";
 		IProject project=getCurrentProjectFromActiveGraph();
@@ -262,6 +322,11 @@ public class JobManager {
 		return userFunctionsPropertyFileRelativePath;
 	}
 
+	/**
+	 * Gets the current project from active graph.
+	 *
+	 * @return the current project from active graph
+	 */
 	private static IProject getCurrentProjectFromActiveGraph() {
 		IEditorInput editorInput=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
 		if(editorInput instanceof IFileEditorInput){
@@ -271,10 +336,11 @@ public class JobManager {
 	}
 	
 	/**
-	 * This method responsible to run the job in debug mode
-	 * @param job
-	 * @param isRemote
-	 * @param userName
+	 * This method responsible to run the job in debug mode.
+	 *
+	 * @param job the job
+	 * @param isRemote the is remote
+	 * @param userName the user name
 	 */
 	public void executeJobInDebug(final Job job, boolean isRemote, String userName) {
 	
@@ -328,18 +394,19 @@ public class JobManager {
 	
 	/**
 	 * Check for remote or local run and start the job in new thread.  
-	 * 
-	 * @param job
-	 * @param gefCanvas
-	 * @param parameterGrid
-	 * @param xmlPath
-	 * @param externalSchemaFiles
-	 * @param subJobList
+	 *
+	 * @param job the job
+	 * @param gefCanvas the gef canvas
+	 * @param parameterGrid the parameter grid
+	 * @param xmlPath the xml path
+	 * @param userFunctionsPropertertyFile the user functions properterty file
+	 * @param externalSchemaFiles the external schema files
+	 * @param subJobList the sub job list
 	 */
 	private void launchJob(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath,final String userFunctionsPropertertyFile,final List<String> externalSchemaFiles,final List<String> subJobList) {
 		if (job.isRemoteMode()) {
-			job.setExecutionTrack(isExecutionTracking());
+			job.setExecutionTrack(isExecutionTrackingOn());
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -353,7 +420,7 @@ public class JobManager {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					job.setExecutionTrack(isExecutionTracking());
+					job.setExecutionTrack(isExecutionTrackingOn());
 					AbstractJobLauncher jobLauncher = new LocalJobLauncher();
 					jobLauncher.launchJob(xmlPath, parameterGrid.getParameterFilesForExecution(), userFunctionsPropertertyFile ,job, gefCanvas,externalSchemaFiles,subJobList);
 				}
@@ -362,16 +429,17 @@ public class JobManager {
 	}
 
 	/**
-	 * 
 	 * Check for remote or local mode and start debug run in new thread.
 	 *   
-	 * @param job
-	 * @param gefCanvas
-	 * @param parameterGrid
-	 * @param xmlPath
-	 * @param debugXmlPath
-	 * @param externalSchemaFiles
-	 * @param subJobList
+	 *
+	 * @param job the job
+	 * @param gefCanvas the gef canvas
+	 * @param parameterGrid the parameter grid
+	 * @param xmlPath the xml path
+	 * @param debugXmlPath the debug xml path
+	 * @param userFunctionsPropertertyFile the user functions properterty file
+	 * @param externalSchemaFiles the external schema files
+	 * @param subJobList the sub job list
 	 */
 	private void launchJobWithDebugParameter(final Job job, final DefaultGEFCanvas gefCanvas, final MultiParameterFileDialog parameterGrid,
 			final String xmlPath, final String debugXmlPath,final String userFunctionsPropertertyFile,final List<String> externalSchemaFiles,final List<String> subJobList) {
@@ -398,6 +466,12 @@ public class JobManager {
 
 	}
 	
+	/**
+	 * Gets the cluster password.
+	 *
+	 * @param runConfigDialog the run config dialog
+	 * @return the cluster password
+	 */
 	private String getClusterPassword(RunConfigDialog runConfigDialog) {
 		String clusterPassword = runConfigDialog.getClusterPassword() != null ? runConfigDialog.getClusterPassword()
 				: "";
@@ -406,7 +480,8 @@ public class JobManager {
 
 	/**
 	 * Get xml file path from active editor.
-	 * @return
+	 *
+	 * @return the job xml path
 	 */
 	private String getJobXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -416,6 +491,11 @@ public class JobManager {
 		return xmlPath;
 	}
 
+	/**
+	 * Gets the job debug xml path.
+	 *
+	 * @return the job debug xml path
+	 */
 	private String getJobDebugXMLPath() {
 		IEditorPart iEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
@@ -424,6 +504,11 @@ public class JobManager {
 		return debugXmlPath;
 	}
 	
+	/**
+	 * Gets the parameter file dialog.
+	 *
+	 * @return the parameter file dialog
+	 */
 	private MultiParameterFileDialog getParameterFileDialog(){
 		
 	    String activeProjectLocation=MultiParameterFileUIUtils.getActiveProjectLocation();
@@ -463,10 +548,22 @@ public class JobManager {
 		return parameterFileDialog;
 	}
 	
+	/**
+	 * Update parameter file list with job specific file.
+	 *
+	 * @param parameterFileList the parameter file list
+	 * @param activeProjectLocation the active project location
+	 */
 	private void updateParameterFileListWithJobSpecificFile(List<ParameterFile> parameterFileList, String activeProjectLocation) {
 		parameterFileList.add(new ParameterFile(getComponentCanvas().getJobName(), ParamterFileTypes.JOB_SPECIFIC));
 	}
 
+	/**
+	 * Save job before execute.
+	 *
+	 * @param gefCanvas the gef canvas
+	 * @return true, if successful
+	 */
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {
 		if (gefCanvas.getParameterFile() == null || CanvasUtils.INSTANCE.isDirtyEditor()) {
 			try {
@@ -488,10 +585,10 @@ public class JobManager {
 	}
 
 	/**
-	 * Kill the job for given jobId
-	 * 
-	 * @param jobId
-	 * @param gefCanvas 
+	 * Kill the job for given jobId.
+	 *
+	 * @param jobId the job id
+	 * @param gefCanvas the gef canvas
 	 */
 	public void killJob(String jobId, DefaultGEFCanvas gefCanvas) {
 		Job jobToKill = runningJobsMap.get(jobId);
@@ -505,10 +602,9 @@ public class JobManager {
 	}
 	
 	/**
-	 * Kill the job for given jobId
-	 * 
-	 * @param jobId
-	 * @param gefCanvas 
+	 * Kill the job for given jobId.
+	 *
+	 * @param jobId the job id
 	 */
 	public void killJob(String jobId) {	
 		Job jobToKill = runningJobsMap.get(jobId);
@@ -526,15 +622,33 @@ public class JobManager {
 		}
 	}
 
+	/**
+	 * Inits the job logger.
+	 *
+	 * @param gefCanvas the gef canvas
+	 * @return the job logger
+	 */
 	public JobLogger initJobLogger(DefaultGEFCanvas gefCanvas) {
 		final JobLogger joblogger = new JobLogger(gefCanvas.getActiveProject(), gefCanvas.getJobName());
 		return joblogger;
 	}
 
+	/**
+	 * Gets the running job.
+	 *
+	 * @param consoleName the console name
+	 * @return the running job
+	 */
 	public Job getRunningJob(String consoleName) {
 		return runningJobsMap.get(consoleName);
 	}
 
+	/**
+	 * Kill remote process.
+	 *
+	 * @param job the job
+	 * @param gefCanvas the gef canvas
+	 */
 	private void killRemoteProcess(Job job, DefaultGEFCanvas gefCanvas) {
 
 		String gradleCommand = getKillJobCommand(job);
@@ -572,6 +686,13 @@ public class JobManager {
 		}
 	}
 
+	/**
+	 * Release resources.
+	 *
+	 * @param job the job
+	 * @param gefCanvas the gef canvas
+	 * @param joblogger the joblogger
+	 */
 	public void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
@@ -579,16 +700,14 @@ public class JobManager {
 			JobManager.INSTANCE.enableRunJob(true);
 		}
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
-
-		//joblogger.logJobEndInfo();
 		joblogger.close();
 		JobManager.INSTANCE.removeJob(job.getLocalJobID());
 	}
 
 	/**
 	 * Enables locked resources..like job canvas
-	 * 
-	 * @param {@link DefaultGEFCanvas}
+	 *
+	 * @param gefCanvas the gef canvas
 	 */
 	protected void enableLockedResources(final DefaultGEFCanvas gefCanvas) {
 		Display.getDefault().syncExec(new Runnable() {
@@ -600,10 +719,9 @@ public class JobManager {
 	}
 
 	/**
-	 * 
-	 * Refresh project directory corresponding to given {@link DefaultGEFCanvas}
-	 * 
-	 * @param gefCanvas
+	 * Refresh project directory corresponding to given {@link DefaultGEFCanvas}.
+	 *
+	 * @param gefCanvas the gef canvas
 	 */
 	protected void refreshProject(DefaultGEFCanvas gefCanvas) {
 		IEditorPart iEditorPart = ((IEditorPart) gefCanvas);
@@ -616,6 +734,13 @@ public class JobManager {
 		}
 	}
 
+	/**
+	 * Log kill process logs asyncronously.
+	 *
+	 * @param process the process
+	 * @param job the job
+	 * @param gefCanvas the gef canvas
+	 */
 	private void logKillProcessLogsAsyncronously(final Process process, final Job job, final DefaultGEFCanvas gefCanvas) {
 		final JobLogger joblogger = initJobLogger(gefCanvas);
 		new Thread(new Runnable() {
@@ -650,8 +775,9 @@ public class JobManager {
 	
 	/**
 	 * Create Gradle command to kill the job.
-	 * @param job
-	 * @return
+	 *
+	 * @param job the job
+	 * @return the kill job command
 	 */
 	private String getKillJobCommand(Job job) {
 		return GradleCommandConstants.GCMD_KILL_REMOTE_JOB + GradleCommandConstants.GPARAM_HOST + job.getHost()
@@ -660,43 +786,47 @@ public class JobManager {
 	}
 
 	/**
-	 * isJobRunning() returns true of job is executing for given console
-	 * 
-	 * @param consoleName
-	 * @return
+	 * isJobRunning() returns true of job is executing for given console.
+	 *
+	 * @param consoleName the console name
+	 * @return true, if is job running
 	 */
 	public boolean isJobRunning(String consoleName) {
 		return runningJobsMap.containsKey(consoleName);
 	}
 
 	/**
-	 * 
-	 * Set active console id
-	 * 
-	 * @param activeCanvas
+	 * Set active console id.
+	 *
+	 * @param activeCanvas the new active canvas id
 	 */
 	public void setActiveCanvasId(String activeCanvas) {
 		this.activeCanvas = activeCanvas;
 	}
 
 	/**
-	 * 
-	 * Returns active canvas id
-	 * 
+	 * Returns active canvas id.
+	 *
 	 * @return - String (active canvas id)
 	 */
 	public String getActiveCanvas() {
 		return activeCanvas;
 	}
 
+	/**
+	 * Gets the running jobs map.
+	 *
+	 * @return the running jobs map
+	 */
 	public Map<String, Job> getRunningJobsMap() {
 		return runningJobsMap;
 	}
 
 	/**
-	 * Check if the file path is absolute else return workspace file path
-	 * @param jobFilePath
-	 * @return
+	 * Check if the file path is absolute else return workspace file path.
+	 *
+	 * @param jobFilePath the job file path
+	 * @return the absolute path from file
 	 */
 	public static String getAbsolutePathFromFile(IPath jobFilePath) {
 		if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath).exists()) {
@@ -707,11 +837,17 @@ public class JobManager {
 		return "";
 	}
 	
-	public boolean isExecutionTracking(){
-		boolean isExeTracking = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
+	
+	/**
+	 * Checks if is execution tracking on.
+	 *
+	 * @return true, if is execution tracking on
+	 */
+	public boolean isExecutionTrackingOn(){
+		boolean isExeTrackingOn = Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID, 
 				ExecutionPreferenceConstants.EXECUTION_TRACKING, true, null);
 		
-		return isExeTracking;
+		return isExeTrackingOn;
 	}
 
 }

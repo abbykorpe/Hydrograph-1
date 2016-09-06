@@ -221,15 +221,6 @@ public class Link extends Model {
 		reconnect();
 	}
 
-	private void applySchemaToTarget(Component sourceComponent, Component targetComponent) {
-
-		if (targetComponent.getComponentName().equalsIgnoreCase("CloneComponent")
-				|| targetComponent.getComponentName().equalsIgnoreCase("UnionallComponent")) {
-			targetComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE,
-					sourceComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
-		}
-	}
-	
 	private void updateSubjobVersionForAnyUpdation(Link link) {
 		link.getSource().getParent().updateSubjobVersion();
 	}

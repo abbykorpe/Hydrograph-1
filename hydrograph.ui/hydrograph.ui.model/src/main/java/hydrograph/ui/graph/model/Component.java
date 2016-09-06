@@ -51,11 +51,15 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * @author Bitwise
  */
 public abstract class Component extends Model {
+	
+	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE
 			.getLogger(Component.class);
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 2587870876576884352L;
 	
+	/** The Unique component name. */
 	private final String UniqueComponentName = "Component" + Math.random() * 10000;
 	
 	/**
@@ -64,20 +68,45 @@ public abstract class Component extends Model {
 	 * @author Bitwise
 	 */
 	public static enum Props {
+		
+		/** The name prop. */
 		NAME_PROP("name"), 
+		
+		/** The location prop. */
 		LOCATION_PROP("Location"), 
+		
+		/** The size prop. */
 		SIZE_PROP("Size"), 
+		
+		/** The inputs. */
 		INPUTS("inputs"), 
+		
+		/** The outputs. */
 		OUTPUTS("outputs"), 
+		
+		/** The validity status. */
 		VALIDITY_STATUS("validityStatus"),
+		
+		/** The execution status. */
 		EXECUTION_STATUS("executionStatus");
 
+		/** The value. */
 		private String value;
 
+		/**
+		 * Instantiates a new props.
+		 *
+		 * @param value the value
+		 */
 		private Props(String value) {
 			this.value = value;
 		}
 
+		/**
+		 * Gets the value.
+		 *
+		 * @return the value
+		 */
 		public String getValue() {
 			return this.value;
 		}
@@ -100,57 +129,119 @@ public abstract class Component extends Model {
 	 * @author Bitwise
 	 */
 	public static enum ValidityStatus {
-		WARN, ERROR, VALID;
+		
+		/** The warn. */
+		WARN, 
+ /** The error. */
+ ERROR, 
+ /** The valid. */
+ VALID;
 	}
 
+	/** The location. */
 	private final Point location;
+	
+	/** The size. */
 	private final Dimension size;
+	
+	/** The properties. */
 	private Map<String, Object> properties;
+	
+	/** The parent. */
 	private Container parent;
+	
+	/** The validity status. */
 	private String validityStatus;
 
+	/** The cloned hash map. */
 	private Map<String, Object> clonedHashMap;
 	
+	/** The cloned array list. */
 	private ArrayList<JoinConfigProperty>  clonedArrayList;
+	
+	/** The input links hash. */
 	private final Hashtable<String, ArrayList<Link>> inputLinksHash;
+	
+	/** The output links hash. */
 	private final Hashtable<String, ArrayList<Link>> outputLinksHash;
+	
+	/** The input links. */
 	private ArrayList<Link> inputLinks = new ArrayList<Link>();
+	
+	/** The output links. */
 	private ArrayList<Link> outputLinks = new ArrayList<Link>();
+	
+	/** The inputport terminals. */
 	private  List<String> inputportTerminals;
+	
+	/** The output port terminals. */
 	private  List<String> outputPortTerminals;
+	
+	/** The new instance. */
 	private boolean newInstance;
+	
+	/** The type. */
 	private String type;
+	
+	/** The prefix. */
 	private String prefix;
+	
+	/** The category. */
 	private String category;
+	
+	/** The ports. */
 	private Map<String, Port> ports;
+	
+	/** The component name. */
 	private String componentName;
+	
+	/** The port details. */
 	private List<PortDetails> portDetails;
 
+	/** The left port count. */
 	private int leftPortCount;
+	
+	/** The right port count. */
 	private int rightPortCount;
+	
+	/** The bottom port count. */
 	private int bottomPortCount;
 
+	/** The change in ports cnt dynamically. */
 	private boolean changeInPortsCntDynamically;
+	
+	/** The change out ports cnt dynamically. */
 	private boolean changeOutPortsCntDynamically;
+	
+	/** The change unused ports cnt dynamically. */
 	private boolean changeUnusedPortsCntDynamically;
 
+	/** The component label. */
 	private ComponentLabel componentLabel;
+	
+	/** The component label margin. */
 	private int componentLabelMargin;
 	 
+	/** The watcher terminals. */
 	private Map<String, Long> watcherTerminals;
 	
+	/** The latest changes in schema. */
 	@XStreamOmitField
 	private boolean latestChangesInSchema=false;
 
+	/** The tooltip information. */
 	@XStreamOmitField
 	private Map<String, PropertyToolTipInformation> tooltipInformation;
 
+	/** The tool tip error messages. */
 	// @XStreamOmitField
 	private Map<String, String> toolTipErrorMessages; // <propertyName,ErrorMessage>
 
+	/** The component edit part. */
 	@XStreamOmitField
 	private Object componentEditPart;
 	
+	/** The status. */
 	@XStreamOmitField
 	private CompStatus status;
 	
@@ -188,9 +279,8 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Returns tooltip error message
-	 * 
+	 * Returns tooltip error message.
+	 *
 	 * @return {@link Map}
 	 */
 	public Map<String, String> getToolTipErrorMessages() {
@@ -198,15 +288,18 @@ public abstract class Component extends Model {
 	}
 	
 	/**
-	 *	
-	 *	Set Tooltip error message 
-	 * 
-	 * @param toolTipErrorMessages
+	 * 	
+	 * 	Set Tooltip error message .
+	 *
+	 * @param toolTipErrorMessages the tool tip error messages
 	 */
 	public void setToolTipErrorMessages(Map<String, String> toolTipErrorMessages) {
 		this.toolTipErrorMessages = toolTipErrorMessages;
 	}
    	
+	/**
+	 * Inits the port settings.
+	 */
 	private void initPortSettings() {
 
 		List<PortSpecification> portSpecification = XMLConfigUtil.INSTANCE.getComponent(componentName)
@@ -237,6 +330,12 @@ public abstract class Component extends Model {
 		
 	}
 
+	/**
+	 * Gets the number of ports for alignment.
+	 *
+	 * @param pAlignEnum the align enum
+	 * @return the number of ports for alignment
+	 */
 	private int getNumberOfPortsForAlignment(PortAlignmentEnum pAlignEnum) {
 		if(pAlignEnum.equals(PortAlignmentEnum.LEFT)){
 			return leftPortCount;
@@ -248,6 +347,13 @@ public abstract class Component extends Model {
 		return 0;
 	}
 
+	/**
+	 * Sets the port count.
+	 *
+	 * @param pAlign the align
+	 * @param portCount the port count
+	 * @param changePortCount the change port count
+	 */
 	private void setPortCount(PortAlignmentEnum pAlign, int portCount, boolean changePortCount) {
 		if(pAlign.equals(PortAlignmentEnum.LEFT)){
 			leftPortCount = leftPortCount + portCount;
@@ -266,68 +372,63 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Returns list of input ports
-	 * 
-	 * @return
+	 * Returns list of input ports.
+	 *
+	 * @return the inputport terminals
 	 */
 	public List<String> getInputportTerminals() {
 		return inputportTerminals;
 	}
 	
 	/**
-	 * 
-	 * Set input port names
-	 * 
-	 * @param portTerminals
+	 * Set input port names.
+	 *
+	 * @param portTerminals the new inputport terminals
 	 */
 	public void setInputportTerminals(List<String> portTerminals){
 		this.inputportTerminals=portTerminals;
 	}
 
 	/**
-	 * 
-	 * Returns list of output port
-	 * 
-	 * @return
+	 * Returns list of output port.
+	 *
+	 * @return the output port terminals
 	 */
 	public List<String> getOutputPortTerminals() {
 		return outputPortTerminals;
 	}
 	
 	/**
-	 * 
-	 * Set output ports
-	 * 
-	 * @param portTerminals
+	 * Set output ports.
+	 *
+	 * @param portTerminals the new output port terminals
 	 */
 	public void setOutputPortTerminals(List<String> portTerminals) {
 		this.outputPortTerminals=portTerminals;
 	}
 	
 	/**
-	 * 
-	 * Set true when number of input port count changed dynamically
-	 * 
+	 * Set true when number of input port count changed dynamically.
+	 *
+	 * @param changeInPortsCntDynamically the new change in ports cnt dynamically
 	 */
 	public void setChangeInPortsCntDynamically(boolean changeInPortsCntDynamically) {
 		this.changeInPortsCntDynamically = changeInPortsCntDynamically;
 	}
 
 	/**
-	 * 
-	 * Set true when number of output port count changed dynamically
-	 * 
+	 * Set true when number of output port count changed dynamically.
+	 *
+	 * @param changeOutPortsCntDynamically the new change out ports cnt dynamically
 	 */	
 	public void setChangeOutPortsCntDynamically(boolean changeOutPortsCntDynamically) {
 		this.changeOutPortsCntDynamically = changeOutPortsCntDynamically;
 	}
 
 	/**
-	 * 
-	 * Set true when number of unused port count changed
-	 * 
-	 * @param changeUnusedPortsCntDynamically
+	 * Set true when number of unused port count changed.
+	 *
+	 * @param changeUnusedPortsCntDynamically the new change unused ports cnt dynamically
 	 */
 	public void setChangeUnusedPortsCntDynamically(
 			boolean changeUnusedPortsCntDynamically) {
@@ -345,10 +446,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * set number of input ports
-	 * 
-	 * @param inPortCount
+	 * set number of input ports.
+	 *
+	 * @param inPortCount the new in port count
 	 */
 	public void setInPortCount(int inPortCount) {
 		this.leftPortCount = inPortCount;
@@ -356,20 +456,18 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get number of output port
-	 * 
-	 * @return
+	 * Get number of output port.
+	 *
+	 * @return the out port count
 	 */
 	public int getOutPortCount() {
 		return rightPortCount;
 	}
 
 	/**
-	 * 
-	 * Set number of output port
-	 * 
-	 * @param outPortCount
+	 * Set number of output port.
+	 *
+	 * @param outPortCount the new out port count
 	 */
 	public void setOutPortCount(int outPortCount) {
 		this.rightPortCount = outPortCount;
@@ -377,20 +475,18 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get number of unused port
-	 * 
-	 * @return
+	 * Get number of unused port.
+	 *
+	 * @return the unused port count
 	 */
 	public int getUnusedPortCount() {
 		return bottomPortCount;
 	}
 
 	/**
-	 * 
-	 * set number of unused port
-	 * 
-	 * @param unusedPortCount
+	 * set number of unused port.
+	 *
+	 * @param unusedPortCount the new unused port count
 	 */
 	public void setUnusedPortCount(int unusedPortCount) {
 		this.bottomPortCount = unusedPortCount;
@@ -398,28 +494,26 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get port specification list
-	 * 
+	 * Get port specification list.
+	 *
 	 * @return - list of {@link PortDetails}
 	 */
 	public List<PortDetails> getPortDetails() {
 		return portDetails;
 	}
+	
 	/**
-	 * 
-	 * Set ports
-	 * 
-	 * @param ports
+	 * Set ports.
+	 *
+	 * @param ports the ports
 	 */
 	public void setPorts(Map<String, Port> ports) {
 		this.ports = ports;
 	}
 	
 	/**
-	 * 
-	 * returns true when there is change in count of input port
-	 * 
+	 * returns true when there is change in count of input port.
+	 *
 	 * @return boolean
 	 */
 	public boolean isChangeInPortsCntDynamically() {
@@ -427,9 +521,8 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * returns true when there is change in count of output port
-	 * 
+	 * returns true when there is change in count of output port.
+	 *
 	 * @return boolean
 	 */
 	public boolean isChangeOutPortsCntDynamically() {
@@ -437,9 +530,8 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * returns true when there is change in count of unused port
-	 * 
+	 * returns true when there is change in count of unused port.
+	 *
 	 * @return boolean
 	 */
 	public boolean isChangeUnusedPortsCntDynamically() {
@@ -447,11 +539,10 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Add input ports
-	 * 
-	 * @param newPortCount
-	 * @param oldPortCount
+	 * Add input ports.
+	 *
+	 * @param key the key
+	 * @return true, if is allow multiple links for port
 	 */
 	
 	private boolean isAllowMultipleLinksForPort(String key){
@@ -462,6 +553,12 @@ public abstract class Component extends Model {
 		return false;
 	}
 	
+	/**
+	 * Checks if is link mandatory for port.
+	 *
+	 * @param key the key
+	 * @return true, if is link mandatory for port
+	 */
 	private boolean isLinkMandatoryForPort(String key){
 		for(PortDetails portDetailsInfo :this.portDetails){
 			if(portDetailsInfo.getPorts().containsKey(key))
@@ -470,14 +567,30 @@ public abstract class Component extends Model {
 		return false;
 	}
 	
+	/**
+	 * Checks if is latest changes in schema.
+	 *
+	 * @return true, if is latest changes in schema
+	 */
 	public boolean isLatestChangesInSchema() {
 		return latestChangesInSchema;
 	}
 
+	/**
+	 * Sets the latest changes in schema.
+	 *
+	 * @param latestChangesInSchema the new latest changes in schema
+	 */
 	public void setLatestChangesInSchema(boolean latestChangesInSchema) {
 		this.latestChangesInSchema = latestChangesInSchema;
 	}
 
+	/**
+	 * Increment left side ports.
+	 *
+	 * @param newPortCount the new port count
+	 * @param oldPortCount the old port count
+	 */
 	public void incrementLeftSidePorts(int newPortCount, int oldPortCount) {
 
 		for (int i = oldPortCount; i < newPortCount; i++) {
@@ -497,11 +610,10 @@ public abstract class Component extends Model {
 
 	
 	/**
-	 * 
-	 * Add output ports
-	 * 
-	 * @param newPortCount
-	 * @param oldPortCount
+	 * Add output ports.
+	 *
+	 * @param newPortCount the new port count
+	 * @param oldPortCount the old port count
 	 */
 	public void incrementRightSidePorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
@@ -519,11 +631,10 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Add unused ports
-	 * 
-	 * @param newPortCount
-	 * @param oldPortCount
+	 * Add unused ports.
+	 *
+	 * @param newPortCount the new port count
+	 * @param oldPortCount the old port count
 	 */
 	public void incrementBottomSidePorts(int newPortCount, int oldPortCount) {
 		for (int i = oldPortCount; i < newPortCount; i++) {
@@ -541,10 +652,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 *  Change input port count
-	 * 
-	 * @param newPortCount
+	 *  Change input port count.
+	 *
+	 * @param newPortCount the new port count
 	 */
 	public void changeInPortCount(int newPortCount) {
 
@@ -559,10 +669,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Change unused port count
-	 * 
-	 * @param newPortCount
+	 * Change unused port count.
+	 *
+	 * @param newPortCount the new port count
 	 */
 	public void changeUnusedPortCount(int newPortCount) {
 
@@ -577,10 +686,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Change output port count
-	 * 
-	 * @param newPortCount
+	 * Change output port count.
+	 *
+	 * @param newPortCount the new port count
 	 */
 	public void changeOutPortCount(int newPortCount) {
 
@@ -595,9 +703,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get ports
-	 *  
+	 * Get ports.
+	 *
+	 * @return the ports
 	 */
 	public Map<String, Port> getPorts() {
 		return ports;
@@ -615,9 +723,8 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get list of component children
-	 * 
+	 * Get list of component children.
+	 *
 	 * @return list of {@link Model}
 	 */
 	public List<Model> getChildren() {
@@ -629,14 +736,20 @@ public abstract class Component extends Model {
 
 	}
 	
+	/**
+	 * Update connection property.
+	 *
+	 * @param prop the prop
+	 * @param newValue the new value
+	 */
 	private void updateConnectionProperty(String prop, Object newValue) {
 		firePropertyChange(prop, null, newValue);
 	}
 
 	/**
 	 * Connect input.
-	 * 
-	 * @param {@link Link}
+	 *
+	 * @param c the c
 	 */
 	public void connectInput(Link c) {
 		inputLinks.add(c);
@@ -646,9 +759,8 @@ public abstract class Component extends Model {
 
 	/**
 	 * Connect output.
-	 * 
-	 * @param {{@link Link}
-	 * 
+	 *
+	 * @param c the c
 	 */
 	public void connectOutput(Link c) {
 		if (outputLinksHash.get(c.getSourceTerminal()) != null)
@@ -685,25 +797,28 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get source connections
-	 * 
-	 * @return
+	 * Get source connections.
+	 *
+	 * @return the source connections
 	 */
 	public List<Link> getSourceConnections() {
 		return outputLinks;
 	}
 	
 	/**
-	 * 
-	 * Set source connections
-	 * 
-	 * @param links
+	 * Set source connections.
+	 *
+	 * @param links the new source connections
 	 */
 	public void  setSourceConnections(List<Link> links) {
 		 outputLinks=(ArrayList<Link>) links;
 	}
 
+	/**
+	 * Gets the target connections.
+	 *
+	 * @return the target connections
+	 */
 	public List<Link> getTargetConnections() {
 		return inputLinks;
 	}
@@ -771,12 +886,20 @@ public abstract class Component extends Model {
 		return outputPortTerminals.contains(terminal);
 	}
 
+	/**
+	 * Sets the properties.
+	 *
+	 * @param properties the properties
+	 */
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
 	}
 
 	/**
 	 * Return the property value for the given propertyId, or null.
+	 *
+	 * @param propertyId the property id
+	 * @return the property value
 	 */
 	public Object getPropertyValue(Object propertyId) {
 		if (properties.containsKey(propertyId)) {
@@ -787,20 +910,38 @@ public abstract class Component extends Model {
 
 	/**
 	 * Set the property value for the given property id.
+	 *
+	 * @param propertyId the property id
+	 * @param value the value
 	 */
 	public void setPropertyValue(Object propertyId, Object value) {
 		properties.put((String) propertyId, value);
 		// tooltipInformation.get(propertyId).setPropertyValue(value);
 	}
 
+	/**
+	 * Gets the component name.
+	 *
+	 * @return the component name
+	 */
 	public String getComponentName() {
 		return componentName;
 	}
 
+	/**
+	 * Gets the component label.
+	 *
+	 * @return the component label
+	 */
 	public ComponentLabel getComponentLabel() {
 		return componentLabel;
 	}
 
+	/**
+	 * Sets the component label.
+	 *
+	 * @param componentLabel the new component label
+	 */
 	public void setComponentLabel(ComponentLabel componentLabel) {
 		this.componentLabel = componentLabel;
 	}
@@ -820,9 +961,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * reset if x or y of components are negative
-	 * 
-	 * @param newLocation
+	 * reset if x or y of components are negative.
+	 *
+	 * @param newLocation the new location
 	 */
 	private void resetLocation(Point newLocation) {
 		if (newLocation.x < 0) {
@@ -868,19 +1009,18 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * get component label margin
-	 * 
+	 * get component label margin.
+	 *
+	 * @return the component label margin
 	 */
 	public int getComponentLabelMargin() {
 		return componentLabelMargin;
 	}
 
 	/**
-	 * 
-	 * Set component label margin
-	 * 
-	 * @param componentLabelMargin
+	 * Set component label margin.
+	 *
+	 * @param componentLabelMargin the new component label margin
 	 */
 	public void setComponentLabelMargin(int componentLabelMargin) {
 		this.componentLabelMargin = componentLabelMargin;
@@ -888,9 +1028,8 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get parent of the component
-	 * 
+	 * Get parent of the component.
+	 *
 	 * @return {@link Container}
 	 */
 	public Container getParent() {
@@ -898,49 +1037,56 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Set component parent
-	 * 
-	 * @param parent
+	 * Set component parent.
+	 *
+	 * @param parent the new parent
 	 */
 	public void setParent(Container parent) {
 		this.parent = parent;
 	}
 
 	/**
-	 * 
-	 * Returns component properties
-	 * 
-	 * @return
+	 * Returns component properties.
+	 *
+	 * @return the properties
 	 */
 	public LinkedHashMap<String, Object> getProperties() {
 		return (LinkedHashMap<String, Object>) properties;
 	}
 
 	/**
-	 * 
-	 * PropertyNotAvailableException exception
-	 * 
-	 * @author Bitwise
+	 * PropertyNotAvailableException exception.
 	 *
+	 * @author Bitwise
 	 */
 	private class PropertyNotAvailableException extends RuntimeException {
+		
+		/** The Constant serialVersionUID. */
 		private static final long serialVersionUID = -7978238880803956846L;
 
 	}
 
+	/**
+	 * Checks if is new instance.
+	 *
+	 * @return true, if is new instance
+	 */
 	public boolean isNewInstance() {
 		return newInstance;
 	}
 
+	/**
+	 * Sets the new instance.
+	 *
+	 * @param newInstance the new new instance
+	 */
 	public void setNewInstance(boolean newInstance) {
 		this.newInstance = newInstance;
 	}
 
 	/**
-	 * 
-	 * Returns component type
-	 * 
+	 * Returns component type.
+	 *
 	 * @return - component type
 	 */
 	public String getType() {
@@ -948,78 +1094,79 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Set Component type
-	 * 
-	 * @param type
+	 * Set Component type.
+	 *
+	 * @param type the new type
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
 	/**
-	 * 
 	 * Get Component prefix i.e. base name
-	 * 
-	 * @return
+	 *
+	 * @return the prefix
 	 */
 	public String getPrefix() {
 		return prefix;
 	}
 
 	/**
-	 * 
 	 * Set Component prefix i.e. base name
-	 * 
-	 * @param prefix
+	 *
+	 * @param prefix the new prefix
 	 */
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
 
 	/**
-	 * 
-	 * Get Component category 
-	 * 
-	 * @return
+	 * Get Component category .
+	 *
+	 * @return the category
 	 */
 	public String getCategory() {
 		return category;
 	}
 
 	/**
-	 * 
-	 * Set component category
-	 * 
-	 * @param category
+	 * Set component category.
+	 *
+	 * @param category the new category
 	 */
 	public void setCategory(String category) {
 		this.category = category;
 	}
 
 	/**
-	 * 
-	 * returns component validation status
-	 * 
-	 * @return
+	 * returns component validation status.
+	 *
+	 * @return the validity status
 	 */
 	public String getValidityStatus() {
 		return validityStatus;
 	}
 
 	/**
-	 * 
-	 * Set component validation status
-	 * 
-	 * @param validityStatus
+	 * Set component validation status.
+	 *
+	 * @param validityStatus the new validity status
 	 */
 	public void setValidityStatus(String validityStatus) {
 		this.validityStatus = validityStatus;
 	}
 
+	/**
+	 * Gets the converter.
+	 *
+	 * @return the converter
+	 */
 	// For Target XML
 	public abstract String getConverter();
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component clone() throws CloneNotSupportedException {
@@ -1125,10 +1272,9 @@ public abstract class Component extends Model {
 	}
 	
 	/**
-	 * 
-	 * Set tooltip information
-	 * 
-	 * @param tooltipInformation
+	 * Set tooltip information.
+	 *
+	 * @param tooltipInformation the tooltip information
 	 */
 	public void setTooltipInformation(
 			Map<String, PropertyToolTipInformation> tooltipInformation) {
@@ -1136,19 +1282,16 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * get tooltip information
-	 * 
-	 * @return
+	 * get tooltip information.
+	 *
+	 * @return the tooltip information
 	 */
 	public Map<String, PropertyToolTipInformation> getTooltipInformation() {
 		return tooltipInformation;
 	}
 
 	/**
-	 * 
-	 * Update tooltip information
-	 * 
+	 * Update tooltip information.
 	 */
 	public void updateTooltipInformation() {
 		for (String propertyName : properties.keySet()) {
@@ -1165,10 +1308,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Set component label
-	 * 
-	 * @param label
+	 * Set component label.
+	 *
+	 * @param label the new component label
 	 */
 	public void setComponentLabel(String label) {
 		setPropertyValue(Component.Props.NAME_PROP.getValue(), label);
@@ -1176,10 +1318,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get component Description
-	 * 
-	 * @return
+	 * Get component Description.
+	 *
+	 * @return the component description
 	 */
 	public String getComponentDescription() {
 		return XMLConfigUtil.INSTANCE.getComponent(componentName)
@@ -1187,10 +1328,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * unused port settings
-	 * 
-	 * @param newPortCount
+	 * unused port settings.
+	 *
+	 * @param newPortCount the new port count
 	 */
 	public void unusedPortSettings(int newPortCount) {
        changeUnusedPortCount(newPortCount);
@@ -1204,10 +1344,9 @@ public abstract class Component extends Model {
 	}
 	
 	/**
-	 * 
-	 * Input port settings
-	 * 
-	 * @param newPortCount
+	 * Input port settings.
+	 *
+	 * @param newPortCount the new port count
 	 */
 	public void inputPortSettings(int newPortCount) {
        changeInPortCount(newPortCount);
@@ -1221,10 +1360,9 @@ public abstract class Component extends Model {
 	}
 	
 	/**
-	 * 
-	 * Output port settings
-	 * 
-	 * @param newPortCount
+	 * Output port settings.
+	 *
+	 * @param newPortCount the new port count
 	 */
 	public void outputPortSettings(int newPortCount) {
 		changeOutPortCount(newPortCount);
@@ -1239,10 +1377,9 @@ public abstract class Component extends Model {
 
 
 	/**
-	 * 
-	 * Decrements port
-	 * 
-	 * @param portsToBeRemoved
+	 * Decrements port.
+	 *
+	 * @param portsToBeRemoved the ports to be removed
 	 */
 	public void decrementPorts(List<String> portsToBeRemoved) {
 
@@ -1252,10 +1389,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Delete input links
-	 * 
-	 * @param portsToBeRemoved
+	 * Delete input links.
+	 *
+	 * @param portsToBeRemoved the ports to be removed
 	 */
 	private void deleteInputLinks(List<String> portsToBeRemoved) {
 		if (inputLinks.size() > 0) {
@@ -1278,10 +1414,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Delete output links
-	 * 
-	 * @param portsToBeRemoved
+	 * Delete output links.
+	 *
+	 * @param portsToBeRemoved the ports to be removed
 	 */
 	private void deleteOutputLinks(List<String> portsToBeRemoved) {
 		if (outputLinks.size() > 0) {
@@ -1303,10 +1438,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Remove ports
-	 * 
-	 * @param portsToBeRemoved
+	 * Remove ports.
+	 *
+	 * @param portsToBeRemoved the ports to be removed
 	 */
 	private void removePorts(List<String> portsToBeRemoved) {
 		for (String portRemove : portsToBeRemoved) {
@@ -1316,30 +1450,28 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Get watcher terminals
-	 * 
-	 * @return
+	 * Get watcher terminals.
+	 *
+	 * @return the watcher terminals
 	 */
 	public Map<String, Long> getWatcherTerminals() {
 		return watcherTerminals;
 	}
 
 	/**
-	 * 
-	 * Set watcher terminals
-	 * 
-	 * @param watcherTerminals
+	 * Set watcher terminals.
+	 *
+	 * @param watcherTerminals the watcher terminals
 	 */
 	public void setWatcherTerminals(Map<String, Long> watcherTerminals) {
 		this.watcherTerminals = watcherTerminals;
 	}
 
 	/**
-	 * Add watcher terminal
-	 * 
-	 * @param port
-	 * @param limit
+	 * Add watcher terminal.
+	 *
+	 * @param port the port
+	 * @param limit the limit
 	 */
 	public void addWatcherTerminal(String port, Long limit) {
 
@@ -1347,24 +1479,24 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * 
-	 * Remove watcher terminal
-	 * 
-	 * @param port
+	 * Remove watcher terminal.
+	 *
+	 * @param port the port
 	 */
 	public void removeWatcherTerminal(String port) {
 		watcherTerminals.remove(port);
 	}
 
 	/**
-	 * 
-	 * Clear watchers
-	 * 
+	 * Clear watchers.
 	 */
 	public void clearWatcherMap() {
 		watcherTerminals.clear();
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 
 	public int hashCode() {
@@ -1374,6 +1506,9 @@ public abstract class Component extends Model {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -1391,6 +1526,9 @@ public abstract class Component extends Model {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "Component [UniqueComponentName=" + UniqueComponentName + ", type=" + type + ", prefix=" + prefix
@@ -1398,24 +1536,49 @@ public abstract class Component extends Model {
 				+ ", unusedPortCount=" + bottomPortCount + ", componentLabel=" + componentLabel + "]";
 	}
 
+	/**
+	 * Gets the component edit part.
+	 *
+	 * @return the component edit part
+	 */
 	public Object getComponentEditPart() {
 		return componentEditPart;
 	}
 
+	/**
+	 * Sets the component edit part.
+	 *
+	 * @param componentEditPart the new component edit part
+	 */
 	public void setComponentEditPart(Object componentEditPart) {
 		this.componentEditPart = componentEditPart;
 	}	
 	
 	
+	/**
+	 * Update component execution status.
+	 *
+	 * @param currentStatus the current status
+	 */
 	public void updateStatus(String currentStatus) {
 		status = CompStatus.fromValue(currentStatus);
 		firePropertyChange(Props.EXECUTION_STATUS.getValue(), null, currentStatus);
 	}
 
+	/**
+	 * Gets the status.
+	 *
+	 * @return the status
+	 */
 	public CompStatus getStatus() {
 		return status;
 	}
 
+	/**
+	 * Sets the status.
+	 *
+	 * @param status the new status
+	 */
 	public void setStatus(CompStatus status) {
 		this.status = status;
 	}			  
@@ -1469,6 +1632,12 @@ public abstract class Component extends Model {
 		return properties;
 	}	
 	
+	/**
+	 * Checks if is wrapper type.
+	 *
+	 * @param clazz the clazz
+	 * @return true, if is wrapper type
+	 */
 	public static boolean isWrapperType(Class<?> clazz) {
 		if (clazz == Boolean.class || clazz == Character.class || clazz == Byte.class || clazz == Short.class
 				|| clazz == Integer.class || clazz == Long.class || clazz == Float.class || clazz == Double.class) {
