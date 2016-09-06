@@ -872,9 +872,6 @@ public class FilterConditionsDialog extends Dialog {
 							removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp,isRemote), 
 							ImagePathConstant.DELETE_BUTTON);
 				}
-				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
-						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp,isRemote), 
-						ImagePathConstant.DELETE_BUTTON);
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override
