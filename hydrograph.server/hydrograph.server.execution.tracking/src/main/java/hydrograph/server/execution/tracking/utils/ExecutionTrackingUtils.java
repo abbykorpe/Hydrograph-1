@@ -157,7 +157,7 @@ public class ExecutionTrackingUtils {
 				fileInputStream = new FileInputStream(file);
 			}
 		} catch (URISyntaxException exception) {
-			logger.error("File Path is not exist" + dirPath, exception);
+			logger.error("File Path does not exist:"+dirPath, exception);
 		} catch (FileNotFoundException exception) {
 			logger.error("File not found", exception);
 		}
