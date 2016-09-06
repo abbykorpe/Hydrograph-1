@@ -79,7 +79,6 @@ public class ExecutionTrackingUtils {
 	 */
 	public String getTrackingUrl(String trackingClientSocketPort) {
 		if(!StringUtils.isNotBlank(trackingClientSocketPort)){
-			//getFilePath();
 			loadPropertyFile();
 		}else{
 			portNo=trackingClientSocketPort;
