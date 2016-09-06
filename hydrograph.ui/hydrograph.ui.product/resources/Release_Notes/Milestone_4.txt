@@ -44,6 +44,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 33.#1089 [Vibhor Tyagi]     Execution Tracking: Kill Job Issues
 34.#1091 [Vibhor Tyagi] 	Execution Tracking: Tracking Logs are not Getting Stored Anywhere Else Other than Default Installation Path
 35.#1109 [Vibhor Tyagi] 	Reduce The Size of the 'Execution Tracker Console' Window 
+36.#686 [Akhilesh Joshi] XML Import: Error Bubble Appears on Join/Transform Component Though All the Attributes Are Getting Imported
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
