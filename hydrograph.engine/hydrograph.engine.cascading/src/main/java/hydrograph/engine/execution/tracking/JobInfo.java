@@ -137,14 +137,9 @@ public class JobInfo {
 	private void getPreviousComponentInfoIfScopeIsNotPresent(CascadingStats<?> cascadingStats,
 			String currentComponentId) {
 		if (componentAndPreviousMap.containsKey(currentComponentId)) {
-			// all previous components connected to current component
 			List<String> previousComponentId_SocketIds = componentAndPreviousMap.get(currentComponentId);
 			for (String previousComponentId_SocketId : previousComponentId_SocketIds) {
-				// getting component id of previous component
 				String previousComponentId = getComponentIdFromComponentSocketID(previousComponentId_SocketId);
-				// checking if previous component if generated filter if so,
-				// then call this function recursively to get generated filters
-				// previous components
 				if (isComponentGeneratedFilter(previousComponentId)) {
 					getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats, previousComponentId);
 				} else {
