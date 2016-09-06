@@ -405,7 +405,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void enableRunJob(boolean enabled){
 		((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(enabled);
 		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(!enabled);
-		((RemoveDebugHandler) RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(enabled);
 		((ExecutionTrackingConsoleHandler) RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler())
 		.setExecutionTrackingConsoleEnabled(isExecutionTracking());
 	}
@@ -472,7 +471,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						}else{
                             ((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
                             ((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
-                           	((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 							}
 						}
 					}
