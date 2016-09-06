@@ -13,23 +13,26 @@
 
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SortComponentKeysFieldsValidationRule implements IValidator{
 	private String errorMessage;
 	
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if (propertyMap != null && !propertyMap.isEmpty()) {
-			return validate(propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		if (object != null) {
 			Map<String, Object> keyFieldsList = (LinkedHashMap<String, Object>) object;
 			if (keyFieldsList != null && !keyFieldsList.isEmpty()) {

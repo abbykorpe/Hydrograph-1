@@ -13,6 +13,7 @@
 
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -37,16 +38,16 @@ public class MixedSchemeGridValidationRule implements IValidator {
 	String errorMessage;
 
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if (propertyMap != null && !propertyMap.isEmpty()) {
-			return validate(propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		Schema schema = (Schema) object;
 		if (schema == null) {
 			errorMessage = propertyName + " is mandatory";

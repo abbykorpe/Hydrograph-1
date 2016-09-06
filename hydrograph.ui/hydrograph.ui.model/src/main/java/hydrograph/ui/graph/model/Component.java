@@ -25,6 +25,7 @@ import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.schema.propagation.SchemaData;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.validators.impl.IValidator;
 
@@ -1605,7 +1606,7 @@ public abstract class Component extends Model {
 					logger.error("Failed to create validator", e);
 					throw new RuntimeException("Failed to create validator", e);
 				}
-				boolean status = validator.validate(propertyValue, configProperty.getName());
+				boolean status = validator.validate(propertyValue, configProperty.getName(),SchemaData.getInputSchema(this));
 				//NOTE : here if any of the property is not valid then whole component is not valid 
 				if(status == false){
 					componentHasRequiredValues = Boolean.FALSE;

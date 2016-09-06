@@ -14,34 +14,38 @@
 
 package hydrograph.ui.validators.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.apache.commons.lang.StringUtils;
 
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.ErrorObject;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
+
 public class TransformMappingValidationRule implements IValidator{
 	private String errorMessage;
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		TransformMapping transformMapping=(TransformMapping) object;
 		
 		if(transformMapping==null)
@@ -52,7 +56,14 @@ public class TransformMappingValidationRule implements IValidator{
 		List<MappingSheetRow> mappingSheetRows=TransformMappingFeatureUtility.INSTANCE.getActiveMappingSheetRow
 				(transformMapping.getMappingSheetRows());
 		List<NameValueProperty>  mapOrPassthroughfields = transformMapping.getMapAndPassthroughField();
-		
+		List<InputField> inputFieldsList = new ArrayList<InputField>();
+		for(Entry< String,List<FixedWidthGridRow>> inputList :inputSchemaMap.entrySet()){
+			for(FixedWidthGridRow row : inputList.getValue()){
+				inputFieldsList.add(new InputField(row.getFieldName(), new ErrorObject(false, "")));
+			}
+			
+		}
+		transformMapping.setInputFields(inputFieldsList);
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
 		{
 	    errorMessage = propertyName + "Output field(s) is mandatory";		 	

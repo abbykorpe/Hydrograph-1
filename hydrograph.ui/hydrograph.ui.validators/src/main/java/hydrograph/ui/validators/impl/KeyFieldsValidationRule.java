@@ -13,22 +13,24 @@
 
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+
 import java.util.List;
 import java.util.Map;
 
 public class KeyFieldsValidationRule implements IValidator {
 	private String errorMessage;
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if (propertyMap != null && !propertyMap.isEmpty()) {
-			return validate(propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		if (object != null) {
 			List<String> keyFieldList = (List<String>) object;
 			if (keyFieldList.size() != 0) {

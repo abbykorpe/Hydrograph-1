@@ -23,6 +23,7 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.schema.propagation.SchemaData;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.validators.impl.IValidator;
 
@@ -168,7 +169,7 @@ public class ComponentCreateCommand extends Command {
 					logger.error("Failed to create validator", e);
 					throw new RuntimeException("Failed to create validator", e);
 				}
-				boolean status = validator.validate(propertyValue, configProperty.getName());
+				boolean status = validator.validate(propertyValue, configProperty.getName(),SchemaData.getInputSchema(this.component));
 				//NOTE : here if any of the property is not valid then whole component is not valid 
 				if(status == false){
 					componentHasRequiredValues = Boolean.FALSE;

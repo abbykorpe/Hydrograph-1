@@ -18,6 +18,7 @@ import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.schema.propagation.SchemaData;
 import hydrograph.ui.propertywindow.handlers.ShowHidePropertyHelpHandler;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -382,7 +383,7 @@ public abstract class AbstractWidget {
 					throw new RuntimeException("Failed to create validator", e);
 				}
 				boolean status = validator.validate(object,
-						getPropertyName());
+						getPropertyName(),SchemaData.getInputSchema(getComponent()));
 				// NOTE : here if any of the property is not valid
 				// then whole component is not valid
 				if (status == false) {

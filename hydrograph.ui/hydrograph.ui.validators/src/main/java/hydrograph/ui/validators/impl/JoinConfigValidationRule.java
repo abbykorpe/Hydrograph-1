@@ -14,6 +14,7 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 
 import java.util.List;
@@ -27,17 +28,17 @@ public class JoinConfigValidationRule implements IValidator{
 	private String errorMessage;
 	
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		return false;
 	}
 
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		List<JoinConfigProperty> valueList = (List<JoinConfigProperty>)object;
 		if(valueList == null || valueList.isEmpty() || valueList.size() < 2){
 			errorMessage = propertyName + " must have atleast 2 port configuration";

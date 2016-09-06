@@ -14,8 +14,10 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
 
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -33,10 +35,10 @@ public class ClassNameValidatorRule implements IValidator {
     }
 	
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		errorMessage = "Invalid parameter value";
 		return false;
@@ -48,7 +50,7 @@ public class ClassNameValidatorRule implements IValidator {
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		if(object == null || !OperationClassProperty.class.isAssignableFrom(object.getClass())){
 			errorMessage = "Invalid parameter value";
 			return false;
@@ -61,12 +63,12 @@ public class ClassNameValidatorRule implements IValidator {
 			{
 				errorMessage = "Expression should not be blank";
 				return false;	
-			}	
+			}
 			if(!operationClassProperty.getExpressionEditorData().isValid())
 			{
 				errorMessage = operationClassProperty.getExpressionEditorData().getErrorMessage();
-				return false;	
-			}	
+				return false;
+			}
 			return true;
 		}
 		else

@@ -48,6 +48,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartListener;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
@@ -82,6 +85,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			((Component) getModel()).addPropertyChangeListener(this);
 			((Component) getModel()).setComponentEditPart(this);
 		}
+		
+		
 	}
 
 	/**
@@ -666,6 +671,5 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 		refreshComponentStatusOfAllComponent();
 	}
-	
-	
+
 }
