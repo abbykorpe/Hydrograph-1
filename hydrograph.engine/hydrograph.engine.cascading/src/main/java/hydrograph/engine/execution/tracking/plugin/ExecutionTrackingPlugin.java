@@ -43,12 +43,11 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 	private List<TypeBaseComponent> jaxbObjectList = new ArrayList<TypeBaseComponent>();
 	private Map<String, Set<SchemaField>> schemaFieldsMap;
 	private JobInfo jobInfo;
-	List<TypeBaseComponent> orginalComponentList;
 	
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
 		TrackContext trackContext;
-		orginalComponentList = manipulationContext.getJaxbMainGraph();
+		List<TypeBaseComponent> orginalComponentList = manipulationContext.getJaxbMainGraph();
 		jaxbObjectList.addAll(orginalComponentList);
 		schemaFieldsMap = manipulationContext.getSchemaFieldMap();
 

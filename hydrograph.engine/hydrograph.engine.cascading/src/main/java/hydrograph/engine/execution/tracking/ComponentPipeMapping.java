@@ -114,9 +114,7 @@ public class ComponentPipeMapping {
 			List<? extends TypeBaseOutSocket> outSockets, List<? extends TypeBaseInSocket> inSockets) {
 		List<String> PreviousComponents = new ArrayList<String>();
 		if (outSockets.size() == 0) {
-			for (int i = 0; i < inSockets.size(); i++) {
-				addComponentAndSocketInMap(eachComponentId, outputSocket);
-			}
+			addComponentAndSocketInMap(eachComponentId, outputSocket);
 		}
 		for (TypeBaseOutSocket outSocket : outSockets) {
 			addComponentAndSocketInMap(eachComponentId, outSocket.getId());
@@ -155,13 +153,14 @@ public class ComponentPipeMapping {
 		for (Cascade cascade : cascades) {
 			for (Flow<?> flow : cascade.getFlows()) {
 				for (FlowStep<?> flowStep : flow.getFlowSteps()) {
+					ElementGraph flowElementGraph;
 					if (isLocalFlowExecution(cascade)) {
-						ElementGraph flowStepElementGraph = flowStep.getElementGraph();
-						fillComponentFlow(flowStepElementGraph, flowStep.getID());
+						flowElementGraph = flowStep.getElementGraph();
+						fillComponentFlow(flowElementGraph, flowStep.getID());
 					} else {
 						for (FlowNodeStats flowNodeStats : flowStep.getFlowStepStats().getFlowNodeStats()) {
-							ElementGraph flowNodeElementGraph = flowNodeStats.getFlowNode().getElementGraph();
-							fillComponentFlow(flowNodeElementGraph, flowNodeStats.getID());
+							flowElementGraph = flowNodeStats.getFlowNode().getElementGraph();
+							fillComponentFlow(flowElementGraph, flowNodeStats.getID());
 						}
 					}
 				}
@@ -277,9 +276,9 @@ public class ComponentPipeMapping {
 	}
 
 	private static String getComponentIdFromComponentSocketID(String componentId_SocketId) {
-		for (Entry<String, List<String>> component_Socketid : componentSocketMap.entrySet()) {
-			String componentId = component_Socketid.getKey();
-			for (String socketId : component_Socketid.getValue()) {
+		for (Entry<String, List<String>> eachcomponent_SocketId : componentSocketMap.entrySet()) {
+			String componentId = eachcomponent_SocketId.getKey();
+			for (String socketId : eachcomponent_SocketId.getValue()) {
 				if (componentId_SocketId.equals(componentId + "_" + socketId)) {
 					return componentId;
 				}

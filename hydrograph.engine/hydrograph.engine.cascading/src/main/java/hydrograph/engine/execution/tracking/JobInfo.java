@@ -50,9 +50,8 @@ public class JobInfo {
 	private List<String> listOfFilterComponent;
 	private Map<String, Long> componentCounterMap;
 	private static String previousflowId = "";
-	private static Map<String, List<String>> componentFlowMap;
+	private Map<String, List<String>> componentFlowMap;
 	private static final String outputSocket = "NoSocketId";
-	private boolean isFlowChanged = false;
 
 	/**
 	 * Method storeComponentStats processes the {@link CascadingStats} to
@@ -67,16 +66,15 @@ public class JobInfo {
 		if (componentPipeMap == null) {
 			checkAndCreateMaps();
 		}
-		checkIfFlowChanged(cascadingStats);
 		generateStats(cascadingStats);
 	}
 
-	private void checkIfFlowChanged(CascadingStats<?> cascadingStats) {
+	private boolean isFlowChanged(CascadingStats<?> cascadingStats) {
 		if (!previousflowId.equals(cascadingStats.getID())) {
 			previousflowId = cascadingStats.getID();
-			isFlowChanged = true;
+			return true;
 		} else {
-			isFlowChanged = false;
+			return false;
 		}
 	}
 
@@ -179,7 +177,7 @@ public class JobInfo {
 	}
 
 	private void removeCompletedFlowFromComponent(CascadingStats<?> cascadingStats, String currentComponentId) {
-		if (isFlowChanged && componentFlowMap.get(currentComponentId) != null) {
+		if (isFlowChanged(cascadingStats) && componentFlowMap.get(currentComponentId) != null) {
 			List<String> flowIdOccuranceList = componentFlowMap.get(currentComponentId);
 			for (Iterator<?> iterator = flowIdOccuranceList.iterator(); iterator.hasNext();) {
 				String flowId = (String) iterator.next();
