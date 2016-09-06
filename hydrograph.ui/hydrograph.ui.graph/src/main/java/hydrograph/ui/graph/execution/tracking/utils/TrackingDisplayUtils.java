@@ -357,6 +357,7 @@ public class TrackingDisplayUtils {
 	
 	/**
 	 * 
+	 * Close websocket client connection.
 	 * @param session
 	 */
 	public void closeWebSocketConnection(Session session){
@@ -370,7 +371,7 @@ public class TrackingDisplayUtils {
 				session.close(closeReason);
 				logger.info("Session closed");
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("Fail to close connection ",e);
 			}
 			
 		}
