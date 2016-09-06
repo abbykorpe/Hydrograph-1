@@ -42,7 +42,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 31.#1100 [Kanchan Kauthale] XML Import: Execution Status is Not Being Displayed on Sub Job and Input components Upon Importing the Job
 32.#1087 [Kanchan Kauthale] Execution Tracking: Execution Status is not Getting Tracked When Jobs Ran on Multiple Server
 33.#1089 [Vibhor Tyagi]     Execution Tracking: Kill Job Issues
-34.#1089 [Vibhor Tyagi] Execution Tracking: Tracking Logs are not Getting Stored Anywhere Else Other than Default Installation Path
+34.#1091 [Vibhor Tyagi] 	Execution Tracking: Tracking Logs are not Getting Stored Anywhere Else Other than Default Installation Path
+35.#1109 [Vibhor Tyagi] 	Reduce The Size of the 'Execution Tracker Console' Window 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
