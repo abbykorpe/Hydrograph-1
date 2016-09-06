@@ -3,8 +3,6 @@ package hydrograph.engine.execution.tracking;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.commandline.utilities.HydrographService;
 import hydrograph.engine.helper.StatusHelper;
@@ -13,13 +11,19 @@ public class ExecutionTrackingNormalizeXmlTest {
 
 	static HydrographService hydrographService;
 	static StatusHelper statusHelper;
+	static int returnCode;
 
 	@BeforeClass
 	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/NormalizeExample.xml" };
 		hydrographService = new HydrographService();
-		hydrographService.executeGraph(args);
+		returnCode = hydrographService.executeGraph(args);
 		statusHelper = new StatusHelper(hydrographService.getStatus());
+	}
+
+	@Test
+	public void isJobSuccessfulAndReturnCodeZero() {
+		Assert.assertEquals(returnCode, 0);
 	}
 
 	@Test

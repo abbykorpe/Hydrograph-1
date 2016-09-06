@@ -15,9 +15,11 @@ package hydrograph.engine.execution.tracking;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import cascading.flow.FlowNode;
 import cascading.flow.FlowStep;
@@ -28,55 +30,71 @@ import cascading.stats.CascadingStats;
 import cascading.stats.FlowNodeStats;
 import cascading.stats.FlowStepStats;
 
+/**
+ * Class JobInfo processes @{link CascadingStats} to store the information of
+ * execution progress of the components inside a Hydrograph.This Class also
+ * provides @{link hydrograph.engine.execution.tracking.JobInfo#getStatus()}
+ * getStatus method
+ * 
+ * @author bitwise
+ *
+ */
 public class JobInfo {
 
 	private final String COUNTER_GROUP = "com.hydrograph.customgroup";
 	private Map<String, ComponentInfo> componentInfoMap = new HashMap<>();
 	private Map<String, Pipe> componentPipeMap;
-	private Map<String, String> pipeComponentMap;
 	private Map<String, List<String>> componentSocketMap;
 	private Map<String, List<String>> componentAndPreviousMap;
-	private List<String> AllPipes;
-	private static List<String> listOfFilterComponent;
+	private Set<String> allPipes;
+	private List<String> listOfFilterComponent;
 	private Map<String, Long> componentCounterMap;
+	private static String previousflowId = "";
+	private static Map<String, List<String>> componentFlowMap;
+	private static final String outputSocket = "NoSocketId";
+	private boolean isFlowChanged = false;
 
 	/**
-	 * Method storeComponentStats processes the {@link CascadingStats} to generate the component statistics.
+	 * Method storeComponentStats processes the {@link CascadingStats} to
+	 * generate the component statistics.
 	 * 
 	 * @param cascadingStats
-	 * 			- {@link CascadingStats} object
+	 *            - {@link CascadingStats} object
 	 * @throws ElementGraphNotFoundException
 	 */
 	public synchronized void storeComponentStats(CascadingStats<?> cascadingStats)
 			throws ElementGraphNotFoundException {
-		checkAndCreateMaps();
+		if (componentPipeMap == null) {
+			checkAndCreateMaps();
+		}
+		checkIfFlowChanged(cascadingStats);
 		generateStats(cascadingStats);
 	}
 
-	private void checkAndCreateMaps() {
-		if (componentPipeMap == null) {
-			componentPipeMap = ComponentPipeMapping.getComponentToPipeMapping();
-			pipeComponentMap = createReverseMap(componentPipeMap);
-			componentSocketMap = ComponentPipeMapping.getComponentSocketMap();
-			componentAndPreviousMap = ComponentPipeMapping.getComponentAndPreviousMap();
-			AllPipes = new ArrayList<String>();
-			listOfFilterComponent = ComponentPipeMapping.getListOfFilterComponent();
-			componentCounterMap = new HashMap<String, Long>();
+	private void checkIfFlowChanged(CascadingStats<?> cascadingStats) {
+		if (!previousflowId.equals(cascadingStats.getID())) {
+			previousflowId = cascadingStats.getID();
+			isFlowChanged = true;
+		} else {
+			isFlowChanged = false;
 		}
+	}
+
+	private void checkAndCreateMaps() {
+		componentPipeMap = ComponentPipeMapping.getComponentToPipeMapping();
+		componentSocketMap = ComponentPipeMapping.getComponentSocketMap();
+		componentAndPreviousMap = ComponentPipeMapping.getComponentAndPreviousMap();
+		allPipes = ComponentPipeMapping.getAllPipes();
+		listOfFilterComponent = ComponentPipeMapping.getListOfFilterComponent();
+		componentFlowMap = ComponentPipeMapping.getComponentFlowMap();
+		componentCounterMap = new HashMap<String, Long>();
 	}
 
 	private void generateStats(CascadingStats<?> cascadingStats) throws ElementGraphNotFoundException {
 		ElementGraph elementGraph = extractElementGraphFromCascadeStats(cascadingStats);
-		for (Scope scope : elementGraph.edgeSet()) {
-			if (!AllPipes.contains(scope.getName())) {
-				AllPipes.add(scope.getName());
-			}
-		}
-
 		for (String counter : cascadingStats.getCountersFor(COUNTER_GROUP)) {
 			componentCounterMap.put(counter, cascadingStats.getCounterValue(COUNTER_GROUP, counter));
 		}
-
 		for (Scope scope : elementGraph.edgeSet()) {
 			String currentComponent_SocketId = getComponentFromPipe(scope.getName());
 			if (currentComponent_SocketId != null) {
@@ -105,7 +123,7 @@ public class JobInfo {
 					long recordCount = 0;
 					String previousPipeName = componentPipeMap.get(previousComponent_SocketID).getName();
 					recordCount = cascadingStats.getCounterValue(COUNTER_GROUP, previousPipeName);
-					currentComponentInfo.setProcessedRecordCount("NoSocketId", recordCount);
+					currentComponentInfo.setProcessedRecordCount(outputSocket, recordCount);
 				}
 			}
 		}
@@ -119,20 +137,22 @@ public class JobInfo {
 	private void getPreviousComponentInfoIfScopeIsNotPresent(CascadingStats<?> cascadingStats,
 			String currentComponentId) {
 		if (componentAndPreviousMap.containsKey(currentComponentId)) {
+			// all previous components connected to current component
 			List<String> previousComponentId_SocketIds = componentAndPreviousMap.get(currentComponentId);
 			for (String previousComponentId_SocketId : previousComponentId_SocketIds) {
-				if (isComponentGeneratedFilter(getComponentIdFromComponentSocketID(
-						getComponentFromPipe(componentPipeMap.get(previousComponentId_SocketId).getName())))) {
-					List<String> prePreviousComponentId_SocketIds = componentAndPreviousMap
-							.get(getComponentIdFromComponentSocketID(getComponentFromPipe(
-									componentPipeMap.get(previousComponentId_SocketId).getName())));
-					for (String prePreviousComponentId_SocketId : prePreviousComponentId_SocketIds) {
-						String previousPipeName = componentPipeMap.get(prePreviousComponentId_SocketId).getName();
-						if (!AllPipes.contains(previousPipeName) && previousPipeName != null) {
-							createComponentInfoForComponent(prePreviousComponentId_SocketId, cascadingStats);
-							getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats,
-									getComponentIdFromComponentSocketID(prePreviousComponentId_SocketId));
-						}
+				// getting component id of previous component
+				String previousComponentId = getComponentIdFromComponentSocketID(previousComponentId_SocketId);
+				// checking if previous component if generated filter if so,
+				// then call this function recursively to get generated filters
+				// previous components
+				if (isComponentGeneratedFilter(previousComponentId)) {
+					getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats, previousComponentId);
+				} else {
+					String previousPipeName = componentPipeMap.get(previousComponentId_SocketId).getName();
+					if (!allPipes.contains(previousPipeName)) {
+						createComponentInfoForComponent(previousComponentId_SocketId, cascadingStats);
+						getPreviousComponentInfoIfScopeIsNotPresent(cascadingStats,
+								getComponentIdFromComponentSocketID(previousComponentId_SocketId));
 					}
 				}
 			}
@@ -143,6 +163,7 @@ public class JobInfo {
 		ComponentInfo componentInfo = null;
 		String currentComponentId = getComponentIdFromComponentSocketID(component_SocketId);
 		if (currentComponentId != null) {
+			removeCompletedFlowFromComponent(cascadingStats, currentComponentId);
 			if (componentInfoMap.containsKey(currentComponentId)) {
 				componentInfo = componentInfoMap.get(currentComponentId);
 				componentInfo.setStatusPerSocketMap(getSocketIdFromComponentSocketID(component_SocketId),
@@ -154,11 +175,25 @@ public class JobInfo {
 					componentInfo.setStatusPerSocketMap(socketId, cascadingStats.getStatus());
 					componentInfo.setProcessedRecordCount(socketId, 0);
 				}
+				componentInfo.setCurrentStatus(CascadingStats.Status.PENDING.name());
 			}
 		}
 		generateAndUpdateComponentRecordCount(cascadingStats, componentInfo, currentComponentId);
 		componentInfoMap.put(currentComponentId, componentInfo);
 		setStatus(componentInfo, cascadingStats);
+	}
+
+	private void removeCompletedFlowFromComponent(CascadingStats<?> cascadingStats, String currentComponentId) {
+		if (isFlowChanged && componentFlowMap.get(currentComponentId) != null) {
+			List<String> flowIdOccuranceList = componentFlowMap.get(currentComponentId);
+			for (Iterator<?> iterator = flowIdOccuranceList.iterator(); iterator.hasNext();) {
+				String flowId = (String) iterator.next();
+				if (flowId.equals(cascadingStats.getID())) {
+					iterator.remove();
+				}
+			}
+			componentFlowMap.put(currentComponentId, flowIdOccuranceList);
+		}
 	}
 
 	private ElementGraph extractElementGraphFromCascadeStats(CascadingStats<?> cascadingStats)
@@ -204,20 +239,13 @@ public class JobInfo {
 	}
 
 	private void generateAndUpdateComponentRecordCount(CascadingStats<?> cascadingStats, ComponentInfo componentInfo,
-			String ComponentId) {
-		for (String socketId : componentSocketMap.get(ComponentId)) {
-			if (componentCounterMap.containsKey(componentPipeMap.get(ComponentId + "_" + socketId).getName())) {
-				componentInfo.setProcessedRecordCount(socketId, componentCounterMap.get(componentPipeMap.get(ComponentId + "_" + socketId).getName()));
+			String componentId) {
+		for (String socketId : componentSocketMap.get(componentId)) {
+			if (componentCounterMap.containsKey(componentPipeMap.get(componentId + "_" + socketId).getName())) {
+				componentInfo.setProcessedRecordCount(socketId,
+						componentCounterMap.get(componentPipeMap.get(componentId + "_" + socketId).getName()));
 			}
 		}
-	}
-
-	private Map<String, String> createReverseMap(Map<String, Pipe> allMapOfPipes) {
-		Map<String, String> pipeComponent = new HashMap<>();
-		for (Map.Entry<String, Pipe> entry : allMapOfPipes.entrySet()) {
-			pipeComponent.put(entry.getValue().getName(), entry.getKey());
-		}
-		return pipeComponent;
 	}
 
 	private String getComponentFromPipe(String pipeName) {
@@ -235,21 +263,25 @@ public class JobInfo {
 		for (Entry<String, String> entry : outSocketStats.entrySet()) {
 			listOfStatus.add(entry.getValue());
 		}
-		if (listOfStatus.contains("FAILED") || listOfStatus.contains("STOPPED"))
+		if (listOfStatus.contains("FAILED") || listOfStatus.contains("STOPPED")) {
 			componentInfo.setCurrentStatus("FAILED");
-		else if (listOfStatus.contains("RUNNING"))
+		} else if (listOfStatus.contains("RUNNING")) {
 			componentInfo.setCurrentStatus("RUNNING");
-		else if (listOfStatus.contains("PENDING") || listOfStatus.contains("STARTED")
-				|| listOfStatus.contains("SUBMITTED")) {
-			componentInfo.setCurrentStatus("PENDING");
 		} else if (listOfStatus.contains("SUCCESSFUL")) {
 			boolean isSuccessful = true;
 			for (String status1 : listOfStatus) {
 				if (!status1.equals("SUCCESSFUL"))
 					isSuccessful = false;
 			}
-			if (isSuccessful)
-				componentInfo.setCurrentStatus("SUCCESSFUL");
+			if (isSuccessful) {
+				if (componentFlowMap.get(componentInfo.getComponentId()) != null) {
+					if (componentFlowMap.get(componentInfo.getComponentId()).isEmpty()) {
+						componentInfo.setCurrentStatus("SUCCESSFUL");
+					}
+				} else {
+					componentInfo.setCurrentStatus("SUCCESSFUL");
+				}
+			}
 		}
 	}
 
@@ -262,7 +294,6 @@ public class JobInfo {
 		return new ArrayList<>(componentInfoMap.values());
 	}
 
-	
 	/**
 	 * @author bitwise
 	 */

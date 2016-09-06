@@ -11,18 +11,19 @@ public class ExecutionTrackingPartitionByExpressionXmlTest {
 
 	static HydrographService hydrographService;
 	static StatusHelper statusHelper;
+	static int returnCode;
 
 	@BeforeClass
-	public static void hydrographService() {
+	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/PartitionByExpressionExample.xml" };
 		hydrographService = new HydrographService();
-		try {
-			hydrographService.executeGraph(args);
-		} catch (Exception e) {	
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		returnCode = hydrographService.executeGraph(args);
 		statusHelper = new StatusHelper(hydrographService.getStatus());
+	}
+
+	@Test
+	public void isJobSuccessfulAndReturnCodeZero() {
+		Assert.assertEquals(returnCode, 0);
 	}
 
 	@Test
