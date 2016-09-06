@@ -126,7 +126,7 @@ public class ExecutionTrackingUtils {
 				statusFrequency = Long.parseLong(frequency);
 			}
 		} catch (IOException exception) {
-			logger.error("Failed to load properties file ", exception);
+			logger.error("Failed to load properties file", exception);
 		}
 	}
 	
@@ -159,7 +159,7 @@ public class ExecutionTrackingUtils {
 		} catch (URISyntaxException exception) {
 			logger.error("File Path does not exist:"+dirPath, exception);
 		} catch (FileNotFoundException exception) {
-			logger.error("File not found", exception);
+			logger.error("File not found: "+dirPath, exception);
 		}
 		return fileInputStream;
 	}
