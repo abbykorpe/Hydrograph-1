@@ -291,13 +291,14 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	 */
 	@Override
 	public void kill() {
+		LOG.info("Kill signal received");
 		if (runtimeContext.getCascade() != null) {
-			LOG.info("Kill signal received.. killing the cascading jobs");
-			for (Cascade cascade : runtimeContext.getCascade()) {
+			for (Cascade cascade : runtimeContext.getCascade()) {				
+				LOG.info("Killing Cascading jobs: "+cascade.getID());
 				cascade.stop();
 			}
 		} else
-			LOG.info("Kill signal received.. exiting code");
+			LOG.info("No cascading jobs present to kill. Exiting code.");
 			System.exit(0);
 	}
 }
