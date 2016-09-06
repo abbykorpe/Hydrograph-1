@@ -208,8 +208,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		}
 		table_2.setLayoutData(gd_table_2);
 		transformDialog.setTableViewer(nameValueTableViewer, nameValueComposite, new String[] {
-				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider(),
-				new OperationLabelProvider());
+				Messages.PROPERTY_NAME, Messages.PROPERTY_VALUE }, new ELTFilterContentProvider());
 		nameValueTableViewer.setLabelProvider(new PropertyLabelProvider());
 		nameValueTableViewer.setCellModifier(new PropertyGridCellModifier(this,nameValueTableViewer,operationClassDialogButtonBar));
 		nameValueTableViewer.setInput(mappingSheetRow.getNameValueProperty());

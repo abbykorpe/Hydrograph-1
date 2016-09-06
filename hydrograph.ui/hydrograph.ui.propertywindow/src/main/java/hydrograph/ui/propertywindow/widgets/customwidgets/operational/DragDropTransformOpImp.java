@@ -14,12 +14,16 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.propertywindow.widgets.utility.DragDropOperation;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 
 
@@ -36,6 +40,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private TransformDialog transformDialogNew;
 	private List<FilterProperties> outerOutputList;
 	private boolean isExpression;
+	private ExpressionComposite expressionComposite;
 	/**
 	 * @param transformDialogNew
 	 * @param mappingSheetRows
@@ -83,6 +88,13 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	}
 
 	
+	public DragDropTransformOpImp(TransformDialog transformDialog, TransformMapping transformMapping,
+			List<FilterProperties> inputFields, boolean b, boolean c, TableViewer operationalInputFieldTableViewer,
+			ExpressionComposite expressionComposite) {
+		this(transformDialog,transformMapping,inputFields,b,c,operationalInputFieldTableViewer);
+		this.expressionComposite=expressionComposite;
+	}
+
 	@Override
 	public void saveResult(String result) {
 		if(isSingleColumn && isExpression)
@@ -94,6 +106,12 @@ public class DragDropTransformOpImp implements DragDropOperation {
         		listOfInputFields.add(inputField);
         		operationInputfieldtableviewer.refresh();
         	}	
+	        if(expressionComposite!=null && StringUtils.isNotBlank(expressionComposite.getExressionTextBox().getText())){
+	        	ExpressionEditorData expressionEditorData=expressionComposite.createExpressionEditorData();
+	        	ExpressionEditorUtil.validateExpression(expressionEditorData.getExpression(),
+						expressionEditorData.getSelectedInputFieldsForExpression(), expressionEditorData);
+	        	transformDialogNew.showHideValidationMessage();
+	        }
 		}
 		else 
 		{	

@@ -62,6 +62,11 @@ public class ClassNameValidatorRule implements IValidator {
 				errorMessage = "Expression should not be blank";
 				return false;	
 			}	
+			if(!operationClassProperty.getExpressionEditorData().isValid())
+			{
+				errorMessage = operationClassProperty.getExpressionEditorData().getErrorMessage();
+				return false;	
+			}	
 			return true;
 		}
 		else

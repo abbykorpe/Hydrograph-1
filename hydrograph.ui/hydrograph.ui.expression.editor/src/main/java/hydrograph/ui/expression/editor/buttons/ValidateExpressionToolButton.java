@@ -56,7 +56,6 @@ import org.slf4j.Logger;
 @SuppressWarnings("restriction")
 public class ValidateExpressionToolButton extends Button {
 
-	private static final String RETURN_STATEMENT = "\t\treturn \n";
 	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR = "compile";
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ValidateExpressionToolButton.class);
 	public static final String HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS =  "hydrograph.engine.expression.api.ValidationAPI";
@@ -107,16 +106,6 @@ public class ValidateExpressionToolButton extends Button {
 		return diagnostics;
 	}
 
-
-	public static String getExpressionText(String expressionText) {
-		StringBuffer buffer=new StringBuffer(expressionText);
-		int startIndex=buffer.indexOf(RETURN_STATEMENT);
-		if(startIndex>-1){
-			buffer.delete(0, startIndex);
-			buffer.delete(0, buffer.indexOf("\n"));
-		}
-		return StringUtils.trim(buffer.toString());
-	}
 
 	public static String getAbsolutePathForJars(IPath iPath) {
 		String absolutePath = iPath.toString();
