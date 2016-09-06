@@ -13,6 +13,7 @@
 package hydrograph.ui.dataviewer.filter;
 
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.actions.ReloadAction;
 import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
@@ -862,6 +863,15 @@ public class FilterConditionsDialog extends Dialog {
 				} else {
 					return;
 				}
+				if(OSValidator.isMac()){
+					addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
+							removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp,isRemote), 
+							ImagePathConstant.MAC_DELETE_BUTTON);
+				}else{
+					addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
+							removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp,isRemote), 
+							ImagePathConstant.DELETE_BUTTON);
+				}
 				addButtonInTable(tableViewer, item, REMOVE, REMOVE_BUTTON_PANE, REMOVE_EDITOR, cell.getColumnIndex(), 
 						removeButtonListener(tableViewer, conditionsList, dummyList,groupSelectionMap, btnAddGrp,isRemote), 
 						ImagePathConstant.DELETE_BUTTON);
@@ -895,9 +905,17 @@ public class FilterConditionsDialog extends Dialog {
 				} else {
 					return;
 				}
-				addButtonInTable(tableViewer, item, ADD, ADD_BUTTON_PANE, ADD_EDITOR, cell.getColumnIndex(), 
-						FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList, dummyList,groupSelectionMap), 
-						ImagePathConstant.ADD_BUTTON);
+				
+				if(OSValidator.isMac()){
+					addButtonInTable(tableViewer, item, ADD, ADD_BUTTON_PANE, ADD_EDITOR, cell.getColumnIndex(), 
+							FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList, dummyList,groupSelectionMap), 
+							ImagePathConstant.MAC_ADD_BUTTON);
+				}else{
+					addButtonInTable(tableViewer, item, ADD, ADD_BUTTON_PANE, ADD_EDITOR, cell.getColumnIndex(), 
+							FilterHelper.INSTANCE.addButtonListener(tableViewer,conditionsList, dummyList,groupSelectionMap), 
+							ImagePathConstant.ADD_BUTTON);
+				}
+				
 				item.addDisposeListener(new DisposeListener() {
 					
 					@Override

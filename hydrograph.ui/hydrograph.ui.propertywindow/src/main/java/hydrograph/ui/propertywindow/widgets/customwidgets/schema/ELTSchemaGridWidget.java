@@ -649,8 +649,6 @@ import org.xml.sax.SAXException;
 				public void widgetSelected(SelectionEvent e) {
 					schemaFromConnectedLinks();
 					showHideErrorSymbol(isWidgetValid());
-					tableViewerComposite.setSize(tableComposite.computeSize(SWT.DEFAULT,
-							SWT.DEFAULT));
 					
 				}
 			});
@@ -797,8 +795,6 @@ import org.xml.sax.SAXException;
 			getComponent().setLatestChangesInSchema(true);
 			enableDisableButtons(schemaGridRowList.size());
 			propertyDialogButtonBar.enableApplyButton(true);
-			tableViewerComposite.setSize(tableComposite.computeSize(SWT.DEFAULT,
-					SWT.DEFAULT));
 		}
 	
 		// Adds the browse button
@@ -881,7 +877,6 @@ import org.xml.sax.SAXException;
 			addImportExportButtons(containerControl);
 	
 			populateWidgetExternalSchema();
-			tableViewerComposite.setSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 		}
 		
 		private File getPath(){
@@ -951,7 +946,6 @@ import org.xml.sax.SAXException;
 						GridRowLoader.showMessageBox(Messages.IMPORTED_SCHEMA,"Information",SWT.ICON_INFORMATION);
 						showHideErrorSymbol(applySchemaValidationRule());
 					}
-					tableViewerComposite.setSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 				}
 			});
 	
@@ -1280,7 +1274,6 @@ import org.xml.sax.SAXException;
 			});
 	
 			populateWidget();
-			tableViewerComposite.setSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 			
 			arrangeTableViewerColumns();
 			
@@ -1571,7 +1564,6 @@ import org.xml.sax.SAXException;
 					if (table.getItemCount() == 0) {
 						showHideErrorSymbol(isWidgetValid());
 					}
-					tableViewerComposite.setSize(tableComposite.computeSize(SWT.DEFAULT,SWT.DEFAULT));
 				}			
 				
 			});
