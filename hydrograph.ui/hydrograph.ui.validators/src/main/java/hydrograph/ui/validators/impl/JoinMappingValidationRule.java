@@ -55,9 +55,7 @@ public class JoinMappingValidationRule implements IValidator{
 			return true;
 		}
 		
-		List<List<FilterProperties>> lookupInputPropertiesList = new ArrayList<List<FilterProperties>>();
-		List<List<FilterProperties>> lookupInputProperties = joinMappingGrid.getLookupInputProperties();
-		
+		List<List<FilterProperties>> lookupInputProperties =  new ArrayList<List<FilterProperties>>();
 		
 		for(Entry< String,List<FixedWidthGridRow>> inputRow :inputSchemaMap.entrySet()){
 			List<FilterProperties> filterPropertiesList = new ArrayList<FilterProperties>(); 
@@ -67,10 +65,9 @@ public class JoinMappingValidationRule implements IValidator{
 				filterProperties.setPropertyname(row.getFieldName());
 				filterPropertiesList.add(filterProperties);
 			} 
-			lookupInputPropertiesList.add(filterPropertiesList);
+			lookupInputProperties.add(filterPropertiesList);
 		}
 		
-		lookupInputProperties.addAll(lookupInputPropertiesList);
 		
 		
 		List<LookupMapProperty> lookupMapProperties = joinMappingGrid.getLookupMapProperties();

@@ -90,6 +90,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	private String selectedTab;
 	
+	private SchemaData schemaData;
+	
 	private boolean isCancelPressed;
 	
 	/**
@@ -112,6 +114,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		isPropertyWindowValid = true;
 		
 		this.toolTipErrorMessages = toolTipErrorMessages;
+		schemaData = new SchemaData();
 	}
 
 	/**
@@ -425,7 +428,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 				logger.error("Failed to create validator", e);
 				throw new RuntimeException("Failed to create validator", e);
 			}
-			boolean status = validator.validateMap(properties, customWidget.getPropertyName(),SchemaData.getInputSchema(component));
+			boolean status = validator.validateMap(properties, customWidget.getPropertyName(),schemaData.getInputSchema(component));
 			//NOTE : here if any of the property is not valid then whole component is not valid 
 			if(status == false){
 				windowValidityStaus = Boolean.FALSE;

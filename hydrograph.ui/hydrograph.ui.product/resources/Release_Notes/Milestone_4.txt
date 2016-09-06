@@ -45,6 +45,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 34.#1091 [Vibhor Tyagi] 	Execution Tracking: Tracking Logs are not Getting Stored Anywhere Else Other than Default Installation Path
 35.#1109 [Vibhor Tyagi] 	Reduce The Size of the 'Execution Tracker Console' Window 
 36.#686 [Akhilesh Joshi] XML Import: Error Bubble Appears on Join/Transform Component Though All the Attributes Are Getting Imported
+37.#1159[Shashank Karnik] Watcher Icon on Coolbar is Getting Enabled, that when Job Does not Have a Watcher
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
