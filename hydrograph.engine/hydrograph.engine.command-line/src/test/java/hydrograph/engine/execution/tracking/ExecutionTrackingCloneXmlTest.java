@@ -43,7 +43,6 @@ public class ExecutionTrackingCloneXmlTest {
 		Assert.assertEquals(statusHelper.getCurrentStatus("input1"), "SUCCESSFUL");
 		Assert.assertEquals(statusHelper.getProcessedRecords("input1").get("out0"), new Long(3));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("input1").get("out0"), "SUCCESSFUL");
-		// System.out.println(statusHelper.getComponentId("input1"));
 	}
 
 	@Test
