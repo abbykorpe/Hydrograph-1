@@ -23,6 +23,8 @@ package hydrograph.ui.common.util;
 public class ImagePathConstant {
 	public static final String ADD_BUTTON = "/icons/add.png";
 	public static final String DELETE_BUTTON = "/icons/delete.png";
+	public static final String MAC_ADD_BUTTON = "/icons/iconadd.png";
+	public static final String MAC_DELETE_BUTTON ="/icons/icondelete.png";
 	public static final String MOVEUP_BUTTON = "/icons/up.png";
 	public static final String MOVEDOWN_BUTTON = "/icons/down.png";
 	public static final String SAVE_BUTTON = "/icons/save_o.png";
