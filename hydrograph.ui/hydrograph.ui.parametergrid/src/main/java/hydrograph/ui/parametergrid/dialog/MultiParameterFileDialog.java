@@ -14,6 +14,7 @@
 package hydrograph.ui.parametergrid.dialog;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.common.util.XMLUtil;
@@ -86,6 +87,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -137,13 +140,13 @@ public class MultiParameterFileDialog extends Dialog {
 	private List<ParameterWithFilePath> parameterSearchBoxItemsFixed;
 	private String activeProjectLocation;
 	private boolean runGraph;
-
+	private boolean ctrlKeyPressed = false;
 	private static final String DROP_BOX_TEXT = "\nDrop parameter file here to delete";
 	private boolean okPressed;
 	private boolean ifNotified = false;
 	private static final Base64 base64 = new Base64();
 	private Composite container_1;
-	
+	private Table table_2;
 	private static final String TABLE_TYPE_KEY="TABLE_TYPE";
 	IStructuredSelection previousSelection = null;
 	/**
@@ -588,17 +591,13 @@ public class MultiParameterFileDialog extends Dialog {
 				false, 1, 1));
 
 		Button btnAdd_1 = new Button(composite_8, SWT.NONE);
-		btnAdd_1.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
+		btnAdd_1.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		btnAdd_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnAdd_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Parameter parameter = new Parameter(
-						MultiParameterFileDialogConstants.DefaultParameter,
-						MultiParameterFileDialogConstants.DefaultValue);
-				parameters.add(parameter);
-				parameterTableViewer.refresh();
+				addNewRow(parameterTableViewer);
 			}
 		});
 		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
@@ -606,55 +605,13 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnDelete = new Button(composite_8, SWT.NONE);
-		btnDelete.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
+		btnDelete.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		btnDelete.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {				
-				Table table = parameterTableViewer.getTable();
-				int selectionIndex = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				if (selectionIndex == -1) {
-					WidgetUtility
-							.errorMessage(ErrorMessages.SELECT_ROW_TO_DELETE);
-				} else {
-					table.remove(indexs);
-					int itemsRemoved = 0;
-					for (int index : indexs) {
-						parameters.remove(index - itemsRemoved);
-						itemsRemoved++;
-					}
-					parameterTableViewer.getTable().removeAll();
-					parameterTableViewer.refresh();
-				}
-				
-				if(indexs.length == 1 && parameters.size() > 0){//only one item is deleted
-					if(parameters.size() == 1){//list contains only one element
-						table.select(0);// select the first element
-						parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
-					}
-					else if(parameters.size() == indexs[0]){//deleted last item 
-						table.select(parameters.size() - 1);//select the last element which now at the end of the list
-						parameterTableViewer.editElement(parameterTableViewer.getElementAt(parameters.size() - 1), 0);
-					}
-					else if(parameters.size() > indexs[0]){//deleted element from middle of the list
-						table.select( indexs[0] == 0 ? 0 : (indexs[0] - 1) );//select the element from at the previous location
-						parameterTableViewer.editElement(parameterTableViewer.getElementAt(indexs[0] == 0 ? 0 : (indexs[0] - 1)), 0);
-					}
-				}
-				else if(indexs.length >= 2){//multiple items are selected for deletion
-					if(indexs[0] == 0){//delete from 0 to ...
-						if(parameters.size() >= 1){//list contains only one element
-							table.select(0);//select the remaining element
-							parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
-						}
-					}
-					else{//delete started from element other than 0th element
-						table.select((indexs[0])-1);//select element before the start of selection   
-						parameterTableViewer.editElement(parameterTableViewer.getElementAt((indexs[0])-1), 0);
-					}
-				}
+				deleteRow(parameterTableViewer);
 			}
 		});
 		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
@@ -662,23 +619,13 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnUp = new Button(composite_8, SWT.NONE);
-		btnUp.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
+		btnUp.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		btnUp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1,
 				1));
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = parameterTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int index : indexes) {
-
-					if (index > 0) {
-						Collections.swap((List<Parameter>) parameters, index,
-								index - 1);
-						parameterTableViewer.refresh();
-
-					}
-				}
+				moveRowUp(parameterTableViewer);
 			}
 		});
 		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
@@ -686,23 +633,13 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnDown = new Button(composite_8, SWT.NONE);
-		btnDown.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
+		btnDown.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		btnDown.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = parameterTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int i = indexes.length - 1; i > -1; i--) {
-
-					if (indexes[i] < parameters.size() - 1) {
-						Collections.swap((List<Parameter>) parameters,
-								indexes[i], indexes[i] + 1);
-						parameterTableViewer.refresh();
-
-					}
-				}
+				moveRowDown(parameterTableViewer);
 			}
 		});
 		Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
@@ -729,12 +666,13 @@ public class MultiParameterFileDialog extends Dialog {
 		
 		parameterTableViewer = new TableViewer(composite_1, SWT.BORDER
 				| SWT.FULL_SELECTION | SWT.MULTI);
-		Table table_2 = parameterTableViewer.getTable();
+		table_2 = parameterTableViewer.getTable();
 		table_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table_2.setLinesVisible(true);
 		table_2.setHeaderVisible(true);
 		parameterTableViewer.setContentProvider(new ArrayContentProvider());
 		parameterTableViewer.setData(TABLE_TYPE_KEY, "parameterTableViewer");
+		attachShortcutListner(parameterTableViewer,table_2);
 		final TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(
 				parameterTableViewer, SWT.NONE);
 		ColumnViewerToolTipSupport.enableFor(parameterTableViewer,
@@ -875,6 +813,128 @@ public class MultiParameterFileDialog extends Dialog {
 		getShell().setFocus();		
 		enableTabbing(filePathTableViewer);
 		setTableLayoutToMappingTable(parameterTableViewer);
+	}
+	
+	private void addNewRow(TableViewer nameValueTableViewer){
+	Parameter parameter = new Parameter(
+			MultiParameterFileDialogConstants.DefaultParameter,
+			MultiParameterFileDialogConstants.DefaultValue);
+	parameters.add(parameter);
+	parameterTableViewer.refresh();
+	
+	}
+	
+	private void deleteRow(TableViewer parameterTableViewer ){
+		Table table = parameterTableViewer.getTable();
+		int selectionIndex = table.getSelectionIndex();
+		int[] indexs = table.getSelectionIndices();
+		if (selectionIndex == -1) {
+			WidgetUtility
+					.errorMessage(ErrorMessages.SELECT_ROW_TO_DELETE);
+		} else {
+			table.remove(indexs);
+			int itemsRemoved = 0;
+			for (int index : indexs) {
+				parameters.remove(index - itemsRemoved);
+				itemsRemoved++;
+			}
+			parameterTableViewer.getTable().removeAll();
+			parameterTableViewer.refresh();
+		}
+		
+		if(indexs.length == 1 && parameters.size() > 0){//only one item is deleted
+			if(parameters.size() == 1){//list contains only one element
+				table.select(0);// select the first element
+				parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+			}
+			else if(parameters.size() == indexs[0]){//deleted last item 
+				table.select(parameters.size() - 1);//select the last element which now at the end of the list
+				parameterTableViewer.editElement(parameterTableViewer.getElementAt(parameters.size() - 1), 0);
+			}
+			else if(parameters.size() > indexs[0]){//deleted element from middle of the list
+				table.select( indexs[0] == 0 ? 0 : (indexs[0] - 1) );//select the element from at the previous location
+				parameterTableViewer.editElement(parameterTableViewer.getElementAt(indexs[0] == 0 ? 0 : (indexs[0] - 1)), 0);
+			}
+		}
+		else if(indexs.length >= 2){//multiple items are selected for deletion
+			if(indexs[0] == 0){//delete from 0 to ...
+				if(parameters.size() >= 1){//list contains only one element
+					table.select(0);//select the remaining element
+					parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+				}
+			}
+			else{//delete started from element other than 0th element
+				table.select((indexs[0])-1);//select element before the start of selection   
+				parameterTableViewer.editElement(parameterTableViewer.getElementAt((indexs[0])-1), 0);
+			}
+		}
+	}
+	
+	private void moveRowUp( TableViewer parameterTableViewer ){
+		Table table = parameterTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int index : indexes) {
+
+			if (index > 0) {
+				Collections.swap((List<Parameter>) parameters, index,
+						index - 1);
+				parameterTableViewer.refresh();
+
+			}
+		}
+	}
+	
+	
+	private void moveRowDown(TableViewer parameterTableViewer){
+		Table table = parameterTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int i = indexes.length - 1; i > -1; i--) {
+
+			if (indexes[i] < parameters.size() - 1) {
+				Collections.swap((List<Parameter>) parameters,
+						indexes[i], indexes[i] + 1);
+				parameterTableViewer.refresh();
+
+			}
+		}
+	}
+	
+	
+	private void attachShortcutListner(final TableViewer nameValueTableViewer,Table table){
+		Control currentControl = table;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
+					deleteRow(nameValueTableViewer);
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
+					addNewRow(nameValueTableViewer);
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp(nameValueTableViewer);				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown(nameValueTableViewer);
+				}
+			}
+		});
 	}
 
 	private boolean saveParameters() {
