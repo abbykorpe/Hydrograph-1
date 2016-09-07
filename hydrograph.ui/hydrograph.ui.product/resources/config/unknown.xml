@@ -41,8 +41,8 @@
 			renderer="XML_CONTENT_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
 		
-		<tns:property dataType="string" name="phase" value="0"
-			renderer="PHASE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
+		<tns:property dataType="string" name="batch" value="0"
+			renderer="BATCH_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
 
 	</tns:component>

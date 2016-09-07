@@ -92,11 +92,11 @@ public class WidgetHelper {
 	}
 	
 	/**
-	 * Configuration to customize text box as phase property 
+	 * Configuration to customize text box as batch property 
 	 */
-	public WidgetConfig getPhaseWidgetConfig(){
+	public WidgetConfig getBatchWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Constants.PHASE);
+		textBoxConfig.setName(Constants.BATCH);
 		textBoxConfig.setCharacterLimit(2);
 		addTextBoxListeners(textBoxConfig);
 		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);

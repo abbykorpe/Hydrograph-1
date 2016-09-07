@@ -66,7 +66,7 @@ public class VerifyDigitLimitNumericListener  implements IELTListener{
 				String string=event.text;
 				Matcher matchs=Pattern.compile("[\\d]*").matcher(string);
 				if(!matchs.matches()){
-					txtDecorator.setDescriptionText(Messages.FIELDPHASE);
+					txtDecorator.setDescriptionText(Messages.FIELDBATCH);
 					txtDecorator.show();
 					event.doit=false;
 			}else

@@ -58,7 +58,7 @@
 			value="First" renderer="RETENTION_LOGIC_WIDGET" type="USER" showAsTooltip="TRUE"
 			tooltipDataType="TEXT" usage="OPTIONAL" propertyHelpText="Retains record values as per specific selection."/>
 			
-		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+		<tns:property dataType="string" name="batch" value="0" renderer="BATCH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>

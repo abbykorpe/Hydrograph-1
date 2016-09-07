@@ -70,7 +70,7 @@ public class Messages extends NLS {
 	public static String FIELD_SCALE_NOT_LESS_THAN_FIELD_LENGTH;
 	public static String DEFAULT_VALUE;
 	public static String FIELDNAMEERROR;
-	public static String FIELDPHASE;
+	public static String FIELDBATCH;
 	public static String CHARACTERSET;
 	public static String SCALE;
 	public static String SCALEERROR;

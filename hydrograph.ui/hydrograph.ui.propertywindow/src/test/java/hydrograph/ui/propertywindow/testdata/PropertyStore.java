@@ -63,7 +63,7 @@ public class PropertyStore {
 				.group("TEXT_PROPERTIES")
 				.subGroup("AAAA").build();
 						
-				Property phase= new Property.Builder("String", "phase", Widgets.PHASE_WIDGET.name())
+				Property batch= new Property.Builder("String", "batch", Widgets.BATCH_WIDGET.name())
 				.group("TEXT_PROPERTIES")
 				.subGroup("AAAA").build();
 				
@@ -93,7 +93,7 @@ public class PropertyStore {
 		inputComponentProperties.add(safe);
 		inputComponentProperties.add(has_header);
 		inputComponentProperties.add(charset);
-		inputComponentProperties.add(phase);
+		inputComponentProperties.add(batch);
 		inputComponentProperties.add(schema);
 		inputComponentProperties.add(runtimeProps);
 		

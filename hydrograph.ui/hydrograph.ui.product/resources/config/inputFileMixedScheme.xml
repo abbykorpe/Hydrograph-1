@@ -64,7 +64,7 @@
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time."/>
 		
-		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+		<tns:property dataType="string" name="batch" value="0" renderer="BATCH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
