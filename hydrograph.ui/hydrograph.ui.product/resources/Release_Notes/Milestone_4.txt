@@ -48,6 +48,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 37.#1159[Shashank Karnik] Watcher Icon on Coolbar is Getting Enabled, that when Job Does not Have a Watcher
 38.#560 [Rushikesh Pawale] Added key shortcuts for add, delete, row up, row down buttons for all components.
 39.#1110 [Rushikesh Pawale] Fixed issue for shifting focus to previous row on delete button.
+40.#241 [Akhilesh Joshi] Join component height increases fractionally
 
 =====================================================================================================
 Notes for QA:

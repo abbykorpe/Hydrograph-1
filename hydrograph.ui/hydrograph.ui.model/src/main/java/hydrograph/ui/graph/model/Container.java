@@ -108,7 +108,12 @@ public class Container extends Model {
 			}
 			else{
 				if(labelLength<ModelConstants.compLabelOneLineLengthLimit){
+					if(!(component.getSize().height>96)){
 				component.setSize(new Dimension(component.getSize().width,80));
+					}
+					else{
+						component.setSize(new Dimension(component.getSize().width,component.getSize().height));
+					}
 				}
 			}
 				
