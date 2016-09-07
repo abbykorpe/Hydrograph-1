@@ -21,9 +21,11 @@ import cascading.scheme.hadoop.SequenceFile;
 import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
+import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.OutputFileSequenceFormatEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSequenceFormatEntity> {
@@ -38,6 +40,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 	@SuppressWarnings("rawtypes")
 	Tap outTap;
 	SequenceFile scheme;
+	private InputOutputFieldsAndTypesCreator<OutputFileSequenceFormatEntity> fieldsCreator;
 	private static Logger LOG = LoggerFactory.getLogger(OutputFileSequenceFormatAssembly.class);
 
 	public OutputFileSequenceFormatAssembly(OutputFileSequenceFormatEntity outputFileSequenceFormatEntity,
@@ -55,6 +58,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 		try {
 			LOG.trace("Creating output file sequence format assembly for '"
 					+ outputFileSequenceFormatEntity.getComponentId() + "'");
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileSequenceFormatEntity>(outputFileSequenceFormatEntity);
 			prepareAssembly();
 			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileSequenceFormat",
 					outputFileSequenceFormatEntity.getComponentId(), ""), tailPipe);
@@ -72,7 +76,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 
 	private void prepareAssembly() {
 		flowDef = componentParameters.getFlowDef();
-		String filePathToWrite = componentParameters.getPathUri();
+		String filePathToWrite = outputFileSequenceFormatEntity.getPath();
 		tailPipe = componentParameters.getInputPipe();
 		try {
 			prepareScheme();
@@ -85,7 +89,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 	}
 
 	public void prepareScheme() {
-
-		scheme = new SequenceFile(componentParameters.getInputFields());
+		Fields outputFields = fieldsCreator.makeFieldsWithTypes();
+		scheme = new SequenceFile(outputFields);
 	}
 }

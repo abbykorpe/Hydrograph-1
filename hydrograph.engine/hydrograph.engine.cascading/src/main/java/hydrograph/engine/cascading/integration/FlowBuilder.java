@@ -139,7 +139,7 @@ public class FlowBuilder {
 			}
 
 			if (isPhaseTempComponent(componentId, runtimeContext)) {
-				buildForPhaseBreak(componentId, runtimeContext, cp);
+//				buildForPhaseBreak(componentId, runtimeContext, cp);
 			}
 
 			((AssemblyGeneratorBase) assemblyGeneratorBase).createAssembly(cp);
@@ -201,21 +201,46 @@ public class FlowBuilder {
 						componentId) instanceof SequenceInputFile;
 	}
 
-	public void cleanup(RuntimeContext runtimeContext) {
-		deleteTempPaths(runtimeContext);
+	public void cleanup(List<String> list,RuntimeContext runtimeContext) {
+		deleteTempPaths(list,runtimeContext);
 
 	}
+//
+//	private void deleteTempPaths(RuntimeContext runtimeContext) {
+//		for (ComponentParameters cp : runtimeContext.getAllTempPathParameters()) {
+//
+//			Path fullPath = new Path(cp.getPathUri());
+//			// do not delete the root directory
+//			if (fullPath.depth() == 0)
+//				continue;
+//			FileSystem fileSystem;
+//
+//			LOG.info("Deleting temp path:" + cp.getPathUri());
+//			try {
+//				fileSystem = FileSystem.get(runtimeContext.getJobConf());
+//
+//				fileSystem.delete(fullPath, true);
+//			} catch (NullPointerException exception) {
+//				// hack to get around npe thrown when fs reaches root directory
+//				// if (!(fileSystem instanceof NativeS3FileSystem))
+//				throw new RuntimeException(exception);
+//			} catch (IOException e) {
+//				throw new RuntimeException(e);
+//			}
+//
+//		}
+//	}
 
-	private void deleteTempPaths(RuntimeContext runtimeContext) {
-		for (ComponentParameters cp : runtimeContext.getAllTempPathParameters()) {
+	private void deleteTempPaths(List<String> tmpPathList,RuntimeContext runtimeContext) {
+		for (String tmpPath : tmpPathList) {
 
-			Path fullPath = new Path(cp.getPathUri());
+			Path fullPath = new Path(tmpPath);
 			// do not delete the root directory
 			if (fullPath.depth() == 0)
 				continue;
 			FileSystem fileSystem;
 
-			LOG.info("Deleting temp path:" + cp.getPathUri());
+			LOG.info("Deleting temp path:" + tmpPath);
 			try {
 				fileSystem = FileSystem.get(runtimeContext.getJobConf());
 

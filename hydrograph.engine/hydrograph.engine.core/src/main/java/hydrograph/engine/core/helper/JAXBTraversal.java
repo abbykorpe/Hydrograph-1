@@ -59,10 +59,10 @@ public class JAXBTraversal {
 
 		jaxbGraph = graph.getInputsOrOutputsOrStraightPulls();
 		identifyHiveComponentInFlow();
-		updatePhase();
+//		updatePhase();
 		populatePhase();
-		populatePhaseChangeComponents();
-		updateLinksAndComponents(graph);
+//		populatePhaseChangeComponents();
+//		updateLinksAndComponents(graph);
 	}
 
 	/**

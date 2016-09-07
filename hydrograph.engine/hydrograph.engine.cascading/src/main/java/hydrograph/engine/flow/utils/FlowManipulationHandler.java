@@ -15,7 +15,9 @@ package hydrograph.engine.flow.utils;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,7 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.main.Graph;
+import hydrograph.engine.phasebreak.PhaseBreakPlugin;
 import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.utilities.OrderedProperties;
 import hydrograph.engine.utilities.OrderedPropertiesHelper;
@@ -54,14 +57,23 @@ public class FlowManipulationHandler {
 		} catch (IOException e) {
 			throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e);
 		}
-
-		for (Object pluginName : properties.keySet()) {
-			jaxbComponents = executePlugin(properties.get(pluginName).toString(), flowManipulationContext);
+		for (String pluginName : preProcessPlugin(properties)) {
+			jaxbComponents = executePlugin(pluginName, flowManipulationContext);
 			flowManipulationContext.setJaxbMainGraph(jaxbComponents);
 			flowManipulationContext.setSchemaFieldMap(new SchemaFieldHandler(jaxbComponents));
 		}
 
 		return getJaxbObject();
+	}
+
+	private static List<String> preProcessPlugin(OrderedProperties properties) {
+		List<String> plugins=new LinkedList<String>();
+		plugins.add(PhaseBreakPlugin.class.getName());
+		for(Object plugin:properties.values()){
+			plugins.add(plugin.toString());
+		}
+		return plugins;
+		
 	}
 
 	private static HydrographJob getJaxbObject() {
