@@ -38,7 +38,9 @@ public class SchemaData {
 		Map<String, List<FixedWidthGridRow>>  inputSchemaMap =new TreeMap<>();
 		for(Link link:component.getTargetConnections()){
 			ComponentsOutputSchema componentsOutputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+			if (componentsOutputSchema!=null){
 			inputSchemaMap.put(link.getTargetTerminal(),componentsOutputSchema.getFixedWidthGridRowsOutputFields());
+			}
 		}
 		return inputSchemaMap;
 		}
