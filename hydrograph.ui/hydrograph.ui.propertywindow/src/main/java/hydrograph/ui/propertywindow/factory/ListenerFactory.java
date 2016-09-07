@@ -35,6 +35,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.ELTOpenFileEditorListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTRuntimeButtonClickListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTSchemaDialogSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTSelectionListener;
+import hydrograph.ui.propertywindow.widgets.listeners.ELTShortcutKeyGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyComponentNameListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyNumbericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifySequenceFieldName;
@@ -43,9 +44,9 @@ import hydrograph.ui.propertywindow.widgets.listeners.FocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.JoinInputCountFocusOutListener;
 import hydrograph.ui.propertywindow.widgets.listeners.OperationClassComboChangeListener;
+import hydrograph.ui.propertywindow.widgets.listeners.VerifyDigitLimitNumericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusOutListener;
-import hydrograph.ui.propertywindow.widgets.listeners.VerifyDigitLimitNumericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.DisposeSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDeleteAllSelectionListener;
@@ -113,7 +114,8 @@ public class ListenerFactory {
 		MOUSE_DOWN_LISTENER(MouseDownSchemaGridListener.class),
 		MOUSE_EXIT_LISTENER(MouseExitSchemaGridListener.class),
 		MOUSE_HOVER_LISTENER(MouseHoverOnSchemaGridListener.class),
-		MOUSE_MOVE_LISTENER(MouseMoveOnSchemaGridListener.class);
+		MOUSE_MOVE_LISTENER(MouseMoveOnSchemaGridListener.class),
+		GRID_KEY_LISTENER(ELTShortcutKeyGridListener.class);
 		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {

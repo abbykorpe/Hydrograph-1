@@ -65,6 +65,8 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -126,13 +128,11 @@ public class JoinMapDialog extends Dialog {
 	
 	
 	private static final String PULL_TOOLTIP = "Pull schema";
-	private static final String ADD_TOOLTIP = "Add field";
-	private static final String DELETE_TOOLTIP = "Delete field";
-	private static final String UP_TOOLTIP = "Move field up";
-	private static final String DOWN_TOOLTIP = "Move field down";
 	
 	private static final String INPUT_TABLE_COLUMN_TEXT="Input Fields";
 	private static final String DIALOG_TITLE="Join Mapping Dialog";
+	private boolean ctrlKeyPressed = false;
+	private Table table;
 	
 	/**
 	 * Create the dialog.
@@ -350,7 +350,8 @@ public class JoinMapDialog extends Dialog {
 		gl_composite_6.horizontalSpacing = 0;
 		composite_6.setLayout(gl_composite_6);
 
-		Table table = createMappingTable(composite_6);
+		table = createMappingTable(composite_6);
+		attachShortcutListner();
 
 		addTabFunctionalityInMappingTable();
 		
@@ -366,6 +367,7 @@ public class JoinMapDialog extends Dialog {
 		scrolledComposite.setContent(composite_6);
 		scrolledComposite.setMinSize(composite_6.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
+
 	}
 
 	private void setTableLayoutToMappingTable(Table table) {
@@ -650,6 +652,114 @@ public class JoinMapDialog extends Dialog {
 		createDownButton(composite_11);
 	}
 	
+	private void deleteRow(){
+
+		Table table = mappingTableViewer.getTable();
+		int selectionIndex = table.getSelectionIndex();
+		int[] indexs = table.getSelectionIndices();
+		if (selectionIndex == -1) {
+			WidgetUtility.errorMessage("Select Rows to delete");
+		} else {
+			table.remove(indexs);
+			int itemsRemoved=0;
+			for (int index : indexs) {
+				mappingTableItemList.remove(index-itemsRemoved);
+				if(index-itemsRemoved-1 != -1){
+					table.setSelection(index-itemsRemoved-1);
+				}else{
+					table.setSelection(0);
+				}
+				itemsRemoved++;
+			}
+			mappingTableViewer.refresh();
+		}
+		refreshButtonStatus();
+	
+	}
+	
+	private void addNewRow(){
+
+		LookupMapProperty lookupMapProperty = new LookupMapProperty();
+		lookupMapProperty.setOutput_Field("");
+		lookupMapProperty.setSource_Field("");
+		mappingTableItemList.add(lookupMapProperty);
+		mappingTableViewer.refresh();
+		mappingTableViewer.editElement(lookupMapProperty, 0);
+		refreshButtonStatus();
+	
+	}
+
+	private void moveRowUp(){
+
+		Table table = mappingTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int index : indexes) {
+
+			if (index > 0) {
+				Collections.swap(
+						(List<LookupMapProperty>) mappingTableItemList,
+						index, index - 1);
+				mappingTableViewer.refresh();
+			}
+		}
+		refreshButtonStatus();
+	
+	}
+
+	private void moveRowDown(){
+
+		Table table = mappingTableViewer.getTable();
+		int[] indexes = table.getSelectionIndices();
+		for (int i = indexes.length - 1; i > -1; i--) {
+
+			if (indexes[i] < mappingTableItemList.size() - 1) {
+				Collections.swap(
+						(List<LookupMapProperty>) mappingTableItemList,
+						indexes[i], indexes[i] + 1);
+				mappingTableViewer.refresh();
+
+			}
+		}
+		refreshButtonStatus();
+	
+	}
+	private void attachShortcutListner(){
+		Control currentControl= table;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
+					deleteRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
+					addNewRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp();				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown();
+				}
+			}
+		});
+	}
+	
 	private void createPullButton(Composite composite_11) {
 		btnPull = new Button(composite_11, SWT.NONE);
 		Image pullButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
@@ -711,50 +821,27 @@ public class JoinMapDialog extends Dialog {
 
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
-		btnDown.setToolTipText(DOWN_TOOLTIP);
+		btnDown.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown.setImage(downButtonImage);
 		
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = mappingTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int i = indexes.length - 1; i > -1; i--) {
-
-					if (indexes[i] < mappingTableItemList.size() - 1) {
-						Collections.swap(
-								(List<LookupMapProperty>) mappingTableItemList,
-								indexes[i], indexes[i] + 1);
-						mappingTableViewer.refresh();
-
-					}
-				}
-				refreshButtonStatus();
+				moveRowDown();
 			}
 		});
 	}
 
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
-		btnUp.setToolTipText(UP_TOOLTIP);
+		btnUp.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
 		btnUp.setImage(upButtonImage);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = mappingTableViewer.getTable();
-				int[] indexes = table.getSelectionIndices();
-				for (int index : indexes) {
-
-					if (index > 0) {
-						Collections.swap(
-								(List<LookupMapProperty>) mappingTableItemList,
-								index, index - 1);
-						mappingTableViewer.refresh();
-					}
-				}
-				refreshButtonStatus();
+				 moveRowUp();
 			}
 		});
 	}
@@ -762,52 +849,27 @@ public class JoinMapDialog extends Dialog {
 	private void createDeleteButton(Composite composite_11) {
 		
 		btnDelete = new Button(composite_11, SWT.NONE);
-		btnDelete.setToolTipText(DELETE_TOOLTIP);
+		btnDelete.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
 		btnDelete.setImage(deleteButtonImage);
 
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Table table = mappingTableViewer.getTable();
-				int selectionIndex = table.getSelectionIndex();
-				int[] indexs = table.getSelectionIndices();
-				if (selectionIndex == -1) {
-					WidgetUtility.errorMessage("Select Rows to delete");
-				} else {
-					table.remove(indexs);
-					int itemsRemoved=0;
-					for (int index : indexs) {
-						mappingTableItemList.remove(index-itemsRemoved);
-						if(index-itemsRemoved-1 != -1){
-							table.setSelection(index-itemsRemoved-1);
-						}else{
-							table.setSelection(0);
-						}
-						itemsRemoved++;
-					}
-					mappingTableViewer.refresh();
-				}
-				refreshButtonStatus();
+				deleteRow();
 			}
 		});
 	}
 
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
-		btnAdd.setToolTipText(ADD_TOOLTIP);
+		btnAdd.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
 		btnAdd.setImage(addButtonImage);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				LookupMapProperty lookupMapProperty = new LookupMapProperty();
-				lookupMapProperty.setOutput_Field("");
-				lookupMapProperty.setSource_Field("");
-				mappingTableItemList.add(lookupMapProperty);
-				mappingTableViewer.refresh();
-				mappingTableViewer.editElement(lookupMapProperty, 0);
-				refreshButtonStatus();
+				addNewRow();
 			}
 		});
 	}

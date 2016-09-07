@@ -28,6 +28,7 @@ import hydrograph.ui.parametergrid.dialog.models.ParameterWithFilePath;
 import hydrograph.ui.parametergrid.dialog.support.ParameterEditingSupport;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
 import hydrograph.ui.parametergrid.utils.SWTResourceManager;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.io.ByteArrayInputStream;
@@ -587,6 +588,7 @@ public class MultiParameterFileDialog extends Dialog {
 				false, 1, 1));
 
 		Button btnAdd_1 = new Button(composite_8, SWT.NONE);
+		btnAdd_1.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		btnAdd_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnAdd_1.addSelectionListener(new SelectionAdapter() {
@@ -604,11 +606,12 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnDelete = new Button(composite_8, SWT.NONE);
+		btnDelete.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		btnDelete.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent e) {				
 				Table table = parameterTableViewer.getTable();
 				int selectionIndex = table.getSelectionIndex();
 				int[] indexs = table.getSelectionIndices();
@@ -625,6 +628,33 @@ public class MultiParameterFileDialog extends Dialog {
 					parameterTableViewer.getTable().removeAll();
 					parameterTableViewer.refresh();
 				}
+				
+				if(indexs.length == 1 && parameters.size() > 0){//only one item is deleted
+					if(parameters.size() == 1){//list contains only one element
+						table.select(0);// select the first element
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+					}
+					else if(parameters.size() == indexs[0]){//deleted last item 
+						table.select(parameters.size() - 1);//select the last element which now at the end of the list
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt(parameters.size() - 1), 0);
+					}
+					else if(parameters.size() > indexs[0]){//deleted element from middle of the list
+						table.select( indexs[0] == 0 ? 0 : (indexs[0] - 1) );//select the element from at the previous location
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt(indexs[0] == 0 ? 0 : (indexs[0] - 1)), 0);
+					}
+				}
+				else if(indexs.length >= 2){//multiple items are selected for deletion
+					if(indexs[0] == 0){//delete from 0 to ...
+						if(parameters.size() >= 1){//list contains only one element
+							table.select(0);//select the remaining element
+							parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+						}
+					}
+					else{//delete started from element other than 0th element
+						table.select((indexs[0])-1);//select element before the start of selection   
+						parameterTableViewer.editElement(parameterTableViewer.getElementAt((indexs[0])-1), 0);
+					}
+				}
 			}
 		});
 		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
@@ -632,6 +662,7 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnUp = new Button(composite_8, SWT.NONE);
+		btnUp.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		btnUp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1,
 				1));
 		btnUp.addSelectionListener(new SelectionAdapter() {
@@ -655,6 +686,7 @@ public class MultiParameterFileDialog extends Dialog {
 		
 
 		Button btnDown = new Button(composite_8, SWT.NONE);
+		btnDown.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		btnDown.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnDown.addSelectionListener(new SelectionAdapter() {
@@ -677,6 +709,7 @@ public class MultiParameterFileDialog extends Dialog {
 		btnDown.setImage(downButtonImage);
 
 		Button btnSave = new Button(composite_8, SWT.NONE);
+		btnSave.setToolTipText(Messages.PARAMETER_GRID_SAVE_TOOLTIP);
 		btnSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
 				1, 1));
 		btnSave.addSelectionListener(new SelectionAdapter() {
@@ -1281,6 +1314,7 @@ public class MultiParameterFileDialog extends Dialog {
 		});
 		
 		Button btnUp_1 = new Button(composite, SWT.NONE);
+		btnUp_1.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		btnUp_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -1299,6 +1333,7 @@ public class MultiParameterFileDialog extends Dialog {
 		btnUp_1.setImage(upImage);
 		
 		Button btnDown_1 = new Button(composite, SWT.NONE);
+		btnDown_1.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		btnDown_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

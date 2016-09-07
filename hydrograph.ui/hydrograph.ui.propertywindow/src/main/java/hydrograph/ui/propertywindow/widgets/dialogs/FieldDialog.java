@@ -53,6 +53,8 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -119,6 +121,7 @@ public class FieldDialog extends Dialog {
 
 	protected Button okButton;
 	private static final String INFORMATION="Information";
+	private boolean ctrlKeyPressed = false;
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
@@ -292,25 +295,25 @@ public class FieldDialog extends Dialog {
 		composite_1.setLayoutData(cld_composite_1);
 
 		Label addButton = new Label(composite_1, SWT.NONE);
-		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
+		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
 		deleteButton = new Label(composite_1, SWT.NONE);
-		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
+		deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
 		upButton = new Label(composite_1, SWT.NONE);
-		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
+		upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
 		downButton = new Label(composite_1, SWT.NONE);
-		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
+		downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
 		attachDownButtonListerner(downButton);
@@ -322,7 +325,6 @@ public class FieldDialog extends Dialog {
 
 	private void attachDownButtonListerner(Label downButton) {
 		downButton.addMouseListener(new MouseListener() {
-			int index1 = 0, index2 = 0;
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -338,24 +340,7 @@ public class FieldDialog extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = targetTable.getSelectionIndex();
-				index1 = targetTable.getSelectionIndex();
-
-				if (index1 < propertyList.size() - 1) {
-					String data = targetTableViewer.getTable().getItem(index1).getText();
-					index2 = index1 + 1;
-					String data2 = targetTableViewer.getTable().getItem(index2).getText();
-
-					FilterProperties filter = new FilterProperties();
-					filter.setPropertyname(data2);
-					propertyList.set(index1, filter);
-
-					filter = new FilterProperties();
-					filter.setPropertyname(data);
-					propertyList.set(index2, filter);
-					targetTableViewer.refresh();
-					targetTable.setSelection(index1 + 1);
-				}
+				moveRowDown();
 			}
 		});
 
@@ -379,23 +364,7 @@ public class FieldDialog extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = targetTable.getSelectionIndex();
-
-				if (index1 > 0) {
-					index2 = index1 - 1;
-					String data = targetTableViewer.getTable().getItem(index1).getText();
-					String data2 = targetTableViewer.getTable().getItem(index2).getText();
-
-					FilterProperties filter = new FilterProperties();
-					filter.setPropertyname(data2);
-					propertyList.set(index1, filter);
-
-					filter = new FilterProperties();
-					filter.setPropertyname(data);
-					propertyList.set(index2, filter);
-					targetTableViewer.refresh();
-					targetTable.setSelection(index1 - 1);
-				}
+				moveRowUp();
 			}
 		});
 
@@ -411,16 +380,7 @@ public class FieldDialog extends Dialog {
 			}
 			@Override
 			public void mouseUp(MouseEvent e) {
-				WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
-				isAnyUpdatePerformed = true;
-				targetTableViewer.refresh();
-				if (propertyList.size() < 1) {
-					deleteButton.setEnabled(false);
-				} 
-				if (propertyList.size() <=1) {
-					upButton.setEnabled(false);
-					downButton.setEnabled(false);
-				} 
+				deleteRow();
 			}
 
 		});
@@ -443,9 +403,7 @@ public class FieldDialog extends Dialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				targetTable.getParent().setFocus();
-				addNewProperty(targetTableViewer, null);
-				enableControlButons();
+				addNewRow();
 			}
 
 		});
@@ -546,7 +504,120 @@ public class FieldDialog extends Dialog {
 			}
 
 		});
+		attachShortcutListner(Constants.PROPERTY_TABLE);
+		attachShortcutListner(Constants.PROPERTY_NAME);
 
+	}
+	
+	private void attachShortcutListner(String controlName){
+		Control currentControl;
+				
+		if (controlName == Constants.PROPERTY_NAME)
+			currentControl = targetTableViewer.getCellEditors()[0].getControl();
+		else
+			currentControl = targetTable;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
+					deleteRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
+					addNewRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp();				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown();
+				}
+			}
+		});
+	}
+	
+	private void moveRowDown()
+	{
+		int index1 = 0, index2 = 0;
+		index1 = targetTable.getSelectionIndex();
+		index1 = targetTable.getSelectionIndex();
+
+		if (index1 < propertyList.size() - 1) {
+			String data = targetTableViewer.getTable().getItem(index1).getText();
+			index2 = index1 + 1;
+			String data2 = targetTableViewer.getTable().getItem(index2).getText();
+
+			FilterProperties filter = new FilterProperties();
+			filter.setPropertyname(data2);
+			propertyList.set(index1, filter);
+
+			filter = new FilterProperties();
+			filter.setPropertyname(data);
+			propertyList.set(index2, filter);
+			targetTableViewer.refresh();
+			targetTable.setSelection(index1 + 1);
+		}
+	
+	}
+	
+	private void moveRowUp(){
+		int index1 = 0, index2 = 0;
+		index1 = targetTable.getSelectionIndex();
+
+		if (index1 > 0) {
+			index2 = index1 - 1;
+			String data = targetTableViewer.getTable().getItem(index1).getText();
+			String data2 = targetTableViewer.getTable().getItem(index2).getText();
+
+			FilterProperties filter = new FilterProperties();
+			filter.setPropertyname(data2);
+			propertyList.set(index1, filter);
+
+			filter = new FilterProperties();
+			filter.setPropertyname(data);
+			propertyList.set(index2, filter);
+			targetTableViewer.refresh();
+			targetTable.setSelection(index1 - 1);
+		}
+	
+	}
+	
+	private void addNewRow()
+	{
+		targetTable.getParent().setFocus();
+		addNewProperty(targetTableViewer, null);
+		enableControlButons();
+	
+	}
+	
+	private void deleteRow()
+	{
+		WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
+		isAnyUpdatePerformed = true;
+		targetTableViewer.refresh();
+		if (propertyList.size() < 1) {
+			deleteButton.setEnabled(false);
+		} 
+		if (propertyList.size() <=1) {
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		} 
+	
 	}
 	
 	protected void operationOnDrop(DropTargetEvent event) {

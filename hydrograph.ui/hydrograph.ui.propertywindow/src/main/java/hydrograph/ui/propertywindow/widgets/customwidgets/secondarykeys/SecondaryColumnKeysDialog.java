@@ -50,6 +50,8 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -106,6 +108,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private Button downButton;
 	private static final String INFORMATION="Information";
 	
+	private boolean ctrlKeyPressed = false;
+	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
 		propertyList = new ArrayList<SecondaryColumnKeysInformation>();
@@ -143,7 +147,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		createSourceTable(composite_2);
 
 		createTargetTable(composite_2);
-
+		
+		attachShortcutListner();
 		addErrorLabel(container);
 
 		return container;
@@ -217,6 +222,122 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			}
 		});
 
+	}
+	
+	private void attachShortcutListner(){
+		Control currentControl= targetTable;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
+					deleteRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
+					addNewRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp();				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown();
+				}
+			}
+		});
+	}
+	
+	private void deleteRow(){
+
+		WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
+		isAnyUpdatePerformed = true;
+		targetTableViewer.refresh();
+		if (propertyList.size() < 1) {
+			deleteButton.setEnabled(false);
+		}
+		if (propertyList.size()<= 1) {
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		} 
+	
+	}
+
+	
+	private void addNewRow(){
+
+		addNewProperty(targetTableViewer, null);
+		enableControlButtons();
+	
+	}
+	
+	private void moveRowUp(){
+		int index1 = 0, index2 = 0;
+		index1 = targetTable.getSelectionIndex();
+		String text = targetTableViewer.getTable().getItem(index1).getText(0);
+		String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
+
+		if (index1 > 0) {
+			index2 = index1 - 1;
+			String data = targetTableViewer.getTable().getItem(index2).getText(0);
+			String data2 = targetTableViewer.getTable().getItem(index2).getText(1);
+
+			SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
+			p.setColumnName(data);
+			p.setSortOrder(data2);
+			propertyList.set(index1, p);
+
+			p = new SecondaryColumnKeysInformation();
+			p.setColumnName(text);
+			p.setSortOrder(text1);
+			propertyList.set(index2, p);
+			targetTableViewer.refresh();
+			targetTable.setSelection(index1 - 1);
+
+		}
+	
+		
+	}
+	
+	private void moveRowDown(){
+		int index1 = 0, index2 = 0;
+
+		index1 = targetTable.getSelectionIndex();
+		String text = targetTableViewer.getTable().getItem(index1).getText(0);
+		String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
+
+		if (index1 < propertyList.size()) {
+			index2 = index1 + 1;
+
+			String data = targetTableViewer.getTable().getItem(index2).getText(0);
+			String data1 = targetTableViewer.getTable().getItem(index2).getText(1);
+
+			SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
+			p.setColumnName(data);
+			p.setSortOrder(data1);
+			propertyList.set(index1, p);
+
+			p = new SecondaryColumnKeysInformation();
+			p.setColumnName(text);
+			p.setSortOrder(text1);
+			propertyList.set(index2, p);
+			targetTableViewer.refresh();
+			targetTable.setSelection(index1 + 1);
+		}
+	
 	}
 
 	private void attachTargetTableListeners() {
@@ -328,25 +449,25 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		composite_1.setLayoutData(cld_composite_1);
 
 		Button addButton = new Button(composite_1, SWT.NONE);
-		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
+		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
 		deleteButton = new Button(composite_1, SWT.NONE);
-		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
+		deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
 		upButton = new Button(composite_1, SWT.NONE);
-		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
+		upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
 		downButton = new Button(composite_1, SWT.NONE);
-		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
+		downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
 		attachDownButtonListerner(downButton);
@@ -357,32 +478,10 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private void attachDownButtonListerner(Button downButton) {
 		downButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
        
 			@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = targetTable.getSelectionIndex();
-				String text = targetTableViewer.getTable().getItem(index1).getText(0);
-				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
-
-				if (index1 < propertyList.size()) {
-					index2 = index1 + 1;
-
-					String data = targetTableViewer.getTable().getItem(index2).getText(0);
-					String data1 = targetTableViewer.getTable().getItem(index2).getText(1);
-
-					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-					p.setColumnName(data);
-					p.setSortOrder(data1);
-					propertyList.set(index1, p);
-
-					p = new SecondaryColumnKeysInformation();
-					p.setColumnName(text);
-					p.setSortOrder(text1);
-					propertyList.set(index2, p);
-					targetTableViewer.refresh();
-					targetTable.setSelection(index1 + 1);
-				}
+				moveRowDown();
 			}
 		});
 
@@ -390,33 +489,11 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	private void attachUpButtonListener(Button upButton) {
 		upButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
 
         	@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = targetTable.getSelectionIndex();
-				String text = targetTableViewer.getTable().getItem(index1).getText(0);
-				String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
-
-				if (index1 > 0) {
-					index2 = index1 - 1;
-					String data = targetTableViewer.getTable().getItem(index2).getText(0);
-					String data2 = targetTableViewer.getTable().getItem(index2).getText(1);
-
-					SecondaryColumnKeysInformation p = new SecondaryColumnKeysInformation();
-					p.setColumnName(data);
-					p.setSortOrder(data2);
-					propertyList.set(index1, p);
-
-					p = new SecondaryColumnKeysInformation();
-					p.setColumnName(text);
-					p.setSortOrder(text1);
-					propertyList.set(index2, p);
-					targetTableViewer.refresh();
-					targetTable.setSelection(index1 - 1);
-
-				}
-			}
+        		moveRowUp();
+        	}
 		});
 
 	}
@@ -426,16 +503,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
-				WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
-				isAnyUpdatePerformed = true;
-				targetTableViewer.refresh();
-				if (propertyList.size() < 1) {
-					deleteButton.setEnabled(false);
-				}
-				if (propertyList.size()<= 1) {
-					upButton.setEnabled(false);
-					downButton.setEnabled(false);
-				} 
+				deleteRow();
 			}
 
 		});
@@ -447,8 +515,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
-				addNewProperty(targetTableViewer, null);
-				enableControlButtons();
+				addNewRow();
 			}
 
 		});

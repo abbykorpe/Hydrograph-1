@@ -127,6 +127,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -223,11 +224,6 @@ import org.xml.sax.SAXException;
 		public final static String SCHEMA_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.SCHEMA_CONFIG_XSD_PATH;
 	
 		private ControlDecoration txtDecorator, decorator;
-	
-		private String addButtonTooltip = Messages.ADD_SCHEMA_TOOLTIP;
-		private String removeButtonTooltip = Messages.DELETE_SCHEMA_TOOLTIP;
-		private String upButtonTooltip = Messages.MOVE_SCHEMA_UP_TOOLTIP;
-		private String downButtonTooltip = Messages.MOVE_SCHEMA_DOWN_TOOLTIP;
 		
 		List<GridRow> copiedGridRows=new ArrayList<GridRow>();
 	
@@ -243,6 +239,7 @@ import org.xml.sax.SAXException;
 		private Composite tableViewerComposite;
 		private Composite tableComposite;
 		protected String componentType;
+		private boolean ctrlKeyPressed = false;
 		/**
 		 * Adds the validators.
 		 */
@@ -1216,22 +1213,31 @@ import org.xml.sax.SAXException;
 						ListenerFactory.Listners.GRID_MOUSE_DOWN.getListener(),
 						propertyDialogButtonBar, helper, editors[0].getControl());
 				
+				eltTable.attachListener(
+						ListenerFactory.Listners.GRID_KEY_LISTENER.getListener(),
+						propertyDialogButtonBar, helper, table,
+						deleteButton.getSWTWidgetControl(),
+						upButton.getSWTWidgetControl(),
+						downButton.getSWTWidgetControl());
+				
 				addButton.attachListener(
 						ListenerFactory.Listners.GRID_ADD_SELECTION.getListener(),
 						propertyDialogButtonBar, helper, table,
 						deleteButton.getSWTWidgetControl(),
 						upButton.getSWTWidgetControl(),
 						downButton.getSWTWidgetControl());
-				
-				
-				
-				
+						
 				deleteButton.attachListener(
 						ListenerFactory.Listners.GRID_DELETE_SELECTION
 								.getListener(), propertyDialogButtonBar, helper,
 						table, deleteButton.getSWTWidgetControl(), upButton
 								.getSWTWidgetControl(), downButton
 								.getSWTWidgetControl());
+				
+					for (CellEditor editor:editors){
+						addShortcutKeyListener(editor.getControl());
+					}
+					addShortcutKeyListener(table);
 	
 			} catch (Exception e) {
 				logger.error(Messages.ATTACH_LISTENER_ERROR, e);
@@ -1370,7 +1376,7 @@ import org.xml.sax.SAXException;
 			SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 			buttonSubGroup.attachWidget(addButton);
 			addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
-			addButton.setToolTipText(addButtonTooltip);
+			addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		}
 	
 		private void addDeleteButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -1378,7 +1384,7 @@ import org.xml.sax.SAXException;
 			SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 			buttonSubGroup.attachWidget(deleteButton);
 			deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
-			deleteButton.setToolTipText(removeButtonTooltip);
+			deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		}
 	
 		private void addUpButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -1386,29 +1392,33 @@ import org.xml.sax.SAXException;
 			SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 			buttonSubGroup.attachWidget(upButton);
 			upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
-			upButton.setToolTipText(upButtonTooltip);
+			upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 			((Button)upButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {
 			 
 				@Override
 				public void mouseDown(MouseEvent e) {
-					propertyDialogButtonBar.enableApplyButton(true);
-					int[] indexes=table.getSelectionIndices();
-					for(int index :indexes)
-					{
-	
-						if (index > 0) {
-							Collections.swap((List)schemaGridRowList,index ,index-1);
-							tableViewer.refresh();
-	
-						}
-					}	
-					
+					moveRowUp();
 				}
 			 
 			
 			});
 	
 				
+		}
+		
+		private void moveRowUp()
+		{
+			propertyDialogButtonBar.enableApplyButton(true);
+			int[] indexes=table.getSelectionIndices();
+			for(int index :indexes)
+			{
+
+				if (index > 0) {
+					Collections.swap((List)schemaGridRowList,index ,index-1);
+					tableViewer.refresh();
+
+				}
+			}	
 		}
 	
 		private void addDownButton(ELTSchemaSubgroupComposite buttonSubGroup) {
@@ -1417,28 +1427,33 @@ import org.xml.sax.SAXException;
 			buttonSubGroup.attachWidget(downButton);
 	
 			downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
-			downButton.setToolTipText(downButtonTooltip);
+			downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 			
 			((Button)downButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {
 				 
 				@Override
 				public void mouseDown(MouseEvent e) {
-					propertyDialogButtonBar.enableApplyButton(true);
-					int[] indexes = table.getSelectionIndices();
-					for (int i = indexes.length - 1; i > -1; i--) {
-	
-						if (indexes[i] < schemaGridRowList.size() - 1) {
-							Collections.swap((List)schemaGridRowList,indexes[i] ,indexes[i]+1);
-							tableViewer.refresh();
-	
-						}
-					
-				}
-			 
+					moveRowDown();
 				}
 			});
 			
 			
+		}
+		
+		private void moveRowDown()
+		{
+			propertyDialogButtonBar.enableApplyButton(true);
+			int[] indexes = table.getSelectionIndices();
+			for (int i = indexes.length - 1; i > -1; i--) {
+
+				if (indexes[i] < schemaGridRowList.size() - 1) {
+					Collections.swap((List)schemaGridRowList,indexes[i] ,indexes[i]+1);
+					tableViewer.refresh();
+
+				}
+			
+		}
+	 
 		}
 	
 		public List<GridRow> getSchemaGridRowList() {
@@ -1621,5 +1636,35 @@ import org.xml.sax.SAXException;
 	
 	public String getComponentType() {
 		return componentType;
+	}
+	
+	private void addShortcutKeyListener (Control currentControl) {
+		logger.info("currentControl is: " + currentControl);
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}									
+								
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					logger.info("Key pressed is arrow up");
+					moveRowUp();			
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					logger.info("Key pressed is arrow down");
+					moveRowDown();
+				}
+			}
+		});
 	}
 	}

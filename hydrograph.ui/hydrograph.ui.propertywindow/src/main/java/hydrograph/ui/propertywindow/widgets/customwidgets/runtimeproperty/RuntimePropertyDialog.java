@@ -36,6 +36,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.TraverseEvent;
@@ -69,11 +71,8 @@ import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 public class RuntimePropertyDialog extends Dialog {
 
 	private static final String ERROR = "ERROR";
-	private static final String PROPERTY_NAME = "PROPERTY_NAME";
-	private static final String PROPERTY_VALUE = "PROPERTY_VALUE";
-
 	
-	private static final String[] PROPS = { PROPERTY_NAME, PROPERTY_VALUE };
+	private static final String[] PROPS = { Constants.PROPERTY_NAME, Constants.PROPERTY_VALUE };
 
 	private String PROPERTY_EXISTS_ERROR = Messages.RuntimePropertAlreadyExists;
 	private String PROPERTY_NAME_BLANK_ERROR = Messages.EmptyNameNotification;
@@ -95,6 +94,7 @@ public class RuntimePropertyDialog extends Dialog {
 	private boolean okPressed;
 	private boolean okPressedAfterUpdate;
 	private static final String INFORMATION="Information";
+	private boolean ctrlKeyPressed = false;
 	/**
 	 * Create the dialog.
 	 * 
@@ -177,25 +177,25 @@ public class RuntimePropertyDialog extends Dialog {
 		composite_1.setLayoutData(cld_composite_1);
 
 		Button addButton = new Button(composite_1, SWT.NONE);
-		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
+		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
 		attachAddButtonListern(addButton);
 
 		deleteButton = new Button(composite_1, SWT.NONE);
-		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
+		deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.DELETE_BUTTON));
 		attachDeleteButtonListener(deleteButton);
 
 		upButton = new Button(composite_1, SWT.NONE);
-		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
+		upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
 		downButton = new Button(composite_1, SWT.NONE);
-		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
+		downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
 		attachDownButtonListerner(downButton);
@@ -207,106 +207,133 @@ public class RuntimePropertyDialog extends Dialog {
 	private void attachDownButtonListerner(Button downButton) {
 		
 		downButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
+			
             @Override
 			public void mouseUp(MouseEvent e) {
-				index1 = table.getSelectionIndex();
-
-				if (index1 < propertyList.size() - 1) {
-					String text = tableViewer.getTable().getItem(index1).getText(0);
-					String text1 = tableViewer.getTable().getItem(index1).getText(1);
-
-					index2 = index1 + 1;
-
-					String data = tableViewer.getTable().getItem(index2).getText(0);
-					String data1 = tableViewer.getTable().getItem(index2).getText(1);
-
-					RuntimeProperties p = new RuntimeProperties();
-					p.setPropertyName(data);
-					p.setPropertyValue(data1);
-					propertyList.set(index1, p);
-					p = new RuntimeProperties();
-					p.setPropertyName(text);
-					p.setPropertyValue(text1);
-					propertyList.set(index2, p);
-					tableViewer.refresh();
-					table.setSelection(index1 + 1);
-				}
-			}
+            	moveRowDown();
+            }
 		});
 
+	}
+	
+	private void moveRowDown()
+	{
+		int index1 = 0, index2 = 0;
+		index1 = table.getSelectionIndex();
+
+		if (index1 < propertyList.size() - 1) {
+			String text = tableViewer.getTable().getItem(index1).getText(0);
+			String text1 = tableViewer.getTable().getItem(index1).getText(1);
+
+			index2 = index1 + 1;
+
+			String data = tableViewer.getTable().getItem(index2).getText(0);
+			String data1 = tableViewer.getTable().getItem(index2).getText(1);
+
+			RuntimeProperties p = new RuntimeProperties();
+			p.setPropertyName(data);
+			p.setPropertyValue(data1);
+			propertyList.set(index1, p);
+			p = new RuntimeProperties();
+			p.setPropertyName(text);
+			p.setPropertyValue(text1);
+			propertyList.set(index2, p);
+			tableViewer.refresh();
+			table.setSelection(index1 + 1);
+		}
+	
 	}
 
 	private void attachUpButtonListener(Button upButton) {
 		upButton.addMouseListener(new MouseAdapter() {
-			int index1 = 0, index2 = 0;
+			
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				index1 = table.getSelectionIndex();
-
-				if (index1 > 0) {
-					String text = tableViewer.getTable().getItem(index1).getText(0);
-					String text1 = tableViewer.getTable().getItem(index1).getText(1);
-					index2 = index1 - 1;
-					String data = tableViewer.getTable().getItem(index2).getText(0);
-					String data2 = tableViewer.getTable().getItem(index2).getText(1);
-
-					RuntimeProperties p = new RuntimeProperties();
-					p.setPropertyName(data);
-					p.setPropertyValue(data2);
-					propertyList.set(index1, p);
-					p = new RuntimeProperties();
-					p.setPropertyName(text);
-					p.setPropertyValue(text1);
-					propertyList.set(index2, p);
-					tableViewer.refresh();
-					table.setSelection(index1 - 1);
-				}
+				moveRowUp();
 			}
 		});
 
 	}
 
+	private void moveRowUp()
+	{
+		int index1 = 0, index2 = 0;
+		index1 = table.getSelectionIndex();
+
+		if (index1 > 0) {
+			String text = tableViewer.getTable().getItem(index1).getText(0);
+			String text1 = tableViewer.getTable().getItem(index1).getText(1);
+			index2 = index1 - 1;
+			String data = tableViewer.getTable().getItem(index2).getText(0);
+			String data2 = tableViewer.getTable().getItem(index2).getText(1);
+
+			RuntimeProperties p = new RuntimeProperties();
+			p.setPropertyName(data);
+			p.setPropertyValue(data2);
+			propertyList.set(index1, p);
+			p = new RuntimeProperties();
+			p.setPropertyName(text);
+			p.setPropertyValue(text1);
+			propertyList.set(index2, p);
+			tableViewer.refresh();
+			table.setSelection(index1 - 1);
+		}
+	
+	}
 	private void attachDeleteButtonListener(final Button deleteButton) {
 		deleteButton.addMouseListener(new MouseAdapter() {
             
 			@Override
 			public void mouseUp(MouseEvent e) {
-				WidgetUtility.setCursorOnDeleteRow(tableViewer, propertyList);
-				isAnyUpdatePerformed = true;
-				tableViewer.refresh();
-				
-				if (propertyList.size() < 1) {
-					deleteButton.setEnabled(false);
-				} 
-				if (propertyList.size()<= 1) {
-					upButton.setEnabled(false);
-					downButton.setEnabled(false);
-				} 
+				deleteRow();
 			}
 
 		});
 
+	}
+	
+	private void deleteRow()
+	{
+
+		WidgetUtility.setCursorOnDeleteRow(tableViewer, propertyList);
+		isAnyUpdatePerformed = true;
+		tableViewer.refresh();
+		
+		if (propertyList.size() < 1) {
+			deleteButton.setEnabled(false);
+		} 
+		if (propertyList.size()<= 1) {
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		} 
+	
 	}
 
 	private void attachAddButtonListern(Button addButton) {
 		addButton.addMouseListener(new MouseAdapter() {
             @Override
 			public void mouseUp(MouseEvent e) {
-				table.getParent().setFocus();
-				tableViewer.getControl().getShell().setFocus();
-				addNewProperty(tableViewer);
-				if (propertyList.size() >= 1) {
-					deleteButton.setEnabled(true);
-				}
-				if (propertyList.size() >= 2) {
-					upButton.setEnabled(true);
-					downButton.setEnabled(true);
-				}
-			}
+            	addNewRow();
+            }
 
 		});
+	}
+	
+	private void addNewRow()
+	{
+
+		table.getParent().setFocus();
+		tableViewer.getControl().getShell().setFocus();
+		addNewProperty(tableViewer);
+		if (propertyList.size() >= 1) {
+			deleteButton.setEnabled(true);
+		}
+		if (propertyList.size() >= 2) {
+			upButton.setEnabled(true);
+			downButton.setEnabled(true);
+		}
+	
 	}
 
 	/**
@@ -449,6 +476,8 @@ public class RuntimePropertyDialog extends Dialog {
 				lblPropertyError.setVisible(false);
 			}
 		});
+		
+		attachShortcutListner(Constants.PROPERTY_TABLE);
 		tableViewer.getTable().addTraverseListener(new TraverseListener() {
 			@Override
 			public void keyTraversed(TraverseEvent e) {
@@ -508,7 +537,53 @@ public class RuntimePropertyDialog extends Dialog {
 			upButton.setEnabled(true);
 			downButton.setEnabled(true);
 		}
+		attachShortcutListner(Constants.PROPERTY_NAME);
+		attachShortcutListner(Constants.PROPERTY_VALUE);
 
+	}
+	
+	private void attachShortcutListner(String controlName){
+		Control currentControl;
+				
+		if (controlName == Constants.PROPERTY_NAME)
+			currentControl = tableViewer.getCellEditors()[0].getControl();
+		else if(controlName == Constants.PROPERTY_VALUE)
+			currentControl = tableViewer.getCellEditors()[1].getControl();
+		else
+			currentControl = table;
+		
+		currentControl.addKeyListener(new KeyListener() {						
+			
+			@Override
+			public void keyReleased(KeyEvent event) {				
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = false;
+				}							
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+					ctrlKeyPressed = true;
+				}
+								
+				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
+					deleteRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
+					addNewRow();
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+					moveRowUp();				
+				}
+				
+				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+					moveRowDown();
+				}
+			}
+		});
 	}
 
 	/**
