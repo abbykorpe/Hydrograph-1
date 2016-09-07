@@ -14,8 +14,13 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+
+import java.util.List;
+import java.util.Map;
+
 public interface IValidator {
-		boolean validateMap(Object object, String propertyName);
-		boolean validate(Object object, String propertyName);
+		boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap);
+		boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap);
 		String getErrorMessage();
 }

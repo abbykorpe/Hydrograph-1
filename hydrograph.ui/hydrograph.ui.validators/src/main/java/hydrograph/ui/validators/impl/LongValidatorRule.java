@@ -14,8 +14,10 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -27,11 +29,11 @@ public class LongValidatorRule implements IValidator{
 	private String errorMessage;
 	
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate((String)propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		return false;
 	}
@@ -42,7 +44,7 @@ public class LongValidatorRule implements IValidator{
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		try{
 			String value = (String)object;
 			Long.parseLong(value);

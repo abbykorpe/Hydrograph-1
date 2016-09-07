@@ -16,14 +16,15 @@ package hydrograph.ui.validators.impl;
 
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -35,22 +36,35 @@ public class LookupMappingValidationRule implements IValidator{
 	private String errorMessage;
 	
 	@Override
-	public boolean validateMap(Object object, String propertyName) {
+	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
 		}
 		return false;
 	}
 
 
 	@Override
-	public boolean validate(Object object, String propertyName) {
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid)object;
 		if(lookupMappingGrid == null){
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}
+		List<List<FilterProperties>> lookupInputPropertiesList = new ArrayList<List<FilterProperties>>();
+		for(Entry< String,List<FixedWidthGridRow>> inputRow :inputSchemaMap.entrySet()){
+			List<FilterProperties> filterPropertiesList = new ArrayList<FilterProperties>(); 
+			
+			for(FixedWidthGridRow row : inputRow.getValue()){
+				FilterProperties filterProperties = new FilterProperties();
+				filterProperties.setPropertyname(row.getFieldName());
+				filterPropertiesList.add(filterProperties);
+			}
+			lookupInputPropertiesList.add(filterPropertiesList);
+		}
+		
+		lookupMappingGrid.setLookupInputProperties(lookupInputPropertiesList);
 		List<List<FilterProperties>> lookupInputProperties = lookupMappingGrid.getLookupInputProperties();
 		List<LookupMapProperty> lookupMapProperties = lookupMappingGrid.getLookupMapProperties();
 		if(lookupInputProperties == null || 

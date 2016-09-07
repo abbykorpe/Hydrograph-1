@@ -19,6 +19,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.schema.propagation.SchemaData;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.constants.ELTProperties;
 import hydrograph.ui.propertywindow.messagebox.ConfirmCancelMessageBox;
@@ -89,6 +90,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	private String selectedTab;
 	
+	private SchemaData schemaData;
+	
 	private boolean isCancelPressed;
 	
 	/**
@@ -111,6 +114,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		isPropertyWindowValid = true;
 		
 		this.toolTipErrorMessages = toolTipErrorMessages;
+		schemaData = new SchemaData();
 	}
 
 	/**
@@ -424,7 +428,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 				logger.error("Failed to create validator", e);
 				throw new RuntimeException("Failed to create validator", e);
 			}
-			boolean status = validator.validateMap(properties, customWidget.getPropertyName());
+			boolean status = validator.validateMap(properties, customWidget.getPropertyName(),schemaData.getInputSchema(component));
 			//NOTE : here if any of the property is not valid then whole component is not valid 
 			if(status == false){
 				windowValidityStaus = Boolean.FALSE;

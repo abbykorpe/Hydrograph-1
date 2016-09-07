@@ -23,6 +23,7 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.schema.propagation.SchemaData;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.validators.impl.IValidator;
 
@@ -44,7 +45,7 @@ import org.slf4j.Logger;
 public class ComponentCreateCommand extends Command {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentCreateCommand.class);
 
-	
+	private SchemaData schemaData;
 	/** The new Component. */
 	private final Component component;
 	/** Graph to add to. */
@@ -65,7 +66,7 @@ public class ComponentCreateCommand extends Command {
 
 		String componentName = DynamicClassProcessor.INSTANCE.getClazzName(component.getClass());
 		hydrograph.ui.common.component.config.Component components = XMLConfigUtil.INSTANCE.getComponent(componentName);
-		
+		schemaData = new SchemaData();
 		//attach tooltip information to component
 		Map<String,PropertyToolTipInformation> tooltipInformation = new LinkedHashMap<>();
 		for(Property property : components.getProperty()){
@@ -168,7 +169,7 @@ public class ComponentCreateCommand extends Command {
 					logger.error("Failed to create validator", e);
 					throw new RuntimeException("Failed to create validator", e);
 				}
-				boolean status = validator.validate(propertyValue, configProperty.getName());
+				boolean status = validator.validate(propertyValue, configProperty.getName(),schemaData.getInputSchema(this.component));
 				//NOTE : here if any of the property is not valid then whole component is not valid 
 				if(status == false){
 					componentHasRequiredValues = Boolean.FALSE;

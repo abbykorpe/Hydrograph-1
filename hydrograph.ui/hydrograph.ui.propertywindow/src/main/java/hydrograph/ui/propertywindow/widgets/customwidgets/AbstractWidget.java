@@ -18,6 +18,7 @@ import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.schema.propagation.SchemaData;
 import hydrograph.ui.propertywindow.handlers.ShowHidePropertyHelpHandler;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -66,7 +67,7 @@ public abstract class AbstractWidget {
 	private String propertyHelpText;
 	private TabFolder tabFolder; 
 	private Property property; 
-	
+	private SchemaData schemaData;
 	public TabFolder getTabFolder() {
 		return tabFolder;
 	}
@@ -98,7 +99,7 @@ public abstract class AbstractWidget {
 	}
 
 	public AbstractWidget() {
-	
+		schemaData = new SchemaData();
 	}
 		
 	/**
@@ -153,7 +154,7 @@ public abstract class AbstractWidget {
 			ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
-		
+		schemaData = new SchemaData();
 		this.componentConfigrationProperty = componentConfigrationProperty;
 		this.componentMiscellaneousProperties = componentMiscellaneousProperties;
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
@@ -382,7 +383,7 @@ public abstract class AbstractWidget {
 					throw new RuntimeException("Failed to create validator", e);
 				}
 				boolean status = validator.validate(object,
-						getPropertyName());
+						getPropertyName(),schemaData.getInputSchema(getComponent()));
 				// NOTE : here if any of the property is not valid
 				// then whole component is not valid
 				if (status == false) {
