@@ -238,7 +238,7 @@ public class JoinMapDialog extends Dialog {
 					mappingTableItemList.clear();
 					mappingTableViewer.refresh();
 					mappingTableViewer.getTable().setEnabled(true);
-					enableMappingTableButtonPanel(true);
+					btnAdd.setEnabled(true);
 				}
 			}
 		});
