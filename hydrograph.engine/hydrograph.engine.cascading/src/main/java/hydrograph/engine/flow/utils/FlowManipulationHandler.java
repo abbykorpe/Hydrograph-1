@@ -15,6 +15,7 @@ package hydrograph.engine.flow.utils;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.main.Graph;
+import hydrograph.engine.phasebreak.plugin.PhaseBreakPlugin;
 import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.utilities.OrderedProperties;
 import hydrograph.engine.utilities.OrderedPropertiesHelper;
@@ -33,6 +35,16 @@ import hydrograph.engine.utilities.OrderedPropertiesHelper;
  *
  */
 public class FlowManipulationHandler {
+
+	enum Plugins {
+		phaseBreak {
+			@Override
+			public String getPluginName() {
+				return PhaseBreakPlugin.class.getName();
+			}
+		};
+		public abstract String getPluginName();
+	}
 
 	private static Logger LOG = LoggerFactory.getLogger(FlowManipulationHandler.class);
 	private static List<TypeBaseComponent> jaxbComponents;
@@ -54,14 +66,30 @@ public class FlowManipulationHandler {
 		} catch (IOException e) {
 			throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e);
 		}
-
-		for (Object pluginName : properties.keySet()) {
-			jaxbComponents = executePlugin(properties.get(pluginName).toString(), flowManipulationContext);
+		for (String pluginName : addPluginFromFile(properties)) {
+			jaxbComponents = executePlugin(pluginName, flowManipulationContext);
 			flowManipulationContext.setJaxbMainGraph(jaxbComponents);
 			flowManipulationContext.setSchemaFieldMap(new SchemaFieldHandler(jaxbComponents));
 		}
 
 		return getJaxbObject();
+	}
+
+	private static List<String> addPluginFromFile(OrderedProperties properties) {
+		List<String> registerdPlugins = new LinkedList<String>();
+		// added phasebreak plugin.
+		registerdPlugins.addAll(addDefaultPlugins());
+		for (Object plugin : properties.values()) {
+			registerdPlugins.add(plugin.toString());
+		}
+		return registerdPlugins;
+	}
+
+	private static List<String> addDefaultPlugins() {
+		List<String> registerdPlugins = new LinkedList<String>();
+		for (Plugins plugin : Plugins.values())
+			registerdPlugins.add(plugin.getPluginName());
+		return registerdPlugins;
 	}
 
 	private static HydrographJob getJaxbObject() {

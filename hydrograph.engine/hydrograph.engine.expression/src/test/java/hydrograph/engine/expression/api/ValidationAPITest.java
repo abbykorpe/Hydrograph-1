@@ -36,13 +36,25 @@ public class ValidationAPITest {
 	}
 
 	@Test
-	public void itShouldCompileAndMatchTheString() {
+	public void itShouldCompileFilterExpression() {
 		ValidationAPI validationAPI = new ValidationAPI(
-				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?1:0;",
+				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?true:false;",
 				"");
 		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
 		schemaFields.put("f1", Date.class);
-		DiagnosticCollector<JavaFileObject> dig = validationAPI.compile(schemaFields);
+		DiagnosticCollector<JavaFileObject> dig = validationAPI.filterCompiler(schemaFields);
+
+		Assert.assertTrue(dig.getDiagnostics().size() <= 0);
+	}
+	
+	@Test
+	public void itShouldCompileTransformExpression() {
+		ValidationAPI validationAPI = new ValidationAPI(
+				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?f1:\"HELLO WORLD\";",
+				"");
+		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
+		schemaFields.put("f1", Date.class);
+		DiagnosticCollector<JavaFileObject> dig = validationAPI.transformCompiler(schemaFields);
 
 		Assert.assertTrue(dig.getDiagnostics().size() <= 0);
 	}

@@ -105,12 +105,12 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 				for (SchemaField schemaField : componentParameters.getSchemaFields()) {
 					schemaMap.put(schemaField.getFieldName(), Class.forName(schemaField.getFieldDataType()));
 				}
-				DiagnosticCollector<JavaFileObject> diagnostic = validationAPI.compile(schemaMap);
+				DiagnosticCollector<JavaFileObject> diagnostic = validationAPI.filterCompiler(schemaMap);
 				if (diagnostic.getDiagnostics().size() > 0) {
 					throw new RuntimeException(diagnostic.getDiagnostics().get(0).getMessage(null));
 				}
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 	}
 

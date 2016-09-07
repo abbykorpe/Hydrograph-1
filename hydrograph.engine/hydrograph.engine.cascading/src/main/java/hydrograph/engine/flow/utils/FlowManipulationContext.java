@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.hadoop.conf.Configuration;
+
 public class FlowManipulationContext {
 
 	private HydrographDebugInfo jaxbDebugGraph;
@@ -32,9 +34,11 @@ public class FlowManipulationContext {
 	private String basePath;
 	private TypeProperties jaxbJobLevelRuntimeProperties;
 	private String graphName;
+	private Configuration conf;
+	private List<String> tmpPath;
 
 	public FlowManipulationContext(HydrographJob hydrographJob, HydrographDebugInfo bhsDebug,
-			SchemaFieldHandler schemaFieldHandler, String jobId, String basePath) {
+			SchemaFieldHandler schemaFieldHandler, String jobId, String basePath, Configuration conf) {
 		this.jaxbMainGraph = hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls();
 		this.jaxbJobLevelRuntimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties();
 		this.graphName = hydrographJob.getJAXBObject().getName();
@@ -42,8 +46,21 @@ public class FlowManipulationContext {
 		this.jaxbDebugGraph = bhsDebug;
 		this.schemaFieldMap = schemaFieldHandler;
 		this.basePath = basePath;
+		this.conf = conf;
 	}
-	
+
+	public List<String> getTmpPath() {
+		return tmpPath;
+	}
+
+	public void setTmpPath(List<String> tmpPath) {
+		this.tmpPath = tmpPath;
+	}
+
+	public Configuration getConf() {
+		return conf;
+	}
+
 	public String getGraphName() {
 		return graphName;
 	}
@@ -60,11 +77,11 @@ public class FlowManipulationContext {
 		this.jaxbJobLevelRuntimeProperties = jaxbRuntimeProperties;
 	}
 
-	public String getJobId(){
+	public String getJobId() {
 		return jobId;
 	}
-	
-	public String getBasePath(){
+
+	public String getBasePath() {
 		return basePath;
 	}
 
@@ -75,8 +92,8 @@ public class FlowManipulationContext {
 	public List<TypeBaseComponent> getJaxbMainGraph() {
 		return jaxbMainGraph;
 	}
-	
-	public SchemaFieldHandler getSchemaFieldHandler(){
+
+	public SchemaFieldHandler getSchemaFieldHandler() {
 		return schemaFieldMap;
 	}
 

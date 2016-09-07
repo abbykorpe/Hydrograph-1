@@ -82,12 +82,14 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		AppProps.setApplicationName(hadoopProperties, hydrographJob.getJAXBObject().getName());
 
 		hadoopProperties.putAll(config);
-
+		
+		Configuration conf = new HadoopConfigProvider(hadoopProperties).getJobConf();
+		
 		SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(
 				hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
 		flowManipulationContext = new FlowManipulationContext(hydrographJob, hydrographDebugInfo, schemaFieldHandler,
-				jobId, basePath);
+				jobId, basePath,conf);
 
 		hydrographJob = FlowManipulationHandler.execute(flowManipulationContext);
 
@@ -98,7 +100,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 			}
 		}
 
-		Configuration conf = new HadoopConfigProvider(hadoopProperties).getJobConf();
+		
 
 		JAXBTraversal traversal = new JAXBTraversal(hydrographJob.getJAXBObject());
 
@@ -166,8 +168,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 
 	@Override
 	public void oncomplete() {
-		flowBuilder.cleanup(runtimeContext);
-
+		flowBuilder.cleanup(flowManipulationContext.getTmpPath(),runtimeContext);
 	}
 
 	/**

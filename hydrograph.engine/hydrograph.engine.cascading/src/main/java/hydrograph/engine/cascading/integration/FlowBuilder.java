@@ -42,12 +42,7 @@ import hydrograph.engine.cascading.assembly.generator.base.OutputAssemblyGenerat
 import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyGeneratorBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.core.entity.LinkInfo;
 import hydrograph.engine.core.helper.JAXBTraversal;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
-import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
-import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
 import hydrograph.engine.utilities.ComponentParameterBuilder;
 import hydrograph.engine.utilities.PlatformHelper;
 
@@ -135,11 +130,6 @@ public class FlowBuilder {
 				flowContext.getCascadeDef().addFlow(
 						new ProcessFlow(componentId, command));
 				continue;
-
-			}
-
-			if (isPhaseTempComponent(componentId, runtimeContext)) {
-				buildForPhaseBreak(componentId, runtimeContext, cp);
 			}
 
 			((AssemblyGeneratorBase) assemblyGeneratorBase).createAssembly(cp);
@@ -152,70 +142,18 @@ public class FlowBuilder {
 		}
 	}
 
-	private String getTempPath(String prefix, JobConf jobConf) {
-		String name = prefix + "_" + UUID.randomUUID().toString();
-		name = name.replaceAll("\\s+|\\*|\\+|/+", "_");
 
-		return (new Path(Hfs.getTempPath(jobConf), name)).toString();
 
-	}
+	public void cleanup(List<String> tmpPathList,RuntimeContext runtimeContext) {
+		for (String tmpPath : tmpPathList) {
 
-	private void buildForPhaseBreak(String componentId,
-			RuntimeContext runtimeContext, ComponentParameters cp) {
-		JAXBTraversal traversal = runtimeContext.getTraversal();
-
-		if (runtimeContext.getTraversal().getComponentFromComponentId(
-				componentId) instanceof SequenceOutputFile) {
-			List<? extends TypeBaseInSocket> originalPhaseSourceSocket = traversal
-					.getInputSocketFromComponentId(componentId);
-
-			LinkInfo originalPhaseLink = traversal
-					.getPhaseLinkFromInputSocket(originalPhaseSourceSocket
-							.iterator().next());
-
-			cp.setPathUri(getTempPath(componentId, runtimeContext.getJobConf()));
-
-			runtimeContext.addTempPathParameter(originalPhaseLink.toString(),
-					cp);
-		} else {
-			List<? extends TypeBaseOutSocket> originalPhaseTargetSocket = traversal
-					.getOutputSocketFromComponentId(componentId);
-			LinkInfo originalPhaseLink = traversal
-					.getPhaseLinkFromOutputSocket(originalPhaseTargetSocket
-							.iterator().next());
-
-			ComponentParameters inputCp = runtimeContext
-					.getTempPathParameter(originalPhaseLink.toString());
-			cp.setOutputFieldsList(inputCp.getInputFieldsList());
-			cp.setPathUri(inputCp.getPathUri());
-		}
-
-	}
-
-	private boolean isPhaseTempComponent(String componentId,
-			RuntimeContext runtimeContext) {
-
-		return runtimeContext.getTraversal().getComponentFromComponentId(
-				componentId) instanceof SequenceOutputFile
-				|| runtimeContext.getTraversal().getComponentFromComponentId(
-						componentId) instanceof SequenceInputFile;
-	}
-
-	public void cleanup(RuntimeContext runtimeContext) {
-		deleteTempPaths(runtimeContext);
-
-	}
-
-	private void deleteTempPaths(RuntimeContext runtimeContext) {
-		for (ComponentParameters cp : runtimeContext.getAllTempPathParameters()) {
-
-			Path fullPath = new Path(cp.getPathUri());
+			Path fullPath = new Path(tmpPath);
 			// do not delete the root directory
 			if (fullPath.depth() == 0)
 				continue;
 			FileSystem fileSystem;
 
-			LOG.info("Deleting temp path:" + cp.getPathUri());
+			LOG.info("Deleting temp path:" + tmpPath);
 			try {
 				fileSystem = FileSystem.get(runtimeContext.getJobConf());
 
