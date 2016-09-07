@@ -30,7 +30,6 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.TransformUiConverter;
-import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -133,7 +132,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		if (operationsComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
 				uiComponent.engageInputPort(getInputSocketType(inSocket) + inPortCounter);
-				UIComponentRepo.INSTANCE.getComponentLinkList().add(
+				currentRepository.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
 								.getFromSocketId(), inSocket.getId()));
 				inPortCounter++;

@@ -721,7 +721,7 @@ public class ConverterHelper {
 	 * @param portName
 	 * @return
 	 */
-	public boolean isMultipleLinkAllowed(Component sourceComponent, String portName) {
+	public static boolean isMultipleLinkAllowed(Component sourceComponent, String portName) {
 		logger.debug("Getting port specification for port" + portName);
 		for (PortDetails portDetails : sourceComponent.getPortDetails()) {
 			for( Port port: portDetails.getPorts().values()){

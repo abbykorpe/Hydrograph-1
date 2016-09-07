@@ -14,15 +14,14 @@
  
 package hydrograph.ui.engine.ui.repository;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.main.Graph;
 import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.graph.model.Component;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.main.Graph;
 
 public class UIComponentRepo {
 
@@ -32,7 +31,6 @@ public class UIComponentRepo {
 	private  LinkedHashMap<String, List<InSocketDetail>> inSocketMap = new LinkedHashMap<>();
 	private List<LinkingData> componentLinkList=new ArrayList<LinkingData>();
 	
-	public static final UIComponentRepo INSTANCE = new UIComponentRepo();
 	
 	public void genrateComponentRepo(Graph graph) {
 

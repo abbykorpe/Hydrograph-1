@@ -88,7 +88,7 @@ public class LookupUiConverter extends TransformUiConverter {
 		if (operationsComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
 				uiComponent.engageInputPort(inSocket.getId());
-				UIComponentRepo.INSTANCE.getComponentLinkList().add(
+				currentRepository.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(),
 								operationsComponent.getId(), inSocket
 										.getFromSocketId(), inSocket.getId()));

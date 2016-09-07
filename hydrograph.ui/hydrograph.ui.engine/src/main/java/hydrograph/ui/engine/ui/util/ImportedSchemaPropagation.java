@@ -55,7 +55,7 @@ public class ImportedSchemaPropagation {
 		}
 		schemaPropagationForTransformCategory(container);
 		removeTempraryProperties(container);
-		validateAllComponents(container);
+//		validateAllComponents(container);
 	}
 
 	// Validates properties of all components present in graph

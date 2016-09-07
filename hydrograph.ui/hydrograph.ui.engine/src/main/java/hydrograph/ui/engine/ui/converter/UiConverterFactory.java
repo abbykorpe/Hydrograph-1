@@ -14,57 +14,18 @@
  
 package hydrograph.ui.engine.ui.converter;
 
-import hydrograph.ui.engine.ui.converter.impl.AggregateUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.CloneUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.CumulateUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.DiscardUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.UnknownUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.FilterUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.GenerateRecordsUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.InputFileDelimitedUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.InputFixedWidthUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.InputHiveParquetUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.InputHiveTextFileUiConverter;
-
-import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
-
-import hydrograph.ui.engine.ui.converter.impl.InputMixedSchemeUiConverter;
-
-import hydrograph.ui.engine.ui.converter.impl.JoinComponentUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.LimitUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.LookupUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.NormalizeUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.OutputFixedWidthUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.OutputHiveParquetUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.OutputHiveTextFileUiConverter;
-
-import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
-
-import hydrograph.ui.engine.ui.converter.impl.OutputMixedSchemeUiConverter;
-
-import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.TransformComponentUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.UnionAllUiConverter;
-import hydrograph.ui.engine.ui.converter.impl.UniqueSequenceUiConverter;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.logging.factory.LogFactory;
-
-import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
-import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
+import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
+import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 import hydrograph.engine.jaxb.inputtypes.TextFileFixedWidth;
 import hydrograph.engine.jaxb.operationstypes.Aggregate;
 import hydrograph.engine.jaxb.operationstypes.Cumulate;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 import hydrograph.engine.jaxb.operationstypes.GenerateSequence;
-import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.engine.jaxb.operationstypes.Join;
+import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.engine.jaxb.operationstypes.Normalize;
 import hydrograph.engine.jaxb.operationstypes.Transform;
 import hydrograph.engine.jaxb.outputtypes.Discard;
@@ -73,6 +34,43 @@ import hydrograph.engine.jaxb.straightpulltypes.Limit;
 import hydrograph.engine.jaxb.straightpulltypes.RemoveDups;
 import hydrograph.engine.jaxb.straightpulltypes.Sort;
 import hydrograph.engine.jaxb.straightpulltypes.UnionAll;
+import hydrograph.ui.engine.ui.converter.impl.AggregateUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.CloneUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.CumulateUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.DiscardUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.FilterUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.GenerateRecordsUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputComponentSubjobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputFileDelimitedUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputFixedWidthUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputHiveParquetUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputHiveTextFileUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputMixedSchemeUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputSubjobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.JoinComponentUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.LimitUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.LookupUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.NormalizeUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OperationSubJobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputComponentSubjobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputFixedWidthUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputHiveParquetUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputHiveTextFileUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputMixedSchemeUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputSubjobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.TransformComponentUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.UnionAllUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.UniqueSequenceUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.UnknownUiConverter;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.logging.factory.LogFactory;
+
+import org.slf4j.Logger;
 
 
 /**
@@ -185,7 +183,23 @@ public class UiConverterFactory {
 		}
 		if((hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputMixedSchemeUiConverter(typeBaseComponent, container);
-		}			
+		}
+		if ((hydrograph.engine.jaxb.operationstypes.Subjob.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new OperationSubJobUiConverter(typeBaseComponent, container);
+		}
+		if ((hydrograph.engine.jaxb.inputtypes.Subjob.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new InputSubjobUiConverter(typeBaseComponent, container);
+		}
+		if ((hydrograph.engine.jaxb.outputtypes.Subjob.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new OutputSubjobUiConverter(typeBaseComponent, container);
+		}
+		if ((hydrograph.engine.jaxb.inputtypes.SubjobInput.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new InputComponentSubjobUiConverter(typeBaseComponent, container);
+		}
+		if ((hydrograph.engine.jaxb.outputtypes.SubjobOutput.class).isAssignableFrom(typeBaseComponent.getClass())) {
+			return new OutputComponentSubjobUiConverter(typeBaseComponent, container);
+		}
+		
 
 		return new UnknownUiConverter(typeBaseComponent,container);
 	}

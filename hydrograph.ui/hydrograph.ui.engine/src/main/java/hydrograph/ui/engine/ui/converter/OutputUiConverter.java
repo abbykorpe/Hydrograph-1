@@ -19,7 +19,6 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
-import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import org.apache.commons.lang.StringUtils;
@@ -65,7 +64,7 @@ public abstract class OutputUiConverter extends UiConverter {
 					propertyMap.put(PropertyNameConstants.SCHEMA.value(), getSchema(inSocket));
 				}
 				uiComponent.engageInputPort(inSocket.getId());
-				UIComponentRepo.INSTANCE.getComponentLinkList().add(
+				currentRepository.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), typeOutputComponent.getId(), inSocket
 								.getFromSocketId(), inSocket.getId()
 

@@ -79,8 +79,7 @@ public class ComponentValidator {
 		PropertyToolTipInformation propertyToolTipInformation= new PropertyToolTipInformation(ISSUE_PROPERTY_NAME, HIDE_TOOLTIP, TOOLTIP_DATATYPE);
 		boolean validationStatus=true;
 		String errorMessages="";
-		
-		if(componentValidators.containsKey(component.getType().toUpperCase())){
+		if(componentValidators!=null && componentValidators.containsKey(component.getType().toUpperCase())){
 			for(IComponentValidator componentValidator: componentValidators.get(component.getType().toUpperCase())){
 				
 				String errorMessage = componentValidator.validateComponent(component);
