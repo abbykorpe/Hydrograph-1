@@ -11,13 +11,19 @@ public class ExecutionTrackingCloneXmlTest {
 
 	static HydrographService hydrographService;
 	static StatusHelper statusHelper;
+	static int returnCode;
 
 	@BeforeClass
 	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/Clone.xml" };
 		hydrographService = new HydrographService();
-		hydrographService.executeGraph(args);
+		returnCode = hydrographService.executeGraph(args);
 		statusHelper = new StatusHelper(hydrographService.getStatus());
+	}
+
+	@Test
+	public void isJobSuccessfulAndReturnCodeZero() {
+		Assert.assertEquals(returnCode, 0);
 	}
 
 	@Test
@@ -37,7 +43,6 @@ public class ExecutionTrackingCloneXmlTest {
 		Assert.assertEquals(statusHelper.getCurrentStatus("input1"), "SUCCESSFUL");
 		Assert.assertEquals(statusHelper.getProcessedRecords("input1").get("out0"), new Long(3));
 		Assert.assertEquals(statusHelper.getStatusPerSocketMap("input1").get("out0"), "SUCCESSFUL");
-		// System.out.println(statusHelper.getComponentId("input1"));
 	}
 
 	@Test

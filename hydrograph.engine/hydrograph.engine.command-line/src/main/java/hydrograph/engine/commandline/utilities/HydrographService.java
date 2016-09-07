@@ -42,10 +42,17 @@ public class HydrographService {
 	 * @param args
 	 *            - arguments for execution <br/>
 	 *            for example: -xmlpath "xml-file-path"
+	 * @return Integer value for execution status: 0 - successful
 	 * @throws Exception
 	 */
-	public void executeGraph(String[] args) throws Exception {
-		execution.run(args);
+	public int executeGraph(String[] args) throws Exception {
+		try{
+			execution.run(args);
+			return 0;
+		}
+		catch(Exception e){
+			throw e;
+		}
 	}
 
 	/**

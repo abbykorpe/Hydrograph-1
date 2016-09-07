@@ -8,15 +8,22 @@ import hydrograph.engine.commandline.utilities.HydrographService;
 import hydrograph.engine.helper.StatusHelper;
 
 public class ExecutionTrackingTransformXmltest {
+
 	static HydrographService hydrographService;
 	static StatusHelper statusHelper;
+	static int returnCode;
 
 	@BeforeClass
 	public static void hydrographService() throws Exception {
 		String[] args = { "-xmlpath", "testData/XMLFiles/TransformExample.xml" };
 		hydrographService = new HydrographService();
-		hydrographService.executeGraph(args);
+		returnCode = hydrographService.executeGraph(args);
 		statusHelper = new StatusHelper(hydrographService.getStatus());
+	}
+
+	@Test
+	public void isJobSuccessfulAndReturnCodeZero() {
+		Assert.assertEquals(returnCode, 0);
 	}
 
 	@Test

@@ -104,6 +104,7 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 			}
 		ComponentPipeMapping.generateComponentToPipeMap(runtimeContext.getFlowContext());
 		ComponentPipeMapping.generateComponentAndPreviousrMap(runtimeContext);
+		ComponentPipeMapping.generateComponentFlowMap(runtimeContext);
 	}
 
 	
