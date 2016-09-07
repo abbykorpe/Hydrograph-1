@@ -96,7 +96,7 @@ public class CompileUtils {
 	private static StringWriter generateRuntimeClass(String fields, String expression, String packageName,
 			String returnType) {
 		if (returnType == null || "".equals(returnType))
-			returnType = "object";
+			returnType = "Object";
 		StringWriter writer = new StringWriter();
 		writer.append(packageName);
 		writer.append("class Expression {");

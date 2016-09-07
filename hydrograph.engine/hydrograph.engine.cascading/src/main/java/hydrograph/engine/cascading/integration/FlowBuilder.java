@@ -142,12 +142,9 @@ public class FlowBuilder {
 		}
 	}
 
-	public void cleanup(List<String> list,RuntimeContext runtimeContext) {
-		deleteTempPaths(list,runtimeContext);
 
-	}
 
-	private void deleteTempPaths(List<String> tmpPathList,RuntimeContext runtimeContext) {
+	public void cleanup(List<String> tmpPathList,RuntimeContext runtimeContext) {
 		for (String tmpPath : tmpPathList) {
 
 			Path fullPath = new Path(tmpPath);
