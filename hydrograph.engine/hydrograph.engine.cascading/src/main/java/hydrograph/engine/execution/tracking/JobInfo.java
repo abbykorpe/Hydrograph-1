@@ -122,9 +122,7 @@ public class JobInfo {
 					long recordCount = 0;
 					String previousPipeName = componentPipeMap.get(previousComponent_SocketID).getName();
 					recordCount = cascadingStats.getCounterValue(COUNTER_GROUP, previousPipeName);
-					if (cascadingStats.getStatus().equals(CascadingStats.Status.FAILED))
-						currentComponentInfo.setProcessedRecordCount(outputSocket, -1);
-					else
+					if (!cascadingStats.getStatus().equals(CascadingStats.Status.FAILED))
 						currentComponentInfo.setProcessedRecordCount(outputSocket, recordCount);
 				}
 			}
@@ -263,8 +261,8 @@ public class JobInfo {
 		if (listOfStatus.contains("FAILED") || listOfStatus.contains("STOPPED")){
 			for(String key : componentInfo.getStatusPerSocketMap().keySet()){
 				componentInfo.setProcessedRecordCount(key,-1);
-				componentInfo.setCurrentStatus("FAILED");
 			}
+			componentInfo.setCurrentStatus("FAILED");
 		}
 		else if (listOfStatus.contains("RUNNING")) {
 			componentInfo.setCurrentStatus("RUNNING");
