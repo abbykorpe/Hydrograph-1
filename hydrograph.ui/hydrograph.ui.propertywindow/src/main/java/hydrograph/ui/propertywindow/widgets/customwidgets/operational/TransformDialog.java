@@ -536,7 +536,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	 		else
 	 		{
 	 			operationId="Expression:"+n;
-	 			ExpressionEditorData expressionEditorData=new ExpressionEditorData("");
+	 			ExpressionEditorData expressionEditorData=new ExpressionEditorData("",component.getComponentName());
 	 	    	mappingSheetRowForExpression = new MappingSheetRow(inputFieldListOperationClass, outputListOperationClass, 
 	 	    			operationId, Messages.CUSTOM, "",
 	 	    			nameValuePropertyOperationClass, false, "", false, "",true,expressionEditorData,false);
@@ -2108,7 +2108,7 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
 		List<NameValueProperty> nameValueProperty = new ArrayList<>();
 		operationID="Expression:"+n;
 		
-		ExpressionEditorData expressionEditorData=new ExpressionEditorData("");
+		ExpressionEditorData expressionEditorData=new ExpressionEditorData("",component.getComponentName());
     	mappingSheetRowForExpression = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
 				nameValueProperty, false, "", false, "",true,expressionEditorData,true);
     	transformMapping.getMappingSheetRows().add(mappingSheetRowForExpression);

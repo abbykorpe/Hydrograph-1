@@ -82,7 +82,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		nameValuePropertyList=new ArrayList<>(); 
 		this.operationClassProperty = (OperationClassProperty) componentConfigrationProperty.getPropertyValue();
 		if(operationClassProperty == null){
-			operationClassProperty = new OperationClassProperty(Messages.CUSTOM, "", false, "",nameValuePropertyList,null);
+			operationClassProperty = new OperationClassProperty(Messages.CUSTOM, "", false, "",nameValuePropertyList,null,null);
 		}
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
@@ -97,7 +97,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 				container.getContainerControl());
 		runtimeComposite.createContainerWidget();
 		runtimeComposite.numberOfBasicWidgets(3);
-
+		operationClassProperty.getExpressionEditorData().setComponentName(getComponent().getComponentName());
 		operationRadioButton = new ELTRadioButton(Messages.OPERATION_CALSS_LABEL);
 		runtimeComposite.attachWidget(operationRadioButton);
 		operationRadioButton.visible(true);

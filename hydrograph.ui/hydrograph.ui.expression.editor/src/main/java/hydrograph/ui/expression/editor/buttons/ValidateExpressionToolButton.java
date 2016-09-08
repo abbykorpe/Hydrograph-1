@@ -56,7 +56,9 @@ import org.slf4j.Logger;
 @SuppressWarnings("restriction")
 public class ValidateExpressionToolButton extends Button {
 
-	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR = "compile";
+	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR_FOR_TRANSFORM_COMPONENTS = "transformCompiler";
+	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR_FOR_FILTER_COMPONENT = "filterCompiler";
+	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ValidateExpressionToolButton.class);
 	public static final String HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS =  "hydrograph.engine.expression.api.ValidationAPI";
 	private static final String ITEM_TEXT = "Validate";
@@ -82,7 +84,7 @@ public class ValidateExpressionToolButton extends Button {
 	protected void checkSubclass() {/* Allow subclassing*/}
 
 	@SuppressWarnings({ "unchecked"})
-	public static DiagnosticCollector<JavaFileObject> compileExpresion(String expressionStyledText,Map<String, Class<?>> fieldMap)
+	public static DiagnosticCollector<JavaFileObject> compileExpresion(String expressionStyledText,Map<String, Class<?>> fieldMap,String componentName)
 			throws JavaModelException, InvocationTargetException, ClassNotFoundException, MalformedURLException,IllegalAccessException, IllegalArgumentException {
 		LOGGER.debug("Compiling expression using Java-Compiler");
 		String expressiontext=expressionStyledText;
@@ -96,12 +98,22 @@ public class ValidateExpressionToolButton extends Button {
 		Thread.currentThread().setContextClassLoader(child);
 		Method[] methods = class1.getDeclaredMethods();
 		for (Method method : methods) {
-			if (method.getParameterTypes().length == 4 && StringUtils.equals(method.getName(), COMPILE_METHOD_OF_EXPRESSION_JAR)) {
+			if (method.getParameterTypes().length == 4
+					&& StringUtils.equals(method.getName(), COMPILE_METHOD_OF_EXPRESSION_JAR_FOR_TRANSFORM_COMPONENTS)
+					&& !StringUtils.equalsIgnoreCase(componentName, hydrograph.ui.common.util.Constants.FILTER)) {
 				method.getDeclaringClass().getClassLoader();
-				diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressiontext,propertyFilePath,
-						fieldMap, transfromJarPath);
+				diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressiontext,
+						propertyFilePath, fieldMap, transfromJarPath);
+				break;
+			}else if (method.getParameterTypes().length == 4
+					&& StringUtils.equals(method.getName(), COMPILE_METHOD_OF_EXPRESSION_JAR_FOR_FILTER_COMPONENT)
+					&& StringUtils.equalsIgnoreCase(componentName, hydrograph.ui.common.util.Constants.FILTER)) {
+				method.getDeclaringClass().getClassLoader();
+				diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressiontext,
+						propertyFilePath, fieldMap, transfromJarPath);
 				break;
 			}
+				
 		}
 		return diagnostics;
 	}
@@ -120,7 +132,8 @@ public class ValidateExpressionToolButton extends Button {
 	private void validation(StyledText expressionEditor) {
 		try {
 			DiagnosticCollector<JavaFileObject> diagnostics = compileExpresion(expressionEditor.getText(),
-					(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP));
+					(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP),
+					String.valueOf(expressionEditor.getData(ExpressionEditorDialog.COMPONENT_NAME_KEY)));
 			if (diagnostics != null && !diagnostics.getDiagnostics().isEmpty())
 				showDiagnostics(diagnostics);
 			else {

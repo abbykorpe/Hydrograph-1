@@ -146,7 +146,7 @@ public class ExpressionEditorUtil {
 		DiagnosticCollector<JavaFileObject> diagnosticCollector = null;
 		try {
 			diagnosticCollector = ValidateExpressionToolButton
-					.compileExpresion(expressionText,inputFields);
+					.compileExpresion(expressionText,inputFields,expressionEditorData.getComponentName());
 			if (diagnosticCollector != null && !diagnosticCollector.getDiagnostics().isEmpty()) {
 				for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
 					if (StringUtils.equals(diagnostic.getKind().name(), Diagnostic.Kind.ERROR.name())) {

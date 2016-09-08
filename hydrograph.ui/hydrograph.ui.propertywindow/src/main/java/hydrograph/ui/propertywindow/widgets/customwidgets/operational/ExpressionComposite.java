@@ -333,13 +333,17 @@ public class ExpressionComposite extends Composite {
 			for (FilterProperties filterProperties : mappingSheetRow.getInputFields()) {
 				inputFieldNames.add(filterProperties.getPropertyname());
 			}
+			mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression().clear();
 			mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
 			mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression()
 					.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(inputFieldNames, getInputSchema(component)));
 			mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression().addAll(inputFieldNames);
+			
 		}
-		else
+		else{
 		mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
+		mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression().clear();
+		}
 		
 		return mappingSheetRow.getExpressionEditorData();
 	}

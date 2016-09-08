@@ -56,7 +56,8 @@ public class EvaluateExpression {
 		try {
 			DiagnosticCollector<JavaFileObject> diagnosticCollector = ValidateExpressionToolButton
 					.compileExpresion(expressionEditor.getText(),
-							(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP));
+							(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP),
+							String.valueOf(expressionEditor.getData(ExpressionEditorDialog.COMPONENT_NAME_KEY)));
 			if (diagnosticCollector != null && !diagnosticCollector.getDiagnostics().isEmpty()) {
 				for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
 					if (StringUtils.equals(diagnostic.getKind().name(), Diagnostic.Kind.ERROR.name())) {
