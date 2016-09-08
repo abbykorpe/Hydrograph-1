@@ -50,11 +50,11 @@ public class ReadSubjobTest {
 
 			xmlContents = XmlUtilities
 					.getXMLStringFromDocument(expandedXmlDocument);
-			Assert.assertTrue(xmlContents.contains("<inputs id=\"inputSubjob.input1\" phase=\"0.0\" xsi:type=\"it:textFileDelimited\">"));
+			Assert.assertTrue(xmlContents.contains("<inputs id=\"inputSubjob.input1\" batch=\"0.0\" xsi:type=\"it:textFileDelimited\">"));
 			Assert.assertTrue(xmlContents.contains("<schema name=\"zxc\">"));
-			Assert.assertTrue(xmlContents.contains("<operations id=\"inputSubjob.reformat\" phase=\"0.0\" xsi:type=\"op:transform\">"));
+			Assert.assertTrue(xmlContents.contains("<operations id=\"inputSubjob.reformat\" batch=\"0.0\" xsi:type=\"op:transform\">"));
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"inputSubjob.input1\" fromSocketId=\"out0\" id=\"in0\"/>"));
-			Assert.assertTrue(xmlContents.contains("<outputs id=\"output1\" phase=\"0.0\" xsi:type=\"ot:textFileDelimited\">"));
+			Assert.assertTrue(xmlContents.contains("<outputs id=\"output1\" batch=\"0.0\" xsi:type=\"ot:textFileDelimited\">"));
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"inputSubjob.reformat\" fromSocketId=\"out0\" id=\"in0\">"));
 
 		} catch (IOException e) {
@@ -82,15 +82,15 @@ public class ReadSubjobTest {
 			xmlContents = XmlUtilities
 					.getXMLStringFromDocument(expandedXmlDocument);
 
-			Assert.assertTrue(xmlContents.contains("<inputs id=\"inputSubjob.input1\" phase=\"0.0\" xsi:type=\"it:textFileDelimited\">"));
+			Assert.assertTrue(xmlContents.contains("<inputs id=\"inputSubjob.input1\" batch=\"0.0\" xsi:type=\"it:textFileDelimited\">"));
 			Assert.assertTrue(xmlContents.contains("<schema name=\"zxc\">"));
-			Assert.assertTrue(xmlContents.contains("<operations id=\"inputSubjob.reformat\" phase=\"0.0\" xsi:type=\"op:transform\">"));
+			Assert.assertTrue(xmlContents.contains("<operations id=\"inputSubjob.reformat\" batch=\"0.0\" xsi:type=\"op:transform\">"));
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"inputSubjob.input1\" fromSocketId=\"out0\" id=\"in0\"/>"));
-			Assert.assertTrue(xmlContents.contains("<straightPulls id=\"operationSubjob.clone\" phase=\"0.0\" xsi:type=\"spt:clone\">"));
+			Assert.assertTrue(xmlContents.contains("<straightPulls id=\"operationSubjob.clone\" batch=\"0.0\" xsi:type=\"spt:clone\">"));
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"inputSubjob.reformat\" fromSocketId=\"out0\" id=\"in0\"/>"));
-			Assert.assertTrue(xmlContents.contains("<outputs id=\"operationSubjob.output2\" phase=\"0.0\" xsi:type=\"ot:textFileDelimited\">"));
+			Assert.assertTrue(xmlContents.contains("<outputs id=\"operationSubjob.output2\" batch=\"0.0\" xsi:type=\"ot:textFileDelimited\">"));
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"operationSubjob.clone\" fromSocketId=\"out0\" id=\"in0\">"));
-			Assert.assertTrue(xmlContents.contains("<outputs id=\"outputSubjob.output1\" phase=\"0.0\" xsi:type=\"ot:textFileDelimited\">"));
+			Assert.assertTrue(xmlContents.contains("<outputs id=\"outputSubjob.output1\" batch=\"0.0\" xsi:type=\"ot:textFileDelimited\">"));
 			Assert.assertTrue(xmlContents.contains("<inSocket fromComponentId=\"operationSubjob.clone\" fromSocketId=\"out1\" id=\"in0\">"));
 			
 		} catch (IOException e) {

@@ -54,7 +54,7 @@ public class FilterAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing filter entity for component: "
 				+ jaxbFilter.getId());
 		filterEntity.setComponentId(jaxbFilter.getId());
-		filterEntity.setPhase(jaxbFilter.getPhase());
+		filterEntity.setBatch(jaxbFilter.getBatch());
 
 		// check if operation is present
 		if (jaxbFilter.getOperationOrExpression() != null) {

@@ -60,7 +60,7 @@ public class InputFileParquetAssembly extends BaseComponent<InputFileParquetEnti
 			fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileParquetEntity>(inputFileParquetEntity);
 			LOG.debug("InputFile Parquet Component: [ Fields List : " + Arrays.toString(fieldsCreator.getFieldNames())
 					+ ", Field Types : " + Arrays.toString(fieldsCreator.getFieldDataTypes()) + " , Path : "
-					+ inputFileParquetEntity.getPath() + ", Phase : " + inputFileParquetEntity.getPhase() + "]");
+					+ inputFileParquetEntity.getPath() + ", Batch : " + inputFileParquetEntity.getBatch() + "]");
 			inputFields = fieldsCreator.makeFields();
 
 			generateTapsAndPipes();

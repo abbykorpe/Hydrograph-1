@@ -55,7 +55,7 @@ public class CloneAssemblyTest {
 
 		CloneEntity cloneEntity = new CloneEntity();
 		cloneEntity.setComponentId("cloneTest");
-		cloneEntity.setPhase("1");
+		cloneEntity.setBatch("1");
 		List<OutSocket> outSocketList = new ArrayList<OutSocket>();
 		outSocketList.add(new OutSocket("out1"));
 		outSocketList.add(new OutSocket("out2"));

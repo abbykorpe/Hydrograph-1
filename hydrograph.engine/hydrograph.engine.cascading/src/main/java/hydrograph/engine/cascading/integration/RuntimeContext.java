@@ -139,8 +139,8 @@ public class RuntimeContext {
 		return flowContext;
 	}
 
-	public void setFlowContext(String phase, FlowContext flowContext) {
-		this.flowContext.put(phase, flowContext);
+	public void setFlowContext(String batch, FlowContext flowContext) {
+		this.flowContext.put(batch, flowContext);
 	}
 
 }

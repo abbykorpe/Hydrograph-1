@@ -67,7 +67,7 @@ public class OutputFileHiveTextAssemblyGenerator extends
 		LOG.trace("Initializing output file Hive Text entity for component: "
 				+ jaxbHiveTextFile.getId());
 		outputFileHiveTextEntity.setComponentId(jaxbHiveTextFile.getId());
-		outputFileHiveTextEntity.setPhase(jaxbHiveTextFile.getPhase());
+		outputFileHiveTextEntity.setBatch(jaxbHiveTextFile.getBatch());
 		outputFileHiveTextEntity
 				.setFieldsList(OutputEntityUtils
 						.extractOutputFields(jaxbHiveTextFile.getInSocket()

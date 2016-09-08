@@ -64,7 +64,7 @@ public class RemoveDupsAssemblyGenerator extends
 		LOG.trace("Initializing remove dups entity for component: "
 				+ jaxbRemoveDups.getId());
 		removeDupsEntity.setComponentId(jaxbRemoveDups.getId());
-		removeDupsEntity.setPhase(jaxbRemoveDups.getPhase());
+		removeDupsEntity.setBatch(jaxbRemoveDups.getBatch());
 		removeDupsEntity.setKeep(jaxbRemoveDups.getKeep().getValue().name());
 		removeDupsEntity.setKeyFields(StraightPullEntityUtils
 				.extractKeyFields(jaxbRemoveDups.getPrimaryKeys()));

@@ -59,7 +59,7 @@ public class PartitionByExpressionAssemblyGenerator extends OperationAssemblyGen
 		LOG.trace("Initializing aggregate entity for component: " + jaxbPartitionByExpression.getId());
 
 		partitionByExpressionEntity.setComponentId(jaxbPartitionByExpression.getId());
-		partitionByExpressionEntity.setPhase(jaxbPartitionByExpression.getPhase());
+		partitionByExpressionEntity.setBatch(jaxbPartitionByExpression.getBatch());
 
 		// check if operation is present
 		if (jaxbPartitionByExpression.getOperationOrExpression() != null) {

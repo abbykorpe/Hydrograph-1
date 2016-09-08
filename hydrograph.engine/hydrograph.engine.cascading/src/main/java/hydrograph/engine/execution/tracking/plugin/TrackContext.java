@@ -22,7 +22,7 @@ public class TrackContext {
 	private String fromComponentId;
 	private String fromOutSocketId;
 	private String fromOutSocketType;
-	private String phase;
+	private String batch;
 
 	/**
 	 * Method getFromComponentId returns the previous component's id
@@ -80,18 +80,18 @@ public class TrackContext {
 	}
 
 	/**
-	 * @return the phase
+	 * @return the batch
 	 */
-	public String getPhase() {
-		return phase;
+	public String getBatch() {
+		return batch;
 	}
 
 	/**
-	 * @param phase
-	 *            phase to set
+	 * @param batch
+	 *            batch to set
 	 */
-	public void setPhase(String phase) {
-		this.phase = phase;
+	public void setBatch(String batch) {
+		this.batch = batch;
 	}
 
 }

@@ -201,12 +201,12 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		String flowStepDotPath = basePath + "/" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "/"
 				+ "flowstep";
 
-		int phaseCounter = 0;
+		int batchCounter = 0;
 		for (Cascade cascadingFlow : runtimeContext.getCascadingFlows()) {
 			for (Flow flows : cascadingFlow.getFlows()) {
-				flows.writeDOT(flowDotPath + "_" + phaseCounter);
-				flows.writeStepsDOT(flowStepDotPath + "_" + phaseCounter);
-				phaseCounter++;
+				flows.writeDOT(flowDotPath + "_" + batchCounter);
+				flows.writeStepsDOT(flowStepDotPath + "_" + batchCounter);
+				batchCounter++;
 			}
 		}
 	}
