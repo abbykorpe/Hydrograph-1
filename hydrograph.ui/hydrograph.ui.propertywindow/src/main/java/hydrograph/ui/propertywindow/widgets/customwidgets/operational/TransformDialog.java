@@ -543,22 +543,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	 	    	transformMapping.getMappingSheetRows().add(mappingSheetRows.indexOf(mappingSheetRow)+1,
 	 	    			mappingSheetRowForExpression);	
 	 		}
-	 		transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
+	 		
 	 	}
-	 	if(!transformMapping.getMapAndPassthroughField().isEmpty()&&
-	 			transformMapping.getMapAndPassthroughField().get(0).getFilterProperty()==null)
-	 	{
-	 		backwardJobComapatabilityCode();	
-	 	}
-	 	for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
-	 	{
-	 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
-	 	}	
-	 	List<FilterProperties> finalSortedList=SchemaSyncUtility.INSTANCE.
-	 	sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(), transformMapping);
-	 	transformMapping.getOutputFieldList().clear();
-	 	transformMapping.getOutputFieldList().addAll(finalSortedList);
-		
 	}
 	private void createOperationClassGrid(Composite parentComposite) {
 
@@ -1480,28 +1466,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		outputFieldViewer.refresh();
 		mappingTableViewer.refresh();
 	}
-	
-    /**
-     * temporaray method for backward Job compatability
-     */
-    private void backwardJobComapatabilityCode()
-    {
-    		List<NameValueProperty> tempNameValuePropertyList=new ArrayList<>();
-    		for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
-    		{
-    			NameValueProperty newNameValueProperty=new NameValueProperty();
-    			newNameValueProperty.setPropertyName(nameValueProperty.getPropertyName());
-    			newNameValueProperty.setPropertyValue(nameValueProperty.getPropertyValue());
-    			newNameValueProperty.getFilterProperty().setPropertyname(nameValueProperty.getPropertyValue());
-    			tempNameValuePropertyList.add(newNameValueProperty);
-    			transformMapping.getOutputFieldList().add(newNameValueProperty.getFilterProperty());
-    		}	
-    		transformMapping.getMapAndPassthroughField().clear();
-    		transformMapping.getMapAndPassthroughField().addAll(tempNameValuePropertyList);
-    		tempNameValuePropertyList.clear();
-    }	
-    
-    
 	/**
 	 * @return finalsortedList
 	 */

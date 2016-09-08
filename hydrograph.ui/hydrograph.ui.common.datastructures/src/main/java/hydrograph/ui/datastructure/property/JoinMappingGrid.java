@@ -226,11 +226,14 @@ public class JoinMappingGrid implements IDataStructure{
 				return false;
 		} else if (!lookupInputProperties.equals(other.lookupInputProperties))
 			return false;
+		if(!isSelected)
+		{	
 		if (lookupMapProperties == null) {
 			if (other.lookupMapProperties != null)
 				return false;
 		} else if (!lookupMapProperties.equals(other.lookupMapProperties))
 			return false;
+		}
 		return true;
 	}
 
