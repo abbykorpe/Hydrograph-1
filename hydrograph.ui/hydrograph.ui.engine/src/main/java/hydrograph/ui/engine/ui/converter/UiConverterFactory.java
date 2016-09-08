@@ -36,6 +36,7 @@ import hydrograph.engine.jaxb.straightpulltypes.Sort;
 import hydrograph.engine.jaxb.straightpulltypes.UnionAll;
 import hydrograph.ui.engine.ui.converter.impl.AggregateUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.CloneUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.CommandSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.CumulateUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.DiscardUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.FilterUiConverter;
@@ -198,6 +199,10 @@ public class UiConverterFactory {
 		}
 		if ((hydrograph.engine.jaxb.outputtypes.SubjobOutput.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new OutputComponentSubjobUiConverter(typeBaseComponent, container);
+		}
+		if((hydrograph.engine.jaxb.commandtypes.Subjob.class).isAssignableFrom(typeBaseComponent.getClass()))
+		{
+			return new CommandSubjobUiConverter(typeBaseComponent, container);
 		}
 		
 
