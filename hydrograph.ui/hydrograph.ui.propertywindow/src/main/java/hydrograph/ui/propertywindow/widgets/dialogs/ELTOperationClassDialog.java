@@ -249,7 +249,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		table_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				addRow(nameValueTableViewer);
+				addNewRow(nameValueTableViewer);
 			}
 
 			@Override
@@ -331,7 +331,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		return container;
 	}
 
-	private void addRow(TableViewer nameValueTableViewer){
+	private void addNewRow(TableViewer nameValueTableViewer){
 		NameValueProperty nameValueProperty = new NameValueProperty();
 		nameValueProperty.setPropertyName("");
 		nameValueProperty.setPropertyValue("");
@@ -397,21 +397,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			}
 		});
 	}
-	private void addNewRow(TableViewer nameValueTableViewer){
 
-		NameValueProperty nameValueProperty = new NameValueProperty();
-		nameValueProperty.setPropertyName("");
-		nameValueProperty.setPropertyValue("");
-		if (!operationClassProperty.getNameValuePropertyList().contains(nameValueProperty)) {
-			operationClassProperty.getNameValuePropertyList().add(nameValueProperty);
-			nameValueTableViewer.refresh();
-			int currentSize = operationClassProperty.getNameValuePropertyList().size();
-			nameValueTableViewer.editElement(nameValueTableViewer.getElementAt(currentSize), 0);
-			applyButton.setEnabled(true);
-		}
-
-
-	}
 
 	private void moveRowUp(TableViewer nameValueTableViewer){
 
