@@ -351,7 +351,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 	private void updateSubjobVersion() {
 		Component currentComponent=getCastedModel();
-		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphIsSubjob()){
+		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphSubjob()){
 			currentComponent.getParent().updateSubjobVersion();
 		}
 	}

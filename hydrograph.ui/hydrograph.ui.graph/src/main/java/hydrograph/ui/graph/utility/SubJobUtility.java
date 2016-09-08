@@ -224,8 +224,8 @@ public class SubJobUtility {
 	 *            the file
 	 */
 	public void updateSubJobModelProperties(ComponentEditPart edComponentEditPart, int inPort, int outPort, IFile file) {
-		edComponentEditPart.getCastedModel().inputPortSettings(inPort);
-		edComponentEditPart.getCastedModel().outputPortSettings(outPort);
+		edComponentEditPart.getCastedModel().completeInputPortSettings(inPort);
+		edComponentEditPart.getCastedModel().completeOutputPortSettings(outPort);
 		ComponentFigure compFig = (ComponentFigure) edComponentEditPart.getFigure();
 		compFig.setHeight(inPort, outPort);
 		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()

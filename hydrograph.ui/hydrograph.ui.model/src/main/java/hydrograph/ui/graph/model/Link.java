@@ -27,6 +27,8 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * The Class Link.
+ * <p>
+ * Represents the link that connects the components through input and output ports.
  * 
  * @author Bitwise
  */
@@ -66,7 +68,7 @@ public class Link extends Model {
 	}
 
 	/**
-	 * Attach source.
+	 * Attach the source component's output port with this link.
 	 */
 	public void attachSource() {
 		if (getSource() == null || getSource().getSourceConnections().contains(this))
@@ -79,7 +81,7 @@ public class Link extends Model {
 	}
 
 	/**
-	 * Attach target.
+	 * Attach the target component's input port with this link
 	 */
 	public void attachTarget() {
 		if (getTarget() == null || getTarget().getTargetConnections().contains(this))
@@ -97,7 +99,7 @@ public class Link extends Model {
 	}
 
 	/**
-	 * Detach source.
+	 * Detach source component from this link.
 	 */
 	public void detachSource() {
 		if (getSource() == null)
@@ -107,7 +109,7 @@ public class Link extends Model {
 	}
 
 	/**
-	 * Detach target.
+	 * Detach target component from this link.
 	 */
 	public void detachTarget() {
 		if (getTarget() == null)
@@ -116,40 +118,84 @@ public class Link extends Model {
 		updateSubjobVersionForAnyUpdation(this);
 	}
 
+	/**
+	 * Gets the source component of this link.
+	 * 
+	 * @return the source
+	 */
 	public Component getSource() {
 		return source;
 	}
 
+	/**
+	 * Gets the source terminal.
+	 * 
+	 * @return the source terminal
+	 */
 	public String getSourceTerminal() {
 		return sourceTerminal;
 	}
 
+	/**
+	 * Gets the target component of this link.
+	 * 
+	 * @return the target
+	 */
 	public Component getTarget() {
 		return target;
 	}
-
+	
+	/**
+	 * Gets the target terminal.
+	 * 
+	 * @return the target terminal
+	 */
 	public String getTargetTerminal() {
 		return targetTerminal;
 	}
 
+	/**
+	 * Sets the source.
+	 * 
+	 * @param source
+	 *            the new source
+	 */
 	public void setSource(Component e) {
 		Object old = source;
 		source = e;
 		firePropertyChange("source", old, source);
 	}
 
+	/**
+	 * Sets the source terminal.
+	 * 
+	 * @param sourceTerminal
+	 *            the new source terminal
+	 */
 	public void setSourceTerminal(String s) {
 		Object old = sourceTerminal;
 		sourceTerminal = s;
 		firePropertyChange("sourceTerminal", old, sourceTerminal);
 	}
 
+	/**
+	 * Sets the target.
+	 * 
+	 * @param target
+	 *            the new target
+	 */
 	public void setTarget(Component e) {
 		Object old = target;
 		target = e;
 		firePropertyChange("target", old, target);
 	}
 
+	/**
+	 * Sets the target terminal.
+	 * 
+	 * @param targetTerminal
+	 *            the new target terminal
+	 */
 	public void setTargetTerminal(String s) {
 		Object old = targetTerminal;
 		targetTerminal = s;
@@ -182,16 +228,27 @@ public class Link extends Model {
 		firePropertyChange(LINESTYLE_PROP, null, new Integer(this.lineStyle));
 	}
 
+	/**
+	 * Gets the link number.
+	 * 
+	 * @return the link number
+	 */
 	public int getLinkNumber() {
 		return linkNumber;
 	}
 
+	/**
+	 * Sets the link number.
+	 * 
+	 * @param linkNumber
+	 *            the new link number
+	 */
 	public void setLinkNumber(int linkNumber) {
 		this.linkNumber = linkNumber;
 	}
 
 	/**
-	 * Reconnect.
+	 * Reconnect this link if not already connected.
 	 */
 	public void reconnect() {
 		if (!isConnected) {
@@ -203,7 +260,7 @@ public class Link extends Model {
 	}
 
 	/**
-	 * Reconnect.
+	 * Reconnect this link to given source component and it's port.
 	 * 
 	 * @param newSource
 	 *            the new source
@@ -225,10 +282,21 @@ public class Link extends Model {
 		link.getSource().getParent().updateSubjobVersion();
 	}
 	
+	/**
+	 * Gets the record count.
+	 * 
+	 * @return the record count
+	 */
 	public String getRecordCount() {
 		return recordCount;
 	}
 	
+	/**
+	 * Update record count.
+	 * 
+	 * @param recordCount
+	 *            the new record count
+	 */
 	public void updateRecordCount(String count) {
 		count = StringUtils.equalsIgnoreCase(COMPONENT_FAIL_RECORD_COUNT, count)? COMPONENT_FAIL_COUNT_DISPLAY : count;
 		this.recordCount = count;

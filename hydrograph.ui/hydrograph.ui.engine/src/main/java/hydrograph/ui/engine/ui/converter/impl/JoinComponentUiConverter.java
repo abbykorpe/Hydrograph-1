@@ -143,7 +143,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 	}
 
 	private void incrementPort() {
-		uiComponent.inputPortSettings(inPortCounter);
+		uiComponent.completeInputPortSettings(inPortCounter);
 		uiComponent.unusedPortSettings(inPortCounter);
 		
 	}

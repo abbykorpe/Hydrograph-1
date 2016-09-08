@@ -82,7 +82,7 @@ public class SubJobPortLinkUtilty {
 	   		inputSubComponent.setComponentLabel(Constants.INPUT_SUBJOB);
 	   		inputSubComponent.setType(Constants.INPUT_SUBJOB_TYPE);
 	   		inputSubComponent.setCategory(Constants.SUBJOB_COMPONENT_CATEGORY);
-	   		inputSubComponent.outputPortSettings(outPort);
+	   		inputSubComponent.completeOutputPortSettings(outPort);
 	   		fixComponentSize(inputSubComponent, outPort);
 	   		setXYCoordinate(inputSubComponent,0 , 0);
 	   		inputSubComponent.setParent(container); 
@@ -147,7 +147,7 @@ public class SubJobPortLinkUtilty {
 		   		outSubComponent.setComponentLabel(Constants.OUTPUT_SUBJOB);
 		   		outSubComponent.setType(Constants.OUTPUT_SUBJOB_TYPE);
 		   		outSubComponent.setCategory(Constants.SUBJOB_COMPONENT_CATEGORY);
-		   		outSubComponent.inputPortSettings(inPort);	
+		   		outSubComponent.completeInputPortSettings(inPort);	
 		   		fixComponentSize(outSubComponent, inPort);
 		   		setXYCoordinate(outSubComponent,getMaxXCoordinate(container)+300 , 0);
 		   		outSubComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE,schemaMap);

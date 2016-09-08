@@ -36,9 +36,11 @@ import org.eclipse.swt.widgets.Display;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 
+
 /**
- * The Class Container(Graph).
- * 
+ * The Class Container.
+ * <p>
+ * The model class for Graph container.
  * @author Bitwise
  */
 public class Container extends Model {
@@ -59,39 +61,57 @@ public class Container extends Model {
 	private long subjobVersion=1;
 	private Map<String,String> graphRuntimeProperties;
 	
-	private List<ParameterFile> jobLevelParamterFiles;
+	private List<ParameterFile> jobLevelParameterFiles;
 	
 	public Container(){
 		
 	}
 	
 	
-	public void addJobLevelParamterFiles(List<ParameterFile> jobLevelParamterFiles){
-		
-		if (this.jobLevelParamterFiles == null){
-			this.jobLevelParamterFiles = new ArrayList<>();
-		}
-		
-		this.jobLevelParamterFiles.clear();
-		this.jobLevelParamterFiles.addAll(jobLevelParamterFiles);
-	}
 	
-	public List<ParameterFile> getJobLevelParamterFiles() {
-		if (jobLevelParamterFiles == null){
-			jobLevelParamterFiles = new ArrayList<>();
+	/**
+	 * Adds the job level parameter files.
+	 * 
+	 * @param jobLevelParameterFiles
+	 *            the job level parameter files
+	 */
+	public void addJobLevelParameterFiles(List<ParameterFile> jobLevelParameterFiles){
+		
+		if (this.jobLevelParameterFiles == null){
+			this.jobLevelParameterFiles = new ArrayList<>();
 		}
-		List<ParameterFile> jobLevelParamterFiles = new ArrayList<>();
-		jobLevelParamterFiles.addAll(this.jobLevelParamterFiles);
-		return jobLevelParamterFiles;
+		
+		this.jobLevelParameterFiles.clear();
+		this.jobLevelParameterFiles.addAll(jobLevelParameterFiles);
 	}
 	
 	/**
+	 * Gets the job level parameter files.
+	 * 
+	 * @return the job level parameter files
+	 */
+	public List<ParameterFile> getJobLevelParameterFiles() {
+		if (jobLevelParameterFiles == null){
+			jobLevelParameterFiles = new ArrayList<>();
+		}
+		List<ParameterFile> jobLevelParamterFiles = new ArrayList<>();
+		jobLevelParamterFiles.addAll(this.jobLevelParameterFiles);
+		return jobLevelParamterFiles;
+	}
+	
+	
+	/**
+	 * 
 	 * Add a component to this graph.
-	 * @return true, if the component was added, false otherwise
+	 * 
+	 * @param component
+	 *            the component
+	 * @return true, if the component was successfully added, false otherwise
+	 *
 	 */
 	public boolean addChild(Component component) {
 		if(component != null){
-			if (isIOSubjobAlreadyNotPresent(component.getComponentName())
+			if (canAddSubjobToCanvas(component.getComponentName())
 				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
@@ -132,11 +152,11 @@ public class Container extends Model {
 
 	/**
 	 * Add a subjob to this graph.
-	 * @return true, if the component was added, false otherwise
+	 * @return true, if the subjob component was added, false otherwise
 	 */
 	public boolean addSubJobChild(Component component){
 	if(component != null){
-		if (isIOSubjobAlreadyNotPresent(component.getComponentName()) && components.add(component)) {
+		if (canAddSubjobToCanvas(component.getComponentName()) && components.add(component)) {
 			component.setParent(this);
 			firePropertyChange(CHILD_ADDED_PROP, null, component);
 			updateSubjobVersion();
@@ -147,7 +167,14 @@ public class Container extends Model {
 }
 
 	
-	private boolean isIOSubjobAlreadyNotPresent(String ioSubjobComponentName) {
+	/**
+	 * Checks if given subjob can be added to canvas.
+	 * 
+	 * @param ioSubjobComponentName
+	 *            the io subjob component name
+	 * @return true, if successful
+	 */
+	private boolean canAddSubjobToCanvas(String ioSubjobComponentName) {
 
 		if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, ioSubjobComponentName)
 				|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, ioSubjobComponentName)) {
@@ -294,10 +321,13 @@ public class Container extends Model {
 		return componentNextNameSuffixes;
 	}
 
+	
 	/**
-	 * Checks whether the graph is main or subjob
+	 * Checks if current graph ia a subjob or main job.
+	 * 
+	 * @return true, if is current graph is a subjob
 	 */
-	public boolean isCurrentGraphIsSubjob() {
+	public boolean isCurrentGraphSubjob() {
 		for (Component component : getChildren()) {
 			if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB, component.getComponentName())
 					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, component.getComponentName())){
@@ -308,38 +338,73 @@ public class Container extends Model {
 	}
 
 
+	/**
+	 * Gets the linked main graph path.
+	 * 
+	 * @return the linked main graph path
+	 */
 	public String getLinkedMainGraphPath() {
 		return linkedMainGraphPath;
 	}
 
 
+	/**
+	 * Sets the linked main graph path.
+	 * 
+	 * @param linkedMainGraphPath
+	 *            the new linked main graph path
+	 */
 	public void setLinkedMainGraphPath(String linkedMainGraphPath) {
 		this.linkedMainGraphPath = linkedMainGraphPath;
 	}
 
 
+	/**
+	 * Gets the subjob component edit part.
+	 * 
+	 * @return the subjob component edit part
+	 */
 	public Object getSubjobComponentEditPart() {
 		return subjobComponentEditPart;
 	}
 
 
+	/**
+	 * Sets the subjob component edit part.
+	 * 
+	 * @param subjobComponentEditPart
+	 *            the new subjob component edit part
+	 */
 	public void setSubjobComponentEditPart(Object subjobComponentEditPart) {
 		this.subjobComponentEditPart = subjobComponentEditPart;
 	}
 
 
+	/**
+	 * Gets the subjob version.
+	 * 
+	 * @return the subjob version
+	 */
 	public long getSubjobVersion() {
 		return subjobVersion;
 	}
 
 
+	/**
+	 * Update subjob version.
+	 */
 	public void updateSubjobVersion() {
-		if(!isVersionAlreadyUpdated && isCurrentGraphIsSubjob()){
+		if(!isVersionAlreadyUpdated && isCurrentGraphSubjob()){
 			this.subjobVersion++;
 			isVersionAlreadyUpdated=true;
 		}
 	}
 
+	/**
+	 * Gets the graph runtime properties.
+	 * 
+	 * @return the graph runtime properties
+	 */
 	public Map<String, String> getGraphRuntimeProperties() {
 		if (graphRuntimeProperties == null){
 			graphRuntimeProperties = new LinkedHashMap<String, String>();

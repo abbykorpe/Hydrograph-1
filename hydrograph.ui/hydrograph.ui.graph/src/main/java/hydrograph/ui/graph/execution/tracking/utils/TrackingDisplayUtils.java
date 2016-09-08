@@ -21,7 +21,7 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.model.CompStatus;
+import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -139,7 +139,7 @@ public class TrackingDisplayUtils {
 			if (editPart instanceof ComponentEditPart) {
 				Component component = ((ComponentEditPart) editPart)
 						.getCastedModel();
-				component.updateStatus(CompStatus.BLANK.value());
+				component.updateStatus(ComponentExecutionStatus.BLANK.value());
 			} else if (editPart instanceof LinkEditPart) {
 				((LinkEditPart) editPart).clearRecordCountAtPort();
 			}

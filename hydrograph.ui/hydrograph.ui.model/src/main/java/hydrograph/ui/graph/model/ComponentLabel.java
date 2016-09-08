@@ -15,11 +15,13 @@
 package hydrograph.ui.graph.model;
 
 import java.io.IOException;
-import org.eclipse.swt.graphics.Image;
+
 import org.eclipse.draw2d.geometry.Dimension;
 
 /**
  * The Class ComponentLabel.
+ * Represents the label ( Name ) for each components that is present in the job canvas.
+ * 
  * @author Bitwise
  */
 
@@ -31,18 +33,39 @@ public class ComponentLabel extends Model{
 
 	private static int count;
 
+	/**
+	 * Instantiates a new component label.
+	 * 
+	 * @param compLabel
+	 *            the comp label
+	 */
 	public ComponentLabel(String compLabel) {
 		this.text = compLabel;
 	}
 
+	/**
+	 * Gets the label contents.
+	 * 
+	 * @return the label contents
+	 */
 	public String getLabelContents() {
 		return text;
 	}
 
+	/**
+	 * Gets the new ID.
+	 * 
+	 * @return the new ID
+	 */
 	protected String getNewID() {
 		return Integer.toString(count++);
 	}
 
+	/**
+	 * Gets the size.
+	 * 
+	 * @return the size
+	 */
 	public Dimension getSize() {
 		return size;
 	}
@@ -52,6 +75,12 @@ public class ComponentLabel extends Model{
 		s.defaultReadObject();
 	}
 
+	/**
+	 * Sets the size.
+	 * 
+	 * @param d
+	 *            the new size
+	 */
 	public void setSize(Dimension d) {
 		if (size.equals(d))
 			return;
@@ -59,6 +88,12 @@ public class ComponentLabel extends Model{
 		firePropertyChange("compLabelSize", null, size);
 	}
 
+	/**
+	 * Sets the label contents.
+	 * 
+	 * @param s
+	 *            the new label contents
+	 */
 	public void setLabelContents(String s) {
 		text = s;
 		firePropertyChange("labelContents", null, text); //$NON-NLS-2$//$NON-NLS-1$
