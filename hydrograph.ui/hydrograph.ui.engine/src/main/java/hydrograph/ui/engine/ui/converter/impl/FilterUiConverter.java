@@ -80,7 +80,8 @@ public class FilterUiConverter extends TransformUiConverter{
 		    else if(filter.getOperationOrExpression().get(0) instanceof TypeTransformExpression)
 		    {
 		     TypeTransformExpression typeTransformExpression=(TypeTransformExpression)filter.getOperationOrExpression().get(0);
-		     ExpressionEditorData expressionEditorData=new ExpressionEditorData(typeTransformExpression.getExpr());
+		     ExpressionEditorData expressionEditorData=getExpressionEditorData(typeTransformExpression);
+		     
 		     operationClassProperty=new OperationClassProperty(null,null, false,true,expressionEditorData);
 		    }
 		}

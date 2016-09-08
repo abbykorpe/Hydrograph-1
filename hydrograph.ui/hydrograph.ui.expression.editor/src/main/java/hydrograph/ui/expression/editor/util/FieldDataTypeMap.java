@@ -13,7 +13,7 @@
 
 package hydrograph.ui.expression.editor.util;
 
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.enums.DataTypes;
@@ -36,26 +36,28 @@ public class FieldDataTypeMap {
 	 * @return
 	 */
 	public Map<String, Class<?>> createFieldDataTypeMap(List<String> selectedInputFields,
-			ComponentsOutputSchema outputSchema) {
+			List<FixedWidthGridRow> outputSchema) {
 		Map<String, Class<?>> fieldMap = new LinkedHashMap<String, Class<?>>();
 		if(selectedInputFields!=null){
 			for(String fieldName:selectedInputFields){
 				fieldMap.put(fieldName, getFieldDataType(fieldName, outputSchema));
 			}
 		}else if(outputSchema!=null){
-			for(GridRow gridRow:outputSchema.getBasicGridRowsOutputFields()){
+			for(GridRow gridRow:outputSchema){
 				fieldMap.put(gridRow.getFieldName(), getFieldDataType(gridRow.getFieldName(), outputSchema));
 			}
 		}
 		return fieldMap;
 	}
 
-	private Class<?> getFieldDataType(String field, ComponentsOutputSchema outputSchema) {
+	private Class<?> getFieldDataType(String field, List<FixedWidthGridRow> outputSchema) {
 		Class<?> clazz = String.class;
-		for (GridRow gridRow : outputSchema.getBasicGridRowsOutputFields()) {
-			if (StringUtils.equalsIgnoreCase(gridRow.getFieldName(), field)) {
-				clazz=DataTypes.getDataTypeClassfromString(ExpressionEditorUtil.INSTANCE.lastString(
-						gridRow.getDataTypeValue(), Constants.DOT));
+		if (outputSchema != null) {
+			for (GridRow gridRow : outputSchema) {
+				if (StringUtils.equalsIgnoreCase(gridRow.getFieldName(), field)) {
+					clazz = DataTypes.getDataTypeClassfromString(ExpressionEditorUtil.INSTANCE.lastString(
+							gridRow.getDataTypeValue(), Constants.DOT));
+				}
 			}
 		}
 		return clazz;

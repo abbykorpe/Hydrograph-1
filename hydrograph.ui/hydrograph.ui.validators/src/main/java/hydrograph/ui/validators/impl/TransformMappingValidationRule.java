@@ -15,7 +15,9 @@
 package hydrograph.ui.validators.impl;
 
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
@@ -23,13 +25,15 @@ import hydrograph.ui.datastructure.property.mapping.ErrorObject;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
+import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -85,11 +89,25 @@ public class TransformMappingValidationRule implements IValidator{
 				}
 				else if(mappingSheetRow.isExpression())
 				{
-					if(StringUtils.isBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
+					String expressionText=mappingSheetRow.getExpressionEditorData().getExpression();
+					ExpressionEditorData expressionEditorData=mappingSheetRow.getExpressionEditorData();
+
+					if(StringUtils.isBlank(expressionText))
 					{
 						 errorMessage = propertyName + "Expression is blank in"+" "+mappingSheetRow.getOperationID();		
 						 return false;
 					}
+					ExpressionEditorUtil.validateExpression(expressionText 
+							, FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(expressionEditorData.getfieldsUsedInExpression()
+							, inputSchemaMap.get(Constants.FIXED_INSOCKET_ID))
+							, expressionEditorData);
+					
+					if(!expressionEditorData.isValid())
+					{
+						errorMessage = expressionEditorData.getErrorMessage();
+						return false;
+					}
+					
 				}	
 				if(mappingSheetRow.getOutputList().isEmpty())
 				{

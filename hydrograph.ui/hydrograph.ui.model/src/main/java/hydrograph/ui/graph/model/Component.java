@@ -53,7 +53,6 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  */
 public abstract class Component extends Model {
 	
-	private SchemaData schemaData;
 	
 	/** The Constant logger. */
 	private static final Logger logger = LogFactory.INSTANCE
@@ -252,7 +251,6 @@ public abstract class Component extends Model {
 	 * Instantiates a new component.
 	 */
 	public Component() {
-		schemaData = new SchemaData();
 		location = new Point(0, 0);
 		size = new Dimension(100, 80);
 		properties = new LinkedHashMap<>();
@@ -1609,7 +1607,7 @@ public abstract class Component extends Model {
 					logger.error("Failed to create validator", e);
 					throw new RuntimeException("Failed to create validator", e);
 				}
-				boolean status = validator.validate(propertyValue, configProperty.getName(),schemaData.getInputSchema(this));
+				boolean status = validator.validate(propertyValue, configProperty.getName(),new SchemaData().getInputSchema(this));
 				//NOTE : here if any of the property is not valid then whole component is not valid 
 				if(status == false){
 					componentHasRequiredValues = Boolean.FALSE;
