@@ -88,7 +88,6 @@ public class SchemaPropagation {
 		if (!isInputSubJobComponent(destinationComponent)
 				&& StringUtils.equals(Constants.SUBJOB_COMPONENT_CATEGORY, destinationComponent.getCategory())
 				&& targetTerminal != null) {
-			System.out.println();
 			propagateSchemaFromSubJob(destinationComponent, targetTerminal, componentsOutputSchema);
 		}
 		setSchemaMapOfComponent(destinationComponent, componentsOutputSchema);
@@ -183,8 +182,8 @@ public class SchemaPropagation {
 	
 	private void propagateSchemaFromSubJob(Component subJobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
-if (componentsOutputSchema==null)
-	return ;
+		if (componentsOutputSchema == null)
+			return;
 		
 		String outPutTargetTerminal = getTagetTerminalForSubjob(targetTerminal);
 		if (subJobComponent.getProperties().get(Constants.INPUT_SUBJOB) != null) {

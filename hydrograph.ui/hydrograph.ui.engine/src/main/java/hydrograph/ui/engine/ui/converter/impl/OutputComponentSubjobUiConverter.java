@@ -21,6 +21,11 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
+/**
+ * Converter to convert jaxb SubjobOutput object into output subjob component
+ *
+ *@author BITWISE
+ */
 public class OutputComponentSubjobUiConverter extends UiConverter {
 
 	

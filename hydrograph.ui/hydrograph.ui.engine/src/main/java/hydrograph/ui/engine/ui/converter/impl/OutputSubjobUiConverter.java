@@ -32,6 +32,11 @@ import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
+/**
+ * Converter to convert jaxb subjob object of output type into subjob component
+ *
+ *@author BITWISE
+ */
 public class OutputSubjobUiConverter extends UiConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputSubjobUiConverter.class);
