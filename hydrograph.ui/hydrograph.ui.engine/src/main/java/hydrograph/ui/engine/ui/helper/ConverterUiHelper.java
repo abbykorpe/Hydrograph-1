@@ -190,8 +190,6 @@ public class ConverterUiHelper {
 	public static String getFromSocketId(LinkingData linkingData, UIComponentRepo componentRepo) {
 		String inSocketId = linkingData.getSourceTerminal();
 
-//		if (ConverterHelper.isMultipleLinkAllowed(inSocket.getSource(), inSocket.getSourceTerminal()))
-//			inSocketId = inSocket.getSource().getPort(inSocket.getSourceTerminal()).getPortType() + inSocket.getLinkNumber();
 		if (componentRepo.getComponentUiFactory().get(linkingData.getSourceComponentId()).getComponentName().equals("InputSubjobComponent")) {
 			return inSocketId.replace("in", "out");
 		}
