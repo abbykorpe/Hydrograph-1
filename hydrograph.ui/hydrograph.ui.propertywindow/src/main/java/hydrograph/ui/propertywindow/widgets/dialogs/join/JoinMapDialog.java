@@ -238,7 +238,8 @@ public class JoinMapDialog extends Dialog {
 					mappingTableItemList.clear();
 					mappingTableViewer.refresh();
 					mappingTableViewer.getTable().setEnabled(true);
-					enableMappingTableButtonPanel(true);
+					btnAdd.setEnabled(true);
+					btnPull.setEnabled(true);
 				}
 			}
 		});
@@ -1087,6 +1088,7 @@ public class JoinMapDialog extends Dialog {
 			radioButtonMap.get(joinMappingGrid.getButtonText()).setSelection(
 					true);
 			mappingTableViewer.getTable().setEnabled(false);
+			enableMappingTableButtonPanel(false);
 			String inputPortID=StringUtils.remove(joinMappingGrid.getButtonText(), Constants.COPY_FROM_INPUT_PORT_PROPERTY);
 			copyFieldsWhenCopyOfIsSelected(inputPorts.get(Integer.parseInt(StringUtils.remove(inputPortID, Constants.INPUT_SOCKET_TYPE))), inputPortID);
 			
@@ -1100,7 +1102,10 @@ public class JoinMapDialog extends Dialog {
 		mappingTableViewer.refresh();
 
 		populatePreviousItemsOfTable();
+		
+		if(mappingTableViewer.getTable().getEnabled()){
 		refreshButtonStatus();
+		}
 
 	}
 
@@ -1117,6 +1122,7 @@ public class JoinMapDialog extends Dialog {
 		btnDelete.setEnabled(enabled);
 		btnDown.setEnabled(enabled);
 		btnUp.setEnabled(enabled);
+		btnPull.setEnabled(enabled);
 	}
 	
 	private void refreshButtonStatus(){

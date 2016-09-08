@@ -49,7 +49,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 38.#560 [Rushikesh Pawale] Added key shortcuts for add, delete, row up, row down buttons for all components.
 39.#1110 [Rushikesh Pawale] Fixed issue for shifting focus to previous row on delete button.
 40.#241 [Akhilesh Joshi] Join component height increases fractionally
-
+41.#1102 [Kalyan Rajpoot] Join Component: 'Delete', 'Move Field Up','Move Field Down' Buttons are Getting Enabled, When There is No Mapping Present in Mapping Grid.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
