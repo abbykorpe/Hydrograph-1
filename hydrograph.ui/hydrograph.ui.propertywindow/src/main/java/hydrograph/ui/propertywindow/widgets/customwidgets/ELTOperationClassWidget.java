@@ -14,12 +14,13 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
-import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -33,15 +34,15 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import hydrograph.ui.common.util.OSValidator;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 
@@ -171,12 +172,16 @@ public class ELTOperationClassWidget extends AbstractWidget {
 				super.widgetSelected(e);
 			}
 
-			private ComponentsOutputSchema getInputSchema() {
-				ComponentsOutputSchema componentsOutputSchema=null;
+			private List<FixedWidthGridRow> getInputSchema() {
+				List<FixedWidthGridRow> fixedWidthGridRows=new ArrayList<>();
 				for(Link link:getComponent().getTargetConnections()){
-					componentsOutputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+					ComponentsOutputSchema componentsOutputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+					if(componentsOutputSchema!=null && componentsOutputSchema.getFixedWidthGridRowsOutputFields()!=null){
+						fixedWidthGridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+					}
+					break;
 				}
-				return componentsOutputSchema;
+				return fixedWidthGridRows;
 			}
 			
 		});

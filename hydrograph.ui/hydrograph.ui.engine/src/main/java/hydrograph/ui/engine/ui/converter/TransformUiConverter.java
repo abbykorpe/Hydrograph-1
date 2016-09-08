@@ -203,8 +203,14 @@ public abstract class TransformUiConverter extends UiConverter {
 		}
 	}
 
-	private ExpressionEditorData getExpressionEditorData(TypeTransformExpression typeTransformExpression) {
-		return new ExpressionEditorData(typeTransformExpression.getExpr());
+	protected ExpressionEditorData getExpressionEditorData(TypeTransformExpression typeTransformExpression) {
+		ExpressionEditorData editorData=new ExpressionEditorData(typeTransformExpression.getExpr());
+		if(typeTransformExpression.getInputFields()!=null){
+		for(TypeInputField inputField:typeTransformExpression.getInputFields().getField()){
+			editorData.getfieldsUsedInExpression().add(inputField.getName());
+			}
+		}
+		return editorData;
 	}
 
 	protected String getOperationClassName(String fullClassPath) {

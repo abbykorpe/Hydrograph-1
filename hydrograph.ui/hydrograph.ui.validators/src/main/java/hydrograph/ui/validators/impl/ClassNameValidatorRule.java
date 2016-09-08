@@ -14,8 +14,12 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
+import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 
 import java.util.List;
 import java.util.Map;
@@ -59,14 +63,22 @@ public class ClassNameValidatorRule implements IValidator {
 		OperationClassProperty operationClassProperty = (OperationClassProperty) object; 
 		if(operationClassProperty.isExpression())
 		{
-			if(StringUtils.isBlank(operationClassProperty.getExpressionEditorData().getExpression()))
+			String expressionText=operationClassProperty.getExpressionEditorData().getExpression();
+			ExpressionEditorData expressionEditorData=operationClassProperty.getExpressionEditorData();
+			if(StringUtils.isBlank(expressionText))
 			{
 				errorMessage = "Expression should not be blank";
 				return false;	
 			}
-			if(!operationClassProperty.getExpressionEditorData().isValid())
+
+			ExpressionEditorUtil.validateExpression(expressionText 
+				, FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(expressionEditorData.getfieldsUsedInExpression()
+				, inputSchemaMap.get(Constants.FIXED_INSOCKET_ID))
+				, expressionEditorData);
+			
+			if(!expressionEditorData.isValid())
 			{
-				errorMessage = operationClassProperty.getExpressionEditorData().getErrorMessage();
+				errorMessage = expressionEditorData.getErrorMessage();
 				return false;
 			}
 			return true;

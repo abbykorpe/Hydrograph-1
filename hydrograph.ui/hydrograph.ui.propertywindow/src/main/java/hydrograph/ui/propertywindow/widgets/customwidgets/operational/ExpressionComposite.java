@@ -5,8 +5,11 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
@@ -14,8 +17,10 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -305,12 +310,16 @@ public class ExpressionComposite extends Composite {
 	protected void checkSubclass() {
 	}
 
-	private ComponentsOutputSchema getInputSchema(Component component) {
-		ComponentsOutputSchema componentsOutputSchema=null;
+	private List<FixedWidthGridRow> getInputSchema(Component component) {
+		List<FixedWidthGridRow> fixedWidthGridRows=new ArrayList<>();
 		for(Link link:component.getTargetConnections()){
-			componentsOutputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+			ComponentsOutputSchema componentsOutputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+			if(componentsOutputSchema!=null && componentsOutputSchema.getFixedWidthGridRowsOutputFields()!=null){
+				fixedWidthGridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+			}
+			break;
 		}
-		return componentsOutputSchema;
+		return fixedWidthGridRows;
 	}
 
 	/**
@@ -327,6 +336,7 @@ public class ExpressionComposite extends Composite {
 			mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
 			mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression()
 					.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(inputFieldNames, getInputSchema(component)));
+			mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression().addAll(inputFieldNames);
 		}
 		else
 		mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
