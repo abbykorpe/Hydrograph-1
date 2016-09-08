@@ -93,7 +93,7 @@ public class HydrographEngineCommunicatorSocket {
 
 	public void sendMessage(String str) throws IOException {
 		logger.debug("CLIENT MESSAGE :"+str);
-		if(session!=null){
+		if(session!=null && session.isOpen()){
 			session.getBasicRemote().sendText(str);
 		}
 	}

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hydrograph</groupId>
 	<artifactId>hydrograph.server.execution.tracking.server</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<packaging>jar</packaging>
 	<properties>
 		<jetty.version>9.2.11.v20150529</jetty.version>
@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>hydrograph</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
-			<version>0.15-wip</version>
+			<version>0.1.10-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- <dependency> <groupId>org.eclipse.jetty</groupId> <artifactId>jetty-server</artifactId> 
@@ -72,7 +72,7 @@
 			<version>2.6.2</version>
 		</dependency>
 
-		<dependency>
+		<dependency> 
 			<groupId>org.glassfish.tyrus</groupId>
 			<artifactId>tyrus-server</artifactId>
 			<version>1.0</version>
