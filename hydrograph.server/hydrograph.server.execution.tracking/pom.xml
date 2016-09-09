@@ -6,7 +6,7 @@
 	<version>1.0.8</version>
 	<packaging>jar</packaging>
 	<properties>
-		<jetty.version>9.2.11.v20150529</jetty.version>
+		<tyrus.version>1.13</tyrus.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -16,11 +16,6 @@
 	</repositories>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.version}</version>
-			</plugin>
 			<!-- Maven Assembly Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -64,33 +59,40 @@
 			<version>0.1.10-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.eclipse.jetty</groupId> <artifactId>jetty-server</artifactId> 
-			<version>${jetty.version}</version> </dependency> -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.6.2</version>
 		</dependency>
 
-		<dependency> 
-			<groupId>org.glassfish.tyrus</groupId>
-			<artifactId>tyrus-server</artifactId>
-			<version>1.0</version>
-		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+		<!-- Tyrus API START -->
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-server</artifactId>
+			<version>${tyrus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-container-grizzly-server</artifactId>
+			<version>${tyrus.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-container-servlet</artifactId>
+			<version>${tyrus.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
 			<artifactId>tyrus-client</artifactId>
-			<version>1.0</version>
-		</dependency> 
-		<dependency>
-			<groupId>org.glassfish.tyrus</groupId>
-			<artifactId>tyrus-container-grizzly</artifactId>
-			<version>1.0</version>
+			<version>${tyrus.version}</version>
 		</dependency>
+		<!-- Tyrus API END -->
+
 	</dependencies>
 </project>
