@@ -68,6 +68,7 @@ public class ConverterUiHelper {
 	 * @return FixedWidthGridRow, this object is responsible for displaying fixed-width schema on property window
 	 */
 	public FixedWidthGridRow getFixedWidthSchema(Object record) {
+		if(record!=null){
 		if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 			return null;
 		} else if ((TypeBaseField.class).isAssignableFrom(record.getClass())) {
@@ -76,7 +77,7 @@ public class ConverterUiHelper {
 			getCommonSchema(fixedWidthGrid, typeBaseField);
 			fixedWidthGrid.setLength(getStringValue(getQnameValue(typeBaseField, Constants.LENGTH_QNAME)));
 			return fixedWidthGrid;
-		}
+		}}
 		return null;
 	}
 	
