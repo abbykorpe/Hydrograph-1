@@ -31,9 +31,7 @@ import hydrograph.engine.utilities.ComponentHelper;
  * @author Prabodh
  */
 public class SortAssembly extends BaseComponent<SortEntity> {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 3468787324609517976L;
 
 	private SortEntity sortEntity;
