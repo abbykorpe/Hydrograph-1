@@ -50,11 +50,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DebugPlugin }
+     * 
+     */
+    public DebugPlugin createDebugPlugin() {
+        return new DebugPlugin();
+    }
+
+    /**
      * Create an instance of {@link ViewData }
      * 
      */
     public ViewData createViewData() {
         return new ViewData();
+    }
+
+    /**
+     * Create an instance of {@link Limit }
+     * 
+     */
+    public Limit createLimit() {
+        return new Limit();
     }
 
 }
