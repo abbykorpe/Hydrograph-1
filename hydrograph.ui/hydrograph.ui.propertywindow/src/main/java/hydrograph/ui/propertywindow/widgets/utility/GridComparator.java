@@ -36,14 +36,17 @@ public class GridComparator implements Comparator<GridRow> {
 	public int compare(GridRow o1, GridRow o2) {
 		   	int flag = o1.getFieldName().compareTo(o2.getFieldName());
 	        if(flag==0) flag = o1.getDataType().compareTo(o2.getDataType());
-	        if(flag==0) flag = o1.getScaleType().compareTo(o2.getScaleType());
+	        if(o1.getScaleType() !=null){
+	        	if(flag==0) flag = o1.getScaleType().compareTo(o2.getScaleType());
+	        }
 	        if(flag==0) flag = o1.getDataTypeValue().compareTo(o2.getDataTypeValue());
 	        if(flag==0) flag = o1.getDateFormat().compareTo(o2.getDateFormat());
 	        if(flag==0) flag = o1.getDescription().compareTo(o2.getDescription());
 	        if(flag==0) flag = o1.getPrecision().compareTo(o2.getPrecision());
 	        if(flag==0) flag = o1.getScale().compareTo(o2.getScale());
-	        if(flag==0) flag = o1.getScaleTypeValue().compareTo(o2.getScaleTypeValue());
-	        
+	        if(o1.getScaleTypeValue() !=null){
+	        	if(flag==0) flag = o1.getScaleTypeValue().compareTo(o2.getScaleTypeValue());
+	        }
 	        if(MixedSchemeGridRow.class.isAssignableFrom(o1.getClass()) && MixedSchemeGridRow.class.isAssignableFrom(o2.getClass())){
 	        	if(flag==0){ 
 	        		if(StringUtils.isNotBlank(((MixedSchemeGridRow) o1).getLength()) && StringUtils.isNotBlank(((MixedSchemeGridRow) o2).getLength()))
