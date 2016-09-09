@@ -50,6 +50,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 39.#1110 [Rushikesh Pawale] Fixed issue for shifting focus to previous row on delete button.
 40.#241 [Akhilesh Joshi] Join component height increases fractionally
 41.#1102 [Kalyan Rajpoot] Join Component: 'Delete', 'Move Field Up','Move Field Down' Buttons are Getting Enabled, When There is No Mapping Present in Mapping Grid.
+42.#1171 [Shashank karnik] Import Xml : Issues Related to Trasform category Component.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
