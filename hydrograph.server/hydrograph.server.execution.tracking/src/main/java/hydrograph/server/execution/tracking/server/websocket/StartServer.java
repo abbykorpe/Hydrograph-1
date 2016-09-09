@@ -13,11 +13,14 @@
 
 package hydrograph.server.execution.tracking.server.websocket;
 
-import hydrograph.server.execution.tracking.server.TrackingSocketServer;
-import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.glassfish.tyrus.server.Server;
+
+import hydrograph.server.execution.tracking.server.TrackingSocketServer;
+import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
 
 /**
  * The Class StartServer.
@@ -48,7 +51,8 @@ public class StartServer {
 	 * @param portNo the port no
 	 */
 	private void runServer(String portNo) {
-		Server server = new Server("localhost", Integer.parseInt(portNo), "/", TrackingSocketServer.class);
+			Map<String, Object> properties = Collections.emptyMap();
+			Server server = new Server("localhost", Integer.parseInt(portNo), "/",properties, TrackingSocketServer.class);
 		try {
 			server.start();
 			Thread.currentThread().join();
