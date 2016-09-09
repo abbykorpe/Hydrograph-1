@@ -13,7 +13,11 @@
 package hydrograph.ui.engine.ui.converter.impl;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
@@ -97,7 +101,8 @@ public class InputSubjobUiConverter extends UiConverter {
 			}
 
 		}
-		SubjobUiConverterUtil.getOutPort((TypeOperationsComponent) typeBaseComponent,uiComponent,propertyMap,currentRepository,logger,componentName);
+		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME,getRuntimeProperties());
+		getOutPort((TypeInputComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent,container,currentRepository,name_suffix,componentName,propertyMap);
 		Component outputSubjobComponent = SubjobUiConverterUtil.getOutputSubJobConnectorReferance(subJobContainer);
 		
@@ -116,9 +121,30 @@ public class InputSubjobUiConverter extends UiConverter {
 		}
 		
 	}
+	protected void getOutPort(TypeInputComponent inputComponent) {
+	logger.debug("Generating OutPut Ports for -{}", componentName);
+	int count=0;
+	if (inputComponent.getOutSocket() != null) {
+		for (TypeInputOutSocket outSocket : inputComponent.getOutSocket()) {
+			uiComponent.engageOutputPort(outSocket.getId());
+			count++;
+			}
+		propertyMap.put(Constants.OUTPUT_PORT_COUNT_PROPERTY,count);
+		uiComponent.outputPortSettings(count);
+	}
+}
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
-		return null;
+		logger.debug("Generating Subjob Properties for -{}", componentName);
+		Map<String, String> runtimeMap = null;
+		TypeProperties typeProperties = subjob.getSubjobParameter();
+		if (typeProperties != null) {
+			runtimeMap = new LinkedHashMap<>();
+			for (Property runtimeProperty : typeProperties.getProperty()) {
+				runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+			}
+		}
+		return runtimeMap;
 	}
 
 }

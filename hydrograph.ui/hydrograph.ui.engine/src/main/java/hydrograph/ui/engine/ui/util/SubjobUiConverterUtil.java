@@ -13,6 +13,7 @@
 
 package hydrograph.ui.engine.ui.util;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
@@ -85,36 +86,7 @@ public class SubjobUiConverterUtil {
 		}
 		return path;	
 	}
-	public static void getInPort(TypeOperationsComponent operationsComponent, Component uiComponent, LinkedHashMap<String, Object> propertyMap, UIComponentRepo currentRepository, Logger logger,String componentName) {
-		logger.debug("Generating InPut Ports for -{}", componentName);
-		int count=0;
-		if (operationsComponent.getInSocket() != null) {
-			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
-				uiComponent.engageInputPort(inSocket.getId());
-				currentRepository.getComponentLinkList().add(
-						new LinkingData(inSocket.getFromComponentId(),
-								operationsComponent.getId(), inSocket
-										.getFromSocketId(), inSocket.getId()));
-				count++;
-			}
-			propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY,count);
-			uiComponent.inputPortSettings(count);
-		}
-	}
 	
-	public static void getOutPort(TypeOperationsComponent operationsComponent, Component uiComponent, LinkedHashMap<String, Object> propertyMap, UIComponentRepo currentRepository, Logger logger,String componentName) {
-		logger.debug("Generating OutPut Ports for -{}", componentName);
-		int count=0;
-		if (operationsComponent.getOutSocket() != null) {
-			for (TypeOperationsOutSocket outSocket : operationsComponent
-					.getOutSocket()) {
-				uiComponent.engageOutputPort(outSocket.getId());
-				count++;
-				}
-			propertyMap.put(Constants.OUTPUT_PORT_COUNT_PROPERTY,count);
-			uiComponent.outputPortSettings(count);
-		}
-	}
 	public static Component getOutputSubJobConnectorReferance(Container subJobContainer) {
 		for(Component component:subJobContainer.getChildren()){
 			if(StringUtils.equals(Constants.OUTPUT_SOCKET_FOR_SUBJOB, component.getType())){

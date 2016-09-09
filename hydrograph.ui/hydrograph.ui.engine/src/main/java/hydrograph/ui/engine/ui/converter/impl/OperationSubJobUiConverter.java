@@ -13,11 +13,16 @@
 package hydrograph.ui.engine.ui.converter.impl;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.operationstypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
 import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
@@ -96,9 +101,9 @@ public class OperationSubJobUiConverter extends UiConverter {
 
 		}
 		
-		
-		SubjobUiConverterUtil.getInPort((TypeOperationsComponent) typeBaseComponent,uiComponent,propertyMap,currentRepository,logger,componentName);
-		SubjobUiConverterUtil.getOutPort((TypeOperationsComponent) typeBaseComponent,uiComponent,propertyMap,currentRepository,logger,componentName);
+		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME,getRuntimeProperties());
+		getInPort((TypeOperationsComponent)typeBaseComponent);
+		getOutPort((TypeOperationsComponent) typeBaseComponent);
 		
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent,container,currentRepository,name_suffix,componentName,propertyMap);
 		
@@ -117,12 +122,53 @@ public class OperationSubJobUiConverter extends UiConverter {
 			outputSubjobComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE,
 					new LinkedHashMap<String, ComponentsOutputSchema>());
 		}
+		
 			
 	}
 
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
-		return null;
+		logger.debug("Generating Subjob Properties for -{}", componentName);
+		Map<String, String> runtimeMap = null;
+		TypeProperties typeProperties = subjob.getSubjobParameter();
+		if (typeProperties != null) {
+			runtimeMap = new LinkedHashMap<>();
+			for (Property runtimeProperty : typeProperties.getProperty()) {
+				runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+			}
+		}
+		return runtimeMap;
 	}
+	
+	private void getInPort(TypeOperationsComponent operationsComponent) {
+	logger.debug("Generating InPut Ports for -{}", componentName);
+	int count=0;
+	if (operationsComponent.getInSocket() != null) {
+		for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
+			uiComponent.engageInputPort(inSocket.getId());
+			currentRepository.getComponentLinkList().add(
+					new LinkingData(inSocket.getFromComponentId(),
+							operationsComponent.getId(), inSocket
+									.getFromSocketId(), inSocket.getId()));
+			count++;
+		}
+		propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY,count);
+		uiComponent.inputPortSettings(count);
+	}
+}
+
+protected void getOutPort(TypeOperationsComponent operationsComponent) {
+	logger.debug("Generating OutPut Ports for -{}", componentName);
+	int count=0;
+	if (operationsComponent.getOutSocket() != null) {
+		for (TypeOperationsOutSocket outSocket : operationsComponent
+				.getOutSocket()) {
+			uiComponent.engageOutputPort(outSocket.getId());
+			count++;
+			}
+		propertyMap.put(Constants.OUTPUT_PORT_COUNT_PROPERTY,count);
+		uiComponent.outputPortSettings(count);
+	}
+}
 	
 }

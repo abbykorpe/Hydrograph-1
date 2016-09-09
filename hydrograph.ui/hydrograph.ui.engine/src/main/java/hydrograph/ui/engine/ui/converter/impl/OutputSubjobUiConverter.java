@@ -14,11 +14,16 @@
 package hydrograph.ui.engine.ui.converter.impl;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.outputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
 import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
@@ -97,7 +102,8 @@ public class OutputSubjobUiConverter extends UiConverter {
 			}
 
 		}
-		SubjobUiConverterUtil.getInPort((TypeOperationsComponent) typeBaseComponent,uiComponent,propertyMap,currentRepository,logger,componentName);
+		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME,getRuntimeProperties());
+		getInPort((TypeOutputComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent,container,currentRepository,name_suffix,componentName,propertyMap);
 		Component inputSubjobComponent=SubjobUiConverterUtil.getInputSubJobConnectorReferance(subJobContainer);
 		propertyMap.put(Constants.INPUT_SUBJOB, inputSubjobComponent);
@@ -112,10 +118,35 @@ public class OutputSubjobUiConverter extends UiConverter {
 		
 	
 	}
+	private void getInPort(TypeOutputComponent typeOutputComponent) {
+	logger.debug("Generating InPut Ports for -{}", componentName);
+	int count=0;
+	if (typeOutputComponent.getInSocket() != null) {
+		for (TypeBaseInSocket inSocket : typeOutputComponent.getInSocket()) {
+			uiComponent.engageInputPort(inSocket.getId());
+			currentRepository.getComponentLinkList().add(
+					new LinkingData(inSocket.getFromComponentId(),
+							typeOutputComponent.getId(), inSocket
+									.getFromSocketId(), inSocket.getId()));
+			count++;
+		}
+		propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY,count);
+		uiComponent.inputPortSettings(count);
+	}
+}
 	
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
-		return null;
+		logger.debug("Generating Subjob Properties for -{}", componentName);
+		Map<String, String> runtimeMap = null;
+		TypeProperties typeProperties = subjob.getSubjobParameter();
+		if (typeProperties != null) {
+			runtimeMap = new LinkedHashMap<>();
+			for (Property runtimeProperty : typeProperties.getProperty()) {
+				runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+			}
+		}
+		return runtimeMap;
 	}
 
 }
