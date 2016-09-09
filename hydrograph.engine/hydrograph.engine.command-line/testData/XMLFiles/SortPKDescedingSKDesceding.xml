@@ -27,7 +27,7 @@
 			</schema>
 		</outSocket>
 
-		<path uri="testData\Input\delimitedInputFile" />
+		<path uri="testData\Input\sort_input.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
