@@ -42,6 +42,8 @@ public class OperationClassComposite extends Composite {
 	private Button switchToExpressionButton;
 	private Button switchToClassButton;
 	private Label lblSwitchTo;
+	private Composite composite_1;
+	private Composite composite_2;
 	
 	/**
 	 * Create the composite.
@@ -114,7 +116,35 @@ public class OperationClassComposite extends Composite {
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
+		
+		composite_1 = new Composite(composite, SWT.NONE);
+		composite_1.setLayout(new GridLayout(1, false));
+		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 1, 4);
+		gd_composite_1.heightHint = 76;
+		gd_composite_1.widthHint = 76;
+		composite_1.setLayoutData(gd_composite_1);
+		
+		composite_2 = new Composite(composite_1, SWT.NONE);
+		GridData gd_composite_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite_2.heightHint = 69;
+		gd_composite_2.widthHint = 72;
+		composite_2.setLayoutData(gd_composite_2);
+		composite_2.setLayout(new GridLayout(1, false));
+		browseButton= new Button(composite_2, SWT.NONE);
+		GridData gd_browseButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_browseButton.widthHint = 28;
+		gd_browseButton.heightHint = 20;
+		browseButton.setLayoutData(gd_browseButton);
+		browseButton.setText("...");
+		new Label(composite_2, SWT.NONE);
+		btnIsParam= new Button(composite_2, SWT.CHECK);
+		GridData gd_btnIsParam = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 1, 1);
+		gd_btnIsParam.heightHint = 19;
+		gd_btnIsParam.widthHint = 67;
+		btnIsParam.setLayoutData(gd_btnIsParam);
+		btnIsParam.setAlignment(SWT.CENTER);
+		btnIsParam.setText(Messages.IS_PARAM);
+		btnIsParam.setSelection(mappingSheetRow.isWholeOperationParameter());
 		new Label(composite, SWT.NONE);
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
@@ -126,13 +156,6 @@ public class OperationClassComposite extends Composite {
 		operationTextBox = new Text(composite, SWT.BORDER);
 		operationTextBox.setEditable(false);
 		operationTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		browseButton= new Button(composite, SWT.NONE);
-		GridData gd_button = new GridData(SWT.CENTER, SWT.FILL, true, false, 1, 1);
-		gd_button.minimumWidth = 30;
-		gd_button.widthHint = 34;
-		browseButton.setLayoutData(gd_button);
-		browseButton.setText("...");
-		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
@@ -159,13 +182,6 @@ public class OperationClassComposite extends Composite {
 		parameterTextBox.setEnabled(mappingSheetRow.isWholeOperationParameter());
 		if (mappingSheetRow.getWholeOperationParameterValue() != null)
 		parameterTextBox.setText(mappingSheetRow.getWholeOperationParameterValue());
-		btnIsParam= new Button(composite, SWT.CHECK);
-		btnIsParam.setAlignment(SWT.CENTER);
-		btnIsParam.setText(Messages.IS_PARAM);
-		GridData gd_btnIsParam = new GridData(SWT.CENTER, SWT.FILL, true, false, 1, 1);
-		gd_btnIsParam.minimumWidth = 70;
-		btnIsParam.setLayoutData(gd_btnIsParam);
-		btnIsParam.setSelection(mappingSheetRow.isWholeOperationParameter());
 		
 		createOperationOutputFieldTable();
 		setAllWidgetsOnIsParamButton(btnIsParam);
