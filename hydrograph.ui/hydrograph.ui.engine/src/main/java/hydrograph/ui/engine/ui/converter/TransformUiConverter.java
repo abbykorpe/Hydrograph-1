@@ -290,13 +290,14 @@ public abstract class TransformUiConverter extends UiConverter {
 			if (typeTransformExpression.getOutputFields() != null) 
 			{
                     TypeBaseField record =typeTransformExpression.getOutputFields().getField();
+                    if(record!=null){
 					GridRow gridRow=converterUiHelper.getFixedWidthSchema(record);
 					gridRowList.add(gridRow);
 					createPropagationDataForOperationFileds(gridRow);
 					FilterProperties filterProperties=new FilterProperties();
 					filterProperties.setPropertyname(record.getName());
 					outputFieldList.add(filterProperties);
-			}
+			}}
 		}	
 		}
 	

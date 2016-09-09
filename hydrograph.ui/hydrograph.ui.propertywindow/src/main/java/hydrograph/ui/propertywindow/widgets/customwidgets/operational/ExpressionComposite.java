@@ -229,7 +229,7 @@ public class ExpressionComposite extends Composite {
 		}	
 		setAllWidgetsOnIsParamButton(btnIsParam);
 		disabledWidgetsifWholeExpressionIsParameter(btnIsParam,mappingSheetRow.isWholeOperationParameter());
-		if(mappingSheetRow.getExpressionEditorData()!=null)
+		if(mappingSheetRow.getExpressionEditorData()!=null && StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
 		{
 			expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());
 		}	
