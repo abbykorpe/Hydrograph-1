@@ -1478,9 +1478,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	 * @return
 	 */
 	public Map<String,List<String>> getDuplicateOutputFieldMap(Map<String,List<FilterProperties> > temporaryOutputFieldListTemp) {
-		
 		Set<String> setToCheckDuplicates = new HashSet<String>();
-		int index = 0;
 		if(duplicateFieldMap!=null)
 		duplicateFieldMap.clear();
 		for (Map.Entry<String, List<FilterProperties>> entry: temporaryOutputFieldListTemp.entrySet()) 
@@ -1490,9 +1488,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			for (FilterProperties filterProperties : temporaryOutputFieldList) {
 			if (!setToCheckDuplicates.add(filterProperties.getPropertyname())) {
 				duplicateFields.add(filterProperties.getPropertyname());
-				outputFieldIndices.add(index);
 			}
-			index++;
 		}
 			duplicateFieldMap.put(entry.getKey(),duplicateFields);	
 		}

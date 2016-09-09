@@ -51,6 +51,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 40.#241 [Akhilesh Joshi] Join component height increases fractionally
 41.#1102 [Kalyan Rajpoot] Join Component: 'Delete', 'Move Field Up','Move Field Down' Buttons are Getting Enabled, When There is No Mapping Present in Mapping Grid.
 42.#1171 [Shashank karnik] Import Xml : Issues Related to Trasform category Component.
+43.#1186 [Akhilesh Joshi] Trasform Component: Error Fields are Not Getting Highlighted Correctly.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
