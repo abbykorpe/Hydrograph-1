@@ -38,6 +38,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 public class ExpressionComposite extends Composite {
+	
+	public static final String EXPRESSION_COMPOSITE_KEY="expression-composite";
 	private Text expressionIdTextBox;
 	private Text expressionTextBox;
 	private Text parameterTextBox;
