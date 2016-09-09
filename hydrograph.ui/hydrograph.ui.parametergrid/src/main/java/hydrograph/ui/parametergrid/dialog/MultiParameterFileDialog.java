@@ -815,12 +815,21 @@ public class MultiParameterFileDialog extends Dialog {
 		setTableLayoutToMappingTable(parameterTableViewer);
 	}
 	
-	private void addNewRow(TableViewer nameValueTableViewer){
+	private void addNewRow(TableViewer parameterTableViewer){
 	Parameter parameter = new Parameter(
 			MultiParameterFileDialogConstants.DefaultParameter,
 			MultiParameterFileDialogConstants.DefaultValue);
+	if(parameters.size() !=0){
 	parameters.add(parameter);
 	parameterTableViewer.refresh();
+	parameterTableViewer.editElement(parameterTableViewer.getElementAt(parameters.size() - 1), 0);
+	}
+	else
+	{
+		parameters.add(parameter);
+		parameterTableViewer.refresh();
+		parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+	}
 	
 	}
 	
