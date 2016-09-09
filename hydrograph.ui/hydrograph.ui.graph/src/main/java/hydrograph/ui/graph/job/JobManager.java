@@ -47,7 +47,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -281,11 +280,7 @@ public class JobManager {
 
 		String uniqueJobID = "";
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		try {
-			uniqueJobID = eltGraphicalEditor.generateUniqueJobId();
-		} catch (NoSuchAlgorithmException e) {
-			logger.error(e.getMessage(), e);
-		}
+		uniqueJobID = eltGraphicalEditor.getUniqueJobId();
 		job.setUniqueJobId(uniqueJobID);
 		job.setUsername(runConfigDialog.getUsername());
 		job.setPassword(clusterPassword);

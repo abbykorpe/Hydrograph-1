@@ -82,6 +82,9 @@ public class ConverterUtil {
 	public void convertToXML(Container container, boolean validate, IFile outPutFile,  IFileStore externalOutputFile) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 		LOGGER.debug("Creating converter based on component");
 			Graph graph = new ObjectFactory().createGraph();
+			graph.setUniqueJobId(container.getUniqueJobId());
+			String runCount = "" + container.getJobRunCount();
+			graph.setRunCounter(runCount);
 			graph.setName(getGraphName(outPutFile,externalOutputFile));
 			List<Component> children = container.getChildren();
 			if(children != null && !children.isEmpty()){

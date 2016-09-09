@@ -83,11 +83,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -885,7 +883,14 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
-
+		
+		try {
+			generateUniqueJobId();
+			getContainer().setUniqueJobId(uniqueJobId);
+		} catch (NoSuchAlgorithmException exception) {
+			logger.error("NoSuchAlgorithmException", exception);
+		}
+		
 		if(this.uniqueJobId!=null){
 			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(this.uniqueJobId);
 		}else{
@@ -905,6 +910,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			
 			saveParameters();
 			updateMainGraphOnSavingSubjob();
+			
 		} catch (Exception e) {
 				logger.error(METHOD_NAME, e);
 				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
@@ -982,8 +988,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		    long milliSeconds = System.currentTimeMillis();
 		    String timeStampLong = Long.toString(milliSeconds);
 		    
-		    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		    /*String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat(JOB_ID_STRING_SEPARATOR+timeStampLong) + JOB_ID_STRING_SEPARATOR + timeStamp;
+		   */
+		    this.uniqueJobId="Job_".concat(""+secureRandom.hashCode()).concat("_"+timeStampLong);
 		    
 		    return uniqueJobId;
 	}
@@ -1073,6 +1081,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
+		try {
+			generateUniqueJobId();
+			getContainer().setUniqueJobId(uniqueJobId);
+		} catch (NoSuchAlgorithmException exception) {
+			logger.error("NoSuchAlgorithmException", exception);
+		}
 		String jobId = getActiveProject() + "." + getJobName();
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE.getPreviouslyExecutedJobs().get(jobId));
 		
@@ -1082,6 +1096,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		IFile file=opeSaveAsDialog();
 		saveJob(file);
 		copyParameterFile(currentParameterMap);
+		
 	}
 
 
@@ -1101,6 +1116,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void saveJob(IFile file) {
 		
 		try {
+			generateUniqueJobId();
+			getContainer().setUniqueJobId(uniqueJobId);
 			if(container!=null)
 				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 			else
@@ -1737,5 +1754,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public List<ParameterFile> getJobLevelParamterFiles() {
 		return container.getJobLevelParameterFiles();
+	}
+	
+	public void setUniqueJobId(String uniqueJobId){
+		this.uniqueJobId = uniqueJobId;
+	}
+	
+	public String getUniqueJobId(){
+		return uniqueJobId;
 	}
 }

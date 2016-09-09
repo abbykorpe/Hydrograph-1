@@ -19,8 +19,6 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
-import hydrograph.ui.graph.handler.RemoveDebugHandler;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 
@@ -29,7 +27,6 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -98,7 +95,7 @@ public class AddWatcherAction extends SelectionAction{
 		super.run();
 		List<Object> selectedObjects =getSelectedObjects();
 		limitValue = -1L;
-		((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
+		//((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 		addWatchPoint(selectedObjects);		 
 	}
 

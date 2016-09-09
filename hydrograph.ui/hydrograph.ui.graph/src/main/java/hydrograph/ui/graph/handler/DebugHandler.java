@@ -73,6 +73,7 @@ public class DebugHandler{
 	private String currentJobName = null;
 	
 	
+	
 	public DebugHandler() {
 		
 	}
@@ -158,7 +159,8 @@ public class DebugHandler{
 		DebugConverter converter = new DebugConverter();
 			
 		try {
-			uniqueJobID= eltGraphicalEditor.generateUniqueJobId();
+			
+			uniqueJobID= eltGraphicalEditor.getUniqueJobId();
 			currentJobPath = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, Constants.DEBUG_EXTENSION);
 			currentJobName = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, "");
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);

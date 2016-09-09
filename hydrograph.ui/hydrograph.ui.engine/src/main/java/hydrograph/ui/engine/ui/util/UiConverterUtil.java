@@ -148,7 +148,12 @@ public class UiConverterUtil {
 		LOGGER.debug("Creating UI-Converter based on component");
 		loadClass();
 		Graph graph = unMarshall(sourceXML);
+		
 		Container container = new Container();
+		container.setUniqueJobId(graph.getUniqueJobId());
+		int count = Integer.parseInt(graph.getRunCounter());
+		container.setJobRunCount(count);
+		
 		List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
 		if (children != null && !children.isEmpty()) {
 			for (TypeBaseComponent typeBaseComponent : children) {

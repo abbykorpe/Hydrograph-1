@@ -12,19 +12,26 @@
  ******************************************************************************/
 package hydrograph.ui.graph.handler;
 
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -33,6 +40,9 @@ import org.eclipse.ui.PlatformUI;
  * @author Bitwise
  */
 public class JobHandler extends AbstractHandler {
+
+	private Map<String, String> map = new HashMap<>();
+	private List<String> list = new ArrayList<>();
 	
 	/**
 	 * Instantiates a new job handler.
@@ -78,12 +88,37 @@ public class JobHandler extends AbstractHandler {
 	
 	public void executeJob()
 	{
+		int count = 0;
 		RunConfigDialog runConfigDialog = getRunConfiguration();
+		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
+		
+		System.out.println("JobName:" + consoleName);
+		String uniqueJobId = getUniqueJobId();
+		System.out.println("JobId:" + uniqueJobId);
+		
 		if(runConfigDialog.isDebug()){
+				int countJobIdFrequency = Collections.frequency(list, consoleName);
+				uniqueJobId = uniqueJobId + "_" + (countJobIdFrequency+1);
+				list.add(consoleName);
+				setUniqueJobId(uniqueJobId);
 			new DebugHandler().execute(runConfigDialog);
 		}
 		else{
+			int countJobIdFrequency = Collections.frequency(list, consoleName);
+			if(countJobIdFrequency > 0){
+				int index = uniqueJobId.lastIndexOf('_');
+				uniqueJobId = uniqueJobId.substring(0, index);
+				count = countJobIdFrequency + 1;
+				uniqueJobId = uniqueJobId + "_" + (count);
+			}else{
+				count = countJobIdFrequency + 1;
+				uniqueJobId = uniqueJobId + "_" + (count);
+			}
+			list.add(consoleName);
+			setUniqueJobId(uniqueJobId);
+			
 			new RunJobHandler().execute(runConfigDialog);
+			setJobRunCounter(count);
 		}
 	}
 
@@ -139,4 +174,43 @@ private boolean confirmationFromUser() {
 		return retValue;
 	}
 
+	/**
+	 * Gets the component canvas.
+	 *
+	 * @return the component canvas
+	 */
+	private DefaultGEFCanvas getComponentCanvas() {		
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		else
+			return null;
+	}
+	
+	private String getUniqueJobId(){
+		String jobId = "";
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+			jobId = eltGraphicalEditor.getUniqueJobId();
+			return jobId;
+		}
+		return jobId;
+	}
+	
+	private void setUniqueJobId(String uniqueJobId){
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+				eltGraphicalEditor.setUniqueJobId(uniqueJobId);
+		}
+	}
+	
+	private void setJobRunCounter(int runCount){
+		IEditorPart editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		ELTGraphicalEditor eltGraphicalEditor = (ELTGraphicalEditor)editorPart;
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+				eltGraphicalEditor.getContainer().setJobRunCount(runCount);
+		}
+		if(!editorPart.isDirty()){
+			editorPart.doSave(null);
+		}
+	}
 }

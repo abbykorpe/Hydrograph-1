@@ -49,6 +49,9 @@ public class Container extends Model {
 	public static final String CHILD_ADDED_PROP = "ComponentsDiagram.ChildAdded";
 	public static final String CHILD_REMOVED_PROP = "ComponentsDiagram.ChildRemoved";
 	
+	private String uniqueJobId;
+	private int jobRunCount;
+	
 	private final List<Component> components = new ArrayList<>();
 	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
@@ -411,4 +414,27 @@ public class Container extends Model {
 		}
 		return graphRuntimeProperties;
 	}
+
+
+	public String getUniqueJobId() {
+		return uniqueJobId;
+	}
+
+
+	public void setUniqueJobId(String uniqueJobId) {
+		this.uniqueJobId = uniqueJobId;
+	}
+
+
+	public int getJobRunCount() {
+		return jobRunCount;
+	}
+
+
+	public void setJobRunCount(int jobRunCount) {
+		this.jobRunCount = jobRunCount;
+	}
+
+
+
 }
