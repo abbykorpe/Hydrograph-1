@@ -67,14 +67,14 @@ public class OperationClassProperty implements IDataStructure{
 	 * @param isParameter
 	 * @param operationClassFullPath
 	 */
-	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath,List<NameValueProperty> nameValuePropertyList ,ExpressionEditorData expressionEditorData) {
+	public OperationClassProperty(String comboBoxValue,String operationClassPath, boolean isParameter,String operationClassFullPath,List<NameValueProperty> nameValuePropertyList ,ExpressionEditorData expressionEditorData,String componentName) {
 		this.comboBoxValue=comboBoxValue;
 		this.operationClassPath = operationClassPath;
 		this.isParameter = isParameter;
 		this.operationClassFullPath=operationClassFullPath;
 		this.nameValuePropertyList=nameValuePropertyList;
 		if(expressionEditorData==null)
-		this.expressionEditor=new ExpressionEditorData("");
+		this.expressionEditor=new ExpressionEditorData("",componentName);
 		else
 		this.expressionEditor=expressionEditorData;
 	}
@@ -180,7 +180,8 @@ public class OperationClassProperty implements IDataStructure{
 		  nameValueProperties.add(nameValueProperty.clone());
 		}
 		}
-		OperationClassProperty clonedObject=new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties,expressionEditor.clone());
+		ExpressionEditorData cloneEditorData=expressionEditor.clone();
+		OperationClassProperty clonedObject=new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties,cloneEditorData,cloneEditorData.getComponentName());
 		
 		clonedObject.setExpression(isExpression);
 		return clonedObject;

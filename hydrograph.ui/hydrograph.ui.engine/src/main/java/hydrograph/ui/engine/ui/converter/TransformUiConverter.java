@@ -204,7 +204,7 @@ public abstract class TransformUiConverter extends UiConverter {
 	}
 
 	protected ExpressionEditorData getExpressionEditorData(TypeTransformExpression typeTransformExpression) {
-		ExpressionEditorData editorData=new ExpressionEditorData(typeTransformExpression.getExpr());
+		ExpressionEditorData editorData=new ExpressionEditorData(typeTransformExpression.getExpr(),uiComponent.getComponentName());
 		if(typeTransformExpression.getInputFields()!=null){
 		for(TypeInputField inputField:typeTransformExpression.getInputFields().getField()){
 			editorData.getfieldsUsedInExpression().add(inputField.getName());

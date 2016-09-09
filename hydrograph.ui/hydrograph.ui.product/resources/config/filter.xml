@@ -46,7 +46,6 @@
 		<tns:property dataType="string" name="operation_fields" renderer="FILTER_PROPERTY_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Fields used within the java \nclass for the Filter operation.">
-			<tns:validator>KEY_FIELDS_VALIDATOR</tns:validator>
 			</tns:property>
 
 			

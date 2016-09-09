@@ -13,11 +13,12 @@ public class ExpressionEditorData implements IDataStructure {
 	private String expression;
 	private List<String> fieldsUsedInExpression;
 	private Map<String,Class<?>> selectedInputFieldsForExpression;
-
-	public ExpressionEditorData(String expression) {
+	private String componentName;
+	public ExpressionEditorData(String expression,String componentName) {
 		this.expression = expression;
 		fieldsUsedInExpression = new ArrayList<>();
 		selectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
+		this.componentName=componentName;
 	}
 
 	public ExpressionEditorData(String expression, List<String> clonedListUsedFieldsInExpression,
@@ -102,7 +103,16 @@ public class ExpressionEditorData implements IDataStructure {
 		ExpressionEditorData expressionEditorData=
 				new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression);
 		expressionEditorData.setValid(isValid);
+		expressionEditorData.setComponentName(componentName);
 		return expressionEditorData;
+	}
+
+	public String getComponentName() {
+		return componentName;
+	}
+
+	public void setComponentName(String componentName) {
+		this.componentName = componentName;
 	}
 
 }

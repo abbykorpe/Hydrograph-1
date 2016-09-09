@@ -57,6 +57,8 @@ import org.eclipse.swt.widgets.Shell;
 public class ExpressionEditorDialog extends Dialog {
 
 	public static final String FIELD_DATA_TYPE_MAP = "fieldMap";
+	public static final String COMPONENT_NAME_KEY = "component-name";
+	
 	private StyledText expressionEditorTextBox;
 	private AvailableFieldsComposite availableFieldsComposite;
 	private ExpressionEditorComposite expressionEditorComposite;
@@ -139,6 +141,7 @@ public class ExpressionEditorDialog extends Dialog {
 		expressionEditorTextBox.setFocus();
 		expressionEditorTextBox.setText(oldExpressionText);
 		expressionEditorTextBox.setData(FIELD_DATA_TYPE_MAP, fieldMap);
+		expressionEditorTextBox.setData(COMPONENT_NAME_KEY, expressionEditorData.getComponentName());
 		getShell().setMaximized(true);
 	}
 
