@@ -16,10 +16,13 @@ package hydrograph.ui.propertywindow.widgets.filterproperty;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupMapWizard;
+import hydrograph.ui.propertywindow.widgets.customwidgets.operational.ExpressionComposite;
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformDialog;
 
 import org.apache.commons.lang.StringUtils;
@@ -96,6 +99,7 @@ public class ELTCellModifier implements ICellModifier{
 		else if(StringUtils.equals(Messages.INNER_OPERATION_INPUT_FIELD,property))
 		{
 			filterProperties.setPropertyname((String)value);
+			validateExpressionOnInputFieldChange(mappingSheetRow);
 			transformDialog.refreshOutputTable();
 			transformDialog.setDuplicateOperationInputFieldMap(mappingSheetRow); 
 			transformDialog.showHideValidationMessage();
@@ -111,6 +115,13 @@ public class ELTCellModifier implements ICellModifier{
 		 }
 		viewer.refresh();
 
+	}
+	private void validateExpressionOnInputFieldChange(MappingSheetRow mappingSheetRow) {
+		ExpressionComposite composite=(ExpressionComposite) viewer.getData(ExpressionComposite.EXPRESSION_COMPOSITE_KEY);
+		if(composite!=null && mappingSheetRow.isExpression() && StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression())){
+			ExpressionEditorData expressionEditorData=composite.createExpressionEditorData();
+			ExpressionEditorUtil.validateExpression(expressionEditorData.getExpression(), expressionEditorData.getSelectedInputFieldsForExpression(), expressionEditorData);
+		}
 	}
 
 }

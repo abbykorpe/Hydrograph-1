@@ -1182,6 +1182,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		addButtonListener(mappingSheetRow,operationalInputFieldTableViewer,addButton);
 		Button deleteButton=expressionComposite.getDeletButton();
 		deleteButtonListener(mappingSheetRow, operationalInputFieldTableViewer, deleteButton);
+		operationalInputFieldTableViewer.setData(ExpressionComposite.EXPRESSION_COMPOSITE_KEY, expressionComposite);
 	}
 
 	private void addModifyListenerToOperationClassAndExpressionTextBox(Text textBox) {

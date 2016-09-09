@@ -30,6 +30,7 @@ import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -77,6 +78,8 @@ public class TransformMappingValidationRule implements IValidator{
 		Set<FilterProperties>set=null;
 		if(mappingSheetRows!=null && !mappingSheetRows.isEmpty())
 		{
+			validateAllExpressions(mappingSheetRows, inputSchemaMap);
+			
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
 				if(!mappingSheetRow.isExpression())
@@ -97,10 +100,6 @@ public class TransformMappingValidationRule implements IValidator{
 						 errorMessage = propertyName + "Expression is blank in"+" "+mappingSheetRow.getOperationID();		
 						 return false;
 					}
-					ExpressionEditorUtil.validateExpression(expressionText 
-							, FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(expressionEditorData.getfieldsUsedInExpression()
-							, inputSchemaMap.get(Constants.FIXED_INSOCKET_ID))
-							, expressionEditorData);
 					
 					if(!expressionEditorData.isValid())
 					{
@@ -166,6 +165,22 @@ public class TransformMappingValidationRule implements IValidator{
 			
 		}	
 		return true;
+	}
+
+	private void validateAllExpressions(List<MappingSheetRow> mappingSheetRows,
+			Map<String, List<FixedWidthGridRow>> inputSchemaMap) {
+		for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
+			if (mappingSheetRow.isExpression()) {
+				String expressionText = mappingSheetRow.getExpressionEditorData().getExpression();
+				ExpressionEditorData expressionEditorData = mappingSheetRow.getExpressionEditorData();
+
+				ExpressionEditorUtil.validateExpression(
+						expressionText,
+						FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(
+								expressionEditorData.getfieldsUsedInExpression(),
+								inputSchemaMap.get(Constants.FIXED_INSOCKET_ID)), expressionEditorData);
+			}
+		}
 	}
 
 	@Override
