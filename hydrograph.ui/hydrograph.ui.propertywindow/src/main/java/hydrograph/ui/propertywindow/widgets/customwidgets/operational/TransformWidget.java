@@ -51,7 +51,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -144,6 +143,11 @@ public class TransformWidget extends AbstractWidget {
 				
 			}	
 				
+		}else{
+			for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+		 	{
+		 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
+		 	}
 		}
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
