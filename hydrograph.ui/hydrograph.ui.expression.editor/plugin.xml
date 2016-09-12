@@ -27,7 +27,8 @@
       <page
             class="hydrograph.ui.expression.editor.pages.AddExternalJarPage"
             id="hydrograph.ui.expression.editor.page1"
-            name="Expression Jars">
+            name="Expression Jars"
+            objectClass="org.eclipse.core.resources.IProject">
       </page>
    </extension>
 
