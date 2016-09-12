@@ -10,8 +10,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
- 
 package hydrograph.ui.validators.impl;
 
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;

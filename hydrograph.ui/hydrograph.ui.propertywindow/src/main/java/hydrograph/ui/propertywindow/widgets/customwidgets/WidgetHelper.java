@@ -157,6 +157,7 @@ public class WidgetHelper {
 		textBoxConfig.setName(Messages.LABEL_BATCH_SIZE);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
 		return textBoxConfig;
 	}
 	

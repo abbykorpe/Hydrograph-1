@@ -43,6 +43,7 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.QueryProperty;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
@@ -551,22 +552,24 @@ public class ConverterHelper {
 		typeBaseField.setName(object.getFieldName());
 
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
-				&& !object.getDateFormat().trim().isEmpty())
+				&& !object.getDateFormat().trim().isEmpty()){
 			typeBaseField.setFormat(object.getDateFormat());
-
-		if (!object.getScale().trim().isEmpty())
+		}
+		if (!object.getScale().trim().isEmpty()){
 			typeBaseField.setScale(Integer.parseInt(object.getScale()));
-
+		}
 		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
 				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
 			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
-			if (!object.getScale().trim().isEmpty())
+			if (!object.getScale().trim().isEmpty()){
 				typeBaseField.setScale(Integer.parseInt(object.getScale()));
+			}
 		}
 
 		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
-			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue()))
+			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue())){
 				typeBaseField.setType(fieldDataType);
+			}
 		}
 		/*if (object.getColumnDefinition() != null && !object.getColumnDefinition().trim().isEmpty()) {
 			typeBaseField.getOtherAttributes().put(new QName(Constants.COLUMN_DEFINITION_QNAME), object.getColumnDefinition());
@@ -805,13 +808,10 @@ public class ConverterHelper {
 				propertyName, properties.get(propertyName) });
 		if (properties.get(propertyName) != null) {
 			ElementValueStringType stringValue = new ElementValueStringType();
-			stringValue.setValue(String.valueOf(properties
-					.get(propertyName)));
+			stringValue.setValue(String.valueOf(properties.get(propertyName)));
 
-			if (!stringValue.getValue()
-					.equalsIgnoreCase((String) properties.get(propertyName))) {
-				ComponentXpath.INSTANCE
-						.getXpathMap()
+			if (!stringValue.getValue().equalsIgnoreCase((String) properties.get(propertyName))) {
+				ComponentXpath.INSTANCE.getXpathMap()
 						.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(
 								ID, componentName)).replace(Constants.PARAM_PROPERTY_NAME,
 								propertyName),
@@ -824,15 +824,15 @@ public class ConverterHelper {
 		return null;
 	}
 	
-	public ElementValueStringType getStringTypeValue(String propertyValue) {
-		logger.debug("Getting String Value for {}", new Object[] {
-				propertyValue });
-		
-			ElementValueStringType stringValue = new ElementValueStringType();
-			stringValue.setValue(propertyValue);
-
-				return stringValue;
-		
+	public ElementValueStringType getStringTypeValue() {
+		ElementValueStringType stringValue = new ElementValueStringType();
+		String query = "";
+		if(null != properties.get(PropertyNameConstants.QUERY.value())){
+			query = ((QueryProperty) properties.get(PropertyNameConstants.QUERY.value())).getQueryText();
+			logger.debug("Getting String Value for {}", new Object[] {query});
+			stringValue.setValue(query);
+		}
+		return stringValue;
 	}
 	
 	/**
@@ -842,12 +842,10 @@ public class ConverterHelper {
 	 * @return {@link ElementValueIntegerType}
 	 */
 	public ElementValueIntegerType getInteger(String propertyName) {
-		logger.debug("Getting integer Value for {}={}", new Object[] {
-				propertyName, properties.get(propertyName) });
-		if (properties.get(propertyName) != null) {
+		logger.debug("Getting integer Value for {}={}", new Object[] {propertyName, properties.get(propertyName) });
+		if (StringUtils.isNotBlank((String) properties.get(propertyName))) {
 			ElementValueIntegerType integerValue = new ElementValueIntegerType();
-			integerValue.setValue(getBigInteger(properties
-					.get(propertyName)));
+			integerValue.setValue(getBigInteger(properties.get(propertyName)));
 
 			if (!(integerValue.getValue().toString().equals(((String) properties.get(propertyName))))) {
 				ComponentXpath.INSTANCE
@@ -889,11 +887,9 @@ public class ConverterHelper {
 	 * @return {@link DatabaseType}
 	 */
 	public hydrograph.engine.jaxb.irdbms.DatabaseTypeValue getInputDatabaseTypeValue(String propertyName) {
-		logger.debug("Getting boolean Value for {}={}", new Object[] {
-				propertyName, properties.get(propertyName) });
+		logger.debug("Getting boolean Value for {}={}", new Object[] {propertyName, properties.get(propertyName)});
 		logger.debug("Getting Database Type for {}", properties.get(Constants.PARAM_NAME));
-		String databaseTypeValue = (String) properties.get(PropertyNameConstants.DATABASE_TYPE
-				.value());
+		String databaseTypeValue = (String) properties.get(PropertyNameConstants.DATABASE_TYPE.value());
 		hydrograph.engine.jaxb.irdbms.DatabaseTypeValue targetDatabaseTypeValue = null;
 		for (hydrograph.engine.jaxb.irdbms.DatabaseTypeValue dbTypeValues : hydrograph.engine.jaxb.irdbms.DatabaseTypeValue.values()) {
 			if (dbTypeValues.value().equalsIgnoreCase(databaseTypeValue)) {

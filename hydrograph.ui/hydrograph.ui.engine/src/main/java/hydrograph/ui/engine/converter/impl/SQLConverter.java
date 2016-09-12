@@ -24,8 +24,16 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Converter for SQL type component.
+ *
+ * @author Bitwise
+ */
 public class SQLConverter extends CommandConverter {
 
+	private static final String FILE = "file";
+	private static final String SQL_COMMAND = "./hplsql/hplsql-0.3.13/hplsql -f";
 	private static final Logger logger = LogFactory.INSTANCE
 			.getLogger(SQLConverter.class);
 
@@ -44,14 +52,14 @@ public class SQLConverter extends CommandConverter {
 		Hplsql router=(Hplsql) baseComponent;
 		
 		Command cmd = new Command();
-		cmd.setCmd("./hplsql/hplsql-0.3.13/hplsql -f");
+		cmd.setCmd(SQL_COMMAND);
 		
 		//Hp.Query query = new Hp.Query();
 		//query.setValue((String) properties.get("path"));
 		//Hp hp = new Hp();
 		//hp.setQuery(query);
 		Execute.Uri sqlFileUri = new Execute.Uri();
-		sqlFileUri.setValue((String) properties.get("file"));
+		sqlFileUri.setValue((String) properties.get(FILE));
 		Execute exec = new Execute();
 		exec.setUri(sqlFileUri);
 		

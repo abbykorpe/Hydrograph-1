@@ -23,8 +23,19 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Converter for BinaryLogisticRegressionModel type component.
+ *
+ * @author Bitwise
+ */
 public class BinaryLogisticRegressionModelConverter extends CommandConverter {
 
+	private static final String BINARY_LOGISTIC_BASE_VALUE = "/opt/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --class SimpleLearn --master local /home/hduser/pushp/gmspoc/target/scala-2.11/sample-project_2.11-1.0.jar";
+	private static final String MODEL = "model";
+	private static final String TEST = "test";
+	private static final String TRAINING = "training";
+	
 	public static final Logger logger = LogFactory.INSTANCE.getLogger(BinaryLogisticRegressionModelConverter.class);
 
 	public BinaryLogisticRegressionModelConverter(Component component) {
@@ -39,21 +50,10 @@ public class BinaryLogisticRegressionModelConverter extends CommandConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-
 		RunProgram runProgram = (RunProgram) baseComponent;
 
-		String BinaryLogisticBaseValue = "/opt/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --class SimpleLearn --master local /home/hduser/pushp/gmspoc/target/scala-2.11/sample-project_2.11-1.0.jar ";
-		String trainingData = (String) properties.get("training");
-		String testData = (String) properties.get("test");
-		String modelData = (String) properties.get("model");
-
 		Command command = new Command();
-		String cmdValue = BinaryLogisticBaseValue + trainingData + " " + testData + " " + modelData;
-
-		command.setValue(cmdValue);
-
+		command.setValue(BINARY_LOGISTIC_BASE_VALUE + " " + (String) properties.get(TRAINING) + " " + (String) properties.get(TEST) + " " + (String) properties.get(MODEL));
 		runProgram.setCommand(command);
-
 	}
-
 }

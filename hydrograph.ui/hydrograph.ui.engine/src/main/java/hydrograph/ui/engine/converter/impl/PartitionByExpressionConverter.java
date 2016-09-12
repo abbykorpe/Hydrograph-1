@@ -36,13 +36,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Converter for PartitionByExpression type component.
+ *
+ * @author Bitwise
+ */
 public class PartitionByExpressionConverter extends TransformConverter {
 
+	private static final String OUT_PORT_COUNT = "outPortCount";
 	private static final String PARTITION_OPERATION_ID = "opt";
-	private static final Logger logger = LogFactory.INSTANCE
-			.getLogger(PartitionByExpressionConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(PartitionByExpressionConverter.class);
 	private ConverterHelper converterHelper;
 
 	public PartitionByExpressionConverter(Component component) {
@@ -55,24 +62,24 @@ public class PartitionByExpressionConverter extends TransformConverter {
 
 	@Override
 	public void prepareForXML() {
-		logger.debug("Generating XML for :{}",
-				properties.get(Constants.PARAM_NAME));
+		logger.debug("Generating XML for :{}",properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		PartitionByExpression partByExp = (PartitionByExpression) baseComponent;
 		
 		NoOfPartitions noOfPartitions = new NoOfPartitions();
-		String partitionValue = (String) this.properties.get("outPortCount");
-		int partitionValueInt = Integer.parseInt(partitionValue);
-		noOfPartitions.setValue(partitionValueInt);
-		partByExp.setNoOfPartitions(noOfPartitions);
+		String partitionValue = (String) this.properties.get(OUT_PORT_COUNT);
+		if(StringUtils.isNotBlank(partitionValue)){
+			int partitionValueInt = Integer.parseInt(partitionValue);
+			noOfPartitions.setValue(partitionValueInt);
+			partByExp.setNoOfPartitions(noOfPartitions);
+		}
 		
 		//partByExp.getOperation().addAll(getOperations());
 	}
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		logger.debug("Generating TypeStraightPullOutSocket data for : {}",
-				properties.get(Constants.PARAM_NAME));
+		logger.debug("Generating TypeStraightPullOutSocket data for : {}", properties.get(Constants.PARAM_NAME));
 		List<TypeOperationsOutSocket> outSockectList = new ArrayList<TypeOperationsOutSocket>();
 		for (Link link : component.getSourceConnections()) {
 			TypeOperationsOutSocket outSocket = new TypeOperationsOutSocket();
@@ -82,8 +89,7 @@ public class PartitionByExpressionConverter extends TransformConverter {
 			outSocket.setCopyOfInsocket(outSocketAsInsocket);
 
 			outSocket.setId(link.getSourceTerminal());
-			outSocket.setType(link.getSource()
-					.getPort(link.getSourceTerminal()).getPortType());
+			outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 
 			outSocket.getOtherAttributes();
 			outSockectList.add(outSocket);
@@ -93,19 +99,18 @@ public class PartitionByExpressionConverter extends TransformConverter {
 
 	/*@Override
 	protected List<TypeTransformOperation> getOperations() {
-		logger.debug("Generating TypeTransformOperation data :{}",
-				properties.get(Constants.PARAM_NAME));
+		logger.debug("Generating TypeTransformOperation data :{}", properties.get(Constants.PARAM_NAME));
 		List<TypeTransformOperation> operationList = new ArrayList<>();
 		TypeTransformOperation operation = new TypeTransformOperation();
 		TypeOperationInputFields operationInputFields = new TypeOperationInputFields();
 		operationInputFields.getField().addAll(getOperationField());
 		operation.setInputFields(operationInputFields);
 		operation.setId(PARTITION_OPERATION_ID);
-		if (properties.get(PropertyNameConstants.OPERATION_CLASS.value()) != null)
-			operation.setClazz(((OperationClassProperty) properties
-					.get(PropertyNameConstants.OPERATION_CLASS.value()))
+		if (properties.get(PropertyNameConstants.OPERATION_CLASS.value()) != null){
+			operation.setClazz(((OperationClassProperty) properties.get(PropertyNameConstants.OPERATION_CLASS.value()))
 					.getOperationClassPath());
-			operation.setProperties(getPartitionProperties());
+		}
+		operation.setProperties(getPartitionProperties());
 		operationList.add(operation);
 		return operationList;
 	}*/
@@ -117,13 +122,10 @@ public class PartitionByExpressionConverter extends TransformConverter {
 	}
 	
 	private List<TypeInputField> getOperationField() {
-		logger.debug("Generating TypeInputField data :{}",
-				properties.get(Constants.PARAM_NAME));
+		logger.debug("Generating TypeInputField data :{}",properties.get(Constants.PARAM_NAME));
 		List<TypeInputField> operationFiledList = new ArrayList<>();
-		@SuppressWarnings("unchecked")
-		List<String> componentOperationFileds = (List<String>) component
-				.getProperties().get(
-						PropertyNameConstants.OPERATION_FILEDS.value());
+		List<String> componentOperationFileds = (List<String>) component.getProperties()
+		.get(PropertyNameConstants.OPERATION_FILEDS.value());
 		if (componentOperationFileds != null) {
 			for (String object : componentOperationFileds) {
 				TypeInputField operationFiled = new TypeInputField();
@@ -137,18 +139,15 @@ public class PartitionByExpressionConverter extends TransformConverter {
 
 	@Override
 	public List<TypeBaseInSocket> getInSocket() {
-		logger.debug("Generating TypeBaseInSocket data for :{}", component
-				.getProperties().get(Constants.PARAM_NAME));
+		logger.debug("Generating TypeBaseInSocket data for :{}", component.getProperties().get(Constants.PARAM_NAME));
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
-			inSocket.setFromComponentId((String) link.getSource()
-					.getProperties().get(Constants.PARAM_NAME));
+			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
 
 			inSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			inSocket.setId(link.getTargetTerminal());
-			inSocket.setType(link.getTarget().getPort(link.getTargetTerminal())
-					.getPortType());
+			inSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			inSocket.getOtherAttributes();
 			inSocketsList.add(inSocket);
 		}

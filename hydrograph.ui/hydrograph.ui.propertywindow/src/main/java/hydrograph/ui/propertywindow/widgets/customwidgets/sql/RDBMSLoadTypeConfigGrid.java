@@ -40,7 +40,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-
+/**
+ * The class RDBMSLoadTypeConfigGrid
+ * 
+ * @author Bitwise
+ * 
+ */
 public class RDBMSLoadTypeConfigGrid extends Dialog {
 
 

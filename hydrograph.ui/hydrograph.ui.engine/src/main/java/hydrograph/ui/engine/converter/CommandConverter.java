@@ -13,7 +13,12 @@
 package hydrograph.ui.engine.converter;
 
 import hydrograph.ui.graph.model.Component;
-
+/**
+ * 
+ * Converter for Command type component.
+ *
+ * @author Bitwise
+ */
 public class CommandConverter extends Converter{
 	
 	public CommandConverter(Component comp) {

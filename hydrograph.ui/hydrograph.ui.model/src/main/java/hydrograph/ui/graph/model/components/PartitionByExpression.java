@@ -15,6 +15,11 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.TransformCategory;
 
+/**
+ * The Class PartitionByExpression Component.
+ * 
+ * @author Bitwise
+ */
 public class PartitionByExpression extends TransformCategory{
 
 	/**

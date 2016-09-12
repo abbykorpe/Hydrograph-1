@@ -25,6 +25,11 @@ import hydrograph.ui.graph.model.categories.InputCategory;
 public class ORedshift extends InputCategory {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4823508502009659559L;
+
+	/**
 	 * Instantiates a new IF delimited.
 	 */
 	public ORedshift() {

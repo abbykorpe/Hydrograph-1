@@ -23,8 +23,19 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Converter for LogisticPrediction type component.
+ *
+ * @author Bitwise
+ */
 public class LogisticPredictionConverter extends CommandConverter {
 
+	private static final String THRESHOL_DDATA = "thresholddata";
+	private static final String OUTPUT_DATA = "outputdata";
+	private static final String MODEL_DATA = "modeldata";
+	private static final String INPUT_DATA = "inputdata";
+	private static final String LOGISTIC_BASE_VALUE = "/opt/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --class SimpleScore --master local /home/hduser/pushp/gmspoc/target/scala-2.11/sample-project_2.11-1.0.jar";
 	public static final Logger logger = LogFactory.INSTANCE.getLogger(LogisticPredictionConverter.class);
 
 	public LogisticPredictionConverter(Component component) {
@@ -42,19 +53,14 @@ public class LogisticPredictionConverter extends CommandConverter {
 
 		RunProgram runProgram = (RunProgram) baseComponent;
 
-		String LogisticBaseValue = "/opt/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --class SimpleScore --master local /home/hduser/pushp/gmspoc/target/scala-2.11/sample-project_2.11-1.0.jar ";
-		String inputData = (String) properties.get("inputdata");
-		String modelData = (String) properties.get("modeldata");
-		String outputData = (String) properties.get("outputdata");
-		String threshold  = (String) properties.get("thresholddata");
-
 		Command command = new Command();
-		String cmdValue = LogisticBaseValue + inputData + " " + modelData + " " + outputData+" "+threshold;
 
-		command.setValue(cmdValue);
+		command.setValue(LOGISTIC_BASE_VALUE + " " 
+				+ (String) properties.get(INPUT_DATA) + " " 
+				+ (String) properties.get(MODEL_DATA) + " " 
+				+ (String) properties.get(OUTPUT_DATA) + " " 
+				+ (String) properties.get(THRESHOL_DDATA));
 
 		runProgram.setCommand(command);
-
 	}
-
 }

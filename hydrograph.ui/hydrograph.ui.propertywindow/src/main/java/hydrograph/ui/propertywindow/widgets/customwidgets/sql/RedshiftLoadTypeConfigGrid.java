@@ -40,7 +40,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-
+/**
+ * The class RedshiftLoadTypeConfigGrid
+ * 
+ * @author Bitwise
+ * 
+ */
 public class RedshiftLoadTypeConfigGrid extends Dialog {
 
 
@@ -148,9 +153,6 @@ public class RedshiftLoadTypeConfigGrid extends Dialog {
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		
-		
-		
-		
 		Button btnRadioInsert = new Button(composite, SWT.RADIO);
 		GridData gd_btnRadioInsert = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnRadioInsert.heightHint = 27;
@@ -169,7 +171,6 @@ public class RedshiftLoadTypeConfigGrid extends Dialog {
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
-		
 		
 		
 		for (int i = 0; i < loadTyepRadio.length; i++) {
@@ -313,8 +314,6 @@ public class RedshiftLoadTypeConfigGrid extends Dialog {
 			propertyDialogButtonBar.enableApplyButton(true);
 			
 		}
-		
-		
 		super.okPressed();
 	}
 }

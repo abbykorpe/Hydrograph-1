@@ -15,6 +15,11 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.CommandCategory;
 
+/**
+ * The Class RunProgram Component.
+ * 
+ * @author Bitwise
+ */
 public class RunProgram extends CommandCategory{
 
 	/**

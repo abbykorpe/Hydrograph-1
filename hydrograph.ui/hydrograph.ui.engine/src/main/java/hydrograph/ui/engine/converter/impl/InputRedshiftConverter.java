@@ -7,7 +7,6 @@ import hydrograph.engine.jaxb.irdbms.DatabaseType;
 import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftOutSocket;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.QueryProperty;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.InputConverter;
 import hydrograph.ui.graph.model.Component;
@@ -17,7 +16,6 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 public class InputRedshiftConverter extends InputConverter{
@@ -41,20 +39,10 @@ public class InputRedshiftConverter extends InputConverter{
 		redshift.setTableName(converterHelper.getString(PropertyNameConstants.TABLE_NAME.value()));
 		redshift.setUsername(converterHelper.getString(PropertyNameConstants.USER_NAME.value()));
 		redshift.setPassword(converterHelper.getString(PropertyNameConstants.PASSWORD.value()));
-		if(!StringUtils.equals("", getQuery())){
-			redshift.setQuery(converterHelper.getStringTypeValue(getQuery()));
-		}
+		redshift.setQuery(converterHelper.getStringTypeValue());
 		redshift.setJdbcurl(converterHelper.getString(PropertyNameConstants.JDBC_URL.value()));
 		redshift.setRuntimeProperties(getRuntimeProperties());
 		redshift.setBatchSize(converterHelper.getInteger(PropertyNameConstants.BATCH_SIZE.value()));
-		
-			 	
-	}
-	
-
-	private String getQuery() {
-		String query = ((QueryProperty) properties.get(PropertyNameConstants.QUERY.value())).getQueryText();
-		return query;
 	}
 
 	@Override
@@ -83,6 +71,5 @@ public class InputRedshiftConverter extends InputConverter{
 			}
 		}
 		return typeBaseFields;
-	
 	}
 }

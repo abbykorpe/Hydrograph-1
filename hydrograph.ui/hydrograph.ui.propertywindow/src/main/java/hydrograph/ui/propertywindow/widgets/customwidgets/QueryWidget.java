@@ -34,22 +34,24 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 
-
+/**
+ * The class QueryWidget
+ * 
+ * @author Bitwise
+ * 
+ */
 public class QueryWidget extends AbstractWidget {
 
 	public static int value;
 	private Object properties;
 	private String propertyName;
 	private LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private QueryProperty queryProperty;
 	
 	public QueryWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 		this.properties = componentConfigrationProperty.getPropertyValue();
-		
-		queryProperty=(QueryProperty) properties;
 		
 	}
 
@@ -95,16 +97,11 @@ public class QueryWidget extends AbstractWidget {
 
 	@Override
 	public boolean isWidgetValid() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void addModifyListener(Property property,
 			ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
-		
 	}
-
-	
 }

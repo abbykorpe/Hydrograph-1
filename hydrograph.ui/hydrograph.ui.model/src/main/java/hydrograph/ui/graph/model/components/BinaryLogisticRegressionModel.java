@@ -14,12 +14,14 @@
 package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.CommandCategory;
-
+/**
+ * Model class for BinaryLogisticRegression component
+ * 
+ * @author Bitwise
+ */
 public class BinaryLogisticRegressionModel extends CommandCategory{
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -8488037672566933596L;
 
 	public BinaryLogisticRegressionModel() {
@@ -30,7 +32,4 @@ public class BinaryLogisticRegressionModel extends CommandCategory{
 	public String getConverter() {
 		return "hydrograph.ui.engine.converter.impl.BinaryLogisticRegressionModelConverter";
 	}
-	
-	
-
 }

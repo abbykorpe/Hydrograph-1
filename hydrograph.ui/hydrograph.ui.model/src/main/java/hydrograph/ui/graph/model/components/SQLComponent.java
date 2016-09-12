@@ -14,13 +14,17 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.CommandCategory;
 
-//TODO: Auto-generated Javadoc
 /**
- * The Class Replicate.
+ * The Class SQL Component.
  * 
  * @author Bitwise
  */
 public class SQLComponent extends CommandCategory {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4128149239279856767L;
 
 	/**
 	 * Instantiates a new replicate.

@@ -167,10 +167,6 @@ public class PasswordTextBoxWithLabelWidget extends AbstractWidget{
 		return false;
 	}
 
-	
-
-
-	
 	@Override
 	public boolean isWidgetValid() {
 	  return validateAgainstValidationRule(textBox.getText());

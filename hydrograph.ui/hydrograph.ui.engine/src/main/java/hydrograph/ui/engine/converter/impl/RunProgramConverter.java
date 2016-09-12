@@ -11,6 +11,18 @@
  * limitations under the License.
  ******************************************************************************/
 
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.engine.converter.impl;
 
 import hydrograph.engine.jaxb.commandtypes.RunProgram;
@@ -23,10 +35,16 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Converter for RunProgram type component.
+ *
+ * @author Bitwise
+ */
 public class RunProgramConverter extends CommandConverter {
 
-	public static final Logger logger = LogFactory.INSTANCE
-			.getLogger(RunProgramConverter.class);
+	private static final String RUN_COMMAND = "runcommand";
+	public static final Logger logger = LogFactory.INSTANCE.getLogger(RunProgramConverter.class);
 
 	public RunProgramConverter(Component component) {
 		super(component);
@@ -38,18 +56,14 @@ public class RunProgramConverter extends CommandConverter {
 
 	@Override
 	public void prepareForXML() {
-		logger.debug("Generating XML for :{}",
-				properties.get(Constants.PARAM_NAME));
+		logger.debug("Generating XML for :{}",	properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 
 		RunProgram runProgram = (RunProgram) baseComponent;
 
 		Command command = new Command();
-		String cmdValue = (String) properties.get("runcommand");
+		String cmdValue = (String) properties.get(RUN_COMMAND);
 		command.setValue(cmdValue);
-
 		runProgram.setCommand(command);
-
 	}
-
 }

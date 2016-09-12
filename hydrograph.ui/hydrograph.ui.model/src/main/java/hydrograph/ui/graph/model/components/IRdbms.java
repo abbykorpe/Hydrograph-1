@@ -25,6 +25,11 @@ import hydrograph.ui.graph.model.categories.InputCategory;
 public class IRdbms extends InputCategory {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6540320646018824466L;
+
+	/**
 	 * Instantiates a new IF delimited.
 	 */
 	public IRdbms() {

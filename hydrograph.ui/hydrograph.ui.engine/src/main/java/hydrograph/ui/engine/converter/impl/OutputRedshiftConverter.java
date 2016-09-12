@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.engine.converter.impl;
 
 
@@ -8,7 +20,6 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.ordbms.DatabaseType;
 import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
-import hydrograph.engine.jaxb.oredshift.TypePriamryKeys;
 import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
@@ -28,7 +39,17 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
+/**
+ * 
+ * Converter for OutputRedshift type component.
+ *
+ * @author Bitwise
+ */
 public class OutputRedshiftConverter extends OutputConverter{
+	private static final String UPDATE = "update";
+	private static final String LOADTYPE_PROPERTIES = "loadtype_properties";
+	private static final String NEW_TABLE = "newTable";
+	private static final String INSERT = "insert";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputRedshiftConverter.class);
 
 	public OutputRedshiftConverter(Component component) {
@@ -58,33 +79,33 @@ public class OutputRedshiftConverter extends OutputConverter{
 	
 	public TypeLoadChoice getLoadType() {
 
-		SQLLoadTypeProperty sqlLoadTypeProperty =  (SQLLoadTypeProperty) properties.get("loadtype_properties");
+		SQLLoadTypeProperty sqlLoadTypeProperty =  (SQLLoadTypeProperty) properties.get(LOADTYPE_PROPERTIES);
 		TypeLoadChoice typeLoadChoice = new TypeLoadChoice();
-
-		if(StringUtils.equals("newTable",sqlLoadTypeProperty.getLoadType())){
-			typeLoadChoice.setNewTable("");
-		}else if(StringUtils.equals("update",sqlLoadTypeProperty.getLoadType())){
-			TypeUpdateKeys updateKeys = new TypeUpdateKeys();
-			List<String> keys = new ArrayList<String>();
-			if(!StringUtils.equals(sqlLoadTypeProperty.getUpdateByKeys(), "")){
-				keys=Arrays.asList(sqlLoadTypeProperty.getUpdateByKeys().split(","));
-				TypeKeyFields typeKeyFields = new TypeKeyFields();
-
-				for (String fieldName:keys){
-					TypeFieldName fieldname = new TypeFieldName();
-					fieldname.setName(fieldName);
-					typeKeyFields.getField().add(fieldname);
+		if(sqlLoadTypeProperty != null && StringUtils.isNotBlank(sqlLoadTypeProperty.getLoadType())){
+			if(StringUtils.equals(NEW_TABLE,sqlLoadTypeProperty.getLoadType())){
+				typeLoadChoice.setNewTable("");
+			}else if(StringUtils.equals(UPDATE,sqlLoadTypeProperty.getLoadType())){
+				TypeUpdateKeys updateKeys = new TypeUpdateKeys();
+				List<String> keys = new ArrayList<String>();
+				if(!StringUtils.equals(sqlLoadTypeProperty.getUpdateByKeys(), "")){
+					keys=Arrays.asList(sqlLoadTypeProperty.getUpdateByKeys().split(","));
+					TypeKeyFields typeKeyFields = new TypeKeyFields();
+	
+					for (String fieldName:keys){
+						TypeFieldName fieldname = new TypeFieldName();
+						fieldname.setName(fieldName);
+						typeKeyFields.getField().add(fieldname);
+					}
+	
+					updateKeys.setUpdateByKeys(typeKeyFields);
+					typeLoadChoice.setUpdate(updateKeys);
+				}else{
+					//throw new Exception("Update keys need to be specified.");
 				}
-
-				updateKeys.setUpdateByKeys(typeKeyFields);
-				typeLoadChoice.setUpdate(updateKeys);
-			}else{
-				//throw new Exception("Update keys need to be specified.");
+			}else if(StringUtils.equals(INSERT,sqlLoadTypeProperty.getLoadType())){
+				typeLoadChoice.setInsert("");
 			}
-		}else if(StringUtils.equals("insert",sqlLoadTypeProperty.getLoadType())){
-			typeLoadChoice.setInsert("");
 		}
-
 		return typeLoadChoice;
 	}
 
