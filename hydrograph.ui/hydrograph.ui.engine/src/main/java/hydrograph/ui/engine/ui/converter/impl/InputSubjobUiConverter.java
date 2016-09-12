@@ -15,9 +15,6 @@ package hydrograph.ui.engine.ui.converter.impl;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
@@ -70,55 +67,55 @@ public class InputSubjobUiConverter extends UiConverter {
 	public void prepareUIXML() {
 		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		super.prepareUIXML();
-		IPath subJobPath=SubjobUiConverterUtil.getSubjobPath(subjob.getPath().getUri(),propertyMap);
-		IPath subJobXMLPath=new Path(subjob.getPath().getUri());
-		IPath parameterFilePath=parameterFile.getFullPath().removeLastSegments(1).append(subJobPath.removeFileExtension().lastSegment()).addFileExtension(Constants.PROPERTIES);
+		IPath subJobPath = SubjobUiConverterUtil.getSubjobPath(subjob.getPath().getUri(), propertyMap);
+		IPath subJobXMLPath = new Path(subjob.getPath().getUri());
+		IPath parameterFilePath = parameterFile.getFullPath().removeLastSegments(1)
+				.append(subJobPath.removeFileExtension().lastSegment()).addFileExtension(Constants.PROPERTIES);
 		IFile parameterFile = ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFilePath);
-		Container subJobContainer=null;
-		if (!subJobXMLPath.isAbsolute()) {
-			try {
+		Container subJobContainer = null;
+		try {
+			if (!subJobXMLPath.isAbsolute()) {
 				IFile subJobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(subJobPath);
 				IPath importFromPath = new Path(sourceXmlPath.getAbsolutePath());
 				importFromPath = importFromPath.removeLastSegments(1).append(subJobXMLPath.lastSegment());
-				subJobContainer=SubjobUiConverterUtil.createSubjobInSubjobsFolder(subJobXMLPath, parameterFilePath, parameterFile, subJobFile, importFromPath,subjob.getPath().getUri());
-			} catch (ComponentNotFoundException | InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
-					| EngineException | JAXBException | ParserConfigurationException | SAXException | IOException
-					| CoreException exception) {
-				logger.error("Error while importing subjob",exception);
+				subJobContainer = SubjobUiConverterUtil.createSubjobInSpecifiedFolder(subJobXMLPath, parameterFilePath,
+						parameterFile, subJobFile, importFromPath, subjob.getPath().getUri());
+			} else {
+				File jobFile = new File(subJobPath.toString());
+				File subJobFile = new File(subjob.getPath().getUri());
+				UiConverterUtil converterUtil = new UiConverterUtil();
+				subJobContainer = converterUtil.convertSubjobToUiXML(subJobFile, jobFile, parameterFile);
+
 			}
-		}
-		else {
-			File jobFile = new File(subJobPath.toString());
-			File subJobFile = new File(subjob.getPath().getUri());
-			UiConverterUtil converterUtil = new UiConverterUtil();
-			try {
-				subJobContainer=converterUtil.convertSubjobToUiXML(subJobFile, jobFile, parameterFile);
-			} catch (ComponentNotFoundException | InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
-					| EngineException | JAXBException | ParserConfigurationException | SAXException | IOException exception) {
-				logger.error("Error while importing subjob",exception);
+			Component outputSubjobComponent = SubjobUiConverterUtil.getOutputSubJobConnectorReferance(subJobContainer);
+
+			outputSubjobComponent.getProperties().put(Constants.SUBJOB_COMPONENT, uiComponent);
+			propertyMap.put(Constants.OUTPUT_SUBJOB, outputSubjobComponent);
+			if (outputSubjobComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
+				propertyMap.put(Constants.SCHEMA_TO_PROPAGATE,
+						outputSubjobComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
+			} else {
+				outputSubjobComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE,
+						new LinkedHashMap<String, ComponentsOutputSchema>());
 			}
 
+			for (Component component : subJobContainer.getChildren()) {
+				SchemaPropagation.INSTANCE.continuousSchemaPropagation(component,
+						(Map) component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
+			}
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException
+				| ComponentNotFoundException exception) {
+			logger.error("Error occurred while creating new files in workspace", exception);
+			SubjobUiConverterUtil.showMessageBox(exception, "Exception Occurred :");
+		} catch (JAXBException | ParserConfigurationException | SAXException exception) {
+			logger.error("Error occurred while creating new files in workspace", exception);
+			SubjobUiConverterUtil.showMessageBox(exception, "Invalid XML File.");
 		}
-		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME,getRuntimeProperties());
+		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME, getRuntimeProperties());
 		getOutPort((TypeInputComponent) typeBaseComponent);
-		SubjobUiConverterUtil.setUiComponentProperties(uiComponent,container,currentRepository,name_suffix,componentName,propertyMap);
-		Component outputSubjobComponent = SubjobUiConverterUtil.getOutputSubJobConnectorReferance(subJobContainer);
-		
-		outputSubjobComponent.getProperties().put(Constants.SUBJOB_COMPONENT,uiComponent);
-		propertyMap.put(Constants.OUTPUT_SUBJOB, outputSubjobComponent);
-		if (outputSubjobComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
-			propertyMap.put(Constants.SCHEMA_TO_PROPAGATE,
-					outputSubjobComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
-		} else {
-			outputSubjobComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE,
-					new LinkedHashMap<String, ComponentsOutputSchema>());
-		}
-		
-		for(Component component:subJobContainer.getChildren()){
-			SchemaPropagation.INSTANCE.continuousSchemaPropagation(component, (Map) component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
-		}
+		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
+				componentName, propertyMap);
 		
 	}
 	protected void getOutPort(TypeInputComponent inputComponent) {
@@ -135,16 +132,9 @@ public class InputSubjobUiConverter extends UiConverter {
 }
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
-		logger.debug("Generating Subjob Properties for -{}", componentName);
-		Map<String, String> runtimeMap = null;
-		TypeProperties typeProperties = subjob.getSubjobParameter();
-		if (typeProperties != null) {
-			runtimeMap = new LinkedHashMap<>();
-			for (Property runtimeProperty : typeProperties.getProperty()) {
-				runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
-			}
-		}
-		return runtimeMap;
+		return SubjobUiConverterUtil.getRunTimeProperties(logger,subjob.getSubjobParameter(),componentName);
 	}
+
+	
 
 }

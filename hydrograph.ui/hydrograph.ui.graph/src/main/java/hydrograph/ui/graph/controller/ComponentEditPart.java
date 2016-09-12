@@ -48,9 +48,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartListener;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
@@ -376,10 +373,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		int prevInPortCount = getCastedModel().getInPortCount();
 		int outPortCount = 0, newInPortCount = 0;
 		if (getCastedModel().getProperties().get("inPortCount") != null) {
-			newInPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("inPortCount"));
+			newInPortCount = Integer.parseInt((String.valueOf(getCastedModel().getProperties().get("inPortCount"))));
 		}
 		if (getCastedModel().getProperties().get("outPortCount") != null) {
-			outPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("outPortCount"));
+			outPortCount = Integer.parseInt(String.valueOf(getCastedModel().getProperties().get("outPortCount")));
 		}
 		int inPortCountToBeApplied = newInPortCount!=prevInPortCount ? newInPortCount : prevInPortCount;
 
@@ -416,12 +413,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 		if (getCastedModel().getProperties().get("inPortCount") != null)
 		{
-			inPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("inPortCount"));
+			inPortCount = Integer.parseInt(String.valueOf(getCastedModel().getProperties().get("inPortCount")));
 		}
 
 		if (getCastedModel().getProperties().get("outPortCount") != null)
 		{
-			newOutPortCount = Integer.parseInt((String) getCastedModel().getProperties().get("outPortCount"));
+			newOutPortCount = Integer.parseInt(String.valueOf(getCastedModel().getProperties().get("outPortCount")));
 		}
 		if(prevOutPortCount != newOutPortCount){
 		int outPortCountToBeApplied = newOutPortCount!=prevOutPortCount ? newOutPortCount : prevOutPortCount;

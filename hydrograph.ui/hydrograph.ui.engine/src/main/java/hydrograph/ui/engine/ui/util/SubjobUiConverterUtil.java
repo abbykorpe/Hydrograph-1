@@ -13,12 +13,9 @@
 
 package hydrograph.ui.engine.ui.util;
 
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
@@ -29,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,6 +40,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -53,7 +54,7 @@ import org.xml.sax.SAXException;
  */
 public class SubjobUiConverterUtil {
 	
-	public static Container createSubjobInSubjobsFolder(IPath subJobXMLPath, IPath parameterFilePath, IFile parameterFile,
+	public static Container createSubjobInSpecifiedFolder(IPath subJobXMLPath, IPath parameterFilePath, IFile parameterFile,
 			IFile subJobFile, IPath importFromPath,String subjobPath) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, JAXBException, ParserConfigurationException,
 			SAXException, IOException, CoreException, FileNotFoundException {
@@ -70,8 +71,8 @@ public class SubjobUiConverterUtil {
 				iFolder.create(true, true, new NullProgressMonitor());
 			}
 			IFile subjobXmlFile = iProject.getFile(subjobPath);
-			subjobXmlFile.create(new FileInputStream(importFromPath.toString()), true, new NullProgressMonitor());
 			subJobContainer=converterUtil.convertToUiXML(importFromPath.toFile(), subJobFile, parameterFile);
+			subjobXmlFile.create(new FileInputStream(importFromPath.toString()), true, new NullProgressMonitor());
 		}
 		return subJobContainer;
 	}
@@ -112,5 +113,22 @@ public class SubjobUiConverterUtil {
 		uiComponent.setParent(container);
 		currentRepository.getComponentUiFactory().put(componentName, uiComponent);
 		uiComponent.setProperties(propertyMap);
+	}
+	public static void showMessageBox(Exception exception, String message) {
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);
+		messageBox.setMessage(message + "\n" + exception.getMessage());
+		messageBox.open();
+	}
+	public static Map<String, String> getRunTimeProperties(Logger logger, TypeProperties properties, String componentName) {
+		logger.debug("Generating Subjob Properties for -{}", componentName);
+		Map<String, String> runtimeMap = null;
+		TypeProperties typeProperties = properties;
+		if (typeProperties != null) {
+			runtimeMap = new LinkedHashMap<>();
+			for (Property runtimeProperty : typeProperties.getProperty()) {
+				runtimeMap.put(runtimeProperty.getName(), runtimeProperty.getValue());
+			}
+		}
+		return runtimeMap;
 	}
 }

@@ -1,5 +1,6 @@
 package hydrograph.ui.engine.ui.converter.impl;
 
+import hydrograph.engine.jaxb.commandtypes.Subjob;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.engine.exceptions.EngineException;
@@ -27,7 +28,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
-import hydrograph.engine.jaxb.commandtypes.Subjob;
 
 public class CommandSubjobUiConverter extends UiConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubJobUiConverter.class);
@@ -44,45 +44,40 @@ public class CommandSubjobUiConverter extends UiConverter {
 	public void prepareUIXML() {
 		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		super.prepareUIXML();
-		IPath subJobPath=SubjobUiConverterUtil.getSubjobPath(subjob.getPath().getUri(),propertyMap);
-		IPath subJobXMLPath=new Path(subjob.getPath().getUri());
-		IPath parameterFilePath=parameterFile.getFullPath().removeLastSegments(1).append(subJobPath.removeFileExtension().lastSegment()).addFileExtension(Constants.PROPERTIES);
+		IPath subJobPath = SubjobUiConverterUtil.getSubjobPath(subjob.getPath().getUri(), propertyMap);
+		IPath subJobXMLPath = new Path(subjob.getPath().getUri());
+		IPath parameterFilePath = parameterFile.getFullPath().removeLastSegments(1)
+				.append(subJobPath.removeFileExtension().lastSegment()).addFileExtension(Constants.PROPERTIES);
 		IFile parameterFile = ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFilePath);
-		if (!subJobXMLPath.isAbsolute()) {
-			try {
+		try {
+			if (!subJobXMLPath.isAbsolute()) {
 				IFile subJobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(subJobPath);
 				IPath importFromPath = new Path(sourceXmlPath.getAbsolutePath());
 				importFromPath = importFromPath.removeLastSegments(1).append(subJobXMLPath.lastSegment());
-				SubjobUiConverterUtil.createSubjobInSubjobsFolder(subJobXMLPath, parameterFilePath, parameterFile, subJobFile, importFromPath,subjob.getPath().getUri());
-			} catch (ComponentNotFoundException | InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
-					| EngineException | JAXBException | ParserConfigurationException | SAXException | IOException
-					| CoreException exception) {
-				logger.error("Error while importing subjob",exception);
-			}
-		}
-		else {
-			File jobFile = new File(subJobPath.toString());
-			File subJobFile = new File(subjob.getPath().getUri());
-			UiConverterUtil converterUtil = new UiConverterUtil();
-			try {
+				SubjobUiConverterUtil.createSubjobInSpecifiedFolder(subJobXMLPath, parameterFilePath, parameterFile,
+						subJobFile, importFromPath, subjob.getPath().getUri());
+			} else {
+				File jobFile = new File(subJobPath.toString());
+				File subJobFile = new File(subjob.getPath().getUri());
+				UiConverterUtil converterUtil = new UiConverterUtil();
 				converterUtil.convertSubjobToUiXML(subJobFile, jobFile, parameterFile);
-			} catch (ComponentNotFoundException | InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
-					| EngineException | JAXBException | ParserConfigurationException | SAXException | IOException exception) {
-				logger.error("Error while importing subjob",exception);
 			}
-
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException
+				| ComponentNotFoundException exception) {
+			logger.error("Error occurred while creating new files in workspace", exception);
+			SubjobUiConverterUtil.showMessageBox(exception, "Exception Occurred :");
+		} catch (JAXBException | ParserConfigurationException | SAXException exception) {
+			logger.error("Error occurred while creating new files in workspace", exception);
+			SubjobUiConverterUtil.showMessageBox(exception, "Invalid XML File.");
 		}
-		
-		SubjobUiConverterUtil.setUiComponentProperties(uiComponent,container,currentRepository,name_suffix,componentName,propertyMap);
-		
+		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME, getRuntimeProperties());
+		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
+				componentName, propertyMap);
 	}
-
-
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
-		return null;
+		return SubjobUiConverterUtil.getRunTimeProperties(logger,subjob.getSubjobParameter(),componentName);
 	}
 
 }
