@@ -341,6 +341,7 @@ public class DebugDataViewer extends ApplicationWindow {
 					showDataInDebugViewer(false, remoteOkPressed);
 				}
 				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
+				syncSchemaWithReceivedDataFile();
 				return Status.OK_STATUS;
 			}
 		};
@@ -350,11 +351,13 @@ public class DebugDataViewer extends ApplicationWindow {
 	private void syncSchemaWithReceivedDataFile() {
 		List<Field> fieldList = dataViewerFileSchema.getField();
 		List<Field> newFieldList = new ArrayList<>();
-		for(String field: dataViewerAdapter.getColumnList()){
-			newFieldList.add(getField(fieldList,field));
+		if(dataViewerAdapter!=null){
+			for(String field: dataViewerAdapter.getColumnList()){
+				newFieldList.add(getField(fieldList,field));
+			}
+			dataViewerFileSchema.getField().clear();
+			dataViewerFileSchema.getField().addAll(newFieldList);
 		}
-		dataViewerFileSchema.getField().clear();
-		dataViewerFileSchema.getField().addAll(newFieldList);
 	}
 
 
