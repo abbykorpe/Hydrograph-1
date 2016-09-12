@@ -54,9 +54,26 @@
 	<li><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Filter component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></li>
 	<li><p><span>Check <a href="../How To Steps/How_To_Pass_Hadoop_Properties_To_Component.html"> How to pass Hadoop properties to component</a></span></p></li>
 </ul>
-	<p><img alt="" src="../images/Runtime_Properties_Grid.png" /></p>
+	<p><img alt="" src="../images/Filter_Runtime_Properties_Grid.png" /></p>
 <ul>
 	<li><span><b>Phase</b> - Phase simply accepts a numeric number starting from 0 and signifies the phase this component will execute in. By default this is 0.</span></li>
+</ul>
+
+<p><a name="validations"></a><span class="header-2">Validations</span></p>
+<p><span><b>Validations</b>&nbsp;for the Filter component are in place for each property present on the Properties window.</span></p>
+<p><img alt="" src="../images/Filter_Properties_Validation.png" /></p>
+<p><b>General Properties:</b></p>
+<ul>
+	<li><span><b>Operation Class</b> -  Operation Class is a mandatory field and needs the user to either select a standard operation class or create his own custom class. If absent, error for empty field appears along with a message on tool tip for the user.
+			<p><img alt="" src="../images/Operation_Class_Validation.png" /></p>
+	
+	</span></li>
+		<li><span><b>Operation Fields </b> -User can select the available fields that will be used within the filter operation class. Hence, known as Operation Fields. Basic validation to check empty field values is present on the Operation Fields Grid. 
+			<p><img alt="" src="../images/Filter_Operation_Fields.png" /></p>
+	</span></li>
+	<li><span><b>Phase </b> -Phase has a default value of 0. However, blank text box results in error validation and is not allowed.
+			<p><img alt="" src="../images/Filter_Phase_Validation.png" /></p>
+	</span></li>
 </ul>
 
 </body>
