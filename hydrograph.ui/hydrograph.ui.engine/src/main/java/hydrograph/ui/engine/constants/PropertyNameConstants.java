@@ -31,11 +31,19 @@ public enum PropertyNameConstants {
 		SECONDARY_COLUMN_KEYS("Secondary_keys"),
 		DEDUP_FILEDS("Key_fields"),
 		DATABASE_NAME("databaseName"),
+		DATABASE_TYPE("databaseType"),
+		USER_NAME("userName"),
+		PASSWORD("password"),
+		QUERY("query"),
+		LOADTYPE_PROPERTIES("loadtype_properties"),
+		JDBC_URL("jdbcUrl"),
+		BATCH_SIZE("batchSize"),
 		TABLE_NAME("tableName"),
 		EXTERNAL_TABLE_PATH("externalTablePath"),
 		PARTITION_KEYS("partitionKeys"),
 		QUOTE("quote"),
-		OVER_WRITE("overWrite");
+		OVER_WRITE("overWrite"),
+		PARTITION_BY_EXPRESSION_PROPERTIES("partitionbyexpression_properties");
 		private final String value;
 
 	PropertyNameConstants(String value) {
@@ -54,6 +62,4 @@ public enum PropertyNameConstants {
 		}
 		return null;
 	}
-	
-	
 }

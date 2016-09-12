@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="hydrograph/engine/jaxb/irdbms" xmlns:cmn="hydrograph/engine/jaxb/commontypes"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/engine/jaxb/irdbms"
+	elementFormDefault="unqualified">
+	<xs:import schemaLocation="../../common/common-types.xsd"
+		namespace="hydrograph/engine/jaxb/commontypes" />
+
+	
+	
+	
+	<xs:complexType name="database-type">
+		<xs:attribute name="value" type="database-type-value"
+			use="required" />
+	</xs:complexType>
+
+	<xs:simpleType name="database-type-value">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MySQL" />
+			<xs:enumeration value="Teradata" />
+			<xs:enumeration value="Oracle" />
+			<xs:enumeration value="H2" />
+			<xs:enumeration value="Derby" />
+			<xs:enumeration value="PostgreSQL" />
+			<xs:enumeration value="Redshift " />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="type-input-rdbms-out-socket">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-input-outSocket">
+				<xs:sequence>
+					<xs:element name="schema" type="cmn:type-base-record" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:string" use="required"
+					fixed="out0" />
+				<xs:attribute name="type" type="xs:string" fixed="out"
+					use="optional" />
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="type-input-rdbms-base">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-input-component">
+				<xs:sequence>
+					<xs:element name="outSocket" type="type-input-rdbms-out-socket"
+						minOccurs="1" maxOccurs="1" />
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

@@ -108,7 +108,16 @@ public class Constants {
 	public static final String ASCENDING_SORT_ORDER = "Asc";
 	public static final String DESCENDING_SORT_ORDER="Desc";
 	public static final String NONE_SORT_ORDER="From Param";
-
+	public static final String INPUT_DATA = "Input Data";	
+	public static final String MODEL_DATA = "Model";	
+	public static final String OUTPUT_DATA = "Output Data";		
+	public static final String COMMAND = "COMMAND";
+	public static final String TRAINING_DATA = "Training Data";
+	public static final String TEST_DATA = "Test Data";	
+	public static final String THRESHOLD_DATA = "Threshold";	
+	public static final String PARTITION_BY_EXPRESSION = "PartitionByExpression";	
+	public static final String PARTITION_PROPERTIES_WINDOW_LABEL = "Partition Properties";	
+	public static final String PARTITION_PROPERTY_LABEL = "Partition\nProperties";	
 
 	/*
 	 * Sub Job required constants 
@@ -130,7 +139,7 @@ public class Constants {
 	public static final String RANGE_FROM_QNAME = "rangeFrom";
 	public static final String RANGE_TO_QNAME = "rangeTo";
 	public static final String DEFAULT_VALUE_QNAME = "default";
-	
+	public static final String COLUMN_DEFINITION_QNAME = "colDef";
 	
 	public static final String GENERATE_RECORDS_COMPONENT_TYPE = "Generate Records";
 	public static final String FIXED_INSOCKET_ID = "in0";
@@ -154,6 +163,8 @@ public class Constants {
 	public static final String RUNTIME_PROPERTY_NAME = "runtime_properties";
 	
 	public static final String RUNTIME_PROPERTY_LABEL = "Runtime\nProperties";
+	public static final String LOADTYPE_PROPERTY_LABEL = "Loadtype\nProperties";
+	public static final String LOADTYPE_PROPERTIES_WINDOW_LABEL = "Loadtype Properties";
 	public static final String SUBJOB_PROPERTY_LABEL = "Subjob\nProperties";
 	public static final String UNUSED_PORT_COUNT_PROPERTY = "unusedPortCount";
 	public static final String UNUSED_AND_INPUT_PORT_COUNT_PROPERTY = "inPortCount|unusedPortCount";

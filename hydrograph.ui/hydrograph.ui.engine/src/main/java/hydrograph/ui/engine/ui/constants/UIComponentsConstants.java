@@ -20,7 +20,7 @@ public enum UIComponentsConstants {
 	FILE_DELIMITED("File Delimited"),
 	FILE_PARQUET("File Parquet"),
 	HIVE_PARQUET("Hive Parquet"),
-	HIVE_TEXTFILE("Hive Text File"),
+	HIVE_TEXTFILE("Hive TextFile"),
 	VALIDITY_STATUS("validityStatus"),
 	INPUT_CATEGORY("INPUT"),
 	FILE_FIXEDWIDTH("File Fixed Width"),
@@ -28,6 +28,7 @@ public enum UIComponentsConstants {
 	OUTPUT_CATEGORY("OUTPUT"),
 	STRAIGHTPULL_CATEGORY("STRAIGHTPULL"),
 	CLONE("Clone"), 
+	COMMAND_CATEGORY("COMMAND"),
 	UNION_ALL("Union All"), 
 	REMOVE_DUPS("Remove Dups"),
 	TRANSFORM_CATEGORY("TRANSFORM"),
@@ -40,7 +41,8 @@ public enum UIComponentsConstants {
 	DISCARD("Discard"),
 	SORT("Sort"),
 	CUMULATE("Cumulate"),
-	NORMALIZE("Normalize");
+	NORMALIZE("Normalize"),
+	RUNPROGRAM("RunProgram");
 	
 	private final String value;
 
