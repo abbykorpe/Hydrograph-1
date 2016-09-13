@@ -24,10 +24,12 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.slf4j.Logger;
 
 /**
@@ -48,7 +50,11 @@ public abstract class UiConverter {
 	protected static final String NAME = "name";
 	protected String componentName;
 	protected String name_suffix;
+	protected UIComponentRepo currentRepository;
+	protected File sourceXmlPath;
+	protected IFile parameterFile;
 
+	
 	/**
 	 * Generate basic properties that are common in all components.
 	 */
@@ -60,7 +66,7 @@ public abstract class UiConverter {
 		propertyMap.put(PHASE, typeBaseComponent.getPhase().toString());
 		uiComponent.setComponentLabel(componentName);
 		uiComponent.setParent(container);
-		UIComponentRepo.INSTANCE.getComponentUiFactory().put(componentName, uiComponent);
+		currentRepository.getComponentUiFactory().put(componentName, uiComponent);
 	}
 
 	/**
@@ -102,7 +108,7 @@ public abstract class UiConverter {
 	 */
 	protected String getValue(String propertyName) {
 		LOGGER.debug("Getting Parameter for - {}", propertyName);
-		List<ParameterData> parameterList = UIComponentRepo.INSTANCE.getParammeterFactory().get(componentName);
+		List<ParameterData> parameterList = currentRepository.getParammeterFactory().get(componentName);
 		if (parameterList != null) {
 			for (ParameterData param : parameterList) {
 				if (param.getPropertyName().equals(propertyName)) {
@@ -133,5 +139,17 @@ public abstract class UiConverter {
 			return outSocket.getType();
 
 		return Constants.OUTPUT_SOCKET_TYPE;
+	}
+
+	public void setCurrentRepository(UIComponentRepo componentRepo) {
+		this.currentRepository=componentRepo;
+	}
+
+	public void setSourceXMLPath(File sourceXmlPath) {
+		this.sourceXmlPath=sourceXmlPath;
+	}
+
+	public void setParameterFile(IFile parameterFile) {
+		this.parameterFile=parameterFile;
 	}
 }

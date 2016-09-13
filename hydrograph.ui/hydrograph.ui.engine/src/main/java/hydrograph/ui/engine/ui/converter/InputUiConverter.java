@@ -75,11 +75,9 @@ public abstract class InputUiConverter extends UiConverter {
 
 	/**
 	 * Create schema for for Input Component.
-	 * 
 	 * @param TypeInputOutSocket
 	 *            the TypeInputOutSocket i.e output port on which schema is applied, every output port has its own
 	 *            schema.
-	 * 
 	 * @return Object
 	 */
 	protected abstract Object getSchema(TypeInputOutSocket outSocket);

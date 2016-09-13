@@ -2,7 +2,7 @@
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
-
+1.#1025[Sonia Raheja] Import xml : Subjob Component has been Displayed as Unknown Component Upon XML Import
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================

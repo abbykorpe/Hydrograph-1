@@ -42,9 +42,13 @@ public class CoordinateProcessor {
 	private List<Node> nodeList = new ArrayList<>();
 	private Map<String, Node> nodeMap = new LinkedHashMap<>();
 	private Map<String, Component> tempUiComponentFactory = new LinkedHashMap<>();
+	private UIComponentRepo componentRepo;
 	private static final int HORIZONTAL_SPACING = 200;
 	private static final int VERTICAL_SPACING = 200;
 
+	public CoordinateProcessor(UIComponentRepo componentRepo) {
+		this.componentRepo=componentRepo;
+	}
 	/**
 	 * Initiate X-Y coordinate generation process and creates node structure for each component.
 	 */
@@ -52,8 +56,8 @@ public class CoordinateProcessor {
 		LOGGER.debug("Processing link-data for creating individual nodes");
 		Node sourceNode = null;
 		Node destinationNode = null;
-		tempUiComponentFactory.putAll(UIComponentRepo.INSTANCE.getComponentUiFactory());
-		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
+		tempUiComponentFactory.putAll(componentRepo.getComponentUiFactory());
+		for (LinkingData linkingData : componentRepo.getComponentLinkList()) {
 			if (nodeMap.get(linkingData.getSourceComponentId()) == null) {
 				sourceNode = new Node(linkingData.getSourceComponentId());
 				nodeMap.put(linkingData.getSourceComponentId(), sourceNode);
@@ -91,7 +95,7 @@ public class CoordinateProcessor {
 			Point point = new Point();
 			point.x = node.gethPosition();
 			point.y = node.getvPosition();
-			UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.name).setLocation(point);
+			componentRepo.getComponentUiFactory().get(node.name).setLocation(point);
 		}
 	}
 
@@ -154,8 +158,8 @@ public class CoordinateProcessor {
 
 	private int incrementXPosition(Node node, int position)throws ComponentNotFoundException {
 		LOGGER.debug("Applying X cordinate for component:{}" + node.getName());
-		if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.getName()) != null) {
-			int width = UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.getName()).getSize().width();
+		if (componentRepo.getComponentUiFactory().get(node.getName()) != null) {
+			int width = componentRepo.getComponentUiFactory().get(node.getName()).getSize().width();
 			if (width > 100)
 				position = position + (width - 100);
 			return position;
@@ -164,7 +168,7 @@ public class CoordinateProcessor {
 	}
 
 	private int incrementYPosition(Node node) {
-		int height = UIComponentRepo.INSTANCE.getComponentUiFactory().get(node.getName()).getSize().height();
+		int height = componentRepo.getComponentUiFactory().get(node.getName()).getSize().height();
 		if (height > 75)
 			height = height - 75;
 		else

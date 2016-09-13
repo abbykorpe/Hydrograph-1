@@ -177,6 +177,11 @@ public class Constants {
 	
 	public static final String INNER = "Inner";
 	public static final String OUTER = "Outer";
+	public static final String INPUT_SOCKET_FOR_SUBJOB="Input Socket for subjob";
+	public static final String OUTPUT_SOCKET_FOR_SUBJOB="Output Socket for subjob";
+	public static final String PROPERTIES="properties";
+	public static final String SUBJOB_INPUT_COMPONENT_NAME="InSubjob_01";
+	public static final String SUBJOB_OUTPUT_COMPONENT_NAME="OutSubjob_01";
 	
 	/*
 	 * Debug required constants 
@@ -249,4 +254,5 @@ public class Constants {
 	public static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 	public static final Character KEY_D = 'd';
 	public static final Character KEY_N = 'n';
+	
 }

@@ -15,6 +15,7 @@
 package hydrograph.ui.engine.parsing;
 
 
+import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.File;
@@ -35,20 +36,19 @@ public class XMLParser {
 	 * @return true, if XML is successfully parsed.
 	 * @throws Exception 
 	 */
-	public boolean parseXML(File inputFile) throws ParserConfigurationException, SAXException, IOException{
+	public boolean parseXML(File inputFile,UIComponentRepo componentRepo) throws ParserConfigurationException, SAXException, IOException{
       LOGGER.debug("Parsing target XML for separating Parameters");
          SAXParserFactory factory = SAXParserFactory.newInstance();
          SAXParser saxParser;
 		try {
 			saxParser = factory.newSAXParser();
-			XMLHandler xmlhandler = new XMLHandler();
+			XMLHandler xmlhandler = new XMLHandler(componentRepo);
 			saxParser.parse(inputFile, xmlhandler);
 			return true;
 		} catch (ParserConfigurationException | SAXException | IOException exception) {
 			 LOGGER.error("Parsing failed...",exception);
 			throw exception; 
 		}
-     
    }  
 }
 

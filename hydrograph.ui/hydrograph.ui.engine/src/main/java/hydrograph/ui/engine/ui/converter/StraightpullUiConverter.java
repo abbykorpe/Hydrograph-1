@@ -14,21 +14,19 @@
  
 package hydrograph.ui.engine.ui.converter;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
-import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
 
 /**
  * The class StraightfullUiConverter
@@ -69,7 +67,7 @@ public abstract class StraightpullUiConverter extends UiConverter {
 		if (straightPullComponent.getInSocket() != null) {
 			for (TypeBaseInSocket inSocket : straightPullComponent.getInSocket()) {
 				uiComponent.engageInputPort(inSocket.getId());
-				UIComponentRepo.INSTANCE.getComponentLinkList().add(
+				currentRepository.getComponentLinkList().add(
 						new LinkingData(inSocket.getFromComponentId(), straightPullComponent.getId(),
 								inSocket.getFromSocketId(), inSocket.getId()));
 				}

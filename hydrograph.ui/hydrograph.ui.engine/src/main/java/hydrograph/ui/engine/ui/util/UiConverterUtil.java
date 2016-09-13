@@ -24,6 +24,7 @@ import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.converter.UiConverterFactory;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
+import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.engine.ui.repository.ParameterData;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.engine.ui.xygenration.CoordinateProcessor;
@@ -39,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -72,12 +74,12 @@ import com.thoughtworks.xstream.XStream;
  */
 public class UiConverterUtil {
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(UiConverterUtil.class);
-
 	private static final String FIXED_OUTPUT_PORT = "out0";
 	private static final String FIXED_UNUSED_PORT = "unused0";
-
+	private UIComponentRepo componentRepo ;
+	
 	public UiConverterUtil() {
-		UIComponentRepo.INSTANCE.flusRepository();
+		componentRepo = new UIComponentRepo();
 	}
 
 	/**
@@ -101,19 +103,59 @@ public class UiConverterUtil {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	public void convertToUiXML(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
+	public Container convertToUiXml(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
 			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,
 			ComponentNotFoundException {
+		Container container = getJobContainer(sourceXML, parameterFile);
+		genrateUiXml(container, jobFile, parameterFile);
+		return container;
+		
+	}
+
+
+	
+	/**
+	 * @param sourceXML
+	 * @param file
+	 * @param parameterFile
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws EngineException
+	 * @throws JAXBException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ComponentNotFoundException
+	 */
+	public Container convertSubjobToUiXml(File sourceXML, File file, IFile parameterFile) throws InstantiationException,
+	IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+	SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,
+	ComponentNotFoundException {
+		Container container = getJobContainer(sourceXML, parameterFile);
+		genrateSubjobUiXml(container, file, parameterFile);
+		return container;
+
+}
+	
+	private Container getJobContainer(File sourceXML, IFile parameterFile) throws JAXBException, ParserConfigurationException,
+			SAXException, IOException {
 		LOGGER.debug("Creating UI-Converter based on component");
 		loadClass();
 		Graph graph = unMarshall(sourceXML);
 		Container container = new Container();
-
 		List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
-		if (children != null && !children.isEmpty()){
+		if (children != null && !children.isEmpty()) {
 			for (TypeBaseComponent typeBaseComponent : children) {
 				UiConverter uiConverter = UiConverterFactory.INSTANCE.getUiConverter(typeBaseComponent, container);
+				uiConverter.setCurrentRepository(componentRepo);
+				uiConverter.setSourceXMLPath(sourceXML);
+				uiConverter.setParameterFile(parameterFile);
 				uiConverter.prepareUIXML();
 				Component component = uiConverter.getComponent();
 				adjustComponentFigure(component);				
@@ -122,8 +164,7 @@ public class UiConverterUtil {
 			createLinks();
 		}
 		ImportedSchemaPropagation.INSTANCE.initiateSchemaPropagationAfterImport(container);
-		genrateUIXML(container, jobFile, parameterFile);
-		
+		return container;
 	}
 
 	private void adjustComponentFigure(Component component) {
@@ -164,16 +205,16 @@ public class UiConverterUtil {
 	public void createLinks() throws ComponentNotFoundException {
 		LOGGER.debug("Creating UI-Links between Components");
 		preProcessLinkData();
-		CoordinateProcessor pc = new CoordinateProcessor();
+		CoordinateProcessor pc = new CoordinateProcessor(componentRepo);
 		pc.initiateCoordinateGenration();
-		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
-			Component sourceComponent = UIComponentRepo.INSTANCE.getComponentUiFactory().get(
+		for (LinkingData linkingData : componentRepo.getComponentLinkList()) {
+			Component sourceComponent = componentRepo.getComponentUiFactory().get(
 					linkingData.getSourceComponentId());
-			Component targetComponent = UIComponentRepo.INSTANCE.getComponentUiFactory().get(
+			Component targetComponent = componentRepo.getComponentUiFactory().get(
 					linkingData.getTargetComponentId());
 
 			Link link = new Link();
-			link.setSourceTerminal(linkingData.getSourceTerminal());
+			link.setSourceTerminal(ConverterUiHelper.getFromSocketId(linkingData, componentRepo));
 			link.setTargetTerminal(linkingData.getTargetTerminal());
 			link.setSource(sourceComponent);
 			link.setTarget(targetComponent);
@@ -191,7 +232,7 @@ public class UiConverterUtil {
 	 * @param jobFile
 	 * @param parameterFile
 	 */
-	private void genrateUIXML(Container container, IFile jobFile, IFile parameterFile) {
+	private void genrateUiXml(Container container, IFile jobFile, IFile parameterFile) {
 		LOGGER.debug("Generating UI-XML");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		String jobXmlData = null;
@@ -205,9 +246,29 @@ public class UiConverterUtil {
 		} catch (CoreException e) {
 			LOGGER.error("Exception occurred while creating UI-XML", e);
 		} finally {
-			UIComponentRepo.INSTANCE.flusRepository();
+			componentRepo.flushRepository();
 			try {
 				out.close();
+			} catch (IOException ioe) {
+				LOGGER.error("IOException occurred while closing output stream", ioe);
+			}
+		}
+	}
+	
+	private void genrateSubjobUiXml(Container container, File file, IFile parameterFile) {
+		LOGGER.debug("Generating UI-XML");
+		FileOutputStream fileOutputStream = null;
+		try {
+			XStream xs = new XStream();
+			xs.autodetectAnnotations(true);
+			fileOutputStream = new FileOutputStream(file.getPath());
+			xs.toXML(container, fileOutputStream);
+		} catch (IOException ioException) {
+			LOGGER.error("Exception occurred while creating UI-XML", ioException);
+		} finally {
+			componentRepo.flushRepository();
+			try {
+				fileOutputStream.close();
 			} catch (IOException ioe) {
 				LOGGER.error("IOException occurred while closing output stream", ioe);
 			}
@@ -226,7 +287,7 @@ public class UiConverterUtil {
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		graph = (Graph) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(inputFileAsString.getBytes()));
 		if (graph != null){
-			UIComponentRepo.INSTANCE.genrateComponentRepo(graph);
+			componentRepo.genrateComponentRepo(graph);
 		}
 		return graph;
 	}
@@ -234,7 +295,7 @@ public class UiConverterUtil {
 	private String replaceParametersWithDefaultValues(File inputFile) {
 		String fileContentAsString = readFileContentInString(inputFile).toString();
 		List<ParameterData> parameterDataList = new ArrayList<>();
-		for (Entry<String, List<ParameterData>> entry : UIComponentRepo.INSTANCE.getParammeterFactory().entrySet()) {
+		for (Entry<String, List<ParameterData>> entry : componentRepo.getParammeterFactory().entrySet()) {
 			parameterDataList.addAll(entry.getValue());
 		}
 		for (ParameterData parameterData : parameterDataList) {
@@ -264,16 +325,16 @@ public class UiConverterUtil {
 
 	private void parseXML(File inputFile) throws ParserConfigurationException, SAXException, IOException {
 		XMLParser xmlParser = new XMLParser();
-		xmlParser.parseXML(inputFile);
+		xmlParser.parseXML(inputFile,componentRepo);
 	}
 	
 	private void preProcessLinkData() {
 		LOGGER.debug("Process links data for one to many port generation");
 		boolean isMultiplePortAllowed;
-		for (LinkingData linkingData : UIComponentRepo.INSTANCE.getComponentLinkList()) {
+		for (LinkingData linkingData : componentRepo.getComponentLinkList()) {
 			LOGGER.debug("Process links data for one to many port generation : {}", linkingData);
-			if (UIComponentRepo.INSTANCE.getComponentUiFactory().get(linkingData.getSourceComponentId()) != null){
-				isMultiplePortAllowed = UIComponentRepo.INSTANCE.getComponentUiFactory()
+			if (componentRepo.getComponentUiFactory().get(linkingData.getSourceComponentId()) != null){
+				isMultiplePortAllowed = componentRepo.getComponentUiFactory()
 						.get(linkingData.getSourceComponentId()).getPortDetails().get(0).isAllowMultipleLinks();
 				
 				if (isMultiplePortAllowed){
@@ -311,4 +372,5 @@ public class UiConverterUtil {
 			}
 		}
 	}
+	
 }

@@ -153,7 +153,7 @@ public class SubJobUtility {
 		int sourceTerminal;
 		for (int i = 0; i < inLinks.size(); i++) {
 			Component oldTarget = inLinks.get(i).getTarget();
-			sourceTerminal = oldTarget.getInputportTerminals().size();
+			sourceTerminal = oldTarget.getInPortCount();
 			inLinks.get(i).getSource();
 			Link link = inLinks.get(i);
 			link.detachTarget();

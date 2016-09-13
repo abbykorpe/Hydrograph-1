@@ -14,11 +14,15 @@
  
 package hydrograph.ui.engine.ui.helper;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.engine.ui.converter.LinkingData;
+import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
@@ -33,9 +37,6 @@ import javax.xml.namespace.QName;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
 
 /**
  * The class ConverterUiHelper
@@ -185,4 +186,14 @@ public class ConverterUiHelper {
 		GridRowLoader gridRowLoader=new GridRowLoader(schemaType, filePath.toFile());
 		return gridRowLoader.importGridRowsFromXML();
 	}
+	
+	public static String getFromSocketId(LinkingData linkingData, UIComponentRepo componentRepo) {
+		String inSocketId = linkingData.getSourceTerminal();
+
+		if (componentRepo.getComponentUiFactory().get(linkingData.getSourceComponentId()).getComponentName().equals("InputSubjobComponent")) {
+			return inSocketId.replace("in", "out");
+		}
+		return inSocketId;
+	}
+
 }

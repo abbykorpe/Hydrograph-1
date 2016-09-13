@@ -82,10 +82,10 @@ public class UnknownUiConverter extends UiConverter {
 		LOGGER.debug("Generating default-component inputport for -{}", componentName);
 
 		String fixedInsocket = "in0";
-		if (UIComponentRepo.INSTANCE.getInsocketMap().get(componentName) != null) {
-			for (InSocketDetail inSocketDetail : UIComponentRepo.INSTANCE.getInsocketMap().get(componentName)) {
+		if (currentRepository.getInsocketMap().get(componentName) != null) {
+			for (InSocketDetail inSocketDetail : currentRepository.getInsocketMap().get(componentName)) {
 					uiComponent.engageInputPort(fixedInsocket);
-				UIComponentRepo.INSTANCE.getComponentLinkList().add(
+				currentRepository.getComponentLinkList().add(
 						new LinkingData(inSocketDetail.getFromComponentId(), componentName, inSocketDetail
 								.getFromSocketId(), fixedInsocket));
 

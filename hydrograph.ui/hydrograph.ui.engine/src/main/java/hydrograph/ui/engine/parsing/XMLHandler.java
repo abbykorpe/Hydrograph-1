@@ -41,11 +41,16 @@ public class XMLHandler extends DefaultHandler {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(XMLParser.class);
 	private String currentComponent;
+	private UIComponentRepo componentRepo;
 	private static final String ID = "id";
 	private static final String VALUE = "value";
 	private static final String INSOCKET_TAG = "inSocket";
 	private static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
 
+	public	XMLHandler(UIComponentRepo componentRepo){
+		this.componentRepo=componentRepo;
+	}
+	
 	/**
 	 * @param uri
 	 * @param localName
@@ -61,7 +66,7 @@ public class XMLHandler extends DefaultHandler {
 		if (isComponent(qName)) {
 			currentComponent = attributes.getValue(ID);
 			List<ParameterData> emptyList = new ArrayList<>();
-			UIComponentRepo.INSTANCE.getParammeterFactory().put(currentComponent, emptyList);
+			componentRepo.getParammeterFactory().put(currentComponent, emptyList);
 		}
 		if (qName.equalsIgnoreCase(INSOCKET_TAG)) {
 			storeInSocket(attributes);
@@ -70,7 +75,7 @@ public class XMLHandler extends DefaultHandler {
 		if (attributes.getValue(VALUE) != null) {
 			matcher = Pattern.compile(REGEX).matcher(attributes.getValue(VALUE));
 			if (matcher.matches()) {
-				tempParammeterList = UIComponentRepo.INSTANCE.getParammeterFactory().get(currentComponent);
+				tempParammeterList = componentRepo.getParammeterFactory().get(currentComponent);
 				if (tempParammeterList != null) {
 					tempParammeterList.add(new ParameterData(qName, attributes.getValue(VALUE)));
 				}
@@ -84,12 +89,12 @@ public class XMLHandler extends DefaultHandler {
 		inSocketdetail.setFromComponentId(attributes.getValue("fromComponentId"));
 		inSocketdetail.setFromSocketId(attributes.getValue("fromSocketId"));
 		inSocketdetail.setInSocketType(attributes.getValue("type"));
-		if(UIComponentRepo.INSTANCE.getInsocketMap().get(currentComponent)!=null && UIComponentRepo.INSTANCE.getInsocketMap().get(currentComponent).size()!=0)
-			UIComponentRepo.INSTANCE.getInsocketMap().get(currentComponent).add(inSocketdetail);
+		if(componentRepo.getInsocketMap().get(currentComponent)!=null && componentRepo.getInsocketMap().get(currentComponent).size()!=0)
+			componentRepo.getInsocketMap().get(currentComponent).add(inSocketdetail);
 		else{
 			List <InSocketDetail> inSocketList=new ArrayList<>();
 			inSocketList.add(inSocketdetail);
-			UIComponentRepo.INSTANCE.getInsocketMap().put(currentComponent, inSocketList);			
+			componentRepo.getInsocketMap().put(currentComponent, inSocketList);			
 		}
 		LOGGER.debug(inSocketdetail.toString());
 	}

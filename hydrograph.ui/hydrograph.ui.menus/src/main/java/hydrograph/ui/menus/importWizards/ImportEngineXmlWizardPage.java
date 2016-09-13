@@ -195,7 +195,7 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 		IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
 		IFile parameterFile = ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFilePath);
 		try {
-			uiConverterUtil.convertToUiXML(new File(targetxmlFilePath), jobFile, parameterFile);
+			uiConverterUtil.convertToUiXml(new File(targetxmlFilePath), jobFile, parameterFile);
 			LOGGER.debug("Successfully created *job,*properties files in workspace");
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException  | IOException | ComponentNotFoundException exception) {

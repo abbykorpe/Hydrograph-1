@@ -182,8 +182,10 @@ public class SchemaPropagation {
 	
 	private void propagateSchemaFromSubJob(Component subJobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
+		if (componentsOutputSchema == null)
+			return;
+		
 		String outPutTargetTerminal = getTagetTerminalForSubjob(targetTerminal);
-
 		if (subJobComponent.getProperties().get(Constants.INPUT_SUBJOB) != null) {
 			Component inputSubjobComponent = (Component) subJobComponent.getProperties().get(
 					Constants.INPUT_SUBJOB);
@@ -349,6 +351,7 @@ public class SchemaPropagation {
 		if (schemaMap != null)
 			schemaMap.put(targetTerminal, componentsOutputSchema);
 		if (parentSubjob != null) {
+			parentSubjob.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, schemaMap);
 			for (Link link : parentSubjob.getSourceConnections()) {
 				if (StringUtils.equals(link.getSourceTerminal(), targetTerminal))
 					 applySchemaToLinkedComponents(link,componentsOutputSchema);
