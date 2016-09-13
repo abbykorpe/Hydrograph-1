@@ -127,7 +127,7 @@ public class OutputSubjobUiConverter extends UiConverter {
 			count++;
 		}
 		propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY,count);
-		uiComponent.inputPortSettings(count);
+		uiComponent.completeInputPortSettings(count);
 	}
 }
 	

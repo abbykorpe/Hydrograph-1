@@ -139,7 +139,7 @@ public class OperationSubJobUiConverter extends UiConverter {
 				count++;
 			}
 			propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY, count);
-			uiComponent.inputPortSettings(count);
+			uiComponent.completeInputPortSettings(count);
 		}
 	}
 
@@ -152,7 +152,7 @@ public class OperationSubJobUiConverter extends UiConverter {
 				count++;
 			}
 			propertyMap.put(Constants.OUTPUT_PORT_COUNT_PROPERTY, count);
-			uiComponent.outputPortSettings(count);
+			uiComponent.completeOutputPortSettings(count);
 		}
 	}
 }

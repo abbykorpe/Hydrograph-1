@@ -73,7 +73,7 @@ public class InputComponentSubjobUiConverter extends UiConverter {
 				uiComponent.engageOutputPort(Constants.OUTPUT_SOCKET_TYPE+count);
 				count++;
 				}
-			uiComponent.outputPortSettings(count);
+			uiComponent.completeOutputPortSettings(count);
 		}
 	}
 

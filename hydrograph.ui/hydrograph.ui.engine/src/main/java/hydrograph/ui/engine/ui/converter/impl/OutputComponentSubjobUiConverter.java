@@ -78,7 +78,7 @@ public class OutputComponentSubjobUiConverter extends UiConverter {
 								typeBaseComponent.getId(), inSocket.getFromSocketId(), Constants.INPUT_SOCKET_TYPE+count));
 				count++;
 			}
-			uiComponent.inputPortSettings(count);
+			uiComponent.completeInputPortSettings(count);
 		}
 	}
 	
