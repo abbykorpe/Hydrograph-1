@@ -50,14 +50,11 @@ public class EvaluateDialog extends Dialog {
 	private static final String OUTPUT_COSOLE_ERROR_PREFIX = "Error\t\t: ";
 	private static final String OUTPUT_CONSOLE_PREFIX = "Output\t\t: ";
 	private String OUTPUT = "Expression's output";
-	private Table table;
 	private StyledText outputConsole;
-	private String expressionText;
 	private StyledText expressionEditor;
 	private Composite previousExpressionEditorComposite;
 	private Button evaluateButton;
 	private EvaluateDialog evaluateDialog;
-	private Table table_1;
 	private Text searchTextBox;
 	private EvalDialogFieldTable evalDialogFieldTable;
 
@@ -127,6 +124,7 @@ public class EvaluateDialog extends Dialog {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				evalDialogFieldTable.getTableViewer().resetFilters();
 				if(!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText())){
 					ViewerFilter filter=new ViewerFilter() {
 						@Override
@@ -141,10 +139,7 @@ public class EvaluateDialog extends Dialog {
 						}
 					};
 					ViewerFilter[] filters={filter};
-					evalDialogFieldTable.getTableViewer().resetFilters();
 					evalDialogFieldTable.getTableViewer().setFilters(filters);
-				}else{
-					evalDialogFieldTable.getTableViewer().resetFilters();
 				}
 			}
 		});

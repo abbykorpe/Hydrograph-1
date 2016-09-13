@@ -264,7 +264,7 @@ public enum DataTypes {
 		protected Object validateValue(String inputValue, String filedName, FixedWidthGridRow inputFieldSchema)	throws InvalidDataTypeValueException {
 			String dateFormat = null;
 			if (inputFieldSchema != null && StringUtils.isNotBlank(inputFieldSchema.getDateFormat())) {
-				dateFormat = valiDateDateFormat(inputFieldSchema.getDateFormat());
+				dateFormat = validateDateFormat(inputFieldSchema.getDateFormat());
 			}
 			try {
 				return getParsedDate(inputValue, dateFormat);
@@ -274,10 +274,10 @@ public enum DataTypes {
 			}
 		}
 
-		private java.lang.String valiDateDateFormat(java.lang.String dateFormat) {
+		private java.lang.String validateDateFormat(java.lang.String dateFormat) {
 			try {
 				DateFormat format = new SimpleDateFormat(dateFormat);
-				format.setLenient(true);
+				format.setLenient(false);
 			} catch (IllegalArgumentException illegalArgumentException) {
 				return Constants.DEFAULT_DATE_FORMAT;
 			}
@@ -287,7 +287,7 @@ public enum DataTypes {
 		private Object getParsedDate(String inputValue, String dateFormat) throws ParseException  {
 			DateFormat format;
 			format = new SimpleDateFormat(dateFormat);
-			format.setLenient(true);
+			format.setLenient(false);
 			return format.parse(inputValue);
 		}
 	};

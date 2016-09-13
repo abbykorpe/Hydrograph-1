@@ -272,7 +272,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		widgets=widgetList;
 	}
 
-	void enableOpertaionFieldButton( Button radioButton,boolean enableOperation){
+	private void enableOpertaionFieldButton( Button radioButton,boolean enableOperation){
 		Composite composite=radioButton.getParent();
 		Group grup=(Group) composite.getParent();
 		Button operationFieldButton=(Button) grup.getData(SingleColumnWidget.SINGLE_COLUMN_WIDGET_KEY);
