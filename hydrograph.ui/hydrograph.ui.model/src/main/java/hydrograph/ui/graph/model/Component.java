@@ -770,15 +770,15 @@ public abstract class Component extends Model {
 	 * 
 	 */
 
-	public void connectOutput(Link c) {
-		if (outputLinksHash.get(c.getSourceTerminal()) != null){
-			c.setLinkNumber(getNewLinkNumber(c));
+	public void connectOutput(Link link) {
+		if (outputLinksHash.get(link.getSourceTerminal()) != null){
+			link.setLinkNumber(getNewLinkNumber(link));
 		}else{
-			c.setLinkNumber(0);
+			link.setLinkNumber(0);
 		}	
-		outputLinks.add(c);
-		outputLinksHash.put(c.getSourceTerminal(), outputLinks);
-		updateConnectionProperty(Props.OUTPUTS.getValue(), c);
+		outputLinks.add(link);
+		outputLinksHash.put(link.getSourceTerminal(), outputLinks);
+		updateConnectionProperty(Props.OUTPUTS.getValue(), link);
 	}
 
 	private int getNewLinkNumber(Link newlink){
