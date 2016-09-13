@@ -769,16 +769,51 @@ public abstract class Component extends Model {
 	 * @param {{@link Link}
 	 * 
 	 */
+
 	public void connectOutput(Link link) {
-		if (outputLinksHash.get(link.getSourceTerminal()) != null)
-			link.setLinkNumber(outputLinksHash.get(link.getSourceTerminal()).size());
-		else
+		if (outputLinksHash.get(link.getSourceTerminal()) != null){
+			link.setLinkNumber(getNewLinkNumber(link));
+		}else{
 			link.setLinkNumber(0);
+		}	
 		outputLinks.add(link);
 		outputLinksHash.put(link.getSourceTerminal(), outputLinks);
 		updateConnectionProperty(Props.OUTPUTS.getValue(), link);
 	}
 
+	private int getNewLinkNumber(Link newlink){
+		List<Integer> existingOutputLinkNumbers = getExistingOutputLinkNumbers(newlink);
+		
+		Integer newLinkNumber = getNewLinkNumberFromExistingLinkNumberRange(existingOutputLinkNumbers);
+		if(newLinkNumber==null){
+			newLinkNumber = existingOutputLinkNumbers.size();
+		}
+		
+		return newLinkNumber;
+	}
+
+	private Integer getNewLinkNumberFromExistingLinkNumberRange(
+			List<Integer> existingOutputLinkNumbers) {
+		int index=0;
+		Integer newLinkNumber=null;
+		for(;index<existingOutputLinkNumbers.size();index++){
+			if(!existingOutputLinkNumbers.contains(index)){
+				newLinkNumber = index;
+				break;
+			}
+		}
+		return newLinkNumber;
+	}
+
+	private List<Integer> getExistingOutputLinkNumbers(Link newlink) {
+		List<Integer> existingOutputLinkNumbers = new ArrayList<>();
+		
+		for(Link link: outputLinksHash.get(newlink.getSourceTerminal())){
+			existingOutputLinkNumbers.add(link.getLinkNumber());
+		}
+		return existingOutputLinkNumbers;
+	}
+	
 	/**
 	 * Disconnect input from given link.
 	 * 
@@ -799,7 +834,6 @@ public abstract class Component extends Model {
 	 */
 	public void disconnectOutput(Link link) {
 		outputLinks.remove(link);
-		outputLinksHash.remove(link.getSourceTerminal());
 		updateConnectionProperty(Props.OUTPUTS.getValue(), link);
 	}
 

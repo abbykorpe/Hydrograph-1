@@ -57,7 +57,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 47.#1203 [Shashank Karnik] Output field is getting cleared in transform Mapping window on importing target xml.
 48.#1197 [Shrirang Kumbhar] Aggregate Component: Output Fields are Getting Removed After Importing the Job.
 49.#1185 [Ashika Holkar] Ok/Apply Buttons on Properties Window are Not Working Properly
-
+50.#1205 [Shrirang Kumbhar] Faced Duplicate key value issue ,if existing job updated to add the new flow to clone component. 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
