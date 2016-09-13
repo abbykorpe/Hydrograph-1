@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.engine.ui.converter.impl;
 
 import hydrograph.engine.jaxb.commandtypes.Subjob;
@@ -29,8 +42,13 @@ import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
+/**
+ * Converter to convert jaxb subjob object of command type into subjob component
+ *
+ *@author BITWISE
+ */
 public class CommandSubjobUiConverter extends UiConverter {
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubJobUiConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(CommandSubjobUiConverter.class);
 	private Subjob subjob;
 	
 	public CommandSubjobUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -41,6 +59,7 @@ public class CommandSubjobUiConverter extends UiConverter {
 		subjob = (Subjob) typeBaseComponent;
 	}
 	
+	@Override
 	public void prepareUIXML() {
 		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		super.prepareUIXML();
@@ -60,7 +79,7 @@ public class CommandSubjobUiConverter extends UiConverter {
 				File jobFile = new File(subJobPath.toString());
 				File subJobFile = new File(subjob.getPath().getUri());
 				UiConverterUtil converterUtil = new UiConverterUtil();
-				converterUtil.convertSubjobToUiXML(subJobFile, jobFile, parameterFile);
+				converterUtil.convertSubjobToUiXml(subJobFile, jobFile, parameterFile);
 			}
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException

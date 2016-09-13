@@ -61,7 +61,7 @@ public class UIComponentRepo {
 		return parammeterFactory;
 	}
 
-	public void flusRepository() {
+	public void flushRepository() {
 		componentFactory.clear();
 		componentUiFactory.clear();
 		parammeterFactory.clear();

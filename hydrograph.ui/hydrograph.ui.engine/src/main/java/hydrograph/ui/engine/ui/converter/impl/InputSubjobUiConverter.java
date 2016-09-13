@@ -64,6 +64,7 @@ public class InputSubjobUiConverter extends UiConverter {
 		subjob = (Subjob) typeBaseComponent;
 	}
 	
+	@Override
 	public void prepareUIXML() {
 		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		super.prepareUIXML();
@@ -84,10 +85,10 @@ public class InputSubjobUiConverter extends UiConverter {
 				File jobFile = new File(subJobPath.toString());
 				File subJobFile = new File(subjob.getPath().getUri());
 				UiConverterUtil converterUtil = new UiConverterUtil();
-				subJobContainer = converterUtil.convertSubjobToUiXML(subJobFile, jobFile, parameterFile);
+				subJobContainer = converterUtil.convertSubjobToUiXml(subJobFile, jobFile, parameterFile);
 
 			}
-			Component outputSubjobComponent = SubjobUiConverterUtil.getOutputSubJobConnectorReferance(subJobContainer);
+			Component outputSubjobComponent = SubjobUiConverterUtil.getOutputSubJobConnectorReference(subJobContainer);
 
 			outputSubjobComponent.getProperties().put(Constants.SUBJOB_COMPONENT, uiComponent);
 			propertyMap.put(Constants.OUTPUT_SUBJOB, outputSubjobComponent);
@@ -118,7 +119,7 @@ public class InputSubjobUiConverter extends UiConverter {
 				componentName, propertyMap);
 		
 	}
-	protected void getOutPort(TypeInputComponent inputComponent) {
+	private void getOutPort(TypeInputComponent inputComponent) {
 	logger.debug("Generating OutPut Ports for -{}", componentName);
 	int count=0;
 	if (inputComponent.getOutSocket() != null) {

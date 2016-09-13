@@ -64,7 +64,8 @@ public class OperationSubJobUiConverter extends UiConverter {
 		subjob = (Subjob) typeBaseComponent;
 	}
 	
-	public void prepareUIXML() throws ComponentNotFoundException  {
+	@Override
+	public void prepareUIXML(){
 		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		super.prepareUIXML();
 		IPath subJobPath = SubjobUiConverterUtil.getSubjobPath(subjob.getPath().getUri(), propertyMap);
@@ -84,16 +85,16 @@ public class OperationSubJobUiConverter extends UiConverter {
 				File jobFile = new File(subJobPath.toString());
 				File subJobFile = new File(subjob.getPath().getUri());
 				UiConverterUtil converterUtil = new UiConverterUtil();
-				subJobContainer = converterUtil.convertSubjobToUiXML(subJobFile, jobFile, parameterFile);
+				subJobContainer = converterUtil.convertSubjobToUiXml(subJobFile, jobFile, parameterFile);
 			}
 
-			Component inputSubjobComponent = SubjobUiConverterUtil.getInputSubJobConnectorReferance(subJobContainer);
+			Component inputSubjobComponent = SubjobUiConverterUtil.getInputSubJobConnectorReference(subJobContainer);
 			inputSubjobComponent.getProperties().put(Constants.SUBJOB_COMPONENT, uiComponent);
 			inputSubjobComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE,
 					new LinkedHashMap<String, ComponentsOutputSchema>());
 
 			propertyMap.put(Constants.INPUT_SUBJOB, inputSubjobComponent);
-			Component outputSubjobComponent = SubjobUiConverterUtil.getOutputSubJobConnectorReferance(subJobContainer);
+			Component outputSubjobComponent = SubjobUiConverterUtil.getOutputSubJobConnectorReference(subJobContainer);
 			propertyMap.put(Constants.OUTPUT_SUBJOB, outputSubjobComponent);
 			outputSubjobComponent.getProperties().put(Constants.SUBJOB_COMPONENT, uiComponent);
 			if (outputSubjobComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
@@ -127,33 +128,31 @@ public class OperationSubJobUiConverter extends UiConverter {
 	}
 	
 	private void getInPort(TypeOperationsComponent operationsComponent) {
-	logger.debug("Generating InPut Ports for -{}", componentName);
-	int count=0;
-	if (operationsComponent.getInSocket() != null) {
-		for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
-			uiComponent.engageInputPort(inSocket.getId());
-			currentRepository.getComponentLinkList().add(
-					new LinkingData(inSocket.getFromComponentId(),
-							operationsComponent.getId(), inSocket
-									.getFromSocketId(), inSocket.getId()));
-			count++;
-		}
-		propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY,count);
-		uiComponent.inputPortSettings(count);
-	}
-}
-
-protected void getOutPort(TypeOperationsComponent operationsComponent) {
-	logger.debug("Generating OutPut Ports for -{}", componentName);
-	int count=0;
-	if (operationsComponent.getOutSocket() != null) {
-		for (TypeOperationsOutSocket outSocket : operationsComponent
-				.getOutSocket()) {
-			uiComponent.engageOutputPort(outSocket.getId());
-			count++;
+		logger.debug("Generating InPut Ports for -{}", componentName);
+		int count = 0;
+		if (operationsComponent.getInSocket() != null) {
+			for (TypeBaseInSocket inSocket : operationsComponent.getInSocket()) {
+				uiComponent.engageInputPort(inSocket.getId());
+				currentRepository.getComponentLinkList().add(
+						new LinkingData(inSocket.getFromComponentId(), operationsComponent.getId(), inSocket
+								.getFromSocketId(), inSocket.getId()));
+				count++;
 			}
-		propertyMap.put(Constants.OUTPUT_PORT_COUNT_PROPERTY,count);
-		uiComponent.outputPortSettings(count);
+			propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY, count);
+			uiComponent.inputPortSettings(count);
+		}
 	}
-}
+
+	private void getOutPort(TypeOperationsComponent operationsComponent) {
+		logger.debug("Generating OutPut Ports for -{}", componentName);
+		int count = 0;
+		if (operationsComponent.getOutSocket() != null) {
+			for (TypeOperationsOutSocket outSocket : operationsComponent.getOutSocket()) {
+				uiComponent.engageOutputPort(outSocket.getId());
+				count++;
+			}
+			propertyMap.put(Constants.OUTPUT_PORT_COUNT_PROPERTY, count);
+			uiComponent.outputPortSettings(count);
+		}
+	}
 }

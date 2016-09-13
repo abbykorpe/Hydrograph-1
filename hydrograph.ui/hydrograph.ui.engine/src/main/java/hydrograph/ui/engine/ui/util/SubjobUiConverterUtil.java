@@ -54,6 +54,26 @@ import org.xml.sax.SAXException;
  */
 public class SubjobUiConverterUtil {
 	
+	
+	/**
+	 * @param subJobXMLPath
+	 * @param parameterFilePath
+	 * @param parameterFile
+	 * @param subJobFile
+	 * @param importFromPath
+	 * @param subjobPath
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws JAXBException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws CoreException
+	 * @throws FileNotFoundException
+	 */
 	public static Container createSubjobInSpecifiedFolder(IPath subJobXMLPath, IPath parameterFilePath, IFile parameterFile,
 			IFile subJobFile, IPath importFromPath,String subjobPath) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, JAXBException, ParserConfigurationException,
@@ -63,7 +83,7 @@ public class SubjobUiConverterUtil {
 		IFile xmlFile = ResourcesPlugin.getWorkspace().getRoot().getFile(subJobXMLPath);
 		File file = new File(xmlFile.getLocation().toString());
 		if (file.exists()) {
-			subJobContainer= converterUtil.convertToUiXML(importFromPath.toFile(), subJobFile, parameterFile);
+			subJobContainer= converterUtil.convertToUiXml(importFromPath.toFile(), subJobFile, parameterFile);
 		} else {
 			IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(parameterFilePath.segment(1));
 			IFolder iFolder = iProject.getFolder(subjobPath.substring(0, subjobPath.lastIndexOf('/')));
@@ -71,12 +91,17 @@ public class SubjobUiConverterUtil {
 				iFolder.create(true, true, new NullProgressMonitor());
 			}
 			IFile subjobXmlFile = iProject.getFile(subjobPath);
-			subJobContainer=converterUtil.convertToUiXML(importFromPath.toFile(), subJobFile, parameterFile);
+			subJobContainer=converterUtil.convertToUiXml(importFromPath.toFile(), subJobFile, parameterFile);
 			subjobXmlFile.create(new FileInputStream(importFromPath.toString()), true, new NullProgressMonitor());
 		}
 		return subJobContainer;
 	}
 	
+	/**
+	 * @param subjobPath
+	 * @param propertyMap
+	 * @return
+	 */
 	public static IPath getSubjobPath(String subjobPath, LinkedHashMap<String, Object> propertyMap) {
 		IPath path = null;
 		if(StringUtils.isNotBlank(subjobPath)){
@@ -88,7 +113,12 @@ public class SubjobUiConverterUtil {
 		return path;	
 	}
 	
-	public static Component getOutputSubJobConnectorReferance(Container subJobContainer) {
+	
+	/**
+	 * @param subJobContainer
+	 * @return
+	 */
+	public static Component getOutputSubJobConnectorReference(Container subJobContainer) {
 		for(Component component:subJobContainer.getChildren()){
 			if(StringUtils.equals(Constants.OUTPUT_SOCKET_FOR_SUBJOB, component.getType())){
 				return component;
@@ -97,7 +127,12 @@ public class SubjobUiConverterUtil {
 		return null;
 	}
 
-	public static Component getInputSubJobConnectorReferance(Container container) {
+	
+	/**
+	 * @param container
+	 * @return
+	 */
+	public static Component getInputSubJobConnectorReference(Container container) {
 		for(Component component:container.getChildren()){
 			if(StringUtils.equals(Constants.INPUT_SOCKET_FOR_SUBJOB, component.getType())){
 				return component;
@@ -105,6 +140,15 @@ public class SubjobUiConverterUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * @param uiComponent
+	 * @param container
+	 * @param currentRepository
+	 * @param name_suffix
+	 * @param componentName
+	 * @param propertyMap
+	 */
 	public static void setUiComponentProperties(Component uiComponent, Container container, UIComponentRepo currentRepository, String name_suffix, String componentName, LinkedHashMap<String, Object> propertyMap) {
 		uiComponent.setType(Constants.SUBJOB_ACTION);
 		uiComponent.setCategory(Constants.SUBJOB_COMPONENT_CATEGORY);
@@ -114,11 +158,24 @@ public class SubjobUiConverterUtil {
 		currentRepository.getComponentUiFactory().put(componentName, uiComponent);
 		uiComponent.setProperties(propertyMap);
 	}
+	
+	/**
+	 * @param exception
+	 * @param message
+	 */
 	public static void showMessageBox(Exception exception, String message) {
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);
 		messageBox.setMessage(message + "\n" + exception.getMessage());
 		messageBox.open();
 	}
+	
+	
+	/**
+	 * @param logger
+	 * @param properties
+	 * @param componentName
+	 * @return
+	 */
 	public static Map<String, String> getRunTimeProperties(Logger logger, TypeProperties properties, String componentName) {
 		logger.debug("Generating Subjob Properties for -{}", componentName);
 		Map<String, String> runtimeMap = null;

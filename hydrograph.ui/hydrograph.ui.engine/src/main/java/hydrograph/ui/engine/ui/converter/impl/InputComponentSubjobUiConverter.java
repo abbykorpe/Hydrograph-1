@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 public class InputComponentSubjobUiConverter extends UiConverter {
 	
 	
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(OperationSubJobUiConverter.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputComponentSubjobUiConverter.class);
 	private SubjobInput subjobInput;
 	
 	public InputComponentSubjobUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -47,6 +47,7 @@ public class InputComponentSubjobUiConverter extends UiConverter {
 		subjobInput = (SubjobInput) typeBaseComponent;
 	}
 	
+	@Override
 	public void prepareUIXML() {
 		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		super.prepareUIXML();

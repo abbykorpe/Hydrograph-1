@@ -65,6 +65,7 @@ public class OutputSubjobUiConverter extends UiConverter {
 		subjob = (Subjob) typeBaseComponent;
 	}
 	
+	@Override
 	public void prepareUIXML() {
 		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
 		super.prepareUIXML();
@@ -85,10 +86,10 @@ public class OutputSubjobUiConverter extends UiConverter {
 				File jobFile = new File(subJobPath.toString());
 				File subJobFile = new File(subjob.getPath().getUri());
 				UiConverterUtil converterUtil = new UiConverterUtil();
-				subJobContainer = converterUtil.convertSubjobToUiXML(subJobFile, jobFile, parameterFile);
+				subJobContainer = converterUtil.convertSubjobToUiXml(subJobFile, jobFile, parameterFile);
 			}
 
-			Component inputSubjobComponent = SubjobUiConverterUtil.getInputSubJobConnectorReferance(subJobContainer);
+			Component inputSubjobComponent = SubjobUiConverterUtil.getInputSubJobConnectorReference(subJobContainer);
 			propertyMap.put(Constants.INPUT_SUBJOB, inputSubjobComponent);
 			inputSubjobComponent.getProperties().put(Constants.SUBJOB_COMPONENT, uiComponent);
 			if (inputSubjobComponent.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {

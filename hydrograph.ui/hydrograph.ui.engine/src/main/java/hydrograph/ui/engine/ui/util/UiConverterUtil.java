@@ -103,24 +103,42 @@ public class UiConverterUtil {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	public Container convertToUiXML(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
+	public Container convertToUiXml(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
 			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,
 			ComponentNotFoundException {
 		Container container = getJobContainer(sourceXML, parameterFile);
-		genrateUIXML(container, jobFile, parameterFile);
+		genrateUiXml(container, jobFile, parameterFile);
 		return container;
 		
 	}
 
 
 	
-	public Container convertSubjobToUiXML(File sourceXML, File file, IFile parameterFile) throws InstantiationException,
+	/**
+	 * @param sourceXML
+	 * @param file
+	 * @param parameterFile
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws EngineException
+	 * @throws JAXBException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ComponentNotFoundException
+	 */
+	public Container convertSubjobToUiXml(File sourceXML, File file, IFile parameterFile) throws InstantiationException,
 	IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
 	SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,
 	ComponentNotFoundException {
 		Container container = getJobContainer(sourceXML, parameterFile);
-		genrateSubjobUIXML(container, file, parameterFile);
+		genrateSubjobUiXml(container, file, parameterFile);
 		return container;
 
 }
@@ -214,7 +232,7 @@ public class UiConverterUtil {
 	 * @param jobFile
 	 * @param parameterFile
 	 */
-	private void genrateUIXML(Container container, IFile jobFile, IFile parameterFile) {
+	private void genrateUiXml(Container container, IFile jobFile, IFile parameterFile) {
 		LOGGER.debug("Generating UI-XML");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		String jobXmlData = null;
@@ -228,7 +246,7 @@ public class UiConverterUtil {
 		} catch (CoreException e) {
 			LOGGER.error("Exception occurred while creating UI-XML", e);
 		} finally {
-			componentRepo.flusRepository();
+			componentRepo.flushRepository();
 			try {
 				out.close();
 			} catch (IOException ioe) {
@@ -237,20 +255,20 @@ public class UiConverterUtil {
 		}
 	}
 	
-	private void genrateSubjobUIXML(Container container, File file, IFile parameterFile) {
+	private void genrateSubjobUiXml(Container container, File file, IFile parameterFile) {
 		LOGGER.debug("Generating UI-XML");
-		FileOutputStream fileOuputStream = null;
+		FileOutputStream fileOutputStream = null;
 		try {
 			XStream xs = new XStream();
 			xs.autodetectAnnotations(true);
-			fileOuputStream = new FileOutputStream(file.getPath());
-			xs.toXML(container, fileOuputStream);
-		} catch (IOException e) {
-			LOGGER.error("Exception occurred while creating UI-XML", e);
+			fileOutputStream = new FileOutputStream(file.getPath());
+			xs.toXML(container, fileOutputStream);
+		} catch (IOException ioException) {
+			LOGGER.error("Exception occurred while creating UI-XML", ioException);
 		} finally {
-			componentRepo.flusRepository();
+			componentRepo.flushRepository();
 			try {
-				fileOuputStream.close();
+				fileOutputStream.close();
 			} catch (IOException ioe) {
 				LOGGER.error("IOException occurred while closing output stream", ioe);
 			}
