@@ -114,41 +114,7 @@ public class TransformWidget extends AbstractWidget {
 		transformComposite.attachWidget(eltDefaultButton);
 		getPropagatedSChema();
 		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), outputList);
-		
-		
-		if(!transformMapping.getMappingSheetRows().isEmpty())
-		{
-			List<MappingSheetRow> activeMappingSheetRow=TransformMappingFeatureUtility.INSTANCE.
-					getActiveMappingSheetRow(transformMapping.getMappingSheetRows());
-			if(activeMappingSheetRow.size()==transformMapping.getMappingSheetRows().size())
-			{
-				for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
-			 	{  
-					transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
-			 	}
-				if(!transformMapping.getMapAndPassthroughField().isEmpty()&&
-			 			transformMapping.getMapAndPassthroughField().get(0).getFilterProperty()==null)
-			 	{
-			 		backwardJobComapatabilityCode();	
-			 	}
-				for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
-			 	{
-			 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
-			 	}	
-			 	List<FilterProperties> finalSortedList=SchemaSyncUtility.INSTANCE.
-			 	sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(), 
-			 			transformMapping);
-			 	transformMapping.getOutputFieldList().clear();
-			 	transformMapping.getOutputFieldList().addAll(finalSortedList);
-				
-			}	
-				
-		}else{
-			for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
-		 	{
-		 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
-		 	}
-		}
+		populateMappingOutputFieldIfTargetXmlImported();
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -191,6 +157,51 @@ public class TransformWidget extends AbstractWidget {
 			}
 		});
 		propagateOuputFieldsToSchemaTabFromTransformWidget();
+	}
+
+	private void populateMappingOutputFieldIfTargetXmlImported() {
+		if(!transformMapping.getMappingSheetRows().isEmpty())
+		{
+			List<MappingSheetRow> activeMappingSheetRow=TransformMappingFeatureUtility.INSTANCE.
+					getActiveMappingSheetRow(transformMapping.getMappingSheetRows());
+			if(activeMappingSheetRow.size()==transformMapping.getMappingSheetRows().size())
+			{
+				for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
+			 	{  
+					transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
+			 	}
+				if(!transformMapping.getMapAndPassthroughField().isEmpty()&&
+			 			transformMapping.getMapAndPassthroughField().get(0).getFilterProperty()==null)
+			 	{
+			 		backwardJobComapatabilityCode();	
+			 	}
+				for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+			 	{
+			 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
+			 	}	
+			 	List<FilterProperties> finalSortedList=SchemaSyncUtility.INSTANCE.
+			 	sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(), 
+			 			transformMapping);
+			 	transformMapping.getOutputFieldList().clear();
+			 	transformMapping.getOutputFieldList().addAll(finalSortedList);
+				
+			}	
+				
+		}
+		else if(!transformMapping.getMapAndPassthroughField().isEmpty()&&transformMapping.getOutputFieldList().isEmpty())
+		{
+			if(transformMapping.getMapAndPassthroughField().get(0).getFilterProperty()==null)
+			backwardJobComapatabilityCode();	
+			for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
+		 	{
+		 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
+		 	}	
+			List<FilterProperties> finalSortedList=SchemaSyncUtility.INSTANCE.
+				 	sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(), 
+				 			transformMapping);
+				 	transformMapping.getOutputFieldList().clear();
+				 	transformMapping.getOutputFieldList().addAll(finalSortedList);
+		}
 	}
 	private List<FilterProperties> convertSchemaToFilterProperty(){
 		List<FilterProperties> outputFileds = new ArrayList<>();

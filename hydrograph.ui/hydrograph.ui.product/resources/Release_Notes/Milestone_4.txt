@@ -53,8 +53,8 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 42.#1171 [Shashank karnik] Import Xml : Issues Related to Trasform category Component.
 43.#1186 [Akhilesh Joshi] Trasform Component: Error Fields are Not Getting Highlighted Correctly.
 44.#1137 [Shrirang Kumbhar] View Data Sort : Sorting is not Working on String Type Column When Original Dataset Filter is Applied.
-45.#1197 [Shrirang Kumbhar] Aggregate Component: Output Fields are Getting Removed After Importing the Job.
-46.#1182 [Shrirang Kumbhar] Join Component: Input Count Becomes Zero After Importing the Job.
+45.#1182 [Shrirang Kumbhar] Join Component: Input Count Becomes Zero After Importing the Job.
+46.#1203 [Shashank Karnik] Output field is getting cleared in transform Mapping window on importing target xml.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
