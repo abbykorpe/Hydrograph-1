@@ -1023,7 +1023,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
      	operationalInputFieldTableViewer = setTableViewer(operationalInputFieldTableViewer,
      			 operationalInputFieldTableViewer.getControl().getParent(), new String[] {Messages.INNER_OPERATION_INPUT_FIELD },
  				new ELTFilterContentProvider());
-     	 operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+		if (OSValidator.isMac()) {
+			operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(147);
+		} else {
+			operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+		}
      	 operationalInputFieldTableViewer.setInput(mappingSheetRowForExpression.getInputFields());
      	 operationalInputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalInputFieldTableViewer,
      			 this,mappingSheetRowForExpression));
@@ -1053,7 +1057,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	operationalInputFieldTableViewer = setTableViewer(operationalInputFieldTableViewer,
     			 operationalInputFieldTableViewer.getControl().getParent(), new String[] {Messages.INNER_OPERATION_INPUT_FIELD },
 				new ELTFilterContentProvider());
-    	 operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+    	if (OSValidator.isMac()) {
+			operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(147);
+		} else {
+			operationalInputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+		}
     	 operationalInputFieldTableViewer.setInput(mappingSheetRowForOperationClass.getInputFields());
     	 operationalInputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalInputFieldTableViewer, this,
     			 mappingSheetRowForOperationClass));
@@ -1069,7 +1077,11 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	 operationalOutputFieldTableViewer = setTableViewer(operationalOutputFieldTableViewer,
     			 operationalOutputFieldTableViewer.getControl().getParent(), new String[] {Messages.INNER_OPERATION_OUTPUT_FIELD },
 				new ELTFilterContentProvider());
-    	 operationalOutputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+    	 if (OSValidator.isMac()) {
+    		 operationalOutputFieldTableViewer.getTable().getColumn(0).setWidth(147);
+ 		} else {
+ 			operationalOutputFieldTableViewer.getTable().getColumn(0).setWidth(145);
+ 		}
     	 operationalOutputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalOutputFieldTableViewer, this));
     	 operationalOutputFieldTableViewer.setInput(mappingSheetRowForOperationClass.getOutputList());
     	 operationalOutputFieldTableViewer.setLabelProvider(new ELTFilterLabelProvider());

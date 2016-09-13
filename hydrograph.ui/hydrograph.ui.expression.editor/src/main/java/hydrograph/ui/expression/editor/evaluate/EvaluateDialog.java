@@ -208,6 +208,7 @@ public class EvaluateDialog extends Dialog {
 		expressionEditor.setParent(previousExpressionEditorComposite);
 		expressionEditor.setSize(previousExpressionEditorComposite.getSize().x-18,previousExpressionEditorComposite.getSize().y-5);
 		enableExpressionDialog();
+		expressionEditor.setFocus();
 		return super.close();
 	}
 	
