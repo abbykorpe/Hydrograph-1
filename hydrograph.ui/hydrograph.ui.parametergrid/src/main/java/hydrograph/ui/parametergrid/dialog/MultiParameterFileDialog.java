@@ -46,6 +46,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,15 +64,18 @@ import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.jface.viewers.TableViewerFocusCellManager;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
@@ -673,6 +677,12 @@ public class MultiParameterFileDialog extends Dialog {
 		parameterTableViewer.setContentProvider(new ArrayContentProvider());
 		parameterTableViewer.setData(TABLE_TYPE_KEY, "parameterTableViewer");
 		attachShortcutListner(parameterTableViewer,table_2);
+		TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(parameterTableViewer, new FocusCellOwnerDrawHighlighter(parameterTableViewer));
+		ColumnViewerEditorActivationStrategy activationSupport = new ColumnViewerEditorActivationStrategy(parameterTableViewer);
+		TableViewerEditor.create(parameterTableViewer, focusCellManager, activationSupport, ColumnViewerEditor.TABBING_HORIZONTAL | 
+			    ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | 
+			    ColumnViewerEditor.TABBING_VERTICAL |
+			    ColumnViewerEditor.KEYBOARD_ACTIVATION);
 		final TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(
 				parameterTableViewer, SWT.NONE);
 		ColumnViewerToolTipSupport.enableFor(parameterTableViewer,
@@ -764,7 +774,39 @@ public class MultiParameterFileDialog extends Dialog {
 				editor.grabVertical = true;
 				editor.setEditor(buttonPane, item, cell.getColumnIndex());
 				editor.layout();
-
+				//Added Key Event on Edit Button
+				button.addKeyListener(new KeyListener() {						
+					
+					@Override
+					public void keyReleased(KeyEvent event) {				
+						if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+							ctrlKeyPressed = false;
+						}							
+					}
+					
+					@Override
+					public void keyPressed(KeyEvent event) {
+						if(event.keyCode == SWT.CTRL || event.keyCode == SWT.COMMAND){					
+							ctrlKeyPressed = true;
+						}
+										
+						if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
+							deleteRow(parameterTableViewer);
+						}
+						
+						else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
+							addNewRow(parameterTableViewer);
+						}
+						
+						else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
+							moveRowUp(parameterTableViewer);				
+						}
+						
+						else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
+							moveRowDown(parameterTableViewer);
+						}
+					}
+				});
 				button.addSelectionListener(new SelectionAdapter() {
 
 					@Override
@@ -819,17 +861,13 @@ public class MultiParameterFileDialog extends Dialog {
 	Parameter parameter = new Parameter(
 			MultiParameterFileDialogConstants.DefaultParameter,
 			MultiParameterFileDialogConstants.DefaultValue);
-	if(parameters.size() !=0){
-	parameters.add(parameter);
-	parameterTableViewer.refresh();
-	parameterTableViewer.editElement(parameterTableViewer.getElementAt(parameters.size() - 1), 0);
-	}
-	else
-	{
 		parameters.add(parameter);
 		parameterTableViewer.refresh();
-		parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
-	}
+		if (parameters.size() != 0) {
+			parameterTableViewer.editElement(parameterTableViewer.getElementAt(parameters.size() - 1), 0);
+		} else {
+			parameterTableViewer.editElement(parameterTableViewer.getElementAt(0), 0);
+		}
 	
 	}
 	
@@ -909,7 +947,7 @@ public class MultiParameterFileDialog extends Dialog {
 	}
 	
 	
-	private void attachShortcutListner(final TableViewer nameValueTableViewer,Table table){
+	private void attachShortcutListner(final TableViewer parameterTableViewer,Table table){
 		Control currentControl = table;
 		
 		currentControl.addKeyListener(new KeyListener() {						
@@ -928,19 +966,19 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 								
 				if (ctrlKeyPressed && event.keyCode == Constants.KEY_D) {				
-					deleteRow(nameValueTableViewer);
+					deleteRow(parameterTableViewer);
 				}
 				
 				else if (ctrlKeyPressed && event.keyCode == Constants.KEY_N){
-					addNewRow(nameValueTableViewer);
+					addNewRow(parameterTableViewer);
 				}
 				
 				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_UP){
-					moveRowUp(nameValueTableViewer);				
+					moveRowUp(parameterTableViewer);				
 				}
 				
 				else if (ctrlKeyPressed && event.keyCode == SWT.ARROW_DOWN){
-					moveRowDown(nameValueTableViewer);
+					moveRowDown(parameterTableViewer);
 				}
 			}
 		});
