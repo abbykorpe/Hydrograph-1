@@ -616,17 +616,29 @@ import org.xml.sax.SAXException;
 			buttonSubGroup.numberOfBasicWidgets(4);
 			
 			if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT)){
-				buttonSubGroup.numberOfBasicWidgets(6);
+				buttonSubGroup.numberOfBasicWidgets(7);
+				ELTDefaultLable defaultLable1 = new ELTDefaultLable("");
+				defaultLable1.lableWidth(0);
+				buttonSubGroup.attachWidget(defaultLable1);
 				createPullPropagtedSchemaButton(buttonSubGroup);
 				ELTDefaultLable defaultLable = new ELTDefaultLable("");
 				buttonSubGroup.attachWidget(defaultLable);
 			}
 			
 			if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
-				buttonSubGroup.numberOfBasicWidgets(6);
+				buttonSubGroup.numberOfBasicWidgets(7);
+				ELTDefaultLable defaultLable1 = new ELTDefaultLable("");
+				defaultLable1.lableWidth(0);
+				buttonSubGroup.attachWidget(defaultLable1);
 				createPullInternallyPropagatedSchema(buttonSubGroup);
 				ELTDefaultLable defaultLable = new ELTDefaultLable("");
 				buttonSubGroup.attachWidget(defaultLable);
+			}
+			if(!(StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))&&!(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()))){
+				buttonSubGroup.numberOfBasicWidgets(5);
+				ELTDefaultLable defaultLable1 = new ELTDefaultLable("");
+				defaultLable1.lableWidth(0);
+				buttonSubGroup.attachWidget(defaultLable1);
 			}
 			
 			addAddButton(buttonSubGroup);
@@ -639,7 +651,7 @@ import org.xml.sax.SAXException;
 	
 		private void createPullPropagtedSchemaButton(ELTSchemaSubgroupComposite containerControl) {
 			ELTDefaultButton pullButtonForOuputComponents = new ELTDefaultButton("Pull Schema");
-			pullButtonForOuputComponents.buttonWidth(150);
+			pullButtonForOuputComponents.buttonWidth(120);
 			containerControl.attachWidget(pullButtonForOuputComponents);
 			((Button)pullButtonForOuputComponents.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -772,7 +784,7 @@ import org.xml.sax.SAXException;
 		 */
 		private void createPullInternallyPropagatedSchema(ELTSchemaSubgroupComposite containerControl) {
 			ELTDefaultButton btnPull = new ELTDefaultButton(Messages.PULL_SCHEMA);
-			btnPull.buttonWidth(150);
+			btnPull.buttonWidth(120);
 			containerControl.attachWidget(btnPull);
 			((Button)btnPull.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -798,11 +810,16 @@ import org.xml.sax.SAXException;
 		private void createExternalSchemaSection(Composite containerControl) {
 			ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
 			eltSuDefaultSubgroupComposite.createContainerWidget();
-	
+			eltSuDefaultSubgroupComposite.numberOfBasicWidgets(6);
+			
+			ELTDefaultLable defaultLable = new ELTDefaultLable("");
+			defaultLable.lableWidth(0);
+			eltSuDefaultSubgroupComposite.attachWidget(defaultLable);
+			
 			AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.EXTERNAL_SCHEMA);
 			eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 	
-			AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(200);
+			AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(false).textBoxWidth(228);
 			eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
 	
 			extSchemaPathText = (Text) eltDefaultTextBox.getSWTWidgetControl();
@@ -913,9 +930,13 @@ import org.xml.sax.SAXException;
 		private void addImportExportButtons(Composite containerControl) {
 			ELTDefaultSubgroupComposite importExportComposite = new ELTDefaultSubgroupComposite(containerControl);
 			importExportComposite.createContainerWidget();
-			importExportComposite.numberOfBasicWidgets(2);
+			importExportComposite.numberOfBasicWidgets(3);
 	
-			AbstractELTWidget importButtonWidget = new ELTDefaultButton(Messages.IMPORT_XML).buttonWidth(100);
+			ELTDefaultLable defaultLable = new ELTDefaultLable("");
+			defaultLable.lableWidth(0);
+			importExportComposite.attachWidget(defaultLable);
+			
+			AbstractELTWidget importButtonWidget = new ELTDefaultButton(Messages.IMPORT_XML);
 			importExportComposite.attachWidget(importButtonWidget);
 			importButton = (Button) importButtonWidget.getSWTWidgetControl();
 	
@@ -946,7 +967,7 @@ import org.xml.sax.SAXException;
 				}
 			});
 	
-			AbstractELTWidget exportButtonWidget = new ELTDefaultButton(Messages.EXPORT_XML).buttonWidth(100).grabExcessHorizontalSpace(false);
+			AbstractELTWidget exportButtonWidget = new ELTDefaultButton(Messages.EXPORT_XML).grabExcessHorizontalSpace(false);
 			importExportComposite.attachWidget(exportButtonWidget);
 			exportButton = (Button) exportButtonWidget.getSWTWidgetControl();
 	
