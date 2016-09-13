@@ -354,6 +354,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 					}
 					}
 					refreshOutputTable();
+					TransformMappingFeatureUtility.INSTANCE.
+					setCursorOnDeleteRowForOutputTable(outputFieldViewer, indexs, finalSortedList);
             	}
 			}
 
