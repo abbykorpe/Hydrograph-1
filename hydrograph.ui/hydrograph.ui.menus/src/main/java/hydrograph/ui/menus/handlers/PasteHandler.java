@@ -27,12 +27,15 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 
-/**
- * @author Bitwise
- * Handler to Paste component on canvas and Project Explorer 
- *
- */
 
+
+/**
+ * The Class PasteHandler.
+ * <p>
+ * Handler to Paste component on canvas and Project Explorer 
+ * 
+ * @author Bitwise
+ */
 public class PasteHandler extends AbstractHandler implements IHandler {
 
 	@Override

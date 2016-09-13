@@ -25,12 +25,14 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 
-/**
- *Creates Project Explorer Handler 
- * @author Bitwise
- *
- */
 
+/**
+ * The Class ProjectExplorerHandler.
+ * <p>
+ * Creates Project Explorer Handler. It will display project explorer in the bottom left of the tool.
+ * 
+ * @author Bitwise
+ */
 public class ProjectExplorerHandler extends AbstractHandler implements IHandler {
 	private Logger logger=LogFactory.INSTANCE.getLogger(ConsoleHandler.class);
 	/**

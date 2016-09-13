@@ -26,12 +26,13 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 
-/**
- *Creates Palette Handler 
- * @author Bitwise
- *
- */
 
+/**
+ * The Class PaletteHandler.
+ * <p> Handler for creating components palette.
+ * 
+ * @author Bitwise
+ */
 public class PaletteHandler extends AbstractHandler implements IHandler {
 	private Logger logger=LogFactory.INSTANCE.getLogger(ConsoleHandler.class);
 	/**

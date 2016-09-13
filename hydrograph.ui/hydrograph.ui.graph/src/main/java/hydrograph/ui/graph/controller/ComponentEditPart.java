@@ -242,12 +242,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	public void propertyChange(PropertyChangeEvent evt) {
 
 		String prop = evt.getPropertyName();
-		if (Component.Props.SIZE_PROP.eq(prop)
-				|| Component.Props.LOCATION_PROP.eq(prop) || Component.Props.EXECUTION_STATUS.eq(prop)) {
+		if (Component.Props.SIZE_PROP.equalsTo(prop)
+				|| Component.Props.LOCATION_PROP.equalsTo(prop) || Component.Props.EXECUTION_STATUS.equalsTo(prop)) {
 			refreshVisuals();
-		} else if (Component.Props.OUTPUTS.eq(prop)) {
+		} else if (Component.Props.OUTPUTS.equalsTo(prop)) {
 			refreshSourceConnections();
-		} else if (Component.Props.INPUTS.eq(prop)) {
+		} else if (Component.Props.INPUTS.equalsTo(prop)) {
 			refreshTargetConnections();
 		}
 	}
@@ -351,7 +351,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 
 	private void updateSubjobVersion() {
 		Component currentComponent=getCastedModel();
-		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphIsSubjob()){
+		if(currentComponent!=null && currentComponent.getParent().isCurrentGraphSubjob()){
 			currentComponent.getParent().updateSubjobVersion();
 		}
 	}

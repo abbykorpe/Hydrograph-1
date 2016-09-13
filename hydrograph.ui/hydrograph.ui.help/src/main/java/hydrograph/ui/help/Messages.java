@@ -15,6 +15,12 @@ package hydrograph.ui.help;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * The Class Messages.
+ * This is a message bundle class.
+ * 
+ * @author Bitwise
+ */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
 

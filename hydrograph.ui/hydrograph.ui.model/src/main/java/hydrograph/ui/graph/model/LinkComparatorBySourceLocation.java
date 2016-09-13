@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 
 
 /**
+ * The Class LinkComparatorBySourceLocation.
+ * <p>
  * This class is used to sort the links on basis of link's source terminals
  * 
  * @author Bitwise

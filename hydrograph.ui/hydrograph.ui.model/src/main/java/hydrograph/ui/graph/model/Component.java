@@ -48,15 +48,15 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * The Class Component.
+ * <p>
+ * This is a base class in model tier for all types of Hydrograph components.
  * 
  * @author Bitwise
  */
 public abstract class Component extends Model {
 	
-	
 	/** The Constant logger. */
-	private static final Logger logger = LogFactory.INSTANCE
-			.getLogger(Component.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(Component.class);
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 2587870876576884352L;
@@ -114,13 +114,12 @@ public abstract class Component extends Model {
 		}
 
 		/**
-		 * Eq.
-		 * 
+		 * Checks if given value is equal to this component's property value.		 * 
 		 * @param property
 		 *            the property
 		 * @return true, if successful
 		 */
-		public boolean eq(String property) {
+		public boolean equalsTo(String property) {
 			return this.value.equals(property);
 		}
 	}
@@ -245,7 +244,7 @@ public abstract class Component extends Model {
 	
 	/** The status. */
 	@XStreamOmitField
-	private CompStatus status;
+	private ComponentExecutionStatus status;
 	
 	/**
 	 * Instantiates a new component.
@@ -277,7 +276,7 @@ public abstract class Component extends Model {
 				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
-		status = CompStatus.BLANK;
+		status = ComponentExecutionStatus.BLANK;
 	}
 
 	/**
@@ -374,36 +373,38 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * Returns list of input ports.
-	 *
-	 * @return the inputport terminals
+	 * Returns list of input ports of this component.
+	 * 
+	 * @return
 	 */
 	public List<String> getInputportTerminals() {
 		return inputportTerminals;
 	}
 	
 	/**
-	 * Set input port names.
-	 *
-	 * @param portTerminals the new inputport terminals
+	 * Set input ports for this component.
+	 * 
+	 * @param portTerminals
 	 */
 	public void setInputportTerminals(List<String> portTerminals){
 		this.inputportTerminals=portTerminals;
 	}
 
 	/**
-	 * Returns list of output port.
-	 *
-	 * @return the output port terminals
+	 * 
+	 * Returns list of output ports for this component.
+	 * 
+	 * @return
 	 */
 	public List<String> getOutputPortTerminals() {
 		return outputPortTerminals;
 	}
 	
 	/**
-	 * Set output ports.
-	 *
-	 * @param portTerminals the new output port terminals
+	 * 
+	 * Set output ports for this component.
+	 * 
+	 * @param portTerminals
 	 */
 	public void setOutputPortTerminals(List<String> portTerminals) {
 		this.outputPortTerminals=portTerminals;
@@ -570,8 +571,8 @@ public abstract class Component extends Model {
 	}
 	
 	/**
-	 * Checks if is latest changes in schema.
-	 *
+	 * Checks if there are latest changes in schema.
+	 * 
 	 * @return true, if is latest changes in schema
 	 */
 	public boolean isLatestChangesInSchema() {
@@ -580,18 +581,21 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the latest changes in schema.
-	 *
-	 * @param latestChangesInSchema the new latest changes in schema
+	 * 
+	 * @param latestChangesInSchema
+	 *            the new latest changes in schema
 	 */
 	public void setLatestChangesInSchema(boolean latestChangesInSchema) {
 		this.latestChangesInSchema = latestChangesInSchema;
 	}
 
 	/**
-	 * Increment left side ports.
-	 *
-	 * @param newPortCount the new port count
-	 * @param oldPortCount the old port count
+	 * Increment left side ports i.e. input ports.
+	 * 
+	 * @param newPortCount
+	 *            the new port count
+	 * @param oldPortCount
+	 *            the old port count
 	 */
 	public void incrementLeftSidePorts(int newPortCount, int oldPortCount) {
 
@@ -749,53 +753,54 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * Connect input.
-	 *
-	 * @param c the c
+	 * Connect input to given link.
+	 * 
+	 * @param {@link Link}
 	 */
-	public void connectInput(Link c) {
-		inputLinks.add(c);
-		inputLinksHash.put(c.getTargetTerminal(), inputLinks);
-		updateConnectionProperty(Props.INPUTS.getValue(), c);
+	public void connectInput(Link link) {
+		inputLinks.add(link);
+		inputLinksHash.put(link.getTargetTerminal(), inputLinks);
+		updateConnectionProperty(Props.INPUTS.getValue(), link);
 	}
 
 	/**
-	 * Connect output.
-	 *
-	 * @param c the c
+	 * Connect output to given link.
+	 * 
+	 * @param {{@link Link}
+	 * 
 	 */
-	public void connectOutput(Link c) {
-		if (outputLinksHash.get(c.getSourceTerminal()) != null)
-			c.setLinkNumber(outputLinksHash.get(c.getSourceTerminal()).size());
+	public void connectOutput(Link link) {
+		if (outputLinksHash.get(link.getSourceTerminal()) != null)
+			link.setLinkNumber(outputLinksHash.get(link.getSourceTerminal()).size());
 		else
-			c.setLinkNumber(0);
-		outputLinks.add(c);
-		outputLinksHash.put(c.getSourceTerminal(), outputLinks);
-		updateConnectionProperty(Props.OUTPUTS.getValue(), c);
+			link.setLinkNumber(0);
+		outputLinks.add(link);
+		outputLinksHash.put(link.getSourceTerminal(), outputLinks);
+		updateConnectionProperty(Props.OUTPUTS.getValue(), link);
 	}
 
 	/**
-	 * Disconnect input.
+	 * Disconnect input from given link.
 	 * 
-	 * @param c
-	 *            the c
+	 * @param link
+	 *            the link
 	 */
-	public void disconnectInput(Link c) {
-		inputLinks.remove(c);
-		inputLinksHash.remove(c.getTargetTerminal());
-		updateConnectionProperty(Props.INPUTS.getValue(), c);
+	public void disconnectInput(Link link) {
+		inputLinks.remove(link);
+		inputLinksHash.remove(link.getTargetTerminal());
+		updateConnectionProperty(Props.INPUTS.getValue(), link);
 	}
 
 	/**
-	 * Disconnect output.
+	 * Disconnect output from given link.
 	 * 
-	 * @param c
-	 *            the c
+	 * @param link
+	 *            the link
 	 */
-	public void disconnectOutput(Link c) {
-		outputLinks.remove(c);
-		outputLinksHash.remove(c.getSourceTerminal());
-		updateConnectionProperty(Props.OUTPUTS.getValue(), c);
+	public void disconnectOutput(Link link) {
+		outputLinks.remove(link);
+		outputLinksHash.remove(link.getSourceTerminal());
+		updateConnectionProperty(Props.OUTPUTS.getValue(), link);
 	}
 
 	/**
@@ -818,7 +823,6 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the target connections.
-	 *
 	 * @return the target connections
 	 */
 	public List<Link> getTargetConnections() {
@@ -836,7 +840,7 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * Free input port.
+	 * Free up given input port.
 	 * 
 	 * @param terminal
 	 *            the terminal
@@ -846,7 +850,7 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * Checks if is input port engaged.
+	 * Checks if input port is engaged (connected ).
 	 * 
 	 * @param terminal
 	 *            the terminal
@@ -868,7 +872,7 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * Free output port.
+	 * Free up given output port.
 	 * 
 	 * @param terminal
 	 *            the terminal
@@ -878,7 +882,7 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * Checks if is output port engaged.
+	 * Checks if output port is engaged ( Connected ).
 	 * 
 	 * @param terminal
 	 *            the terminal
@@ -890,8 +894,9 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the properties.
-	 *
-	 * @param properties the properties
+	 * 
+	 * @param properties
+	 *            the properties
 	 */
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
@@ -923,7 +928,6 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the component name.
-	 *
 	 * @return the component name
 	 */
 	public String getComponentName() {
@@ -932,7 +936,6 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the component label.
-	 *
 	 * @return the component label
 	 */
 	public ComponentLabel getComponentLabel() {
@@ -941,8 +944,9 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the component label.
-	 *
-	 * @param componentLabel the new component label
+	 * 
+	 * @param componentLabel
+	 *            the new component label
 	 */
 	public void setComponentLabel(ComponentLabel componentLabel) {
 		this.componentLabel = componentLabel;
@@ -963,9 +967,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * reset if x or y of components are negative.
-	 *
-	 * @param newLocation the new location
+	 * reset if x or y coordinates of components are negative
+	 * 
+	 * @param newLocation
 	 */
 	private void resetLocation(Point newLocation) {
 		if (newLocation.x < 0) {
@@ -1069,8 +1073,8 @@ public abstract class Component extends Model {
 	}
 
 	/**
-	 * Checks if is new instance.
-	 *
+	 * Checks if it's a new instance.
+	 * 
 	 * @return true, if is new instance
 	 */
 	public boolean isNewInstance() {
@@ -1345,12 +1349,14 @@ public abstract class Component extends Model {
 		}
 	}
 	
+	
 	/**
-	 * Input port settings.
-	 *
-	 * @param newPortCount the new port count
+	 * Complete input port settings.
+	 * 
+	 * @param newPortCount
+	 *            the new port count
 	 */
-	public void inputPortSettings(int newPortCount) {
+	public void completeInputPortSettings(int newPortCount) {
        changeInPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
 			Port inPort = new Port(Constants.INPUT_SOCKET_TYPE + (i), Constants.INPUT_SOCKET_TYPE
@@ -1361,12 +1367,14 @@ public abstract class Component extends Model {
 		}
 	}
 	
+	
 	/**
-	 * Output port settings.
-	 *
-	 * @param newPortCount the new port count
+	 * Complete output port settings.
+	 * 
+	 * @param newPortCount
+	 *            the new port count
 	 */
-	public void outputPortSettings(int newPortCount) {
+	public void completeOutputPortSettings(int newPortCount) {
 		changeOutPortCount(newPortCount);
 		for (int i = 0; i < (newPortCount); i++) {
 			Port outPort = new Port(Constants.OUTPUT_SOCKET_TYPE + (i), Constants.OUTPUT_SOCKET_TYPE
@@ -1489,10 +1497,11 @@ public abstract class Component extends Model {
 		watcherTerminals.remove(port);
 	}
 
+	
 	/**
 	 * Clear watchers.
 	 */
-	public void clearWatcherMap() {
+	public void clearWatchers() {
 		watcherTerminals.clear();
 	}
 	
@@ -1540,7 +1549,7 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the component edit part.
-	 *
+	 * 
 	 * @return the component edit part
 	 */
 	public Object getComponentEditPart() {
@@ -1549,8 +1558,9 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the component edit part.
-	 *
-	 * @param componentEditPart the new component edit part
+	 * 
+	 * @param componentEditPart
+	 *            the new component edit part
 	 */
 	public void setComponentEditPart(Object componentEditPart) {
 		this.componentEditPart = componentEditPart;
@@ -1558,30 +1568,32 @@ public abstract class Component extends Model {
 	
 	
 	/**
-	 * Update component execution status.
-	 *
-	 * @param currentStatus the current status
+	 * Update status.
+	 * 
+	 * @param currentStatus
+	 *            the current status
 	 */
 	public void updateStatus(String currentStatus) {
-		status = CompStatus.fromValue(currentStatus);
+		status = ComponentExecutionStatus.fromValue(currentStatus);
 		firePropertyChange(Props.EXECUTION_STATUS.getValue(), null, currentStatus);
 	}
 
 	/**
 	 * Gets the status.
-	 *
+	 * 
 	 * @return the status
 	 */
-	public CompStatus getStatus() {
+	public ComponentExecutionStatus getStatus() {
 		return status;
 	}
 
 	/**
 	 * Sets the status.
-	 *
-	 * @param status the new status
+	 * 
+	 * @param status
+	 *            the new status
 	 */
-	public void setStatus(CompStatus status) {
+	public void setStatus(ComponentExecutionStatus status) {
 		this.status = status;
 	}			  
 
@@ -1635,10 +1647,11 @@ public abstract class Component extends Model {
 	}	
 	
 	/**
-	 * Checks if is wrapper type.
-	 *
-	 * @param clazz the clazz
-	 * @return true, if is wrapper type
+	 * Checks if given class is of wrapper type.
+	 * 
+	 * @param clazz
+	 *            the clazz
+	 * @return true, if it's a wrapper type
 	 */
 	public static boolean isWrapperType(Class<?> clazz) {
 		if (clazz == Boolean.class || clazz == Character.class || clazz == Byte.class || clazz == Short.class

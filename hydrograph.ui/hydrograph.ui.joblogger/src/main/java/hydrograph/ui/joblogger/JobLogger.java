@@ -27,12 +27,14 @@ import java.util.List;
 import org.slf4j.Logger;
 
 
+
 /**
- * 
- * The job logger/loggers manager class
+ * The Class JobLogger.
+ * <p>
+ * Manages Job logging. Job logs will be displayed in console as well as written in the log file. For each job run, it
+ * will log system information of the client machine.
  * 
  * @author Bitwise
- *
  */
 public class JobLogger {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JobLogger.class);

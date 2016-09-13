@@ -14,9 +14,14 @@
  
 package hydrograph.ui.help.aboutDialog;
 
+
 /**
- * NOTE : Do not change/modify values for below constants(not even space) until you know 
- * where it is affecting the behavior 
+ * The Class Constants.
+ * 
+ * <p>
+ * <b> NOTE:</b> Do not change/modify values for below constants(not even space) until you know where it is affecting
+ * the behavior
+ * 
  * @author Bitwise
  */
 public class Constants {

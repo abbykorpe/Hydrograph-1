@@ -62,7 +62,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.internal.about.AboutBundleGroupData;
-import org.eclipse.ui.internal.about.AboutFeaturesButtonManager;
 import org.eclipse.ui.internal.about.AboutItem;
 import org.eclipse.ui.internal.about.AboutTextManager;
 import org.eclipse.ui.internal.about.InstallationDialog;
@@ -71,10 +70,12 @@ import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
 
+
 /**
- *Creates Custom AboutDialog of Application
+ * The Class CustomAboutDialog.
+ * Creates Custom AboutDialog of Hydrograph Application
+ * 
  * @author Bitwise
- *
  */
 public class CustomAboutDialog extends TrayDialog {
 	private static final String ECLIPSE_BUILD_ID = "eclipse.buildId";
@@ -82,7 +83,6 @@ public class CustomAboutDialog extends TrayDialog {
 	private final static int TEXT_MARGIN = 5;
 
 	private final static int DETAILS_ID = IDialogConstants.CLIENT_ID + 1;
-	private final static int HELP_ID = IDialogConstants.HELP_ID;
 
 	private String productName;
 
@@ -91,7 +91,6 @@ public class CustomAboutDialog extends TrayDialog {
 
 	private ArrayList<Image> images = new ArrayList<Image>();
 
-	private AboutFeaturesButtonManager buttonManager = new AboutFeaturesButtonManager();
 
 	private StyledText text;
 

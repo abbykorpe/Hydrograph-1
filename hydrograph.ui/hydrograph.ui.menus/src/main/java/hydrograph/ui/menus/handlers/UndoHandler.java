@@ -24,6 +24,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 
+/**
+ * The Class UndoHandler.
+ * <p>
+ * Handler for Undo functionality in the canvas.
+ * 
+ * @author Bitwise
+ */
 public class UndoHandler extends AbstractHandler implements IHandler{
 
 	@Override

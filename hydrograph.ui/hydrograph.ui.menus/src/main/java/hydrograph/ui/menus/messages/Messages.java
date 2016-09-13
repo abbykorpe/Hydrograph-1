@@ -17,6 +17,8 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * The Class Messages.
+ * <p>
+ * This is a message bundle class.
  * 
  * @author Bitwise
  */

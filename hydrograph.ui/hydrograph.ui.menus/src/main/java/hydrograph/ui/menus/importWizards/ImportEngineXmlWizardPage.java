@@ -55,6 +55,13 @@ import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
 
+/**
+ * The Class ImportEngineXmlWizardPage.
+ * <p>
+ * This wizard page provides actual content of the import engine xml window.
+ * 
+ * @author Bitwise
+ */
 public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ImportEngineXmlWizard.class);
@@ -68,6 +75,14 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 	private IPath parameterFilePath, jobFilePath;
 	private String targetxmlFilePath;
 
+	/**
+	 * Instantiates a new import engine xml wizard page.
+	 * 
+	 * @param pageName
+	 *            the page name
+	 * @param selection
+	 *            the selection
+	 */
 	public ImportEngineXmlWizardPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		setTitle(pageName);
@@ -135,6 +150,9 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 	 * @see org.eclipse.ui.dialogs.ImportEngineXmlWizardPage#createLinkTarget()
 	 */
 
+	/**
+	 * Display error.
+	 */
 	protected void displayError() {
 		setErrorMessage(Messages.SOURCE_EMPTY_ERROR_MESSAGE);
 		setPageComplete(false);
@@ -225,6 +243,13 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 		return valid;
 	}
 
+	/**
+	 * Checks if is files available.
+	 * 
+	 * @param path
+	 *            the path
+	 * @return true, if is files available
+	 */
 	public boolean isFilesAvailable(IPath path) {
 		LOGGER.debug("Checking file availability at path :{}", path);
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();

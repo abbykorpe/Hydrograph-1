@@ -23,12 +23,13 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.slf4j.Logger;
 
+
 /**
- * 
+ * The Class ConsoleLogger.
+ * <p>
  * Class to create Console logger
  * 
  * @author Bitwise
- *
  */
 public class ConsoleLogger extends AbstractJobLogger{
 

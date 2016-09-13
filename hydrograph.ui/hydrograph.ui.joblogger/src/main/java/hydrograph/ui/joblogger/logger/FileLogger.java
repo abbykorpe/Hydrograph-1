@@ -32,12 +32,13 @@ import org.slf4j.Logger;
 
 
 
+
 /**
- * 
+ * The Class FileLogger.
+ * <p>
  * Class to create file logger
  * 
  * @author Bitwise
- *
  */
 public class FileLogger extends AbstractJobLogger{
 	private static final String YYYY_M_MDD_H_HMMSS = "yyyyMMdd_HHmmss";

@@ -18,9 +18,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Model.
+ * <p>
+ * The Base Model class for the Hydrograph components. 
  * 
  * @author Bitwise
  */

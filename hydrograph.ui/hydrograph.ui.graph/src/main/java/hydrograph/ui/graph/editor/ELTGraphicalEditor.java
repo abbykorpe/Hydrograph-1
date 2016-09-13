@@ -476,7 +476,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 				}else{
 															
-					if(((ELTGraphicalEditor)partView).getContainer().isCurrentGraphIsSubjob()){
+					if(((ELTGraphicalEditor)partView).getContainer().isCurrentGraphSubjob()){
 						((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
 					} else{
 						logger.debug("enabling run job button");
@@ -850,7 +850,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 
 	private void setMainGraphDirty(boolean dirty) {
-		if(container.getLinkedMainGraphPath()!=null && container.isCurrentGraphIsSubjob()){
+		if(container.getLinkedMainGraphPath()!=null && container.isCurrentGraphSubjob()){
 			for(IEditorReference editorReference:PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences()){
 				if(StringUtils.equals(editorReference.getTitleToolTip(), container.getLinkedMainGraphPath())){
 					if(editorReference.getEditor(false) instanceof ELTGraphicalEditor);
@@ -1631,7 +1631,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
  
 	public Container deleteSubjobProperties(Container container) {
 		hydrograph.ui.graph.model.Component oldSubjob=null;
-		if (container!=null && container.isCurrentGraphIsSubjob()) {
+		if (container!=null && container.isCurrentGraphSubjob()) {
 
 			for (int i = 0; i < container.getChildren().size(); i++) {
 				if (Constants.INPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
@@ -1648,7 +1648,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private void updateMainGraphOnSavingSubjob() {
 		hydrograph.ui.graph.model.Component subjobComponent=null;
-		if (container != null && container.isCurrentGraphIsSubjob()) {
+		if (container != null && container.isCurrentGraphSubjob()) {
 			for (int i = 0; i < container.getChildren().size(); i++) {
 				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
 					subjobComponent = (hydrograph.ui.graph.model.Component) container.getChildren().get(i)
@@ -1725,11 +1725,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if(jobLevelParamterFiles.size() != getJobLevelParamterFiles().size()){
 			setDirty(true);
 		}
-		container.addJobLevelParamterFiles(jobLevelParamterFiles);
+		container.addJobLevelParameterFiles(jobLevelParamterFiles);
 	}
 	
 	@Override
 	public List<ParameterFile> getJobLevelParamterFiles() {
-		return container.getJobLevelParamterFiles();
+		return container.getJobLevelParameterFiles();
 	}
 }

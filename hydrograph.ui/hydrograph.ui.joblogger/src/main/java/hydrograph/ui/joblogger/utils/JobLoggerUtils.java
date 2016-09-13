@@ -20,12 +20,13 @@ import java.sql.Timestamp;
 
 import org.slf4j.Logger;
 
+
 /**
- * 
+ * The Class JobLoggerUtils.
+ * <p>
  * Job logger utility class
  * 
  * @author Bitwise
- *
  */
 public class JobLoggerUtils {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JobLoggerUtils.class);

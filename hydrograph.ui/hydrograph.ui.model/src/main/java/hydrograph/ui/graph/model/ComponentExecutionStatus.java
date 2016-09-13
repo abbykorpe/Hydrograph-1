@@ -1,11 +1,14 @@
 package hydrograph.ui.graph.model;
 
+
 /**
- * Execution tracking status.
- *
+ * The Enum ComponentExecutionStatus.
+ * <p>
+ * Stores the component execution status values
+ * 
  * @author Bitwise
  */
-public enum CompStatus {
+public enum ComponentExecutionStatus {
 	
 	/** The blank. */
 	BLANK("BLANK"),
@@ -31,7 +34,7 @@ public enum CompStatus {
 	 *
 	 * @param v the v
 	 */
-	CompStatus(String v) {
+	ComponentExecutionStatus(String v) {
         value = v;
     }
 
@@ -50,8 +53,8 @@ public enum CompStatus {
      * @param v the v
      * @return the comp status
      */
-    public static CompStatus fromValue(String v) {
-        for (CompStatus c: CompStatus.values()) {
+    public static ComponentExecutionStatus fromValue(String v) {
+        for (ComponentExecutionStatus c: ComponentExecutionStatus.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

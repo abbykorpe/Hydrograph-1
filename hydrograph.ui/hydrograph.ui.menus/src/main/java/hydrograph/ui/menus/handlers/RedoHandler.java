@@ -24,6 +24,14 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 
+
+/**
+ * The Class RedoHandler.
+ * <p>
+ * The Handler for redo functionality in the canvas.
+ * 
+ * @author Bitwise
+ */
 public class RedoHandler extends AbstractHandler implements IHandler{
 
 	@Override

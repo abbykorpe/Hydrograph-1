@@ -18,7 +18,7 @@ import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.model.CompStatus;
+import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.graph.model.Component.ValidityStatus;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
 import hydrograph.ui.graph.model.PortDetails;
@@ -99,7 +99,7 @@ public class ComponentFigure extends Figure implements Validator {
 	private Runnable timer;
 
 	private String acronym;
-	private CompStatus componentStatus;
+	private ComponentExecutionStatus componentStatus;
 	private LinkedHashMap<String, Object> componentProperties;
 
 	/**
@@ -347,18 +347,18 @@ public class ComponentFigure extends Figure implements Validator {
 		Rectangle rectangle = getBounds().getCopy();
 		if(componentStatus!=null){
 
-			if (componentStatus.equals(CompStatus.BLANK)){
+			if (componentStatus.equals(ComponentExecutionStatus.BLANK)){
 				compStatusImage = null;
-			}else if (componentStatus.equals(CompStatus.PENDING)){
+			}else if (componentStatus.equals(ComponentExecutionStatus.PENDING)){
 				//setBackgroundColor(ELTColorConstants.BG_COMPONENT);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_PENDING_ICON);
-			}else if (componentStatus.equals(CompStatus.RUNNING)){
+			}else if (componentStatus.equals(ComponentExecutionStatus.RUNNING)){
 				//setBackgroundColor(ELTColorConstants.COMP_RUNNING_COLOR);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_RUNNING_ICON);
-			}else if (componentStatus.equals(CompStatus.SUCCESSFUL)){
+			}else if (componentStatus.equals(ComponentExecutionStatus.SUCCESSFUL)){
 				//setBackgroundColor(ELTColorConstants.COMP_COMPLETED_COLOR);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_SUCCESS_ICON);
-			}else if (componentStatus.equals(CompStatus.FAILED)){
+			}else if (componentStatus.equals(ComponentExecutionStatus.FAILED)){
 				//setBackgroundColor(ELTColorConstants.COMP_FAILED_COLOR);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_FAILED_ICON);
 			}
@@ -374,7 +374,7 @@ public class ComponentFigure extends Figure implements Validator {
 	 * @param status
 	 *            the status
 	 */
-	public void updateComponentStatus(CompStatus status){
+	public void updateComponentStatus(ComponentExecutionStatus status){
 		componentStatus = status;
 	}
 	

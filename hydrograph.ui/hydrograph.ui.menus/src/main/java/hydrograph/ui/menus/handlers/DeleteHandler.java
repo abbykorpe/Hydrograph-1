@@ -27,10 +27,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 
+
 /**
+ * The Class DeleteHandler.
+ * <p>
+ * Handler to delete component on canvas and Project Explorer
+ * 
  * @author Bitwise
- * Handler to delete component on canvas and Project Explorer 
- *
  */
 public class DeleteHandler extends AbstractHandler implements IHandler{
 

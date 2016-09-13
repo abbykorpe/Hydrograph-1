@@ -46,7 +46,8 @@ import org.xml.sax.SAXException;
 
 /**
  * The class ComponentXpath
- * Used to create XPaht objects for UI components.
+ * <p>
+ * Used to create XPath objects for UI components.
  * 
  * @author Bitwise
  * 
