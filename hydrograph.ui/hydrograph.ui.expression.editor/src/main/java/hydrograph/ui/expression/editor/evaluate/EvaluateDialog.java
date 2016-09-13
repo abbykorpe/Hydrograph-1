@@ -13,18 +13,25 @@
 
 package hydrograph.ui.expression.editor.evaluate;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -86,10 +93,11 @@ public class EvaluateDialog extends Dialog {
 		Composite fieldTableComposite = new Composite(sashForm, SWT.BORDER);
 		fieldTableComposite.setLayout(new GridLayout(1, false));
 		
-//		createSearchTextBox(fieldTableComposite);
+		createSearchTextBox(fieldTableComposite);
 
-		evalDialogFieldTable = new EvalDialogFieldTable().createFieldTable(fieldTableComposite,(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP));
-		
+		evalDialogFieldTable = new EvalDialogFieldTable().createFieldTable(fieldTableComposite,
+				(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP),
+				(List<FixedWidthGridRow>) expressionEditor.getData(ExpressionEditorDialog.INPUT_FILEDS_SCHEMA_KEY));
 		
 		
 		Composite errorComposite = new Composite(sashForm, SWT.BORDER);
@@ -97,7 +105,6 @@ public class EvaluateDialog extends Dialog {
 		
 		createOutputConsole(errorComposite);
 		sashForm.setWeights(new int[] {101, 263, 140});
-//		sashForm.setWeights(new int[] {177, 232, 177, 122});
 		
 		showOutput(OUTPUT);
 		
@@ -115,6 +122,32 @@ public class EvaluateDialog extends Dialog {
 		searchTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		searchTextBox.setForeground(new Color(null,128,128,128));
 		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+		ExpressionEditorUtil.INSTANCE.addFocusListenerToSearchTextBox(searchTextBox);
+		searchTextBox.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if(!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText())){
+					ViewerFilter filter=new ViewerFilter() {
+						@Override
+						public boolean select(Viewer viewer, Object parentElement, Object element) {
+							if(element!=null && element instanceof FieldNameAndValue){
+								FieldNameAndValue fieldNameAndValue=(FieldNameAndValue) element;
+								if(StringUtils.containsIgnoreCase(fieldNameAndValue.getFieldName(),searchTextBox.getText()) ){
+									return true;
+								}
+							}
+							return false;
+						}
+					};
+					ViewerFilter[] filters={filter};
+					evalDialogFieldTable.getTableViewer().resetFilters();
+					evalDialogFieldTable.getTableViewer().setFilters(filters);
+				}else{
+					evalDialogFieldTable.getTableViewer().resetFilters();
+				}
+			}
+		});
 	}
 
 	
@@ -150,6 +183,8 @@ public class EvaluateDialog extends Dialog {
 		evaluateButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+				evalDialogFieldTable.getTableViewer().resetFilters();
 				EvaluateExpression evaluateExpression=new EvaluateExpression(expressionEditor,outputConsole,evaluateDialog);
 				if(evaluateExpression.isValidExpression()){
 					 try {

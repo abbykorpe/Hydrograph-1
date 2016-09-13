@@ -13,13 +13,17 @@
 
 package hydrograph.ui.expression.editor.enums;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.evaluate.InvalidDataTypeValueException;
 import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HydrographCompletionProposalComputer;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import javax.management.InstanceNotFoundException;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -30,7 +34,7 @@ public enum DataTypes {
 	
 	Integer("I","integer") {
 		@Override
-		protected String getDefaultValue() {
+		protected String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "0";
 		}
 
@@ -45,7 +49,7 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName,FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			try {
 				return java.lang.Integer.parseInt(inputValue);
 			}
@@ -56,7 +60,7 @@ public enum DataTypes {
 	},
 	Float("F","float") {
 		@Override
-		protected String getDefaultValue() {
+		protected String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "1.0";
 		}
 
@@ -71,7 +75,7 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName,FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			try {
 				return java.lang.Float.parseFloat(inputValue);
 			}
@@ -82,7 +86,7 @@ public enum DataTypes {
 	},
 	Double("D","double") {
 		@Override
-		protected String getDefaultValue() {
+		protected String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "1.0";
 		}
 
@@ -97,7 +101,7 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName, FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			try {
 				return java.lang.Double.parseDouble(inputValue);
 			}
@@ -108,7 +112,7 @@ public enum DataTypes {
 	},
 	Long("J","long") {
 		@Override
-		protected String getDefaultValue() {
+		protected String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "1";
 		}
 
@@ -123,7 +127,7 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName, FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			try {
 				return java.lang.Long.parseLong(inputValue);
 			}
@@ -134,7 +138,7 @@ public enum DataTypes {
 	},
 	Short("S","short") {
 		@Override
-		protected String getDefaultValue() {
+		protected String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "1";
 		}
 
@@ -149,7 +153,7 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName, FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			try {
 				return java.lang.Long.parseLong(inputValue);
 			}
@@ -160,7 +164,7 @@ public enum DataTypes {
 	},
 	Boolean("Z","boolean") {
 		@Override
-		public String getDefaultValue() {
+		public String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "false";
 		}
 
@@ -175,7 +179,7 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName, FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			try {
 				return java.lang.Boolean.parseBoolean(inputValue);
 			}
@@ -187,7 +191,7 @@ public enum DataTypes {
 	
 	Void("V","void") {
 		@Override
-		public String getDefaultValue() {
+		public String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "";
 		}
 
@@ -202,14 +206,14 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName, FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			return null;
 		}
 	},
 	
 	String("S","String") {
 		@Override
-		public String getDefaultValue() {
+		public String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
 			return "Hydrograph";
 		}
 
@@ -224,15 +228,26 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
+		protected Object validateValue(String inputValue,String filedName, FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
 			return inputValue;
 		}
 	},
 	
-	Date("Date","Date") {
+	Date("Date", "Date") {
 		@Override
-		public String getDefaultValue() {
-				return "2016-08-12";
+		public String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
+			String defaultDate = null;
+			if (inputFieldSchema != null && StringUtils.isNotBlank(inputFieldSchema.getDateFormat())) {
+				try {
+					SimpleDateFormat dateFormat = new SimpleDateFormat(inputFieldSchema.getDateFormat());
+					defaultDate = dateFormat.format(new java.util.Date());
+				} catch (Exception e) {
+					defaultDate = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT).format(new java.util.Date());
+				}
+			} else {
+				defaultDate = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT).format(new java.util.Date());
+			}
+			return defaultDate;
 		}
 
 		@Override
@@ -246,15 +261,34 @@ public enum DataTypes {
 		}
 
 		@Override
-		protected Object validateValue(String inputValue,String filedName) throws InvalidDataTypeValueException {
-			final String DATE_FORMAT = "yyyy-MM-dd";
-			DateFormat format = new SimpleDateFormat(DATE_FORMAT);
+		protected Object validateValue(String inputValue, String filedName, FixedWidthGridRow inputFieldSchema)	throws InvalidDataTypeValueException {
+			String dateFormat = null;
+			if (inputFieldSchema != null && StringUtils.isNotBlank(inputFieldSchema.getDateFormat())) {
+				dateFormat = valiDateDateFormat(inputFieldSchema.getDateFormat());
+			}
 			try {
-				return format.parse(inputValue);
+				return getParsedDate(inputValue, dateFormat);
+			} catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception, "Invalid value for " + filedName
+						+ ". Required date format is " + dateFormat);
 			}
-			catch (Exception exception) {
-				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Required date format is "+DATE_FORMAT);
+		}
+
+		private java.lang.String valiDateDateFormat(java.lang.String dateFormat) {
+			try {
+				DateFormat format = new SimpleDateFormat(dateFormat);
+				format.setLenient(true);
+			} catch (IllegalArgumentException illegalArgumentException) {
+				return Constants.DEFAULT_DATE_FORMAT;
 			}
+			return dateFormat;
+		}
+
+		private Object getParsedDate(String inputValue, String dateFormat) throws ParseException  {
+			DateFormat format;
+			format = new SimpleDateFormat(dateFormat);
+			format.setLenient(true);
+			return format.parse(inputValue);
 		}
 	};
 	
@@ -262,10 +296,10 @@ public enum DataTypes {
 	private final String reflectionValue;
 	private String dataType;
 
-	protected abstract String getDefaultValue();
+	protected abstract String getDefaultValue(FixedWidthGridRow inputFieldSchema);
 	protected abstract String getDataTypeName();
 	protected abstract Class<?> getDataTypeClass();
-	protected abstract Object validateValue(String inputValue,String fieldName)throws InvalidDataTypeValueException;
+	protected abstract Object validateValue(String inputValue,String fieldName, FixedWidthGridRow inputFieldSchema)throws InvalidDataTypeValueException;
 	
 	DataTypes(String value,String dataType) {
 		this.reflectionValue = value;
@@ -276,20 +310,20 @@ public enum DataTypes {
 		return reflectionValue;
 	}
 
-	public static String getDefaulltValuefromReflectionDataTypeString(String value) {
+	public static String getDefaulltValuefromReflectionDataTypeString(String value,FixedWidthGridRow inputFieldSchema) {
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.reflectionValue, value)) {
-				return dataType.getDefaultValue();
+				return dataType.getDefaultValue(inputFieldSchema);
 			}
 		}
 		
 		return value;
 	}
 	
-	public static String getDefaulltValuefromDataTypesSimpleName(String value) {
+	public static String getDefaulltValuefromDataTypesSimpleName(String value,FixedWidthGridRow inputFieldSchema) {
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.dataType, value)) {
-				return dataType.getDefaultValue();
+				return dataType.getDefaultValue(inputFieldSchema);
 			}
 		}
 		return value;
@@ -315,12 +349,12 @@ public enum DataTypes {
 		return null;
 	}
 	
-	public static Object validateInputeAndGetEquivalentObject(String inputValue,String fieldName,String dataTypeSimpleName) throws InvalidDataTypeValueException{
+	public static Object validateInputeAndGetEquivalentObject(String inputValue,String fieldName,String dataTypeSimpleName, FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException{
 		if(inputValue ==null || StringUtils.equals(Constants.NULL_STRING, inputValue))
 			return null;
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.dataType, dataTypeSimpleName)) {
-				return dataType.validateValue(inputValue, fieldName);
+				return dataType.validateValue(inputValue, fieldName,inputFieldSchema);
 			}
 		}
 		return null;

@@ -14,6 +14,7 @@
 package hydrograph.ui.expression.editor.dialogs;
 
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.color.manager.JavaLineStyler;
@@ -58,6 +59,7 @@ public class ExpressionEditorDialog extends Dialog {
 
 	public static final String FIELD_DATA_TYPE_MAP = "fieldMap";
 	public static final String COMPONENT_NAME_KEY = "component-name";
+	public static final String INPUT_FILEDS_SCHEMA_KEY = "input-field-schema";
 	
 	private StyledText expressionEditorTextBox;
 	private AvailableFieldsComposite availableFieldsComposite;
@@ -75,13 +77,15 @@ public class ExpressionEditorDialog extends Dialog {
 	private SashForm containerSashForm;
 	private SashForm upperSashForm;
 	private ExpressionEditorData expressionEditorData;
+	private List<FixedWidthGridRow> inputFieldSchema;
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
+	 * @param inputFieldSchema 
 	 */
-	public ExpressionEditorDialog(Shell parentShell, ExpressionEditorData expressionEditorData) {
+	public ExpressionEditorDialog(Shell parentShell, ExpressionEditorData expressionEditorData, List<FixedWidthGridRow> inputFieldSchema) {
 
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
@@ -90,6 +94,7 @@ public class ExpressionEditorDialog extends Dialog {
 		javaLineStyler = new JavaLineStyler(selectedInputFields);
 		this.oldExpressionText = expressionEditorData.getExpression();
 		this.expressionEditorData = expressionEditorData;
+		this.inputFieldSchema=inputFieldSchema;
 		CURRENT_INSTANCE = this;
 	}
 
@@ -142,6 +147,7 @@ public class ExpressionEditorDialog extends Dialog {
 		expressionEditorTextBox.setText(oldExpressionText);
 		expressionEditorTextBox.setData(FIELD_DATA_TYPE_MAP, fieldMap);
 		expressionEditorTextBox.setData(COMPONENT_NAME_KEY, expressionEditorData.getComponentName());
+		expressionEditorTextBox.setData(INPUT_FILEDS_SCHEMA_KEY,inputFieldSchema);
 		getShell().setMaximized(true);
 	}
 

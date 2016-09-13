@@ -124,6 +124,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 				Messages.EDIT_BUTTON_LABEL).grabExcessHorizontalSpace(false);
 		runtimeComposite.attachWidget(eltDefaultButton);
 		
+		
 		initialize();
 		
 		setToolTipMessage(Messages.OperationClassBlank);
@@ -132,13 +133,14 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(((Button) expressionRadioButton.getSWTWidgetControl()).getSelection()){
+					List<FixedWidthGridRow> inputFieldSchema=getInputSchema();
 					operationClassProperty.setExpression(true);
 					operationClassProperty.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
 					operationClassProperty.getExpressionEditorData().getSelectedInputFieldsForExpression()
-							.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(null,getInputSchema()));
+							.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(null,inputFieldSchema));
 					LaunchExpressionEditor launchExpressionEditor=new LaunchExpressionEditor();
 					String oldExpression=operationClassProperty.getExpressionEditorData().getExpression();
-					launchExpressionEditor.launchExpressionEditor(operationClassProperty.getExpressionEditorData());
+					launchExpressionEditor.launchExpressionEditor(operationClassProperty.getExpressionEditorData(),inputFieldSchema);
 					if(!StringUtils.equals(operationClassProperty.getExpressionEditorData().getExpression(), oldExpression)){
 						propertyDialogButtonBar.enableApplyButton(true);
 					}

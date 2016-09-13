@@ -14,6 +14,7 @@
 package hydrograph.ui.expression.editor.launcher;
 
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.PathConstant;
@@ -24,6 +25,7 @@ import hydrograph.ui.expression.editor.message.CustomMessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
@@ -42,14 +44,14 @@ public class LaunchExpressionEditor {
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(LaunchExpressionEditor.class);
 	private IClasspathEntry[] oldClasspathEntry=null;
 	
-	public void launchExpressionEditor(ExpressionEditorData expressionEditorData){
+	public void launchExpressionEditor(ExpressionEditorData expressionEditorData, List<FixedWidthGridRow> inputFieldSchema){
 		LOGGER.debug("Initiating creation of Expression Editor");
 		System.gc();
 		if (intialize()) {
 			BuildExpressionEditorDataSturcture.INSTANCE
 					.createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
 			ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(Display.getCurrent()
-					.getActiveShell(), expressionEditorData);
+					.getActiveShell(), expressionEditorData,inputFieldSchema);
 			int returnCode = expressionEditorDialog.open();
 			if (returnCode == 0) {
 				saveProperty(expressionEditorData, expressionEditorDialog.getExpressionText());
