@@ -373,64 +373,38 @@ public abstract class Component extends Model {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Returns list of input ports.
-	 *
-	 * @return the inputport terminals
-=======
-	 * 
 	 * Returns list of input ports of this component.
 	 * 
 	 * @return
->>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public List<String> getInputportTerminals() {
 		return inputportTerminals;
 	}
 	
 	/**
-<<<<<<< HEAD
-	 * Set input port names.
-	 *
-	 * @param portTerminals the new inputport terminals
-=======
-	 * 
 	 * Set input ports for this component.
 	 * 
 	 * @param portTerminals
->>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setInputportTerminals(List<String> portTerminals){
 		this.inputportTerminals=portTerminals;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Returns list of output port.
-	 *
-	 * @return the output port terminals
-=======
 	 * 
 	 * Returns list of output ports for this component.
 	 * 
 	 * @return
->>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public List<String> getOutputPortTerminals() {
 		return outputPortTerminals;
 	}
 	
 	/**
-<<<<<<< HEAD
-	 * Set output ports.
-	 *
-	 * @param portTerminals the new output port terminals
-=======
 	 * 
 	 * Set output ports for this component.
 	 * 
 	 * @param portTerminals
->>>>>>> Rupesh Langarkar:  Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setOutputPortTerminals(List<String> portTerminals) {
 		this.outputPortTerminals=portTerminals;
@@ -597,13 +571,8 @@ public abstract class Component extends Model {
 	}
 	
 	/**
-<<<<<<< HEAD
-	 * Checks if is latest changes in schema.
-	 *
-=======
 	 * Checks if there are latest changes in schema.
 	 * 
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 * @return true, if is latest changes in schema
 	 */
 	public boolean isLatestChangesInSchema() {
@@ -612,33 +581,21 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the latest changes in schema.
-<<<<<<< HEAD
-	 *
-	 * @param latestChangesInSchema the new latest changes in schema
-=======
 	 * 
 	 * @param latestChangesInSchema
 	 *            the new latest changes in schema
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setLatestChangesInSchema(boolean latestChangesInSchema) {
 		this.latestChangesInSchema = latestChangesInSchema;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Increment left side ports.
-	 *
-	 * @param newPortCount the new port count
-	 * @param oldPortCount the old port count
-=======
 	 * Increment left side ports i.e. input ports.
 	 * 
 	 * @param newPortCount
 	 *            the new port count
 	 * @param oldPortCount
 	 *            the old port count
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void incrementLeftSidePorts(int newPortCount, int oldPortCount) {
 
@@ -796,15 +753,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Connect input.
-	 *
-	 * @param c the c
-=======
 	 * Connect input to given link.
 	 * 
 	 * @param {@link Link}
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void connectInput(Link link) {
 		inputLinks.add(link);
@@ -813,16 +764,10 @@ public abstract class Component extends Model {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Connect output.
-	 *
-	 * @param c the c
-=======
 	 * Connect output to given link.
 	 * 
 	 * @param {{@link Link}
 	 * 
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void connectOutput(Link link) {
 		if (outputLinksHash.get(link.getSourceTerminal()) != null)
@@ -878,11 +823,6 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the target connections.
-<<<<<<< HEAD
-	 *
-=======
-	 * 
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 * @return the target connections
 	 */
 	public List<Link> getTargetConnections() {
@@ -954,14 +894,9 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the properties.
-<<<<<<< HEAD
-	 *
-	 * @param properties the properties
-=======
 	 * 
 	 * @param properties
 	 *            the properties
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
@@ -993,11 +928,6 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the component name.
-<<<<<<< HEAD
-	 *
-=======
-	 * 
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 * @return the component name
 	 */
 	public String getComponentName() {
@@ -1006,11 +936,6 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the component label.
-<<<<<<< HEAD
-	 *
-=======
-	 * 
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 * @return the component label
 	 */
 	public ComponentLabel getComponentLabel() {
@@ -1019,14 +944,9 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the component label.
-<<<<<<< HEAD
-	 *
-	 * @param componentLabel the new component label
-=======
 	 * 
 	 * @param componentLabel
 	 *            the new component label
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setComponentLabel(ComponentLabel componentLabel) {
 		this.componentLabel = componentLabel;
@@ -1047,15 +967,9 @@ public abstract class Component extends Model {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * reset if x or y of components are negative.
-	 *
-	 * @param newLocation the new location
-=======
 	 * reset if x or y coordinates of components are negative
 	 * 
 	 * @param newLocation
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	private void resetLocation(Point newLocation) {
 		if (newLocation.x < 0) {
@@ -1159,13 +1073,8 @@ public abstract class Component extends Model {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Checks if is new instance.
-	 *
-=======
 	 * Checks if it's a new instance.
 	 * 
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 * @return true, if is new instance
 	 */
 	public boolean isNewInstance() {
@@ -1442,16 +1351,10 @@ public abstract class Component extends Model {
 	
 	
 	/**
-<<<<<<< HEAD
-	 * Input port settings.
-	 *
-	 * @param newPortCount the new port count
-=======
 	 * Complete input port settings.
 	 * 
 	 * @param newPortCount
 	 *            the new port count
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void completeInputPortSettings(int newPortCount) {
        changeInPortCount(newPortCount);
@@ -1466,16 +1369,10 @@ public abstract class Component extends Model {
 	
 	
 	/**
-<<<<<<< HEAD
-	 * Output port settings.
-	 *
-	 * @param newPortCount the new port count
-=======
 	 * Complete output port settings.
 	 * 
 	 * @param newPortCount
 	 *            the new port count
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void completeOutputPortSettings(int newPortCount) {
 		changeOutPortCount(newPortCount);
@@ -1652,11 +1549,7 @@ public abstract class Component extends Model {
 
 	/**
 	 * Gets the component edit part.
-<<<<<<< HEAD
-	 *
-=======
 	 * 
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 * @return the component edit part
 	 */
 	public Object getComponentEditPart() {
@@ -1665,14 +1558,9 @@ public abstract class Component extends Model {
 
 	/**
 	 * Sets the component edit part.
-<<<<<<< HEAD
-	 *
-	 * @param componentEditPart the new component edit part
-=======
 	 * 
 	 * @param componentEditPart
 	 *            the new component edit part
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void setComponentEditPart(Object componentEditPart) {
 		this.componentEditPart = componentEditPart;
@@ -1680,16 +1568,10 @@ public abstract class Component extends Model {
 	
 	
 	/**
-<<<<<<< HEAD
-	 * Update component execution status.
-	 *
-	 * @param currentStatus the current status
-=======
 	 * Update status.
 	 * 
 	 * @param currentStatus
 	 *            the current status
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public void updateStatus(String currentStatus) {
 		status = ComponentExecutionStatus.fromValue(currentStatus);
@@ -1765,18 +1647,11 @@ public abstract class Component extends Model {
 	}	
 	
 	/**
-<<<<<<< HEAD
-	 * Checks if is wrapper type.
-	 *
-	 * @param clazz the clazz
-	 * @return true, if is wrapper type
-=======
 	 * Checks if given class is of wrapper type.
 	 * 
 	 * @param clazz
 	 *            the clazz
 	 * @return true, if it's a wrapper type
->>>>>>> Rupesh Langarkar: Contd. Javadoc and cleanup changes for plugins: hydrograph.ui.menus, hydrograph.ui.model
 	 */
 	public static boolean isWrapperType(Class<?> clazz) {
 		if (clazz == Boolean.class || clazz == Character.class || clazz == Byte.class || clazz == Short.class
