@@ -40,11 +40,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.internal.corext.codemanipulation.AddCustomConstructorOperation;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 
 
 /**
@@ -219,6 +224,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 
 				if(((Button) operationRadioButton.getSWTWidgetControl()).getSelection()){
 					operationClassProperty.setExpression(false);
+					enableOpertaionFieldButton((Button)e.widget, true);
 				}else
 					operationClassProperty.setExpression(true);
 			}
@@ -235,9 +241,9 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				if(((Button) expressionRadioButton.getSWTWidgetControl()).getSelection()){
 					operationClassProperty.setExpression(true);
+					enableOpertaionFieldButton((Button)e.widget, false);
 				}else
 					operationClassProperty.setExpression(false);
 			}
@@ -245,6 +251,19 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {/*Do-Nothing*/}
 		} );
+
+		((Button) expressionRadioButton.getSWTWidgetControl()).addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				Button exprRadioButton=(Button) expressionRadioButton.getSWTWidgetControl();
+				enableOpertaionFieldButton(exprRadioButton,!operationClassProperty.isExpression());
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e)  {/*Do-Nothing*/}
+		});
+		
 	}
 
 
@@ -253,4 +272,13 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		widgets=widgetList;
 	}
 
+	void enableOpertaionFieldButton( Button radioButton,boolean enableOperation){
+		Composite composite=radioButton.getParent();
+		Group grup=(Group) composite.getParent();
+		Button operationFieldButton=(Button) grup.getData(SingleColumnWidget.SINGLE_COLUMN_WIDGET_KEY);
+		if(operationFieldButton!=null){
+			operationFieldButton.setEnabled(enableOperation);
+		}
+	}
+	
 }

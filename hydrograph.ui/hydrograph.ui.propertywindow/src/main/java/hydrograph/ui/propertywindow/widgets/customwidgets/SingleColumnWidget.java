@@ -36,12 +36,15 @@ import java.util.List;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 
 
 public class SingleColumnWidget extends AbstractWidget {
 
+	public static final String SINGLE_COLUMN_WIDGET_KEY = "single-column-widget";
 	protected String propertyName;
 	private List<String> set;
 	protected SingleColumnGridConfig gridConfig = null;
@@ -82,10 +85,16 @@ public class SingleColumnWidget extends AbstractWidget {
 
 			
 		});
-
+		addDataToGroup(button);
 	}
 
 	
+	private void addDataToGroup(Button button) {
+		Composite composite=(button.getParent());
+		Group grup=(Group) composite.getParent();
+		grup.setData(SINGLE_COLUMN_WIDGET_KEY,button);
+	}
+
 	protected void onDoubleClick() {
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setComponentName(gridConfig.getComponentName());
