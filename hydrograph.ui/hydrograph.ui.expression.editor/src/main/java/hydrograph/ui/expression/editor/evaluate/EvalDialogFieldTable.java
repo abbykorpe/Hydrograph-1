@@ -13,14 +13,15 @@
 
 package hydrograph.ui.expression.editor.evaluate;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.expression.editor.enums.DataTypes;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -40,6 +41,7 @@ public class EvalDialogFieldTable {
 	private List<FieldNameAndValue> propertyList;
 	private TableColumn fieldValueColumn;
 	private TableColumn fieldNameColumn;
+	private List<FixedWidthGridRow> inputFieldsSchema;
 	public static final String FIELD_NAME_PROPERTY = "FIELD_NAME_PROPERTY";
 	public static final String FIELD_DATATYPE_PROPERTY = "FIELD_DATATYPE_PROPERTY";
 	public static final String FIELD_VALUE_PROPERTY = "FIELD_VALUE_PROPERTY";
@@ -48,9 +50,9 @@ public class EvalDialogFieldTable {
 	private static final String[] PROPS = { FIELD_NAME_PROPERTY, FIELD_DATATYPE_PROPERTY ,FIELD_VALUE_PROPERTY };
 	private static final String FIELD_DATATYPE_COLUMN = "Data Type";
 
-	EvalDialogFieldTable createFieldTable(Composite fieldTableComposite,Map<String,Class<?>> fieldMap) {
+	EvalDialogFieldTable createFieldTable(Composite fieldTableComposite,Map<String,Class<?>> fieldMap,List<FixedWidthGridRow> inputFieldsSchema) {
 		
-		
+		this.inputFieldsSchema=inputFieldsSchema;
 		loadDefaultProperties(fieldMap);
 		tableViewer = new TableViewer(fieldTableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
@@ -98,7 +100,8 @@ public class EvalDialogFieldTable {
 		if(fieldMap!=null){
 			for(Entry< String, Class<?>> entry:fieldMap.entrySet()){
 				FieldNameAndValue fieldNameAndValue=new FieldNameAndValue(entry.getKey(), 
-						String.valueOf(DataTypes.getDefaulltValuefromDataTypesSimpleName(entry.getValue().getSimpleName())),entry.getValue().getSimpleName());
+						String.valueOf(DataTypes.getDefaulltValuefromDataTypesSimpleName(entry.getValue().getSimpleName(),getShemaOfField(entry.getKey()))),
+						entry.getValue().getSimpleName());
 				propertyList.add(fieldNameAndValue);
 			}
 		}
@@ -112,14 +115,29 @@ public class EvalDialogFieldTable {
 		String[] fieldNames=new String[propertyList.size()];
 		Object[] fieldValues=new Object[propertyList.size()];
 		for(FieldNameAndValue fieldNameAndValue:propertyList){
-		fieldValues[propertyList.indexOf(fieldNameAndValue)]=DataTypes.validateInputeAndGetEquivalentObject(fieldNameAndValue.getFieldValue(), fieldNameAndValue.getFieldName(), fieldNameAndValue.getDataType());
-		fieldNames[propertyList.indexOf(fieldNameAndValue)]=fieldNameAndValue.getFieldName();
+			fieldValues[propertyList.indexOf(fieldNameAndValue)] = DataTypes.validateInputeAndGetEquivalentObject(
+					fieldNameAndValue.getFieldValue(), fieldNameAndValue.getFieldName(),
+					fieldNameAndValue.getDataType(),getShemaOfField(fieldNameAndValue.getFieldName()));
+			fieldNames[propertyList.indexOf(fieldNameAndValue)] = fieldNameAndValue.getFieldName();
 		}
 		return new Object[]{fieldNames,fieldValues};
 	}
 	
+	
+	
 	TableViewer getTableViewer() {
 		return tableViewer;
+	}
+	
+	private FixedWidthGridRow getShemaOfField(String fieldName) {
+		if (inputFieldsSchema != null) {
+			for (FixedWidthGridRow inputField : inputFieldsSchema) {
+				if (StringUtils.equals(inputField.getFieldName(), fieldName)) {
+					 return inputField;
+				}
+			}
+		}
+		return null;
 	}
 	
 }

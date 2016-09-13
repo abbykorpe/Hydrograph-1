@@ -106,18 +106,6 @@ public class FilterUiConverter extends TransformUiConverter{
 				        }
 			     }
 			  }
-			 else if(object instanceof TypeTransformExpression)
-			 {
-				 TypeTransformExpression transformExpression=(TypeTransformExpression) object;
-				 if(transformExpression.getInputFields()!=null)
-				 {
-					for(TypeInputField inputFileds:transformExpression.getInputFields().getField())
-					{
-						componentOperationFileds.add(inputFileds.getName());
-			        }
-					 
-				 }	 
-			 }	 
 			}
 			return componentOperationFileds;
 	}

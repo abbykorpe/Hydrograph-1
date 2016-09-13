@@ -22,6 +22,8 @@ public class Constants {
 	public static final String PACKAGE_NAME = "hydrograph.engine.transformation.standardfunctions";
 	public static final String FIELD_SEPRATOR_FOR_DRAG_DROP = "#";
 	public static final String EXPRESSION_EDITOR_PLUGIN_ID = "hydrograph.ui.expression.editor";
+	public static final String DEFAULT_DATE_FORMAT="yyyy-MM-dd";
+	
 	public static final String EMPTY_STRING = "";
 	public static final String OPENING_BRACKET = "(";
 	public static final String SEMICOLON = ";";
@@ -34,6 +36,7 @@ public class Constants {
 	public static final String SPACE = " ";
 	public static final String ASTRISK = "*";
 	public static final String COLON = ":";
+
 	
 	public static final String ANTLR_JAR_FILE_NAME = "antlr4-runtime";
 	public static final String BEAN_SHELLJAR_FILE_NAME = "bsh-";
