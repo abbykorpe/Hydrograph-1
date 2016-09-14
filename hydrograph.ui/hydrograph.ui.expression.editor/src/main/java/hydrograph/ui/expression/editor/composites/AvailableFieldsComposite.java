@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.composites;
 
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
@@ -117,7 +118,12 @@ public class AvailableFieldsComposite extends Composite {
 		table.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				availableFieldsColumn.setWidth(table.getSize().x-4);
+				if(OSValidator.isMac()){
+					availableFieldsColumn.setWidth(table.getSize().x-2);
+				}else{
+					availableFieldsColumn.setWidth(table.getSize().x-4);
+				}
+				
 			}
 		});
 	}

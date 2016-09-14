@@ -70,12 +70,14 @@ public class FilterUiConverter extends TransformUiConverter{
 	private OperationClassProperty getOperationClassOrExpression() {
 		OperationClassProperty operationClassProperty=null;
 		String clazz=null;
-		
 		if(filter.getOperationOrExpression()!=null && filter.getOperationOrExpression().size()!=0){
-//			clazz=filter.getOperationOrExpression().get(0).getClazz();
+		
 		    if(filter.getOperationOrExpression().get(0) instanceof TypeTransformOperation)
 		    {	
-			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.isParameter(clazz),false,null);
+		    	TypeTransformOperation transformOperation=(TypeTransformOperation) filter.getOperationOrExpression().get(0);
+		    	clazz=transformOperation.getClazz();
+		    ExpressionEditorData expressionEditorData=new ExpressionEditorData("",uiComponent.getComponentName());	
+			operationClassProperty=new OperationClassProperty(getOperationClassName(clazz),clazz, ParameterUtil.isParameter(clazz),false,expressionEditorData);
 		    }
 		    else if(filter.getOperationOrExpression().get(0) instanceof TypeTransformExpression)
 		    {
