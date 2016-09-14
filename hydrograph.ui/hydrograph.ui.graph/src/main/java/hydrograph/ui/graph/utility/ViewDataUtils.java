@@ -124,4 +124,15 @@ public class ViewDataUtils {
 		}
 		return false;
 	}
+	
+	/**
+	 * The function will return timeStamp in milliseconds.
+	 *
+	 * @return String
+	 */
+	public String getTimeStamp(){
+		long milliSeconds = System.currentTimeMillis();
+	    String timeStampLong = Long.toString(milliSeconds);
+		return timeStampLong;
+	}
 }

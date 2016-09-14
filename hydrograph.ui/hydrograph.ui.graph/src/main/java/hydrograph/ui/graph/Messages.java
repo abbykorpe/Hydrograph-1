@@ -57,6 +57,7 @@ public class Messages extends NLS {
 	public static String DEBUG_ALL;
 	public static String ADD_WATCH_POINT_TEXT;
 	public static String WATCH_RECORD_TEXT;
+	public static String VIEW_DATA_CURRENT_RUN_TEXT;
 	public static String REMOVE_WATCH_POINT_TEXT;
 	public static String RECORD_LIMIT;
 	public static String LIMIT_VALUE;

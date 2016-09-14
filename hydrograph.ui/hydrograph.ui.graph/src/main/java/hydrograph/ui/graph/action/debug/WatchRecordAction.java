@@ -76,7 +76,7 @@ public class WatchRecordAction extends SelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("ViewData Records");
+		setText(Messages.WATCH_RECORD_TEXT);
 		setId(Constants.WATCH_RECORD_ID);
 		setEnabled(true);
 		dataViewerMap = new HashMap<>();
@@ -222,7 +222,6 @@ public class WatchRecordAction extends SelectionAction {
 		
 		String tmpId = dataUniqueIdDialog.getSelectedUniqueJobId();
 		Job selectedJob = null;
-		System.out.println("Vied Data SelectionId:"+dataUniqueIdDialog.getSelectedUniqueJobId());
 		for(Map.Entry<String, List<Job>> entry1 : jobDetails1.entrySet()){
 			if(consoleName.equalsIgnoreCase(entry1.getKey())){
 				List<Job> jdList = entry1.getValue();

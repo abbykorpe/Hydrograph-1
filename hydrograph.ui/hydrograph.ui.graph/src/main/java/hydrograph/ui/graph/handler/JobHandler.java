@@ -15,6 +15,7 @@ package hydrograph.ui.graph.handler;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -89,12 +89,9 @@ public class JobHandler extends AbstractHandler {
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 		
 		String uniqueJobId = getUniqueJobId();
-		System.out.println("JobId:" + uniqueJobId);
-		int counter = getRunCount();
-		counter = counter + 1;
-		uniqueJobId = uniqueJobId + "_" + counter;
+		String timeStamp = ViewDataUtils.INSTANCE.getTimeStamp();
+		uniqueJobId = uniqueJobId + "_" + timeStamp;
 		setUniqueJobId(uniqueJobId);
-		setJobRunCounter(counter);
 		
 		if(runConfigDialog.isDebug()){
 			new DebugHandler().execute(runConfigDialog);
@@ -173,24 +170,4 @@ public class JobHandler extends AbstractHandler {
 		}
 	}
 	
-	private void setJobRunCounter(int runCount){
-		IEditorPart editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		ELTGraphicalEditor eltGraphicalEditor = (ELTGraphicalEditor)editorPart;
-		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
-				eltGraphicalEditor.getContainer().setJobRunCount(runCount);
-		}
-		if(!editorPart.isDirty()){
-			editorPart.doSave(null);
-		}
-	}
-	
-	private int getRunCount(){
-		int runCount = 0;
-		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
-			runCount = eltGraphicalEditor.getContainer().getJobRunCount();
-			return runCount;
-		}
-		return runCount;
-	}
 }

@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 /**
@@ -49,7 +50,7 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 	@Override
 	protected void init() {
 		super.init();
-		setText("Current Job Run");
+		setText(Messages.VIEW_DATA_CURRENT_RUN_TEXT);
 		setId(Constants.CURRENT_VIEW_DATA_ID);
 		setEnabled(true);
 		
@@ -103,12 +104,22 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 		}
 	}
 	
+	/**
+	 * Gets the component canvas.
+	 *
+	 * @return the component canvas
+	 */
+	private DefaultGEFCanvas getComponentCanvas() {		
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
+			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		else
+			return null;
+	}
 
 	@Override
 	public void run() {
 		// Check if job is executed in debug mode
-				DefaultGEFCanvas defaultGEFCanvas = ViewDataUtils.INSTANCE.getComponentCanvas();
-				Job job = JobManager.INSTANCE.getPreviouslyExecutedJobs().get(defaultGEFCanvas.getActiveProject() + "." + defaultGEFCanvas.getJobName());
+				Job job = JobManager.INSTANCE.getPreviouslyExecutedJobs().get(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
 				if(job==null){
 					MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.FORGOT_TO_EXECUTE_DEBUG_JOB);
 					return;

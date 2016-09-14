@@ -37,7 +37,6 @@ import hydrograph.ui.graph.action.DeleteAction;
 import hydrograph.ui.graph.action.GraphRuntimePropertiesAction;
 import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.action.debug.AddWatcherAction;
-import hydrograph.ui.graph.action.debug.PriorViewDataAction;
 import hydrograph.ui.graph.action.debug.RemoveWatcherAction;
 import hydrograph.ui.graph.action.debug.ViewDataCurrentJobAction;
 import hydrograph.ui.graph.action.debug.WatchRecordAction;
@@ -791,9 +790,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
-		action = new PriorViewDataAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
 	}
 
 
@@ -1283,7 +1279,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE
 				.getPreviouslyExecutedJobs().get(jobId));
 
-		deleteDebugFiles(jobId);
+		//deleteDebugFiles(jobId);
 		enableRunningJobResource() ;
 	}
 	

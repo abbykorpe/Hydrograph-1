@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Shell;
 public class ViewDataUniqueIdDialog extends Dialog{
 	
 	private List<Job> jobDetails;
-	private Button[] radioButton = new Button[5];
 	private String selectedUniqueJobId;
 	private Button button1;
 
@@ -42,23 +41,23 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		Composite composite = new Composite(container, SWT.BORDER);
 		composite.setLayout(new RowLayout(SWT.VERTICAL));
 
-		Label lblNewLabel = new Label(composite, SWT.CENTER);
-		lblNewLabel.setLayoutData(new RowData(137, 21));
-		lblNewLabel.setText("ViewData history");
 
 		Composite portComposite = new Composite(composite, SWT.BORDER);
-		portComposite.setLayoutData(new RowData(436, 110));
-		portComposite.setBounds(10, 10, 200, 300);
+		portComposite.setLayoutData(new RowData(512, 130));
 		
-		int y = 3;
-			for(Job str : jobDetails){
-				String timeStamp = getTimeStamp(str.getUniqueJobId());
-				buttonWidget(portComposite, SWT.RADIO, new int[] {10, y, 230, 20}, str.getUniqueJobId() /*+" | "+timeStamp*/);
-				labelWidget(portComposite, SWT.None, new int[] {240, y, 130, 20}, timeStamp);
-				String mode = getJobExecutionMode(str.isRemoteMode());
-				labelWidget(portComposite, SWT.None, new int[] {380, y, 180, 20}, mode);
-				y = y + 20;
-			}
+		buttonWidget(portComposite, SWT.None, new int[] {26, 2, 254, 20}, "Job Id");
+		buttonWidget(portComposite, SWT.None, new int[] {280, 2, 130, 20}, "Time Stamp");
+		buttonWidget(portComposite, SWT.None, new int[] {410, 2, 100, 20}, "Execution Mode");
+		
+		int y = 26;
+		for(Job job : jobDetails){
+			String timeStamp = getTimeStamp(job.getUniqueJobId());
+			buttonWidget(portComposite, SWT.RADIO, new int[] {10, y, 270, 20}, job.getUniqueJobId());
+			labelWidget(portComposite, SWT.None, new int[] {282, y + 2, 130, 20}, timeStamp);
+			String mode = getJobExecutionMode(job.isRemoteMode());
+			labelWidget(portComposite, SWT.None|SWT.CENTER, new int[] {412, y + 2, 100, 20}, mode);
+			y = y + 20;
+		}
 
 		return super.createDialogArea(parent);
 	}
@@ -76,6 +75,7 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		Button button = new Button(parent, style);
 		button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
 		button.setText(value);
+		button.setToolTipText(value);
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
