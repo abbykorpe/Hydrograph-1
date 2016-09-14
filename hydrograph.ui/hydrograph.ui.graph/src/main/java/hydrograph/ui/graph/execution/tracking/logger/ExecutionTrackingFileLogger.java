@@ -22,6 +22,8 @@ import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.logging.execution.tracking.ExecutionTrackingLogger;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +32,38 @@ import org.eclipse.core.runtime.Platform;
 import org.slf4j.Logger;
 
 
+class LastExecutionStatus{
+	private int statusNumber;
+	private ExecutionStatus executionStatus;
+	
+	public LastExecutionStatus(int statusNumber, ExecutionStatus executionStatus) {
+		super();
+		this.statusNumber = statusNumber;
+		this.executionStatus = executionStatus;
+	}
+
+	public int getStatusNumber() {
+		return statusNumber;
+	}
+
+	public ExecutionStatus getExecutionStatus() {
+		return executionStatus;
+	}
+	
+	@Override
+	public String toString() {
+		return "LastExecutionStatus [statusNumber=" + statusNumber + ", executionStatus=" + executionStatus + "]";
+	}	
+}
+
 /**
  * The Class ExecutionTrackingFileLogger use to show as well as save execution tracking log
  */
 public class ExecutionTrackingFileLogger {
+	
+	private static final String TIMESTAMP_FORMAT = "MM.dd.yyyy HH.mm.ss";
+	private static final String SUBMISSION_TIME = "Submission time: ";
+	private static final String JOB_ID = "Job ID: ";
 	
 	/** The Constant ExecutionTrackingLogFileExtention. */
 	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".log";
@@ -46,7 +76,7 @@ public class ExecutionTrackingFileLogger {
 	/** The job tracking log directory. */
 	private String jobTrackingLogDirectory;;
 
-	private Map<String,ExecutionStatus> lastExecutionStatus;
+	private Map<String,LastExecutionStatus> lastExecutionStatusMap;
 	
 	/**
 	 * Instantiates a new execution tracking file logger.
@@ -55,7 +85,7 @@ public class ExecutionTrackingFileLogger {
 
 		jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
 				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);			
-		lastExecutionStatus = new HashMap<>();
+		lastExecutionStatusMap = new HashMap<>();
 		createJobTrackingLogDirectory();
 	}
 
@@ -82,8 +112,8 @@ public class ExecutionTrackingFileLogger {
 	}
 
 	public void removeLastExecutionStatus(String jobID){
-		if(lastExecutionStatus.get(jobID)!=null){
-			lastExecutionStatus.remove(jobID);
+		if(lastExecutionStatusMap.get(jobID)!=null){
+			lastExecutionStatusMap.remove(jobID);
 		}
 	}
 	
@@ -95,19 +125,49 @@ public class ExecutionTrackingFileLogger {
 	 */
 	public void log(String uniqJobId,ExecutionStatus executionStatus, boolean isLocalMode){
 		
-		if(lastExecutionStatus.get(uniqJobId)!=null && executionStatus.equals(lastExecutionStatus.get(uniqJobId))){
-			return;
+		String header=null;
+		if(lastExecutionStatusMap.get(uniqJobId)==null){
+			lastExecutionStatusMap.put(uniqJobId, new LastExecutionStatus(0, executionStatus));
+			header = getHeader(executionStatus);
+		}else{
+			header = null;
+			if(executionStatus.equals(lastExecutionStatusMap.get(uniqJobId).getExecutionStatus())){
+				return;
+			}			
+			lastExecutionStatusMap.put(uniqJobId, new LastExecutionStatus(lastExecutionStatusMap.get(uniqJobId).getStatusNumber() + 1, executionStatus));
 		}
-		lastExecutionStatus.put(uniqJobId, executionStatus);
+		
+		Logger executionTrackingLogger = getExecutionStatusLogger(uniqJobId, isLocalMode);
+		
+		if(!StringUtils.isBlank(header)){
+			executionTrackingLogger.debug(header);
+		}
 		
 		String executionStatusString = getExecutionStatusInString(executionStatus);
 		if(StringUtils.isBlank(executionStatusString)){
 			return;
 		}
-		
-		Logger executionTrackingLogger = getExecutionStatusLogger(uniqJobId, isLocalMode);
 		executionTrackingLogger.debug(executionStatusString);
 	}
+
+
+	private String getHeader(ExecutionStatus executionStatus) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(JOB_ID);
+		stringBuilder.append(executionStatus.getJobId() + " | ");
+		stringBuilder.append(SUBMISSION_TIME);
+		
+		String timeStamp = getTimeStamp();
+		stringBuilder.append(timeStamp + "\n");
+		return stringBuilder.toString();
+	}
+
+
+	private String getTimeStamp() {
+		String timeStamp = new SimpleDateFormat(TIMESTAMP_FORMAT).format(new Date());
+		return timeStamp;
+	}
+
 
 	/**
 	 * Gets the execution status logger.
@@ -143,18 +203,21 @@ public class ExecutionTrackingFileLogger {
 		if(executionStatus==null){
 			return null;
 		}
-		stringBuilder.append("Job ID: " + executionStatus.getJobId() + "\n");
-		stringBuilder.append("Job Type: " + executionStatus.getType() + "\n");
-		
+
 		for(ComponentStatus componentStatus : executionStatus.getComponentStatus()){
-			stringBuilder.append("-------------------------------------\n");
-			stringBuilder.append("Component ID: " + componentStatus.getComponentId() + "\n");
-			//stringBuilder.append("Component Name: " + componentStatus.getComponentName() + "\n");
-			stringBuilder.append("Current Status: " + componentStatus.getCurrentStatus() + "\n");
-			stringBuilder.append("Processed record count: " + componentStatus.getProcessedRecordCount().toString() + "\n");
+			
+			Map<String, Long> processCounts = componentStatus.getProcessedRecordCount();
+			
+			for(String portID: processCounts.keySet()){
+				stringBuilder.append(lastExecutionStatusMap.get(executionStatus.getJobId()).getStatusNumber() + " | ");
+				stringBuilder.append(getTimeStamp() + " | ");
+				stringBuilder.append(componentStatus.getComponentId() + " | ");
+				stringBuilder.append(portID + " | ");
+				stringBuilder.append(componentStatus.getCurrentStatus() + " | ");
+				stringBuilder.append(processCounts.get(portID) + "\n");
+			}
 		}
-		
-		stringBuilder.append("============================================================================\n");		
+				
 		return stringBuilder.toString();
 	}
 
@@ -162,6 +225,6 @@ public class ExecutionTrackingFileLogger {
 	 * Dispose logger.
 	 */
 	public void disposeLogger(){
-		//TODO - to be implement
+		//TODO - to be implemented
 	}
 }
