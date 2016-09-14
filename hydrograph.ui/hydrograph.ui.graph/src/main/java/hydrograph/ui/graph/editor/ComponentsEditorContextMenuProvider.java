@@ -15,6 +15,7 @@ package hydrograph.ui.graph.editor;
 
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.action.debug.ViewDataActionMenu;
 import hydrograph.ui.graph.action.debug.WatcherMenuAction;
 import hydrograph.ui.graph.action.subjob.SubMenuAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -80,7 +81,15 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
         watcherAction[1] = getAction(Constants.REMOVE_WATCH_POINT_ID);
         WatcherMenuAction watcherMenu = new WatcherMenuAction(watcherAction, Constants.WATCHER_ACTION,Constants.WATCHER_ACTION_TEXT, true); //action to add watch points
          
-        IAction actionWatchRecords = getAction(Constants.WATCH_RECORD_ID);// action to view debug data
+        
+        IAction[] viewDataActions = new IAction[2];
+        viewDataActions[0] = getAction(Constants.CURRENT_VIEW_DATA_ID);
+        viewDataActions[1] = getAction(Constants.WATCH_RECORD_ID);
+        ViewDataActionMenu viewDataActionMenu = new ViewDataActionMenu(viewDataActions, "View Data", "View Data", true);
+        //WatcherMenuAction viewDataActionMenu = new WatcherMenuAction(viewDataActions, Constants.WATCHER_ACTION,Constants.WATCHER_ACTION_TEXT, true); //action to add watch points
+        
+        
+        //IAction actionWatchRecords = getAction(Constants.WATCH_RECORD_ID);// action to view debug data
         IAction componentHelpAction=getAction(Constants.HELP_ID);
         IAction componentPropertiesAction=getAction(Constants.COMPONENT_PROPERTIES_ID);
         
@@ -96,7 +105,8 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subJobMenu);
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.GRAPH_PROPERTY));
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
-		menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
+		//menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);
+		menu.appendToGroup(GEFActionConstants.GROUP_REST, viewDataActionMenu);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST,componentPropertiesAction);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, componentHelpAction);
 		
@@ -109,6 +119,11 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		if(watcherMenu.getActiveOperationCount()== 0){
 			watcherMenu.setEnabled(false);
 		}
+		
+		if(viewDataActionMenu.getActiveOperationCount() == 0){
+			viewDataActionMenu.setEnabled(false);
+		}
+		
 	}
 	
 	private IAction getAction(String actionId) {

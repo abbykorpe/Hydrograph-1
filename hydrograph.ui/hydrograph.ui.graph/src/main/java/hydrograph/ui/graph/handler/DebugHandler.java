@@ -160,7 +160,7 @@ public class DebugHandler{
 			
 		try {
 			
-			uniqueJobID= eltGraphicalEditor.getUniqueJobId();
+			uniqueJobID= eltGraphicalEditor.getContainer().getUniqueJobId() +"_"+ eltGraphicalEditor.getContainer().getJobRunCount();
 			currentJobPath = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, Constants.DEBUG_EXTENSION);
 			currentJobName = currentJobIPath.lastSegment().replace(Constants.JOB_EXTENSION, "");
 			currentJobIPath = currentJobIPath.removeLastSegments(1).append(currentJobPath);

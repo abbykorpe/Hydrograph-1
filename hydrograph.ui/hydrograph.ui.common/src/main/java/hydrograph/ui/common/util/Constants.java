@@ -187,6 +187,11 @@ public class Constants {
 	 * Debug required constants 
 	 */
 	
+	public static final String CURRENT_VIEW_DATA_ID = "currentJobViewDataId";
+	public static final String PRIOR_VIEW_DATA_ID = "priorViewDataId";
+	
+	
+	
 	public static final String WATCHER_ACTION = "Watch Point";
 	public static final String WATCHER_ACTION_TEXT = "Add watch";
 	public static final String ADD_WATCH_POINT_ID = "watchPointId";

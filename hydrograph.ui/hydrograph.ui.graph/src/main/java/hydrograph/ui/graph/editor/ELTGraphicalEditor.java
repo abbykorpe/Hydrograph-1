@@ -37,7 +37,9 @@ import hydrograph.ui.graph.action.DeleteAction;
 import hydrograph.ui.graph.action.GraphRuntimePropertiesAction;
 import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.action.debug.AddWatcherAction;
+import hydrograph.ui.graph.action.debug.PriorViewDataAction;
 import hydrograph.ui.graph.action.debug.RemoveWatcherAction;
+import hydrograph.ui.graph.action.debug.ViewDataCurrentJobAction;
 import hydrograph.ui.graph.action.debug.WatchRecordAction;
 import hydrograph.ui.graph.action.subjob.SubJobAction;
 import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
@@ -785,6 +787,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
+		action = new ViewDataCurrentJobAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action = new PriorViewDataAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
 	}
 
 
@@ -883,13 +892,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
-		
-		try {
-			generateUniqueJobId();
-			getContainer().setUniqueJobId(uniqueJobId);
-		} catch (NoSuchAlgorithmException exception) {
-			logger.error("NoSuchAlgorithmException", exception);
-		}
 		
 		if(this.uniqueJobId!=null){
 			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(this.uniqueJobId);
@@ -1081,12 +1083,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void doSaveAs() {
-		try {
-			generateUniqueJobId();
-			getContainer().setUniqueJobId(uniqueJobId);
-		} catch (NoSuchAlgorithmException exception) {
-			logger.error("NoSuchAlgorithmException", exception);
-		}
 		String jobId = getActiveProject() + "." + getJobName();
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE.getPreviouslyExecutedJobs().get(jobId));
 		
@@ -1116,8 +1112,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void saveJob(IFile file) {
 		
 		try {
-			generateUniqueJobId();
-			getContainer().setUniqueJobId(uniqueJobId);
+			if(getContainer().getUniqueJobId() == null){
+				generateUniqueJobId();
+				getContainer().setUniqueJobId(uniqueJobId);
+			}
 			if(container!=null)
 				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 			else

@@ -12,14 +12,12 @@
  ******************************************************************************/
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,37 +86,21 @@ public class JobHandler extends AbstractHandler {
 	
 	public void executeJob()
 	{
-		int count = 0;
 		RunConfigDialog runConfigDialog = getRunConfiguration();
-		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		
-		System.out.println("JobName:" + consoleName);
 		String uniqueJobId = getUniqueJobId();
 		System.out.println("JobId:" + uniqueJobId);
+		int counter = getRunCount();
+		counter = counter + 1;
+		uniqueJobId = uniqueJobId + "_" + counter;
+		setUniqueJobId(uniqueJobId);
+		setJobRunCounter(counter);
 		
 		if(runConfigDialog.isDebug()){
-				int countJobIdFrequency = Collections.frequency(list, consoleName);
-				uniqueJobId = uniqueJobId + "_" + (countJobIdFrequency+1);
-				list.add(consoleName);
-				setUniqueJobId(uniqueJobId);
 			new DebugHandler().execute(runConfigDialog);
 		}
 		else{
-			int countJobIdFrequency = Collections.frequency(list, consoleName);
-			if(countJobIdFrequency > 0){
-				int index = uniqueJobId.lastIndexOf('_');
-				uniqueJobId = uniqueJobId.substring(0, index);
-				count = countJobIdFrequency + 1;
-				uniqueJobId = uniqueJobId + "_" + (count);
-			}else{
-				count = countJobIdFrequency + 1;
-				uniqueJobId = uniqueJobId + "_" + (count);
-			}
-			list.add(consoleName);
-			setUniqueJobId(uniqueJobId);
-			
 			new RunJobHandler().execute(runConfigDialog);
-			setJobRunCounter(count);
 		}
 	}
 
@@ -133,7 +115,7 @@ public class JobHandler extends AbstractHandler {
 		return runConfigDialog;
 	}
 	
-private boolean confirmationFromUser() {
+	private boolean confirmationFromUser() {
 		
 		MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(),Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE, null,
 				Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB, MessageDialog.QUESTION, new String[] { "Yes",
@@ -174,23 +156,11 @@ private boolean confirmationFromUser() {
 		return retValue;
 	}
 
-	/**
-	 * Gets the component canvas.
-	 *
-	 * @return the component canvas
-	 */
-	private DefaultGEFCanvas getComponentCanvas() {		
-		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
-			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		else
-			return null;
-	}
-	
 	private String getUniqueJobId(){
 		String jobId = "";
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
-			jobId = eltGraphicalEditor.getUniqueJobId();
+			jobId = eltGraphicalEditor.getContainer().getUniqueJobId();
 			return jobId;
 		}
 		return jobId;
@@ -212,5 +182,15 @@ private boolean confirmationFromUser() {
 		if(!editorPart.isDirty()){
 			editorPart.doSave(null);
 		}
+	}
+	
+	private int getRunCount(){
+		int runCount = 0;
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+			runCount = eltGraphicalEditor.getContainer().getJobRunCount();
+			return runCount;
+		}
+		return runCount;
 	}
 }
