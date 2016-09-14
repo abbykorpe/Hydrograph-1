@@ -1227,10 +1227,7 @@ public abstract class Component extends Model {
 						clonedArrayList = new ArrayList<>();
 						List orignalList = (ArrayList) entry.getValue();
 						if (!orignalList.isEmpty() && String.class.isAssignableFrom(orignalList.get(0).getClass())) {
-							 for(int i=0;i<orignalList.size();i++)
-						     {
 						    	 clonedArrayList.addAll(orignalList);
-						     } 
 							
 						} else {
 							ArrayList<JoinConfigProperty>  joinConfigList= (ArrayList<JoinConfigProperty>) orignalList ;

@@ -59,6 +59,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 48.#1185 [Ashika Holkar] Ok/Apply Buttons on Properties Window are Not Working Properly
 49.#1205 [Shrirang Kumbhar] Faced Duplicate key value issue ,if existing job updated to add the new flow to clone component. 
 50.#175 [Rushikesh Pawale] Fixed alignment issue of Schema tab window.
+51.#1216[Nitin Gupta] Filter Component: Operation Fields are Not Getting Populated Correctly After Copy Pasting the Component. 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
