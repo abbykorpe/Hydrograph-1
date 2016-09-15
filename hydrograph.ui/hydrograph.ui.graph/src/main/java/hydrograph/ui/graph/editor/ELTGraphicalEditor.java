@@ -889,6 +889,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
 		
+		
+		try {
+			if(StringUtils.isEmpty(getContainer().getUniqueJobId())){
+				String uniqueJobID = generateUniqueJobId();
+				getContainer().setUniqueJobId(uniqueJobID);
+			}
+		} catch (NoSuchAlgorithmException exception) {
+			logger.error("Failed to generate Unique Job Id", exception);
+		}
+		
 		if(this.uniqueJobId!=null){
 			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(this.uniqueJobId);
 		}else{

@@ -54,6 +54,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.TextUtilities;
@@ -151,8 +152,7 @@ public class UiConverterUtil {
 		
 		Container container = new Container();
 		container.setUniqueJobId(graph.getUniqueJobId());
-		int count = Integer.parseInt(graph.getRunCounter());
-		container.setJobRunCount(count);
+		container.setJobRunCount(0);
 		
 		List<TypeBaseComponent> children = graph.getInputsOrOutputsOrStraightPulls();
 		if (children != null && !children.isEmpty()) {
@@ -354,6 +354,7 @@ public class UiConverterUtil {
 		}
 	}
 
+	
 	private void storeParameterData(IFile parameterFile, String jobXmlData) {
 		LOGGER.debug("Creating Parameter(i.e *properties) File at {}", parameterFile.getFullPath());
 		CanvasDataAdapter canvasDataAdapter = new CanvasDataAdapter(jobXmlData);
