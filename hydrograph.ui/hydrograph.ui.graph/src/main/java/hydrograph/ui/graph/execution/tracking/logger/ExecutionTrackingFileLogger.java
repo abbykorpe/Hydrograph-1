@@ -62,7 +62,7 @@ class LastExecutionStatus{
 public class ExecutionTrackingFileLogger {
 	
 	private static final String EXECUTION_STATUS_RECORD_SEPARATOR = " | ";
-	private static final String TIMESTAMP_FORMAT = "MM.dd.yyyy HH.mm.ss";
+	private static final String TIMESTAMP_FORMAT = "MM/dd/yyyy HH:mm:ss";
 	private static final String SUBMISSION_TIME = "Submission time: ";
 	private static final String JOB_ID = "Job ID: ";
 	
