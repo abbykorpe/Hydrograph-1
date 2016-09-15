@@ -61,6 +61,7 @@ class LastExecutionStatus{
  */
 public class ExecutionTrackingFileLogger {
 	
+	private static final String EXECUTION_STATUS_RECORD_SEPARATOR = " | ";
 	private static final String TIMESTAMP_FORMAT = "MM.dd.yyyy HH.mm.ss";
 	private static final String SUBMISSION_TIME = "Submission time: ";
 	private static final String JOB_ID = "Job ID: ";
@@ -154,7 +155,7 @@ public class ExecutionTrackingFileLogger {
 	private String getHeader(ExecutionStatus executionStatus) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(JOB_ID);
-		stringBuilder.append(executionStatus.getJobId() + " | ");
+		stringBuilder.append(executionStatus.getJobId() + EXECUTION_STATUS_RECORD_SEPARATOR);
 		stringBuilder.append(SUBMISSION_TIME);
 		
 		String timeStamp = getTimeStamp();
@@ -209,11 +210,11 @@ public class ExecutionTrackingFileLogger {
 			Map<String, Long> processCounts = componentStatus.getProcessedRecordCount();
 			
 			for(String portID: processCounts.keySet()){
-				stringBuilder.append(lastExecutionStatusMap.get(executionStatus.getJobId()).getStatusNumber() + " | ");
-				stringBuilder.append(getTimeStamp() + " | ");
-				stringBuilder.append(componentStatus.getComponentId() + " | ");
-				stringBuilder.append(portID + " | ");
-				stringBuilder.append(componentStatus.getCurrentStatus() + " | ");
+				stringBuilder.append(lastExecutionStatusMap.get(executionStatus.getJobId()).getStatusNumber() + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(getTimeStamp() + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(componentStatus.getComponentId() + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(portID + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(componentStatus.getCurrentStatus() + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(processCounts.get(portID) + "\n");
 			}
 		}

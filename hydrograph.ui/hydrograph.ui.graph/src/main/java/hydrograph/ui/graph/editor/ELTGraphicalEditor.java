@@ -220,6 +220,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private static final Color palatteTextColor=new Color(null,51,51,51);
 	
 	
+	private static final String JOB_ID_STRING_SEPARATOR = "_";
+	
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -981,7 +983,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		    String timeStampLong = Long.toString(milliSeconds);
 		    
 		    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat("_"+timeStampLong) + "_" + timeStamp;
+		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat(JOB_ID_STRING_SEPARATOR+timeStampLong) + JOB_ID_STRING_SEPARATOR + timeStamp;
 		    
 		    return uniqueJobId;
 	}
