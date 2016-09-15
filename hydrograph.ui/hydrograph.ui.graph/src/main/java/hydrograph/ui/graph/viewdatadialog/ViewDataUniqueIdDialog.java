@@ -45,7 +45,7 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		Composite portComposite = new Composite(composite, SWT.BORDER);
 		portComposite.setLayoutData(new RowData(512, 130));
 		
-		buttonWidget(portComposite, SWT.None, new int[] {26, 2, 254, 20}, "Job Id");
+		buttonWidget(portComposite, SWT.None, new int[] {4, 2, 276, 20}, "Job Id");
 		buttonWidget(portComposite, SWT.None, new int[] {280, 2, 130, 20}, "Time Stamp");
 		buttonWidget(portComposite, SWT.None, new int[] {410, 2, 100, 20}, "Execution Mode");
 		
@@ -119,7 +119,7 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		String jobUniqueId = jobId;
 		
 		String[] s1 = jobUniqueId.split("_");
-		timeStamp = s1[s1.length-2];
+		timeStamp = s1[s1.length-1];
 		long times = Long.parseLong(timeStamp);
 		SimpleDateFormat dateFormat=new SimpleDateFormat("dd MMM yyyy HH:mm:ss z");
 		timeStamp = dateFormat.format(new Date(times));

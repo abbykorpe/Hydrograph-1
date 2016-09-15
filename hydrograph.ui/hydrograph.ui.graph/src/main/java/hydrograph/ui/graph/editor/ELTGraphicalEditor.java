@@ -1279,21 +1279,22 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		DataViewerUtility.INSTANCE.closeDataViewerWindows(JobManager.INSTANCE
 				.getPreviouslyExecutedJobs().get(jobId));
 
-		//deleteDebugFiles(jobId);
+		deleteDebugFiles(jobId);
 		enableRunningJobResource() ;
 	}
 	
 	private void deleteDebugFiles(String jobID) {
 		Job job = DebugHandler.getJob(jobID);
 		deleteDebugFileFromWorkspace();
-		
 		if(job == null){
 			logger.debug("current job {} wasn't found in Debughandler's map",jobID);
 			return ;
 		}
-		deleteSchemaAndDataViewerFiles();
-		deleteBasePathDebugFiles(job);
-		DebugHandler.getJobMap().remove(jobID);
+		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
+			deleteSchemaAndDataViewerFiles();
+			deleteBasePathDebugFiles(job);
+			DebugHandler.getJobMap().remove(jobID);
+		}
 	}
 
 	private void deleteDebugFileFromWorkspace() {
