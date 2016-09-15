@@ -710,14 +710,17 @@ import org.xml.sax.SAXException;
 			if(returnCode!=SWT.CANCEL){
 				if (!schemaGridRowList.isEmpty()) {
 					if ( returnCode== SWT.YES ) {
-						for (GridRow gridRow : copiedList){
-							GridRow schemaGridRow = componentsOutputSchema.getSchemaGridRow(gridRow);
+						Iterator<GridRow> itr= copiedList.iterator();
+						Iterator <GridRow> itr1= schema.getGridRow().iterator();
+						schemaGridRowList.removeAll(schemaGridRowList);
+						while (itr.hasNext() && itr1.hasNext()){
+							GridRow schemaGridRow = componentsOutputSchema.getSchemaGridRow(itr1.next());
 							if (schemaGridRow == null){
-								schemaGridRowList.remove(gridRow);
+								schemaGridRowList.remove(itr.next());
 							}
 							else{
 								//if "Yes" is clicked in pull schema then it should update the data type etc. 
-								schemaGridRowList.set(schemaGridRowList.indexOf(gridRow),schemaGridRow);
+								schemaGridRowList.add(schemaGridRow);
 							}
 						}
 					}
@@ -766,10 +769,15 @@ import org.xml.sax.SAXException;
 		private boolean isAnyUpdateAvailableOnPropagatedSchema(ComponentsOutputSchema componentsOutputSchema) {
 			GridRow propagatedGridRow = null;
 			if (this.schemaGridRowList.size() == componentsOutputSchema.getFixedWidthGridRowsOutputFields().size()) {
-				for (GridRow gridRowOfSchemaGrid : this.schemaGridRowList) {
-					propagatedGridRow = componentsOutputSchema.getSchemaGridRow(gridRowOfSchemaGrid);
+				List<FixedWidthGridRow> list=componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+				
+				Iterator <GridRow> itr=this.schemaGridRowList.iterator();
+				Iterator <FixedWidthGridRow> itr1=list.iterator();
+				while(itr.hasNext() && itr1.hasNext())
+				{
+					propagatedGridRow = componentsOutputSchema.getSchemaGridRow(itr1.next());
 					if (propagatedGridRow == null || ( propagatedGridRow != null
-							&& !SchemaPropagationHelper.INSTANCE.isGridRowEqual(gridRowOfSchemaGrid, propagatedGridRow)) ){
+							&& !SchemaPropagationHelper.INSTANCE.isGridRowEqual(itr.next(), propagatedGridRow)) ){
 						return true;
 					}
 				}
