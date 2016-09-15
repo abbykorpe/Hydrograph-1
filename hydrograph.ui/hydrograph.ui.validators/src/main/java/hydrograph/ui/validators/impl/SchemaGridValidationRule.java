@@ -99,9 +99,11 @@ public class SchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(StringUtils.isNotBlank(gridRow.getPrecision()) && StringUtils.isNotBlank(gridRow.getScale())){
+			if(StringUtils.isNotBlank(gridRow.getScale())){
 				try{
-					precision = Integer.parseInt(gridRow.getPrecision());
+					if(StringUtils.isNotEmpty(gridRow.getPrecision())){
+						precision = Integer.parseInt(gridRow.getPrecision());
+					}
 				}
 				catch(NumberFormatException exception){
 					logger.debug("Failed to parse the precision ", exception);
@@ -118,8 +120,7 @@ public class SchemaGridValidationRule implements IValidator {
 			}
 			
 			if(DATA_TYPE_BIG_DECIMAL.equalsIgnoreCase(gridRow.getDataTypeValue())){
-				if(StringUtils.isBlank(gridRow.getScale()) || scale<0 || precision<=scale 
-						|| !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
+				if(StringUtils.isBlank(gridRow.getScale()) || scale<0 || !(gridRow.getScale().matches(REGULAR_EXPRESSION_FOR_NUMBER))){
 					errorMessage = "Scale should be positive integer.";
 					return false;
 				}

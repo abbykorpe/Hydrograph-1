@@ -156,6 +156,13 @@ public class JobDetails {
 	public boolean isRemote() {
 		return isRemote;
 	}
+	
+	
+
+	public void setUniqueJobID(String uniqueJobID) {
+		this.uniqueJobID = uniqueJobID;
+	}
+
 
 	@Override
 	public String toString() {

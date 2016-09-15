@@ -15,14 +15,19 @@ package hydrograph.ui.graph.handler;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -33,6 +38,9 @@ import org.eclipse.ui.PlatformUI;
  * @author Bitwise
  */
 public class JobHandler extends AbstractHandler {
+
+	private Map<String, String> map = new HashMap<>();
+	private List<String> list = new ArrayList<>();
 	
 	/**
 	 * Instantiates a new job handler.
@@ -79,6 +87,12 @@ public class JobHandler extends AbstractHandler {
 	public void executeJob()
 	{
 		RunConfigDialog runConfigDialog = getRunConfiguration();
+		
+		String uniqueJobId = getUniqueJobId();
+		String timeStamp = ViewDataUtils.INSTANCE.getTimeStamp();
+		uniqueJobId = uniqueJobId + "_" + timeStamp;
+		setUniqueJobId(uniqueJobId);
+		
 		if(runConfigDialog.isDebug()){
 			new DebugHandler().execute(runConfigDialog);
 		}
@@ -98,7 +112,7 @@ public class JobHandler extends AbstractHandler {
 		return runConfigDialog;
 	}
 	
-private boolean confirmationFromUser() {
+	private boolean confirmationFromUser() {
 		
 		MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(),Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE, null,
 				Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB, MessageDialog.QUESTION, new String[] { "Yes",
@@ -139,4 +153,21 @@ private boolean confirmationFromUser() {
 		return retValue;
 	}
 
+	private String getUniqueJobId(){
+		String jobId = "";
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+			jobId = eltGraphicalEditor.getContainer().getUniqueJobId();
+			return jobId;
+		}
+		return jobId;
+	}
+	
+	private void setUniqueJobId(String uniqueJobId){
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+				eltGraphicalEditor.setUniqueJobId(uniqueJobId);
+		}
+	}
+	
 }

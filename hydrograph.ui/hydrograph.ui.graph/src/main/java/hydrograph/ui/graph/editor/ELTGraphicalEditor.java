@@ -38,6 +38,7 @@ import hydrograph.ui.graph.action.GraphRuntimePropertiesAction;
 import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.action.debug.AddWatcherAction;
 import hydrograph.ui.graph.action.debug.RemoveWatcherAction;
+import hydrograph.ui.graph.action.debug.ViewDataCurrentJobAction;
 import hydrograph.ui.graph.action.debug.WatchRecordAction;
 import hydrograph.ui.graph.action.subjob.SubJobAction;
 import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
@@ -83,11 +84,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -787,6 +786,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
+		action = new ViewDataCurrentJobAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
 	}
 
 
@@ -885,7 +888,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
-
+		
 		if(this.uniqueJobId!=null){
 			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(this.uniqueJobId);
 		}else{
@@ -905,6 +908,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			
 			saveParameters();
 			updateMainGraphOnSavingSubjob();
+			
 		} catch (Exception e) {
 				logger.error(METHOD_NAME, e);
 				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
@@ -982,8 +986,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		    long milliSeconds = System.currentTimeMillis();
 		    String timeStampLong = Long.toString(milliSeconds);
 		    
-		    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		    /*String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat(JOB_ID_STRING_SEPARATOR+timeStampLong) + JOB_ID_STRING_SEPARATOR + timeStamp;
+		   */
+		    this.uniqueJobId="Job_".concat(""+secureRandom.hashCode()).concat("_"+timeStampLong);
 		    
 		    return uniqueJobId;
 	}
@@ -1082,6 +1088,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		IFile file=opeSaveAsDialog();
 		saveJob(file);
 		copyParameterFile(currentParameterMap);
+		
 	}
 
 
@@ -1101,6 +1108,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void saveJob(IFile file) {
 		
 		try {
+			if(getContainer().getUniqueJobId() == null){
+				generateUniqueJobId();
+				getContainer().setUniqueJobId(uniqueJobId);
+			}
 			if(container!=null)
 				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 			else
@@ -1275,14 +1286,15 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void deleteDebugFiles(String jobID) {
 		Job job = DebugHandler.getJob(jobID);
 		deleteDebugFileFromWorkspace();
-		
 		if(job == null){
 			logger.debug("current job {} wasn't found in Debughandler's map",jobID);
 			return ;
 		}
-		deleteSchemaAndDataViewerFiles();
-		deleteBasePathDebugFiles(job);
-		DebugHandler.getJobMap().remove(jobID);
+		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
+			deleteSchemaAndDataViewerFiles();
+			deleteBasePathDebugFiles(job);
+			DebugHandler.getJobMap().remove(jobID);
+		}
 	}
 
 	private void deleteDebugFileFromWorkspace() {
@@ -1737,5 +1749,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public List<ParameterFile> getJobLevelParamterFiles() {
 		return container.getJobLevelParameterFiles();
+	}
+	
+	public void setUniqueJobId(String uniqueJobId){
+		this.uniqueJobId = uniqueJobId;
+	}
+	
+	public String getUniqueJobId(){
+		return uniqueJobId;
 	}
 }

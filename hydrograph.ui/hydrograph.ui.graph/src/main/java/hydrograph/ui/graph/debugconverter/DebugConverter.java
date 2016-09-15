@@ -19,7 +19,6 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debug.config.Debug;
 import hydrograph.ui.graph.debug.config.DebugPlugin;
-import hydrograph.ui.graph.debug.config.Limit;
 import hydrograph.ui.graph.debug.config.ViewData;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
@@ -66,7 +65,7 @@ public class DebugConverter {
 		 
 		//debug.setDebugPlugin(debugPlugin);
 		ViewData viewData = null;
-		Limit limit = null;
+		//Limit limit = null;
 		 
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
@@ -84,7 +83,7 @@ public class DebugConverter {
 					if(!map.isEmpty()){
 						for(Entry<String, Long> entrySet: map.entrySet()){
 							viewData = new ViewData();
-							limit = new Limit();
+							//limit = new Limit();
 							
 							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
 								String componentId_socketId = DebugHelper.INSTANCE.getSubgraphComponent(component);
@@ -93,8 +92,8 @@ public class DebugConverter {
 								String socketId = data[1];
 								viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
 								viewData.setOutSocketId(socketId);
-								limit.setValue(entrySet.getValue());
-								viewData.setLimit(limit);
+								//limit.setValue(entrySet.getValue());
+								//viewData.setLimit(limit);
 							}else{
 								viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
 								viewData.setOutSocketId(entrySet.getKey());
@@ -105,8 +104,8 @@ public class DebugConverter {
 								}else{
 									viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
 								}
-								limit.setValue(entrySet.getValue());
-								viewData.setLimit(limit);
+								//limit.setValue(entrySet.getValue());
+								//viewData.setLimit(limit);
 							}
 								
 							debug.getViewData().add(viewData);

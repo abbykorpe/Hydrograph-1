@@ -33,6 +33,7 @@ import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.graph.utility.MessageBox;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
@@ -47,7 +48,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -281,11 +281,7 @@ public class JobManager {
 
 		String uniqueJobID = "";
 		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		try {
-			uniqueJobID = eltGraphicalEditor.generateUniqueJobId();
-		} catch (NoSuchAlgorithmException e) {
-			logger.error(e.getMessage(), e);
-		}
+		uniqueJobID = eltGraphicalEditor.getUniqueJobId();
 		job.setUniqueJobId(uniqueJobID);
 		job.setUsername(runConfigDialog.getUsername());
 		job.setPassword(clusterPassword);
@@ -390,9 +386,11 @@ public class JobManager {
 
 		gefCanvas.disableRunningJobResource();
 		
-		DataViewerUtility.INSTANCE.deletePreviousRunsDataviewCsvXmlFiles(previouslyExecutedJobs.get(job.getConsoleName()));
+		/*DataViewerUtility.INSTANCE.deletePreviousRunsDataviewCsvXmlFiles(previouslyExecutedJobs.get(job.getConsoleName()));
 		DataViewerUtility.INSTANCE.deletePreviousRunsBasePathDebugFiles(previouslyExecutedJobs.get(job.getConsoleName()));
-		DataViewerUtility.INSTANCE.closeDataViewerWindows(previouslyExecutedJobs.get(job.getConsoleName()));
+		DataViewerUtility.INSTANCE.closeDataViewerWindows(previouslyExecutedJobs.get(job.getConsoleName()));*/
+		
+		ViewDataUtils.INSTANCE.addDebugJob(job.getConsoleName(), job);
 		
 		previouslyExecutedJobs.put(job.getConsoleName(), job);
 		launchJobWithDebugParameter(job, gefCanvas, parameterGrid, xmlPath, debugXmlPath,getUserFunctionsPropertertyFile() ,externalSchemaFiles,subJobList);

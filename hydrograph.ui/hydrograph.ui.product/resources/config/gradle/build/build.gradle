@@ -337,7 +337,7 @@ task executeDebugRemoteJob() {
         def basePath = basePath;
         def isExecutionTracking = isExecutionTracking;
         
-        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath + "-udfpath" + udfpath  + " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
+        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath + " -udfpath" + udfpath  + " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
         println "Executing command: "+command
 		sshToRemoteServer(host,username,password,command)
     }

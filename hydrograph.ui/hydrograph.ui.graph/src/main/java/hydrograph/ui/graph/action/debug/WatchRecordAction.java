@@ -30,6 +30,8 @@ import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.utility.MessageBox;
+import hydrograph.ui.graph.utility.ViewDataUtils;
+import hydrograph.ui.graph.viewdatadialog.ViewDataUniqueIdDialog;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.HashMap;
@@ -48,12 +50,13 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 /**
- * The Class WatchRecordAction used to view data at watch points after job execution
+ * The Class WatchRecordAction used to view data history at watch points after job execution
  * 
  * @author Bitwise
  * 
@@ -61,6 +64,7 @@ import org.slf4j.Logger;
 public class WatchRecordAction extends SelectionAction {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WatchRecordAction.class);
 	private boolean isWatcher;
+	private JobDetails jobDetails;
 	private WatchRecordInner watchRecordInner = new WatchRecordInner();
 
 	private static Map<String, DebugDataViewer> dataViewerMap;
@@ -193,7 +197,6 @@ public class WatchRecordAction extends SelectionAction {
 			return;
 		}
 		
-		
 		//Create data viewer window name, if window exist reopen same window
 		String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
 				+ watchRecordInner.getSocketId();
@@ -211,7 +214,33 @@ public class WatchRecordAction extends SelectionAction {
 			return;
 		}
 				
-		final JobDetails jobDetails = getJobDetails(job);
+		
+		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
+		Map<String, List<Job>> jobDetails1 = ViewDataUtils.INSTANCE.getJob();
+		List<Job> tmpList = jobDetails1.get(consoleName);
+		ViewDataUniqueIdDialog dataUniqueIdDialog = new ViewDataUniqueIdDialog(Display.getDefault().getActiveShell(), tmpList);
+		dataUniqueIdDialog.open();
+		
+		String selectedUniqueJobId = dataUniqueIdDialog.getSelectedUniqueJobId();
+		Job selectedJob = null;
+		for(Map.Entry<String, List<Job>> entry1 : jobDetails1.entrySet()){
+			if(consoleName.equalsIgnoreCase(entry1.getKey())){
+				List<Job> jobList = entry1.getValue();
+				for(Job jobDetail: jobList){
+					if(StringUtils.isNotEmpty(selectedUniqueJobId) && jobDetail.getUniqueJobId().equalsIgnoreCase(selectedUniqueJobId)){
+						selectedJob = jobDetail;
+						break;
+					}
+				}
+			}
+		}
+		
+		if(StringUtils.isNotEmpty(selectedUniqueJobId)){
+			jobDetails = getJobDetails(selectedJob);
+		}else{
+			return;
+		}
+		
 
 		final String dataViewerWindowTitle = dataViewerWindowName;	
 
@@ -224,8 +253,7 @@ public class WatchRecordAction extends SelectionAction {
 				dataViewerMap.put(dataViewerWindowTitle, window);
 				window.setBlockOnOpen(true);
 				window.setDataViewerMap(dataViewerMap);
-				if(watcherAndConditon.containsKey(watcherId))
-				{
+				if(watcherAndConditon.containsKey(watcherId)){
 					window.setConditions(watcherAndConditon.get(watcherId));
 					if(watcherAndConditon.get(watcherId).isOverWritten()){
 						window.setOverWritten(watcherAndConditon.get(watcherId).isOverWritten());
