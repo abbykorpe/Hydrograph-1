@@ -19,7 +19,6 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debug.config.Debug;
 import hydrograph.ui.graph.debug.config.DebugPlugin;
-import hydrograph.ui.graph.debug.config.Limit;
 import hydrograph.ui.graph.debug.config.ViewData;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
@@ -66,7 +65,7 @@ public class DebugConverter {
 		 
 		//debug.setDebugPlugin(debugPlugin);
 		ViewData viewData = null;
-		Limit limit = null;
+		//Limit limit = null;
 		 
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();

@@ -64,6 +64,7 @@ import org.slf4j.Logger;
 public class WatchRecordAction extends SelectionAction {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WatchRecordAction.class);
 	private boolean isWatcher;
+	private JobDetails jobDetails;
 	private WatchRecordInner watchRecordInner = new WatchRecordInner();
 
 	private static Map<String, DebugDataViewer> dataViewerMap;
@@ -220,20 +221,21 @@ public class WatchRecordAction extends SelectionAction {
 		ViewDataUniqueIdDialog dataUniqueIdDialog = new ViewDataUniqueIdDialog(Display.getDefault().getActiveShell(), tmpList);
 		dataUniqueIdDialog.open();
 		
-		String tmpId = dataUniqueIdDialog.getSelectedUniqueJobId();
+		String selectdUniqueJobId = dataUniqueIdDialog.getSelectedUniqueJobId();
 		Job selectedJob = null;
 		for(Map.Entry<String, List<Job>> entry1 : jobDetails1.entrySet()){
 			if(consoleName.equalsIgnoreCase(entry1.getKey())){
-				List<Job> jdList = entry1.getValue();
-				for(Job tmpJob: jdList){
-					if(StringUtils.isNotEmpty(tmpId) && tmpJob.getUniqueJobId().equalsIgnoreCase(tmpId)){
-						selectedJob = tmpJob;
+				List<Job> jobList = entry1.getValue();
+				for(Job jobDetail: jobList){
+					if(StringUtils.isNotEmpty(selectdUniqueJobId) && jobDetail.getUniqueJobId().equalsIgnoreCase(selectdUniqueJobId)){
+						selectedJob = jobDetail;
+						break;
 					}
 				}
 			}
 		}
-		final JobDetails jobDetails;
-		if(StringUtils.isNotEmpty(tmpId)){
+		
+		if(StringUtils.isNotEmpty(selectdUniqueJobId)){
 			jobDetails = getJobDetails(selectedJob);
 		}else{
 			return;

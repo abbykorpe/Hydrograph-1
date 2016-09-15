@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.graph.viewdatadialog;
 
 import hydrograph.ui.graph.job.Job;
@@ -20,6 +33,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+
+/**
+ * The class ViewDataUniqueIdDialog is used to show view data history
+ * @author Bitwise
+ *
+ */
 public class ViewDataUniqueIdDialog extends Dialog{
 	
 	private List<Job> jobDetails;
@@ -45,9 +64,9 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		Composite portComposite = new Composite(composite, SWT.BORDER);
 		portComposite.setLayoutData(new RowData(512, 130));
 		
-		buttonWidget(portComposite, SWT.None, new int[] {4, 2, 276, 20}, "Job Id");
-		buttonWidget(portComposite, SWT.None, new int[] {280, 2, 130, 20}, "Time Stamp");
-		buttonWidget(portComposite, SWT.None, new int[] {410, 2, 100, 20}, "Execution Mode");
+		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {4, 2, 276, 20}, "Job Id");
+		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {280, 2, 130, 20}, "Time Stamp");
+		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {410, 2, 100, 20}, "Execution Mode");
 		
 		int y = 26;
 		for(Job job : jobDetails){
@@ -96,6 +115,10 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		return runningMode;
 	}
 	
+	/**
+	 * The function will return selected unique job id
+	 *@return String
+	 */
 	public String getSelectedUniqueJobId(){
 		return selectedUniqueJobId;
 	}
