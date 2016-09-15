@@ -3,7 +3,9 @@ Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
 1.#1025[Sonia Raheja] Import xml : Subjob Component has been Displayed as Unknown Component Upon XML Import
-=====================================================================================================
+2...... [Shrirang Kumbhar] Replaced buffered writers from execution tracking with sl4j loggers.
+3...... [Shrirang Kumbhar] Updated execution tracking log format.
+====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
 Sr.No. <date> <GitHub Issue #> - [fixed by] - description

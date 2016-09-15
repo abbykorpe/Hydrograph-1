@@ -69,6 +69,8 @@ import com.google.gson.Gson;
 @ClientEndpoint
 public class HydrographUiClientSocket {
 
+	private static final String JOB_ID_STRING_SEPARATOR = "_";
+
 	/** The session. */
 	private Session session;
 
@@ -395,8 +397,9 @@ public class HydrographUiClientSocket {
 	 */
 	private String getJobID(ExecutionStatus executionStatus) {
 		String jobId = executionStatus.getJobId();
-		jobId = StringUtils.substringBeforeLast(jobId, "_");
-		jobId = StringUtils.substringBeforeLast(jobId, "_");
+		jobId = StringUtils.substringBeforeLast(
+					StringUtils.substringBeforeLast(
+							StringUtils.substringBeforeLast(jobId, JOB_ID_STRING_SEPARATOR), JOB_ID_STRING_SEPARATOR), JOB_ID_STRING_SEPARATOR);
 		return jobId;
 	}
 

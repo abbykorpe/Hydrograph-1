@@ -12,4 +12,5 @@ Require-Bundle: org.eclipse.ui,
  org.slf4j.api
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: hydrograph.ui.logging.factory
+Export-Package: hydrograph.ui.logging.execution.tracking,
+ hydrograph.ui.logging.factory
