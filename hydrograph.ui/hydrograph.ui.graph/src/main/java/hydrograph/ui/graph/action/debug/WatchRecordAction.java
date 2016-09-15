@@ -221,13 +221,13 @@ public class WatchRecordAction extends SelectionAction {
 		ViewDataUniqueIdDialog dataUniqueIdDialog = new ViewDataUniqueIdDialog(Display.getDefault().getActiveShell(), tmpList);
 		dataUniqueIdDialog.open();
 		
-		String selectdUniqueJobId = dataUniqueIdDialog.getSelectedUniqueJobId();
+		String selectedUniqueJobId = dataUniqueIdDialog.getSelectedUniqueJobId();
 		Job selectedJob = null;
 		for(Map.Entry<String, List<Job>> entry1 : jobDetails1.entrySet()){
 			if(consoleName.equalsIgnoreCase(entry1.getKey())){
 				List<Job> jobList = entry1.getValue();
 				for(Job jobDetail: jobList){
-					if(StringUtils.isNotEmpty(selectdUniqueJobId) && jobDetail.getUniqueJobId().equalsIgnoreCase(selectdUniqueJobId)){
+					if(StringUtils.isNotEmpty(selectedUniqueJobId) && jobDetail.getUniqueJobId().equalsIgnoreCase(selectedUniqueJobId)){
 						selectedJob = jobDetail;
 						break;
 					}
@@ -235,7 +235,7 @@ public class WatchRecordAction extends SelectionAction {
 			}
 		}
 		
-		if(StringUtils.isNotEmpty(selectdUniqueJobId)){
+		if(StringUtils.isNotEmpty(selectedUniqueJobId)){
 			jobDetails = getJobDetails(selectedJob);
 		}else{
 			return;

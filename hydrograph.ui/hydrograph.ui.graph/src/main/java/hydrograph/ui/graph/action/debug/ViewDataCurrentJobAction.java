@@ -99,7 +99,7 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 			}
 		}
 		} catch (CoreException exception) {
-			logger.error("SubJob conponent and socket id is not fetched", exception);
+			logger.error("SubJob component and socket id is not fetched", exception);
 		}
 		
 		if (!selectedObject.isEmpty() && isWatcher) {

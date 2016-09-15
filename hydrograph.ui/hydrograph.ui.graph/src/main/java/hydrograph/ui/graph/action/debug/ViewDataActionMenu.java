@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.MenuItem;
 
 
 /**
+ * The Class ViewDataActionMenu used to show subActions
  * @author Bitwise
  *
  */
@@ -78,7 +79,7 @@ public class ViewDataActionMenu extends Action implements SelectionListener{
 	
 	/**
 	 * The function will return integer value if any action is enabled
-	 *
+	 *@return integer
 	 */
 	 public int getActiveOperationCount()
      {
