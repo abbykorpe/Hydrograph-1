@@ -184,6 +184,8 @@ public class JoinMapDialog extends Dialog {
 		composite.setWeights(new int[] {215, 559, 116});
 
 		populateJoinMapDialog();
+		
+		getShell().setMinimumSize(getInitialSize());
 		return container;
 	}
 

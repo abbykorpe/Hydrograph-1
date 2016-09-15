@@ -86,6 +86,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 70.#1064[Nikhil Deokar] Subjob: Fixed issue of Input Subjob Links From Input Subjob to Subsequent Component
 71.#1059[Nikhil Deokar] Subjob: Disabled 'Refresh' Icon was not present
 72.#973 [Shrirang Kumbhar] Sync schema: When user add mapping in mapping table and press autosync. It enables apply and when we press cancel it still saves the mapping changes. The same happens in case of pull button
+73.#661 [Kalyan Rajpoot] Standardising the Minimum size of Re-sizeable Windows/Grids 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
