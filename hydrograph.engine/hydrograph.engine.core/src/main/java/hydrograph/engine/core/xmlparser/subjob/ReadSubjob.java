@@ -36,7 +36,7 @@ public class ReadSubjob {
 	private static final String TYPE = "xsi:type";
 	private static final Object SUBJOBPARAMETER = "subjobParameter";
 	private static final String COMMANDS = "commands";
-	private static final String PHASE = "phase";
+	private static final String BATCH = "batch";
 
 	private Document xmlDocument = null;
 	private String xmlContent;
@@ -65,16 +65,16 @@ public class ReadSubjob {
 	private Document getSubjob(Document xmlDocument)
 			throws FileNotFoundException {
 		Node parentNode = xmlDocument.getFirstChild();
-		String subjobComponentId, subjobComponentPhase;
+		String subjobComponentId, subjobComponentBatch;
 		for (int i = 0; i < parentNode.getChildNodes().getLength(); i++) {
 			if (isSubjobPresent(parentNode.getChildNodes().item(i))) {
 				Node subjobNode = parentNode.getChildNodes().item(i);
 				subjobComponentId = subjobNode.getAttributes().getNamedItem(ID)
 						.getNodeValue();
 
-				subjobComponentPhase = subjobNode.getAttributes().getNamedItem(
-						PHASE) == null ? "0" : subjobNode.getAttributes()
-						.getNamedItem(PHASE).getNodeValue();
+				subjobComponentBatch = subjobNode.getAttributes().getNamedItem(
+						BATCH) == null ? "0" : subjobNode.getAttributes()
+						.getNamedItem(BATCH).getNodeValue();
 
 				String subjobXml = EMPTY;
 				subjobXml = readSubjob(subjobNode);
@@ -83,7 +83,7 @@ public class ReadSubjob {
 							.getXMLDocument(removeComments(subjobXml));
 					subjobXmlDocument = getSubjob(subjobXmlDocument);
 					xmlDocument = parseSubjob(xmlDocument, subjobXmlDocument,
-							subjobComponentId, subjobComponentPhase);
+							subjobComponentId, subjobComponentBatch);
 				} else {
 					throw new RuntimeException(
 							"Subjob XML contents empty. Subjob ID: '"
@@ -96,9 +96,9 @@ public class ReadSubjob {
 
 	private Document parseSubjob(Document parentXmlDocument,
 			Document subjobXmlDocument, String subjobComponentId,
-			String subjobComponentPhase) {
+			String subjobComponentBatch) {
 		ParseSubjob subjobParser = new ParseSubjob(parentXmlDocument,
-				subjobXmlDocument, subjobComponentId, subjobComponentPhase);
+				subjobXmlDocument, subjobComponentId, subjobComponentBatch);
 		return subjobParser.expandSubjob();
 
 	}

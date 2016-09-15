@@ -25,7 +25,7 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.engine.phasebreak.plugin.PhaseBreakPlugin;
+import hydrograph.engine.batchbreak.plugin.BatchBreakPlugin;
 import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.utilities.OrderedProperties;
 import hydrograph.engine.utilities.OrderedPropertiesHelper;
@@ -37,10 +37,10 @@ import hydrograph.engine.utilities.OrderedPropertiesHelper;
 public class FlowManipulationHandler {
 
 	enum Plugins {
-		phaseBreak {
+		batchBreak {
 			@Override
 			public String getPluginName() {
-				return PhaseBreakPlugin.class.getName();
+				return BatchBreakPlugin.class.getName();
 			}
 		};
 		public abstract String getPluginName();
@@ -77,7 +77,7 @@ public class FlowManipulationHandler {
 
 	private static List<String> addPluginFromFile(OrderedProperties properties) {
 		List<String> registerdPlugins = new LinkedList<String>();
-		// added phasebreak plugin.
+		// added batchbreak plugin.
 		registerdPlugins.addAll(addDefaultPlugins());
 		for (Object plugin : properties.values()) {
 			registerdPlugins.add(plugin.toString());

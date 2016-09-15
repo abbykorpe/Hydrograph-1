@@ -60,7 +60,7 @@ public class OutputFileSequenceAssemblyGenerator extends OutputAssemblyGenerator
 
 		LOG.trace("Initializing output file delimited entity for component: " + jaxbSequenceOutputFile.getId());
 		outputFileSequenceFormatEntity.setComponentId(jaxbSequenceOutputFile.getId());
-		outputFileSequenceFormatEntity.setPhase(jaxbSequenceOutputFile.getPhase());
+		outputFileSequenceFormatEntity.setBatch(jaxbSequenceOutputFile.getBatch());
 		outputFileSequenceFormatEntity.setPath(jaxbSequenceOutputFile.getPath().getUri());
 		outputFileSequenceFormatEntity.setFieldsList(OutputEntityUtils.extractOutputFields(
 				jaxbSequenceOutputFile.getInSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));

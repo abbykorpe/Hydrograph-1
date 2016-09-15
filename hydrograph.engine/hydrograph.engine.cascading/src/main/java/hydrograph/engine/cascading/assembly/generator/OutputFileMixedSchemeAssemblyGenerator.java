@@ -56,7 +56,7 @@ public class OutputFileMixedSchemeAssemblyGenerator extends OutputAssemblyGenera
 	public void initializeEntity() {
 
 		outputFileMixedSchemeEntity.setComponentId(jaxbTextFileMixedScheme.getId());
-		outputFileMixedSchemeEntity.setPhase(jaxbTextFileMixedScheme.getPhase());
+		outputFileMixedSchemeEntity.setBatch(jaxbTextFileMixedScheme.getBatch());
 		outputFileMixedSchemeEntity.setCharset(jaxbTextFileMixedScheme.getCharset() != null
 				? jaxbTextFileMixedScheme.getCharset().getValue().value() : "UTF-8");
 

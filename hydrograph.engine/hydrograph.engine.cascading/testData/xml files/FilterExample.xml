@@ -19,7 +19,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd  ">
 
-	<input id="input1" phase="1" xsi:type="it:file-fixed-width">
+	<input id="input1" batch="1" xsi:type="it:file-fixed-width">
 		<outSocket id="out0" type="out">
 			<schema name="klk">
 				<field name="name" type="java.lang.String" length="4" />
@@ -36,7 +36,7 @@
 
 	</input>
 
-	<transform id="trans" phase="1" xsi:type="tt:filter">
+	<transform id="trans" batch="1" xsi:type="tt:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<operation id="operation1" class="com.bitwisegloabal.bhse.userfuntions.Filter">
 			<inputFields>
@@ -70,7 +70,7 @@
 		<charset value="ISO-8859-1" />
 	</output>
 
-	<output id="unusedOutput" phase="1" xsi:type="ot:file-fixed-width">
+	<output id="unusedOutput" batch="1" xsi:type="ot:file-fixed-width">
 		<inSocket fromComponentId="trans1" fromSocketId="unused1" id="in0"
 			fromSocketType="unused">
 			<schema name="Detail">

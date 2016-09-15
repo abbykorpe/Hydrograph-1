@@ -152,7 +152,7 @@ class TrackComponentUtils {
 		filterOperation.setClazz(Counter.class.getCanonicalName());
 		filter.setId(TrackComponentUtils.generateUniqueComponentId(trackContext.getFromComponentId(),
 				"generatedHydrographFilter", jaxbObjectList));
-		filter.setPhase(trackContext.getPhase());
+		filter.setBatch(trackContext.getBatch());
 		filter.getInSocket().add(TrackComponentUtils.getStraightPullInSocket(trackContext.getFromComponentId(),
 				trackContext.getFromOutSocketId(), trackContext.getFromOutSocketType()));
 

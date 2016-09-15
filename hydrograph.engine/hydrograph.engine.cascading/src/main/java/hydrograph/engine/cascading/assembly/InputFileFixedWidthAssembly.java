@@ -63,8 +63,8 @@ public class InputFileFixedWidthAssembly extends BaseComponent<InputFileFixedWid
 				inputFileFixedWidthEntity);
 		LOG.debug("InputFile Fixed Width Component: [ Fields List : " + Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 				+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Field Length : " + Arrays.toString(fieldsCreator.getFieldLength())
-				+ " , Path : " + inputFileFixedWidthEntity.getPath() + ", Phase : "
-				+ inputFileFixedWidthEntity.getPhase() + "]");
+				+ " , Path : " + inputFileFixedWidthEntity.getPath() + ", Batch : "
+				+ inputFileFixedWidthEntity.getBatch() + "]");
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipe, tap);
 

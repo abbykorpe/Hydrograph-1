@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.phasebreak.plugin;
+package hydrograph.engine.batchbreak.plugin;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,12 +39,12 @@ import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
 import hydrograph.engine.jaxb.inputtypes.SequenceInputFile.Path;
 import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
 
-public class PhaseBreakPlugin implements ManipulatorListener {
+public class BatchBreakPlugin implements ManipulatorListener {
 
 	private Map<String, Set<SchemaField>> schemaFieldsMap;
 	private List<TypeBaseComponent> jaxbGraph;
-	private List<LinkInfo> phaseChangeOriginalLinks;
-	private List<LinkInfo> phaseChangeLinks;
+	private List<LinkInfo> batchChangeOriginalLinks;
+	private List<LinkInfo> batchChangeLinks;
 	private static final String DEFAULT_OUT_SOCKET = "out0";
 	private static final String DEFAULT_IN_SOCKET = "in0";
 	private Configuration conf;
@@ -56,55 +56,55 @@ public class PhaseBreakPlugin implements ManipulatorListener {
 		conf = manipulationContext.getConf();
 		jaxbGraph = manipulationContext.getJaxbMainGraph();
 		schemaFieldsMap = manipulationContext.getSchemaFieldMap();
-		this.phaseChangeOriginalLinks = new ArrayList<LinkInfo>();
-		this.phaseChangeLinks = new ArrayList<LinkInfo>();
-		updatePhase();
-		populatePhaseChangeComponents();
+		this.batchChangeOriginalLinks = new ArrayList<LinkInfo>();
+		this.batchChangeLinks = new ArrayList<LinkInfo>();
+		updateBatch();
+		populateBatchChangeComponents();
 		updateLinksAndComponents(jaxbGraph);
 		manipulationContext.setTmpPath(tempPathList);
 		return jaxbGraph;
 	}
 
 	/**
-	 * Update subphase of all the components in the job. Phase attribute should
-	 * be present on all the components. It throws RuntimeException if phase of
-	 * source component is greater than phase of target component.
+	 * Update subbatch of all the components in the job. Batch attribute should
+	 * be present on all the components. It throws RuntimeException if batch of
+	 * source component is greater than batch of target component.
 	 * 
 	 */
-	private void updatePhase() {
+	private void updateBatch() {
 		HashSet<String> componentsTraversed = new HashSet<String>();
 		for (TypeBaseComponent jaxbComponent : jaxbGraph) {
-			updatePhaseOfInputFlow(jaxbComponent, componentsTraversed);
+			updateBatchOfInputFlow(jaxbComponent, componentsTraversed);
 		}
 	}
 
-	private void updatePhaseOfInputFlow(TypeBaseComponent jaxbComponent, HashSet<String> componentsTraversed) {
+	private void updateBatchOfInputFlow(TypeBaseComponent jaxbComponent, HashSet<String> componentsTraversed) {
 
 		if (!componentsTraversed.contains(jaxbComponent.getId())) {
 			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities.getInSocketList(jaxbComponent);
 
 			for (TypeBaseInSocket typeBaseInSocket : inSocketList) {
-				String phase = jaxbComponent.getPhase();
-				int phaseLevel = phase.split("\\.").length;
+				String batch = jaxbComponent.getBatch();
+				int batchLevel = batch.split("\\.").length;
 
 				TypeBaseComponent sourceComponent = getComponent(typeBaseInSocket.getFromComponentId());
 
-				updatePhaseOfInputFlow(sourceComponent, componentsTraversed);
-				for (int j = 0; j < phaseLevel; j++) {
-					if (Integer.parseInt(phase.split("\\.")[j]) < Integer
-							.parseInt(sourceComponent.getPhase().split("\\.")[j])) {
-						// if main phase is less than source component main
-						// phase then throw error
-						// else update the subphase of this component with the
-						// subphase of source component
+				updateBatchOfInputFlow(sourceComponent, componentsTraversed);
+				for (int j = 0; j < batchLevel; j++) {
+					if (Integer.parseInt(batch.split("\\.")[j]) < Integer
+							.parseInt(sourceComponent.getBatch().split("\\.")[j])) {
+						// if main batch is less than source component main
+						// batch then throw error
+						// else update the subbatch of this component with the
+						// subbatch of source component
 						if (j > 0) {
-							jaxbComponent.setPhase(sourceComponent.getPhase());
+							jaxbComponent.setBatch(sourceComponent.getBatch());
 						} else {
 							throw new RuntimeException(
-									"Phase of source component cannot be greater than target component. Source component '"
-											+ sourceComponent.getId() + "' has phase " + sourceComponent.getPhase()
-											+ " and target component '" + jaxbComponent.getId() + "' has phase "
-											+ jaxbComponent.getPhase());
+									"Batch of source component cannot be greater than target component. Source component '"
+											+ sourceComponent.getId() + "' has batch " + sourceComponent.getBatch()
+											+ " and target component '" + jaxbComponent.getId() + "' has batch "
+											+ jaxbComponent.getBatch());
 						}
 					}
 				}
@@ -135,18 +135,18 @@ public class PhaseBreakPlugin implements ManipulatorListener {
 	private void updateLinksAndComponents(List<TypeBaseComponent> jaxbGraph2) {
 		int counter = 0;
 
-		for (LinkInfo link2 : phaseChangeLinks) {
+		for (LinkInfo link2 : batchChangeLinks) {
 			TypeBaseComponent targetComponent = this.getComponentFromComponentId(link2.getComponentId());
 			String tempPath = getTempPath(targetComponent.getId(), conf);
 			TypeBaseInSocket inSocket = link2.getInSocket();
 			Set<SchemaField> schemaFields = schemaFieldsMap
 					.get(link2.getInSocket().getFromComponentId() + "_" + link2.getInSocket().getFromSocketId());
-			String sequenceInputComponentId = targetComponent.getId() + "_" + counter + "_phase_"
-					+ targetComponent.getPhase();
+			String sequenceInputComponentId = targetComponent.getId() + "_" + counter + "_batch_"
+					+ targetComponent.getBatch();
 
 			SequenceInputFile jaxbSequenceInputFile = new SequenceInputFile();
 			jaxbSequenceInputFile.setId(sequenceInputComponentId);
-			jaxbSequenceInputFile.setPhase(targetComponent.getPhase());
+			jaxbSequenceInputFile.setBatch(targetComponent.getBatch());
 			Path inPath = new Path();
 			inPath.setUri(tempPath);
 			jaxbSequenceInputFile.setPath(inPath);
@@ -182,11 +182,11 @@ public class PhaseBreakPlugin implements ManipulatorListener {
 
 			SequenceOutputFile jaxbSequenceOutputFile = new SequenceOutputFile();
 
-			String sequenceOutputComponentId = sourceComponent.getId() + "_" + counter + "_phase_"
-					+ sourceComponent.getPhase();
+			String sequenceOutputComponentId = sourceComponent.getId() + "_" + counter + "_batch_"
+					+ sourceComponent.getBatch();
 			jaxbSequenceOutputFile.setId(sequenceOutputComponentId);
 
-			jaxbSequenceOutputFile.setPhase(sourceComponent.getPhase());
+			jaxbSequenceOutputFile.setBatch(sourceComponent.getBatch());
 			hydrograph.engine.jaxb.outputtypes.SequenceOutputFile.Path outPath = new hydrograph.engine.jaxb.outputtypes.SequenceOutputFile.Path();
 			outPath.setUri(tempPath);
 			jaxbSequenceOutputFile.setPath(outPath);
@@ -240,7 +240,7 @@ public class PhaseBreakPlugin implements ManipulatorListener {
 	}
 
 	private void addInSocketToOriginalLinks(String sourceComponentId, String outSocketId, TypeBaseInSocket inSocket) {
-		for (LinkInfo link2 : phaseChangeOriginalLinks) {
+		for (LinkInfo link2 : batchChangeOriginalLinks) {
 			if (link2.getOutSocketId().equals(outSocketId) && link2.getSourceComponentId().equals(sourceComponentId)) {
 				link2.setInSocket(inSocket);
 			}
@@ -250,7 +250,7 @@ public class PhaseBreakPlugin implements ManipulatorListener {
 
 	private void addOutSocketToOriginalLinks(String targetComponentId, String inSocketPortId,
 			TypeInputOutSocket outputSocket) {
-		for (LinkInfo link2 : phaseChangeOriginalLinks) {
+		for (LinkInfo link2 : batchChangeOriginalLinks) {
 			if (link2.getInSocketId().equals(inSocketPortId) && link2.getComponentId().equals(targetComponentId)) {
 				link2.setOutSocket(outputSocket);
 			}
@@ -258,21 +258,21 @@ public class PhaseBreakPlugin implements ManipulatorListener {
 
 	}
 
-	private void populatePhaseChangeComponents() {
+	private void populateBatchChangeComponents() {
 
 		for (TypeBaseComponent component : jaxbGraph) {
 			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities.getInSocketList(component);
 
-			String phase = component.getPhase();
+			String batch = component.getBatch();
 
 			for (TypeBaseInSocket inSocket : inSocketList) {
 				// get the dependent component
 				TypeBaseComponent sourceComponent = getComponent(inSocket.getFromComponentId());
-				if (sourceComponent.getPhase().compareTo(phase) > 0) {
+				if (sourceComponent.getBatch().compareTo(batch) > 0) {
 					throw new GraphTraversalException(
-							"Phase of source component cannot be greator then target component. Source component "
-									+ sourceComponent.getId() + " has phase " + sourceComponent.getPhase()
-									+ " and target component " + component.getId() + " has phase " + phase);
+							"Batch of source component cannot be greator then target component. Source component "
+									+ sourceComponent.getId() + " has batch " + sourceComponent.getBatch()
+									+ " and target component " + component.getId() + " has batch " + batch);
 				}
 
 				TypeBaseOutSocket outSocket = SocketUtilities.getOutSocket(sourceComponent, inSocket.getFromSocketId());
@@ -280,10 +280,10 @@ public class PhaseBreakPlugin implements ManipulatorListener {
 				LinkInfo link = new LinkInfo(component.getId(), inSocket.getId(), inSocket, sourceComponent.getId(),
 						outSocket.getId(), outSocket);
 
-				if (sourceComponent.getPhase().compareTo(phase) < 0) {
-					phaseChangeLinks.add(link);
+				if (sourceComponent.getBatch().compareTo(batch) < 0) {
+					batchChangeLinks.add(link);
 				}
-				phaseChangeOriginalLinks.add(link);
+				batchChangeOriginalLinks.add(link);
 			}
 		}
 	}

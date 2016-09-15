@@ -68,7 +68,7 @@ public class OutputFileHiveParquetAssemblyGenerator extends
 		LOG.trace("Initializing output file Hive parquet entity for component: "
 				+ jaxbHiveParquetFile.getId());
 		outputFileHiveParquetEntity.setComponentId(jaxbHiveParquetFile.getId());
-		outputFileHiveParquetEntity.setPhase(jaxbHiveParquetFile.getPhase());
+		outputFileHiveParquetEntity.setBatch(jaxbHiveParquetFile.getBatch());
 		outputFileHiveParquetEntity
 				.setFieldsList(OutputEntityUtils
 						.extractOutputFields(jaxbHiveParquetFile.getInSocket()

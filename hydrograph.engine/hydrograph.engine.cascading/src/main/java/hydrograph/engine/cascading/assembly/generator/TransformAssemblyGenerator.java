@@ -62,7 +62,7 @@ public class TransformAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
 		LOG.trace("Initializing transform entity for component: " + jaxbTransform.getId());
 		transformEntity.setComponentId(jaxbTransform.getId());
-		transformEntity.setPhase(jaxbTransform.getPhase());
+		transformEntity.setBatch(jaxbTransform.getBatch());
 
 		// check if operation is present
 		if (jaxbTransform.getOperationOrExpression() != null && jaxbTransform.getOperationOrExpression().size() > 0) {

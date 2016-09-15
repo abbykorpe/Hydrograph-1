@@ -63,7 +63,7 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 					+ Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 					+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Field Length : "
 					+ Arrays.toString(fieldsCreator.getFieldLength()) + " , Path : "
-					+ outputFileFixedWidthEntity.getPath() + ", Phase : " + outputFileFixedWidthEntity.getPhase()
+					+ outputFileFixedWidthEntity.getPath() + ", Batch : " + outputFileFixedWidthEntity.getBatch()
 					+ "]");
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(outputFileFixedWidthEntity.toString());

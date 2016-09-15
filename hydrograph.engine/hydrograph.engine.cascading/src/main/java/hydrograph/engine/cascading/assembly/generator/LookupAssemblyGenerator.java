@@ -54,7 +54,7 @@ public class LookupAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing hash join entity for component: "
 				+ jaxbLookup.getId());
 		lookupEntity.setComponentId(jaxbLookup.getId());
-		lookupEntity.setPhase(jaxbLookup.getPhase());
+		lookupEntity.setBatch(jaxbLookup.getBatch());
 
 		if (jaxbLookup.getOutSocket() == null) {
 			throw new NullPointerException("No out socket defined for hash join component: " + jaxbLookup.getId());

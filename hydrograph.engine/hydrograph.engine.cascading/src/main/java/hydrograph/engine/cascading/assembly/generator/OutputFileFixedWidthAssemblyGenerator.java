@@ -56,7 +56,7 @@ public class OutputFileFixedWidthAssemblyGenerator extends OutputAssemblyGenerat
 	public void initializeEntity() {
 
 		outputFileFixedWidthEntity.setComponentId(jaxbOutputFileFixedWidth.getId());
-		outputFileFixedWidthEntity.setPhase(jaxbOutputFileFixedWidth.getPhase());
+		outputFileFixedWidthEntity.setBatch(jaxbOutputFileFixedWidth.getBatch());
 		outputFileFixedWidthEntity.setPath(jaxbOutputFileFixedWidth.getPath().getUri());
 		outputFileFixedWidthEntity.setSafe(
 				jaxbOutputFileFixedWidth.getSafe() != null ? jaxbOutputFileFixedWidth.getSafe().isValue() : false);

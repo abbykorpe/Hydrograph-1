@@ -14,7 +14,7 @@
 	xmlns:ct="hydrograph/engine/jaxb/commandtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
 
-	<inputs id="input1" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0" type="out">
 			<schema name="klk">
 				<field name="name" type="java.lang.String" />
@@ -29,7 +29,7 @@
 	</inputs>
 
 
-	<operations id="trans" phase="0" xsi:type="op:filter">
+	<operations id="trans" batch="0" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<expression
 			expr="StringFunctions.stringMatch(Choice,&quot;AAA&quot;)?true:false;"
@@ -47,7 +47,7 @@
 	</operations>
 
 
-	<outputs id="output1" phase="0" xsi:type="ot:textFileDelimited">
+	<outputs id="output1" batch="0" xsi:type="ot:textFileDelimited">
 		<inSocket fromComponentId="trans" fromSocketId="out1" id="in0">
 			<schema name="Detail">
 				<field name="name" type="java.lang.String" />
@@ -62,7 +62,7 @@
 		<charset value="ISO-8859-1" />
 	</outputs>
 
-	<outputs id="unusedOutput" phase="0" xsi:type="ot:textFileDelimited">
+	<outputs id="unusedOutput" batch="0" xsi:type="ot:textFileDelimited">
 		<inSocket fromComponentId="trans" fromSocketId="unused1" id="in0"
 			fromSocketType="unused">
 			<schema name="Detail">

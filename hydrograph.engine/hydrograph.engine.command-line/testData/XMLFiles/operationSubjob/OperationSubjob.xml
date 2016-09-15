@@ -18,7 +18,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../../elt-core/src/main/resources/newxmlschema/main/main.xsd ">
 
-	<inputs id="subjobInput" phase="0" xsi:type="it:subjobInput">
+	<inputs id="subjobInput" batch="0" xsi:type="it:subjobInput">
 		<outSocket id="in0">
 			<schema name="@{ret}">
 			</schema>
@@ -26,7 +26,7 @@
 	</inputs>
 	
 	<straightPulls id="clone" xsi:type="spt:clone"
-		phase="0">
+		batch="0">
 		<inSocket id="in0" fromComponentId="subjobInput" fromSocketId="in0" />
 		<outSocket id="out0">
 			<copyOfInsocket inSocketId="in0" />
@@ -36,7 +36,7 @@
 		</outSocket>
 	</straightPulls>
 
-	<outputs id="output2" xsi:type="ot:textFileDelimited" phase="0">
+	<outputs id="output2" xsi:type="ot:textFileDelimited" batch="0">
 		<inSocket fromComponentId="clone" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
 				<field name="id" type="java.lang.String" />

@@ -26,7 +26,7 @@
 			value="testData\output\JoinDelimitedComponentsStats\plannerTransformPath" />
 	</runtimeProperties>
  -->
-	<inputs id="input1" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">
 				<field name="id1" type="java.lang.String" />
@@ -40,7 +40,7 @@
 		<charset value="ISO-8859-1" />
 	</inputs>
 
-	<inputs id="input2" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="input2" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">
 				<field name="id" type="java.lang.String" />
@@ -52,7 +52,7 @@
 		<hasHeader value="true" />
 	</inputs>
 
-<inputs id="input3" phase="0" xsi:type="it:textFileDelimited">
+<inputs id="input3" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">
 				<field name="id11" type="java.lang.String" />

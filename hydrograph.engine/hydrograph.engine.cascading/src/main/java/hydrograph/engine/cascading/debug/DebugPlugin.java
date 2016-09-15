@@ -78,7 +78,7 @@ public class DebugPlugin implements ManipulatorListener {
 		debugContext.setPreviousComponentId(component.getId());
 		debugContext.setFromComponentId(debug.getFromComponentId());
 		debugContext.setFromOutSocketId(debug.getOutSocketId());
-		debugContext.setPhase(baseComponent.getPhase());
+		debugContext.setBatch(baseComponent.getBatch());
 		debugContext.setSchemaFieldsMap(schemaFieldsMap);
 		debugContext.setTypeBaseComponents(componentList);
 		return ComponentBuilder.TEXT_OUTPUT_COMPONENT.create(debugContext);
@@ -96,7 +96,7 @@ public class DebugPlugin implements ManipulatorListener {
 		debugContext.setPreviousComponentId(component.getId());
 		debugContext.setFromComponentId(debug.getFromComponentId());
 		debugContext.setFromOutSocketId(debug.getOutSocketId());
-		debugContext.setPhase(baseComponent.getPhase());
+		debugContext.setBatch(baseComponent.getBatch());
 		debugContext.setSchemaFieldsMap(schemaFieldsMap);
 		debugContext.setTypeBaseComponents(componentList);
 		return ComponentBuilder.AVRO_OUTPUT_COMPONENT.create(debugContext);
@@ -111,7 +111,7 @@ public class DebugPlugin implements ManipulatorListener {
 		debugContext.setPreviousComponentId(component.getId());
 		debugContext.setFromComponentId(component.getId());
 		debugContext.setFromOutSocketId("out1");
-		debugContext.setPhase(baseComponent.getPhase());
+		debugContext.setBatch(baseComponent.getBatch());
 		debugContext.setTypeBaseComponents(componentList);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("limitvalue", limit);
@@ -126,7 +126,7 @@ public class DebugPlugin implements ManipulatorListener {
 		DebugContext debugContext = new DebugContext();
 		debugContext.setFromComponentId(debug.getFromComponentId());
 		debugContext.setFromOutSocketId(debug.getOutSocketId());
-		debugContext.setPhase(baseComponent.getPhase());
+		debugContext.setBatch(baseComponent.getBatch());
 		debugContext.setTypeBaseComponents(componentList);
 		return ComponentBuilder.REPLICATE_COMPONENT.create(debugContext);
 	}

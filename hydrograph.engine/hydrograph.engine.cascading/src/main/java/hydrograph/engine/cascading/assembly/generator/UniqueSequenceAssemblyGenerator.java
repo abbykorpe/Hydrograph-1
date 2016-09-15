@@ -56,7 +56,7 @@ public class UniqueSequenceAssemblyGenerator extends
 		LOG.trace("Initializing generate sequence entity for component: "
 				+ jaxbGenerateSequence.getId());
 		uniqueSequenceEntity.setComponentId(jaxbGenerateSequence.getId());
-		uniqueSequenceEntity.setPhase(jaxbGenerateSequence.getPhase());
+		uniqueSequenceEntity.setBatch(jaxbGenerateSequence.getBatch());
 		// check if operation is present
 		if (jaxbGenerateSequence.getOperationOrExpression() != null) {
 			LOG.trace("Operation(s) present for unique sequence component: "

@@ -18,7 +18,7 @@ public class AssemblyEntityBase {
 
 	private String componentId;
 	private Properties runtimeProperties;
-	private String phase;
+	private String batch;
 
 	/**
 	 * @return the componentId
@@ -51,18 +51,18 @@ public class AssemblyEntityBase {
 	}
 
 	/**
-	 * @return the phase
+	 * @return the batch
 	 */
-	public String getPhase() {
-		return phase;
+	public String getBatch() {
+		return batch;
 	}
 
 	/**
-	 * @param phase
-	 *            the phase to set
+	 * @param batch
+	 *            the batch to set
 	 */
-	public void setPhase(String phase) {
-		this.phase = phase;
+	public void setBatch(String batch) {
+		this.batch = batch;
 	}
 
 	public boolean isOperationPresent() {
@@ -72,7 +72,7 @@ public class AssemblyEntityBase {
 	@Override
 	public String toString() {
 
-		return "Component ID: " + componentId + " | phase: " + phase
+		return "Component ID: " + componentId + " | batch: " + batch
 				+ " | runtime properties: " + runtimeProperties + "\n";
 	}
 }

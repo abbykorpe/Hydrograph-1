@@ -26,7 +26,7 @@ public class DebugContext {
 	private String fromComponentId;
 	private String fromOutSocketId;
 	private String fromOutSocketType;
-	private String phase;
+	private String batch;
 	private List<TypeBaseComponent> typeBaseComponents;
 	private Map<String, Set<SchemaField>> schemaFieldsMap;
 	private Map<String, Object> params;
@@ -77,12 +77,12 @@ public class DebugContext {
 		this.fromOutSocketId = fromOutSocketId;
 	}
 
-	public String getPhase() {
-		return phase;
+	public String getBatch() {
+		return batch;
 	}
 
-	public void setPhase(String phase) {
-		this.phase = phase;
+	public void setBatch(String batch) {
+		this.batch = batch;
 	}
 
 	public Map<String, Object> getParams() {
