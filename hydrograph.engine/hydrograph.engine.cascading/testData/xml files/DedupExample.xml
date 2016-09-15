@@ -21,7 +21,7 @@
 
 
 
-	<input id="input1" phase="1" xsi:type="it:file-fixed-width">
+	<input id="input1" batch="1" xsi:type="it:file-fixed-width">
 		<outSocket id="inout1">
 			<schema name="klk">
 				<field name="f1" type="java.lang.String" length="4" />

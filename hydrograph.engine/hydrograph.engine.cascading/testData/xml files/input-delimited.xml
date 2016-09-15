@@ -19,7 +19,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
 
-	<input id="in1" phase="1" xsi:type="it:file-delimited">
+	<input id="in1" batch="1" xsi:type="it:file-delimited">
 		<outSocket id="out0">
 			<schema name="inSchema">
 				<field name="firstname" type="java.lang.String" />

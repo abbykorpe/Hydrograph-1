@@ -21,12 +21,12 @@
 
 
 
-	<!-- <input id="input1" phase="1" xsi:type="it:file-fixed-width"> <outSocket 
+	<!-- <input id="input1" batch="1" xsi:type="it:file-fixed-width"> <outSocket 
 		id="inout1"> <schema name="klk"> <field name="f1" type="java.lang.String" 
 		length="4" /> </schema> </outSocket> <path uri="file.txt" /> <safe value="false" 
 		/> <strict value="false" /> <charset value="ISO-8859-1" /> </input> -->
 
-	<input id="input1" phase="1" xsi:type="it:file-fixed-width">
+	<input id="input1" batch="1" xsi:type="it:file-fixed-width">
 		<outSocket id="inout1">
 			<schema name="klk">
 				<field name="f1" type="java.lang.String" length="4" />
@@ -39,7 +39,7 @@
 		<!-- <quote value="" /> -->
 	</input>
 
-	<input id="input2" phase="1" xsi:type="it:file-fixed-width">
+	<input id="input2" batch="1" xsi:type="it:file-fixed-width">
 		<outSocket id="inout2">
 			<schema name="klk">
 				<field name="f1" type="java.lang.String" length="4" />

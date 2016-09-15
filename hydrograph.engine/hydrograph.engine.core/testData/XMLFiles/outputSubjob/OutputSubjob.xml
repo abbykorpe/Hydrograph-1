@@ -17,14 +17,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
-	<inputs id="subjobInput" phase="1" xsi:type="it:subjobInput">
+	<inputs id="subjobInput" batch="1" xsi:type="it:subjobInput">
 		<outSocket id="in0">
 			<schema name="@{ads}">
 			</schema>
 		</outSocket>
 
 	</inputs>
-	<outputs id="output1" phase="0" xsi:type="ot:textFileDelimited">
+	<outputs id="output1" batch="0" xsi:type="ot:textFileDelimited">
 		<inSocket fromComponentId="subjobInput" fromSocketId="in0" id="in0">
 			<schema name="outSchema">
 				<field name="id" type="java.lang.String" />

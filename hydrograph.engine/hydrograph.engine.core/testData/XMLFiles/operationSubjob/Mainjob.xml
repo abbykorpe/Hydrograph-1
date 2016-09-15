@@ -18,7 +18,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
-	<inputs id="inputSubjob" phase="0" xsi:type="it:subjob">
+	<inputs id="inputSubjob" batch="0" xsi:type="it:subjob">
 		<outSocket id="out0">
 			<schema name="outSchema">
 			</schema>
@@ -30,7 +30,7 @@
 		</subjobParameter>
 	</inputs>
 	
-	<operations id="operationSubjob" phase="0" xsi:type="op:subjob">
+	<operations id="operationSubjob" batch="0" xsi:type="op:subjob">
 		<inSocket fromComponentId="inputSubjob" fromSocketId="out0" id="in0" />
 		<outSocket id="out0">
 		</outSocket>
@@ -42,7 +42,7 @@
 		</subjobParameter>
 	</operations>
 	
-	<outputs id="outputSubjob" phase="0" xsi:type="ot:subjob">
+	<outputs id="outputSubjob" batch="0" xsi:type="ot:subjob">
 		<inSocket fromComponentId="operationSubjob" fromSocketId="out0" id="in0">
 			<schema name="schema1">
 			</schema>
