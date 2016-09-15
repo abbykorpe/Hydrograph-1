@@ -66,7 +66,7 @@ public class PartitionByExpressionConverter extends TransformConverter {
 		noOfPartitions.setValue(partitionValueInt);
 		partByExp.setNoOfPartitions(noOfPartitions);
 		
-		partByExp.getOperation().addAll(getOperations());
+		//partByExp.getOperation().addAll(getOperations());
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class PartitionByExpressionConverter extends TransformConverter {
 		return outSockectList;
 	}
 
-	@Override
+	/*@Override
 	protected List<TypeTransformOperation> getOperations() {
 		logger.debug("Generating TypeTransformOperation data :{}",
 				properties.get(Constants.PARAM_NAME));
@@ -108,8 +108,14 @@ public class PartitionByExpressionConverter extends TransformConverter {
 			operation.setProperties(getPartitionProperties());
 		operationList.add(operation);
 		return operationList;
-	}
+	}*/
 
+	@Override
+	protected List<Object> getOperations() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	private List<TypeInputField> getOperationField() {
 		logger.debug("Generating TypeInputField data :{}",
 				properties.get(Constants.PARAM_NAME));
@@ -164,5 +170,4 @@ public class PartitionByExpressionConverter extends TransformConverter {
 		}
 		return typeProperties;
 	}
-
 }

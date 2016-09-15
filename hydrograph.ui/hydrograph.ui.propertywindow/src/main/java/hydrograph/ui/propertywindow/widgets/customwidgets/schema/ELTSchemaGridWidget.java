@@ -164,6 +164,7 @@ import org.xml.sax.SAXException;
 		public static final String SCALE = Messages.SCALE;
 		public static final String SCALE_TYPE = Messages.SCALE_TYPE;
 		public static final String FIELD_DESCRIPTION = Messages.FIELD_DESCRIPTION;
+		public static final String COL_DEF = Messages.COL_DEF;
 		public static final String LENGTH = Messages.LENGTH;
 		public static final String DELIMITER = Messages.DELIMITER;
 		public static int COLUMN_WIDTH=100;
