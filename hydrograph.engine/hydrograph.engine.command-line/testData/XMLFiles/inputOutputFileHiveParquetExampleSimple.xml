@@ -21,7 +21,7 @@
 
 
     
-    <inputs id="hive_parquet" phase="0" xsi:type="it:parquetHiveFile">
+    <inputs id="hive_parquet" batch="0" xsi:type="it:parquetHiveFile">
 		<outSocket id="out0">
 			<schema name="schema1">
 				 <field name="id" type="java.lang.Integer"/>
@@ -36,7 +36,7 @@
     
     
     
-   <outputs id="hiveparquetoutput" phase="0" xsi:type="ot:parquetHiveFile">
+   <outputs id="hiveparquetoutput" batch="0" xsi:type="ot:parquetHiveFile">
 		<inSocket fromComponentId="hive_parquet" fromSocketId="out0"
 			id="in0">
 			<schema name="">

@@ -18,7 +18,7 @@
 		<property name="hive.metastore.uris" value="thrift://UbuntuD5.bitwiseglobal.net:9083" />
 	</runtimeProperties>
 
-	<inputs id="IFDelimited_01" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="IFDelimited_01" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0" type="out">
 			<schema name="sdf">
 				<field name="id" type="java.lang.Integer" />
