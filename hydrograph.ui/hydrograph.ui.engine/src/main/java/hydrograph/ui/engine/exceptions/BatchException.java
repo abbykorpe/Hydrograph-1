@@ -15,11 +15,11 @@
 package hydrograph.ui.engine.exceptions;
 
 /**
- * Exception class thrown when Phase parameter is invalid
+ * Exception class thrown when Batch parameter is invalid
  */
 public class BatchException extends EngineException {
 	private static final long serialVersionUID = -2836447374635141077L;
-	private static final String MESSAGE_PREFIX = "Phase is empty or invalid - ";
+	private static final String MESSAGE_PREFIX = "Batch is empty or invalid - ";
 	
 	public BatchException(String message, Throwable cause) {
 		super(MESSAGE_PREFIX + message, cause);

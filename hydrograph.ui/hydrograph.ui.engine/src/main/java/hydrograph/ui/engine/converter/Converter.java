@@ -71,7 +71,7 @@ public abstract class Converter {
 		componentName = (String) properties.get(Constants.PARAM_NAME);
 		baseComponent.setId(componentName);
 		try {
-			baseComponent.setPhase((String) properties
+			baseComponent.setBatch((String) properties
 					.get(Constants.PARAM_BATCH));
 		} catch (NullPointerException | NumberFormatException nfe) {
 			logger.error("Batch id Empty or Invalid for : {}, {}",
