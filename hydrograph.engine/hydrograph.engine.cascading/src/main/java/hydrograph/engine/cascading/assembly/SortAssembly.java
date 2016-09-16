@@ -28,16 +28,10 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.utilities.ComponentHelper;
 
 /**
- * Check for sort fields sequence. Apply data types on keys. Max-Core not
- * implemented Special - Always does exact match.
- * 
  * @author Prabodh
- * 
  */
 public class SortAssembly extends BaseComponent<SortEntity> {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 3468787324609517976L;
 
 	private SortEntity sortEntity;
@@ -56,15 +50,7 @@ public class SortAssembly extends BaseComponent<SortEntity> {
 			for (OutSocket outSocket : sortEntity.getOutSocketList()) {
 				LOG.trace("Creating sort assembly for '" + sortEntity.getComponentId() + "' for socket: '"
 						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
-				// TODO
-				/*
-				 * The sort order applied on key fields does not take effect.
-				 * Need to change the logic to keep just 1st key field as the
-				 * group field for GroupBy Pipe. Set reverse order of GroupBy
-				 * pipe based on the sort order of that 1st field. Move all
-				 * other fields into secondary key fields with appropriate sort
-				 * order
-				 */
+				
 				Fields keyFields = getFieldsFromKeyFields(sortEntity.getKeyFields());
 				Fields secondaryKeyFields = getFieldsFromKeyFields(sortEntity.getSecondaryKeyFields());
 

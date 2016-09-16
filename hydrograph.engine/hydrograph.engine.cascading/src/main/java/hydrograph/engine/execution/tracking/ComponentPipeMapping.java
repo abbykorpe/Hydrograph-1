@@ -71,7 +71,7 @@ public class ComponentPipeMapping {
 	}
 
 	/**
-	 * Method generateComponentToFilterMap iterate over the phases and generates
+	 * Method generateComponentToFilterMap iterate over the batchs and generates
 	 * map of component id and it's corresponding previous components id.
 	 * 
 	 * @param runtimeContext
@@ -80,10 +80,10 @@ public class ComponentPipeMapping {
 	 */
 	public static void generateComponentAndPreviousrMap(RuntimeContext runtimeContext) {
 		JAXBTraversal jaxbTraversal = runtimeContext.getTraversal();
-		SortedSet<String> phases = jaxbTraversal.getFlowsNumber();
+		SortedSet<String> batchs = jaxbTraversal.getFlowsNumber();
 
-		for (String eachPhaseNumber : phases) {
-			List<String> orderedComponentList = jaxbTraversal.getOrderedComponentsList(eachPhaseNumber);
+		for (String eachBatchNumber : batchs) {
+			List<String> orderedComponentList = jaxbTraversal.getOrderedComponentsList(eachBatchNumber);
 			for (String eachComponentId : orderedComponentList) {
 				List<? extends TypeBaseOutSocket> outSockets = jaxbTraversal
 						.getOutputSocketFromComponentId(eachComponentId);

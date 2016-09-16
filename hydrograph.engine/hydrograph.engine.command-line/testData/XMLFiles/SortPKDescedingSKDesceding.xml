@@ -12,41 +12,52 @@
     limitations under the License.
  -->
 
-<p:graph name="OutputFileParquetExample" xmlns:p="hydrograph/engine/jaxb/main"
-	xmlns:it="hydrograph/engine/jaxb/inputtypes" xmlns:ot="hydrograph/engine/jaxb/outputtypes"
-	xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"
+<p:graph name="SortPrimaryKeyDescSecondayKeyDesc" xmlns:it="hydrograph/engine/jaxb/inputtypes"
+	xmlns:ot="hydrograph/engine/jaxb/outputtypes" xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"
 	xmlns:op="hydrograph/engine/jaxb/operationstypes" xmlns:ct="hydrograph/engine/jaxb/commandtypes"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd ">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"
+	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
 
 	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">
-				<field name="id" type="java.lang.String" />
+				<field name="id" type="java.lang.Integer" />
 				<field name="name" type="java.lang.String" />
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData\Input\hexDelimitedInputFile.txt" />
-		<delimiter value="\xC7" />
+
+		<path uri="testData\Input\sort_input.txt" />
+		<delimiter value="," />
 		<hasHeader value="false" />
-		<safe value="true" />
 		<charset value="ISO-8859-1" />
-		<quote value="asd" />
 	</inputs>
 
+	<straightPulls id="sort" xsi:type="spt:sort" batch="0">
+		<inSocket id="in0" fromComponentId="input1" fromSocketId="out0" />
+		<outSocket id="out0" type="out">
+			<copyOfInsocket inSocketId="in0" />
+		</outSocket>
+		<primaryKeys>
+			<field name="name" order="desc" />
+		</primaryKeys>	
+		<secondaryKeys>
+			<field name="city" order="desc" />
+		</secondaryKeys>	
+	</straightPulls>
 
 	<outputs id="output1" xsi:type="ot:textFileDelimited" batch="1">
-		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
+		<inSocket fromComponentId="sort" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
-				<field name="id" type="java.lang.String" />
+				<field name="id" type="java.lang.Integer" />
 				<field name="name" type="java.lang.String" />
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<overWrite value="true"/>
-		<path uri="testData\Output\HexDelimitedOutput" />
-		<delimiter value="\t" />
+		<path uri="testData\output\sortPKDescSKDescOutput" />
+		<delimiter value="," />
 		<hasHeader value="true" />
+		<charset value="ISO-8859-1" />
 	</outputs>
+
 </p:graph>

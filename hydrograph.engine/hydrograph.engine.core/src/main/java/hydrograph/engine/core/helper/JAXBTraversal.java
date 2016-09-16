@@ -43,7 +43,7 @@ public class JAXBTraversal {
 	public JAXBTraversal(Graph graph) {
 		jaxbGraph = graph.getInputsOrOutputsOrStraightPulls();
 		identifyHiveComponentInFlow();
-		populatePhase();
+		populateBatch();
 	}
 
 	private void identifyHiveComponentInFlow() {
@@ -61,12 +61,12 @@ public class JAXBTraversal {
 
 	/**
 	 * This method returns the list of ordered component id's in the specified
-	 * phase
+	 * batch
 	 * 
-	 * @param phase
+	 * @param batch
 	 * @return Ordered list of component id
 	 */
-	public List<String> getOrderedComponentsList(String phase) {
+	public List<String> getOrderedComponentsList(String batch) {
 		HashMap<String, Integer> componentDependencies = new HashMap<String, Integer>();
 		ArrayList<String> orderedComponents = new ArrayList<String>();
 		Queue<String> resolvedComponents = new LinkedList<String>();
@@ -75,7 +75,7 @@ public class JAXBTraversal {
 		LOG.trace("Ordering components");
 		for (TypeBaseComponent component : jaxbGraph) {
 
-			if (!component.getPhase().equals(phase))
+			if (!component.getBatch().equals(batch))
 				continue;
 
 			int intitialDependency = 0;
@@ -92,7 +92,7 @@ public class JAXBTraversal {
 
 		if (resolvedComponents.isEmpty() && !componentDependencies.isEmpty()) {
 			throw new GraphTraversalException(
-					"Unable to find any source component to process for phase " + phase + " in graph " + jaxbGraph);
+					"Unable to find any source component to process for batch " + batch + " in graph " + jaxbGraph);
 		}
 
 		while (!resolvedComponents.isEmpty()) {
@@ -166,9 +166,9 @@ public class JAXBTraversal {
 		return flowCount;
 	}
 
-	private void populatePhase() {
+	private void populateBatch() {
 		for (TypeBaseComponent component : jaxbGraph) {
-			flowCount.add(component.getPhase());
+			flowCount.add(component.getBatch());
 		}
 	}
 

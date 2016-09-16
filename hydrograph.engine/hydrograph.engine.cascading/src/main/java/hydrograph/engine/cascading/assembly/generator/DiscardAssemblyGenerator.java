@@ -60,7 +60,7 @@ public class DiscardAssemblyGenerator extends OutputAssemblyGeneratorBase {
 		LOG.trace("Initializing discard entity for component: "
 				+ jaxbDiscard.getId());
 		discardEntity.setComponentId(jaxbDiscard.getId());
-		discardEntity.setPhase(jaxbDiscard.getPhase());
+		discardEntity.setBatch(jaxbDiscard.getBatch());
 	}
 
 	@Override

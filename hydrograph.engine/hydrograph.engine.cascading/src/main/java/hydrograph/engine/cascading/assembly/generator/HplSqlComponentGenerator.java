@@ -35,7 +35,7 @@ public class HplSqlComponentGenerator extends CommandComponentGeneratorBase {
 	@Override
 	public void initializeEntity() {
 		hplSqlEntity.setComponentId(hplsql.getId());
-		hplSqlEntity.setPhase(hplsql.getPhase());
+		hplSqlEntity.setBatch(hplsql.getBatch());
 		hplSqlEntity.setCommand(hplsql.getCommand().getCmd());
 		if (hplsql.getExecute().getUri() != null)
 			hplSqlEntity.setUri(hplsql.getExecute().getUri().getValue());

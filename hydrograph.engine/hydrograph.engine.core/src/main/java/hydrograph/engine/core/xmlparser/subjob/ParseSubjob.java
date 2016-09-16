@@ -36,18 +36,18 @@ public class ParseSubjob {
 	private static final String FROMSOCKETID = "fromSocketId";
 	private static final String TYPE = "xsi:type";
 	private static final String SUBJOB_COMPONENTS = "operations|inputs|outputs|commands";
-	private static final String PHASE = "phase";
+	private static final String BATCH = "batch";
 	private Document parentXmlDocument = null;
 	private Document subjobXmlDocument = null;
 	private String subjobName;
-	private String subjobPhase;
+	private String subjobBatch;
 
 	public ParseSubjob(Document parentjobXml, Document subjobXml,
-			String subjobName, String subjobPhase) {
+			String subjobName, String subjobBatch) {
 		this.parentXmlDocument = parentjobXml;
 		this.subjobXmlDocument = subjobXml;
 		this.subjobName = subjobName;
-		this.subjobPhase = subjobPhase;
+		this.subjobBatch = subjobBatch;
 	}
 
 	public Document expandSubjob() {
@@ -68,52 +68,52 @@ public class ParseSubjob {
 
 			mergeParentjobAndSubjob();
 			
-			updatePhaseOfComponentsTillPhaseLevelInExpandedXmlDocument();
+			updateBatchOfComponentsTillBatchLevelInExpandedXmlDocument();
 		}
 		return parentXmlDocument;
 	}
 
 	/**
-	 * Updates the phase of components in the merged job till phaselevel. Phase level is the level of nesting of subjobs.
-	 * This method do not validate or updates the phase of components based on the source components.
+	 * Updates the batch of components in the merged job till batchlevel. Batch level is the level of nesting of subjobs.
+	 * This method do not validate or updates the batch of components based on the source components.
 	 */
-	private void updatePhaseOfComponentsTillPhaseLevelInExpandedXmlDocument() {
-		// phaseLevel is the level of nesting of subjobs
-		int phaseLevel = getPhaseLevel(XmlUtilities.getXMLStringFromDocument(parentXmlDocument));
-		NodeList componentsWithPhaseAttribute = null;
+	private void updateBatchOfComponentsTillBatchLevelInExpandedXmlDocument() {
+		// batchLevel is the level of nesting of subjobs
+		int batchLevel = getBatchLevel(XmlUtilities.getXMLStringFromDocument(parentXmlDocument));
+		NodeList componentsWithBatchAttribute = null;
 		try {
-			componentsWithPhaseAttribute = XmlUtilities
-					.getComponentsWithAttribute(parentXmlDocument, PHASE);
+			componentsWithBatchAttribute = XmlUtilities
+					.getComponentsWithAttribute(parentXmlDocument, BATCH);
 
-			if (componentsWithPhaseAttribute != null
-					&& componentsWithPhaseAttribute.getLength() > 0) {
-				setPhaseOfComponentsUptoPhaselevel(phaseLevel,componentsWithPhaseAttribute);
+			if (componentsWithBatchAttribute != null
+					&& componentsWithBatchAttribute.getLength() > 0) {
+				setBatchOfComponentsUptoBatchlevel(batchLevel,componentsWithBatchAttribute);
 			} else {
-				throw new RuntimeException("Component tag does not have '"+ PHASE +"' attribute.");
+				throw new RuntimeException("Component tag does not have '"+ BATCH +"' attribute.");
 			}
 
 		} catch (XPathExpressionException e) {
-			// this exception will never be thrown as XPATH is evaluted on the hardcoded value i.e PHASE
+			// this exception will never be thrown as XPATH is evaluted on the hardcoded value i.e BATCH
 			throw new RuntimeException(e);
 		}
 	}
 
-	/**updates phase of all the components in the expanded job by appending .0 to phase till phaseLevel.
-	 * @param phaseLevel
-	 * @param componentsWithPhaseAttribute
+	/**updates batch of all the components in the expanded job by appending .0 to batch till batchLevel.
+	 * @param batchLevel
+	 * @param componentsWithBatchAttribute
 	 */
-	private void setPhaseOfComponentsUptoPhaselevel(int phaseLevel,
-			NodeList componentsWithPhaseAttribute) {
-		for (int i = 0; i < componentsWithPhaseAttribute.getLength(); i++) {
-			String phase = componentsWithPhaseAttribute.item(i).getAttributes()
-					.getNamedItem(PHASE).getNodeValue();
-			if (phase.split("\\.").length < phaseLevel) {
-				for (int j = 0; j < phaseLevel; j++) {
-					phase = componentsWithPhaseAttribute.item(i)
-							.getAttributes().getNamedItem(PHASE).getNodeValue();
-					if (phase.split("\\.").length < phaseLevel) {
-						componentsWithPhaseAttribute.item(i).getAttributes()
-								.getNamedItem(PHASE).setNodeValue(phase + ".0");
+	private void setBatchOfComponentsUptoBatchlevel(int batchLevel,
+			NodeList componentsWithBatchAttribute) {
+		for (int i = 0; i < componentsWithBatchAttribute.getLength(); i++) {
+			String batch = componentsWithBatchAttribute.item(i).getAttributes()
+					.getNamedItem(BATCH).getNodeValue();
+			if (batch.split("\\.").length < batchLevel) {
+				for (int j = 0; j < batchLevel; j++) {
+					batch = componentsWithBatchAttribute.item(i)
+							.getAttributes().getNamedItem(BATCH).getNodeValue();
+					if (batch.split("\\.").length < batchLevel) {
+						componentsWithBatchAttribute.item(i).getAttributes()
+								.getNamedItem(BATCH).setNodeValue(batch + ".0");
 					}
 				}
 			}
@@ -129,8 +129,8 @@ public class ParseSubjob {
 				+ SUBJOB_OUTPUT);
 	}
 
-	private int getPhaseLevel(String xmlAsString) {
-		Matcher m = Pattern.compile("phase\\s*=\\s*\"(.*?)\"", Pattern.DOTALL)
+	private int getBatchLevel(String xmlAsString) {
+		Matcher m = Pattern.compile("batch\\s*=\\s*\"(.*?)\"", Pattern.DOTALL)
 				.matcher(xmlAsString);
 		int length = 0;
 		while (m.find()) {
@@ -154,7 +154,7 @@ public class ParseSubjob {
 		NodeList nodeList = subjobXmlDocument.getFirstChild().getChildNodes();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			if (nodeList.item(i).hasAttributes()) {
-				Node componentNode = updateComponentIdAndPhase(nodeList.item(i));
+				Node componentNode = updateComponentIdAndBatch(nodeList.item(i));
 				updateInSocket(componentNode);
 			}
 		}
@@ -176,7 +176,7 @@ public class ParseSubjob {
 		}
 	}
 
-	private Node updateComponentIdAndPhase(Node componentNode) {
+	private Node updateComponentIdAndBatch(Node componentNode) {
 		String componentId = componentNode.getAttributes().getNamedItem(ID)
 				.getNodeValue();
 		componentNode.getAttributes().getNamedItem(ID)
@@ -184,18 +184,18 @@ public class ParseSubjob {
 
 		if (!isSubjobIOComponent(componentNode.getAttributes()
 				.getNamedItem(TYPE).getNodeValue())) {
-			if (componentNode.getAttributes().getNamedItem(PHASE) == null){
-				throw new RuntimeException("Phase attribute is not present for '" 
+			if (componentNode.getAttributes().getNamedItem(BATCH) == null){
+				throw new RuntimeException("Batch attribute is not present for '" 
 						+ componentNode.getAttributes()
 						.getNamedItem(TYPE).getNodeValue().split(":")[1] + "' component with Id '"
 						+ componentNode.getAttributes().getNamedItem(ID).getNodeValue() +"'");
 			} else {
-				String componentPhase = this.subjobPhase.split("\\.")[0]
+				String componentBatch = this.subjobBatch.split("\\.")[0]
 						+ "."
-						+ componentNode.getAttributes().getNamedItem(PHASE)
+						+ componentNode.getAttributes().getNamedItem(BATCH)
 						.getNodeValue();
-				componentNode.getAttributes().getNamedItem(PHASE)
-				.setNodeValue(componentPhase);
+				componentNode.getAttributes().getNamedItem(BATCH)
+				.setNodeValue(componentBatch);
 			}
 
 					

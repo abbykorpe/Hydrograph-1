@@ -17,7 +17,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
-	<inputs id="input1" phase="1" xsi:type="it:textFileDelimited">
+	<inputs id="input1" batch="1" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="schema1">
 				<includeExternalSchema uri="testData/XMLFiles/outputSubjob/SchemaForSubjob.xml" />
@@ -28,7 +28,7 @@
 		<hasHeader value="false" />
 	</inputs>
 	
-	<operations id="reformat" phase="0" xsi:type="op:transform">
+	<operations id="reformat" batch="0" xsi:type="op:transform">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<operation id="opt1" class="com.bitwiseglobal.test.TransformTest">
 			<inputFields>
@@ -45,7 +45,7 @@
 		</outSocket>
 	</operations>
 	
-	<outputs id="outputSubjob" phase="0" xsi:type="ot:subjob">
+	<outputs id="outputSubjob" batch="0" xsi:type="ot:subjob">
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0">
 			<schema name="schema1">
 			</schema>

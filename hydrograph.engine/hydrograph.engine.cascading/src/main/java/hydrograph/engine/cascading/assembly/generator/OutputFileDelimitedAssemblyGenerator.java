@@ -62,7 +62,7 @@ public class OutputFileDelimitedAssemblyGenerator extends OutputAssemblyGenerato
 
 		LOG.trace("Initializing output file delimited entity for component: " + jaxbOutputFileDelimited.getId());
 		outputFileDelimitedEntity.setComponentId(jaxbOutputFileDelimited.getId());
-		outputFileDelimitedEntity.setPhase(jaxbOutputFileDelimited.getPhase());
+		outputFileDelimitedEntity.setBatch(jaxbOutputFileDelimited.getBatch());
 		outputFileDelimitedEntity.setPath(jaxbOutputFileDelimited.getPath().getUri());
 		outputFileDelimitedEntity.setSafe(
 				jaxbOutputFileDelimited.getSafe() != null ? jaxbOutputFileDelimited.getSafe().isValue() : false);

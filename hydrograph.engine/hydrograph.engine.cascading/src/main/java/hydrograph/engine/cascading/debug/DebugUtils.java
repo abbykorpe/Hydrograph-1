@@ -31,8 +31,6 @@ public class DebugUtils {
 			debugPoint = new DebugPoint();
 			debugPoint.setFromComponentId(viewData.getFromComponentId());
 			debugPoint.setOutSocketId(viewData.getOutSocketId());
-			if (viewData.getLimit() != null)
-				debugPoint.setLimit(viewData.getLimit().getValue());
 			listOfDebugPoints.add(debugPoint);
 		}
 		return listOfDebugPoints;

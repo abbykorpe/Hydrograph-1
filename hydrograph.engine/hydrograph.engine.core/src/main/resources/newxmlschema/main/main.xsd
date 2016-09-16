@@ -110,6 +110,9 @@
 				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required" />
+			<!-- To view historical watcher data -->
+			<xs:attribute name="runCounter" type="xs:string" use="optional" />
+			<xs:attribute name="uniqueJobId" type="xs:string" use="optional" />
 		</xs:complexType>
 		<xs:key name="keyComponentID">
 			<xs:selector xpath="inputs|outputs|straightPulls|operations|commands" />

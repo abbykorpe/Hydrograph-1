@@ -47,7 +47,7 @@ public enum ComponentBuilder {
 					debugContext.getFromComponentId(),
 					debugContext.getFromOutSocketId(),
 					debugContext.getTypeBaseComponents()));
-			clone.setPhase(debugContext.getPhase());
+			clone.setBatch(debugContext.getBatch());
 			clone.getInSocket().add(
 					ComponentBuilderUtils.getStraightPullInSocket(
 							debugContext.getFromComponentId(),
@@ -84,7 +84,7 @@ public enum ComponentBuilder {
 			limit.setId(ComponentBuilderUtils.generateUniqueComponentId(
 					debugContext.getPreviousComponentId(), "out1",
 					debugContext.getTypeBaseComponents()));
-			limit.setPhase(debugContext.getPhase());
+			limit.setBatch(debugContext.getBatch());
 			MaxRecords mr = new MaxRecords();
 			mr.setValue((long) debugContext.getParams().get("limitvalue"));
 			limit.setMaxRecords(mr);
@@ -107,7 +107,7 @@ public enum ComponentBuilder {
 					.generateUniqueComponentId(
 							debugContext.getPreviousComponentId(), "out1",
 							debugContext.getTypeBaseComponents()));
-			avroOutputFile.setPhase(debugContext.getPhase());
+			avroOutputFile.setBatch(debugContext.getBatch());
 			Path path = new Path();
 
 			String pathUri = debugContext.getBasePath() + "/debug/"
@@ -141,8 +141,8 @@ public enum ComponentBuilder {
 					.generateUniqueComponentId(
 							debugContext.getPreviousComponentId(), "out1",
 							debugContext.getTypeBaseComponents()));
-			// set phase
-			textOutputFileDelimited.setPhase(debugContext.getPhase());
+			// set batch
+			textOutputFileDelimited.setBatch(debugContext.getBatch());
 
 			// set path
 			String pathUri = debugContext.getBasePath() + "/debug/"

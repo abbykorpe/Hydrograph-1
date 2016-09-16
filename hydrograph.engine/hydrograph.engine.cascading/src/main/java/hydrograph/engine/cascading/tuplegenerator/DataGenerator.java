@@ -54,9 +54,15 @@ public class DataGenerator {
 	// INTEGER
 
 	private static int generateFixedLengthNumber(int length) {
-		int fromRangeVal = (int) Math.pow(10, (length - 1));
-		int toRangeVal = (int) (Math.pow(10, length) - 1);
-		return DataGenerator.getIntegerBetween(-fromRangeVal, toRangeVal);
+		int fromRangeValForPositiveNumbers = (int) Math.pow(10, (length - 1));
+		int toRangeValForPositiveNumbers = (int) (Math.pow(10, length) - 1);
+		int fromRangeValForNegetiveNumbers = (int) Math.pow(10, (length - 2));
+		int toRangeValForNegetiveNumbers = (int) (Math.pow(10, (length-1)) - 1);
+		if (DataGenerator.getIntegerBetween(0, 1) == 0) {
+			return DataGenerator.getIntegerBetween(-toRangeValForNegetiveNumbers, -fromRangeValForNegetiveNumbers);
+		} else {
+			return DataGenerator.getIntegerBetween(fromRangeValForPositiveNumbers, toRangeValForPositiveNumbers);
+		}
 	}
 
 	/**
@@ -526,7 +532,7 @@ public class DataGenerator {
 	 */
 	public static double getRandomDouble(int length) {
 		BigDecimal big = new BigDecimal(generateFixedLengthNumber(length - 1));
-		return big.movePointLeft(length - 2).doubleValue();
+		return big.doubleValue()/10;
 	}
 
 	/**
@@ -609,7 +615,7 @@ public class DataGenerator {
 	public static float getRandomFloat(int length) {
 
 		BigDecimal big = new BigDecimal(generateFixedLengthNumber(length - 1));
-		return big.movePointLeft(length - 2).floatValue();
+		return big.floatValue()/10;
 	}
 
 	/**
@@ -673,9 +679,15 @@ public class DataGenerator {
 	// SHORT
 
 	private static short generateFixedLengthShortNumber(int length) {
-		short fromRangeVal = (short) Math.pow(10, (length - 1));
-		short toRangeVal = (short) (Math.pow(10, length) - 1);
-		return DataGenerator.getShortBetween(fromRangeVal, toRangeVal);
+		short fromRangeValForPositiveNumbers = (short) Math.pow(10, (length - 1));
+		short toRangeValForPositiveNumbers = (short) (Math.pow(10, length) - 1);
+		short fromRangeValForNegetiveNumbers = (short) Math.pow(10, (length - 2));
+		short toRangeValForNegetiveNumbers = (short) (Math.pow(10, (length-1)) - 1);
+		if (DataGenerator.getIntegerBetween(0, 1) == 0) {
+			return DataGenerator.getShortBetween((short)-toRangeValForNegetiveNumbers, (short)-fromRangeValForNegetiveNumbers);
+		} else {
+			return DataGenerator.getShortBetween(fromRangeValForPositiveNumbers, toRangeValForPositiveNumbers);
+		}
 	}
 
 	/**
@@ -759,9 +771,15 @@ public class DataGenerator {
 	// LONG
 
 	private static long generateFixedLengthLongNumber(int length) {
-		long fromRangeVal = (long) Math.pow(10, (length - 1));
-		long toRangeVal = (long) (Math.pow(10, length) - 1);
-		return DataGenerator.getLongBetween(fromRangeVal, toRangeVal);
+		long fromRangeValForPositiveNumbers = (long) Math.pow(10, (length - 1));
+		long toRangeValForPositiveNumbers = (long) (Math.pow(10, length) - 1);
+		long fromRangeValForNegetiveNumbers = (long) Math.pow(10, (length - 2));
+		long toRangeValForNegetiveNumbers = (long) (Math.pow(10, (length-1)) - 1);
+		if (DataGenerator.getIntegerBetween(0, 1) == 0) {
+			return DataGenerator.getLongBetween(-toRangeValForNegetiveNumbers, -fromRangeValForNegetiveNumbers);
+		} else {
+			return DataGenerator.getLongBetween(fromRangeValForPositiveNumbers, toRangeValForPositiveNumbers);
+		}
 	}
 
 	/**

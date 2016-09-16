@@ -20,7 +20,7 @@
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
 
-	<inputs id="input1" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0" type="out">
 			<schema name="timepass">
 				<field name="f1" type="java.lang.String" />
@@ -32,7 +32,7 @@
 		<charset value="ISO-8859-1" />
 	</inputs>
 
-	<straightPulls id="limit" phase="0" xsi:type="spt:limit">
+	<straightPulls id="limit" batch="0" xsi:type="spt:limit">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<outSocket id="out0" type="out">
 			<copyOfInsocket inSocketId="in0" />

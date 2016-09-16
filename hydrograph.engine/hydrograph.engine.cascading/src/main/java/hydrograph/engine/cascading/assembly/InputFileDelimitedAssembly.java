@@ -58,8 +58,8 @@ public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimited
 		fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileDelimitedEntity>(inputFileDelimitedEntity);
 		LOG.debug("InputFile Delimited Component: [ Fields List : " + Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 				+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Delimiter : '" + inputFileDelimitedEntity.getDelimiter()
-				+ "' , Path : " + inputFileDelimitedEntity.getPath() + ", Phase : "
-				+ inputFileDelimitedEntity.getPhase() + "]");
+				+ "' , Path : " + inputFileDelimitedEntity.getPath() + ", Batch : "
+				+ inputFileDelimitedEntity.getBatch() + "]");
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipe, tap);
 

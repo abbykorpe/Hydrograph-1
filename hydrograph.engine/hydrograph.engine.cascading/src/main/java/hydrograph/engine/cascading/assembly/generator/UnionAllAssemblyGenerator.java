@@ -61,7 +61,7 @@ public class UnionAllAssemblyGenerator extends
 		LOG.trace("Initializing union all entity for component: "
 				+ jaxbUnionAll.getId());
 		unionAllEntity.setComponentId(jaxbUnionAll.getId());
-		unionAllEntity.setPhase(jaxbUnionAll.getPhase());
+		unionAllEntity.setBatch(jaxbUnionAll.getBatch());
 		unionAllEntity.setOutSocket(StraightPullEntityUtils.extractOutSocketList(
 				jaxbUnionAll.getOutSocket()).get(0));
 		unionAllEntity.setRuntimeProperties(StraightPullEntityUtils

@@ -60,7 +60,7 @@ public class NormalizeAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
 		LOG.trace("Initializing normalize entity for component: " + jaxbNormalize.getId());
 		normalizeEntity.setComponentId(jaxbNormalize.getId());
-		normalizeEntity.setPhase(jaxbNormalize.getPhase());
+		normalizeEntity.setBatch(jaxbNormalize.getBatch());
 		// check if operation is present
 		if (jaxbNormalize.getOperationOrExpression() != null && jaxbNormalize.getOperationOrExpression().size() > 0) {
 

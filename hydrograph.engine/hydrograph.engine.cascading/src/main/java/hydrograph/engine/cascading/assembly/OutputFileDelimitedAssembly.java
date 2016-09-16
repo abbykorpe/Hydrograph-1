@@ -67,7 +67,7 @@ public class OutputFileDelimitedAssembly extends BaseComponent<OutputFileDelimit
 					+ Arrays.toString(fieldsCreator.getFieldNames()) + ", Field Types : "
 					+ Arrays.toString(fieldsCreator.getFieldDataTypes()) + ", Delimiter : '"
 					+ outputFileDelimitedEntity.getDelimiter() + "' , Path : " + outputFileDelimitedEntity.getPath()
-					+ ", Phase : " + outputFileDelimitedEntity.getPhase() + "]");
+					+ ", Batch : " + outputFileDelimitedEntity.getBatch() + "]");
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(outputFileDelimitedEntity.toString());
 			}

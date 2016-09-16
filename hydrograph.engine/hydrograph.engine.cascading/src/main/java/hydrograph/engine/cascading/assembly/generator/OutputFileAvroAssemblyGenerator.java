@@ -59,7 +59,7 @@ public class OutputFileAvroAssemblyGenerator extends OutputAssemblyGeneratorBase
 
 		LOG.trace("Initializing output file Avro entity for component: " + jaxbAvroFile.getId());
 		outputFileAvroEntity.setComponentId(jaxbAvroFile.getId());
-		outputFileAvroEntity.setPhase(jaxbAvroFile.getPhase());
+		outputFileAvroEntity.setBatch(jaxbAvroFile.getBatch());
 		outputFileAvroEntity.setPath(jaxbAvroFile.getPath().getUri());
 		outputFileAvroEntity.setFieldsList(OutputEntityUtils.extractOutputFields(
 				jaxbAvroFile.getInSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));

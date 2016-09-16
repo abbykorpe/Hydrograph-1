@@ -66,13 +66,13 @@ public class FlowBuilder {
 				.getHydrographEngineFlowConnector(hadoopProps);
 
 		Cascade[] cascades = new Cascade[traversal.getFlowsNumber().size()];
-		int phaseIndex = -1;
+		int batchIndex = -1;
 		String flowName = "flow";
-		for (String phase : traversal.getFlowsNumber()) {
-			phaseIndex = phaseIndex + 1;
+		for (String batch : traversal.getFlowsNumber()) {
+			batchIndex = batchIndex + 1;
 			FlowContext flowContext = new FlowContext(hydrographJob, traversal,
 					hadoopProps);
-			traverseAndConnect(runtimeContext, flowContext, phase);
+			traverseAndConnect(runtimeContext, flowContext, batch);
 			FlowDef flowDef = flowContext.getFlowDef();
 			if (flowConnector instanceof Hadoop2TezFlowConnector) {
 				flowDef = PlatformHelper
@@ -82,9 +82,9 @@ public class FlowBuilder {
 				flowContext.getCascadeDef().addFlow(
 						flowConnector.connect(flowDef));
 			}
-			cascades[phaseIndex] = (new CascadeConnector().connect(flowContext
-					.getCascadeDef().setName(flowName + "_" + phaseIndex)));
-			runtimeContext.setFlowContext(phase, flowContext);
+			cascades[batchIndex] = (new CascadeConnector().connect(flowContext
+					.getCascadeDef().setName(flowName + "_" + batchIndex)));
+			runtimeContext.setFlowContext(batch, flowContext);
 		}
 		runtimeContext.setCascade(cascades);
 
@@ -96,11 +96,11 @@ public class FlowBuilder {
 	}
 
 	private void traverseAndConnect(RuntimeContext runtimeContext,
-			FlowContext flowContext, String phase) {
+			FlowContext flowContext, String batch) {
 
 		JAXBTraversal traversal = flowContext.getTraversal();
 
-		for (String componentId : traversal.getOrderedComponentsList(phase)) {
+		for (String componentId : traversal.getOrderedComponentsList(batch)) {
 			LOG.info("Building parameters for " + componentId);
 
 			ComponentParameters cp = null;

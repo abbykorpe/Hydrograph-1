@@ -57,7 +57,7 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 			for (OutSocket outSocket : outSocketList) {
 				trackContext = new TrackContext();
 				trackContext.setFromComponentId(typeBaseComponent.getId());
-				trackContext.setPhase(typeBaseComponent.getPhase());
+				trackContext.setBatch(typeBaseComponent.getBatch());
 				trackContext.setFromOutSocketId(outSocket.getSocketId());
 				trackContext.setFromOutSocketType(outSocket.getSocketType());
 				Filter newFilter = TrackComponentUtils.generateFilterAfterEveryComponent(trackContext, jaxbObjectList,
