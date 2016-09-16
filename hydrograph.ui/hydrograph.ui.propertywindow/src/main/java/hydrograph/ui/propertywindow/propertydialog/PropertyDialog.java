@@ -250,7 +250,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	@Override
 	protected Point getInitialSize() {
 		Point result = getDefaultSize();
-
+		getShell().setMinimumSize(result);
 	    // Check the dialog settings for a stored size.
 	    if((getDialogBoundsStrategy() & DIALOG_PERSISTSIZE) != 0)
 	    {

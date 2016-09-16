@@ -170,6 +170,8 @@ public class LookupMapDialog extends Dialog {
 		composite.setWeights(new int[] {267, 618});
 
 		populateLookupMapDialog();
+		
+		getShell().setMinimumSize(getInitialSize());
 		return container;
 	}
 

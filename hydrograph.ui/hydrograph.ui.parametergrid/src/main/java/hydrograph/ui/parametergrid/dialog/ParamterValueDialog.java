@@ -80,6 +80,7 @@ public class ParamterValueDialog extends Dialog {
 		if(StringUtils.isNotBlank(this.initialValue))
 			text.setText(this.initialValue);
 		
+		getShell().setMinimumSize(getInitialSize());
 		return container;
 	}
 

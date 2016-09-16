@@ -226,7 +226,7 @@ public class MultiParameterFileDialog extends Dialog {
 			populateViewParameterFileBox(jobSpecificFile);
 
 		createParameterSearchBox(childSashForm);
-
+		getShell().setMinimumSize(getInitialSize());
 		return container_1;
 	}
 
