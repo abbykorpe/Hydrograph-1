@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -43,7 +42,8 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	
 	private List<Job> jobDetails;
 	private String selectedUniqueJobId;
-	private Button button1;
+	private Button buttonSelection;
+	private Button radioButton[] = new Button[5];
 
 	public ViewDataUniqueIdDialog(Shell parentShell, List<Job> jobDetails) {
 		super(parentShell);
@@ -68,16 +68,32 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {280, 2, 130, 20}, "Time Stamp");
 		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {410, 2, 100, 20}, "Execution Mode");
 		
+		int x= 0;
 		int y = 26;
 		for(Job job : jobDetails){
 			String timeStamp = getTimeStamp(job.getUniqueJobId());
-			buttonWidget(portComposite, SWT.RADIO, new int[] {10, y, 270, 20}, job.getUniqueJobId());
+			radioButton[x] = buttonWidget(portComposite, SWT.RADIO, new int[] {10, y, 270, 20}, job.getUniqueJobId());
 			labelWidget(portComposite, SWT.None, new int[] {282, y + 2, 130, 20}, timeStamp);
 			String mode = getJobExecutionMode(job.isRemoteMode());
 			labelWidget(portComposite, SWT.None|SWT.CENTER, new int[] {412, y + 2, 100, 20}, mode);
 			y = y + 20;
+			x = x+1;
 		}
-
+		radioButton[0].setSelection(true);
+		
+		for(int i=0; i<radioButton.length;i++){
+			if(radioButton[i] != null){
+				radioButton[i].addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent event) {
+						buttonSelection = (Button)event.getSource();
+						if(buttonSelection != null){
+							selectedUniqueJobId = buttonSelection.getText();
+						}
+					}
+				});
+			}
+		}
 		return super.createDialogArea(parent);
 	}
 	
@@ -96,12 +112,6 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		button.setText(value);
 		button.setToolTipText(value);
 
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				button1 = (Button) event.widget;
-			}
-		});
 		return button;
 	}
 	
@@ -125,8 +135,8 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	
 	@Override
 	protected void okPressed() {
-		if(StringUtils.isNotEmpty(button1.getText())){
-			selectedUniqueJobId = button1.getText();
+		if(selectedUniqueJobId == null){
+			selectedUniqueJobId = radioButton[0].getText();
 		}
 		super.okPressed();
 	}
