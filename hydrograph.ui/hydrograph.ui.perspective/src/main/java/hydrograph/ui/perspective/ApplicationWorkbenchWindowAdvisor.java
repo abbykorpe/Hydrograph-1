@@ -110,20 +110,17 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		
     	String command = "java -cp " + path + HYDROGRAPH_EXECUTION_TRACKING_SERVER_JAR	+ " " + EXECUTION_TRACKING_SERVER_MAIN_CLASS;
     	Runtime runtime = Runtime.getRuntime();
-    	String commandArray[];
-		if (OSValidator.isWindows()) {
-			commandArray = new String[] { "cmd.exe", "/c", command };
-		} 
-		else{
-			commandArray = new String[] {command};
-		}
-		
-		try {
-			runtime.exec(commandArray);
+    	try {
+			if (OSValidator.isWindows()) {
+				String commandArray[] = new String[] { "cmd.exe", "/c", command };
+				runtime.exec(commandArray);
+			} 
+			else{
+				runtime.exec(command);
+			}
 		} catch (IOException ioException) {
 			logger.error("Exception occurred while starting execution tracking server" + ioException);
 		}
-
 	}
     
 	@Override
