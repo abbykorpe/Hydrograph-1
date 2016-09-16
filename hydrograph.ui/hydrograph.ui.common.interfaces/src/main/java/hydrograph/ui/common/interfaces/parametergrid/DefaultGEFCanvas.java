@@ -121,4 +121,11 @@ public interface DefaultGEFCanvas {
 	 * @return
 	 */
 	public List<ParameterFile> getJobLevelParamterFiles(); 
+	
+	/**
+	 * Returns unique job id
+	 * 
+	 * @return unique job id
+	 */
+	public String getUniqueJobId();
 }
