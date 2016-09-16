@@ -65,6 +65,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 52.#1212 [Rushikesh Pawale] Schema in Output component is now Getting Updated After Re-arranging the Schema Of all Components.
 53.#1227 [Vibhor Tyagi] View Data: On 'Execution History Window', on By default Radio Button is not getting Selected to the Prior job
 54.#1226 [Shrirang Kumbhar] Execution Tracking : On Re-run of the job, Previous logs Are not Getting Removed from Execution Tracking Console Log Window 
+55.#529 [Ankit Sharma] Phase Renamed: Attribute Phase is renamed to batch at all of its occurences. 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
