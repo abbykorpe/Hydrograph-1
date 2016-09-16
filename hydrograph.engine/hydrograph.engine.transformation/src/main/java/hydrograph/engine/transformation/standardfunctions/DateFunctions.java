@@ -57,7 +57,6 @@ public class DateFunctions {
 	 * Formats and converts a date value into string representation in the
 	 * desired new date format
 	 * 
-	 * @see dateFormatter("20150512", "yyyyMMdd", "dd-MM-yyyy")
 	 * @param inputValue
 	 *            the date value in old format
 	 * @param oldFormat
@@ -96,7 +95,6 @@ public class DateFunctions {
 	 * Formats and converts a date value into string representation in the
 	 * desired new date format
 	 * 
-	 * @see dateFormatter("20150512", "yyyyMMdd", "dd-MM-yyyy")
 	 * @param inputValue
 	 *            the date value in old format
 	 * @param oldFormat
@@ -129,7 +127,6 @@ public class DateFunctions {
 	 * Formats and converts a date value into string representation in the
 	 * desired new date format
 	 * 
-	 * @see dateFormatter(20150512, "yyyyMMdd", "dd-MM-yyyy")
 	 * @param inputValue
 	 *            the date value in old format
 	 * @param oldFormat
@@ -161,7 +158,6 @@ public class DateFunctions {
 	/**
 	 * Returns a date object from a string date value
 	 * 
-	 * @see getDateFromString("20150512", "yyyyMMdd")
 	 * @param inputDateInStringFormat
 	 *            the date value in string
 	 * @param dateFormat
@@ -191,7 +187,6 @@ public class DateFunctions {
 	/**
 	 * Returns a date object from a string date value
 	 * 
-	 * @see getDateFromString("20150512", "yyyyMMdd")
 	 * @param inputDateInStringFormat
 	 *            the date value in string
 	 * @param dateFormat
@@ -217,7 +212,6 @@ public class DateFunctions {
 	/**
 	 * Returns a string value of the date
 	 * 
-	 * @see getStringDateFromDateObject(20150512, "yyyyMMdd")
 	 * @param inputDate
 	 *            the date to fetch the string value
 	 * @param dateFormat
@@ -243,7 +237,6 @@ public class DateFunctions {
 	/**
 	 * Returns a string value of the date
 	 * 
-	 * @see getStringDateFromDateObject(20150512, "yyyyMMdd")
 	 * @param inputDate
 	 *            the date to fetch the string value
 	 * @param dateFormat
@@ -268,7 +261,6 @@ public class DateFunctions {
 	/**
 	 * Validates the string date value to the format specified
 	 * 
-	 * @see validateStringDate("20150512", "yyyyMMdd")
 	 * @param inputDate
 	 *            the date value in string to be validated
 	 * @param dateFormat
