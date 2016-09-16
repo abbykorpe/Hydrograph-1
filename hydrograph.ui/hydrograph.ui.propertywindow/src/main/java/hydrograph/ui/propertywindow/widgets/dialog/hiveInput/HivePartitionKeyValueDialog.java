@@ -297,6 +297,8 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		outterSashForm.setWeights(new int[] {451, 176});
 		
 		checkTargetFieldsSequence();
+		
+		getShell().setMinimumSize(getInitialSize());
 		return container;
 	}
 
