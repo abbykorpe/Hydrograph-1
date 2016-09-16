@@ -827,7 +827,7 @@ public class FieldDialog extends Dialog {
 	@Override
 	protected void cancelPressed() {
 		if (isAnyUpdatePerformed) {
-			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO |SWT.ICON_INFORMATION;
 			MessageBox messageBox = new MessageBox(getShell(), style);
 			messageBox.setText(INFORMATION); //$NON-NLS-1$
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);

@@ -822,7 +822,7 @@ public class JoinMapGrid extends Dialog {
 			super.close();
 		} else {
 			if (!Arrays.equals(currentItems, previousItems)) {
-				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+				int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO | SWT.ICON_INFORMATION;
 				MessageBox messageBox = new MessageBox(new Shell(), style);
 				messageBox.setText(INFORMATION);
 				messageBox.setMessage(Messages.MessageBeforeClosingWindow);

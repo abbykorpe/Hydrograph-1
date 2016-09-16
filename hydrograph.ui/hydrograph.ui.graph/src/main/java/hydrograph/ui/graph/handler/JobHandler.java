@@ -29,8 +29,10 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -118,10 +120,15 @@ public class JobHandler extends AbstractHandler {
 	
 	private boolean confirmationFromUser() {
 		
-		MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(),Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE, null,
+		/*MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(),Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE, null,
 				Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB, MessageDialog.QUESTION, new String[] { "Yes",
-		  "No" }, 0);
-		int response = messageDialog.open();
+		  "No" }, 0);*/
+		
+		MessageBox dialog = new MessageBox(new Shell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		dialog.setText(Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE);
+		dialog.setMessage(Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB);
+		
+		int response = dialog.open();
 		 if(response == 0){
 	        	return true;
 	        } else {

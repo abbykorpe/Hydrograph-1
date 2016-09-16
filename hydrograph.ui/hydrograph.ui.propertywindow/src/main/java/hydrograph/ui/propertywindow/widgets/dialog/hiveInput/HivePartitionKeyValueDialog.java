@@ -1051,7 +1051,7 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 	@Override
 	protected void cancelPressed() {
 		if (isAnyUpdatePerformed) {
-			int style = SWT.APPLICATION_MODAL | SWT.OK | SWT.CANCEL;
+			int style = SWT.APPLICATION_MODAL | SWT.OK | SWT.CANCEL |SWT.ICON_INFORMATION;
 			MessageBox messageBox = new MessageBox(getShell(), style);
 			messageBox.setText(Messages.INFORMATION); //$NON-NLS-1$
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);

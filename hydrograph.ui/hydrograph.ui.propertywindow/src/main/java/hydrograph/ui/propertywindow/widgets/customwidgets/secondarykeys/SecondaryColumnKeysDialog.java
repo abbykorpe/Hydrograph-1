@@ -757,7 +757,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	@Override
 	protected void cancelPressed() {
 		if (isAnyUpdatePerformed) {
-			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO;
+			int style = SWT.APPLICATION_MODAL | SWT.YES | SWT.NO |SWT.ICON_INFORMATION;
 			MessageBox messageBox = new MessageBox(new Shell(), style);
 			messageBox.setText(INFORMATION);
 			messageBox.setMessage(Messages.MessageBeforeClosingWindow);
