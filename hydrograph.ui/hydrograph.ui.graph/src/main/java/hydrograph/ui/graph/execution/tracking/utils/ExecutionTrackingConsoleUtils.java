@@ -75,9 +75,10 @@ public class ExecutionTrackingConsoleUtils {
 			if(!JobManager.INSTANCE.isJobRunning(localJobId)){
 				openExecutionTrackingConsoleWindow(localJobId);
 			}
+		}else{
+			openExecutionTrackingConsoleWindow(localJobId);
 		}
 		
-		openExecutionTrackingConsoleWindow(localJobId);
 	}
 	
 	/**
@@ -120,12 +121,15 @@ public class ExecutionTrackingConsoleUtils {
 	 * @param localJobId the local job id
 	 */
 	private void openExecutionTrackingConsoleWindow(String localJobId) {
-		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(localJobId.replace(".", "_"));
+		boolean newConsole=false;
+		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(localJobId);
 		if(console==null){
-			console = new ExecutionTrackingConsole(localJobId);
-			JobManager.INSTANCE.getExecutionTrackingConsoles().put(localJobId.replace(".", "_"), console);
+			console = new ExecutionTrackingConsole(getConsoleName(),localJobId);
+			JobManager.INSTANCE.getExecutionTrackingConsoles().put(localJobId, console);
+			newConsole = true;
 		}
 		if(console.getShell()==null){
+			console.clearConsole();
 			console.open();
 		}else{
 			Rectangle originalBounds = console.getShell().getBounds();
@@ -134,8 +138,8 @@ public class ExecutionTrackingConsoleUtils {
 			console.getShell().setBounds(originalBoundsClone);		
 			console.getShell().setActive();	
 		}
-		if(StringUtils.isNotEmpty(getUniqueJobId())){
-			console.setStatus(null, readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode()));
+		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole){
+			console.setStatus(readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode()));
 		}
 	}
 
@@ -152,8 +156,26 @@ public class ExecutionTrackingConsoleUtils {
 			return null;
 		}
 		
-		String jobId = canvas.getActiveProject() + "." + canvas.getJobName();
+		//String jobId = canvas.getActiveProject() + "." + canvas.getJobName();
+		String jobId = canvas.getUniqueJobId();
 		return jobId;
+	}
+	
+	/**
+	 * Gets the local job id.
+	 *
+	 * @return the local job id
+	 */
+	private String getConsoleName() {
+		DefaultGEFCanvas canvas = CanvasUtils.INSTANCE.getComponentCanvas();
+		
+		if(canvas==null){
+			MessageBox.INSTANCE.showMessage(MessageBox.INFO, Messages.NO_ACTIVE_GRAPHICAL_EDITOR);
+			return null;
+		}
+		
+		String consoleName = canvas.getActiveProject() + "." + canvas.getJobName();
+		return consoleName;
 	}
 	
 	/**
@@ -163,7 +185,7 @@ public class ExecutionTrackingConsoleUtils {
 	 * @param uniqueJobId the unique job id
 	 * @return the string builder
 	 */
-	public StringBuilder readFile(ExecutionStatus executionStatus, String uniqueJobId, boolean isLocalMode){
+	public String readFile(ExecutionStatus executionStatus, String uniqueJobId, boolean isLocalMode){
 		String jobId = "";
 		if(executionStatus != null){
 			jobId = executionStatus.getJobId();	
@@ -185,7 +207,7 @@ public class ExecutionTrackingConsoleUtils {
 				builder.append(System.lineSeparator());
 			    line = bufferedReader.readLine();
 			}
-			return builder;
+			return builder.toString();
 			} catch (FileNotFoundException exception) {
 				logger.error("File not found", exception.getMessage());
 			} catch (IOException exception) {

@@ -24,8 +24,8 @@ import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger
 import hydrograph.ui.graph.execution.tracking.utils.ExecutionTrackingConsoleUtils;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.utility.CanvasUtils;
@@ -46,7 +46,6 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -68,8 +67,6 @@ import com.google.gson.Gson;
  */
 @ClientEndpoint
 public class HydrographUiClientSocket {
-
-	private static final String JOB_ID_STRING_SEPARATOR = "_";
 
 	/** The session. */
 	private Session session;
@@ -382,26 +379,13 @@ public class HydrographUiClientSocket {
 	private void pushExecutionStatusToExecutionTrackingConsole(
 			ExecutionStatus executionStatus) {
 
-		String jobId = getJobID(executionStatus);		
+		String jobId = executionStatus.getJobId();
 		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(jobId);
 		if(console!=null){
 			updateExecutionTrackingConsole(executionStatus, console);	
 		}
 	}
 
-	/**
-	 * Gets the job id.
-	 *
-	 * @param executionStatus the execution status
-	 * @return the job id
-	 */
-	private String getJobID(ExecutionStatus executionStatus) {
-		String jobId = executionStatus.getJobId();
-		jobId = StringUtils.substringBeforeLast(
-					StringUtils.substringBeforeLast(
-							StringUtils.substringBeforeLast(jobId, JOB_ID_STRING_SEPARATOR), JOB_ID_STRING_SEPARATOR), JOB_ID_STRING_SEPARATOR);
-		return jobId;
-	}
 
 	/**
 	 * Update execution tracking console.
@@ -417,7 +401,7 @@ public class HydrographUiClientSocket {
 			@Override
 			public void run() {
 				console.clearConsole();
-				console.setStatus(executionStatus, ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode()));
+				console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode()));
 			}
 		});
 	}

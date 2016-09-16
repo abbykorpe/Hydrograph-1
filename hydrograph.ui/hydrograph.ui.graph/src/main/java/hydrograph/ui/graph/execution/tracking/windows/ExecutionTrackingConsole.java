@@ -4,7 +4,6 @@ package hydrograph.ui.graph.execution.tracking.windows;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.execution.tracking.constants.MenuConstants;
-import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.handlers.ActionFactory;
 import hydrograph.ui.graph.execution.tracking.handlers.ClearConsoleAction;
 import hydrograph.ui.graph.job.JobManager;
@@ -44,17 +43,19 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	/** The status line manager. */
 	private StatusLineManager statusLineManager;
 	
+	private String jobID;
 	/**
 	 * Create the application window,.
 	 *
 	 * @param consoleName the console name
 	 */
-	public ExecutionTrackingConsole(String consoleName) {
+	public ExecutionTrackingConsole(String consoleName,String jobID) {
 		super(null);
 		addCoolBar(SWT.FLAT);
 		addMenuBar();
 		addStatusLine();
 		this.consoleName = consoleName;
+		this.jobID = jobID;
 	}
 	
 
@@ -201,14 +202,13 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	 * Sets the status.
 	 *
 	 * @param executionStatus the execution status
-	 * @param stringBuilder the string builder
 	 */
-	public void setStatus(ExecutionStatus executionStatus, StringBuilder stringBuilder){
+	public void setStatus(String executionStatus){
 		
 		statusLineManager.setMessage("");
 		
 		if(styledText!=null && !styledText.isDisposed()){
-			styledText.append(stringBuilder.toString());
+			styledText.append(executionStatus.toString());
 			styledText.setTopIndex(styledText.getLineCount() - 1);
 		}
 	}
@@ -227,7 +227,7 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	 */
 	@Override
 	public boolean close() {
-		JobManager.INSTANCE.getExecutionTrackingConsoles().remove(consoleName.replace(".", "_"));
+		JobManager.INSTANCE.getExecutionTrackingConsoles().remove(jobID);
 		return super.close();
 	}
 }
