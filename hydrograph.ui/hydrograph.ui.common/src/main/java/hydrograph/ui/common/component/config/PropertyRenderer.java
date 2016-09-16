@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="BROWSE_WORKSPACE_WIDGET"/>
  *     &lt;enumeration value="CHARACTER_SET_WIDGET"/>
  *     &lt;enumeration value="DELIMETER_WIDGET"/>
- *     &lt;enumeration value="PHASE_WIDGET"/>
+ *     &lt;enumeration value="BATCH_WIDGET"/>
  *     &lt;enumeration value="NO_OF_RECORDS_WIDGET"/>
  *     &lt;enumeration value="HAS_HEADER_WIDGET"/>
  *     &lt;enumeration value="SAFE_PROPERTY_WIDGET"/>
@@ -99,7 +99,7 @@ public enum PropertyRenderer {
     BROWSE_WORKSPACE_WIDGET,
     CHARACTER_SET_WIDGET,
     DELIMETER_WIDGET,
-    PHASE_WIDGET,
+    BATCH_WIDGET,
     NO_OF_RECORDS_WIDGET,
     HAS_HEADER_WIDGET,
     SAFE_PROPERTY_WIDGET,

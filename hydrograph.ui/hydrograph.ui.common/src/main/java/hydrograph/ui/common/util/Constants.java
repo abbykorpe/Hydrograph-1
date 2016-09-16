@@ -25,7 +25,7 @@ public class Constants {
 	
 	public static final String ERROR = "ERROR";
 	
-	public static final String PHASE = "Phase";
+	public static final String BATCH = "Batch";
 	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
 	
 	public static final String INPUT_PORT_COUNT_PROPERTY="inPortCount";
@@ -33,7 +33,7 @@ public class Constants {
 	
 	public static final String PARAM_OPERATION = "operation";
 	public static final String PARAM_NAME = "name";
-	public static final String PARAM_PHASE = "phase";
+	public static final String PARAM_BATCH = "batch";
 	public static final String PARAM_DEPENDS_ON = "dependsOn";
 	public static final String PARAM_PROPERTY_NAME = "propertyName";
 	public static final String PARAM_COUNT = "count";

@@ -82,10 +82,19 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			((Component) getModel()).addPropertyChangeListener(this);
 			((Component) getModel()).setComponentEditPart(this);
 		}
-		
-		
+		backwardCompatibilityForChangingPhaseToBatch();
 	}
 
+	// temporary code for backward compatibility for phase to batch rename, the code checks
+	// whether the attribute name in xml matches with the one that declared in Constants.java as'BATCH'.   
+	private void backwardCompatibilityForChangingPhaseToBatch() {
+		if(getCastedModel().getProperties().get("phase")!=null)
+		{
+			getCastedModel().getProperties().put("batch",getCastedModel().getProperties().remove("phase"));
+		}
+		
+	}
+	
 	/**
 	 * Upon deactivation, detach from the model element as a property change
 	 * listener.

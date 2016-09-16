@@ -92,7 +92,7 @@ public class RawProperties {
 		rawProperties.add(getRawProperty("[validation=null, type=USER, renderer=HAS_HEADER_WIDGET, dataType=BOOLEAN, name=has_header, value=null, group=GENERAL, subGroup=CONFIGURATION]"));
 		rawProperties.add(getRawProperty("[validation=null, type=USER, renderer=CHARACTER_SET_WIDGET, dataType=STRING, name=charset, value=null, group=GENERAL, subGroup=CONFIGURATION]"));
 		rawProperties.add(getRawProperty("[validation=null, type=USER, renderer=RUNTIME_PROPERTIES_WIDGET, dataType=STRING, name=runtime_properties, value=null, group=GENERAL, subGroup=CONFIGURATION]"));
-		rawProperties.add(getRawProperty("[validation=null, type=USER, renderer=PHASE_WIDGET, dataType=STRING, name=phase, value=null, group=GENERAL, subGroup=CONFIGURATION]"));
+		rawProperties.add(getRawProperty("[validation=null, type=USER, renderer=BATCH_WIDGET, dataType=STRING, name=batch, value=null, group=GENERAL, subGroup=CONFIGURATION]"));
 		
 		return rawProperties;
 	}

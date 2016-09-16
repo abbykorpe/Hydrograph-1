@@ -31,7 +31,7 @@ public class ComponentModel {
 		inputComponenetProperties.put("path", null);
 		inputComponenetProperties.put("delimiter", null);
 		inputComponenetProperties.put("charset", null);
-		inputComponenetProperties.put("phase", null);
+		inputComponenetProperties.put("batch", null);
 		inputComponenetProperties.put("safe", null);
 		inputComponenetProperties.put("has_header", null);		
 		inputComponenetProperties.put("Schema", null);

@@ -14,10 +14,16 @@
  
 package hydrograph.ui.engine.converter;
 
+import hydrograph.engine.jaxb.commontypes.BooleanValueType;
+import hydrograph.engine.jaxb.commontypes.StandardCharsets;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeDependsOn;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
-import hydrograph.ui.engine.exceptions.PhaseException;
+import hydrograph.ui.engine.exceptions.BatchException;
 import hydrograph.ui.engine.exceptions.SchemaException;
 import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.engine.xpath.ComponentXpath;
@@ -26,7 +32,6 @@ import hydrograph.ui.engine.xpath.ComponentsAttributeAndValue;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +41,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
-
-import hydrograph.engine.jaxb.commontypes.BooleanValueType;
-import hydrograph.engine.jaxb.commontypes.StandardCharsets;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 
 /**
  * Base class for converter implementation. Consists of common methods used by
@@ -65,17 +64,17 @@ public abstract class Converter {
 	/**
 	 * Prepares the class of type {@link TypeBaseComponent} for xml conversion
 	 * 
-	 * @throws PhaseException
+	 * @throws BatchException
 	 * @throws SchemaException
 	 */
 	public void prepareForXML() {
 		componentName = (String) properties.get(Constants.PARAM_NAME);
 		baseComponent.setId(componentName);
 		try {
-			baseComponent.setPhase((String) properties
-					.get(Constants.PARAM_PHASE));
+			baseComponent.setBatch((String) properties
+					.get(Constants.PARAM_BATCH));
 		} catch (NullPointerException | NumberFormatException nfe) {
-			logger.error("Phase id Empty or Invalid for : {}, {}",
+			logger.error("Batch id Empty or Invalid for : {}, {}",
 					new Object[]{baseComponent.getId(), nfe});
 		}
 	}

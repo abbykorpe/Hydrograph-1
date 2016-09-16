@@ -328,14 +328,14 @@ public class ComponentFigure extends Figure implements Validator {
 
 		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
 
-		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.PHASE)) != null) {
-			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))).length() > 2)
+		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.BATCH)) != null) {
+			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))).length() > 2)
 				graphics.drawText(
 						StringUtils.substring(
-								String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))), 0, 2)
+								String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))), 0, 2)
 								+ "..", new Point(q.width - 16, q.height+ getComponentLabelMargin()-20));
 			else
-				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.PHASE))),
+				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))),
 						new Point(q.width - 14, q.height+ getComponentLabelMargin()-20));
 		}
 		

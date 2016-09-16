@@ -82,7 +82,7 @@
 		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+		<tns:property dataType="string" name="batch" value="0" renderer="BATCH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
