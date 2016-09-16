@@ -15,45 +15,38 @@
 package hydrograph.ui.graph.debug.service;
 
 import hydrograph.ui.common.debug.service.IDebugService;
-import hydrograph.ui.graph.handler.DebugHandler;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 
-public class DebugServiceHandler  implements IDebugService{
 
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(DebugServiceHandler.class);
+/**
+ * The Class DebugServiceHandler will remove ViewdData Files on tool close.
+ * @author Bitwise
+ *
+ */
+public class PurgeViedDataFiles  implements IDebugService{
+
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(PurgeViedDataFiles.class);
 
 	@Override
 	public void deleteDebugFiles() {
 		logger.info("call to api to remove debug files::::::::");
-		Map<String, Job> jobMap = DebugHandler.getJobMap();
+		Map<String, List<Job>> viewDataJobMap = ViewDataUtils.getJob();
 		
-		Set<String> keySet = jobMap.keySet();
-		
-		/*try {
-			int portPID = Integer.parseInt(DebugHelper.INSTANCE.getServicePortPID());
-			DebugHelper.INSTANCE.killPortProcess(portPID);
-		} catch (NumberFormatException exception) {
-			logger.error(exception.getMessage());
-		} catch (IOException exception) {
-			logger.error(exception.getMessage());
-		}*/
-		
-		/*for (String jobId : keySet) {
-			Job job=jobMap.get(jobId);
-			DebugFilesReader debugFilesReader = new DebugFilesReader(job.getBasePath(), job.getUniqueJobId(), "IFDelimite_01", "out0");
-			try {
-				debugFilesReader.delete();
-				jobMap.remove(jobId);
-			} catch (IOException exception) {
-				logger.error("No files available to remove", exception);
-			}
-		}*/
-    	
+		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
+			ViewDataUtils.INSTANCE.purgeViewDataFiles(viewDataJobMap);
+			ViewDataUtils.getJob().clear();
+		}
 	}
+	
+	
+	
+	
 }

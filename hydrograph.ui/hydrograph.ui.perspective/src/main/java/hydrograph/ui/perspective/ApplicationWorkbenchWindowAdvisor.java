@@ -13,6 +13,7 @@
 
 package hydrograph.ui.perspective;
 
+import hydrograph.ui.common.debug.service.IDebugService;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.job.Job;
@@ -46,6 +47,9 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 
 // TODO: Auto-generated Javadoc
@@ -205,18 +209,19 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
     public void dispose() {
 		super.dispose();
+		BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+		ServiceReference<IDebugService> serviceReference = (ServiceReference<IDebugService>) bundleContext.getServiceReference(IDebugService.class.getName());
+		if(serviceReference != null){
+			IDebugService debugService = (IDebugService)bundleContext.getService(serviceReference);
+			debugService.deleteDebugFiles();
+		}
+		
 		try {
 			killPortProcess();
 			killTrackingPortProcess();
 		} catch (IOException e) {
 			logger.debug("Socket is not closed.");
 		}
-		/*BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-			ServiceReference<IDebugService> serviceReference = (ServiceReference<IDebugService>) bundleContext.getServiceReference(IDebugService.class.getName());
-			if(serviceReference != null){
-				IDebugService debugService = (IDebugService)bundleContext.getService(serviceReference);
-				debugService.deleteDebugFiles();
-			}*/
     }
 	
 	public void killPortProcess() throws IOException{
