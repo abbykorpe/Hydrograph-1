@@ -95,7 +95,8 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 					String socketId = link.getSourceTerminal();
 					watchRecordInner.setSocketId(socketId);
 				}
-				isWatcher = ViewDataUtils.INSTANCE.checkWatcher(link.getSource(), link.getSourceTerminal());
+				ViewDataUtils dataUtils = ViewDataUtils.getInstance();
+				isWatcher = dataUtils.checkWatcher(link.getSource(), link.getSourceTerminal());
 			}
 		}
 		} catch (CoreException exception) {

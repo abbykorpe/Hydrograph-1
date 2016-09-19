@@ -21,16 +21,16 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 
 /**
@@ -42,9 +42,9 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	
 	private List<Job> jobDetails;
 	private String selectedUniqueJobId;
-	private Button buttonSelection;
-	private Button radioButton[] = new Button[5];
-
+	private String[] titles = {"Job Id", "Time Stamp", "Execution Mode"};
+	private Table table;
+	
 	public ViewDataUniqueIdDialog(Shell parentShell, List<Job> jobDetails) {
 		super(parentShell);
 		this.jobDetails = jobDetails;
@@ -55,65 +55,48 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("ViewData Execution History");
-		container.setLayout(new FillLayout(SWT.VERTICAL));
-
-		Composite composite = new Composite(container, SWT.BORDER);
-		composite.setLayout(new RowLayout(SWT.VERTICAL));
-
-
-		Composite portComposite = new Composite(composite, SWT.BORDER);
-		portComposite.setLayoutData(new RowData(512, 130));
+		container.setLayout(new GridLayout(1, false));
 		
-		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {4, 2, 276, 20}, "Job Id");
-		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {280, 2, 130, 20}, "Time Stamp");
-		buttonWidget(portComposite, SWT.READ_ONLY, new int[] {410, 2, 100, 20}, "Execution Mode");
 		
-		int x= 0;
-		int y = 26;
-		for(Job job : jobDetails){
-			String timeStamp = getTimeStamp(job.getUniqueJobId());
-			radioButton[x] = buttonWidget(portComposite, SWT.RADIO, new int[] {10, y, 270, 20}, job.getUniqueJobId());
-			labelWidget(portComposite, SWT.None, new int[] {282, y + 2, 130, 20}, timeStamp);
-			String mode = getJobExecutionMode(job.isRemoteMode());
-			labelWidget(portComposite, SWT.None|SWT.CENTER, new int[] {412, y + 2, 100, 20}, mode);
-			y = y + 20;
-			x = x+1;
-		}
-		radioButton[0].setSelection(true);
+		Composite composite1 = new Composite(container, SWT.BORDER);
+		GridData gd_scrolledComposite1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_scrolledComposite1.heightHint = 236;
+		gd_scrolledComposite1.widthHint = 644;
+		composite1.setLayoutData(gd_scrolledComposite1);
 		
-		for(int i=0; i<radioButton.length;i++){
-			if(radioButton[i] != null){
-				radioButton[i].addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent event) {
-						buttonSelection = (Button)event.getSource();
-						if(buttonSelection != null){
-							selectedUniqueJobId = buttonSelection.getText();
-						}
-					}
-				});
+		table = new Table(composite1, SWT.BORDER | SWT.Selection | SWT.FULL_SELECTION );
+		table.setBounds(0, 0, 642, 234);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		
+	    for (int i = 0; i < 3; i++) {
+	      TableColumn column = new TableColumn(table, SWT.NONE);
+	      column.setWidth(212);
+	      column.setText(titles[i]);
+	    }
+		
+	    for(Job job : jobDetails){
+	    	String timeStamp = getTimeStamp(job.getUniqueJobId());
+	    	TableItem items = new TableItem(table, SWT.None);
+	    	items.setText(0, job.getUniqueJobId());
+	    	items.setText(1, timeStamp);
+	    	String mode = getJobExecutionMode(job.isRemoteMode());
+	    	items.setText(2, mode);
+	    }
+	    
+	    table.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				TableItem[] item = table.getSelection();
+				 for (int i = 0; i < item.length; i++){
+					 TableItem selectedItem = item[i];
+					 selectedUniqueJobId = selectedItem.getText();
+			      }
 			}
-		}
+		});
 		return super.createDialogArea(parent);
 	}
 	
-	
-	private Label labelWidget(Composite parent, int style, int[] bounds, String value) {
-		Label label = new Label(parent, style);
-		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		label.setText(value);
-
-		return label;
-	}
-	
-	private Button buttonWidget(Composite parent, int style, int[] bounds, String value) {
-		Button button = new Button(parent, style);
-		button.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
-		button.setText(value);
-		button.setToolTipText(value);
-
-		return button;
-	}
 	
 	private String getJobExecutionMode(boolean executionMode){
 		String runningMode = "";
@@ -136,7 +119,7 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	@Override
 	protected void okPressed() {
 		if(selectedUniqueJobId == null){
-			selectedUniqueJobId = radioButton[0].getText();
+			selectedUniqueJobId = jobDetails.get(0).getUniqueJobId();
 		}
 		super.okPressed();
 	}

@@ -14,23 +14,31 @@
 package hydrograph.ui.graph.utility;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
 
 /**
  * View Data Utils
@@ -40,22 +48,31 @@ import org.eclipse.ui.PlatformUI;
  */
 public class ViewDataUtils {
 
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataUtils.class);
 	/** The jobUniqueId map. */
 	private static Map<String, List<Job>> viewDataUniqueIdMap;
 	
-	public static ViewDataUtils INSTANCE = new ViewDataUtils();
+	private static ViewDataUtils INSTANCE = new ViewDataUtils();
 	
-	public ViewDataUtils() {
+	private ViewDataUtils() {
 		viewDataUniqueIdMap = new HashMap<>();
 	}
 	
 	
 	/**
+	 * Static 'instance' method
+	 *
+	 */
+	public static ViewDataUtils getInstance( ) {
+      return INSTANCE;
+	}
+	   
+	/**
 	 * Gets the job map.
 	 *
 	 * @param jobName the job name
 	 */
-	public static Map<String, List<Job>> getJob() {
+	public  Map<String, List<Job>> getJob() {
 		return viewDataUniqueIdMap;
 	}
 	
@@ -72,10 +89,22 @@ public class ViewDataUtils {
 			jobs.add(jobDetails);
 			viewDataUniqueIdMap.put(jobName, jobs);
 		}else{
-			if(viewDataUniqueIdMap.get(jobName).size() > 5){
-				viewDataUniqueIdMap.get(jobName).clear();
-			}
 			viewDataUniqueIdMap.get(jobName).add(jobDetails);
+		}
+	}
+	
+	/**
+	 * Purge ViewData Files
+	 *
+	 * @param Map<String, List<Job>>
+	 */
+	public void purgeViewDataFiles(Map<String, List<Job>> viewDataJobMap){
+		for(Entry<String, List<Job>> entry : viewDataJobMap.entrySet()){
+			List<Job> value =  (List<Job>) entry.getValue();
+	        for(Job job : value){
+	        	deleteBasePathDebugFiles(job);
+	        	deleteSchemaAndDataViewerFiles(job.getUniqueJobId());
+	        }
 		}
 	}
 	
@@ -131,4 +160,42 @@ public class ViewDataUtils {
 	    String timeStampLong = Long.toString(milliSeconds);
 		return timeStampLong;
 	}
+	
+	public void deleteBasePathDebugFiles(Job job){
+		try {
+			DebugServiceClient.INSTANCE.deleteBasePathFiles(job.getHost(), job.getPortNumber(), job.getUniqueJobId(), job.getBasePath(),
+					job.getUserId(), job.getPassword());
+		} catch (Exception exception) {
+			logger.warn("Unable to delete debug Base path file",exception);
+		} 
+	}
+	
+	public void deleteSchemaAndDataViewerFiles(String uniqueJobId){
+		String dataViewerDirectoryPath = Utils.INSTANCE.getDataViewerDebugFilePath();
+		IPath path = new Path(dataViewerDirectoryPath);
+		boolean deleted = false;
+		String dataViewerSchemaFilePathToBeDeleted = "";
+		if(path.toFile().isDirectory()){
+			String[] fileList = path.toFile().list();
+			for (String file: fileList){
+				if(file.contains(uniqueJobId)){
+					if (OSValidator.isWindows()){
+						dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "\\" + file;
+					}else{
+						dataViewerSchemaFilePathToBeDeleted = dataViewerDirectoryPath+ "/" + file;
+					}
+					path = new Path(dataViewerSchemaFilePathToBeDeleted);
+					if(path.toFile().exists()){
+						deleted = path.toFile().delete();
+						if(deleted){
+							logger.debug("Deleted Data Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+						}else{
+							logger.warn("Unable to delete Viewer file {}", dataViewerSchemaFilePathToBeDeleted);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 }

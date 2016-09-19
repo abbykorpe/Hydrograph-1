@@ -216,10 +216,13 @@ public class WatchRecordAction extends SelectionAction {
 				
 		
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
-		Map<String, List<Job>> jobDetails1 = ViewDataUtils.INSTANCE.getJob();
+		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
+		Map<String, List<Job>> jobDetails1 = dataUtils.getJob();
 		List<Job> tmpList = jobDetails1.get(consoleName);
 		ViewDataUniqueIdDialog dataUniqueIdDialog = new ViewDataUniqueIdDialog(Display.getDefault().getActiveShell(), tmpList);
 		dataUniqueIdDialog.open();
+		
+		
 		
 		String selectedUniqueJobId = dataUniqueIdDialog.getSelectedUniqueJobId();
 		Job selectedJob = null;

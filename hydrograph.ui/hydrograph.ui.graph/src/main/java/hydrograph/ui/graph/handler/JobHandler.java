@@ -87,9 +87,10 @@ public class JobHandler extends AbstractHandler {
 	public void executeJob()
 	{
 		RunConfigDialog runConfigDialog = getRunConfiguration();
+		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
 		
 		String uniqueJobId = getUniqueJobId();
-		String timeStamp = ViewDataUtils.INSTANCE.getTimeStamp();
+		String timeStamp = dataUtils.getTimeStamp();
 		uniqueJobId = uniqueJobId + "_" + timeStamp;
 		setUniqueJobId(uniqueJobId);
 		
