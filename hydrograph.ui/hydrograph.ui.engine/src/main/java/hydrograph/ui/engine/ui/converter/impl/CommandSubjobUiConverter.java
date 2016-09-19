@@ -84,10 +84,10 @@ public class CommandSubjobUiConverter extends UiConverter {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException
 				| ComponentNotFoundException exception) {
-			logger.error("Error occurred while creating new files in workspace", exception);
-			SubjobUiConverterUtil.showMessageBox(exception, "Exception Occurred :");
+			logger.error("Error occurred while importing "+subJobXMLPath.lastSegment()+" file in workspace", exception);
+			SubjobUiConverterUtil.showMessageBox(exception, "Error occurred while importing "+subJobXMLPath.lastSegment()+" file in workspace");
 		} catch (JAXBException | ParserConfigurationException | SAXException exception) {
-			logger.error("Error occurred while creating new files in workspace", exception);
+			logger.error("Error occurred while importing "+subJobXMLPath.lastSegment()+" file in workspace", exception);
 			SubjobUiConverterUtil.showMessageBox(exception, "Invalid XML File.");
 		}
 		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME, getRuntimeProperties());
