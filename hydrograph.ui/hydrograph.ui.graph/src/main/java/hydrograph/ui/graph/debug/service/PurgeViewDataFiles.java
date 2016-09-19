@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 
 
 /**
- * The Class DebugServiceHandler will remove ViewdData Files on tool close.
+ * The Class PurgeViewDataFiles will remove ViewData Files on tool close.
  * @author Bitwise
  *
  */
