@@ -108,10 +108,10 @@ public class OperationSubJobUiConverter extends UiConverter {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException
 				| ComponentNotFoundException exception) {
-			logger.error("Error occurred while importing "+subJobXMLPath.lastSegment()+" files in workspace", exception);
-			SubjobUiConverterUtil.showMessageBox(exception, "Error occurred while importing "+subJobXMLPath.lastSegment()+" files in workspace");
+			logger.error("Error occurred while importing "+subJobXMLPath.lastSegment()+" file in workspace", exception);
+			SubjobUiConverterUtil.showMessageBox(exception, "Error occurred while importing "+subJobXMLPath.lastSegment()+" file in workspace");
 		} catch (JAXBException | ParserConfigurationException | SAXException exception) {
-			logger.error("Error occurred while importing "+subJobXMLPath.lastSegment()+" files in workspace", exception);
+			logger.error("Error occurred while importing "+subJobXMLPath.lastSegment()+" file in workspace", exception);
 			SubjobUiConverterUtil.showMessageBox(exception, "Invalid XML File.");
 		}
 
