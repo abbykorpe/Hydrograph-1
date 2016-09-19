@@ -17,6 +17,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages";
+	public static String STARTUP_JDK_WARNING_WINDOW_DIALOG ;
 	public static String TOOL_EXT_MESSAGE;
 	public static String TOOL_EXIT_MESSAGE_BOX_TITLE;
 	static {

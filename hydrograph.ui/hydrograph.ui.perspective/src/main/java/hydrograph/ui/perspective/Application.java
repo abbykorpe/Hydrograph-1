@@ -454,7 +454,7 @@ public class Application implements IApplication {
 			boolean returnCode = MessageDialog
 					.openQuestion(
 							Display.getCurrent().getActiveShell(),
-							"Add jdk path in hydrograph.ini",
+							Messages.STARTUP_JDK_WARNING_WINDOW_DIALOG,
 							"Hydrograph is not launched using jdk. As a result expression editor functionality will not work. Please add following at the top of hydrograph.ini file in the Hydrograph installation directory: \n-vm\n"
 									+ getJDKPath() + "\\bin\n\n" +
 											"Do you want to continue without updating hydrograph.ini file?");
