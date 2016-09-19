@@ -827,13 +827,16 @@ import org.xml.sax.SAXException;
 			AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.EXTERNAL_SCHEMA);
 			eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 	
-			AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(false).textBoxWidth(228);
+			AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(false).textBoxWidth(218);
 			eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
-	
+			
 			extSchemaPathText = (Text) eltDefaultTextBox.getSWTWidgetControl();
 			extSchemaPathText.setToolTipText(Messages.CHARACTERSET);
 			decorator = WidgetUtility.addDecorator(extSchemaPathText, Messages.EMPTYFIELDMESSAGE);
 			decorator.hide();
+			GridData data=(GridData) extSchemaPathText.getLayoutData();
+			data.horizontalIndent=10;
+			
 			extSchemaPathText.addFocusListener(new FocusListener() {
 	
 				@Override
