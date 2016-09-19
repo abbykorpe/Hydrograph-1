@@ -124,7 +124,7 @@ public class JobHandler extends AbstractHandler {
 				Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB, MessageDialog.QUESTION, new String[] { "Yes",
 		  "No" }, 0);*/
 		
-		MessageBox dialog = new MessageBox(new Shell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox dialog = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		dialog.setText(Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE);
 		dialog.setMessage(Messages.CONFIRM_FOR_GRAPH_PROPS_RUN_JOB);
 		
