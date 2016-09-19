@@ -1,5 +1,6 @@
 package hydrograph.ui.expression.editor.jar.util;
 
+import hydrograph.ui.common.util.ConfigFileReader;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.PathConstant;
@@ -59,7 +60,7 @@ public class BuildExpressionEditorDataSturcture {
 				}
 			}
 		} catch (JavaModelException e) {
-			LOGGER.error("Error occurred while loading class from jar", e);
+			LOGGER.error("Error occurred while loading class from jar {}", jarFileName, e);
 		}
 		loadClassesFromSettingsFolder();
 	}
@@ -116,7 +117,7 @@ public class BuildExpressionEditorDataSturcture {
 		} catch (JavaModelException javaModelException) {
 			LOGGER.error("Error occurred while loading engines-transform jar", javaModelException);
 		}
-		if(StringUtils.equals(jarFileName, Constants.JAR_FILE_NAME))
+		if(StringUtils.equals(jarFileName, ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(hydrograph.ui.common.util.Constants.KEY_TRANSFORMATION_JAR)))
 			new CustomMessageBox(SWT.ERROR, "Error occurred while loading " + jarFileName + " file", "ERROR").open();
 		return null;
 	}
@@ -146,7 +147,7 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 	public void refreshRepo(){
-		createClassRepo(Constants.JAR_FILE_NAME, Constants.PACKAGE_NAME);
+		createClassRepo(ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(hydrograph.ui.common.util.Constants.KEY_TRANSFORMATION_JAR), Constants.PACKAGE_NAME);
 		loadClassesFromSettingsFolder();
 	}
 	

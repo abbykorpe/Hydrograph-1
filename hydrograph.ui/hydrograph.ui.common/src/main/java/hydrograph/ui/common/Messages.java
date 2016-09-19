@@ -23,6 +23,7 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "hydrograph.ui.common.messages"; //$NON-NLS-1$
 	public static String XMLConfigUtil_CONFIG_FOLDER;
+	public static String XMLConfigUtil_XML_CONFIG_FOLDER;
 	public static String XMLConfigUtil_FILE_EXTENTION;
 	public static String XMLConfigUtil_COMPONENTCONFIG_XSD_PATH;
 	public static String XMLConfigUtil_POLICYCONFIG_XSD_PATH;

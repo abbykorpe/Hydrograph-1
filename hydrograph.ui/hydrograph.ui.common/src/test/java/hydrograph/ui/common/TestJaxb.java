@@ -81,7 +81,7 @@ public class TestJaxb {
 	@Test
 	public void testFilteredFiles(){
 		FilenameFilter fileNameFilter = XMLConfigUtil.INSTANCE.getFileNameFilter(Messages.XMLConfigUtil_FILE_EXTENTION);
-		String filePath = Platform.getInstallLocation().getURL().getPath() + Messages.XMLConfigUtil_CONFIG_FOLDER;
+		String filePath = Platform.getInstallLocation().getURL().getPath() + Messages.XMLConfigUtil_XML_CONFIG_FOLDER;
 		String[] filteredFiles = XMLConfigUtil.INSTANCE.getFilteredFiles(filePath, fileNameFilter);
 		
 		
@@ -105,7 +105,7 @@ public class TestJaxb {
 	public void itShouldValidateXmlWithXsd() throws Exception
 	{
 		String xsdPath="../hydrograph.ui.product/resources/config/xsds/ComponentConfig.xsd";
-		String xmlPath="../hydrograph.ui.product/resources/config/inputdelimited.xml";
+		String xmlPath="../hydrograph.ui.product/resources/config/xml/inputdelimited.xml";
 		Assert.assertTrue(XMLConfigUtil.INSTANCE.validateXMLSchema(xsdPath,xmlPath));
 	}
 }
