@@ -48,9 +48,19 @@ public class DateFunctions {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T now() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHmmssS");
+		return (T) now("yyyyMMddHmmssS");
+	}
+
+	/**
+	 * Returns current date and time in the required format
+	 * 
+	 * @param dateFormat the format for the date
+	 * @return current date and time in the required format
+	 */
+	public static String now(String dateFormat) {
+		DateFormat sdf = new SimpleDateFormat(dateFormat);
 		Date date = new Date();
-		return (T) dateFormat.format(date);
+		return sdf.format(date);
 	}
 
 	/**
