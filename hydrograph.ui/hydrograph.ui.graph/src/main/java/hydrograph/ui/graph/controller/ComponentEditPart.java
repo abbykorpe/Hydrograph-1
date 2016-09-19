@@ -69,7 +69,8 @@ import org.slf4j.Logger;
 public class ComponentEditPart extends AbstractGraphicalEditPart implements NodeEditPart, PropertyChangeListener {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentEditPart.class);
-	
+	private static final String PHASE="phase";
+	private static final String BATCH="batch";
 
 	/**
 	 * Upon activation, attach to the model element as a property change
@@ -85,12 +86,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		backwardCompatibilityForChangingPhaseToBatch();
 	}
 
-	// temporary code for backward compatibility for phase to batch rename, the code checks
-	// whether the attribute name in xml matches with the one that declared in Constants.java as'BATCH'.   
 	private void backwardCompatibilityForChangingPhaseToBatch() {
-		if(getCastedModel().getProperties().get("phase")!=null)
+		if(getCastedModel().getProperties().get(PHASE)!=null)
 		{
-			getCastedModel().getProperties().put("batch",getCastedModel().getProperties().remove("phase"));
+			getCastedModel().getProperties().put(BATCH,getCastedModel().getProperties().remove(PHASE));
 		}
 		
 	}
