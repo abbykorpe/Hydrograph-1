@@ -927,17 +927,21 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
      	expandItem.setControl(expressionComposite);
      	expandItem.setText(mappingSheetRowForExpression.getOperationID());
     	}
-    	
+        else if(mappingSheetRowForOperationClass.isActive())
+    	{
+    	expandItem.setControl(operationClassComposite);	
+    	expandItem.setText(mappingSheetRowForOperationClass.getOperationID());
+    	}
     	attachListenerOnSwitchToClassButton(expandItem,
 				operationClassComposite, expressionComposite);
       	attachListenerOnSwitchToExpressiomButton(expandItem,
 				operationClassComposite, expressionComposite);
         }
-        if(mappingSheetRowForOperationClass.isActive())
-    	{
-    	expandItem.setControl(operationClassComposite);	
-    	expandItem.setText(mappingSheetRowForOperationClass.getOperationID());
-    	}
+        else
+        {
+        	expandItem.setControl(operationClassComposite);	
+        	expandItem.setText(mappingSheetRowForOperationClass.getOperationID());
+        }	
         showHideValidationMessage();
         scrollBarComposite.setContent(expandBar);
 		scrollBarComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
