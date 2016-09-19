@@ -567,7 +567,6 @@ public class JobManager {
 	 * @return true, if successful
 	 */
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {
-		if (gefCanvas.getParameterFile() == null || CanvasUtils.INSTANCE.isDirtyEditor()) {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
@@ -582,9 +581,6 @@ public class JobManager {
 				return false;
 			}
 		}
-
-		return true;
-	}
 
 	/**
 	 * Kill the job for given jobId.
