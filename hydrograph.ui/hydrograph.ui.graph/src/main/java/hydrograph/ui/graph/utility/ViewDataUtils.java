@@ -24,8 +24,6 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.httpclient.HttpException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
@@ -57,11 +54,19 @@ public class ViewDataUtils {
 	
 	public static ViewDataUtils INSTANCE = new ViewDataUtils();
 	
-	public ViewDataUtils() {
+	private ViewDataUtils() {
 		viewDataUniqueIdMap = new HashMap<>();
 	}
 	
 	
+	/**
+	 * Static 'instance' method
+	 *
+	 */
+	public static ViewDataUtils getInstance( ) {
+      return INSTANCE;
+	}
+	   
 	/**
 	 * Gets the job map.
 	 *
@@ -84,10 +89,6 @@ public class ViewDataUtils {
 			jobs.add(jobDetails);
 			viewDataUniqueIdMap.put(jobName, jobs);
 		}else{
-			if(viewDataUniqueIdMap.get(jobName).size() >= 5){
-				purgeViewDataFiles(viewDataUniqueIdMap);
-				viewDataUniqueIdMap.get(jobName).clear();
-			}
 			viewDataUniqueIdMap.get(jobName).add(jobDetails);
 		}
 	}
@@ -160,22 +161,16 @@ public class ViewDataUtils {
 		return timeStampLong;
 	}
 	
-	private void deleteBasePathDebugFiles(Job job){
+	public void deleteBasePathDebugFiles(Job job){
 		try {
 			DebugServiceClient.INSTANCE.deleteBasePathFiles(job.getHost(), job.getPortNumber(), job.getUniqueJobId(), job.getBasePath(),
 					job.getUserId(), job.getPassword());
-		} catch (NumberFormatException e) {
-			logger.warn("Unable to delete debug Base path file",e);
-		} catch (HttpException e) {
-			logger.warn("Unable to delete debug Base path file",e);
-		} catch (MalformedURLException e) {
-			logger.warn("Unable to delete debug Base path file",e);
-		} catch (IOException e) {
-			logger.warn("Unable to delete debug Base path file",e);
-		}
+		} catch (Exception exception) {
+			logger.warn("Unable to delete debug Base path file",exception);
+		} 
 	}
 	
-	private void deleteSchemaAndDataViewerFiles(String uniqueJobId){
+	public void deleteSchemaAndDataViewerFiles(String uniqueJobId){
 		String dataViewerDirectoryPath = Utils.INSTANCE.getDataViewerDebugFilePath();
 		IPath path = new Path(dataViewerDirectoryPath);
 		boolean deleted = false;

@@ -221,6 +221,8 @@ public class WatchRecordAction extends SelectionAction {
 		ViewDataUniqueIdDialog dataUniqueIdDialog = new ViewDataUniqueIdDialog(Display.getDefault().getActiveShell(), tmpList);
 		dataUniqueIdDialog.open();
 		
+		
+		
 		String selectedUniqueJobId = dataUniqueIdDialog.getSelectedUniqueJobId();
 		Job selectedJob = null;
 		for(Map.Entry<String, List<Job>> entry1 : jobDetails1.entrySet()){

@@ -22,6 +22,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 
@@ -31,17 +32,24 @@ import org.slf4j.Logger;
  * @author Bitwise
  *
  */
-public class PurgeViedDataFiles  implements IDebugService{
+public class PurgeViewDataFiles  implements IDebugService{
 
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(PurgeViedDataFiles.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(PurgeViewDataFiles.class);
 
 	@Override
 	public void deleteDebugFiles() {
 		logger.info("call to api to remove debug files::::::::");
+		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
 		Map<String, List<Job>> viewDataJobMap = ViewDataUtils.getJob();
 		
 		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
-			ViewDataUtils.INSTANCE.purgeViewDataFiles(viewDataJobMap);
+			for(Entry<String, List<Job>> entry : viewDataJobMap.entrySet()){
+				List<Job> value =  (List<Job>) entry.getValue();
+		        for(Job job : value){
+		        	dataUtils.deleteBasePathDebugFiles(job);
+		        	dataUtils.deleteSchemaAndDataViewerFiles(job.getUniqueJobId());
+		        }
+			}
 			ViewDataUtils.getJob().clear();
 		}
 	}

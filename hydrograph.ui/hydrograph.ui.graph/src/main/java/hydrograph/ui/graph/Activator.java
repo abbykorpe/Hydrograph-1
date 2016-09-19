@@ -15,7 +15,7 @@
 package hydrograph.ui.graph;
 
 import hydrograph.ui.common.debug.service.IDebugService;
-import hydrograph.ui.graph.debug.service.PurgeViedDataFiles;
+import hydrograph.ui.graph.debug.service.PurgeViewDataFiles;
 import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.job.JobManager;
@@ -50,7 +50,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		context.registerService(IDebugService.class.getCanonicalName(), new PurgeViedDataFiles(), null);
+		context.registerService(IDebugService.class.getCanonicalName(), new PurgeViewDataFiles(), null);
 	}
 
 	/*
