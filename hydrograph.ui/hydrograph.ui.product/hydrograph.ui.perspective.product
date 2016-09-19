@@ -18,6 +18,8 @@ openFile
 org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 -vm
 /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/jli/libjli.dylib</programArgsMac>
+      <programArgsWin>-vm 
+&quot;C:\\Program Files\\Java\\jdk1.7.0_55\\bin&quot;</programArgsWin>
       <vmArgs>-Xms1536m
 
 -Xmx2048m</vmArgs>
@@ -80,7 +82,7 @@ org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.batik.util.gui"/>
-      <plugin id="org.apache.commons.beanutils" fragment=""/>
+      <plugin id="org.apache.commons.beanutils"/>
       <plugin id="org.apache.commons.el"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.jasper"/>
