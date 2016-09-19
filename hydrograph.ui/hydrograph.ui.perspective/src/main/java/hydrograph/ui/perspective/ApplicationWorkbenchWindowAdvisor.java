@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.css.swt.dom.WidgetElement;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
@@ -54,6 +55,7 @@ import org.slf4j.Logger;
  * @author Bitwise
  */
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
+	private static final String EXECUTION_TRACKING_SERVER_MAIN_CLASS = "hydrograph.server.execution.tracking.server.websocket.StartServer";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ApplicationWorkbenchWindowAdvisor.class);
 	private static final String CURRENT_THEME_ID = "hydrograph.ui.custom.ui.theme"; //$NON-NLS-1$
 	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.HydrographConsole"; //$NON-NLS-1$
@@ -64,6 +66,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String DRIVER_CLASS = " hydrograph.server.debug.service.DebugService";
 	private static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
 	private static final String EXECUTION_TRACK_SERVICE_JAR = "EXECUTION_TRACK_SERVICE_JAR";
+	private static final String HYDROGRAPH_EXECUTION_TRACKING_SERVER_JAR = "config/service/hydrograph.server.execution.tracking.server.jar";
 	
 	public static final String SERVICE_JAR = "SERVICE_JAR";
 
@@ -94,12 +97,32 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     }
     @Override
     public void createWindowContents(Shell shell) {
-    	
     	super.createWindowContents(shell);
-
-  
     }
 
+
+    // Code to execute launch new process to start execution-tracking service
+    private void startExecutionTrackingServer() {
+    	String path = Platform.getInstallLocation().getURL().getPath();
+		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
+			path = StringUtils.substring(path, 1);
+		}
+		
+    	String command = "java -cp " + path + HYDROGRAPH_EXECUTION_TRACKING_SERVER_JAR	+ " " + EXECUTION_TRACKING_SERVER_MAIN_CLASS;
+    	Runtime runtime = Runtime.getRuntime();
+    	try {
+			if (OSValidator.isWindows()) {
+				String commandArray[] = new String[] { "cmd.exe", "/c", command };
+				runtime.exec(commandArray);
+			} 
+			else{
+				runtime.exec(command);
+			}
+		} catch (IOException ioException) {
+			logger.error("Exception occurred while starting execution tracking server" + ioException);
+		}
+	}
+    
 	@Override
 	public void postWindowOpen() {
 		super.postWindowOpen();
@@ -128,6 +151,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		} catch (IOException exception) {
 			logger.error("Failure in IO", exception);
 		}
+		
+		startExecutionTrackingServer();
 	}
 	
 	private void serviceInitiator() throws IOException{
