@@ -52,7 +52,7 @@ public class ViewDataUtils {
 	/** The jobUniqueId map. */
 	private static Map<String, List<Job>> viewDataUniqueIdMap;
 	
-	public static ViewDataUtils INSTANCE = new ViewDataUtils();
+	private static ViewDataUtils INSTANCE = new ViewDataUtils();
 	
 	private ViewDataUtils() {
 		viewDataUniqueIdMap = new HashMap<>();
@@ -72,7 +72,7 @@ public class ViewDataUtils {
 	 *
 	 * @param jobName the job name
 	 */
-	public static Map<String, List<Job>> getJob() {
+	public  Map<String, List<Job>> getJob() {
 		return viewDataUniqueIdMap;
 	}
 	

@@ -40,7 +40,7 @@ public class PurgeViewDataFiles  implements IDebugService{
 	public void deleteDebugFiles() {
 		logger.info("call to api to remove debug files::::::::");
 		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
-		Map<String, List<Job>> viewDataJobMap = ViewDataUtils.getJob();
+		Map<String, List<Job>> viewDataJobMap = dataUtils.getJob();
 		
 		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
 			for(Entry<String, List<Job>> entry : viewDataJobMap.entrySet()){
@@ -50,7 +50,7 @@ public class PurgeViewDataFiles  implements IDebugService{
 		        	dataUtils.deleteSchemaAndDataViewerFiles(job.getUniqueJobId());
 		        }
 			}
-			ViewDataUtils.getJob().clear();
+			dataUtils.getJob().clear();
 		}
 	}
 	
