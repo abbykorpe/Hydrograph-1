@@ -16,6 +16,7 @@ package hydrograph.ui.propertywindow.widgets.dialogs;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -468,6 +469,11 @@ public class FieldDialog extends Dialog {
 
 		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.LEFT);
 		targetTableColumn.setText("Field Name");
+		if(OSValidator.isMac()){
+			targetTableColumn.setWidth(357);
+		}else{
+			targetTableColumn.setWidth(352);
+		}
 		targetTableColumn.setWidth(352);
 		targetTable.setHeaderVisible(true);
 		targetTable.setLinesVisible(true);
@@ -647,7 +653,11 @@ public class FieldDialog extends Dialog {
 
 		tableViewerColumn = new TableViewerColumn(sourceTableViewer, SWT.LEFT);
 		sourceTableColumn = tableViewerColumn.getColumn();
-		sourceTableColumn.setWidth(255);
+		if(OSValidator.isMac()){
+			sourceTableColumn.setWidth(260);
+		}else{
+			sourceTableColumn.setWidth(255);
+		}
 		sourceTableColumn.setText(Messages.AVAILABLE_FIELDS_HEADER);
 		getSourceFieldsFromPropagatedSchema(sourceTable);
 		dragSource = new DragSource(sourceTable, DND.DROP_MOVE);
