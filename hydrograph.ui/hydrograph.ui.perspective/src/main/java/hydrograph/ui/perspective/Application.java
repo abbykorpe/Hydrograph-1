@@ -24,6 +24,9 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.tools.ToolProvider;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -71,6 +74,7 @@ public class Application implements IApplication {
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
 	 */
 	public Object start(IApplicationContext context) throws Exception {
+		checkWheterToolIsLaunchedWithJDK();
 		Display display = PlatformUI.createDisplay();
 		try {
 			Shell shell = WorkbenchPlugin.getSplashShell(display);
@@ -443,5 +447,27 @@ public class Application implements IApplication {
 					workbench.close();
 			}
 		});
+	}
+	
+	private void checkWheterToolIsLaunchedWithJDK() {
+		if (ToolProvider.getSystemJavaCompiler() == null) {
+			boolean returnCode = MessageDialog
+					.openQuestion(
+							Display.getCurrent().getActiveShell(),
+							Messages.STARTUP_JDK_WARNING_WINDOW_DIALOG,
+							"Hydrograph is not launched using jdk. As a result expression editor functionality will not work. Please add following at the top of hydrograph.ini file in the Hydrograph installation directory: \n-vm\n"
+									+ getJDKPath() + "\\bin\n\n" +
+											"Do you want to continue without updating hydrograph.ini file?");
+			if (!returnCode)
+				System.exit(1);
+		}}
+
+	private String getJDKPath() {
+		String jdkPath="/path/jdk/bin";
+		if(StringUtils.isNotBlank(System.getenv("JAVA_HOME"))){
+			jdkPath=System.getenv("JAVA_HOME");
+		}
+		return jdkPath;
+		
 	}
 }
