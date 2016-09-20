@@ -58,8 +58,6 @@ public class GradleCommandConstants {
 	
 	public static final String REMOTE_FIXED_DIRECTORY_PARAM="param";
 	public static final String REMOTE_FIXED_DIRECTORY_LIB="lib";
-	public static final String DAEMON_ENABLE=" -Dorg.gradle.daemon=true";
-	public static final String KILL_GRADLE_DAEMON="gradle --stop";
 	
 	public static final String GCMD_SCP_USER_FUNCTIONS_PROPERTY_FILE="gradle scpUserFunctionsPropertyFile ";
 	public static final String GCMD_SCP_LIB_FOLDER_JAR_FILES="gradle scpLibFolderJarFiles ";
