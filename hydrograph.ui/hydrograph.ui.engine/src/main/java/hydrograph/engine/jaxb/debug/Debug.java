@@ -31,7 +31,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="debugPlugin" type="{hydrograph/engine/jaxb/debug}debugPlugin" minOccurs="0"/>
  *         &lt;element name="viewData" type="{hydrograph/engine/jaxb/debug}viewData" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -43,38 +42,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "debugPlugin",
     "viewData"
 })
 @XmlRootElement(name = "debug")
 public class Debug {
 
-    protected DebugPlugin debugPlugin;
     protected List<ViewData> viewData;
-
-    /**
-     * Gets the value of the debugPlugin property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DebugPlugin }
-     *     
-     */
-    public DebugPlugin getDebugPlugin() {
-        return debugPlugin;
-    }
-
-    /**
-     * Sets the value of the debugPlugin property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DebugPlugin }
-     *     
-     */
-    public void setDebugPlugin(DebugPlugin value) {
-        this.debugPlugin = value;
-    }
 
     /**
      * Gets the value of the viewData property.

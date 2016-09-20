@@ -83,8 +83,6 @@ public class ConverterUtil {
 		LOGGER.debug("Creating converter based on component");
 			Graph graph = new ObjectFactory().createGraph();
 			graph.setUniqueJobId(container.getUniqueJobId());
-			String runCount = "" + container.getJobRunCount();
-			graph.setRunCounter(runCount);
 			graph.setName(getGraphName(outPutFile,externalOutputFile));
 			List<Component> children = container.getChildren();
 			if(children != null && !children.isEmpty()){
