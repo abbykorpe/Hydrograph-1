@@ -51,7 +51,7 @@ public class LaunchExpressionEditor {
 		System.gc();
 		if (intialize()) {
 			BuildExpressionEditorDataSturcture.INSTANCE
-					.createClassRepo(ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(hydrograph.ui.common.util.Constants.KEY_TRANSFORMATION_JAR), Constants.PACKAGE_NAME);
+					.createClassRepo(ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(Constants.KEY_TRANSFORMATION_JAR), Constants.PACKAGE_NAME);
 			ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(Display.getCurrent()
 					.getActiveShell(), expressionEditorData,inputFieldSchema);
 			int returnCode = expressionEditorDialog.open();

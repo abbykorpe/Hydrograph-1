@@ -23,6 +23,9 @@ public class Constants {
 	public static final String EXPRESSION_EDITOR_PLUGIN_ID = "hydrograph.ui.expression.editor";
 	public static final String DEFAULT_DATE_FORMAT="yyyy-MM-dd";
 	
+	public static final String KEY_TRANSFORMATION_JAR = "expreditor.transformation.jar.name";
+	public static final String KEY_EXPRESSION_JAR = "expreditor.expression.jar.name";
+	
 	public static final String EMPTY_STRING = "";
 	public static final String OPENING_BRACKET = "(";
 	public static final String SEMICOLON = ";";

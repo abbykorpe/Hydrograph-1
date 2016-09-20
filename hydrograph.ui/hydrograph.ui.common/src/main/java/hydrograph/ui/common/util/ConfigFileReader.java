@@ -58,7 +58,7 @@ public class ConfigFileReader {
 	 * Reads the configuration from Common configuration file
 	 * @return map containing the configuration values
 	 */
-	public Properties getConfigurationsFromCommon(){
+	public Properties getCommonConfigurations(){
 		if(cachedProperties.isEmpty()){
 			cachedProperties = getConfigurationsAsProperties(COMMON_PROPERTIES);
 		}

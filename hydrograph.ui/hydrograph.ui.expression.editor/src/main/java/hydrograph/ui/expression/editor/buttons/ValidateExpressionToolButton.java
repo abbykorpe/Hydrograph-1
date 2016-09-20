@@ -171,14 +171,14 @@ public class ValidateExpressionToolButton extends Button {
 		Object[] returnObj=new Object[3];
 		IJavaProject iJavaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject());
 		List<URL> urlList = new ArrayList<>();
-		Properties properties = ConfigFileReader.INSTANCE.getConfigurationsFromCommon();
+		Properties properties = ConfigFileReader.INSTANCE.getCommonConfigurations();
 		for (IPackageFragmentRoot iPackageFragmentRoot : iJavaProject.getAllPackageFragmentRoots()) {
 			if (!iPackageFragmentRoot.isExternal()
-					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), properties.getProperty(hydrograph.ui.common.util.Constants.KEY_TRANSFORMATION_JAR))
+					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), properties.getProperty(Constants.KEY_TRANSFORMATION_JAR))
 					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.ANTLR_JAR_FILE_NAME)
 					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.BEAN_SHELLJAR_FILE_NAME)
 					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), Constants.SL4JLOG)
-					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), properties.getProperty(hydrograph.ui.common.util.Constants.KEY_EXPRESSION_JAR))) {
+					|| StringUtils.contains(iPackageFragmentRoot.getElementName(), properties.getProperty(Constants.KEY_EXPRESSION_JAR))) {
 				URL url = null;
 				if (!iPackageFragmentRoot.isExternal()) {
 					url = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()
@@ -191,7 +191,7 @@ public class ValidateExpressionToolButton extends Button {
 				}
 
 				if (!iPackageFragmentRoot.isExternal()
-						|| StringUtils.contains(iPackageFragmentRoot.getElementName(), properties.getProperty(hydrograph.ui.common.util.Constants.KEY_TRANSFORMATION_JAR))) {
+						|| StringUtils.contains(iPackageFragmentRoot.getElementName(), properties.getProperty(Constants.KEY_TRANSFORMATION_JAR))) {
 					if (transfromJarPath == null) {
 						if (OSValidator.isMac() || OSValidator.isUnix())
 							transfromJarPath = url.getPath() + Constants.COLON;

@@ -117,7 +117,7 @@ public class BuildExpressionEditorDataSturcture {
 		} catch (JavaModelException javaModelException) {
 			LOGGER.error("Error occurred while loading engines-transform jar", javaModelException);
 		}
-		if(StringUtils.equals(jarFileName, ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(hydrograph.ui.common.util.Constants.KEY_TRANSFORMATION_JAR)))
+		if(StringUtils.equals(jarFileName, ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(Constants.KEY_TRANSFORMATION_JAR)))
 			new CustomMessageBox(SWT.ERROR, "Error occurred while loading " + jarFileName + " file", "ERROR").open();
 		return null;
 	}
@@ -147,7 +147,7 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 	public void refreshRepo(){
-		createClassRepo(ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(hydrograph.ui.common.util.Constants.KEY_TRANSFORMATION_JAR), Constants.PACKAGE_NAME);
+		createClassRepo(ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(Constants.KEY_TRANSFORMATION_JAR), Constants.PACKAGE_NAME);
 		loadClassesFromSettingsFolder();
 	}
 	

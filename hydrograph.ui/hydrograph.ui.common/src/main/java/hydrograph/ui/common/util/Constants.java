@@ -19,10 +19,6 @@ package hydrograph.ui.common.util;
  * @author Bitwise
  */
 public class Constants {
-	public static final String COMMON_PROPERTIES = "common.properties";
-	public static final String KEY_TRANSFORMATION_JAR = "expreditor.transformation.jar.name";
-	public static final String KEY_EXPRESSION_JAR = "expreditor.expression.jar.name";
-	
 	public static final String VALIDATOR_PACKAGE_PREFIX = "hydrograph.ui.validators.impl.";
 	public static final String COMPONENT_PACKAGE_PREFIX = "hydrograph.ui.graph.model.components.";
 	
