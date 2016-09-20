@@ -144,7 +144,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 	 * @return the executute job command
 	 */
 	private String getExecututeJobCommand(String xmlPath, String paramFile,String userFunctionsPropertyFile, String debugXmlPath, Job job) {
-		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB + GradleCommandConstants.DAEMON_ENABLE
+		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB 
 				+ GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML
 				+ xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_LOCAL_JOB
 				+ GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1]

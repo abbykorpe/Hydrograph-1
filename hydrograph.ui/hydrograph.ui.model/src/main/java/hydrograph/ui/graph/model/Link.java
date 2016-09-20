@@ -38,8 +38,8 @@ public class Link extends Model {
 	/** Line drawing style for this connection. */
 	private int lineStyle = Graphics.LINE_SOLID;
 	private int linkNumber;
-	private String COMPONENT_FAIL_RECORD_COUNT="-1"; 
-	private String COMPONENT_FAIL_COUNT_DISPLAY="?";
+	private final String COMPONENT_FAIL_RECORD_COUNT="-1"; 
+	private final String COMPONENT_FAIL_COUNT_DISPLAY="?";
 	/**
 	 * Used for indicating that a Connection with solid line style should be created.
 	 */
@@ -298,9 +298,12 @@ public class Link extends Model {
 	 *            the new record count
 	 */
 	public void updateRecordCount(String count) {
-		count = StringUtils.equalsIgnoreCase(COMPONENT_FAIL_RECORD_COUNT, count)? COMPONENT_FAIL_COUNT_DISPLAY : count;
-		this.recordCount = count;
-		firePropertyChange("record_count", null, count);
+		if(StringUtils.equals(COMPONENT_FAIL_RECORD_COUNT, count.trim())){
+			this.recordCount = COMPONENT_FAIL_COUNT_DISPLAY;	
+		}else{
+			this.recordCount = count;	
+		}
+		firePropertyChange("record_count", null, recordCount);
 	}
 
 }
