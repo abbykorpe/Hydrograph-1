@@ -106,6 +106,28 @@ public class HiveInputSingleColumnWidget extends SingleColumnWidget {
 		this.hivePartitionKeyValues = (InputHivePartitionKeyValues)properties;
 		
 	}
+	
+	@Override
+	public void refresh(Object value) {
+		InputHivePartitionKeyValues inputHivePartitionKeyValues = new InputHivePartitionKeyValues();
+		List<String> keys= (ArrayList<String>)value;
+		List<InputHivePartitionColumn> keyValues = new ArrayList<>();
+		inputHivePartitionKeyValues.setKey(trim(keys));
+		inputHivePartitionKeyValues.setKeyValues(keyValues);
+		setProperties(propertyName, (InputHivePartitionKeyValues)inputHivePartitionKeyValues);
+	}
+
+
+
+	private List<String> trim(List<String> keys) {
+		List<String> temp = new ArrayList<>();
+		for (String key : keys) {
+			key=key.trim();
+			temp.add(key);
+		}
+		
+		return temp;
+	}
 
 }
 

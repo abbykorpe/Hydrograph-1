@@ -49,6 +49,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget
 import hydrograph.ui.propertywindow.widgets.customwidgets.WidgetHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
+import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.ELTExtractMetaStoreDataWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
@@ -127,7 +128,8 @@ public class WidgetFactory {
 		JOIN_MAPPING_WIDGET(ELTJoinMapWidget.class),
 		HASH_JOIN_WIDGET(ELTLookupConfigWidget.class),
 		HASH_JOIN_MAPPING_WIDGET(ELTLookupMapWidget.class),
-		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class);
+		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class),
+		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class);
 		
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;

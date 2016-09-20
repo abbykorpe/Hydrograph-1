@@ -52,6 +52,12 @@
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local."/>
 		
+		<tns:property dataType="string" name="extractMetaStoreData" renderer="EXTRACT_METASTORE_DATA_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Extract Hive schema,delimeter,partition keys from remote.">
+		</tns:property>		
+		
+		
 		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET_INPUT_HIVE"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Displays the user specific partition keys">

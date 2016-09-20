@@ -262,6 +262,16 @@ public abstract class AbstractWidget {
 	public void refresh(){
 				
 	}
+	
+	/**
+	 * 
+	 * Refresh the widget value.
+	 * 
+	 */
+	public void refresh(Object value){
+						
+	}
+	
 
 	 public void showHideErrorSymbol(boolean isError)
 	   {
@@ -392,4 +402,6 @@ public abstract class AbstractWidget {
 			}
 		return componentHasRequiredValues;
 	}
+	
+	
 }

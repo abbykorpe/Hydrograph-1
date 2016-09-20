@@ -19,6 +19,7 @@ import hydrograph.ui.communication.debugservice.method.Provider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -120,5 +121,22 @@ public class DebugServiceClient {
 		executePostMethod(method);
 		return getFilePathFromPostResponse(method);
 	}
+	
+	/**
+	 * Method to read metastore db
+	 * @param jsonString db name and table name
+	 * @param jobDetails
+	 * @param userCredentials 
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	public String readMetaStoreDb(String jsonString,JobDetails jobDetails, List<String> userCredentials) throws NumberFormatException, HttpException, IOException {
+		PostMethod method=Provider.INSTANCE.readMetaStoreforHiveMethod(jsonString, jobDetails,userCredentials);
+		executePostMethod(method);
+		return method.getResponseBodyAsString();
+	}
+	
 	
 }

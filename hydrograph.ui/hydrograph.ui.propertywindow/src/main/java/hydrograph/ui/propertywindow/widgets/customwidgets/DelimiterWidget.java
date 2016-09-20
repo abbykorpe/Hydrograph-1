@@ -50,4 +50,10 @@ public class DelimiterWidget extends TextBoxWithLabelWidget{
 			txtDecorator.show();
 		}
 	}
+	
+	@Override
+	public void refresh(Object value) {
+		
+		textBox.setText((String)value);
+	}
 }

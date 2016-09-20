@@ -1082,6 +1082,27 @@ import org.xml.sax.SAXException;
 				enableDisableButtons(schemaGridRowList.size());
 			}
 		}
+		
+		protected void populateWidgetExternalSchema(Object properties) {
+			if (properties != null) {
+				Schema schema = (Schema) properties;
+				this.properties=properties;
+				if (schema.getIsExternal()) {
+					if (extSchemaPathText != null) {
+						extSchemaPathText.setText(schema.getExternalSchemaPath());
+						schemaGridRowList = schema.getGridRow();
+						tableViewer.setInput(schemaGridRowList);
+						tableViewer.refresh();
+						decorator.hide();
+						external = true;
+						toggleSchema(true);
+					}
+				} else {
+					toggleSchema(false);
+				}
+				enableDisableButtons(schemaGridRowList.size());
+			}
+		}
 	
 		private void populateSchemaTypeWidget() {
 			if (this.properties != null) {
@@ -1699,4 +1720,35 @@ import org.xml.sax.SAXException;
 			}
 		});
 	}
+	
+	@Override
+	public void refresh(Object value) {
+		
+		Schema schema = (Schema)value;
+
+		{
+			if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow( getComponent().getComponentName())){
+
+				if (schema.getGridRow().size() != 0) {
+					table.clearAll();
+					if (!schema.getIsExternal()) {
+						if (tableViewer != null) {
+							schemaGridRowList = new ArrayList<>(schema.getGridRow());
+							ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
+							eLTDetails.setGrids(schemaGridRowList); 
+							tableViewer.setInput(schemaGridRowList);
+							tableViewer.refresh();
+							external = false;
+							toggleSchema(false);
+						}
+					}
+				}
+			}
+		}
+		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(null, null,table,componentType);
+		
+		LinkedHashMap<String, Object> currentSchemaProperty = new LinkedHashMap<>();
+		currentSchemaProperty.put(propertyName, schema);
+	}
+	
 	}

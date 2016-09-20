@@ -5,6 +5,7 @@ Sr.No. <date> - [developer names] - description
 1.#1025[Sonia Raheja] Import xml : Subjob Component has been Displayed as Unknown Component Upon XML Import
 2...... [Shrirang Kumbhar] Replaced buffered writers from execution tracking with sl4j loggers.
 3...... [Shrirang Kumbhar] Updated execution tracking log format.
+4...... [Prateem Tadas] Added extract hive db details feature in input hive component.
 ====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
