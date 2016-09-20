@@ -28,9 +28,6 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="viewData">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="limit" type="{hydrograph/engine/jaxb/debug}limit" minOccurs="0"/>
- *       &lt;/sequence>
  *       &lt;attribute name="fromComponentId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="outSocketId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="outSocketType" type="{http://www.w3.org/2001/XMLSchema}string" default="out" />
@@ -42,42 +39,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "viewData", propOrder = {
-    "limit"
-})
+@XmlType(name = "viewData")
 public class ViewData {
 
-    protected Limit limit;
     @XmlAttribute(name = "fromComponentId", required = true)
     protected String fromComponentId;
     @XmlAttribute(name = "outSocketId", required = true)
     protected String outSocketId;
     @XmlAttribute(name = "outSocketType")
     protected String outSocketType;
-
-    /**
-     * Gets the value of the limit property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Limit }
-     *     
-     */
-    public Limit getLimit() {
-        return limit;
-    }
-
-    /**
-     * Sets the value of the limit property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Limit }
-     *     
-     */
-    public void setLimit(Limit value) {
-        this.limit = value;
-    }
 
     /**
      * Gets the value of the fromComponentId property.
