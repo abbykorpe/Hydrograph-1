@@ -58,6 +58,8 @@ public class Application implements IApplication {
 	 */
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
 
+    private static final String JDK_PATH_TEMPLATE="/path/jdk/bin";
+    
     private static final String VERSION_FILENAME = "version.ini"; //$NON-NLS-1$
     
     private static final String WORKSPACE_VERSION_KEY = "org.eclipse.core.runtime"; //$NON-NLS-1$
@@ -453,17 +455,26 @@ public class Application implements IApplication {
 		if (ToolProvider.getSystemJavaCompiler() == null) {
 			boolean returnCode = MessageDialog
 					.openQuestion(
-							Display.getCurrent().getActiveShell(),
+							getShell(),
 							Messages.STARTUP_JDK_WARNING_WINDOW_DIALOG,
 							"Hydrograph is not launched using jdk. As a result expression editor functionality will not work. Please add following at the top of hydrograph.ini file in the Hydrograph installation directory: \n-vm\n"
 									+ getJDKPath() + "\\bin\n\n" +
 											"Do you want to continue without updating hydrograph.ini file?");
 			if (!returnCode)
 				System.exit(1);
-		}}
+		}
+	}
+
+	private Shell getShell() {
+		Shell shell=new Shell();
+		if(Display.getCurrent() !=null && Display.getCurrent().getActiveShell()!=null){
+			shell =  Display.getCurrent().getActiveShell();
+		}
+		return shell;
+	}
 
 	private String getJDKPath() {
-		String jdkPath="/path/jdk/bin";
+		String jdkPath=JDK_PATH_TEMPLATE;
 		if(StringUtils.isNotBlank(System.getenv("JAVA_HOME"))){
 			jdkPath=System.getenv("JAVA_HOME");
 		}
