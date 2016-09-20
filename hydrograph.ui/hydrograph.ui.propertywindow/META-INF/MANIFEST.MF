@@ -26,7 +26,9 @@ Require-Bundle: org.eclipse.core.runtime,
  hydrograph.ui.validators;bundle-version="0.0.1",
  hydrograph.ui.logging;bundle-version="0.0.1",
  org.eclipse.jdt.core;bundle-version="3.7.3",
- org.apache.commons.collections;bundle-version="3.2.0"
+ org.apache.commons.collections;bundle-version="3.2.0",
+ hydrograph.ui.communication;bundle-version="0.0.1",
+ org.apache.commons.httpclient;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.common.util,
@@ -57,3 +59,7 @@ Export-Package: hydrograph.ui.propertywindow,
  hydrograph.ui.propertywindow.widgets.gridwidgets.container,
  hydrograph.ui.propertywindow.widgets.listeners,
  hydrograph.ui.propertywindow.widgets.utility
+Bundle-ClassPath: .,
+ resources/lib/jackson-databind-2.2.2.jar,
+ resources/lib/jackson-annotations-2.2.2.jar,
+ resources/lib/jackson-core-2.2.2.jar

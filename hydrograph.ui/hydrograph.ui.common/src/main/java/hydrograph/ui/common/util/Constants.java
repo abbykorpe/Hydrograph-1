@@ -241,7 +241,7 @@ public class Constants {
 	public static String SCHEMA_NOT_SYNC_MESSAGE="Fields in schema and mapping are not in sync.";
 	public static String SYNC_WARNING="Sync Warning";
 	public static String SYNC_CONFIRM="Confirm";
-	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema? It will override existing schema.";
+	public static String SYNC_CONFIRM_MESSAGE="Do you want to sync schema? It will override existing .";
 	public static String SYNC_OUTPUT_FIELDS_CONFIRM_MESSAGE="Do you want to pull output fields from schema? It will over write existing Output fields.";
 	public static String CLICK_TO_FOCUS="Click to focus";
 
@@ -259,5 +259,10 @@ public class Constants {
 	public static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 	public static final Character KEY_D = 'd';
 	public static final Character KEY_N = 'n';
-	
+
+	public static final String DATABASE_WIDGET_NAME="databaseName";
+	public static final String DBTABLE_WIDGET_NAME="tableName";
+	public static final String PARTITION_KEYS_WIDGET_NAME="partitionKeys";
+	public static final String EXTERNAL_TABLE_PATH_WIDGET_NAME="externalTablePath";
+
 }

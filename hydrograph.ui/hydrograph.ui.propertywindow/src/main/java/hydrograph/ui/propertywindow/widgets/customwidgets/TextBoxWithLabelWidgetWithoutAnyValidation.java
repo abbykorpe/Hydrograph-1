@@ -65,5 +65,11 @@ public class TextBoxWithLabelWidgetWithoutAnyValidation extends TextBoxWithLabel
 			super.populateWidget();
 			txtDecorator.hide();
 	}
+	
+	@Override
+	public void refresh(Object value) {
+		
+		textBox.setText((String)value);
+	}
 
 }

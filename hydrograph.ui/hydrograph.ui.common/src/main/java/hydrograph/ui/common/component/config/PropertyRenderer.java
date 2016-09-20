@@ -80,6 +80,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="MIXED_SCHEME"/>
  *     &lt;enumeration value="OVERWRITE_WIDGET"/>
  *     &lt;enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
+ *     &lt;enumeration value="EXTRACT_METASTORE_DATA_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -135,7 +136,8 @@ public enum PropertyRenderer {
     EXTERNAL_TABLE_PATH_WIDGET,
     MIXED_SCHEME,
     OVERWRITE_WIDGET,
-    PARTITION_KEYS_WIDGET_INPUT_HIVE;
+    PARTITION_KEYS_WIDGET_INPUT_HIVE,
+    EXTRACT_METASTORE_DATA_WIDGET;
 
     public String value() {
         return name();

@@ -261,6 +261,8 @@ public class Messages extends NLS {
 	public static String DELETE_KEY_SHORTCUT_TOOLTIP;
 	public static String MOVE_UP_KEY_SHORTCUT_TOOLTIP;
 	public static String MOVE_DOWN_KEY_SHORTCUT_TOOLTIP;
+	public static String EXTRACT_FROM_METASTORE;
+	public static String EXTRACT;
 	
 	
 	static {

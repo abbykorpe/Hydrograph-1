@@ -15,6 +15,7 @@ package hydrograph.ui.communication.debugservice.method;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.communication.debugservice.constants.DebugServiceMethods;
@@ -126,4 +127,26 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.FILTER_JSON_OBJECT,jsonString);
 		return postMethod;
 	}
+	
+	/**
+	 * Method to get hive table details
+	 * @param jsonString Db name and table details
+	 * @param jobDetails
+	 * @param userCredentials 
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws MalformedURLException
+	 */
+	public PostMethod readMetaStoreforHiveMethod(String jsonString,JobDetails jobDetails, List<String> userCredentials) throws NumberFormatException, MalformedURLException {
+		
+		URL url = new URL("http://bhsnode3.bitwiseglobal.net:8888/readFromMetastore");
+		PostMethod postMethod = new PostMethod(url.toString());
+        postMethod.addParameter("database", jsonString.split("\\|")[0]);
+        postMethod.addParameter("table", jsonString.split("\\|")[1]);
+        postMethod.addParameter("userName", userCredentials.get(0));
+        postMethod.addParameter("password", userCredentials.get(1));
+        
+		return postMethod;
+	}
+	
 }
