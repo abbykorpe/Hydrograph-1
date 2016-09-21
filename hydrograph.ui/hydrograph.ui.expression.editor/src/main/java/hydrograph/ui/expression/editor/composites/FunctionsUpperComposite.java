@@ -79,7 +79,8 @@ public class FunctionsUpperComposite extends Composite {
 		searchTextBox.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText()) && classNameList.getSelectionCount()!=0) {
+				if (!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText()) && (classNameList.getSelectionCount()!=0 &&
+						!StringUtils.startsWith(classNameList.getItem(0), Messages.CANNOT_SEARCH_INPUT_STRING))) {
 					methodList.removeAll();
 					ClassDetails classDetails = (ClassDetails) methodList
 							.getData(CategoriesComposite.KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST);

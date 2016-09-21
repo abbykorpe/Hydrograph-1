@@ -145,7 +145,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 							.putAll(FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(null,inputFieldSchema));
 					LaunchExpressionEditor launchExpressionEditor=new LaunchExpressionEditor();
 					String oldExpression=operationClassProperty.getExpressionEditorData().getExpression();
-					launchExpressionEditor.launchExpressionEditor(operationClassProperty.getExpressionEditorData(),inputFieldSchema);
+					launchExpressionEditor.launchExpressionEditor(operationClassProperty.getExpressionEditorData(),inputFieldSchema,getComponent().getComponentLabel().getLabelContents());
 					if(!StringUtils.equals(operationClassProperty.getExpressionEditorData().getExpression(), oldExpression)){
 						propertyDialogButtonBar.enableApplyButton(true);
 					}

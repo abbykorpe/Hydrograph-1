@@ -77,7 +77,7 @@ public class EvaluateDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
-		container.getShell().setText(Messages.EXPRESSION_EDITOR_EVALUATE_DIALOG_TITLE);
+		container.getShell().setText(getTitle());
 		
 		SashForm sashForm = new SashForm(container, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
@@ -106,6 +106,18 @@ public class EvaluateDialog extends Dialog {
 		sashForm.setWeights(new int[] {101, 263, 140});
 		
 		return container;
+	}
+
+	private String getTitle() {
+		String titleSuffix=(String) expressionEditor.getData(ExpressionEditorDialog.TITLE_SUFFIX_KEY);
+		StringBuffer title=new StringBuffer(Messages.EXPRESSION_EDITOR_EVALUATE_DIALOG_TITLE);
+		if(StringUtils.isNotBlank(titleSuffix)){
+			title.append(Constants.SPACE);
+			title.append(Constants.DASH);
+			title.append(Constants.SPACE);
+			title.append(titleSuffix);
+		}
+		return title.toString();
 	}
 
 	private void createOutputConsole(Composite errorComposite) {

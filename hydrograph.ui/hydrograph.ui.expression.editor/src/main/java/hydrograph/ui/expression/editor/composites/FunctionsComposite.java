@@ -94,7 +94,9 @@ public class FunctionsComposite extends Composite {
 				MethodDetails methodDetails = (MethodDetails) methodList.getData(String.valueOf(methodList
 						.getSelectionIndex()));
 				event.data = methodDetails.getPlaceHolder();
-			}}
+			}else
+				event.data=StringUtils.EMPTY+"#"+StringUtils.EMPTY;
+			}
 		});
 	}
 

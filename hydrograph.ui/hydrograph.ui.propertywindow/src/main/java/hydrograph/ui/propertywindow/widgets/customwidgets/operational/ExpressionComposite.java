@@ -180,7 +180,7 @@ public class ExpressionComposite extends Composite {
 				createExpressionEditorData();
 
 				LaunchExpressionEditor launchExpressionEditor = new LaunchExpressionEditor();
-				launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getExpressionEditorData(),getInputSchema(component));
+				launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getExpressionEditorData(),getInputSchema(component),mappingSheetRow.getOperationID());
 				expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());
 			}
 
