@@ -19,7 +19,7 @@ public class ValidationAPITest {
 
 	@Test(expected = DescriptiveErrorListener.HydrographExpressionError.class)
 	public void itShouldThrowException() {
-		ValidationAPI validationAPI = new ValidationAPI("(1==1)?12:20;", "");
+		ValidationAPI validationAPI = new ValidationAPI("(1==1)12:20;", "");
 		validationAPI.isExpressionValid();
 	}
 

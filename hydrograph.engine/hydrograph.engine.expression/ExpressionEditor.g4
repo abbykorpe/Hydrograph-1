@@ -45,7 +45,7 @@ arithmeticOperator : '+'|'-'|'++'|'--';
 
 //----------------------> Statememt
 statement
-    :    statementExpression ;
+    :    statementExpression (';')?;
 
 statementExpression
     :   expression
