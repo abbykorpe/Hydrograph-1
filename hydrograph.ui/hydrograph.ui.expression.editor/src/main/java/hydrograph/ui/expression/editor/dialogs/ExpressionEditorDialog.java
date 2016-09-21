@@ -118,13 +118,14 @@ public class ExpressionEditorDialog extends Dialog {
 		upperSashForm = new SashForm(upperComposite, SWT.NONE);
 		upperSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, expressionEditorTextBox,
-				selectedInputFields);
+		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, selectedInputFields);
 
 		expressionEditorComposite = new ExpressionEditorComposite(upperSashForm, SWT.NONE, javaLineStyler);
 		this.expressionEditorTextBox = expressionEditorComposite.getExpressionEditor();
 		upperSashForm.setWeights(new int[] { 288, 576 });
 
+		availableFieldsComposite.setExpressionEditor(expressionEditorTextBox);
+		
 		Composite composite = new Composite(containerSashForm, SWT.BORDER);
 		composite.setLayout(new GridLayout(1, false));
 
@@ -132,7 +133,7 @@ public class ExpressionEditorDialog extends Dialog {
 		lowerSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		categoriesComposite = new CategoriesComposite(lowerSashForm, SWT.NONE);
-		functionsComposite = new FunctionsComposite(lowerSashForm, categoriesComposite, SWT.NONE);
+		functionsComposite = new FunctionsComposite(lowerSashForm,expressionEditorTextBox ,categoriesComposite, SWT.NONE);
 		descriptionComposite = new DescriptionComposite(lowerSashForm, functionsComposite, categoriesComposite,
 				SWT.NONE);
 
@@ -218,4 +219,7 @@ public class ExpressionEditorDialog extends Dialog {
 		return containerSashForm;
 	}
 
+	public StyledText getExpressionEditorTextBox() {
+		return expressionEditorTextBox;
+	}
 }

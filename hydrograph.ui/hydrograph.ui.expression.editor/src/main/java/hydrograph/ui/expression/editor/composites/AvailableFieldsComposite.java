@@ -15,6 +15,7 @@ package hydrograph.ui.expression.editor.composites;
 
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 import java.util.List;
@@ -26,10 +27,10 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -55,11 +56,10 @@ public class AvailableFieldsComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public AvailableFieldsComposite(Composite parent, int style , StyledText expressionEditor,List<String> fieldNameList) {
+	public AvailableFieldsComposite(Composite parent, int style , List<String> fieldNameList) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 		this.inputFields=fieldNameList;
-		this.expressionEditor=expressionEditor;
 		Composite headerComposite = new Composite(this, SWT.NONE);
 		headerComposite.setLayout(new GridLayout(2, false));
 		GridData gd_headerComposite = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
@@ -84,8 +84,20 @@ public class AvailableFieldsComposite extends Composite {
 		ExpressionEditorUtil.INSTANCE.addDragSupport(table);
 
 		loadData();
-		addListners();
+		addControlListener();
+		addDoubleClickListener();
 		
+	}
+
+	private void addDoubleClickListener() {
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				if(table.getSelectionIndex()!=-1){
+					expressionEditor.insert(table.getItem(table.getSelectionIndex()).getText());
+				}
+			}
+		});
 	}
 
 	private void createSearchTextBox(Composite headerComposite) {
@@ -110,11 +122,17 @@ public class AvailableFieldsComposite extends Composite {
 						new TableItem(table, SWT.NONE).setText(field);
 					}
 				}
-			}}
+				
+				if(table.getItemCount()==0 && StringUtils.isNotBlank(searchTextBox.getText())){
+					new TableItem(table, SWT.NONE).setText(Messages.CANNOT_SEARCH_INPUT_STRING+searchTextBox.getText());
+				}
+			}
+				
+			}
 		});
 	}
 
-	private void addListners() {
+	private void addControlListener() {
 		table.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
@@ -139,5 +157,9 @@ public class AvailableFieldsComposite extends Composite {
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
+	}
+
+	public void setExpressionEditor(StyledText expressionEditorTextBox) {
+		this.expressionEditor=expressionEditorTextBox;
 	}
 }

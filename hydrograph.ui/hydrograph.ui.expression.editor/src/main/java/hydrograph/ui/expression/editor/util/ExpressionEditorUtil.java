@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import hydrograph.ui.expression.editor.Messages;
 
 public class ExpressionEditorUtil {
 
@@ -102,6 +103,7 @@ public class ExpressionEditorUtil {
 	}
 	
 	public void addFocusListenerToSearchTextBox(final Text searchTextBox) {
+		searchTextBox.setToolTipText(Messages.SEARCH_TEXT_BOX_TOOLTIP);
 		searchTextBox.addFocusListener(new FocusListener() {
 			
 			@Override

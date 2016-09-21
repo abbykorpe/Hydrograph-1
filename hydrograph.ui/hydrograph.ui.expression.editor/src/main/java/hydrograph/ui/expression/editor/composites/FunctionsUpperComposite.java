@@ -14,14 +14,14 @@
 package hydrograph.ui.expression.editor.composites;
 
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.datastructure.ClassDetails;
 import hydrograph.ui.expression.editor.datastructure.MethodDetails;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
-import java.util.ArrayList;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
@@ -30,16 +30,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class FunctionsUpperComposite extends Composite {
 	private static final String TITLE = "Functions";
-	private FunctionsComposite functionsComposite;
 	private List methodList;
 	private Text searchTextBox;
-	private java.util.List<String> tempMethodList = new ArrayList<String>();
-
+	private Browser descriptionStyledText;
+	private List classNameList;
 	/**
 	 * Create the composite.
 	 * 
@@ -48,7 +46,6 @@ public class FunctionsUpperComposite extends Composite {
 	 */
 	public FunctionsUpperComposite(Composite parent, int style) {
 		super(parent, style);
-		this.functionsComposite = (FunctionsComposite) parent;
 		setLayout(new GridLayout(2, false));
 
 		Label lblFunctions = new Label(this, SWT.NONE);
@@ -82,18 +79,22 @@ public class FunctionsUpperComposite extends Composite {
 		searchTextBox.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText())) {
+				if (!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText()) && classNameList.getSelectionCount()!=0) {
 					methodList.removeAll();
 					ClassDetails classDetails = (ClassDetails) methodList
 							.getData(CategoriesComposite.KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST);
 					if (classDetails != null) {
 						for (MethodDetails methodDetails : classDetails.getMethodList()) {
-							if (StringUtils.containsIgnoreCase(methodDetails.getSignature(), searchTextBox.getText())) {
+							if (StringUtils.containsIgnoreCase(methodDetails.getMethodName(), searchTextBox.getText())) {
 								methodList.add(methodDetails.getSignature());
 								methodList.setData(String.valueOf(methodList.getItemCount() - 1), methodDetails);
 							}
 						}
 					}
+					if(methodList.getItemCount()==0 && StringUtils.isNotBlank(searchTextBox.getText())){
+						methodList.add(Messages.CANNOT_SEARCH_INPUT_STRING+searchTextBox.getText());
+					}
+					descriptionStyledText.setText(Constants.EMPTY_STRING);
 				}
 			}
 		});
@@ -101,6 +102,14 @@ public class FunctionsUpperComposite extends Composite {
 
 	public void refresh() {
 		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+	}
+
+	public void setDescriptionText(Browser descriptionStyledText) {
+		this.descriptionStyledText=descriptionStyledText;
+	}
+
+	public void setClassNameList(List classNamelist) {
+		this.classNameList=classNamelist;
 	}
 
 }
