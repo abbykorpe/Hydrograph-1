@@ -51,7 +51,6 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="runCounter" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="uniqueJobId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -79,8 +78,6 @@ public class Graph {
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
     @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute(name = "runCounter")
-    protected String runCounter;
     @XmlAttribute(name = "uniqueJobId")
     protected String uniqueJobId;
 
@@ -163,30 +160,6 @@ public class Graph {
      */
     public void setName(String value) {
         this.name = value;
-    }
-
-    /**
-     * Gets the value of the runCounter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRunCounter() {
-        return runCounter;
-    }
-
-    /**
-     * Sets the value of the runCounter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRunCounter(String value) {
-        this.runCounter = value;
     }
 
     /**
