@@ -15,5 +15,11 @@
 
 <toc label="Output Hive TextFile" link_to="xml\Components\components.xml#outputHiveTextFile"> 
 	<topic label="Properties"  href="html/Components/Output_Hive_Text_Properties.html"> 
+		<topic href="html/Components/Output_Hive_Text_Properties.html#general_properties" label="General Properties">
+	    </topic>
+	    <topic href="html/Components/Output_Hive_Text_Properties.html#schema" label="Schema">
+	    </topic>
+	    <topic href="html/Components/Output_Hive_Text_Properties.html#validations" label="Validations">
+	    </topic> 
 	</topic>
 </toc>
