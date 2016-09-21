@@ -68,6 +68,7 @@ public class XMLConfigUtil {
 	private static final String SEPARATOR = "/";
 	
 	public final static String CONFIG_FILES_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.XMLConfigUtil_CONFIG_FOLDER;
+	public final static String XML_CONFIG_FILES_PATH = Platform.getInstallLocation().getURL().getPath() + Messages.XMLConfigUtil_XML_CONFIG_FOLDER;
 	public final static String COMPONENT_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath()+Messages.XMLConfigUtil_COMPONENTCONFIG_XSD_PATH;
 	public final static String POLICY_CONFIG_XSD_PATH = Platform.getInstallLocation().getURL().getPath()+Messages.XMLConfigUtil_POLICYCONFIG_XSD_PATH;
 	public final static List<Component> componentList = new ArrayList<>();
@@ -90,16 +91,16 @@ public class XMLConfigUtil {
 			try{
 				JAXBContext jaxbContext = JAXBContext.newInstance(Config.class);
 				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-				String[] configFileList = getFilteredFiles(CONFIG_FILES_PATH, getFileNameFilter(Messages.XMLConfigUtil_FILE_EXTENTION));
+				String[] configFileList = getFilteredFiles(XML_CONFIG_FILES_PATH, getFileNameFilter(Messages.XMLConfigUtil_FILE_EXTENTION));
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				dbf.setNamespaceAware(true);
 				dbf.setExpandEntityReferences(false);
 				DocumentBuilder builder = dbf.newDocumentBuilder();
 				for (int i = 0; i < configFileList.length; i++){
 					logger.trace("Creating palette component: ", configFileList[i]);
-					if(validateXMLSchema(COMPONENT_CONFIG_XSD_PATH, CONFIG_FILES_PATH + SEPARATOR + configFileList[i])){
+					if(validateXMLSchema(COMPONENT_CONFIG_XSD_PATH, XML_CONFIG_FILES_PATH + SEPARATOR + configFileList[i])){
 						
-						Document document = builder.parse(new File(CONFIG_FILES_PATH + SEPARATOR + configFileList[i]));
+						Document document = builder.parse(new File(XML_CONFIG_FILES_PATH + SEPARATOR + configFileList[i]));
 						Config config = (Config) unmarshaller.unmarshal(document);
 						componentList.addAll(config.getComponent());
 						builder.reset();

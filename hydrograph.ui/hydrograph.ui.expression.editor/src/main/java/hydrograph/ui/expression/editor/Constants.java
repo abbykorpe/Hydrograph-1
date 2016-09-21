@@ -18,11 +18,13 @@ public class Constants {
 	public static final String CLASS_EXTENSION = ".class";
 	public static final String USER_DEFINED_SUFFIX = " - user defined";
 	public static final String SRC_CLASS_SUFFIX = " - src";
-	public static final String JAR_FILE_NAME = "hydrograph.engine.transformation";
 	public static final String PACKAGE_NAME = "hydrograph.engine.transformation.standardfunctions";
 	public static final String FIELD_SEPRATOR_FOR_DRAG_DROP = "#";
 	public static final String EXPRESSION_EDITOR_PLUGIN_ID = "hydrograph.ui.expression.editor";
 	public static final String DEFAULT_DATE_FORMAT="yyyy-MM-dd";
+	
+	public static final String KEY_TRANSFORMATION_JAR = "expreditor.transformation.jar.name";
+	public static final String KEY_EXPRESSION_JAR = "expreditor.expression.jar.name";
 	
 	public static final String EMPTY_STRING = "";
 	public static final String OPENING_BRACKET = "(";
@@ -32,12 +34,10 @@ public class Constants {
 	public static final String CLOSING_BRACKET = ")";
 	public static final String DASH = "-";
 	public static final String DEFAULT_SEARCH_TEXT = "Search";
-	public static final String EXPRESSION_JAR_FILE_NAME = "hydrograph.engine.expression";
 	public static final String SPACE = " ";
 	public static final String ASTRISK = "*";
 	public static final String COLON = ":";
 
-	
 	public static final String ANTLR_JAR_FILE_NAME = "antlr4-runtime";
 	public static final String BEAN_SHELLJAR_FILE_NAME = "bsh-";
 	public static final String SL4JLOG = "slf4j-api";
@@ -50,4 +50,5 @@ public class Constants {
 	public static final String JAR_FILE_NAME_HEADER = "\n\t<b>Jar File Name ::</b> ";
 	public static final String HTML_NEW_LINE_TAG="</br>";
 	public static final String ALPHANUMERIC_REGEX="[\\w]*";
+	
 }
