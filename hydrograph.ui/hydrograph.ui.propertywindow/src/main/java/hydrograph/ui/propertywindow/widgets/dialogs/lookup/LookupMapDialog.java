@@ -661,12 +661,13 @@ public class LookupMapDialog extends Dialog {
 		LookupMapProperty lookupMapProperty = new LookupMapProperty();
 		lookupMapProperty.setOutput_Field("");
 		lookupMapProperty.setSource_Field("");
+		if(!mappingTableItemList.contains(lookupMapProperty)){
 		mappingTableItemList.add(lookupMapProperty);
 		mappingTableViewer.refresh();
 		mappingTableViewer.editElement(lookupMapProperty, 0);
 		component.setLatestChangesInSchema(false);
 		refreshButtonStatus();
-	
+		}
 	}
 
 	private Composite createOuterMostComposite(Composite container) {

@@ -687,11 +687,12 @@ public class JoinMapDialog extends Dialog {
 		LookupMapProperty lookupMapProperty = new LookupMapProperty();
 		lookupMapProperty.setOutput_Field("");
 		lookupMapProperty.setSource_Field("");
+		if(!mappingTableItemList.contains(lookupMapProperty)){
 		mappingTableItemList.add(lookupMapProperty);
 		mappingTableViewer.refresh();
 		mappingTableViewer.editElement(lookupMapProperty, 0);
 		refreshButtonStatus();
-	
+		}
 	}
 
 	private void moveRowUp(){
