@@ -38,6 +38,12 @@ public class Constants {
 	public static final String HDFS_SITE_CONFIG_PATH = "hdfsSiteConfigPath";
 
 	/**
+	 * The config key for hive-site.xml path set in ServiceConfig.properties
+	 * file
+	 */
+	public static final String HIVE_SITE_CONFIG_PATH = "hiveSiteConfigPath";
+
+	/**
 	 * The config key for core-site.xml path set in ServiceConfig.properties
 	 * file
 	 */
