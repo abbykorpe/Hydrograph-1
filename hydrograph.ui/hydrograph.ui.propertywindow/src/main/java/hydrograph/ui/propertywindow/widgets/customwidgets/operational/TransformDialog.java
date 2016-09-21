@@ -294,14 +294,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				FilterProperties filterproperties = new FilterProperties();
-				filterproperties.setPropertyname("");
-					transformMapping.getOutputFieldList().add(filterproperties);
-					((List<FilterProperties>)outputFieldViewer.getInput()).add(filterproperties);
-					outputFieldViewer.refresh();
-					int i = ((List<FilterProperties>)outputFieldViewer.getInput()).size() == 0 ? ((List<FilterProperties>)outputFieldViewer.getInput()).size()
-							:((List<FilterProperties>)outputFieldViewer.getInput()).size() - 1;
-					outputFieldViewer.editElement(outputFieldViewer.getElementAt(i), 0);
+				addNewRowForOutputField();
 			}
 
 		});
@@ -380,6 +373,26 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		 });
 		addControlListener(outputFieldViewer.getTable());
+		outputFieldViewer.getTable().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				addNewRowForOutputField();
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+		});
+	}
+	private void addNewRowForOutputField() {
+		FilterProperties filterproperties = new FilterProperties();
+		filterproperties.setPropertyname("");
+		transformMapping.getOutputFieldList().add(filterproperties);
+		((List<FilterProperties>)outputFieldViewer.getInput()).add(filterproperties);
+		outputFieldViewer.refresh();
+		int i = ((List<FilterProperties>)outputFieldViewer.getInput()).size() == 0 ? ((List<FilterProperties>)outputFieldViewer.getInput()).size()
+				:((List<FilterProperties>)outputFieldViewer.getInput()).size() - 1;
+		outputFieldViewer.editElement(outputFieldViewer.getElementAt(i), 0);
 	}
    
 	private void addListenerForRowHighlighting(
@@ -798,6 +811,17 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 			}
 		});
+		
+		 mappingTableViewer.getTable().addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					addNewRowForMappingField();	
+				}
+
+				@Override
+				public void mouseDown(MouseEvent e) {
+				}
+			});
 
 		DragDropUtility.INSTANCE.applyDrop(mappingTableViewer,
 				new DragDropTransformOpImp(this, transformMapping,null, false,false,
@@ -816,18 +840,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				NameValueProperty nameValueProperty = new NameValueProperty();
-				nameValueProperty.setPropertyName("");
-				nameValueProperty.setPropertyValue("");
-				if (!transformMapping.getMapAndPassthroughField().contains(nameValueProperty)) {
-					transformMapping.getMapAndPassthroughField().add(nameValueProperty);
-					mappingTableViewer.refresh();
-					int currentSize = transformMapping.getMapAndPassthroughField().size();
-					int i = currentSize == 0 ? currentSize : currentSize - 1;
-					mappingTableViewer.editElement(mappingTableViewer.getElementAt(i), 0);
-					component.setLatestChangesInSchema(false);
-				}
-
+				addNewRowForMappingField();
 			}
 		});
 
@@ -904,6 +917,20 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
         addControlListener(errorTableViewer.getTable());
 	}
+
+	private void addNewRowForMappingField() {
+		NameValueProperty nameValueProperty = new NameValueProperty();
+		nameValueProperty.setPropertyName("");
+		nameValueProperty.setPropertyValue("");
+		if (!transformMapping.getMapAndPassthroughField().contains(nameValueProperty)) {
+			transformMapping.getMapAndPassthroughField().add(nameValueProperty);
+			mappingTableViewer.refresh();
+			int currentSize = transformMapping.getMapAndPassthroughField().size();
+			int i = currentSize == 0 ? currentSize : currentSize - 1;
+			mappingTableViewer.editElement(mappingTableViewer.getElementAt(i), 0);
+			component.setLatestChangesInSchema(false);
+		}
+}
 
 	private void addExpandItem(final ScrolledComposite scrollBarComposite) 
 	{
@@ -1044,7 +1071,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
         		  (this,transformMapping,mappingSheetRowForExpression.getInputFields(),true,true,operationalInputFieldTableViewer,expressionComposite);
   		 DragDropUtility.INSTANCE.applyDrop(operationalInputFieldTableViewer, dragDropTransformOpImpnew);
   		 intializeFunctionalityToExpressionWidget(expressionComposite,mappingSheetRowForExpression,operationalInputFieldTableViewer);
-		 return expressionComposite;
+  		 operationalInputTableDoubleClick(mappingSheetRowForExpression,operationalInputFieldTableViewer);  
+  		 return expressionComposite;
 	}
 
 	private OperationClassComposite createOperationClassComposite(
@@ -1104,8 +1132,36 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	 (operationClassComposite, mappingSheetRowForOperationClass, operationalInputFieldTableViewer, operationalOutputFieldTableViewer);
     	 if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
     	 operationClassComposite.setVisible(false);
+    	 operationalOutputTableDoubleClick(mappingSheetRowForOperationClass,operationalOutputFieldTableViewer); 
+    	 operationalInputTableDoubleClick(mappingSheetRowForOperationClass,operationalInputFieldTableViewer);  
     	 return operationClassComposite;
 	}
+	
+	private void operationalOutputTableDoubleClick(final MappingSheetRow mappingSheetRow,final TableViewer tableViewer) {
+		tableViewer.getTable().addMouseListener(new MouseAdapter() {
+ 			@Override
+ 			public void mouseDoubleClick(MouseEvent e) {
+ 				operationOutputTableAddButton(mappingSheetRow,tableViewer);
+ 			}
+ 			@Override
+ 			public void mouseDown(MouseEvent e) {
+ 			}
+ 		});
+	}
+
+	private void operationalInputTableDoubleClick(final MappingSheetRow mappingSheetRow,final TableViewer tableViewer) {
+		tableViewer.getTable().addMouseListener(new MouseAdapter() {
+  			@Override
+  			public void mouseDoubleClick(MouseEvent e) {
+  				operationInputTableAddButton(mappingSheetRow,tableViewer);
+  			}
+
+  			@Override
+  			public void mouseDown(MouseEvent e) {
+  			}
+  		});
+	}
+	
 	private void removeExpressionOrOperationOutputFieldFromOutputList(
 			MappingSheetRow mappingSheetRowForExpressionClass) {
 		for(FilterProperties expressionOutputField:mappingSheetRowForExpressionClass.getOutputList())
@@ -1309,22 +1365,29 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		addLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				FilterProperties f = new FilterProperties();
-				f.setPropertyname("");
-
-				if (!mappingSheetRow.getOutputList().contains(f)) {
-
-					mappingSheetRow.getOutputList().add(f);
-					operationOutputtableViewer.refresh();
-					int i = mappingSheetRow.getOutputList().size() == 0 ? mappingSheetRow.getOutputList().size()
-							: mappingSheetRow.getOutputList().size() - 1;
-					operationalOutputFieldTableViewer.editElement(operationOutputtableViewer.getElementAt(i), 0);
-					component.setLatestChangesInSchema(false);
+				operationOutputTableAddButton(mappingSheetRow,
+						operationOutputtableViewer);
 				}
-			}
-
 		});
 	}
+	
+	private void operationOutputTableAddButton(
+			final MappingSheetRow mappingSheetRow,
+			final TableViewer operationOutputtableViewer) {
+		FilterProperties f = new FilterProperties();
+		f.setPropertyname("");
+
+		if (!mappingSheetRow.getOutputList().contains(f)) {
+
+			mappingSheetRow.getOutputList().add(f);
+			operationOutputtableViewer.refresh();
+			int i = mappingSheetRow.getOutputList().size() == 0 ? mappingSheetRow.getOutputList().size()
+					: mappingSheetRow.getOutputList().size() - 1;
+			operationalOutputFieldTableViewer.editElement(operationOutputtableViewer.getElementAt(i), 0);
+			component.setLatestChangesInSchema(false);
+		}
+	}
+	
     private void addIsParamSelectionListenerForOperationClassWidget(Button btnIsParam,final MappingSheetRow mappingSheetRow)
     {
     	btnIsParam.addSelectionListener(new SelectionAdapter() {
@@ -1764,8 +1827,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				boolean isInputFieldRemovedFromExpression = false;
 				ExpressionEditorData expressionEditorData = mappingSheetRow.getExpressionEditorData();
 				for (String item : itemsToBeDeleted) {
-					if (expressionEditorData.getfieldsUsedInExpression().remove(item)
-							| expressionEditorData.getSelectedInputFieldsForExpression().remove(item) != null) {
+					if (expressionEditorData!=null && (expressionEditorData.getfieldsUsedInExpression().remove(item)
+							| expressionEditorData.getSelectedInputFieldsForExpression().remove(item) != null)) {
 						isInputFieldRemovedFromExpression = true;
 					}
 				}
@@ -1815,22 +1878,26 @@ private void addButtonListener(final MappingSheetRow mappingSheetRow,
 
 			@Override
 			public void handleEvent(Event event) {
-				FilterProperties filterProperties = new FilterProperties();
-				filterProperties.setPropertyname("");
-				if (!mappingSheetRow.getInputFields().contains(filterProperties)) {
-					mappingSheetRow.getInputFields().add(filterProperties);
-
-					operationalInputFieldTableViewer.refresh();
-					int i = mappingSheetRow.getInputFields().size() == 0 ? mappingSheetRow.getInputFields().size()
-							: mappingSheetRow.getInputFields().size() - 1;
-					operationalInputFieldTableViewer.editElement(operationalInputFieldTableViewer.getElementAt(i), 0);
-
+				operationInputTableAddButton(mappingSheetRow,
+						operationalInputFieldTableViewer);
 				}
-				
-			}
-			
 		});
 	}
+
+private void operationInputTableAddButton(
+		 MappingSheetRow mappingSheetRow,
+		 TableViewer tableViewer) {
+	FilterProperties filterProperties = new FilterProperties();
+	filterProperties.setPropertyname("");
+	if (!mappingSheetRow.getInputFields().contains(filterProperties)) {
+		mappingSheetRow.getInputFields().add(filterProperties);
+
+		tableViewer.refresh();
+		int i = mappingSheetRow.getInputFields().size() == 0 ? mappingSheetRow.getInputFields().size()
+				: mappingSheetRow.getInputFields().size() - 1;
+		tableViewer.editElement(tableViewer.getElementAt(i), 0);
+	}
+}
 
 	private void setIsOperationInputFieldDuplicate() {
 		if (!transformMapping.getMappingSheetRows().isEmpty()) {

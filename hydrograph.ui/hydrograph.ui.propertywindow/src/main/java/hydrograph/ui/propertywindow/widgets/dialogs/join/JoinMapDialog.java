@@ -67,6 +67,8 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -1104,6 +1106,26 @@ public class JoinMapDialog extends Dialog {
 		mappingTableViewer.refresh();
 
 		populatePreviousItemsOfTable();
+		
+		mouseDoubleClick();
+	}
+	
+	 private void mouseDoubleClick() {
+		mappingTableViewer.getTable().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				addNewRow();
+			}
+		});
 		
 		if(mappingTableViewer.getTable().getEnabled()){
 		refreshButtonStatus();
