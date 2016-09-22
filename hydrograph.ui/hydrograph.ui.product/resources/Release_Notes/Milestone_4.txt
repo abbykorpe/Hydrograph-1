@@ -69,6 +69,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 55.#529 [Ankit Sharma] Phase Renamed: Attribute Phase is renamed to batch at all of its occurences. 
 56.#509 [Ankit Sharma] Look and Feel of Operation Class window : Added a new row feature on double clicking at all the existing tables.
 57.#1217 [Rushikesh Pawale] Fixed MAC Alignment Related Issues.
+58.#1266 [Shashank Karnik] Trasform Component: Auto sync Popup is Getting Displayed If new Error appears in Error Log.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
