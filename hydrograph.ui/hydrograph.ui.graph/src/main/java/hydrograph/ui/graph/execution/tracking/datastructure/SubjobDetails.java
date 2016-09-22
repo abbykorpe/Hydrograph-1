@@ -56,5 +56,12 @@ public class SubjobDetails {
 	public void setTargetTerminal(String targetTerminal) {
 		this.targetTerminal = targetTerminal;
 	}
+
+	@Override
+	public String toString() {
+		return "SubjobDetails [sourceTerminal=" + sourceTerminal
+				+ ", targetTerminal=" + targetTerminal + "]";
+	}
+	
 	
 }
