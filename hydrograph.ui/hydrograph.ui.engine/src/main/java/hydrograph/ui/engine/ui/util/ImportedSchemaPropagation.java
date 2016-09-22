@@ -19,6 +19,7 @@ import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 
 import java.util.LinkedHashMap;
@@ -63,6 +64,7 @@ public class ImportedSchemaPropagation {
 
 		if (container != null) {
 			for (Component component : container.getChildren()) {
+				if(!(component instanceof SubjobComponent))
 				component.validateComponentProperties();
 			}
 		}

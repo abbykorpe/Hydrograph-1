@@ -27,6 +27,8 @@ import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.engine.ui.util.UiConverterUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -120,6 +122,20 @@ public class OperationSubJobUiConverter extends UiConverter {
 		getOutPort((TypeOperationsComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
+		for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
+			if (!(subJobContainer.getChildren().get(i) instanceof InputSubjobComponent || subJobContainer.getChildren()
+					.get(i) instanceof OutputSubjobComponent)) {
+			if ((subJobContainer.getChildren().get(i).getProperties().get("validityStatus").toString().equalsIgnoreCase("ERROR") || 
+							subJobContainer.getChildren().get(i).getProperties().get("validityStatus").toString().equalsIgnoreCase("WARN"))) {
+				uiComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "ERROR");
+				uiComponent.setValidityStatus("ERROR");
+				break; 
+			} else {
+				uiComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "VALID");
+				uiComponent.setValidityStatus("VALID");
+			}
+			}
+		}
 	}
 	
 	@Override

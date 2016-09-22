@@ -330,7 +330,7 @@ public class SubJobUtility {
 	 * @param componentEditPart
 	 *            the component edit part
 	 */
-	public void updateSubjobProperty(ComponentEditPart componentEditPart, String filePath,
+	public Container updateSubjobPropertyAndGetSubjobContainer(ComponentEditPart componentEditPart, String filePath,
 			Component selectedSubjobComponent) {
 		IPath jobFileIPath = null;
 		Container container = null;
@@ -360,6 +360,7 @@ public class SubJobUtility {
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid graph file.");
 			}
 		}
+		return container;
 	}
 
 	public void updateContainerAndSubjob(Container subJobContainer, Component selectedSubjobComponent,

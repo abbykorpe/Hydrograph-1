@@ -344,7 +344,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 							+ getCastedModel().getSize().width);
 			if(eltPropertyWindow.isPropertyChanged() && Constants.SUBJOB_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
 				SubJobUtility subJobUtility=new SubJobUtility();
-				subJobUtility.updateSubjobProperty((ComponentEditPart)this,null,null);
+				subJobUtility.updateSubjobPropertyAndGetSubjobContainer((ComponentEditPart)this,null,null);
 			} 
 			if(eltPropertyWindow.isPropertyChanged())
 			{updateSubjobVersion();}

@@ -25,6 +25,7 @@ import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.action.ComponentHelpAction;
 import hydrograph.ui.graph.action.ComponentPropertiesAction;
 import hydrograph.ui.graph.action.ContributionItemManager;
@@ -58,7 +59,10 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.model.Component.ValidityStatus;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.DataViewerUtility;
@@ -914,7 +918,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			
 			saveParameters();
 			updateMainGraphOnSavingSubjob();
-			
 		} catch (Exception e) {
 				logger.error(METHOD_NAME, e);
 				MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
@@ -1634,6 +1637,25 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath().toString();
 				IPath subJobFilePath=new Path(path);
 				SubJobUtility subJobUtility=new SubJobUtility();
+				for (int i = 0; i < container.getChildren().size(); i++) {
+					if (!(container.getChildren().get(i) instanceof InputSubjobComponent || container.getChildren()
+							.get(i) instanceof OutputSubjobComponent)
+							&& (ValidityStatus.WARN.name().equalsIgnoreCase(
+									container.getChildren().get(i).getProperties().get(Messages.VALIDITY_STATUS)
+											.toString()) || ValidityStatus.ERROR.name().equalsIgnoreCase(
+									container.getChildren().get(i).getProperties().get(Messages.VALIDITY_STATUS)
+											.toString()))) {
+						subjobComponent.setValidityStatus(ValidityStatus.ERROR.name());
+						subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.ERROR.name());
+						break;
+					} else {
+						subjobComponent.setValidityStatus(ValidityStatus.VALID.name());
+						subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.VALID.name());
+					}
+				}
+				if (subjobComponent.getComponentEditPart() != null) {
+					((ComponentEditPart) subjobComponent.getComponentEditPart()).updateComponentStatus();
+				}
 				subJobUtility.updateContainerAndSubjob(container, subjobComponent, subJobFilePath);
 				((ComponentEditPart)container.getSubjobComponentEditPart()).changePortSettings();
 			}
