@@ -46,14 +46,14 @@ public class LaunchExpressionEditor {
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(LaunchExpressionEditor.class);
 	private IClasspathEntry[] oldClasspathEntry=null;
 	
-	public void launchExpressionEditor(ExpressionEditorData expressionEditorData, List<FixedWidthGridRow> inputFieldSchema){
+	public void launchExpressionEditor(ExpressionEditorData expressionEditorData, List<FixedWidthGridRow> inputFieldSchema, String windowTitleSuffix){
 		LOGGER.debug("Initiating creation of Expression Editor");
 		System.gc();
 		if (intialize()) {
 			BuildExpressionEditorDataSturcture.INSTANCE
 					.createClassRepo(ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(Constants.KEY_TRANSFORMATION_JAR), Constants.PACKAGE_NAME);
 			ExpressionEditorDialog expressionEditorDialog = new ExpressionEditorDialog(Display.getCurrent()
-					.getActiveShell(), expressionEditorData,inputFieldSchema);
+					.getActiveShell(), expressionEditorData,inputFieldSchema,windowTitleSuffix);
 			int returnCode = expressionEditorDialog.open();
 			if (returnCode == 0) {
 				saveProperty(expressionEditorData, expressionEditorDialog.getExpressionText());

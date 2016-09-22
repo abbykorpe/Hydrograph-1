@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -64,12 +65,17 @@ public class CategoriesComposite extends Composite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				if(classNamelist.getItemCount()!=0 && !StringUtils.startsWith(classNamelist.getItem(0),Messages.CANNOT_SEARCH_INPUT_STRING)){
 				ClassDetails classDetails = (ClassDetails) classNamelist.getData(String.valueOf(classNamelist
 						.getSelectionIndex()));
 				if (classDetails != null && StringUtils.isNotBlank(classDetails.getJavaDoc())) {
 					descriptionStyledText.setText(classDetails.getJavaDoc());
 				} else {
 					descriptionStyledText.setText(Messages.JAVA_DOC_NOT_AVAILABLE);
+				}
+				}else
+				{
+					methodList.removeAll();
 				}
 			}
 
@@ -91,6 +97,7 @@ public class CategoriesComposite extends Composite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				if(classNamelist.getItemCount()!=0 && !StringUtils.startsWith(classNamelist.getItem(0),Messages.CANNOT_SEARCH_INPUT_STRING)){
 				ClassDetails classDetails = (ClassDetails) classNamelist.getData(String.valueOf(classNamelist
 						.getSelectionIndex()));
 				methodList.removeAll();
@@ -103,6 +110,7 @@ public class CategoriesComposite extends Composite {
 				}
 				if(functionsComposite!=null){
 					functionsComposite.refresh();
+				}
 				}
 			}
 
@@ -138,5 +146,19 @@ public class CategoriesComposite extends Composite {
 
 	public void setFunctionsComposite(FunctionsComposite functionsComposite) {
 		this.functionsComposite=functionsComposite;
+	}
+
+	public List getClassNamelist() {
+		return classNamelist;
+	}
+	
+	/**
+	 * Clears method-list and description text box.
+	 * 
+	 */
+	public void clearDescriptionAndMethodList() {
+		functionsComposite.refresh();
+		methodList.removeAll();
+		descriptionStyledText.setText(Constants.EMPTY_STRING);
 	}
 }

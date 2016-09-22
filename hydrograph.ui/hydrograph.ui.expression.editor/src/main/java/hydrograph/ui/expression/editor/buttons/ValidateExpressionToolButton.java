@@ -147,7 +147,7 @@ public class ValidateExpressionToolButton extends Button {
 		} catch (InvocationTargetException exception) {
 			if(exception.getCause()!=null && StringUtils.isNotBlank(exception.getCause().getMessage()))
 				new CustomMessageBox(SWT.ERROR, exception.getCause().getMessage(), Messages.INVALID_EXPRESSION_TITLE).open();
-			LOGGER.error("Exception occurred while invoking compile method for compiling expression",exception);
+			LOGGER.warn("Exception occurred while invoking compile method for compiling expression");
 		} catch (ClassNotFoundException classNotFoundException) {
 			new CustomMessageBox(SWT.ERROR, "Cannot find validation jar in build path", Messages.INVALID_EXPRESSION_TITLE).open();
 		}

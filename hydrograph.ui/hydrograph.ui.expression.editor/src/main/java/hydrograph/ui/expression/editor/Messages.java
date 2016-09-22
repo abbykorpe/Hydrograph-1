@@ -17,6 +17,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
+	public static String SEARCH_TEXT_BOX_TOOLTIP;
 	public static String VALID_EXPRESSION_TITLE;
 	public static String CANNOT_OPEN_EDITOR;
 	public static String MESSAGE_TO_EXIT_WITHOUT_SAVE;
@@ -38,6 +39,10 @@ public class Messages extends NLS {
 	public static String OPERATORS_TOOLTIP;
 	public static String EXTERNAL_JAR_DIALOG_BROWSE_BUTTON_TOOLTIP;
 	public static String EXTERNAL_JAR_DIALOG_DELETE_BUTTON_TOOLTIP;
+	public static String CANNOT_SEARCH_INPUT_STRING;
+	public static String EVALUATE_EXPRESSION_EDITOR_GROUP_HEADER;
+	public static String EVALUATE_FIELD_NAMES_GROUP_HEADER;
+	public static String EVALUATE_OUTPUT_CONSOLE_GROUP_HEADER;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

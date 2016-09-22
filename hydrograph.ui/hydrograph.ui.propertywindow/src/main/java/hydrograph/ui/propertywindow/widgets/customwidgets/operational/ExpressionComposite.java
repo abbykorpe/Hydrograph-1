@@ -159,6 +159,7 @@ public class ExpressionComposite extends Composite {
 		gd_browseButton.heightHint = 20;
 		browseButton.setLayoutData(gd_browseButton);
 		browseButton.setText("...");
+		browseButton.setToolTipText(Messages.EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP);
 		new Label(composite_2, SWT.NONE);
 		btnIsParam= new Button(composite_2, SWT.CHECK);
 		btnIsParam.addSelectionListener(new SelectionAdapter() {
@@ -179,7 +180,7 @@ public class ExpressionComposite extends Composite {
 				createExpressionEditorData();
 
 				LaunchExpressionEditor launchExpressionEditor = new LaunchExpressionEditor();
-				launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getExpressionEditorData(),getInputSchema(component));
+				launchExpressionEditor.launchExpressionEditor(mappingSheetRow.getExpressionEditorData(),getInputSchema(component),mappingSheetRow.getOperationID());
 				expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());
 			}
 

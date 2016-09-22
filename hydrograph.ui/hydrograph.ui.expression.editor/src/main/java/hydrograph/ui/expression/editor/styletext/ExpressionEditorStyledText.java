@@ -1,6 +1,7 @@
 package hydrograph.ui.expression.editor.styletext;
 
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
 
 import org.apache.commons.lang.StringUtils;
@@ -60,10 +61,12 @@ public class ExpressionEditorStyledText extends StyledText{
      * @see org.eclipse.swt.custom.StyledText#insert(java.lang.String)
      */
     @Override
-    public void insert(String string) {
-    	super.insert(string);
-    	this.setFocus();
-		this.setSelection(this.getText().length()+100);
-    }
-	
+	public void insert(String string) {
+		if (!StringUtils.startsWith(StringUtils.trim(string),Messages.CANNOT_SEARCH_INPUT_STRING)) {
+			super.insert(string);
+			this.setFocus();
+			this.setSelection(this.getText().length() + 100);
+		}
+	}
+
 }

@@ -15,8 +15,8 @@ package hydrograph.ui.expression.editor.dialogs;
 
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.color.manager.JavaLineStyler;
 import hydrograph.ui.expression.editor.composites.AvailableFieldsComposite;
 import hydrograph.ui.expression.editor.composites.CategoriesComposite;
@@ -28,18 +28,11 @@ import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaFileObject;
-
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -52,7 +45,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 public class ExpressionEditorDialog extends Dialog {
@@ -60,6 +52,7 @@ public class ExpressionEditorDialog extends Dialog {
 	public static final String FIELD_DATA_TYPE_MAP = "fieldMap";
 	public static final String COMPONENT_NAME_KEY = "component-name";
 	public static final String INPUT_FILEDS_SCHEMA_KEY = "input-field-schema";
+	public static final String TITLE_SUFFIX_KEY = "dialog-title-key";
 	
 	private StyledText expressionEditorTextBox;
 	private AvailableFieldsComposite availableFieldsComposite;
@@ -78,14 +71,16 @@ public class ExpressionEditorDialog extends Dialog {
 	private SashForm upperSashForm;
 	private ExpressionEditorData expressionEditorData;
 	private List<FixedWidthGridRow> inputFieldSchema;
+	private String windowTitleSuffix;
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
 	 * @param inputFieldSchema 
+	 * @param windowTitleSuffix 
 	 */
-	public ExpressionEditorDialog(Shell parentShell, ExpressionEditorData expressionEditorData, List<FixedWidthGridRow> inputFieldSchema) {
+	public ExpressionEditorDialog(Shell parentShell, ExpressionEditorData expressionEditorData, List<FixedWidthGridRow> inputFieldSchema, String windowTitleSuffix) {
 
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
@@ -95,6 +90,7 @@ public class ExpressionEditorDialog extends Dialog {
 		this.oldExpressionText = expressionEditorData.getExpression();
 		this.expressionEditorData = expressionEditorData;
 		this.inputFieldSchema=inputFieldSchema;
+		this.windowTitleSuffix=windowTitleSuffix;
 		CURRENT_INSTANCE = this;
 	}
 
@@ -107,7 +103,7 @@ public class ExpressionEditorDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
-		container.getShell().setText(Messages.EXPRESSION_EDITOR_TITLE);
+		container.getShell().setText(getTitle());
 
 		containerSashForm = new SashForm(container, SWT.VERTICAL);
 		containerSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -118,13 +114,14 @@ public class ExpressionEditorDialog extends Dialog {
 		upperSashForm = new SashForm(upperComposite, SWT.NONE);
 		upperSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, expressionEditorTextBox,
-				selectedInputFields);
+		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, selectedInputFields);
 
 		expressionEditorComposite = new ExpressionEditorComposite(upperSashForm, SWT.NONE, javaLineStyler);
 		this.expressionEditorTextBox = expressionEditorComposite.getExpressionEditor();
 		upperSashForm.setWeights(new int[] { 288, 576 });
 
+		availableFieldsComposite.setExpressionEditor(expressionEditorTextBox);
+		
 		Composite composite = new Composite(containerSashForm, SWT.BORDER);
 		composite.setLayout(new GridLayout(1, false));
 
@@ -132,7 +129,7 @@ public class ExpressionEditorDialog extends Dialog {
 		lowerSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		categoriesComposite = new CategoriesComposite(lowerSashForm, SWT.NONE);
-		functionsComposite = new FunctionsComposite(lowerSashForm, categoriesComposite, SWT.NONE);
+		functionsComposite = new FunctionsComposite(lowerSashForm,expressionEditorTextBox ,categoriesComposite, SWT.NONE);
 		descriptionComposite = new DescriptionComposite(lowerSashForm, functionsComposite, categoriesComposite,
 				SWT.NONE);
 
@@ -142,12 +139,24 @@ public class ExpressionEditorDialog extends Dialog {
 		return container;
 	}
 
+	private String getTitle() {
+		StringBuffer title=new StringBuffer(Messages.EXPRESSION_EDITOR_TITLE);
+		if(StringUtils.isNotBlank(windowTitleSuffix)){
+			title.append(Constants.SPACE);
+			title.append(Constants.DASH);
+			title.append(Constants.SPACE);
+			title.append(windowTitleSuffix);
+		}
+		return title.toString();
+	}
+
 	private void intializeWidgets() {
 		expressionEditorTextBox.setFocus();
 		expressionEditorTextBox.setText(oldExpressionText);
 		expressionEditorTextBox.setData(FIELD_DATA_TYPE_MAP, fieldMap);
 		expressionEditorTextBox.setData(COMPONENT_NAME_KEY, expressionEditorData.getComponentName());
 		expressionEditorTextBox.setData(INPUT_FILEDS_SCHEMA_KEY,inputFieldSchema);
+		expressionEditorTextBox.setData(TITLE_SUFFIX_KEY,windowTitleSuffix);
 		getShell().setMaximized(true);
 	}
 
@@ -218,4 +227,7 @@ public class ExpressionEditorDialog extends Dialog {
 		return containerSashForm;
 	}
 
+	public StyledText getExpressionEditorTextBox() {
+		return expressionEditorTextBox;
+	}
 }

@@ -70,7 +70,7 @@ public class EvaluateExpression {
 		} catch (JavaModelException | MalformedURLException | IllegalAccessException | IllegalArgumentException exception) {
 			LOGGER.error("Exception occurred while compiling expression", exception);
 		} catch (InvocationTargetException exception) {
-			LOGGER.error("Exception occurred while invoking compile method for compiling expression", exception);
+			LOGGER.warn("Exception occurred while invoking compile method for compiling expression");
 			evaluateDialog.showError(exception.getCause().getMessage());
 		} catch (ClassNotFoundException classNotFoundException) {
 			evaluateDialog.showError("Cannot find validation jar in build path");

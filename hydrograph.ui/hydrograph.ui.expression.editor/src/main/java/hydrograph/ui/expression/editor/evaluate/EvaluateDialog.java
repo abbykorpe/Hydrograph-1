@@ -42,14 +42,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 public class EvaluateDialog extends Dialog {
 	private static final String OUTPUT_COSOLE_ERROR_PREFIX = "Error\t\t: ";
 	private static final String OUTPUT_CONSOLE_PREFIX = "Output\t\t: ";
-	private String OUTPUT = "Expression's output";
 	private StyledText outputConsole;
 	private StyledText expressionEditor;
 	private Composite previousExpressionEditorComposite;
@@ -64,7 +63,7 @@ public class EvaluateDialog extends Dialog {
 	 */
 	public EvaluateDialog(Shell parentShell,StyledText expressionEditor) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE);
+		setShellStyle(SWT.CLOSE|SWT.RESIZE);
 		this.expressionEditor=expressionEditor;
 		previousExpressionEditorComposite=expressionEditor.getParent();
 		evaluateDialog=this;
@@ -78,17 +77,19 @@ public class EvaluateDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
-		container.getShell().setText(Messages.EXPRESSION_EDITOR_EVALUATE_DIALOG_TITLE);
+		container.getShell().setText(getTitle());
 		
 		SashForm sashForm = new SashForm(container, SWT.VERTICAL);
-		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
 		
-		Composite expressionEditorcomposite = new Composite(sashForm, SWT.BORDER);
+		Group expressionEditorcomposite = new Group(sashForm, SWT.NORMAL);
+		expressionEditorcomposite.setText(Messages.EVALUATE_EXPRESSION_EDITOR_GROUP_HEADER);
 		expressionEditor.setParent(expressionEditorcomposite);
 		expressionEditorcomposite.setLayout(new GridLayout(1, false));
 		
-		Composite fieldTableComposite = new Composite(sashForm, SWT.BORDER);
+		Group fieldTableComposite = new Group(sashForm, SWT.NORMAL);
 		fieldTableComposite.setLayout(new GridLayout(1, false));
+		fieldTableComposite.setText(Messages.EVALUATE_FIELD_NAMES_GROUP_HEADER);
 		
 		createSearchTextBox(fieldTableComposite);
 
@@ -97,15 +98,26 @@ public class EvaluateDialog extends Dialog {
 				(List<FixedWidthGridRow>) expressionEditor.getData(ExpressionEditorDialog.INPUT_FILEDS_SCHEMA_KEY));
 		
 		
-		Composite errorComposite = new Composite(sashForm, SWT.BORDER);
+		Group errorComposite = new Group(sashForm, SWT.NORMAL);
 		errorComposite.setLayout(new GridLayout(1, false));
-		
+		errorComposite.setText(Messages.EVALUATE_OUTPUT_CONSOLE_GROUP_HEADER);
+				
 		createOutputConsole(errorComposite);
 		sashForm.setWeights(new int[] {101, 263, 140});
 		
-		showOutput(OUTPUT);
-		
 		return container;
+	}
+
+	private String getTitle() {
+		String titleSuffix=(String) expressionEditor.getData(ExpressionEditorDialog.TITLE_SUFFIX_KEY);
+		StringBuffer title=new StringBuffer(Messages.EXPRESSION_EDITOR_EVALUATE_DIALOG_TITLE);
+		if(StringUtils.isNotBlank(titleSuffix)){
+			title.append(Constants.SPACE);
+			title.append(Constants.DASH);
+			title.append(Constants.SPACE);
+			title.append(titleSuffix);
+		}
+		return title.toString();
 	}
 
 	private void createOutputConsole(Composite errorComposite) {
@@ -206,24 +218,17 @@ public class EvaluateDialog extends Dialog {
 	@Override
 	public boolean close() {
 		expressionEditor.setParent(previousExpressionEditorComposite);
-		expressionEditor.setSize(previousExpressionEditorComposite.getSize().x-18,previousExpressionEditorComposite.getSize().y-5);
-		enableExpressionDialog();
+		previousExpressionEditorComposite.setSize(previousExpressionEditorComposite.getSize().x+1,
+				previousExpressionEditorComposite.getSize().y+1);
+		previousExpressionEditorComposite.setSize(previousExpressionEditorComposite.getSize().x-1,
+				previousExpressionEditorComposite.getSize().y-1);
 		expressionEditor.setFocus();
 		return super.close();
 	}
 	
 	@Override
 	public int open() {
-		disableExpressionDialog();
 		return super.open();
 	}
 
-	private void disableExpressionDialog() {
-		ExpressionEditorDialog.CURRENT_INSTANCE.getContainerSashForm();
-		ExpressionEditorDialog.CURRENT_INSTANCE.getUpperSashForm();
-	}
-	private void enableExpressionDialog() {
-		ExpressionEditorDialog.CURRENT_INSTANCE.getContainerSashForm();
-		ExpressionEditorDialog.CURRENT_INSTANCE.getUpperSashForm();
-	}
 }

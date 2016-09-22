@@ -14,6 +14,7 @@
 package hydrograph.ui.expression.editor.composites;
 
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.datastructure.ClassDetails;
 import hydrograph.ui.expression.editor.dialogs.AddCategoreisDialog;
 import hydrograph.ui.expression.editor.repo.ClassRepo;
@@ -54,7 +55,7 @@ public class CategoriesUpperComposite extends Composite {
 		Label lblCategories = new Label(this, SWT.NONE);
 		lblCategories.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblCategories.setText("Categories");
-		
+		categoriesComposite=(CategoriesComposite)parent;
 		btnAddPackages = new Button(this, SWT.NONE);
 		btnAddPackages.setText(ADD_CATEGORIES);
 		btnAddPackages.setVisible(false);
@@ -87,6 +88,10 @@ public class CategoriesUpperComposite extends Composite {
 							classNameList.setData(String.valueOf(classNameList.getItemCount() - 1), classDetails);
 						}
 					}
+				if(classNameList.getItemCount()==0 && StringUtils.isNotBlank(searchTextBox.getText())){
+					classNameList.add(Messages.CANNOT_SEARCH_INPUT_STRING+searchTextBox.getText());
+				}
+				categoriesComposite.clearDescriptionAndMethodList();
 				}
 			}
 		});
