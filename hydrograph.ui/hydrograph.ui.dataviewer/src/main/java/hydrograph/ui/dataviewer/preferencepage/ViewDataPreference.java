@@ -31,6 +31,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -69,6 +71,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	private DirectoryFieldEditor defaultPathFieldEditor;
 	private BooleanFieldEditor purgeEditor;
 	private List<FieldEditor> editorList;
+	private StringFieldEditor hostFieldEditor;
 	
 	public ViewDataPreference() {
 		super();
@@ -85,7 +88,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		final Composite parentComposite = new Composite(parent, SWT.None);
 		parentComposite.setToolTipText("Export Data");
 		GridData parentCompositeData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
-		parentCompositeData.heightHint = 390;
+		parentCompositeData.heightHint = 396;
 		parentCompositeData.widthHint = 650;
 		parentCompositeData.grabExcessHorizontalSpace = true;
 		parentCompositeData.grabExcessVerticalSpace = true;
@@ -196,7 +199,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpExportLayout.horizontalSpacing = 0;
 		GridData gd_grpExportData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
 		gd_grpExportData.widthHint = 580;
-		gd_grpExportData.heightHint = 130;
+		gd_grpExportData.heightHint = 140;
 		gd_grpExportData.grabExcessHorizontalSpace = true;
 		gd_grpExportData.grabExcessVerticalSpace = true;
 		
@@ -340,19 +343,30 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		GridLayout gl_grpServiceDetails = new GridLayout(1, true);
 		GridData gd_grpServiceDetailsData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
 		gd_grpServiceDetailsData.widthHint = 580;
-		gd_grpServiceDetailsData.heightHint = 34;
+		gd_grpServiceDetailsData.heightHint = 60;
 		grpServiceDetails.setLayoutData(gd_grpServiceDetailsData);
 		grpServiceDetails.setLayout(gl_grpServiceDetails);
 		grpServiceDetails.setText("Service Details");
 		
 		Composite grpServiceDetailsCmposite = new Composite(grpServiceDetails, SWT.None);
 		GridData serviceGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		serviceGridData.heightHint = 26;
+		serviceGridData.heightHint = 50;
 		serviceGridData.widthHint = 530;
 		grpServiceDetailsCmposite.setLayout(new GridLayout());
 		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 
 		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite, 4);
+		hostFieldEditor = new StringFieldEditor(PreferenceConstants.HOST, "Host	           ", grpServiceDetailsCmposite);
+		hostFieldEditor.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if(StringUtils.isEmpty(hostFieldEditor.getStringValue())){
+					hostFieldEditor.setStringValue(PreferenceConstants.DEFAULT_HOST);
+				}
+			}
+		});
+		hostFieldEditor.setPreferenceStore(getPreferenceStore());
+		hostFieldEditor.load();
 		portNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
@@ -492,6 +506,10 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		delimiterEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DELIMITER));
 		quoteEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.QUOTE_CHARACTOR));
 		portNo.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.PORT_NO));
+		if(StringUtils.isEmpty(hostFieldEditor.getStringValue())){
+			hostFieldEditor.setStringValue(PreferenceConstants.DEFAULT_HOST);
+		}
+
 		booleanFieldEditor.loadDefault();
 		purgeEditor.loadDefault();
 	}
@@ -507,6 +525,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		booleanFieldEditor.store();
 		pageSizeEditor.store();
 		portNo.store();
+		hostFieldEditor.store();
 	}
 	
 	@Override
@@ -520,6 +539,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		booleanFieldEditor.store();
 		purgeEditor.store();
 		portNo.store();
+		hostFieldEditor.store();
 		return super.performOk();
 	}
 }

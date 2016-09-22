@@ -142,6 +142,13 @@ public class Utils {
 		String portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
 				PreferenceConstants.PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
 		return portNo;
-		
+	}
+	
+	/**
+	 * Set Host Value
+	 * @param String
+	 */
+	public void setHostValue(String host){
+		PreferenceConstants.DEFAULT_HOST = host;
 	}
 }
