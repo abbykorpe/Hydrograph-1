@@ -68,10 +68,10 @@
    <topic href="html/Components/Output_Hive_Parquet.html" label="Output Hive Parquet">
       <anchor id="outputHiveParquet"/>
    </topic>
-   <topic href="html/Components/Input_Hive_Text.html" label="Input Hive TextFile">
+   <topic href="html/Components/Input_Hive_Text.html" label="Input Hive Text File">
       <anchor id="inputHiveTextFile"/>
    </topic>
-   <topic href="html/Components/Output_Hive_Text.html" label="Output Hive TextFile">
+   <topic href="html/Components/Output_Hive_Text.html" label="Output Hive Text File">
       <anchor id="outputHiveTextFile"/>
    </topic>
    <topic href="html/Components/Normalize.html" label="Normalize">
