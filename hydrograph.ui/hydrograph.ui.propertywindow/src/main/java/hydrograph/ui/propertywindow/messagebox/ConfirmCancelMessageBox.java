@@ -51,9 +51,8 @@ public class ConfirmCancelMessageBox {
 	
 	private void createMessageBox(){
 		Shell shell=container.getShell();
-		int style = SWT.APPLICATION_MODAL | SWT.OK | SWT.CANCEL;
+		int style = SWT.APPLICATION_MODAL | SWT.OK | SWT.CANCEL | SWT.ICON_INFORMATION;
 		messageBox = new MessageBox(shell,style);
-		
 		messageBox.setText("Information"); //$NON-NLS-1$
 		messageBox.setMessage(Messages.MessageBeforeClosingWindow);
 	}

@@ -482,7 +482,10 @@ import org.xml.sax.SAXException;
 				}
 				if(!equalLists(schemaInGrid, schemasFromFile,new GridComparator())){
 					verifiedSchema=false;
-					MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA_NOT_IN_SYNC);
+					//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Information", Messages.EXPORTED_SCHEMA_NOT_IN_SYNC);
+					MessageBox dialog = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK);
+					dialog.setText(Messages.INFORMATION);
+					dialog.setMessage(Messages.EXPORTED_SCHEMA_NOT_IN_SYNC);
 				}
 				
 			} catch (FileNotFoundException e) {
@@ -507,7 +510,10 @@ import org.xml.sax.SAXException;
 			}
 			catch( SAXException| IOException ex)
 			{
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
+				//MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
+				MessageBox dialog = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR | SWT.OK);
+				dialog.setText(Messages.ERROR);
+				dialog.setMessage(Messages.IMPORT_XML_FORMAT_ERROR + "-\n" + ex.getMessage());
 				logger.error(Messages.IMPORT_XML_FORMAT_ERROR);
 				return false;
 			}

@@ -25,7 +25,7 @@ package hydrograph.ui.parametergrid.constants;
 public enum MessageType {
 	ERROR("Error"),
 	WARNING("Warning"),
-	INFO("Info");
+	INFO("Information");
 	
 	private String messageType;
 	private MessageType(String messageType){
