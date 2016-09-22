@@ -263,6 +263,9 @@ public class Messages extends NLS {
 	public static String MOVE_DOWN_KEY_SHORTCUT_TOOLTIP;
 	public static String EXTRACT_FROM_METASTORE;
 	public static String EXTRACT;
+	public static  String HOST_NAME_BLANK_ERROR ;
+	public static  String METASTORE_FORMAT_ERROR;
+	public static  String INVALID_DB_ERROR;
 
 	public static String EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 	

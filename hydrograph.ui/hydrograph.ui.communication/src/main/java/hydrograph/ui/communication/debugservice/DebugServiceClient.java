@@ -132,8 +132,8 @@ public class DebugServiceClient {
 	 * @throws HttpException
 	 * @throws IOException
 	 */
-	public String readMetaStoreDb(String jsonString,JobDetails jobDetails, List<String> userCredentials) throws NumberFormatException, HttpException, IOException {
-		PostMethod method=Provider.INSTANCE.readMetaStoreforHiveMethod(jsonString, jobDetails,userCredentials);
+	public String readMetaStoreDb(String jsonString,String host,String port, List<String> userCredentials) throws NumberFormatException, HttpException, IOException {
+		PostMethod method=Provider.INSTANCE.readMetaStoreforHiveMethod(jsonString,host,port,userCredentials);
 		executePostMethod(method);
 		return method.getResponseBodyAsString();
 	}
