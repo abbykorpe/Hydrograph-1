@@ -100,8 +100,8 @@ public class TransformViewDataDialog extends Dialog {
 
 		    createStyleTextEditor(container);
 		
-		
-		return container;
+			getShell().setMinimumSize(290,290);
+			return container;
 	}
 	
 
