@@ -259,6 +259,7 @@ public class SchemaSyncUtility {
 			if(StringUtils.isNotBlank(fileFilterProperty.getPropertyname())
 					&&!(ParameterUtil.isParameter(fileFilterProperty.getPropertyname())))
 			{
+				if(!outputFields.contains(fileFilterProperty.getPropertyname()))
 				outputFields.add(fileFilterProperty.getPropertyname());
 			}	
 		 }
