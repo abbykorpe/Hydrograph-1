@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -78,12 +79,14 @@ public class DebugConverter {
 						for(Entry<String, Long> entrySet: map.entrySet()){
 							viewData = new ViewData();
 							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
-								String componentId_socketId = DebugHelper.INSTANCE.getSubgraphComponent(component);
-								String[] data = StringUtils.split(componentId_socketId,".");
-								String componentId = data[0];
-								String socketId = data[1];
-								viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
-								viewData.setOutSocketId(socketId);
+								List<String> componentId_socketIdList = DebugHelper.INSTANCE.getSubgraphComponent(component);
+								for(String componentId_socketId : componentId_socketIdList){
+									String[] data = StringUtils.split(componentId_socketId,".");
+									String componentId = data[0];
+									String socketId = data[1];
+									viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
+									viewData.setOutSocketId(socketId);
+								}
 							}else{
 								viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
 								viewData.setOutSocketId(entrySet.getKey());

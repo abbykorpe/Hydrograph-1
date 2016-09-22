@@ -93,8 +93,8 @@ public class WatchRecordAction extends SelectionAction {
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
 				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
-					String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
-					String[] str1 = StringUtils.split(str, ".");
+					//String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
+					String[] str1 = StringUtils.split("str", ".");
 					String componentID = str1[0];
 					String socketId = str1[1];
 					watchRecordInner

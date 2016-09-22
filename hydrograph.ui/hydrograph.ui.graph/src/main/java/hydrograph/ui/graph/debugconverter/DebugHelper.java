@@ -21,6 +21,7 @@ import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
@@ -29,7 +30,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
@@ -59,13 +63,13 @@ public class DebugHelper {
 	public static final String SERVICE_JAR = "SERVICE_JAR";
 	public static final String PORT_NUMBER = "PORT_NO";
 	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
-	
+	private List<String> subjobWatcherList = new ArrayList<>(); 
 
 	/**
 	 * This function used to return subgraph component_Id and socket_Id
 	 *
 	 */
-	public String getSubgraphComponent(Component component) throws CoreException{
+	public List<String> getSubgraphComponent(Component component) throws CoreException{
 		Container container=null;
 		if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
 			String subgraphFilePath=(String) component.getProperties().get(Constants.JOB_PATH);
@@ -83,23 +87,37 @@ public class DebugHelper {
 					for(Link str : links){
 						String sub_comp = str.getSource().getComponentLabel().getLabelContents();
 						String sub_comp_port = str.getSourceTerminal();
-						return sub_comp+"."+sub_comp_port;
+						subjobWatcherList.add(sub_comp+"."+sub_comp_port);
 					}
+					return subjobWatcherList;
 				}
 				else{
 					if(ResourcesPlugin.getWorkspace().getRoot().getFile(jobPath).exists()){
 						XStream xs = new XStream();
 					container=(Container) xs.fromXML(ResourcesPlugin.getWorkspace().getRoot().getFile(jobPath).getContents(true));
 					List<Link> links = null;
+					
 					for(Component component_temp:container.getChildren()){
 						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), Constants.OUTPUT_SUBJOB)){
 							links=component_temp.getTargetConnections();
+							break;
 						}
-					}for(Link str : links){
-						String sub_comp = str.getSource().getComponentLabel().getLabelContents();
-						String sub_comp_port = str.getSourceTerminal();
-						return sub_comp+"."+sub_comp_port;
+					}for(Link link : links){
+						Map<String, Port> map = link.getSource().getPorts();
+						for(Entry<String, Port> entry : map.entrySet()){
+							Port port = entry.getValue();
+							String type = port.getPortType();
+							if((type.equalsIgnoreCase("out")||type.equalsIgnoreCase("unused")) && port.isWatched()){
+								Component component2 = port.getParent();
+								String label = component2.getComponentLabel().getLabelContents();
+								//String sub_comp = str.getSource().getComponentLabel().getLabelContents();
+								String sub_comp_port = port.getTerminal();
+								subjobWatcherList.add(label+"."+sub_comp_port);
+							}
+						}
 					}
+					return subjobWatcherList;
+					
 				  }
 				}
 			  }

@@ -261,7 +261,12 @@ public class DebugHandler{
 			createDirectoryIfNotExist(validPath);
 			
 			filePath = validPath + jobId;
-			SchemaHelper.INSTANCE.exportSchemaFile(filePath);
+				try {
+					SchemaHelper.INSTANCE.exportSchemaFile(filePath);
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}else{
 			logger.debug("File path does not exist : {}", path);
 		}

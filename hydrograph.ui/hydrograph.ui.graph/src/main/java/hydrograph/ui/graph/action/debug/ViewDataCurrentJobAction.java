@@ -76,15 +76,14 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 		int count = 0;
 		boolean isWatcher = false;
 		List<Object> selectedObject = getSelectedObjects();
-		try {
 		for (Object obj : selectedObject) {
 			if (obj instanceof LinkEditPart) {
 				Link link = (Link) ((LinkEditPart) obj).getModel();
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
 				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
-					String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
-					String[] str1 = StringUtils.split(str, ".");
+					//List<String> str = DebugHelper.INSTANCE.getSubgraphComponent(component);
+					String[] str1 = StringUtils.split("", ".");
 					String componentID = str1[0];
 					String socketId = str1[1];
 					watchRecordInner
@@ -98,9 +97,6 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 				ViewDataUtils dataUtils = ViewDataUtils.getInstance();
 				isWatcher = dataUtils.checkWatcher(link.getSource(), link.getSourceTerminal());
 			}
-		}
-		} catch (CoreException exception) {
-			logger.error("SubJob component and socket id is not fetched", exception);
 		}
 		
 		if (!selectedObject.isEmpty() && isWatcher) {
