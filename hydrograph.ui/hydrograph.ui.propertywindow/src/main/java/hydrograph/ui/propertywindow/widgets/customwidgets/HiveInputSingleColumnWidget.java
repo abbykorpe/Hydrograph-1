@@ -37,6 +37,7 @@ public class HiveInputSingleColumnWidget extends SingleColumnWidget {
 	
 	
 	private InputHivePartitionKeyValues hivePartitionKeyValues;
+	private Schema metaStoreExtractedSchema=null;
 
 	public HiveInputSingleColumnWidget(
 			ComponentConfigrationProperty componentConfigProp,
@@ -59,6 +60,11 @@ public class HiveInputSingleColumnWidget extends SingleColumnWidget {
 		List<String> list = new ArrayList<String>();
 		Schema schema = (Schema) getComponent().getProperties().get(
 				Constants.SCHEMA_PROPERTY_NAME);
+		
+		if (null==schema && null!= metaStoreExtractedSchema) {
+			schema=metaStoreExtractedSchema.clone();
+		}
+		
 		if (schema != null && schema.getGridRow() != null) {
 			List<GridRow> gridRows = schema.getGridRow();
 			if (gridRows != null) {
@@ -109,8 +115,13 @@ public class HiveInputSingleColumnWidget extends SingleColumnWidget {
 	
 	@Override
 	public void refresh(Object value) {
+		
+		List<Object> tempList=(ArrayList<Object>)value;
+		
+		metaStoreExtractedSchema = (Schema)tempList.get(1);
+		
 		InputHivePartitionKeyValues inputHivePartitionKeyValues = new InputHivePartitionKeyValues();
-		List<String> keys= (ArrayList<String>)value;
+		List<String> keys= (ArrayList<String>)tempList.get(0);
 		List<InputHivePartitionColumn> keyValues = new ArrayList<>();
 		inputHivePartitionKeyValues.setKey(trim(keys));
 		inputHivePartitionKeyValues.setKeyValues(keyValues);

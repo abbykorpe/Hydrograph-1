@@ -111,11 +111,16 @@ public class HiveInputExtractMetaStoreDialog extends Dialog {
 	 * @param parent
 	 */
 	private void createErrorComposite(Composite parent) {
-		parent.setLayout(new GridLayout(1, false));
+		GridLayout gl_container = new GridLayout(1, false);
+		gl_container.marginHeight = 2;
+		gl_container.verticalSpacing = 2;
+		parent.setLayout(gl_container);
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Composite errorComposite = new Composite(parent, SWT.NONE);
-		errorComposite.setLayout(new GridLayout(1, false));
+		GridLayout gl_errorComposite = new GridLayout(1, false);
+		gl_errorComposite.marginHeight = 0;
+		errorComposite.setLayout(gl_errorComposite);
 		errorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		addErrorLabel(errorComposite);
@@ -137,7 +142,7 @@ public class HiveInputExtractMetaStoreDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(350, 200);
+		return new Point(350, 180);
 	}
 	
 
