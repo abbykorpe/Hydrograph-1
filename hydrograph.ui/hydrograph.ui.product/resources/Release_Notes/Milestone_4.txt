@@ -68,6 +68,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 54.#1226 [Shrirang Kumbhar] Execution Tracking : On Re-run of the job, Previous logs Are not Getting Removed from Execution Tracking Console Log Window 
 55.#529 [Ankit Sharma] Phase Renamed: Attribute Phase is renamed to batch at all of its occurences. 
 56.#509 [Ankit Sharma] Look and Feel of Operation Class window : Added a new row feature on double clicking at all the existing tables.
+57.#1217 [Rushikesh Pawale] Fixed MAC Alignment Related Issues.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

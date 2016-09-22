@@ -507,8 +507,8 @@ public class RuntimePropertyDialog extends Dialog {
 		for (int i = 0, n = table.getColumnCount(); i < n; i++) {
 			table.getColumn(i).pack();
 		}
-		column1.setWidth(230);
-		column2.setWidth(386);
+		column1.setWidth(280);
+		column2.setWidth(374);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 

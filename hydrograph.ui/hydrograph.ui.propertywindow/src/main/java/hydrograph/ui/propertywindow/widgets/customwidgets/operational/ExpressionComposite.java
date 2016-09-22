@@ -3,13 +3,12 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
@@ -155,7 +154,11 @@ public class ExpressionComposite extends Composite {
 		composite_2.setLayout(new GridLayout(1, false));
 		browseButton= new Button(composite_2, SWT.NONE);
 		GridData gd_browseButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_browseButton.widthHint = 28;
+		if(OSValidator.isMac()){
+			gd_browseButton.widthHint = 35;
+		}else{
+			gd_browseButton.widthHint = 28;
+		}
 		gd_browseButton.heightHint = 20;
 		browseButton.setLayoutData(gd_browseButton);
 		browseButton.setText("...");
