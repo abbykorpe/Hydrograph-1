@@ -180,9 +180,19 @@ public class OperationClassProperty implements IDataStructure{
 		  nameValueProperties.add(nameValueProperty.clone());
 		}
 		}
+		OperationClassProperty clonedObject;
+		if(expressionEditor!=null)
+		{	
 		ExpressionEditorData cloneEditorData=expressionEditor.clone();
-		OperationClassProperty clonedObject=new OperationClassProperty(comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties,cloneEditorData,cloneEditorData.getComponentName());
-		
+		clonedObject=new OperationClassProperty
+        (comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties,cloneEditorData,
+        		cloneEditorData.getComponentName());
+		}
+		else
+		{	
+		 clonedObject=new OperationClassProperty
+				 (comboBoxValue,operationClassPath,isParameter,operationClassFullPath,nameValueProperties,null,null);
+		}
 		clonedObject.setExpression(isExpression);
 		return clonedObject;
 	}
