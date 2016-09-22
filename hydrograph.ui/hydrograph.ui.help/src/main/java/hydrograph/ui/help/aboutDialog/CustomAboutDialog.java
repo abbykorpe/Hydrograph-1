@@ -42,6 +42,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -54,6 +55,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -456,7 +458,7 @@ public class CustomAboutDialog extends TrayDialog {
 		Button button =  createButton(parent, 0, "", false); 
 		Bundle bundle = Platform.getBundle(Constants.ABOUT_DIALOG_IMAGE_BUNDLE_NAME);
 		URL fullPathString = BundleUtility.find(bundle,Constants.ABOUT_DIALOG_FEATURE_IMAGE_PATH);
-		button.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, false));
+		button.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
 		button.setToolTipText("Help");
 		Image image = ImageDescriptor.createFromURL(fullPathString).createImage();
 		button.setImage(image);
@@ -477,11 +479,36 @@ public class CustomAboutDialog extends TrayDialog {
 			    }
 			}); 
 		
-		Label l = new Label(parent, SWT.NONE);
-	    l.setLayoutData(new GridData());
+		Button installationButton = new Button(parent,SWT.PUSH);
+		installationButton.setLayoutData(new GridData());
 	    GridLayout layout = (GridLayout) parent.getLayout();
+	    installationButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 	    layout.numColumns++;
 	    layout.makeColumnsEqualWidth = false;
+		installationButton.setText("Installation Details");
+		installationButton.setToolTipText("Installation Details");
+		installationButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+				CustomInstallationDialog dialog = new CustomInstallationDialog(getShell());
+				dialog.setModalParent(CustomAboutDialog.this);
+				dialog.open();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				//{Do-nothing}
+			}
+		});
+		
+		Label l = new Label(parent, SWT.NONE);
+	    l.setLayoutData(new GridData());
+	    GridLayout layout1 = (GridLayout) parent.getLayout();
+	    l.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
+	    layout1.numColumns++;
+	    layout1.makeColumnsEqualWidth = false;
 
 	    Button ok = createButton(parent, IDialogConstants.OK_ID,
 	                IDialogConstants.OK_LABEL, true);
