@@ -112,10 +112,10 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+
 				String host = Platform.getPreferencesService().getString(PLUGIN_ID,HOST, "", null);
 				String port_no =Platform.getPreferencesService().getString(PLUGIN_ID,PORT_NO, DEFAULT_PORTNO, null);
-				
+
 				if(null!=host&& StringUtils.isNotBlank(host)){
 					
 					
@@ -173,43 +173,28 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 						for (AbstractWidget abstractWgt : widgets) {
 			
 							if (abstractWgt.getProperty().getPropertyName()
-									.equalsIgnoreCase(Constants.DELIMITER_QNAME)
-									&& null != hiveTableSchema.getFieldDelimiter()) {
-								abstractWgt.refresh(hiveTableSchema.getFieldDelimiter());
-							}else if (abstractWgt.getProperty().getPropertyName()
-									.equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
+									.equalsIgnoreCase(Constants.DELIMITER_QNAME)&& null != hiveTableSchema.getFieldDelimiter()) {
 								
-								Schema schema = new Schema();
-								List<GridRow> rows = new ArrayList<>();
-			
-								for (HiveTableSchemaField hsf : hiveTableSchema
-										.getSchemaFields()) {
-									BasicSchemaGridRow gridRow = new BasicSchemaGridRow();
-			
-									gridRow.setFieldName(hsf.getFieldName());
-									gridRow.setDataTypeValue(hsf.getFieldType());
-									gridRow.setPrecision(hsf.getPrecision());
-									gridRow.setScale(hsf.getScale());
-									gridRow.setDateFormat(hsf.getFormat());
-									gridRow.setDataType(GridWidgetCommonBuilder
-											.getDataTypeByValue(hsf.getFieldType()));
-			
-									rows.add(gridRow);
-								}
-			
-								schema.setGridRow(rows);
-								abstractWgt.refresh(schema);
-							}else if (abstractWgt.getProperty().getPropertyName()
-									.equalsIgnoreCase(Constants.PARTITION_KEYS_WIDGET_NAME)
+								abstractWgt.refresh(hiveTableSchema.getFieldDelimiter());
+						
+							}else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
+								
+								abstractWgt.refresh(getComponentSchema(hiveTableSchema));
+								
+							}else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.PARTITION_KEYS_WIDGET_NAME)
 									&& null != hiveTableSchema.getPartitionKeys()) {
 			
-								List<String> keys = new ArrayList<>(
-										Arrays.asList(hiveTableSchema.getPartitionKeys()
-												.split(",")));
-								abstractWgt.refresh(keys);
-							} else if (abstractWgt.getProperty().getPropertyName()
-									.equalsIgnoreCase(Constants.EXTERNAL_TABLE_PATH_WIDGET_NAME)
+								List<String> keys = new ArrayList<>(Arrays.asList(hiveTableSchema.getPartitionKeys().split(",")));
+								
+								List<Object> temp = new ArrayList<>();
+								temp.add(keys);
+								temp.add(getComponentSchema(hiveTableSchema));
+								
+								abstractWgt.refresh(temp);
+								
+							} else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.EXTERNAL_TABLE_PATH_WIDGET_NAME)
 									&& null != hiveTableSchema.getExternalTableLocation()) {
+								
 								abstractWgt.refresh(hiveTableSchema.getExternalTableLocation());
 							}
 							
@@ -223,6 +208,33 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 			
 				createErrorDialog(jsonResponse).open();
 		}
+	}
+
+	/**
+	 * @param hiveTableSchema
+	 * @return
+	 */
+	private Schema getComponentSchema(HiveTableSchema hiveTableSchema) {
+		Schema schema = new Schema();
+		List<GridRow> rows = new ArrayList<>();
+
+		for (HiveTableSchemaField hsf : hiveTableSchema
+				.getSchemaFields()) {
+			BasicSchemaGridRow gridRow = new BasicSchemaGridRow();
+
+			gridRow.setFieldName(hsf.getFieldName());
+			gridRow.setDataTypeValue(hsf.getFieldType());
+			gridRow.setPrecision(hsf.getPrecision());
+			gridRow.setScale(hsf.getScale());
+			gridRow.setDateFormat(hsf.getFormat());
+			gridRow.setDataType(GridWidgetCommonBuilder
+					.getDataTypeByValue(hsf.getFieldType()));
+
+			rows.add(gridRow);
+		}
+
+		schema.setGridRow(rows);
+		return schema;
 	}
 
 	/**
