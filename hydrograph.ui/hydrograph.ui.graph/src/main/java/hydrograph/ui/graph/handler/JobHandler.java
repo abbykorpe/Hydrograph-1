@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.graph.handler;
 
+import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
@@ -88,6 +89,8 @@ public class JobHandler extends AbstractHandler {
 	{
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
+		
+		Utils.INSTANCE.setHostValue(runConfigDialog.getHost());
 		
 		String uniqueJobId = getUniqueJobId();
 		String timeStamp = dataUtils.getTimeStamp();

@@ -32,9 +32,11 @@ public class PreferenceConstants {
 	public static final String DEFAULTPATH = "exportDataDefaultpath";
 	public static final String PURGE_DATA_FILES = "purgeDataFiles";
 	public static final String PORT_NO = "portNo";
+	public static final String HOST="host";
 	
 	public static final String DEFAULT_VIEW_DATA_PAGE_SIZE="100";
 	public static final String DEFAULT_VIEW_DATA_FILE_SIZE="100";
 	public static final Long INITIAL_OFFSET=0L;
 	public static final String DEFAULT_PORT_NO="8004";
+	public static String DEFAULT_HOST;
 }
