@@ -30,4 +30,7 @@ public class DebugServicePostParameters {
 	public static final String FILE_SIZE = "file_size";
 	public static final String HOST_NAME = "host_name";
 	public static final String FILTER_JSON_OBJECT="json_object";
+	public static final String METASTORE_DB_NAME="database";
+	public static final String METASTORE_TABLE_NAME="table";
+	public static final String USERNAME="userName";
 }

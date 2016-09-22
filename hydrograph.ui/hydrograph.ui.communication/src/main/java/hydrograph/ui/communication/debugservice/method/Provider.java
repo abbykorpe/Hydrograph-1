@@ -22,6 +22,7 @@ import hydrograph.ui.communication.debugservice.constants.DebugServiceMethods;
 import hydrograph.ui.communication.debugservice.constants.DebugServicePostParameters;
 
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * The class Provider
@@ -137,14 +138,14 @@ public class Provider {
 	 * @throws NumberFormatException
 	 * @throws MalformedURLException
 	 */
-	public PostMethod readMetaStoreforHiveMethod(String jsonString,JobDetails jobDetails, List<String> userCredentials) throws NumberFormatException, MalformedURLException {
+	public PostMethod readMetaStoreforHiveMethod(String jsonString,String host,String port, List<String> userCredentials) throws NumberFormatException, MalformedURLException {
 		
-		URL url = new URL("http://bhsnode3.bitwiseglobal.net:8888/readFromMetastore");
+		URL url = new URL(POST_PROTOCOL,host,Integer.valueOf(port),DebugServiceMethods.READ_METASTORE);
 		PostMethod postMethod = new PostMethod(url.toString());
-        postMethod.addParameter("database", jsonString.split("\\|")[0]);
-        postMethod.addParameter("table", jsonString.split("\\|")[1]);
-        postMethod.addParameter("userName", userCredentials.get(0));
-        postMethod.addParameter("password", userCredentials.get(1));
+        postMethod.addParameter(DebugServicePostParameters.METASTORE_DB_NAME, jsonString.split("\\|")[0]);
+        postMethod.addParameter(DebugServicePostParameters.METASTORE_TABLE_NAME, jsonString.split("\\|")[1]);
+        postMethod.addParameter(DebugServicePostParameters.USERNAME, userCredentials.get(0));
+        postMethod.addParameter(DebugServicePostParameters.PASSWORD,userCredentials.get(1));
         
 		return postMethod;
 	}

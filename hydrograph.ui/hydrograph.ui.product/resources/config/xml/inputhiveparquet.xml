@@ -47,15 +47,15 @@
 			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
+		<tns:property dataType="string" name="extractMetaStoreData" renderer="EXTRACT_METASTORE_DATA_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Extract Hive schema,delimeter,partition keys from remote.">
+		</tns:property>		
 			
 		<tns:property dataType="string" name="externalTablePath" value="" renderer="EXTERNAL_TABLE_PATH_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the location of the file either Remote/Local."/>
 		
-		<tns:property dataType="string" name="extractMetaStoreData" renderer="EXTRACT_METASTORE_DATA_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Extract Hive schema,delimeter,partition keys from remote.">
-		</tns:property>		
 		
 		
 		<tns:property dataType="string" name="partitionKeys" renderer="PARTITION_KEYS_WIDGET_INPUT_HIVE"

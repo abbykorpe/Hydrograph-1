@@ -18,11 +18,13 @@ import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.Activator;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.HiveInputExtractMetaStoreDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -41,6 +43,7 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -58,7 +61,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
-	private static final String INVALID_DB_ERROR = "Invalid DB input output format";
+
+	private static final String DEFAULT_PORTNO = "8004";
+	private static final String PORT_NO = "portNo";
+	private static final String HOST = "host";
+	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private static final String HIVE_TEXT_FILE = "Hive Text File";
 	private static final String PARQUET = "parquet";
 	private static final String TEXTDELIMITED = "textdelimited";
@@ -105,24 +112,33 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-		
-				if(getDBTableDetailsFromWidgets()){
 				
-				HiveInputExtractMetaStoreDialog extractMetaStoreDialog = new HiveInputExtractMetaStoreDialog(Display.getCurrent().getActiveShell());
+				String host = Platform.getPreferencesService().getString(PLUGIN_ID,HOST, "", null);
+				String port_no =Platform.getPreferencesService().getString(PLUGIN_ID,PORT_NO, DEFAULT_PORTNO, null);
 				
-				extractMetaStoreDialog.open();
-				
-				List<String> userCredentials = extractMetaStoreDialog.getProperties();
-				
-				if(null!=userCredentials && userCredentials.size()>0){
-				
-					extractMetaStoreDetails(userCredentials);
-
-				}
+				if(null!=host&& StringUtils.isNotBlank(host)){
+					
+					
+					if(getDBTableDetailsFromWidgets()){
+					
+					HiveInputExtractMetaStoreDialog extractMetaStoreDialog = new HiveInputExtractMetaStoreDialog(Display.getCurrent().getActiveShell());
+					
+					extractMetaStoreDialog.open();
+					
+					List<String> userCredentials = extractMetaStoreDialog.getProperties();
+					
+					if(null!=userCredentials && userCredentials.size()>0){
+					
+						extractMetaStoreDetails(userCredentials,host,port_no);
+	
+					}
 			}else{
-				createErrorDialog("Extracting Metastore details DB/TABLE Name required").open();
+				createErrorDialog(Messages.METASTORE_FORMAT_ERROR).open();
 			}
 
+			}else{
+				createErrorDialog(Messages.HOST_NAME_BLANK_ERROR).open();
+				}
 			}
 			 };
 		
@@ -130,7 +146,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	}
 	
 	
-	private void extractMetaStoreDetails(List<String> userCredentials) {
+	private void extractMetaStoreDetails(List<String> userCredentials, String host, String port_no) {
 		HiveTableSchema hiveTableSchema = null;
 		String jsonResponse = "";
 
@@ -140,7 +156,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 
 			ObjectMapper mapper = new ObjectMapper();
 			String input = dbName + SEPARATOR + dbTableName;
-			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input,null,userCredentials);
+			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input,host,port_no,userCredentials);
 			hiveTableSchema = mapper.readValue(jsonResponse,
 					HiveTableSchema.class);
 
@@ -201,7 +217,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 						}
 			
 				}else{
-					createErrorDialog(INVALID_DB_ERROR).open();
+					createErrorDialog(Messages.INVALID_DB_ERROR).open();
 				 }
 			} else {
 			
@@ -253,7 +269,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	 */
 	@Override
 	public boolean isWidgetValid() {
-		return true;
+		return false;
 	}
 
 	@Override
