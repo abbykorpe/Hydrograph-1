@@ -21,9 +21,11 @@
     </topic> 
 	</topic>
  <topic href="html/Components/Filter_Operation_Window.html" label="Operation Class">
-    <topic label="Custom Built Operation Class">
+    <topic href="html/Components/Filter_Operation_Window.html#custom-operation-class" label="Custom Built Operation Class">
     </topic>
-    <topic label="Operations Properties Grid">
+    <topic href="html/Components/Filter_Operation_Window.html#Operation_Properties_Grid" label="Operations Properties Grid">
+    </topic>
+    <topic href="html/Components/Filter_Operation_Window.html#using-existing-java-class" label="Using Existing Java Class">
     </topic>
  </topic>
 </toc>
