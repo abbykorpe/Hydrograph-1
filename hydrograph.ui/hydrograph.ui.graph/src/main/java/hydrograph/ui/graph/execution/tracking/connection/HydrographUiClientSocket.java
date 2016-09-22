@@ -179,12 +179,10 @@ public class HydrographUiClientSocket {
 
 					if(!pending){
 						updateComponentPending(component, componentStatus, pending);
-						System.out.println("Updated comp status PENDING");
 					}
 
 					if(!running){
 						updateComponentRunning(component, componentStatus, running);
-						System.out.println("Updated comp status RUNNING");
 					} 
 
 					if(componentStatus.getComponentId().contains(keySubjobName+".") && componentStatus.getCurrentStatus().equalsIgnoreCase(ComponentExecutionStatus.FAILED.value())){
@@ -194,21 +192,14 @@ public class HydrographUiClientSocket {
 
 
 					if(!componentNameAndLink.isEmpty()){
-						System.out.println("**************componentNameAndLink in not empty");
-						System.out.println("Map : "+componentNameAndLink);
 						for (Map.Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet())
 						{
-							System.out.println("componentStatus :"+componentStatus);
 							if(entry.getKey().contains(componentStatus.getComponentId())){
 								List<String> portList = new ArrayList(componentStatus.getProcessedRecordCount().keySet());
 								for(String port: portList){
-									System.out.println("*********** In IF   :"+entry.getKey());
-									System.out.println("*********** In IF   :"+componentStatus.getComponentId()+"."+port);
 									if((componentStatus.getComponentId()+"."+port).equals(entry.getKey())){
 										for(Link link: component.getSourceConnections()){
-											System.out.println("In IF link :"+link.getSourceTerminal().toString()+"________"+((SubjobDetails)entry.getValue()).getTargetTerminal());
 											if(link.getSourceTerminal().toString().equals(((SubjobDetails)entry.getValue()).getTargetTerminal())){
-												System.out.println("In IF link :"+link);
 												link.updateRecordCount(componentStatus.getProcessedRecordCount().get(((SubjobDetails)entry.getValue()).getSourceTerminal()).toString());
 											}
 										}
@@ -221,15 +212,15 @@ public class HydrographUiClientSocket {
 										successCount++;
 									}
 								}
-						}else{
-							continue;
+							}else{
+								continue;
+							}
+
 						}
-						
-					}
 					}else if(component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
 						Container container = null;
 						String filePath=null;
-						
+
 						filePath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
 						IPath jobFileIPath = new Path(filePath);
 						if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
@@ -250,14 +241,13 @@ public class HydrographUiClientSocket {
 							}
 						} 
 					}
-
+					//For subjobs other than stand alone
 					if(successCount == componentNameAndLink.size() && !component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
 						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
-						System.out.println("Found successCount "+successCount+" Updted component status to SUCCESS");
 					}
+					//For stand alone subjob
 					if(successCount == componentCount && component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
 						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
-						System.out.println("Found successCount "+successCount+" Updted component status to SUCCESS");
 					}
 				}
 			}
@@ -268,7 +258,7 @@ public class HydrographUiClientSocket {
 
 				for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 					if(componentStatus.getComponentId().equals(component.getComponentLabel().getLabelContents())){
-						//logger.info("Updating normal component {} status {}",component.getComponentLabel().getLabelContents(), componentStatus.getCurrentStatus());
+						logger.info("Updating normal component {} status {}",component.getComponentLabel().getLabelContents(), componentStatus.getCurrentStatus());
 						component.updateStatus(componentStatus.getCurrentStatus());
 						for(Link link: component.getSourceConnections()){
 							if(componentStatus.getComponentId().equals(link.getSource().getComponentLabel().getLabelContents())){
@@ -318,8 +308,6 @@ public class HydrographUiClientSocket {
 							}
 						}
 					}
-				}else if(component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
-					
 				}
 			}
 
@@ -370,10 +358,7 @@ public class HydrographUiClientSocket {
 						Component componentNextToInput = link.getTarget();
 						//if componentNextToInput is running
 						String compName = component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents();
-						System.out.println("compName: "+compName);
-						System.out.println("componentStatus.getComponentId(): "+componentStatus.getComponentId());
 						if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.RUNNING.value())){
-							System.out.println("Matched component");
 							component.updateStatus(ComponentExecutionStatus.RUNNING.value());
 							runningStatusApplied = true;
 							break;
