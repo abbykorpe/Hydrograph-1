@@ -27,6 +27,7 @@ public class ValidationFunctions {
 	 * @return the first defined value from the number of {@code inputValues}.
 	 *         Skips {@code null} values as undefined
 	 */
+	@Deprecated
 	public static <T> T getFirstDefined(T... inputValues) {
 		if (inputValues == null)
 			return null;
@@ -47,6 +48,7 @@ public class ValidationFunctions {
 	 *            the input value to check
 	 * @return 1 if inputValue is not null else 0
 	 */
+	@Deprecated
 	public static <T> Integer isDefined(T inputValue) {
 		return (inputValue == null) ? 0 : 1;
 	}
@@ -59,6 +61,7 @@ public class ValidationFunctions {
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is not null else {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isDefinedCheck(T inputValue) {
 		return (inputValue == null) ? false : true;
 	}
@@ -71,6 +74,7 @@ public class ValidationFunctions {
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is instance of String else 0
 	 */
+	@Deprecated
 	public static <T> Integer isValid(T inputValue) {
 		if (StandardFunctionHelper.checkValidity(inputValue))
 			return 1;
@@ -87,6 +91,7 @@ public class ValidationFunctions {
 	 * @return {@code true} if {@code inputValue} is instance of String else
 	 *         {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isValidCheck(T inputValue) {
 		if (StandardFunctionHelper.checkValidity(inputValue))
 			return true;
@@ -102,6 +107,7 @@ public class ValidationFunctions {
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is null else 0
 	 */
+	@Deprecated
 	public static <T> Integer isNull(T inputValue) {
 		return (inputValue == null) ? 1 : 0;
 	}
@@ -114,6 +120,7 @@ public class ValidationFunctions {
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is null else {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isNullCheck(T inputValue) {
 		return (inputValue == null) ? true : false;
 	}
@@ -126,6 +133,7 @@ public class ValidationFunctions {
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is null else 0
 	 */
+	@Deprecated
 	public static <T> Integer isBlank(T inputValue) {
 		if (inputValue == null)
 			return null;
@@ -144,6 +152,7 @@ public class ValidationFunctions {
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is blank else {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isBlankCheck(T inputValue) {
 		if (inputValue == null)
 			return true;

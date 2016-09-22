@@ -102,40 +102,40 @@ public class CompileUtils {
 		writer.append("class Expression {");
 		writer.append("public static  " + returnType + "  validate(){ try{");
 		writer.append(fields != null ? fields : "");
-		writer.append("return  " + expression + "}catch(Exception e){throw new RuntimeException(e);}}");
+		writer.append("return  " + expression + ";"+"}catch(Exception e){throw new RuntimeException(e);}}");
 		writer.append("public static void main(String args[]) {");
 		writer.append("validate();");
 		writer.append("}");
 		writer.append("}");
 		return writer;
 	}
-
-	static Iterable<JavaSourceFromString> getJavaSourceFromString(String code) {
-		final JavaSourceFromString jsfs;
-		jsfs = new JavaSourceFromString("code", code);
-		return new Iterable<JavaSourceFromString>() {
-			public Iterator<JavaSourceFromString> iterator() {
-				return new Iterator<JavaSourceFromString>() {
-					boolean isNext = true;
-
-					public boolean hasNext() {
-						return isNext;
-					}
-
-					public JavaSourceFromString next() {
-						if (!isNext)
-							throw new NoSuchElementException();
-						isNext = false;
-						return jsfs;
-					}
-
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
-	}
+//
+//	static Iterable<JavaSourceFromString> getJavaSourceFromString(String code) {
+//		final JavaSourceFromString jsfs;
+//		jsfs = new JavaSourceFromString("code", code);
+//		return new Iterable<JavaSourceFromString>() {
+//			public Iterator<JavaSourceFromString> iterator() {
+//				return new Iterator<JavaSourceFromString>() {
+//					boolean isNext = true;
+//
+//					public boolean hasNext() {
+//						return isNext;
+//					}
+//
+//					public JavaSourceFromString next() {
+//						if (!isNext)
+//							throw new NoSuchElementException();
+//						isNext = false;
+//						return jsfs;
+//					}
+//
+//					public void remove() {
+//						throw new UnsupportedOperationException();
+//					}
+//				};
+//			}
+//		};
+//	}
 }
 
 class JavaSourceFromString extends SimpleJavaFileObject {

@@ -19,26 +19,26 @@ public class ValidationAPITest {
 
 	@Test(expected = DescriptiveErrorListener.HydrographExpressionError.class)
 	public void itShouldThrowException() {
-		ValidationAPI validationAPI = new ValidationAPI("(1==1)?12:20", "");
+		ValidationAPI validationAPI = new ValidationAPI("(1==1)12:20;", "");
 		validationAPI.isExpressionValid();
 	}
 
 	@Test
 	public void itShouldValidateTheExpression() {
-		ValidationAPI validationAPI = new ValidationAPI("StringFunctions.stringMatch(\"AAA\",\"a\")?1:2;", "");
+		ValidationAPI validationAPI = new ValidationAPI("StringFunctions.stringMatch(\"AAA\",\"a\")?1:2", "");
 		Assert.assertTrue(validationAPI.isExpressionValid());
 	}
 
 	@Test
 	public void itShouldImportDefauldPackage() {
-		ValidationAPI validationAPI = new ValidationAPI("(1==1)?12:20;", "");
+		ValidationAPI validationAPI = new ValidationAPI("(1==1)?12:20", "");
 		Assert.assertTrue(validationAPI.getValidExpression().contains("import"));
 	}
 
 	@Test
 	public void itShouldCompileFilterExpression() {
 		ValidationAPI validationAPI = new ValidationAPI(
-				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?true:false;",
+				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?true:false",
 				"");
 		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
 		schemaFields.put("f1", Date.class);
@@ -50,7 +50,7 @@ public class ValidationAPITest {
 	@Test
 	public void itShouldCompileTransformExpression() {
 		ValidationAPI validationAPI = new ValidationAPI(
-				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?f1:\"HELLO WORLD\";",
+				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?f1:\"HELLO WORLD\"",
 				"");
 		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
 		schemaFields.put("f1", Date.class);
@@ -62,7 +62,7 @@ public class ValidationAPITest {
 	@Test
 	public void itShouldMatchFieldName() {
 		ValidationAPI validationAPI = new ValidationAPI(
-				"StringFunctions.stringMatch(f2,DateFunctions.getStringDateFromDateObject(f1, \"\"))?1:0;", "");
+				"StringFunctions.stringMatch(f2,DateFunctions.getStringDateFromDateObject(f1, \"\"))?1:0", "");
 		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
 		schemaFields.put("f1", Date.class);
 		schemaFields.put("f2", String.class);
@@ -74,7 +74,7 @@ public class ValidationAPITest {
 
 	@Test
 	public void itShouldExcuteTheExpression() {
-		ValidationAPI validationAPI = new ValidationAPI("StringFunctions.stringMatch(\"test\",\"test\")?1:0;", "");
+		ValidationAPI validationAPI = new ValidationAPI("StringFunctions.stringMatch(\"test\",\"test\")?1:0", "");
 		Assert.assertEquals(1, validationAPI.execute());
 	}
 }

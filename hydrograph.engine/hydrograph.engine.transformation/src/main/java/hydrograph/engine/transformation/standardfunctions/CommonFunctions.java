@@ -38,6 +38,7 @@ public class CommonFunctions {
 	 * @return true if all the field values match <br>
 	 *         false is any field value does not match
 	 */
+	@Deprecated
 	public static boolean vectorCompare(ReusableRow inputRow, String prefix1,
 			String prefix2) {
 
