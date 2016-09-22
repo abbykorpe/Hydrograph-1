@@ -92,7 +92,9 @@ public class JobHandler extends AbstractHandler {
 		RunConfigDialog runConfigDialog = getRunConfiguration();
 		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
 		
-		Utils.INSTANCE.setHostValue(runConfigDialog.getHost());
+		if(!runConfigDialog.getHost().equalsIgnoreCase("localhost")){
+			Utils.INSTANCE.setHostValue(runConfigDialog.getHost());
+		}
 		
 		String uniqueJobId = getUniqueJobId();
 		String timeStamp = dataUtils.getTimeStamp();
