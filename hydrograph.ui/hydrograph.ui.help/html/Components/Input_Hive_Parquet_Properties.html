@@ -14,57 +14,57 @@
 <html>
 <head>
 	<title>Input Hive Parquet Properties</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 28px;">Input Hive Parquet Properties</span></font></p>
+<p><span class="header-1">Input Hive Parquet Properties</span></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">Hydrograph Release Version 1.0</span></span></p>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size: 14px;"><b>Properties</b>&nbsp;for the Input Hive Parquet component can be viewed by Double click-&gt;component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, scale etc. </span></span></p>
+<p><span><b>Properties</b>&nbsp;for the Input Hive Parquet component can be viewed by Double click-&gt;component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, scale etc.</span></p>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>General Properties:</b> </span></font></p>
+<p><a name="general_properties"></a><span class="header-2">General Properties</span></p>
 
 <p><img alt="" src="../images/Input_Hive_Parquet_Properties_General.png" /></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Display</b></span></span></p>
+<p><span class="header-2">Display</span></p>
 
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Name</b> - The Name field will specify the name of the component as desired by the user.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Base Type</b> - Base Type signifies the basic operation area of the component. In this case it is of Base Type Input.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Input Hive Parquet.</span></span></li>
+	<li><span><b>Name</b> - The Name field will specify the name of the component as desired by the user.</span></li>
+	<li><span><b>Base Type</b> - Base Type signifies the basic operation area of the component. In this case it is of Base Type Input.</span></li>
+	<li><span><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Input Hive Parquet.</span></li>
 </ul>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Configuration</b></span></span></p>
-
+<p><span class="header-2">Configuration</span></p>
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Database Name</b> - Database Name is used to specify the Hive Database Name. User has to manually type the database name in the text box provided.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Table Name</b> - Table Name is used to specify the Hive database table name. User has to manually type the table name in the text box provided.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>External Table Path</b> - External Table Path is used to specify Hive Database/Table location. User has to manually type the path in the text box provided. External Table Path is an optional field.</span></span></li>
-		<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Partiton Keys</b> - Partition Keys enables the user to enter user-specific partitions based on schema. Each Table can have one or more partition Keys which determines how the data is stored. Partitions - apart from being storage units - also allow the user to efficiently identify the rows that satisfy a certain criteria.User can drag and drop the fields required.Partition Keys is an optional field.</span></span></li>
+	<li><span><b>Database Name</b> - Database Name is used to specify the Hive Database Name. User has to manually type the database name in the text box provided.</span></li>
+	<li><span><b>Table Name</b> - Table Name is used to specify the Hive database table name. User has to manually type the table name in the text box provided.</span></li>
+	<li><span><b>External Table Path</b> - External Table Path is used to specify Hive Database/Table location. User has to manually type the path in the text box provided. External Table Path is an optional field.</span></li>
+		<li><span><b>Partiton Keys</b> - Partition Keys enables the user to enter user-specific partitions based on schema. Each Table can have one or more partition Keys which determines how the data is stored. Partitions - apart from being storage units - also allow the user to efficiently identify the rows that satisfy a certain criteria.User can drag and drop the fields required.Partition Keys is an optional field.</span></li>
 		<p><img alt="" src="../images/Partition_Keys.png" /></p>
 	
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Input Hive Parquet component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></span></li>
+	<li><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Input Hive Parquet component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></li>
 	<p><img alt="" src="../images/Runtime_Properties_Grid.png" /></p>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric value starting from 0 to maximum 99 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
+	<li><span><b>Phase</b> - Phase simply accepts a numeric value starting from 0 to maximum 99 and signifies the phase this component will execute in. By default this is 0.</span></li>
 </ul>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>Schema tab: </b></span></font></p>
+<p><a name="schema"></a><span class="header-2">Schema Tab</span></p>
 
 <p><img alt="" src="../images/Input_Hive_Parquet_Properties_Schema.png" /></p>
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Schema Types</b></span></span></p>
+<p><span><b>Schema Types</b></span></span></p>
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Internal</b> - User is provided a Grid to enter the internal schema of the Input Delimited file.</span></span></li>
-	<ul><li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Name</b> - User needs to enter all the Field names in this column.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Data type</b> - By default "string" Data type has been selected for any field added to the Grid. User can select from different Data type values like "integer", "double", "float" etc.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Date Format</b> - User can specify desired date format like "YY-DD-MM", "YYYYMMDD" etc for a date field in this column.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Precision</b> - Precision for a bigdecimal field can be specified here.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Scale</b> - Scale for a bigdecimal field can be specified here.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Scale Type</b> - Scale Type accepts values as implicit or explicit for bigdecimal field and none for other data types. Explicit considers the length of ' <b>.</b> ' and implicit ignores length of ' <b>.</b> ' for the bigdecimal field.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Description</b> - User can specify field description.</span></span></li></ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>External</b> - User can provide an external Hydrograph Schema file of XML format. A text box is provided to either manually type or use the Browse button to select the schema file from File system. The External schema file path is resolved during run time and replaced with the contents of the file in the Job XML.</span></span></li>
+	<li><span><b>Internal</b> - User is provided a Grid to enter the internal schema of the Input Delimited file.</span></li>
+	<ul>
+		<li><span><b>Field Name</b> - User needs to enter all the Field names in this column.</span></li>
+		<li><span><b>Data type</b> - By default "string" Data type has been selected for any field added to the Grid. User can select from different Data type values like "integer", "double", "float" etc.</span></li>
+		<li><span><b>Date Format</b> - User can specify desired date format like "YY-DD-MM", "YYYYMMDD" etc for a date field in this column.</span></li>
+		<li><span><b>Precision</b> - Precision for a bigdecimal field can be specified here.</span></li>
+		<li><span><b>Scale</b> - Scale for a bigdecimal field can be specified here.</span></li>
+		<li><span><b>Scale Type</b> - Scale Type accepts values as implicit or explicit for bigdecimal field and none for other data types. Explicit considers the length of ' <b>.</b> ' and implicit ignores length of ' <b>.</b> ' for the bigdecimal field.</span></li>
+		<li><span><b>Field Description</b> - User can specify field description.</span></li>
+	</ul>
+	<li><span><b>External</b> - User can provide an external Hydrograph Schema file of XML format. A text box is provided to either manually type or use the Browse button to select the schema file from File system. The External schema file path is resolved during run time and replaced with the contents of the file in the Job XML.</span></li>
 </ul>	
-
 <p>&nbsp;</p>
 
 <ul>
