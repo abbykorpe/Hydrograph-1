@@ -28,6 +28,6 @@
     <topic href="html/Components/Filter_Operation_Window.html#using-existing-java-class" label="Using Existing Java Class">
     </topic>
  </topic>
- <topic label="Expression Editor">
+ <topic href="html/Components/Expression_Editor_window.html" label="Expression Editor">
  </topic>
 </toc>
