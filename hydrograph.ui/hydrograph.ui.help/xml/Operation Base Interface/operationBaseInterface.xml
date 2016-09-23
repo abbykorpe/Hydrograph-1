@@ -17,6 +17,9 @@
    <topic href="html/Operation Base Interface/Aggregate/AggregateTransformBase.html" label="AggregateTransformBase">
       <anchor id="AggregateTransformBase"/>
    </topic>
+   <topic href="html/Operation Base Interface/Normalize/NormalizeTransformBase.html" label="NormalizeTransformBase">
+      <anchor id="NormalizeTransformBase"/>
+   </topic>
    <topic label="FilterBase">
       <anchor id="FilterBase"/>
    </topic>
