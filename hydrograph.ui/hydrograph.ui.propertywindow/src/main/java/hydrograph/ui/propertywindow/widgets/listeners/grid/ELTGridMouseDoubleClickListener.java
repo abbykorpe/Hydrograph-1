@@ -19,7 +19,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.ELTMouseDoubleClickListene
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Widget;
 
 
@@ -35,12 +35,12 @@ import org.eclipse.swt.widgets.Widget;
 public class ELTGridMouseDoubleClickListener extends ELTMouseDoubleClickListener{
 	@Override
 	public void mouseDoubleClickAction(PropertyDialogButtonBar propertyDialogButtonBar,ListenerHelper helpers, Widget... widgets){
-		((Label) widgets[1]).setEnabled(true);
+		((Button) widgets[1]).setEnabled(true);
 		propertyDialogButtonBar.enableApplyButton(true);
 		ELTGridDetails gridDetails = (ELTGridDetails) helpers.get(HelperType.SCHEMA_GRID);
 		if (gridDetails.getGrids().size() >= 1) {
-			((Label) widgets[2]).setEnabled(true);
-			((Label) widgets[3]).setEnabled(true);
+			((Button) widgets[2]).setEnabled(true);
+			((Button) widgets[3]).setEnabled(true);
 		}
 		gridDetails.getGridWidgetCommonBuilder().createDefaultSchema(gridDetails.getGrids(), gridDetails.getTableViewer(), gridDetails.getLabel());
 	}
