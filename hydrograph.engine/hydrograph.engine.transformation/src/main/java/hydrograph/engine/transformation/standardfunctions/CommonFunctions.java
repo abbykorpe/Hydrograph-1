@@ -19,6 +19,10 @@ import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
+/**
+ * The class CommonFunctions provides vector related functions.
+ *
+ */
 public class CommonFunctions {
 
 	private static Logger LOG = LoggerFactory.getLogger(CommonFunctions.class);

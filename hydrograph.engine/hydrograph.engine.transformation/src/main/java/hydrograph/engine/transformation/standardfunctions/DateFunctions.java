@@ -19,6 +19,10 @@ import java.util.Date;
 
 import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
+/**
+ * The class DateFunctions provides various Date and Time related functions.
+ *
+ */
 public class DateFunctions {
 
 	/**

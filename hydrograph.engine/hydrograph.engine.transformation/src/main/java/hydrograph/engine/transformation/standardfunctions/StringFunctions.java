@@ -18,6 +18,10 @@ import java.util.regex.Pattern;
 
 import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
+/**
+ * The class StringFunctions provides various string manipulation functions.
+ *
+ */
 public class StringFunctions {
 
 	/**

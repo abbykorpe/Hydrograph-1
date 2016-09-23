@@ -14,13 +14,16 @@ package hydrograph.engine.transformation.standardfunctions;
 
 import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
+/**
+ * The class ValidationFunctions provides various validation functions.
+ *
+ */
 public class ValidationFunctions {
 
 	/**
 	 * Returns the first defined value from the number of {@code inputValues}.
 	 * Skips {@code null} values as undefined
 	 * 
-	 * @see getFirstDefined("20150512")
 	 * @param inputValues
 	 *            the list / arbitrary number of input values from whom the
 	 *            first defined value is to be returned
@@ -43,7 +46,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is defined.
 	 * 
-	 * @see isDefined("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if inputValue is not null else 0
@@ -56,7 +58,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is defined
 	 * 
-	 * @see isDefinedCheck("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is not null else {@code false}
@@ -69,7 +70,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is instance of String
 	 * 
-	 * @see getFirstDefined("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is instance of String else 0
@@ -85,7 +85,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is instance of String
 	 * 
-	 * @see isValidCheck("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is instance of String else
@@ -102,7 +101,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is null
 	 * 
-	 * @see isNull("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is null else 0
@@ -115,7 +113,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if inputValue is null
 	 * 
-	 * @see isNull("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is null else {@code false}
@@ -128,7 +125,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is blank
 	 * 
-	 * @see isBlank("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is null else 0
@@ -147,7 +143,6 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is blank
 	 * 
-	 * @see isBlank("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is blank else {@code false}
