@@ -42,6 +42,7 @@ public class CategoriesUpperComposite extends Composite {
 	private Button btnAddPackages;
 	private Text searchTextBox;
 	private List classNameList;
+	private Text functionSearchTextBox;
 	
 	/**
 	 * Create the composite.
@@ -93,6 +94,7 @@ public class CategoriesUpperComposite extends Composite {
 				}
 				categoriesComposite.clearDescriptionAndMethodList();
 				}
+				functionSearchTextBox.setEnabled(false);
 			}
 		});
 		
@@ -131,4 +133,11 @@ public class CategoriesUpperComposite extends Composite {
 		this.classNameList=classNamelist;		
 	}
 
+	public void setFunctionSearchBox(Text functionSearchTextBox) {
+		this.functionSearchTextBox=functionSearchTextBox;
+	}
+
+	public Text getSearchTextBox() {
+		return searchTextBox;
+	}
 }

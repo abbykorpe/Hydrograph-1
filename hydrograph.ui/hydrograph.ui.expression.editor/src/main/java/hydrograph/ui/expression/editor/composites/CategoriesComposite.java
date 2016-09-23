@@ -30,6 +30,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Text;
 
 public class CategoriesComposite extends Composite {
 	public static final String KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST = "class";
@@ -38,6 +39,7 @@ public class CategoriesComposite extends Composite {
 	private Browser descriptionStyledText;
 	private FunctionsComposite functionsComposite;
 	private CategoriesUpperComposite categoriesUpperComposite;
+	private Text functionSearchTextBox;
 	/**
 	 * Create the composite.
 	 * 
@@ -90,6 +92,9 @@ public class CategoriesComposite extends Composite {
 			classNamelist.add(classDetails.getDisplayName());
 			classNamelist.setData(String.valueOf(classNamelist.getItemCount() - 1), classDetails);
 		}
+		if(classNamelist.getItemCount()==0){
+			categoriesUpperComposite.getSearchTextBox().setEnabled(false);
+		}
 	}
 
 	private void addListnersToClassNameList(final List classNamelist) {
@@ -101,6 +106,7 @@ public class CategoriesComposite extends Composite {
 				ClassDetails classDetails = (ClassDetails) classNamelist.getData(String.valueOf(classNamelist
 						.getSelectionIndex()));
 				methodList.removeAll();
+				functionSearchTextBox.setEnabled(true);
 				if (classDetails != null) {
 					for (MethodDetails methodDetails : classDetails.getMethodList()) {
 						methodList.add(methodDetails.getSignature());
@@ -111,6 +117,8 @@ public class CategoriesComposite extends Composite {
 				if(functionsComposite!=null){
 					functionsComposite.refresh();
 				}
+				}else{
+					functionSearchTextBox.setEnabled(false);
 				}
 			}
 
@@ -160,5 +168,10 @@ public class CategoriesComposite extends Composite {
 		functionsComposite.refresh();
 		methodList.removeAll();
 		descriptionStyledText.setText(Constants.EMPTY_STRING);
+	}
+
+	public void setFunctionSearchBox(Text functionSearchTextBox) {
+		this.functionSearchTextBox=functionSearchTextBox;
+		categoriesUpperComposite.setFunctionSearchBox(functionSearchTextBox);
 	}
 }

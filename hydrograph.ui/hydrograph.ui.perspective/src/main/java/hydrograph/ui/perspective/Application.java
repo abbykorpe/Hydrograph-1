@@ -461,7 +461,7 @@ public class Application implements IApplication {
 									+ getJDKPath() + "\\bin\n\n" +
 											"Do you want to continue without updating hydrograph.ini file?");
 			if (!returnCode)
-				System.exit(1);
+				System.exit(0);
 		}
 	}
 
