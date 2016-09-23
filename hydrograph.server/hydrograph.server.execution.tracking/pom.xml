@@ -7,6 +7,8 @@
 	<packaging>jar</packaging>
 	<properties>
 		<tyrus.version>1.13</tyrus.version>
+		<slf4j.version>1.7.12</slf4j.version>
+		<logback.version>1.0.7</logback.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -53,23 +55,18 @@
 
 	<dependencies>
 		<!--Jetty dependencies start here -->
-		<dependency>
+ 		<dependency>
 			<groupId>hydrograph</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
 			<version>0.1.10-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
+		</dependency> 
+ 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.6.2</version>
 		</dependency>
-
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
+ 
 		<!-- Tyrus API START -->
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
@@ -94,16 +91,26 @@
 		</dependency>
 		<!-- Tyrus API END -->
 
-		<dependency>
-    		<groupId>ch.qos.logback</groupId>
-    		<artifactId>logback-classic</artifactId>
-    		<version>1.0.7</version>
-		</dependency>
+		<!-- SLF4j logger Start -->
 		
 		<dependency>
-    		<groupId>ch.qos.logback</groupId>
-    		<artifactId>logback-core</artifactId>
-    		<version>1.0.7</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+		
+		<!-- SLF4j logger END -->
 	</dependencies>
 </project>
