@@ -278,5 +278,11 @@
             file="xml/Components/inputFileMixedScheme.xml">
       </toc>
    </extension>
+   <extension
+         point="org.eclipse.help.index">
+      <index
+            file="xml/index.xml">
+      </index>
+   </extension>
 
 </plugin>
