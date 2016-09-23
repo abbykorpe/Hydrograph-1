@@ -54,6 +54,7 @@ public class TrackingDisplayUtils {
 	/** The instance. */
 	public static TrackingDisplayUtils INSTANCE = new TrackingDisplayUtils();
 
+	private long DELAY=7000;
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(TrackingDisplayUtils.class);
 	
@@ -362,7 +363,7 @@ public class TrackingDisplayUtils {
 	 */
 	public void closeWebSocketConnection(Session session){
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(DELAY);
 		} catch (InterruptedException e1) {
 		}
 		if (session != null  && session.isOpen()) {

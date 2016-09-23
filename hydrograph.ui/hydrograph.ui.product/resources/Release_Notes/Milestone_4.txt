@@ -73,6 +73,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 59.#1255 [Prateem Tadas] Hive Component: Error bubble is displaying on properties window, General tab
 60.#1259 [Prateem Tadas]Hive component: On Partition key Window, Available Fields are Blank when Extract from Hive Metastore
 61.#1282 [Nitin Gupta] Expression Editor: Function Section’s Search is enabled Even If Nothing is Loaded in Categories section
+63.#1175 [Rahul Mahajan] Execution Tracking status is not displayed on job canvas after receiving an Exception
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
