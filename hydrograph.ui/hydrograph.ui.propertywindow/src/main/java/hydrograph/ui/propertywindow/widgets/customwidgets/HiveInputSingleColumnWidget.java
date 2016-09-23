@@ -61,7 +61,7 @@ public class HiveInputSingleColumnWidget extends SingleColumnWidget {
 		Schema schema = (Schema) getComponent().getProperties().get(
 				Constants.SCHEMA_PROPERTY_NAME);
 		
-		if (null==schema && null!= metaStoreExtractedSchema) {
+		if ((null==schema ||(schema!=null&&schema.getGridRow().size()==0)) && null!= metaStoreExtractedSchema) {
 			schema=metaStoreExtractedSchema.clone();
 		}
 		
