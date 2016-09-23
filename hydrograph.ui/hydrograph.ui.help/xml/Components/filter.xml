@@ -17,7 +17,7 @@
 	<topic label="Properties"  href="html/Components/Filter_Properties.html">
     <topic href="html/Components/Filter_Properties.html#general_properties" label="General Properties">
     </topic>
-    <topic href="html/Components/Filter_Validations.html" label="Validations">
+    <topic href="html/Components/Filter_Properties.html#validations" label="Validations">
     </topic> 
 	</topic>
  <topic href="html/Components/Filter_Operation_Window.html" label="Operation Class">
@@ -27,5 +27,7 @@
     </topic>
     <topic href="html/Components/Filter_Operation_Window.html#using-existing-java-class" label="Using Existing Java Class">
     </topic>
+ </topic>
+ <topic label="Expression Editor">
  </topic>
 </toc>

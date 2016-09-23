@@ -2,17 +2,6 @@
 <index>
     <entry keyword="Aggregate">
         <topic href="/hydrograph.ui.help/html/Components/Aggregate.html"/>
-        <entry keyword="Normalize">
-            <topic href="/hydrograph.ui.help/html/Components/Normalize.html"/>
-            <topic href="/hydrograph.ui.help/html/Components/Normalize_Mapping_View.html"/>
-            <topic href="/hydrograph.ui.help/html/Components/Normalize_Properties.html"/>
-        </entry>
-        <entry keyword="Sort">
-            <topic href="/hydrograph.ui.help/html/Components/Sort.html"/>
-        </entry>
-        <entry keyword="Transform">
-            <topic href="/hydrograph.ui.help/html/Components/Transform.html" title="Transform Forms"/>
-            <topic href="/hydrograph.ui.help/html/Components/Transform_Mapping_View.html" />
-        </entry>
     </entry>
  </index>
+ 
