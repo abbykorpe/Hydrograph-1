@@ -8,43 +8,87 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License. -->
- 
- 
+
+
 <!doctype html>
 <html>
 <head>
-	<title>Clone Properties</title>
+<title>Clone Properties</title>
+<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 28px;">Clone Properties</span></font></p>
+	<p>
+		<span class="header-1">Clone Properties</span>
+	</p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">Hydrograph Release Version 1.0</span></span></p>
+	<p>
+		<span><b>Properties</b>&nbsp;for the Clone component can be
+			viewed by Double click-&gt;component on canvas. The properties
+			contain only the &#39;General&#39; tab since Clone falls under the
+			Straight Pull category in the component palette</span>
+	</p>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size: 14px;"><b>Properties</b>&nbsp;for the Clone component can be viewed by Double click-&gt;component on canvas. The properties contain only the &#39;General&#39; tab since Clone falls under the Straight Pull category in the component palette</span></span></p>
+	<p>
+		<span><b><a name="general_properties"></a>General
+				Properties:</b></span>
+	</p>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>General Properties:</b> </span></font></p>
+	<p class="center">
+		<img alt="" src="../images/Clone_Properties_General.png" />
+	</p>
 
-<p><img alt="" src="../images/Clone_Properties_General.png" /></p>
+	<p>
+		<span><b>Display</b></span>
+	</p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Display</b></span></span></p>
+	<ul>
+		<li><span><b>Name</b> - The Name field will specify the
+				name of the component as desired by the user.</span></li>
+		<li><span><b>Base Type</b> - Base Type signifies the basic
+				operation area of the component. In this case it is of Base Type
+				Straight Pull.</span></li>
+		<li><span><b>Type </b> - Type further categorizes the
+				component to detailed operation that it intends to perform. Here it
+				is of type Clone.</span></li>
+	</ul>
 
-<ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Name</b> - The Name field will specify the name of the component as desired by the user.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Base Type</b> - Base Type signifies the basic operation area of the component. In this case it is of Base Type Straight Pull.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Clone.</span></span></li>
-</ul>
+	<p>
+		<span><b>Configuration</b></span>
+	</p>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Configuration</b></span></span></p>
+	<ul>
+		<li><span><b>Runtime Properties</b> -&nbsp;Runtime
+				properties are used to override the Hadoop configurations specific
+				to Clone component at run time. User is required to enter the
+				Property Name and Value in the runtime properties grid.</span></li>
+		<p class="center">
+			<img alt="" src="../images/Runtime_Properties_Grid.png" />
+		</p>
+		<li><span><b>Batch</b> - Batch simply accepts a numeric
+				number starting from 0 to 99 and signifies the phase this component
+				will execute in. By default this is 0.</span></li>
 
-<ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Clone component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></span></li>
-	<p><img alt="" src="../images/Runtime_Properties_Grid.png" /></p>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric number starting from 0 to 99 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
-	
-</ul>
+	</ul>
 
-<ul>
-</ul>
+	<p>
+		<a name="validations"></a><span class="header-2">Validations</span>
+	</p>
+	<ul>
+		<li><p>
+				<span>The properties window also displays error icon on
+					mandatory fields if it has an incorrect value. The error icon is
+					displayed on the tab as well, if any of the field within the tab
+					has some error.</span>
+			</p> <img src="" alt="" /></li>
+
+		<li><span><b>Batch </b> -Batch has a default value of 0.
+				However, blank text box results in error validation and is not
+				allowed.
+				<p class="center">
+					<img alt="" src="" />
+				</p> </span></li>
+	</ul>
+
 </body>
 </html>

@@ -14,6 +14,10 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Clone" link_to="xml\Components\components.xml#Clone"> 
-	<topic label="Properties"  href="html/Components/Clone_Properties.html"> 
+	<topic label="Properties"  href="html/Components/Clone_Properties.html">
+    <topic href="html/Components/Clone_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/Clone_Properties.html#validations" label="Validations">
+    </topic> 
 	</topic>
 </toc>
