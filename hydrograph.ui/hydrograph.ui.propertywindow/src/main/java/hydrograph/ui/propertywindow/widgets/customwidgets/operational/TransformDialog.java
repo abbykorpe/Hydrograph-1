@@ -222,6 +222,9 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
         createOperationClassGrid(mainSashForm);
 		createOutputFieldTable(mainSashForm);
 		mainSashForm.setWeights(new int[] {87, 242, 87});
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		final Point newSize = container.getShell().computeSize(screenSize.width/2, screenSize.height/2, true);
+		getShell().setMinimumSize(newSize);
 		return mainSashForm;
 	}
 
