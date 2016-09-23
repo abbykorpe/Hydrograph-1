@@ -170,6 +170,10 @@ public class CategoriesComposite extends Composite {
 		descriptionStyledText.setText(Constants.EMPTY_STRING);
 	}
 
+	/**
+	 * Links function-search textbox to Categories composite. 
+	 * @param functionSearchTextBox
+	 */
 	public void setFunctionSearchBox(Text functionSearchTextBox) {
 		this.functionSearchTextBox=functionSearchTextBox;
 		categoriesUpperComposite.setFunctionSearchBox(functionSearchTextBox);
