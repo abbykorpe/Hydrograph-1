@@ -102,13 +102,22 @@ public class CompileUtils {
 		writer.append("class Expression {");
 		writer.append("public static  " + returnType + "  validate(){ try{");
 		writer.append(fields != null ? fields : "");
-		writer.append("return  " + expression + ";"+"}catch(Exception e){throw new RuntimeException(e);}}");
+		writer.append("return  " + addOrNotSemiColon(expression) +"}catch(Exception e){throw new RuntimeException(e);}}");
 		writer.append("public static void main(String args[]) {");
 		writer.append("validate();");
 		writer.append("}");
 		writer.append("}");
 		return writer;
 	}
+	
+	private static String addOrNotSemiColon(String expression){
+		if(expression.endsWith(";"))
+			return expression;
+		else
+			return expression+";";
+	}
+
+	
 //
 //	static Iterable<JavaSourceFromString> getJavaSourceFromString(String code) {
 //		final JavaSourceFromString jsfs;

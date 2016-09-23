@@ -36,13 +36,25 @@ public class ValidationAPITest {
 	}
 
 	@Test
-	public void itShouldCompileFilterExpression() {
+	public void itShouldCompileFilterExpressionWithOutSemiColon() {
 		ValidationAPI validationAPI = new ValidationAPI(
 				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?true:false",
 				"");
 		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
 		schemaFields.put("f1", Date.class);
 		DiagnosticCollector<JavaFileObject> dig = validationAPI.filterCompiler(schemaFields);
+
+		Assert.assertTrue(dig.getDiagnostics().size() <= 0);
+	}
+	
+	@Test
+	public void itShouldCompileTransformExpressionWithSemicolon() {
+		ValidationAPI validationAPI = new ValidationAPI(
+				"StringFunctions.stringMatch(\"HELLO WORLD\",DateFunctions.getStringDateFromDateObject(f1, \"\"))?f1:\"HELLO WORLD\";",
+				"");
+		Map<String, Class<?>> schemaFields = new HashMap<String, Class<?>>();
+		schemaFields.put("f1", Date.class);
+		DiagnosticCollector<JavaFileObject> dig = validationAPI.transformCompiler(schemaFields);
 
 		Assert.assertTrue(dig.getDiagnostics().size() <= 0);
 	}
@@ -71,10 +83,16 @@ public class ValidationAPITest {
 		List<String> fieldList = validationAPI.getFieldNameList(schemaFields);
 		Assert.assertEquals("f1", fieldList.get(0));
 	}
+	
+	@Test
+	public void itShouldExcuteTheExpressionWithOutSemicolon() {
+		ValidationAPI validationAPI = new ValidationAPI("StringFunctions.stringMatch(\"test\",\"Testing\")?1:0", "");
+		Assert.assertEquals(0, validationAPI.execute());
+	}
 
 	@Test
-	public void itShouldExcuteTheExpression() {
-		ValidationAPI validationAPI = new ValidationAPI("StringFunctions.stringMatch(\"test\",\"test\")?1:0", "");
+	public void itShouldExcuteTheExpressionWithSemicolon() {
+		ValidationAPI validationAPI = new ValidationAPI("StringFunctions.stringMatch(\"test\",\"test\")?1:0;", "");
 		Assert.assertEquals(1, validationAPI.execute());
 	}
 }

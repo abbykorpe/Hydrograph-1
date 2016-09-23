@@ -12,6 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
+/**
+ * The class ForceError provides functions to terminate the flow.
+ *
+ */
 public class ForceError {
 
 	/**

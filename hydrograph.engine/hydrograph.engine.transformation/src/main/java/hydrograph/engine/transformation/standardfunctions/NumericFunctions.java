@@ -21,6 +21,10 @@ import java.util.regex.Pattern;
 
 import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
+/**
+ * The class NumericFunctions provides various math and numeric functions.
+ *
+ */
 public class NumericFunctions {
 
 	/**
