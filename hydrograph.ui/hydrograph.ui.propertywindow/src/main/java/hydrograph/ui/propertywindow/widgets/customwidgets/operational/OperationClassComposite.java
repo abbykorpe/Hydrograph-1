@@ -131,6 +131,7 @@ public class OperationClassComposite extends Composite {
 		composite_2.setLayoutData(gd_composite_2);
 		composite_2.setLayout(new GridLayout(1, false));
 		browseButton= new Button(composite_2, SWT.NONE);
+		browseButton.setToolTipText(Messages.OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP);
 		GridData gd_browseButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_browseButton.widthHint = 28;
 		gd_browseButton.heightHint = 20;
