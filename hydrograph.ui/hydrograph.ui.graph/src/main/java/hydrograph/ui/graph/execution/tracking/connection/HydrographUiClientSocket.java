@@ -145,6 +145,7 @@ public class HydrographUiClientSocket {
 								if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
 									String keySubjobName = component.getComponentLabel().getLabelContents();
 									StringBuilder subjobPrefix = new StringBuilder("");
+									componentNameAndLink.clear();
 									populateSubjobRecordCount(componentNameAndLink,
 											component,subjobPrefix);
 
@@ -172,6 +173,7 @@ public class HydrographUiClientSocket {
 					Component component, int successCount, String keySubjobName) {
 				boolean running = false;
 				boolean pending = false;
+				int componentCount = 0;
 
 				for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 
@@ -196,8 +198,7 @@ public class HydrographUiClientSocket {
 								List<String> portList = new ArrayList(componentStatus.getProcessedRecordCount().keySet());
 								for(String port: portList){
 									if((componentStatus.getComponentId()+"."+port).equals(entry.getKey())){
-
-										for(Link link: component.getSourceConnections()){ 
+										for(Link link: component.getSourceConnections()){
 											if(link.getSourceTerminal().toString().equals(((SubjobDetails)entry.getValue()).getTargetTerminal())){
 												link.updateRecordCount(componentStatus.getProcessedRecordCount().get(((SubjobDetails)entry.getValue()).getSourceTerminal()).toString());
 											}
@@ -205,19 +206,47 @@ public class HydrographUiClientSocket {
 										if(componentStatus.getCurrentStatus().equalsIgnoreCase(ComponentExecutionStatus.SUCCESSFUL.value())){
 											successCount++;
 										}
-
 										break;	
+									}
+									if(componentStatus.getCurrentStatus().equalsIgnoreCase(ComponentExecutionStatus.SUCCESSFUL.value())){
+										successCount++;
 									}
 								}
 							}else{
 								continue;
 							}
+
 						}
+					}else if(component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
+						Container container = null;
+						String filePath=null;
+
+						filePath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
+						IPath jobFileIPath = new Path(filePath);
+						if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
+							InputStream inp = null;
+							try {
+								inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+							} catch (CoreException e) {
+								logger.error("Not able to find subjob file", e);
+							}
+							container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
+							List<Component> subJobComponents = container.getChildren();
+							componentCount = subJobComponents.size();
+							for(Component subJobComponent : subJobComponents){
+								String compName = component.getComponentLabel().getLabelContents()+"."+subJobComponent.getComponentLabel().getLabelContents();
+								if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.SUCCESSFUL.value())){
+									successCount++;
+								}
+							}
+						} 
 					}
-
-
-
-					if(successCount == componentNameAndLink.size()){
+					//For subjobs other than stand alone
+					if(successCount == componentNameAndLink.size() && !component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
+						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
+					} 
+					//For stand alone subjob
+					else if(successCount == componentCount && component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
 						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
 					}
 				}
@@ -243,7 +272,8 @@ public class HydrographUiClientSocket {
 			private void populateSubjobRecordCount(
 					Map<String, SubjobDetails> componentNameAndLink, Component component,StringBuilder subjobPrefix) {
 				Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
-				if(outputSubjobComponent!=null){
+				if(outputSubjobComponent!=null && (component.getProperties().get(Constants.TYPE).equals(Constants.INPUT)||
+						component.getProperties().get(Constants.TYPE).equals(Constants.OPERATION))){
 					for(Link link:outputSubjobComponent.getTargetConnections()){
 						Component componentPrevToOutput = link.getSource();
 						if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
@@ -257,6 +287,24 @@ public class HydrographUiClientSocket {
 								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+portNumber, subjobDetails);
 							}else{
 								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
+							}
+						}
+					}
+				}else if(component.getProperties().get(Constants.TYPE).equals(Constants.OUTPUT)){
+					Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
+					for(Link link:inputSubjobComponent.getSourceConnections()){
+						Component componentNextToInput = link.getTarget();
+						if(Constants.SUBJOB_COMPONENT.equals(componentNextToInput.getComponentName())){
+							subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
+							populateSubjobRecordCount(componentNameAndLink, componentNextToInput,subjobPrefix);
+						}else{
+							String portNumber = link.getSourceTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
+
+							SubjobDetails subjobDetails = new SubjobDetails(link.getTargetTerminal(), portNumber);
+							if(CLONE_COMPONENT_TYPE.equalsIgnoreCase(componentNextToInput.getComponentName())){
+								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents()+"."+portNumber, subjobDetails);
+							}else{
+								componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentNextToInput.getComponentLabel().getLabelContents()+"."+subjobDetails.getTargetTerminal(), subjobDetails);
 							}
 						}
 					}
