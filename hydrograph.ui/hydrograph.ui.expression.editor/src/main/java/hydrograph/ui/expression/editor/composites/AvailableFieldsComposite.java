@@ -152,6 +152,9 @@ public class AvailableFieldsComposite extends Composite {
 				new TableItem(table, SWT.NONE).setText(field);
 			}
 		}
+		if(table.getItemCount()==0){
+			searchTextBox.setEnabled(false);
+		}
 	}
 	
 	@Override

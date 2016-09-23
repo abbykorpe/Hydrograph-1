@@ -268,6 +268,8 @@ public class Messages extends NLS {
 	public static  String INVALID_DB_ERROR;
 
 	public static String EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
+
+	public static String OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 	
 	
 	static {

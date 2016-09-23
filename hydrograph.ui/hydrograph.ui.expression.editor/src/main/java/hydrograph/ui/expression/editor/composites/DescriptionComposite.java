@@ -13,12 +13,12 @@
 
 package hydrograph.ui.expression.editor.composites;
 
+import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.browser.JavaDocBrowser;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -70,9 +70,8 @@ public class DescriptionComposite extends Composite {
 		
 		descriptionStyledText=new JavaDocBrowser(composite,  SWT.NORMAL);
 		descriptionStyledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		descriptionStyledText.setBackground(new Color(null,255, 255, 225));
 		descriptionStyledText.setFont(new Font(null,"Arabic Transparent", 18, SWT.NORMAL));
-		
+		descriptionStyledText.setText(Constants.HTML_START_TAG+Constants.HTML_END_TAG);
 		linkFunctionAndDescription(functionsComposite);
 		linkCategoriesAndDescription(categoriesComposite);
 	}

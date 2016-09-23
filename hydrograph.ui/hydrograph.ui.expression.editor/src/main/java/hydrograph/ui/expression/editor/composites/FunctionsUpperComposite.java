@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Text;
 public class FunctionsUpperComposite extends Composite {
 	private static final String TITLE = "Functions";
 	private List methodList;
-	private Text searchTextBox;
+	private Text functionSearchTextBox;
 	private Browser descriptionStyledText;
 	private List classNameList;
 	/**
@@ -65,35 +65,36 @@ public class FunctionsUpperComposite extends Composite {
 	}
 
 	private void createSearchTextBox(Composite headerComposite) {
-		searchTextBox = new Text(headerComposite, SWT.BORDER);
+		functionSearchTextBox = new Text(headerComposite, SWT.BORDER);
 		GridData gd_searchTextBox = new GridData(SWT.RIGHT, SWT.CENTER, true, true, 0, 0);
 		gd_searchTextBox.widthHint = 150;
-		searchTextBox.setLayoutData(gd_searchTextBox);
-		searchTextBox.setForeground(new Color(null, 128, 128, 128));
-		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+		functionSearchTextBox.setLayoutData(gd_searchTextBox);
+		functionSearchTextBox.setForeground(new Color(null, 128, 128, 128));
+		functionSearchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+		functionSearchTextBox.setEnabled(false);
 		addListnersToSearchTextBox();
-		ExpressionEditorUtil.INSTANCE.addFocusListenerToSearchTextBox(searchTextBox);
+		ExpressionEditorUtil.INSTANCE.addFocusListenerToSearchTextBox(functionSearchTextBox);
 	}
 
 	private void addListnersToSearchTextBox() {
-		searchTextBox.addModifyListener(new ModifyListener() {
+		functionSearchTextBox.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, searchTextBox.getText()) && (classNameList.getSelectionCount()!=0 &&
+				if (!StringUtils.equals(Constants.DEFAULT_SEARCH_TEXT, functionSearchTextBox.getText()) && (classNameList.getSelectionCount()!=0 &&
 						!StringUtils.startsWith(classNameList.getItem(0), Messages.CANNOT_SEARCH_INPUT_STRING))) {
 					methodList.removeAll();
 					ClassDetails classDetails = (ClassDetails) methodList
 							.getData(CategoriesComposite.KEY_FOR_ACCESSING_CLASS_FROM_METHOD_LIST);
 					if (classDetails != null) {
 						for (MethodDetails methodDetails : classDetails.getMethodList()) {
-							if (StringUtils.containsIgnoreCase(methodDetails.getMethodName(), searchTextBox.getText())) {
+							if (StringUtils.containsIgnoreCase(methodDetails.getMethodName(), functionSearchTextBox.getText())) {
 								methodList.add(methodDetails.getSignature());
 								methodList.setData(String.valueOf(methodList.getItemCount() - 1), methodDetails);
 							}
 						}
 					}
-					if(methodList.getItemCount()==0 && StringUtils.isNotBlank(searchTextBox.getText())){
-						methodList.add(Messages.CANNOT_SEARCH_INPUT_STRING+searchTextBox.getText());
+					if(methodList.getItemCount()==0 && StringUtils.isNotBlank(functionSearchTextBox.getText())){
+						methodList.add(Messages.CANNOT_SEARCH_INPUT_STRING+functionSearchTextBox.getText());
 					}
 					descriptionStyledText.setText(Constants.EMPTY_STRING);
 				}
@@ -102,9 +103,13 @@ public class FunctionsUpperComposite extends Composite {
 	}
 
 	public void refresh() {
-		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
+		functionSearchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
 	}
 
+	public Text getFunctionSearchTextBox() {
+		return functionSearchTextBox;
+	}
+	
 	public void setDescriptionText(Browser descriptionStyledText) {
 		this.descriptionStyledText=descriptionStyledText;
 	}

@@ -75,7 +75,7 @@ public class FunctionsComposite extends Composite {
 		methodList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				if(methodList.getSelectionIndex()!=-1){
+				if(methodList.getSelectionIndex()!=-1 && !StringUtils.startsWith(methodList.getItem(methodList.getSelectionIndex()),Messages.CANNOT_SEARCH_INPUT_STRING)){
 				MethodDetails methodDetails = (MethodDetails) methodList.getData(String.valueOf(methodList
 						.getSelectionIndex()));
 					if(methodDetails !=null && StringUtils.isNotBlank(methodDetails.getPlaceHolder())){
@@ -103,6 +103,7 @@ public class FunctionsComposite extends Composite {
 	private void linkFunctionAndClassComposite(CategoriesComposite categoriesComposite) {
 		categoriesComposite.setMethodList(methodList);
 		categoriesComposite.setFunctionsComposite(this);
+		categoriesComposite.setFunctionSearchBox(functionUppersComposite.getFunctionSearchTextBox());
 	}
 
 	private void addListnersToMethodList(final List methodsList) {
