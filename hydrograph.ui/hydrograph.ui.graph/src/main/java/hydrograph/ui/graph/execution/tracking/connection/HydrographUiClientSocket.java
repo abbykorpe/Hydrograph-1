@@ -244,9 +244,9 @@ public class HydrographUiClientSocket {
 					//For subjobs other than stand alone
 					if(successCount == componentNameAndLink.size() && !component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
 						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
-					}
+					} 
 					//For stand alone subjob
-					if(successCount == componentCount && component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
+					else if(successCount == componentCount && component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
 						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
 					}
 				}
