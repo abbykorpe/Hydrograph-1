@@ -27,7 +27,9 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * 
@@ -42,7 +44,7 @@ public class HydrographEngineCommunicatorSocket {
 	private Session session;
 	private ExecutionStatus executionStatus;
 	private HydrographService execution;
-	final static Logger logger = Logger.getLogger(HydrographEngineCommunicatorSocket.class);;
+	final static Logger logger = LoggerFactory.getLogger(HydrographEngineCommunicatorSocket.class);;
 
 	
 	public HydrographEngineCommunicatorSocket(HydrographService execution) {

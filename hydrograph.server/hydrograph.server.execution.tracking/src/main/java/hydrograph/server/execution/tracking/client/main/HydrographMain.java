@@ -28,8 +28,9 @@ import javax.websocket.CloseReason;
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
 
-import org.apache.log4j.Logger;
 import org.glassfish.tyrus.client.ClientManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -51,7 +52,7 @@ import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
 public class HydrographMain {
 
 	/** The Constant logger. */
-	private final static Logger logger = Logger.getLogger(HydrographMain.class);
+	private final static Logger logger = LoggerFactory.getLogger(HydrographMain.class);
 
 	/**
 	 * The main method.
@@ -167,7 +168,7 @@ public class HydrographMain {
 					ExecutionTrackingFileLogger.INSTANCE.disposeLogger(jobId);
 					latch.countDown();
 				} catch (Exception e) {
-					logger.error(e);
+					logger.error("job fail :",e);
 					logger.info("JOB FAILED");
 					try {
 						Thread.sleep(Constants.DELAY_TIME);
