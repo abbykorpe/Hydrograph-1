@@ -8,41 +8,39 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License. -->
-
+ 
+ 
 <!doctype html>
 <html>
 <head>
 	<title>Discard Properties</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 28px;">Discard Properties</span></font></p>
+<p><span class="header-1">Discard Properties</span></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">Hydrograph Release Version 1.0</span></span></p>
+<p><span><b>Properties</b>&nbsp;for the Discard component can be viewed by Double click-&gt;component on canvas. The properties contain only the &#39;General&#39; tab since Discard falls under the Output category in the component palette.</span></span></p>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size: 14px;"><b>Properties</b>&nbsp;for the Discard component can be viewed by Double click-&gt;Discard component on canvas. The properties contain only the &#39;General&#39; tab.</span></span></p>
-
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size: 14px;">The only configurable piece for Discard is phase.</span></span></p
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>General Properties:</b> </span></font></p>
+<p><a name="general_properties"></a><span class="header-2">General Properties</span></p>
 
 <p><img alt="" src="../images/Output_Discard_Properties.png" /></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Display</b></span></span></p>
+<p><span class="header-2">Display</span></p>
 
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Name</b> - The Name field will specify the name of the component as desired by the user.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Base Type</b> - Base Type signifies the basic operation area of the component. In this case it is of Base Type Output.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Discard.</span></span></li>
+	<li><span><b>Name</b> - The identifier for the component. This is a <b>mandatory</b> property. This property is pre-populated with the component name, i.e. 'Discard' followed by an incremental number. It can be changed to any custom name. The name property has following restrictions:</span></li>
+	<ul>
+		<li><span>Must be specified and should not be blank.</span></li>
+		<li><span>Must be unique across the job.</span></li>
+		<li><span>Accepts only alphabets (a-z), numerals (0-9) and 4 special characters: "_", "-", ",", " " (space).</span></li>
+	</ul>
+	<li><span><b>Base Type</b> - Base Type signifies the category of the component. Discard is of base type Output. This is a non editable field.</span></li>
+	<li><span><b>Type</b> - Type defines the type of component within the category. This typically is the name of the component. This is a non editable field.</span></li>
 </ul>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Configuration</b></span></span></p>
-
-<ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric value starting from 0 to maximum 99 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
-	
-</ul>
-
-<ul>
+<p><span class="header-2">Configuration</span></p>
+	<li><span><b>Batch</b> - Batch accepts an integer value and signifies the batch this component will execute in. The default value for batch is 0. Batch can have a maximum value of 99. Batch is a <b>mandatory</b> property.</span></li>
 </ul>
 </body>
 </html>
