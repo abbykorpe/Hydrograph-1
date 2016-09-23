@@ -14,14 +14,18 @@
 package hydrograph.ui.graph.utility;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
@@ -198,4 +202,27 @@ public class ViewDataUtils {
 		}
 	}
 	
+	/*
+	 * The function will use to check components in subjob.
+	 */
+	public void subjobParams(Map<String, SubjobDetails> componentNameAndLink, Component component, StringBuilder subjobPrefix, String sourcePort){
+		Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
+		String source_port = sourcePort.replace("out", "in");
+		if(outputSubjobComponent!=null){
+			for(Link link:outputSubjobComponent.getTargetConnections()){
+				if(link.getTargetTerminal().equalsIgnoreCase(source_port)){
+					Component componentPrevToOutput = link.getSource();
+					if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
+						subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
+						subjobParams(componentNameAndLink, componentPrevToOutput,subjobPrefix, sourcePort);
+					}else{
+						String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
+						SubjobDetails subjobDetails = new SubjobDetails(link.getSourceTerminal(), portNumber);
+						componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
+					}
+				}
+			}
+		}
+			
+	}
 }

@@ -21,7 +21,7 @@ import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.LinkEditPart;
-import hydrograph.ui.graph.debugconverter.DebugHelper;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
@@ -34,9 +34,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPart;
@@ -71,9 +71,12 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 		JobManager.INSTANCE.setDataViewerMap(dataViewerMap);
 	}
 	
+	
 	@Override
-	protected boolean calculateEnabled() {
+	protected boolean calculateEnabled(){
+		Map<String, SubjobDetails> componentNameAndLink = new HashMap();
 		int count = 0;
+		List<String> list = null;
 		boolean isWatcher = false;
 		List<Object> selectedObject = getSelectedObjects();
 		for (Object obj : selectedObject) {
@@ -82,13 +85,21 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
 				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
-					//List<String> str = DebugHelper.INSTANCE.getSubgraphComponent(component);
-					String[] str1 = StringUtils.split("", ".");
-					String componentID = str1[0];
-					String socketId = str1[1];
-					watchRecordInner
-							.setComponentId(link.getSource().getComponentLabel().getLabelContents() + "." + componentID);
-					watchRecordInner.setSocketId(socketId);
+					String componenet_Id = "";
+					String socket_Id = "";
+					ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
+					for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
+						String comp_soc = entry.getKey();
+						String[] split = StringUtils.split(comp_soc, "/.");
+						componenet_Id = split[0];
+						for(int i = 1;i<split.length-1;i++){
+							componenet_Id = componenet_Id + "." + split[i];
+						}
+						socket_Id = split[split.length-1];
+					}
+
+					watchRecordInner.setComponentId(componenet_Id);
+					watchRecordInner.setSocketId(socket_Id);
 				} else {
 					watchRecordInner.setComponentId(componentId);
 					String socketId = link.getSourceTerminal();

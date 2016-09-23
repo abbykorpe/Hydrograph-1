@@ -63,7 +63,7 @@ public class DebugHelper {
 	public static final String SERVICE_JAR = "SERVICE_JAR";
 	public static final String PORT_NUMBER = "PORT_NO";
 	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
-	private List<String> subjobWatcherList = new ArrayList<>(); 
+	private List<String> subjobWatcherList; 
 
 	/**
 	 * This function used to return subgraph component_Id and socket_Id
@@ -71,6 +71,7 @@ public class DebugHelper {
 	 */
 	public List<String> getSubgraphComponent(Component component) throws CoreException{
 		Container container=null;
+		subjobWatcherList=new ArrayList<>();
 		if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
 			String subgraphFilePath=(String) component.getProperties().get(Constants.JOB_PATH);
 			if(StringUtils.isNotBlank(subgraphFilePath)){
@@ -109,10 +110,9 @@ public class DebugHelper {
 							String type = port.getPortType();
 							if((type.equalsIgnoreCase("out")||type.equalsIgnoreCase("unused")) && port.isWatched()){
 								Component component2 = port.getParent();
-								String label = component2.getComponentLabel().getLabelContents();
-								//String sub_comp = str.getSource().getComponentLabel().getLabelContents();
+								String sub_componenet = component2.getComponentLabel().getLabelContents();
 								String sub_comp_port = port.getTerminal();
-								subjobWatcherList.add(label+"."+sub_comp_port);
+								subjobWatcherList.add(sub_componenet+"."+sub_comp_port);
 							}
 						}
 					}

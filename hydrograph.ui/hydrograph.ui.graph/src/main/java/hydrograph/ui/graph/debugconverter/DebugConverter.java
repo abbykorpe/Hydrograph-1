@@ -77,29 +77,35 @@ public class DebugConverter {
 					Map<String, Long> map = component.getWatcherTerminals();
 					if(!map.isEmpty()){
 						for(Entry<String, Long> entrySet: map.entrySet()){
-							viewData = new ViewData();
 							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
 								List<String> componentId_socketIdList = DebugHelper.INSTANCE.getSubgraphComponent(component);
 								for(String componentId_socketId : componentId_socketIdList){
+									viewData = new ViewData();
 									String[] data = StringUtils.split(componentId_socketId,".");
 									String componentId = data[0];
 									String socketId = data[1];
 									viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
 									viewData.setOutSocketId(socketId);
+									String portType = socketId.substring(0, 3);
+									viewData.setOutSocketType(checkPortType(portType));
+									
+									debug.getViewData().add(viewData);
 								}
+								break;
 							}else{
+								viewData = new ViewData();
 								viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
 								viewData.setOutSocketId(entrySet.getKey());
 								String portType = entrySet.getKey().substring(0, 3);
 								
+								viewData.setOutSocketType(checkPortType(portType));
+								
 								if(StringUtils.equalsIgnoreCase(portType, Constants.OUTPUT_SOCKET_TYPE)){
 									viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
 								}else{
-									viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
 								}
+								debug.getViewData().add(viewData);
 							}
-								
-							debug.getViewData().add(viewData);
 						}
 					}  
 				}
@@ -109,6 +115,15 @@ public class DebugConverter {
 		return debug;
 	}
 	
+	private String checkPortType(String portType){
+		String socketType;
+		if(StringUtils.equalsIgnoreCase(portType, Constants.OUTPUT_SOCKET_TYPE)){
+			socketType = Constants.OUTPUT_SOCKET_TYPE;
+		}else{
+			socketType = Constants.UNUSED_SOCKET_TYPE;
+		}
+		return socketType;
+	}
 	
 	public void marshall(Debug debug,IFile outPutFile) throws JAXBException, IOException, CoreException{
 		
