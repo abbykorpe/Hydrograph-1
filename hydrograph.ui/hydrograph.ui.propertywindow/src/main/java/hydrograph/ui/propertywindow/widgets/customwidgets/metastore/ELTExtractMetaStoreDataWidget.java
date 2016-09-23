@@ -163,7 +163,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 		} catch (NumberFormatException | HttpException | MalformedURLException exp) {
 			logger.error("Json to object Mapping issue ", exp);
 		} catch (IOException ex) {
-			logger.error("Json to object Mapping issue ", ex);
+			logger.error("Json to object Mapping issue ", ex.getMessage());
 		}
 
 		if (null != hiveTableSchema) {
@@ -205,8 +205,11 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 					createErrorDialog(Messages.INVALID_DB_ERROR).open();
 				 }
 			} else {
-			
-				createErrorDialog(jsonResponse).open();
+				if(StringUtils.isNotBlank(jsonResponse)){
+					createErrorDialog(jsonResponse).open();
+				}else{
+					createErrorDialog("Invalid Host Name:" +host).open();
+				}
 		}
 	}
 
