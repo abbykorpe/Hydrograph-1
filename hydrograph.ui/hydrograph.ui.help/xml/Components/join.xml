@@ -13,11 +13,18 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Join" link_to="xml\Components\components.xml#Join"> 
-	<topic label="Properties"  href="html/Components/Join_Properties.html"> 
+
+<toc label="Join" link_to="xml\Components\components.xml#Join" topic=""> 	
+	<topic label="Properties"  href="html/Components/Join_Properties.html">
+    <topic href="html/Components/Join_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/Join_Properties.html#schema" label="Schema">
+    </topic>
+    <topic href="html/Components/Join_Properties.html#validations" label="Validations">
+    </topic> 
 	</topic>
  <topic href="html/Components/Join_Mapping_View.html" label="Mapping View">
+   
  </topic>
- <topic href="html/concepts/maintopic.html" label="Validations">
- </topic>
+
 </toc>
