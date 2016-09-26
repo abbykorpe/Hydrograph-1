@@ -47,7 +47,7 @@ public class ConsoleLogger extends AbstractJobLogger{
 	@Override
 	public void log(String message) {
 		if(messageConsoleStream!=null && !messageConsoleStream.isClosed())
-			messageConsoleStream.println(getLogStamp() + message);
+			messageConsoleStream.println(message);
 		logger.debug("logged message on console - message - {}" , message );
 	}
 	
