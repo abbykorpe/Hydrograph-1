@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -106,16 +107,33 @@ public class BuildExpressionEditorDataSturcture {
 		return true;
 	}
 	
+	/**
+	 * Returns packages of given jar file
+	 * 
+	 * @param jarFileName
+	 * @return IPackageFragmentRoot
+	 * 			packages of given jar file
+	 */
 	public IPackageFragmentRoot getIPackageFragment(String jarFileName) {
 		IProject iProject = getCurrentProject();
+		IJavaProject javaProject = JavaCore.create(iProject);
 		try {
-			IPackageFragmentRoot[] fragmentRoot = JavaCore.create(iProject).getAllPackageFragmentRoots();
+			IPackageFragmentRoot[] fragmentRoot = javaProject.getAllPackageFragmentRoots();
 			for (IPackageFragmentRoot iPackageFragmentRoot : fragmentRoot) {
 				if (StringUtils.contains(iPackageFragmentRoot.getElementName(), jarFileName))
 					return iPackageFragmentRoot;
 			}
 		} catch (JavaModelException javaModelException) {
 			LOGGER.error("Error occurred while loading engines-transform jar", javaModelException);
+		}
+		finally{
+			if(javaProject!=null){
+				try {
+					javaProject.close();
+				} catch (JavaModelException modelException) {
+					LOGGER.warn("JavaModelException occurred while closing java-project"+modelException);
+				}
+			}
 		}
 		if(StringUtils.equals(jarFileName, ConfigFileReader.INSTANCE.getConfigurationValueFromCommon(Constants.KEY_TRANSFORMATION_JAR)))
 			new CustomMessageBox(SWT.ERROR, "Error occurred while loading " + jarFileName + " file", "ERROR").open();
