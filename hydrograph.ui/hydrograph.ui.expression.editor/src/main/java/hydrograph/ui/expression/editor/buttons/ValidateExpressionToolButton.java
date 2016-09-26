@@ -61,7 +61,6 @@ public class ValidateExpressionToolButton extends Button {
 
 	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR_FOR_TRANSFORM_COMPONENTS = "transformCompiler";
 	private static final String COMPILE_METHOD_OF_EXPRESSION_JAR_FOR_FILTER_COMPONENT = "filterCompiler";
-	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ValidateExpressionToolButton.class);
 	public static final String HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS =  "hydrograph.engine.expression.api.ValidationAPI";
 	private static final String ITEM_TEXT = "Validate";
@@ -111,7 +110,7 @@ public class ValidateExpressionToolButton extends Button {
 		List<URL> urlList=(List<URL>) returObj[0];
 		String transfromJarPath = (String) returObj[1];
 		String propertyFilePath= (String) returObj[2];
-		URLClassLoader child = new URLClassLoader(urlList.toArray(new URL[urlList.size()]));
+		URLClassLoader child = URLClassLoader.newInstance(urlList.toArray(new URL[urlList.size()]));
 		
 		Class<?> class1 = Class.forName(HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS, true, child);
 		Thread.currentThread().setContextClassLoader(child);
@@ -135,10 +134,11 @@ public class ValidateExpressionToolButton extends Button {
 			}
 				
 		}
+		
 		try {
 			child.close();
 		} catch (IOException ioException) {
-			LOGGER.error("Error occurred while closing classloader",ioException);
+			LOGGER.error("Error occurred while closing classloader", ioException);
 		}
 		return diagnostics;
 	}
