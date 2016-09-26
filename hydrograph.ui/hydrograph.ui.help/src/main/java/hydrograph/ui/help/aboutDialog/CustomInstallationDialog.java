@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.about.InstallationPage;
 import org.eclipse.ui.internal.about.InstallationDialog;
 import org.eclipse.ui.services.IServiceLocator;
 
@@ -27,7 +26,6 @@ public class CustomInstallationDialog extends InstallationDialog {
 
 	private static IServiceLocator serviceLocator;
 	TabFolder tabFolder;
-	InstallationPage page;
 
 	public CustomInstallationDialog(Shell shell) {
 		super(shell, serviceLocator);
@@ -71,11 +69,6 @@ public class CustomInstallationDialog extends InstallationDialog {
 		tblclmnItem.setWidth(100);
 		tblclmnItem.setText(columnName);
 		return tableViewerColumn;
-	}
-	
-	
-	@Override
-	protected void createButtons(InstallationPage page) {
 	}
 	
 }
