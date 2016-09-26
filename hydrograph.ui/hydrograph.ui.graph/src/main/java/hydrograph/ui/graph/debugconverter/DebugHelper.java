@@ -110,9 +110,9 @@ public class DebugHelper {
 							String type = port.getPortType();
 							if((type.equalsIgnoreCase("out")||type.equalsIgnoreCase("unused")) && port.isWatched()){
 								Component component2 = port.getParent();
-								String sub_componenet = component2.getComponentLabel().getLabelContents();
-								String sub_comp_port = port.getTerminal();
-								subjobWatcherList.add(sub_componenet+"."+sub_comp_port);
+								String subjob_componenetId = component2.getComponentLabel().getLabelContents();
+								String subjob__socketId = port.getTerminal();
+								subjobWatcherList.add(subjob_componenetId+"."+subjob__socketId);
 							}
 						}
 					}

@@ -263,9 +263,8 @@ public class DebugHandler{
 			filePath = validPath + jobId;
 				try {
 					SchemaHelper.INSTANCE.exportSchemaFile(filePath);
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (CoreException exception) {
+					logger.error("Failed to create file", exception);
 				}
 		}else{
 			logger.debug("File path does not exist : {}", path);
