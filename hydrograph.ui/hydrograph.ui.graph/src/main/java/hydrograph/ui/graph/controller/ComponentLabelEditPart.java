@@ -85,6 +85,14 @@ public class ComponentLabelEditPart extends AbstractGraphicalEditPart implements
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			((ComponentLabelFigure) getFigure()).disposeFont();
+			super.deactivate();
+		}
+	}
 
 	
 	/**

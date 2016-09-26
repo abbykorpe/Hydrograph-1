@@ -45,6 +45,8 @@ import org.eclipse.swt.widgets.Display;
  */
 public class LinkEditPart extends AbstractConnectionEditPart
 		implements PropertyChangeListener {
+	
+	private Font recordCountFont;
 	/**
 	 * Upon activation, attach to the model element as a property change
 	 * listener.
@@ -64,6 +66,9 @@ public class LinkEditPart extends AbstractConnectionEditPart
 	@Override
 	public void deactivate() {
 		if (isActive()) {
+			if(recordCountFont!=null){
+				recordCountFont.dispose();
+			}
 			super.deactivate();
 			((Link) getModel())
 					.removePropertyChangeListener(this);
@@ -112,17 +117,19 @@ public class LinkEditPart extends AbstractConnectionEditPart
 	protected void refreshVisuals() {
 		Connection connection = (Connection) getFigure();
 		Boolean labelAlreadyExists = false;
-		Font font = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.NORMAL);
+		if(recordCountFont==null){
+			recordCountFont = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.NORMAL);
+		}
 		for(Object figure:connection.getChildren()){
 			if(figure instanceof Label){
 				labelAlreadyExists = true;
-				((Label) figure).setFont(font);
+				((Label) figure).setFont(recordCountFont);
 				((Label) figure).setText(getCastedModel().getRecordCount());
 			}
 		}
 		if(!labelAlreadyExists){
 			Label endLabel = new Label(getCastedModel().getRecordCount());
-			endLabel.setFont(font);
+			endLabel.setFont(recordCountFont);
 			endLabel.setText(getCastedModel().getRecordCount());
 			ConnectionEndpointLocator ce = new ConnectionEndpointLocator(connection, false);
 			connection.add(endLabel,ce);

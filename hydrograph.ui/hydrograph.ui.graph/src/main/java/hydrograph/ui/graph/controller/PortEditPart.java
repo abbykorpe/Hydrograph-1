@@ -16,6 +16,7 @@ package hydrograph.ui.graph.controller;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.figure.ComponentFigure;
+import hydrograph.ui.graph.figure.ComponentLabelFigure;
 import hydrograph.ui.graph.figure.ELTColorConstants;
 import hydrograph.ui.graph.figure.PortFigure;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
@@ -166,5 +167,13 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		}
 		
 		getFigure().repaint();
+	}
+	
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			getPortFigure().disposeFont();
+			super.deactivate();
+		}
 	}
 }

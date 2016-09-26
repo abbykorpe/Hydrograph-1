@@ -47,6 +47,7 @@ public class PortFigure extends Figure {
 	private static boolean displayPortLabels;
 	private boolean isWatched;
 	private PortAlignmentEnum portAlignment;
+	private Font portLabelFont;
 	/**
 	 * Instantiates a new port figure.
 	 * 
@@ -86,8 +87,8 @@ public class PortFigure extends Figure {
 		tooltipFigure = new TooltipFigure();
 		setToolTip(tooltipFigure);
 
-		Font font = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.NORMAL);
-		setFont(font);
+		portLabelFont = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.NORMAL);
+		setFont(portLabelFont);
 		setForegroundColor(ColorConstants.black);
 		//NOTE : to Suppress the component tooltip when user hover the mouse on Port 
 		addMouseMotionListener(new MouseMotionListener() {
@@ -189,6 +190,15 @@ public class PortFigure extends Figure {
 	 */
 	public boolean isDisplayPortlabels() {
 		return displayPortLabels;
+	}
+	
+	/**
+	 * Calls dispose method on Fonts. Called by EditPart.
+	 */
+	public void disposeFont(){
+		if(this.portLabelFont!=null){
+			this.portLabelFont.dispose();
+		}
 	}
 	
 	/**

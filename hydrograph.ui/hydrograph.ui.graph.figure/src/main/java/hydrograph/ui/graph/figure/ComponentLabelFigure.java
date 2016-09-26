@@ -42,7 +42,8 @@ public class ComponentLabelFigure extends Figure {
 
 	/** The inner TextFlow **/
 	private TextFlow textFlow = new TextFlow();
-	FlowPage flowPage;
+	private FlowPage flowPage;
+	private Font font;
 
 	
 	public ComponentLabelFigure() {
@@ -69,7 +70,7 @@ public class ComponentLabelFigure extends Figure {
 
 		setLayoutManager(new StackLayout());
 		add(flowPage);
-		Font font = new Font( Display.getDefault(), "Arial", 9,
+		font = new Font( Display.getDefault(), "Arial", 9,
 				SWT.NORMAL );
 		setFont(font);
 		setForegroundColor(ColorConstants.black);
@@ -102,5 +103,13 @@ public class ComponentLabelFigure extends Figure {
 		}
 	}
 	
+	/**
+	 * Calls dispose method on Fonts. Called by EditPart.
+	 */
+	public void disposeFont(){
+		if(this.font!=null){
+			this.font.dispose();
+		}
+	}
 	
 }

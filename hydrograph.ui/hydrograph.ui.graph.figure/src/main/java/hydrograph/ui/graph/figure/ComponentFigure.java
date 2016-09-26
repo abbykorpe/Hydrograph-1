@@ -101,6 +101,7 @@ public class ComponentFigure extends Figure implements Validator {
 	private String acronym;
 	private ComponentExecutionStatus componentStatus;
 	private LinkedHashMap<String, Object> componentProperties;
+	private Font labelFont, acronymFont;
 
 	/**
 	 * Instantiates a new component figure.
@@ -125,8 +126,8 @@ public class ComponentFigure extends Figure implements Validator {
 		layout = new XYLayout();
 		setLayoutManager(layout);
 
-		Font font = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 9, SWT.NORMAL);
-		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, font).width;
+		labelFont = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 9, SWT.NORMAL);
+		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, labelFont).width;
 
 		if (labelLength >= ELTFigureConstants.compLabelOneLineLengthLimit) {
 			this.componentLabelMargin = ELTFigureConstants.componentTwoLineLabelMargin;
@@ -151,8 +152,8 @@ public class ComponentFigure extends Figure implements Validator {
 			setWidth(totalPortsAtBottonSide);
 		}
 
-		Font accronymFont = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.BOLD);
-		setFont(accronymFont);
+		acronymFont = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.BOLD);
+		setFont(acronymFont);
 		setForegroundColor(org.eclipse.draw2d.ColorConstants.black);
 
 		componentCanvas = getComponentCanvas();
@@ -396,6 +397,18 @@ public class ComponentFigure extends Figure implements Validator {
 		logger.debug("Component has {} property status.", getPropertyStatus());
 		if (statusImage != null) {
 			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
+		}
+	}
+	
+	/**
+	 * Calls dispose method on Fonts. Called by EditPart.
+	 */
+	public void disposeFonts(){
+		if(labelFont!=null){
+			this.labelFont.dispose();
+		}
+		if(acronymFont!=null){
+			this.acronymFont.dispose();
 		}
 	}
 

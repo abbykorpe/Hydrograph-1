@@ -71,6 +71,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentEditPart.class);
 	private static final String PHASE="phase";
 	private static final String BATCH="batch";
+	private Font componentLabelFont;
 
 	/**
 	 * Upon activation, attach to the model element as a property change
@@ -101,8 +102,12 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	@Override
 	public void deactivate() {
 		if (isActive()) {
+			if(componentLabelFont!=null){
+				componentLabelFont.dispose();
+			}
 			super.deactivate();
 			((Component) getModel()).removePropertyChangeListener(this);
+			getComponentFigure().disposeFonts();
 		}
 	}
 
@@ -597,9 +602,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		Dimension d = null;
 		String label = (String) component.getPropertyValue(Component.Props.NAME_PROP.getValue());
 		ComponentLabel componentLabel = component.getComponentLabel();
-		Font font = new Font( Display.getDefault(), ELTFigureConstants.labelFont, 10,
+		if(componentLabelFont==null){
+			componentLabelFont = new Font( Display.getDefault(), ELTFigureConstants.labelFont, 10,
 				SWT.NORMAL );
-		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, font).width;
+		}
+		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, componentLabelFont).width;
 		component.setComponentLabel(label);
 		if(labelLength >= ELTFigureConstants.compLabelOneLineLengthLimit && !componentFigure.isIncrementedHeight()){
 			component.setSize(new Dimension(component.getSize().width, component.getSize().height +ELTFigureConstants.componentOneLineLabelMargin));
