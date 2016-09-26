@@ -241,6 +241,8 @@ public class SubJobUtility {
 			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.OUTPUT);
 		if (inPort == 0 && outPort != 0)
 			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.INPUT);
+		if (inPort == 0 && outPort == 0)
+			edComponentEditPart.getCastedModel().getProperties().put(Constants.TYPE, Constants.STANDALONE_SUBJOB);
 		edComponentEditPart.refresh();
 	}
 
