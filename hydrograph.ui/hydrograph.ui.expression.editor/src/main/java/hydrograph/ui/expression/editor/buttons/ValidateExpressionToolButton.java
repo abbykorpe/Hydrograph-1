@@ -24,6 +24,7 @@ import hydrograph.ui.expression.editor.message.CustomMessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -85,6 +86,21 @@ public class ValidateExpressionToolButton extends Button {
 
 	protected void checkSubclass() {/* Allow subclassing*/}
 
+	/**
+	 * Complies the given expression using engine's jar from ELT-Project's build path. 
+	 * 
+	 * @param expressionStyledText
+	 * @param fieldMap
+	 * @param componentName
+	 * @return DiagnosticCollector 
+	 * 			complete diagnosis of given expression
+	 * @throws JavaModelException
+	 * @throws InvocationTargetException
+	 * @throws ClassNotFoundException
+	 * @throws MalformedURLException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 */
 	@SuppressWarnings({ "unchecked"})
 	public static DiagnosticCollector<JavaFileObject> compileExpresion(String expressionStyledText,Map<String, Class<?>> fieldMap,String componentName)
 			throws JavaModelException, InvocationTargetException, ClassNotFoundException, MalformedURLException,IllegalAccessException, IllegalArgumentException {
@@ -95,7 +111,8 @@ public class ValidateExpressionToolButton extends Button {
 		List<URL> urlList=(List<URL>) returObj[0];
 		String transfromJarPath = (String) returObj[1];
 		String propertyFilePath= (String) returObj[2];
-		ClassLoader child = new URLClassLoader(urlList.toArray(new URL[urlList.size()]));
+		URLClassLoader child = new URLClassLoader(urlList.toArray(new URL[urlList.size()]));
+		
 		Class<?> class1 = Class.forName(HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS, true, child);
 		Thread.currentThread().setContextClassLoader(child);
 		Method[] methods = class1.getDeclaredMethods();
@@ -106,6 +123,7 @@ public class ValidateExpressionToolButton extends Button {
 				method.getDeclaringClass().getClassLoader();
 				diagnostics = (DiagnosticCollector<JavaFileObject>) method.invoke(null, expressiontext,
 						propertyFilePath, fieldMap, transfromJarPath);
+				
 				break;
 			}else if (method.getParameterTypes().length == 4
 					&& StringUtils.equals(method.getName(), COMPILE_METHOD_OF_EXPRESSION_JAR_FOR_FILTER_COMPONENT)
@@ -116,6 +134,11 @@ public class ValidateExpressionToolButton extends Button {
 				break;
 			}
 				
+		}
+		try {
+			child.close();
+		} catch (IOException ioException) {
+			LOGGER.error("Error occurred while closing classloader",ioException);
 		}
 		return diagnostics;
 	}
@@ -210,6 +233,7 @@ public class ValidateExpressionToolButton extends Button {
 		returnObj[0]=urlList;
 		returnObj[1]=transfromJarPath;
 		returnObj[2]=getPropertyFilePath(iJavaProject);
+		iJavaProject.close();
 		return returnObj;
 	}
 

@@ -5,6 +5,7 @@ import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturctu
 import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HotKeyUtil;
 import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HydrographJavaSourceViewerConfiguration;
 import hydrograph.ui.expression.editor.styletext.ExpressionEditorStyledText;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -17,9 +18,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.text.java.hover.SourceViewerInformationControl;
 import org.eclipse.jdt.ui.text.IColorManager;
@@ -77,9 +80,11 @@ import org.eclipse.ui.texteditor.DefaultRangeIndicator;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.MarkerAnnotationPreferences;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
+import org.slf4j.Logger;
 
 public class SourceViewer extends ProjectionViewer {
-	   
+	
+		private Logger LOGGER = LogFactory.INSTANCE.getLogger(SourceViewer.class);
 	    private static final String HYDROGRAPH_COMPILATIONUNIT_PACKAGE = "hydrograph.compilationunit";
 		private IRegion viewerStartRegion, viewerEndRegion;
 	    private static int currentId = 0;
@@ -117,9 +122,10 @@ public class SourceViewer extends ProjectionViewer {
 	        this.checkCode=checkCode; 
 	        oldAnnotations= new HashMap<ProjectionAnnotation, Position>();
 	        
+	        IJavaProject javaProject = JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject());
 	        try 
 	        {
-             IPackageFragmentRoot[] ipackageFragmentRootList=JavaCore.create(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()).getPackageFragmentRoots();
+			IPackageFragmentRoot[] ipackageFragmentRootList=javaProject.getPackageFragmentRoots();
              IPackageFragmentRoot ipackageFragmentRoot=null;
              for(IPackageFragmentRoot tempIpackageFragmentRoot:ipackageFragmentRootList)
              {
@@ -134,9 +140,17 @@ public class SourceViewer extends ProjectionViewer {
              IPackageFragment compilationUnitPackage=   ipackageFragmentRoot.createPackageFragment(HYDROGRAPH_COMPILATIONUNIT_PACKAGE, true, new NullProgressMonitor());
              compilatioUnit=   compilationUnitPackage.createCompilationUnit(filename,document.get(),true, new NullProgressMonitor());
             } 
-	        catch (Exception e) {
-	        	e.printStackTrace();
-	        }
+			 catch (Exception exception) {
+						LOGGER.warn("Exception occurred while initializing source viewer", exception);
+					} finally {
+						if (javaProject != null) {
+							try {
+								javaProject.close();
+							} catch (JavaModelException javaModelException) {
+								LOGGER.warn("Exception occurred while closing java-project", javaModelException);
+							}
+						}
+					}
 	        initializeViewer(document);
 	        updateContents();
 	  }

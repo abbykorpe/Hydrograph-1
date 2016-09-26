@@ -351,11 +351,13 @@ task executeLocalJob(dependsOn: ['build', 'classes'], type: JavaExec) {
 
         def transformFiles = files { file(project.libsDir.path).listFiles() }
 
+		def libJarFiles = files {file(project.projectDir.path+'/lib').listFiles() }
+
         println 'Executing local job'
         main = mainClassName
         standardOutput = System.out
         errorOutput = System.err
-        classpath += transformFiles + configurations.compile
+        classpath += transformFiles + libJarFiles + configurations.compile
         def argsArray = getArgsForRunJob()
         args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]]
 
@@ -411,12 +413,12 @@ task executeDebugLocal (dependsOn: ['build', 'classes'], type: JavaExec) {
     if(project.hasProperty('localjob')){
         def mainClassName = hydrographExecution
         def transformFiles = files { file(project.libsDir.path).listFiles() }
-
+		def libJarFiles = files {file(project.projectDir.path+'/lib').listFiles() }
         println 'Executing Debug local job'
         main = mainClassName
         standardOutput = System.out
         errorOutput = System.err
-        classpath += transformFiles + configurations.compile
+        classpath += transformFiles + libJarFiles + configurations.compile
         def argsArray = getArgsForDebugRunJob()
         args=[''+argsArray[0]+'',''+argsArray[1]+'',''+argsArray[2]+'',''+argsArray[3]+'',''+argsArray[4]+'',''+argsArray[5]+'',''+argsArray[6]+'',''+argsArray[7]+'',''+
                 argsArray[8]+'',''+argsArray[9]+'',''+argsArray[10]+'',''+argsArray[11]+'',''+argsArray[12]+'',''+argsArray[13]+'',''+argsArray[14]+'',''+argsArray[15]]
