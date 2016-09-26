@@ -531,9 +531,9 @@ public class JobManager {
 		}
 		
 		try{
-			File matadataFile = new File(activeProjectLocation + PROJECT_METADATA_FILE);
-			if(matadataFile.exists() && !matadataFile.isDirectory()) { 
-				ObjectInputStream ois= new ObjectInputStream(new FileInputStream(matadataFile));			
+			File metadataFile = new File(activeProjectLocation + PROJECT_METADATA_FILE);
+			if(metadataFile.exists() && !metadataFile.isDirectory()) { 
+				ObjectInputStream ois= new ObjectInputStream(new FileInputStream(metadataFile));			
 				filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
 			}
 		} catch (FileNotFoundException fileNotfoundException) {
