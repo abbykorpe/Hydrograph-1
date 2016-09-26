@@ -155,6 +155,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 				newClasspathEntry[oldClasspathEntry.length] = JavaCore.newLibraryEntry(jarFile.getFullPath(), null,
 						null);
 				javaProject.setRawClasspath(newClasspathEntry, new NullProgressMonitor());
+				javaProject.close();
 			}
 		});
 	}
@@ -235,7 +236,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 					javaProject.setRawClasspath(newClasspathEntry, new NullProgressMonitor());
 					jarFile.delete(true, new NullProgressMonitor());
 				}
-
+				javaProject.close();
 			}
 
 			@Override
@@ -300,8 +301,9 @@ public class CategoriesDialogSourceComposite extends Composite {
 	private void loadComboJarListFromBuildPath(Combo comboJarList) {
 		comboJarList.removeAll();
 		IProject iProject = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
+		IJavaProject iJavaProject=null;
 		try {
-			IJavaProject iJavaProject = JavaCore.create(iProject);
+			iJavaProject = JavaCore.create(iProject);
 			PackageFragmentRoot srcfragmentRoot= getSrcPackageFragment(iJavaProject);
 			comboJarList.add(srcfragmentRoot.getElementName());
 			comboJarList.setData(String.valueOf(comboJarList.getItemCount() - 1), srcfragmentRoot);
@@ -315,6 +317,15 @@ public class CategoriesDialogSourceComposite extends Composite {
 			}
 		} catch (JavaModelException javaModelException) {
 			LOGGER.error("Error occurred while loading engines-transform jar", javaModelException);
+		}
+		finally{
+			if(iJavaProject!=null){
+				try {
+					iJavaProject.close();
+				} catch (JavaModelException e) {
+					LOGGER.warn("JavaModelException occurred while closing java-project"+e);
+				}
+			}
 		}
 
 	}

@@ -20,6 +20,7 @@ import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -322,10 +323,16 @@ public class TransformViewDataDialog extends Dialog {
 	    	copyButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-				
+				if (StringUtils.isNotBlank(styledText.getSelectionText())) {
 					styledText.copy();
+				} else {
+					styledText.selectAll();
+					styledText.copy();
+					styledText.setSelection(0);
 				}
-				});
+
+			}
+		});
 			copyButton.pack();
 	}
 	

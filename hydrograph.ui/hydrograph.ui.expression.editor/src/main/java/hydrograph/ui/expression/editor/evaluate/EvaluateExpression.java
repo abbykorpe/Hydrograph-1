@@ -18,6 +18,7 @@ import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -83,11 +84,13 @@ public class EvaluateExpression {
 		LOGGER.debug("Evaluating expression from jar");
 		String output = null;
 		Object[] returnObj;
+		URLClassLoader child =null;
 		try {
 		returnObj = ValidateExpressionToolButton.getBuildPathForMethodInvocation();
 		List<URL> urlList=(List<URL>) returnObj[0];
 		String userFunctionsPropertyFileName=(String) returnObj[2];
-		ClassLoader child = new URLClassLoader(urlList.toArray(new URL[urlList.size()]));
+		 child = URLClassLoader.newInstance(urlList.toArray(new URL[urlList.size()]));
+		 Thread.currentThread().setContextClassLoader(child);
 		Class<?> class1 = Class.forName(ValidateExpressionToolButton.HYDROGRAPH_ENGINE_EXPRESSION_VALIDATION_API_CLASS,true, child);
 		Method[] methods = class1.getDeclaredMethods();
 		for (Method method : methods) {
@@ -110,6 +113,15 @@ public class EvaluateExpression {
 				}else 
 					evaluateDialog.showError(exception.getCause().getMessage());
 					LOGGER.debug("Invalid Expression....",exception);
+		}
+		finally{
+			if(child!=null){
+				try {
+					child.close();
+				} catch (IOException ioException) {
+					LOGGER.error("Error occurred while closing classloader",ioException);
+				}
+			}
 		}
 		return output;
 	}
