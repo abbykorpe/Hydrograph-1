@@ -11,5 +11,13 @@
     	<topic href="/hydrograph.ui.help/html/Components/Discard.html"/>
     	<topic href="/hydrograph.ui.help/html/Components/Discard_Properties.html"/>
     </entry>
+     <entry keyword="Normalize">
+	<topic
+		href="/hydrograph.ui.help/html/Components/Normalize_Operation_Class_Window.html" />
+	<topic
+		href="/hydrograph.ui.help/html/Components/Normalize_Operation_Editor.html" />
+	<topic href="/hydrograph.ui.help/html/Components/Normalize_Properties.html" />
+	<topic href="/hydrograph.ui.help/html/Components/Normalize.html" />
+	</entry>
  </index>
  
