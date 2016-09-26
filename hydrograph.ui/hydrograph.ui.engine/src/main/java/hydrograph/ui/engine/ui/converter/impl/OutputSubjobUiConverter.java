@@ -20,6 +20,7 @@ import hydrograph.engine.jaxb.outputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
@@ -27,6 +28,8 @@ import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.engine.ui.util.UiConverterUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -112,6 +115,25 @@ public class OutputSubjobUiConverter extends UiConverter {
 		getInPort((TypeOutputComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
+		if (subJobContainer == null) {
+			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
+		} else {
+			for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
+				if (!(subJobContainer.getChildren().get(i) instanceof InputSubjobComponent || subJobContainer
+						.getChildren().get(i) instanceof OutputSubjobComponent)) {
+					if ((subJobContainer.getChildren().get(i).getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString()
+							.equalsIgnoreCase(UIComponentsConstants.ERROR.value()) || subJobContainer.getChildren().get(i).getProperties()
+							.get(UIComponentsConstants.VALIDITY_STATUS.value()).toString().equalsIgnoreCase(UIComponentsConstants.WARN.value()))) {
+						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.ERROR.value());
+						uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
+						break;
+					} else {
+						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.VALID.value());
+						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
+					}
+				}
+			}
+		}
 	
 	}
 	private void getInPort(TypeOutputComponent typeOutputComponent) {

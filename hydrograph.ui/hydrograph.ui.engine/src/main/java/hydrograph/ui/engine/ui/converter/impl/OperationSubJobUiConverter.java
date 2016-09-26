@@ -20,6 +20,7 @@ import hydrograph.engine.jaxb.operationstypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
@@ -122,18 +123,23 @@ public class OperationSubJobUiConverter extends UiConverter {
 		getOutPort((TypeOperationsComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
-		for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
-			if (!(subJobContainer.getChildren().get(i) instanceof InputSubjobComponent || subJobContainer.getChildren()
-					.get(i) instanceof OutputSubjobComponent)) {
-			if ((subJobContainer.getChildren().get(i).getProperties().get("validityStatus").toString().equalsIgnoreCase("ERROR") || 
-							subJobContainer.getChildren().get(i).getProperties().get("validityStatus").toString().equalsIgnoreCase("WARN"))) {
-				uiComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "ERROR");
-				uiComponent.setValidityStatus("ERROR");
-				break; 
-			} else {
-				uiComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "VALID");
-				uiComponent.setValidityStatus("VALID");
-			}
+		if (subJobContainer == null) {
+			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
+		} else {
+			for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
+				if (!(subJobContainer.getChildren().get(i) instanceof InputSubjobComponent || subJobContainer
+						.getChildren().get(i) instanceof OutputSubjobComponent)) {
+					if ((subJobContainer.getChildren().get(i).getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString()
+							.equalsIgnoreCase(UIComponentsConstants.ERROR.value()) || subJobContainer.getChildren().get(i).getProperties()
+							.get(UIComponentsConstants.VALIDITY_STATUS.value()).toString().equalsIgnoreCase(UIComponentsConstants.WARN.value()))) {
+						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.ERROR.value());
+						uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
+						break;
+					} else {
+						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.VALID.value());
+						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
+					}
+				}
 			}
 		}
 	}

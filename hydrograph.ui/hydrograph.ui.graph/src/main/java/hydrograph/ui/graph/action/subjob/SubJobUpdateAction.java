@@ -21,6 +21,7 @@ import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Component.ValidityStatus;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.OutputSubjobComponent;
@@ -130,15 +131,15 @@ public class SubJobUpdateAction extends SelectionAction {
 					if (!(container.getChildren().get(i) instanceof InputSubjobComponent || container.getChildren()
 							.get(i) instanceof OutputSubjobComponent)) {
 						if (container.getChildren().get(i).getProperties().get(Messages.VALIDITY_STATUS).toString()
-								.equalsIgnoreCase("ERROR")
+								.equalsIgnoreCase(ValidityStatus.ERROR.name())
 								|| container.getChildren().get(i).getProperties().get(Messages.VALIDITY_STATUS)
-										.toString().equalsIgnoreCase("WARN")) {
+										.toString().equalsIgnoreCase(ValidityStatus.WARN.name())) {
 							selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
-									"ERROR");
+									ValidityStatus.ERROR.name());
 							break;
 						} else {
 							selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
-									"VALID");
+									ValidityStatus.VALID.name());
 						}
 					}
 				}

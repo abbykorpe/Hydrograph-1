@@ -40,7 +40,10 @@ public enum UIComponentsConstants {
 	DISCARD("Discard"),
 	SORT("Sort"),
 	CUMULATE("Cumulate"),
-	NORMALIZE("Normalize");
+	NORMALIZE("Normalize"),
+	WARN("WARN"),
+	ERROR("ERROR"),
+	VALID("VALID");
 	
 	private final String value;
 
