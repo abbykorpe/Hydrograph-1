@@ -298,7 +298,7 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		
 		checkTargetFieldsSequence();
 		
-		getShell().setMinimumSize(getInitialSize());
+		getShell().setMinimumSize(400,500);
 		return container;
 	}
 
@@ -863,14 +863,6 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 				true);
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
-	}
-
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(652, 595);
 	}
 
 	

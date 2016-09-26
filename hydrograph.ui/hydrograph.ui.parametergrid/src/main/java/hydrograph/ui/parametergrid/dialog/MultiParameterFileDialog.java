@@ -226,7 +226,7 @@ public class MultiParameterFileDialog extends Dialog {
 			populateViewParameterFileBox(jobSpecificFile);
 
 		createParameterSearchBox(childSashForm);
-		getShell().setMinimumSize(getInitialSize());
+		getShell().setMinimumSize(800,476);
 		return container_1;
 	}
 
@@ -1500,13 +1500,6 @@ public class MultiParameterFileDialog extends Dialog {
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
 
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(870, 570);
-	}
 
 	/**
 	 * 

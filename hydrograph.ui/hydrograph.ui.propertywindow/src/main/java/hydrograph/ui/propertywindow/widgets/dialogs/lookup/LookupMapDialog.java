@@ -173,7 +173,7 @@ public class LookupMapDialog extends Dialog {
 
 		populateLookupMapDialog();
 		
-		getShell().setMinimumSize(getInitialSize());
+		getShell().setMinimumSize(800,500);
 		return container;
 	}
 
@@ -866,13 +866,6 @@ public class LookupMapDialog extends Dialog {
 				IDialogConstants.CANCEL_LABEL, false);
 	}
 
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(922, 558);
-	}
 
 	@Override
 	protected void okPressed() {
