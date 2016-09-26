@@ -13,59 +13,76 @@ limitations under the License. -->
 <html>
 <head>
 	<title>Output File Parquet Properties</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 28px;">Output File Parquet Properties</span></font></p>
+<p><span class="header-1">Output File Parquet Properties</span></font></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;">Hydrograph Release Version 1.0</span></span></p>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size: 14px;"><b>Properties</b>&nbsp;for the Output File Parquet component can be viewed by Double click-&gt;component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, precision etc. </span></span></p>
+<p><span><b>Properties</b>&nbsp;for the Output File Parquet component can be viewed by double clicking the component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, data type,scale etc. </span></p>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>General Properties:</b> </span></font></p>
+<p><a name="general_properties"></a><span class="header-2">General Properties</span></p>
 
 <p><img alt="" src="../images/Output_File_Parquet_Properties_General.png" /></p>
 
-<p><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Display</b></span></span></p>
+<p><span class="header-2">Display</span></p>
 
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Name</b> - The Name field will specify the name of the component as desired by the user.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Base Type</b> - Base Type signifies the basic operation area of the component. In this case it is of Base Type Output.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Output File Parquet.</span></span></li>
+	<li><span><b>Name</b> - The identifier for the component. This is a <b>mandatory</b> property. This property is pre-populated with the component name, i.e. 'OFParquet' followed by an incremental number. It can be changed to any custom name. The name property has following restrictions:</span></li>
+	<ul>
+		<li><span>Must be specified and should not be blank.</span></li>
+		<li><span>Must be unique across the job.</span></li>
+		<li><span>Accepts only alphabets (a-z), numerals (0-9) and 4 special characters: "_", "-", ",", " " (space)<./span></li>
+	</ul>
+	<li><span><b>Base Type</b> - Base Type signifies the category of the component. Output File Parquet is of base type Output. This is a non editable field.</span></li>
+	<li><span><b>Type</b> - Type defines the type of component within the category. This typically is the name of the component. This is a non editable field.</span></li>
 </ul>
 
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Configuration</b></span></span></p>
+<p><span class="header-2">Configuration</span></p>
 
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>File Path</b> - File path is used to specify the path where the Output parquet file will be generated after successful execution . User can either manually type the path in the text box provided or use the Browse button to search for a location to save the output file. Alternatively, the user can parameterize the File path where the parameter value will be resolved at run-time.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Overwrite</b> - This property accepts Boolean values True and False. It can also be parameterized and later on resolved during run-time. The Overwrite property when True, overwrites the output file.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Output File Parquet component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></span></li>
+	<li><span><b>File Path</b> - File path is used to specify the path of the input parquet file present either in the File system or on the cluster. User can either manually type the path in the text box provided or use the Browse button to search for the file and select it. Alternatively, the user can parameterize the File path where the parameter value will be resolved at run-time.</span></span></li>
+	<li><span><b>Overwrite</b> - This property accepts Boolean values True and False. It can also be parameterized and later on resolved during run-time. The Overwrite property when True, overwrites the output file.</span></li>
+	<li><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Input File Parquet component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></li>
 	<p><img alt="" src="../images/Runtime_Properties_Grid.png" /></p>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Phase</b> - Phase simply accepts a numeric value starting from 0 to maximum 99 and signifies the phase this component will execute in. By default this is 0.</span></span></li>
+	<li><span><b>Batch</b> - Batch accepts an integer value and signifies the Batch this component will execute in. The default value for Batch is 0. Batch can have a maximum value of 99. Batch is a <b>mandatory</b> property.</span></li>
 </ul>
 
-<p><font face="verdana, geneva, sans-serif"><span style="font-size: 14px;"><b>Schema tab: </b></span></font></p>
+<p><a name="schema"></a><span class="header-2">Schema Tab</span></p>
 
 <p><img alt="" src="../images/Output_File_Parquet_Properties_Schema.png" /></p>
-<p><span style="font-family:verdana,geneva,sans-serif;"><span style="font-size:14px;"><b>Schema Types</b></span></span></p>
+<p><span>Schema is <b>mandatory</b> for output file parquet component. Schema tab defines the record format on the out port of the aggregate component. A field in schema has multiple attributes as described below.</span></p>
 <ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Internal</b> - User is provided a Grid to enter the internal schema of the Output Parquet file.</span></span></li>
-	<ul><li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Name</b> - User needs to enter all the Field names in this column.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Data type</b> - By default "string" Data type has been selected for any field added to the Grid. User can select from different Data type values like "integer", "double", "float" etc.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Date Format</b> - User can specify desired date format like "YY-DD-MM", "YYYYMMDD" etc for a date field in this column.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Precision</b> - Precision for a bigdecimal field can be specified here.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Scale</b> - Scale for a bigdecimal field can be specified here.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Scale Type</b> - Scale Type accepts values as implicit or explicit for bigdecimal field and none for other data types. Explicit considers the length of ' <b>.</b> ' and implicit ignores length of ' <b>.</b> ' for the bigdecimal field.</span></span></li>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>Field Description</b> - User can specify field description.</span></span></li></ul>
-	<li><span style="font-size:14px;"><span style="font-family:verdana,geneva,sans-serif;"><b>External</b> <ul>
+	<li><span><b>Internal</b> - User is provided a Grid to enter the internal schema of the Output Parquet file.</span></li>
+	<ul>
+	<li><span><b>Field Name</b> - The name for the field. This is a mandatory attribute.</span></li>
+	<li><span><b>Data type</b> - The data type for the field. This is a mandatory attribute. The default data type is "String". Check <a href="../references/SupportedDataTypes.html">supported data types</a> page for list of supported data types.</span></li>
+	<li><span><b>Scale</b> - The number of digits to the right of decimal point. Scale is defined for Double, Float or BigDecimal field.</span></li>
+	<li><span><b>Scale Type</b> – Scale Type accepts values as implicit or explicit for BigDecimal field and none for other data types. Explicit considers the length of '.' in precision and implicit ignores length of '.' precision for the BigDecimal field.</span></li>
+	<li><span><b>Date Format</b> - The format for date data type. Refer to <a href="../references/Java_Date_Formats.html">java date formats</a> page for acceptable date formats.</span></li>
+	<li><span><b>Precision</b> – The number of significant digits (all digits except leading zeros and trailing zeros after decimal point).</span></li>
+	<li><span><b>Field Description</b> – The description for the field.</span></li>
+	</ul>
+	
+	<li><span><b>External</b> <ul>
 		<li><b>Import XML</b>- User can provide an external Hydrograph Schema file of XML format. A text box is provided to either manually type or use the Browse button to select the schema file from File system. The External schema file path is resolved during run time and replaced with the contents of the file in the Job XML.</li>
 		<li><b>Export XML</b>- User can provide an external directory path to export Hydrograph Schema file in XML format. A text box is provided to either manually type or use the Browse button to specify the output directory on File system. The External directory path is resolved during run time and the xml schema file is saved in it.</li>
-	</ul></span></span></li>
-</ul>	
-
-<p>&nbsp;</p>
-
-<ul>
+	</ul></span></li>
 </ul>
+
+<p>
+	<span><b>Pull Schema</b> – The schema defined in operation editor's output, will be pulled to the schema tab. The current schema in the grid will be overwritten with the schema from operation editor's output.</span>
+</p>
+<p><a name="validations"></a><span class="header-2">Validations</span></p>
+<p><span>The output file parquet component applies validations to the mandatory fields as described above. Upon placing the output file parquet component on job canvas for the first time (from component palette), the component shows up a warning icon as mandatory properties are not provided.</span></p>
+<img src="../images/IFParquet_Validation_Warning.png" alt="Warning icon displayed on component" />
+
+<p><span>The properties window also displays error icon on mandatory fields if it has an incorrect value. The error icon is displayed on the tab as well, if any of the field within the tab has some error.</span></p>
+<img src="../images/IFParquet_Properties_Validation.png" alt="Error icon displayed on tabs" />
+
+<p><span>If the properties window has some error even after user visit's it once, then the warning icon on the output file parquet component on the job canvas changes to error icon. This error icon is removed only when all the mandatory fields are supplied with correct values.</span></p>
+<img src="../images/IFParquet_Validation_Error.png" alt="Error icon displayed on component" />
+
 </body>
 </html>
