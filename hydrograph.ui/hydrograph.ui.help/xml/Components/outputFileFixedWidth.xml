@@ -15,5 +15,15 @@
 
 <toc label="Output File Fixed Width" link_to="xml\Components\components.xml#OutputFileFixedWidth"> 
 	<topic label="Properties"  href="html/Components/Output_File_Fixed_Width_Properties.html"> 
+	<topic href="html/Components/Output_File_Fixed_Width_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/Output_File_Fixed_Width_Properties.html#display" label="Display">
+    </topic>
+    <topic href="html/Components/Output_File_Fixed_Width_Properties.html#configuration" label="Configuration">
+    </topic>
+    <topic href="html/Components/Output_File_Fixed_Width_Properties.html#schema_tab" label="Schema tab">
+    </topic>
+    <topic href="html/Components/Output_File_Fixed_Width_Properties.html#validations" label="Validations">
+    </topic>
 	</topic>
 </toc>
