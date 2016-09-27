@@ -25,8 +25,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import hydrograph.server.execution.tracking.json.JsonDecoder;
 import hydrograph.server.execution.tracking.json.JsonEncoder;
@@ -43,7 +42,7 @@ public class TrackingSocketServer {
 	private static Set<Session> allSessions;
 	
 	/** The Constant logger. */
-	final static Logger logger = LoggerFactory.getLogger(TrackingSocketServer.class);
+	final static Logger logger = Logger.getLogger(TrackingSocketServer.class);
 	
 	
 	/**

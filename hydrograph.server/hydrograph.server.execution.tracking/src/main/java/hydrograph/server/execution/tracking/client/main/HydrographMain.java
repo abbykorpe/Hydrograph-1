@@ -28,9 +28,8 @@ import javax.websocket.CloseReason;
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
 
+import org.apache.log4j.Logger;
 import org.glassfish.tyrus.client.ClientManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -52,7 +51,7 @@ import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
 public class HydrographMain {
 
 	/** The Constant logger. */
-	private final static Logger logger = LoggerFactory.getLogger(HydrographMain.class);
+	private final static Logger logger = Logger.getLogger(HydrographMain.class);
 
 	/**
 	 * The main method.
@@ -123,24 +122,25 @@ public class HydrographMain {
 					public void run() {
 						List<ComponentInfo> componentInfos = execution.getStatus();
 						if(!componentInfos.isEmpty()){
-						List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
-						for (ComponentInfo componentInfo : componentInfos) {
-							ComponentStatus componentStatus = new ComponentStatus(componentInfo.getComponentId(),
-									componentInfo.getCurrentStatus(), componentInfo.getProcessedRecords());
-							componentStatusList.add(componentStatus);
-						}
-						ExecutionStatus executionStatus = new ExecutionStatus(componentStatusList);
-						executionStatus.setJobId(jobId);
-						executionStatus.setType(Constants.POST);
-						Gson gson = new Gson();
-						try {
-							socket.sendMessage(gson.toJson(executionStatus));
+							List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
+							for (ComponentInfo componentInfo : componentInfos) {
+								ComponentStatus componentStatus = new ComponentStatus(componentInfo.getComponentId(),
+										componentInfo.getCurrentStatus(), componentInfo.getProcessedRecords());
+								componentStatusList.add(componentStatus);
+							}
+							ExecutionStatus executionStatus = new ExecutionStatus(componentStatusList);
+							executionStatus.setJobId(jobId);
+							executionStatus.setType(Constants.POST);
+							Gson gson = new Gson();
+							try {
+								socket.sendMessage(gson.toJson(executionStatus));
+							} catch (IOException e) {
+								logger.error("Fail to send status for job - " + jobId, e);
+								timer.cancel();
+							}
+							//moved this after sendMessage in order to log even if the service is not running 
 							ExecutionTrackingFileLogger.INSTANCE.log(jobId, executionStatus);
-						} catch (IOException e) {
-							logger.error("Fail to send status for job - " + jobId, e);
-							timer.cancel();
 						}
-					}
 					}
 				};
 				timer.schedule(task, 0l, ExecutionTrackingUtils.INSTANCE.getStatusFrequency());

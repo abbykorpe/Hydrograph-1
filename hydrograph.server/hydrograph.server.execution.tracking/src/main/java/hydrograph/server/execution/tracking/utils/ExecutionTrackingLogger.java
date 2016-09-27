@@ -15,16 +15,10 @@
 package hydrograph.server.execution.tracking.utils;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.FileAppender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 
 /**
  * Execution tracking file logger
@@ -38,11 +32,8 @@ public class ExecutionTrackingLogger {
     
     public static final ExecutionTrackingLogger INSTANCE = new ExecutionTrackingLogger();
     
-    private Map<String,Logger> executionTrackingLoggers;
     
-    private ExecutionTrackingLogger(){
-    	executionTrackingLoggers = new HashMap();
-    }
+    private ExecutionTrackingLogger(){}
     
     /**
      * 
@@ -53,50 +44,21 @@ public class ExecutionTrackingLogger {
      * @return {@link Logger}
      */
 	public Logger getLogger(String jobID,String fileLogLocation) {
+		//creates pattern layout
+		PatternLayout layout = new PatternLayout();
+		layout.setConversionPattern("%msg%n");
 		
-        if(executionTrackingLoggers.containsKey(jobID)){
-        	return executionTrackingLoggers.get(jobID);
-        }else{
-        	return getNewLogger(jobID,fileLogLocation);
-        }
-        
-    }
-
-	private Logger getNewLogger(String jobID,String fileLogLocation) {
-		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-
-		FileAppender<ILoggingEvent> fileAppender = new FileAppender();
-		fileAppender.setContext(loggerContext);
+		//create file appender
+		FileAppender fileAppender = new FileAppender();
 		fileAppender.setFile(fileLogLocation);
+		fileAppender.setLayout(layout);
+		fileAppender.activateOptions();
+		//configures the root logger
 		
-        /*SizeBasedTriggeringPolicy<ILoggingEvent> triggeringPolicy = new SizeBasedTriggeringPolicy<ILoggingEvent>();
-        triggeringPolicy.setMaxFileSize("10MB");
-        triggeringPolicy.start();*/
-
-        PatternLayoutEncoder encoder = new PatternLayoutEncoder();
-        encoder.setContext(loggerContext);
-        encoder.setPattern("%msg%n");
-        encoder.start();
-        
-        fileAppender.setEncoder(encoder);
-        fileAppender.start();
-
-        // attach the rolling file appender to the logger of your choice
-        Logger logbackLogger = loggerContext.getLogger(jobID);
-        ((ch.qos.logback.classic.Logger) logbackLogger).addAppender(fileAppender);
-        
-        executionTrackingLoggers.put(jobID, logbackLogger);
-        
-		return logbackLogger;
-	}
-	
-	/**
-	 * Dispose logger
-	 * @param jobID
-	 */
-	public void dispose(String jobID){
-		((ch.qos.logback.classic.Logger)executionTrackingLoggers.get(jobID)).getLoggerContext().stop();
-	}
-
+		Logger logger = Logger.getLogger(jobID);
+		logger.setLevel(Level.DEBUG);
+		logger.addAppender(fileAppender);
+        return logger;
+    }
 }
 
