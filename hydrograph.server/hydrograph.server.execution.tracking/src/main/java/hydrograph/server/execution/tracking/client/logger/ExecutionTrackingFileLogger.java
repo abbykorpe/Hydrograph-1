@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
+import org.apache.log4j.Logger;
 
 class LastExecutionStatus{
 	private int statusNumber;
@@ -189,14 +189,5 @@ public class ExecutionTrackingFileLogger {
 		}
 				
 		return stringBuilder.toString();
-	}
-
-	/**
-	 * Dispose logger.
-	 *
-	 * @param jobId the job id
-	 */
-	public void disposeLogger(String jobId){
-		// TODO - needs to be implemented 
 	}
 }

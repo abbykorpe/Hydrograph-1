@@ -16,9 +16,8 @@ package hydrograph.server.execution.tracking.server.websocket;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.glassfish.tyrus.server.Server;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hydrograph.server.execution.tracking.server.TrackingSocketServer;
 import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
@@ -29,7 +28,7 @@ import hydrograph.server.execution.tracking.utils.ExecutionTrackingUtils;
 public class StartServer {
 	
 	/** The Constant logger. */
-	private final static Logger logger = LoggerFactory.getLogger(StartServer.class);
+	private final static Logger logger = Logger.getLogger(StartServer.class);
 
 	/**
 	 * Start the server

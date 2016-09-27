@@ -26,8 +26,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * The Class ExecutionTrackingUtils.
@@ -35,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class ExecutionTrackingUtils {
 
 	/** The Constant logger. */
-	private final static Logger logger = LoggerFactory.getLogger(ExecutionTrackingUtils.class);
+	private final static Logger logger = Logger.getLogger(ExecutionTrackingUtils.class);
 	
 	/** The Constant PORT_NO. */
 	private static final String PORT_NO = "EXECUTION_TRACKING_PORT";
