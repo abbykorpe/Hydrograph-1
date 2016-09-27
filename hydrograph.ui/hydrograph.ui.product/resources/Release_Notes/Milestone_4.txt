@@ -78,6 +78,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 65.#1301 [Shashank Karnik] Trasform Component:Property window is not getting closed on opening custom class.
 66.#1272 [Akhilesh Joshi]'Ok' and 'Cancel' buttons are getting hide on Join(Mapping), Parameter Grid, Hive(Partitian Key) windows
 67.#1304 [Prateem Tadas] Hive Component: On Hive job Import, Error Message is Getting Displayed While Extracting the Table from Metastore.
+68.#1302 [Shashank Karnik] Trasform Component: Unnecessary WARNING pop-up is Getting Displayed.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

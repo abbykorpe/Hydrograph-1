@@ -43,6 +43,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
@@ -307,7 +308,7 @@ public class FilterOperationClassUtility  {
 			}
 
 			File fileToOpen = new File(fileName);
-			if(!fileToOpen.isFile()){
+			if(StringUtils.isNotBlank(fileName) &&!fileToOpen.isFile()){
 				Path path = new Path(fileName);
 				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 				fileFullPath = file.getRawLocation().toOSString();
