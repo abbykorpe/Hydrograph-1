@@ -1,14 +1,12 @@
 package hydrograph.ui.help.aboutDialog;
 
+import java.io.InputStream;
+
 import org.eclipse.core.internal.registry.ConfigurationElementHandle;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -50,8 +48,9 @@ public class CustomInstallationDialog extends InstallationDialog {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		createTableViewerColumns(tableViewer,"Name");
-		createTableViewerColumns(tableViewer,"Details");
-		final TableViewerColumn tableViewerColumn=createTableViewerColumns(tableViewer,"Description");
+		createTableViewerColumns(tableViewer,"Version No");
+		createTableViewerColumns(tableViewer,"Generic Id");
+		final TableViewerColumn tableViewerColumn=createTableViewerColumns(tableViewer,"Artifact Id");
 		
 		ConfigurationElementHandle object =(ConfigurationElementHandle) tabFolder.getItem(0).getData();
 		
@@ -71,4 +70,7 @@ public class CustomInstallationDialog extends InstallationDialog {
 		return tableViewerColumn;
 	}
 	
+	public void readLibrariesDetails(InputStream xml){
+		
+	}
 }

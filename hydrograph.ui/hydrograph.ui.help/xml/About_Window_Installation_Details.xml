@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InstallationWindowDetails>
+	<JarInformation>
+		<Name>Jackson.jar</Name>
+		<VersionNo>0.0.1.qualifier</VersionNo>
+		<GenericId>001234</GenericId>
+		<ArtifactNo>12345</ArtifactNo>
+	</JarInformation>
+	
+	<JarInformation>
+		<Name>Jdbc.jar</Name>
+		<VersionNo>0.0.1.qualifier</VersionNo>
+		<GenericId>0012345</GenericId>
+		<ArtifactNo>123456</ArtifactNo>
+	</JarInformation>
+	
+	<JarInformation>
+		<Name>Common.jar</Name>
+		<VersionNo>0.0.1.qualifier</VersionNo>
+		<GenericId>0012346</GenericId>
+		<ArtifactNo>123457</ArtifactNo>
+	</JarInformation>
+</InstallationWindowDetails>
