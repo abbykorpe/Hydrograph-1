@@ -14,6 +14,12 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Input Hive Parquet" link_to="xml\Components\components.xml#inputHiveParquet"> 
-	<topic label="Properties"  href="html/Components/Input_Hive_Parquet_Properties.html"> 
+	<topic label="Properties"  href="html/Components/Input_Hive_Parquet_Properties.html">
+    <topic href="html/Components/Input_Hive_Parquet_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/Input_Hive_Parquet_Properties.html#schema" label="Schema">
+    </topic>
+    <topic href="html/Components/Input_Hive_Parquet_Properties.html#" label="Validations">
+    </topic> 
 	</topic>
 </toc>
