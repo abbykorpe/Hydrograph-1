@@ -19,5 +19,25 @@
 	<topic href="/hydrograph.ui.help/html/Components/Normalize_Properties.html" />
 	<topic href="/hydrograph.ui.help/html/Components/Normalize.html" />
 	</entry>
+      <entry keyword="Clone">
+        <topic href="/hydrograph.ui.help/html/Components/Clone.html"/>
+    </entry>
+     <entry keyword="Filter">
+        <topic href="/hydrograph.ui.help/html/Components/Filter.html"/>
+        <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html"/>
+        <topic href="/hydrograph.ui.help/html/Components/Filter_Properties.html"/>
+    </entry>
+     <entry keyword="Operation Class Window">
+        <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html"/>
+        <entry keyword="In-built Operation Classes">
+        <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#using-existing-java-class"/>
+        </entry>
+        <entry keyword="Create Custom Classes">
+        <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#custom-operation-class"/>
+        </entry>
+    </entry>
+     <entry keyword="Operation Property Grid">
+        <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#Operation_Properties_Grid"/>
+    </entry>
  </index>
  
