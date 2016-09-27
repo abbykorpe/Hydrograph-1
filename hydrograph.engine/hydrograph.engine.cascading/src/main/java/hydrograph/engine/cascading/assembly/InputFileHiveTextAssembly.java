@@ -23,7 +23,6 @@ import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.operation.regex.RegexFilter;
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
@@ -36,6 +35,7 @@ import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
+import hydrograph.engine.cascading.filters.PartitionFilter;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
@@ -122,7 +122,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	}
 
 	private boolean isPartitionFilterEnabled() {
-		if ("".equals(inputHiveFileEntity.getPartitionFilterRegex()))
+		if (inputHiveFileEntity.getPartitionFilterList() == null)
 			return false;
 		else
 			return true;
@@ -130,8 +130,8 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 
 	private void addPartitionFilter(HivePartitionTap hivePartitionTap) {
 		hivePartitionTap.addSourcePartitionFilter(new Fields(
-				convertLowerCase(inputHiveFileEntity.getPartitionKeys())), new RegexFilter(
-				inputHiveFileEntity.getPartitionFilterRegex()));
+				convertLowerCase(inputHiveFileEntity.getPartitionKeys())), new PartitionFilter(
+				inputHiveFileEntity.getPartitionFilterList()));
 	}
 
 	/*

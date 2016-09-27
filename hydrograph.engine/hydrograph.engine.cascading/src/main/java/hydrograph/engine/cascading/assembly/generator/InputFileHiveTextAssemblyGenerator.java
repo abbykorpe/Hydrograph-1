@@ -28,6 +28,8 @@ import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.engine.utilities.GeneralUtilities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,46 +107,29 @@ public class InputFileHiveTextAssemblyGenerator extends
 						.getPartitionKeys()));
 		inputHiveFileEntity.setBatch(jaxbHiveTextFile.getBatch());
 		inputHiveFileEntity
-				.setPartitionFilterRegex(createPartitionFilterRegex(jaxbHiveTextFile
+				.setPartitionFilterList(populatePartitionFilterList(jaxbHiveTextFile
 						.getPartitionFilter()));
 	}
 
-	private String createPartitionFilterRegex(
-			HivePartitionFilterType hivePartitionFilterType) {
-		if (hivePartitionFilterType != null
-				&& hivePartitionFilterType.getPartitionColumn() != null) {
-			String partitionRegex = "";
-			String regex = "";
-			int numberOfPartitionKeys = inputHiveFileEntity.getPartitionKeys().length;
-			for (PartitionColumn partitionColumn : hivePartitionFilterType
-					.getPartitionColumn()) {
-				if (partitionRegex != "") {
-					partitionRegex = partitionRegex + "|";
-				}
-				regex = "";
-				regex = buildRegex(partitionColumn, regex);
-				if (!(regex.split("\t").length == numberOfPartitionKeys)) {
-					regex = regex + "\t.*";
-				} else {
-					regex = regex + "\\b";
-				}
-				partitionRegex = partitionRegex + regex;
+	private ArrayList<ArrayList<String>> populatePartitionFilterList(HivePartitionFilterType hivePartitionFilterType) {
+		ArrayList<ArrayList<String>> listOfPartitionColumn = new ArrayList<ArrayList<String>>();
+		if (hivePartitionFilterType != null && hivePartitionFilterType.getPartitionColumn() != null) {
+			for (PartitionColumn partitionColumn : hivePartitionFilterType.getPartitionColumn()) {
+				ArrayList<String> arrayList = new ArrayList<String>();
+				arrayList = fillArrayList(partitionColumn, arrayList);
+				listOfPartitionColumn.add(arrayList);
 			}
-			return partitionRegex;
-		} else {
-			return "";
 		}
+		return listOfPartitionColumn;
 	}
 
-	private String buildRegex(PartitionColumn partitionColumn,
-			String partitionRegex) {
-		partitionRegex = partitionRegex + partitionColumn.getValue();
+	private ArrayList<String> fillArrayList(PartitionColumn partitionColumn,
+			ArrayList<String> listOfPartitionColumn) {
+		listOfPartitionColumn.add(partitionColumn.getValue());
 		if (partitionColumn.getPartitionColumn() != null) {
-			partitionRegex = partitionRegex + "\t";
-			partitionRegex = buildRegex(partitionColumn.getPartitionColumn(),
-					partitionRegex);
+			listOfPartitionColumn = fillArrayList(partitionColumn.getPartitionColumn(), listOfPartitionColumn);
 		}
-		return partitionRegex;
+		return listOfPartitionColumn;
 	}
 
 	/**

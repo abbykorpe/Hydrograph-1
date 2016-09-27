@@ -16,6 +16,7 @@ import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
 import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.filters.PartitionFilter;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
@@ -88,7 +89,7 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	}
 
 	private boolean isPartitionFilterEnabled() {
-		if ("".equals(inputFileHiveParquetEntity.getPartitionFilterRegex()))
+		if (inputFileHiveParquetEntity.getPartitionFilterList()==null)
 			return false;
 		else
 			return true;
@@ -97,7 +98,7 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	private void addPartitionFilter(HivePartitionTap hivePartitionTap) {
 		hivePartitionTap.addSourcePartitionFilter(
 				new Fields(convertLowerCase(inputFileHiveParquetEntity.getPartitionKeys())),
-				new RegexFilter(inputFileHiveParquetEntity.getPartitionFilterRegex()));
+				new PartitionFilter(inputFileHiveParquetEntity.getPartitionFilterList()));
 	}
 
 	/*
