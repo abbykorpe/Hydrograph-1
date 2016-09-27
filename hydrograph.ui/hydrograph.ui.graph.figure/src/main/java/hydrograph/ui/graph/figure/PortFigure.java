@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Display;
  */
 public class PortFigure extends Figure {
 
-	private Color portColor;
+	private Color portColor, componentBorderSelectedColor, componentBorder, watchColor;
 	private String terminal;
 	private FixedConnectionAnchor anchor;
 	private TooltipFigure tooltipFigure;
@@ -48,6 +48,7 @@ public class PortFigure extends Figure {
 	private boolean isWatched;
 	private PortAlignmentEnum portAlignment;
 	private Font portLabelFont;
+
 	/**
 	 * Instantiates a new port figure.
 	 * 
@@ -90,6 +91,11 @@ public class PortFigure extends Figure {
 		portLabelFont = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.NORMAL);
 		setFont(portLabelFont);
 		setForegroundColor(ColorConstants.black);
+		
+		componentBorder = new Color(null, ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
+		componentBorderSelectedColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
+		watchColor = new Color(null, ELTColorConstants.WATCH_COLOR_RGB[0], ELTColorConstants.WATCH_COLOR_RGB[1], ELTColorConstants.WATCH_COLOR_RGB[2]);
+		
 		//NOTE : to Suppress the component tooltip when user hover the mouse on Port 
 		addMouseMotionListener(new MouseMotionListener() {
 			@Override
@@ -202,6 +208,24 @@ public class PortFigure extends Figure {
 	}
 	
 	/**
+	 * Calls dispose method on Colors. Called by EditPart.
+	 */
+	public void disposeColors(){
+		if(portColor!=null){
+			this.portColor.dispose();
+		}
+		if(componentBorderSelectedColor!=null){
+			this.componentBorderSelectedColor.dispose();
+		}
+		if(componentBorder!=null){
+			this.componentBorder.dispose();
+		}
+		if(watchColor!=null){
+			this.watchColor.dispose();
+		}
+	}
+	
+	/**
 	 * Sets whether to display portlabels. If set to true, port labels will be displayed in canvas.
 	 * 
 	 * @param toggleValue
@@ -214,7 +238,7 @@ public class PortFigure extends Figure {
 	protected void paintFigure(Graphics graphics) {
 		super.paintFigure(graphics);
 		if(isWatched)
-			setBackgroundColor(ELTColorConstants.WATCH_COLOR);
+			setBackgroundColor(watchColor);
 		Rectangle r = getBounds().getCopy();
 		if(PortAlignmentEnum.LEFT.equals(portAlignment)){
 			graphics.fillRectangle(getBounds().getLocation().x-20, getBounds()
@@ -279,15 +303,15 @@ public class PortFigure extends Figure {
 	 */
 	public void selectPort() {
 		if(!isWatched)
-		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER_SELECTED);
+		setBackgroundColor(componentBorderSelectedColor);
 	}
-
+	
 	/**
 	 * Deselect port by reverting the background color of the port.
 	 */
 	public void deSelectPort() {
 		if(!isWatched)
-		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
+		setBackgroundColor(componentBorder);
 	}
 
 	/**
@@ -295,7 +319,7 @@ public class PortFigure extends Figure {
 	 * Typically when user adds the watcher on this port.
 	 */
 	public void changeWatcherColor(){
-		setBackgroundColor(ELTColorConstants.WATCH_COLOR);
+		setBackgroundColor(watchColor);
 	}
 	
 	/**
@@ -303,7 +327,7 @@ public class PortFigure extends Figure {
 	 * Typically when user removes the watcher on this port.
 	 */
 	public void removeWatcherColor(){
-		setBackgroundColor(ELTColorConstants.COMPONENT_BORDER);
+		setBackgroundColor(componentBorder);
 	}
 	@Override
 	public void validate() {
@@ -369,6 +393,4 @@ public class PortFigure extends Figure {
 		return tooltipFigure;
 	}
 	
-
-
 }
