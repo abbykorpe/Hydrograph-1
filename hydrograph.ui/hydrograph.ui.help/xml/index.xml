@@ -39,5 +39,9 @@
      <entry keyword="Operation Property Grid">
         <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#Operation_Properties_Grid"/>
     </entry>
+    <entry keyword="Unique Sequence">
+        <topic href="/hydrograph.ui.help/html/Components/Unique_Sequence.html"/>
+		<topic href="/hydrograph.ui.help/html/Components/Unique_Sequence_Properties.html"/>
+    </entry>
  </index>
  
