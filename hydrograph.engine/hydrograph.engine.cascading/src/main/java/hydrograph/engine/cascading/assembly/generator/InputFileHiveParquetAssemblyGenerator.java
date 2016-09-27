@@ -98,10 +98,30 @@ public class InputFileHiveParquetAssemblyGenerator extends
 						: jaxbInputFileHiveParquetFile.getExternalTablePath()
 								.getUri());
 		inputFileHiveParquetEntity
-				.setPartitionFilterRegex(createPartitionFilterRegex(jaxbInputFileHiveParquetFile
-						.getPartitionFilter()));
+				.setPartitionFilterList(populatePartitionFilterList(jaxbInputFileHiveParquetFile.getPartitionFilter()));
 	}
 
+	private ArrayList<ArrayList<String>> populatePartitionFilterList(HivePartitionFilterType hivePartitionFilterType) {
+		ArrayList<ArrayList<String>> listOfPartitionColumn = new ArrayList<ArrayList<String>>();
+		if (hivePartitionFilterType != null && hivePartitionFilterType.getPartitionColumn() != null) {
+			for (PartitionColumn partitionColumn : hivePartitionFilterType.getPartitionColumn()) {
+				ArrayList<String> arrayList = new ArrayList<String>();
+				arrayList = fillArrayList(partitionColumn, arrayList);
+				listOfPartitionColumn.add(arrayList);
+			}
+		}
+		return listOfPartitionColumn;
+	}
+
+	private ArrayList<String> fillArrayList(PartitionColumn partitionColumn,
+			ArrayList<String> listOfPartitionColumn) {
+		listOfPartitionColumn.add(partitionColumn.getValue());
+		if (partitionColumn.getPartitionColumn() != null) {
+			listOfPartitionColumn = fillArrayList(partitionColumn.getPartitionColumn(), listOfPartitionColumn);
+		}
+		return listOfPartitionColumn;
+	}
+	
 	private String createPartitionFilterRegex(
 			HivePartitionFilterType hivePartitionFilterType) {
 		if (hivePartitionFilterType != null

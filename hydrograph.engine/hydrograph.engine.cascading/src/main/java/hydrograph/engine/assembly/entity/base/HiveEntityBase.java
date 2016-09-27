@@ -15,6 +15,10 @@
  */
 package hydrograph.engine.assembly.entity.base;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+
 /**
  * @author bitwise1
  *
@@ -25,7 +29,7 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	protected String tableName;
 	private String externalTablePathUri;
 	private boolean overWrite;
-	private String partitionFilterRegex;
+	private ArrayList<ArrayList<String>> partitionFilterList;
 
 	/**
 	 * @return the partitionKeys
@@ -103,18 +107,18 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	}
 
 	/**
-	 * @return the partitionFilterRegex
+	 * @return the partitionFilterList
 	 */
-	public String getPartitionFilterRegex() {
-		return partitionFilterRegex;
+	public ArrayList<ArrayList<String>> getPartitionFilterList() {
+		return partitionFilterList;
 	}
 
 	/**
-	 * @param partitionFilterRegex
-	 *            the partitionFilterRegex to set
+	 * @param partitionFilterList
+	 *            the partitionFilterList to set
 	 */
-	public void setPartitionFilterRegex(String partitionFilterRegex) {
-		this.partitionFilterRegex = partitionFilterRegex;
+	public void setPartitionFilterList(ArrayList<ArrayList<String>> partitionFilterList) {
+		this.partitionFilterList = partitionFilterList;
 	}
 
 }
