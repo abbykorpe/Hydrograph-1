@@ -270,6 +270,8 @@ public class Messages extends NLS {
 	public static String EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 
 	public static String OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
+	public static  String METASTORE_IMPORT_SUCCESS;
+	
 	
 	
 	static {
