@@ -29,6 +29,7 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
@@ -77,13 +78,14 @@ public class ELTOpenFileEditorListener implements IELTListener{
 			public void handleEvent(Event event) {
 
 				String comboValue = ((Combo) widgetList[0]).getText();
+				String className=((Text) widgetList[1]).getText();
 				if (comboValue.equalsIgnoreCase(Messages.CUSTOM)) {
 
 					if (helpers
 							.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL) != null) {
 						IOperationClassDialog operationClassDialog = (IOperationClassDialog) helpers
 								.get(HelperType.OPERATION_CLASS_DIALOG_OK_CONTROL);
-						if (needToShowMessageBox(helpers)) {
+						if (needToShowMessageBox(helpers,className)) {
 							MessageBox messageBox = new MessageBox(new Shell(),
 									SWT.ICON_WARNING | SWT.YES | SWT.NO
 											| SWT.CANCEL);
@@ -185,11 +187,11 @@ public class ELTOpenFileEditorListener implements IELTListener{
 		}
 	}
 	
-	private boolean needToShowMessageBox(ListenerHelper helpers) {
+	private boolean needToShowMessageBox(ListenerHelper helpers,String className) {
 		PropertyDialogButtonBar opeartionClassDialogButtonBar = (PropertyDialogButtonBar) helpers
 				.get(HelperType.OPERATION_CLASS_DIALOG_APPLY_BUTTON);
 
-		if (opeartionClassDialogButtonBar.isApplyEnabled()) {
+		if (opeartionClassDialogButtonBar.isApplyEnabled()&& StringUtils.isNotBlank(className)) {
 			return true;
 		} else {
 			return false;
