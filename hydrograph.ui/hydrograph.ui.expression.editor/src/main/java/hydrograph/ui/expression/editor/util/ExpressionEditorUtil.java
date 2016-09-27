@@ -16,6 +16,7 @@ package hydrograph.ui.expression.editor.util;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
+import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -145,6 +146,7 @@ public class ExpressionEditorUtil {
 	 * @param expressionEditorData
 	 */
 	public static void validateExpression(String expressionText,Map<String, Class<?>> inputFields,ExpressionEditorData expressionEditorData ) {
+		if(BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject()!=null){
 		DiagnosticCollector<JavaFileObject> diagnosticCollector = null;
 		try {
 			diagnosticCollector = ValidateExpressionToolButton
@@ -163,5 +165,6 @@ public class ExpressionEditorUtil {
 			return;
 		}
 		expressionEditorData.setValid(true);
+		}
 	}
 }

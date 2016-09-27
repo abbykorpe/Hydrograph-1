@@ -75,6 +75,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 61.#1282 [Nitin Gupta] Expression Editor: Function Section’s Search is enabled Even If Nothing is Loaded in Categories section
 63.#1175 [Rahul Mahajan] Execution Tracking status is not displayed on job canvas after receiving an Exception
 64.#1258 [Kanchan Kauthale] Execution Tracking: For failed component, record count is displayed as -1.
+65.#1301 [Shashank Karnik] Trasform Component:Property window is not getting closed on opening custom class.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
