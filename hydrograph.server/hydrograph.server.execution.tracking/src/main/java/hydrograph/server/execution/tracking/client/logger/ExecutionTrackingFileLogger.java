@@ -190,13 +190,4 @@ public class ExecutionTrackingFileLogger {
 				
 		return stringBuilder.toString();
 	}
-
-	/**
-	 * Dispose logger.
-	 *
-	 * @param jobId the job id
-	 */
-	public void disposeLogger(String jobId){
-		// TODO - needs to be implemented 
-	}
 }

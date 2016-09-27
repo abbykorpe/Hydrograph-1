@@ -15,6 +15,9 @@
 package hydrograph.server.execution.tracking.utils;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -27,13 +30,14 @@ import org.apache.log4j.PatternLayout;
  *
  */
 public class ExecutionTrackingLogger {
-	final public String CLASSIC_FILE = "executiontrackinglogback.xml";
-    final public String LOG_DIR = "config/logger/tmplogs";
     
     public static final ExecutionTrackingLogger INSTANCE = new ExecutionTrackingLogger();
     
+    private Map<String,Logger> executionTrackingLoggers;
     
-    private ExecutionTrackingLogger(){}
+    private ExecutionTrackingLogger(){
+    	executionTrackingLoggers = new HashMap();
+    }
     
     /**
      * 
@@ -44,9 +48,14 @@ public class ExecutionTrackingLogger {
      * @return {@link Logger}
      */
 	public Logger getLogger(String jobID,String fileLogLocation) {
+		
+		if (executionTrackingLoggers.containsKey(jobID)) {
+			return executionTrackingLoggers.get(jobID);
+		}
+		
 		//creates pattern layout
 		PatternLayout layout = new PatternLayout();
-		layout.setConversionPattern("%msg%n");
+		layout.setConversionPattern("%m%n");
 		
 		//create file appender
 		FileAppender fileAppender = new FileAppender();
@@ -58,6 +67,9 @@ public class ExecutionTrackingLogger {
 		Logger logger = Logger.getLogger(jobID);
 		logger.setLevel(Level.DEBUG);
 		logger.addAppender(fileAppender);
+		
+		executionTrackingLoggers.put(jobID, logger);
+		
         return logger;
     }
 }

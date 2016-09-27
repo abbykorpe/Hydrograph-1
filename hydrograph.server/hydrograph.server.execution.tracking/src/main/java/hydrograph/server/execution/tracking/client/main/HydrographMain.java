@@ -165,7 +165,6 @@ public class HydrographMain {
 					execution.executeGraph(argsFinalList);
 					Thread.sleep(Constants.DELAY_TIME);
 					timer.cancel();
-					ExecutionTrackingFileLogger.INSTANCE.disposeLogger(jobId);
 					latch.countDown();
 				} catch (Exception e) {
 					logger.error("job fail :",e);
