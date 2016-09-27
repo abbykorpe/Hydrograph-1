@@ -14,6 +14,8 @@
  
 package hydrograph.ui.graph.policy;
 
+import hydrograph.ui.graph.figure.ELTColorConstants;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.gef.GraphicalEditPart;
@@ -25,10 +27,14 @@ import org.eclipse.swt.graphics.Color;
  */
 public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 
+	private Color linkSelectedColor=null;
+	
 	@Override
 	protected void addSelectionHandles() {
-		super.addSelectionHandles();
-		getLinkFigure().setForegroundColor(new Color(null, 22, 169, 199));
+		if(linkSelectedColor.isDisposed()){
+			linkSelectedColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
+		}
+		getLinkFigure().setForegroundColor(linkSelectedColor);
 	}
 
 	protected PolylineConnection getLinkFigure() {
@@ -39,5 +45,8 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 	protected void removeSelectionHandles() {
 		super.removeSelectionHandles();
 		getLinkFigure().setForegroundColor(ColorConstants.black);
+		if(linkSelectedColor!=null){
+			linkSelectedColor.dispose();
+		}
 	}
 }
