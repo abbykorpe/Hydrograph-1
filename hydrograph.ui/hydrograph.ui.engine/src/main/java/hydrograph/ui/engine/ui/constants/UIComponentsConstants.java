@@ -20,7 +20,7 @@ public enum UIComponentsConstants {
 	FILE_DELIMITED("File Delimited"),
 	FILE_PARQUET("File Parquet"),
 	HIVE_PARQUET("Hive Parquet"),
-	HIVE_TEXTFILE("Hive TextFile"),
+	HIVE_TEXTFILE("Hive Text File"),
 	VALIDITY_STATUS("validityStatus"),
 	INPUT_CATEGORY("INPUT"),
 	FILE_FIXEDWIDTH("File Fixed Width"),

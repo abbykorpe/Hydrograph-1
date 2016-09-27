@@ -18,13 +18,11 @@ import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.Activator;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.HiveInputExtractMetaStoreDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
@@ -62,6 +60,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 
+	private static final String ERROR = "ERR";
+	private static final String INFO = "INF";
 	private static final String DEFAULT_PORTNO = "8004";
 	private static final String PORT_NO = "portNo";
 	private static final String HOST = "host";
@@ -133,11 +133,11 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	
 					}
 			}else{
-				createErrorDialog(Messages.METASTORE_FORMAT_ERROR).open();
+				createMessageDialog(Messages.METASTORE_FORMAT_ERROR,ERROR).open();
 			}
 
 			}else{
-				createErrorDialog(Messages.HOST_NAME_BLANK_ERROR).open();
+				createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
 				}
 			}
 			 };
@@ -201,14 +201,15 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 							
 						}
 			
+					createMessageDialog(Messages.METASTORE_IMPORT_SUCCESS,INFO).open();
 				}else{
-					createErrorDialog(Messages.INVALID_DB_ERROR).open();
+					createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
 				 }
 			} else {
 				if(StringUtils.isNotBlank(jsonResponse)){
-					createErrorDialog(jsonResponse).open();
+					createMessageDialog(jsonResponse,ERROR).open();
 				}else{
-					createErrorDialog("Invalid Host Name:" +host).open();
+					createMessageDialog("Invalid Host Name:" +host,ERROR).open();
 				}
 		}
 	}
@@ -299,10 +300,19 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	 * @param errorMessage
 	 * @return
 	 */
-	public MessageBox createErrorDialog(String errorMessage) {
-		MessageBox messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);
+	public MessageBox createMessageDialog(String errorMessage,String messageType) {
+		
+		MessageBox messageBox=null;
+		if("INF".equalsIgnoreCase(messageType)){
+			 messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
+			 messageBox.setText("Information");
+
+		}else{
+			 messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);	
+			 messageBox.setText("Error");
+		}
+		
 		messageBox.setMessage(errorMessage);
-		messageBox.setText("Error");
 		return messageBox;
 	}
 
