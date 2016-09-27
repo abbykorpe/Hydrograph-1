@@ -86,7 +86,7 @@ public class ComponentFigure extends Figure implements Validator {
 	private int componentLabelMargin;
 
 	private String canvasIconPath;
-	private Image canvasIcon;
+	private Image canvasIcon, statusImage, compStatusImage;
 
 	private String propertyStatus;
 
@@ -344,23 +344,18 @@ public class ComponentFigure extends Figure implements Validator {
 	}
 
 	private void trackExecution(Graphics graphics) {
-		Image compStatusImage = null;
 		Rectangle rectangle = getBounds().getCopy();
 		if(componentStatus!=null){
 
 			if (componentStatus.equals(ComponentExecutionStatus.BLANK)){
 				compStatusImage = null;
 			}else if (componentStatus.equals(ComponentExecutionStatus.PENDING)){
-				//setBackgroundColor(ELTColorConstants.BG_COMPONENT);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_PENDING_ICON);
 			}else if (componentStatus.equals(ComponentExecutionStatus.RUNNING)){
-				//setBackgroundColor(ELTColorConstants.COMP_RUNNING_COLOR);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_RUNNING_ICON);
 			}else if (componentStatus.equals(ComponentExecutionStatus.SUCCESSFUL)){
-				//setBackgroundColor(ELTColorConstants.COMP_COMPLETED_COLOR);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_SUCCESS_ICON);
 			}else if (componentStatus.equals(ComponentExecutionStatus.FAILED)){
-				//setBackgroundColor(ELTColorConstants.COMP_FAILED_COLOR);
 				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_FAILED_ICON);
 			}
 		}
@@ -385,7 +380,7 @@ public class ComponentFigure extends Figure implements Validator {
 	 * @param graphics
 	 */
 	private void drawPropertyStatus(Graphics graphics) {
-		Image statusImage = null;
+		
 		Rectangle rectangle = getBounds().getCopy();
 		if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.WARN.name())) {
 			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_WARN_ICON);
@@ -411,7 +406,21 @@ public class ComponentFigure extends Figure implements Validator {
 			this.acronymFont.dispose();
 		}
 	}
-
+	
+	/**
+	 * Calls dispose method on Images. Called by EditPart.
+	 */
+	public void disposeImages(){
+		if(canvasIcon!=null){
+			this.canvasIcon.dispose();
+		}
+		if(compStatusImage!=null){
+			this.compStatusImage.dispose();
+		}
+		if(statusImage!=null){
+			this.statusImage.dispose();
+		}
+	}
 	/**
 	 * Gets the connection anchor.
 	 * 
