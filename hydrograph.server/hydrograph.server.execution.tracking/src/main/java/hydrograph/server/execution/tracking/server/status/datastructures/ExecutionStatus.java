@@ -100,6 +100,45 @@ public class ExecutionStatus {
 	public String toString() {
 		return "ExecutionStatus [componentStatus=" + componentStatus + ", jobId=" + jobId + ", type=" + type;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((componentStatus == null) ? 0 : componentStatus.hashCode());
+		result = prime * result + ((jobId == null) ? 0 : jobId.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExecutionStatus other = (ExecutionStatus) obj;
+		if (componentStatus == null) {
+			if (other.componentStatus != null)
+				return false;
+		} else if (!componentStatus.equals(other.componentStatus))
+			return false;
+		if (jobId == null) {
+			if (other.jobId != null)
+				return false;
+		} else if (!jobId.equals(other.jobId))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		return true;
+	}
+
 	
 
 }

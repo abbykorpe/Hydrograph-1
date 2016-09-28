@@ -12,7 +12,12 @@
  ******************************************************************************/
 package hydrograph.server.execution.tracking.client;
 
+import hydrograph.engine.commandline.utilities.HydrographService;
+import hydrograph.server.execution.tracking.server.status.datastructures.ExecutionStatus;
+
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 import javax.websocket.ClientEndpoint;
@@ -24,8 +29,7 @@ import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
 
-import hydrograph.engine.commandline.utilities.HydrographService;
-import hydrograph.server.execution.tracking.server.status.datastructures.ExecutionStatus;
+
 
 /**
  * 
@@ -61,8 +65,19 @@ public class HydrographEngineCommunicatorSocket {
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		logger.info("Trying to kill the job");
-		execution.kill();
-		logger.info("Job killed successfully");
+		final Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				if (execution != null) {
+					logger.info("Job killed successfully");
+					execution.kill();
+					timer.cancel();
+				}
+			}
+				
+		};
+		timer.schedule(task, 0l, 600);
 	}
 
 	@OnClose
@@ -80,7 +95,9 @@ public class HydrographEngineCommunicatorSocket {
 
 	public void sendMessage(String str) throws IOException {
 		logger.debug("CLIENT MESSAGE :"+str);
-		session.getBasicRemote().sendText(str);
+		if(session!=null && session.isOpen()){
+			session.getBasicRemote().sendText(str);
+		}
 	}
 
 	public ExecutionStatus getExecutionStatus() {

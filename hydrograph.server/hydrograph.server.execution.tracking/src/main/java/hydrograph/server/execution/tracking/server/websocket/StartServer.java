@@ -13,8 +13,8 @@
 
 package hydrograph.server.execution.tracking.server.websocket;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.glassfish.tyrus.server.Server;
@@ -39,7 +39,7 @@ public class StartServer {
 		
 		logger.info("*************Starting Server **************");
 		StartServer startServer = new StartServer();
-		ExecutionTrackingUtils.INSTANCE.getFilePath();
+		ExecutionTrackingUtils.INSTANCE.loadPropertyFile();
 		startServer.runServer(args.length != 0 ? args[0] : ExecutionTrackingUtils.INSTANCE.getPortNo());
 		logger.info("*************Server Stopped**************");
 		
@@ -51,14 +51,17 @@ public class StartServer {
 	 * @param portNo the port no
 	 */
 	private void runServer(String portNo) {
-		Server server = new Server("localhost", Integer.parseInt(portNo), "/", TrackingSocketServer.class);
+			Map<String, Object> properties = Collections.emptyMap();
+			Server server = new Server("localhost", Integer.parseInt(portNo), "/",properties, TrackingSocketServer.class);
 		try {
 			server.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			logger.info("Please press a key to stop the server.");
-	        reader.readLine();
+			Thread.currentThread().join();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			logger.info("Stopping server...");
+			server.stop();
 		}
 	}
 }

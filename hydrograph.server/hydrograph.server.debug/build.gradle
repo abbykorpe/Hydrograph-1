@@ -11,7 +11,6 @@ archivesBaseName = 'hydrograph.server'
 
 buildscript {
   repositories {
-  
     jcenter()
   }
   dependencies {
@@ -28,7 +27,6 @@ doFirst {
 println "Releasing application $version"
 		}
 }
-
 	
 class Version {
 	int major, minor, revision
@@ -38,11 +36,12 @@ class Version {
 	"$major.$minor.$revision${release ? '' : '-SNAPSHOT'}"
 		}
 }
+//ToDo: kept this for copying dependency into lib folder
 
-task copyRuntimeLibs(type: Copy) {
-into "lib"
-from configurations.testRuntime
-}
+//task copyRuntimeLibs(type: Copy) {
+//into "lib"
+//from configurations.testRuntime
+//}
 
 repositories {
     mavenLocal()
@@ -57,8 +56,6 @@ repositories {
 
 dependencies {
 	compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
-	compile group: 'com.google.code.gson', name: 'gson', version: '2.7'	
-	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'	
 	compile group: 'cascading', name: 'lingual-hadoop2-mr1', version: '1.2.1', classifier:'jdbc'
   	compile group: 'com.sparkjava', name: 'spark-core', version: '1.1.1'
 	compile group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoopVersion
@@ -77,10 +74,3 @@ jar {
     exclude '**/*.properties'
   }
 }
- 
-//ToDo: keep this for test
-
-// task copyToLib(type: Copy) {
-//    into "$buildDir/output/lib"
-//    from configurations.runtime
-//}

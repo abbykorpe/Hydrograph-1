@@ -42,6 +42,8 @@ import org.apache.hadoop.security.UserGroupInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import cascading.lingual.type.SQLTimestampCoercibleType;
@@ -52,6 +54,8 @@ import hydrograph.server.debug.lingual.json.RemoteFilterJson;
 import hydrograph.server.debug.lingual.querygenerator.LingualQueryCreator;
 import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.debug.utilities.ServiceUtilities;
+import hydrograph.server.metastore.HiveTableSchema;
+import hydrograph.server.metastore.HiveTableSchemaUtils;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -77,6 +81,92 @@ public class DebugService implements PrivilegedAction<Object> {
 			LOG.error("Error fetching port number. Defaulting to " + Constants.DEFAULT_PORT_NUMBER, e);
 		}
 		Spark.setPort(portNumber);
+		
+		
+		Spark.post(new Route("readFromMetastore") {
+			
+			@Override
+			public Object handle(Request request, Response response) {
+				LOG.info("************************readFromMetastore endpoint - started************************");
+				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
+				String database = request.queryParams("database");
+				String table = request.queryParams("table");
+				String userId = request.queryParams("userName");
+				String password = request.queryParams("password");
+
+				LOG.info("Fetching metadata for Database: {}, Table name: {}, with User Id: {}",
+						new Object[] { database, table, userId });
+
+				String objectAsString = "";
+				ObjectMapper objectMapper = new ObjectMapper();
+
+				try {
+					objectAsString = objectMapper
+							.writeValueAsString(fetchSchemaFromMetastore(database, table, userId, password));
+					LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+				} catch (RuntimeException e) {
+					LOG.error("Error in fetching table metadata from hive metastore: ", e);
+					response.status(400);
+					return e.getMessage();
+
+				} catch (JsonProcessingException e) {
+					LOG.error("Error in fetching table metadata from hive metastore: ", e);
+					response.status(400);
+					return e.getMessage();
+				}
+				return objectAsString;
+			}
+			
+			/**
+			 * This method will fetch the metadata from hivemetastore and return
+			 * schema of the table {@code tableName} in database
+			 * {@code databaseName} passed in parameter.
+			 * 
+			 * @param databaseName
+			 *            name of the database in Hive
+			 * @param tableName
+			 *            name of the table in Hive
+			 * @param userId
+			 * @param password
+			 * @return instance of HiveTableSchema which
+			 *         contains all the metadata of a specific table.
+			 * 
+			 */
+			
+			private HiveTableSchema fetchSchemaFromMetastore(String databaseName, String tableName, String userId,
+					String password) {
+
+				HiveTableSchema hiveTableSchema = null;
+				
+				try {
+					getKerberosToken(userId, password);
+					hiveTableSchema = new HiveTableSchemaUtils(databaseName, tableName).getHiveTableSchema();
+				} catch (LoginException e) {
+					throw new RuntimeException(e.getMessage());
+				} catch (IOException e) {
+					throw new RuntimeException(e.getMessage());
+				}
+				return hiveTableSchema;
+			}
+			
+			private void getKerberosToken(String userId, String password) throws LoginException, IOException {
+				Configuration conf = new Configuration();
+
+				// load hdfs-site.xml and core-site.xml
+				String hdfsConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.HDFS_SITE_CONFIG_PATH);
+				String coreSiteConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
+						.getString(Constants.CORE_SITE_CONFIG_PATH);
+				LOG.debug("Loading hdfs-site.xml:" + hdfsConfigPath);
+				conf.addResource(new Path(hdfsConfigPath));
+				LOG.debug("Loading hdfs-site.xml:" + coreSiteConfigPath);
+				conf.addResource(new Path(coreSiteConfigPath));
+
+				// apply kerberos token
+				applyKerberosToken(userId, password, conf);
+
+			}
+		});
 
 		Spark.post(new Route("/read") {
 			@Override
