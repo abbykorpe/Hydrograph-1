@@ -388,9 +388,13 @@ public class ComponentFigure extends Figure implements Validator {
 			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON);
 		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(Constants.UPDATE_AVAILABLE)) {
 			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_UPDATE_ICON);
+		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.VALID.name())){
+			if (statusImage != null && !statusImage.isDisposed()) {
+				statusImage.dispose();
+			}
 		}
 		logger.debug("Component has {} property status.", getPropertyStatus());
-		if (statusImage != null) {
+		if (statusImage != null && !statusImage.isDisposed()) {
 			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
 		}
 	}
