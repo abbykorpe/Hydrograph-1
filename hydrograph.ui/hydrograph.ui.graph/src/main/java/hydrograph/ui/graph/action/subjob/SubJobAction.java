@@ -23,6 +23,7 @@ import hydrograph.ui.graph.command.SubJobCommand;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Component.ValidityStatus;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.LinkComparatorBySourceLocation;
@@ -157,12 +158,26 @@ public class SubJobAction extends SelectionAction{
 		{	
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
+		String validityStatus = null;
+			for (int i = 0; i < containerOld.getChildren().size(); i++) {
+				if (containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS) != null
+						&& (StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), containerOld.getChildren().get(i)
+								.getProperties().get(Constants.VALIDITY_STATUS).toString()))
+						|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(), containerOld.getChildren().get(i)
+								.getProperties().get(Constants.VALIDITY_STATUS).toString())) {
+					validityStatus = ValidityStatus.ERROR.name();
+					break;
+				} else {
+					validityStatus = ValidityStatus.WARN.name();
+				}
+			}
 	   	execute(createSubJobCommand(getSelectedObjects())); 
     	List clipboardList = (List) Clipboard.getDefault().getContents();
     	SubjobComponent subjobComponent= new SubjobComponent();
 		ComponentCreateCommand createComponent = new ComponentCreateCommand(subjobComponent,containerOld,new Rectangle(((Component)clipboardList.get(0)).getLocation(),((Component)clipboardList.get(0)).getSize()));
 		createComponent.execute(); 
-		subjobComponent.getProperties().put(Constants.VALIDITY_STATUS,"VALID");
+			
+		subjobComponent.getProperties().put(Constants.VALIDITY_STATUS,validityStatus);
 		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
 		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();)
 		{

@@ -69,12 +69,13 @@ public class ImportedSchemaPropagation {
 				if (component instanceof SubjobComponent) {
 					String previousValidityStatus = component.getValidityStatus();
 					component.validateComponentProperties();
-					if (previousValidityStatus.equalsIgnoreCase(UIComponentsConstants.ERROR.value())
-							&& component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString().equalsIgnoreCase(UIComponentsConstants.VALID.value())) {
+					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), previousValidityStatus)
+							&& StringUtils.equalsIgnoreCase(UIComponentsConstants.VALID.value(), component
+									.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())) {
 						component.setValidityStatus(UIComponentsConstants.WARN.value());
-						component.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(), UIComponentsConstants.WARN.value());
+						component.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),
+								UIComponentsConstants.WARN.value());
 					}
-
 				} else {
 					component.validateComponentProperties();
 				}

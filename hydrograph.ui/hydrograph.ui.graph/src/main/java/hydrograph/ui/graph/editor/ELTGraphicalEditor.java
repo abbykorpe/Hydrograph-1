@@ -1623,13 +1623,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private void updateMainGraphOnSavingSubjob() {
 		hydrograph.ui.graph.model.Component subjobComponent=null;
-		if (container != null && container.isCurrentGraphSubjob()) {
+		if (container != null && container.getLinkedMainGraphPath()!=null) {
 			for (int i = 0; i < container.getChildren().size(); i++) {
-				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
-					subjobComponent = (hydrograph.ui.graph.model.Component) container.getChildren().get(i)
-							.getProperties().get(Constants.SUBJOB_COMPONENT);
+				subjobComponent = ((ComponentEditPart)(container.getSubjobComponentEditPart())).getCastedModel();
 					break;
-				}
 			}
 			if(subjobComponent!=null){
 				String path=getEditorInput().getToolTipText();
@@ -1639,18 +1636,18 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 				SubJobUtility subJobUtility=new SubJobUtility();
 				for (int i = 0; i < container.getChildren().size(); i++) {
 					if (!(container.getChildren().get(i) instanceof InputSubjobComponent || container.getChildren()
-							.get(i) instanceof OutputSubjobComponent)
-							&& (ValidityStatus.WARN.name().equalsIgnoreCase(
-									container.getChildren().get(i).getProperties().get(Messages.VALIDITY_STATUS)
-											.toString()) || ValidityStatus.ERROR.name().equalsIgnoreCase(
-									container.getChildren().get(i).getProperties().get(Messages.VALIDITY_STATUS)
-											.toString()))) {
-						subjobComponent.setValidityStatus(ValidityStatus.ERROR.name());
-						subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.ERROR.name());
-						break;
-					} else {
-						subjobComponent.setValidityStatus(ValidityStatus.VALID.name());
-						subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.VALID.name());
+							.get(i) instanceof OutputSubjobComponent)) {
+						if (StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(), container.getChildren().get(i)
+								.getProperties().get(Messages.VALIDITY_STATUS).toString())
+								|| StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), container.getChildren()
+										.get(i).getProperties().get(Messages.VALIDITY_STATUS).toString())) {
+							subjobComponent.setValidityStatus(ValidityStatus.ERROR.name());
+							subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.ERROR.name());
+							break;
+						} else {
+							subjobComponent.setValidityStatus(ValidityStatus.VALID.name());
+							subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.VALID.name());
+						}
 					}
 				}
 				if (subjobComponent.getComponentEditPart() != null) {
