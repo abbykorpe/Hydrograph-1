@@ -117,7 +117,7 @@ public class LinkEditPart extends AbstractConnectionEditPart
 	protected void refreshVisuals() {
 		Connection connection = (Connection) getFigure();
 		Boolean labelAlreadyExists = false;
-		if(recordCountFont==null){
+		if(recordCountFont==null || recordCountFont.isDisposed()){
 			recordCountFont = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 8, SWT.NORMAL);
 		}
 		for(Object figure:connection.getChildren()){
