@@ -271,7 +271,7 @@ public class Messages extends NLS {
 
 	public static String OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 	public static  String METASTORE_IMPORT_SUCCESS;
-	public static String ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE;
+	public static String ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT;
 	
 	
 	static {

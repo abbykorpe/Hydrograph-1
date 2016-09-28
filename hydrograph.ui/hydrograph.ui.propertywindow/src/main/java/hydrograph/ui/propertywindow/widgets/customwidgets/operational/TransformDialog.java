@@ -61,13 +61,11 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -112,6 +110,7 @@ import org.eclipse.swt.widgets.Widget;
  * @author Bitwise
  *
  */
+
 public class TransformDialog extends Dialog implements IOperationClassDialog {
 
 	private static final String EXITING_TRANSFORM_EDITOR = "Exiting Transform Editor";
@@ -2168,6 +2167,12 @@ private void operationInputTableAddButton(
 		}
 		addExpandItem(scrolledComposite);
 	}
+	
+	/**
+	 * 
+	 * Close method get called on closing the dialog.
+	 * 
+	 */
 	public boolean close() {
 		if (preClose()==SWT.YES) {
 			return super.close();
@@ -2180,7 +2185,7 @@ private void operationInputTableAddButton(
 		{	
 		MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_QUESTION | SWT.YES|SWT.NO);
 		messageBox.setText(EXITING_TRANSFORM_EDITOR);
-		messageBox.setMessage(Messages.ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE);
+		messageBox.setMessage(Messages.ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT);
 		return messageBox.open();
 		}
 		return SWT.YES;

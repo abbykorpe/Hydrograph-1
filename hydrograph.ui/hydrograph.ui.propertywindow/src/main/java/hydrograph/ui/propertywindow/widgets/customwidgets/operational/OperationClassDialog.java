@@ -415,6 +415,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				}
 			}
 		} else {
+			FilterOperationClassUtility.INSTANCE.getOpenBtn().setEnabled(false);
 			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 204));
 			operationClasses.select(0);
 			isParameterCheckBox.setEnabled(false);
