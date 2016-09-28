@@ -35,6 +35,7 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 			linkSelectedColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 		}
 		getLinkFigure().setForegroundColor(linkSelectedColor);
+		super.addSelectionHandles();
 	}
 
 	protected PolylineConnection getLinkFigure() {
