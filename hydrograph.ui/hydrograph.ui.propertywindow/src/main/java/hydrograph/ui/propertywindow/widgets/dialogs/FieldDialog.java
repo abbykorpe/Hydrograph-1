@@ -474,7 +474,6 @@ public class FieldDialog extends Dialog {
 		}else{
 			targetTableColumn.setWidth(352);
 		}
-		targetTableColumn.setWidth(352);
 		targetTable.setHeaderVisible(true);
 		targetTable.setLinesVisible(true);
 
