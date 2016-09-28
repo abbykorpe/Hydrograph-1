@@ -13,8 +13,6 @@
 package hydrograph.ui.graph.debugconverter;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
@@ -24,17 +22,10 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -60,9 +51,6 @@ public class DebugHelper {
 
 	private static Logger logger = LogFactory.INSTANCE.getLogger(DebugHelper.class);
 	public static DebugHelper INSTANCE = new DebugHelper();
-	public static final String SERVICE_JAR = "SERVICE_JAR";
-	public static final String PORT_NUMBER = "PORT_NO";
-	public static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
 	private List<String> subjobWatcherList; 
 
 	/**
@@ -124,76 +112,6 @@ public class DebugHelper {
 			}
 		return null;
 	}
-	
-	/**
-	 * This function used to return Rest Service port Number which running on local
-	 *
-	 */
-	public String restServicePort(){
-		String portNumber = null;
-		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
-			Properties properties = new Properties();
-			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
-				portNumber = properties.getProperty(PORT_NUMBER);
-			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not exists", e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-		
-		return portNumber;
-	}
-	
-	/**
-	 * This function used to return Rest Service jar Name which uses to start the rest service
-	 *
-	 */
-	public String restServiceJar(){
-		String restServiceJar = null;
-		try {
-			FileReader fileReader = new FileReader(XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
-			Properties properties = new Properties();
-			properties.load(fileReader);
-			if(StringUtils.isNotBlank(properties.getProperty(SERVICE_JAR))){
-				restServiceJar = properties.getProperty(SERVICE_JAR);
-			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not exists", e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-		return restServiceJar;
-	}
-	
-	/**
-	 * This function will be return process ID which running on defined port
-	 *
-	 */
-	public String getServicePortPID(int portNumber) throws IOException{
-		if(OSValidator.isWindows()){
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c" ,"netstat -a -o -n |findstr :"+portNumber});
-			Process process =builder.start();
-			InputStream inputStream = process.getInputStream();
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-			String str = bufferedReader.readLine();
-			str=StringUtils.substringAfter(str, "LISTENING");
-			str=StringUtils.trim(str);
-			return str;
-		}
-		else if(OSValidator.isMac()){
-			//sudo lsof -n -i4tcp:8004 |grep LISTEN
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"sudo lsof -n -i4tcp:"+portNumber+" |grep LISTEN"});
-			builder.start();
-		}
-		else if(OSValidator.isUnix()){
-			new ProcessBuilder(new String[]{}).start();
-		}
-		return "";
-	}
-	
 	
 	/**
 	 * This function returns that watcher is added on selected port

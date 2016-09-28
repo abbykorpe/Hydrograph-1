@@ -13,6 +13,7 @@
 
 package hydrograph.ui.graph.execution.tracking.utils;
 
+import hydrograph.ui.common.util.ConfigFileReader;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.Activator;
@@ -58,30 +59,19 @@ public class TrackingDisplayUtils {
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(TrackingDisplayUtils.class);
 	
-	/** The Constant PORT_NUMBER. */
-	private static final String PORT_NUMBER = "EXECUTION_TRACKING_PORT";
-	
 	/** The Constant LOCAL_URL. */
-	private static final String LOCAL_URL = "WEBSOCKET_LOCAL_HOST";
+	private static final String WEBSOCKET_LOCAL_HOST = "WEBSOCKET_LOCAL_HOST";
 	
 	/** The Constant WEBSOCKET_ROUTE. */
-	private static final String WEBSOCKET_ROUTE = "WEBSOCKET_UI_ROUTE";
+	private static final String WEBSOCKET_UI_ROUTE = "WEBSOCKET_UI_ROUTE";
 
 	/** The Constant EXECUTION_TRACK_START. */
 	private static final String EXECUTION_TRACK_START = " hydrograph.execution.tracking.server.websocket.StartServer";
 	
-	/** The Constant EXECUTION_TRACK_SERVICE. */
-	private static final String EXECUTION_TRACK_SERVICE = "EXECUTION_TRACK_SERVICE_JAR";
-	
-	/** The Constant EXECUTION_TRACKING_PORT. */
+   //Execution tracking config properties	
 	private static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
-	
-	/** The Constant PROPERY_FILE_PATH. */
-	private static final String PROPERY_FILE_PATH = "/service/hydrograph-service.properties";
-	
-	/** The Constant EXECUTION_TRACKING_PROPERY_FILE. */
-	private static final String EXECUTION_TRACKING_PROPERY_FILE = "/service/socket-server.properties";
 
+	
 	/** The local host. */
 	private String localHost;
 
@@ -154,21 +144,12 @@ public class TrackingDisplayUtils {
 	 */
 	public String getExecutiontrackingPortNo() {
 		String portNumber = null;
-		try {
-			FileReader fileReader = new FileReader(
-					XMLConfigUtil.CONFIG_FILES_PATH + EXECUTION_TRACKING_PROPERY_FILE);
-			Properties properties = new Properties();
-			properties.load(fileReader);
-			if (StringUtils.isNotBlank(properties.getProperty(PORT_NUMBER))) {
-				portNumber = properties.getProperty(PORT_NUMBER);
-				localHost = properties.getProperty(LOCAL_URL);
-				websocketRoute = properties.getProperty(WEBSOCKET_ROUTE);
+			Properties properties = ConfigFileReader.INSTANCE.getCommonConfigurations();
+			if (StringUtils.isNotBlank(properties.getProperty(EXECUTION_TRACKING_PORT))) {
+				portNumber = properties.getProperty(EXECUTION_TRACKING_PORT);
+				localHost = properties.getProperty(WEBSOCKET_LOCAL_HOST);
+				websocketRoute = properties.getProperty(WEBSOCKET_UI_ROUTE);
 			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not exists", e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
 		return portNumber;
 	}
 
@@ -210,120 +191,14 @@ public class TrackingDisplayUtils {
 	}
 
 	/**
-	 * Start execution tracking service.
-	 */
-	public void startExecutionTrackingService() {
-		if (OSValidator.isWindows()) {
-			try {
-				String command = "java -cp " + getInstallationPathForExeTrack()
-						+ EXECUTION_TRACK_START;
-				ProcessBuilder builder = new ProcessBuilder(new String[] {
-						"cmd", "/c", command });
-
-				builder.start();
-
-			} catch (Exception e) {
-				logger.info("Failed to start web socket server");
-			}
-		}
-	}
-
-	/**
-	 * Re start execution tracking service.
-	 * 
-	 * @param pid
-	 *            the pid
-	 */
-	public void reStartExecutionTrackingService(String pid) {
-		if (OSValidator.isWindows()) {
-			try {
-				logger.info("Taskkill /PID :" + pid);
-				String command = "Taskkill /PID " + pid + " /F";
-				ProcessBuilder builder = new ProcessBuilder(new String[] {
-						"cmd", "/c", command });
-				builder.start();
-				startExecutionTrackingService();
-			} catch (Exception e) {
-				logger.info("Failed to start web socket server");
-			}
-		}
-	}
-
-	/**
-	 * Gets the execution tracking service jar.
-	 * 
-	 * @return the execution tracking service jar
-	 */
-	private String getExecutionTrackingServiceJar() {
-		String exeTrackServiceJar = null;
-		try {
-			FileReader fileReader = new FileReader(
-					XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
-			Properties properties = new Properties();
-			properties.load(fileReader);
-			if (StringUtils.isNotBlank(properties
-					.getProperty(EXECUTION_TRACK_SERVICE))) {
-				exeTrackServiceJar = properties
-						.getProperty(EXECUTION_TRACK_SERVICE);
-			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not exists", e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-		return exeTrackServiceJar;
-	}
-
-	/**
-	 * Gets the installation path for exe track.
-	 * 
-	 * @return the installation path for exe track
-	 */
-	private String getInstallationPathForExeTrack() {
-		String path = Platform.getInstallLocation().getURL().getPath();
-		String executionTraJar = getExecutionTrackingServiceJar();
-		if (StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/")
-				&& OSValidator.isWindows()) {
-			path = StringUtils.substring(path, 1);
-		}
-		return path + "config/service/" + executionTraJar;
-	}
-
-	/**
-	 * This function used to return Rest Service port Number which running on
-	 * local.
-	 * 
-	 * @return the string
-	 */
-	public static String restServicePort() {
-		String portNumber = null;
-		try {
-			FileReader fileReader = new FileReader(
-					XMLConfigUtil.CONFIG_FILES_PATH + PROPERY_FILE_PATH);
-			Properties properties = new Properties();
-			properties.load(fileReader);
-			if (StringUtils.isNotBlank(properties
-					.getProperty(EXECUTION_TRACK_SERVICE))) {
-				portNumber = properties.getProperty(EXECUTION_TRACKING_PORT);
-			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not exists", e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		return portNumber;
-	}
-
-	/**
 	 * This function will be return process ID which running on defined port.
 	 * 
 	 * @return the service port pid
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public String getServicePortPID() throws IOException {
-		int portNumber = Integer.parseInt(restServicePort());
+	public String getServicePortPID(Properties properties) throws IOException {
+		int portNumber = Integer.parseInt(properties.getProperty(EXECUTION_TRACKING_PORT));
 		if (OSValidator.isWindows()) {
 			ProcessBuilder builder = new ProcessBuilder(new String[] { "cmd",
 					"/c", "netstat -a -o -n |findstr :" + portNumber });
