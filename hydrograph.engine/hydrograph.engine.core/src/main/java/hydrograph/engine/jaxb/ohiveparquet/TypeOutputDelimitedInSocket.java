@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-delimited-in-socket")
+@XmlType(name = "type-output-delimited-in-socket", namespace = "hydrograph/engine/jaxb/ohiveparquet")
 public class TypeOutputDelimitedInSocket
     extends TypeOutputInSocket
 {

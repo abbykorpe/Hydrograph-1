@@ -37,7 +37,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-name-field")
+@XmlType(name = "type-name-field", namespace = "hydrograph/engine/jaxb/generatesequence")
 public class TypeNameField
     extends TypeBaseField
 {

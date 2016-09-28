@@ -96,7 +96,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 
 		Fields fields = getFieldsToWrite(tb);
 		HydrographDelimitedParser delimitedParser = new HydrographDelimitedParser(
-				inputHiveFileEntity.getDelimiter(),
+				inputHiveFileEntity.getDelimiter() != null ? inputHiveFileEntity.getDelimiter() : "\1",
 
 				inputHiveFileEntity.getQuote(), null,
 				inputHiveFileEntity.isStrict(), inputHiveFileEntity.isSafe());

@@ -203,7 +203,7 @@
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="tableName" type="ohivetextfile:hive_type"
 						minOccurs="1" maxOccurs="1" />
-					<xs:element name="delimiter">
+					<xs:element name="delimiter" minOccurs="0" maxOccurs="1">
 						<xs:complexType>
 							<xs:attribute name="value" type="xs:string" use="required" />
 						</xs:complexType>

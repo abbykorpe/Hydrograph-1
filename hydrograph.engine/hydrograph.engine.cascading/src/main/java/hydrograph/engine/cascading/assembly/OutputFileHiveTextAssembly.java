@@ -105,7 +105,7 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase<OutputFileHiv
 						.getExternalTablePathUri()));
 
 		HydrographDelimitedParser delimitedParser = new HydrographDelimitedParser(
-				outputFileHiveTextEntity.getDelimiter(),
+				outputFileHiveTextEntity.getDelimiter() != null ? outputFileHiveTextEntity.getDelimiter() : "\1",
 				outputFileHiveTextEntity.getQuote(), null,
 				outputFileHiveTextEntity.isStrict(),
 				outputFileHiveTextEntity.isSafe());

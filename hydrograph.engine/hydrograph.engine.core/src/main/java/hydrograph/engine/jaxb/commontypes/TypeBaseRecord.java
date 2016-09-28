@@ -48,7 +48,7 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-record", propOrder = {
+@XmlType(name = "type-base-record", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "fieldOrRecordOrIncludeExternalSchema"
 })
 @XmlSeeAlso({

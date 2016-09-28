@@ -40,7 +40,7 @@ import hydrograph.engine.jaxb.commandtypes.Subjob;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-command-component")
+@XmlType(name = "type-command-component", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlSeeAlso({
     RunProgram.class,
     FtpIn.class,

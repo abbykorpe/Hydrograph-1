@@ -45,7 +45,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-out-socket")
+@XmlType(name = "type-out-socket", namespace = "hydrograph/engine/jaxb/generatesequence")
 public class TypeOutSocket
     extends TypeOperationsOutSocket
 {

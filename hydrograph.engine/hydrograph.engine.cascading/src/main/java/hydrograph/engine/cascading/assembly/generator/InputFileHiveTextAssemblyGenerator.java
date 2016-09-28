@@ -79,8 +79,8 @@ public class InputFileHiveTextAssemblyGenerator extends
 								.getFieldOrRecordOrIncludeExternalSchema()));
 		inputHiveFileEntity.setOutSocketList(InputEntityUtils
 				.extractOutSocket(jaxbHiveTextFile.getOutSocket()));
-		inputHiveFileEntity.setDelimiter(GeneralUtilities
-				.parseHex(jaxbHiveTextFile.getDelimiter().getValue()));
+		inputHiveFileEntity.setDelimiter(jaxbHiveTextFile.getDelimiter() != null
+				? GeneralUtilities.parseHex(jaxbHiveTextFile.getDelimiter().getValue()) : null);
 		inputHiveFileEntity.setDatabaseName(jaxbHiveTextFile.getDatabaseName()
 				.getValue());
 		inputHiveFileEntity.setTableName(jaxbHiveTextFile.getTableName()

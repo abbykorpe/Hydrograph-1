@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "normalize")
+@XmlType(name = "normalize", namespace = "hydrograph/engine/jaxb/operationstypes")
 public class Normalize
     extends TypeOperationsComponent
 {

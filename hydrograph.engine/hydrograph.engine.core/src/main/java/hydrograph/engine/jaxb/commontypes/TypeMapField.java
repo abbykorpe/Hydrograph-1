@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-map-field")
+@XmlType(name = "type-map-field", namespace = "hydrograph/engine/jaxb/commontypes")
 public class TypeMapField {
 
     @XmlAttribute(name = "name", required = true)

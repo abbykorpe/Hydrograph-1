@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.straightpulltypes.RemoveDups;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-removedups-base")
+@XmlType(name = "type-removedups-base", namespace = "hydrograph/engine/jaxb/removedups")
 @XmlSeeAlso({
     RemoveDups.class
 })
