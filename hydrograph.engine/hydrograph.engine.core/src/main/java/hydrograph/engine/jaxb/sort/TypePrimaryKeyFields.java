@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-primary-key-fields", namespace = "hydrograph/engine/jaxb/sort", propOrder = {
+@XmlType(name = "type-primary-key-fields", propOrder = {
     "field"
 })
 public class TypePrimaryKeyFields {

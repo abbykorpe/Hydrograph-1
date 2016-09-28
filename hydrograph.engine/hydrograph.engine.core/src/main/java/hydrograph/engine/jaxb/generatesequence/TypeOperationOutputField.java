@@ -39,7 +39,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operation-output-field", namespace = "hydrograph/engine/jaxb/generatesequence")
+@XmlType(name = "type-operation-output-field")
 public class TypeOperationOutputField
     extends TypeOperationOutputFields
 {

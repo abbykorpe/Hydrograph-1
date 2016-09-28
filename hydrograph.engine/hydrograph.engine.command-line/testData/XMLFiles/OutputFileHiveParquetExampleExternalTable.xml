@@ -15,7 +15,7 @@
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd"
 	name="OutputFileHiveParquetExampleExternalTable">
 
-	<inputs id="IFDelimited_01" phase="1" xsi:type="it:textFileDelimited">
+	<inputs id="IFDelimited_01" batch="1" xsi:type="it:textFileDelimited">
 		<outSocket id="out0" type="out">
 			<schema name="">
 				<field name="id" type="java.lang.Integer" />
@@ -31,7 +31,7 @@
 		<charset value="ISO-8859-1" />
 	</inputs>
 
-	<outputs id="hiveparquetoutput" phase="1" xsi:type="ot:parquetHiveFile">
+	<outputs id="hiveparquetoutput" batch="1" xsi:type="ot:parquetHiveFile">
 		<inSocket fromComponentId="IFDelimited_01" fromSocketId="out0"
 			id="in0">
 			<schema name="">
@@ -47,7 +47,7 @@
 		<databaseName value="d1External" />
 		<tableName value="t1ExternalTable" />
 		<!-- Create externalTablePath folder hierarchy before running this xml -->
-		<externalTablePath uri="C:/HiveParquet" />
+		<externalTablePath uri="/HiveParquet" />
 	</outputs>
 </p:graph>
 	

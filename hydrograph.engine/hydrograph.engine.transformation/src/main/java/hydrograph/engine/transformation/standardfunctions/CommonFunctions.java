@@ -19,6 +19,10 @@ import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
+/**
+ * The class CommonFunctions provides vector related functions.
+ *
+ */
 public class CommonFunctions {
 
 	private static Logger LOG = LoggerFactory.getLogger(CommonFunctions.class);
@@ -38,6 +42,7 @@ public class CommonFunctions {
 	 * @return true if all the field values match <br>
 	 *         false is any field value does not match
 	 */
+	@Deprecated
 	public static boolean vectorCompare(ReusableRow inputRow, String prefix1,
 			String prefix2) {
 

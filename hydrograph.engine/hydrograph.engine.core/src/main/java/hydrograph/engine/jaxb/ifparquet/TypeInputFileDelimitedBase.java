@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.ParquetFile;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-file-delimited-base", namespace = "hydrograph/engine/jaxb/ifparquet")
+@XmlType(name = "type-input-file-delimited-base")
 @XmlSeeAlso({
     ParquetFile.class
 })

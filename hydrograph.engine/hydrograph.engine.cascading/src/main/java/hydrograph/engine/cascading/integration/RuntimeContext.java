@@ -43,24 +43,33 @@ public class RuntimeContext {
 	private AssemblyGeneratorFactory assemblyGeneratorFactory;
 	private Map<String, FlowContext> flowContext;
 	private SchemaFieldHandler schemaFieldHandler;
+	private String UDFPath;
 
-	public RuntimeContext(HydrographJob hydrographJob, JAXBTraversal traversal,
-			Properties hadoopProps,
-			AssemblyGeneratorFactory assemblyGeneratorFactory, SchemaFieldHandler schemaFieldHandler) {
+	public RuntimeContext(HydrographJob hydrographJob, JAXBTraversal traversal, Properties hadoopProps,
+			AssemblyGeneratorFactory assemblyGeneratorFactory, SchemaFieldHandler schemaFieldHandler, String UDFPath) {
 		this.hydrographJob = hydrographJob;
 		this.traversal = traversal;
 		this.hadoopProperties = hadoopProps;
 		this.assemblyGeneratorFactory = assemblyGeneratorFactory;
 		this.hadoopConfProvider = new HadoopConfigProvider(hadoopProps);
-		this.schemaFieldHandler=schemaFieldHandler;
+		this.schemaFieldHandler = schemaFieldHandler;
+		this.UDFPath=UDFPath;
 		tempPathParameters = new LinkedHashMap<String, ComponentParameters>();
 		this.flowContext = new HashMap<String, FlowContext>();
 	}
 
+	public String getUDFPath() {
+		return UDFPath;
+	}
 	
-	public SchemaFieldHandler getSchemaFieldHandler(){
+	public void setSchemaFieldHandler(SchemaFieldHandler schemaFieldHandler){
+		this.schemaFieldHandler=schemaFieldHandler;
+	}
+
+	public SchemaFieldHandler getSchemaFieldHandler() {
 		return schemaFieldHandler;
 	}
+
 	public JobConf getJobConf() {
 		return hadoopConfProvider.getJobConf();
 	}
@@ -125,13 +134,13 @@ public class RuntimeContext {
 	public ComponentParameters getTempPathParameter(String string) {
 		return tempPathParameters.get(string);
 	}
-	
+
 	public Map<String, FlowContext> getFlowContext() {
 		return flowContext;
 	}
 
-	public void setFlowContext(String phase, FlowContext flowContext) {
-		this.flowContext.put(phase, flowContext);
+	public void setFlowContext(String batch, FlowContext flowContext) {
+		this.flowContext.put(batch, flowContext);
 	}
 
 }

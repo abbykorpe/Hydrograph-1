@@ -18,24 +18,60 @@ import java.util.List;
 
 import hydrograph.engine.execution.tracking.ComponentInfo;
 
+/**
+ * Class HydrographService is used to execute {@link HydrographExecution} , kill
+ * the Hydrograph job or getting current status of a job.
+ * 
+ * @author bitwise
+ *
+ */
 public class HydrographService {
+
 	private HydrographExecution execution;
+
+	/**
+	 * Class Constructor
+	 */
 	public HydrographService() {
 		execution = new HydrographExecution();
 	}
 
-	public void executeGraph(String[] args) throws Exception {
+	/**
+	 * Execute the Hydrograph job with arguments passed.
+	 * 
+	 * @param args
+	 *            - arguments for execution <br/>
+	 *            for example: -xmlpath "xml-file-path"
+	 * @return Integer value for execution status: 0 - successful
+	 * @throws Exception
+	 */
+	public int executeGraph(String[] args) throws Exception {
+		try{
 			execution.run(args);
+			return 0;
+		}
+		catch(Exception e){
+			throw e;
+		}
 	}
+
+	/**
+	 * Returns the current statistics of the job in a list of ComponentInfo
+	 * objects, Each ComponentInfo represents a component in Hydrograph.
+	 * 
+	 * @return List of {@link ComponentInfo}
+	 */
 	public List<ComponentInfo> getStatus() {
-		if(execution.getJobInfo()!=null)
-			return new ArrayList<>(execution.getJobInfo().getstatus());
+		if (execution.getExecutionStatus() != null)
+			return new ArrayList<>(execution.getExecutionStatus());
 		else
 			return Collections.emptyList();
 	}
 
+	/**
+	 * Kills the current running job.
+	 */
 	public void kill() {
 		execution.kill();
 	}
-
 }

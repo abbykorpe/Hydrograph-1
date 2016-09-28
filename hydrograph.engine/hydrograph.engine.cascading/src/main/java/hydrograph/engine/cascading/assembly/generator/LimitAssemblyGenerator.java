@@ -61,7 +61,7 @@ public class LimitAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 		LOG.trace("Initializing limit entity for component: "
 				+ jaxbLimit.getId());
 		limitEntity.setComponentId(jaxbLimit.getId());
-		limitEntity.setPhase(jaxbLimit.getPhase());
+		limitEntity.setBatch(jaxbLimit.getBatch());
 		limitEntity.setMaxRecord(jaxbLimit.getMaxRecords().getValue());
 		limitEntity.setRuntimeProperties(StraightPullEntityUtils
 				.extractRuntimeProperties(jaxbLimit.getRuntimeProperties()));

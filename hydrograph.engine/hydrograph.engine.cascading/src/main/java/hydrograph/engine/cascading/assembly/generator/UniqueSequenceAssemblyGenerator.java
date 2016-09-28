@@ -56,18 +56,18 @@ public class UniqueSequenceAssemblyGenerator extends
 		LOG.trace("Initializing generate sequence entity for component: "
 				+ jaxbGenerateSequence.getId());
 		uniqueSequenceEntity.setComponentId(jaxbGenerateSequence.getId());
-		uniqueSequenceEntity.setPhase(jaxbGenerateSequence.getPhase());
+		uniqueSequenceEntity.setBatch(jaxbGenerateSequence.getBatch());
 		// check if operation is present
-		if (jaxbGenerateSequence.getOperation() != null) {
+		if (jaxbGenerateSequence.getOperationOrExpression() != null) {
 			LOG.trace("Operation(s) present for unique sequence component: "
 					+ jaxbGenerateSequence.getId() + ", processing");
 			// set the number of operations in the transform component and set
 			// operation present to true
 			uniqueSequenceEntity.setNumOperations(jaxbGenerateSequence
-					.getOperation().size());
+					.getOperationOrExpression().size());
 			uniqueSequenceEntity.setOperationPresent(true);
 			uniqueSequenceEntity.setOperationsList(OperationEntityUtils
-					.extractOperations(jaxbGenerateSequence.getOperation()));
+					.extractOperations(jaxbGenerateSequence.getOperationOrExpression()));
 		} else {
 			LOG.trace("Operation not present for unique sequence component: "
 					+ jaxbGenerateSequence.getId()

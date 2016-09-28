@@ -59,7 +59,7 @@ public class CloneAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 		LOG.trace("Initializing clone entity for component: "
 				+ jaxbClone.getId());
 		cloneEntity.setComponentId(jaxbClone.getId());
-		cloneEntity.setPhase(jaxbClone.getPhase());
+		cloneEntity.setBatch(jaxbClone.getBatch());
 		cloneEntity.setOutSocketList(StraightPullEntityUtils
 				.extractOutSocketList(jaxbClone.getOutSocket()));
 		cloneEntity.setRuntimeProperties(StraightPullEntityUtils

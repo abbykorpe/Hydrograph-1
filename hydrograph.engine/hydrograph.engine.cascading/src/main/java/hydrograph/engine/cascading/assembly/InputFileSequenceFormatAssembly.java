@@ -22,10 +22,12 @@ import cascading.pipe.Pipe;
 import cascading.scheme.hadoop.SequenceFile;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
+import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.InputFileSequenceFormatEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequenceFormatEntity> {
@@ -38,7 +40,7 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 	private SequenceFile scheme;
 	private FlowDef flowDef;
 	private static Logger LOG = LoggerFactory.getLogger(InputFileSequenceFormatAssembly.class);
-
+	private InputOutputFieldsAndTypesCreator<InputFileSequenceFormatEntity> fieldsCreator;
 	private InputFileSequenceFormatEntity inputFileSequenceFormatEntity;
 
 	public InputFileSequenceFormatAssembly(InputFileSequenceFormatEntity assemblyEntityBase,
@@ -49,6 +51,7 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 	@Override
 	protected void createAssembly() {
 		try {
+			fieldsCreator = new InputOutputFieldsAndTypesCreator<InputFileSequenceFormatEntity>(inputFileSequenceFormatEntity);
 			generateTapsAndPipes();
 			flowDef = flowDef.addSource(pipe, tap);
 			for (OutSocket outSocket : inputFileSequenceFormatEntity.getOutSocketList()) {
@@ -77,7 +80,7 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 		flowDef = componentParameters.getFlowDef();
 
 		// initializing each pipe and tap
-		tap = new Hfs(scheme, componentParameters.getPathUri());
+		tap = new Hfs(scheme, inputFileSequenceFormatEntity.getPath());
 		pipe = new Pipe(ComponentHelper.getComponentName("inputFileSequenceFormat",
 				inputFileSequenceFormatEntity.getComponentId(),
 				inputFileSequenceFormatEntity.getOutSocketList().get(0).getSocketId()));
@@ -87,7 +90,8 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 	}
 
 	protected void prepareScheme() {
-		scheme = new SequenceFile(componentParameters.getOutputFields());
+		Fields inputFields = fieldsCreator.makeFieldsWithTypes();
+		scheme = new SequenceFile(inputFields);
 
 	}
 

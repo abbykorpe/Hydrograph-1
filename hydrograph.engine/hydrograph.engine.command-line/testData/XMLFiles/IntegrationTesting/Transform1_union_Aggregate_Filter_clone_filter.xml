@@ -20,7 +20,7 @@
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../../elt-core/src/main/resources/newxmlschema/main/main.xsd ">
 
 
- <inputs xmlns:ns4="hydrograph/engine/jaxb/inputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="IFDelimited_01" phase="1" xsi:type="ns4:textFileDelimited">
+ <inputs xmlns:ns4="hydrograph/engine/jaxb/inputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="IFDelimited_01" batch="1" xsi:type="ns4:textFileDelimited">
         <outSocket xmlns:ns5="hydrograph/engine/jaxb/itfd" id="out0" type="out" xsi:type="ns5:type-input-delimited-out-socket">
             <schema name="">
                 <field name="id" type="java.lang.Integer"/>
@@ -37,7 +37,7 @@
         <charset value="UTF-8"/>
     </inputs>
   
-    <inputs xmlns:ns4="hydrograph/engine/jaxb/inputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="IFixedWidth_01" phase="1" xsi:type="ns4:textFileFixedWidth">
+    <inputs xmlns:ns4="hydrograph/engine/jaxb/inputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="IFixedWidth_01" batch="1" xsi:type="ns4:textFileFixedWidth">
         <outSocket xmlns:ns5="hydrograph/engine/jaxb/itffw" id="out0" type="out" xsi:type="ns5:type-input-fixedwidth-out-socket">
             <schema name="">
                 <field length="2" name="id" type="java.lang.Integer"/>
@@ -51,7 +51,7 @@
         <strict value="false"/>
         <charset value="UTF-8"/>
     </inputs>
-    <outputs xmlns:ns4="hydrograph/engine/jaxb/outputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="OFixedWidth_01" phase="8" xsi:type="ns4:textFileFixedWidth">
+    <outputs xmlns:ns4="hydrograph/engine/jaxb/outputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="OFixedWidth_01" batch="8" xsi:type="ns4:textFileFixedWidth">
         <inSocket xmlns:ns5="hydrograph/engine/jaxb/otffw" fromComponentId="Clone_03" fromSocketId="out0" id="in0" type="in" xsi:type="ns5:type-output-fixedwidth-in-socket">
             <schema name="">
                 <field length="2" name="id" type="java.lang.Integer"/>
@@ -64,14 +64,14 @@
         <safe value="false"/>
         <charset value="UTF-8"/>
     </outputs>
-    <straightPulls xmlns:ns4="hydrograph/engine/jaxb/straightpulltypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Unionall_01" phase="1" xsi:type="ns4:unionAll">
+    <straightPulls xmlns:ns4="hydrograph/engine/jaxb/straightpulltypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Unionall_01" batch="1" xsi:type="ns4:unionAll">
         <inSocket fromComponentId="IFDelimited_01" fromSocketId="out0" id="in0" type="in"/>
         <inSocket fromComponentId="IFixedWidth_01" fromSocketId="out0" id="in1" type="in"/>
         <outSocket id="out0" type="out">
             <copyOfInsocket inSocketId="in0"/>
         </outSocket>
     </straightPulls>
-    <straightPulls xmlns:ns4="hydrograph/engine/jaxb/straightpulltypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Clone_03" phase="1" xsi:type="ns4:clone">
+    <straightPulls xmlns:ns4="hydrograph/engine/jaxb/straightpulltypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Clone_03" batch="1" xsi:type="ns4:clone">
         <inSocket fromComponentId="Unionall_01" fromSocketId="out0" id="in0" type="in"/>
         <outSocket id="out0" type="out">
             <copyOfInsocket inSocketId="in0"/>
@@ -80,7 +80,7 @@
             <copyOfInsocket inSocketId="in0"/>
         </outSocket>
     </straightPulls>
-    <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Filter_02" phase="1" xsi:type="ns4:filter">
+    <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Filter_02" batch="1" xsi:type="ns4:filter">
         <inSocket fromComponentId="Clone_03" fromSocketId="out1" id="in0" type="in"/>
         <operation class="hydrograph.engine.core.userfuntions.Filter" id="opt">
             <inputFields>
@@ -91,7 +91,7 @@
             <copyOfInsocket inSocketId="in0"/>
         </outSocket>
     </operations>
-    <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Aggregate_01" phase="1" xsi:type="ns4:aggregate">
+    <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Aggregate_01" batch="1" xsi:type="ns4:aggregate">
         <inSocket fromComponentId="Filter_02" fromSocketId="out0" id="in0" type="in"/>
         <operation class="hydrograph.engine.transformation.userfunctions.aggregate.Count" id="1">
             <inputFields>
@@ -113,7 +113,7 @@
         </primaryKeys>
       
     </operations>
-    <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Transform_01" phase="1" xsi:type="ns4:transform">
+    <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Transform_01" batch="1" xsi:type="ns4:transform">
         <inSocket fromComponentId="Aggregate_01" fromSocketId="out0" id="in0" type="in"/>
         
         <outSocket type="out" id="out0">
@@ -127,7 +127,7 @@
     </operations>
     
     
-      <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Transform_02" phase="1" xsi:type="ns4:transform">
+      <operations xmlns:ns4="hydrograph/engine/jaxb/operationstypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Transform_02" batch="1" xsi:type="ns4:transform">
         <inSocket fromComponentId="Transform_01" fromSocketId="out0" id="in0" type="in"/>
         
         <operation id="op1" class="hydrograph.engine.test.TransformTest">
@@ -150,7 +150,7 @@
         </outSocket>
     </operations>
     
-      <outputs xmlns:ns4="hydrograph/engine/jaxb/outputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="OFDelimited_01" phase="8" xsi:type="ns4:textFileDelimited">
+      <outputs xmlns:ns4="hydrograph/engine/jaxb/outputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="OFDelimited_01" batch="8" xsi:type="ns4:textFileDelimited">
         <inSocket xmlns:ns5="hydrograph/engine/jaxb/otfd" fromComponentId="Transform_02" fromSocketId="out0" id="in0" type="in" xsi:type="ns5:type-output-delimited-in-socket">
             <schema name="">
                 <field name="id" type="java.lang.String"/>

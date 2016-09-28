@@ -83,7 +83,7 @@ import hydrograph.engine.jaxb.itfd.TypeInputFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "textFileDelimited", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
+@XmlType(name = "textFileDelimited", propOrder = {
     "path",
     "delimiter",
     "hasHeader",

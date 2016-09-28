@@ -55,44 +55,47 @@ public class HydrographXMLInputService implements HydrographInputService {
 			throws JAXBException {
 		HydrographJob hydrographJob = null;
 		this.config = config;
-		//String path = CLIParser.getXmlPath(args, config);
-		String path=XmlParsingUtils.getXMLPath(args, config);
+		String path = XmlParsingUtils.getXMLPath(args, config);
 		LOG.info("Parsing for graph file: " + path + " started");
 		ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
 				getUserParameters(args));
-		
+
 		try {
 			ParseExternalSchema parseExternalSchema = new ParseExternalSchema(
 					checkSubjobAndExpandXml(parameterSubstitutor,
-							XmlParsingUtils.getXMLStringFromPath(path)), parameterSubstitutor);
+							XmlParsingUtils.getXMLStringFromPath(path)),
+					parameterSubstitutor);
 			hydrographJob = hydrographJobGenerator.createHydrographJob(
 					parseExternalSchema.getXmlDom(),
 					config.getProperty("xsdLocation"));
 
 		} catch (FileNotFoundException e) {
 			LOG.error("Error while merging subjob and mainjob.", e);
-			throw new RuntimeException("Error while merging subjob and mainjob.", e);
+			throw new RuntimeException(
+					"Error while merging subjob and mainjob.", e);
 		} catch (SAXException e) {
 			LOG.error("Error while parsing XSD.", e);
 			throw new RuntimeException("Error while parsing XSD.", e);
 		}
-			LOG.info("Graph: '" + hydrographJob.getJAXBObject().getName()
-					+ "' parsed successfully");
-			return hydrographJob;
+		LOG.info("Graph: '" + hydrographJob.getJAXBObject().getName()
+				+ "' parsed successfully");
+		return hydrographJob;
 	}
 
 	@Override
-	public HydrographDebugInfo parseHydrographDebugInfo(Properties config, String[] args)
-			throws JAXBException {
+	public HydrographDebugInfo parseHydrographDebugInfo(Properties config,
+			String[] args) throws JAXBException {
 		HydrographDebugInfo hydrographDebugInfo = null;
 		this.config = config;
 		String path = XmlParsingUtils.getDebugXMLPath(args, config);
 		if (path != null) {
-			
-			if(XmlParsingUtils.getJobId(args)==null)
-				throw new HydrographXMLInputServiceException("job id is required for Debugging");
-			if(XmlParsingUtils.getBasePath(args)==null)
-				throw new HydrographXMLInputServiceException("base path is required for Debugging");
+
+			if (XmlParsingUtils.getJobId(args) == null)
+				throw new HydrographXMLInputServiceException(
+						"job id is required for Debugging");
+			if (XmlParsingUtils.getBasePath(args) == null)
+				throw new HydrographXMLInputServiceException(
+						"base path is required for Debugging");
 			LOG.info("Parsing for Debug graph file: " + path + " started");
 			ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
 					getUserParameters(args));
@@ -115,12 +118,9 @@ public class HydrographXMLInputService implements HydrographInputService {
 		}
 	}
 
-	
-
-	
-	
 	private String checkSubjobAndExpandXml(
-			ParameterSubstitutor parameterSubstitutor, String xmlContents) throws FileNotFoundException {
+			ParameterSubstitutor parameterSubstitutor, String xmlContents)
+			throws FileNotFoundException {
 
 		LOG.info("Expanding subjobs");
 		ReadSubjob subjobParser = new ReadSubjob(
@@ -130,7 +130,7 @@ public class HydrographXMLInputService implements HydrographInputService {
 		return XmlUtilities.getXMLStringFromDocument(expandedXmlDocument);
 	}
 
-	private UserParameters getUserParameters(String[] args)   {
+	private UserParameters getUserParameters(String[] args) {
 		try {
 			return new UserParameters(args);
 		} catch (IOException e) {

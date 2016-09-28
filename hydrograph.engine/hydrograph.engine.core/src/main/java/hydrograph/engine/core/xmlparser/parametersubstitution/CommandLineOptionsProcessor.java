@@ -28,9 +28,9 @@ public class CommandLineOptionsProcessor {
 	public static final String OPTION_PARAMETER_FILES = "paramfiles";
 	public static final String OPTION_COMMANDLINE_PARAM = "param";
 	public static final String OPTION_HELP = "help";
-	
-	private static final Logger LOG = LoggerFactory
-			.getLogger(CommandLineOptionsProcessor.class);
+	public static final String OPTION_USER_FUNCTION = "udfpath";
+
+	private static final Logger LOG = LoggerFactory.getLogger(CommandLineOptionsProcessor.class);
 
 	public String getXMLPath(String[] args) {
 		String[] paths = null;
@@ -44,7 +44,7 @@ public class CommandLineOptionsProcessor {
 			return null;
 		}
 	}
-	
+
 	public String getDebugXMLPath(String[] args) {
 		String[] paths = null;
 
@@ -57,7 +57,20 @@ public class CommandLineOptionsProcessor {
 			return null;
 		}
 	}
-	
+
+	public String getUDFPath(String[] args) {
+		String[] paths = null;
+
+		paths = GeneralUtilities.getArgsOption(args, OPTION_USER_FUNCTION);
+
+		if (paths != null) {
+			// only the first path
+			return paths[0];
+		} else {
+			return null;
+		}
+	}
+
 	public String getJobId(String[] args) {
 		String[] jobId = null;
 
@@ -70,7 +83,7 @@ public class CommandLineOptionsProcessor {
 			return null;
 		}
 	}
-	
+
 	public String getBasePath(String[] args) {
 		String[] basePath = null;
 
@@ -85,8 +98,7 @@ public class CommandLineOptionsProcessor {
 	}
 
 	public String getParamFiles(String[] args) {
-		String[] commaSeperatedFilePaths = GeneralUtilities.getArgsOption(args,
-				OPTION_PARAMETER_FILES);
+		String[] commaSeperatedFilePaths = GeneralUtilities.getArgsOption(args, OPTION_PARAMETER_FILES);
 		String allPaths = null;
 		if (commaSeperatedFilePaths == null) {
 			return null;
@@ -107,8 +119,7 @@ public class CommandLineOptionsProcessor {
 		Properties props = new Properties();
 		PropertyBank pb = new PropertyBank();
 
-		String[] paramNameValueArray = GeneralUtilities.getArgsOption(args,
-				OPTION_COMMANDLINE_PARAM);
+		String[] paramNameValueArray = GeneralUtilities.getArgsOption(args, OPTION_COMMANDLINE_PARAM);
 
 		if (paramNameValueArray == null) {
 			return pb;
@@ -119,24 +130,21 @@ public class CommandLineOptionsProcessor {
 
 			// if there is no equal to or multiple equal to|| param name is
 			// blank (cannot be space)||param value is blank
-			if (split.length != 2 || split[0].trim().length() == 0
-					|| split[1].length() == 0) {
+			if (split.length != 2 || split[0].trim().length() == 0 || split[1].length() == 0) {
 
-				throw new CommandOptionException("Command line parameter "
-						+ paramNameValue
+				throw new CommandOptionException("Command line parameter " + paramNameValue
 						+ " is not in correct syntax. It should be param=value");
 
 			}
 
 			props.put(split[0].trim(), split[1]);
-			LOG.info("Parsed commandline parameter {} with value-> {}",
-					split[0].trim(), split[1]);
+			LOG.info("Parsed commandline parameter {} with value-> {}", split[0].trim(), split[1]);
 		}
 
 		pb.addProperties(props);
 		return pb;
 	}
-	
+
 	public static void printUsage() {
 
 		LOG.info("This utility can have following options:");

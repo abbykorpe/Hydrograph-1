@@ -19,7 +19,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
-	<inputs id="input1" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0" type="out">
 			<schema name="klk">
 				<field name="name" type="java.lang.String"  />
@@ -34,7 +34,7 @@
 		<hasHeader value="false" />
 	</inputs>
 
-	<operations id="trans" phase="0" xsi:type="op:filter">
+	<operations id="trans" batch="1" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<operation id="operation1" class="hydrograph.engine.userfunctions.Filter">
 			<inputFields>
@@ -53,7 +53,7 @@
 	</operations>
 
 
-	<outputs id="output1" xsi:type="ot:textFileDelimited">
+	<outputs id="output1" batch="1" xsi:type="ot:textFileDelimited">
 		<inSocket fromComponentId="trans" fromSocketId="out1" id="in0">
 			<schema name="Detail">
 				<field name="name" type="java.lang.String"  />
@@ -68,7 +68,7 @@
 		<charset value="ISO-8859-1" />
 	</outputs>
 
-	<outputs id="unusedOutput" phase="0" xsi:type="ot:textFileDelimited">
+	<outputs id="unusedOutput" batch="1" xsi:type="ot:textFileDelimited">
 		<inSocket fromComponentId="trans" fromSocketId="unused1" id="in0"
 			fromSocketType="unused">
 			<schema name="Detail">

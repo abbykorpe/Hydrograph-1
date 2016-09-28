@@ -14,19 +14,23 @@ package hydrograph.engine.transformation.standardfunctions;
 
 import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
+/**
+ * The class ValidationFunctions provides various validation functions.
+ *
+ */
 public class ValidationFunctions {
 
 	/**
 	 * Returns the first defined value from the number of {@code inputValues}.
 	 * Skips {@code null} values as undefined
 	 * 
-	 * @see getFirstDefined("20150512")
 	 * @param inputValues
 	 *            the list / arbitrary number of input values from whom the
 	 *            first defined value is to be returned
 	 * @return the first defined value from the number of {@code inputValues}.
 	 *         Skips {@code null} values as undefined
 	 */
+	@Deprecated
 	public static <T> T getFirstDefined(T... inputValues) {
 		if (inputValues == null)
 			return null;
@@ -42,11 +46,11 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is defined.
 	 * 
-	 * @see isDefined("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if inputValue is not null else 0
 	 */
+	@Deprecated
 	public static <T> Integer isDefined(T inputValue) {
 		return (inputValue == null) ? 0 : 1;
 	}
@@ -54,11 +58,11 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is defined
 	 * 
-	 * @see isDefinedCheck("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is not null else {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isDefinedCheck(T inputValue) {
 		return (inputValue == null) ? false : true;
 	}
@@ -66,11 +70,11 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is instance of String
 	 * 
-	 * @see getFirstDefined("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is instance of String else 0
 	 */
+	@Deprecated
 	public static <T> Integer isValid(T inputValue) {
 		if (StandardFunctionHelper.checkValidity(inputValue))
 			return 1;
@@ -81,12 +85,12 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is instance of String
 	 * 
-	 * @see isValidCheck("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is instance of String else
 	 *         {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isValidCheck(T inputValue) {
 		if (StandardFunctionHelper.checkValidity(inputValue))
 			return true;
@@ -97,11 +101,11 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is null
 	 * 
-	 * @see isNull("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is null else 0
 	 */
+	@Deprecated
 	public static <T> Integer isNull(T inputValue) {
 		return (inputValue == null) ? 1 : 0;
 	}
@@ -109,11 +113,11 @@ public class ValidationFunctions {
 	/**
 	 * Checks if inputValue is null
 	 * 
-	 * @see isNull("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is null else {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isNullCheck(T inputValue) {
 		return (inputValue == null) ? true : false;
 	}
@@ -121,11 +125,11 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is blank
 	 * 
-	 * @see isBlank("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return 1 if {@code inputValue} is null else 0
 	 */
+	@Deprecated
 	public static <T> Integer isBlank(T inputValue) {
 		if (inputValue == null)
 			return null;
@@ -139,11 +143,11 @@ public class ValidationFunctions {
 	/**
 	 * Checks if {@code inputValue} is blank
 	 * 
-	 * @see isBlank("Hello World")
 	 * @param inputValue
 	 *            the input value to check
 	 * @return {@code true} if {@code inputValue} is blank else {@code false}
 	 */
+	@Deprecated
 	public static <T> boolean isBlankCheck(T inputValue) {
 		if (inputValue == null)
 			return true;

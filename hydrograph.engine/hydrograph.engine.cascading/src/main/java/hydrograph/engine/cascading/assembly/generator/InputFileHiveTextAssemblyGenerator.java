@@ -103,7 +103,7 @@ public class InputFileHiveTextAssemblyGenerator extends
 		inputHiveFileEntity
 				.setPartitionKeys(extractPartitionFields(jaxbHiveTextFile
 						.getPartitionKeys()));
-		inputHiveFileEntity.setPhase(jaxbHiveTextFile.getPhase());
+		inputHiveFileEntity.setBatch(jaxbHiveTextFile.getBatch());
 		inputHiveFileEntity
 				.setPartitionFilterRegex(createPartitionFilterRegex(jaxbHiveTextFile
 						.getPartitionFilter()));

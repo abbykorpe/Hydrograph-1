@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "type-sort-order", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "type-sort-order")
 @XmlEnum
 public enum TypeSortOrder {
 

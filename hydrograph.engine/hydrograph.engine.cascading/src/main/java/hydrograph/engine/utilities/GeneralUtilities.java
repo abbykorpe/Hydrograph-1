@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.utilities;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -147,6 +148,24 @@ public class GeneralUtilities {
 		}
 
 		return false;
+	}
+	
+
+	/**
+	 * To check execution tracking is enable.
+	 * 
+	 * @param executionTrackingKey
+	 * @return an string containing execution tracking class
+	 */
+	public static String getExecutionTrackingClass(String executionTrackingKey) {
+		OrderedProperties properties = new OrderedProperties();
+		try {
+			properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties");
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e);
+		}
+		
+		return properties.getProperty(executionTrackingKey);
 	}
 
 }

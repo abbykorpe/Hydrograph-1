@@ -26,7 +26,7 @@ import hydrograph.engine.cascading.assembly.handlers.RecordFilterHandlerBase;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 import hydrograph.engine.utilities.UserClassLoader;
 
-public class RecordFilter extends BaseOperation<RecordFilterContext>implements Filter<RecordFilterContext> {
+public class RecordFilter extends BaseOperation<RecordFilterContext> implements Filter<RecordFilterContext> {
 
 	/**
 	 * 
@@ -47,21 +47,26 @@ public class RecordFilter extends BaseOperation<RecordFilterContext>implements F
 	@Override
 	public void prepare(FlowProcess flowProcess, OperationCall<RecordFilterContext> call) {
 
-		Object filterObject = UserClassLoader.loadAndInitClass(filterClassName);
 		RecordFilterContext context = new RecordFilterContext();
 		call.setContext(context);
-		context.setFilterClass(filterObject);
-		if (filterObject instanceof FilterBase) {
+		if (filterClassName == null)
 			context.setHandlerContext(filterHandler.prepare());
-		} else {
+		else {
+			Object filterObject = UserClassLoader.loadAndInitClass(filterClassName);
+			context.setFilterClass(filterObject);
 			context.setCounterName(counterName);
+			if (filterObject instanceof FilterBase)
+				context.setHandlerContext(filterHandler.prepare());
 		}
+
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean isRemove(FlowProcess flowProcess, FilterCall<RecordFilterContext> call) {
-		if (call.getContext().getFilterClass() instanceof FilterBase) {
+		if (call.getContext().getFilterClass() == null)
+			return filterHandler.isRemove(call);
+		else if (call.getContext().getFilterClass() instanceof FilterBase) {
 			return filterHandler.isRemove(call);
 		} else {
 			return ((Filter<RecordFilterContext>) call.getContext().getFilterClass()).isRemove(flowProcess, call);
@@ -71,7 +76,9 @@ public class RecordFilter extends BaseOperation<RecordFilterContext>implements F
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void cleanup(FlowProcess flowProcess, OperationCall<RecordFilterContext> call) {
-		if (call.getContext().getFilterClass() instanceof FilterBase) {
+		if (call.getContext().getFilterClass() == null)
+			filterHandler.cleanup(call);
+		else if (call.getContext().getFilterClass() instanceof FilterBase) {
 			filterHandler.cleanup(call);
 		}
 	}

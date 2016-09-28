@@ -15,11 +15,20 @@ package hydrograph.engine.execution.tracking;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 
+import cascading.cascade.Cascade;
+import cascading.flow.Flow;
+import cascading.flow.FlowStep;
+import cascading.flow.planner.Scope;
+import cascading.flow.planner.graph.ElementGraph;
 import cascading.pipe.Pipe;
+import cascading.stats.FlowNodeStats;
 import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.integration.FlowContext;
@@ -38,7 +47,17 @@ public class ComponentPipeMapping {
 	private static Map<String, Pipe> componentToPipeMapping = new HashMap<String, Pipe>();
 	private static Map<String, List<String>> componentAndPreviousMap = new HashMap<String, List<String>>();
 	private static List<String> listOfFilterComponent = new ArrayList<String>();
+	private static final String outputSocket = "NoSocketId";
+	private static Map<String, List<String>> componentFlowMap = new HashMap<String, List<String>>();
+	private static Set<String> allPipes = new HashSet<String>();
 
+	/**
+	 * Method generateComponentToPipeMap generates map of component with
+	 * corresponding pipe.
+	 * 
+	 * @param flowContextMap
+	 *            - Map of String and {@link FlowContext} to set
+	 */
 	public static void generateComponentToPipeMap(Map<String, FlowContext> flowContextMap) {
 		for (FlowContext flowContext : flowContextMap.values()) {
 			Map<String, BaseComponent<AssemblyEntityBase>> Assemblies = flowContext.getAssemblies();
@@ -51,12 +70,20 @@ public class ComponentPipeMapping {
 		}
 	}
 
-	public static void generateComponentToFilterMap(RuntimeContext runtimeContext) {
+	/**
+	 * Method generateComponentToFilterMap iterate over the batchs and generates
+	 * map of component id and it's corresponding previous components id.
+	 * 
+	 * @param runtimeContext
+	 *            - {@link RuntimeContext} to extract the current and previous
+	 *            component
+	 */
+	public static void generateComponentAndPreviousrMap(RuntimeContext runtimeContext) {
 		JAXBTraversal jaxbTraversal = runtimeContext.getTraversal();
-		SortedSet<String> phases = jaxbTraversal.getFlowsNumber();
+		SortedSet<String> batchs = jaxbTraversal.getFlowsNumber();
 
-		for (String eachPhaseNumber : phases) {
-			List<String> orderedComponentList = jaxbTraversal.getOrderedComponentsList(eachPhaseNumber);
+		for (String eachBatchNumber : batchs) {
+			List<String> orderedComponentList = jaxbTraversal.getOrderedComponentsList(eachBatchNumber);
 			for (String eachComponentId : orderedComponentList) {
 				List<? extends TypeBaseOutSocket> outSockets = jaxbTraversal
 						.getOutputSocketFromComponentId(eachComponentId);
@@ -69,13 +96,25 @@ public class ComponentPipeMapping {
 		}
 	}
 
+	/**
+	 * Method generateComponentAndPreviousMap generates map of component and
+	 * their previous components.
+	 * 
+	 * @param hydrographJob
+	 *            - {@link HydrographJob} to get all components.
+	 * @param eachComponentId
+	 *            - Current componentId for which previous component id is
+	 *            stored.
+	 * @param outSockets
+	 *            - List of {@link TypeBaseOutSocket} of current component.
+	 * @param inSockets
+	 *            - List of {@link TypeBaseInSocket} of current component.
+	 */
 	private static void generateComponentAndPreviousMap(HydrographJob hydrographJob, String eachComponentId,
 			List<? extends TypeBaseOutSocket> outSockets, List<? extends TypeBaseInSocket> inSockets) {
 		List<String> PreviousComponents = new ArrayList<String>();
 		if (outSockets.size() == 0) {
-			for (TypeBaseInSocket inSocket : inSockets) {
-				addComponentAndSocketInMap(eachComponentId, "NoSocketId");
-			}
+			addComponentAndSocketInMap(eachComponentId, outputSocket);
 		}
 		for (TypeBaseOutSocket outSocket : outSockets) {
 			addComponentAndSocketInMap(eachComponentId, outSocket.getId());
@@ -101,7 +140,73 @@ public class ComponentPipeMapping {
 		}
 	}
 
+	/**
+	 * Method generateComponentFlowMap generates map of component and it's
+	 * corresponding flow id's list
+	 * 
+	 * @param runtimeContext
+	 *            - {@link RuntimeContext} used to retrieve the component and
+	 *            its flow id information
+	 */
+	public static void generateComponentFlowMap(RuntimeContext runtimeContext) {
+		Cascade[] cascades = runtimeContext.getCascadingFlows();
+		for (Cascade cascade : cascades) {
+			for (Flow<?> flow : cascade.getFlows()) {
+				for (FlowStep<?> flowStep : flow.getFlowSteps()) {
+					ElementGraph flowElementGraph;
+					if (isLocalFlowExecution(cascade)) {
+						flowElementGraph = flowStep.getElementGraph();
+						fillComponentFlow(flowElementGraph, flowStep.getID());
+					} else {
+						for (FlowNodeStats flowNodeStats : flowStep.getFlowStepStats().getFlowNodeStats()) {
+							flowElementGraph = flowNodeStats.getFlowNode().getElementGraph();
+							fillComponentFlow(flowElementGraph, flowNodeStats.getID());
+						}
+					}
+				}
+			}
+		}
+	}
 
+	private static void fillComponentFlow(ElementGraph flowElementGraph, String id) {
+		Map<String, String> componentPipeMap = createReverseMap(componentToPipeMapping);
+		List<String> flowStatsList = new ArrayList<String>();
+		for (Scope scope : flowElementGraph.edgeSet()) {
+			addPipesInAllPipes(scope.getName());
+
+			if (componentPipeMap.containsKey(scope.getName())) {
+				String componentSocketId = componentPipeMap.get(scope.getName());
+				String componentId = getComponentIdFromComponentSocketID(componentSocketId);
+				if (!componentFlowMap.containsKey(componentId)) {
+					List<String> flowIdList = new ArrayList<String>();
+					flowIdList.add(id);
+					componentFlowMap.put(componentId, flowIdList);
+					flowStatsList.add(id);
+				} else {
+					if (!flowStatsList.contains(id)) {
+						flowStatsList.add(id);
+						List<String> flowIdList = componentFlowMap.get(componentId);
+						flowIdList.add(id);
+						componentFlowMap.put(componentId, flowIdList);
+					}
+				}
+			}
+		}
+	}
+
+	private static void addPipesInAllPipes(String pipename) {
+		// TODO Auto-generated method stub
+		allPipes.add(pipename);
+	}
+
+	/**
+	 * Create a map of component and socket
+	 * 
+	 * @param componentId
+	 *            - componentId to set
+	 * @param socketId
+	 *            - socketId to set
+	 */
 	private static void addComponentAndSocketInMap(String componentId, String socketId) {
 		if (componentSocketMap.containsKey(componentId)) {
 			List<String> sockets = componentSocketMap.get(componentId);
@@ -113,24 +218,80 @@ public class ComponentPipeMapping {
 		}
 	}
 
+	/**
+	 * Generates a map of generated filter components
+	 * 
+	 * @param generatedFilter
+	 *            - generated filter component id.
+	 */
 	public static void generateFilterList(Filter generatedFilter) {
 		listOfFilterComponent.add(generatedFilter.getId());
 	}
 
-
+	/**
+	 * @return Map of component to Pipe.
+	 */
 	public static Map<String, Pipe> getComponentToPipeMapping() {
 		return componentToPipeMapping;
 	}
 
+	/**
+	 * @return Map of component to list of outSocketid.
+	 */
 	public static Map<String, List<String>> getComponentSocketMap() {
 		return componentSocketMap;
 	}
 
+	/**
+	 * @return Map of component to list of previous components.
+	 */
 	public static Map<String, List<String>> getComponentAndPreviousMap() {
 		return componentAndPreviousMap;
 	}
-	
+
+	/**
+	 * @return List of generated filter components.
+	 */
 	public static List<String> getListOfFilterComponent() {
 		return listOfFilterComponent;
+	}
+
+	/**
+	 * @return List of all pipe names
+	 */
+	public static Set<String> getAllPipes() {
+		return allPipes;
+	}
+
+	/**
+	 * @return Map of Component id and their flow id's list
+	 */
+	public static Map<String, List<String>> getComponentFlowMap() {
+		return componentFlowMap;
+	}
+
+	private static boolean isLocalFlowExecution(Cascade cascade) {
+		Flow<?> flow = cascade.getFlows().get(0);
+		return flow.stepsAreLocal();
+	}
+
+	private static String getComponentIdFromComponentSocketID(String componentId_SocketId) {
+		for (Entry<String, List<String>> eachcomponent_SocketId : componentSocketMap.entrySet()) {
+			String componentId = eachcomponent_SocketId.getKey();
+			for (String socketId : eachcomponent_SocketId.getValue()) {
+				if (componentId_SocketId.equals(componentId + "_" + socketId)) {
+					return componentId;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static Map<String, String> createReverseMap(Map<String, Pipe> allMapOfPipes) {
+		Map<String, String> pipeComponent = new HashMap<>();
+		for (Map.Entry<String, Pipe> entry : allMapOfPipes.entrySet()) {
+			pipeComponent.put(entry.getValue().getName(), entry.getKey());
+		}
+		return pipeComponent;
 	}
 }

@@ -13,7 +13,6 @@
 package hydrograph.engine.core.core;
 
 import hydrograph.engine.jaxb.debug.Debug;
-import hydrograph.engine.jaxb.debug.DebugPlugin;
 import hydrograph.engine.jaxb.debug.ViewData;
 
 import java.util.ArrayList;
@@ -62,15 +61,5 @@ public class HydrographDebugInfo {
 			}
 			return viewDataList;
 		}
-
-		public static DebugPlugin getDebugPlugin(HydrographDebugInfo bhsDebug) {
-
-			if (bhsDebug != null) {
-				return bhsDebug.getJAXBObject().getDebugPlugin();
-
-			}
-			return null;
-		}
-
 	}
 }

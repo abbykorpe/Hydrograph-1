@@ -12,18 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.core.helper;
 
-import hydrograph.engine.core.entity.Link;
-import hydrograph.engine.core.entity.LinkInfo;
-import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
-import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,81 +24,49 @@ import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hydrograph.engine.core.entity.Link;
+import hydrograph.engine.core.utilities.SocketUtilities;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
+import hydrograph.engine.jaxb.main.Graph;
+
 public class JAXBTraversal {
 
 	private Map<String, Link> linkMap;
-	public static final String PHASE_INTERMEDIATE_INPUT_COMPONENT = "phase_intermediate_input";
-	public static final String PHASE_INTERMEDIATE_OUTPUT_COMPONENT = "phase_intermediate_output";
-	public static final String DEFAULT_OUT_SOCKET = "out0";
-	public static final String DEFAULT_IN_SOCKET = "in0";
 	private static Logger LOG = LoggerFactory.getLogger(JAXBTraversal.class);
 	private SortedSet<String> flowCount = new TreeSet<String>();
 
 	private List<TypeBaseComponent> jaxbGraph;
-	private List<LinkInfo> phaseChangeOriginalLinks;
-	private List<LinkInfo> phaseChangeLinks;
 	private boolean isHiveComponentPresentInFlow = false;
+
 	public JAXBTraversal(Graph graph) {
-		
-		this.phaseChangeOriginalLinks = new ArrayList<LinkInfo>();
-		this.phaseChangeLinks = new ArrayList<LinkInfo>();
-		
 		jaxbGraph = graph.getInputsOrOutputsOrStraightPulls();
 		identifyHiveComponentInFlow();
-		populatePhase();
-		populatePhaseChangeComponents();
-		updateLinksAndComponents(graph);
+		populateBatch();
 	}
-
 
 	private void identifyHiveComponentInFlow() {
 		for (TypeBaseComponent component : jaxbGraph) {
-			if(!isHiveComponentPresentInFlow && (component.getClass().getName().contains("Hive"))){
+			if (!isHiveComponentPresentInFlow && (component.getClass().getName().contains("Hive"))) {
 				isHiveComponentPresentInFlow = true;
 				break;
 			}
-		}		
+		}
 	}
 
 	public Map<String, Link> getLinkMap() {
 		return linkMap;
 	}
 
-
-	
-	
-	
-	public List<? extends TypeBaseInSocket> getInputSocketFromComponentId(String componentId){
-		for (TypeBaseComponent component : jaxbGraph) {
-			if(component.getId().equals(componentId)) {
-								List<? extends TypeBaseInSocket> inSocket = SocketUtilities.getInSocketList(component);
-								return inSocket;
-			}
-		}
-		
-		throw new GraphTraversalException("InputSocet not present for the component with id: " + componentId);
-	}
-	
-	public List<? extends TypeBaseOutSocket> getOutputSocketFromComponentId(String componentId){
-		for (TypeBaseComponent component : jaxbGraph) {
-			if(component.getId().equals(componentId)) {
-								List<? extends TypeBaseOutSocket> outSocket = SocketUtilities.getOutSocketList(component);
-								return outSocket;
-			}
-		}
-		throw new GraphTraversalException("OutputSocet not present for the component with id: " + componentId);
-	}
-	
-	public TypeBaseComponent getComponentFromComponentId(String componentId){
-		for (TypeBaseComponent component : jaxbGraph) {
-			if(component.getId().equals(componentId)) {
-				return component;
-			}
-		}
-		throw new GraphTraversalException("Component not present for the component id: " + componentId);
-	}
-	
-	public List<String> getOrderedComponentsList(String phase) {
+	/**
+	 * This method returns the list of ordered component id's in the specified
+	 * batch
+	 * 
+	 * @param batch
+	 * @return Ordered list of component id
+	 */
+	public List<String> getOrderedComponentsList(String batch) {
 		HashMap<String, Integer> componentDependencies = new HashMap<String, Integer>();
 		ArrayList<String> orderedComponents = new ArrayList<String>();
 		Queue<String> resolvedComponents = new LinkedList<String>();
@@ -118,29 +74,26 @@ public class JAXBTraversal {
 
 		LOG.trace("Ordering components");
 		for (TypeBaseComponent component : jaxbGraph) {
-			
-			if (!component.getPhase().equals(phase))
+
+			if (!component.getBatch().equals(batch))
 				continue;
-			
+
 			int intitialDependency = 0;
 
-			intitialDependency = SocketUtilities.getInSocketList(component)
-					.size();
+			intitialDependency = SocketUtilities.getInSocketList(component).size();
 
 			if (intitialDependency == 0) {
 				resolvedComponents.add(component.getId());
 			} else {
-				componentDependencies
-						.put(component.getId(), intitialDependency);
+				componentDependencies.put(component.getId(), intitialDependency);
 			}
 			componentMap.put(component.getId(), component);
 		}
 
-		 if (resolvedComponents.isEmpty() && !componentDependencies.isEmpty()) {
-			 throw new GraphTraversalException(
-			 "Unable to find any source component to process for phase "
-			 + phase + " in graph " + jaxbGraph);
-		 }
+		if (resolvedComponents.isEmpty() && !componentDependencies.isEmpty()) {
+			throw new GraphTraversalException(
+					"Unable to find any source component to process for batch " + batch + " in graph " + jaxbGraph);
+		}
 
 		while (!resolvedComponents.isEmpty()) {
 			// get resolved component
@@ -156,22 +109,18 @@ public class JAXBTraversal {
 
 			for (TypeBaseOutSocket link : outSocketList) {
 				// get the dependent component
-				String targetComponent = getDependentComponent(link.getId(),
-						component);
-				
-				if(targetComponent == null)
-					throw new GraphTraversalException(
-							"Unable to find Depenedent components in traversal for "
-									+ component
-									+ ". This may be due to circular dependecies or unlinked components. ");
-				
+				String targetComponent = getDependentComponent(link.getId(), component);
+
+				if (targetComponent == null)
+					throw new GraphTraversalException("Unable to find Depenedent components in traversal for "
+							+ component + ". This may be due to circular dependecies or unlinked components. ");
+
 				String dependentComponentID = targetComponent;
 
 				// decrease the dependency by one
-				Integer dependency = componentDependencies
-						.get(dependentComponentID);
+				Integer dependency = componentDependencies.get(dependentComponentID);
 				dependency = dependency - 1;
-				
+
 				// if dependency is resolved then add it to resolved queue
 				if (dependency == 0) {
 					resolvedComponents.add(targetComponent);
@@ -191,10 +140,8 @@ public class JAXBTraversal {
 				components = components + ",  " + componentID;
 			}
 
-			throw new GraphTraversalException(
-					"Unable to include following components in traversal"
-							+ components
-							+ ". This may be due to circular dependecies or unlinked components. Please inspect and remove circular dependencies.");
+			throw new GraphTraversalException("Unable to include following components in traversal" + components
+					+ ". This may be due to circular dependecies or unlinked components. Please inspect and remove circular dependencies.");
 		}
 
 		if (LOG.isDebugEnabled()) {
@@ -205,147 +152,51 @@ public class JAXBTraversal {
 
 	private String getDependentComponent(String socketId, String componentID) {
 		for (TypeBaseComponent component : jaxbGraph) {
-			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities
-					.getInSocketList(component);
+			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities.getInSocketList(component);
 			for (TypeBaseInSocket inSocket : inSocketList) {
-				if (inSocket.getFromComponentId().equals(componentID)
-						&& inSocket.getFromSocketId().equals(socketId))
+				if (inSocket.getFromComponentId().equals(componentID) && inSocket.getFromSocketId().equals(socketId))
 					return component.getId();
 			}
 		}
-		throw new GraphTraversalException("Dependent component not found for component with id '" + componentID + "' and socket id '" + socketId + "'");
+		throw new GraphTraversalException("Dependent component not found for component with id '" + componentID
+				+ "' and socket id '" + socketId + "'");
 	}
 
-	private TypeBaseComponent getComponent(String componentID) {
-		for (TypeBaseComponent component : jaxbGraph) {
-				if (component.getId().equals(componentID))
-					return component;
-		}
-		throw new GraphTraversalException("Component not found with id '" + componentID +"'");
-	}
-	
 	public SortedSet<String> getFlowsNumber() {
 		return flowCount;
 	}
 
-	private void populatePhase() {
+	private void populateBatch() {
 		for (TypeBaseComponent component : jaxbGraph) {
-			flowCount.add(component.getPhase());
+			flowCount.add(component.getBatch());
 		}
 	}
-	
-	private void updateLinksAndComponents(Graph graph) {
-		int counter = 0;
-		
-		for (LinkInfo link2 : phaseChangeLinks) {
-			TypeBaseComponent targetComponent = this.getComponentFromComponentId(link2.getComponentId());
-			TypeBaseInSocket inSocket = link2.getInSocket();
-			
-			String sequenceInputComponentId = targetComponent.getId() + "_" + counter + "_phase_" + targetComponent.getPhase();
 
-			SequenceInputFile jaxbSequenceInputFile = new SequenceInputFile();
-			jaxbSequenceInputFile.setId(sequenceInputComponentId);
-			jaxbSequenceInputFile.setPhase(targetComponent.getPhase());
-
-			TypeInputOutSocket outputSocket = new TypeInputOutSocket();
-			outputSocket.setId(DEFAULT_OUT_SOCKET);
-			
-			jaxbSequenceInputFile.getOutSocket().add(outputSocket);
-			
-			graph.getInputsOrOutputsOrStraightPulls().add(jaxbSequenceInputFile);
-
-			inSocket.setFromComponentId(sequenceInputComponentId);
-			inSocket.setFromSocketId(DEFAULT_OUT_SOCKET);
-			
-			//SocketUtilities.replaceInSocket(targetComponent, inSocket.getId(), newInSocket);
-			counter++;
-			
-			TypeBaseComponent sourceComponent = this.getComponentFromComponentId(link2.getSourceComponentId());
-			
-			TypeBaseOutSocket outSocket = link2.getOutSocket();
-			
-			SequenceOutputFile jaxbSequenceOutputFile = new SequenceOutputFile();
-			
-			String sequenceOutputComponentId = sourceComponent.getId() + "_" + counter + "_phase_" + sourceComponent.getPhase();
-			jaxbSequenceOutputFile.setId(sequenceOutputComponentId);
-			
-			jaxbSequenceOutputFile.setPhase(sourceComponent.getPhase());
-			
-			TypeOutputInSocket outputInSocket = new TypeOutputInSocket();
-			
-			outputInSocket.setFromComponentId(sourceComponent.getId());
-			outputInSocket.setFromSocketId(outSocket.getId());
-			outputInSocket.setId(DEFAULT_IN_SOCKET);
-			
-			jaxbSequenceOutputFile.getInSocket().add(outputInSocket);
-			
-			graph.getInputsOrOutputsOrStraightPulls().add(jaxbSequenceOutputFile);
-
-			counter++;
-			
-			addInSocketToOriginalLinks(sourceComponent.getId(), outSocket.getId(), inSocket);
-			addOutSocketToOriginalLinks(targetComponent.getId(), inSocket.getId(), outputSocket);
-			
-		}
-	}
-	
-	private void addInSocketToOriginalLinks(String sourceComponentId, String outSocketId, TypeBaseInSocket inSocket) {
-		for (LinkInfo link2 : phaseChangeOriginalLinks) {
-			if(link2.getOutSocketId().equals(outSocketId) && link2.getSourceComponentId().equals(sourceComponentId)){
-				link2.setInSocket(inSocket);
-			}
-		}
-		
+	public boolean isHiveComponentPresentInFlow() {
+		return isHiveComponentPresentInFlow;
 	}
 
-
-	private void addOutSocketToOriginalLinks(String targetComponentId, String inSocketPortId, TypeInputOutSocket outputSocket) {
-		for (LinkInfo link2 : phaseChangeOriginalLinks) {
-			if(link2.getInSocketId().equals(inSocketPortId) && link2.getComponentId().equals(targetComponentId)){
-				link2.setOutSocket(outputSocket);
-			}
-		}
-		
-	}
-
-
-	private void populatePhaseChangeComponents() {
-		
+	public List<? extends TypeBaseOutSocket> getOutputSocketFromComponentId(String componentId) {
 		for (TypeBaseComponent component : jaxbGraph) {
-			List<? extends TypeBaseInSocket> inSocketList = SocketUtilities
-					.getInSocketList(component);
-			
-			String phase = component.getPhase();
-
-			for (TypeBaseInSocket inSocket : inSocketList) {
-				// get the dependent component
-				TypeBaseComponent sourceComponent = getComponent(inSocket.getFromComponentId());
-				if(sourceComponent.getPhase().compareTo(phase) > 0){
-					throw new GraphTraversalException(
-							"Phase of source component cannot be greator then target component. Source component "
-									+ sourceComponent.getId()
-									+ " has phase "
-									+  sourceComponent.getPhase()
-									+ " and target component "
-									+ component.getId()
-									+ " has phase "
-									+ phase);
-				} 
-
-				TypeBaseOutSocket outSocket = SocketUtilities
-						.getOutSocket(sourceComponent, inSocket.getFromSocketId());
-				
-				LinkInfo link = new LinkInfo(component.getId(), inSocket.getId(), inSocket, sourceComponent.getId(), outSocket.getId(), outSocket);
-
-				if(sourceComponent.getPhase().compareTo(phase) < 0){
-					phaseChangeLinks.add(link);
-				}
-				phaseChangeOriginalLinks.add(link);
+			if (component.getId().equals(componentId)) {
+				List<? extends TypeBaseOutSocket> outSocket = SocketUtilities.getOutSocketList(component);
+				return outSocket;
 			}
 		}
+		throw new GraphTraversalException("OutputSocket not present for the component with id: " + componentId);
 	}
 
-	
+	public List<? extends TypeBaseInSocket> getInputSocketFromComponentId(String componentId) {
+		for (TypeBaseComponent component : jaxbGraph) {
+			if (component.getId().equals(componentId)) {
+				List<? extends TypeBaseInSocket> inSocket = SocketUtilities.getInSocketList(component);
+				return inSocket;
+			}
+		}
+
+		throw new GraphTraversalException("Input Socket not present for the component with id: " + componentId);
+	}
+
 	private class GraphTraversalException extends RuntimeException {
 
 		private static final long serialVersionUID = -2396594973435552339L;
@@ -363,34 +214,4 @@ public class JAXBTraversal {
 		}
 	}
 
-
-	public LinkInfo getPhaseLinkFromInputSocket(TypeBaseInSocket typeBaseInSocket) {
-		for (LinkInfo link2 : phaseChangeOriginalLinks) {
-			if(link2.getSourceComponentId().equals(typeBaseInSocket.getFromComponentId()) &&
-					link2.getOutSocketId().equals(typeBaseInSocket.getFromSocketId()))
-				return link2;
-		}
-		throw new GraphTraversalException("Link not found for input socket: " + typeBaseInSocket.toString());
-	}
-
-	public LinkInfo getPhaseLinkFromOutputSocket(TypeBaseOutSocket typeBaseOutSocket) {
-		for (LinkInfo link2 : phaseChangeOriginalLinks) {
-			if(link2.getOutSocket().equals(typeBaseOutSocket))
-				return link2;
-		}
-		
-		throw new GraphTraversalException("Link not found for output socket: " + typeBaseOutSocket.toString());
-	}
-	
-	public LinkInfo getPhaseLinkFromOutputSocket(String componentId, TypeBaseOutSocket typeBaseOutSocket) {
-		for (LinkInfo link2 : phaseChangeOriginalLinks) {
-			if(link2.getInSocket().getFromComponentId().equals(componentId) && link2.getOutSocket().getId().equals(typeBaseOutSocket.getId()))
-				return link2;
-		}
-		throw new GraphTraversalException("Link not found for output socket: " + typeBaseOutSocket.toString());
-	}
-
-	public boolean isHiveComponentPresentInFlow() {
-		return isHiveComponentPresentInFlow;
-	}
 }

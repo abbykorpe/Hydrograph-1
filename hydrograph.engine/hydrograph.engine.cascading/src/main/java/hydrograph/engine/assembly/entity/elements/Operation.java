@@ -37,7 +37,23 @@ public class Operation {
 	private String[] operationInputFields;
 	private String[] operationOutputFields;
 	private Properties operationProperties;
+	private String expression;
 
+	/**
+	 * @return the Expression
+	 */
+	public String getExpression() {
+		return expression;
+	}
+
+	/**
+	 * @param Expression
+	 *            the Expression to set
+	 */
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+	
 	/**
 	 * @return the operationClass
 	 */

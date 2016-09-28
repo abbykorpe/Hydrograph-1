@@ -61,7 +61,7 @@ public class InputFileDelimitedAssemblyGenerator extends InputAssemblyGeneratorB
 
 		LOG.trace("Initializing input file delimited entity for component: " + jaxbFileDelimited.getId());
 		inputFileDelimitedEntity.setComponentId(jaxbFileDelimited.getId());
-		inputFileDelimitedEntity.setPhase(jaxbFileDelimited.getPhase());
+		inputFileDelimitedEntity.setBatch(jaxbFileDelimited.getBatch());
 		inputFileDelimitedEntity.setPath(jaxbFileDelimited.getPath().getUri());
 		inputFileDelimitedEntity.setDelimiter(GeneralUtilities.parseHex(jaxbFileDelimited.getDelimiter().getValue()));
 		inputFileDelimitedEntity.setSafe(jaxbFileDelimited.getSafe() != null ? jaxbFileDelimited.getSafe().isValue() : false);

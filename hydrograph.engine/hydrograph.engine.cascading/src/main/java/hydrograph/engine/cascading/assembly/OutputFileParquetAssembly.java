@@ -55,7 +55,7 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 			fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileParquetEntity>(outputFileParquetEntity);
 			LOG.debug("OutputFile Parquet Component: [ Fields List : " + Arrays.toString(fieldsCreator.getFieldNames())
 					+ ", Field Types : " + Arrays.toString(fieldsCreator.getFieldDataTypes()) + " , Path : "
-					+ outputFileParquetEntity.getPath() + ", Phase : " + outputFileParquetEntity.getPhase() + "]");
+					+ outputFileParquetEntity.getPath() + ", Batch : " + outputFileParquetEntity.getBatch() + "]");
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(outputFileParquetEntity.toString());
 			}

@@ -51,6 +51,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="uniqueJobId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -63,7 +64,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
     "runtimeProperties",
     "inputsOrOutputsOrStraightPulls"
 })
-@XmlRootElement(name = "graph", namespace = "hydrograph/engine/jaxb/main")
+@XmlRootElement(name = "graph")
 public class Graph {
 
     protected TypeProperties runtimeProperties;
@@ -77,6 +78,8 @@ public class Graph {
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
     @XmlAttribute(name = "name", required = true)
     protected String name;
+    @XmlAttribute(name = "uniqueJobId")
+    protected String uniqueJobId;
 
     /**
      * Gets the value of the runtimeProperties property.
@@ -157,6 +160,30 @@ public class Graph {
      */
     public void setName(String value) {
         this.name = value;
+    }
+
+    /**
+     * Gets the value of the uniqueJobId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUniqueJobId() {
+        return uniqueJobId;
+    }
+
+    /**
+     * Sets the value of the uniqueJobId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUniqueJobId(String value) {
+        this.uniqueJobId = value;
     }
 
 }

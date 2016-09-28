@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "field_basic_type", namespace = "hydrograph/engine/jaxb/ohivetextfile")
+@XmlType(name = "field_basic_type")
 public class FieldBasicType {
 
     @XmlAttribute(name = "name", required = true)

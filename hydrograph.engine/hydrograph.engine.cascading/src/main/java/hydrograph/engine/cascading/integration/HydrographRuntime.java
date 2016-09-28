@@ -38,9 +38,7 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.props.PropertiesLoader;
-import hydrograph.engine.execution.tracking.JobInfo;
-import hydrograph.engine.execution.tracking.listener.ExecutionTrackingListener;
-import hydrograph.engine.execution.tracking.plugin.ExecutionTrackingPlugin;
+import hydrograph.engine.flow.utils.ExecutionTrackingListener;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
 import hydrograph.engine.flow.utils.FlowManipulationHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
@@ -48,12 +46,14 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.utilities.GeneralUtilities;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
+import hydrograph.engine.utilities.UserClassLoader;
 
 @SuppressWarnings({ "rawtypes" })
 public class HydrographRuntime implements HydrographRuntimeService {
 
+	final String EXECUTION_TRACKING = "hydrograph.execution.tracking";
 	private Properties hadoopProperties = new Properties();
-	private JobInfo jobInfo;
+	private ExecutionTrackingListener executionTrackingListener;
 	private FlowBuilder flowBuilder;
 	private RuntimeContext runtimeContext;
 	private String[] args;
@@ -66,7 +66,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		config = PropertiesLoader.getInstance();
 		LOG.info("Invoking initialize on runtime service");
 		initialize(config.getRuntimeServiceProperties(), this.args, hydrographJob, new HydrographDebugInfo(null), null,
-				null);
+				null,null);
 		LOG.info("Preparation started");
 		prepareToExecute();
 		LOG.info("Preparation completed. Now starting execution");
@@ -77,17 +77,19 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	}
 
 	public void initialize(Properties config, String[] args, HydrographJob hydrographJob,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath) {
+			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath,String UDFPath) {
 
 		AppProps.setApplicationName(hadoopProperties, hydrographJob.getJAXBObject().getName());
 
 		hadoopProperties.putAll(config);
-
-		SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(hydrographJob.getJAXBObject()
-				.getInputsOrOutputsOrStraightPulls());
 		
-		flowManipulationContext = new FlowManipulationContext(hydrographJob,
-				hydrographDebugInfo,schemaFieldHandler, jobId, basePath);
+		Configuration conf = new HadoopConfigProvider(hadoopProperties).getJobConf();
+		
+		SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(
+				hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
+
+		flowManipulationContext = new FlowManipulationContext(hydrographJob, hydrographDebugInfo, schemaFieldHandler,
+				jobId, basePath,conf);
 
 		hydrographJob = FlowManipulationHandler.execute(flowManipulationContext);
 
@@ -98,7 +100,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 			}
 		}
 
-		Configuration conf = new HadoopConfigProvider(hadoopProperties).getJobConf();
+		
 
 		JAXBTraversal traversal = new JAXBTraversal(hydrographJob.getJAXBObject());
 
@@ -132,7 +134,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		flowBuilder = new FlowBuilder();
 
 		runtimeContext = new RuntimeContext(hydrographJob, traversal, hadoopProperties, assemblyGeneratorFactory,
-				flowManipulationContext.getSchemaFieldHandler());
+				flowManipulationContext.getSchemaFieldHandler(),UDFPath);
 
 		LOG.info(
 				"Graph '" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "' initialized successfully");
@@ -154,27 +156,30 @@ public class HydrographRuntime implements HydrographRuntimeService {
 			LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION + " option is provided so skipping execution");
 			return;
 		}
-		if (ExecutionTrackingListener.isTrackingPluginPresent()) {
-			ExecutionTrackingPlugin.generateMapsForExecutionTracking(runtimeContext);
+		if (GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
+			executionTrackingListener = (ExecutionTrackingListener) UserClassLoader.loadAndInitClass(
+					GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING), "execution tracking");
+			executionTrackingListener.addListener(runtimeContext);
 		}
 		for (Cascade cascade : runtimeContext.getCascade()) {
-			if (ExecutionTrackingListener.isTrackingPluginPresent()) {
-				jobInfo=new JobInfo();
-				ExecutionTrackingListener.addListener(cascade,jobInfo);
-			}
 			cascade.complete();
 		}
 	}
 
 	@Override
 	public void oncomplete() {
-		flowBuilder.cleanup(runtimeContext);
-
+		flowBuilder.cleanup(flowManipulationContext.getTmpPath(),runtimeContext);
 	}
-	
+
+	/**
+	 * Returns the statistics of components in a job.
+	 * @see hydrograph.engine.execution.tracking.ComponentInfo
+	 */
 	@Override
-	public Object getJobInfo(){
-		return jobInfo;
+	public Object getExecutionStatus() {
+		if (executionTrackingListener != null)
+			return executionTrackingListener.getStatus();
+		return null;
 	}
 
 	public Cascade[] getFlow() {
@@ -196,12 +201,12 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		String flowStepDotPath = basePath + "/" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "/"
 				+ "flowstep";
 
-		int phaseCounter = 0;
+		int batchCounter = 0;
 		for (Cascade cascadingFlow : runtimeContext.getCascadingFlows()) {
 			for (Flow flows : cascadingFlow.getFlows()) {
-				flows.writeDOT(flowDotPath + "_" + phaseCounter);
-				flows.writeStepsDOT(flowStepDotPath + "_" + phaseCounter);
-				phaseCounter++;
+				flows.writeDOT(flowDotPath + "_" + batchCounter);
+				flows.writeStepsDOT(flowStepDotPath + "_" + batchCounter);
+				batchCounter++;
 			}
 		}
 	}
@@ -287,11 +292,14 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	 */
 	@Override
 	public void kill() {
+		LOG.info("Kill signal received");
 		if (runtimeContext.getCascade() != null) {
-			for (Cascade cascade : runtimeContext.getCascade()) {
+			for (Cascade cascade : runtimeContext.getCascade()) {				
+				LOG.info("Killing Cascading jobs: "+cascade.getID());
 				cascade.stop();
 			}
 		} else
+			LOG.info("No cascading jobs present to kill. Exiting code.");
 			System.exit(0);
 	}
 }

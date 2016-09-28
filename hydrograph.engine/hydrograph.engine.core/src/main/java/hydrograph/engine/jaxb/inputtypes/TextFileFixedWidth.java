@@ -64,7 +64,7 @@ import hydrograph.engine.jaxb.itffw.TypeFixedWidthBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "textFileFixedWidth", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
+@XmlType(name = "textFileFixedWidth", propOrder = {
     "path",
     "safe",
     "strict",

@@ -62,17 +62,17 @@ public class TransformAssemblyGenerator extends OperationAssemblyGeneratorBase {
 
 		LOG.trace("Initializing transform entity for component: " + jaxbTransform.getId());
 		transformEntity.setComponentId(jaxbTransform.getId());
-		transformEntity.setPhase(jaxbTransform.getPhase());
+		transformEntity.setBatch(jaxbTransform.getBatch());
 
 		// check if operation is present
-		if (jaxbTransform.getOperation() != null && jaxbTransform.getOperation().size() > 0) {
+		if (jaxbTransform.getOperationOrExpression() != null && jaxbTransform.getOperationOrExpression().size() > 0) {
 
 			LOG.trace("Operation(s) present for transform component: " + jaxbTransform.getId() + ", processing");
 			// set the number of operations in the transform component and set
 			// operation present to true
-			transformEntity.setNumOperations(jaxbTransform.getOperation().size());
+			transformEntity.setNumOperations(jaxbTransform.getOperationOrExpression().size());
 			transformEntity.setOperationPresent(true);
-			transformEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbTransform.getOperation()));
+			transformEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbTransform.getOperationOrExpression()));
 		} else {
 
 			LOG.trace("Operation not present for transform component: " + jaxbTransform.getId()

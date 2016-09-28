@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "keep_value", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "keep_value")
 @XmlEnum
 public enum KeepValue {
 

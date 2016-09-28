@@ -65,7 +65,7 @@ public class InputFileFixedWidthAssemblyGenerator extends
 				+ jaxbInputFileFixedWidth.getId());
 		inputFileFixedWidthEntity.setComponentId(jaxbInputFileFixedWidth
 				.getId());
-		inputFileFixedWidthEntity.setPhase(jaxbInputFileFixedWidth.getPhase());
+		inputFileFixedWidthEntity.setBatch(jaxbInputFileFixedWidth.getBatch());
 		inputFileFixedWidthEntity.setPath(jaxbInputFileFixedWidth.getPath()
 				.getUri());
 		inputFileFixedWidthEntity

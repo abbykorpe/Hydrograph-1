@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-pbe-operation", namespace = "hydrograph/engine/jaxb/partitionByExpression")
+@XmlType(name = "type-pbe-operation")
 public class TypePbeOperation
     extends TypeTransformOperation
 {

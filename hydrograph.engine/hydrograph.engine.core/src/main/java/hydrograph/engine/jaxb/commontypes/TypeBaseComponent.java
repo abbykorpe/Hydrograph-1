@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="phase" type="{http://www.w3.org/2001/XMLSchema}string" default="0" />
+ *       &lt;attribute name="batch" type="{http://www.w3.org/2001/XMLSchema}string" default="0" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-component", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "type-base-component")
 @XmlSeeAlso({
     TypeInputComponent.class,
     TypeOutputComponent.class,
@@ -51,8 +51,8 @@ public class TypeBaseComponent {
 
     @XmlAttribute(name = "id", required = true)
     protected String id;
-    @XmlAttribute(name = "phase")
-    protected String phase;
+    @XmlAttribute(name = "batch")
+    protected String batch;
 
     /**
      * Gets the value of the id property.
@@ -79,31 +79,31 @@ public class TypeBaseComponent {
     }
 
     /**
-     * Gets the value of the phase property.
+     * Gets the value of the batch property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPhase() {
-        if (phase == null) {
+    public String getBatch() {
+        if (batch == null) {
             return "0";
         } else {
-            return phase;
+            return batch;
         }
     }
 
     /**
-     * Sets the value of the phase property.
+     * Sets the value of the batch property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPhase(String value) {
-        this.phase = value;
+    public void setBatch(String value) {
+        this.batch = value;
     }
 
 }

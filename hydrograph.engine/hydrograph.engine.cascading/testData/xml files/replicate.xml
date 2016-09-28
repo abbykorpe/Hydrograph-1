@@ -19,7 +19,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
 
-	<input id="input1" phase="1" xsi:type="it:file-fixed-width">
+	<input id="input1" batch="1" xsi:type="it:file-fixed-width">
 		<outSocket id="inout1">
 			<schema name="klk">
 				<field name="f1" type="java.lang.String" length="4" />
@@ -32,7 +32,7 @@
 	</input>
 
 	<straight-pull id="replicate" xsi:type="spt:replicate"
-		phase="1">
+		batch="1">
 		<inSocket id="in0" fromComponentId="input1" fromSocketId="inout1" />
 		<outSocket id="sdf">
 			<copyOfInsocket inSocketId="in0" />

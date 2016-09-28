@@ -19,7 +19,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
-	<inputs id="input1" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0" type="out">
 			<schema name="abc">
 				<field name="f1" type="java.lang.String" />
@@ -31,7 +31,7 @@
 	</inputs>
 
 	<straightPulls id="clone" xsi:type="spt:clone"
-		phase="0">
+		batch="0">
 		<inSocket id="in0" fromComponentId="input1" fromSocketId="out0" />
 		<outSocket id="sdf">
 			<copyOfInsocket inSocketId="in0" />

@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-fixedwidth-in-socket", namespace = "hydrograph/engine/jaxb/otffw")
+@XmlType(name = "type-output-fixedwidth-in-socket")
 public class TypeOutputFixedwidthInSocket
     extends TypeOutputInSocket
 {

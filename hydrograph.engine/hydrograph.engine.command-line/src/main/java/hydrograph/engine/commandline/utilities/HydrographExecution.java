@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.commandline.utilities;
 
+import java.util.List;
+
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
+import hydrograph.engine.execution.tracking.ComponentInfo;
 import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.utilities.GeneralUtilities;
 
@@ -64,13 +67,13 @@ public class HydrographExecution {
 		bhsDebug = createHydrographDebugInfo(args);
 		initialization(args, hydrographJob, bhsDebug,
 				XmlParsingUtils.getJobId(args),
-				XmlParsingUtils.getBasePath(args));
+				XmlParsingUtils.getBasePath(args),XmlParsingUtils.getUDFPath(args));
 		prepareToExecute();
 		finalExecute();
 	}
 	
-	public JobInfo getJobInfo(){
-		return (JobInfo) runtimeService.getJobInfo();
+	public List<ComponentInfo> getExecutionStatus(){
+		return (List<ComponentInfo>) runtimeService.getExecutionStatus();
 	}
 
 	private HydrographJob createHydrographJob(String[] args) throws JAXBException {
@@ -86,11 +89,11 @@ public class HydrographExecution {
 	}
 
 	private void initialization(String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo bhsDebug, String jobId, String basePath) {
+			HydrographDebugInfo bhsDebug, String jobId, String basePath, String UDFPath) {
 		LOG.info("Invoking initialize on runtime service");
 		runtimeService.initialize(
 				propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
-				bhsDebug, jobId,basePath);
+				bhsDebug, jobId,basePath,UDFPath);
 	}
 
 	private void prepareToExecute()  {
@@ -101,12 +104,12 @@ public class HydrographExecution {
 	private void finalExecute()  {
 		try {
 			runtimeService.execute();
+			LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
+					+ "' executed successfully!");
 		} finally {
 			LOG.info("Invoking on complete for cleanup");
 			runtimeService.oncomplete();
 		}
-		LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
-				+ "' executed successfully!");
 	}
 
 	private void loadService() {
