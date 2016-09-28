@@ -141,7 +141,7 @@ public class TransformWidget extends AbstractWidget {
 					showHideErrorSymbol(widgets);
                	}	
 
-				if(!oldATMappings.equals(transformDialog.getATMapping()))
+				if(!oldATMappings.equals(transformDialog.getATMapping()) && returncode==0)
 				{
 					propertyDialogButtonBar.enableApplyButton(true);
 					

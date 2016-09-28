@@ -61,13 +61,11 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -112,8 +110,10 @@ import org.eclipse.swt.widgets.Widget;
  * @author Bitwise
  *
  */
+
 public class TransformDialog extends Dialog implements IOperationClassDialog {
 
+	private static final String EXITING_TRANSFORM_EDITOR = "Exiting Transform Editor";
 	private static final String PLEASE_SELECT_PARAMETER_FIELD_S_ONLY = "Please select Parameter field(s) only";
 	private static final String OUTPUT_DELETE_BUTTON = "outputDeleteButton";
 	private static final String OUTPUT_ADD_BUTTON = "outputAddButton";
@@ -177,6 +177,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private Button deleteLabel;
 	private Button addLabel;
 	private Button viewTransform;
+	private TransformMapping oldTransformMapping;
 	/**
     * @param parentShell
     * @param component
@@ -188,6 +189,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.transformMapping = atMapping;
+		oldTransformMapping=(TransformMapping) atMapping.clone();
 		isYesButtonPressed = false;
 		isNoButtonPressed = false;
 		this.component = component;
@@ -1949,9 +1951,6 @@ private void operationInputTableAddButton(
 
 	@Override
 	protected void okPressed() {
-			transformMapping = new TransformMapping((List<InputField>) inputFieldTableViewer.getInput(),
-			transformMapping.getMappingSheetRows(), transformMapping.getMapAndPassthroughField(),
-			transformMapping.getOutputFieldList());
 			okPressed = true;
 			super.okPressed();
 	}
@@ -2167,5 +2166,28 @@ private void operationInputTableAddButton(
     	transformMapping.getMappingSheetRows().add(mappingSheetRowForExpression);
 		}
 		addExpandItem(scrolledComposite);
+	}
+	
+	/**
+	 * 
+	 * Close method get called on closing the dialog.
+	 * 
+	 */
+	public boolean close() {
+		if (preClose()==SWT.YES) {
+			return super.close();
+		}
+		return false;
+	}
+	private int preClose()
+	{
+		if (!oldTransformMapping.equals(transformMapping)&&!okPressed)
+		{	
+		MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_QUESTION | SWT.YES|SWT.NO);
+		messageBox.setText(EXITING_TRANSFORM_EDITOR);
+		messageBox.setMessage(Messages.ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT);
+		return messageBox.open();
+		}
+		return SWT.YES;
 	}
 }

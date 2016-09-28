@@ -58,6 +58,8 @@ import org.eclipse.jdt.ui.actions.OpenNewClassWizardAction;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -368,7 +370,7 @@ public class FilterOperationClassUtility  {
 		eltSuDefaultSubgroupComposite.attachWidget(fileNameTextBox);
 		Text fileName = (Text) fileNameTextBox.getSWTWidgetControl();
 		fileName.setSize(10, 100);
-
+        addModifyListenerToFileNameTextBox(fileName);
 		GridData layoutData = (GridData)fileName.getLayoutData();
 		layoutData.horizontalIndent=6;
 		
@@ -427,6 +429,16 @@ public class FilterOperationClassUtility  {
 		} catch (Exception e) {
 			logger.error("Fail to attach listener "+e); 
 		} 
+	}
+
+	private void addModifyListenerToFileNameTextBox(Text fileName) {
+		fileName.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Text classNameTextBox=(Text)e.widget;
+				openBtn.setEnabled(StringUtils.isNotBlank(classNameTextBox.getText())&&!btnCheckButton.getSelection());
+			}
+		});
 	}
 
 	private static void setIJavaProject() {
@@ -500,6 +512,13 @@ public class FilterOperationClassUtility  {
 
 	public void setFileNameTextBoxValue(String fileNameTextBoxValue) {
 		this.fileNameTextBoxValue = fileNameTextBoxValue;
+	}
+
+	/**
+	 * @return the openBtn
+	 */
+	public Button getOpenBtn() {
+		return openBtn;
 	}
 	
 }
