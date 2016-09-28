@@ -31,9 +31,7 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 	
 	@Override
 	protected void addSelectionHandles() {
-		if(linkSelectedColor.isDisposed()){
-			linkSelectedColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
-		}
+		linkSelectedColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 		getLinkFigure().setForegroundColor(linkSelectedColor);
 	}
 
@@ -45,8 +43,5 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 	protected void removeSelectionHandles() {
 		super.removeSelectionHandles();
 		getLinkFigure().setForegroundColor(ColorConstants.black);
-		if(linkSelectedColor!=null){
-			linkSelectedColor.dispose();
-		}
 	}
 }
