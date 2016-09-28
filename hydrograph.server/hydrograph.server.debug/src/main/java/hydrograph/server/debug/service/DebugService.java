@@ -458,6 +458,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				String uniqueId = batchID + "_" + UUID;
 				String linugalMetaDataPath = basePath + "/filter/" + UUID;
 
+				System.out.println("Path to  be read :   " + basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId);
 				String fieldNames[] = getHeader(basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId,
 						username, password);
 				try {
