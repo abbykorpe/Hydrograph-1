@@ -170,10 +170,10 @@ public class ComponentFigure extends Figure implements Validator {
 	}
 
 	private void setInitialColor() {
-		componentColor = ELTColorConstants.BG_COMPONENT;
-		borderColor = ELTColorConstants.COMPONENT_BORDER;
-		selectedComponentColor = ELTColorConstants.BG_COMPONENT_SELECTED;
-		selectedBorderColor = ELTColorConstants.COMPONENT_BORDER_SELECTED;
+		componentColor = new Color(null, ELTColorConstants.LIGHT_GREY_RGB[0], ELTColorConstants.LIGHT_GREY_RGB[1], ELTColorConstants.LIGHT_GREY_RGB[2]);
+		borderColor = new Color(null, ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
+		selectedComponentColor = new Color(null, ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[2]);
+		selectedBorderColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 	}
 
 	/**
@@ -419,6 +419,25 @@ public class ComponentFigure extends Figure implements Validator {
 		}
 		if(statusImage!=null){
 			this.statusImage.dispose();
+		}
+	}
+	
+	/**
+	 * Calls dispose method on Images. Called by EditPart.
+	 */
+	public void disposeColors(){
+		
+		if(componentColor!=null){
+			this.componentColor.dispose();
+		}
+		if(borderColor!=null){
+			this.borderColor.dispose();
+		}
+		if(selectedComponentColor!=null){
+			this.selectedComponentColor.dispose();
+		}
+		if(selectedBorderColor!=null){
+			this.selectedBorderColor.dispose();
 		}
 	}
 	/**
