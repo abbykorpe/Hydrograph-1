@@ -458,6 +458,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				String uniqueId = batchID + "_" + UUID;
 				String linugalMetaDataPath = basePath + "/filter/" + UUID;
 
+				System.out.println("Path to  be read :   " + basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId);
 				String fieldNames[] = getHeader(basePath + "/debug/" + jobId + "/" + componentId + "_" + socketId,
 						username, password);
 				try {
@@ -526,14 +527,22 @@ public class DebugService implements PrivilegedAction<Object> {
 				}
 				return header;
 			}
+			private Path filterOutSuccessFile(FileStatus[] fileStatus){
+				for(FileStatus status:fileStatus){
+					if(status.getPath().getName().toUpperCase().contains("_SUCCESS"))
+						continue;
+					else
+						return	status.getPath();
+				}				
+				return null;
+			}
 
 			private String[] getHeaderArray(Path path, Configuration conf) throws IOException {
 				FileSystem fs = FileSystem.get(conf);
 				FileStatus[] status = fs.listStatus(path);
 				String line = "";
 				try {
-
-					BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(status[0].getPath())));
+					BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(filterOutSuccessFile(status))));
 
 					line = br.readLine();
 					br.close();
