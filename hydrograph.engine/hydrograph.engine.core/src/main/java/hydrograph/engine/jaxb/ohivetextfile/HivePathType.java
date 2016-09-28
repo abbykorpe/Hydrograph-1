@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hive_path_type")
+@XmlType(name = "hive_path_type", namespace = "hydrograph/engine/jaxb/ohivetextfile")
 public class HivePathType {
 
     @XmlAttribute(name = "uri", required = true)

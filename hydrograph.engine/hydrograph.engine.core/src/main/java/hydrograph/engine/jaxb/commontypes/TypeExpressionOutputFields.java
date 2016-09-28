@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-expression-output-fields", propOrder = {
+@XmlType(name = "type-expression-output-fields", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "field"
 })
 public class TypeExpressionOutputFields {

@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "generateSequence")
+@XmlType(name = "generateSequence", namespace = "hydrograph/engine/jaxb/operationstypes")
 public class GenerateSequence
     extends TypeOperationsComponent
 {

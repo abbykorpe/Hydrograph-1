@@ -39,7 +39,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-mixed-field")
+@XmlType(name = "type-mixed-field", namespace = "hydrograph/engine/jaxb/ifmixedscheme")
 public class TypeMixedField
     extends TypeBaseField
 {

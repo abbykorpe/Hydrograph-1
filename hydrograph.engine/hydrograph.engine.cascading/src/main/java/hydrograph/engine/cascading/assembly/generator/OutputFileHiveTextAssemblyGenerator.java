@@ -90,8 +90,8 @@ public class OutputFileHiveTextAssemblyGenerator extends
 		outputFileHiveTextEntity
 				.setOverWrite(!(jaxbHiveTextFile.getOverWrite() != null && (TrueFalse.FALSE)
 						.equals(jaxbHiveTextFile.getOverWrite().getValue())));
-		outputFileHiveTextEntity.setDelimiter(GeneralUtilities
-				.parseHex(jaxbHiveTextFile.getDelimiter().getValue()));
+		outputFileHiveTextEntity.setDelimiter(jaxbHiveTextFile.getDelimiter() != null
+				? GeneralUtilities.parseHex(jaxbHiveTextFile.getDelimiter().getValue()) : null);
 		outputFileHiveTextEntity
 				.setQuote(jaxbHiveTextFile.getQuote() != null ? jaxbHiveTextFile
 						.getQuote().getValue() : "");

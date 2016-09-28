@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "boolean-value-type")
+@XmlType(name = "boolean-value-type", namespace = "hydrograph/engine/jaxb/commontypes")
 public class BooleanValueType {
 
     @XmlAttribute(name = "value")

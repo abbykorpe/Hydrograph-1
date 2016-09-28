@@ -77,7 +77,7 @@ import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hplsql", propOrder = {
+@XmlType(name = "hplsql", namespace = "hydrograph/engine/jaxb/commandtypes", propOrder = {
     "command",
     "execute"
 })

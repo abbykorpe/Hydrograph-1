@@ -39,7 +39,7 @@ import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
  *       &lt;sequence>
  *         &lt;element name="partitionKeys" type="{hydrograph/engine/jaxb/ihivetextfile}hive_partition_fields_type" minOccurs="0"/>
  *         &lt;element name="partitionFilter" type="{hydrograph/engine/jaxb/ihivetextfile}hive_partition_filter_type" minOccurs="0"/>
- *         &lt;element name="delimiter">
+ *         &lt;element name="delimiter" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -72,7 +72,7 @@ import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hiveTextFile", propOrder = {
+@XmlType(name = "hiveTextFile", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "partitionKeys",
     "partitionFilter",
     "delimiter",
@@ -90,7 +90,6 @@ public class HiveTextFile
 
     protected HivePartitionFieldsType partitionKeys;
     protected HivePartitionFilterType partitionFilter;
-    @XmlElement(required = true)
     protected HiveTextFile.Delimiter delimiter;
     @XmlElement(required = true)
     protected HiveType databaseName;

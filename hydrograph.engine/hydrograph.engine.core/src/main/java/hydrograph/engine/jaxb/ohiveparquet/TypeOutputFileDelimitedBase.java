@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-file-delimited-base")
+@XmlType(name = "type-output-file-delimited-base", namespace = "hydrograph/engine/jaxb/ohiveparquet")
 @XmlSeeAlso({
     ParquetHiveFile.class
 })

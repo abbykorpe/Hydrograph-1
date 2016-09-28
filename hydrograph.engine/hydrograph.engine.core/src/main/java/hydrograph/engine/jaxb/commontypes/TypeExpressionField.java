@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-expression-field")
+@XmlType(name = "type-expression-field", namespace = "hydrograph/engine/jaxb/commontypes")
 public class TypeExpressionField {
 
     @XmlAttribute(name = "name", required = true)

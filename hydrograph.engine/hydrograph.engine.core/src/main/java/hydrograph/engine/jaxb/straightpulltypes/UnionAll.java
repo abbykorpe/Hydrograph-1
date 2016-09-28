@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "unionAll")
+@XmlType(name = "unionAll", namespace = "hydrograph/engine/jaxb/straightpulltypes")
 public class UnionAll
     extends TypeStraightPullComponent
 {

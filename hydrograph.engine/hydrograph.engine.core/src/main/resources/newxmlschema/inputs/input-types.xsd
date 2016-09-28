@@ -205,7 +205,7 @@
 					<xs:element name="partitionFilter"
 						type="ihivetextfile:hive_partition_filter_type" minOccurs="0"
 						maxOccurs="1" />
-					<xs:element name="delimiter">
+					<xs:element name="delimiter" minOccurs="0" maxOccurs="1">
 						<xs:complexType>
 							<xs:attribute name="value" type="xs:string" use="required" />
 						</xs:complexType>
