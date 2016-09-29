@@ -16,6 +16,7 @@ package hydrograph.ui.graph.action.subjob;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -127,22 +128,23 @@ public class SubJobUpdateAction extends SelectionAction {
 				filePath=(String) selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubJobUtility subJobUtility=new SubJobUtility();
 				Container container=subJobUtility.updateSubjobPropertyAndGetSubjobContainer(null,filePath, selectedSubjobComponent);
-				for (int i = 0; i < container.getChildren().size(); i++) {
-					if (!(container.getChildren().get(i) instanceof InputSubjobComponent || container.getChildren()
-							.get(i) instanceof OutputSubjobComponent)) {
-						if (StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), container.getChildren().get(i)
-								.getProperties().get(Messages.VALIDITY_STATUS).toString())
-								|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(), container.getChildren()
-										.get(i).getProperties().get(Messages.VALIDITY_STATUS).toString())) {
-							selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
-									ValidityStatus.ERROR.name());
-							break;
-						} else {
-							selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
-									ValidityStatus.VALID.name());
-						}
-					}
-				}
+				SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(container,selectedSubjobComponent);
+//				for (int i = 0; i < container.getChildren().size(); i++) {
+//					if (!(container.getChildren().get(i) instanceof InputSubjobComponent || container.getChildren()
+//							.get(i) instanceof OutputSubjobComponent)) {
+//						if (StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), container.getChildren().get(i)
+//								.getProperties().get(Messages.VALIDITY_STATUS).toString())
+//								|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(), container.getChildren()
+//										.get(i).getProperties().get(Messages.VALIDITY_STATUS).toString())) {
+//							selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
+//									ValidityStatus.ERROR.name());
+//							break;
+//						} else {
+//							selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
+//									ValidityStatus.VALID.name());
+//						}
+//					}
+//				}
 				componentEditPart.changePortSettings();
 				componentEditPart.updateComponentStatus();
 				componentEditPart.refresh();
