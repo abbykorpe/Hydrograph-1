@@ -55,6 +55,10 @@ import org.xml.sax.SAXException;
  * @author Bitwise
  * 
  */
+/**
+ * @author soniar
+ *
+ */
 public class SubjobUiConverterUtil {
 	
 	
@@ -193,6 +197,12 @@ public class SubjobUiConverterUtil {
 		}
 		return runtimeMap;
 	}
+	
+	
+	/**
+	 * @param subJobContainer
+	 * @param uiComponent
+	 */
 	public static void showOrHideErrorSymbolOnComponent(Container subJobContainer, Component uiComponent) {
 		if (subJobContainer == null) {
 			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
