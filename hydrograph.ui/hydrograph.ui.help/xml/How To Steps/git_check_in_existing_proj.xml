@@ -13,18 +13,8 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="How To Steps">
-   <anchor id="CreateJob"/>
-   <anchor id="CreateProject"/>
-   <anchor id="ImportProject"/>
-   <anchor id="GitCreateNewProj"/>
-   <anchor id="GitChkOutExstProj"/>
-   <anchor id="GitChkInNewProj"/>
-   <anchor id="GitChkInExstProj"/>
-   <anchor id="RunJobCluster"/>
-   <anchor id="RunJobLocally"/>
-   <anchor id="ParameterizeComponentProperties"/>
-   <anchor id="PassParameterstoOperationClass"/>
-   <anchor id="ImportEngineXMLtoUI"/>
-   <anchor id="PassHadoopPropertiestoComponent"/>
+<toc label="GIT- How to check in changes into existing Hydrograph project" link_to="xml/How To Steps/howToSteps.xml#GitChkInExstProj">
+   <topic href="html/How To Steps/GIT-How_to_check_in_changes_to_existing_Hydrograph_project.html" label="GIT- How to check in changes into existing Hydrograph project">
+   </topic> 
+	
 </toc>

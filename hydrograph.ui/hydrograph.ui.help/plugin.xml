@@ -156,11 +156,17 @@
             file="xml/How To Steps/howToSteps.xml"
             primary="true">
       </toc>
-      <toc
-            file="xml/How To Steps/git_howToCheckinJobsProject.xml">
+	  <toc
+            file="xml/How To Steps/git_create_new_project.xml">
       </toc>
       <toc
-            file="xml/How To Steps/git_howToCheckoutProject.xml">
+            file="xml/How To Steps/git_checkout_exst_prj.xml">
+      </toc>
+	   <toc
+            file="xml/How To Steps/git_check_in_new_proj.xml">
+      </toc>
+	   <toc
+            file="xml/How To Steps/git_check_in_existing_proj.xml">
       </toc>
       <toc
             file="xml/How To Steps/howToCreateAJob.xml">
