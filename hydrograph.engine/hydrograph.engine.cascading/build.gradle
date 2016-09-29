@@ -57,6 +57,7 @@ test {
     exclude '**/OutputFileHiveParquetFileTest*'
     exclude '**/InputFileHiveTextFileTest*'
     exclude '**/OutputFileHiveTextFileTest*'
+	exclude '**/RunProgramTest*'
 }
 
 uploadArchives {
@@ -78,13 +79,23 @@ repositories {
 }
 
 dependencies {
+	 compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion, changing: true
+     testCompile( group: 'org.apache.tez', name: 'tez-tests', version: tezVersion, classifier: 'tests' )
+    testCompile( group: 'org.apache.tez', name: 'tez-api', version: tezVersion )
+    testCompile( group: 'org.apache.tez', name: 'tez-dag', version: tezVersion )
+    
+	compile group: 'cascading', name: 'cascading-jdbc-core', version: '3.0.0'
+ 	compile group: 'cascading', name: 'cascading-jdbc-mysql', version: '3.0.0'
+  	compile group: 'cascading', name: 'cascading-jdbc-redshift', version: '3.0.0'
+
+		
 	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'
     compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
     compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
-    compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion
     //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
-    compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
+ 
+ compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
 
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion //required for plunger
 

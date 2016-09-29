@@ -78,6 +78,8 @@ public class OutputEntityUtils {
 			
 			setTypeofLengthDelimeter(list,fields,i);
 			
+			setColDef(list,fields,i);
+			
 			fieldList.add(fields);
 		}
 
@@ -198,6 +200,24 @@ public class OutputEntityUtils {
 			fields.setFieldLength(Integer.parseInt(hashmap.get(new QName("length"))));
 	}
 
+	
+	/**
+	 * @param list
+	 *            of {@link TypeBaseField} objects which contain the fields type
+	 *            information
+	 * @param fields
+	 *            of {@link SchemaField} objects which contain the fields type
+	 *            information
+	 * @param i
+	 *            index
+	 */
+	private static void setColDef(List<Object> list, SchemaField fields, int i) {
+		Map<QName, String> hashmap = ((TypeBaseField) list.get(i)).getOtherAttributes();
+		if (hashmap.containsKey(new QName("colDef")))
+			fields.setColDef((hashmap.get(new QName("colDef"))));
+	}
+	
+	
 	/**
 	 * Extracts the {@link Properties} object from the {@link TypeProperties}
 	 * object passed as a parameter

@@ -42,6 +42,7 @@ public class SchemaField implements Cloneable {
 	private String fieldDefaultValue;
 	private String fieldToRangeValue;
 	private String fieldFromRangeValue;
+	private String colDef;
 
 	public SchemaField(String fieldName, String fieldDataType) {
 		this.fieldName = fieldName;
@@ -219,6 +220,21 @@ public class SchemaField implements Cloneable {
 		this.typeFieldLengthDelimiter = typeFieldLengthDelimiter;
 	}
 
+	/**
+	 * @return the colDef
+	 */
+	public String getColDef() {
+		return colDef;
+	}
+	
+	/**
+	 * @param colDef
+	 *            the colDef to set
+	 */
+	public void setColDef(String colDef) {
+		this.colDef = colDef;
+	}
+	
 	public String toString() {
 		StringBuilder str = new StringBuilder("schema field: ");
 		str.append("name: " + fieldName);

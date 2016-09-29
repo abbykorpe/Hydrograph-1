@@ -154,6 +154,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeKeyFields }
+     * 
+     */
+    public TypeKeyFields createTypeKeyFields() {
+        return new TypeKeyFields();
+    }
+    
+    /**
      * Create an instance of {@link TypeFieldName }
      * 
      */
@@ -202,6 +210,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ElementValueIntegerType }
+     * 
+     */
+    public ElementValueIntegerType createElementValueIntegerType() {
+        return new ElementValueIntegerType();
+    }
+
+    /**
      * Create an instance of {@link TypeOperationOutputFields }
      * 
      */
@@ -239,6 +255,14 @@ public class ObjectFactory {
      */
     public TypeInputOutSocket createTypeInputOutSocket() {
         return new TypeInputOutSocket();
+    }
+    
+    /**
+     * Create an instance of {@link ElementValueStringType }
+     * 
+     */
+    public ElementValueStringType createElementValueStringType() {
+        return new ElementValueStringType();
     }
 
     /**

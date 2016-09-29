@@ -42,7 +42,11 @@ public enum ComponentAssemblyMapping {
 	HPLSQL(AssemblyType.HPLSQL),AVROFILE(AssemblyType.AVROFILE),
 	HIVETEXTFILE(AssemblyType.HIVETEXTFILE),
 	PARQUETHIVEFILE(AssemblyType.PARQUETHIVEFILE),
-	PARQUETFILE(AssemblyType.PARQUETFILE);
+	PARQUETFILE(AssemblyType.PARQUETFILE),
+	MYSQL(AssemblyType.MYSQL),
+	REDSHIFT(AssemblyType.REDSHIFT),
+	ORACLE(AssemblyType.ORACLE);
+	
 
 	private final AssemblyType assemblyType;
 
@@ -253,6 +257,43 @@ public enum ComponentAssemblyMapping {
 					return GENERATOR + ".InputFileParquetAssemblyGenerator";
 				} else {
 					return GENERATOR + ".OutputFileParquetAssemblyGenerator";
+				}
+			}
+		},
+		
+		MYSQL {
+			@Override
+			public String getMapping(TypeBaseComponent typeBaseComponent) {
+				if (typeBaseComponent.getClass().getCanonicalName().contains("inputtypes")
+						&& typeBaseComponent.getClass().getSimpleName().equals("Mysql")) {
+					return GENERATOR + ".InputMysqlAssemblyGenerator";
+				} else {
+					return GENERATOR + ".OutputMysqlAssemblyGenerator";
+				}
+			}
+		},
+		
+		REDSHIFT {
+			@Override
+			public String getMapping(TypeBaseComponent typeBaseComponent) {
+				if (typeBaseComponent.getClass().getCanonicalName().contains("inputtypes")
+						&& typeBaseComponent.getClass().getSimpleName().equals("Redshift")) {
+					return GENERATOR + ".InputRedshiftAssemblyGenerator";
+				} else {
+					return GENERATOR + ".OutputRedshiftAssemblyGenerator";
+				}
+			}
+		},
+		
+		
+		ORACLE {
+			@Override
+			public String getMapping(TypeBaseComponent typeBaseComponent) {
+				if (typeBaseComponent.getClass().getCanonicalName().contains("inputtypes")
+						&& typeBaseComponent.getClass().getSimpleName().equals("Oracle")) {
+					return GENERATOR + ".InputOracleAssemblyGenerator";
+				} else {
+					return GENERATOR + ".OutputOracleAssemblyGenerator";
 				}
 			}
 		};
