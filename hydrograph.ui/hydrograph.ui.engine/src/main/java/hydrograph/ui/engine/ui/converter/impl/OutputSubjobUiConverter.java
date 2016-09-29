@@ -116,28 +116,7 @@ public class OutputSubjobUiConverter extends UiConverter {
 		getInPort((TypeOutputComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
-		if (subJobContainer == null) {
-			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
-		} else {
-			for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
-				if (!(subJobContainer.getChildren().get(i) instanceof InputSubjobComponent || subJobContainer
-						.getChildren().get(i) instanceof OutputSubjobComponent)) {
-					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), subJobContainer.getChildren()
-							.get(i).getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
-							|| StringUtils.equalsIgnoreCase(
-									UIComponentsConstants.WARN.value(),
-									subJobContainer.getChildren().get(i).getProperties()
-											.get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())) {
-						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.ERROR.value());
-						uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
-						break;
-					} else {
-						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),UIComponentsConstants.VALID.value());
-						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
-					}
-				}
-			}
-		}
+		SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(subJobContainer,uiComponent);
 	
 	}
 	private void getInPort(TypeOutputComponent typeOutputComponent) {

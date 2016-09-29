@@ -23,6 +23,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
@@ -1634,22 +1635,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath().toString();
 				IPath subJobFilePath=new Path(path);
 				SubJobUtility subJobUtility=new SubJobUtility();
-				for (int i = 0; i < container.getChildren().size(); i++) {
-					if (!(container.getChildren().get(i) instanceof InputSubjobComponent || container.getChildren()
-							.get(i) instanceof OutputSubjobComponent)) {
-						if (StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(), container.getChildren().get(i)
-								.getProperties().get(Messages.VALIDITY_STATUS).toString())
-								|| StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), container.getChildren()
-										.get(i).getProperties().get(Messages.VALIDITY_STATUS).toString())) {
-							subjobComponent.setValidityStatus(ValidityStatus.ERROR.name());
-							subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.ERROR.name());
-							break;
-						} else {
-							subjobComponent.setValidityStatus(ValidityStatus.VALID.name());
-							subjobComponent.getProperties().put(Messages.VALIDITY_STATUS, ValidityStatus.VALID.name());
-						}
-					}
-				}
+				SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(container,subjobComponent);
 				if (subjobComponent.getComponentEditPart() != null) {
 					((ComponentEditPart) subjobComponent.getComponentEditPart()).updateComponentStatus();
 				}

@@ -168,7 +168,7 @@ public class SubJobAction extends SelectionAction{
 					validityStatus = ValidityStatus.ERROR.name();
 					break;
 				} else {
-					validityStatus = ValidityStatus.WARN.name();
+					validityStatus = ValidityStatus.VALID.name();
 				}
 			}
 	   	execute(createSubJobCommand(getSelectedObjects())); 
