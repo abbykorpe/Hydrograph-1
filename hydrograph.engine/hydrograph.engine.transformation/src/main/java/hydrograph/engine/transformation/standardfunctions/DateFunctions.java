@@ -66,6 +66,18 @@ public class DateFunctions {
 		Date date = new Date();
 		return sdf.format(date);
 	}
+	
+	/**
+	 * Returns current date and time in the required format
+	 * 
+	 * @param dateFormat the format for the date
+	 * @return current date and time in the required format
+	 */
+	public static String now(String dateFormat) {
+		DateFormat sdf = new SimpleDateFormat(dateFormat);
+		Date date = new Date();
+		return sdf.format(date);
+	}
 
 	/**
 	 * Formats and converts a date value into string representation in the
