@@ -380,7 +380,7 @@ public abstract class AbstractWidget {
 	 	}
 	}
 	public boolean validateAgainstValidationRule(Object object){
-		boolean isComponentNotValid = Boolean.FALSE;
+		boolean isComponentInvalid = Boolean.FALSE;
 		ComponentCacheUtil.INSTANCE.getProperties(getComponent().getComponentName());
 		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
 							getComponent().getComponentName(),getPropertyName());
@@ -397,10 +397,10 @@ public abstract class AbstractWidget {
 				// NOTE : here if any of the property is not valid
 				// then whole component is not valid
 				if (status == false) {
-					isComponentNotValid = Boolean.TRUE;
+					isComponentInvalid = Boolean.TRUE;
 				}
 			}
-		return isComponentNotValid;
+		return isComponentInvalid;
 	}
 	
 	

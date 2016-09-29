@@ -932,6 +932,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 catch(IllegalArgumentException e)
 				 {
 					 WidgetUtility.createMessageBox(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,"Error",SWT.ICON_ERROR|SWT.OK);
+					 logger.error(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,e);
 					 return null;
 				 }	
 				 if(relativePath!=null)
