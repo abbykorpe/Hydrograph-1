@@ -101,7 +101,9 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile,userFunctionsPropertyFile, debugXmlPath,job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
-		job.setJobStatus(JobStatus.SUCCESS);
+		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)){
+			job.setJobStatus(JobStatus.SUCCESS);
+		}
 
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);

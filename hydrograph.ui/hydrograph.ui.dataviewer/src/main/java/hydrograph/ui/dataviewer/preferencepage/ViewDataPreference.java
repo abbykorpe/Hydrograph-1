@@ -89,7 +89,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		parentComposite.setToolTipText("Export Data");
 		GridData parentCompositeData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
 		parentCompositeData.heightHint = 396;
-		parentCompositeData.widthHint = 650;
+		parentCompositeData.widthHint = 662;
 		parentCompositeData.grabExcessHorizontalSpace = true;
 		parentCompositeData.grabExcessVerticalSpace = true;
 		parentComposite.setLayout(new GridLayout(3, false));
@@ -351,7 +351,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		Composite grpServiceDetailsCmposite = new Composite(grpServiceDetails, SWT.None);
 		GridData serviceGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		serviceGridData.heightHint = 50;
-		serviceGridData.widthHint = 530;
+		serviceGridData.widthHint = 556;
 		grpServiceDetailsCmposite.setLayout(new GridLayout());
 		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 

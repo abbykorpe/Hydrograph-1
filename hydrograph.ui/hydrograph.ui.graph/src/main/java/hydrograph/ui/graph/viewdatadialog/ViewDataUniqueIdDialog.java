@@ -42,7 +42,7 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	
 	private List<Job> jobDetails;
 	private String selectedUniqueJobId;
-	private String[] titles = {"Job Id", "Time Stamp", "Execution Mode"};
+	private String[] titles = {"Job Id", "Time Stamp", "Execution Mode", "Job Status"};
 	private Table table;
 	
 	public ViewDataUniqueIdDialog(Shell parentShell, List<Job> jobDetails) {
@@ -61,15 +61,15 @@ public class ViewDataUniqueIdDialog extends Dialog{
 		Composite composite1 = new Composite(container, SWT.BORDER);
 		GridData gd_scrolledComposite1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_scrolledComposite1.heightHint = 236;
-		gd_scrolledComposite1.widthHint = 644;
+		gd_scrolledComposite1.widthHint = 844;
 		composite1.setLayoutData(gd_scrolledComposite1);
 		
 		table = new Table(composite1, SWT.BORDER | SWT.Selection | SWT.FULL_SELECTION );
-		table.setBounds(0, 0, 642, 234);
+		table.setBounds(0, 0, 842, 234);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-	    for (int i = 0; i < 3; i++) {
+	    for (int i = 0; i < titles.length; i++) {
 	      TableColumn column = new TableColumn(table, SWT.NONE);
 	      column.setWidth(212);
 	      column.setText(titles[i]);
@@ -82,6 +82,7 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	    	items.setText(1, timeStamp);
 	    	String mode = getJobExecutionMode(job.isRemoteMode());
 	    	items.setText(2, mode);
+	    	items.setText(3, job.getJobStatus());
 	    }
 	    
 	    table.addListener(SWT.Selection, new Listener() {

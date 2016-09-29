@@ -111,10 +111,10 @@ public class DataViewerFileManager {
 				csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
 			}
 		} catch (NumberFormatException | HttpException  | MalformedURLException e4) {
-			logger.error("Unable to fetch debug file", e4);
+			logger.error("Unable to fetch viewData file", e4);
 			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 		}  catch (IOException e4) {
-			logger.error("Unable to fetch debug file", e4);
+			logger.error("Unable to fetch viewData file", e4);
 			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 		}
 		if (csvDebugFileAbsolutePath != null) {
@@ -134,7 +134,7 @@ public class DataViewerFileManager {
 					copyFilteredFileToDataViewerStagingArea(jobDetails, csvDebugFileAbsolutePath, dataViewerDebugFile);
 				}
 			} catch (IOException | JSchException e1) {
-				logger.error("Unable to fetch debug file", e1);
+				logger.error("Unable to fetch viewData file", e1);
 				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			}
 			
@@ -149,7 +149,7 @@ public class DataViewerFileManager {
 
 			// Check for empty csv debug file
 			if (isEmptyDebugCSVFile(dataViewerFilePath, dataViewerFileName)) {
-				logger.error("Empty debug file");
+				logger.error("Empty viewData file");
 				return new StatusMessage(StatusConstants.ERROR, Messages.EMPTY_DEBUG_FILE);
 			}
 		}
@@ -288,9 +288,9 @@ public class DataViewerFileManager {
 		try {
 			DebugServiceClient.INSTANCE.deleteDebugFile(details);
 		} catch (NumberFormatException | HttpException  | MalformedURLException e1) {
-			logger.warn("Unable to delete debug file",e1);
+			logger.warn("Unable to delete viewData file",e1);
 		} catch (IOException e1) {
-			logger.warn("Unable to delete debug file",e1);
+			logger.warn("Unable to delete viewData file",e1);
 		}
 	}
 
