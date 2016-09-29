@@ -129,7 +129,22 @@ public class WidgetUtility {
 		messageBox.setMessage(message);
 		messageBox.open();
 	}
-
+	/**
+	 * create SWT MessageBox
+	 * 
+	 * @param message to be shown 
+	 * @param title of widow
+	 * @param style to be set on window           
+	 */
+	
+	public static int createMessageBox(String message,String windowTitle,int style) {
+		Shell shell = new Shell();
+		MessageBox messageBox = new MessageBox(shell,style);
+		messageBox.setText(windowTitle);
+		messageBox.setMessage(message);
+		return messageBox.open();
+	}
+	
 	/**
 	 * Elt confirm message.
 	 * 

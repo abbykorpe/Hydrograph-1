@@ -154,7 +154,7 @@ import org.xml.sax.SAXException;
 	 */
 	public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	
-		
+		private static final String COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH = "Could not locate the external schema file path";
 		private static Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
 		private ColumnLayoutData compositeOfOutsideTable;
 		public static final String FIELDNAME = Messages.FIELDNAME;
@@ -182,7 +182,7 @@ import org.xml.sax.SAXException;
 		protected boolean transformSchemaType=false;
 	
 		protected String gridRowType;
-	
+	    private boolean isSchemaNotValid;
 		protected ControlDecoration fieldNameDecorator;
 		protected ControlDecoration isFieldNameAlphanumericDecorator;
 		protected ControlDecoration scaleDecorator;
@@ -842,7 +842,15 @@ import org.xml.sax.SAXException;
 			decorator.hide();
 			GridData data=(GridData) extSchemaPathText.getLayoutData();
 			data.horizontalIndent=10;
-			
+			extSchemaPathText.addModifyListener(new ModifyListener() {
+				
+				@Override
+				public void modifyText(ModifyEvent e) {
+                   Text externalSchemaPath=(Text)e.widget;
+                   exportButton.setEnabled(StringUtils.isNotBlank(externalSchemaPath.getText()));
+            	   importButton.setEnabled(StringUtils.isNotBlank(externalSchemaPath.getText()));
+               }
+			});
 			extSchemaPathText.addFocusListener(new FocusListener() {
 	
 				@Override
@@ -918,7 +926,15 @@ import org.xml.sax.SAXException;
 				String schemaPath = extSchemaPathText.getText();
 				if(!StringUtils.isEmpty(schemaPath) && !ParameterUtil.containsParameter(schemaPath, Path.SEPARATOR) &&!new File(schemaPath).isAbsolute()){
 					IWorkspace workspace = ResourcesPlugin.getWorkspace();
-					IPath relativePath=workspace.getRoot().getFile(new Path(schemaPath)).getLocation();
+					IPath relativePath=null;
+					try{
+					  relativePath=workspace.getRoot().getFile(new Path(schemaPath)).getLocation();
+					}
+					catch(IllegalArgumentException e)
+					{
+					WidgetUtility.createMessageBox(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,"Error",SWT.ICON_ERROR|SWT.OK);
+					return null;
+					}	
 					if(relativePath!=null)
 					schemaFile = new File(relativePath.toOSString());
 					else
@@ -992,14 +1008,28 @@ import org.xml.sax.SAXException;
 			exportButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					File schemaFile=getPath();
-					if (schemaFile == null){
-						return;
-					}
-					GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
-					gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
+					if(isSchemaNotValid)
+					{
+						if(WidgetUtility.createMessageBox
+						(Messages.SCHEMA_IS_INVALID_DO_YOU_WISH_TO_CONTINUE,Messages.EXPORT_SCHEMA,SWT.ICON_QUESTION | SWT.YES|SWT.NO)==SWT.YES)
+					    {
+					    	exportSchemaToXmlFile();
+					    }	
+					}	
+					else
+					{
+						exportSchemaToXmlFile();
+					}	
 				}
 			});
+		}
+		private void exportSchemaToXmlFile() {
+			File schemaFile=getPath();
+			if (schemaFile == null){
+				return;
+			}
+			GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
+			gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
 		}
 	
 		// Adds the Radio buttons
@@ -1034,7 +1064,9 @@ import org.xml.sax.SAXException;
 					toggleSchema(true);
 					external = true;
 	
-					if (extSchemaPathText.getText().isEmpty()) {
+					if (StringUtils.isBlank(extSchemaPathText.getText())) {
+						importButton.setEnabled(false);
+						exportButton.setEnabled(false);
 						decorator.show();
 					} else {
 						decorator.hide();
@@ -1135,11 +1167,14 @@ import org.xml.sax.SAXException;
 		}
 	
 		private void toggleSchema(boolean enableExtSchema) {
-			if (extSchemaPathText != null && browseButton != null) {
+			if (extSchemaPathText!=null && browseButton != null) {
 				extSchemaPathText.setEnabled(enableExtSchema);
 				browseButton.setEnabled(enableExtSchema);
+				if(StringUtils.isNotBlank(extSchemaPathText.getText()))
+				{	
 				importButton.setEnabled(enableExtSchema);
 				exportButton.setEnabled(enableExtSchema);
+				}
 			}
 		}
 	
@@ -1659,11 +1694,14 @@ import org.xml.sax.SAXException;
 				if (extSchemaPathText != null)
 					schema.setExternalSchemaPath(extSchemaPathText.getText());
 				schema.setIsExternal(external);
-				return validateAgainstValidationRule(schema);
+				isSchemaNotValid=validateAgainstValidationRule(schema);
+				return isSchemaNotValid;
 			} else
-				return validateAgainstValidationRule(getComponent().getProperties()
+			{
+				isSchemaNotValid= validateAgainstValidationRule(getComponent().getProperties()
 						.get(Constants.SCHEMA_PROPERTY_NAME));
-	
+				return isSchemaNotValid;
+			}
 		}
 	 
 	public List<NameValueProperty> getComponentSchemaAsProperty(){

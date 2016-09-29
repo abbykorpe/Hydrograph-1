@@ -37,12 +37,13 @@ public class Messages extends NLS {
 	public static String FILE_NOT_FOUND;
 	
 	public static String NOT_EXISTS;
-	public static  String FILE_DOES_NOT_EXISTS ;
+	public static String FILE_DOES_NOT_EXISTS ;
 
-	public static  String SCHEMA_CONFIG_XSD_PATH;
-
-	public static  String FIELDNAME_NOT_ALPHANUMERIC_ERROR;
-	public static  String FIELDNAME_SHOULD_NOT_BE_BLANK;
+	public static String SCHEMA_CONFIG_XSD_PATH;
+	public static String EXPORT_SCHEMA;
+	public static String SCHEMA_IS_INVALID_DO_YOU_WISH_TO_CONTINUE; 
+	public static String FIELDNAME_NOT_ALPHANUMERIC_ERROR;
+	public static String FIELDNAME_SHOULD_NOT_BE_BLANK;
 	public static String EMPTY_XML_CONTENT;
 	public static String RUNTIME_WINDOW_NAME;
 	public static String RUNTIME_HEADER;
