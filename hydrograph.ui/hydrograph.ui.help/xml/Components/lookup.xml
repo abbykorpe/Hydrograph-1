@@ -13,11 +13,17 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Lookup" link_to="xml\Components\components.xml#Lookup"> 
-	<topic label="Properties"  href="html/Components/Lookup_Properties.html"> 
+<toc label="Lookup" link_to="xml\Components\components.xml#Lookup" topic=""> 	
+	<topic label="Properties"  href="html/Components/Lookup_Properties.html">
+    <topic href="html/Components/Lookup_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/Lookup_Properties.html#schema" label="Schema">
+    </topic>
+    <topic href="html/Components/Lookup_Properties.html#validations" label="Validations">
+    </topic> 
 	</topic>
  <topic href="html/Components/Lookup_Mapping_View.html" label="Mapping View">
+   
  </topic>
- <topic href="html/concepts/maintopic.html" label="Validations">
- </topic>
+
 </toc>
