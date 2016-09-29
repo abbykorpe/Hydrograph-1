@@ -26,6 +26,7 @@ import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
