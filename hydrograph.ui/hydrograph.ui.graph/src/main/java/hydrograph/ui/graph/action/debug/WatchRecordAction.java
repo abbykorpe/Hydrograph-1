@@ -95,19 +95,19 @@ public class WatchRecordAction extends SelectionAction {
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
 				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
-					String componenet_Id = "";
+					String componenetId = "";
 					String socket_Id = "";
 					ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
 					for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
 						String comp_soc = entry.getKey();
 						String[] split = StringUtils.split(comp_soc, "/.");
-						componenet_Id = split[0];
+						componenetId = split[0];
 						for(int i = 1;i<split.length-1;i++){
-							componenet_Id = componenet_Id + "." + split[i];
+							componenetId = componenetId + "." + split[i];
 						}
 						socket_Id = split[split.length-1];
 					}
-					watchRecordInner.setComponentId(componenet_Id);
+					watchRecordInner.setComponentId(componenetId);
 					watchRecordInner.setSocketId(socket_Id);
 				} else {
 					watchRecordInner.setComponentId(componentId);

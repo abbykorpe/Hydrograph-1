@@ -20,11 +20,14 @@ import hydrograph.engine.jaxb.debug.ViewData;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +62,11 @@ public class DebugConverter {
 	
 	
 	public Debug getParam() throws Exception{
+		Map<String, SubjobDetails> componentNameAndLink = new HashMap();
 		Debug debug = new Debug();
 		ViewData viewData = null;
+		String componenetId = "";
+		String socket_Id = "";
 		 
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
@@ -78,20 +84,22 @@ public class DebugConverter {
 					if(!map.isEmpty()){
 						for(Entry<String, Long> entrySet: map.entrySet()){
 							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
-								List<String> componentId_socketIdList = DebugHelper.INSTANCE.getSubgraphComponent(component);
-								for(String componentId_socketId : componentId_socketIdList){
-									viewData = new ViewData();
-									String[] data = StringUtils.split(componentId_socketId,".");
-									String componentId = data[0];
-									String socketId = data[1];
-									viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
-									viewData.setOutSocketId(socketId);
-									String portType = socketId.substring(0, 3);
-									viewData.setOutSocketType(checkPortType(portType));
-									
-									debug.getViewData().add(viewData);
+								ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), entrySet.getKey());
+								for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
+									String comp_soc = entry.getKey();
+									String[] split = StringUtils.split(comp_soc, "/.");
+									componenetId = split[0];
+									for(int i = 1;i<split.length-1;i++){
+										componenetId = componenetId + "." + split[i];
+									}
+									socket_Id = split[split.length-1];
 								}
-								break;
+								viewData = new ViewData();
+								viewData.setFromComponentId(componenetId);
+								viewData.setOutSocketId(socket_Id);
+								String portType = socket_Id.substring(0, 3);
+								viewData.setOutSocketType(checkPortType(portType));
+								debug.getViewData().add(viewData);
 							}else{
 								viewData = new ViewData();
 								viewData.setFromComponentId(component.getComponentLabel().getLabelContents());

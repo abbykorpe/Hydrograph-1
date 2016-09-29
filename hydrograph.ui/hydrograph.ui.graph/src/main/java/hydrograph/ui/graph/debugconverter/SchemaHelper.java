@@ -21,14 +21,19 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -62,9 +67,11 @@ public class SchemaHelper {
 	 * @throws CoreException 
 	 */
 	public void exportSchemaFile(String schemaFilePath) throws CoreException{
+		Map<String, SubjobDetails> componentNameAndLink = new HashMap();
 		File file = null;
 		String socketName = null;
 		String componentName;
+		String component_Id = null;
 		ComponentsOutputSchema  componentsOutputSchema = null;
 		
 		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -77,13 +84,20 @@ public class SchemaHelper {
 						List<Link> links = ((ComponentEditPart) objectEditPart).getCastedModel().getSourceConnections();
 						for(Link link : links){
 							 Component component = link.getSource();
-							/* if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
-									String componentId_socketId = DebugHelper.INSTANCE.getSubgraphComponent(component);
-									String[] data = StringUtils.split(componentId_socketId,".");
-									componentName = component.getComponentLabel().getLabelContents()+"."+data[0];
-								}else{*/
+							 if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
+								 ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
+								 for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
+										String comp_soc = entry.getKey();
+										String[] split = StringUtils.split(comp_soc, "/.");
+										component_Id = split[0];
+										for(int i = 1;i<split.length-1;i++){
+											component_Id = component_Id + "." + split[i];
+										}
+									}
+								 componentName = component_Id;
+								}else{
 									componentName = link.getSource().getComponentLabel().getLabelContents();
-								//}
+								}
 							 Object obj = link.getSource().getComponentEditPart();
 							 List<PortEditPart> portEditPart = ((EditPart) obj).getChildren();
 							 
