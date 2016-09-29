@@ -17,11 +17,14 @@ import hydrograph.engine.jaxb.commandtypes.Subjob;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
 import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.engine.ui.util.UiConverterUtil;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -34,6 +37,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -68,18 +72,19 @@ public class CommandSubjobUiConverter extends UiConverter {
 		IPath parameterFilePath = parameterFile.getFullPath().removeLastSegments(1)
 				.append(subJobPath.removeFileExtension().lastSegment()).addFileExtension(Constants.PROPERTIES);
 		IFile parameterFile = ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFilePath);
+		Container subJobContainer = null;
 		try {
 			if (!subJobXMLPath.isAbsolute()) {
 				IFile subJobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(subJobPath);
 				IPath importFromPath = new Path(sourceXmlPath.getAbsolutePath());
 				importFromPath = importFromPath.removeLastSegments(1).append(subJobXMLPath.lastSegment());
-				SubjobUiConverterUtil.createSubjobInSpecifiedFolder(subJobXMLPath, parameterFilePath, parameterFile,
+				subJobContainer=SubjobUiConverterUtil.createSubjobInSpecifiedFolder(subJobXMLPath, parameterFilePath, parameterFile,
 						subJobFile, importFromPath, subjob.getPath().getUri());
 			} else {
 				File jobFile = new File(subJobPath.toString());
 				File subJobFile = new File(subjob.getPath().getUri());
 				UiConverterUtil converterUtil = new UiConverterUtil();
-				converterUtil.convertSubjobToUiXml(subJobFile, jobFile, parameterFile);
+				subJobContainer=converterUtil.convertSubjobToUiXml(subJobFile, jobFile, parameterFile);
 			}
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException
@@ -93,6 +98,7 @@ public class CommandSubjobUiConverter extends UiConverter {
 		propertyMap.put(Constants.RUNTIME_PROPERTY_NAME, getRuntimeProperties());
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
+		SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(subJobContainer,uiComponent);
 	}
 	@Override
 	protected Map<String, String> getRuntimeProperties() {

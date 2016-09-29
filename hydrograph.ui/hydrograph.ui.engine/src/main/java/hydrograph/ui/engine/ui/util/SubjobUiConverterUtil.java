@@ -16,9 +16,12 @@ package hydrograph.ui.engine.ui.util;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,6 +54,10 @@ import org.xml.sax.SAXException;
  * 
  * @author Bitwise
  * 
+ */
+/**
+ * @author soniar
+ *
  */
 public class SubjobUiConverterUtil {
 	
@@ -189,5 +196,38 @@ public class SubjobUiConverterUtil {
 			}
 		}
 		return runtimeMap;
+	}
+	
+	
+	/**
+	 * This method shows or hides error icon on component
+	 * @param subJobContainer
+	 * @param uiComponent
+	 */
+	public static void showOrHideErrorSymbolOnComponent(Container subJobContainer, Component uiComponent) {
+		if (subJobContainer == null) {
+			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
+		} else {
+			for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
+				if (!(subJobContainer.getChildren().get(i) instanceof InputSubjobComponent || subJobContainer
+						.getChildren().get(i) instanceof OutputSubjobComponent)) {
+					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), subJobContainer.getChildren()
+							.get(i).getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
+							|| StringUtils.equalsIgnoreCase(
+									UIComponentsConstants.WARN.value(),
+									subJobContainer.getChildren().get(i).getProperties()
+											.get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())) {
+						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),
+								UIComponentsConstants.ERROR.value());
+						uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
+						break;
+					} else {
+						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),
+								UIComponentsConstants.VALID.value());
+						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
+					}
+				}
+			}
+		}
 	}
 }

@@ -16,10 +16,13 @@ package hydrograph.ui.engine.ui.util;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,7 +66,19 @@ public class ImportedSchemaPropagation {
 
 		if (container != null) {
 			for (Component component : container.getChildren()) {
-				component.validateComponentProperties();
+				if (component instanceof SubjobComponent) {
+					String previousValidityStatus = component.getValidityStatus();
+					component.validateComponentProperties();
+					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), previousValidityStatus)
+							&& StringUtils.equalsIgnoreCase(UIComponentsConstants.VALID.value(), component
+									.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())) {
+						component.setValidityStatus(UIComponentsConstants.WARN.value());
+						component.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),
+								UIComponentsConstants.WARN.value());
+					}
+				} else {
+					component.validateComponentProperties();
+				}
 			}
 		}
 

@@ -16,10 +16,16 @@ package hydrograph.ui.graph.action.subjob;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Component.ValidityStatus;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.utility.SubJobUtility;
 
 import java.util.List;
@@ -121,8 +127,8 @@ public class SubJobUpdateAction extends SelectionAction {
 			if (StringUtils.equals(Constants.SUBJOB_COMPONENT, selectedSubjobComponent.getComponentName()) && selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME)!=null) {
 				filePath=(String) selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubJobUtility subJobUtility=new SubJobUtility();
-				subJobUtility.updateSubjobProperty(null,filePath, selectedSubjobComponent);
-				selectedSubjobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), "VALID");
+				Container container=subJobUtility.updateSubjobPropertyAndGetSubjobContainer(null,filePath, selectedSubjobComponent);
+				SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(container,selectedSubjobComponent);
 				componentEditPart.changePortSettings();
 				componentEditPart.updateComponentStatus();
 				componentEditPart.refresh();

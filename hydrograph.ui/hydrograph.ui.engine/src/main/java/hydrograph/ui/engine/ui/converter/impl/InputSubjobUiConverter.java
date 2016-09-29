@@ -19,12 +19,15 @@ import hydrograph.engine.jaxb.inputtypes.Subjob;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
 import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.engine.ui.util.UiConverterUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -38,6 +41,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -117,6 +121,7 @@ public class InputSubjobUiConverter extends UiConverter {
 		getOutPort((TypeInputComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
+		SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(subJobContainer,uiComponent);
 		
 	}
 	private void getOutPort(TypeInputComponent inputComponent) {

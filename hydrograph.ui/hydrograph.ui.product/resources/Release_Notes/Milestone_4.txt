@@ -81,6 +81,9 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 68.#1302 [Shashank Karnik] Trasform Component: Unnecessary WARNING pop-up is Getting Displayed.
 69.#1189 [Shashank Karnik] Trasform Component: Apply Button is Getting Enabled When User Performs Any Action and Clicks On Cancel Button. 
 70.#1289 [Shashank Karnik] Transform Component: Confirmation Pop-up is Not Getting Displayed When User Click on Close button.
+71.#1330 [Kanchan Kauthale] Input and Output Components : Warning and Error Bubble Symbol is Getting Displayed Even when Job Run Sucessfully.
+72.#1331 [Kanchan Kauthale] Watch Point: Unable to Select Connection Link.
+73.#1162 [Sonia Raheja] Subjob Component: Error Bubble is Not Getting Displayed on Subjob Component in Main job if Error Bubble present on components within the subjob.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

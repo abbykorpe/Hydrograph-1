@@ -91,6 +91,7 @@ public class Messages extends NLS {
 	public static String INPUT_SUBJOB_COMPONENT;
 	public static String IN_PORT_TYPE;
 	public static String OUT_PORT_TYPE;
+	public static String VALIDITY_STATUS;
 	
 	public static String UNABLE_TO_CREATE_JOB_SPECIFIC_FILE;
 	
