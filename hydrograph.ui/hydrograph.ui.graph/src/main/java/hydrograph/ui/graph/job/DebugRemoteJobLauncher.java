@@ -228,7 +228,10 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			return;
 		}
 
-		job.setJobStatus(JobStatus.SUCCESS);
+		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)){
+			job.setJobStatus(JobStatus.SUCCESS);
+		}
+		
 		releaseResources(job, gefCanvas, joblogger);
 		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 	}

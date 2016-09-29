@@ -341,7 +341,10 @@ public class DebugDataViewer extends ApplicationWindow {
 					showDataInDebugViewer(false, remoteOkPressed);
 				}
 				dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + debugFileName + SCHEMA_FILE_EXTENTION);
-				syncSchemaWithReceivedDataFile();
+				
+				if(dataViewerFileSchema != null){
+					syncSchemaWithReceivedDataFile();
+				}
 				return Status.OK_STATUS;
 			}
 		};
