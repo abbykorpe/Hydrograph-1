@@ -27,6 +27,8 @@ import hydrograph.ui.graph.model.Component.ValidityStatus;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.LinkComparatorBySourceLocation;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.utility.SubJobUtility;
 
@@ -160,15 +162,19 @@ public class SubJobAction extends SelectionAction{
 		Container containerOld=editor.getContainer(); 
 		String validityStatus = null;
 			for (int i = 0; i < containerOld.getChildren().size(); i++) {
-				if (containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS) != null
-						&& (StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), containerOld.getChildren().get(i)
-								.getProperties().get(Constants.VALIDITY_STATUS).toString()))
-						|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(), containerOld.getChildren().get(i)
-								.getProperties().get(Constants.VALIDITY_STATUS).toString())) {
-					validityStatus = ValidityStatus.ERROR.name();
-					break;
-				} else {
-					validityStatus = ValidityStatus.VALID.name();
+				if (!(containerOld.getChildren().get(i) instanceof InputSubjobComponent || containerOld.getChildren()
+						.get(i) instanceof OutputSubjobComponent)) {
+					if (containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS) != null
+							&& (StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), containerOld.getChildren()
+									.get(i).getProperties().get(Constants.VALIDITY_STATUS).toString()))
+							|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(),
+									containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS)
+											.toString())) {
+						validityStatus = ValidityStatus.ERROR.name();
+						break;
+					} else {
+						validityStatus = ValidityStatus.VALID.name();
+					}
 				}
 			}
 	   	execute(createSubJobCommand(getSelectedObjects())); 
