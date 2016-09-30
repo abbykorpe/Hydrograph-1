@@ -21,15 +21,22 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
@@ -57,10 +64,14 @@ public class SchemaHelper {
 	/**
 	 * This function will write schema in xml file
 	 * @param schemaFilePath
+	 * @throws CoreException 
 	 */
-	public void exportSchemaFile(String schemaFilePath){
+	public void exportSchemaFile(String schemaFilePath) throws CoreException{
+		Map<String, SubjobDetails> componentNameAndLink = new HashMap();
 		File file = null;
 		String socketName = null;
+		String componentName;
+		String component_Id = null;
 		ComponentsOutputSchema  componentsOutputSchema = null;
 		
 		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -71,9 +82,22 @@ public class SchemaHelper {
 				for (Object objectEditPart : graphicalViewer.getEditPartRegistry().values()){
 					if(objectEditPart instanceof ComponentEditPart){
 						List<Link> links = ((ComponentEditPart) objectEditPart).getCastedModel().getSourceConnections();
-						
 						for(Link link : links){
-							 String componentName = link.getSource().getComponentLabel().getLabelContents();
+							 Component component = link.getSource();
+							 if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
+								 ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
+								 for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
+										String comp_soc = entry.getKey();
+										String[] split = StringUtils.split(comp_soc, "/.");
+										component_Id = split[0];
+										for(int i = 1;i<split.length-1;i++){
+											component_Id = component_Id + "." + split[i];
+										}
+									}
+								 componentName = component_Id;
+								}else{
+									componentName = link.getSource().getComponentLabel().getLabelContents();
+								}
 							 Object obj = link.getSource().getComponentEditPart();
 							 List<PortEditPart> portEditPart = ((EditPart) obj).getChildren();
 							 
@@ -85,7 +109,7 @@ public class SchemaHelper {
 										componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 										if(StringUtils.isNotBlank(schemaFilePath)){
 											String path = schemaFilePath.trim() + "_" + componentName + "_" + socketName;
-											String filePath=((IPath)new Path(path)).removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
+											String filePath=((IPath)new Path(path)).addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
 											List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
 											file = new File(filePath);
 											GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);

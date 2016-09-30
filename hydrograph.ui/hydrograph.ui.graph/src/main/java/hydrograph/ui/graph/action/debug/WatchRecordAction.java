@@ -23,8 +23,8 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
@@ -39,6 +39,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -86,6 +87,7 @@ public class WatchRecordAction extends SelectionAction {
 	}
 
 	private void createWatchCommand() throws CoreException {
+		Map<String, SubjobDetails> componentNameAndLink = new HashMap();
 		List<Object> selectedObjects = getSelectedObjects();
 		for (Object obj : selectedObjects) {
 			if (obj instanceof LinkEditPart) {
@@ -93,13 +95,20 @@ public class WatchRecordAction extends SelectionAction {
 				String componentId = link.getSource().getComponentLabel().getLabelContents();
 				Component component = link.getSource();
 				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
-					String str = DebugHelper.INSTANCE.getSubgraphComponent(component);
-					String[] str1 = StringUtils.split(str, ".");
-					String componentID = str1[0];
-					String socketId = str1[1];
-					watchRecordInner
-							.setComponentId(link.getSource().getComponentLabel().getLabelContents() + "." + componentID);
-					watchRecordInner.setSocketId(socketId);
+					String componenetId = "";
+					String socket_Id = "";
+					ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
+					for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
+						String comp_soc = entry.getKey();
+						String[] split = StringUtils.split(comp_soc, "/.");
+						componenetId = split[0];
+						for(int i = 1;i<split.length-1;i++){
+							componenetId = componenetId + "." + split[i];
+						}
+						socket_Id = split[split.length-1];
+					}
+					watchRecordInner.setComponentId(componenetId);
+					watchRecordInner.setSocketId(socket_Id);
 				} else {
 					watchRecordInner.setComponentId(componentId);
 					String socketId = link.getSourceTerminal();

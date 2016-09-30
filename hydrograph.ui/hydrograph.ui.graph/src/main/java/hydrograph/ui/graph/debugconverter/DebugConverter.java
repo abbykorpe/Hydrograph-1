@@ -20,12 +20,17 @@ import hydrograph.engine.jaxb.debug.ViewData;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -58,8 +63,11 @@ public class DebugConverter {
 	
 	
 	public Debug getParam() throws Exception{
+		Map<String, SubjobDetails> componentNameAndLink = new HashMap();
 		Debug debug = new Debug();
 		ViewData viewData = null;
+		String componenetId = "";
+		String socket_Id = "";
 		 
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ELTGraphicalEditor editor=	(ELTGraphicalEditor) page.getActiveEditor();
@@ -73,30 +81,43 @@ public class DebugConverter {
 				EditPart editPart = (EditPart) iterator.next();
 				if(editPart instanceof ComponentEditPart){
 					Component component = ((ComponentEditPart)editPart).getCastedModel();
+					
 					Map<String, Long> map = component.getWatcherTerminals();
 					if(!map.isEmpty()){
 						for(Entry<String, Long> entrySet: map.entrySet()){
-							viewData = new ViewData();
-							if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
-								String componentId_socketId = DebugHelper.INSTANCE.getSubgraphComponent(component);
-								String[] data = StringUtils.split(componentId_socketId,".");
-								String componentId = data[0];
-								String socketId = data[1];
-								viewData.setFromComponentId(component.getComponentLabel().getLabelContents()+"."+componentId);
-								viewData.setOutSocketId(socketId);
-							}else{
-								viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
-								viewData.setOutSocketId(entrySet.getKey());
-								String portType = entrySet.getKey().substring(0, 3);
-								
-								if(StringUtils.equalsIgnoreCase(portType, Constants.OUTPUT_SOCKET_TYPE)){
-									viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
+							List<Link> links = ((ComponentEditPart) editPart).getCastedModel().getSourceConnections();
+								if(StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)){
+									for(Link link : links){
+										componentNameAndLink.clear();
+										boolean isWatch = link.getSource().getPort(link.getSourceTerminal()).isWatched();
+										if(isWatch){
+											ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
+											for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
+												String comp_soc = entry.getKey();
+												String[] split = StringUtils.split(comp_soc, "/.");
+												componenetId = split[0];
+												for(int i = 1;i<split.length-1;i++){
+													componenetId = componenetId + "." + split[i];
+												}
+												socket_Id = split[split.length-1];
+											}
+											viewData = new ViewData();
+											viewData.setFromComponentId(componenetId);
+											viewData.setOutSocketId(socket_Id);
+											String portType = socket_Id.substring(0, 3);
+											viewData.setOutSocketType(checkPortType(portType));
+											debug.getViewData().add(viewData);
+										}
+									}
+									break;
 								}else{
-									viewData.setOutSocketType(Constants.UNUSED_SOCKET_TYPE);
-								}
+									viewData = new ViewData();
+									viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
+									viewData.setOutSocketId(entrySet.getKey());
+									String portType = entrySet.getKey().substring(0, 3);
+									viewData.setOutSocketType(checkPortType(portType));
+									debug.getViewData().add(viewData);
 							}
-								
-							debug.getViewData().add(viewData);
 						}
 					}  
 				}
@@ -106,6 +127,15 @@ public class DebugConverter {
 		return debug;
 	}
 	
+	private String checkPortType(String portType){
+		String socketType;
+		if(StringUtils.equalsIgnoreCase(portType, Constants.OUTPUT_SOCKET_TYPE)){
+			socketType = Constants.OUTPUT_SOCKET_TYPE;
+		}else{
+			socketType = Constants.UNUSED_SOCKET_TYPE;
+		}
+		return socketType;
+	}
 	
 	public void marshall(Debug debug,IFile outPutFile) throws JAXBException, IOException, CoreException{
 		
