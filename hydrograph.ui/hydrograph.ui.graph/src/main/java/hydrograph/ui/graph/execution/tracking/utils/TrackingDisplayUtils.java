@@ -22,13 +22,11 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,8 +34,8 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import javax.websocket.CloseReason;
-import javax.websocket.Session;
 import javax.websocket.CloseReason.CloseCodes;
+import javax.websocket.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
@@ -65,9 +63,6 @@ public class TrackingDisplayUtils {
 	/** The Constant WEBSOCKET_ROUTE. */
 	private static final String WEBSOCKET_UI_ROUTE = "WEBSOCKET_UI_ROUTE";
 
-	/** The Constant EXECUTION_TRACK_START. */
-	private static final String EXECUTION_TRACK_START = " hydrograph.execution.tracking.server.websocket.StartServer";
-	
    //Execution tracking config properties	
 	private static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
 
@@ -145,7 +140,10 @@ public class TrackingDisplayUtils {
 	public String getExecutiontrackingPortNo() {
 		String portNumber = null;
 			Properties properties = ConfigFileReader.INSTANCE.getCommonConfigurations();
-			if (StringUtils.isNotBlank(properties.getProperty(EXECUTION_TRACKING_PORT))) {
+			if (StringUtils.isNotBlank(properties.getProperty(EXECUTION_TRACKING_PORT))
+				&& StringUtils.isNotBlank(properties.getProperty(WEBSOCKET_LOCAL_HOST))
+				&& StringUtils.isNotBlank(properties.getProperty(WEBSOCKET_UI_ROUTE))) {
+				
 				portNumber = properties.getProperty(EXECUTION_TRACKING_PORT);
 				localHost = properties.getProperty(WEBSOCKET_LOCAL_HOST);
 				websocketRoute = properties.getProperty(WEBSOCKET_UI_ROUTE);
