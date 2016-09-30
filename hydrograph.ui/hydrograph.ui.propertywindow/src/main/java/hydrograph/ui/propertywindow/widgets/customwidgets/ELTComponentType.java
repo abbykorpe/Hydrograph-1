@@ -90,7 +90,7 @@ public class ELTComponentType extends AbstractWidget{
 
 	@Override
 	public boolean isWidgetValid() {
-		return false;
+		return true;
 	}
 
 	

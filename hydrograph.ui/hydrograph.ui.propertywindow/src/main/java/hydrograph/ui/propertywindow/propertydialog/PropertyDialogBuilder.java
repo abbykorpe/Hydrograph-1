@@ -223,9 +223,10 @@ public class PropertyDialogBuilder {
 					subGroupContainer, property);	
 			eltWidgetList.add(eltWidget);
 			
-			if(eltWidget.isWidgetValid())
+			if(!eltWidget.isWidgetValid())
+			{	
 				isError=true;
-		
+			}
 		}
 		
 		if (isError) {

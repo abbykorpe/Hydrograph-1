@@ -285,7 +285,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	 */
 	@Override
 	public boolean isWidgetValid() {
-		return false;
+		return true;
 	}
 
 	@Override

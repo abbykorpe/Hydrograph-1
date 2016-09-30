@@ -191,7 +191,7 @@ public class ELTComponentNameWidget extends AbstractWidget {
 
 	@Override
 	public boolean isWidgetValid() {
-		return false;
+		return true;
 	}
 
 	@Override

@@ -144,7 +144,7 @@ public class ELTRetentionLogicWidget extends AbstractWidget{
 
 	@Override
 	public boolean isWidgetValid() {
-		return false;
+		return true;
 	}
 
 	

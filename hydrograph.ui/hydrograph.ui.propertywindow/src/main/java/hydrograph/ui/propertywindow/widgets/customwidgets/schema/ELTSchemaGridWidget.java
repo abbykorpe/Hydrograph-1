@@ -182,7 +182,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected boolean transformSchemaType=false;
 
 	protected String gridRowType;
-	private boolean isSchemaInvalid;
+	private boolean isSchemaValid;
 	protected ControlDecoration fieldNameDecorator;
 	protected ControlDecoration isFieldNameAlphanumericDecorator;
 	protected ControlDecoration scaleDecorator;
@@ -1008,7 +1008,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 exportButton.addSelectionListener(new SelectionAdapter() {
 			 @Override
 			 public void widgetSelected(SelectionEvent e) {
-				 if(isSchemaInvalid)
+				 if(!isSchemaValid)
 				 {
 					 if(WidgetUtility.createMessageBox
 							 (Messages.SCHEMA_IS_INVALID_DO_YOU_WISH_TO_CONTINUE,Messages.EXPORT_SCHEMA,SWT.ICON_QUESTION | SWT.YES|SWT.NO)==SWT.YES)
@@ -1694,13 +1694,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 if (extSchemaPathText != null)
 				 schema.setExternalSchemaPath(extSchemaPathText.getText());
 			 schema.setIsExternal(external);
-			 isSchemaInvalid=validateAgainstValidationRule(schema);
-			 return isSchemaInvalid;
+			 isSchemaValid=validateAgainstValidationRule(schema);
+			 return isSchemaValid;
 		 } else
 		 {
-			 isSchemaInvalid= validateAgainstValidationRule(getComponent().getProperties()
+			 isSchemaValid= validateAgainstValidationRule(getComponent().getProperties()
 					 .get(Constants.SCHEMA_PROPERTY_NAME));
-			 return isSchemaInvalid;
+			 return isSchemaValid;
 		 }
 	 }
 
