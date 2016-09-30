@@ -78,7 +78,7 @@ public class OutputOracleAssemblyGenerator extends OutputAssemblyGeneratorBase {
 		outputRDBMSEntity.setDatabaseType("Oracle");
 		outputRDBMSEntity.setRuntimeProperties(OutputEntityUtils
 				.extractRuntimeProperties(jaxbOutputOracle.getRuntimeProperties()));
-		outputRDBMSEntity.setPhase(jaxbOutputOracle.getPhase());
+		outputRDBMSEntity.setBatch(jaxbOutputOracle.getBatch());
 		outputRDBMSEntity.setUsername(jaxbOutputOracle.getUsername().getValue());
 		outputRDBMSEntity.setPassword(jaxbOutputOracle.getPassword().getValue());
 		outputRDBMSEntity.setJdbcurl(jaxbOutputOracle.getJdbcurl().getValue());

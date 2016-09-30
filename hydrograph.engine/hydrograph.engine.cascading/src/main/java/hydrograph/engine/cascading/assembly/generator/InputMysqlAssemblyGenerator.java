@@ -76,7 +76,7 @@ InputAssemblyGeneratorBase {
 		inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
 				.extractRuntimeProperties(inputMysqlJaxb
 						.getRuntimeProperties()));
-		inputRDBMSEntity.setPhase(inputMysqlJaxb.getPhase());
+		inputRDBMSEntity.setBatch(inputMysqlJaxb.getBatch());
 		inputRDBMSEntity.setQuery(inputMysqlJaxb.getQuery() ==null?null:inputMysqlJaxb.getQuery().getValue());
 		inputRDBMSEntity.setUsername(inputMysqlJaxb.getUsername().getValue());
 		inputRDBMSEntity.setPassword(inputMysqlJaxb.getPassword().getValue());

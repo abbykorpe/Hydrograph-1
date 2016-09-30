@@ -76,7 +76,7 @@ public class OutputMysqlAssemblyGenerator extends OutputAssemblyGeneratorBase {
 		outputRDBMSEntity.setTableName(jaxbOutputMysql.getTableName().getValue());
 		outputRDBMSEntity.setRuntimeProperties(OutputEntityUtils
 				.extractRuntimeProperties(jaxbOutputMysql.getRuntimeProperties()));
-		outputRDBMSEntity.setPhase(jaxbOutputMysql.getPhase());
+		outputRDBMSEntity.setBatch(jaxbOutputMysql.getBatch());
 		outputRDBMSEntity.setUsername(jaxbOutputMysql.getUsername().getValue());
 		outputRDBMSEntity.setPassword(jaxbOutputMysql.getPassword().getValue());
 		outputRDBMSEntity.setJdbcurl(jaxbOutputMysql.getJdbcurl().getValue());

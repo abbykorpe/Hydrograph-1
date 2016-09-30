@@ -12,37 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Collections2;
-import com.sun.xml.internal.bind.annotation.OverrideAnnotationOf;
-
-import cascading.flow.FlowDef;
-import cascading.jdbc.JDBCScheme;
-import cascading.jdbc.JDBCTap;
-import cascading.jdbc.TableDesc;
-import cascading.jdbc.db.DBInputFormat;
-import cascading.jdbc.db.DBOutputFormat;
 import cascading.jdbc.db.MySqlDBInputFormat;
-import cascading.pipe.Pipe;
-import cascading.tap.SinkMode;
-import cascading.tuple.Fields;
 import hydrograph.engine.assembly.entity.OutputRDBMSEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import java.sql.*;
-
-
 
 public class OutputMysqlAssembly extends OutputRDBMSAssembly {
 
@@ -51,22 +23,15 @@ public class OutputMysqlAssembly extends OutputRDBMSAssembly {
 	 * 
 	 */
 	private static final long serialVersionUID = -2946197683137950707L;
-	
-	
-	
-	public OutputMysqlAssembly(OutputRDBMSEntity baseComponentEntity,
-			ComponentParameters componentParameters) {
+
+	public OutputMysqlAssembly(OutputRDBMSEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
-@Override
+	@Override
 	public void intializeRdbmsSpecificDrivers() {
 		// For MySQL
 		inputFormatClass = MySqlDBInputFormat.class;
 		driverName = "com.mysql.jdbc.Driver";
-			}
-	
-	
+	}
 }
-
-	
