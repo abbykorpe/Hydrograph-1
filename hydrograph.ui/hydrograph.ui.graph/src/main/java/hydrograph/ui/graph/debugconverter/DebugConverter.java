@@ -94,7 +94,6 @@ public class DebugConverter {
 											ViewDataUtils.getInstance().subjobParams(componentNameAndLink, component, new StringBuilder(), link.getSourceTerminal());
 											for(Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()){
 												String comp_soc = entry.getKey();
-												System.out.println("Comp ID0:::"+comp_soc);
 												String[] split = StringUtils.split(comp_soc, "/.");
 												componenetId = split[0];
 												for(int i = 1;i<split.length-1;i++){
@@ -103,7 +102,6 @@ public class DebugConverter {
 												socket_Id = split[split.length-1];
 											}
 											viewData = new ViewData();
-											System.out.println("Comp ID:::"+componenetId);
 											viewData.setFromComponentId(componenetId);
 											viewData.setOutSocketId(socket_Id);
 											String portType = socket_Id.substring(0, 3);
@@ -117,13 +115,7 @@ public class DebugConverter {
 									viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
 									viewData.setOutSocketId(entrySet.getKey());
 									String portType = entrySet.getKey().substring(0, 3);
-									
 									viewData.setOutSocketType(checkPortType(portType));
-									
-									if(StringUtils.equalsIgnoreCase(portType, Constants.OUTPUT_SOCKET_TYPE)){
-										viewData.setOutSocketType(Constants.OUTPUT_SOCKET_TYPE);
-									}else{
-									}
 									debug.getViewData().add(viewData);
 							}
 						}
