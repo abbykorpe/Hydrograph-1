@@ -80,15 +80,21 @@
 
 <p><img alt="" src="../images/Input_Hive_Text_File_Properties_Schema.png" /></p>
 <p><span>Schema is <b>mandatory</b> for Input Hive Text File component. Schema tab defines the record format on the out port of the Input Hive Text File component. A field in schema has multiple attributes as described below.</span></p>
+
 <ul>
-	<li><span><b>Field Name</b> - User needs to enter all the Field names in this column.</span></li>
-	<li><span><b>Data type</b> - By default "string" Data type has been selected for any field added to the Grid. User can select from different Data type values like "integer", "double", "float" etc.</span></li>
-	<li><span><b>Date Format</b> - User can specify desired date format like "YY-DD-MM", "YYYYMMDD" etc for a date field in this column.</span></li>
-	<li><span><b>Precision</b> - Precision for a bigdecimal field can be specified here.</span></li>
-	<li><span><b>Scale</b> - Scale for a bigdecimal field can be specified here.</span></li>
-	<li><span><b>Scale Type</b> - Scale Type accepts values as implicit or explicit for bigdecimal field and none for other data types. Explicit considers the length of ' <b>.</b> ' and implicit ignores length of ' <b>.</b> ' for the bigdecimal field.</span></li>
-	<li><span><b>Field Description</b> - User can specify field description.</span></li></ul>
-</ul>	
+	<li><span><b>Internal</b> - User is provided a Grid to enter the internal schema of the Input Delimited file.</span></li>
+	<ul>
+		<li><span><b>Field Name</b> - User needs to enter all the Field names in this column.</span></li>
+		<li><span><b>Data type</b>  - The data type for the field. This is a mandatory attribute. The default data type is "String". Check <a href="../references/SupportedDataTypes.html">supported data types</a> page for list of supported data types.</span></li>
+		<li><span><b>Date Format</b> - The format for date data type. Refer to <a href="../references/Java_Date_Formats.html">java date formats</a> page for acceptable date formats.</span></li>
+		<li><span><b>Precision</b> - Precision for a bigdecimal field can be specified here.</span></li>
+		<li><span><b>Scale</b> - Scale for a bigdecimal field can be specified here.</span></li>
+		<li><span><b>Scale Type</b> - Scale Type accepts values as implicit or explicit for bigdecimal field and none for other data types. Explicit considers the length of ' <b>.</b> ' and implicit ignores length of ' <b>.</b> ' for the bigdecimal field.</span></li>
+		<li><span><b>Field Description</b> - User can specify field description.</span></li></ul>
+	</ul>	
+	<li><span><b>External</b> - User can provide an external Hydrograph Schema file of XML format. A text box is provided to either manually type or use the Browse button to select the schema file from File system. The External schema file path is resolved during run time and replaced with the contents of the file in the Job XML.</span></li>
+</ul>
+
 
 <p><a name="validations"></a><span class="header-2">Validations</span></p>
 <p><span>The Input Hive Text File components applies validations to the mandatory fields as described above. Upon placing the Input Hive Text File component on job canvas for the first time (from component palette), the component shows up a warning icon as mandatory properties are not provided.</span></p>
