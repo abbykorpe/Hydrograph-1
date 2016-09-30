@@ -1,14 +1,18 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.messages.Messages;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -17,8 +21,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 
 public class OperationClassComposite extends Composite {
 
@@ -133,7 +135,11 @@ public class OperationClassComposite extends Composite {
 		browseButton= new Button(composite_2, SWT.NONE);
 		browseButton.setToolTipText(Messages.OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP);
 		GridData gd_browseButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_browseButton.widthHint = 28;
+		if(OSValidator.isMac()){
+			gd_browseButton.widthHint = 35;
+		}else{
+			gd_browseButton.widthHint = 28;
+		}
 		gd_browseButton.heightHint = 20;
 		browseButton.setLayoutData(gd_browseButton);
 		browseButton.setText("...");
