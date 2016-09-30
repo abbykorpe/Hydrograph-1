@@ -76,7 +76,7 @@ InputAssemblyGeneratorBase {
 		inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
 				.extractRuntimeProperties(inputRedshiftJaxb
 						.getRuntimeProperties()));
-		inputRDBMSEntity.setPhase(inputRedshiftJaxb.getPhase());
+		inputRDBMSEntity.setBatch(inputRedshiftJaxb.getBatch());
 		inputRDBMSEntity.setQuery(inputRedshiftJaxb.getQuery() ==null?null:inputRedshiftJaxb.getQuery().getValue());
 		inputRDBMSEntity.setUsername(inputRedshiftJaxb.getUsername().getValue());
 		inputRDBMSEntity.setPassword(inputRedshiftJaxb.getPassword().getValue());

@@ -76,7 +76,7 @@ InputAssemblyGeneratorBase {
 		inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
 				.extractRuntimeProperties(inputOracleJaxb
 						.getRuntimeProperties()));
-		inputRDBMSEntity.setPhase(inputOracleJaxb.getPhase());
+		inputRDBMSEntity.setBatch(inputOracleJaxb.getBatch());
 		inputRDBMSEntity.setQuery(inputOracleJaxb.getQuery() ==null?null:inputOracleJaxb.getQuery().getValue());
 		inputRDBMSEntity.setUsername(inputOracleJaxb.getUsername().getValue());
 		inputRDBMSEntity.setPassword(inputOracleJaxb.getPassword().getValue());
