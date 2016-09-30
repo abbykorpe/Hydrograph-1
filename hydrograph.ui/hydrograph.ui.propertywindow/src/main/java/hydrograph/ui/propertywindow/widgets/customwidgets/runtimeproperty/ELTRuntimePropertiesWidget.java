@@ -184,11 +184,10 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 
 	protected void setDecoratorsVisibility() {
 
-		if (isWidgetValid()) {
+		if (!isWidgetValid()) {
 			buttonDecorator.show();
 		} else {
-
-			buttonDecorator.hide();
+          buttonDecorator.hide();
 		}
 
 	}

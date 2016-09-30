@@ -273,9 +273,9 @@ public abstract class AbstractWidget {
 	}
 	
 
-	 public void showHideErrorSymbol(boolean isError)
+	 public void showHideErrorSymbol(boolean isWidgetValid)
 	   {
-		   if(isError)
+		   if(!isWidgetValid)
 		   {
 			   for(TabItem item:getTabFolder().getItems())
 				{
@@ -352,7 +352,7 @@ public abstract class AbstractWidget {
 		boolean isErrorPresent=false;
 		 for(AbstractWidget abstractWidget:widgetList)	
 	 	 {
-		 if(StringUtils.equals(abstractWidget.getProperty().getPropertyGroup(), property.getPropertyGroup()) &&abstractWidget.isWidgetValid())
+		 if(StringUtils.equals(abstractWidget.getProperty().getPropertyGroup(), property.getPropertyGroup()) &&!(abstractWidget.isWidgetValid()))
 	 	  {
 	 			isErrorPresent=true;
 	 			break;
@@ -380,7 +380,7 @@ public abstract class AbstractWidget {
 	 	}
 	}
 	public boolean validateAgainstValidationRule(Object object){
-		boolean componentHasRequiredValues = Boolean.FALSE;
+		boolean isComponentValid=true;
 		ComponentCacheUtil.INSTANCE.getProperties(getComponent().getComponentName());
 		List<String> validators = ComponentCacheUtil.INSTANCE.getValidatorsForProperty(
 							getComponent().getComponentName(),getPropertyName());
@@ -392,15 +392,12 @@ public abstract class AbstractWidget {
 				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 					throw new RuntimeException("Failed to create validator", e);
 				}
-				boolean status = validator.validate(object,
+				isComponentValid=validator.validate(object,
 						getPropertyName(),schemaData.getInputSchema(getComponent()));
-				// NOTE : here if any of the property is not valid
-				// then whole component is not valid
-				if (status == false) {
-					componentHasRequiredValues = Boolean.TRUE;
-				}
+				if(!isComponentValid)
+				break;	
 			}
-		return componentHasRequiredValues;
+		return isComponentValid;
 	}
 	
 	

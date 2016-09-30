@@ -191,7 +191,7 @@ public class DropDownWidget extends AbstractWidget{
 			{	
 			 return validateAgainstValidationRule(text.getText());
 			}
-			return false;
+			return true;
 	}
 
 	

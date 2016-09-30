@@ -2183,10 +2183,8 @@ private void operationInputTableAddButton(
 	{
 		if (!oldTransformMapping.equals(transformMapping)&&!okPressed)
 		{	
-		MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_QUESTION | SWT.YES|SWT.NO);
-		messageBox.setText(EXITING_TRANSFORM_EDITOR);
-		messageBox.setMessage(Messages.ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT);
-		return messageBox.open();
+		 return WidgetUtility.createMessageBox
+		 (Messages.ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT, EXITING_TRANSFORM_EDITOR,SWT.ICON_QUESTION | SWT.YES|SWT.NO);	
 		}
 		return SWT.YES;
 	}

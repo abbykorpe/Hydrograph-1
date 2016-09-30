@@ -86,6 +86,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 73.#1162 [Sonia Raheja] Subjob Component: Error Bubble is Not Getting Displayed on Subjob Component in Main job if Error Bubble present on components within the subjob.
 74.#1268 [Rushikesh Pawale] Name of the 'Input Socket for Subjob' Component is Not Getting Displayed Correctly, After Renaming.
 75.#1349 [Sonia Raheja] Subjob Component: User is Not able to Create Nested Subjob.
+76.#286  [shashank karnik] Show warning/error message if schema has errors and user tries to export it.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

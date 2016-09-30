@@ -161,7 +161,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 		{
 			return validateAgainstValidationRule(getProperties().get(propertyName));
 		}
-		return false;
+		return true;
 		
 	}
 
