@@ -1,23 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <InstallationWindowDetails>
-	<JarInformation>
-		<Name>Jackson.jar</Name>
-		<VersionNo>0.0.1.qualifier</VersionNo>
-		<GenericId>001234</GenericId>
-		<ArtifactNo>12345</ArtifactNo>
-	</JarInformation>
-	
-	<JarInformation>
-		<Name>Jdbc.jar</Name>
-		<VersionNo>0.0.1.qualifier</VersionNo>
-		<GenericId>0012345</GenericId>
-		<ArtifactNo>123456</ArtifactNo>
-	</JarInformation>
-	
-	<JarInformation>
-		<Name>Common.jar</Name>
-		<VersionNo>0.0.1.qualifier</VersionNo>
-		<GenericId>0012346</GenericId>
-		<ArtifactNo>123457</ArtifactNo>
-	</JarInformation>
+  <jarInformationDetails>
+    <JarInformationDetail>
+      <name>Jackson.jar</name>
+      <versionNo>0.0.1.qualifier</versionNo>
+      <genericId>12345</genericId>
+      <artifactNo>0001223</artifactNo>
+    </JarInformationDetail>
+    <JarInformationDetail>
+      <name>Jackson.jar</name>
+      <versionNo>0.0.1.qualifier</versionNo>
+      <genericId>12345</genericId>
+      <artifactNo>0001223</artifactNo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>JDBC.jar</name>
+      <versionNo>0.0.1.qualifier</versionNo>
+      <genericId>12234345</genericId>
+      <artifactNo>0011101223</artifactNo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>ABC.jar</name>
+      <versionNo>0.0.1.qualifier</versionNo>
+      <genericId>1245657345</genericId>
+      <artifactNo>0001223</artifactNo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>XTZS.jar</name>
+      <versionNo>0.0.1.qualifier</versionNo>
+      <genericId>12345</genericId>
+      <artifactNo>saadd</artifactNo>
+    </JarInformationDetail>
+  </jarInformationDetails>
 </InstallationWindowDetails>
