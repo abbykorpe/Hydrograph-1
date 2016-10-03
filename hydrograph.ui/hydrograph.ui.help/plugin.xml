@@ -150,6 +150,9 @@
             file="xml/Operation Base Interface/transformBase.xml">
       </toc>
       <toc
+            file="xml/Operation Base Interface/normalizeTransformBase.xml">
+      </toc>
+      <toc
             file="xml/How To Steps/howToSteps.xml"
             primary="true">
       </toc>

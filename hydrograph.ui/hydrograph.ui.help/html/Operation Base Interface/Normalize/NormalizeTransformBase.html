@@ -40,20 +40,14 @@
     </tr>
     <tr>
       <td><span class="code">public void</span></td>
-      <td><span class="code"><a href="#mth_normalize">normalize</a>(<a href="../ReusableRow.html">ReusableRow</a> inputRow)</span><br />
-	  <span>The <i>operation function</i>. This function is called for each input row.</span> 
-	</td>
-    </tr>
-    <tr>
-      <td><span class="code">public void</span></td>
       <td><span class="code"><a href="#mth_cleanup">cleanup</a>()</span><br />
 	  <span class="code">cleanup()</span><span> method is a lifecycle method and is called at the end of entire operation.</span>
 	</td>
     </tr>
     <tr>
-      <td><span class="code">public void<span class="code"></td>
-      <td><span class="code"><a href="#mth_oncompletegroup">onCompleteGroup</a>(<a href="../ReusableRow.html">ReusableRow</a> outputRow)</span><br />
-	  <span class="code">onCompleteGroup()</span><span> method is called after each group is processed.</span>
+      <td><span class="code">public void</span></td>
+      <td><span class="code"><a href="#mth_normalize">normalize</a>(<a href="../ReusableRow.html">ReusableRow</a> inputRow, <a href="../ReusableRow.html">ReusableRow</a> outputRow, <a href ="../OutputDispatcher.html">OutputDispatcher</a> outputDispatcher)</span><br />
+	  <span>The <i>operation function</i>. This function is called for each input row.</span> 
 	</td>
     </tr>
     <tr>
@@ -67,25 +61,25 @@
 
 <p><span class="header-2">Method Detail</span></p>
 
-<a name="mth_normalize" id="mth_normalize"></a>
-<p><span class="header-3">normalize</span></p>
-<p><span class="code">public void normalize(<a href="../ReusableRow.html">ReusableRow</a> input)</span></p>
-<p><span>The method <span class="code">normalize()</span> is the operation function and is called for each input row. The custom normalize logic should be written in this method. Since this method is called for each record in the input, the values of variables local to this method are not persisted for every call. Use <span class="code"><a href="#mth_prepare">prepare</a>()</span> and <span class="code"><a href="#mth_onCompleteGroup">onCompleteGroup</a>()</span> methods to initialize / reset the required variables.</span></p>
-<p><span>The parameter <span class="code">input</span> holds the current input row. Refer the documentation of <a href="../ReusableRow.html">ReusableRow</a> class to get information on accessing individual field of the current input row.</span></p>
-
 <a name="mth_cleanup" id="mth_cleanup"></a>
 <p><span class="header-3">cleanup</span></p>
 <p><span class="code">public void cleanup()</span></p>
 <p><span>The method <span class="code">cleanup()</span> is called after processing all the records in the input. This method can be typically used to do cleanup activities as the name suggests.</span></p>
 <p><span>This method is called just once in the entire lifecycle of the normalize component, after processing all the records.</span></p>
 
-<a name="mth_onCompleteGroup" id="mth_onCompleteGroup"></a>
-<p><span class="header-3">onCompleteGroup</span></p>
-<p><span class="code">public void onCompleteGroup(<a href="../ReusableRow.html">ReusableRow</a> output)</span></p>
-<p><span>The method <span class="code">onCompleteGroup()</span> is called after processing each group. The groups are defined using <a href="../../Components/Normalize_Properties.html#key_fields">key fields</a> option on <a href="../../Components/Normalize_Properties.html">normalize properties</a> window.</span></p>
-<p><span>The result of the normalize operation should be committed to the output row in this method.</span></p>
-<p><span>The parameter <span class="code">output</span> holds the current output row.  Refer the documentation of <a href="../ReusableRow.html">ReusableRow</a> class to get information on accessing individual field of the output row.</span></p>
-<p><span>This method is called multiple times in tnormalize lifecycle of the normalize component. The method is invoked after completion of each group.</span></p>
+<a name="mth_normalize" id="mth_normalize"></a>
+<p><span class="header-3">normalize</span></p>
+<p><span class="code">public void normalize(<a href="../ReusableRow.html">ReusableRow</a> inputRow, <a href="../ReusableRow.html">ReusableRow</a> outputRow, <a href ="../OutputDispatcher.html">OutputDispatcher</a> outputDispatcher)</span></p>
+<p><span>The method <span class="code">normalize()</span> is the operation function and is called for each input row. The custom logic for normalize should be written in this method. The custom logic for normalize involves creating multiple output rows for each input row. The output row is send to out port using sendOutput() method of the outputDispatcher object passed as the parameter. Since this method is called for each record in the input, the values of variables local to this method are not persisted for every call. Use <span class="code"><a href="#mth_prepare">prepare</a>()</span> method to initialize the required variables.</span></p>
+
+<p><span class="code"><b>inputRow</b></span><br />
+<span>The <span class="code">inputRow</span> object holds the current input row. Refer the documentation of <a href="../ReusableRow.html">ReusableRow</a> class to get information on accessing individual field of the current input row.</span></p>
+
+<p><span class="code"><b>outputRow</b></span><br />
+<span>The <span class="code">outputRow</span> object holds the current output row. Refer the documentation of <a href="../ReusableRow.html">ReusableRow</a> class to get information on accessing individual field of the current output row.</span></p>
+
+<p><span class="code"><b>outputDispatcher</b></span><br />
+<span>The <span class="code">outputDispatcher</span> object is a special class which dispatches an output row to the out port of the normalize component.The <a href = "../OutputDispatcher.html#sendOutput">sendOutput</a> method of outputDispatcher is called multiple times per row. </span></p>
 
 <a name="mth_prepare" id="mth_prepare"></a>
 <p><span class="header-3">prepare</span></p>
