@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
@@ -71,6 +72,8 @@ public class CategoriesDialogSourceComposite extends Composite {
 	private AddExternalJarPage addCategoreisDialog;
 	protected String[] filters = new String[] { "*.jar" };
 	private Button deleteButton;
+	private Label addAllSelectedPackagesLabel;
+	private Label addSelectedPackagesLabel;
 
 	/**
 	 * Create the composite.
@@ -92,17 +95,31 @@ public class CategoriesDialogSourceComposite extends Composite {
 
 		comboJarList = new Combo(headerComposite, SWT.READ_ONLY);
 		comboJarList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 0, 1));
-		loadComboJarListFromBuildPath(comboJarList);
-		addListnersToCombo(comboJarList);
+		loadComboJarListFromBuildPath(comboJarList,null);
+		addListnersToCombo();
 		
 		createBrowseButton(headerComposite);
 		createDelButton(headerComposite);
 
-		sourcePackageList = new List(this, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		sourcePackageList = new List(this, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
 		GridData gd_packageList = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_packageList.heightHint = 254;
 		sourcePackageList.setLayoutData(gd_packageList);
 		addDragSupport(sourcePackageList, comboJarList);
+		addListenerToSourcePackageList(sourcePackageList);
+	}
+
+	private void addListenerToSourcePackageList(final List sourcePackageList) {
+		sourcePackageList.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(sourcePackageList.getSelectionCount()>0){
+					addSelectedPackagesLabel.setEnabled(true);
+				}else{
+					addSelectedPackagesLabel.setEnabled(false);
+				}
+			}
+		});
 	}
 
 	private void createBrowseButton(Composite headerComposite) {
@@ -124,8 +141,8 @@ public class CategoriesDialogSourceComposite extends Composite {
 							try {
 								newFile.create(new FileInputStream(file.getAbsoluteFile()), true, null);
 								addFileToBuildPath(newFile);
-								loadComboJarListFromBuildPath(comboJarList);
-								sourcePackageList.removeAll();
+								loadComboJarListFromBuildPath(comboJarList,newFile.getName());
+								
 							} catch (FileNotFoundException | CoreException e1) {
 								LOGGER.error(
 										"Exception occurred while copying jar file from local-file-system to project",
@@ -183,6 +200,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 							comboJarList.remove(jarName);
 							sourcePackageList.removeAll();
 							refresh(jarName);
+							enableOrDisableAddLabelsOnComboSelection();
 						} catch (CoreException e1) {
 							LOGGER.error("Exception occurred while removing jar file" + jarName + "from build Path");
 						}
@@ -255,7 +273,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 			private Object formatDataToTransfer(String[] selection) {
 				StringBuffer buffer = new StringBuffer();
 				for (String field : selection) {
-					buffer.append(field + Constants.DOT + Constants.ASTRISK + SWT.SPACE + Constants.DASH + SWT.SPACE
+					buffer.append(field + Constants.DOT + Constants.ASTERISK + SWT.SPACE + Constants.DASH + SWT.SPACE
 							+ comboJarList.getItem(comboJarList.getSelectionIndex())
 							+ Constants.FIELD_SEPRATOR_FOR_DRAG_DROP);
 				}
@@ -264,33 +282,11 @@ public class CategoriesDialogSourceComposite extends Composite {
 		});
 	}
 
-	private void addListnersToCombo(final Combo comboJarList) {
+	private void addListnersToCombo() {
 		comboJarList.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				sourcePackageList.removeAll();
-				IPackageFragmentRoot iPackageFragmentRoot = (IPackageFragmentRoot) comboJarList.getData(String
-						.valueOf(comboJarList.getSelectionIndex()));
-				if (iPackageFragmentRoot != null) {
-					try {
-						for (IJavaElement iJavaElement : iPackageFragmentRoot.getChildren()) {
-								if (iJavaElement instanceof IPackageFragment) {
-									IPackageFragment packageFragment = (IPackageFragment) iJavaElement;
-									if (packageFragment.containsJavaResources()) {
-										sourcePackageList.add(packageFragment.getElementName());
-									}
-								}
-						}
-					} catch (JavaModelException javaModelException) {
-						LOGGER.warn("Error occurred while fetching packages from "
-								+ iPackageFragmentRoot.getElementName());
-					}
-				}
-				if(comboJarList.getSelectionIndex() ==0){
-					deleteButton.setEnabled(false);
-				}else{
-					deleteButton.setEnabled(true);
-				}
+				populatePackageNameFromSelectedJar();
 			}
 
 			@Override
@@ -298,7 +294,62 @@ public class CategoriesDialogSourceComposite extends Composite {
 		});
 	}
 
-	private void loadComboJarListFromBuildPath(Combo comboJarList) {
+	/**
+	 * Populate packages for selected jar file
+	 * 
+	 */
+	public void populatePackageNameFromSelectedJar() {
+		sourcePackageList.removeAll();
+		IPackageFragmentRoot iPackageFragmentRoot = (IPackageFragmentRoot) comboJarList.getData(String
+				.valueOf(comboJarList.getSelectionIndex()));
+		if (iPackageFragmentRoot != null) {
+			try {
+				for (IJavaElement iJavaElement : iPackageFragmentRoot.getChildren()) {
+						if (iJavaElement instanceof IPackageFragment) {
+							IPackageFragment packageFragment = (IPackageFragment) iJavaElement;
+							if (packageFragment.containsJavaResources()) {
+								if(!isAlreadyPresentInTargetList(packageFragment.getElementName()))
+								sourcePackageList.add(packageFragment.getElementName());
+							}
+						}
+				}
+			} catch (JavaModelException javaModelException) {
+				LOGGER.warn("Error occurred while fetching packages from "
+						+ iPackageFragmentRoot.getElementName());
+			}
+		}
+		if(comboJarList.getSelectionIndex() ==0){
+			deleteButton.setEnabled(false);
+		}else{
+			deleteButton.setEnabled(true);
+		}
+		enableOrDisableAddLabelsOnComboSelection();
+	}
+	
+	private boolean isAlreadyPresentInTargetList(String packageName) {
+		if(packageName!=null){
+			for(String selectedPackage:targetList.getItems()){
+				if(StringUtils.equals(ExpressionEditorUtil.INSTANCE.getPackageNameFromFormattedText(selectedPackage), packageName)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Enables or Disables add-buttons as per the source package list.
+	 */
+	public void enableOrDisableAddLabelsOnComboSelection() {
+		addSelectedPackagesLabel.setEnabled(false);
+		if(sourcePackageList.getItemCount()>0){
+			addAllSelectedPackagesLabel.setEnabled(true);
+		}else{
+			addAllSelectedPackagesLabel.setEnabled(false);
+		}
+	}
+
+	private void loadComboJarListFromBuildPath(Combo comboJarList, String newJarName) {
 		comboJarList.removeAll();
 		IProject iProject = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
 		IJavaProject iJavaProject=null;
@@ -315,6 +366,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 					comboJarList.setData(String.valueOf(comboJarList.getItemCount() - 1), iPackageFragmentRoot);
 				}
 			}
+			selectAndLoadJarData(newJarName);
 		} catch (JavaModelException javaModelException) {
 			LOGGER.error("Error occurred while loading engines-transform jar", javaModelException);
 		}
@@ -328,6 +380,13 @@ public class CategoriesDialogSourceComposite extends Composite {
 			}
 		}
 
+	}
+
+	private void selectAndLoadJarData(String newJarName) {
+		if(StringUtils.isNotBlank(newJarName) && comboJarList.indexOf(newJarName)!=-1){
+			comboJarList.select(comboJarList.indexOf(newJarName));
+			populatePackageNameFromSelectedJar();
+		}
 	}
 
 	private PackageFragmentRoot getSrcPackageFragment(IJavaProject iJavaProject) throws JavaModelException {
@@ -362,4 +421,22 @@ public class CategoriesDialogSourceComposite extends Composite {
 		this.targetComposite = categoriesDialogTargetComposite;
 	}
 
+	public void setAddAllLabel(Label addAllSelectedPackagesLabel) {
+		this.addAllSelectedPackagesLabel=addAllSelectedPackagesLabel;
+	}
+
+	public void setAddLabel(Label addSelectedPackagesLabel) {
+		this.addSelectedPackagesLabel=addSelectedPackagesLabel;
+	}
+	
+	public Combo getComboJarList() {
+		return comboJarList;
+	}
+	
+	public List getSourcePackageList() {
+		return sourcePackageList;
+	}
+
 }
+
+

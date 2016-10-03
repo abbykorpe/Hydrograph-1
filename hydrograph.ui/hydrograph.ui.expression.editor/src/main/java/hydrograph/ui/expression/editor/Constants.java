@@ -35,7 +35,7 @@ public class Constants {
 	public static final String DASH = "-";
 	public static final String DEFAULT_SEARCH_TEXT = "Search";
 	public static final String SPACE = " ";
-	public static final String ASTRISK = "*";
+	public static final String ASTERISK = "*";
 	public static final String COLON = ":";
 
 	public static final String ANTLR_JAR_FILE_NAME = "antlr4-runtime";

@@ -13,16 +13,17 @@
 
 package hydrograph.ui.expression.editor.composites;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.PathConstant;
-import hydrograph.ui.expression.editor.buttons.OperatorToolCombo;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.logging.factory.LogFactory;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
@@ -34,20 +35,27 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.slf4j.Logger;
-
 public class CategoriesDialogTargetComposite extends Composite {
 	private List targetList;
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(CategoriesDialogTargetComposite.class);
+	private Label addAllSelectedPackagesLabel;
+	private Label addSelectedPackagesLabel;
+	private List sourcePackageList;
+	private Combo comboJarList;
+	private CategoriesDialogSourceComposite categoriesDialogSourceComposite;
 
 	/**
 	 * Create the composite.
@@ -58,19 +66,22 @@ public class CategoriesDialogTargetComposite extends Composite {
 	 */
 	public CategoriesDialogTargetComposite(Composite parent, CategoriesDialogSourceComposite categoriesDialogSourceComposite, int style) {
 		super(parent, style);
-		setLayout(new GridLayout(1, false));
+		setLayout(new GridLayout(2, false));
+		new Label(this, SWT.NONE);
 
 		Composite upperComposite = new Composite(this, SWT.NONE);
 		upperComposite.setLayout(new GridLayout(2, false));
-		GridData gd_upperComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		GridData gd_upperComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 0, 0);
 		gd_upperComposite.heightHint = 34;
 		upperComposite.setLayoutData(gd_upperComposite);
 
 		Label lblSelectedCategories = new Label(upperComposite, SWT.NONE);
 		lblSelectedCategories.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblSelectedCategories.setText("Selected Categories");
+		lblSelectedCategories.setText("Selected Packages");
 
 		createDelButton(upperComposite);
+		
+		createMiddleLayer();
 
 		targetList = new List(this, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION|SWT.V_SCROLL|SWT.H_SCROLL);
 		targetList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -82,8 +93,99 @@ public class CategoriesDialogTargetComposite extends Composite {
 		linkSourceAndTarget(categoriesDialogSourceComposite);
 	}
 
+	private void createMiddleLayer() {
+		Composite middleComposite = new Composite(this, SWT.NONE);
+		middleComposite.setLayout(new GridLayout(1, false));
+		middleComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
+		
+		addAllSelectedPackagesLabel = new Label(middleComposite, SWT.NONE);
+		addAllSelectedPackagesLabel.setBounds(6, 70, 25, 25);
+		Image selectAllColumns = new Image(middleComposite.getShell().getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.SELECT_ALL_ICON);
+		addAllSelectedPackagesLabel.setImage(selectAllColumns);
+		addAllSelectedPackagesLabel.setToolTipText("Add all packages");
+		addListenerToSelectAllLable(addAllSelectedPackagesLabel);
+		addAllSelectedPackagesLabel.setEnabled(false);
+		
+		Label dummyLabel = new Label(middleComposite, SWT.NONE);
+		
+		addSelectedPackagesLabel = new Label(middleComposite, SWT.NONE);
+		addSelectedPackagesLabel.setBounds(6, 110, 25, 25);
+		Image select = new Image(middleComposite.getShell().getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SELECT_ICON);
+		addSelectedPackagesLabel.setImage(select);
+		addSelectedPackagesLabel.setToolTipText("Add selected packages");
+		addListenerToSelectLable(addSelectedPackagesLabel);
+		addSelectedPackagesLabel.setEnabled(false);
+	}
+
+	private void addListenerToSelectAllLable(Label selectAllLabel) {
+		selectAllLabel.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				if (comboJarList.getSelectionIndex() != -1) {
+					for (String packageName : sourcePackageList.getItems()) {
+						String formattedPackageName = packageName + Constants.DOT + Constants.ASTERISK + SWT.SPACE
+								+ Constants.DASH + SWT.SPACE + comboJarList.getItem(comboJarList.getSelectionIndex());
+						if (isFieldAvailable(formattedPackageName)) {
+							targetList.add(formattedPackageName);
+							removeAddedPackageNameFromSourceList(formattedPackageName);
+						}
+					}
+					categoriesDialogSourceComposite.enableOrDisableAddLabelsOnComboSelection();
+				}
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {}
+		});
+	}
+
+	private void addListenerToSelectLable(Label selectLabel) {
+		selectLabel.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				if (comboJarList.getSelectionIndex() != -1) {
+					for (String packageName : sourcePackageList.getSelection()) {
+						String formattedPackageName = packageName + Constants.DOT + Constants.ASTERISK + SWT.SPACE
+								+ Constants.DASH + SWT.SPACE + comboJarList.getItem(comboJarList.getSelectionIndex());
+						if (isFieldAvailable(formattedPackageName)) {
+							targetList.add(formattedPackageName);
+							removeAddedPackageNameFromSourceList(formattedPackageName);
+						}
+					}
+					categoriesDialogSourceComposite.enableOrDisableAddLabelsOnComboSelection();
+				}
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {}
+		});
+	}
+
+	private void removeAddedPackageNameFromSourceList(String formattedPackageName) {
+		if (sourcePackageList.indexOf(formattedPackageName) != -1) {
+			sourcePackageList.remove(formattedPackageName);
+		} else {
+			String packageName = ExpressionEditorUtil.INSTANCE.getPackageNameFromFormattedText(formattedPackageName);
+			if (sourcePackageList.indexOf(packageName) != -1) {
+				sourcePackageList.remove(packageName);
+			}
+		}
+	}
+
 	private void linkSourceAndTarget(CategoriesDialogSourceComposite categoriesDialogSourceComposite) {
+		categoriesDialogSourceComposite.setAddAllLabel(addAllSelectedPackagesLabel);
+		categoriesDialogSourceComposite.setAddLabel(addSelectedPackagesLabel);
+		this.sourcePackageList=categoriesDialogSourceComposite.getSourcePackageList();
+		this.comboJarList=categoriesDialogSourceComposite.getComboJarList();
+		categoriesDialogSourceComposite.setTargetList(targetList);
 		categoriesDialogSourceComposite.setTargetComposite(this);
+		this.categoriesDialogSourceComposite=categoriesDialogSourceComposite;
 	}
 
 	public void loadPackagesFromPropertyFileSettingFolder() {
@@ -127,6 +229,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 				for (String field : targetList.getSelection()) {
 					targetList.remove(field);
 				}
+				categoriesDialogSourceComposite.populatePackageNameFromSelectedJar();
 			}
 
 			@Override
@@ -142,9 +245,12 @@ public class CategoriesDialogTargetComposite extends Composite {
 		dropTarget.setTransfer(new Transfer[] { TextTransfer.getInstance() });
 		dropTarget.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
-				for (String fieldName : ExpressionEditorUtil.INSTANCE.getformatedData((String) event.data)) {
-					if (isFieldAvailable(fieldName))
-						targetList.add(fieldName);
+				for (String formattedPackageName : ExpressionEditorUtil.INSTANCE.getformatedData((String) event.data)) {
+					if (isFieldAvailable(formattedPackageName)){
+						targetList.add(formattedPackageName);
+						removeAddedPackageNameFromSourceList(formattedPackageName);
+						categoriesDialogSourceComposite.enableOrDisableAddLabelsOnComboSelection();
+					}
 				}
 			}
 		});
