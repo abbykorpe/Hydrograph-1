@@ -273,7 +273,7 @@ public class CategoriesDialogSourceComposite extends Composite {
 			private Object formatDataToTransfer(String[] selection) {
 				StringBuffer buffer = new StringBuffer();
 				for (String field : selection) {
-					buffer.append(field + Constants.DOT + Constants.ASTRISK + SWT.SPACE + Constants.DASH + SWT.SPACE
+					buffer.append(field + Constants.DOT + Constants.ASTERISK + SWT.SPACE + Constants.DASH + SWT.SPACE
 							+ comboJarList.getItem(comboJarList.getSelectionIndex())
 							+ Constants.FIELD_SEPRATOR_FOR_DRAG_DROP);
 				}

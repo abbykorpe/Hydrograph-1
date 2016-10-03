@@ -123,7 +123,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 			public void mouseUp(MouseEvent e) {
 				if (comboJarList.getSelectionIndex() != -1) {
 					for (String packageName : sourcePackageList.getItems()) {
-						String formattedPackageName = packageName + Constants.DOT + Constants.ASTRISK + SWT.SPACE
+						String formattedPackageName = packageName + Constants.DOT + Constants.ASTERISK + SWT.SPACE
 								+ Constants.DASH + SWT.SPACE + comboJarList.getItem(comboJarList.getSelectionIndex());
 						if (isFieldAvailable(formattedPackageName)) {
 							targetList.add(formattedPackageName);
@@ -148,7 +148,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 			public void mouseUp(MouseEvent e) {
 				if (comboJarList.getSelectionIndex() != -1) {
 					for (String packageName : sourcePackageList.getSelection()) {
-						String formattedPackageName = packageName + Constants.DOT + Constants.ASTRISK + SWT.SPACE
+						String formattedPackageName = packageName + Constants.DOT + Constants.ASTERISK + SWT.SPACE
 								+ Constants.DASH + SWT.SPACE + comboJarList.getItem(comboJarList.getSelectionIndex());
 						if (isFieldAvailable(formattedPackageName)) {
 							targetList.add(formattedPackageName);
@@ -249,6 +249,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 					if (isFieldAvailable(formattedPackageName)){
 						targetList.add(formattedPackageName);
 						removeAddedPackageNameFromSourceList(formattedPackageName);
+						categoriesDialogSourceComposite.enableOrDisableAddLabelsOnComboSelection();
 					}
 				}
 			}

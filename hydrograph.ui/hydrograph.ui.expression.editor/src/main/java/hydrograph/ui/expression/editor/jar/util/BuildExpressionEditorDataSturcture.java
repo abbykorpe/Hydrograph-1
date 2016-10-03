@@ -180,7 +180,7 @@ public class BuildExpressionEditorDataSturcture {
 				properties.load(inStream);
 				
 				for(Object key:properties.keySet()){
-					String packageName=StringUtils.remove((String)key,Constants.DOT+Constants.ASTRISK);
+					String packageName=StringUtils.remove((String)key,Constants.DOT+Constants.ASTERISK);
 					if(StringUtils.isNotBlank(properties.getProperty((String)key)) && StringUtils.isNotBlank(packageName)){
 						loadUserDefinedClassesInClassRepo(properties.getProperty((String)key),packageName);
 					}

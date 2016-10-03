@@ -184,7 +184,7 @@ public class ExpressionEditorUtil {
 		StringBuffer buffer=new StringBuffer();
 		try {
 		buffer.append(formattedPackageName);
-		buffer.delete(buffer.lastIndexOf(Constants.ASTRISK), formattedPackageName.length()-1);
+		buffer.delete(buffer.lastIndexOf(Constants.ASTERISK), formattedPackageName.length()-1);
 		buffer.delete(buffer.lastIndexOf(Constants.DOT), buffer.length());
 		return buffer.toString();
 		}
