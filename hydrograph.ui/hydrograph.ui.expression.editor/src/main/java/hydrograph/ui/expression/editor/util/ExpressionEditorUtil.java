@@ -15,8 +15,10 @@ package hydrograph.ui.expression.editor.util;
 
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
 import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
+import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,12 +50,13 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import hydrograph.ui.expression.editor.Messages;
+import org.slf4j.Logger;
 
 public class ExpressionEditorUtil {
 
 	public static final ExpressionEditorUtil INSTANCE = new ExpressionEditorUtil();
-
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ExpressionEditorUtil.class);
+	
 	public String[] getformatedData(String formatedString) {
 		String[] fieldNameArray = null;
 		if (formatedString != null) {
@@ -166,5 +169,28 @@ public class ExpressionEditorUtil {
 		}
 		expressionEditorData.setValid(true);
 		}
+	}
+	
+	
+	/**
+	 * Returns package name from formatted text. 
+	 * 
+	 * @param formattedPackageName
+	 * 		  	Format should be : package-name.* - jarname
+	 * @return
+	 * 			package-name
+	 */
+	public String getPackageNameFromFormattedText(String formattedPackageName){
+		StringBuffer buffer=new StringBuffer();
+		try {
+		buffer.append(formattedPackageName);
+		buffer.delete(buffer.lastIndexOf(Constants.ASTRISK), formattedPackageName.length()-1);
+		buffer.delete(buffer.lastIndexOf(Constants.DOT), buffer.length());
+		return buffer.toString();
+		}
+		catch (Exception exception) {
+			LOGGER.warn("Invalid format of package name",exception);
+		}
+		return Constants.EMPTY_STRING;
 	}
 }
