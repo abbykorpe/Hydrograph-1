@@ -32,6 +32,21 @@
 
 			<p><span>4)	Go to Project Explorer, Right click on the project > Team > Commit</p></span>
 			<p><img alt="" src="../images/Git_commit_1.png" /></p>
+			<p><span>Note: There may be few empty folders in your ELT project. By default, those folders will not be pushed to upstream repository. If you want to keep those folders in upstream Git repository, create a .gitigonre file with following 4-line content:</p></span>
+			
+			<p><span># Ignore everything in this directory</p></span>
+			<p><span>*</p></span>
+			<p><span># Except this file</p></span>
+			<p><span>!.gitignore</p></span>
+			
+			<p><span>However, once you add something to these empty folders, you would need to remove or update the .gitignore file accordingly.</p></span>
+			
+			<p><span>Similarly, if you want to not check in certain files/folders and also, want to avoid them showing up in commit window, create a .gitignore and list such files/folders in it. For example, a .gitignore file with below content will exclude folders bin, target and files .settings, .classpath from checking in:</p></span>
+			<p><span>/target</p></span>
+			<p><span>/bin</p></span>
+			<p><span>/.settings</p></span>
+			<p><span>/.classpath</p></span>
+						
 
 			<p><span>5)	Enter commit message and choose files to commit (check in ) and then click Commit:</p></span>
 			<p><img alt="" src="../images/Git_commit_2.png" /></p>

@@ -15,13 +15,13 @@
 
 <toc label="GIT- How to work with Git in Hydrograph" link_to="xml/How To Steps/howToSteps.xml#GitWorkWithGit">
    <topic href="html/How To Steps/GIT-How_to_work_with_Git_in_Hydrograph.html" label="GIT- How to work with Git in Hydrograph">
-		<topic href="html/How To Steps/GIT-How_to_create_new_Hydrograph_project.html" label="How to create new Hydrograph project in Git Repository">
+		<topic href="html/How To Steps/GIT-How_to_create_new_Hydrograph_project.html" label="Creating new ELT project in Git Repository">
 		</topic>
-		<topic href="html/How To Steps/GIT-How_to_Check_in_New_Project.html" label="How to Check in New Hydrograph Project Git Repository">
+		<topic href="html/How To Steps/GIT-How_to_Check_in_New_Project.html" label="Check in New ELT Project Git Repository">
 		</topic>
-		<topic href="html/How To Steps/Git_How_to_check_out_existing_Hydrograph_proj_from_Git.html" label="How to check out existing Hydrograph project from Git">
+		<topic href="html/How To Steps/Git_How_to_check_out_existing_Hydrograph_proj_from_Git.html" label="Check out existing ELT project from Git">
 		</topic>		
-		<topic href="html/How To Steps/GIT-How_to_check_in_changes_to_existing_Hydrograph_project.html" label="How to check in changes to existing Hydrograph project Git Repository">
+		<topic href="html/How To Steps/GIT-How_to_check_in_changes_to_existing_Hydrograph_project.html" label="Check in changes to existing ELT project Git Repository">
 		</topic>		
    </topic>	
 </toc>
