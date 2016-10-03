@@ -14,19 +14,20 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import hydrograph.ui.propertywindow.custom.celleditor.CustomComboBoxCellEditor;
 import hydrograph.ui.propertywindow.messages.Messages;
 
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+
 
 
 /**
@@ -116,7 +117,7 @@ public abstract class GridWidgetCommonBuilder {
 	 *            the position
 	 */
 	protected void addComboBox(Table table, CellEditor[] cellEditor, String[] data, int position){
-		cellEditor[position] = new ComboBoxCellEditor(table, data, SWT.READ_ONLY);		
+		cellEditor[position] = new CustomComboBoxCellEditor(table, data, SWT.READ_ONLY);		
 	}
 	
 	public static String[] dataTypeList;

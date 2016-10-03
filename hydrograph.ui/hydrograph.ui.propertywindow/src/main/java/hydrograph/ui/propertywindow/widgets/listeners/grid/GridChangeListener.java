@@ -14,23 +14,20 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
+import hydrograph.ui.propertywindow.custom.celleditor.CustomComboBoxCellEditor;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.extended.GridCellEditorListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Combo;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * 
  * @author Bitwise
@@ -66,13 +63,13 @@ public class GridChangeListener {
 		for(CellEditor cellEditor : cellEditors){
 			if(cellEditor instanceof TextCellEditor)
 				cellEditor.addListener(new GridCellEditorListener(propertyDialogButtonBar));
-			else if(cellEditor instanceof ComboBoxCellEditor){
+			else if(cellEditor instanceof CustomComboBoxCellEditor){
 				attachComboChangeListener(cellEditor);
 			}
 		}
 	}
 	private void attachComboChangeListener(CellEditor cellEditor) {
-		((CCombo)cellEditor.getControl()).addSelectionListener(new SelectionAdapter() {
+		((Combo)cellEditor.getControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				propertyDialogButtonBar.enableApplyButton(true);
