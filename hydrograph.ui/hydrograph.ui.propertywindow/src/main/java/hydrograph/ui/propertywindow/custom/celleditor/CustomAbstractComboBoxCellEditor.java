@@ -19,6 +19,9 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * @author Bitwise
+ * 
+ * Base class for all cell editors which will be
+ * used as a Custom-combo box.
  *
  */
 abstract class CustomAbstractComboBoxCellEditor extends CellEditor {

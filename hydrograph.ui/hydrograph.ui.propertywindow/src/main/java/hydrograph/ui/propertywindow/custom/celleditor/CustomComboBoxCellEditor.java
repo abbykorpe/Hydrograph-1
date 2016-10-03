@@ -33,6 +33,8 @@ import org.eclipse.swt.widgets.Control;
 /**
  * @author Bitwise
  *
+ * A cell editor that represents a list of combo box items.
+ * This class may be instantiated; but it is not intended to be sub classed.
  */
 public class CustomComboBoxCellEditor extends CustomAbstractComboBoxCellEditor {
 
@@ -167,7 +169,7 @@ public class CustomComboBoxCellEditor extends CustomAbstractComboBoxCellEditor {
 		}
 	}
 
-	void applyEditorValueAndDeactivate() {
+	private void applyEditorValueAndDeactivate() {
 		selection = comboBox.getSelectionIndex();
 		Object newValue = doGetValue();
 		markDirty();
