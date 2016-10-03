@@ -157,16 +157,7 @@
             primary="true">
       </toc>
 	  <toc
-            file="xml/How To Steps/git_create_new_project.xml">
-      </toc>
-      <toc
-            file="xml/How To Steps/git_checkout_exst_prj.xml">
-      </toc>
-	   <toc
-            file="xml/How To Steps/git_check_in_new_proj.xml">
-      </toc>
-	   <toc
-            file="xml/How To Steps/git_check_in_existing_proj.xml">
+            file="xml/How To Steps/git_working_with_git_in_hydrograph.xml">
       </toc>
       <toc
             file="xml/How To Steps/howToCreateAJob.xml">

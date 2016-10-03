@@ -17,10 +17,7 @@
    <anchor id="CreateJob"/>
    <anchor id="CreateProject"/>
    <anchor id="ImportProject"/>
-   <anchor id="GitCreateNewProj"/>
-   <anchor id="GitChkOutExstProj"/>
-   <anchor id="GitChkInNewProj"/>
-   <anchor id="GitChkInExstProj"/>
+   <anchor id="GitWorkWithGit"/>
    <anchor id="RunJobCluster"/>
    <anchor id="RunJobLocally"/>
    <anchor id="ParameterizeComponentProperties"/>
