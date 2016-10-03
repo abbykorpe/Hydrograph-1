@@ -10,13 +10,14 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
 
+
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
-	<tns:component paletteIconPath="/icons/runprogram_palette.png" canvasIconPath="/icons/runprogram_canvas.png"
-		name="RunProgram" nameInPalette="Run Program" defaultNamePrefix="RunProgram" 
-		description="Run's command given as input"
+	<tns:component paletteIconPath="/icons/sql_palette.png" canvasIconPath="/icons/sql_canvas.png"
+		name="SQLComponent" nameInPalette="SQL" defaultNamePrefix="SQL" 
+		description="This is SQL component."
 		helpFilePath="/hydrograph.ui.help/html/Components/Clone.html"
-		acronym="Run">
+		acronym="Sql">
 		<tns:category>COMMAND</tns:category>
 			<tns:port>
 			<tns:portSpecification numberOfPorts="0" portAlignment="left" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
@@ -31,13 +32,13 @@
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 		
-		<tns:property dataType="string" name="runcommand" value="" renderer="RUNPROGRAM_TEXT_WIDGET" type="USER"
+		<tns:property dataType="string" name="file" renderer="FILE_PATH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
-			usage="REQUIRED" propertyHelpText="Displays command provided by user">
+			usage="REQUIRED" propertyHelpText="Displays the location of the file either Remote/Local. \nAllows only underscore ‘_’ and alphanumeric characters.">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="phase" value="0" renderer="PHASE_WIDGET" type="USER"
+		<tns:property dataType="string" name="phase" value="0" renderer="BATCH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence \nof this component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>

@@ -71,6 +71,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -1758,5 +1759,73 @@ import org.xml.sax.SAXException;
 		currentSchemaProperty.put(propertyName, schema);
 	}
 	
+
+
+public void highlightInvalidRowWithRedColor(GridRow gridRow)
+{ 
+	for(TableItem item:table.getItems())
+	{
+		if(gridRow==null)
+	    gridRow=(GridRow)item.getData();	
+	    if(StringUtils.equalsIgnoreCase(item.getText(),gridRow.getFieldName()))
+		{
+			if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), "java.math.BigDecimal"))&&(StringUtils.isBlank(gridRow.getPrecision()) || StringUtils.isBlank(gridRow.getScale()) ||
+				StringUtils.equalsIgnoreCase(gridRow.getScaleTypeValue(), "none")||
+					!(gridRow.getScale().matches("\\d+"))||!(gridRow.getPrecision().matches("\\d+"))
+					))
+			{
+				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				
+			}
+			else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),"java.util.Date") && (StringUtils.isBlank(gridRow.getDateFormat()) ))
+			{
+				item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+			}
+			else if(gridRow instanceof FixedWidthGridRow && !(gridRow instanceof GenerateRecordSchemaGridRow))
+			{
+			
+				FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
+				if(fixedWidthGridRow instanceof MixedSchemeGridRow)
+				{
+					if((StringUtils.isBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isBlank(fixedWidthGridRow.getLength())))
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}	
+					else if(StringUtils.isNotBlank(fixedWidthGridRow.getDelimiter()) && StringUtils.isNotBlank(fixedWidthGridRow.getLength()))	
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}
+					else if(StringUtils.isNotBlank(fixedWidthGridRow.getLength())&& !(fixedWidthGridRow.getLength().matches("\\d+")))	
+					{
+						item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+					}
+					else
+					{
+						item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+					}	
+					
+				}
+				else
+				{
+					
+				if(Arrays.asList(getPropertiesToShow()).contains(LENGTH)&&(StringUtils.isBlank(fixedWidthGridRow.getLength())||!(fixedWidthGridRow.getLength().matches("\\d+"))) )
+				{
+					item.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+				}	
+				else
+				{
+					item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				}	
+				}	
+			}	
+			else
+			{
+				item.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+			}	
+			gridRow=null;
+		}	
+	    
+		}	
 	}
+}
 
