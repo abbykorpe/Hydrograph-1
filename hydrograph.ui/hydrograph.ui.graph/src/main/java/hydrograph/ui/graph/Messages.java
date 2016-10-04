@@ -94,6 +94,10 @@ public class Messages extends NLS {
 	public static String VALIDITY_STATUS;
 	
 	public static String UNABLE_TO_CREATE_JOB_SPECIFIC_FILE;
+
+	public static String CONFIRM_TO_SAVE_JOB_BEFORE_RUN;
+
+	public static String CONFIRM_TO_SAVE_JOB_BEFORE_RUN_DIALOG_TITLE;
 	
 	static {
 		// initialize resource bundle
