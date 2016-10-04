@@ -19,6 +19,7 @@ import hydrograph.ui.engine.ui.converter.TransformUiConverter;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -99,7 +100,7 @@ public class CumulateUiConverter extends TransformUiConverter {
 		TypePrimaryKeyFields typePrimaryKeyFields = cumulate.getPrimaryKeys();
 		if (typePrimaryKeyFields != null) {
 
-			primaryKeySet = new LinkedList<String>();
+			primaryKeySet = new ArrayList<String>();
 			for (TypeFieldName fieldName : typePrimaryKeyFields.getField()) {
 				primaryKeySet.add(fieldName.getName());
 			}
