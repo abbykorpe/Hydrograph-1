@@ -88,6 +88,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 75.#1349 [Sonia Raheja] Subjob Component: User is Not able to Create Nested Subjob.
 76.#286  [shashank karnik] Show warning/error message if schema has errors and user tries to export it.
 77.#1374 [Nitin Gupta] Confirmation Message is Not Getting Displayed Before Starting Job Execution.
+78.#1352 [Akhilesh Joshi]User is NOT able to Copy/Paste the Multiple Component from One Job Canvas to Another
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
