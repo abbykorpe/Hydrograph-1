@@ -16,12 +16,15 @@ import hydrograph.engine.utilities.Constants;
 
 import java.lang.reflect.Type;
 
+<<<<<<< bf166effb2f6d67243a0923b950add6638823712
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+=======
+>>>>>>> Revert "Fixed issue #1288 with UnionAll component. Removed below attributes from hashcode and equals method of SchemaField class as these should not be considered for schema comparsion."
 /**
  * This is a POJO which holds the information for one field of any Input and
  * Output components like
@@ -29,12 +32,8 @@ import org.slf4j.LoggerFactory;
  * InputFile} ,
  * {@link hydrograph.engine.cascading.assembly.OutputFileFixedWidthAssembly
  * OutputFile} etc. The object of this class is supposed to be used in the
- * entity classes for the Input/Output type components<br>
- * <b>Note:</b><br>
- * This class does not consider below field attributes while comparing fields<br>
- * 1. Default Value<br>
- * 2. Range From<br>
- * 3. Range To<br>
+ * entity classes for the Input/Output type components
+ * 
  * @author gurdits
  *
  */
@@ -52,8 +51,12 @@ public class SchemaField implements Cloneable {
 	private String fieldDefaultValue;
 	private String fieldToRangeValue;
 	private String fieldFromRangeValue;
+<<<<<<< bf166effb2f6d67243a0923b950add6638823712
 	private String colDef;
 	private static Logger LOG = LoggerFactory.getLogger(SchemaField.class);
+=======
+
+>>>>>>> Revert "Fixed issue #1288 with UnionAll component. Removed below attributes from hashcode and equals method of SchemaField class as these should not be considered for schema comparsion."
 	public SchemaField(String fieldName, String fieldDataType) {
 		this.fieldName = fieldName;
 		this.fieldDataType = fieldDataType;
@@ -269,7 +272,7 @@ public class SchemaField implements Cloneable {
 		try {
 			return (SchemaField) super.clone();
 		} catch (CloneNotSupportedException e) {
-			LOG.error("Error while cloning SchemaField", e);
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -279,13 +282,16 @@ public class SchemaField implements Cloneable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((fieldDataType == null) ? 0 : fieldDataType.hashCode());
+		result = prime * result + ((fieldDefaultValue == null) ? 0 : fieldDefaultValue.hashCode());
 		result = prime * result + ((fieldFormat == null) ? 0 : fieldFormat.hashCode());
+		result = prime * result + ((fieldFromRangeValue == null) ? 0 : fieldFromRangeValue.hashCode());
 		result = prime * result + fieldLength;
 		result = prime * result + ((fieldLengthDelimiter == null) ? 0 : fieldLengthDelimiter.hashCode());
 		result = prime * result + ((fieldName == null) ? 0 : fieldName.hashCode());
 		result = prime * result + fieldPrecision;
 		result = prime * result + fieldScale;
 		result = prime * result + ((fieldScaleType == null) ? 0 : fieldScaleType.hashCode());
+		result = prime * result + ((fieldToRangeValue == null) ? 0 : fieldToRangeValue.hashCode());
 		result = prime * result + ((typeFieldLengthDelimiter == null) ? 0 : typeFieldLengthDelimiter.hashCode());
 		return result;
 	}
@@ -304,10 +310,20 @@ public class SchemaField implements Cloneable {
 				return false;
 		} else if (!fieldDataType.equals(other.fieldDataType))
 			return false;
+		if (fieldDefaultValue == null) {
+			if (other.fieldDefaultValue != null)
+				return false;
+		} else if (!fieldDefaultValue.equals(other.fieldDefaultValue))
+			return false;
 		if (fieldFormat == null) {
 			if (other.fieldFormat != null)
 				return false;
 		} else if (!fieldFormat.equals(other.fieldFormat))
+			return false;
+		if (fieldFromRangeValue == null) {
+			if (other.fieldFromRangeValue != null)
+				return false;
+		} else if (!fieldFromRangeValue.equals(other.fieldFromRangeValue))
 			return false;
 		if (fieldLength != other.fieldLength)
 			return false;
@@ -329,6 +345,11 @@ public class SchemaField implements Cloneable {
 			if (other.fieldScaleType != null)
 				return false;
 		} else if (!fieldScaleType.equals(other.fieldScaleType))
+			return false;
+		if (fieldToRangeValue == null) {
+			if (other.fieldToRangeValue != null)
+				return false;
+		} else if (!fieldToRangeValue.equals(other.fieldToRangeValue))
 			return false;
 		if (typeFieldLengthDelimiter == null) {
 			if (other.typeFieldLengthDelimiter != null)
