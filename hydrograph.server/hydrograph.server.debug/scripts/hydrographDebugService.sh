@@ -43,7 +43,7 @@ exportMailConfigurations(){
     then
         . $mailConfigFile
     else
-        echo "config/mail.properties file not found"
+        echo "$mailConfigFile file not found"
     fi
 }
 
@@ -61,7 +61,7 @@ function monitor_service() {
 				"$mail_smtp_to"
             rc=$?
             if [ $rc -ne 0 ]; then
-                echo "Failed while sending email"
+                echo "Failed while sending email with return code: "$rc
             fi
             break
         fi
