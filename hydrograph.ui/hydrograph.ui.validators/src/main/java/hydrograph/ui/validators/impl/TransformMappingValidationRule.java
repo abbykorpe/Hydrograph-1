@@ -30,7 +30,6 @@ import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -123,14 +122,21 @@ public class TransformMappingValidationRule implements IValidator{
 			    }	
 			   
 			}
+			Set<String> duplicateOperationIdSet=new HashSet<String>();
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
 				   set = new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
 				   if(set.size() < mappingSheetRow.getInputFields().size())
 				   {
-					 errorMessage = propertyName + "Duplicate field(s) exists in" +" "+mappingSheetRow.getOperationID();		
+					 errorMessage = propertyName + "Duplicate field(s) exists in" +" "+mappingSheetRow.getOperationID();
 					 return false;
 				   }
+				   
+				   if(!(duplicateOperationIdSet.add(mappingSheetRow.getOperationID())))
+				   {
+					   errorMessage = propertyName + "Duplicate operation Id"+" "+mappingSheetRow.getOperationID();
+					   return false;
+				   }   
 			}
 			
 		}
