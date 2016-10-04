@@ -7,10 +7,11 @@ import java.io.File;
 
 import org.eclipse.core.internal.registry.ConfigurationElementHandle;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -34,6 +35,8 @@ import com.thoughtworks.xstream.XStream;
 
 public class CustomInstallationDialog extends InstallationDialog {
 
+	
+	
 	private final static int MORE_ID = IDialogConstants.CLIENT_ID + 1;
 	private final static int COLUMNS_ID = MORE_ID + 2;
 	private static IServiceLocator serviceLocator;
@@ -90,19 +93,45 @@ public class CustomInstallationDialog extends InstallationDialog {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-			TabItem item=folder.getItem(1);
-			Composite comp1=(Composite) item.getControl();
-				SashForm form=(SashForm) comp1.getChildren()[0];
-				Composite composite=(Composite) form.getChildren()[0];
+			TabItem item=folder.getItem(3);
+				//SashForm form=(SashForm) comp1.getChildren()[0];
+				//Composite composite=(Composite) form.getChildren()[0];
+			Composite comp1=(Composite)((Composite)((Composite)composite.getParent().getChildren()[1]).getChildren()[0]).getChildren()[0].getParent();
+			
+				if(folder.getSelectionIndex()==3){
+					// increment the number of columns in the button bar
+					
+					((GridLayout) comp1.getLayout()).numColumns=((GridLayout) comp1.getLayout()).numColumns+3;
+					comp1.setBackground(new Color(null,200,0,0));
+					Composite compositeaa=new Composite(comp1, SWT.BORDER);
+					compositeaa.setBackground(new Color(null, 0,0,200));
+					Button button = new Button(comp1, SWT.PUSH);
+					button.setText("LLLLLLLL");
+					button.setFont(JFaceResources.getDialogFont());
+					button.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent event) {
+							buttonPressed(((Integer) event.widget.getData()).intValue());
+						}
+					});
+					
+					comp1.getChildren()[3].dispose();
+					
+					setButtonLayoutData(button);
+					comp1.getChildren();
+					comp1.redraw();
+					System.out.println();
+					
+			}
+				
 				if(folder.getSelectionIndex()==1){
-					Composite composites=(Composite)composite.getParent().getChildren()[1];
-					Composite composite2=(Composite) composites.getChildren()[0];
-					composite2.getChildren()[0].setVisible(true);
-					composite2.getChildren()[2].setVisible(true);
-					composite2.setLayout(new GridLayout(6, true));
-					composite2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,false,0,0));
-					composite2.setBackground(new Color(null,255,0,0));
-					System.out.println(">>>>>>>>>>>>>>>>>"+folder);
+					TabItem item2=folder.getItem(1);
+					
+					for(Control control:comp1.getChildren()){
+						if(control instanceof Button){
+							Button button=(Button) control;
+							
+						}
+					}
 				}
 			}
 			
@@ -151,15 +180,22 @@ public class CustomInstallationDialog extends InstallationDialog {
  
 	@Override
 	protected void createButtons(InstallationPage page) {
+		
 		super.createButtons(page);
 	}
 	
 	public void createPageButtons(Composite parent) {
+		
+		
 		Button moreInfo = createButton(parent, MORE_ID, WorkbenchMessages.AboutPluginsDialog_moreInfo, false);
 		moreInfo.setEnabled(false);
 
 		Button columns = createButton(parent, COLUMNS_ID, WorkbenchMessages.AboutPluginsDialog_columns, false);
 
 	}
-
+@Override
+public int open() {
+	// TODO Auto-generated method stub
+	return super.open();
+}
 }
