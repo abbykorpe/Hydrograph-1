@@ -156,11 +156,8 @@
             file="xml/How To Steps/howToSteps.xml"
             primary="true">
       </toc>
-      <toc
-            file="xml/How To Steps/git_howToCheckinJobsProject.xml">
-      </toc>
-      <toc
-            file="xml/How To Steps/git_howToCheckoutProject.xml">
+	  <toc
+            file="xml/How To Steps/git_working_with_git_in_hydrograph.xml">
       </toc>
       <toc
             file="xml/How To Steps/howToCreateAJob.xml">
