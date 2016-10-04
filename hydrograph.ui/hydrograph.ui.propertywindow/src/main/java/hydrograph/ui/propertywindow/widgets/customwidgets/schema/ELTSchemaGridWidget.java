@@ -18,6 +18,7 @@ import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
@@ -99,6 +100,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -294,6 +296,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	 @Override
 	 public LinkedHashMap<String, Object> getProperties() {
+		 
+		 if(OSValidator.isMac())
+		 {
+			for(CellEditor cellEditor : tableViewer.getCellEditors()){
+				 cellEditor.getControl().setEnabled(false);
+				 cellEditor.getControl().setEnabled(true);
+				 }
+		 }
 
 		 LinkedHashMap<String, Object> currentSchemaProperty = new LinkedHashMap<>();
 		 List<GridRow> schemaGridRowListClone = new ArrayList<>();

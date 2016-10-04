@@ -15,6 +15,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -349,6 +350,13 @@ public class RuntimePropertyDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		
+		if(OSValidator.isMac()){
+			for(CellEditor cellEditor : tableViewer.getCellEditors()){
+				cellEditor.getControl().setEnabled(false);
+				cellEditor.getControl().setEnabled(true);
+			}
+		}
 
 		if (validate()) {
 			runtimePropertyMap.clear();

@@ -807,6 +807,14 @@ public class FieldDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		
+		if(OSValidator.isMac())
+		{
+			for(CellEditor cellEditor : targetTableViewer.getCellEditors()){
+				cellEditor.getControl().setEnabled(false);
+				cellEditor.getControl().setEnabled(true);
+			}
+		}
 		if (validate()) {
 			fieldNameList.clear();
 			for (FilterProperties temp : propertyList) {
