@@ -16,6 +16,7 @@ import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
@@ -32,7 +33,6 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -75,17 +75,37 @@ public class JobHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		if(validateGraphProperties()){
-		if(confirmationFromUser()){
-			executeJob();
-		}
-		}
-		else {
-			executeJob();
+		if(jobIsSaved()){
+				if(validateGraphProperties()){
+				if(confirmationFromUser()){
+					executeJob();
+				}
+				}
+				else {
+					executeJob();
+				}
 		}
 		return null;
 	
 	}
+	
+	private boolean jobIsSaved() {
+		ELTGraphicalEditor editor=SubJobUtility.getCurrentEditor();
+		if(editor.isDirty())
+		{
+		    MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION |SWT.YES | SWT.NO|SWT.Close);
+		    messageBox.setText(Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN_DIALOG_TITLE);
+		    messageBox.setMessage("'"+editor.getEditorInput().getName()+"'"+Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN);
+		    int rc = messageBox.open();
+		    if(rc==SWT.YES){
+		    	PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
+		    	return true;
+		    }else
+		    	return false;
+		}
+		return true;
+	}
+	
 	
 	public void executeJob()
 	{
