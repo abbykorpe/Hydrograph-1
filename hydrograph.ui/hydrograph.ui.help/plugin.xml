@@ -277,6 +277,17 @@
       <toc
             file="xml/Components/inputFileMixedScheme.xml">
       </toc>
+       <toc
+            file="xml/Components/cumulate.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="hydrograph.ui.help.toc2"
+            primary="false">
+      </toc>
+      <toc
+            file="xml/Components/cumulate.xml">
+      </toc>
    </extension>
    <extension
          point="org.eclipse.help.index">
