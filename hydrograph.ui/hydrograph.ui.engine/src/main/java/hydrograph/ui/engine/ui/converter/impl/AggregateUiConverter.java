@@ -20,8 +20,8 @@ import hydrograph.ui.engine.ui.converter.TransformUiConverter;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -100,7 +100,7 @@ public class AggregateUiConverter extends TransformUiConverter {
 		TypePrimaryKeyFields typePrimaryKeyFields = aggregate.getPrimaryKeys();
 		if (typePrimaryKeyFields != null) {
 
-			primaryKeySet = new LinkedList<String>();
+			primaryKeySet = new ArrayList<String>();
 			for (TypeFieldName fieldName : typePrimaryKeyFields.getField()) {
 				primaryKeySet.add(fieldName.getName());
 			}

@@ -21,7 +21,6 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
