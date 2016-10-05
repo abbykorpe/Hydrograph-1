@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.apache.commons.collections4.IteratorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,11 +105,9 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 			Set<SchemaField> set) {
 		HashMap<String, Boolean> fieldCheckMap = new HashMap<String, Boolean>(
 				refSchema.size());
-		for (SchemaField refSchemaField : IteratorUtils.asIterable(refSchema
-				.iterator())) {
+		for (SchemaField refSchemaField : refSchema){
 			fieldCheckMap.put(refSchemaField.getFieldName(), false);
-			for (SchemaField setSchemaField : IteratorUtils.asIterable(set
-					.iterator())) {
+			for (SchemaField setSchemaField : set){
 				if (setSchemaField.getFieldName().equals(
 						refSchemaField.getFieldName())
 						&& setSchemaField.getFieldDataType().equals(
@@ -120,6 +117,7 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 				}
 			}
 		}
+		
 		if (fieldCheckMap.containsValue(false))
 			return false;
 		else 
