@@ -15,6 +15,7 @@ package hydrograph.ui.propertywindow.widgets.dialog.hiveInput;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
@@ -1000,6 +1001,19 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 
 	@Override
 	protected void okPressed() {
+		
+		if(OSValidator.isMac()){
+			
+			List<TableViewer> tableViewers = new ArrayList<TableViewer>();
+			tableViewers.add(keyValueTableViewer);
+			tableViewers.add(targetTableViewer);
+			for(TableViewer tableView : tableViewers){
+				for(CellEditor cellEditor : tableView.getCellEditors()){
+					cellEditor.getControl().setEnabled(false);
+					cellEditor.getControl().setEnabled(true);
+				}
+			}
+		}
 		if (validate()) {
 			fieldNameList.clear();
 			hivePartitionColumns.clear();

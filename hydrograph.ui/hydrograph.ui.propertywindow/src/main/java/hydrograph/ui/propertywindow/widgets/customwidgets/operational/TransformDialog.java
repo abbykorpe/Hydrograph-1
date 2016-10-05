@@ -1951,6 +1951,24 @@ private void operationInputTableAddButton(
 
 	@Override
 	protected void okPressed() {
+		
+		if(OSValidator.isMac()){
+		
+			List<TableViewer> tableViewer = new ArrayList<TableViewer>();
+			tableViewer.add(mappingTableViewer);
+			tableViewer.add(outputFieldViewer);
+			tableViewer.add(operationalInputFieldTableViewer);
+			tableViewer.add(operationalOutputFieldTableViewer);
+			
+			for(TableViewer tableView : tableViewer){
+				
+				for(CellEditor cellEditor : tableView.getCellEditors()){
+					cellEditor.getControl().setEnabled(false);
+					cellEditor.getControl().setEnabled(true);					
+				}
+			}
+		}
+		
 			okPressed = true;
 			super.okPressed();
 	}
