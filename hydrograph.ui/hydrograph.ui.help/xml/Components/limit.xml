@@ -14,6 +14,10 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Limit" link_to="xml\Components\components.xml#Limit"> 
-	<topic label="Properties"  href="html/Components/Limit_Properties.html"> 
+	<topic label="Properties"  href="html/Components/Limit_Properties.html">
+    <topic href="html/Components/Limit_Properties.html#general_properties" label="General Properties">
+    </topic>
+    <topic href="html/Components/Limit_Properties.html#validations" label="Validation">
+    </topic> 
 	</topic>
 </toc>
