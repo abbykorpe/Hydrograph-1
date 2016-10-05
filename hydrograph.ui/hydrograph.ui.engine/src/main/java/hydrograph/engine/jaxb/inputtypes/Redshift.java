@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package hydrograph.engine.jaxb.inputtypes;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -38,6 +39,7 @@ import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftBase;
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="jdbcurl" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="query" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
+ *         &lt;element name="condition" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *         &lt;element name="batchSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
@@ -56,6 +58,7 @@ import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftBase;
     "password",
     "jdbcurl",
     "query",
+    "condition",
     "batchSize",
     "runtimeProperties"
 })
@@ -74,6 +77,7 @@ public class Redshift
     @XmlElement(required = true)
     protected ElementValueStringType jdbcurl;
     protected ElementValueStringType query;
+    protected ElementValueStringType condition;
     @XmlElement(required = true)
     protected ElementValueIntegerType batchSize;
     protected TypeProperties runtimeProperties;
@@ -220,6 +224,30 @@ public class Redshift
      */
     public void setQuery(ElementValueStringType value) {
         this.query = value;
+    }
+
+    /**
+     * Gets the value of the condition property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getCondition() {
+        return condition;
+    }
+
+    /**
+     * Sets the value of the condition property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setCondition(ElementValueStringType value) {
+        this.condition = value;
     }
 
     /**

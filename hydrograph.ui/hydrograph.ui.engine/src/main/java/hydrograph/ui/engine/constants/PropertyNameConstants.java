@@ -43,7 +43,8 @@ public enum PropertyNameConstants {
 		PARTITION_KEYS("partitionKeys"),
 		QUOTE("quote"),
 		OVER_WRITE("overWrite"),
-		PARTITION_BY_EXPRESSION_PROPERTIES("partitionbyexpression_properties");
+		PARTITION_BY_EXPRESSION_PROPERTIES("partitionbyexpression_properties"),
+		MYSQL_CONDITION("condition");
 		private final String value;
 
 	PropertyNameConstants(String value) {

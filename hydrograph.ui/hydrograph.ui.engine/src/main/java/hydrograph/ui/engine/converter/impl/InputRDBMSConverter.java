@@ -14,9 +14,8 @@ package hydrograph.ui.engine.converter.impl;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.inputtypes.Rdbms;
-import hydrograph.engine.jaxb.irdbms.DatabaseType;
-import hydrograph.engine.jaxb.irdbms.TypeInputRdbmsOutSocket;
+import hydrograph.engine.jaxb.imysql.TypeInputMysqlOutSocket;
+import hydrograph.engine.jaxb.inputtypes.Mysql;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -41,7 +40,7 @@ public class InputRDBMSConverter extends InputConverter{
 
 	public InputRDBMSConverter(Component component) {
 		super(component);
-		this.baseComponent = new Rdbms();
+		this.baseComponent = new Mysql();
 		this.component = component;
 		this.properties = component.getProperties();
 	}
@@ -50,18 +49,18 @@ public class InputRDBMSConverter extends InputConverter{
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		Rdbms rdbms = (Rdbms) baseComponent;
-		DatabaseType databaseType= new DatabaseType();
-		databaseType.setValue(converterHelper.getInputDatabaseTypeValue(PropertyNameConstants.DATABASE_TYPE.value()));
-		rdbms.setDatabaseType(databaseType);
-		rdbms.setDatabaseName(converterHelper.getString(PropertyNameConstants.DATABASE_NAME.value()));
-		rdbms.setTableName(converterHelper.getString(PropertyNameConstants.TABLE_NAME.value()));
-		rdbms.setUsername(converterHelper.getString(PropertyNameConstants.USER_NAME.value()));
-		rdbms.setPassword(converterHelper.getString(PropertyNameConstants.PASSWORD.value()));
-		rdbms.setQuery(converterHelper.getStringTypeValue());
-		rdbms.setJdbcurl(converterHelper.getString(PropertyNameConstants.JDBC_URL.value()));
-		rdbms.setRuntimeProperties(getRuntimeProperties());
-		rdbms.setBatchSize(converterHelper.getInteger(PropertyNameConstants.BATCH_SIZE.value()));
+		Mysql mysql = (Mysql) baseComponent;
+		mysql.setDatabaseName(converterHelper.getString(PropertyNameConstants.DATABASE_NAME.value()));
+		mysql.setTableName(converterHelper.getString(PropertyNameConstants.TABLE_NAME.value()));
+		mysql.setUsername(converterHelper.getString(PropertyNameConstants.USER_NAME.value()));
+		mysql.setPassword(converterHelper.getString(PropertyNameConstants.PASSWORD.value()));
+		if (converterHelper.getStringTypeValue().getValue() != null) {
+			mysql.setQuery(converterHelper.getStringTypeValue());
+		}
+		mysql.setCondition(converterHelper.getString(PropertyNameConstants.MYSQL_CONDITION.value()));
+		mysql.setJdbcurl(converterHelper.getString(PropertyNameConstants.JDBC_URL.value()));
+		mysql.setRuntimeProperties(getRuntimeProperties());
+		mysql.setBatchSize(converterHelper.getInteger(PropertyNameConstants.BATCH_SIZE.value()));
 	}
 
 
@@ -70,7 +69,7 @@ public class InputRDBMSConverter extends InputConverter{
 		logger.debug("Generating TypeInputOutSocket data for {}", properties.get(Constants.PARAM_NAME));
 		List<TypeInputOutSocket> outSockets = new ArrayList<>();
 		for (Link link : component.getSourceConnections()) {
-			TypeInputRdbmsOutSocket outSocket = new TypeInputRdbmsOutSocket();
+			TypeInputMysqlOutSocket outSocket = new TypeInputMysqlOutSocket();
 			outSocket.setId(link.getSourceTerminal());
 			outSocket.setType(link.getSource().getPort(link.getSourceTerminal()).getPortType());
 			outSocket.setSchema(getSchema());

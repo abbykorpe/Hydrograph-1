@@ -3,7 +3,6 @@ package hydrograph.ui.engine.converter.impl;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.inputtypes.Redshift;
-import hydrograph.engine.jaxb.irdbms.DatabaseType;
 import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftOutSocket;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -33,8 +32,6 @@ public class InputRedshiftConverter extends InputConverter{
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Redshift redshift = (Redshift) baseComponent;
-		DatabaseType databaseType= new DatabaseType();
-		databaseType.setValue(converterHelper.getInputDatabaseTypeValue(PropertyNameConstants.DATABASE_TYPE.value()));
 		redshift.setDatabaseName(converterHelper.getString(PropertyNameConstants.DATABASE_NAME.value()));
 		redshift.setTableName(converterHelper.getString(PropertyNameConstants.TABLE_NAME.value()));
 		redshift.setUsername(converterHelper.getString(PropertyNameConstants.USER_NAME.value()));

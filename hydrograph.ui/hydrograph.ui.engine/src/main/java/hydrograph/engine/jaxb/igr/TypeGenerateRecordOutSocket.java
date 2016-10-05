@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-generate-record-out-socket")
+@XmlType(name = "type-generate-record-out-socket", namespace = "hydrograph/engine/jaxb/igr")
 public class TypeGenerateRecordOutSocket
     extends TypeInputOutSocket
 {

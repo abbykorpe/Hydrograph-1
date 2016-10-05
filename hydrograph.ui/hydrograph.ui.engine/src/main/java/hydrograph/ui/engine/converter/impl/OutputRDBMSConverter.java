@@ -18,13 +18,14 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.ordbms.DatabaseType;
-import hydrograph.engine.jaxb.ordbms.TypeLoadChoice;
-import hydrograph.engine.jaxb.ordbms.TypeOutputRdbmsInSocket;
-import hydrograph.engine.jaxb.ordbms.TypePriamryKeys;
-import hydrograph.engine.jaxb.ordbms.TypeUpdateKeys;
-import hydrograph.engine.jaxb.outputtypes.Rdbms;
+import hydrograph.engine.jaxb.omysql.DatabaseType;
+import hydrograph.engine.jaxb.omysql.TypeLoadChoice;
+import hydrograph.engine.jaxb.omysql.TypeOutputMysqlOutSocket;
+import hydrograph.engine.jaxb.omysql.TypePriamryKeys;
+import hydrograph.engine.jaxb.omysql.TypeUpdateKeys;
+import hydrograph.engine.jaxb.outputtypes.Mysql;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.SQLLoadTypeProperty;
@@ -54,7 +55,7 @@ public class OutputRDBMSConverter extends OutputConverter{
 
 	public OutputRDBMSConverter(Component component) {
 		super(component);
-		this.baseComponent = new Rdbms();
+		this.baseComponent = new Mysql();
 		this.component = component;
 		this.properties = component.getProperties();
 	}
@@ -63,18 +64,17 @@ public class OutputRDBMSConverter extends OutputConverter{
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		Rdbms rdbms = (Rdbms) baseComponent;
+		Mysql mysql = (Mysql) baseComponent;
 		DatabaseType databaseType= new DatabaseType();
 		databaseType.setValue(converterHelper.getOutputDatabaseTypeValue(PropertyNameConstants.DATABASE_TYPE.value()));
-		rdbms.setDatabaseType(databaseType);
-		rdbms.setDatabaseName(converterHelper.getString(PropertyNameConstants.DATABASE_NAME.value()));
-		rdbms.setTableName(converterHelper.getString(PropertyNameConstants.TABLE_NAME.value()));
-		rdbms.setUsername(converterHelper.getString(PropertyNameConstants.USER_NAME.value()));
-		rdbms.setPassword(converterHelper.getString(PropertyNameConstants.PASSWORD.value()));
-		rdbms.setJdbcurl(converterHelper.getString(PropertyNameConstants.JDBC_URL.value()));
-		rdbms.setRuntimeProperties(getRuntimeProperties());
-		rdbms.setBatchSize(converterHelper.getInteger(PropertyNameConstants.BATCH_SIZE.value()));
-		rdbms.setLoadType(getLoadType());			 	
+		mysql.setDatabaseName(converterHelper.getString(PropertyNameConstants.DATABASE_NAME.value()));
+		mysql.setTableName(converterHelper.getString(PropertyNameConstants.TABLE_NAME.value()));
+		mysql.setUsername(converterHelper.getString(PropertyNameConstants.USER_NAME.value()));
+		mysql.setPassword(converterHelper.getString(PropertyNameConstants.PASSWORD.value()));
+		mysql.setJdbcurl(converterHelper.getString(PropertyNameConstants.JDBC_URL.value()));
+		mysql.setRuntimeProperties(getRuntimeProperties());
+		mysql.setBatchSize(converterHelper.getInteger(PropertyNameConstants.BATCH_SIZE.value()));
+		mysql.setLoadType(getLoadType());			 	
 	}
 	
 
@@ -83,7 +83,7 @@ public class OutputRDBMSConverter extends OutputConverter{
 		logger.debug("Generating TypeOutputInSocket data");
 		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
-			TypeOutputRdbmsInSocket outInSocket = new TypeOutputRdbmsInSocket();
+			TypeOutputMysqlOutSocket outInSocket = new TypeOutputMysqlOutSocket();
 			outInSocket.setId(link.getTargetTerminal());
 			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
@@ -102,7 +102,7 @@ public class OutputRDBMSConverter extends OutputConverter{
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
 		if (gridList != null && gridList.size() != 0) {
 			for (GridRow object : gridList) {
-				typeBaseFields.add(converterHelper.getSQLTargetData((FixedWidthGridRow)object));
+				typeBaseFields.add(converterHelper.getSQLTargetData((BasicSchemaGridRow)object));
 			}
 		}
 		return typeBaseFields;

@@ -39,7 +39,7 @@ import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-primary-key-fields-attributes")
+@XmlType(name = "type-primary-key-fields-attributes", namespace = "hydrograph/engine/jaxb/sort")
 public class TypePrimaryKeyFieldsAttributes
     extends TypeFieldName
 {

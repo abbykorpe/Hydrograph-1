@@ -60,7 +60,6 @@ import hydrograph.ui.logging.factory.LogFactory;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -547,7 +546,7 @@ public class ConverterHelper {
 	 * @param {@link SQLGridRow}
 	 * @return {@link TypeBaseField}
 	 */
-	public TypeBaseField getSQLTargetData(FixedWidthGridRow object) {
+	public TypeBaseField getSQLTargetData(BasicSchemaGridRow object) {
 		TypeBaseField typeBaseField = new TypeBaseField();
 		typeBaseField.setName(object.getFieldName());
 
@@ -886,38 +885,14 @@ public class ConverterHelper {
 	 * @param propertyName
 	 * @return {@link DatabaseType}
 	 */
-	public hydrograph.engine.jaxb.irdbms.DatabaseTypeValue getInputDatabaseTypeValue(String propertyName) {
-		logger.debug("Getting boolean Value for {}={}", new Object[] {propertyName, properties.get(propertyName)});
-		logger.debug("Getting Database Type for {}", properties.get(Constants.PARAM_NAME));
-		String databaseTypeValue = (String) properties.get(PropertyNameConstants.DATABASE_TYPE.value());
-		hydrograph.engine.jaxb.irdbms.DatabaseTypeValue targetDatabaseTypeValue = null;
-		for (hydrograph.engine.jaxb.irdbms.DatabaseTypeValue dbTypeValues : hydrograph.engine.jaxb.irdbms.DatabaseTypeValue.values()) {
-			if (dbTypeValues.value().equalsIgnoreCase(databaseTypeValue)) {
-				targetDatabaseTypeValue = dbTypeValues;
-				break;
-			}
-		}
-		if (targetDatabaseTypeValue == null)
-			ComponentXpath.INSTANCE.getXpathMap().put(
-					ComponentXpathConstants.COMPONENT_CHARSET_XPATH.value()
-							.replace(ID, componentName), new ComponentsAttributeAndValue(null, databaseTypeValue));
-		return targetDatabaseTypeValue;
-	}
-	
-	/**
-	 * Converts the String to {@link DatabaseTypeValue}
-	 * 
-	 * @param propertyName
-	 * @return {@link DatabaseType}
-	 */
-	public hydrograph.engine.jaxb.ordbms.DatabaseTypeValue getOutputDatabaseTypeValue(String propertyName) {
+	public hydrograph.engine.jaxb.omysql.DatabaseTypeValue getOutputDatabaseTypeValue(String propertyName) {
 		logger.debug("Getting boolean Value for {}={}", new Object[] {
 				propertyName, properties.get(propertyName) });
 		logger.debug("Getting Database Type for {}", properties.get(Constants.PARAM_NAME));
 		String databaseTypeValue = (String) properties.get(PropertyNameConstants.DATABASE_TYPE
 				.value());
-		hydrograph.engine.jaxb.ordbms.DatabaseTypeValue targetDatabaseTypeValue = null;
-		for (hydrograph.engine.jaxb.ordbms.DatabaseTypeValue dbTypeValues : hydrograph.engine.jaxb.ordbms.DatabaseTypeValue.values()) {
+		hydrograph.engine.jaxb.omysql.DatabaseTypeValue targetDatabaseTypeValue = null;
+		for (hydrograph.engine.jaxb.omysql.DatabaseTypeValue dbTypeValues : hydrograph.engine.jaxb.omysql.DatabaseTypeValue.values()) {
 			if (dbTypeValues.value().equalsIgnoreCase(databaseTypeValue)) {
 				targetDatabaseTypeValue = dbTypeValues;
 				break;

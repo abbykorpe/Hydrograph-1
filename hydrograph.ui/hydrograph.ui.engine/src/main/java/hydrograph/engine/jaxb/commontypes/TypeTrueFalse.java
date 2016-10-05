@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-true-false")
+@XmlType(name = "type-true-false", namespace = "hydrograph/engine/jaxb/commontypes")
 public class TypeTrueFalse {
 
     @XmlAttribute(name = "value")

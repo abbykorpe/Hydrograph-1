@@ -17,12 +17,12 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.ordbms.DatabaseType;
 import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
 import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.SQLLoadTypeProperty;
@@ -64,8 +64,6 @@ public class OutputRedshiftConverter extends OutputConverter{
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
 		Redshift redshift = (Redshift) baseComponent;
-		DatabaseType databaseType= new DatabaseType();
-		databaseType.setValue(converterHelper.getOutputDatabaseTypeValue(PropertyNameConstants.DATABASE_TYPE.value()));
 		redshift.setDatabaseName(converterHelper.getString(PropertyNameConstants.DATABASE_NAME.value()));
 		redshift.setTableName(converterHelper.getString(PropertyNameConstants.TABLE_NAME.value()));
 		redshift.setUsername(converterHelper.getString(PropertyNameConstants.USER_NAME.value()));
@@ -133,7 +131,7 @@ public class OutputRedshiftConverter extends OutputConverter{
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
 		if (gridRowList != null && gridRowList.size() != 0) {
 			for (GridRow object : gridRowList)
-				typeBaseFields.add(converterHelper.getSQLTargetData((FixedWidthGridRow) object));
+				typeBaseFields.add(converterHelper.getSQLTargetData((BasicSchemaGridRow) object));
 
 		}
 		return typeBaseFields;

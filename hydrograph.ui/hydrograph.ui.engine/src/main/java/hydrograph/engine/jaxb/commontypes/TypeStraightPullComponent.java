@@ -49,7 +49,7 @@ import hydrograph.engine.jaxb.straightpulltypes.UnionAll;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-straight-pull-component", propOrder = {
+@XmlType(name = "type-straight-pull-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inSocket",
     "outSocket",
     "runtimeProperties"
