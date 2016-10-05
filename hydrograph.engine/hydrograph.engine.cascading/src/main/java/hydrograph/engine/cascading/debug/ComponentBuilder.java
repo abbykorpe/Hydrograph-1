@@ -37,14 +37,14 @@ import java.util.List;
 import java.util.Set;
 
 public enum ComponentBuilder {
-
+	
 	REPLICATE_COMPONENT {
 
 		@Override
 		public TypeBaseComponent create(DebugContext debugContext) {
 			Clone clone = new Clone();
 			clone.setId(ComponentBuilderUtils.generateUniqueComponentId(
-					debugContext.getFromComponentId(),
+					viewDataComponentIdentifier+debugContext.getFromComponentId(),
 					debugContext.getFromOutSocketId(),
 					debugContext.getTypeBaseComponents()));
 			clone.setBatch(debugContext.getBatch());
@@ -204,6 +204,8 @@ public enum ComponentBuilder {
 		}
 	};
 
+	private final static String viewDataComponentIdentifier = "viewData_";
+	
 	public abstract TypeBaseComponent create(DebugContext debugContext);
 
 	private static class ComponentBuilderUtils {
