@@ -66,7 +66,6 @@ public class ExpressionEditorDialog extends Dialog {
 	private String oldExpressionText;
 	private Map<String, Class<?>> fieldMap;
 	private Composite container;
-	public static ExpressionEditorDialog CURRENT_INSTANCE;
 	private SashForm containerSashForm;
 	private SashForm upperSashForm;
 	private ExpressionEditorData expressionEditorData;
@@ -91,7 +90,6 @@ public class ExpressionEditorDialog extends Dialog {
 		this.expressionEditorData = expressionEditorData;
 		this.inputFieldSchema=inputFieldSchema;
 		this.windowTitleSuffix=windowTitleSuffix;
-		CURRENT_INSTANCE = this;
 	}
 
 	/**
