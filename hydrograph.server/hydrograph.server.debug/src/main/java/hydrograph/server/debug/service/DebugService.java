@@ -526,14 +526,22 @@ public class DebugService implements PrivilegedAction<Object> {
 				}
 				return header;
 			}
+			private Path filterOutSuccessFile(FileStatus[] fileStatus){
+				for(FileStatus status:fileStatus){
+					if(status.getPath().getName().toUpperCase().contains("_SUCCESS"))
+						continue;
+					else
+						return	status.getPath();
+				}				
+				return null;
+			}
 
 			private String[] getHeaderArray(Path path, Configuration conf) throws IOException {
 				FileSystem fs = FileSystem.get(conf);
 				FileStatus[] status = fs.listStatus(path);
 				String line = "";
 				try {
-
-					BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(status[0].getPath())));
+					BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(filterOutSuccessFile(status))));
 
 					line = br.readLine();
 					br.close();
