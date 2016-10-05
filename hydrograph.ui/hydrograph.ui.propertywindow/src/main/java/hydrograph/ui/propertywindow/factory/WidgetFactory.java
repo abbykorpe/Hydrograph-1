@@ -151,7 +151,8 @@ public class WidgetFactory {
 		RUN_TRAINING_TEXT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRunTrainingWidgetConfig ()),
 		RUN_TEST_TEXT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRunTestWidgetConfig ()),
 		RUN_THRESHOLD_TEXT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getThresholdOutputWidgetConfig ()),
-		PARTITION_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.PARTITION_PROPERTY_LABEL,Constants.PARTITION_PROPERTIES_WINDOW_LABEL));
+		PARTITION_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.PARTITION_PROPERTY_LABEL,Constants.PARTITION_PROPERTIES_WINDOW_LABEL)),
+		SQL_CONDITION_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getSqlConditionWidgetConfig());
 		
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;

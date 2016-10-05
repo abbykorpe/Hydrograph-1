@@ -449,5 +449,15 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}	
+	
+	/**
+	 * Configuration to customize text box as SQL condition property 
+	 */
+	public WidgetConfig getSqlConditionWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABLE_CONDITION);
+		textBoxConfig.setGrabExcessSpace(true);
+		return textBoxConfig;
+	}
 
 }

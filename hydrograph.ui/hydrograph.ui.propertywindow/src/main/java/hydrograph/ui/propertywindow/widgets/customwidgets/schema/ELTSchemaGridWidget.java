@@ -1296,7 +1296,9 @@ import org.xml.sax.SAXException;
 								.getSWTWidgetControl());
 				
 					for (CellEditor editor:editors){
-						addShortcutKeyListener(editor.getControl());
+				if (editor != null) {
+					addShortcutKeyListener(editor.getControl());
+				}
 					}
 					addShortcutKeyListener(table);
 	

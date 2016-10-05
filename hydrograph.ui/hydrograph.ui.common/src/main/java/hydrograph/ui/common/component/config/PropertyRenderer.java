@@ -171,7 +171,8 @@ public enum PropertyRenderer {
     RUN_TEST_TEXT_WIDGET,
     RUN_THRESHOLD_TEXT_WIDGET,
     PARTITION_PROPERTIES_WIDGET,
-    PARTITION_KEYS_WIDGET_INPUT_HIVE;
+    PARTITION_KEYS_WIDGET_INPUT_HIVE,
+    SQL_CONDITION_WIDGET;
 
     public String value() {
         return name();
