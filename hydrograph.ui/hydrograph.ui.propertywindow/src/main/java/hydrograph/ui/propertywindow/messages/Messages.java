@@ -274,6 +274,8 @@ public class Messages extends NLS {
 	public static  String METASTORE_IMPORT_SUCCESS;
 	public static String ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT;
 	
+	public static String PARAMETER_NOT_FOUND;
+	
 	
 	static {
 		// initialize resource bundle
