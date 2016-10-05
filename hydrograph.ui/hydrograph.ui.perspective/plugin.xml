@@ -43,10 +43,6 @@
                name="appName"
                value="Hydrograph">
          </property>
-         <property
-               name="applicationCSS"
-               value="platform:/plugin/hydrograph.ui.perspective/css/style.css">
-         </property>
           <property
       name="applicationXMI"
       value="org.eclipse.platform/LegacyIDE.e4xmi">
@@ -54,10 +50,6 @@
           <property
                 name="windowImages"
                 value="icons/app_icon.png">
-          </property>
-          <property
-                name="preferenceCustomization"
-                value="plugin_customization.ini">
           </property>
       </product>
    </extension>
@@ -112,47 +104,6 @@
             </command>
          </menu>
       </menuContribution>
-   </extension>
-     <extension
-   		id="com.example.rcp.css.id"
-   		name="com.example.rcp.css.name"	
-         point="org.eclipse.e4.ui.css.swt.theme">
-      <theme
-            basestylesheeturi="css/style.css"
-            id="hydrograph.ui.project.structure.rcp.theme.id"
-            label="hydrograph.ui.project.structure.rcp.theme.label">
-      </theme>
-   </extension>
-      <extension
-         point="org.eclipse.ui.themes">
-          <theme
-            id="hydrograph.ui.custom.ui.theme"
-            name="Custom Theme">
-         <colorOverride
-               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_END"
-               value="14,76,145">
-         </colorOverride>
-         <colorOverride
-               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_START"
-               value="14,76,145">
-         </colorOverride>
-         <colorOverride
-               id="org.eclipse.ui.workbench.INACTIVE_TAB_BG_END"
-               value="14,76,145">
-         </colorOverride>
-         <colorOverride
-               id="org.eclipse.ui.workbench.INACTIVE_TAB_BG_START"
-               value="14,76,145">
-         </colorOverride>
-         <colorOverride
-               id="org.eclipse.ui.workbench.ACTIVE_TAB_TEXT_COLOR"
-               value="255,255,255">
-         </colorOverride>
-         <colorOverride
-               id="org.eclipse.ui.workbench.INACTIVE_TAB_TEXT_COLOR"
-               value="255,255,255">
-         </colorOverride>
-      </theme>
    </extension>
    
   

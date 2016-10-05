@@ -124,6 +124,7 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 				activePage.activate(activePage.findEditor(input));
 			}
 		}
+		
 	}
 
 	private boolean showErrorIfFileNameIsGreaterThanFiftyCharactors() {

@@ -19,21 +19,16 @@
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mars-repo.url>http://download.eclipse.org/releases/indigo</mars-repo.url>
+		<neon-repo.url>http://download.eclipse.org/releases/neon/</neon-repo.url>
 
 	</properties>
 
 	
 	<repositories>
 		<repository>
-			<id>indigo</id>
-			<url>${mars-repo.url}</url>
+			<id>mars</id>
+			<url>${neon-repo.url}</url>
 			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>third-party-eclipse-plugins</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/e4/updates/0.11/</url>
 		</repository>
 	</repositories>
 
