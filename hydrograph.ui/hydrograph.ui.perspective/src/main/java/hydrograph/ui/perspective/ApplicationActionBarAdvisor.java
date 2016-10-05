@@ -15,7 +15,12 @@
 package hydrograph.ui.perspective;
 
 
+import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
@@ -23,7 +28,6 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ApplicationActionBarAdvisor.
  * 
@@ -31,7 +35,8 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	
-	 private IWorkbenchAction openPerspectiveAction;
+	private static final String HYDROGRAPH_UI_GRAPH_TOOLBAR_ID = "hydrograph.ui.graph.toolbar1";
+	private IWorkbenchAction openPerspectiveAction;
 	 
 	/**
 	 * Instantiates a new application action bar advisor.
@@ -53,5 +58,13 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
     protected void fillMenuBar(IMenuManager menuBar) {
     	
+    }
+    
+    @Override
+    protected void fillCoolBar(ICoolBarManager coolBar) {
+    	super.fillCoolBar(coolBar);
+    	IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.LEFT);
+		coolBar.add(new ToolBarContributionItem(toolbar, HYDROGRAPH_UI_GRAPH_TOOLBAR_ID));
+
     }
 }

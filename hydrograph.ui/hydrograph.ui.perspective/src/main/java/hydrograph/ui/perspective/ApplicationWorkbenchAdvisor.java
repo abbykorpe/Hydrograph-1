@@ -16,9 +16,6 @@ package hydrograph.ui.perspective;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IPartService;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
@@ -26,10 +23,6 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.EditorPart;
-import hydrograph.ui.perspective.TitleBarPartListener;
-
-import theme.ThemeHelper;
 
 /**
  * The Class ApplicationWorkbenchAdvisor.
@@ -62,13 +55,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 	@Override
 	public void initialize(IWorkbenchConfigurer configurer) {
-		// TODO Auto-generated method stub
 		super.initialize(configurer);
-		
-		ThemeHelper.getEngine().setTheme("hydrograph.ui.project.structure.rcp.theme.id",true);
-		
-		
-		
 	}
 	
 	

@@ -13,15 +13,6 @@
 
 package hydrograph.ui.perspective;
 
-import hydrograph.ui.common.debug.service.IDebugService;
-import hydrograph.ui.common.util.ConfigFileReader;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.perspective.config.ELTPerspectiveConfig;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -33,14 +24,12 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.e4.ui.css.swt.dom.WidgetElement;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -52,6 +41,15 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.debug.service.IDebugService;
+import hydrograph.ui.common.util.ConfigFileReader;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.perspective.config.ELTPerspectiveConfig;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ApplicationWorkbenchWindowAdvisor.
@@ -61,9 +59,7 @@ import org.slf4j.Logger;
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ApplicationWorkbenchWindowAdvisor.class);
 	
-	private static final String CURRENT_THEME_ID = "hydrograph.ui.custom.ui.theme"; //$NON-NLS-1$
-	private static final String CONSOLE_ID = "hydrograph.ui.project.structure.console.HydrographConsole"; //$NON-NLS-1$
-	private static final String CONSOLE_TOOLBAR_CSS_ID="consoleToolbarColor"; //$NON-NLS-1$
+	//private static final String CURRENT_THEME_ID = "hydrograph.ui.custom.ui.theme"; //$NON-NLS-1$
 	private static final String WARNING_TITLE="Warning"; //$NON-NLS-1$
 	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues."; //$NON-NLS-1$
 	private static final int DPI_COORDINATE=96;
@@ -96,7 +92,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         ELTPerspectiveConfig eltPerspectiveConfig = new ELTPerspectiveConfig(configurer);
         
         eltPerspectiveConfig.setDefaultELTPrespectiveConfigurations();
-        PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(CURRENT_THEME_ID);
+        //PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(CURRENT_THEME_ID);
     }
     @Override
     public void createWindowContents(Shell shell) {
@@ -132,9 +128,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 		getWindowConfigurer().getWindow().getShell().setMaximized(true);
 		getWindowConfigurer().getWindow().getActivePage().resetPerspective();
-		IViewPart consoleView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(CONSOLE_ID);
-		ToolBarManager toobar = (ToolBarManager) consoleView.getViewSite().getActionBars().getToolBarManager();
-		setCSSID(toobar.getControl(),CONSOLE_TOOLBAR_CSS_ID);
 		
 		if (OSValidator.isWindows()) {
 			Point dpiCoordinates = PlatformUI.getWorkbench()
@@ -181,12 +174,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		}
 	}
 	
-	private void setCSSID(Widget widget, String name) {
-		WidgetElement.setID(widget, name);
-		WidgetElement.getEngine(widget).applyStyles(widget, true);
-	}
-    
-	
+
 	@Override
 	public boolean preWindowShellClose() {
 		for (Entry<String, Job> entry : JobManager.INSTANCE.getRunningJobsMap().entrySet()) {

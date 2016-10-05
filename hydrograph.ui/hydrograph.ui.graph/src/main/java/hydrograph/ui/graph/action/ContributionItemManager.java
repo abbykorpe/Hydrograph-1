@@ -21,7 +21,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.WorkbenchWindow;
@@ -30,105 +29,17 @@ public enum ContributionItemManager {
 	UndoRedoDefaultBarManager {
 		public void changeUndoRedoStatus(GraphicalViewer viewer) {
 			UndoRedoDefaultBarManager.initializeViewerResource(viewer);
-			changeToolControl(controls, undoStatus, redoStatus);
-			changeMenuControl(menuItems, undoStatus, redoStatus);
-		}
-
-		private void changeToolControl(Control[] controls, boolean undoStatus,
-				boolean redoStatus) {
-			for (Control control : controls) {
-				if (control instanceof ToolBar && (!control.isDisposed())) {
-					if (((ToolBar) control).getItems().length > 5) {
-						toolItems = ((ToolBar) control).getItems();
-						toolItems[5].setEnabled(undoStatus);
-						toolItems[6].setEnabled(redoStatus);
-						toolItems[7].setEnabled(false);
-						toolItems[9].setEnabled(false);
-						toolItems[10].setEnabled(false);
-						toolItems[11].setEnabled(false);
-
-					}
-
-				}
-			}
-
-		}
-
-		private void changeMenuControl(MenuItem[] menuItems,
-				boolean undoStatus, boolean redoStatus) {
-
-			for (MenuItem item : menuItems) {
-				if (menuList.contains(item.toString().toLowerCase())) {
-					menu = item.getMenu();
-					for (MenuItem menuItem : menu.getItems()) {
-						if (menuItemsList.contains(menuItem.getText()
-								.toLowerCase())) {
-							menuItem.setEnabled(false);
-						} else {
-							if (undoRedoItemsList.get(0).contains(menuItem.getText()
-									.toLowerCase())) {
-								menuItem.setEnabled(undoStatus);
-							}
-							if (undoRedoItemsList.get(1).contains(menuItem.getText()
-									.toLowerCase())) {
-								menuItem.setEnabled(redoStatus);
-							}
-						}
-					}
-				}
-
-			}
 		}
 	},
 	UndoRedoCustomToolBarManager {
 		public void changeUndoRedoStatus(GraphicalViewer viewer) {
 			UndoRedoCustomToolBarManager.initializeViewerResource(viewer);
-			changeToolControl(controls, undoStatus, redoStatus);
-		}
-
-		private void changeToolControl(Control[] controls, boolean undoStatus,
-				boolean redoStatus) {
-			for (Control control : controls) {
-				if (control instanceof ToolBar && (!control.isDisposed())) {
-					if (((ToolBar) control).getItemCount() > 5) {
-						ToolItem[] toolItems = ((ToolBar) control).getItems();
-						toolItems[5].setEnabled(undoStatus);
-						toolItems[6].setEnabled(redoStatus);
-
-					}
-
-				}
-			}
-
 		}
 
 	},
 	UndoRedoCustomMenuBarManager {
 		public void changeUndoRedoStatus(GraphicalViewer viewer) {
 			UndoRedoCustomMenuBarManager.initializeViewerResource(viewer);
-
-			changeMenuControl(menuItems, undoStatus, redoStatus);
-		}
-
-		private void changeMenuControl(MenuItem[] menuItems,
-				boolean undoStatus, boolean redoStatus) {
-			for (MenuItem item : menuItems) {
-				if (menuList.contains(item.toString().toLowerCase())) {
-					menu = item.getMenu();
-					for (MenuItem menuItem : menu.getItems()) {
-						if (undoRedoItemsList.get(0).contains(menuItem.getText()
-								.toLowerCase())) {
-							menuItem.setEnabled(undoStatus);
-						}
-						if (undoRedoItemsList.get(1).contains(menuItem.getText()
-								.toLowerCase())) {
-							menuItem.setEnabled(redoStatus);
-						}
-
-					}
-				}
-
-			}
 		}
 
 	},
@@ -160,8 +71,7 @@ public enum ContributionItemManager {
 	boolean redoStatus = false;
 	WorkbenchWindow workbenchWindow = (WorkbenchWindow) PlatformUI
 			.getWorkbench().getActiveWorkbenchWindow();
-	Control[] controls = workbenchWindow.getCoolBarManager().getControl()
-			.getChildren();
+	Control[] controls;
 	ToolItem[] toolItems = null;
 	MenuItem[] menuItems = null;
 	Menu menu = null;
@@ -171,10 +81,7 @@ public enum ContributionItemManager {
 
 	private ContributionItemManager() {
 		workbenchWindow = (WorkbenchWindow) PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow();
-		controls = workbenchWindow.getCoolBarManager().getControl()
-				.getChildren();
-		menuItems = workbenchWindow.getMenuBarManager().getMenu().getItems();
+				.getActiveWorkbenchWindow();	
 		menuItemsList = ContributionItems.MENU_BAR_ITEMS_LIST
 				.getRequiredItems();
 		undoRedoItemsList = ContributionItems.UNDO_REDO_ITEMS_LIST
@@ -197,7 +104,7 @@ public enum ContributionItemManager {
 	}
 
 	private void setMenuItemStatus(String menuItemName, boolean status) {
-		for (MenuItem item : menuItems) {
+		/*for (MenuItem item : menuItems) {
 			if ("menuitem {&edit}".equalsIgnoreCase(item.toString())) {
 				menu = item.getMenu();
 				for (MenuItem menuItem : menu.getItems()) {
@@ -207,12 +114,12 @@ public enum ContributionItemManager {
 				}
 			}
 
-		}
+		}*/
 	}
 
 	private void setToolItemStatus(int toolItemNumber, boolean status) {
 		
-		for (Control control : controls) {
+		/*for (Control control : controls) {
 			if (control instanceof ToolBar && (!control.isDisposed())) {
 				if (((ToolBar) control).getItems().length > 5) {
 					toolItems = ((ToolBar) control).getItems();
@@ -221,7 +128,7 @@ public enum ContributionItemManager {
 				}
 
 			}
-		}
+		}*/
 	}
 
 }

@@ -1,14 +1,12 @@
 package hydrograph.ui.expression.editor.javasourceviewerconfiguration;
 
-import hydrograph.ui.expression.editor.comparator.ProposalComparator;
-import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.internal.core.SourceField;
@@ -29,23 +27,21 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.expression.editor.sourceviewer.SourceViewer;
 
 
 @SuppressWarnings("restriction")
 public class HydrographJavaCompletionProcessor extends JavaCompletionProcessor{
 
-	
 	public HydrographJavaCompletionProcessor(ContentAssistant assistant, String partition) {
-        super(null, assistant, partition);
+        super(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor(), assistant, partition);
     }
 	
-	
-	
-	
-	@Override
 	protected List<ICompletionProposal> filterAndSortProposals(List<ICompletionProposal> proposals, IProgressMonitor monitor,
             ContentAssistInvocationContext context) {
-		proposals = super.filterAndSortProposals(proposals, monitor, context);
+		proposals = super.sortProposals(proposals, monitor, context);
         Map<String, ICompletionProposal> completionProposalMap = new HashMap<String, ICompletionProposal>();
         boolean globalFieldsDone = false;
         for (Object object : proposals) {
