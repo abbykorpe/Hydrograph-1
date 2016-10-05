@@ -18,8 +18,8 @@
 	</topic>
  <topic href="html/Components/Transform_Mapping_View.html" label="Mapping View">
  </topic>
- <topic href="html/concepts/maintopic.html" label="Operation Class">
+ <topic href="html/Components/Transform_Operation_Class_Window.html" label="Operation Class">
  </topic>
- <topic href="html/concepts/maintopic.html" label="Validations">
+ <topic href="html/Components/Transform_Properties.html#validations" label="Validations">
  </topic>
 </toc>
