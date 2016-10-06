@@ -90,7 +90,7 @@ public class SaveJobFileBeforeRunDialog extends Dialog {
 		
 		alwaysSaveCheckButton = new Button(alwaysSaveComposite, SWT.CHECK);
 		alwaysSaveCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		alwaysSaveCheckButton.setText("Always save job before launching");
+		alwaysSaveCheckButton.setText("Always save job before running");
 		new Label(alwaysSaveComposite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 
