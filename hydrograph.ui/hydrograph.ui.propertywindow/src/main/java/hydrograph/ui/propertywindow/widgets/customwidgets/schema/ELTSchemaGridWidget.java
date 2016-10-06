@@ -41,6 +41,7 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
+import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -216,6 +217,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private Map<String, String> paramsMap;
 	private Cursor cursur;
 	private String finalParamPath;
+	private Utils utils = Utils.INSTANCE;
 
 	String[] populateColumns(){	
 		String[] cols = new String[columns.size()];
@@ -932,7 +934,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 /**
 			 *parameter resolution at dev phase 
 			 */
-			loadProperties();
+		 	utils.loadProperties();
 			cursur = containerControl.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
 				
 	    	addImportExportButtons(containerControl);
@@ -944,14 +946,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			
 			@Override
 			public void mouseMove(MouseEvent e) {
-				String paramValue = getParamValue(extSchemaPathText.getText());
-			    finalParamPath = getParamFilePath(extSchemaPathText.getText(), paramValue);
+				String paramValue = utils.getParamValue(extSchemaPathText.getText());
+			    finalParamPath = utils.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
 			    while(ParameterUtil.containsParameter(finalParamPath, '/')){
-			    	paramValue = getParamValue(extSchemaPathText.getToolTipText());
-			    	finalParamPath = getParamFilePath(extSchemaPathText.getToolTipText(), paramValue);
+			    	paramValue = utils.getParamValue(extSchemaPathText.getToolTipText());
+			    	finalParamPath = utils.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
 		    		}
 				}
-		};
+			};
 		
 		private File getPath(){
 			 File schemaFile=null;
@@ -961,11 +963,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 if(input instanceof IFileEditorInput){
 				 
 				 if(ParameterUtil.containsParameter(extSchemaPathText.getText(), '/')){
-					 String paramValue = getParamValue(extSchemaPathText.getText());
-					 finalParamPath = getParamFilePath(extSchemaPathText.getText(), paramValue);
+					 String paramValue = utils.getParamValue(extSchemaPathText.getText());
+					 finalParamPath = utils.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
 						while(ParameterUtil.containsParameter(finalParamPath, '/')){
-							paramValue = getParamValue(extSchemaPathText.getToolTipText());
-					    	finalParamPath = getParamFilePath(extSchemaPathText.getToolTipText(), paramValue);
+							paramValue = utils.getParamValue(extSchemaPathText.getToolTipText());
+					    	finalParamPath = utils.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
 				    		}
 					  schemaPath = finalParamPath;
 				 }
@@ -996,11 +998,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 }
 			 else{
 				 if(ParameterUtil.containsParameter(extSchemaPathText.getText(), '/')){
-					 String paramValue = getParamValue(extSchemaPathText.getText());
-					 finalParamPath = getParamFilePath(extSchemaPathText.getText(), paramValue);
+					 String paramValue = utils.getParamValue(extSchemaPathText.getText());
+					 finalParamPath = utils.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
 						while(ParameterUtil.containsParameter(finalParamPath, '/')){
-							paramValue = getParamValue(extSchemaPathText.getToolTipText());
-					    	finalParamPath = getParamFilePath(extSchemaPathText.getToolTipText(), paramValue);
+							paramValue = utils.getParamValue(extSchemaPathText.getToolTipText());
+					    	finalParamPath = utils.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
 				    		}
 					  schemaPath = finalParamPath;
 				 }
@@ -1866,10 +1868,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 {
 			 if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow( getComponent().getComponentName())){
 
-				 if (schema.getGridRow().size() != 0) {
+				 if (schema.getGridRow().size() != 0){
 					 table.clearAll();
-					 if (!schema.getIsExternal()) {
-						 if (tableViewer != null) {
+					 if (!schema.getIsExternal()){
+						 if (tableViewer != null){
 							 schemaGridRowList = new ArrayList<>(schema.getGridRow());
 							 ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 							 eLTDetails.setGrids(schemaGridRowList); 
@@ -1887,89 +1889,4 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 LinkedHashMap<String, Object> currentSchemaProperty = new LinkedHashMap<>();
 		 currentSchemaProperty.put(propertyName, schema);
 	 }
-	 
-	 private void loadProperties(){
-			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
-			
-			IFile file = input.getFile();
-			IProject activeProject = file.getProject();
-			String activeProjectName = activeProject.getName();
-			final File globalparamFilesPath = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString()+"/"+activeProjectName+"/"+"globalparam");
-			final File localParamFilePath = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString()+"/"+activeProjectName+"/"+"param");
-			File[] files = (File[]) ArrayUtils.addAll(listFilesForFolder(globalparamFilesPath), listFilesForFolder(localParamFilePath));
-			List<File> paramNameList = Arrays.asList(files);
-			getParamMap(paramNameList);
-		}
-
-	 private void getParamMap(List<File> FileNameList){
-			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
-			IFile file = input.getFile();
-			IProject activeProject = file.getProject();
-			String activeProjectName = activeProject.getName();
-			
-			String propFilePath = null;
-			for(File propFileName : FileNameList){
-				String fileName = propFileName.getName();
-				if(StringUtils.contains(propFileName.toString(), "globalparam")){
-					 propFilePath = "/" + activeProjectName +"/globalparam"+"/"+fileName;
-				}
-				else{
-					 propFilePath =  "/" + activeProjectName +"/param"+"/"+fileName;
-				}
-				IPath propPath = new Path(propFilePath);
-				IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFile(propPath);
-				try {
-					InputStream reader = iFile.getContents();
-					jobProps.load(reader);
-
-				} catch (CoreException | IOException e) {
-					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
-							"Exception occured while loading build properties from file -\n" + e.getMessage());
-				}
-			
-				Enumeration<?> e = jobProps.propertyNames();
-				paramsMap = new HashMap<String, String>();
-			    while (e.hasMoreElements()){
-			        String param = (String) e.nextElement();
-			        paramsMap.put(param, jobProps.getProperty(param));
-			     }
-		    }
-		}
-		
-	 private String getParamValue(String value){
-			if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
-			String param = null;
-			value = value.substring(value.indexOf("{") + 1).substring(0, value.substring(value.indexOf("{") + 1).indexOf("}"));
-			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
-				param = entry.getKey();
-			 if(StringUtils.equals(param, value)){
-				 if(entry.getValue().endsWith("/")){
-					 return entry.getValue();
-				 }
-				return entry.getValue()+"/";
-	    			}
-				} 
-			}
-			return PARAMETER_NOT_FOUND;
-		}		
-		
-	 private String getParamFilePath(String extSchemaPath, String paramValue){
-			String remainingString = "";
-		    if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND) || ParameterUtil.isParameter(extSchemaPath)){
-		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
-		    }
-		    else{
-		    remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+2, extSchemaPath.length());
-		    extSchemaPathText.setToolTipText(paramValue+remainingString);
-		       }
-			return paramValue+remainingString;
-			}		
-		
-	 public File[]  listFilesForFolder(final File folder) {
-			File[] listofFiles = folder.listFiles();
-			
-			return listofFiles;
-			}					
 }
