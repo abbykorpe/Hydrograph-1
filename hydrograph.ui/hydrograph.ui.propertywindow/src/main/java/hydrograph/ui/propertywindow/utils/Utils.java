@@ -45,6 +45,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
@@ -67,7 +70,6 @@ public class Utils {
 	public static final String JOIN_MAP = "join_mapping";
 	private Properties jobProps;
 	private Map<String, String> paramsMap;
-	private Cursor cursur;
 	private String finalParamPath;
 	
 	public static Utils INSTANCE = new Utils();
@@ -173,7 +175,11 @@ public class Utils {
 		}
 		return outputFields;
 	}
-
+	
+	/**
+	 * 
+	 * loading the properties files
+	 */
 	 public void loadProperties(){
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
@@ -187,8 +193,70 @@ public class Utils {
 			List<File> paramNameList = Arrays.asList(files);
 			getParamMap(paramNameList);
 		}
-
-	 public void getParamMap(List<File> FileNameList){
+		
+	 	/**
+		 * 
+		 * checking the parameter in paramsMap
+		 * @param value
+		 * @return value of Parameter if found in Map otherwise Parameter not found
+		 */
+	 public String getParamValue(String value){
+			if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
+			String param = null;
+			value = value.substring(value.indexOf("{") + 1).substring(0, value.substring(value.indexOf("{") + 1).indexOf("}"));
+			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
+				param = entry.getKey();
+			 if(StringUtils.equals(param, value)){
+				 if(entry.getValue().endsWith("/")){
+					 return entry.getValue();
+				 }
+				return entry.getValue()+"/";
+	    			}
+				} 
+			}
+			return PARAMETER_NOT_FOUND;
+		}		
+		
+	 	/**
+		 * 
+		 * get the file Path according to the Parameter value
+		 * @param extSchemaPath
+		 * @param paramValue
+		 * @param extSchemaPathText
+		 * @return the file Path according to the Parameter value
+		 */
+	 public String getParamFilePath(String extSchemaPath, String paramValue, Text extSchemaPathText){
+			String remainingString = "";
+		    if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND) || ParameterUtil.isParameter(extSchemaPath)){
+		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
+		    }
+		    else{
+		    remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+2, extSchemaPath.length());
+		    extSchemaPathText.setToolTipText(paramValue+remainingString);
+		       }
+			return paramValue+remainingString;
+			}		
+		
+	 	/**
+		 * 
+		 * Add MouseMoveListner 
+		 * @param extSchemaPathText
+		 * @param cursor
+		 */
+	 public void addMouseMoveListener(Text extSchemaPathText , Cursor cursor){
+		 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')){
+				extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 255));	
+				extSchemaPathText.setCursor(cursor);
+				extSchemaPathText.addMouseMoveListener(getMouseListner(extSchemaPathText));
+					}
+			else{
+				extSchemaPathText.removeMouseMoveListener(getMouseListner(extSchemaPathText));
+				extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				extSchemaPathText.setCursor(null);
+			}
+	 }		
+		
+	 private void getParamMap(List<File> FileNameList){
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
 			IFile file = input.getFile();
@@ -222,38 +290,25 @@ public class Utils {
 			        paramsMap.put(param, jobProps.getProperty(param));
 			     }
 		    }
-		}
-		
-	 public String getParamValue(String value){
-			if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
-			String param = null;
-			value = value.substring(value.indexOf("{") + 1).substring(0, value.substring(value.indexOf("{") + 1).indexOf("}"));
-			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
-				param = entry.getKey();
-			 if(StringUtils.equals(param, value)){
-				 if(entry.getValue().endsWith("/")){
-					 return entry.getValue();
-				 }
-				return entry.getValue()+"/";
-	    			}
-				} 
-			}
-			return PARAMETER_NOT_FOUND;
+		}		 
+		 
+	 private MouseMoveListener getMouseListner(final Text extSchemaPathText){
+			final MouseMoveListener listner = new MouseMoveListener() {
+				
+				@Override
+				public void mouseMove(MouseEvent e) {
+					String paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getText());
+				    finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
+				    while(ParameterUtil.containsParameter(finalParamPath, '/')){
+				    	paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
+				    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
+			    		}
+					}
+				};
+			return listner;
 		}		
-		
-	 public String getParamFilePath(String extSchemaPath, String paramValue, Text extSchemaPathText){
-			String remainingString = "";
-		    if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND) || ParameterUtil.isParameter(extSchemaPath)){
-		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
-		    }
-		    else{
-		    remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+2, extSchemaPath.length());
-		    extSchemaPathText.setToolTipText(paramValue+remainingString);
-		       }
-			return paramValue+remainingString;
-			}		
-		
-	 public File[]  listFilesForFolder(final File folder) {
+	 
+	 private File[]  listFilesForFolder(final File folder) {
 			File[] listofFiles = folder.listFiles();
 			
 			return listofFiles;

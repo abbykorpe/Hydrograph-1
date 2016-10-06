@@ -72,17 +72,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -92,13 +88,9 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -127,7 +119,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -151,7 +142,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.eclipse.ui.statushandlers.StatusManager;
@@ -190,7 +180,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	private Integer windowButtonHeight = 25;
 	private Integer macButtonWidth = 40;
 	private Integer macButtonHeight = 30;
-	private static final String PARAMETER_NOT_FOUND = Messages.PARAMETER_NOT_FOUND;
 
 	protected boolean transformSchemaType=false;
 
@@ -213,11 +202,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected GridWidgetCommonBuilder gridWidgetBuilder = getGridWidgetBuilder();
 	protected Map<String, Integer> columns = getPropertiesToShow();
 	protected final String[] PROPS =  populateColumns();
-	private Properties jobProps;
-	private Map<String, String> paramsMap;
-	private Cursor cursur;
+	private Cursor cursor;
 	private String finalParamPath;
-	private Utils utils = Utils.INSTANCE;
 
 	String[] populateColumns(){	
 		String[] cols = new String[columns.size()];
@@ -291,7 +277,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 componentType=(String)componentMiscellaneousProperties.getComponentMiscellaneousProperty("componentType");
 		 this.propertyName = componentConfigrationProperty.getPropertyName();
 		 this.properties = componentConfigrationProperty.getPropertyValue();
-		 this.jobProps = new Properties();
 	 }
 
 	 private List<String> getSchemaFields(List<GridRow> schemaGridRowList2) {
@@ -931,29 +916,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 e1.printStackTrace();
 		 }
 		 
-		 /**
-			 *parameter resolution at dev phase 
-			 */
-		 	utils.loadProperties();
-			cursur = containerControl.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
+		 	Utils.INSTANCE.loadProperties();
+			cursor = containerControl.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
 				
 	    	addImportExportButtons(containerControl);
 
 	    	populateWidgetExternalSchema();
 	 }
-
-	 final MouseMoveListener listner = new MouseMoveListener() {
-			
-			@Override
-			public void mouseMove(MouseEvent e) {
-				String paramValue = utils.getParamValue(extSchemaPathText.getText());
-			    finalParamPath = utils.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
-			    while(ParameterUtil.containsParameter(finalParamPath, '/')){
-			    	paramValue = utils.getParamValue(extSchemaPathText.getToolTipText());
-			    	finalParamPath = utils.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
-		    		}
-				}
-			};
 		
 		private File getPath(){
 			 File schemaFile=null;
@@ -963,11 +932,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 if(input instanceof IFileEditorInput){
 				 
 				 if(ParameterUtil.containsParameter(extSchemaPathText.getText(), '/')){
-					 String paramValue = utils.getParamValue(extSchemaPathText.getText());
-					 finalParamPath = utils.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
+					 String paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getText());
+					 finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
 						while(ParameterUtil.containsParameter(finalParamPath, '/')){
-							paramValue = utils.getParamValue(extSchemaPathText.getToolTipText());
-					    	finalParamPath = utils.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
+							paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
+					    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
 				    		}
 					  schemaPath = finalParamPath;
 				 }
@@ -998,11 +967,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 }
 			 else{
 				 if(ParameterUtil.containsParameter(extSchemaPathText.getText(), '/')){
-					 String paramValue = utils.getParamValue(extSchemaPathText.getText());
-					 finalParamPath = utils.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
+					 String paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getText());
+					 finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
 						while(ParameterUtil.containsParameter(finalParamPath, '/')){
-							paramValue = utils.getParamValue(extSchemaPathText.getToolTipText());
-					    	finalParamPath = utils.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
+							paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
+					    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
 				    		}
 					  schemaPath = finalParamPath;
 				 }
@@ -1175,17 +1144,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 decorator.hide();
 					 external = true;
 					 toggleSchema(true);
-					 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')){
-							Color myColor = new Color(Display.getDefault(), 0, 0, 255);
-							extSchemaPathText.setForeground(myColor);	
-							extSchemaPathText.setCursor(cursur);
-							extSchemaPathText.addMouseMoveListener(listner);
-								}
-						else{
-							extSchemaPathText.removeMouseMoveListener(listner);
-							extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-							extSchemaPathText.setCursor(null);
-						}
+					 Utils.INSTANCE.addMouseMoveListener(extSchemaPathText, cursor);
 				 }
 			 } else {
 				 toggleSchema(false);
@@ -1207,17 +1166,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 decorator.hide();
 					 external = true;
 					 toggleSchema(true);
-					 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')){
-							Color myColor = new Color(Display.getDefault(), 0, 0, 255);
-							extSchemaPathText.setForeground(myColor);	
-							extSchemaPathText.setCursor(cursur);
-							extSchemaPathText.addMouseMoveListener(listner);
-								}
-						else{
-							extSchemaPathText.removeMouseMoveListener(listner);
-							extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-							extSchemaPathText.setCursor(null);
-						}
+					 Utils.INSTANCE.addMouseMoveListener(extSchemaPathText, cursor);
 				 }
 			 } else {
 				 toggleSchema(false);
@@ -1720,17 +1669,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				 @Override
 				 public void modifyText(ModifyEvent e) {
-					 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')){
-							Color myColor = new Color(Display.getDefault(), 0, 0, 255);
-							extSchemaPathText.setForeground(myColor);	
-							extSchemaPathText.setCursor(cursur);
-							extSchemaPathText.addMouseMoveListener(listner);
-								}
-						else{
-							extSchemaPathText.removeMouseMoveListener(listner);
-							extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 0));
-							extSchemaPathText.setCursor(null);
-						}
+					 Utils.INSTANCE.addMouseMoveListener(extSchemaPathText, cursor);
 
 					 showHideErrorSymbol(isWidgetValid());
 
