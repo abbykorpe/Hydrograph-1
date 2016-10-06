@@ -13,8 +13,11 @@
 package hydrograph.ui.graph.handler;
 
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.dialog.SaveJobFileBeforeRunDialog;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.preferences.JobRunPreference;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.graph.utility.ViewDataUtils;
@@ -30,6 +33,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
@@ -91,18 +96,15 @@ public class JobHandler extends AbstractHandler {
 	
 	private boolean jobIsSaved() {
 		ELTGraphicalEditor editor=SubJobUtility.getCurrentEditor();
-		if(editor.isDirty())
+		if(editor.isDirty() && !StringUtils.equals(Activator.getDefault().getPreferenceStore().getString(JobRunPreference.JOB_RUN_PREFRENCE), MessageDialogWithToggle.ALWAYS))
 		{
-		    MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION |SWT.YES | SWT.NO|SWT.Close);
-		    messageBox.setText(Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN_DIALOG_TITLE);
-		    messageBox.setMessage("'"+editor.getEditorInput().getName()+"'"+Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN);
+			SaveJobFileBeforeRunDialog messageBox = new SaveJobFileBeforeRunDialog(Display.getCurrent().getActiveShell(),"'"+editor.getEditorInput().getName()+"' "+Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN );
 		    int rc = messageBox.open();
-		    if(rc==SWT.YES){
-		    	PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
-		    	return true;
-		    }else
+		    if(rc!=IDialogConstants.OK_ID){
 		    	return false;
+		    }
 		}
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 		return true;
 	}
 	

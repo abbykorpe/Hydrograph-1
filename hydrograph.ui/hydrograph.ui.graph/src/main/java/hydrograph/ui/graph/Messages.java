@@ -98,6 +98,8 @@ public class Messages extends NLS {
 	public static String CONFIRM_TO_SAVE_JOB_BEFORE_RUN;
 
 	public static String CONFIRM_TO_SAVE_JOB_BEFORE_RUN_DIALOG_TITLE;
+
+	public static String SAVE_JOBS_BEFORE_LAUNCHING_MESSAGE;
 	
 	static {
 		// initialize resource bundle
