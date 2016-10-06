@@ -35,7 +35,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  hydrograph.ui.dataviewer;bundle-version="0.0.1",
  hydrograph.ui.communication;bundle-version="0.0.1",
- hydrograph.ui.expression.editor;bundle-version="0.0.1"
+ hydrograph.ui.expression.editor;bundle-version="0.0.1",
+ org.eclipse.debug.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.jcraft.jsch;version="0.1.44",
@@ -43,6 +44,7 @@ Import-Package: com.jcraft.jsch;version="0.1.44",
  hydrograph.ui.graph.model,
  hydrograph.ui.graph.model.processor,
  org.eclipse.core.filesystem,
+ org.eclipse.debug.internal.ui,
  org.eclipse.jdt.ui.wizards
 Export-Package: hydrograph.ui.graph.controller,
  hydrograph.ui.graph.editor,

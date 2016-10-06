@@ -364,5 +364,10 @@
           id="hydrograph.ui.graph"
           name="Execution Tracking">
     </page>
+    <page
+          class="hydrograph.ui.graph.execution.tracking.preferences.JobRunPreference"
+          id="hydrograph.ui.graph.jobRunPrefrence"
+          name="Job Run">
+    </page>
  </extension>
 </plugin>
