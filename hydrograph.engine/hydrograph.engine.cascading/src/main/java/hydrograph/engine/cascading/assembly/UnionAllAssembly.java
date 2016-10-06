@@ -13,6 +13,7 @@
 package hydrograph.engine.cascading.assembly;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -84,7 +85,6 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 		Set<SchemaField> refSchema = schemaFieldList.get(0);
 		
 		for (int i = 1; i < schemaFieldList.size(); i++) {
-
 			if (refSchema.size() != schemaFieldList.get(i).size()) {
 				throw new SchemaMismatchException("Component:" + unionAllEntity.getComponentId()
 						+ " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.");
@@ -92,8 +92,7 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 		}
 
 		for (int i = 1; i < schemaFieldList.size(); i++) {
-
-			if (!refSchema.containsAll(schemaFieldList.get(i))) {
+			if (!isEqualSchema(refSchema, schemaFieldList.get(i))){
 				throw new SchemaMismatchException("Component:" + unionAllEntity.getComponentId()
 						+ " - Different schema is defined for input sockets. For UnionAll component schema of all input sockets should be same.");
 			}
@@ -101,6 +100,29 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 
 	}
 	
+
+	private boolean isEqualSchema(Set<SchemaField> refSchema,
+			Set<SchemaField> set) {
+		HashMap<String, Boolean> fieldCheckMap = new HashMap<String, Boolean>(
+				refSchema.size());
+		for (SchemaField refSchemaField : refSchema){
+			fieldCheckMap.put(refSchemaField.getFieldName(), false);
+			for (SchemaField setSchemaField : set){
+				if (setSchemaField.getFieldName().equals(
+						refSchemaField.getFieldName())
+						&& setSchemaField.getFieldDataType().equals(
+								refSchemaField.getFieldDataType())) {
+					fieldCheckMap.put(refSchemaField.getFieldName(), true);
+					break;
+				}
+			}
+		}
+		
+		if (fieldCheckMap.containsValue(false))
+			return false;
+		else 
+			return true;
+	}
 
 	private Pipe[] alignfields(ArrayList<Pipe> arrayList,
 			ArrayList<Fields> fieldList) {
@@ -121,6 +143,11 @@ public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 	
 	public class SchemaMismatchException extends RuntimeException{
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public SchemaMismatchException(String msg) {
 			super(msg);
 		}

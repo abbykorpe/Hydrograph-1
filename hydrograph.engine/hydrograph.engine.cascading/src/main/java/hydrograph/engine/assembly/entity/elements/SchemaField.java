@@ -16,6 +16,9 @@ import hydrograph.engine.utilities.Constants;
 
 import java.lang.reflect.Type;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This is a POJO which holds the information for one field of any Input and
  * Output components like
@@ -42,7 +45,8 @@ public class SchemaField implements Cloneable {
 	private String fieldDefaultValue;
 	private String fieldToRangeValue;
 	private String fieldFromRangeValue;
-
+	private static Logger LOG = LoggerFactory.getLogger(SchemaField.class);
+	
 	public SchemaField(String fieldName, String fieldDataType) {
 		this.fieldName = fieldName;
 		this.fieldDataType = fieldDataType;
@@ -243,7 +247,7 @@ public class SchemaField implements Cloneable {
 		try {
 			return (SchemaField) super.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			LOG.error("Error cloning SchemaField object", e);
 		}
 		return null;
 	}
