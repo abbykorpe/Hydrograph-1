@@ -89,7 +89,7 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	}
 
 	private boolean isPartitionFilterEnabled() {
-		if (inputFileHiveParquetEntity.getPartitionFilterList()==null)
+		if (inputFileHiveParquetEntity.getPartitionFilterList().size() > 0)
 			return false;
 		else
 			return true;
