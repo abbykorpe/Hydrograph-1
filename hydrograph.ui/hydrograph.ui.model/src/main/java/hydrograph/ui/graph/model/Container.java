@@ -118,7 +118,7 @@ public class Container extends Model {
 				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
-			
+			//String compNewName = getDefaultNameForComponent(component.getComponentLabel().getLabelContents());
 			//Check length and increment height
 			Font font = new Font( Display.getDefault(), ModelConstants.labelFont, 10,
 					SWT.NORMAL );
@@ -208,10 +208,15 @@ public class Container extends Model {
 	public boolean removeChild(Component component) {
 		if (component != null && components.remove(component)) {
 			componentNames.remove(component.getPropertyValue(Component.Props.NAME_PROP.getValue()));
+			component.getComponentLabel().getLabelContents();
 			if(componentNextNameSuffixes.get(component.getPrefix())!=null){
 			Integer nextSuffix = componentNextNameSuffixes.get(component.getPrefix()) - 1;
 			componentNextNameSuffixes.put(component.getPrefix(), nextSuffix);
 			}
+//			if(componentNextNameSuffixes.get(component.getComponentLabel().getLabelContents())!=null){
+//				Integer nextSuffix = componentNextNameSuffixes.get(component.getComponentLabel().getLabelContents()) - 1;
+//				componentNextNameSuffixes.put(component.getComponentLabel().getLabelContents(), nextSuffix);
+//				}
 			firePropertyChange(CHILD_REMOVED_PROP, null, component);
 			updateSubjobVersion();
 			return true;
