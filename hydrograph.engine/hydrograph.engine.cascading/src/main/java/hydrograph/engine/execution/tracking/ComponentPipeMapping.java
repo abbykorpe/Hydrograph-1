@@ -50,6 +50,7 @@ public class ComponentPipeMapping {
 	private static final String outputSocket = "NoSocketId";
 	private static Map<String, List<String>> componentFlowMap = new HashMap<String, List<String>>();
 	private static Set<String> allPipes = new HashSet<String>();
+	private static Map<String,String> batchMap = new HashMap<String,String>();
 
 	/**
 	 * Method generateComponentToPipeMap generates map of component with
@@ -91,7 +92,7 @@ public class ComponentPipeMapping {
 						.getInputSocketFromComponentId(eachComponentId);
 				generateComponentAndPreviousMap(runtimeContext.getHydrographJob(), eachComponentId, outSockets,
 						inSockets);
-
+				batchMap.put(eachComponentId, eachBatchNumber);
 			}
 		}
 	}
@@ -247,6 +248,13 @@ public class ComponentPipeMapping {
 	 */
 	public static Map<String, List<String>> getComponentAndPreviousMap() {
 		return componentAndPreviousMap;
+	}
+	
+	/**
+	 * @return Map of components with their batch 
+	 */
+	public static Map<String,String> getBatchMap(){
+		return batchMap;
 	}
 
 	/**

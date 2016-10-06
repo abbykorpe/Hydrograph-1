@@ -43,6 +43,7 @@ public class JobInfo {
 
 	private final String COUNTER_GROUP = "com.hydrograph.customgroup";
 	private Map<String, ComponentInfo> componentInfoMap = new HashMap<>();
+	private Map<String,String> batchMap; 
 	private Map<String, Pipe> componentPipeMap;
 	private Map<String, List<String>> componentSocketMap;
 	private Map<String, List<String>> componentAndPreviousMap;
@@ -80,6 +81,7 @@ public class JobInfo {
 		}
 	}
 	private void checkAndCreateMaps() {
+		batchMap = ComponentPipeMapping.getBatchMap();
 		componentPipeMap = ComponentPipeMapping.getComponentToPipeMapping();
 		componentSocketMap = ComponentPipeMapping.getComponentSocketMap();
 		componentAndPreviousMap = ComponentPipeMapping.getComponentAndPreviousMap();
@@ -157,6 +159,7 @@ public class JobInfo {
 	private void createComponentInfoForComponent(String component_SocketId, CascadingStats<?> cascadingStats) {
 		ComponentInfo componentInfo = null;
 		String currentComponentId = getComponentIdFromComponentSocketID(component_SocketId);
+		String batchNumber = batchMap.get(currentComponentId);
 		if (currentComponentId != null) {
 			removeCompletedFlowFromComponent(cascadingStats, currentComponentId);
 			if (componentInfoMap.containsKey(currentComponentId)) {
@@ -166,6 +169,7 @@ public class JobInfo {
 			} else {
 				componentInfo = new ComponentInfo();
 				componentInfo.setComponentId(currentComponentId);
+				componentInfo.setBatch(batchNumber);
 				for (String socketId : componentSocketMap.get(currentComponentId)) {
 					componentInfo.setStatusPerSocketMap(socketId, cascadingStats.getStatus());
 					componentInfo.setProcessedRecordCount(socketId, 0);
