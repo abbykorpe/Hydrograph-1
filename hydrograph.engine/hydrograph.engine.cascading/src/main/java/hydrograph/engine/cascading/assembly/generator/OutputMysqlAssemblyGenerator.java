@@ -113,6 +113,3 @@ public class OutputMysqlAssemblyGenerator extends OutputAssemblyGeneratorBase {
 		return outputMysqlAssembly;
 	}
 }
-	
-
-	

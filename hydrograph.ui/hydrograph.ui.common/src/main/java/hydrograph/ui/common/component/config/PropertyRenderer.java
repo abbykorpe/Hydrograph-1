@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET"/>
  *     &lt;enumeration value="TRANSFORM_SCHEMA_WIDGET"/>
  *     &lt;enumeration value="SCHEMA_WIDGET"/>
+ *     &lt;enumeration value="SQL_SCHEMA_WIDGET"/>
  *     &lt;enumeration value="FIELD_SEQUENCE_WIDGET"/>
  *     &lt;enumeration value="FIXED_WIDGET"/>
  *     &lt;enumeration value="RUNTIME_PROPERTIES_WIDGET"/>
@@ -73,12 +74,28 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
  *     &lt;enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
  *     &lt;enumeration value="DATABASE_NAME_WIDGET"/>
+ *     &lt;enumeration value="DATABASE_TYPE_WIDGET"/>
+ *     &lt;enumeration value="RDBMS_LOADTYPE_PROPERTIES_WIDGET"/>
+ *     &lt;enumeration value="REDSHIFT_LOADTYPE_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="TABLE_NAME_WIDGET"/>
+ *     &lt;enumeration value="USER_NAME_WIDGET"/>
+ *     &lt;enumeration value="PASSWORD_NAME_WIDGET"/>
+ *     &lt;enumeration value="QUERY_WIDGET"/>
+ *     &lt;enumeration value="JDBC_URL_WIDGET"/>
+ *     &lt;enumeration value="BATCH_SIZE_WIDGET"/>
  *     &lt;enumeration value="PARTITION_KEYS_WIDGET"/>
  *     &lt;enumeration value="QUOTE_WIDGET"/>
  *     &lt;enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
  *     &lt;enumeration value="MIXED_SCHEME"/>
  *     &lt;enumeration value="OVERWRITE_WIDGET"/>
+ *     &lt;enumeration value="RUN_MODEL_TEXT_WIDGET"/>
+ *     &lt;enumeration value="RUN_INPUT_TEXT_WIDGET"/>
+ *     &lt;enumeration value="RUN_OUTPUT_TEXT_WIDGET"/>
+ *     &lt;enumeration value="RUNPROGRAM_TEXT_WIDGET"/>
+ *     &lt;enumeration value="RUN_TRAINING_TEXT_WIDGET"/>
+ *     &lt;enumeration value="RUN_TEST_TEXT_WIDGET"/>
+ *     &lt;enumeration value="RUN_THRESHOLD_TEXT_WIDGET"/>
+ *     &lt;enumeration value="PARTITION_PROPERTIES_WIDGET"/>
  *     &lt;enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
  *     &lt;enumeration value="EXTRACT_METASTORE_DATA_WIDGET"/>
  *   &lt;/restriction>
@@ -93,6 +110,7 @@ public enum PropertyRenderer {
     GENERATE_RECORDS_SCHEMA_WIDGET,
     TRANSFORM_SCHEMA_WIDGET,
     SCHEMA_WIDGET,
+    SQL_SCHEMA_WIDGET,
     FIELD_SEQUENCE_WIDGET,
     FIXED_WIDGET,
     RUNTIME_PROPERTIES_WIDGET,
@@ -130,14 +148,31 @@ public enum PropertyRenderer {
     COUNT_WIDGET,
     PRIMARY_COLUMN_KEYS_WIDGET,
     DATABASE_NAME_WIDGET,
+    DATABASE_TYPE_WIDGET,
+    RDBMS_LOADTYPE_PROPERTIES_WIDGET,
+    REDSHIFT_LOADTYPE_PROPERTIES_WIDGET,
     TABLE_NAME_WIDGET,
+    USER_NAME_WIDGET,
+    PASSWORD_NAME_WIDGET,
+    QUERY_WIDGET,
+    JDBC_URL_WIDGET,
+    BATCH_SIZE_WIDGET,
     PARTITION_KEYS_WIDGET,
     QUOTE_WIDGET,
     EXTERNAL_TABLE_PATH_WIDGET,
     MIXED_SCHEME,
     OVERWRITE_WIDGET,
+    EXTRACT_METASTORE_DATA_WIDGET,
+    RUN_MODEL_TEXT_WIDGET,
+    RUN_INPUT_TEXT_WIDGET,
+    RUN_OUTPUT_TEXT_WIDGET,
+    RUNPROGRAM_TEXT_WIDGET,
+    RUN_TRAINING_TEXT_WIDGET,
+    RUN_TEST_TEXT_WIDGET,
+    RUN_THRESHOLD_TEXT_WIDGET,
+    PARTITION_PROPERTIES_WIDGET,
     PARTITION_KEYS_WIDGET_INPUT_HIVE,
-    EXTRACT_METASTORE_DATA_WIDGET;
+    SQL_CONDITION_WIDGET;
 
     public String value() {
         return name();

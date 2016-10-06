@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-transform-operation")
+@XmlType(name = "type-transform-operation", namespace = "hydrograph/engine/jaxb/transform")
 public class TypeTransformOperation
     extends hydrograph.engine.jaxb.commontypes.TypeTransformOperation
 {

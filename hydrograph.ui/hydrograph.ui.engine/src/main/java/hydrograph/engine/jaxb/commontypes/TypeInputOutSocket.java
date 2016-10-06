@@ -21,6 +21,9 @@ import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.ifmixedscheme.TypeInputMixedOutSocket;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordOutSocket;
 import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextDelimitedOutSocket;
+import hydrograph.engine.jaxb.imysql.TypeInputMysqlOutSocket;
+import hydrograph.engine.jaxb.ioracle.TypeInputOracleOutSocket;
+import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftOutSocket;
 import hydrograph.engine.jaxb.itffw.TypeInputFixedwidthOutSocket;
 import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
 
@@ -46,7 +49,7 @@ import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-outSocket", propOrder = {
+@XmlType(name = "type-input-outSocket", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "schema"
 })
 @XmlSeeAlso({
@@ -58,7 +61,10 @@ import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
     hydrograph.engine.jaxb.ihiveparquet.TypeInputDelimitedOutSocket.class,
     TypeInputHiveTextDelimitedOutSocket.class,
     TypeInputMixedOutSocket.class,
-    hydrograph.engine.jaxb.ifsubjob.TypeInputDelimitedOutSocket.class
+    hydrograph.engine.jaxb.ifsubjob.TypeInputDelimitedOutSocket.class,
+    TypeInputMysqlOutSocket.class,
+    TypeInputRedshiftOutSocket.class,
+    TypeInputOracleOutSocket.class
 })
 public class TypeInputOutSocket
     extends TypeBaseOutSocket

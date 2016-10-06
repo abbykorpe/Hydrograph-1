@@ -59,7 +59,7 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operations-component", propOrder = {
+@XmlType(name = "type-operations-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inSocket",
     "operationOrExpression",
     "outSocket",

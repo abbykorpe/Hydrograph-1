@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.operationstypes.Lookup;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "lookup-base")
+@XmlType(name = "lookup-base", namespace = "hydrograph/engine/jaxb/lookup")
 @XmlSeeAlso({
     Lookup.class
 })

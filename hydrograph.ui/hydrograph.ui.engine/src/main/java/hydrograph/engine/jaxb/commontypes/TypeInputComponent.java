@@ -24,6 +24,9 @@ import hydrograph.engine.jaxb.ifmixedscheme.TypeMixedBase;
 import hydrograph.engine.jaxb.ifsubjob.TypeInputFileDelimitedSubjob;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
 import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
+import hydrograph.engine.jaxb.imysql.TypeInputMysqlBase;
+import hydrograph.engine.jaxb.ioracle.TypeInputOracleBase;
+import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftBase;
 import hydrograph.engine.jaxb.itffw.TypeFixedWidthBase;
 import hydrograph.engine.jaxb.itfs.TypeInputFileSequenceBase;
 
@@ -48,7 +51,7 @@ import hydrograph.engine.jaxb.itfs.TypeInputFileSequenceBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-component", propOrder = {
+@XmlType(name = "type-input-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "outSocket"
 })
 @XmlSeeAlso({
@@ -61,7 +64,10 @@ import hydrograph.engine.jaxb.itfs.TypeInputFileSequenceBase;
     TypeInputHiveTextFileDelimitedBase.class,
     TypeMixedBase.class,
     TypeInputFileDelimitedSubjob.class,
-    hydrograph.engine.jaxb.ifsubjob.TypeInputFileDelimitedBase.class
+    hydrograph.engine.jaxb.ifsubjob.TypeInputFileDelimitedBase.class,
+    TypeInputMysqlBase.class,
+    TypeInputRedshiftBase.class,
+    TypeInputOracleBase.class
 })
 public abstract class TypeInputComponent
     extends TypeBaseComponent

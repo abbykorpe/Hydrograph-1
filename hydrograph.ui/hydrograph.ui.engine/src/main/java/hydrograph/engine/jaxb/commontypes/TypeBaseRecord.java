@@ -23,6 +23,9 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordRecord;
+import hydrograph.engine.jaxb.omysql.TypeMysqlRecord;
+import hydrograph.engine.jaxb.ooracle.TypeOracleRecord;
+import hydrograph.engine.jaxb.oredshift.TypeRedshiftRecord;
 
 
 /**
@@ -48,7 +51,7 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-record", propOrder = {
+@XmlType(name = "type-base-record", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "fieldOrRecordOrIncludeExternalSchema"
 })
 @XmlSeeAlso({
@@ -56,7 +59,10 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordRecord;
     TypeGenerateRecordRecord.class,
     hydrograph.engine.jaxb.ifmixedscheme.TypeMixedRecord.class,
     hydrograph.engine.jaxb.otffw.TypeFixedwidthRecord.class,
-    hydrograph.engine.jaxb.ofmixedscheme.TypeMixedRecord.class
+    hydrograph.engine.jaxb.ofmixedscheme.TypeMixedRecord.class,
+    TypeMysqlRecord.class,
+    TypeRedshiftRecord.class,
+    TypeOracleRecord.class
 })
 public class TypeBaseRecord {
 

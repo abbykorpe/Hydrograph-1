@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="NON_BLANK_STRING_VALIDATOR"/>
  *     &lt;enumeration value="SCHEMA_GRID_VALIDATOR"/>
  *     &lt;enumeration value="MIXED_SCHEME_GRID_VALIDATOR"/>
+ *     &lt;enumeration value="SQL_SCHEME_GRID_VALIDATOR"/>
  *     &lt;enumeration value="BOOLEAN_OR_PARAMETER_VALIDATOR"/>
  *     &lt;enumeration value="JOIN_CONFIG_VALIDATOR"/>
  *     &lt;enumeration value="JOIN_MAPPING_VALIDATOR"/>
@@ -74,6 +75,8 @@ public enum Validators {
     SchemaGridValidationRule("SCHEMA_GRID_VALIDATOR"),
     @XmlEnumValue("MIXED_SCHEME_GRID_VALIDATOR")
     MixedSchemeGridValidationRule("MIXED_SCHEME_GRID_VALIDATOR"),
+    @XmlEnumValue("SQL_SCHEME_GRID_VALIDATOR")
+    SQLSchemeGridValidationRule("SQL_SCHEME_GRID_VALIDATOR"),
     @XmlEnumValue("BOOLEAN_OR_PARAMETER_VALIDATOR")
     BooleanOrParameterValidationRule("BOOLEAN_OR_PARAMETER_VALIDATOR"),
     @XmlEnumValue("JOIN_CONFIG_VALIDATOR")

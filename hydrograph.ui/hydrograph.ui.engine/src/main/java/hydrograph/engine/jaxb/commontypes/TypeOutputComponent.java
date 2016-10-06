@@ -23,6 +23,9 @@ import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.ofmixedscheme.TypeMixedBase;
 import hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedSubjob;
 import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedBase;
+import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
+import hydrograph.engine.jaxb.ooracle.TypeOutputOracleBase;
+import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
 import hydrograph.engine.jaxb.otffw.TypeFixedWidthBase;
 import hydrograph.engine.jaxb.otfs.TypeOutputFileSequenceBase;
 import hydrograph.engine.jaxb.outputtypes.Discard;
@@ -49,7 +52,7 @@ import hydrograph.engine.jaxb.outputtypes.Discard;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-component", propOrder = {
+@XmlType(name = "type-output-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inSocket",
     "overWrite"
 })
@@ -63,7 +66,10 @@ import hydrograph.engine.jaxb.outputtypes.Discard;
     TypeOutputHiveTextFileDelimitedBase.class,
     TypeMixedBase.class,
     TypeOutputFileDelimitedSubjob.class,
-    hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase.class
+    hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase.class,
+    TypeOutputMysqlBase.class,
+    TypeOutputRedshiftBase.class,
+    TypeOutputOracleBase.class
 })
 public abstract class TypeOutputComponent
     extends TypeBaseComponent

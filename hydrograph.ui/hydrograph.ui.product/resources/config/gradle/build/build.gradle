@@ -54,7 +54,7 @@ ext.hiveVersion = '1.2.0'
 
 dependencies {
 
-  	compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.10-SNAPSHOT')
+  	compile(group: 'bitwise', name: 'hydrograph.engine.command-line', version: '0.0.3')
 
     compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     

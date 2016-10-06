@@ -106,7 +106,8 @@ public class SchemaPropagation {
 	
 	private void applySchemaToLinkedComponents(Link link, ComponentsOutputSchema componentsOutputSchema) {
 		if ((!(Constants.TRANSFORM.equals(link.getTarget().getCategory()) & !Constants.FILTER.equalsIgnoreCase(link
-				.getTarget().getComponentName())) && !link.getTarget().getProperties()
+				.getTarget().getComponentName()) & !Constants.PARTITION_BY_EXPRESSION.equalsIgnoreCase(link
+						.getTarget().getComponentName())) && !link.getTarget().getProperties()
 				.containsValue(componentsOutputSchema))) {
 			if (!checkUnusedSocketAsSourceTerminal(link))
 				applySchemaToTargetComponents(link.getTarget(), link.getTargetTerminal(), componentsOutputSchema);
@@ -329,6 +330,9 @@ public class SchemaPropagation {
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 			if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
 				componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+			else if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null
+					&& StringUtils.equals(Constants.PARTITION_BY_EXPRESSION, link.getSource().getComponentName()))
+				componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);	
 		}
 		return componentsOutputSchema;
 	}
