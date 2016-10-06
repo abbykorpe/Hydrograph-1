@@ -122,7 +122,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 	}
 
 	private boolean isPartitionFilterEnabled() {
-		if (inputHiveFileEntity.getPartitionFilterList() == null)
+		if (inputHiveFileEntity.getPartitionFilterList().size() > 0)
 			return false;
 		else
 			return true;
