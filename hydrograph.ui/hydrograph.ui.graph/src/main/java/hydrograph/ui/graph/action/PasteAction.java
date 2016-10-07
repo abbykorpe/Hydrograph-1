@@ -53,15 +53,17 @@ public class PasteAction extends SelectionAction {
 		setEnabled(false);
 	}
 
-	private Command createPasteCommand() {
+	private Command createPasteCommand(boolean increaseCounter) {
 		ComponentPasteCommand command = new ComponentPasteCommand();
+		if(increaseCounter){
 		command.setPasteCounter(pasteCounter++);
+		}
 		return command;
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		Command command = createPasteCommand();
+		Command command = createPasteCommand(false);
 		boolean status = command != null && command.canExecute();
 		ContributionItemManager.PASTE.setEnable(status);	
 		return status;
@@ -69,7 +71,7 @@ public class PasteAction extends SelectionAction {
 
 	@Override
 	public void run() {
-	   execute(createPasteCommand());
+	   execute(createPasteCommand(true));
 	}
    
 	public void setPasteCounter(int pasteCounter) {

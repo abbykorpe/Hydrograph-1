@@ -90,6 +90,7 @@ Sr.No. <date> <GitHub Issue #> - [fixed by] - description
 77.#1374 [Nitin Gupta] Confirmation Message is Not Getting Displayed Before Starting Job Execution.
 78.#1352 [Akhilesh Joshi]User is NOT able to Copy/Paste the Multiple Component from One Job Canvas to Another
 79.#738  [Akhilesh Joshi]Component Copy & Paste Issue
+80.#1172 [Akhilesh Joshi] Component copied from one job canvas to other is pasted to right most bottom corner of the job canvas 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
