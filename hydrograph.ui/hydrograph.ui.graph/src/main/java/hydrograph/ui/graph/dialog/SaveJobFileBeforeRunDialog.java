@@ -39,7 +39,6 @@ public class SaveJobFileBeforeRunDialog extends Dialog {
 
 	private String messageText;
 	private Button alwaysSaveCheckButton;
-	private Image image;
 
 	/**
 	 * Create the dialog.
@@ -72,8 +71,7 @@ public class SaveJobFileBeforeRunDialog extends Dialog {
 		messageComposite.setLayoutData(gd_messageComposite);
 		
 		Label iconLabel = new Label(messageComposite, SWT.NONE);
-		image=getSWTImage();
-		iconLabel.setImage(image);
+		iconLabel.setImage(getSWTImage());
 		
 		Label messageLabel = new Label(messageComposite, SWT.WRAP);
 		messageLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
@@ -154,13 +152,6 @@ public class SaveJobFileBeforeRunDialog extends Dialog {
 
 		return image[0];
 
-	}
-
-	@Override
-	public boolean close() {
-		boolean rc=super.close();
-		image.dispose();
-		return rc;
 	}
 }
 
