@@ -811,8 +811,10 @@ public class FieldDialog extends Dialog {
 		if(OSValidator.isMac())
 		{
 			for(CellEditor cellEditor : targetTableViewer.getCellEditors()){
+				if(cellEditor !=null){
 				cellEditor.getControl().setEnabled(false);
 				cellEditor.getControl().setEnabled(true);
+				}
 			}
 		}
 		if (validate()) {

@@ -698,9 +698,11 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		
 		if(OSValidator.isMac()){
 			for(CellEditor cellEditor : nameValueTableViewer.getCellEditors())
-			{
+			{   
+				if(cellEditor !=null){
 				cellEditor.getControl().setEnabled(false);
 				cellEditor.getControl().setEnabled(false);
+				}
 			}
 		}
 		if(checkNameValueFieldBlankOrNot()){

@@ -808,11 +808,14 @@ public class JoinMapGrid extends Dialog {
 			tableViewers.add(outputTableViewer);
 			tableViewers.addAll(java.util.Arrays.asList(inputTableViewer));
 			for(TableViewer tableView : tableViewers){
-				
+				if(tableView !=null){
 			for(CellEditor cellEditor : tableView.getCellEditors()){
+				if(cellEditor !=null){
 				cellEditor.getControl().setEnabled(false);
 				cellEditor.getControl().setEnabled(true);
+				}
 			}
+				}
 			}
 		}
 		populateCurrentItemsOfTable();

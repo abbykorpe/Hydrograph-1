@@ -775,8 +775,10 @@ public class HiveOutputFieldDialog extends Dialog {
 		if(OSValidator.isMac()){
 			
 			for(CellEditor cellEditor : targetTableViewer.getCellEditors()){
+				if(cellEditor !=null){
 				cellEditor.getControl().setEnabled(false);
 				cellEditor.getControl().setEnabled(true);
+				}
 			}
 		}
 		if (validate()) {

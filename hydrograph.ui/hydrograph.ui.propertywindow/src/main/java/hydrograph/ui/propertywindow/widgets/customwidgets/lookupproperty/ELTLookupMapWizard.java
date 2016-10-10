@@ -706,9 +706,13 @@ public class ELTLookupMapWizard extends Dialog {
 			tableViewers.addAll(java.util.Arrays.asList(inputTableViewer));
 			
 			for(TableViewer views : tableViewers){
+				if(views !=null){
 				for(CellEditor cellEditor : views.getCellEditors()){
+					if(cellEditor !=null){
 					cellEditor.getControl().setEnabled(false);
 					cellEditor.getControl().setEnabled(true);
+					}
+				}
 				}
 			}
 		}

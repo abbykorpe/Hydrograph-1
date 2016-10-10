@@ -1009,8 +1009,10 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 			tableViewers.add(targetTableViewer);
 			for(TableViewer tableView : tableViewers){
 				for(CellEditor cellEditor : tableView.getCellEditors()){
+					if(cellEditor !=null){
 					cellEditor.getControl().setEnabled(false);
 					cellEditor.getControl().setEnabled(true);
+					}
 				}
 			}
 		}
