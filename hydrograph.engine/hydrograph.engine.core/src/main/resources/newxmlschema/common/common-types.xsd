@@ -432,7 +432,5 @@
 		<xs:attribute name="value" type="true_false" default="true" />
 	</xs:complexType>
 
-
-
 	<!--**************New changes- end************ -->
 </xs:schema>

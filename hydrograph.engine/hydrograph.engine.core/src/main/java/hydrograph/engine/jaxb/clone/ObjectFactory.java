@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
-     * 
-     */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
-    }
-
-    /**
      * Create an instance of {@link TypeCloneOutSocket }
      * 
      */
     public TypeCloneOutSocket createTypeCloneOutSocket() {
         return new TypeCloneOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * 
+     */
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
     }
 
     /**

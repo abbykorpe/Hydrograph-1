@@ -19,26 +19,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.flow.FlowDef;
-import cascading.jdbc.JDBCFactory;
 import cascading.jdbc.JDBCScheme;
 import cascading.jdbc.JDBCTap;
 import cascading.jdbc.TableDesc;
 import cascading.jdbc.db.DBInputFormat;
-import cascading.jdbc.db.DBOutputFormat;
 import cascading.pipe.Pipe;
 import cascading.tap.SinkMode;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.assembly.entity.InputRDBMSEntity;
 import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.assembly.entity.FilterEntity;
-import hydrograph.engine.assembly.entity.InputRDBMSEntity;
 
-public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
+public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 
 	/**
 	 * RDBMS Input Component - read records from RDBMS Table.
@@ -48,9 +43,9 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 	protected FlowDef flowDef;
 	protected Pipe pipe;
 	protected List<SchemaField> schemaFieldList;
+	protected InputRDBMSEntity inputRDBMSEntity;
 	protected String[] fieldsDataType;
 	@SuppressWarnings("rawtypes")
-	protected InputRDBMSEntity inputRDBMSEntity;
 	Class<? extends DBInputFormat> inputFormatClass;
 	protected JDBCScheme scheme;
 	private TableDesc tableDesc;
@@ -61,30 +56,26 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 	protected String[] columnNames;
 	protected String condition;
 
-
-	@SuppressWarnings("rawtypes")
 	protected JDBCTap rdbmsTap;
 
 	protected final static String TIME_STAMP = "hh:mm:ss";
 
 	protected InputOutputFieldsAndTypesCreator<InputRDBMSEntity> fieldsCreator;
 
-	private static Logger LOG = LoggerFactory
-			.getLogger(InputRDBMSAssembly.class);
+	private static Logger LOG = LoggerFactory.getLogger(InputRDBMSAssembly.class);
 
-	public InputRDBMSAssembly(InputRDBMSEntity baseComponentEntity,
-			ComponentParameters componentParameters) {
-		super( baseComponentEntity, componentParameters);
+	public InputRDBMSAssembly(InputRDBMSEntity baseComponentEntity, ComponentParameters componentParameters) {
+		super(baseComponentEntity, componentParameters);
 	}
 
 	@Override
 	public void initializeEntity(InputRDBMSEntity assemblyEntityBase) {
-		inputRDBMSEntity = (InputRDBMSEntity) assemblyEntityBase;
-		
+		inputRDBMSEntity = assemblyEntityBase;
+
 	}
-	
+
 	public void intializeRdbmsSpecificDrivers() {
-		//Todo
+		// Todo
 	}
 
 	/*
@@ -97,8 +88,7 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 
 	protected void createAssembly() {
 
-		fieldsCreator = new InputOutputFieldsAndTypesCreator<InputRDBMSEntity>(
-				inputRDBMSEntity);
+		fieldsCreator = new InputOutputFieldsAndTypesCreator<InputRDBMSEntity>(inputRDBMSEntity);
 		intializeRdbmsSpecificDrivers();
 		generateTapsAndPipes(); // exception handled separately within
 		try {
@@ -109,26 +99,21 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 			}
 			for (OutSocket outSocket : inputRDBMSEntity.getOutSocketList()) {
 
-				String[] fieldsArray = new String[inputRDBMSEntity
-						.getFieldsList().size()];
+				String[] fieldsArray = new String[inputRDBMSEntity.getFieldsList().size()];
 				int i = 0;
 				for (SchemaField Fields : inputRDBMSEntity.getFieldsList()) {
 					fieldsArray[i++] = Fields.getFieldName();
 				}
 
-				LOG.trace("Creating input "+inputRDBMSEntity.getDatabaseType() +" assembly for '"
-						+ inputRDBMSEntity.getComponentId() + "' for socket: '"
-						+ outSocket.getSocketId() + "' of type: '"
-						+ outSocket.getSocketType() + "'");
-				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(),
-						inputRDBMSEntity.getComponentId(), pipe, new Fields(
-								fieldsArray));
+				LOG.trace("Creating input " + inputRDBMSEntity.getDatabaseType() + " assembly for '"
+						+ inputRDBMSEntity.getComponentId() + "' for socket: '" + outSocket.getSocketId()
+						+ "' of type: '" + outSocket.getSocketType() + "'");
+				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), inputRDBMSEntity.getComponentId(), pipe,
+						new Fields(fieldsArray));
 			}
 		} catch (Exception e) {
-			LOG.error(
-					"Error in creating assembly for component '"
-							+ inputRDBMSEntity.getComponentId() + "', Error: "
-							+ e.getMessage(), e);
+			LOG.error("Error in creating assembly for component '" + inputRDBMSEntity.getComponentId() + "', Error: "
+					+ e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -140,34 +125,31 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 	 * on for other file format like parquet, etc.
 	 */
 	protected void prepareScheme() {
-		
 
 		fields = fieldsCreator.makeFieldsWithTypes();
 		columnNames = fieldsCreator.getFieldNames();
 		condition = inputRDBMSEntity.getCondition();
-		LOG.debug("Applying " +inputRDBMSEntity.getDatabaseType() + "  schema to read data from RDBMS");
+		LOG.debug("Applying " + inputRDBMSEntity.getDatabaseType() + "  schema to read data from RDBMS");
 
 		createTableDescAndScheme();
 	}
 
 	protected void createTableDescAndScheme() {
 		// For sql query
-		if (inputRDBMSEntity.getQuery() != null
-				&& inputRDBMSEntity.getQuery() != "") {
+		if (inputRDBMSEntity.getQuery() != null && inputRDBMSEntity.getQuery() != "") {
 			String sql = inputRDBMSEntity.getQuery();
 
-			String countSql = "select count(*) from "
-					+ inputRDBMSEntity.getTableName();
-			scheme = new JDBCScheme(inputFormatClass, fields, columnNames, sql,
-					countSql, -1);
+			String countSql = "select count(*) from " + inputRDBMSEntity.getTableName();
+			scheme = new JDBCScheme(inputFormatClass, fields, columnNames, sql, countSql, -1);
 
 		} else {
-			tableDesc = new TableDesc(inputRDBMSEntity.getTableName(),
-					fieldsCreator.getFieldNames(), columnDefs, primaryKeys);
+			tableDesc = new TableDesc(inputRDBMSEntity.getTableName(), fieldsCreator.getFieldNames(), columnDefs,
+					primaryKeys);
 
-//			scheme = new JDBCScheme(inputFormatClass, fields, columnNames);
-//			scheme = new JDBCScheme(inputFormatClass,null, fields, columnNames, null, null,-1, null, null, true );
-			scheme = new JDBCScheme(inputFormatClass,null, fields, columnNames, null, condition ,-1, null, null, true );
+			// scheme = new JDBCScheme(inputFormatClass, fields, columnNames);
+			// scheme = new JDBCScheme(inputFormatClass,null, fields,
+			// columnNames, null, null,-1, null, null, true );
+			scheme = new JDBCScheme(inputFormatClass, null, fields, columnNames, null, condition, -1, null, null, true);
 		}
 	}
 
@@ -177,19 +159,18 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 		// inputRDBMSEntity.getDriverName(), tableDesc,scheme,
 		// SinkMode.REPLACE);
 
-		if (inputRDBMSEntity.getQuery() == null
-				|| inputRDBMSEntity.getQuery() == "") {
-			rdbmsTap = new JDBCTap(inputRDBMSEntity.getJdbcurl()
-					+ (inputRDBMSEntity.getDatabaseName()==null ? "" : "/"	+ inputRDBMSEntity.getDatabaseName())
-					,
-					inputRDBMSEntity.getUsername(),
-					inputRDBMSEntity.getPassword(), driverName, tableDesc,
-					scheme, SinkMode.REPLACE);
+		if (inputRDBMSEntity.getQuery() == null || inputRDBMSEntity.getQuery() == "") {
+			rdbmsTap = new JDBCTap(
+					inputRDBMSEntity.getJdbcurl() + (inputRDBMSEntity.getDatabaseName() == null ? ""
+							: "/" + inputRDBMSEntity.getDatabaseName()),
+					inputRDBMSEntity.getUsername(), inputRDBMSEntity.getPassword(), driverName, tableDesc, scheme,
+					SinkMode.REPLACE);
 
 		} else {
-			rdbmsTap = new JDBCTap(inputRDBMSEntity.getJdbcurl() + (inputRDBMSEntity.getDatabaseName()==null ? "" : "/"	+ inputRDBMSEntity.getDatabaseName()),
-					inputRDBMSEntity.getUsername(),
-					inputRDBMSEntity.getPassword(), driverName, scheme);
+			rdbmsTap = new JDBCTap(
+					inputRDBMSEntity.getJdbcurl() + (inputRDBMSEntity.getDatabaseName() == null ? ""
+							: "/" + inputRDBMSEntity.getDatabaseName()),
+					inputRDBMSEntity.getUsername(), inputRDBMSEntity.getPassword(), driverName, scheme);
 		}
 		((JDBCTap) rdbmsTap).setBatchSize(inputRDBMSEntity.getBatchSize());
 
@@ -199,11 +180,9 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 
 		// initializing each pipe and tap
 		LOG.debug(inputRDBMSEntity.getDatabaseType() + " Input Component '" + inputRDBMSEntity.getComponentId()
-				+ "': [ Database Name: " + inputRDBMSEntity.getDatabaseName()
-				+ ", Table Name: " + inputRDBMSEntity.getTableName()
-				+ ", Column Names: "
-				+ Arrays.toString(fieldsCreator.getFieldNames())
-				+  "]");
+				+ "': [ Database Name: " + inputRDBMSEntity.getDatabaseName() + ", Table Name: "
+				+ inputRDBMSEntity.getTableName() + ", Column Names: " + Arrays.toString(fieldsCreator.getFieldNames())
+				+ "]");
 
 		// scheme and tap to be initialized in its specific assembly
 		try {
@@ -216,8 +195,7 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 
 			prepareScheme();
 		} catch (Exception e) {
-			LOG.error("Error in preparing scheme for component '"
-					+ inputRDBMSEntity.getComponentId() + "': "
+			LOG.error("Error in preparing scheme for component '" + inputRDBMSEntity.getComponentId() + "': "
 					+ e.getMessage());
 			throw new RuntimeException(e);
 		}
@@ -229,9 +207,4 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity>  {
 		setHadoopProperties(rdbmsTap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
 	}
-
-	
-
-
-
 }

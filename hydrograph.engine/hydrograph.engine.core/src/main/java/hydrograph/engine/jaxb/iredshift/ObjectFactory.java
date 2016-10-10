@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputRedshiftBase }
-     * 
-     */
-    public TypeInputRedshiftBase createTypeInputRedshiftBase() {
-        return new TypeInputRedshiftBase();
-    }
-
-    /**
      * Create an instance of {@link TypeInputRedshiftOutSocket }
      * 
      */
     public TypeInputRedshiftOutSocket createTypeInputRedshiftOutSocket() {
         return new TypeInputRedshiftOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputRedshiftBase }
+     * 
+     */
+    public TypeInputRedshiftBase createTypeInputRedshiftBase() {
+        return new TypeInputRedshiftBase();
     }
 
 }

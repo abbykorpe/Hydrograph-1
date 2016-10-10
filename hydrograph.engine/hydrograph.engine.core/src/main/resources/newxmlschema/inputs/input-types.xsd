@@ -46,7 +46,7 @@
 	<xs:import schemaLocation="./redshift-type/input-redshift-types.xsd"
 		namespace="hydrograph/engine/jaxb/iredshift" />
 	<xs:import schemaLocation="./oracle-type/input-oracle-types.xsd"
-		namespace="hydrograph/engine/jaxb/ioracle" />		
+		namespace="hydrograph/engine/jaxb/ioracle" />			
 
 
 

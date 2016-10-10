@@ -58,11 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Subjob }
+     * Create an instance of {@link RunProgram }
      * 
      */
-    public Subjob createSubjob() {
-        return new Subjob();
+    public RunProgram createRunProgram() {
+        return new RunProgram();
     }
 
     /**
@@ -74,11 +74,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RunProgram }
+     * Create an instance of {@link Subjob }
      * 
      */
-    public RunProgram createRunProgram() {
-        return new RunProgram();
+    public Subjob createSubjob() {
+        return new Subjob();
     }
 
     /**
@@ -106,11 +106,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Subjob.Path }
+     * Create an instance of {@link RunProgram.Command }
      * 
      */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
+    public RunProgram.Command createRunProgramCommand() {
+        return new RunProgram.Command();
     }
 
     /**
@@ -122,11 +122,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RunProgram.Command }
+     * Create an instance of {@link Subjob.Path }
      * 
      */
-    public RunProgram.Command createRunProgramCommand() {
-        return new RunProgram.Command();
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
 }
