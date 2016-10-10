@@ -118,7 +118,6 @@ public class Container extends Model {
 				&& components.add(component)) {
 			component.setParent(this);
 			String compNewName = getDefaultNameForComponent(component.getPrefix());
-			
 			//Check length and increment height
 			Font font = new Font( Display.getDefault(), ModelConstants.labelFont, 10,
 					SWT.NORMAL );

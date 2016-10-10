@@ -68,6 +68,7 @@ public class ComponentPasteCommand extends Command {
 				IWorkbenchPage page = PlatformUI.getWorkbench()
 						.getActiveWorkbenchWindow().getActivePage();
 					Component clonedComponent =  node.clone();
+					clonedComponent.setPrefix(node.getComponentLabel().getLabelContents());
 					clonedComponent.setParent(((ELTGraphicalEditor) page.getActiveEditor()).getContainer());
 					Point location = node.getLocation();
 					int incrementedLocation = pasteCounter * 20;
