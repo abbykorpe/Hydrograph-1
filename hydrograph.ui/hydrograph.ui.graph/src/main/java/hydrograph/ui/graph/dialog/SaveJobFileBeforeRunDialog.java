@@ -155,13 +155,6 @@ public class SaveJobFileBeforeRunDialog extends Dialog {
 		return image[0];
 
 	}
-
-	@Override
-	public boolean close() {
-		boolean rc=super.close();
-		image.dispose();
-		return rc;
-	}
 }
 
 
