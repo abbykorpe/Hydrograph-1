@@ -23,6 +23,7 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -32,10 +33,13 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubg
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -43,6 +47,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -64,6 +69,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 	private ControlDecoration txtDecorator;
 	private ControlDecoration decorator;
 	private Button button;
+	private Cursor cursor;
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(ELTFilePathWidget.class);
 	/**
 	 * Instantiates a new ELT file path widget.
@@ -167,16 +173,23 @@ public class ELTFilePathWidget extends AbstractWidget{
 			} catch (Exception exception) {
 			LOGGER.error("Exception occurred while attaching listeners to ELTFileWidget",exception);
 		}
+		/**
+		 *parameter resolution at dev phase 
+		 */
+		Utils.INSTANCE.loadProperties();
+		cursor = container.getContainerControl().getDisplay().getSystemCursor(SWT.CURSOR_HAND);
 		
 		populateWidget();
 	}
 
+	
 	private void populateWidget(){		
 		String property = (String)properties;
 		if(StringUtils.isNotBlank(property)){
 			textBox.setText(property);	
 			decorator.hide();
 			txtDecorator.hide();
+			Utils.INSTANCE.addMouseMoveListener(textBox, cursor);
 		}
 		else{
 			textBox.setText("");
@@ -221,8 +234,10 @@ public class ELTFilePathWidget extends AbstractWidget{
 		textBox.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				Utils.INSTANCE.addMouseMoveListener(textBox, cursor);
 				showHideErrorSymbol(widgetList);
 			}
 		});
 	}
+	
 }

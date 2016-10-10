@@ -41,6 +41,7 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
+import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -122,6 +123,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -200,6 +202,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	protected GridWidgetCommonBuilder gridWidgetBuilder = getGridWidgetBuilder();
 	protected Map<String, Integer> columns = getPropertiesToShow();
 	protected final String[] PROPS =  populateColumns();
+	private Cursor cursor;
+	private String finalParamPath;
 
 	String[] populateColumns(){	
 		String[] cols = new String[columns.size()];
@@ -911,54 +915,81 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 } catch (Exception e1) {
 			 e1.printStackTrace();
 		 }
+		 
+		 	Utils.INSTANCE.loadProperties();
+			cursor = containerControl.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
+				
+	    	addImportExportButtons(containerControl);
 
-		 addImportExportButtons(containerControl);
-
-		 populateWidgetExternalSchema();
+	    	populateWidgetExternalSchema();
 	 }
+		
+		private File getPath(){
+			 File schemaFile=null;
+			 String schemaPath =null;
+			 IEditorInput input = (IEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
 
-	 private File getPath(){
-		 IEditorInput input = (IEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
-
-		 File schemaFile=null;
-		 if(input instanceof IFileEditorInput){
-			 String schemaPath = extSchemaPathText.getText();
-			 if(!StringUtils.isEmpty(schemaPath) && !ParameterUtil.containsParameter(schemaPath, Path.SEPARATOR) &&!new File(schemaPath).isAbsolute()){
-				 IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				 IPath relativePath=null;
-				 try{
-					 relativePath=workspace.getRoot().getFile(new Path(schemaPath)).getLocation();
+			 if(input instanceof IFileEditorInput){
+				 
+				 if(ParameterUtil.containsParameter(extSchemaPathText.getText(), '/')){
+					 String paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getText());
+					 finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
+						while(ParameterUtil.containsParameter(finalParamPath, '/')){
+							paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
+					    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
+				    		}
+					  schemaPath = finalParamPath;
 				 }
-				 catch(IllegalArgumentException e)
-				 {
-					 WidgetUtility.createMessageBox(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,"Error",SWT.ICON_ERROR|SWT.OK);
-					 logger.error(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,e);
-					 return null;
-				 }	
-				 if(relativePath!=null)
-					 schemaFile = new File(relativePath.toOSString());
+				 else{
+					  schemaPath = extSchemaPathText.getText();
+				 }
+				 if(!StringUtils.isEmpty(schemaPath) && !ParameterUtil.containsParameter(schemaPath, Path.SEPARATOR) &&!new File(schemaPath).isAbsolute()){
+					 IWorkspace workspace = ResourcesPlugin.getWorkspace();
+					 IPath relativePath=null;
+					 try{
+						 relativePath=workspace.getRoot().getFile(new Path(schemaPath)).getLocation();
+					 }
+					 catch(IllegalArgumentException e)
+					 {
+						 WidgetUtility.createMessageBox(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,"Error",SWT.ICON_ERROR|SWT.OK);
+						 logger.error(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,e);
+						 return null;
+					 }	
+					 if(relativePath!=null)
+						 schemaFile = new File(relativePath.toOSString());
+					 else
+						 schemaFile = new File(schemaPath);
+				 }
 				 else
+				 {
 					 schemaFile = new File(schemaPath);
+				 }
 			 }
-			 else
-			 {
-				 schemaFile = new File(schemaPath);
+			 else{
+				 if(ParameterUtil.containsParameter(extSchemaPathText.getText(), '/')){
+					 String paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getText());
+					 finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getText(), paramValue, extSchemaPathText);
+						while(ParameterUtil.containsParameter(finalParamPath, '/')){
+							paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
+					    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
+				    		}
+					  schemaPath = finalParamPath;
+				 }
+				 else{
+					  schemaPath = extSchemaPathText.getText();
+				 }
+				 if(!new File(schemaPath).isAbsolute()){
+					 Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, 
+							 "Existing job is not saved. In order to use relative path save the job", null);
+					 StatusManager.getManager().handle(status, StatusManager.BLOCK);
+					 return schemaFile;
+				 }
+				 else {
+					 schemaFile = new File(schemaPath);				
+				 }
 			 }
+			 return schemaFile;
 		 }
-		 else{
-			 String schemaPath = extSchemaPathText.getText();
-			 if(!new File(schemaPath).isAbsolute()){
-				 Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, 
-						 "Existing job is not saved. In order to use relative path save the job", null);
-				 StatusManager.getManager().handle(status, StatusManager.BLOCK);
-				 return schemaFile;
-			 }
-			 else {
-				 schemaFile = new File(schemaPath);				
-			 }
-		 }
-		 return schemaFile;
-	 }
 
 	 private void addImportExportButtons(Composite containerControl) {
 		 ELTDefaultSubgroupComposite importExportComposite = new ELTDefaultSubgroupComposite(containerControl);
@@ -1113,6 +1144,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 decorator.hide();
 					 external = true;
 					 toggleSchema(true);
+					 Utils.INSTANCE.addMouseMoveListener(extSchemaPathText, cursor);
 				 }
 			 } else {
 				 toggleSchema(false);
@@ -1134,6 +1166,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 decorator.hide();
 					 external = true;
 					 toggleSchema(true);
+					 Utils.INSTANCE.addMouseMoveListener(extSchemaPathText, cursor);
 				 }
 			 } else {
 				 toggleSchema(false);
@@ -1636,6 +1669,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				 @Override
 				 public void modifyText(ModifyEvent e) {
+					 Utils.INSTANCE.addMouseMoveListener(extSchemaPathText, cursor);
 
 					 showHideErrorSymbol(isWidgetValid());
 
@@ -1773,10 +1807,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 {
 			 if(!SchemaSyncUtility.INSTANCE.isSchemaSyncAllow( getComponent().getComponentName())){
 
-				 if (schema.getGridRow().size() != 0) {
+				 if (schema.getGridRow().size() != 0){
 					 table.clearAll();
-					 if (!schema.getIsExternal()) {
-						 if (tableViewer != null) {
+					 if (!schema.getIsExternal()){
+						 if (tableViewer != null){
 							 schemaGridRowList = new ArrayList<>(schema.getGridRow());
 							 ELTGridDetails eLTDetails= (ELTGridDetails) helper.get(HelperType.SCHEMA_GRID);
 							 eLTDetails.setGrids(schemaGridRowList); 
@@ -1794,5 +1828,4 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 LinkedHashMap<String, Object> currentSchemaProperty = new LinkedHashMap<>();
 		 currentSchemaProperty.put(propertyName, schema);
 	 }
-
 }
