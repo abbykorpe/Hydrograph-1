@@ -16,6 +16,7 @@ package hydrograph.ui.graph.execution.tracking.preferences;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.debug.internal.ui.preferences.DebugPreferencesMessages;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -51,7 +52,12 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	@Override
 	public void init(IWorkbench workbench) {
 		getPreferenceStore().setDefault(JOB_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
-		Activator.getDefault().getPreferenceStore().setDefault(JOB_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
+		String value=Activator.getDefault().getPreferenceStore().getString(JobRunPreference.JOB_RUN_PREFRENCE);
+		if(StringUtils.equals(MessageDialogWithToggle.ALWAYS, value)){
+			getPreferenceStore().setValue(JOB_RUN_PREFRENCE,value);
+		}else{
+			getPreferenceStore().setValue(JOB_RUN_PREFRENCE,MessageDialogWithToggle.PROMPT);
+		}
 	}
 
 	/* (non-Javadoc)
