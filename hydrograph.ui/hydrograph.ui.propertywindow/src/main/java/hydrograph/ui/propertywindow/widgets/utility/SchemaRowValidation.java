@@ -89,6 +89,9 @@ public class SchemaRowValidation{
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
 			executeIfDataTypeIsDate(gridRow, tableItem);	
 		}
+		else{
+			setBlackColor(tableItem);
+		}
 	}
 
 
@@ -99,7 +102,8 @@ public class SchemaRowValidation{
 			if(executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem))
 				return;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
-			executeIfDataTypeIsDate(gridRow, tableItem);	
+			executeIfDataTypeIsDate(gridRow, tableItem);
+			return;
 		}
 		
 		FixedWidthGridRow fixedWidthGridRow=(FixedWidthGridRow)gridRow;
@@ -124,7 +128,6 @@ public class SchemaRowValidation{
 				invalidLength = false;
 			}
 		}
-		validateDateFormatAndLength(tableItem);
 	}
 	
 	
@@ -415,14 +418,6 @@ public class SchemaRowValidation{
 		}else{
 			setBlackColor(tableItem);
 			return false;
-		}
-	}
-	
-	private void validateDateFormatAndLength(TableItem tableItem){
-		if(invalidDateFormat || invalidLength){
-			setRedColor(tableItem);
-		}else{
-			setBlackColor(tableItem);
 		}
 	}
 }
