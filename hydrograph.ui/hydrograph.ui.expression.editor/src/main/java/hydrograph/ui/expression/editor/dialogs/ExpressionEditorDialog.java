@@ -80,7 +80,7 @@ public class ExpressionEditorDialog extends Dialog {
 	 * @param windowTitleSuffix 
 	 */
 	public ExpressionEditorDialog(Shell parentShell, ExpressionEditorData expressionEditorData, List<FixedWidthGridRow> inputFieldSchema, String windowTitleSuffix) {
-
+		
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
 		this.fieldMap = expressionEditorData.getSelectedInputFieldsForExpression();
@@ -186,6 +186,7 @@ public class ExpressionEditorDialog extends Dialog {
 			ExpressionEditorUtil.validateExpression(expressionEditorTextBox.getText(),(Map<String, Class<?>>) expressionEditorTextBox
 					.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP),expressionEditorData);
 			ClassRepo.INSTANCE.flusRepo();
+			expressionEditorComposite.getViewer().getSourceViewerDecorationSupport().dispose();
 			return super.close();
 		}
 		return false;

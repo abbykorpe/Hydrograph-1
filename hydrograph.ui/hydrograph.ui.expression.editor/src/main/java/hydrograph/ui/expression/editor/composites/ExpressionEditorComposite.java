@@ -33,7 +33,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
@@ -42,7 +41,6 @@ public class ExpressionEditorComposite extends Composite {
 
 	private SourceViewer viewer;
 	private StyledText expressionEditor;
-	private Canvas canvas;
 	
 	/**
 	 * Create the composite.
@@ -56,7 +54,6 @@ public class ExpressionEditorComposite extends Composite {
 		Composite toolBarComposite = new Composite(this, SWT.NONE);
 		toolBarComposite.setLayout(new GridLayout(10, false));
 		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 0);
-//		gd_composite.widthHint = 477;
 		gd_composite.heightHint = 39;
 		toolBarComposite.setLayoutData(gd_composite);
 		
@@ -98,19 +95,24 @@ public class ExpressionEditorComposite extends Composite {
 		Combo tltmOperators = new OperatorToolCombo(composite, SWT.READ_ONLY, expressionEditor);
 		Button tltmValidate = new ValidateExpressionToolButton(composite, SWT.NONE, expressionEditor);
 		Button tltmTest = new EvaluateExpressionToolButton(composite, SWT.NONE, expressionEditor);
-//		Button tltmExport = new ExportExpressionToolButton(composite, SWT.NONE, expressionEditor);
-//		Button tltmImport = new ImportExpressionToolButton(composite, SWT.NONE, expressionEditor);
-		
 	}
 	
 	
 	@Override
 	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
+		
 	}
 
 	public StyledText getExpressionEditor() {
 		return expressionEditor;
 	}
+
+	/**
+	 * @return the viewer
+	 */
+	public SourceViewer getViewer() {
+		return viewer;
+	}
+	
 	
 }
