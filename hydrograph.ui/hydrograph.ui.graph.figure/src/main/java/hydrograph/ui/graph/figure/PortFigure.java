@@ -42,7 +42,6 @@ public class PortFigure extends Figure {
 	private Color portColor, componentBorderSelectedColor, componentBorder, watchColor;
 	private String terminal;
 	private FixedConnectionAnchor anchor;
-	private TooltipFigure tooltipFigure;
 	private String labelOfPort;
 	private static boolean displayPortLabels;
 	private boolean isWatched;
@@ -85,10 +84,7 @@ public class PortFigure extends Figure {
 		////to define the height and width of in, out and unused port 
 		setPortDimension();
 
-		tooltipFigure = new TooltipFigure();
-		setToolTip(tooltipFigure);
-
-		portLabelFont = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.NORMAL);
+        portLabelFont = new Font(Display.getDefault(),ELTFigureConstants.labelFont, 8, SWT.NORMAL);
 		setFont(portLabelFont);
 		setForegroundColor(ColorConstants.black);
 		
@@ -142,14 +138,7 @@ public class PortFigure extends Figure {
 		return portColor;
 	}
 	
-	/**
-	 * Gets the tooltip figure.
-	 * 
-	 * @return the tooltip figure
-	 */
-	public TooltipFigure getTooltipFigure() {
-		return tooltipFigure;
-	}
+	
 	
 	/**
 	 * Gets the label of port.
@@ -374,23 +363,4 @@ public class PortFigure extends Figure {
 				+ "\n******************************************\n";
 	}
 
-	/**
-	 * Sets the tooltip text to be displayed for this port.
-	 * 
-	 * @param tooltipText
-	 *            the new tooltip text
-	 */
-	public void setTooltipText(String tooltipText) {
-		tooltipFigure.setMessage(tooltipText);
-	}
-
-	/**
-	 * Gets the tool tip figure.
-	 * 
-	 * @return the tool tip figure
-	 */
-	public TooltipFigure getToolTipFigure() {
-		return tooltipFigure;
-	}
-	
 }
