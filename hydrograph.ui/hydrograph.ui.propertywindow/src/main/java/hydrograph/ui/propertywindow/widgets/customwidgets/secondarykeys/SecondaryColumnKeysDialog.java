@@ -263,7 +263,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 	
 	private void deleteRow(){
-
+		setValueForCellEditor();
 		WidgetUtility.setCursorOnDeleteRow(targetTableViewer, propertyList);
 		isAnyUpdatePerformed = true;
 		targetTableViewer.refresh();
@@ -279,7 +279,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	
 	private void addNewRow(){
-
+		setValueForCellEditor();
 		addNewProperty(targetTableViewer, null);
 		enableControlButtons();
 	
@@ -288,6 +288,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private void moveRowUp(){
 		int index1 = 0, index2 = 0;
 		index1 = targetTable.getSelectionIndex();
+		setValueForCellEditor();
 		String text = targetTableViewer.getTable().getItem(index1).getText(0);
 		String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
 
@@ -315,7 +316,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	
 	private void moveRowDown(){
 		int index1 = 0, index2 = 0;
-
+		setValueForCellEditor();
 		index1 = targetTable.getSelectionIndex();
 		String text = targetTableViewer.getTable().getItem(index1).getText(0);
 		String text1 = targetTableViewer.getTable().getItem(index1).getText(1);
@@ -742,14 +743,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		
-		if(OSValidator.isMac()){
-			for(CellEditor cellEditor : targetTableViewer.getCellEditors()){
-				if(cellEditor !=null){
-				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
-				cellEditor.getControl().setEnabled(true);
-				}
-			}
-		}
+		setValueForCellEditor();
 		if (validate()) {
 			secondaryColumnsMap.clear();
 			for (SecondaryColumnKeysInformation temp : propertyList) {
@@ -798,6 +792,17 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		if (propertyList.size() >= 2) {
 			upButton.setEnabled(true);
 			downButton.setEnabled(true);
+		}
+	}
+	
+	private void setValueForCellEditor(){
+		if(OSValidator.isMac()){
+			for(CellEditor cellEditor : targetTableViewer.getCellEditors()){
+				if(cellEditor !=null){
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
+				cellEditor.getControl().setEnabled(true);
+				}
+			}
 		}
 	}
 }
