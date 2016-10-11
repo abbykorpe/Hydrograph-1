@@ -16,7 +16,6 @@ package hydrograph.ui.graph.controller;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.figure.ComponentFigure;
-import hydrograph.ui.graph.figure.ComponentLabelFigure;
 import hydrograph.ui.graph.figure.ELTColorConstants;
 import hydrograph.ui.graph.figure.PortFigure;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
@@ -64,8 +63,6 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 		port =  new PortFigure(borderColor, getCastedModel().getSequence(), getCastedModel().getNumberOfPortsOfThisType(),getCastedModel().getTerminal(),
 				getCastedModel().getLabelOfPort(), getCastedModel().getPortAlignment());	
 		
-		String toolTipText = getCastedModel().getTerminal();
-		port.getToolTipFigure().setMessage(toolTipText);
 		portPoint = getPortLocation(getCastedModel().getNumberOfPortsOfThisType(), getCastedModel().getPortType(),
 				getCastedModel().getSequence(), height, width, margin, getCastedModel().getPortAlignment());
 		
