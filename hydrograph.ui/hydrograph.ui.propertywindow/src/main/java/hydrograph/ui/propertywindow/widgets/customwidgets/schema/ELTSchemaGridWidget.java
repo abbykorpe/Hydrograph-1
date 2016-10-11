@@ -810,8 +810,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 updateSchemaWithPropogatedSchema();
 			 }
 		 });
-
-
+		 if(getComponent().getTargetConnections()==null || getComponent().getTargetConnections().isEmpty()){
+			 ((Button)btnPull.getSWTWidgetControl()).setEnabled(false);
+		 }
 	 }
 
 	 public void updateSchemaWithPropogatedSchema(){
