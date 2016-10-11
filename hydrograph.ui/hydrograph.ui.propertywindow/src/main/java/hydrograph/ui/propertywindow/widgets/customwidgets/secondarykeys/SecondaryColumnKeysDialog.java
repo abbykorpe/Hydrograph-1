@@ -15,6 +15,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
@@ -740,6 +741,15 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		
+		if(OSValidator.isMac()){
+			for(CellEditor cellEditor : targetTableViewer.getCellEditors()){
+				if(cellEditor !=null){
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
+				cellEditor.getControl().setEnabled(true);
+				}
+			}
+		}
 		if (validate()) {
 			secondaryColumnsMap.clear();
 			for (SecondaryColumnKeysInformation temp : propertyList) {

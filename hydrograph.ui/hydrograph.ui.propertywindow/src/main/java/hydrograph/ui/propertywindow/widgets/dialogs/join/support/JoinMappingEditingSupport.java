@@ -72,4 +72,9 @@ public class JoinMappingEditingSupport extends EditingSupport {
 		viewer.refresh();
 		viewer.update(element, null);
 	}
+	
+	public CellEditor getEditor(){
+		return editor;
+		
+	}
 }

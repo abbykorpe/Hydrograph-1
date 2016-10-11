@@ -128,6 +128,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private Label errorLabel; 
 	private boolean ctrlKeyPressed = false;
 	private Table table_2;
+	private TableViewer nameValueTableViewer;
 
 	public ELTOperationClassDialog(Shell parentShell,PropertyDialogButtonBar propertyDialogButtonBar, OperationClassProperty operationClassProperty, WidgetConfig widgetConfig, String componentName) {
 		super(parentShell);
@@ -204,7 +205,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		name_gd.marginRight=0;
 		nameValueComposite.setLayout(name_gd);
 
-		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER |SWT.FULL_SELECTION
+		 nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER |SWT.FULL_SELECTION
 				| SWT.MULTI);
 		table_2 = nameValueTableViewer.getTable();
 		
@@ -694,6 +695,16 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	
 	@Override
 	protected void okPressed() {
+		
+		if(OSValidator.isMac()){
+			for(CellEditor cellEditor : nameValueTableViewer.getCellEditors())
+			{   
+				if(cellEditor !=null){
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
+				cellEditor.getControl().setEnabled(false);
+				}
+			}
+		}
 		if(checkNameValueFieldBlankOrNot()){
 		operationClassProperty = new OperationClassProperty(operationClasses.getText(), fileName.getText(),
 				isParameterCheckBox.getSelection(), (String) fileName.getData(PATH),this.operationClassProperty.getNameValuePropertyList(),null,componentName);

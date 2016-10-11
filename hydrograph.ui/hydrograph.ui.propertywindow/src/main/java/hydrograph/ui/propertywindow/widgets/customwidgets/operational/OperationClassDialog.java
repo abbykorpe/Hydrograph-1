@@ -46,6 +46,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
@@ -115,6 +116,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 	private ELTSWTWidgets widget = new ELTSWTWidgets();
 	private boolean ctrlKeyPressed = false;
 	private Table table_2;
+	private  TableViewer nameValueTableViewer;
 
 	public OperationClassDialog(Shell parentShell, String componentName, MappingSheetRow mappingSheetRow,
 			PropertyDialogButtonBar propertyDialogButtonBar, WidgetConfig widgetConfig,TransformDialog transformDialog ) {
@@ -199,7 +201,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		name_gd.marginRight=0;
 		nameValueComposite.setLayout(name_gd);
 
-		final TableViewer nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER | SWT.FULL_SELECTION
+		nameValueTableViewer = new TableViewer(nameValueComposite, SWT.BORDER | SWT.FULL_SELECTION
 				| SWT.MULTI);
 		table_2 = nameValueTableViewer.getTable();
 		addResizbleListner(table_2);
@@ -572,6 +574,15 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 	@Override
 	protected void okPressed() {
+		
+		if(OSValidator.isMac()){
+			for(CellEditor cellEditor : nameValueTableViewer.getCellEditors()){
+				if(cellEditor !=null){
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
+				cellEditor.getControl().setEnabled(true);
+				}
+			}
+		}
         if(checkNameValueFieldBlankOrNot()) 
         {
         	mappingSheetRow = new MappingSheetRow(mappingSheetRow.getInputFields(), mappingSheetRow.getOutputList(),

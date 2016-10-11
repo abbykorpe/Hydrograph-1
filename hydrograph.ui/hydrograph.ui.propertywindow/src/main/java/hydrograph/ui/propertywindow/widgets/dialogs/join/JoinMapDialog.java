@@ -135,6 +135,8 @@ public class JoinMapDialog extends Dialog {
 	private static final String DIALOG_TITLE="Join Mapping Dialog";
 	private boolean ctrlKeyPressed = false;
 	private Table table;
+	private JoinMappingEditingSupport outputEditingSupport;
+	private JoinMappingEditingSupport inputEditingSupport;
 	
 	/**
 	 * Create the dialog.
@@ -490,8 +492,8 @@ public class JoinMapDialog extends Dialog {
 		TableColumn tblclmnPropertyValue = tableViewerColumn_1.getColumn();
 		tblclmnPropertyValue.setWidth(148);
 		tblclmnPropertyValue.setText(JoinMapDialogConstants.OUTPUT_FIELD);
-		tableViewerColumn_1.setEditingSupport(new JoinMappingEditingSupport(
-				mappingTableViewer, JoinMapDialogConstants.OUTPUT_FIELD));
+		outputEditingSupport = new JoinMappingEditingSupport(mappingTableViewer, JoinMapDialogConstants.OUTPUT_FIELD);
+		tableViewerColumn_1.setEditingSupport(outputEditingSupport);
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
 
 			String tooltipText;
@@ -561,8 +563,8 @@ public class JoinMapDialog extends Dialog {
 		TableColumn tblclmnPropertyName = tableViewerColumn.getColumn();
 		tblclmnPropertyName.setWidth(169);
 		tblclmnPropertyName.setText(JoinMapDialogConstants.INPUT_FIELD);
-		tableViewerColumn.setEditingSupport(new JoinMappingEditingSupport(
-				mappingTableViewer, JoinMapDialogConstants.INPUT_FIELD));
+		inputEditingSupport = new JoinMappingEditingSupport(mappingTableViewer, JoinMapDialogConstants.INPUT_FIELD);
+		tableViewerColumn.setEditingSupport(inputEditingSupport);
 
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			String tooltipText;
@@ -660,6 +662,7 @@ public class JoinMapDialog extends Dialog {
 	private void deleteRow(){
 
 		Table table = mappingTableViewer.getTable();
+		setValueForCellEditor();
 		int selectionIndex = table.getSelectionIndex();
 		int[] indexs = table.getSelectionIndices();
 		if (selectionIndex == -1) {
@@ -683,7 +686,7 @@ public class JoinMapDialog extends Dialog {
 	}
 	
 	private void addNewRow(){
-
+		setValueForCellEditor();
 		LookupMapProperty lookupMapProperty = new LookupMapProperty();
 		lookupMapProperty.setOutput_Field("");
 		lookupMapProperty.setSource_Field("");
@@ -696,8 +699,9 @@ public class JoinMapDialog extends Dialog {
 	}
 
 	private void moveRowUp(){
-
+		
 		Table table = mappingTableViewer.getTable();
+		setValueForCellEditor();
 		int[] indexes = table.getSelectionIndices();
 		for (int index : indexes) {
 
@@ -715,6 +719,7 @@ public class JoinMapDialog extends Dialog {
 	private void moveRowDown(){
 
 		Table table = mappingTableViewer.getTable();
+		setValueForCellEditor();
 		int[] indexes = table.getSelectionIndices();
 		for (int i = indexes.length - 1; i > -1; i--) {
 
@@ -1054,6 +1059,8 @@ public class JoinMapDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		
+		setValueForCellEditor();
 		joinMappingGrid.setLookupInputProperties(inputPorts);
 		joinMappingGrid.setLookupMapProperties(mappingTableItemList);
 		
@@ -1158,5 +1165,18 @@ public class JoinMapDialog extends Dialog {
 			btnUp.setEnabled(false);
 		}
 		
+	}
+	
+	private void setValueForCellEditor(){
+		
+		if(outputEditingSupport !=null && outputEditingSupport.getEditor()!=null){
+			outputEditingSupport.getEditor().getControl().setEnabled(false);
+			outputEditingSupport.getEditor().getControl().setEnabled(true);
+		}
+		
+		if(inputEditingSupport !=null && inputEditingSupport.getEditor()!=null){
+			inputEditingSupport.getEditor().getControl().setEnabled(false);
+			inputEditingSupport.getEditor().getControl().setEnabled(true);
+		}
 	}
 }

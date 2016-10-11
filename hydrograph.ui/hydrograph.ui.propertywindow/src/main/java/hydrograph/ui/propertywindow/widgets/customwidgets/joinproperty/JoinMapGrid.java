@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -799,6 +800,24 @@ public class JoinMapGrid extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		
+		
+		if(OSValidator.isMac())
+		{   
+			List<TableViewer> tableViewers = new ArrayList<TableViewer>();
+			tableViewers.add(outputTableViewer);
+			tableViewers.addAll(java.util.Arrays.asList(inputTableViewer));
+			for(TableViewer tableView : tableViewers){
+				if(tableView !=null){
+			for(CellEditor cellEditor : tableView.getCellEditors()){
+				if(cellEditor !=null){
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
+				cellEditor.getControl().setEnabled(true);
+				}
+			}
+				}
+			}
+		}
 		populateCurrentItemsOfTable();
 		if (previousItems.length == 0 && currentItems.length != 0) {
 			propertyDialogButtonBar.enableApplyButton(true);
