@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.expression.editor.sourceviewer;
 
 import hydrograph.ui.expression.editor.PathConstant;
@@ -79,6 +92,11 @@ import org.eclipse.ui.texteditor.MarkerAnnotationPreferences;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.slf4j.Logger;
 
+
+/**
+ * Responsible to create a sourceviewer for expression editor.
+ * 
+ */
 public class SourceViewer extends ProjectionViewer {
 
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(SourceViewer.class);
@@ -536,7 +554,12 @@ public class SourceViewer extends ProjectionViewer {
 		return imports;
 	}
 
-	public static SourceViewer createViewerWithVariables(Composite composite, int iz) {
+	/**
+	 * @param composite parent for source viewer 
+	 * @param styles  style bit for source viewer
+	 * @return source viewer object
+	 */
+	public static SourceViewer createViewerWithVariables(Composite composite, int styles) {
 		IDocument document = new Document();
 		StringBuffer buff = new StringBuffer();
 		buff.append("\n package "+HYDROGRAPH_COMPILATIONUNIT_PACKAGE+";\n\n");
@@ -548,7 +571,7 @@ public class SourceViewer extends ProjectionViewer {
 		String defaultValue = " ";
 		buff.append(defaultValue + "\n\n\n;\t\n}\n}");  
 		document.set(buff.toString());
-		return initializeViewer(composite,iz,document,length);
+		return initializeViewer(composite,styles,document,length);
 	}
 
 	/**
