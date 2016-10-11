@@ -4,9 +4,18 @@ public class JarInformationDetails {
 
 	private String name = "Jackson.jar";
 	private String versionNo="0.0.1.qualifier";
-	private String genericId="12345";
+	private String groupId="12345";
 	private String artifactNo="0001223";
+	private String licenseInfo="C:\\Users\\ashikah\\Git\\Hydrograph_Tool\\Thesis\\hydrograph.ui\\hydrograph.ui.help\\html\\Components\\Input_File_Delimited.html";
 	
+	public String getLicenseInfo() {
+		return licenseInfo;
+	}
+
+	public void setLicenseInfo(String licenseInfo) {
+		this.licenseInfo = licenseInfo;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -23,12 +32,12 @@ public class JarInformationDetails {
 		this.versionNo = versionNo;
 	}
 	
-	public String getGenericId() {
-		return genericId;
+	public String getGroupId() {
+		return groupId;
 	}
 	
-	public void setGenericId(String genericId) {
-		this.genericId = genericId;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 	
 	public String getArtifactNo() {
@@ -46,10 +55,12 @@ public class JarInformationDetails {
 	      stringBuilder.append(name);
 	      stringBuilder.append("\nVersion No: ");
 	      stringBuilder.append(versionNo);
-	      stringBuilder.append("\nGeneric Id: ");
-	      stringBuilder.append(genericId);
+	      stringBuilder.append("\nGroup Id: ");
+	      stringBuilder.append(groupId);
 	      stringBuilder.append("\nArtifact No: ");
 	      stringBuilder.append(artifactNo);
+	      stringBuilder.append("\nLicense Info: ");
+	      stringBuilder.append(licenseInfo);
 	      stringBuilder.append(" ]");
 	      return stringBuilder.toString();
 	   }

@@ -493,7 +493,7 @@ public class CustomAboutDialog extends TrayDialog {
 			public void widgetSelected(SelectionEvent e) {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 				CustomInstallationDialog dialog = new CustomInstallationDialog(getShell());
-				dialog.setModalParent(CustomAboutDialog.this);
+				//dialog.setModalParent(CustomAboutDialog.this);
 				dialog.open();
 			}
 			
