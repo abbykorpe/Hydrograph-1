@@ -19,27 +19,37 @@
 <body>
 <p><span class="header-1">How to Run a Job on Cluster</span></p>
 
-<p><span>To<b> Run</b>&nbsp;a job on cluster, make sure that you have a working job. Check whether the bhs_hadoop utility along with other configuration files/jars is present at the location you wish to run the job on cluster. The bhs_hadoop utility is used to run the job submitted by Hydrograph UI. It communicates with the Hydrograph Engine and returns appropriate values for the job to run successfully on the UI.</span></p>
-<p><img alt="" src="../images/Utility_on_Cluster.png" /></p>
-<p><span>Move the Input files that are required by your job to appropriate folder on the cluster</span></p>
-<p><img alt="" src="../images/Files_on_Hadoop.png" /></p>
-<p><span>Click on Run button or press Ctr+R and select Remote. This will expand the window</span></p>
-<p><span>User is required to pass the below details 
+<p><span>To<b> Run</b>&nbsp;a job on cluster, make sure of below things,</span></p>
 	<ul>
-		<li><b>Edge Node</b> - name of the server where the job will execute</li>
-		<li><b>User</b> - username to login on edge node</li>
-		<li><b>Password</b> - password to login on edge node</li>
-		<li><b>Run Utility</b> - location of the script on edge node</li>
-		<li><b>Project path</b> - location where the project related file will be copied </li>
-	</ul>.</span></p>
+		<li><p><span>None of the components in the job have error/warning icon on it</span></p></li>
+		
+		<li><p><span>Execution utility script along with it's dependent jars are present at the location you wish to run the job on cluster. 
+		The Execution utility script is used to run the job submitted by Hydrograph UI.</span></p>
+		<p><span><img alt="" src="../images/Utility_on_Cluster.png" /></span></p></li>
+		
+		<li><p><span>Make sure the input file paths from the cluster are correctly configured in the Job. 
+		Input files could already be present on cluster and user may not have to move them.</span></p>
+		<p><span><img alt="" src="../images/Files_on_Hadoop.png" /></span></p></li>
+</ul>
+<p><span>Click on Run button or press Ctr+R</span></p>
+<p><img alt="" src="../images/Run_Button.png" /></p>
+<p><span>Select Remote. This will expand the window</span></p>
+<p><span>User is required to pass the below details</span></p>
+	<ul>
+		<li><p><span><b>Edge Node</b> - name of the server where the job will execute</span></p></li>
+		<li><p><span><b>User</b> - username to login on edge node</span></p></li>
+		<li><p><span><b>Password</b> - password to login on edge node</span></p></li>
+		<li><p><span><b>Run Utility</b> - location of the script on edge node</span></p></li>
+		<li><p><span><b>Project path</b> - location where the project related files will be copied</span></p></li>
+	</ul>.
 <p><img alt="" src="../images/Remote_option1.png" /></p>
 
 
-<p><span>Click on Ok. Provide parameter values if any in the parameter grid and click OK.</span></p>
+<p><span>Click on Ok. Provide parameter values, if any, in the parameter grid and click OK.</span></p>
 <p><img alt="" src="../images/Remote_option2.png" /></p>
 
 
-<p><span style="font-size: 14px;"> Watch Job Run log in the console and wait for the build to complete successfully.</span></p>
+<p><span style="font-size: 14px;"> Watch Job Run log in the console and wait for the job run to complete.</span></p>
 <p><img alt="" src="../images/Job_Console_Build_Successful.png" /></p>
 
 </body>
