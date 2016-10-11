@@ -11,6 +11,7 @@ Issues/Defects fixed:
 Sr.No. <GitHub Issue #> - [fixed by] - description
 1. <1328> - [shashank karnik] - Transform Components: 'Pull Schema' Button should not be in enable state unless there is an incoming
 connection(link) on transform component.
+2. <1410> - [Ashika Holkar] - MacBook Pro - Field Name is not Getting Updated When User Renames Field Name from Its Default Name
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
