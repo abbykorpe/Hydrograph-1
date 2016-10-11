@@ -1,34 +1,277 @@
 <InstallationWindowDetails>
   <jarInformationDetails>
     <JarInformationDetail>
-      <name>Jackson.jar</name>
-      <versionNo>0.0.1.qualifier</versionNo>
-      <genericId>12345</genericId>
+      <name>JDK</name>
+      <versionNo>7</versionNo>
+      <groupId>12345</groupId>
       <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\JDKLicense.html</licenseInfo>
     </JarInformationDetail>
     <JarInformationDetail>
-      <name>Jackson.jar</name>
-      <versionNo>0.0.1.qualifier</versionNo>
-      <genericId>12345</genericId>
+      <name>P2 Repository</name>
+      <versionNo>SR2</versionNo>
+      <groupId>12345</groupId>
       <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\EclipsePublicLicense.html</licenseInfo>
     </JarInformationDetail>
      <JarInformationDetail>
-      <name>JDBC.jar</name>
-      <versionNo>0.0.1.qualifier</versionNo>
-      <genericId>12234345</genericId>
-      <artifactNo>0011101223</artifactNo>
-    </JarInformationDetail>
-     <JarInformationDetail>
-      <name>ABC.jar</name>
-      <versionNo>0.0.1.qualifier</versionNo>
-      <genericId>1245657345</genericId>
+      <name>Gradle</name>
+      <versionNo>2.7 or above</versionNo>
+      <groupId>12345</groupId>
       <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
     </JarInformationDetail>
      <JarInformationDetail>
-      <name>XTZS.jar</name>
-      <versionNo>0.0.1.qualifier</versionNo>
-      <genericId>12345</genericId>
-      <artifactNo>saadd</artifactNo>
+      <name>Maven</name>
+      <versionNo>3.3.3 or above</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>xstream jars</name>
+      <versionNo>1.4.8</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\BSD3LicenseInfo.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>spark-core</name>
+      <versionNo>1.1.1</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>slf4j-api</name>
+      <versionNo>1.7.12</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\MITLicense.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>slf4j-log4j12</name>
+      <versionNo>1.7.12</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\MITLicense.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>csvjdbc-1.0-29.jar</name>
+      <versionNo>1.2.29</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\GNULibraryLicenseInfo.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>opencsv-3.7.jar</name>
+      <versionNo>3.7</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>Hadoop</name>
+      <versionNo>2.6</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>Hive</name>
+      <versionNo>1.1/1.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+      <JarInformationDetail>
+      <name>Cascading</name>
+      <versionNo>3.1.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>jgrapht-core</name>
+      <versionNo>0.9.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\EclipsePublicLicense.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>riffle</name>
+      <versionNo>1.0.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>janino</name>
+      <versionNo>2.7.6</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\janinoLicenseInfo.html</licenseInfo>
+    </JarInformationDetail>
+         <JarInformationDetail>
+      <name>hadoop-core</name>
+      <versionNo>1.2.1</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+         <JarInformationDetail>
+      <name>hadoop-mapreduce-client-core</name>
+      <versionNo>2.7.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+        <JarInformationDetail>
+      <name>hadoop-common</name>
+      <versionNo>2.7.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+        <JarInformationDetail>
+      <name>hadoop-minicluster</name>
+      <versionNo>2.7.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>tez-api</name>
+      <versionNo>0.8.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>tez-dag</name>
+      <versionNo>0.8.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+          <JarInformationDetail>
+      <name>tez-mapreduce</name>
+      <versionNo>0.8.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+         <JarInformationDetail>
+      <name>hadoop-hdfs</name>
+      <versionNo>2.7.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+        <JarInformationDetail>
+      <name>tez-tests</name>
+      <versionNo>0.8.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+         <JarInformationDetail>
+      <name>tez-yarn-timeline-history</name>
+      <versionNo>0.8.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>hadoop-aws</name>
+      <versionNo>2.7.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>tez-yarn-timeline-history-with-acls</name>
+      <versionNo>0.8.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+      <JarInformationDetail>
+      <name>guava</name>
+      <versionNo>14.0.1</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+      <JarInformationDetail>
+      <name>commons-io</name>
+      <versionNo>2.1</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>tagsoup</name>
+      <versionNo>1.2</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+    <JarInformationDetail>
+      <name>cascading-hive</name>
+      <versionNo>2.0.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+     <JarInformationDetail>
+      <name>cascading-avro</name>
+      <versionNo>2.5.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>parquet-hadoop</name>
+      <versionNo>1.6.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+      <JarInformationDetail>
+      <name>parquet-column</name>
+      <versionNo>1.6.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>parquet-cascading</name>
+      <versionNo>1.6.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+       <JarInformationDetail>
+      <name>Riffle</name>
+      <versionNo>1.0.0</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</licenseInfo>
+    </JarInformationDetail>
+      <JarInformationDetail>
+      <name>datafactory</name>
+      <versionNo>0.8</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\GNULGPL_Version 3.0.html</licenseInfo>
+    </JarInformationDetail>
+    <JarInformationDetail>
+      <name>com.google.code.findbugs</name>
+      <versionNo>1.3.9</versionNo>
+      <groupId>12345</groupId>
+      <artifactNo>0001223</artifactNo>
+      <licenseInfo>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\GNULGPL_Version 3.0.html</licenseInfo>
     </JarInformationDetail>
   </jarInformationDetails>
 </InstallationWindowDetails>
