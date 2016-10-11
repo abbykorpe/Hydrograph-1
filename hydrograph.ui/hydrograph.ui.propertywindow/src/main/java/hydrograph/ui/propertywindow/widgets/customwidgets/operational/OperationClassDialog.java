@@ -578,7 +578,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		if(OSValidator.isMac()){
 			for(CellEditor cellEditor : nameValueTableViewer.getCellEditors()){
 				if(cellEditor !=null){
-				cellEditor.getControl().setEnabled(false);
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
 				cellEditor.getControl().setEnabled(true);
 				}
 			}

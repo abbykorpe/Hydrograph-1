@@ -354,7 +354,7 @@ public class RuntimePropertyDialog extends Dialog {
 		if(OSValidator.isMac()){
 			for(CellEditor cellEditor : tableViewer.getCellEditors()){
 				if(cellEditor !=null){
-				cellEditor.getControl().setEnabled(false);
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
 				cellEditor.getControl().setEnabled(true);
 				}
 			}

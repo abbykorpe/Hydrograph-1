@@ -1961,10 +1961,13 @@ private void operationInputTableAddButton(
 			tableViewer.add(operationalOutputFieldTableViewer);
 			
 			for(TableViewer tableView : tableViewer){
-				
+				if(tableView !=null){
 				for(CellEditor cellEditor : tableView.getCellEditors()){
-					cellEditor.getControl().setEnabled(false);
-					cellEditor.getControl().setEnabled(true);					
+					if(cellEditor !=null){
+					cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
+					cellEditor.getControl().setEnabled(true); 
+					}
+				}
 				}
 			}
 		}

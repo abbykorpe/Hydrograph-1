@@ -811,7 +811,7 @@ public class JoinMapGrid extends Dialog {
 				if(tableView !=null){
 			for(CellEditor cellEditor : tableView.getCellEditors()){
 				if(cellEditor !=null){
-				cellEditor.getControl().setEnabled(false);
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
 				cellEditor.getControl().setEnabled(true);
 				}
 			}

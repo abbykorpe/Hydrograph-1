@@ -709,7 +709,7 @@ public class ELTLookupMapWizard extends Dialog {
 				if(views !=null){
 				for(CellEditor cellEditor : views.getCellEditors()){
 					if(cellEditor !=null){
-					cellEditor.getControl().setEnabled(false);
+					cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
 					cellEditor.getControl().setEnabled(true);
 					}
 				}

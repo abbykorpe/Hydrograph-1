@@ -700,7 +700,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			for(CellEditor cellEditor : nameValueTableViewer.getCellEditors())
 			{   
 				if(cellEditor !=null){
-				cellEditor.getControl().setEnabled(false);
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
 				cellEditor.getControl().setEnabled(false);
 				}
 			}

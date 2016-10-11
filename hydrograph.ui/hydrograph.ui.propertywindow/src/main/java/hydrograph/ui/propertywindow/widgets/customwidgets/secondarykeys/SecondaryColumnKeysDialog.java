@@ -745,7 +745,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		if(OSValidator.isMac()){
 			for(CellEditor cellEditor : targetTableViewer.getCellEditors()){
 				if(cellEditor !=null){
-				cellEditor.getControl().setEnabled(false);
+				cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
 				cellEditor.getControl().setEnabled(true);
 				}
 			}

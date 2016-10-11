@@ -1010,7 +1010,7 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 			for(TableViewer tableView : tableViewers){
 				for(CellEditor cellEditor : tableView.getCellEditors()){
 					if(cellEditor !=null){
-					cellEditor.getControl().setEnabled(false);
+					cellEditor.getControl().setEnabled(false); //Saves the existing value of CellEditor
 					cellEditor.getControl().setEnabled(true);
 					}
 				}
