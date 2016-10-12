@@ -16,8 +16,6 @@
 package hydrograph.engine.assembly.entity.base;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
 
 /**
  * @author bitwise1
@@ -35,7 +33,7 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	 * @return the partitionKeys
 	 */
 	public String[] getPartitionKeys() {
-		return partitionKeys;
+		return partitionKeys != null ? partitionKeys.clone() : null;
 	}
 
 	/**
@@ -43,7 +41,7 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	 *            the partitionKeys to set
 	 */
 	public void setPartitionKeys(String[] partitionKeys) {
-		this.partitionKeys = partitionKeys;
+		this.partitionKeys = partitionKeys != null ? partitionKeys.clone() : null;
 	}
 
 	/**

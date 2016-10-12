@@ -29,9 +29,9 @@ public class AvroDescriptor {
 	public AvroDescriptor(Fields inputFields, Class<?>[] fieldDataTypes,
 			int[] fieldPrecision, int[] fieldScale) {
 		this.inputFields = inputFields;
-		this.fieldDataTypes = fieldDataTypes;
-		this.fieldScale = fieldScale;
-		this.fieldPrecision = fieldPrecision;
+		this.fieldDataTypes = fieldDataTypes != null ? fieldDataTypes : null;
+		this.fieldScale = fieldScale != null ? fieldScale.clone() : null;
+		this.fieldPrecision = fieldPrecision != null ? fieldPrecision.clone() : null;
 	}
 
 	public Fields getInputFields() {
@@ -39,23 +39,23 @@ public class AvroDescriptor {
 	}
 
 	public Class<?>[] getFieldDataTypes() {
-		return fieldDataTypes;
+		return fieldDataTypes != null ? fieldDataTypes.clone() : null;
 	}
 
 	public int[] getFieldScale() {
-		return fieldScale;
+		return fieldScale != null ? fieldScale.clone() : null;
 	}
 
 	public void setFieldScale(int[] fieldScale) {
-		this.fieldScale = fieldScale;
+		this.fieldScale = fieldScale != null ? fieldScale.clone() : null;
 	}
 
 	public void setFieldPrecision(int[] fieldPrecision) {
-		this.fieldPrecision = fieldPrecision;
+		this.fieldPrecision = fieldPrecision != null ? fieldPrecision.clone() : null;
 	}
 
 	public int[] getFieldPrecision() {
-		return fieldPrecision;
+		return fieldPrecision != null ? fieldPrecision.clone() : null;
 	}
 
 }

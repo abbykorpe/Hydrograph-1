@@ -27,7 +27,6 @@ import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
 import hydrograph.engine.execution.tracking.ComponentInfo;
-import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.utilities.GeneralUtilities;
 
 public class HydrographExecution {
@@ -37,8 +36,7 @@ public class HydrographExecution {
 	private HydrographRuntimeService runtimeService;
 	private HydrographXMLInputService hydrographXmlInputService;
 	private HydrographJob hydrographJob;
-	private HydrographDebugInfo bhsDebug;
-
+	
 	private static Logger LOG = LoggerFactory.getLogger(HydrographExecution.class);
 
 	public HydrographExecution() {
@@ -64,8 +62,8 @@ public class HydrographExecution {
 
 	public void run(String[] args) throws Exception {
 		hydrographJob = createHydrographJob(args);
-		bhsDebug = createHydrographDebugInfo(args);
-		initialization(args, hydrographJob, bhsDebug,
+		HydrographDebugInfo hydrographDebug = createHydrographDebugInfo(args);
+		initialization(args, hydrographJob, hydrographDebug,
 				XmlParsingUtils.getJobId(args),
 				XmlParsingUtils.getBasePath(args),XmlParsingUtils.getUDFPath(args));
 		prepareToExecute();
@@ -89,11 +87,11 @@ public class HydrographExecution {
 	}
 
 	private void initialization(String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo bhsDebug, String jobId, String basePath, String UDFPath) {
+			HydrographDebugInfo bhsDebug, String jobId, String basePath, String udfPath) {
 		LOG.info("Invoking initialize on runtime service");
 		runtimeService.initialize(
 				propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
-				bhsDebug, jobId,basePath,UDFPath);
+				bhsDebug, jobId,basePath,udfPath);
 	}
 
 	private void prepareToExecute()  {
