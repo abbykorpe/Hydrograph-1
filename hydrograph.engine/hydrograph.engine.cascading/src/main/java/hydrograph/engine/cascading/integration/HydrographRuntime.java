@@ -62,7 +62,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	private static Logger LOG = LoggerFactory.getLogger(HydrographRuntime.class);
 
 	public void executeProcess(String[] args, HydrographJob hydrographJob) {
-		this.args = args;
+		this.args = args != null ? args.clone() : null;
 		config = PropertiesLoader.getInstance();
 		LOG.info("Invoking initialize on runtime service");
 		initialize(config.getRuntimeServiceProperties(), this.args, hydrographJob, new HydrographDebugInfo(null), null,

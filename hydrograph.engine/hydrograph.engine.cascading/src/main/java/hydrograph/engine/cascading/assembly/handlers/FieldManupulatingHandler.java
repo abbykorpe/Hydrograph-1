@@ -264,7 +264,7 @@ public class FieldManupulatingHandler implements Serializable {
 	 * @return the field positions of pass through fields in the input row
 	 */
 	public int[] getOperationPositions() {
-		return operationFieldsPositions;
+		return operationFieldsPositions != null ? operationFieldsPositions.clone() : null;
 	}
 
 	public int[] getInputPositions() {
@@ -299,11 +299,11 @@ public class FieldManupulatingHandler implements Serializable {
 	 *         row
 	 */
 	public int[] getMapSourceFieldPositions() {
-		return mapSourceFieldPositions;
+		return mapSourceFieldPositions != null ? mapSourceFieldPositions.clone() : null;
 	}
 	
 	public int[] getMapTargetFieldPositions() {
-		return mapTargetFieldPositions;
+		return mapTargetFieldPositions != null ? mapTargetFieldPositions.clone() : null;
 	}
 
 	/**

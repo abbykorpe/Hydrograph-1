@@ -66,9 +66,9 @@ public class SchemaFieldHandler {
 			} else if (baseComponent instanceof TypeOperationsComponent) {
 
 				schemaFields.putAll(operationHandler.getOperation());
-			} else if (baseComponent instanceof TypeCommandComponent) {
+			} /*else if (baseComponent instanceof TypeCommandComponent) {
 				// no need of schema fields
-			}
+			}*/
 		}
 	}
 

@@ -12,15 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
+import java.util.Arrays;
+
 import hydrograph.engine.assembly.entity.base.StraightPullEntityBase;
 import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.constants.Keep;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class RemoveDupsEntity extends StraightPullEntityBase {
 
@@ -29,19 +25,19 @@ public class RemoveDupsEntity extends StraightPullEntityBase {
 	private String keep;
 
 	public KeyField[] getKeyFields() {
-		return keyFields;
+		return keyFields != null ? keyFields.clone() : null;
 	}
 
 	public void setKeyFields(KeyField[] keyFields) {
-		this.keyFields = keyFields;
+		this.keyFields = keyFields != null ? keyFields.clone() : null;
 	}
 
 	public KeyField[] getSecondaryKeyFields() {
-		return secondaryKeyFields;
+		return secondaryKeyFields != null ? secondaryKeyFields.clone() : null;
 	}
 
-	public void setSecondaryKeyFields(KeyField[] keyFields2) {
-		this.secondaryKeyFields = keyFields2;
+	public void setSecondaryKeyFields(KeyField[] secondaryKeyFields) {
+		this.secondaryKeyFields = secondaryKeyFields != null ? secondaryKeyFields.clone() : null;
 	}
 
 	public Keep getKeep() {

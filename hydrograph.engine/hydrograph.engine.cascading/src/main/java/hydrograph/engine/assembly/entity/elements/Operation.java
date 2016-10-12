@@ -28,16 +28,17 @@ import java.util.Properties;
  */
 public class Operation {
 
-	public Operation() {
-
-	}
-
 	private String operationId;
 	private String operationClass;
 	private String[] operationInputFields;
 	private String[] operationOutputFields;
 	private Properties operationProperties;
 	private String expression;
+	
+	public Operation() {
+
+	}
+
 
 	/**
 	 * @return the Expression
@@ -73,7 +74,7 @@ public class Operation {
 	 * @return the operationInputFields
 	 */
 	public String[] getOperationInputFields() {
-		return operationInputFields;
+		return operationInputFields != null ? operationInputFields.clone() : null;
 	}
 
 	/**
@@ -81,14 +82,14 @@ public class Operation {
 	 *            the operationInputFields to set
 	 */
 	public void setOperationInputFields(String[] operationInputFields) {
-		this.operationInputFields = operationInputFields;
+		this.operationInputFields = operationInputFields != null ? operationInputFields.clone() : null;
 	}
 
 	/**
 	 * @return the operationOutputFields
 	 */
 	public String[] getOperationOutputFields() {
-		return operationOutputFields;
+		return operationOutputFields != null ? operationOutputFields.clone() : null;
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class Operation {
 	 *            the operationOutputFields to set
 	 */
 	public void setOperationOutputFields(String[] operationOutputFields) {
-		this.operationOutputFields = operationOutputFields;
+		this.operationOutputFields = operationOutputFields != null ? operationOutputFields.clone() : null;
 	}
 
 	/**

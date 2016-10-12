@@ -26,7 +26,7 @@ public class AggregateEntity extends OperationEntityBase {
 	 * @return keyFields
 	 */
 	public KeyField[] getKeyFields() {
-		return keyFields != null ? keyFields : null;
+		return keyFields != null ? keyFields.clone() : null;
 	}
 
 	/**
@@ -34,14 +34,14 @@ public class AggregateEntity extends OperationEntityBase {
 	 *            the keyFields to set
 	 */
 	public void setKeyFields(KeyField[] keyFields) {
-		this.keyFields = keyFields;
+		this.keyFields = keyFields != null ? keyFields.clone() : null;
 	}
 
 	/**
 	 * @return secondaryKeyFields
 	 */
 	public KeyField[] getSecondaryKeyFields() {
-		return secondaryKeyFields;
+		return secondaryKeyFields != null ? secondaryKeyFields.clone() : null;
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class AggregateEntity extends OperationEntityBase {
 	 *            the secondaryKeyFields to set
 	 */
 	public void setSecondaryKeyFields(KeyField[] secondaryKeyFields) {
-		this.secondaryKeyFields = secondaryKeyFields;
+		this.secondaryKeyFields = secondaryKeyFields != null ? secondaryKeyFields.clone() : null;
 	}
 
 	/**
