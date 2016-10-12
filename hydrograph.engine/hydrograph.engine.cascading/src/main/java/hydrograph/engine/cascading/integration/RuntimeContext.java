@@ -98,11 +98,11 @@ public class RuntimeContext {
 	}
 
 	public void setCascade(Cascade[] cascades) {
-		this.cascades = cascades;
+		this.cascades = cascades != null ? cascades.clone() : null;
 	}
 
 	public Cascade[] getCascade() {
-		return cascades;
+		return cascades != null ? cascades.clone() : null;
 	}
 
 	public Map<String, GeneratorBase> getAssemblyGeneratorMap() {

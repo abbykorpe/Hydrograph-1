@@ -37,7 +37,7 @@ public class JoinKeyFields {
 	public JoinKeyFields(String inSocketId, boolean recordRequired, String[] fields) {
 		this.inSocketId = inSocketId;
 		this.recordRequired = recordRequired;
-		this.fields = fields;
+		this.fields = fields != null ? fields.clone() : null;
 	}
 
 	public Fields getFields() {

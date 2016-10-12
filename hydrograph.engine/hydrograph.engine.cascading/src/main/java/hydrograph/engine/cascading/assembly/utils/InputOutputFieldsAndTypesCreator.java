@@ -83,7 +83,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 		fieldFromRangeValue = new String[sizeOfFieldList];
 		fieldToRangeValue = new String[sizeOfFieldList];
 		fieldLengthOrDelimiter = new String[sizeOfFieldList];
-		fieldLengthOrDelimiter = new String[sizeOfFieldList];
         colDef = new String[sizeOfFieldList];
 		typefieldLengthDelimiter = new Type[sizeOfFieldList];
 
@@ -121,7 +120,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public String[] getFieldDataTypes() {
-		return fieldDataTypes;
+		return fieldDataTypes != null ? fieldDataTypes.clone() : null;
 	}
 
 	/**
@@ -131,7 +130,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public String[] getFieldFormat() {
-		return fieldFormat;
+		return fieldFormat != null ? fieldFormat.clone() : null;
 	}
 
 	/**
@@ -141,7 +140,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public int[] getFieldScale() {
-		return fieldScale;
+		return fieldScale != null ? fieldScale.clone() : null;
 	}
 
 	/**
@@ -151,7 +150,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public String[] getFieldScaleType() {
-		return fieldScaleType;
+		return fieldScaleType != null ? fieldScaleType.clone() : null;
 	}
 
 	/**
@@ -160,7 +159,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return int[]
 	 */
 	public int[] getFieldLength() {
-		return fieldLength;
+		return fieldLength != null ? fieldLength.clone() : null;
 	}
 
 	/**
@@ -169,7 +168,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public String[] getFieldLengthOrDelimiter() {
-		return fieldLengthOrDelimiter;
+		return fieldLengthOrDelimiter != null ? fieldLengthOrDelimiter.clone() : null;
 	}
 
 	/**
@@ -179,7 +178,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return Type[]
 	 */
 	public Type[] getTypeFieldLengthDelimiter() {
-		return typefieldLengthDelimiter;
+		return typefieldLengthDelimiter != null ? typefieldLengthDelimiter.clone() : null;
 	}
 
 	/**
@@ -189,7 +188,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public int[] getFieldPrecision() {
-		return fieldPrecision;
+		return fieldPrecision != null ? fieldPrecision.clone() : null;
 	}
 
 	/**
@@ -198,7 +197,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public String[] getFieldDefaultValue() {
-		return fieldDefaultValue;
+		return fieldDefaultValue != null ? fieldDefaultValue.clone() : null;
 	}
 
 	/**
@@ -207,7 +206,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public String[] getFieldFromRangeValue() {
-		return fieldFromRangeValue;
+		return fieldFromRangeValue != null ? fieldFromRangeValue.clone() : null;
 	}
 
 	/**
@@ -216,7 +215,7 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * @return String[]
 	 */
 	public String[] getFieldToRangeValue() {
-		return fieldToRangeValue;
+		return fieldToRangeValue != null ? fieldToRangeValue.clone() : null;
 	}
 
 	  /**

@@ -28,7 +28,7 @@ public class SortEntity extends StraightPullEntityBase {
 	 * @return the keyFields
 	 */
 	public KeyField[] getKeyFields() {
-		return keyFields;
+		return keyFields != null ? keyFields.clone() : null;
 	}
 
 	/**
@@ -36,14 +36,14 @@ public class SortEntity extends StraightPullEntityBase {
 	 *            the keyFields to set
 	 */
 	public void setKeyFields(KeyField[] keyFields) {
-		this.keyFields = keyFields;
+		this.keyFields = keyFields != null ? keyFields.clone() : null;
 	}
 
 	/**
 	 * @return the secondaryKeyFields
 	 */
 	public KeyField[] getSecondaryKeyFields() {
-		return secondaryKeyFields;
+		return secondaryKeyFields != null ? secondaryKeyFields.clone() : null;
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class SortEntity extends StraightPullEntityBase {
 	 *            the secondaryKeyFields to set
 	 */
 	public void setSecondaryKeyFields(KeyField[] secondaryKeyFields) {
-		this.secondaryKeyFields = secondaryKeyFields;
+		this.secondaryKeyFields = secondaryKeyFields != null ? secondaryKeyFields.clone() : null;
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class SortEntity extends StraightPullEntityBase {
 	@Override
 	public String toString() {
 
-		StringBuilder str = new StringBuilder("Aggregate entity information\n");
+		StringBuilder str = new StringBuilder("Sort entity information\n");
 		str.append(super.toString());
 
 		str.append("Key fields: ");

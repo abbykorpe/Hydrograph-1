@@ -132,9 +132,9 @@ public class XmlParsingUtils {
 			return jobId;
 		}
 
-		if (jobId == null) {
+		/*if (jobId == null) {
 			// optional param
-		}
+		}*/
 		return jobId;
 
 	}
@@ -147,9 +147,9 @@ public class XmlParsingUtils {
 			return basePath;
 		}
 
-		if (basePath == null) {
+		/*if (basePath == null) {
 			// optional param
-		}
+		}*/
 		return basePath;
 
 	}
