@@ -43,5 +43,18 @@
         <topic href="/hydrograph.ui.help/html/Components/Unique_Sequence.html"/>
 		<topic href="/hydrograph.ui.help/html/Components/Unique_Sequence_Properties.html"/>
     </entry>
+    
+      <entry keyword="Lookup">
+        <topic href="/hydrograph.ui.help/html/Components/Lookup.html"/>
+		<topic href="/hydrograph.ui.help/html/Components/Lookup_Properties.html"/>
+		<topic href="/hydrograph.ui.help/html/Components/Lookup_Mapping_View.html"/>
+    </entry>
+    
+      <entry keyword="Join">
+        <topic href="/hydrograph.ui.help/html/Components/Join.html"/>
+		<topic href="/hydrograph.ui.help/html/Components/Join_Properties.html"/>
+		<topic href="/hydrograph.ui.help/html/Components/Join_Mapping_View.html"/>
+    </entry>
+    
  </index>
  
