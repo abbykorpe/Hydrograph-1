@@ -61,6 +61,8 @@ public class InstallationDetailsLabelProvider implements ITableLabelProvider, IT
 			return jarInformationDetails.getArtifactNo();
 		case 4:
 			return jarInformationDetails.getLicenseInfo();
+		case 5:
+			return jarInformationDetails.getPath();
 		}
 		return null;
 	}
