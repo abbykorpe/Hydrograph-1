@@ -165,11 +165,11 @@ public class SubJobAction extends SelectionAction{
 				if (!(containerOld.getChildren().get(i) instanceof InputSubjobComponent || containerOld.getChildren()
 						.get(i) instanceof OutputSubjobComponent)) {
 					if (containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS) != null
-							&& (StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), containerOld.getChildren()
+							&& ((StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), containerOld.getChildren()
 									.get(i).getProperties().get(Constants.VALIDITY_STATUS).toString()))
 							|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(),
 									containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS)
-											.toString())) {
+											.toString()))) {
 						validityStatus = ValidityStatus.ERROR.name();
 						break;
 					} else {
