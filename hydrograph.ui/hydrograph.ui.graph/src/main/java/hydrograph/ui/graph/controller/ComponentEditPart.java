@@ -399,7 +399,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		ComponentFigure compFig = (ComponentFigure)getFigure();
 		compFig.setHeight(inPortCountToBeApplied, outPortCount);
 
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight());
 		getCastedModel().setSize(newSize);
 		refresh();
 
@@ -441,7 +441,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		ComponentFigure compFig = (ComponentFigure)getFigure();
 		compFig.setHeight(inPortCount, outPortCountToBeApplied);
 
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight());
 		getCastedModel().setSize(newSize);
 		refresh();
 		
@@ -478,7 +478,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		ComponentFigure compFig = (ComponentFigure)getFigure();
 		compFig.setWidth(unusedPortCountToBeApplied);
 
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight());
 		getCastedModel().setSize(newSize);
 		refresh();
 		

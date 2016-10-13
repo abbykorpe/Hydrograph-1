@@ -170,7 +170,6 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			getPortFigure().disposeFont();
-			getPortFigure().disposeColors();
 			super.deactivate();
 		}
 	}

@@ -14,6 +14,7 @@ connection(link) on transform component.
 2. <1410> - [Ashika Holkar] - MacBook Pro - Field Name is not Getting Updated When User Renames Field Name from Its Default Name
 3.<1416>-[Sonia Raheja]-Subjob: User is Not able to Create a subjob.
 4.<1267> - [Ankit Sharma] - Subjob : Size of Output Socket for Subjob was getting reduced after renaming it.
+5.<1409>-[Akhilesh Joshi]Join Component: Size of the Join Component is not getting reduced After Changing the Input Count
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
