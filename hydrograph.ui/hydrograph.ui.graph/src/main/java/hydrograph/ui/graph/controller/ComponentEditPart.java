@@ -393,6 +393,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		if (getCastedModel().getProperties().get("outPortCount") != null) {
 			outPortCount = Integer.parseInt(String.valueOf(getCastedModel().getProperties().get("outPortCount")));
 		}
+		if(prevInPortCount != newInPortCount){
 		int inPortCountToBeApplied = newInPortCount!=prevInPortCount ? newInPortCount : prevInPortCount;
 
 		ComponentFigure compFig = (ComponentFigure)getFigure();
@@ -402,7 +403,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		getCastedModel().setSize(newSize);
 		refresh();
 
-		if(prevInPortCount != newInPortCount){
 
 			if(prevInPortCount < newInPortCount){
 				//Increment the ports
