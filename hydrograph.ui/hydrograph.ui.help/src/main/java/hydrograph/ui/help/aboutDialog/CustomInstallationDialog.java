@@ -18,6 +18,9 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -92,24 +95,47 @@ public class CustomInstallationDialog extends InstallationDialog {
 		tableViewer.setLabelProvider(new InstallationDetailsLabelProvider());
 		tableViewer.setContentProvider(new InstallationDetailsContentProvider());
 		tableViewer.setInput(installationWindowDetails.getJarInfromationDetails());
+		tableLicense.setLabelProvider(new StyledCellLabelProvider() {
+		    @Override
+		    public void update(ViewerCell cell)
+		    {
+		        Object element = cell.getElement();
+		        if(element instanceof JarInformationDetails)
+		        {
+		        	JarInformationDetails jarInfo = (JarInformationDetails) cell.getElement();
+
+		            /* make text look like a link */
+		            StyledString text = new StyledString();
+		            StyleRange myStyledRange = new StyleRange(0, jarInfo.getLicenseInfo().length(), Display.getCurrent().getSystemColor(SWT.COLOR_BLUE), null);
+		            myStyledRange.underline = true;
+		            text.append(jarInfo.getLicenseInfo(), StyledString.DECORATIONS_STYLER);
+		            cell.setText(text.toString());
+
+		            StyleRange[] range = { myStyledRange };
+		            cell.setStyleRanges(range);
+
+		            super.update(cell);
+		            
+		        }
+		    }
+		});
 		tableViewer.refresh();
 		
-		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+		tableViewer.getControl().addMouseListener(new MouseAdapter() {
 			
 			@Override
-			public void doubleClick(DoubleClickEvent event) {
+			public void mouseDown(MouseEvent e) {
 				StructuredSelection selection=(StructuredSelection) tableViewer.getSelection();
 				JarInformationDetails details=(JarInformationDetails) selection.getFirstElement();
 				IPath iPath=new Path(details.getPath());
 				try {
 					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(iPath.toFile().toURL());
-				} catch (PartInitException | MalformedURLException e) {
-					e.printStackTrace();
+				} catch (PartInitException | MalformedURLException e1) {
+					e1.printStackTrace();
 				};
 				
 			}
 		});
-		
 		
 		
 		return composite;

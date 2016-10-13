@@ -19,8 +19,8 @@
      <JarInformationDetail>
       <name>Gradle</name>
       <versionNo>2.7 or above</versionNo>
-      <groupId>12345</groupId>
-      <artifactNo>0001223</artifactNo>
+      <groupId>org.gradle</groupId>
+      <artifactNo>gradle-base-services</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
 	<path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
