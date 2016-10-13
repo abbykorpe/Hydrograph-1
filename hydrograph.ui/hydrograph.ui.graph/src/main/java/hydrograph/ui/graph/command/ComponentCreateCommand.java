@@ -86,7 +86,7 @@ public class ComponentCreateCommand extends Command {
 				totalPortsOnBottomSide=p.getNumberOfPorts();
 			}
 		}
-		int heightFactor=totalPortsOnLeftSide > totalPortsOnRightSide ? totalPortsOnLeftSide : totalPortsOnRightSide;
+		int heightFactor=totalPortsOnLeftSide > totalPortsOnRightSide ? (totalPortsOnLeftSide!=2?totalPortsOnLeftSide:1) : totalPortsOnRightSide;
 		int height = (heightFactor+1)*27;
 		
 		int widthFactor = totalPortsOnBottomSide;
