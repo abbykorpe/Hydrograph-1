@@ -123,7 +123,7 @@ public class Container extends Model {
 					SWT.NORMAL );
 			int labelLength = TextUtilities.INSTANCE.getStringExtents(compNewName, font).width;
 			ComponentLabel componentLabel = component.getComponentLabel();
-			if(labelLength >= ModelConstants.compLabelOneLineLengthLimit && component.getSize().height<96 ){
+			if(labelLength >= ModelConstants.compLabelOneLineLengthLimit && component.getSize().height<96 && labelLength!=97){
 				component.setSize(new Dimension(component.getSize().width, component.getSize().height + ModelConstants.componentOneLineLabelMargin));
 				componentLabel.setSize(new Dimension(componentLabel.getSize().width, componentLabel.getSize().height + ModelConstants.componentOneLineLabelMargin));
 				component.setComponentLabelMargin(ModelConstants.componentTwoLineLabelMargin);

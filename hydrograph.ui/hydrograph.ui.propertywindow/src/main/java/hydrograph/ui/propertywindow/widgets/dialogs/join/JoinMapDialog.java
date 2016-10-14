@@ -189,7 +189,6 @@ public class JoinMapDialog extends Dialog {
 
 		populateJoinMapDialog();
 		
-		getShell().setMinimumSize(800,500);
 		return container;
 	}
 
@@ -1178,5 +1177,10 @@ public class JoinMapDialog extends Dialog {
 			inputEditingSupport.getEditor().getControl().setEnabled(false);
 			inputEditingSupport.getEditor().getControl().setEnabled(true);
 		}
+	}
+	
+	@Override
+	protected Point getInitialSize() {
+		return new Point(800,500);
 	}
 }
