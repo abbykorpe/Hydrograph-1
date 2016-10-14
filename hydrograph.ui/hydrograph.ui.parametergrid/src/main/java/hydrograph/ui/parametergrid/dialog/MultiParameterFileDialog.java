@@ -227,7 +227,6 @@ public class MultiParameterFileDialog extends Dialog {
 
 		createParameterSearchBox(childSashForm);
 		mainSashForm.setWeights(new int[] {260, 214});
-		getShell().setMinimumSize(800,476);
 		return container_1;
 	}
 
@@ -1742,5 +1741,10 @@ public class MultiParameterFileDialog extends Dialog {
 	
 	public void setJobLevelParamterFiles(List list) {
 		this.jobLevelParamterFiles.addAll(list);
+	}
+	
+	@Override
+	protected Point getInitialSize() {
+		return new Point(800,476);
 	}
 }

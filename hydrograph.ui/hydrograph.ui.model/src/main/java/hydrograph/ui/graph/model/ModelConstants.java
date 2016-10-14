@@ -23,6 +23,6 @@ public class ModelConstants {
 
 	public static final int componentOneLineLabelMargin = 16;
 	public static final int componentTwoLineLabelMargin = 32;
-	public static final int compLabelOneLineLengthLimit = 98;
+	public static final int compLabelOneLineLengthLimit = 95;
 	public static final String labelFont = "Arial";
 }
