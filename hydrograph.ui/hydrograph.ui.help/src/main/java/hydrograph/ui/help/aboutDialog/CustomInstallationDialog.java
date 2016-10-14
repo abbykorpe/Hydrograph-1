@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.help.aboutDialog;
 
 import hydrograph.ui.datastructure.property.InstallationWindowDetails;
@@ -8,8 +20,6 @@ import java.net.MalformedURLException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
@@ -20,7 +30,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,10 +48,14 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import com.thoughtworks.xstream.XStream;
 
+/**
+ * The Class CustomInstallationDialog.
+ * This class creates the tabFolder which displays information for JarInformation.
+ * 
+ * @author Bitwise
+ */
 public class CustomInstallationDialog extends InstallationDialog {
 
-	
-	
 	private static IServiceLocator serviceLocator;
 	private TabFolder tabFolder;
 	private Composite composite;
@@ -71,7 +84,6 @@ public class CustomInstallationDialog extends InstallationDialog {
 		composite_1.setLayout(new GridLayout(1, false));
 		tbtmLibraries.setControl(composite_1);
 		
-		//ObjectToXMLGeneration.INSTANCE.objectToXMlConverter(file);
 		tableViewer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION | SWT.H_SCROLL
 				| SWT.V_SCROLL);
 		Table table = tableViewer.getTable();
@@ -145,9 +157,10 @@ public class CustomInstallationDialog extends InstallationDialog {
 	
 
 	/**
-	 * Creates columns for the Schema Grid
+	 * Creates columns for the Table Viewer
 	 * 
 	 * @param tableViewer
+	 * @return tableViewerColumn
 	 */
 	public TableViewerColumn createTableViewerColumns(TableViewer tableViewer, String columnName) {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
@@ -157,7 +170,13 @@ public class CustomInstallationDialog extends InstallationDialog {
 			
 		return tableViewerColumn;
 	}
-
+	
+	/**
+	 * Reads the XML file(About_Window_Installation_Details.xml) to display in Installation Window
+	 * 
+	 * @param file
+	 * 
+	 */
 	public void readFromXMLFile(File file) {
 
 		XStream xstream = new XStream();
