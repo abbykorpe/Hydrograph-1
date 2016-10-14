@@ -13,41 +13,6 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.common.util.TransformMappingFeatureUtility;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.expression.ExpressionEditorData;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.datastructure.property.mapping.InputField;
-import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
-import hydrograph.ui.datastructure.property.mapping.TransformMapping;
-import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.transform.viewdata.TransformViewDataDialog;
-import hydrograph.ui.propertywindow.utils.SWTResourceManager;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputFieldColumnLabelProvider;
-import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ErrorLabelProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.TransformMappingOutputTableCellModifier;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
-import hydrograph.ui.propertywindow.widgets.utility.DragDropUtility;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -105,6 +70,42 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.TransformMappingFeatureUtility;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.mapping.InputField;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.transform.viewdata.TransformViewDataDialog;
+import hydrograph.ui.propertywindow.utils.SWTResourceManager;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.InputFieldColumnLabelProvider;
+import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ErrorLabelProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.TransformMappingOutputTableCellModifier;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
+import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
+import hydrograph.ui.propertywindow.widgets.utility.DragDropUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+import hydrograph.ui.validators.utils.ValidatorUtility;
 
 /**
  * @author Bitwise
@@ -953,7 +954,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				scrollBarComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 		});
-    	final OperationClassComposite operationClassComposite = createOperationClassComposite(expandItem);
+		final OperationClassComposite operationClassComposite = createOperationClassComposite(expandItem);
         if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
         {	
         final ExpressionComposite expressionComposite = createExpressionComposite(
@@ -967,6 +968,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	{
     	expandItem.setControl(operationClassComposite);	
     	expandItem.setText(mappingSheetRowForOperationClass.getOperationID());
+    	
     	}
     	attachListenerOnSwitchToClassButton(expandItem,
 				operationClassComposite, expressionComposite);
@@ -1205,7 +1207,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
  						.getComponentName(), orignalMappingSheetRow, propertyDialogButtonBar, widgetConfig,
  						transformDialog);
  				operationClassDialog.open();
- 				operationClassTextBox.setText(operationClassDialog.getMappingSheetRow().getOperationClassPath());
  				orignalMappingSheetRow.setComboBoxValue(operationClassDialog.getMappingSheetRow().getComboBoxValue());
  				orignalMappingSheetRow.setOperationClassPath(operationClassDialog.getMappingSheetRow()
  						.getOperationClassPath());
@@ -1213,6 +1214,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
                 
  				orignalMappingSheetRow.setOperationClassFullPath(operationClassDialog.getMappingSheetRow()
  						.getOperationClassFullPath());
+ 				operationClassTextBox.setText(operationClassDialog.getMappingSheetRow().getOperationClassPath());
+ 				
  				if (operationClassDialog.isCancelPressed() && (!(operationClassDialog.isApplyPressed()))) {
  					orignalMappingSheetRow.setNameValueProperty(oldMappingSheetRow.getNameValueProperty());
  				}
@@ -1682,12 +1685,22 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				Text operationClassTextBox=((OperationClassComposite)item.getControl()).getOperationTextBox();
 				isParam=((OperationClassComposite)item.getControl()).getBtnIsParam();
 				idTextBox=((OperationClassComposite)item.getControl()).getOperationIdTextBox();
+				MappingSheetRow mappingSheetRow=
+						(MappingSheetRow)((OperationClassComposite)item.getControl()).getBrowseButton().getData(Messages.MAPPING_SHEET);
+				 
 			if(operationClassTextBox!=null)
 			{
 			   if(StringUtils.isBlank(operationClassTextBox.getText()) && !isParam.getSelection())
 			   {
 				intializeErrorLabelObject(idTextBox,"Operation Class must not be blank for");
-			    }
+			   }
+			   else if(!isParam.getSelection()
+					   &&!mappingSheetRow.isClassParameter()
+					   && !(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(operationClassTextBox.getText()))
+					   )
+			   {
+				   intializeErrorLabelObject(idTextBox,"Java class is not present on build path of current project for");
+			   }	
 			}
 			}
 			if(item.getControl().getClass()==ExpressionComposite.class)

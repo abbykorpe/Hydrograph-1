@@ -20,6 +20,7 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
+import hydrograph.ui.validators.utils.ValidatorUtility;
 
 import java.util.List;
 import java.util.Map;
@@ -90,6 +91,7 @@ public class ClassNameValidatorRule implements IValidator {
 			errorMessage = "Field should not be empty";
 			return false;
 		}
+		
 		else if(operationClassProperty.isParameter()){
 			if(!operationClassPath.startsWith("@{") || !operationClassPath.endsWith("}") || 
 					operationClassPath.indexOf("}") != 2){
@@ -100,6 +102,11 @@ public class ClassNameValidatorRule implements IValidator {
 				return false;
 			}
 		}
+		else if(!(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(operationClassProperty.getOperationClassPath())))
+		   {
+			   errorMessage = "Operation class is not present";
+			   return false;
+		   }	
 		else{
 			if(!validateJavaIdentifier(operationClassPath)){
 				errorMessage = "Invalid value for property";
