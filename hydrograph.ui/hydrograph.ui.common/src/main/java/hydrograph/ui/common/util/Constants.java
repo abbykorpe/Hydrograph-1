@@ -161,6 +161,7 @@ public class Constants {
 	public static final String PATH_PROPERTY_NAME = "path";
 	public static final String SUBJOB_CREATE = "Create";
 	public static final String SUBJOB_OPEN = "Open"; 	
+	public static final String SUBJOB_TRACKING = "View Tracking"; 
 	public static final String SUBJOB_ACTION = "SubJob";
 	public static final String SUBJOB_ACTION_ToolTip = "Path operations";
 	public static final String STANDALONE_SUBJOB = "StandAlone_Subjob";
