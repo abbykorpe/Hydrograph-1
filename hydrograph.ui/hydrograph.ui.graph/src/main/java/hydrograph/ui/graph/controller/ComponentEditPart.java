@@ -602,7 +602,8 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	
 	private void adjustComponentFigure(Component component, ComponentFigure componentFigure){
 		Dimension d = null;
-		String label = (String) component.getPropertyValue(Component.Props.NAME_PROP.getValue());
+		//an extra space has been added at the end of the component's name for showing it after renaming.
+		String label = (String) component.getPropertyValue(Component.Props.NAME_PROP.getValue())+" ";
 		ComponentLabel componentLabel = component.getComponentLabel();
 		if(componentLabelFont==null){
 			componentLabelFont = new Font( Display.getDefault(), ELTFigureConstants.labelFont, 10,
