@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  hydrograph.ui.common.datastructures;bundle-version="0.0.1",
  hydrograph.ui.xstream.annotations;bundle-version="0.0.1",
  hydrograph.ui.logging;bundle-version="0.0.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.validators.impl,
  org.apache.commons.lang,
