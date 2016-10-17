@@ -109,11 +109,19 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 		hivePartitionFieldDialog.getRowFields().set(getIndex(property), (String)value);
 		
 		for(HivePartitionFields row:(List<HivePartitionFields>)viewer.getInput()){
+			for (int i = 0; i < row.getRowFields().size() - 1; i++) {
 			if(StringUtils.isBlank(row.getRowFields().get(0))){
 				errorLabel.setVisible(true);
 				break;
-			}else{
-				errorLabel.setVisible(false);
+			}else {
+				if((StringUtils.isBlank(row.getRowFields().get(i)))
+							&& (StringUtils.isNotBlank((row.getRowFields().get(i + 1))))) {
+						errorLabel.setVisible(true);
+						break;
+					} else {
+						errorLabel.setVisible(false);
+					}
+				}
 			}
 		}
 		viewer.refresh();
