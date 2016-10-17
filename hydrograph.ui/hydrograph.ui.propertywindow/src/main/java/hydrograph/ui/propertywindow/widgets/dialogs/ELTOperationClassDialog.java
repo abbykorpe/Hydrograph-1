@@ -39,6 +39,7 @@ import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+import hydrograph.ui.validators.utils.ValidatorUtility;
 
 import java.util.Collections;
 import java.util.List;
@@ -113,6 +114,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 	private ControlDecoration alphanumericDecorator;
 	private ControlDecoration emptyDecorator;
 	private ControlDecoration parameterDecorator;
+	private ControlDecoration classNotPresentDecorator;
 	private boolean isYesPressed;
 	private boolean isNoPressed;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
@@ -188,7 +190,8 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		emptyDecorator.setMarginWidth(2);
 		parameterDecorator = WidgetUtility.addDecorator(fileName, Messages.PARAMETER_ERROR);
 		parameterDecorator.setMarginWidth(2);
-
+		classNotPresentDecorator=WidgetUtility.addDecorator(fileName, "Java class is not present on build path of current project.");
+		classNotPresentDecorator.setMarginWidth(2);
 		buttonComposite = new Composite(container, SWT.NONE);
 		GridData gd_composite_3 = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_composite_3.heightHint = 44;
@@ -476,6 +479,10 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			emptyDecorator.hide();
 			operationClassProperty.setComboBoxValue(operationClassProperty.getComboBoxValue());
 			fileName.setText(operationClassProperty.getOperationClassPath());
+			
+			if(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(fileName.getText()))
+            classNotPresentDecorator.hide();
+			
 			operationClasses.setText(operationClassProperty.getComboBoxValue());
 			isParameterCheckBox.setSelection(operationClassProperty.isParameter());
 			if (!StringUtils.equalsIgnoreCase(Messages.CUSTOM, operationClassProperty.getComboBoxValue())) {
@@ -485,10 +492,12 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			} else {
 				isParameterCheckBox.setEnabled(true);
 				if (isParameterCheckBox.getSelection()) {
+					classNotPresentDecorator.hide();
 					FilterOperationClassUtility.INSTANCE.enableAndDisableButtons(true, true);
 				}
 			}
 		} else {
+			classNotPresentDecorator.hide();
 			FilterOperationClassUtility.INSTANCE.getOpenBtn().setEnabled(false);
 			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 204));
 			operationClasses.select(0);
@@ -515,6 +524,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 		operationClassDialogButtonBar.setPropertyDialogButtonBar(okButton, applyButton, cancelButton);
 		alphanumericDecorator.hide();
 		parameterDecorator.hide();
+		
 		isParameterCheckBox.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -549,6 +559,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 				String textBoxValue = (currentText.substring(0, e.start) + e.text + currentText.substring(e.end))
 						.trim();
 				if (isParameterCheckBox.getSelection()) {
+					classNotPresentDecorator.hide(); 
 					if (StringUtils.isNotBlank(textBoxValue)
 							&& (!textBoxValue.startsWith("@{") || !textBoxValue.endsWith("}"))) {
 						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 255));
@@ -564,15 +575,28 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 						hasTextBoxAlphanumericCharactorsOnly(textBoxValue);
 					}
 				} else {
-					if (StringUtils.isNotBlank(textBoxValue)) {
+					if (StringUtils.isBlank(textBoxValue)) {
+						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						isParameterCheckBox.setEnabled(false);
+						classNotPresentDecorator.hide(); 	
+						emptyDecorator.show();
+					} 
+					else
+					{	
+						emptyDecorator.hide();	
+					 if(!(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(textBoxValue.replace('.', '/'))))
+					{
+                     classNotPresentDecorator.show(); 						
+					}
+					 else
+					 {
+						 classNotPresentDecorator.hide(); 		 
+					 } 
 						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 255));
 						applyButton.setEnabled(true);
 						isParameterCheckBox.setEnabled(true);
-						emptyDecorator.hide();
-					} else {
-						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 204));
-						isParameterCheckBox.setEnabled(false);
-						emptyDecorator.show();
+						
+					
 					}
 				}
 			}

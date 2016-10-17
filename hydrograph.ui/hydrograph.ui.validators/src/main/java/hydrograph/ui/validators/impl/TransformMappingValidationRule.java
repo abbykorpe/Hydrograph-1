@@ -27,6 +27,7 @@ import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
+import hydrograph.ui.validators.utils.ValidatorUtility;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -88,6 +89,16 @@ public class TransformMappingValidationRule implements IValidator{
 					 errorMessage = propertyName + "Operation class is blank in"+" "+mappingSheetRow.getOperationID();		
 					 return false;
 				}
+				else if(
+						!mappingSheetRow.isClassParameter()
+						&&!mappingSheetRow.isWholeOperationParameter()
+						//&&StringUtils.equalsIgnoreCase(mappingSheetRow.getComboBoxValue(),"Custom")
+						&&!(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(mappingSheetRow.getOperationClassPath()))
+						)
+				   {
+					   errorMessage = "Operation class is not present for"+" "+mappingSheetRow.getOperationID();
+					   return false;
+				   }	
 				}
 				else if(mappingSheetRow.isExpression())
 				{
@@ -136,7 +147,7 @@ public class TransformMappingValidationRule implements IValidator{
 				   {
 					   errorMessage = propertyName + "Duplicate operation Id"+" "+mappingSheetRow.getOperationID();
 					   return false;
-				   }   
+				   }  
 			}
 			
 		}
@@ -169,7 +180,8 @@ public class TransformMappingValidationRule implements IValidator{
 			 errorMessage = propertyName + "Duplicate field(s) exists in OutputFields";		
 			 return false;
 			
-		}	
+		}
+		
 		return true;
 	}
 
