@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.ui,
  hydrograph.ui.communication;bundle-version="0.0.1",
  org.apache.commons.collections
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
  lib/csvjdbc-1.0-29.jar,
  lib/opencsv-3.7.jar,
