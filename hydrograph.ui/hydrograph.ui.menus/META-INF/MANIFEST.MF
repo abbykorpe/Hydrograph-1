@@ -25,3 +25,4 @@ Import-Package: hydrograph.ui.graph.figure,
  org.eclipse.jdt.internal.ui.refactoring.reorg,
  org.eclipse.ui.console,
  org.eclipse.ui.navigator
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

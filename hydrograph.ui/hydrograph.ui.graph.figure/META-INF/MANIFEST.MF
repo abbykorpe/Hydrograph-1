@@ -17,6 +17,6 @@ Require-Bundle: org.eclipse.ui,
  hydrograph.ui.common.interfaces;bundle-version="0.0.1",
  org.apache.commons.lang,
  hydrograph.ui.logging;bundle-version="0.0.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.graph.figure

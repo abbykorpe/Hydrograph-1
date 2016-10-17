@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.core.runtime,
  hydrograph.ui.communication;bundle-version="0.0.1",
  org.apache.commons.httpclient,
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.common.util,
  hydrograph.ui.expression.editor.launcher,
