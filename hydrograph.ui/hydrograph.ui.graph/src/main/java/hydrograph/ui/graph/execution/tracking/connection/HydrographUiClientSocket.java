@@ -13,31 +13,12 @@
 
 package hydrograph.ui.graph.execution.tracking.connection;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
-import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
-import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
-import hydrograph.ui.graph.execution.tracking.utils.ExecutionTrackingConsoleUtils;
-import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
-import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.ComponentExecutionStatus;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.logging.factory.LogFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
@@ -46,13 +27,6 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -97,8 +71,6 @@ public class HydrographUiClientSocket {
 	@OnMessage
 	public void updateJobTrackingStatus(String message, Session session) { 
 
-
-
 		final String status = message; 
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
@@ -110,287 +82,12 @@ public class HydrographUiClientSocket {
 				for (IEditorReference ref : refs){
 					IEditorPart editor = ref.getEditor(false);
 					if(editor instanceof ELTGraphicalEditor){
-						if(((ELTGraphicalEditor)editor).getJobId().equals(executionStatus.getJobId())){
-							updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor);
+						if(((ELTGraphicalEditor)editor).getJobId().equals(executionStatus.getJobId()) || ((((ELTGraphicalEditor)editor).getContainer()!=null) && (((ELTGraphicalEditor)editor).getContainer().getUniqueJobId().equals(executionStatus.getJobId())))){
+							TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor);
 						}
 					}
 				}
 			}
-			/**
-			 * Update component status and processed record 
-			 * @param executionStatus
-			 * @param editor
-			 */
-			private void updateEditorWithCompStatus(
-					ExecutionStatus executionStatus, ELTGraphicalEditor editor) {
-				Map<String, SubjobDetails> componentNameAndLink = new HashMap();
-				if(executionStatus!=null)
-				{
-					pushExecutionStatusToExecutionTrackingConsole(executionStatus);
-
-
-					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
-
-					if(editor!=null && editor instanceof ELTGraphicalEditor && (editor.getJobId().equals(executionStatus.getJobId())))
-					{
-						GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-						for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); 
-								ite.hasNext();)
-						{
-							EditPart editPart = (EditPart) ite.next();
-							if(editPart instanceof ComponentEditPart) 
-							{
-								Component component = ((ComponentEditPart)editPart).getCastedModel();
-
-								if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
-									String keySubjobName = component.getComponentId();
-									StringBuilder subjobPrefix = new StringBuilder("");
-									componentNameAndLink.clear();
-									populateSubjobRecordCount(componentNameAndLink,
-											component,subjobPrefix);
-
-									int successCount=0;
-									updateStatusCountForSubjobComponent(
-											executionStatus,
-											componentNameAndLink, component,
-											successCount, keySubjobName);
-
-								}else {
-									updateStatusCountForNormalComponent(
-											executionStatus, component);
-
-								}
-							}
-						}
-					}
-				}
-				ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
-			}
-
-			private void updateStatusCountForSubjobComponent(
-					ExecutionStatus executionStatus,
-					Map<String, SubjobDetails> componentNameAndLink,
-					Component component, int successCount, String keySubjobName) {
-				boolean running = false;
-				boolean pending = false;
-				int componentCount = 0;
-
-				for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-
-					if(!pending){
-						updateComponentPending(component, componentStatus, pending);
-					}
-
-					if(!running){
-						updateComponentRunning(component, componentStatus, running);
-					} 
-
-					if(componentStatus.getComponentId().contains(keySubjobName+".") && componentStatus.getCurrentStatus().equalsIgnoreCase(ComponentExecutionStatus.FAILED.value())){
-						component.updateStatus(ComponentExecutionStatus.FAILED.value());
-						break;
-					}
-
-
-					if(!componentNameAndLink.isEmpty()){
-						for (Map.Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet())
-						{
-							if(entry.getKey().contains(componentStatus.getComponentId())){
-								List<String> portList = new ArrayList(componentStatus.getProcessedRecordCount().keySet());
-								for(String port: portList){
-									if((componentStatus.getComponentId()+"."+port).equals(entry.getKey())){
-										for(Link link: component.getSourceConnections()){
-											if(link.getSourceTerminal().toString().equals(((SubjobDetails)entry.getValue()).getTargetTerminal())){
-												link.updateRecordCount(componentStatus.getProcessedRecordCount().get(((SubjobDetails)entry.getValue()).getSourceTerminal()).toString());
-											}
-										}
-										if(componentStatus.getCurrentStatus().equalsIgnoreCase(ComponentExecutionStatus.SUCCESSFUL.value())){
-											successCount++;
-										}
-										break;	
-									}
-									if(componentStatus.getCurrentStatus().equalsIgnoreCase(ComponentExecutionStatus.SUCCESSFUL.value())){
-										successCount++;
-									}
-								}
-							}else{
-								continue;
-							}
-
-						}
-					}else if(component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
-						Container container = null;
-						String filePath=null;
-
-						filePath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
-						IPath jobFileIPath = new Path(filePath);
-						if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
-							InputStream inp = null;
-							try {
-								inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-							} catch (CoreException e) {
-								logger.error("Not able to find subjob file", e);
-							}
-							container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
-							List<Component> subJobComponents = container.getChildren();
-							componentCount = subJobComponents.size();
-							for(Component subJobComponent : subJobComponents){
-								String compName = component.getComponentLabel().getLabelContents()+"."+subJobComponent.getComponentLabel().getLabelContents();
-								if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.SUCCESSFUL.value())){
-									successCount++;
-								}
-							}
-						} 
-					}
-					//For subjobs other than stand alone
-					if(successCount == componentNameAndLink.size() && !component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
-						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
-					} 
-					//For stand alone subjob
-					else if(successCount == componentCount && component.getProperties().get(Constants.TYPE).equals(Constants.STANDALONE_SUBJOB)){
-						component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
-					}
-				}
-			}
-
-			private void updateStatusCountForNormalComponent(
-					ExecutionStatus executionStatus, Component component) {
-
-
-				for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-					if(componentStatus.getComponentId().equals(component.getComponentId())){
-						logger.info("Updating normal component {} status {}",component.getComponentId(), componentStatus.getCurrentStatus());
-						component.updateStatus(componentStatus.getCurrentStatus());
-						for(Link link: component.getSourceConnections()){
-							if(componentStatus.getComponentId().equals(link.getSource().getComponentId())){
-								link.updateRecordCount(componentStatus.getProcessedRecordCount().get(link.getSourceTerminal()).toString());
-							}
-						}
-					}
-				}
-			}
-
-			private void populateSubjobRecordCount(
-					Map<String, SubjobDetails> componentNameAndLink, Component component,StringBuilder subjobPrefix) {
-				Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
-				if(outputSubjobComponent!=null && (component.getProperties().get(Constants.TYPE).equals(Constants.INPUT)||
-						component.getProperties().get(Constants.TYPE).equals(Constants.OPERATION))){
-					for(Link link:outputSubjobComponent.getTargetConnections()){
-						Component componentPrevToOutput = link.getSource();
-						if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
-							subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
-							populateSubjobRecordCount(componentNameAndLink, componentPrevToOutput,subjobPrefix);
-						}else{
-							String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
-
-							SubjobDetails subjobDetails = new SubjobDetails(link.getSourceTerminal(), portNumber);
-							if(CLONE_COMPONENT_TYPE.equalsIgnoreCase(componentPrevToOutput.getComponentName())){
-								componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+portNumber, subjobDetails);
-							}else{
-								componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
-							}
-						}
-					}
-				}else if(component.getProperties().get(Constants.TYPE).equals(Constants.OUTPUT)){
-					Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
-					for(Link link:inputSubjobComponent.getSourceConnections()){
-						Component componentNextToInput = link.getTarget();
-						if(Constants.SUBJOB_COMPONENT.equals(componentNextToInput.getComponentName())){
-							subjobPrefix.append(component.getComponentId()+".");
-							populateSubjobRecordCount(componentNameAndLink, componentNextToInput,subjobPrefix);
-						}else{
-							String portNumber = link.getSourceTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
-
-							SubjobDetails subjobDetails = new SubjobDetails(link.getTargetTerminal(), portNumber);
-							if(CLONE_COMPONENT_TYPE.equalsIgnoreCase(componentNextToInput.getComponentName())){
-								componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentNextToInput.getComponentId()+"."+portNumber, subjobDetails);
-							}else{
-								componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentNextToInput.getComponentId()+"."+subjobDetails.getTargetTerminal(), subjobDetails);
-							}
-						}
-					}
-				}
-			}
-
-			private void updateComponentPending(Component component, ComponentStatus componentStatus, boolean pendingStatusApplied) {
-				Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
-				if(inputSubjobComponent!=null){
-					for(Link link:inputSubjobComponent.getSourceConnections()){
-						Component componentNextToInput = link.getTarget();
-						//if componentNextToInput is pending
-						String compName = component.getComponentId()+"."+componentNextToInput.getComponentId();
-						if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.PENDING.value())){
-							component.updateStatus(ComponentExecutionStatus.PENDING.value());
-							pendingStatusApplied = true;
-							break;
-						}
-					}
-				}else{
-					Container container = null;
-					String filePath=null;
-					filePath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
-					IPath jobFileIPath = new Path(filePath);
-					if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
-						InputStream inp = null;
-						try {
-							inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-						} catch (CoreException e) {
-							logger.error("Not able to find subjob file", e);
-						}
-						container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
-						List<Component> subJobComponents = container.getChildren();
-						for(Component subJobComponent : subJobComponents){
-							String compName = component.getComponentId()+"."+subJobComponent.getComponentId();
-							if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.PENDING.value())){
-								component.updateStatus(ComponentExecutionStatus.PENDING.value());
-								pendingStatusApplied = true;
-								break;
-							}
-						}
-					} 
-					
-				}
-			}
-
-			private void updateComponentRunning(Component component, ComponentStatus componentStatus, boolean runningStatusApplied) {
-				Component inputSubjobComponent=(Component) component.getProperties().get(Messages.INPUT_SUBJOB_COMPONENT);
-				if(inputSubjobComponent!=null){
-					for(Link link:inputSubjobComponent.getSourceConnections()){
-						Component componentNextToInput = link.getTarget();
-						//if componentNextToInput is running
-						String compName = component.getComponentId()+"."+componentNextToInput.getComponentId();
-						if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.RUNNING.value())){
-							component.updateStatus(ComponentExecutionStatus.RUNNING.value());
-							runningStatusApplied = true;
-							break;
-						}
-					}
-				}else{
-					Container container = null;
-					String filePath=null;
-					filePath=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
-					IPath jobFileIPath = new Path(filePath);
-					if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
-						InputStream inp = null;
-						try {
-							inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-						} catch (CoreException e) {
-							logger.error("Not able to find subjob file", e);
-						}
-						container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
-						List<Component> subJobComponents = container.getChildren();
-						for(Component subJobComponent : subJobComponents){
-							String compName = component.getComponentId()+"."+subJobComponent.getComponentId();
-							if(compName.equals(componentStatus.getComponentId()) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.RUNNING.value())){
-								component.updateStatus(ComponentExecutionStatus.RUNNING.value());
-								runningStatusApplied = true;
-								break; 
-							}
-						}
-					} 
-					
-				}
-			}
-
 		});
 	}
 
@@ -417,40 +114,5 @@ public class HydrographUiClientSocket {
 
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Push execution status to execution tracking console.
-	 *
-	 * @param executionStatus the execution status
-	 */
-	private void pushExecutionStatusToExecutionTrackingConsole(
-			ExecutionStatus executionStatus) {
-
-		String jobId = executionStatus.getJobId();
-		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(jobId);
-		if(console!=null){
-			updateExecutionTrackingConsole(executionStatus, console);	
-		}
-	}
-
-
-	/**
-	 * Update execution tracking console.
-	 *
-	 * @param executionStatus the execution status
-	 * @param console the console
-	 */
-	private void updateExecutionTrackingConsole(
-			final ExecutionStatus executionStatus,
-			final ExecutionTrackingConsole console) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				console.clearConsole();
-				console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode()));
-			}
-		});
 	}
 }
