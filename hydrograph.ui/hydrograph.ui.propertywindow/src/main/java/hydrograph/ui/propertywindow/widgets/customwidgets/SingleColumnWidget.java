@@ -54,6 +54,7 @@ public class SingleColumnWidget extends AbstractWidget {
 	private List<String> set;
 	protected SingleColumnGridConfig gridConfig = null;
 	private ArrayList<AbstractWidget> widgets;
+	Button button ;
 
 	public SingleColumnWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
@@ -80,7 +81,7 @@ public class SingleColumnWidget extends AbstractWidget {
 		
 		AbstractELTWidget defaultButton = new ELTDefaultButton(Constants.EDIT);
 		defaultSubgroupComposite.attachWidget(defaultButton);
-		Button button = (Button) defaultButton.getSWTWidgetControl();
+		button = (Button) defaultButton.getSWTWidgetControl();
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -100,6 +101,9 @@ public class SingleColumnWidget extends AbstractWidget {
 		grup.setData(SINGLE_COLUMN_WIDGET_KEY,button);
 	}
 
+	public void setEditButtonEnable(Boolean enable){
+		button.setEnabled(enable);
+	}
 	protected void onDoubleClick() {
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setComponentName(gridConfig.getComponentName());

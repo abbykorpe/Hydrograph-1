@@ -69,14 +69,6 @@ public class OperationClassComposite extends Composite {
 		{
 		lblSwitchTo = new Label(composite, SWT.NONE);
 		lblSwitchTo.setText("Switch to");
-		
-		switchToClassButton = new Button(composite, SWT.RADIO);
-		switchToClassButton.setText("Class");
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		switchToClassButton.setSelection(true);
-		new Label(composite, SWT.NONE);
-		
 		switchToExpressionButton = new Button(composite, SWT.RADIO);
 		switchToExpressionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -86,6 +78,14 @@ public class OperationClassComposite extends Composite {
 			}
 		});
 		switchToExpressionButton.setText("Expression");
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		
+		switchToClassButton = new Button(composite, SWT.RADIO);
+		switchToClassButton.setText("Class");
+		switchToClassButton.setSelection(true);
+		
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);

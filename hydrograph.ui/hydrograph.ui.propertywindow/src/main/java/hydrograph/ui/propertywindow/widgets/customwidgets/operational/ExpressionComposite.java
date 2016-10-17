@@ -97,14 +97,15 @@ public class ExpressionComposite extends Composite {
 		lblNewLabel_1 = new Label(composite, SWT.NONE);
 		lblNewLabel_1.setText("Switch to");
 		
-		switchToClassButton = new Button(composite, SWT.RADIO);
-		switchToClassButton.setText("Class");
+		switchToExpressionButton = new Button(composite, SWT.RADIO);
+		switchToExpressionButton.setText("Expression");
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		
-		switchToExpressionButton = new Button(composite, SWT.RADIO);
-		switchToExpressionButton.setText("Expression");
+		
+		switchToClassButton = new Button(composite, SWT.RADIO);
+		switchToClassButton.setText("Class");
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
