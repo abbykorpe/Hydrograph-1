@@ -171,7 +171,9 @@ public class Utils {
 			List<FilterProperties> outputFieldList) {
 		List<String> outputFields = new ArrayList<>();
 		for (FilterProperties fileFilterProperty : outputFieldList) {
+			if(!ParameterUtil.isParameter(fileFilterProperty.getPropertyname())){
 			outputFields.add(fileFilterProperty.getPropertyname());
+			}	
 		}
 		return outputFields;
 	}
