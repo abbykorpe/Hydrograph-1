@@ -43,13 +43,13 @@ public class DelimitedAndFixedWidthHelper {
 
 	public static Object[] getFields(Fields sourceFields, String line,
 			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-			Type[] types, boolean safe) {
+			Type[] types, boolean safe, String quote) {
 
 		if (!line.equals("")) {
 
 			try {
 				String[] tokens = generateTokensFromRawData(line,
-						lengthsAndDelimiters, lengthsAndDelimitersType);
+						lengthsAndDelimiters, lengthsAndDelimitersType, quote);
 				Type[] fieldDataTypes = types;
 				if (fieldDataTypes == null) {
 					fieldDataTypes = new Type[sourceFields.size()];
@@ -69,7 +69,7 @@ public class DelimitedAndFixedWidthHelper {
 								+ "\nDatatypes in scheme: "
 								+ Arrays.toString(types)
 								+ "\nSafe was set to: " + safe, e);
-				throw new RuntimeException(e);			
+				throw new RuntimeException(e);
 			}
 		} else {
 			return new Object[lengthsAndDelimiters.length];
@@ -77,10 +77,12 @@ public class DelimitedAndFixedWidthHelper {
 	}
 
 	private static String[] generateTokensFromRawData(String line,
-			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType) {
+			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
+			String quote) {
 		String tokens[] = new String[lengthsAndDelimiters.length];
 		String strings[];
 		String identifier;
+		quote = DelimitedAndFixedWidthHelper.checkIfDelimiterIsRegexChar(quote);
 		for (int i = 0; i < lengthsAndDelimiters.length; i++) {
 			identifier = DelimitedAndFixedWidthHelper
 					.checkIfDelimiterIsRegexChar(lengthsAndDelimiters[i]);
@@ -89,9 +91,15 @@ public class DelimitedAndFixedWidthHelper {
 				if (i != (lengthsAndDelimiters.length - 1))
 					line = line.substring(Integer.parseInt(identifier));
 			} else {
+				if (line.contains(quote.replace("\\", ""))) {
+					identifier = identifier + "(?=(?:[^" + quote + "]*" + quote
+							+ "[^" + quote + "]*[^" + quote + identifier + "]*"
+							+ quote + ")*(?![^" + quote + "]*" + quote + "))";
+				}
 				strings = line.split(identifier);
 				if (strings.length != 0) {
-					tokens[i] = (strings)[0];
+					tokens[i] = ((strings)[0]).replace(quote.replace("\\", ""),
+							"");
 					if (i != (lengthsAndDelimiters.length - 1))
 						line = (line.split(identifier, 2))[1];
 				} else {
@@ -131,7 +139,7 @@ public class DelimitedAndFixedWidthHelper {
 
 	public static StringBuilder createLine(Tuple tuple,
 			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-			boolean strict, char filler, Type[] types) {
+			boolean strict, char filler, Type[] types, String quote) {
 		counter = 0;
 		StringBuilder buffer = new StringBuilder();
 		for (Object value : tuple) {
@@ -206,6 +214,10 @@ public class DelimitedAndFixedWidthHelper {
 					continue;
 				}
 			}
+			if (quoteCharPresent(quote)) {
+				value = appendQuoteChars(value, quote,
+						lengthsAndDelimiters[counter]);
+			}
 			buffer.append(value);
 			if (lengthsAndDelimiters[counter].contentEquals("\\n"))
 				lengthsAndDelimiters[counter] = "\n";
@@ -218,6 +230,18 @@ public class DelimitedAndFixedWidthHelper {
 			counter++;
 		}
 		return buffer;
+	}
+
+	private static boolean quoteCharPresent(String quote) {
+		return !quote.equals("NoQuoteCharPresent");
+	}
+
+	private static Object appendQuoteChars(Object value, String quote,
+			String lengthsAndDelimiters) {
+		if (value instanceof String && ((String) value).contains(lengthsAndDelimiters)) {
+			value = quote + ((String) value) + quote;
+		}
+		return value;
 	}
 
 	private static boolean isFixedWidthField(String[] lengthsAndDelimitersType,

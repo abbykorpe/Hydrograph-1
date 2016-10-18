@@ -94,7 +94,7 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 		scheme = new TextDelimitedAndFixedWidth(outputFields, fieldsCreator.getFieldLengthOrDelimiter(),
 				fieldsCreator.getTypeFieldLengthDelimiter(), outputFields.getTypes(),
 				outputFileMixedSchemeEntity.getStrict(), outputFileMixedSchemeEntity.getSafe(),
-				outputFileMixedSchemeEntity.getCharset());
+				outputFileMixedSchemeEntity.getCharset(), outputFileMixedSchemeEntity.getQuote());
 	}
 
 	@Override

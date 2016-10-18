@@ -100,7 +100,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 		scheme = new TextDelimitedAndFixedWidth(inputFields, fieldsCreator.getFieldLengthOrDelimiter(),
 				fieldsCreator.getTypeFieldLengthDelimiter(), inputFields.getTypes(),
 				inputFileMixedSchemeEntity.getStrict(), inputFileMixedSchemeEntity.getSafe(),
-				inputFileMixedSchemeEntity.getCharset());
+				inputFileMixedSchemeEntity.getCharset(),inputFileMixedSchemeEntity.getQuote());
 
 	}
 

@@ -26,6 +26,7 @@ public class OutputFileMixedSchemeEntity extends InputOutputEntityBase {
 	private List<SchemaField> fieldsList;
 	private boolean strict;
 	private boolean overWrite;
+	private String quote = null;
 
 	public boolean isOverWrite() {
 		return overWrite;
@@ -73,6 +74,14 @@ public class OutputFileMixedSchemeEntity extends InputOutputEntityBase {
 
 	public void setStrict(boolean strict) {
 		this.strict = strict;
+	}
+	
+	public String getQuote() {
+		return quote;
+	}
+
+	public void setQuote(String quote) {
+		this.quote = quote;
 	}
 	
 	/**
