@@ -218,6 +218,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TextFileMixedScheme.Quote }
+     * 
+     */
+    public TextFileMixedScheme.Quote createTextFileMixedSchemeQuote() {
+        return new TextFileMixedScheme.Quote();
+    }
+
+    /**
      * Create an instance of {@link AvroFile.Path }
      * 
      */
