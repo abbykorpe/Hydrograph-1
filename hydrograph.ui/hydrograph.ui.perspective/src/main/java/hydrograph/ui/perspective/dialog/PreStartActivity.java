@@ -90,7 +90,7 @@ public class PreStartActivity {
 		JdkPathDialog dlg = new JdkPathDialog(getShell());
 		if (dlg.open() == Window.OK) {
 			if(replaceExistingJDKPath){
-			updateINIOnJDkUpgrade(dlg.getInputVlue());
+			updateINIOnJDKUpgrade(dlg.getInputVlue());
 			}else{
 				updateINIFile(dlg.getInputVlue());
 			}
@@ -109,7 +109,7 @@ public class PreStartActivity {
 	public void updateINIOnJDkUpgrade() {
 		logger.debug("Initiating auto-update process for updating INI file if JAVA_HOME variable is updated");
 		String javaHome = getSystemJavaHomeValue();
-		if(isValidJDKPath(javaHome,false) && updateINIOnJDkUpgrade(javaHome)){
+		if(isValidJDKPath(javaHome,false) && updateINIOnJDKUpgrade(javaHome)){
 			restartHydrograph();
 		}
 		
@@ -234,8 +234,8 @@ public class PreStartActivity {
 				if (file != null) {
 					file.close();
 				}
-			} catch (IOException eioException) {
-				logger.error("IOException occurred while updating " + HYDROGRAPH_INI + " file", eioException);
+			} catch (IOException ioException) {
+				logger.error("IOException occurred while updating " + HYDROGRAPH_INI + " file", ioException);
 			}
 		}
 		return isUpdated;
@@ -251,7 +251,7 @@ public class PreStartActivity {
 		
 	
 	
-	private boolean updateINIOnJDkUpgrade(String javaHome) {
+	private boolean updateINIOnJDKUpgrade(String javaHome) {
 		logger.debug("Updating INI file if JDK path is updated");
 		RandomAccessFile file = null;
 		boolean isUpdated = false;
