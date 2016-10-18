@@ -13,11 +13,6 @@
 
 package hydrograph.ui.graph.execution.tracking.connection;
 
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.IOException;
 
 import javax.websocket.ClientEndpoint;
@@ -35,6 +30,11 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
+
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class HydrographUiClientSocket is use to get get execution tracking status and update the job canvas.
@@ -78,12 +78,11 @@ public class HydrographUiClientSocket {
 				ExecutionStatus executionStatus=gson.fromJson(status, ExecutionStatus.class);
 				IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
 				IEditorReference[] refs = page.getEditorReferences();
-
 				for (IEditorReference ref : refs){
 					IEditorPart editor = ref.getEditor(false);
 					if(editor instanceof ELTGraphicalEditor){
 						if(((ELTGraphicalEditor)editor).getJobId().equals(executionStatus.getJobId()) || ((((ELTGraphicalEditor)editor).getContainer()!=null) && (((ELTGraphicalEditor)editor).getContainer().getUniqueJobId().equals(executionStatus.getJobId())))){
-							TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor);
+								TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor);
 						}
 					}
 				}
