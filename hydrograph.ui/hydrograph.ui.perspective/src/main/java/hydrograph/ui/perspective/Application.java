@@ -14,6 +14,9 @@
  
 package hydrograph.ui.perspective;
 
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.perspective.dialog.PreStartActivity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,7 +29,6 @@ import java.util.Properties;
 
 import javax.tools.ToolProvider;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -47,6 +49,7 @@ import org.eclipse.ui.internal.ide.ChooseWorkspaceDialog;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.ide.StatusUtil;
+
 
 /**
  * This class controls all aspects of the application's execution
@@ -76,10 +79,18 @@ public class Application implements IApplication {
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
 	 */
 	public Object start(IApplicationContext context) throws Exception {
-		checkWheterToolIsLaunchedWithJDK();
 		Display display = PlatformUI.createDisplay();
+		Shell shell = WorkbenchPlugin.getSplashShell(display);
+
+		if (OSValidator.isWindows() && !PreStartActivity.isDevLaunchMode(context.getArguments())) {
+			PreStartActivity activity = new PreStartActivity(shell);
+			if (ToolProvider.getSystemJavaCompiler() == null) {
+				activity.performPreStartActivity();
+			} else {
+				activity.updateINIOnJDkUpgrade();
+			}
+		}
 		try {
-			Shell shell = WorkbenchPlugin.getSplashShell(display);
 			Object instanceLocationCheck = checkInstanceLocation(shell, context.getArguments());
 			if (instanceLocationCheck != null) {
             	WorkbenchPlugin.unsetSplashShell(display);
@@ -451,34 +462,4 @@ public class Application implements IApplication {
 		});
 	}
 	
-	private void checkWheterToolIsLaunchedWithJDK() {
-		if (ToolProvider.getSystemJavaCompiler() == null) {
-			boolean returnCode = MessageDialog
-					.openQuestion(
-							getShell(),
-							Messages.STARTUP_JDK_WARNING_WINDOW_DIALOG,
-							"Hydrograph is not launched using jdk. As a result expression editor functionality will not work. Please add following at the top of hydrograph.ini file in the Hydrograph installation directory: \n-vm\n"
-									+ getJDKPath() + "\\bin\n\n" +
-											"Do you want to continue without updating hydrograph.ini file?");
-			if (!returnCode)
-				System.exit(0);
-		}
-	}
-
-	private Shell getShell() {
-		Shell shell=new Shell();
-		if(Display.getCurrent() !=null && Display.getCurrent().getActiveShell()!=null){
-			shell =  Display.getCurrent().getActiveShell();
-		}
-		return shell;
-	}
-
-	private String getJDKPath() {
-		String jdkPath=JDK_PATH_TEMPLATE;
-		if(StringUtils.isNotBlank(System.getenv("JAVA_HOME"))){
-			jdkPath=System.getenv("JAVA_HOME");
-		}
-		return jdkPath;
-		
-	}
 }
