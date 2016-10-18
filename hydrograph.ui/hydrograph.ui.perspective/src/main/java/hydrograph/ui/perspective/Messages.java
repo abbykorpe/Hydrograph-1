@@ -20,6 +20,9 @@ public class Messages extends NLS {
 	public static String STARTUP_JDK_WARNING_WINDOW_DIALOG ;
 	public static String TOOL_EXT_MESSAGE;
 	public static String TOOL_EXIT_MESSAGE_BOX_TITLE;
+	public static String JDK_PATH_DIALOG_TITLE;
+	public static String JDK_PATH_DIALOG_MESSAGE;
+	public static String JDK_PATH_DIALOG_NOTE;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

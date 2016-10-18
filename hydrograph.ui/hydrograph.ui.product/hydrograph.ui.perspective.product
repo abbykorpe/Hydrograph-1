@@ -16,6 +16,7 @@ openFile</programArgs>
 org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.101.v201120109-1504
 -vm
 /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre/lib/jli/libjli.dylib</programArgsMac>
+      <programArgsWin>-Dosgi.requiredJavaVersion=1.7</programArgsWin>
       <vmArgs>-Xms1536m
 -Xmx2048m
 -XX:MaxPermSize=512m</vmArgs>
