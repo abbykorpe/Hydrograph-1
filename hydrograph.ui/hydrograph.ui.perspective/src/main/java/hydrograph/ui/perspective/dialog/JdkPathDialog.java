@@ -34,6 +34,12 @@ import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.perspective.Messages;
 
+/**
+ * Dialog class for getting JDK path from user.
+ * 
+ * @author Bitwise
+ *
+ */
 public class JdkPathDialog extends Dialog {
 	private Text text;
 	private Button okButton;
@@ -81,7 +87,7 @@ public class JdkPathDialog extends Dialog {
 		return container;
 	}
 
-	public void createTextBox(Composite mainComposite) {
+	private void createTextBox(Composite mainComposite) {
 		text = new Text(mainComposite, SWT.BORDER);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 0));
 		text.addModifyListener(new ModifyListener() {
@@ -122,6 +128,9 @@ public class JdkPathDialog extends Dialog {
 		errorLbl.setVisible(false);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
+	 */
 	@Override
 	protected void okPressed() {
 		String textValue = getTextBoxValue();
@@ -144,11 +153,10 @@ public class JdkPathDialog extends Dialog {
 		return new Point(450, 209);
 	}
 
-	public static void main(String[] args) {
-		JdkPathDialog dialog=new JdkPathDialog(new Shell());
-		dialog.open();
-	}
-
+	/**
+	 * Returns JDK path give by user.
+	 * 
+	 */
 	public String getInputVlue() {
 		return inputValue;
 	}

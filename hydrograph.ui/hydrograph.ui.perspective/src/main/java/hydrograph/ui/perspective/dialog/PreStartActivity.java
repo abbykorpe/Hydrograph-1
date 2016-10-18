@@ -30,6 +30,12 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * Class for updating hydrograph.ini file at tool startup
+ * 
+ * @author Buitwise
+ *
+ */
 public class PreStartActivity {
 	private static final long REQUIRED_JDK_VERSION = 17000; // i.e. 1.7.0_00
 	private static final String JAVAC_EXE = "\\javac.exe";
@@ -46,8 +52,14 @@ public class PreStartActivity {
 		logger.debug("Initializing PreStartActivity");
 		this.shell=shell;
 	}
-	
-	 @SuppressWarnings("unchecked")
+
+	/**
+	 * Checks whether tool is launched in development mode.
+	 * 
+	 * @param argumentsMap
+	 * @return true if tool is launched in development mode, else returns false
+	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isDevLaunchMode(Map argumentsMap) {
 		 logger.debug("Checking whether tool is launched in development mode");
 		 for(Entry< Object, String[]> entry:((Map<Object, String[]>)argumentsMap).entrySet()){
@@ -60,6 +72,10 @@ public class PreStartActivity {
 			return true;
 		}
 	 
+	/**
+	 * Initiates startup activity for updating hydrograph.ini file  
+	 * 
+	 */
 	public void performPreStartActivity() {
 		logger.debug("Initiating pre-start activity");
 			if (autoUpdateINIFile()) {
@@ -85,6 +101,11 @@ public class PreStartActivity {
 
 	}
 
+	/**
+	 * 
+	 * Updates hydrograph.ini file whenever JAVA_HOME is updated.
+	 * 
+	 */
 	public void updateINIOnJDkUpgrade() {
 		logger.debug("Initiating auto-update process for updating INI file if JAVA_HOME variable is updated");
 		String javaHome = getSystemJavaHomeValue();
@@ -112,9 +133,14 @@ public class PreStartActivity {
 	}
 
 	/**
+	 * Checks whether given JDK-PATH is valid or not.
+	 * 
 	 * @param javaHome
+	 * 			input jdk path
 	 * @param showPopUp
+	 * 			true if user wants to show pop for invalid path.
 	 * @return
+	 * 		true if input string is valid JDK path.
 	 */
 	public static boolean isValidJDKPath(String javaHome,boolean showPopUp) {
 		try{
@@ -225,7 +251,7 @@ public class PreStartActivity {
 		
 	
 	
-	public boolean updateINIOnJDkUpgrade(String javaHome) {
+	private boolean updateINIOnJDkUpgrade(String javaHome) {
 		logger.debug("Updating INI file if JDK path is updated");
 		RandomAccessFile file = null;
 		boolean isUpdated = false;
