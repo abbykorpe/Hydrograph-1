@@ -602,7 +602,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	
 	private void adjustComponentFigure(Component component, ComponentFigure componentFigure){
 		Dimension d = null;
-		//an extra space has been added at the end of the component's name for showing it after renaming.
+		//an extra space has been added at the end of the component's name for handling component renaming issue#1370.
 		String label = (String) component.getPropertyValue(Component.Props.NAME_PROP.getValue())+" ";
 		ComponentLabel componentLabel = component.getComponentLabel();
 		if(componentLabelFont==null){
