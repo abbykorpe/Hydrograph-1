@@ -18,6 +18,7 @@ connection(link) on transform component.
 6.<1317>-[Shashank Karnik]-Trasform Component: After Importing xml/Copy pasting the Job, Error Bubble is Not Getting Displyed on Trasform Component even if Class file is Not Present in build path of current project.
 7.<1370>-[Ankit Sharma] User was not able to rename the component's name.
 8.<1356>-[Ankit sharma] Added validations for Hive Component partition key values. 
+9.<1413>-[Ankit Sharma] Error bubble was getting displayed on transform component even if there is no error in component. 
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
