@@ -89,6 +89,7 @@ public class TrackingDisplayUtils {
 				.getWorkbench().getWorkbenchWindows()[0].getActivePage()
 				.getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor) {
+			editor.closeAllSubJobLinkedEditors();
 			clearTrackingStatusForEditor(editor);
 		}
 	}
@@ -106,6 +107,7 @@ public class TrackingDisplayUtils {
 				.getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor
 				&& (editor.getJobId().equals(jobId))) {
+			editor.closeAllSubJobLinkedEditors();
 			clearTrackingStatusForEditor(editor);
 		}
 	}
