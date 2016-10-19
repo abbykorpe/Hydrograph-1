@@ -1837,7 +1837,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 }
 		 }
 		 SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(null, null,table,componentType);
-
+		 showHideErrorSymbol(applySchemaValidationRule());
 		 LinkedHashMap<String, Object> currentSchemaProperty = new LinkedHashMap<>();
 		 currentSchemaProperty.put(propertyName, schema);
 	 }
