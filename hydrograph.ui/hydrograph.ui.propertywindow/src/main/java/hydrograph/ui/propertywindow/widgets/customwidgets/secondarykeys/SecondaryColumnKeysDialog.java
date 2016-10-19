@@ -160,7 +160,12 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		targetTable = targetTableViewer.getTable();
 		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 		gd_table_1.heightHint = 401;
-		gd_table_1.widthHint = 340;
+		
+		if(OSValidator.isMac()){
+			gd_table_1.widthHint = 363;
+		}else{
+			gd_table_1.widthHint = 352;
+		}
 		targetTable.setLayoutData(gd_table_1);
 
 		attachTargetTableListeners();
@@ -178,7 +183,13 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			targetTable.getColumn(i).pack();
 		}
 		targetTableColumnFieldName.setWidth(252);
-		targetTableColumnSortOrder.setWidth(111);
+		
+		if(OSValidator.isMac()){
+			targetTableColumnSortOrder.setWidth(128);
+		}else{
+			targetTableColumnSortOrder.setWidth(116);
+		}
+		
 		targetTable.setHeaderVisible(true);
 		targetTable.setLinesVisible(true);
 

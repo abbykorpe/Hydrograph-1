@@ -19,6 +19,10 @@ connection(link) on transform component.
 7.<1370>-[Ankit Sharma] User was not able to rename the component's name.
 8.<1356>-[Ankit sharma] Added validations for Hive Component partition key values. 
 9.<1413>-[Ankit Sharma] Error bubble was getting displayed on transform component even if there is no error in component. 
+10.<1363> - [Pooja Yadav] - Remove Dups Component: Size of Remove Dups Component is Not Same As All Other Components
+11.<1217> - [Pooja Yadav] - MAC: Alignment Related Issues
+12.<1272> - [Anshul Shivhare] - 'Ok' and 'Cancel' buttons are getting hide on Join(Mapping), Parameter Grid, Hive(Partitian Key) windows
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
