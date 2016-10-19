@@ -12,9 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.generator;
 
-import java.util.Map;
-
-import cascading.tap.Tap;
 import hydrograph.engine.assembly.entity.OutputFileMixedSchemeEntity;
 import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
 import hydrograph.engine.cascading.assembly.OutputFileMixedSchemeAssembly;
@@ -24,6 +21,10 @@ import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
+
+import java.util.Map;
+
+import cascading.tap.Tap;
 
 public class OutputFileMixedSchemeAssemblyGenerator extends OutputAssemblyGeneratorBase {
 
@@ -69,6 +70,9 @@ public class OutputFileMixedSchemeAssemblyGenerator extends OutputAssemblyGenera
 
 		outputFileMixedSchemeEntity.setRuntimeProperties(
 				OutputEntityUtils.extractRuntimeProperties(jaxbTextFileMixedScheme.getRuntimeProperties()));
+		outputFileMixedSchemeEntity
+		.setQuote(jaxbTextFileMixedScheme.getQuote() != null ? jaxbTextFileMixedScheme
+				.getQuote().getValue() : "");
 
 		outputFileMixedSchemeEntity.setStrict(
 				jaxbTextFileMixedScheme.getStrict() != null ? jaxbTextFileMixedScheme.getStrict().isValue() : true);
