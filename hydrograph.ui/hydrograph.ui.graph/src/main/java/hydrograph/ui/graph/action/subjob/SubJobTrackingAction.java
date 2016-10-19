@@ -17,10 +17,14 @@ package hydrograph.ui.graph.action.subjob;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -47,6 +51,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 public class SubJobTrackingAction extends SelectionAction{
 	PasteAction pasteAction;
 	ComponentEditPart edComponentEditPart;
+	IFile file_job;
 	
 	Logger logger = LogFactory.INSTANCE.getLogger(SubJobTrackingAction.class);
 	/**
@@ -89,7 +94,7 @@ public class SubJobTrackingAction extends SelectionAction{
 					if (((ComponentEditPart) obj).getCastedModel().getCategory().equalsIgnoreCase(Constants.SUBJOB_COMPONENT_CATEGORY)) {
 						Component subjobComponent = ((ComponentEditPart) obj).getCastedModel();
 						ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-						Container container=(Container)subjobComponent.getProperties().get("Container");
+						Container container=(Container)subjobComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
 						if(subjobComponent.getParent().isCurrentGraphSubjob()){
 							container.setUniqueJobId(subjobComponent.getParent().getUniqueJobId());
 						}
@@ -98,12 +103,22 @@ public class SubJobTrackingAction extends SelectionAction{
 						}
 						String s =new Path(eltGraphicalEditor.getJobName()+"_"+subjobComponent.getComponentLabel().getLabelContents()).toString();
 						System.out.println("Job Id :"+container.getUniqueJobId());
-						IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(eltGraphicalEditor.getActiveProject()+"/"+s).addFileExtension("job"));
+						IFolder folder=ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(eltGraphicalEditor.getActiveProject()+"/temp"));
+						if(!folder.exists()){
+							try {
+								folder.create(true, true,new NullProgressMonitor());
+							} catch (CoreException e) {
+								e.printStackTrace();
+							}
+						}
 						
+						IFile file1=folder.getFile(s+Constants.JOB_EXTENSION);
 						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						IFile file_job =subJobUtility.doSaveAsSubJob(file, container);
+						file_job =subJobUtility.doSaveAsSubJob(file1, container);
 						try {
-							IDE.openEditor(page, file_job,true);
+							ELTGraphicalEditor editorPart=(ELTGraphicalEditor) IDE.openEditor(page, file_job,true);
+						editorPart.setDeleteOnDispose(true);
+						eltGraphicalEditor.addSubJobEditor(editorPart);
 						} catch (PartInitException e) {
 							e.printStackTrace();
 						}

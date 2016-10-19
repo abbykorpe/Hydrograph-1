@@ -193,6 +193,8 @@ import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
  */
 public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette implements ComponentCanvas, DefaultGEFCanvas{
 
+	private List<ELTGraphicalEditor> linkedSubJobEditors=new ArrayList<>();
+	private boolean deleteOnDispose;
 	private boolean dirty=false;
 	private PaletteRoot paletteRoot = null;
 
@@ -1283,6 +1285,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void dispose() {
 		super.dispose();
+		closeAllSubJobLinkedEditors();
 		removeSubjobProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
@@ -1293,6 +1296,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		deleteDebugFiles(jobId);
 		enableRunningJobResource() ;
+		removeTempSubJobTrackFiles();
 	}
 	
 	private void deleteDebugFiles(String jobID) {
@@ -1720,4 +1724,39 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public String getUniqueJobId(){
 		return uniqueJobId;
 	}
+	
+	public void setDeleteOnDispose(boolean deleteOnDispose) {
+		this.deleteOnDispose = deleteOnDispose;
+	}
+	
+	public void addSubJobEditor(ELTGraphicalEditor editor){
+		linkedSubJobEditors.add(editor);
+	}
+
+	
+	public void closeAllSubJobLinkedEditors() {
+		for(ELTGraphicalEditor editor:linkedSubJobEditors){
+			if(editor!=null)
+			editor.getEditorSite().getPage().closeEditor(editor, false);
+		}
+	}
+	
+	public void removeTempSubJobTrackFiles() {
+		
+		
+	if(deleteOnDispose){
+		try {
+			IFile file=((IFileEditorInput)getEditorInput()).getFile();
+			if(file.exists()){
+			ResourcesPlugin.getWorkspace().getRoot().getFile(file.getFullPath()).delete(true, null);
+			ResourcesPlugin.getWorkspace().getRoot().getFile(file.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH)).delete(true, null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	}
+
+
 }
