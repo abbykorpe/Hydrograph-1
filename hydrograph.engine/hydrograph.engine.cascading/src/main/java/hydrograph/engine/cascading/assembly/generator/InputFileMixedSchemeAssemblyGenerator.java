@@ -94,7 +94,7 @@ public class InputFileMixedSchemeAssemblyGenerator extends
 				.extractOutSocket(jaxbTextFileMixedScheme.getOutSocket()));
 		inputFileMixedSchemeEntity
 				.setQuote(jaxbTextFileMixedScheme.getQuote() != null ? jaxbTextFileMixedScheme
-						.getQuote().getValue() : null);
+						.getQuote().getValue() : "");
 	}
 
 	@Override

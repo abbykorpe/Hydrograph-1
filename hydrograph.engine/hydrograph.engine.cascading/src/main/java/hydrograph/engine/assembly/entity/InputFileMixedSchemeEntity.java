@@ -22,7 +22,7 @@ public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 	private String charset;
 	private boolean safe;
 	private boolean strict;
-	private String quote = null;
+	private String quote = "";
 
 	public String getPath() {
 		return path;
@@ -82,6 +82,7 @@ public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 		str.append(" | strict: " + strict);
 		str.append(" | safe: " + safe);
 		str.append(" | charset: " + charset);
+		str.append(" | quote: " + quote);
 
 		str.append("\nfields: ");
 		if (getFieldsList() != null) {

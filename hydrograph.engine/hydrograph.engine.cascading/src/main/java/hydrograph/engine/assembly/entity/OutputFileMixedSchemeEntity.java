@@ -26,7 +26,7 @@ public class OutputFileMixedSchemeEntity extends InputOutputEntityBase {
 	private List<SchemaField> fieldsList;
 	private boolean strict;
 	private boolean overWrite;
-	private String quote = null;
+	private String quote = "";
 
 	public boolean isOverWrite() {
 		return overWrite;
@@ -101,6 +101,7 @@ public class OutputFileMixedSchemeEntity extends InputOutputEntityBase {
 		str.append(" | strict: " + strict);
 		str.append(" | safe: " + safe);
 		str.append(" | charset: " + charset);
+		str.append(" | quote: " + quote);
 
 		str.append("\nfields: ");
 		if (fieldsList != null) {

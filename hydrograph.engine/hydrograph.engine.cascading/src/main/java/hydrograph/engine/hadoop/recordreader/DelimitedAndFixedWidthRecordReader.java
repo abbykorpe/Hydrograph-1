@@ -71,7 +71,7 @@ public class DelimitedAndFixedWidthRecordReader implements
 
 	private boolean isQuotePresent(String string) {
 		if (string != null) {
-			if (string.equals("NoQuoteCharPresent"))
+			if (string.equals(""))
 				return false;
 			else
 				return true;

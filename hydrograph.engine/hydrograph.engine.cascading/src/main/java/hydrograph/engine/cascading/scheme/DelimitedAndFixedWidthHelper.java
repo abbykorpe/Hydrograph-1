@@ -82,16 +82,19 @@ public class DelimitedAndFixedWidthHelper {
 		String tokens[] = new String[lengthsAndDelimiters.length];
 		String strings[];
 		String identifier;
-		quote = DelimitedAndFixedWidthHelper.checkIfDelimiterIsRegexChar(quote);
+		quote = DelimitedAndFixedWidthHelper.maskRegexChar(quote);
 		for (int i = 0; i < lengthsAndDelimiters.length; i++) {
 			identifier = DelimitedAndFixedWidthHelper
-					.checkIfDelimiterIsRegexChar(lengthsAndDelimiters[i]);
+					.maskRegexChar(lengthsAndDelimiters[i]);
 			if (lengthsAndDelimitersType[i].contains("Integer")) {
 				tokens[i] = line.substring(0, Integer.parseInt(identifier));
 				if (i != (lengthsAndDelimiters.length - 1))
 					line = line.substring(Integer.parseInt(identifier));
 			} else {
-				if (line.contains(quote.replace("\\", ""))) {
+				if (!"".equals(quote) && line.contains(quote.replace("\\", ""))) {
+					// Creation of RegEx to split data based on delimiter
+					// ignoring the delimiter present in data based on 
+					// presence of quote char
 					identifier = identifier + "(?=(?:[^" + quote + "]*" + quote
 							+ "[^" + quote + "]*[^" + quote + identifier + "]*"
 							+ quote + ")*(?![^" + quote + "]*" + quote + "))";
@@ -233,7 +236,7 @@ public class DelimitedAndFixedWidthHelper {
 	}
 
 	private static boolean quoteCharPresent(String quote) {
-		return !quote.equals("NoQuoteCharPresent");
+		return !quote.equals("");
 	}
 
 	private static Object appendQuoteChars(Object value, String quote,
@@ -339,36 +342,36 @@ public class DelimitedAndFixedWidthHelper {
 		}
 	}
 
-	public static String checkIfDelimiterIsRegexChar(
-			String delimiterToBePassedToRecordReader) {
-		String string = delimiterToBePassedToRecordReader;
-		if (delimiterToBePassedToRecordReader.contains("|")) {
-			string = delimiterToBePassedToRecordReader.replace("|", "\\|");
+	public static String maskRegexChar(
+			String singleChar) {
+		String string = singleChar;
+		if (singleChar.contains("|")) {
+			string = singleChar.replace("|", "\\|");
 		}
-		if (delimiterToBePassedToRecordReader.contains(".")) {
-			string = delimiterToBePassedToRecordReader.replace(".", "\\.");
+		if (singleChar.contains(".")) {
+			string = singleChar.replace(".", "\\.");
 		}
-		if (delimiterToBePassedToRecordReader.contains("+")) {
-			string = delimiterToBePassedToRecordReader.replace("+", "\\+");
+		if (singleChar.contains("+")) {
+			string = singleChar.replace("+", "\\+");
 		}
-		if (delimiterToBePassedToRecordReader.contains("$")) {
-			string = delimiterToBePassedToRecordReader.replace("$", "\\$");
+		if (singleChar.contains("$")) {
+			string = singleChar.replace("$", "\\$");
 		}
-		if (delimiterToBePassedToRecordReader.contains("*")) {
-			string = delimiterToBePassedToRecordReader.replace("*", "\\*");
+		if (singleChar.contains("*")) {
+			string = singleChar.replace("*", "\\*");
 		}
-		if (delimiterToBePassedToRecordReader.contains("?")) {
-			string = delimiterToBePassedToRecordReader.replace("?", "\\?");
+		if (singleChar.contains("?")) {
+			string = singleChar.replace("?", "\\?");
 		}
-		if (delimiterToBePassedToRecordReader.contains("^")) {
-			string = delimiterToBePassedToRecordReader.replace("^", "\\^");
+		if (singleChar.contains("^")) {
+			string = singleChar.replace("^", "\\^");
 		}
-		if (delimiterToBePassedToRecordReader.contains("-")) {
-			string = delimiterToBePassedToRecordReader.replace("-", "\\-");
+		if (singleChar.contains("-")) {
+			string = singleChar.replace("-", "\\-");
 		}
-		if (delimiterToBePassedToRecordReader.contains("\\x")) {
+		if (singleChar.contains("\\x")) {
 			string = GeneralUtilities
-					.parseHex(delimiterToBePassedToRecordReader);
+					.parseHex(singleChar);
 		}
 		return string;
 	}
@@ -376,7 +379,7 @@ public class DelimitedAndFixedWidthHelper {
 	public static String[] checkIfDelimiterIsRegexChar(
 			String[] lengthsAndDelimiters) {
 		for (int i = 0; i < lengthsAndDelimiters.length; i++)
-			lengthsAndDelimiters[i] = checkIfDelimiterIsRegexChar(lengthsAndDelimiters[i]);
+			lengthsAndDelimiters[i] = maskRegexChar(lengthsAndDelimiters[i]);
 		return lengthsAndDelimiters;
 	}
 

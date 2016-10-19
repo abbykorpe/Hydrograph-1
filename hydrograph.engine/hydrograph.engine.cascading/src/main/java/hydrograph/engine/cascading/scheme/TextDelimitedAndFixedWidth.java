@@ -65,7 +65,7 @@ public class TextDelimitedAndFixedWidth
 	public static final boolean DEFAULT_STRICT = false;
 	public static final boolean DEFAULT_SAFE = false;
 	private static final Type[] DEFAULT_TYPES = null;
-	private static final String DEFAULT_QUOTE = null;
+	private static final String DEFAULT_QUOTE = "";
 
 	Compress sinkCompression = Compress.DISABLE;
 	String charsetName = DEFAULT_CHARSET;
@@ -158,7 +158,7 @@ public class TextDelimitedAndFixedWidth
 		this.lengthsAndDelimitersType = Arrays.toString(
 				typesOfLengthsAndDelimiters).split(",");
 		this.filler = filler;
-		this.quote = quote == null ? "NoQuoteCharPresent" : quote;
+		this.quote = quote == null ? "" : quote;
 	}
 
 	public Compress getSinkCompression() {

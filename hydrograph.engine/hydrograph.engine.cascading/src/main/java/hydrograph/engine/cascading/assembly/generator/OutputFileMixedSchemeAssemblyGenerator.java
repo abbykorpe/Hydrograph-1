@@ -72,7 +72,7 @@ public class OutputFileMixedSchemeAssemblyGenerator extends OutputAssemblyGenera
 				OutputEntityUtils.extractRuntimeProperties(jaxbTextFileMixedScheme.getRuntimeProperties()));
 		outputFileMixedSchemeEntity
 		.setQuote(jaxbTextFileMixedScheme.getQuote() != null ? jaxbTextFileMixedScheme
-				.getQuote().getValue() : null);
+				.getQuote().getValue() : "");
 
 		outputFileMixedSchemeEntity.setStrict(
 				jaxbTextFileMixedScheme.getStrict() != null ? jaxbTextFileMixedScheme.getStrict().isValue() : true);
