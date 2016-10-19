@@ -208,7 +208,7 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		statusLineManager.setMessage("");
 		
 		if(styledText!=null && !styledText.isDisposed()){
-			styledText.append(executionStatus.toString());
+			styledText.append(executionStatus);
 			styledText.setTopIndex(styledText.getLineCount() - 1);
 		}
 	}

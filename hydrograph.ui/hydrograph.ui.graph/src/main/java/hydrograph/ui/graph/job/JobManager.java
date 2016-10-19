@@ -14,32 +14,6 @@
  
 package hydrograph.ui.graph.job;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.MultiParameterFileUIUtils;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.datastructures.parametergrid.ParameterFile;
-import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.graph.Activator;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
-import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
-import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
-import hydrograph.ui.graph.handler.JobHandler;
-import hydrograph.ui.graph.handler.StopJobHandler;
-import hydrograph.ui.graph.utility.CanvasUtils;
-import hydrograph.ui.graph.utility.DataViewerUtility;
-import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
-import hydrograph.ui.graph.utility.MessageBox;
-import hydrograph.ui.graph.utility.ViewDataUtils;
-import hydrograph.ui.joblogger.JobLogger;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
-import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,6 +43,33 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.MultiParameterFileUIUtils;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
+import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.replay.ReplayExecutionTrackingUtility;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
+import hydrograph.ui.graph.handler.JobHandler;
+import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.DataViewerUtility;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
+import hydrograph.ui.graph.utility.MessageBox;
+import hydrograph.ui.graph.utility.ViewDataUtils;
+import hydrograph.ui.joblogger.JobLogger;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
+import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 /**
@@ -223,7 +224,7 @@ public class JobManager {
 			return;
 		}
 		
-		ExecutionTrackingFileLogger.INSTANCE.removeLastExecutionStatus(runningJobsMap.get(canvasId).getUniqueJobId());
+		//ExecutionTrackingFileLogger.INSTANCE.removeLastExecutionStatus(runningJobsMap.get(canvasId).getUniqueJobId());
 		
 		runningJobsMap.remove(canvasId);		
 		logger.debug("Removed job " + canvasId + " from jobmap");
@@ -297,6 +298,8 @@ public class JobManager {
 		}
 		
 		gefCanvas.disableRunningJobResource();
+		
+		ReplayExecutionTrackingUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 		
 		DataViewerUtility.INSTANCE.deletePreviousRunsDataviewCsvXmlFiles(previouslyExecutedJobs.get(job.getConsoleName()));
 		DataViewerUtility.INSTANCE.deletePreviousRunsBasePathDebugFiles(previouslyExecutedJobs.get(job.getConsoleName()));
