@@ -134,6 +134,7 @@ public class ConverterUiHelper {
 			if (typeBaseField.getScaleType() != null) {
 				fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType()
 						.value()));
+				fixedWidthGrid.setScaleTypeValue(typeBaseField.getScaleType().value());
 			}
 		}
 	}
