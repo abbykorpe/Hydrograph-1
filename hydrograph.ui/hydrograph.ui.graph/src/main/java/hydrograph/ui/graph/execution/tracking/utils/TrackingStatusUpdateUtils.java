@@ -69,17 +69,17 @@ public class TrackingStatusUpdateUtils {
 	 * @param executionStatus
 	 * @param editor
 	 */
-	public void updateEditorWithCompStatus(ExecutionStatus executionStatus, ELTGraphicalEditor editor) {
+	public void updateEditorWithCompStatus(ExecutionStatus executionStatus, ELTGraphicalEditor editor,boolean isReplay) {
 		if (executionStatus != null) {
 			
 			
 			/**
 			 * Push the tracking log in tracking console
 			 */
-			pushExecutionStatusToExecutionTrackingConsole(executionStatus);
-			ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
-
-				
+			if(!isReplay){
+					pushExecutionStatusToExecutionTrackingConsole(executionStatus);
+					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
+				}
 				GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
 				
 				for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
@@ -110,7 +110,8 @@ public class TrackingStatusUpdateUtils {
 					}
 				}
 			}
-			ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
+		ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
+			
 	}
 	
 	private void updateStatusCountForComponent(
@@ -316,7 +317,10 @@ public class TrackingStatusUpdateUtils {
 			@Override
 			public void run() {
 				console.clearConsole();
-				console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode()));
+				ExecutionStatus[] status = ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
+				for(int i=0;i<status.length;i++){
+					console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.getExecutionStatusInString(status[i]));
+				}
 			}
 		});
 	}

@@ -13,10 +13,28 @@
 
 package hydrograph.ui.graph.execution.tracking.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
@@ -24,17 +42,6 @@ import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
 
 
 /**
@@ -50,11 +57,14 @@ public class ExecutionTrackingConsoleUtils {
 	public static ExecutionTrackingConsoleUtils INSTANCE = new ExecutionTrackingConsoleUtils();
 	
 	/** The Constant ExecutionTrackingLogFileExtention. */
-	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".log";
+	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".track.log";
 	
 	private static final String EXECUTION_TRACKING_LOCAL_MODE = "L_";
 
 	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
+	
+	private static final String EXECUTION_STATUS_RECORD_SEPARATOR = " | ";
+	private static final String TIMESTAMP_FORMAT = "MM/dd/yyyy HH:mm:ss";
 
 	
 	/**
@@ -139,8 +149,41 @@ public class ExecutionTrackingConsoleUtils {
 			console.getShell().setActive();	
 		}
 		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole){
-			console.setStatus(readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode()));
+			ExecutionStatus[] executionStatus = readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode());
+			for(int i =0; i<executionStatus.length; i++){
+				console.setStatus(getExecutionStatusInString(executionStatus[i]));
+			}
 		}
+	}
+	
+	/**
+	 * Gets the execution status in string.
+	 *
+	 * @param executionStatus the execution status
+	 * @return the execution status in string
+	 */
+	public String getExecutionStatusInString(ExecutionStatus executionStatus) {
+		StringBuilder stringBuilder = new StringBuilder();
+		if(executionStatus==null){
+			return null;
+		}
+
+		for(ComponentStatus componentStatus : executionStatus.getComponentStatus()){
+			
+			Map<String, Long> processCounts = componentStatus.getProcessedRecordCount();
+			
+			for(String portID: processCounts.keySet()){
+				stringBuilder.append("" + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(getTimeStamp() + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(componentStatus.getComponentId() + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(portID + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(componentStatus.getCurrentStatus() + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(processCounts.get(portID) + "\n");
+			}
+		}
+		
+		stringBuilder.append("\n");
+		return stringBuilder.toString();
 	}
 
 	/**
@@ -185,7 +228,8 @@ public class ExecutionTrackingConsoleUtils {
 	 * @param uniqueJobId the unique job id
 	 * @return the string builder
 	 */
-	public String readFile(ExecutionStatus executionStatus, String uniqueJobId, boolean isLocalMode){
+	public ExecutionStatus[] readFile(ExecutionStatus executionStatus, String uniqueJobId, boolean isLocalMode){
+		ExecutionStatus[] executionStatusarray;
 		String jobId = "";
 		if(executionStatus != null){
 			jobId = executionStatus.getJobId();	
@@ -199,15 +243,22 @@ public class ExecutionTrackingConsoleUtils {
 		}
 		try {
 			String path = getLogPath() + jobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION;
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+			
+			JsonParser jsonParser = new JsonParser();
+			
+			Gson gson = new Gson();
+			String jsonArray = jsonParser.parse(new FileReader(new File(path))).toString();
+			executionStatusarray = gson.fromJson(jsonArray, ExecutionStatus[].class);
+			
+			/*BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 			StringBuilder builder = new StringBuilder();
 			String line = bufferedReader.readLine();
 			while(line != null){
 				builder.append(line);
 				builder.append(System.lineSeparator());
 			    line = bufferedReader.readLine();
-			}
-			return builder.toString();
+			}*/
+			return executionStatusarray;
 			} catch (FileNotFoundException exception) {
 				logger.error("File not found", exception.getMessage());
 			} catch (IOException exception) {
@@ -238,6 +289,10 @@ public class ExecutionTrackingConsoleUtils {
 		String uniqueJobId = editor.getJobId();
 		
 		return uniqueJobId;
-		
+	}
+	
+	private String getTimeStamp() {
+		String timeStamp = new SimpleDateFormat(TIMESTAMP_FORMAT).format(new Date());
+		return timeStamp;
 	}
 }

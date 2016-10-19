@@ -82,7 +82,7 @@ public class HydrographUiClientSocket {
 					IEditorPart editor = ref.getEditor(false);
 					if(editor instanceof ELTGraphicalEditor){
 						if(((ELTGraphicalEditor)editor).getJobId().equals(executionStatus.getJobId()) || ((((ELTGraphicalEditor)editor).getContainer()!=null) && (((ELTGraphicalEditor)editor).getContainer().getUniqueJobId().equals(executionStatus.getJobId())))){
-								TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor);
+								TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,false);
 						}
 					}
 				}

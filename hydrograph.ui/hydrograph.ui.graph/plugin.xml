@@ -47,6 +47,10 @@
             id="hydrograph.ui.graph.command.exectrackconsole"
             name="Execution Tracking Console">
       </command>
+      <command
+            id="hydrograph.ui.graph.trackingHistory"
+            name="Tracking History">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -98,6 +102,18 @@
       <handler
             class="hydrograph.ui.graph.handler.GraphPropertiesHandler"
             commandId="hydrograph.ui.propertywindow.graphProperties">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="hydrograph.ui.graph.etlgraphicaleditor">
+               </equals>
+            </with>
+         </activeWhen>
+      </handler>
+      <handler
+            class="hydrograph.ui.graph.handler.ReplayTrackingHistoryHandler"
+            commandId="hydrograph.ui.graph.trackingHistory">
          <activeWhen>
             <with
                   variable="activeEditorId">
@@ -210,14 +226,8 @@
                   style="push">
             </command>
             <command
-                  commandId="hydrograph.ui.graph.command.runjob"
-                  icon="resources/icons/run.png"
-                  label="Run Job"
-                  style="push">
-            </command>
-            <command
                   commandId="hydrograph.ui.graph.stopjob"
-                  icon="resources/icons/stop_job.png"
+                  icon="resources/iconspulldownp_job.png"
                   label="Stop Job">
  				 </command>
  				 
@@ -237,6 +247,37 @@
             style="push">
       </command>
          </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="hydrograph.ui.graph.toolbar2"
+               label="Replay Execution Tracking Toolbar">
+            <command
+                  commandId="hydrograph.ui.graph.command.runjob"
+                  icon="resources/icons/run.png"
+                  label="Run"
+                  style="pulldown">
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:hydrograph.ui.graph.command.runjob">
+         <command
+               commandId="hydrograph.ui.graph.command.runjob"
+               icon="resources/icons/run.png"
+               id="hydrograph.ui.graph.command.run"
+               label="Run Job"
+               style="push">
+         </command>
+         <command
+               commandId="hydrograph.ui.graph.trackingHistory"
+               icon="resources/icons/replay.png"
+               label="Tracking History"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -317,21 +358,6 @@
          </hiddenToolBarItem> 
               
       </perspectiveExtension>
-   </extension>
-	<extension
-         point="org.eclipse.ltk.core.refactoring.renameParticipants">
-      <renameParticipant
-            class="hydrograph.ui.graph.editor.RenameJobParticipant"
-            id="hydrograph.ui.graph.editor.RenameJobParticipant"
-            name="RenameJobRelatedFiles">
-         <enablement>
-            <and>
-               <instanceof
-                     value="org.eclipse.core.resources.IFile">
-               </instanceof>
-            </and>
-         </enablement>
-      </renameParticipant>
    </extension>
  <extension
        point="org.eclipse.ui.newWizards">
