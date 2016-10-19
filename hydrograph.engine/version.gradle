@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 ext.repo = Grgit.open()
-version = new Version(major: 0, minor:0, revision: 2, branch :ext.repo.branch.current.name)
+version = new Version(major: 0, minor:1, revision: 10, branch :ext.repo.branch.current.name)
 
 buildscript {
 repositories {
@@ -31,6 +31,6 @@ class Version {
 	if(branch=="master")
 		"$major.$minor.$revision${''}"
 	else
-		"$major.$minor.$revision${''}"
+		"$major.$minor.$revision${'-SNAPSHOT'}"
 				}
 }
