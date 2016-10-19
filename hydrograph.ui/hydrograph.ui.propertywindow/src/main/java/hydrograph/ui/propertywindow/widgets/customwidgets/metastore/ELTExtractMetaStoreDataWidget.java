@@ -76,12 +76,14 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	private String dbName;
 	private String dbTableName;
 	private String hiveType;
+	private PropertyDialogButtonBar propDialogButtonBar;
 	
 	public ELTExtractMetaStoreDataWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 		propertyName = componentConfigProp.getPropertyName();
+		this.propDialogButtonBar=propDialogButtonBar;
 	}
 
 	@Override
@@ -202,6 +204,8 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 						}
 			
 					createMessageDialog(Messages.METASTORE_IMPORT_SUCCESS,INFO).open();
+					propDialogButtonBar.enableApplyButton(true);
+				
 				}else{
 					createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
 				 }

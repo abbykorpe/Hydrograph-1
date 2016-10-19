@@ -22,6 +22,7 @@ connection(link) on transform component.
 10.<1363> - [Pooja Yadav] - Remove Dups Component: Size of Remove Dups Component is Not Same As All Other Components
 11.<1217> - [Pooja Yadav] - MAC: Alignment Related Issues
 12.<1272> - [Anshul Shivhare] - 'Ok' and 'Cancel' buttons are getting hide on Join(Mapping), Parameter Grid, Hive(Partitian Key) windows
+13.<1336> - [Prateem Tadas] -Hive component: On Partition key Window, that when we Use Different DB, the Available Fields are not Getting Imported.
 
 =====================================================================================================
 Notes for QA:
