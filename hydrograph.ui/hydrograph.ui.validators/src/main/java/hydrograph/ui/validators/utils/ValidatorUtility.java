@@ -19,11 +19,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput;
+import org.eclipse.jdt.internal.ui.javaeditor.InternalClassFileEditorInput;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IFileEditorInput;
@@ -60,14 +63,25 @@ public boolean isClassFilePresentOnBuildPath(String filePath)
 	String packageName=filePath.substring(0, filePath.lastIndexOf('.'));
 	String JavaFileName=filePath.substring(filePath.lastIndexOf('.')+1);
 	IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-       IProject project = null;    
-	    if(page.getActiveEditor()!=null)
+       IJavaProject javaProject=null;
+     
+	    if(page.getActiveEditor()!=null )
 	    {	
-	    	
+	    
+	    if(page.getActiveEditor().getEditorInput() instanceof IFileEditorInput)
+	    {	
 		IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
 		IFile file = input.getFile();
 		IProject activeProject = file.getProject();
-		project = ResourcesPlugin.getWorkspace().getRoot().getProject(activeProject.getName());
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(activeProject.getName());
+		 javaProject = JavaCore.create(project);
+	    }
+	    else if(page.getActiveEditor().getEditorInput() instanceof IClassFileEditorInput)
+	    {
+	    	  IClassFileEditorInput classFileEditorInput=(InternalClassFileEditorInput)page.getActiveEditor().getEditorInput() ;
+	          IClassFile classFile=classFileEditorInput.getClassFile();
+	          javaProject=classFile.getJavaProject();
+	    }	
 	    }
 	    else
 	    {
@@ -76,11 +90,11 @@ public boolean isClassFilePresentOnBuildPath(String filePath)
 
 	   		        if(selection instanceof IStructuredSelection) {    
 	   		            Object element = ((IStructuredSelection)selection).getFirstElement();    
-	   		           
-	   		                project= ((IResource)element).getProject();    
+	   		          
+	   		         IProject project= ((IResource)element).getProject(); 
+	   		         javaProject = JavaCore.create(project);
 	     }
 	    }
-		IJavaProject javaProject = JavaCore.create(project);
 		IPackageFragmentRoot[] ipackageFragmentRootList=null;
 		try {
 			ipackageFragmentRootList = javaProject.getPackageFragmentRoots();
