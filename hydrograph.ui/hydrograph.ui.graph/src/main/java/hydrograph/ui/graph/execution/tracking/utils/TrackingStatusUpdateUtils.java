@@ -73,13 +73,16 @@ public class TrackingStatusUpdateUtils {
 		if (executionStatus != null) {
 			
 			
+			
 			/**
 			 * Push the tracking log in tracking console
 			 */
 			if(!isReplay){
 					pushExecutionStatusToExecutionTrackingConsole(executionStatus);
 					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
-				}
+					ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
+				}	
+
 				GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
 				
 				for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
@@ -95,9 +98,7 @@ public class TrackingStatusUpdateUtils {
 							if((component.getProperties().get(Constants.TYPE).equals(Constants.INPUT)||component.getProperties().get(Constants.TYPE).equals(Constants.OPERATION))){
 								Map<String, SubjobDetails> componentNameAndLink = new HashMap();
 								StringBuilder subjobPrefix = new StringBuilder("");
-								populateSubjobRecordCount(componentNameAndLink, component, subjobPrefix);
-								System.out.println("component.getComponentName() :"+component.getComponentLabel().getLabelContents());
-								System.out.println("componentNameAndLink *********:"+componentNameAndLink);
+								populateSubjobRecordCount(componentNameAndLink, component,subjobPrefix,true);
 								applyRecordCountOnSubjobComponent(component, componentNameAndLink, executionStatus);
 							} 
 							int successCount = 0;
@@ -110,8 +111,6 @@ public class TrackingStatusUpdateUtils {
 					}
 				}
 			}
-		ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
-			
 	}
 	
 	private void updateStatusCountForComponent(
@@ -198,15 +197,14 @@ public class TrackingStatusUpdateUtils {
 	 * @param component
 	 * @param subjobPrefix use to identify inner subjob components
 	 */
-	private void populateSubjobRecordCount(Map<String, SubjobDetails> componentNameAndLink, Component component,StringBuilder subjobPrefix) {
-		
+	private void populateSubjobRecordCount(Map<String, SubjobDetails> componentNameAndLink, Component component,StringBuilder subjobPrefix,boolean isParent) {
 		Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
 		if(outputSubjobComponent!=null){
 			for(Link link:outputSubjobComponent.getTargetConnections()){
 				Component componentPrevToOutput = link.getSource();
 				if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
 					subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
-					populateSubjobRecordCount(componentNameAndLink, componentPrevToOutput,subjobPrefix);
+					populateSubjobRecordCount(componentNameAndLink, componentPrevToOutput,subjobPrefix,false);
 				}else{
 					String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
 
@@ -214,13 +212,16 @@ public class TrackingStatusUpdateUtils {
 					if(CLONE_COMPONENT_TYPE.equalsIgnoreCase(componentPrevToOutput.getComponentName())){
 						componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+portNumber, subjobDetails);
 					}else{
-						componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents(), subjobDetails);
+						if(isParent)
+							componentNameAndLink.put(component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents(), subjobDetails);
+						else
+							componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents(), subjobDetails);
 					}
 				}
 			}
 		}
 	}
-
+	
 	private boolean applyPendingStatus(Component component, ComponentStatus componentStatus, boolean pendingStatusApplied) {
 		Container container=(Container)component.getProperties().get("Container");
 		for (Component innerSubComponent : container.getChildren()) {
@@ -318,9 +319,9 @@ public class TrackingStatusUpdateUtils {
 			public void run() {
 				console.clearConsole();
 				ExecutionStatus[] status = ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
-				for(int i=0;i<status.length;i++){
-					console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.getExecutionStatusInString(status[i]));
-				}
+				for(int i=0;i<status.length;i++){		
+					console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.getExecutionStatusInString(status[i]));		
+				}	
 			}
 		});
 	}
