@@ -82,7 +82,7 @@ public class JoinConverter extends TransformConverter {
 		int portCount=  Integer.parseInt((String)properties.get(Constants.INPUT_PORT_COUNT_PROPERTY));
 		if (keyFields != null && !keyFields.isEmpty()) {
 			typeKeyFieldsList = new ArrayList<>();
-			for (int i=0;i<portCount;i++) {
+			for (int i=0;i<keyFields.size();i++) {
 				TypeKeyFields typeKeyField = new TypeKeyFields();
 				String[] keyList = keyFields.get(i).getJoinKey().split(",");
 				if(keyList.length==0 || (keyList.length==1 && StringUtils.isBlank(keyList[0])))
