@@ -10,31 +10,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
- 
-package hydrograph.ui.menus.handlers;
-
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
-import org.eclipse.ui.handlers.HandlerUtil;
-import hydrograph.ui.help.aboutDialog.*;
-
-
+package hydrograph.ui.help.aboutDialog;
 
 /**
- * The Class AboutDialogHandler.
- * <p> This is a handler class for 'About' window in the Hydrograph Tool.
+ * The Class InstallationDetailsContentProvider.
+ * This class provides the content for JarInformationDetails Tab.
  * 
  * @author Bitwise
  */
-public class AboutDialogHandler extends AbstractHandler implements IHandler {
+import java.util.List;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+
+
+public class InstallationDetailsContentProvider implements IStructuredContentProvider {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		new CustomAboutDialog(HandlerUtil.getActiveShellChecked(event)).open();
-		return null;
+	public void dispose() {
+		// Do nothing
+		
 	}
 
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		// Do nothing
+		
+	}
+
+	@Override
+	public Object[] getElements(Object inputElement) {
+		return ((List) inputElement).toArray();
+	}
 }

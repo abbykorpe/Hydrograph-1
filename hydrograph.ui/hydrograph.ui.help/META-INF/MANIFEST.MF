@@ -10,7 +10,17 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help.ui,
  org.eclipse.help.webapp,
  org.eclipse.equinox.http.jetty,
- org.apache.commons.lang
+ org.apache.commons.lang,
+ hydrograph.ui.common.datastructures;bundle-version="0.0.1",
+ hydrograph.ui.common;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.help.aboutDialog
+ org.apache.commons.lang,
+ hydrograph.ui.common.datastructures;bundle-version="0.0.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: hydrograph.ui.help.aboutDialog
+Import-Package: com.thoughtworks.xstream,
+ hydrograph.ui.logging.factory,
+ org.slf4j;version="1.7.2"

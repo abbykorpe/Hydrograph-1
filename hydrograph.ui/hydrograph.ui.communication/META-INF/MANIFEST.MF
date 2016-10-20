@@ -16,3 +16,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: hydrograph.ui.communication.debugservice,
  hydrograph.ui.communication.utilities
 Import-Package: com.jcraft.jsch;version="0.1.53"
+Bundle-Vendor: BITWISE
