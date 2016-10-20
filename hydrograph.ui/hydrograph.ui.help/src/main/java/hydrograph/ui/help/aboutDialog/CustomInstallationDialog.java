@@ -153,8 +153,8 @@ public class CustomInstallationDialog extends InstallationDialog {
 				IPath iPath = new Path(details.getPath());
 				try {
 					URL url = FileLocator.find(bundle, iPath, null);
-					fileUrl = FileLocator.toFileURL(url);
-					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(fileUrl);
+					 URL fileUrlForPath = FileLocator.toFileURL(url);
+					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(fileUrlForPath);
 				} catch (PartInitException | IOException e1) {
 					logger.error(e1.getMessage());
 				}
