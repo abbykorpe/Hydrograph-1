@@ -56,6 +56,7 @@ public abstract class Converter {
 	protected Component component;
 	protected TypeBaseComponent baseComponent = null;
 	protected String componentName = null;
+	private String componentId;
 
 	public Converter(Component comp){
 		converterHelper = new ConverterHelper(comp);
@@ -69,7 +70,9 @@ public abstract class Converter {
 	 */
 	public void prepareForXML() {
 		componentName = (String) properties.get(Constants.PARAM_NAME);
-		baseComponent.setId(componentName);
+		componentId=component.getComponentId();
+		baseComponent.setId(componentId);
+		baseComponent.setName(componentName);
 		try {
 			baseComponent.setBatch((String) properties
 					.get(Constants.PARAM_BATCH));

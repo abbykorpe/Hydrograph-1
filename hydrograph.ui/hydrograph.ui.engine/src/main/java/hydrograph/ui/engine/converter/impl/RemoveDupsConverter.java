@@ -175,7 +175,7 @@ public class RemoveDupsConverter extends StraightPullConverter {
 		List<TypeBaseInSocket> inSocketsList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
 			TypeBaseInSocket inSocket = new TypeBaseInSocket();
-			inSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
+			inSocket.setFromComponentId(link.getSource().getComponentId());
 			inSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			inSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 			inSocket.setId(link.getTargetTerminal());

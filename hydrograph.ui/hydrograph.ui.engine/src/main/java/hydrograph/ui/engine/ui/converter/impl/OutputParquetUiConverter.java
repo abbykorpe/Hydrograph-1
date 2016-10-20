@@ -56,7 +56,6 @@ public class OutputParquetUiConverter extends OutputUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching OutPut-Parquet-Component for {}", componentName);
 		ParquetFile parquetFile = (ParquetFile) typeBaseComponent;
-		uiComponent.setComponentLabel(parquetFile.getId());
 		if (parquetFile.getPath() != null)
 			propertyMap.put(PropertyNameConstants.PATH.value(), parquetFile.getPath().getUri());
 

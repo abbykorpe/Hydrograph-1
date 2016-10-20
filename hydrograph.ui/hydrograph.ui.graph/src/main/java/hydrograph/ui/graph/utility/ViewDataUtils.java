@@ -214,12 +214,12 @@ public class ViewDataUtils {
 				if(link.getTargetTerminal().equalsIgnoreCase(source_port)){
 					Component componentPrevToOutput = link.getSource();
 					if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
-						subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
+						subjobPrefix.append(component.getComponentId()+".");
 						subjobParams(componentNameAndLink, componentPrevToOutput,subjobPrefix, sourcePort);
 					}else{
 						String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
 						SubjobDetails subjobDetails = new SubjobDetails(link.getSourceTerminal(), portNumber);
-						componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
+						componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
 					}
 				}
 			}

@@ -140,6 +140,7 @@ public class Container extends Model {
 			}
 				
 			component.setComponentLabel(compNewName);
+			component.setComponentId(compNewName);
 			
 			if (component.isNewInstance()) {
 				component.setNewInstance(false);

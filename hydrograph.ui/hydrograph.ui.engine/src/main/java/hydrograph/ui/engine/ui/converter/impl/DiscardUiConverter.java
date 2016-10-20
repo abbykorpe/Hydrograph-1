@@ -65,14 +65,8 @@ public class DiscardUiConverter extends OutputUiConverter {
 
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Discard-Component for {}", componentName);
-		Discard discardUI = (Discard) typeBaseComponent;
-		uiComponent.setComponentLabel(discardUI.getId());
-		
-
 		uiComponent.setType(UIComponentsConstants.DISCARD.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
-		container.getComponentNextNameSuffixes().put(name_suffix, 0);
-		container.getComponentNames().add(discardUI.getId());
 		uiComponent.setProperties(propertyMap);
 	}
 
