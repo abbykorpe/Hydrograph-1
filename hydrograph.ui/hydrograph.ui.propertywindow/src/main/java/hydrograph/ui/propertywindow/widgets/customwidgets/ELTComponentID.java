@@ -78,8 +78,16 @@ public class ELTComponentID extends AbstractWidget{
 	
 	private void populateWidget() {
 		String componentId = getComponent().getComponentId();
-		if(StringUtils.isNotBlank(componentId))
-		((Text)eltDefaultTextBox.getSWTWidgetControl()).setText(componentId);
+		String componentName = getComponent().getComponentLabel().getLabelContents();
+		if (StringUtils.isNotBlank(componentId)) {
+			((Text) eltDefaultTextBox.getSWTWidgetControl()).setText(componentId);
+		} else {
+			if (StringUtils.isNotBlank(componentName)) {
+				((Text) eltDefaultTextBox.getSWTWidgetControl()).setText(componentName);
+				getComponent().setComponentId(componentName);
+			}
+		}
+
 	}
 
 	@Override
