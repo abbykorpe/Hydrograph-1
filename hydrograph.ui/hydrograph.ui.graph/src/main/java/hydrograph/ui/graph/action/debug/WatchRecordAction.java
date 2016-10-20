@@ -92,7 +92,7 @@ public class WatchRecordAction extends SelectionAction {
 		for (Object obj : selectedObjects) {
 			if (obj instanceof LinkEditPart) {
 				Link link = (Link) ((LinkEditPart) obj).getModel();
-				String componentId = link.getSource().getComponentLabel().getLabelContents();
+				String componentId = link.getSource().getComponentId();
 				Component component = link.getSource();
 				if (StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.SUBJOB_COMPONENT)) {
 					String componenetId = "";

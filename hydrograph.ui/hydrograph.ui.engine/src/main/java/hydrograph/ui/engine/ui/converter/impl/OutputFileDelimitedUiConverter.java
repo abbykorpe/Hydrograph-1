@@ -57,7 +57,6 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching OutPut-Delimited-Component for {}", componentName);
 		TextFileDelimited fileDelimited = (TextFileDelimited) typeBaseComponent;
-		uiComponent.setComponentLabel(fileDelimited.getId());
 		propertyMap.put(PropertyNameConstants.HAS_HEADER.value(),
 				convertBooleanValue(fileDelimited.getHasHeader(), PropertyNameConstants.HAS_HEADER.value()));
 		if (fileDelimited.getPath() != null){

@@ -94,7 +94,6 @@ public class InputHiveTextFileUiConverter extends InputUiConverter {
 				convertBooleanValue(hiveTextfile.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		
 		
-		uiComponent.setComponentLabel(hiveTextfile.getId());
 		uiComponent.setType(UIComponentsConstants.HIVE_TEXTFILE.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		

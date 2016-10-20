@@ -53,20 +53,23 @@
 		protected UIComponentRepo currentRepository;
 		protected File sourceXmlPath;
 		protected IFile parameterFile;
+		protected String componentId;
 
 	
 		/**
 		 * Generate basic properties that are common in all components.
 		 */
 		public void prepareUIXML() {
-			componentName = typeBaseComponent.getId();
+			componentId = typeBaseComponent.getId();
+			componentName=typeBaseComponent.getName();
 			name_suffix = uiComponent.getComponentName() + "_";
-			LOGGER.debug("Preparing basic properties for component {}", componentName);
+			LOGGER.debug("Preparing basic properties for component Name:{} and Id{}", componentName,componentId);
 			propertyMap.put(NAME, componentName);
 			propertyMap.put(BATCH, typeBaseComponent.getBatch().toString());
 			uiComponent.setComponentLabel(componentName);
 			uiComponent.setParent(container);
-			currentRepository.getComponentUiFactory().put(componentName, uiComponent);
+			uiComponent.setComponentId(componentId);
+			currentRepository.getComponentUiFactory().put(componentId, uiComponent);
 		}
 
 		/**

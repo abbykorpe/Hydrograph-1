@@ -96,7 +96,7 @@ public class SchemaHelper {
 									}
 								 componentName = component_Id;
 								}else{
-									componentName = link.getSource().getComponentLabel().getLabelContents();
+									componentName = link.getSource().getComponentId();
 								}
 							 Object obj = link.getSource().getComponentEditPart();
 							 List<PortEditPart> portEditPart = ((EditPart) obj).getChildren();
