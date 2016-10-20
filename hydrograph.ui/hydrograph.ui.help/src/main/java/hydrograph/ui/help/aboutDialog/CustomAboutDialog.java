@@ -493,7 +493,6 @@ public class CustomAboutDialog extends TrayDialog {
 			public void widgetSelected(SelectionEvent e) {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 				CustomInstallationDialog dialog = new CustomInstallationDialog(getShell());
-				//dialog.setModalParent(CustomAboutDialog.this);
 				dialog.open();
 			}
 			
@@ -503,12 +502,12 @@ public class CustomAboutDialog extends TrayDialog {
 			}
 		});
 		
-		Label l = new Label(parent, SWT.NONE);
-	    l.setLayoutData(new GridData());
-	    GridLayout layout1 = (GridLayout) parent.getLayout();
-	    l.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
-	    layout1.numColumns++;
-	    layout1.makeColumnsEqualWidth = false;
+		Label installationLabel = new Label(parent, SWT.NONE);
+		installationLabel.setLayoutData(new GridData());
+	    GridLayout installationLabelLayout = (GridLayout) parent.getLayout();
+	    installationLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
+	    installationLabelLayout.numColumns++;
+	    installationLabelLayout.makeColumnsEqualWidth = false;
 
 	    Button ok = createButton(parent, IDialogConstants.OK_ID,
 	                IDialogConstants.OK_LABEL, true);
