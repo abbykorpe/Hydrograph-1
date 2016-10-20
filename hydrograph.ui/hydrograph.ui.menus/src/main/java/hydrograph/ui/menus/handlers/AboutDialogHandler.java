@@ -14,14 +14,12 @@
  
 package hydrograph.ui.menus.handlers;
 
-import hydrograph.ui.help.aboutDialog.CustomAboutDialog;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.handlers.HandlerUtil;
-
+import hydrograph.ui.help.aboutDialog.*;
 
 
 
@@ -35,7 +33,7 @@ public class AboutDialogHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		 new CustomAboutDialog(HandlerUtil.getActiveShellChecked(event)).open();
+		new CustomAboutDialog(HandlerUtil.getActiveShellChecked(event)).open();
 		return null;
 	}
 

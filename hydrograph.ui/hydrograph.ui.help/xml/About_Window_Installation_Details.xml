@@ -17,7 +17,7 @@
       <groupId>org.apache.maven.plugins</groupId>
       <artifactNo>maven-compiler-plugin</artifactNo>
       <licenseInfo>JDKLicense.html</licenseInfo>
-	 <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\JDKLicense.html</path>
+	 <path>/html/License Info/JDKLicense.html</path>
 	</JarInformationDetail>
     <JarInformationDetail>
       <name>P2 Repository</name>
@@ -25,7 +25,7 @@
       <groupId>com.github.skosmalla.tycho</groupId>
       <artifactNo>p2-repository-from-maven-artifacts</artifactNo>
       <licenseInfo>EclipsePublicLicense.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\EclipsePublicLicense.html</path>
+   <path>/html/License Info/EclipsePublicLicense.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>Gradle</name>
@@ -33,7 +33,7 @@
       <groupId>org.gradle</groupId>
       <artifactNo>gradle-base-services</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-	<path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+	<path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>Maven</name>
@@ -41,7 +41,7 @@
       <groupId>org.apache.maven</groupId>
       <artifactNo>org.apache.maven</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-	<path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+	<path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>xstream jars</name>
@@ -49,7 +49,7 @@
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactNo>xstream</artifactNo>
       <licenseInfo>BSD3LicenseInfo.html</licenseInfo>
-	<path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\BSD3LicenseInfo.html</path>
+	<path>/html/License Info/BSD3LicenseInfo.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>spark-core</name>
@@ -57,7 +57,7 @@
       <groupId>org.apache.spark</groupId>
       <artifactNo>spark-core_1.1.1</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>slf4j-api</name>
@@ -65,7 +65,7 @@
       <groupId>org.slf4j</groupId>
       <artifactNo>slf4j-api</artifactNo>
       <licenseInfo>MITLicense.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\MITLicense.html</path>
+   <path>/html/License Info/MITLicense.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>slf4j-log4j12</name>
@@ -73,7 +73,7 @@
       <groupId>org.slf4j</groupId>
       <artifactNo>slf4j-log4j12</artifactNo>
       <licenseInfo>MITLicense.html</licenseInfo>
-	<path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\MITLicense.html</path>
+	<path>/html/License Info/MITLicense.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>csvjdbc-1.0-29.jar</name>
@@ -81,7 +81,7 @@
       <groupId>net.sourceforge.csvjdbc</groupId>
       <artifactNo>csvjdbc</artifactNo>
       <licenseInfo>GNULibraryLicenseInfo.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\GNULibraryLicenseInfo.html</path>
+   <path>/html/License Info/GNULibraryLicenseInfo.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>opencsv-3.7.jar</name>
@@ -89,7 +89,7 @@
       <groupId>opencsv</groupId>
       <artifactNo>opencsv</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>Hadoop</name>
@@ -97,7 +97,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>org.apache.hadoop</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>Hive</name>
@@ -105,7 +105,7 @@
       <groupId>org.apache.hive</groupId>
       <artifactNo>hive</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>Cascading</name>
@@ -113,7 +113,7 @@
       <groupId>cascading</groupId>
       <artifactNo>cascading-hadoop</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>jgrapht-core</name>
@@ -121,7 +121,7 @@
       <groupId>org.jgrapht</groupId>
       <artifactNo>jgrapht-core</artifactNo>
       <licenseInfo>EclipsePublicLicense.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\EclipsePublicLicense.html</path>
+   <path>/html/License Info/EclipsePublicLicense.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>riffle</name>
@@ -129,7 +129,7 @@
       <groupId>riffle</groupId>
       <artifactNo>riffle</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>janino</name>
@@ -137,7 +137,7 @@
       <groupId>org.codehaus.janino</groupId>
       <artifactNo>janino</artifactNo>
       <licenseInfo>janinoLicenseInfo.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\janinoLicenseInfo.html</path>
+   <path>/html/License Info/janinoLicenseInfo.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>hadoop-core</name>
@@ -145,7 +145,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>hadoop-core</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
          <JarInformationDetail>
       <name>hadoop-mapreduce-client-core</name>
@@ -153,7 +153,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>hadoop-mapreduce-client-core</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
         <JarInformationDetail>
       <name>hadoop-common</name>
@@ -161,7 +161,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>hadoop-common</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
         <JarInformationDetail>
       <name>hadoop-minicluster</name>
@@ -169,7 +169,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>hadoop-minicluster</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>tez-api</name>
@@ -177,7 +177,7 @@
       <groupId>org.apache.tez</groupId>
       <artifactNo>tez-api</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>tez-dag</name>
@@ -185,7 +185,7 @@
       <groupId>org.apache.tez</groupId>
       <artifactNo>tez-dag</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
           <JarInformationDetail>
       <name>tez-mapreduce</name>
@@ -193,7 +193,7 @@
       <groupId>org.apache.tez</groupId>
       <artifactNo>tez-mapreduce</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
          <JarInformationDetail>
       <name>hadoop-hdfs</name>
@@ -201,7 +201,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>hadoop-hdfs</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
         <JarInformationDetail>
       <name>tez-tests</name>
@@ -209,7 +209,7 @@
       <groupId>org.apache.tez</groupId>
       <artifactNo>tez-tests</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
          <JarInformationDetail>
       <name>tez-yarn-timeline-history</name>
@@ -217,7 +217,7 @@
       <groupId>org.apache.tez</groupId>
       <artifactNo>tez-yarn-timeline-history</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>hadoop-aws</name>
@@ -225,7 +225,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>hadoop-aws</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>tez-yarn-timeline-history-with-acls</name>
@@ -233,7 +233,7 @@
       <groupId>org.apache.tez</groupId>
       <artifactNo>tez-yarn-timeline-history-with-acls</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>guava</name>
@@ -241,7 +241,7 @@
       <groupId>com.google.guava</groupId>
       <artifactNo>guava</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>commons-io</name>
@@ -249,7 +249,7 @@
       <groupId>commons-io</groupId>
       <artifactNo>commons-io</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>tagsoup</name>
@@ -257,7 +257,7 @@
       <groupId>org.ccil.cowan.tagsoup</groupId>
       <artifactNo>tagsoup</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
     <JarInformationDetail>
       <name>cascading-hive</name>
@@ -265,7 +265,7 @@
       <groupId>cascading</groupId>
       <artifactNo>cascading-hive</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>cascading-avro</name>
@@ -273,7 +273,7 @@
       <groupId>cascading.avro</groupId>
       <artifactNo>avro-scheme</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>parquet-hadoop</name>
@@ -281,7 +281,7 @@
       <groupId>com.twitter</groupId>
       <artifactNo>parquet-hadoop</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>parquet-column</name>
@@ -289,7 +289,7 @@
       <groupId>com.twitter</groupId>
       <artifactNo>parquet-column</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>parquet-cascading</name>
@@ -297,7 +297,7 @@
       <groupId>com.twitter</groupId>
       <artifactNo>parquet-cascading</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>Riffle</name>
@@ -305,7 +305,7 @@
       <groupId>riffle</groupId>
       <artifactNo>riffle</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>datafactory</name>
@@ -313,7 +313,7 @@
       <groupId>org.fluttercode.datafactory</groupId>
       <artifactNo>datafactory</artifactNo>
       <licenseInfo>GNULGPL_Version 3.0.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\GNULGPL_Version 3.0.html</path>
+   <path>/html/License Info/GNULGPL_Version 3.0.html</path>
 	</JarInformationDetail>
     <JarInformationDetail>
       <name>com.google.code.findbugs</name>
@@ -321,7 +321,7 @@
       <groupId>com.google.code.findbugs</groupId>
       <artifactNo>jsr305</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
      <JarInformationDetail>
       <name>javax.inject</name>
@@ -329,7 +329,7 @@
       <groupId>javax.inject</groupId>
       <artifactNo>javax.inject</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>hadoop-minicluster</name>
@@ -337,7 +337,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactNo>hadoop-minicluster</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>slf4j-log4j</name>
@@ -345,7 +345,7 @@
       <groupId>org.slf4j</groupId>
       <artifactNo>slf4j-log4j</artifactNo>
       <licenseInfo>MITLicense.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\MITLicense.html</path>
+   <path>/html/License Info/MITLicense.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>lingual</name>
@@ -353,7 +353,7 @@
       <groupId>cascading</groupId>
       <artifactNo>lingual-platform</artifactNo>
       <licenseInfo>ApacheLicense2.0Info.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\ApacheLicense2.0Info.html</path>
+   <path>/html/License Info/ApacheLicense2.0Info.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>antlr</name>
@@ -361,7 +361,7 @@
       <groupId>org.antlr</groupId>
       <artifactNo>antlr4</artifactNo>
       <licenseInfo>BSDLicenseInfo.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\BSDLicenseInfo.html</path>
+   <path>/html/License Info/BSDLicenseInfo.html</path>
 	</JarInformationDetail>
     <JarInformationDetail>
       <name>tyrus-client-1.0.jar</name>
@@ -369,7 +369,7 @@
       <groupId>org.glassfish.tyrus</groupId>
       <artifactNo>tyrus-client</artifactNo>
       <licenseInfo>CDDL 1.1_GPL 2.0LicenseInfo.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\CDDL 1.1_GPL 2.0LicenseInfo.html</path>
+   <path>/html/License Info/CDDL 1.1_GPL 2.0LicenseInfo.html</path>
 	</JarInformationDetail>
       <JarInformationDetail>
       <name>tyrus-container-grizzly-1.0.jar</name>
@@ -377,7 +377,7 @@
       <groupId>org.glassfish.tyrus</groupId>
       <artifactNo>tyrus-container-grizzly</artifactNo>
       <licenseInfo>CDDL 1.1_GPL 2.0LicenseInfo.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\CDDL 1.1_GPL 2.0LicenseInfo.html</path>
+   <path>/html/License Info/CDDL 1.1_GPL 2.0LicenseInfo.html</path>
 	</JarInformationDetail>
        <JarInformationDetail>
       <name>tyrus-server-1.0.jar</name>
@@ -385,7 +385,7 @@
       <groupId>org.glassfish.tyrus</groupId>
       <artifactNo>tyrus-server</artifactNo>
       <licenseInfo>CDDL 1.1_GPL 2.0LicenseInfo.html</licenseInfo>
-   <path>C:\Users\ashikah\Git\Hydrograph_Tool\Thesis\hydrograph.ui\hydrograph.ui.help\html\License Info\CDDL 1.1_GPL 2.0LicenseInfo.html</path>
+   <path>/html/License Info/CDDL 1.1_GPL 2.0LicenseInfo.html</path>
 	</JarInformationDetail>
   </jarInformationDetails>
 </InstallationWindowDetails>
