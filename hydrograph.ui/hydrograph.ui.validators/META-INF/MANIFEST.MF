@@ -19,6 +19,7 @@ Export-Package: hydrograph.ui.validators.impl,
 Import-Package: hydrograph.ui.expression.editor.util,
  org.eclipse.core.resources,
  org.eclipse.jdt.core,
+ org.eclipse.jdt.internal.ui.javaeditor,
  org.eclipse.jface.viewers,
  org.eclipse.ui,
  org.eclipse.ui.internal
