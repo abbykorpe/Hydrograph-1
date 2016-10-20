@@ -31,8 +31,6 @@ public class ComponentStatus {
 	/** The processed record count. */
 	Map<String, Long> processedRecordCount;
 	
-	
-
 	/**
 	 * Instantiates a new component status.
 	 *
@@ -76,7 +74,10 @@ public class ComponentStatus {
 		return processedRecordCount;
 	}
 	
-	
+	public String getBatch() {
+		return batch;
+	}
+
 
 	@Override
 	public String toString() {
