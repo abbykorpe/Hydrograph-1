@@ -38,11 +38,6 @@
 			usage="OPTIONAL" propertyHelpText="Fields used for grouping.">
 			<tns:validator>SORT_KEY_FIELDS_VALIDATOR</tns:validator>
 			</tns:property>
-				
-		<tns:property dataType="string" name="Secondary_keys" renderer="SECONDARY_COLUMN_KEYS_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
-			usage="OPTIONAL" propertyHelpText="Fields used for sorting within the groups.">
-			</tns:property>
 			
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"

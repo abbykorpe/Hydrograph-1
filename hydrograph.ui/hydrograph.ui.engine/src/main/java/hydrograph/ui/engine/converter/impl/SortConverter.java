@@ -62,7 +62,6 @@ public class SortConverter extends StraightPullConverter {
 		super.prepareForXML();
 		Sort sort = (Sort) baseComponent;
 		sort.setPrimaryKeys(getPrimaryKeys());
-		sort.setSecondaryKeys(getSecondaryKeys());
 	}
 	
 	private TypePrimaryKeyFields getPrimaryKeys() {
@@ -98,41 +97,6 @@ public class SortConverter extends StraightPullConverter {
 
 		}
 		return primaryKeyFields;
-	}
-
-	private TypeSecondaryKeyFields getSecondaryKeys() {
-
-		Map<String, String> secondaryKeyRow = (LinkedHashMap<String, String>) properties.get(Constants.PARAM_SECONDARY_COLUMN_KEYS);
-
-		TypeSecondaryKeyFields typeSecondaryKeyFields = null;
-		if (secondaryKeyRow != null && !secondaryKeyRow.isEmpty()) {
-			typeSecondaryKeyFields = new TypeSecondaryKeyFields();
-			List<TypeSecondayKeyFieldsAttributes> fieldNameList = typeSecondaryKeyFields.getField();
-			if(!converterHelper.hasAllKeysAsParams(secondaryKeyRow)){
-				
-				for (Map.Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet()) {
-					if(!ParameterUtil.isParameter(secondaryKeyRowEntry.getKey())){
-						TypeSecondayKeyFieldsAttributes field = new TypeSecondayKeyFieldsAttributes();
-						field.setName(secondaryKeyRowEntry.getKey());
-						field.setOrder(TypeSortOrder.fromValue(secondaryKeyRowEntry.getValue().toLowerCase()));
-						fieldNameList.add(field);}
-					else{
-						converterHelper.addParamTag(this.ID, secondaryKeyRowEntry.getKey(), 
-								ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value(), false);
-					}
-				}
-			}else{
-				StringBuffer parameterFieldNames = new StringBuffer();
-				TypeSecondayKeyFieldsAttributes fieldsAttributes = new TypeSecondayKeyFieldsAttributes();
-				fieldsAttributes.setName("");
-				fieldNameList.add(fieldsAttributes);
-				for (Entry<String, String> secondaryKeyRowEntry : secondaryKeyRow.entrySet())
-					parameterFieldNames.append(secondaryKeyRowEntry.getKey() + " ");
-				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
-						ComponentXpathConstants.STRAIGHTPULL_SECONDARY_KEYS.value(), true);
-			}
-		}
-		return typeSecondaryKeyFields;
 	}
 
 	@Override
