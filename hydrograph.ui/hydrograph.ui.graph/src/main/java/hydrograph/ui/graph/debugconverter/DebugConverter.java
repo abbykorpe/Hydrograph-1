@@ -112,7 +112,7 @@ public class DebugConverter {
 									break;
 								}else{
 									viewData = new ViewData();
-									viewData.setFromComponentId(component.getComponentLabel().getLabelContents());
+									viewData.setFromComponentId(component.getComponentId());
 									viewData.setOutSocketId(entrySet.getKey());
 									String portType = entrySet.getKey().substring(0, 3);
 									viewData.setOutSocketType(checkPortType(portType));

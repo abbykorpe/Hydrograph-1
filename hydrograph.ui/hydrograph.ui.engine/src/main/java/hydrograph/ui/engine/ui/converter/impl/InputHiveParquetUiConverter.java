@@ -84,7 +84,6 @@ public class InputHiveParquetUiConverter extends InputUiConverter {
 		}
 		propertyMap.put(PropertyNameConstants.PARTITION_KEYS.value(), getPartitionKeys());
 		
-		uiComponent.setComponentLabel(parquetHive.getId());
 		uiComponent.setType(UIComponentsConstants.HIVE_PARQUET.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		

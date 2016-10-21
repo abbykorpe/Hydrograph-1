@@ -72,7 +72,7 @@ public class OutputFileMixedSchemeConverter extends OutputConverter {
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 			outInSocket.setSchema(getSchema());
 			outInSocket.getOtherAttributes();
-			outInSocket.setFromComponentId((String) link.getSource().getProperties().get(Constants.PARAM_NAME));
+			outInSocket.setFromComponentId(link.getSource().getComponentId());
 			outputinSockets.add(outInSocket);
 		}
 		return outputinSockets;

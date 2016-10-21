@@ -89,7 +89,6 @@ public class OutputHiveTextFileUiConverter extends OutputUiConverter {
 		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
 				convertToTrueFalseValue(hiveTextfile.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
 		
-		uiComponent.setComponentLabel(hiveTextfile.getId());
 		uiComponent.setType(UIComponentsConstants.HIVE_TEXTFILE.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		

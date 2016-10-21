@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -56,6 +57,7 @@ public abstract class Converter {
 	protected Component component;
 	protected TypeBaseComponent baseComponent = null;
 	protected String componentName = null;
+	private String componentId;
 
 	public Converter(Component comp){
 		converterHelper = new ConverterHelper(comp);
@@ -69,7 +71,12 @@ public abstract class Converter {
 	 */
 	public void prepareForXML() {
 		componentName = (String) properties.get(Constants.PARAM_NAME);
-		baseComponent.setId(componentName);
+		componentId=component.getComponentId();
+		if (StringUtils.isNotBlank(componentId))
+			baseComponent.setId(componentId);
+		else
+			baseComponent.setId(componentName);
+		baseComponent.setName(componentName);
 		try {
 			baseComponent.setBatch((String) properties
 					.get(Constants.PARAM_BATCH));

@@ -50,17 +50,13 @@ public class OutputComponentSubjobUiConverter extends UiConverter {
 	
 	@Override
 	public void prepareUIXML() {
-		logger.debug("Fetching Input-Delimited-Properties for {}", componentName);
+		logger.debug("Fetching Input-Delimited-Properties for Name:{} and Id:{}", componentName,componentId);
 		super.prepareUIXML();
-		
-		componentName=typeBaseComponent.getId();
 		getInPort((TypeOutputComponent) typeBaseComponent);
-		
 		uiComponent.setType(Constants.OUTPUT_SOCKET_FOR_SUBJOB);
 		uiComponent.setCategory(Constants.SUBJOB_COMPONENT_CATEGORY);
 		uiComponent.setComponentLabel(Constants.SUBJOB_OUTPUT_COMPONENT_NAME);
 		uiComponent.setParent(container);
-		currentRepository.getComponentUiFactory().put(componentName, uiComponent);
 		propertyMap.put(NAME,Constants.SUBJOB_OUTPUT_COMPONENT_NAME);
 		propertyMap.put(Constants.INPUT_PORT_COUNT_PROPERTY,subjobOutput.getInSocket().size());
 		uiComponent.setProperties(propertyMap);

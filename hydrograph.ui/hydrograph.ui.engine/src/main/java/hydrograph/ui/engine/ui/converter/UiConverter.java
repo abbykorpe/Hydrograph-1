@@ -29,7 +29,8 @@
 	import java.util.List;
 	import java.util.Map;
 
-	import org.eclipse.core.resources.IFile;
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
 	import org.slf4j.Logger;
 
 	/**
@@ -53,20 +54,26 @@
 		protected UIComponentRepo currentRepository;
 		protected File sourceXmlPath;
 		protected IFile parameterFile;
+		protected String componentId;
 
 	
 		/**
 		 * Generate basic properties that are common in all components.
 		 */
 		public void prepareUIXML() {
-			componentName = typeBaseComponent.getId();
+			componentId = typeBaseComponent.getId();
+			componentName=typeBaseComponent.getName();
+			if(StringUtils.isBlank(componentName)){
+				componentName=componentId;
+			}
 			name_suffix = uiComponent.getComponentName() + "_";
-			LOGGER.debug("Preparing basic properties for component {}", componentName);
+			LOGGER.debug("Preparing basic properties for component Name:{} and Id{}", componentName,componentId);
 			propertyMap.put(NAME, componentName);
 			propertyMap.put(BATCH, typeBaseComponent.getBatch().toString());
 			uiComponent.setComponentLabel(componentName);
 			uiComponent.setParent(container);
-			currentRepository.getComponentUiFactory().put(componentName, uiComponent);
+			uiComponent.setComponentId(componentId);
+			currentRepository.getComponentUiFactory().put(componentId, uiComponent);
 		}
 
 		/**

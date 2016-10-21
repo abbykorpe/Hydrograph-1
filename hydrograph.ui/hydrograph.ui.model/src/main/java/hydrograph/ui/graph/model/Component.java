@@ -13,22 +13,6 @@
 
 package hydrograph.ui.graph.model;
 
-import hydrograph.ui.common.cloneableinterface.IDataStructure;
-import hydrograph.ui.common.component.config.PortInfo;
-import hydrograph.ui.common.component.config.PortSpecification;
-import hydrograph.ui.common.component.config.Property;
-import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
-import hydrograph.ui.common.util.ComponentCacheUtil;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.JoinConfigProperty;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
-import hydrograph.ui.graph.model.components.OutputSubjobComponent;
-import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
-import hydrograph.ui.graph.schema.propagation.SchemaData;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.validators.impl.IValidator;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,6 +29,22 @@ import org.eclipse.draw2d.geometry.Point;
 import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.common.component.config.PortInfo;
+import hydrograph.ui.common.component.config.PortSpecification;
+import hydrograph.ui.common.component.config.Property;
+import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
+import hydrograph.ui.common.util.ComponentCacheUtil;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.JoinConfigProperty;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
+import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.schema.propagation.SchemaData;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.validators.impl.IValidator;
 
 /**
  * The Class Component.
@@ -74,6 +74,9 @@ public abstract class Component extends Model {
 		/** The name prop. */
 		NAME_PROP("name"), 
 		
+		/** The id prop. */
+	 	ID_PROP("id"),
+		 
 		/** The location prop. */
 		LOCATION_PROP("Location"), 
 		
@@ -195,6 +198,9 @@ public abstract class Component extends Model {
 	
 	/** The component name. */
 	private String componentName;
+	
+	/** The component id. */
+ 	private String componentId;
 	
 	/** The port details. */
 	private List<PortDetails> portDetails;
@@ -986,6 +992,26 @@ public abstract class Component extends Model {
 		this.componentLabel = componentLabel;
 	}
 
+	
+	/**
+ 	 * Sets the component id.
+ 	 * 
+ 	 * @param String
+ 	 *            the new component id
+ 	 */
+ 	public void setComponentId(String id) {
+ 		this.componentId = id;
+ 	}
+	 	
+ 	/**
+ 	 * Gets the component id.
+ 	 * @return the component id
+ 	 */
+ 	public String getComponentId() {
+ 		return componentId;
+ 	}
+	 
+	 
 	/**
 	 * Set the Location of this shape.
 	 * 
