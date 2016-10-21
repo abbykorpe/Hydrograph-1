@@ -80,6 +80,7 @@ public class TrackingStatusUpdateUtils {
 			if(!isReplay){
 					pushExecutionStatusToExecutionTrackingConsole(executionStatus);
 					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
+					ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
 				}	
 
 				GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
@@ -101,16 +102,15 @@ public class TrackingStatusUpdateUtils {
 								applyRecordCountOnSubjobComponent(component, componentNameAndLink, executionStatus);
 							} 
 							int successCount = 0;
-							updateStatusCountForSubjobComponent(executionStatus, component, successCount);
-
+							updateStatusCountForSubjobComponent(executionStatus, component, successCount,isReplay);
+							
 						}else
 						{
 							updateStatusCountForComponent(executionStatus,component);
 						}
 					}
 				}
-				ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
-			}
+		}
 	}
 	
 	private void updateStatusCountForComponent(
@@ -129,10 +129,10 @@ public class TrackingStatusUpdateUtils {
 		}
 	}
 
-	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component, int successCount) {
+	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component, int successCount,boolean isReplay) {
 		boolean running = false;
 		boolean pending = false;
-
+		ComponentExecutionStatus status=component.getStatus();
 		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 
 			if(!pending){
@@ -153,12 +153,16 @@ public class TrackingStatusUpdateUtils {
 					component.updateStatus(ComponentExecutionStatus.FAILED.value());
 					break;
 				}
-		}
-		if(component.getStatus().value().equalsIgnoreCase(ComponentExecutionStatus.PENDING.value()) || component.getStatus().value().equalsIgnoreCase(ComponentExecutionStatus.RUNNING.value()) ){
+				
+			}
+		
+		
+		if((status!=null && !ComponentExecutionStatus.BLANK.value().equalsIgnoreCase(status.value())) || isReplay){
 			boolean isSuccess=applySuccessStatus(component, executionStatus, successCount);
 	 		if(isSuccess)
 	 			component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
 		}
+
 	}
 	
 	private void applyRecordCountOnSubjobComponent( Component component,Map<String, SubjobDetails> componentNameAndLink, ExecutionStatus executionStatus){
@@ -185,7 +189,6 @@ public class TrackingStatusUpdateUtils {
 					}
 				}
 			}
-			System.out.println("componentNameAndLink :"+componentNameAndLink);
 		}
 	}
 	
@@ -223,7 +226,7 @@ public class TrackingStatusUpdateUtils {
 	}
 	
 	private boolean applyPendingStatus(Component component, ComponentStatus componentStatus, boolean pendingStatusApplied) {
-		Container container=(Container)component.getProperties().get("Container");
+		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (Component innerSubComponent : container.getChildren()) {
 			if(Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())){
 				applyPendingStatus(innerSubComponent, componentStatus, pendingStatusApplied);

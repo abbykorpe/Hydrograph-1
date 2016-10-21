@@ -85,6 +85,14 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			((Component) getModel()).setComponentEditPart(this);
 		}
 		backwardCompatibilityForChangingPhaseToBatch();
+		backwardCompatibilityForLoadingComponentId();
+	}
+
+	// Temp method for loading component's Id.
+	private void backwardCompatibilityForLoadingComponentId() {
+		if(StringUtils.isBlank(getCastedModel().getComponentId())){
+			getCastedModel().setComponentId(getCastedModel().getComponentLabel().getLabelContents());
+		}
 	}
 
 	private void backwardCompatibilityForChangingPhaseToBatch() {
