@@ -2,7 +2,7 @@
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
-
+1. .... - [Pooja Yadav] - Removal of Secondary key Widget from Sort Component
 
 =====================================================================================================
 Issues/Defects fixed:
@@ -25,7 +25,7 @@ connection(link) on transform component.
 13.<1336> - [Prateem Tadas] -Hive component: On Partition key Window, that when we Use Different DB, the Available Fields are not Getting Imported.
 14.<1413>-[Ankit Sharma] Error bubble was getting displayed on transform component even if there is no error in component. 
 15.<1423>-[Pooja Yadav]-Exception Occured While saving the Job
-
+16.<1336> - [Prateem Tadas] -Hive component: On Partition key Window, that when we Use Different DB, the Available Fields are not Getting Imported.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

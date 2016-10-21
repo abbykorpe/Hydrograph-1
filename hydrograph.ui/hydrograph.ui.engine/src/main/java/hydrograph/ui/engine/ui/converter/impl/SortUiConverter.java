@@ -58,7 +58,6 @@ public class SortUiConverter extends StraightpullUiConverter {
 		sort = (Sort) typeBaseComponent;
 
 		propertyMap.put(Constants.PARAM_PRIMARY_COLUMN_KEYS, getPrimaryKeys());
-		propertyMap.put(Constants.PARAM_SECONDARY_COLUMN_KEYS, getSecondaryKeys());
 
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(componentName);
@@ -67,20 +66,6 @@ public class SortUiConverter extends StraightpullUiConverter {
 		
 	}
 
-	private Map<String, String> getSecondaryKeys() {
-		LOGGER.debug("Fetching Sort-Secondary-Keys-Properties for -{}", componentName);
-		Map<String, String> secondaryKeyMap = null;
-		sort = (Sort) typeBaseComponent;
-		TypeSecondaryKeyFields typeSecondaryKeyFields = sort.getSecondaryKeys();
-
-		if (typeSecondaryKeyFields != null) {
-			secondaryKeyMap = new LinkedHashMap<String, String>();
-			for (TypeSecondayKeyFieldsAttributes secondayKeyFieldsAttributes : typeSecondaryKeyFields.getField()) {
-				secondaryKeyMap.put(secondayKeyFieldsAttributes.getName(), secondayKeyFieldsAttributes.getOrder().value());
-			}
-		}
-		return secondaryKeyMap;
-	}
 
 	private Map<String, String> getPrimaryKeys() {
 		LOGGER.debug("Fetching RemoveDups-Primary-Keys-Properties for -{}", componentName);
