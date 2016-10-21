@@ -83,7 +83,7 @@ public class JdkPathDialog extends Dialog {
 		return container;
 	}
 
-	public void createNoteComposite(Composite mainComposite) {
+	private void createNoteComposite(Composite mainComposite) {
 		Composite noteComposite = new Composite(mainComposite, SWT.NONE);
 		noteComposite.setLayout(new GridLayout(1, false));
 		noteComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -94,7 +94,7 @@ public class JdkPathDialog extends Dialog {
 		noteMessage.setText(Messages.JDK_PATH_DIALOG_NOTE);
 	}
 
-	public void createTitleComposite(Composite mainComposite) {
+	private void createTitleComposite(Composite mainComposite) {
 		Composite titleComposite = new Composite(mainComposite, SWT.NONE);
 		titleComposite.setLayout(new GridLayout(1, false));
 		titleComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
