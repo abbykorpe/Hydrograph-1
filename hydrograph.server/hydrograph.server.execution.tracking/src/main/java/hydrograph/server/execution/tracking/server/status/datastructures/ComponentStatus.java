@@ -26,9 +26,11 @@ public class ComponentStatus {
 	/** The current status. */
 	String currentStatus;
 	
+	String batch;
+	
 	/** The processed record count. */
 	Map<String, Long> processedRecordCount;
-
+	
 	/**
 	 * Instantiates a new component status.
 	 *
@@ -36,11 +38,12 @@ public class ComponentStatus {
 	 * @param currentStatus the current status
 	 * @param processedRecordCount the processed record count
 	 */
-	public ComponentStatus(String componentId,String currentStatus,
+	public ComponentStatus(String componentId,String currentStatus,String batch,
 			Map<String, Long> processedRecordCount) {
 		super();
 		this.componentId = componentId;
 		this.currentStatus = currentStatus;
+		this.batch=batch;
 		this.processedRecordCount = processedRecordCount;
 	}
 
@@ -71,27 +74,25 @@ public class ComponentStatus {
 		return processedRecordCount;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	public String getBatch() {
+		return batch;
+	}
+
+
 	@Override
 	public String toString() {
-		return "ComponentStatus [componentId=" + componentId + ", currentStatus="
-				+ currentStatus + ", processedRecordCount=" + processedRecordCount + "]";
+		return "ComponentStatus [componentId=" + componentId + ", currentStatus=" + currentStatus + ", batch=" + batch
+				+ ", processedRecordCount=" + processedRecordCount + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((componentId == null) ? 0 : componentId.hashCode());
-		result = prime * result
-				+ ((currentStatus == null) ? 0 : currentStatus.hashCode());
-		result = prime
-				* result
-				+ ((processedRecordCount == null) ? 0 : processedRecordCount
-						.hashCode());
+		result = prime * result + ((batch == null) ? 0 : batch.hashCode());
+		result = prime * result + ((componentId == null) ? 0 : componentId.hashCode());
+		result = prime * result + ((currentStatus == null) ? 0 : currentStatus.hashCode());
+		result = prime * result + ((processedRecordCount == null) ? 0 : processedRecordCount.hashCode());
 		return result;
 	}
 
@@ -104,6 +105,11 @@ public class ComponentStatus {
 		if (getClass() != obj.getClass())
 			return false;
 		ComponentStatus other = (ComponentStatus) obj;
+		if (batch == null) {
+			if (other.batch != null)
+				return false;
+		} else if (!batch.equals(other.batch))
+			return false;
 		if (componentId == null) {
 			if (other.componentId != null)
 				return false;
@@ -121,7 +127,7 @@ public class ComponentStatus {
 			return false;
 		return true;
 	}
-	
+
 
 	
 	

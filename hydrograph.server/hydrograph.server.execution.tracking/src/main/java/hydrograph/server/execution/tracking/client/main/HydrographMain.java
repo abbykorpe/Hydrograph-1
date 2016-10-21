@@ -118,6 +118,7 @@ public class HydrographMain {
 			throws IOException {
 			try {
 				TimerTask task = new TimerTask() {
+					ExecutionStatus previousExecutionStatus=null;
 					@Override
 					public void run() {
 						List<ComponentInfo> componentInfos = execution.getStatus();
@@ -125,7 +126,7 @@ public class HydrographMain {
 							List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
 							for (ComponentInfo componentInfo : componentInfos) {
 								ComponentStatus componentStatus = new ComponentStatus(componentInfo.getComponentId(),
-										componentInfo.getCurrentStatus(), componentInfo.getProcessedRecords());
+										componentInfo.getCurrentStatus(),componentInfo.getBatch(), componentInfo.getProcessedRecords());
 								componentStatusList.add(componentStatus);
 							}
 							ExecutionStatus executionStatus = new ExecutionStatus(componentStatusList);
@@ -133,7 +134,10 @@ public class HydrographMain {
 							executionStatus.setType(Constants.POST);
 							Gson gson = new Gson();
 							try {
-								socket.sendMessage(gson.toJson(executionStatus));
+								if(previousExecutionStatus==null || !executionStatus.equals(previousExecutionStatus)){
+									socket.sendMessage(gson.toJson(executionStatus));
+									previousExecutionStatus=executionStatus;
+								}
 							} catch (IOException e) {
 								logger.error("Fail to send status for job - " + jobId, e);
 								timer.cancel();
