@@ -178,6 +178,7 @@ public class ExecutionTrackingConsoleUtils {
 				stringBuilder.append(componentStatus.getComponentId() + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(portID + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(componentStatus.getCurrentStatus() + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append(componentStatus.getBatch() + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(processCounts.get(portID) + "\n");
 			}
 		}
@@ -250,19 +251,10 @@ public class ExecutionTrackingConsoleUtils {
 			String jsonArray = jsonParser.parse(new FileReader(new File(path))).toString();
 			executionStatusarray = gson.fromJson(jsonArray, ExecutionStatus[].class);
 			
-			/*BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-			StringBuilder builder = new StringBuilder();
-			String line = bufferedReader.readLine();
-			while(line != null){
-				builder.append(line);
-				builder.append(System.lineSeparator());
-			    line = bufferedReader.readLine();
-			}*/
 			return executionStatusarray;
-			} catch (FileNotFoundException exception) {
+		
+		} catch (FileNotFoundException exception) {
 				logger.error("File not found", exception.getMessage());
-			} catch (IOException exception) {
-				logger.error("IO Exception", exception.getMessage());
 			}
 			return null;
 	}

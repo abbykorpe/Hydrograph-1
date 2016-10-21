@@ -105,10 +105,6 @@ public class ReplayTrackingHistoryHandler extends AbstractHandler{
 		Gson gson = new Gson();
 		String jsonArray = jsonParser.parse(new FileReader(new File(path))).toString();
 		executionStatus = gson.fromJson(jsonArray, ExecutionStatus[].class);
-		for(int i=0; i<executionStatus.length;i++){
-			System.out.println(executionStatus[i]);
-		}
-		System.out.println("<<<<<LAST_Status>>>>>>"+executionStatus[executionStatus.length-1]);
 		return executionStatus[executionStatus.length-1];
 	}
 	
