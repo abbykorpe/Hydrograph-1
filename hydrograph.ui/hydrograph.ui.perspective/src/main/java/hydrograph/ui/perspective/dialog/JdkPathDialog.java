@@ -14,12 +14,16 @@
 
 package hydrograph.ui.perspective.dialog;
 
+import hydrograph.ui.perspective.Messages;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -27,12 +31,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
-
-import hydrograph.ui.perspective.Messages;
 
 /**
  * Dialog class for getting JDK path from user.
@@ -45,6 +47,7 @@ public class JdkPathDialog extends Dialog {
 	private Button okButton;
 	private String inputValue;
 	private Label errorLbl;
+	private Shell shell;
 	
 	/**
 	 * Create the dialog.
@@ -52,6 +55,7 @@ public class JdkPathDialog extends Dialog {
 	 */
 	public JdkPathDialog(Shell parentShell) {
 		super(parentShell);
+		this.shell=parentShell;
 	}
 
 	/**
@@ -69,27 +73,46 @@ public class JdkPathDialog extends Dialog {
 		mainComposite.setLayout(new GridLayout(1, false));
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		Label title = new Label(mainComposite, SWT.NONE);
-		title.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
-		title.setText(Messages.JDK_PATH_DIALOG_MESSAGE);
+		createTitleComposite(mainComposite);
 		
-//		Composite txtBoxComposite = new Composite(mainComposite, SWT.NONE);
-//		txtBoxComposite.setLayout(new GridLayout(1, false));
-//		txtBoxComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-//		txtBoxComposite.setBounds(0, 0, 64, 64);
 		
 		createTextBox(mainComposite);
 		
-		Label noteMessage = new Label(mainComposite, SWT.WRAP);
-		noteMessage.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
-		noteMessage.setText(Messages.JDK_PATH_DIALOG_NOTE);
+		createNoteComposite(mainComposite);
 
 		return container;
 	}
 
+	private void createNoteComposite(Composite mainComposite) {
+		Composite noteComposite = new Composite(mainComposite, SWT.NONE);
+		noteComposite.setLayout(new GridLayout(1, false));
+		noteComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		
+		Label noteMessage = new Label(noteComposite, SWT.WRAP);
+		noteMessage.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
+		noteMessage.setText(Messages.JDK_PATH_DIALOG_NOTE);
+	}
+
+	private void createTitleComposite(Composite mainComposite) {
+		Composite titleComposite = new Composite(mainComposite, SWT.NONE);
+		titleComposite.setLayout(new GridLayout(1, false));
+		titleComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
+		Label title = new Label(titleComposite, SWT.NONE);
+		title.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		title.setText(Messages.JDK_PATH_DIALOG_MESSAGE);
+	}
+
 	private void createTextBox(Composite mainComposite) {
-		text = new Text(mainComposite, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 0));
+		
+		Composite txtBoxComposite = new Composite(mainComposite, SWT.NONE);
+		txtBoxComposite.setLayout(new GridLayout(2, false));
+		txtBoxComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
+		
+		text = new Text(txtBoxComposite, SWT.BORDER);
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 1));
 		text.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -101,6 +124,23 @@ public class JdkPathDialog extends Dialog {
 						okButton.setEnabled(false);
 					}
 		}});
+		
+		Button browseButon = new Button(txtBoxComposite, SWT.NONE);
+		browseButon.setText("...");
+
+		browseButon.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DirectoryDialog dialog = new DirectoryDialog(shell);
+				if (StringUtils.isNotBlank(text.getText())) {
+					dialog.setFilterPath(text.getText());
+				}
+				String selectedPath = dialog.open();
+				if (StringUtils.isNotBlank(selectedPath)) {
+					text.setText(selectedPath);
+				}
+			}
+		});
 	}
 
 	/**
@@ -150,7 +190,7 @@ public class JdkPathDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 209);
+		return new Point(450, 190);
 	}
 
 	/**
@@ -160,5 +200,7 @@ public class JdkPathDialog extends Dialog {
 	public String getInputVlue() {
 		return inputValue;
 	}
+
 }
+
 
