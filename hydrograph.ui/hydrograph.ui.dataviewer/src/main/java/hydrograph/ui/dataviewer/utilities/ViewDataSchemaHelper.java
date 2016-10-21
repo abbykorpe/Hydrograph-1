@@ -70,7 +70,6 @@ public class ViewDataSchemaHelper {
 				}
 			}
 		}
-		System.out.println();
 		return fields;
 	}
 }
