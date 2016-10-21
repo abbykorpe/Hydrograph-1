@@ -79,6 +79,7 @@ public class SubJobPortLinkUtilty {
 	 
 	   	if(cacheInputSubjobComp.size()>0){
 	   		inputSubComponent.getProperties().put(Constants.NAME, Constants.INPUT_SUBJOB);
+	   		inputSubComponent.setComponentId(Constants.INPUT_SUBJOB);
 	   		inputSubComponent.setComponentLabel(Constants.INPUT_SUBJOB);
 	   		inputSubComponent.setType(Constants.INPUT_SUBJOB_TYPE);
 	   		inputSubComponent.setCategory(Constants.SUBJOB_COMPONENT_CATEGORY);
@@ -145,6 +146,7 @@ public class SubJobPortLinkUtilty {
 		   	if(cacheOutSubjobComp.size()>0){
 		   		outSubComponent.getProperties().put(Constants.NAME,Constants.OUTPUT_SUBJOB);
 		   		outSubComponent.setComponentLabel(Constants.OUTPUT_SUBJOB);
+		   		outSubComponent.setComponentId(Constants.OUTPUT_SUBJOB);
 		   		outSubComponent.setType(Constants.OUTPUT_SUBJOB_TYPE);
 		   		outSubComponent.setCategory(Constants.SUBJOB_COMPONENT_CATEGORY);
 		   		outSubComponent.completeInputPortSettings(inPort);	
