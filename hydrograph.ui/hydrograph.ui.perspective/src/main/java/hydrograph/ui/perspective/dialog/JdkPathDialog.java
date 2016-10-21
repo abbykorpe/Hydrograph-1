@@ -201,12 +201,6 @@ public class JdkPathDialog extends Dialog {
 		return inputValue;
 	}
 
-	public static void main(String[] args) {
-		JdkPathDialog dialog=new JdkPathDialog(new Shell());
-		dialog.open();
-		
-	}
-
 }
 
 
