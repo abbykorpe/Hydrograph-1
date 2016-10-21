@@ -48,7 +48,6 @@ public class HydrographUiClientSocket {
 	/** The logger. */
 	private Logger logger = LogFactory.INSTANCE.getLogger(HydrographUiClientSocket.class);
 
-	private String CLONE_COMPONENT_TYPE ="CloneComponent";
 
 	/**
 	 * On open.

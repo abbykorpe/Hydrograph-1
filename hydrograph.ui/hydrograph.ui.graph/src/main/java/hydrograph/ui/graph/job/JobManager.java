@@ -225,6 +225,7 @@ public class JobManager {
 		}
 		
 		//ExecutionTrackingFileLogger.INSTANCE.removeLastExecutionStatus(runningJobsMap.get(canvasId).getUniqueJobId());
+		ExecutionTrackingFileLogger.INSTANCE.getExecutionStatusList().clear();
 		
 		runningJobsMap.remove(canvasId);		
 		logger.debug("Removed job " + canvasId + " from jobmap");

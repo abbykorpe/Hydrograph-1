@@ -80,7 +80,6 @@ public class TrackingStatusUpdateUtils {
 			if(!isReplay){
 					pushExecutionStatusToExecutionTrackingConsole(executionStatus);
 					ExecutionTrackingFileLogger.INSTANCE.log(executionStatus.getJobId(), executionStatus, JobManager.INSTANCE.isLocalMode());
-					ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
 				}	
 
 				GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
@@ -110,6 +109,7 @@ public class TrackingStatusUpdateUtils {
 						}
 					}
 				}
+				ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
 			}
 	}
 	
@@ -117,11 +117,11 @@ public class TrackingStatusUpdateUtils {
 			ExecutionStatus executionStatus, Component component) {
 
 		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-			if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(component.getComponentLabel().getLabelContents())){
-				logger.info("Updating normal component {} status {}",component.getComponentLabel().getLabelContents(), componentStatus.getCurrentStatus());
+			if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(component.getComponentId())){
+				logger.info("Updating normal component {} status {}",component.getComponentId(), componentStatus.getCurrentStatus());
 				component.updateStatus(componentStatus.getCurrentStatus());
 				for(Link link: component.getSourceConnections()){
-					if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(link.getSource().getComponentLabel().getLabelContents())){
+					if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(link.getSource().getComponentId())){
 						link.updateRecordCount(componentStatus.getProcessedRecordCount().get(link.getSourceTerminal()).toString());
 					}
 				}
@@ -203,19 +203,19 @@ public class TrackingStatusUpdateUtils {
 			for(Link link:outputSubjobComponent.getTargetConnections()){
 				Component componentPrevToOutput = link.getSource();
 				if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
-					subjobPrefix.append(component.getComponentLabel().getLabelContents()+".");
+					subjobPrefix.append(component.getComponentId()+".");
 					populateSubjobRecordCount(componentNameAndLink, componentPrevToOutput,subjobPrefix,false);
 				}else{
 					String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
 
 					SubjobDetails subjobDetails = new SubjobDetails(link.getSourceTerminal(), portNumber);
 					if(CLONE_COMPONENT_TYPE.equalsIgnoreCase(componentPrevToOutput.getComponentName())){
-						componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents()+"."+portNumber, subjobDetails);
+						componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+portNumber, subjobDetails);
 					}else{
 						if(isParent)
-							componentNameAndLink.put(component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents(), subjobDetails);
+							componentNameAndLink.put(component.getComponentId()+"."+componentPrevToOutput.getComponentId(), subjobDetails);
 						else
-							componentNameAndLink.put(subjobPrefix+component.getComponentLabel().getLabelContents()+"."+componentPrevToOutput.getComponentLabel().getLabelContents(), subjobDetails);
+							componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId(), subjobDetails);
 					}
 				}
 			}
@@ -228,7 +228,7 @@ public class TrackingStatusUpdateUtils {
 			if(Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())){
 				applyPendingStatus(innerSubComponent, componentStatus, pendingStatusApplied);
 			}else{
-				String compName = component.getComponentLabel().getLabelContents()+"."+innerSubComponent.getComponentLabel().getLabelContents();
+				String compName = component.getComponentId()+"."+innerSubComponent.getComponentId();
 				if(componentStatus.getComponentId().contains(compName) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.PENDING.value())){
 					pendingStatusApplied = true;
 					return pendingStatusApplied;
@@ -239,12 +239,12 @@ public class TrackingStatusUpdateUtils {
 	}
 
 	private boolean applyRunningStatus(Component component, ComponentStatus componentStatus, boolean runningStatusApplied) {
-		Container container = (Container) component.getProperties().get("Container");
+		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (Component innerSubComponent : container.getChildren()) {
 			if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
 				applyRunningStatus(innerSubComponent, componentStatus, runningStatusApplied);
 			} else {
-				String compName = component.getComponentLabel().getLabelContents() + "."+ innerSubComponent.getComponentLabel().getLabelContents();
+				String compName = component.getComponentId() + "."+ innerSubComponent.getComponentId();
 				if (componentStatus.getComponentId().contains(compName)&& componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.RUNNING.value())) {
 					runningStatusApplied = true;
 					return runningStatusApplied;
@@ -254,12 +254,12 @@ public class TrackingStatusUpdateUtils {
 		return runningStatusApplied;
 	}
 	private boolean applyFailStatus(Component component, ComponentStatus componentStatus) {
-		Container container = (Container) component.getProperties().get("Container");
+		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (Component innerSubComponent : container.getChildren()) {
 			if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
 				applyFailStatus(innerSubComponent, componentStatus);
 			} else {
-				String compName = component.getComponentLabel().getLabelContents() + "."+ innerSubComponent.getComponentLabel().getLabelContents();
+				String compName = component.getComponentId() + "."+ innerSubComponent.getComponentId();
 				if (componentStatus.getComponentId().contains(compName)&& componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.FAILED.value())) {
 					return true;
 				}
@@ -269,13 +269,13 @@ public class TrackingStatusUpdateUtils {
 	}
 	
 	private boolean applySuccessStatus(Component component, ExecutionStatus executionStatus,int successcount) {
-		Container container = (Container) component.getProperties().get("Container");
+		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (ComponentStatus componentStatus : executionStatus.getComponentStatus()) {
 			for (Component innerSubComponent : container.getChildren()) {
 				if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
 					applySuccessStatus(innerSubComponent, executionStatus,successcount);
 				} else {
-					String compName = component.getComponentLabel().getLabelContents() + "."+ innerSubComponent.getComponentLabel().getLabelContents();
+					String compName = component.getComponentId() + "."+ innerSubComponent.getComponentId();
 					if (componentStatus.getComponentId().contains(compName)){
 						if(!componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.SUCCESSFUL.value())){
 							return false;
