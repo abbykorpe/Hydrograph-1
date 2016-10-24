@@ -13,22 +13,6 @@
 
 package hydrograph.ui.propertywindow.widgets.dialog.hiveInput;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
-import hydrograph.ui.datastructure.property.InputHivePartitionKeyValues;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.PropertyContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -70,7 +54,6 @@ import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -84,6 +67,22 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.InputHivePartitionColumn;
+import hydrograph.ui.datastructure.property.InputHivePartitionKeyValues;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.PropertyContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * 
@@ -319,8 +318,8 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		
 		keyValueButtonPanelcmpst.setLayoutData(gd_keyValueButtonPanelcmpst);
 						
-		Button keyValAddButton = new Button(keyValueButtonPanelcmpst, SWT.NONE);
-		Button keyValueDelButton = new Button(keyValueButtonPanelcmpst, SWT.NONE);
+		final Button keyValAddButton = new Button(keyValueButtonPanelcmpst, SWT.NONE);
+		final Button keyValueDelButton = new Button(keyValueButtonPanelcmpst, SWT.NONE);
 		
 		keyValAddButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		keyValAddButton.setText("");
@@ -384,6 +383,32 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		
 		keyValueTableViewer.setData(Constants.PARTITION_KEYS, propertyList);
 		
+		keyValueTableViewer.getTable().addMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				if (validate()) {
+					addNewRow();
+				}
+				if (keyValues.size() >0) {
+					keyValueDelButton.setEnabled(true);
+				}
+			}
+		});
+		
+		keyValueTableViewer.getTable().addMouseListener(new SingleClickEvent(new Runnable() {
+			@Override
+			public void run() {
+					validate();
+			}
+		}));
 	}
 	
 	/**
@@ -478,6 +503,13 @@ public class HivePartitionKeyValueDialog extends Dialog {
 
 					}
 				});
+		
+		targetTableViewer.getTable().addMouseListener(new SingleClickEvent(new Runnable() {
+			@Override
+			public void run() {
+					validate();
+			}
+		}));
 
 		targetTable.setBounds(196, 70, 324, 400);
 		targetTableViewer.setContentProvider(new ELTFilterContentProvider());
@@ -565,6 +597,7 @@ public class HivePartitionKeyValueDialog extends Dialog {
 	private void addErrorLabel(Composite container) {
 			
 		lblPropertyError = new Label(container, SWT.NONE);
+		lblPropertyError.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 		lblPropertyError.setText(Messages.HIVE_FIELD_DIALOG_ERROR);
 		lblPropertyError.setVisible(false);
@@ -898,6 +931,11 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 			propertyCounter++;
 
 		}
+		
+		if (keyValueColumns.size() != 0) {
+			return HiveFieldDialogCellModifier.validatePartitionKeyTable(keyValueTableViewer,
+					lblPropertyError);
+		}
 		return true;
 	}
 
@@ -1109,26 +1147,9 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
-				isAnyUpdatePerformed=true;
-				
-				HivePartitionFields fieldDialog = 
-						new HivePartitionFields();
-				
-				List<String> rowFields=new ArrayList<>();
-				
-				for (FilterProperties string : propertyList) {
-					rowFields.add("");
+				if(validate()){
+				addNewRow();
 				}
-				fieldDialog.setRowFields(rowFields);
-				keyValues.add(fieldDialog);
-				
-			
-				
-				keyValueTableViewer.refresh();
-				
-				keyValueTableViewer.editElement(keyValueTableViewer.getElementAt(keyValues.size() - 1), 0);
-				
 				if (keyValues.size() >0) {
 					keyValueDelButton.setEnabled(true);
 				}
@@ -1145,6 +1166,25 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 		return listener;
 	}
 	
+	public void addNewRow() {
+		if (!lblPropertyError.getVisible() || keyValues.size() < 1) {
+			isAnyUpdatePerformed = true;
+
+			HivePartitionFields fieldDialog = new HivePartitionFields();
+
+			List<String> rowFields = new ArrayList<>();
+
+			for (FilterProperties string : propertyList) {
+				rowFields.add("");
+			}
+			fieldDialog.setRowFields(rowFields);
+			keyValues.add(fieldDialog);
+
+			keyValueTableViewer.refresh();
+
+			keyValueTableViewer.editElement(keyValueTableViewer.getElementAt(keyValues.size() - 1), 0);
+		}
+	}
 	/**
 	 * 
 	 * @param keyValueDelButton
@@ -1156,6 +1196,9 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 				public void widgetSelected(SelectionEvent e) {
 					WidgetUtility.setCursorOnDeleteRow(keyValueTableViewer, keyValues);
 					isAnyUpdatePerformed=true;
+					if(lblPropertyError.getVisible()){
+						lblPropertyError.setVisible(false);
+					}
 					keyValueTableViewer.refresh();
 					
 					if (keyValues.size() < 1) {
