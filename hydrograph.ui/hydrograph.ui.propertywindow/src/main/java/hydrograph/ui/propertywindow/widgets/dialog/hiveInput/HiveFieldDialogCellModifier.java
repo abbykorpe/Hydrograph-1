@@ -14,10 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.dialog.hiveInput;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.propertywindow.messages.Messages;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +21,10 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 
 /**
@@ -98,25 +98,35 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 	 *            the value
 	 */
 	public void modify(Object element, String property, Object value) {
-		
+
 		Label errorLabel=(Label) viewer.getData("Error"); 
-		errorLabel.setText(Messages.HIVE_FIELD_DIALOG_ERROR);
 		if (element instanceof Item){
 			element = ((Item) element).getData();
 		}
-	
-		HivePartitionFields hivePartitionFieldDialog=(HivePartitionFields)element;
-		hivePartitionFieldDialog.getRowFields().set(getIndex(property), (String)value);
 		
-		for(HivePartitionFields row:(List<HivePartitionFields>)viewer.getInput()){
-			for (int i = 0; i < row.getRowFields().size() - 1; i++) {
-			if(StringUtils.isBlank(row.getRowFields().get(0))){
-				errorLabel.setVisible(true);
-				break;
-			}else {
-				if((StringUtils.isBlank(row.getRowFields().get(i)))
+			HivePartitionFields hivePartitionFieldDialog=(HivePartitionFields)element;
+			hivePartitionFieldDialog.getRowFields().set(getIndex(property), (String)value);
+			validatePartitionKeyTable(viewer,errorLabel);
+			viewer.refresh();
+	}
+
+	public static boolean validatePartitionKeyTable(Viewer viewer,Label errorLabel) {
+		errorLabel.setVisible(false);
+		for (HivePartitionFields row : (List<HivePartitionFields>) viewer.getInput()) {
+			if (errorLabel.getVisible()) {
+				return false;
+			}
+			for (int i = 0; i < row.getRowFields().size()- 1; i++) {
+				List<FilterProperties> list=(List<FilterProperties> ) viewer.getData(Constants.PARTITION_KEYS);
+				if (StringUtils.isBlank(row.getRowFields().get(0))) {
+					errorLabel.setVisible(true);
+					errorLabel.setText("Column " + list.get(i).getPropertyname() + " " + Messages.HIVE_FIELD_DIALOG_ERROR);
+					break;
+				} else {
+					if ((StringUtils.isBlank(row.getRowFields().get(i)))
 							&& (StringUtils.isNotBlank((row.getRowFields().get(i + 1))))) {
 						errorLabel.setVisible(true);
+						errorLabel.setText("Column " + list.get(i).getPropertyname()+ " " + Messages.HIVE_FIELD_DIALOG_ERROR);
 						break;
 					} else {
 						errorLabel.setVisible(false);
@@ -124,7 +134,10 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 				}
 			}
 		}
-		viewer.refresh();
+		if (!errorLabel.getVisible()) {
+			return true;
+		}
+		return false;
 	}
 	
 }
