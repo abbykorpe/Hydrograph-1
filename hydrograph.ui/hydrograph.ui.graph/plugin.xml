@@ -253,7 +253,7 @@
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
                id="hydrograph.ui.graph.toolbar2"
-               label="Replay Execution Tracking Toolbar">
+               label="View Execution History Toolbar">
             <command
                   commandId="hydrograph.ui.graph.command.runjob"
                   icon="resources/icons/run.png"

@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.graph.execution.tracking.replay;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +38,11 @@ import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.graph.job.Job;
 
+/**
+ * The Class ReplayExecutionTrackingDialog use to create dialog to manage previous tracking history.
+ * 
+ * @author Bitwise
+ */
 public class ReplayExecutionTrackingDialog extends Dialog{
 
 	public static final int CLOSE = 9999;
@@ -34,16 +52,22 @@ public class ReplayExecutionTrackingDialog extends Dialog{
 	private Table table;
 	private Text trackingFileText;
 	private String filePath;
+	private static final String VIEW_TRACKING_HISTORY="View Execution Tracking History"; 
+	private static final String BROWSE_TRACKING_FILE="Browse Tracking File"; 
+	private static final String EXECUTION_HISTORY_DIALOG="Execution History Dialog";
 	
 	public ReplayExecutionTrackingDialog(Shell parentShell, List<Job> jobDetails) {
 		super(parentShell);
 		this.jobDetails = jobDetails;
 	}
 
+	/**
+	 * Create dialog for execution tracking view history, that use to manage all previous run tracking history. 
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.getShell().setText("View Tracking History");
+		container.getShell().setText(VIEW_TRACKING_HISTORY);
 		container.setLayout(new GridLayout(1, false));
 		
 		
@@ -121,7 +145,7 @@ public class ReplayExecutionTrackingDialog extends Dialog{
 	   */
 	private void createBrowseButton(final Composite parent){
 		Label label=new  Label(parent, SWT.None);
-		label.setText("Browse Tracking File");
+		label.setText(BROWSE_TRACKING_FILE);
 		
 		// Create the text box extra wide to show long paths
 		trackingFileText = new Text(parent, SWT.BORDER);
@@ -136,7 +160,7 @@ public class ReplayExecutionTrackingDialog extends Dialog{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog fileDialog = new FileDialog(parent.getShell(),  SWT.OPEN  );
-			fileDialog.setText("Execution History Dialog");
+			fileDialog.setText(EXECUTION_HISTORY_DIALOG);
 			String[] filterExt = { "*.log"/*,"*.*"*/ };
 			fileDialog.setFilterExtensions(filterExt);
 			String path = fileDialog.open();

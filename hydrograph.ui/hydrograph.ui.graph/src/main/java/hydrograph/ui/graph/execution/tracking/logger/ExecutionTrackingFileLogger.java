@@ -46,6 +46,7 @@ public class ExecutionTrackingFileLogger {
 	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
 
 	private List<ExecutionStatus> executionStatusList = new ArrayList<>();
+
 	/** The Constant INSTANCE. */
 	public static final ExecutionTrackingFileLogger INSTANCE = new ExecutionTrackingFileLogger();
 	
@@ -85,9 +86,14 @@ public class ExecutionTrackingFileLogger {
 		}
 	}
 
+	/**
+	 * 
+	 * @return tracking status list
+	 */
 	public List<ExecutionStatus> getExecutionStatusList(){
 		return executionStatusList;
 	}
+	
 	/**
 	 * Write the log
 	 *
@@ -122,7 +128,7 @@ public class ExecutionTrackingFileLogger {
 		try {
 			createJsonFormatFile(jobTrackingLogDirectory + uniqJobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION, executionStatusList);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			logger.error("Failed to create json file", e);
 		}
 	}
 

@@ -109,8 +109,7 @@ public class HydrographUiClientSocket {
 		try {
 			session.getBasicRemote().sendText(str);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			logger.error("Failed to sent connection request: ", e);
 		}
 	}
 }
