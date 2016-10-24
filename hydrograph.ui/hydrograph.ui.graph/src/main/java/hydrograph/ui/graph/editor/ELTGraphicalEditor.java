@@ -214,12 +214,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private static final String CONSOLE_VIEW_ID = "hydrograph.ui.project.structure.console.HydrographConsole";
 
 	private String uniqueJobId;
-	private String jobId;
 
 	private static final Color palatteTextColor=new Color(null,51,51,51);
-	
-	
-	private static final String JOB_ID_STRING_SEPARATOR = "_";
 	
 	/**
 	 * Instantiates a new ETL graphical editor.
@@ -980,7 +976,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			String activeProjectName = activeProject.getName();
 
 			IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+ getPartName().replace(".job", ".properties"));
-		    jobId = activeProjectName.concat("_").concat(getPartName().replace(".job", "_"));
+		    activeProjectName.concat("_").concat(getPartName().replace(".job", "_"));
 
 			return parameterFileIPath;
 		}else{
@@ -1119,6 +1115,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		refreshParameterFileInProjectExplorer();
 	}
 
+	/**
+	 * Generate Target XML from container
+	 * @param file
+	 */
 	public void saveJob(IFile file) {
 		
 		try {
@@ -1740,9 +1740,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			editor.getEditorSite().getPage().closeEditor(editor, false);
 		}
 	}
+
 	
+	/**
+	 * Remove temp tracking subjob file after tool close, rerun and modification. 
+	 */
 	public void removeTempSubJobTrackFiles() {
-		
 		
 	if(deleteOnDispose){
 		try {
@@ -1752,7 +1755,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			ResourcesPlugin.getWorkspace().getRoot().getFile(file.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH)).delete(true, null);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Failed to remove temp subjob tracking files: "+e);
 		}
 	}
 	

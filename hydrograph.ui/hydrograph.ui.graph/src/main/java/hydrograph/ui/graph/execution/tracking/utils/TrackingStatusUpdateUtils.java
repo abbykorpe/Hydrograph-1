@@ -29,7 +29,6 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.connection.HydrographUiClientSocket;
 import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
@@ -50,7 +49,7 @@ public class TrackingStatusUpdateUtils {
 
 	
 	/** The logger. */
-	private Logger logger = LogFactory.INSTANCE.getLogger(HydrographUiClientSocket.class);
+	private Logger logger = LogFactory.INSTANCE.getLogger(TrackingStatusUpdateUtils.class);
 
 	/** The instance. */
 	public static TrackingStatusUpdateUtils INSTANCE = new TrackingStatusUpdateUtils();
@@ -113,12 +112,17 @@ public class TrackingStatusUpdateUtils {
 		}
 	}
 	
+	/**
+	 * Updating status and count for canvas component according to received status.
+	 * @param executionStatus
+	 * @param component
+	 */
 	private void updateStatusCountForComponent(
 			ExecutionStatus executionStatus, Component component) {
 
 		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(component.getComponentId())){
-				logger.info("Updating normal component {} status {}",component.getComponentId(), componentStatus.getCurrentStatus());
+				logger.debug("Updating normal component {} status {}",component.getComponentId(), componentStatus.getCurrentStatus());
 				component.updateStatus(componentStatus.getCurrentStatus());
 				for(Link link: component.getSourceConnections()){
 					if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(link.getSource().getComponentId())){

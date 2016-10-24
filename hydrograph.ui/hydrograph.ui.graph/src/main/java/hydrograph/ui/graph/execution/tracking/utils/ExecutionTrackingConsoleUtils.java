@@ -16,7 +16,6 @@ package hydrograph.ui.graph.execution.tracking.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -200,7 +199,6 @@ public class ExecutionTrackingConsoleUtils {
 			return null;
 		}
 		
-		//String jobId = canvas.getActiveProject() + "." + canvas.getJobName();
 		String jobId = canvas.getUniqueJobId();
 		return jobId;
 	}
@@ -230,7 +228,7 @@ public class ExecutionTrackingConsoleUtils {
 	 * @return the string builder
 	 */
 	public ExecutionStatus[] readFile(ExecutionStatus executionStatus, String uniqueJobId, boolean isLocalMode){
-		ExecutionStatus[] executionStatusarray;
+		ExecutionStatus[] executionStatusArray;
 		String jobId = "";
 		if(executionStatus != null){
 			jobId = executionStatus.getJobId();	
@@ -249,9 +247,9 @@ public class ExecutionTrackingConsoleUtils {
 			
 			Gson gson = new Gson();
 			String jsonArray = jsonParser.parse(new FileReader(new File(path))).toString();
-			executionStatusarray = gson.fromJson(jsonArray, ExecutionStatus[].class);
+			executionStatusArray = gson.fromJson(jsonArray, ExecutionStatus[].class);
 			
-			return executionStatusarray;
+			return executionStatusArray;
 		
 		} catch (FileNotFoundException exception) {
 				logger.error("File not found", exception.getMessage());

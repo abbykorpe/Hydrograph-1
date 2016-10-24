@@ -33,7 +33,6 @@ import org.eclipse.ui.ide.IDE;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.Component;
@@ -43,19 +42,18 @@ import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
- * The Class SubJobOpenAction use to open sub graph.
+ * The Class SubJobTrackingAction use to view subjob tracking,on this action new temp subjob tracking container will be open.
  * 
  * @author Bitwise
  */
 public class SubJobTrackingAction extends SelectionAction{
-	PasteAction pasteAction;
-	ComponentEditPart edComponentEditPart;
-	IFile tempTrackFile;
+
 	private static final String TEMP_DIRECTORY="temp"; 
 	
 	Logger logger = LogFactory.INSTANCE.getLogger(SubJobTrackingAction.class);
+
 	/**
-	 * Instantiates a new cut action.
+	 * Instantiates a new SubJobTracking action.
 	 * 
 	 * @param part
 	 *            the part
@@ -64,14 +62,13 @@ public class SubJobTrackingAction extends SelectionAction{
 	 */
 	public SubJobTrackingAction(IWorkbenchPart part, IAction action) {
 		super(part);
-		this.pasteAction = (PasteAction) action;
 		setLazyEnablementCalculation(true);
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		
+
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setText(Constants.SUBJOB_TRACKING); 
 		setId(Constants.SUBJOB_TRACKING);
@@ -81,7 +78,7 @@ public class SubJobTrackingAction extends SelectionAction{
 
 
 	/*
-	 * Open the sub graph that saved in sub graph component path property.
+	 * Open the sub graph to show tracking.
 	 */
 	@SuppressWarnings("unused")
 	@Override
@@ -107,19 +104,19 @@ public class SubJobTrackingAction extends SelectionAction{
 							try {
 								folder.create(true, true,new NullProgressMonitor());
 							} catch (CoreException e) {
-								e.printStackTrace();
+								logger.error("Failed to create temp subjob tracking file", e);
 							}
 						}
 						
 						IFile tempFile=folder.getFile(tempFileName+Constants.JOB_EXTENSION);
 						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						tempTrackFile =subJobUtility.doSaveAsSubJob(tempFile, container);
+						subJobUtility.doSaveAsSubJob(tempFile, container);
 						try {
 							ELTGraphicalEditor editorPart=(ELTGraphicalEditor) IDE.openEditor(page, tempFile,true);
 						editorPart.setDeleteOnDispose(true);
 						eltGraphicalEditor.addSubJobEditor(editorPart);
 						} catch (PartInitException e) {
-							e.printStackTrace();
+							logger.error("Failed to open tracking view for subjob", e);
 						}
 					}
 				}

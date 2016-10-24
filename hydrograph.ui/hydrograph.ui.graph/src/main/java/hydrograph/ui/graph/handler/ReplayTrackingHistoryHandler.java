@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.graph.handler;
 
 import java.io.File;
@@ -15,6 +28,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -28,13 +42,22 @@ import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.replay.ReplayExecutionTrackingDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ReplayExecutionTrackingUtility;
+import hydrograph.ui.graph.execution.tracking.utils.ExecutionTrackingConsoleUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.utility.MessageBox;
+import hydrograph.ui.logging.factory.LogFactory;
 
 public class ReplayTrackingHistoryHandler extends AbstractHandler{
 
+	/** The logger. */
+	private static Logger logger = LogFactory.INSTANCE.getLogger(ReplayTrackingHistoryHandler.class);
+
+	
+	/**
+	 * Show view execution history for selected jobId.
+	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
@@ -55,7 +78,7 @@ public class ReplayTrackingHistoryHandler extends AbstractHandler{
 			ExecutionStatus executionStatus = readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
 			replayExecutionTracking(executionStatus);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("Failed to show view execution tracking history: "+e);
 		}
 		
 		
@@ -63,6 +86,10 @@ public class ReplayTrackingHistoryHandler extends AbstractHandler{
 		return null;
 	}
 	
+	/**
+	 * Apply status and count on editor according to jobid.
+	 * @param executionStatus
+	 */
 	public void replayExecutionTracking(ExecutionStatus executionStatus){
 		IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
 		IEditorReference[] refs = page.getEditorReferences();
