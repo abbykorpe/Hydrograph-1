@@ -1165,8 +1165,7 @@ private void attachDeleteButtonListener(final Button deleteButton) {
 		};
 		return listener;
 	}
-	
-	public void addNewRow() {
+	private void addNewRow() {
 		if (!lblPropertyError.getVisible() || keyValues.size() < 1) {
 			isAnyUpdatePerformed = true;
 
