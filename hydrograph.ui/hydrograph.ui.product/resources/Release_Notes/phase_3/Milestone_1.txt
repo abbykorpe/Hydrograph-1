@@ -2,7 +2,9 @@
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
-1. .... - [Pooja Yadav] - Removal of Secondary key Widget from Sort Component
+<<<<<<< HEAD
+1. .... - [Pooja Yadav] - Removal of Secondary key Widget from Sort Component.
+2..... - [Pooja Yadav]-Change in Output subjob acronym.
 
 =====================================================================================================
 Issues/Defects fixed:
