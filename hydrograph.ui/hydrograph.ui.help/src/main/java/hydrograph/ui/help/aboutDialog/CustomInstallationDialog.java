@@ -84,7 +84,7 @@ public class CustomInstallationDialog extends InstallationDialog {
 		composite = (Composite) super.createDialogArea(parent);
 		this.tabFolder = (TabFolder) composite.getChildren()[0];
 
-		composite.getShell().setMinimumSize(950, 800);
+		composite.getShell().setMinimumSize(950, 500);
 		TabItem tbtmLibraries = new TabItem(tabFolder, SWT.NONE);
 		tbtmLibraries.setText("Libraries");
 
