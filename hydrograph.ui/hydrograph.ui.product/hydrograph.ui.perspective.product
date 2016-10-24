@@ -15,10 +15,6 @@
 
 ../Eclipse/plugins/org.eclipse.equinox.launcher.cocoa.macosx.x86_64_1.1.400.v20160518-1444
 
--product
-
-org.eclipse.epp.package.rcp.product
-
 --launcher.defaultAction
 
 openFile
@@ -37,15 +33,10 @@ openFile
 
 -XX:+UseStringDeduplication
 
--XstartOnFirstThread
 
 -Dorg.eclipse.swt.internal.carbon.smallFonts
 
 -Dosgi.requiredJavaVersion=1.8
-
--Xms256m
-
--Xmx1024m
 
 -Xdock:icon=../Resources/Eclipse.icns
 
@@ -87,6 +78,11 @@ openFile
 -XX:+UseStringDeduplication
 -Dosgi.requiredJavaVersion=1.8</argsX86_64>
       </programArgsWin>
+      <vmArgsMac>-Xms256m
+-Xmx1024m
+
+-XstartOnFirstThread
+      </vmArgsMac>
       <vmArgsWin>
          <argsX86_64>-Xms2048m
 -Xmx4096m</argsX86_64>
@@ -332,6 +328,7 @@ openFile
       <plugin id="org.eclipse.platform"/>
       <plugin id="org.eclipse.search"/>
       <plugin id="org.eclipse.swt"/>
+	  <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
       <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
