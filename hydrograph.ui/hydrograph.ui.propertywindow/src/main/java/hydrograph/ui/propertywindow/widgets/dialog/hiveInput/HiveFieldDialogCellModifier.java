@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
+ 	
 package hydrograph.ui.propertywindow.widgets.dialog.hiveInput;
 
 import java.util.List;
@@ -110,6 +110,19 @@ public class HiveFieldDialogCellModifier implements ICellModifier {
 			viewer.refresh();
 	}
 
+    /**
+     * Returns a boolean value
+     * 
+     * @param viewer
+     * 
+     * @param errorLabel
+     * 
+     * This method will always return a boolean value to the caller.
+     * The viewer argument is the specific table viewer for which the user
+     * wants to validate the data. The errorLabel is used just for checking the present status
+     * like whether the calling class has already set its value or not.
+     * 
+     */
 	public static boolean validatePartitionKeyTable(Viewer viewer,Label errorLabel) {
 		errorLabel.setVisible(false);
 		for (HivePartitionFields row : (List<HivePartitionFields>) viewer.getInput()) {
