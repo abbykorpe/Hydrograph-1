@@ -41,6 +41,7 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -90,6 +91,11 @@ public class TrackingDisplayUtils {
 				.getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor) {
 			editor.closeAllSubJobLinkedEditors();
+			String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "." + ((ELTGraphicalEditor) editor).getJobName();	
+			Job job = editor.getJobInstance(currentJobName);			
+			if(job!=null){			
+				job.setJobStatus(JobStatus.PENDING);			
+			}
 			clearTrackingStatusForEditor(editor);
 		}
 	}
@@ -108,6 +114,11 @@ public class TrackingDisplayUtils {
 		if (editor != null && editor instanceof ELTGraphicalEditor
 				&& (editor.getJobId().equals(jobId))) {
 			editor.closeAllSubJobLinkedEditors();
+			String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "." + ((ELTGraphicalEditor) editor).getJobName();	
+			Job job = editor.getJobInstance(currentJobName);			
+			if(job!=null){			
+				job.setJobStatus(JobStatus.PENDING);			
+			}
 			clearTrackingStatusForEditor(editor);
 		}
 	}

@@ -101,8 +101,9 @@ public class ExecutionTrackingFileLogger {
 	 * @param executionStatus the execution status
 	 */
 	public void log(String uniqJobId,ExecutionStatus executionStatus, boolean isLocalMode){
-		
-		executionStatusList.add(executionStatus);
+		if(executionStatus!=null && executionStatus.getComponentStatus().size()>0){
+			executionStatusList.add(executionStatus);
+		}
 		getExecutionStatusLogger(uniqJobId, isLocalMode, executionStatusList);
 	}
 

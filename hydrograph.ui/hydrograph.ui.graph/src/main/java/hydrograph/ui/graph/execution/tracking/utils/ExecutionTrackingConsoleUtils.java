@@ -262,7 +262,7 @@ public class ExecutionTrackingConsoleUtils {
 	 *
 	 * @return the log path
 	 */
-	private String getLogPath(){
+	public String getLogPath(){
 		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
 				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
 		return jobTrackingLogDirectory = jobTrackingLogDirectory + "/";

@@ -20,4 +20,5 @@ public class JobStatus {
 	public static final String SUCCESS="SUCCESS";
 	public static final String FAILED="FAILED";
 	public static final String KILLED="KILLED";	
+	public static final String PENDING="PENDING";	
 }
