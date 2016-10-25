@@ -20,6 +20,7 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -285,7 +286,9 @@ public class SecondaryColumnKeysDialog extends Dialog {
 			upButton.setEnabled(false);
 			downButton.setEnabled(false);
 		} 
-	
+		if (lblPropertyError.getVisible()) {
+			lblPropertyError.setVisible(false);
+		}
 	}
 
 	
@@ -383,6 +386,14 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 			}
 		});
+		
+		targetTableViewer.getTable().addMouseListener(new SingleClickEvent(new Runnable() {
+			
+			@Override
+			public void run() {
+				validate();
+			}
+		}));
 	}
 
 	private void createSourceTable(Composite composite_2) {

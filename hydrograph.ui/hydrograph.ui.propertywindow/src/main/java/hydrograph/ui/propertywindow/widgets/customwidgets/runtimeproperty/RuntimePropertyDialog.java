@@ -20,6 +20,7 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -308,7 +309,9 @@ public class RuntimePropertyDialog extends Dialog {
 			upButton.setEnabled(false);
 			downButton.setEnabled(false);
 		} 
-	
+		if(lblPropertyError.getVisible()){
+			lblPropertyError.setVisible(false);
+		}
 	}
 
 	private void attachAddButtonListern(Button addButton) {
@@ -549,6 +552,13 @@ public class RuntimePropertyDialog extends Dialog {
 		}
 		attachShortcutListner(Constants.PROPERTY_NAME);
 		attachShortcutListner(Constants.PROPERTY_VALUE);
+		
+		tableViewer.getTable().addMouseListener(new SingleClickEvent(new Runnable() {
+			@Override
+			public void run() {
+				validate();
+			}
+		}));
 
 	}
 	
