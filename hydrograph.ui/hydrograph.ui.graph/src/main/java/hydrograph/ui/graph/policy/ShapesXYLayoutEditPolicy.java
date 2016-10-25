@@ -14,6 +14,14 @@
  
 package hydrograph.ui.graph.policy;
 
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
+
 import hydrograph.ui.graph.command.CommentBoxSetConstraintCommand;
 import hydrograph.ui.graph.command.ComponentCreateCommand;
 import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
@@ -22,15 +30,6 @@ import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
-
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
-import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.requests.CreateRequest;
 
 
 /**
@@ -68,7 +67,7 @@ public class ShapesXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override 
 	protected EditPolicy createChildEditPolicy(EditPart child) { 
 		if (child instanceof CommentBoxEditPart){
-			return new LogicResizableEditPolicy();
+			return new CommentBoxResizableEditPolicy();
 		}
 		return new ComponentResizableEditPolicy();
 		//return new NonResizableEditPolicy(); 

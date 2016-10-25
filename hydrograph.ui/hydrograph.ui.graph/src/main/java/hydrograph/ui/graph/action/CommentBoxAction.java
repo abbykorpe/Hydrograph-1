@@ -14,14 +14,6 @@
  
 package hydrograph.ui.graph.action;
 
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.action.PasteAction;
-import hydrograph.ui.graph.command.CommentBoxCommand;
-import hydrograph.ui.graph.controller.ContainerEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.CommentBox;
-import hydrograph.ui.graph.model.Container;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
@@ -31,16 +23,23 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.command.CommentBoxCommand;
+import hydrograph.ui.graph.controller.ContainerEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.model.CommentBox;
+import hydrograph.ui.graph.model.Container;
 /**
  * The Class Action use to create Comment Box
  * 
  * @author Bitwise
  */
-public class LabelAction extends SelectionAction{
+public class CommentBoxAction extends SelectionAction{
 	
 private PasteAction pasteAction;
 	
-	public LabelAction(IWorkbenchPart part, IAction action) {
+	public CommentBoxAction(IWorkbenchPart part, IAction action) {
 		super(part);
 		this.pasteAction = (PasteAction) action;
 		setLazyEnablementCalculation(true);

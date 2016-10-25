@@ -14,18 +14,16 @@
  
 package hydrograph.ui.graph.model;
 
-import hydrograph.ui.datastructure.property.JoinConfigProperty;
-import hydrograph.ui.graph.model.Component.Props;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.slf4j.Logger;
+
+import hydrograph.ui.graph.model.Component.Props;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class CommentBox.
@@ -45,7 +43,6 @@ public class CommentBox extends Model{
 	private Point location;
 	private boolean newInstance;
 	private Map<String, Object> clonedHashMap;
-	private ArrayList<JoinConfigProperty>  clonedArrayList;
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(CommentBox.class);
 

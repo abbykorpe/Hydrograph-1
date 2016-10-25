@@ -1,38 +1,38 @@
-/*******************************************************************************
- * Copyright (c) 2000, 2005 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.graph.action;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.part.CellEditorActionHandler;
-
-import hydrograph.ui.graph.figure.StickyNoteFigure;
 
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.part.CellEditorActionHandler;
 
-public class LogicLabelEditManager 
+import hydrograph.ui.graph.figure.CommentBoxFigure;
+
+public class CommentBoxLabelEditManager 
 	extends DirectEditManager
 {
 
@@ -47,7 +47,7 @@ private ZoomListener zoomListener = new ZoomListener() {
 	}
 };
 
-public LogicLabelEditManager(GraphicalEditPart source, CellEditorLocator locator) {
+public CommentBoxLabelEditManager(GraphicalEditPart source, CellEditorLocator locator) {
 	super(source, null, locator);
 }
 
@@ -88,8 +88,8 @@ private void disposeScaledFont() {
 
 protected void initCellEditor() {
 	// update text
-	StickyNoteFigure stickyNote = (StickyNoteFigure)getEditPart().getFigure();
-	getCellEditor().setValue(stickyNote.getText());
+	CommentBoxFigure comment = (CommentBoxFigure)getEditPart().getFigure();
+	getCellEditor().setValue(comment.getText());
 	// update font
 	ZoomManager zoomMgr = (ZoomManager)getEditPart().getViewer()
 			.getProperty(ZoomManager.class.toString());
@@ -99,7 +99,7 @@ protected void initCellEditor() {
 		updateScaledFont(zoomMgr.getZoom());
 		zoomMgr.addZoomListener(zoomListener);
 	} else
-		getCellEditor().getControl().setFont(stickyNote.getFont());
+		getCellEditor().getControl().setFont(comment.getFont());
 
 	// Hook the cell editor's copy/paste actions to the actionBars so that they can
 	// be invoked via keyboard shortcuts.

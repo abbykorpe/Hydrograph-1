@@ -13,15 +13,8 @@
 package hydrograph.ui.graph.controller;
 
 
-import hydrograph.ui.graph.action.LogicLabelEditManager;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.figure.StickyNoteFigure;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import hydrograph.ui.graph.model.CommentBox;
-import hydrograph.ui.graph.policy.LabelDirectEditPolicy;
-import hydrograph.ui.graph.policy.LogicLabelEditPolicy;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -36,6 +29,13 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.accessibility.AccessibleControlEvent;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.graph.action.CommentBoxLabelEditManager;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.figure.CommentBoxFigure;
+import hydrograph.ui.graph.model.CommentBox;
+import hydrograph.ui.graph.policy.CommentBoxDirectEditPolicy;
+import hydrograph.ui.graph.policy.LabelEditPolicy;
 
 public class CommentBoxEditPart extends AbstractGraphicalEditPart implements PropertyChangeListener
 
@@ -67,7 +67,7 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	protected AccessibleEditPart createAccessible(){
 		return new AccessibleGraphicalEditPart(){
 			public void getValue(AccessibleControlEvent e) {
-				e.result = getLogicLabel().getLabelContents();
+				e.result = getLabel().getLabelContents();
 			}
 
 			public void getName(AccessibleEvent e) {
@@ -78,31 +78,31 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 
 	@Override
 	protected void createEditPolicies(){
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new LabelDirectEditPolicy());
-		installEditPolicy(EditPolicy.COMPONENT_ROLE,new LogicLabelEditPolicy()); 
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new CommentBoxDirectEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE,new LabelEditPolicy()); 
 	}
 
 	@Override
 	protected IFigure createFigure(){
-		StickyNoteFigure label = new StickyNoteFigure();
+		CommentBoxFigure label = new CommentBoxFigure();
 		label.setSize(268, 56);
 		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		org.eclipse.swt.graphics.Point point = editor.getCursorPosition();
 		Point newLocation = resetLocation(new Point(point));
 		label.setLocation(newLocation);
-		if(label.getSize() != getLogicLabel().getSize()){
-			label.setSize(getLogicLabel().getSize());
+		if(label.getSize() != getLabel().getSize()){
+			label.setSize(getLabel().getSize());
 		}
 		return label;
 	}
 
-	private CommentBox getLogicLabel(){
+	private CommentBox getLabel(){
 		return (CommentBox)getModel();
 	}
 
 	private void performDirectEdit(){
-		new LogicLabelEditManager(this,
-				new LabelCellEditorLocator((StickyNoteFigure)getFigure())).show();
+		new CommentBoxLabelEditManager(this,
+				new CommentBoxCellEditorLocator((CommentBoxFigure)getFigure())).show();
 	}
 
 	private Point resetLocation(Point newLocation){
@@ -126,8 +126,8 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 			 refreshVisuals();
 		  }
 		else if (prop.equalsIgnoreCase("Size") || prop.equalsIgnoreCase("Location")){
-			Point loc = getLogicLabel().getLocation();
-			Dimension size = getLogicLabel().getSize();
+			Point loc = getLabel().getLocation();
+			Dimension size = getLabel().getSize();
 			Rectangle r = new Rectangle(loc ,size);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this,getFigure(),r);
 			 refreshVisuals();
@@ -136,7 +136,7 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	
 	@Override
 	protected void refreshVisuals() {
-		((StickyNoteFigure)getFigure()).setText(getLogicLabel().getLabelContents());
+		((CommentBoxFigure)getFigure()).setText(getLabel().getLabelContents());
 	}
 
 }

@@ -146,6 +146,7 @@ import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.action.CommentBoxAction;
 import hydrograph.ui.graph.action.ComponentHelpAction;
 import hydrograph.ui.graph.action.ComponentPropertiesAction;
 import hydrograph.ui.graph.action.ContributionItemManager;
@@ -803,6 +804,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		getSelectionActions().add(action.getId());
 		
 		action = new ViewDataCurrentJobAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action=new CommentBoxAction(this, pasteAction);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
