@@ -27,6 +27,7 @@ connection(link) on transform component.
 14.<1413>-[Ankit Sharma] Error bubble was getting displayed on transform component even if there is no error in component. 
 15.<1423>-[Pooja Yadav]-Exception Occured While saving the Job
 16.<1336> - [Prateem Tadas] -Hive component: On Partition key Window, that when we Use Different DB, the Available Fields are not Getting Imported.
+17.<1435> - [Ankit Sharma] - Error was getting removed when user clicks anywhere in the panel.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
