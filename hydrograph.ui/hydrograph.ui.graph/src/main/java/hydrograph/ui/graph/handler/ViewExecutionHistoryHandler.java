@@ -23,6 +23,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -76,18 +77,14 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		}
 		
 		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(), tmpList);
-		dialog.open();
-		
-		
-		try {
-			ExecutionStatus executionStatus = readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
-			replayExecutionTracking(executionStatus);
-		} catch (FileNotFoundException e) {
-			logger.error("Failed to show view execution tracking history: "+e);
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			try {
+				ExecutionStatus executionStatus = readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
+				replayExecutionTracking(executionStatus);
+			} catch (FileNotFoundException e) {
+				logger.error("Failed to show view execution tracking history: " + e);
+			}
 		}
-		
-		
-		
 		return null;
 	}
 	
