@@ -13,65 +13,6 @@
 
 package hydrograph.ui.graph.editor;
 
-import hydrograph.ui.common.component.config.CategoryType;
-import hydrograph.ui.common.component.config.Component;
-import hydrograph.ui.common.interfaces.console.IHydrographConsole;
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
-import hydrograph.ui.common.util.CanvasDataAdapter;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructures.parametergrid.ParameterFile;
-import hydrograph.ui.engine.exceptions.EngineException;
-import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
-import hydrograph.ui.engine.util.ConverterUtil;
-import hydrograph.ui.graph.Activator;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.action.ComponentHelpAction;
-import hydrograph.ui.graph.action.ComponentPropertiesAction;
-import hydrograph.ui.graph.action.ContributionItemManager;
-import hydrograph.ui.graph.action.CopyAction;
-import hydrograph.ui.graph.action.CutAction;
-import hydrograph.ui.graph.action.DeleteAction;
-import hydrograph.ui.graph.action.GraphRuntimePropertiesAction;
-import hydrograph.ui.graph.action.PasteAction;
-import hydrograph.ui.graph.action.debug.AddWatcherAction;
-import hydrograph.ui.graph.action.debug.RemoveWatcherAction;
-import hydrograph.ui.graph.action.debug.ViewDataCurrentJobAction;
-import hydrograph.ui.graph.action.debug.WatchRecordAction;
-import hydrograph.ui.graph.action.subjob.SubJobAction;
-import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
-import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
-import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.debugconverter.DebugHelper;
-import hydrograph.ui.graph.editorfactory.GenrateContainerData;
-import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
-import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
-import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
-import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
-import hydrograph.ui.graph.handler.DebugHandler;
-import hydrograph.ui.graph.handler.JobHandler;
-import hydrograph.ui.graph.handler.RemoveDebugHandler;
-import hydrograph.ui.graph.handler.RunJobHandler;
-import hydrograph.ui.graph.handler.StopJobHandler;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.job.JobStatus;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.graph.model.Component.ValidityStatus;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
-import hydrograph.ui.graph.model.components.OutputSubjobComponent;
-import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
-import hydrograph.ui.graph.utility.CanvasUtils;
-import hydrograph.ui.graph.utility.DataViewerUtility;
-import hydrograph.ui.graph.utility.SubJobUtility;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.parametergrid.utils.ParameterFileManager;
-import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -190,12 +131,70 @@ import org.xml.sax.SAXException;
 
 import com.thoughtworks.xstream.XStream;
 
+import hydrograph.ui.common.component.config.CategoryType;
+import hydrograph.ui.common.component.config.Component;
+import hydrograph.ui.common.interfaces.console.IHydrographConsole;
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
+import hydrograph.ui.common.util.CanvasDataAdapter;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
+import hydrograph.ui.engine.util.ConverterUtil;
+import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.action.ComponentHelpAction;
+import hydrograph.ui.graph.action.ComponentPropertiesAction;
+import hydrograph.ui.graph.action.ContributionItemManager;
+import hydrograph.ui.graph.action.CopyAction;
+import hydrograph.ui.graph.action.CutAction;
+import hydrograph.ui.graph.action.DeleteAction;
+import hydrograph.ui.graph.action.GraphRuntimePropertiesAction;
+import hydrograph.ui.graph.action.PasteAction;
+import hydrograph.ui.graph.action.debug.AddWatcherAction;
+import hydrograph.ui.graph.action.debug.RemoveWatcherAction;
+import hydrograph.ui.graph.action.debug.ViewDataCurrentJobAction;
+import hydrograph.ui.graph.action.debug.WatchRecordAction;
+import hydrograph.ui.graph.action.subjob.SubJobAction;
+import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
+import hydrograph.ui.graph.action.subjob.SubJobTrackingAction;
+import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
+import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
+import hydrograph.ui.graph.editorfactory.GenrateContainerData;
+import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
+import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
+import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
+import hydrograph.ui.graph.handler.DebugHandler;
+import hydrograph.ui.graph.handler.JobHandler;
+import hydrograph.ui.graph.handler.RemoveDebugHandler;
+import hydrograph.ui.graph.handler.RunJobHandler;
+import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.job.JobStatus;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.utility.DataViewerUtility;
+import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.parametergrid.utils.ParameterFileManager;
+import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
+
 /**
  * Responsible to render the palette and container.
  * 
  */
 public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette implements ComponentCanvas, DefaultGEFCanvas{
 
+	private List<ELTGraphicalEditor> linkedSubJobEditors=new ArrayList<>();
+	private boolean deleteOnDispose;
 	private boolean dirty=false;
 	private PaletteRoot paletteRoot = null;
 
@@ -215,12 +214,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private static final String CONSOLE_VIEW_ID = "hydrograph.ui.project.structure.console.HydrographConsole";
 
 	private String uniqueJobId;
-	private String jobId;
 
 	private static final Color palatteTextColor=new Color(null,51,51,51);
-	
-	
-	private static final String JOB_ID_STRING_SEPARATOR = "_";
 	
 	/**
 	 * Instantiates a new ETL graphical editor.
@@ -763,6 +758,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		
+		action=new SubJobTrackingAction(this, pasteAction);
+		registry.registerAction(action); 
+		getSelectionActions().add(action.getId());
+		
+		
 		action = new AddWatcherAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
@@ -976,7 +976,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			String activeProjectName = activeProject.getName();
 
 			IPath parameterFileIPath =new Path("/"+activeProjectName+"/param/"+ getPartName().replace(".job", ".properties"));
-		    jobId = activeProjectName.concat("_").concat(getPartName().replace(".job", "_"));
+		    activeProjectName.concat("_").concat(getPartName().replace(".job", "_"));
 
 			return parameterFileIPath;
 		}else{
@@ -1115,6 +1115,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		refreshParameterFileInProjectExplorer();
 	}
 
+	/**
+	 * Generate Target XML from container
+	 * @param file
+	 */
 	public void saveJob(IFile file) {
 		
 		try {
@@ -1281,6 +1285,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	@Override
 	public void dispose() {
 		super.dispose();
+		closeAllSubJobLinkedEditors();
 		removeSubjobProperties(isDirty());
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(new ResourceChangeListener(this));
 		logger.debug("Job closed");
@@ -1291,6 +1296,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 		deleteDebugFiles(jobId);
 		enableRunningJobResource() ;
+		removeTempSubJobTrackFiles();
 	}
 	
 	private void deleteDebugFiles(String jobID) {
@@ -1718,4 +1724,51 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public String getUniqueJobId(){
 		return uniqueJobId;
 	}
+	/**
+	 * Set flag use to dispose editor.
+	 * @param deleteOnDispose
+	 */
+	public void setDeleteOnDispose(boolean deleteOnDispose) {
+		this.deleteOnDispose = deleteOnDispose;
+	}
+	
+	/**
+	 * Add dependent editor
+	 * @param editor
+	 */
+	public void addSubJobEditor(ELTGraphicalEditor editor){
+		linkedSubJobEditors.add(editor);
+	}
+
+	/**
+	 * close all linked subjob editor on main job closed.
+	 */
+	public void closeAllSubJobLinkedEditors() {
+		for(ELTGraphicalEditor editor:linkedSubJobEditors){
+			if(editor!=null)
+			editor.getEditorSite().getPage().closeEditor(editor, false);
+		}
+	}
+
+	
+	/**
+	 * Remove temp tracking subjob file after tool close, rerun and modification. 
+	 */
+	public void removeTempSubJobTrackFiles() {
+		
+	if(deleteOnDispose){
+		try {
+			IFile file=((IFileEditorInput)getEditorInput()).getFile();
+			if(file.exists()){
+			ResourcesPlugin.getWorkspace().getRoot().getFile(file.getFullPath()).delete(true, null);
+			ResourcesPlugin.getWorkspace().getRoot().getFile(file.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH)).delete(true, null);
+			}
+		} catch (Exception e) {
+			logger.error("Failed to remove temp subjob tracking files: "+e);
+		}
+	}
+	
+	}
+
+
 }

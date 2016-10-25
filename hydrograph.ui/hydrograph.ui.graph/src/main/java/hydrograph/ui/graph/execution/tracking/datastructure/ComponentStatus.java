@@ -31,6 +31,8 @@ public class ComponentStatus {
 	/** The current status. */
 	private String currentStatus;
 	
+	private String batch;
+	
 	/** The processed record count. */
 	private Map<String, Long> processedRecordCount;
 
@@ -42,23 +44,17 @@ public class ComponentStatus {
 	 * @param currentStatus the current status
 	 * @param processedRecordCount the processed record count
 	 */
-	public ComponentStatus(String componentId, String componentName, String currentStatus,
+	public ComponentStatus(String componentId, String componentName, String currentStatus,String batch,
 			Map<String, Long> processedRecordCount) {
 		super();
 		this.componentId = componentId;
 		this.componentName = componentName;
 		this.currentStatus = currentStatus;
+		this.batch=batch;
 		this.processedRecordCount = processedRecordCount;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "ComponentStatus [componentId=" + componentId + ", componentName=" + componentName + ", currentStatus="
-				+ currentStatus + ", processedRecordCount=" + processedRecordCount + "]";
-	}
+	
 
 	/**
 	 * Gets the component id.
@@ -86,6 +82,12 @@ public class ComponentStatus {
 	public String getCurrentStatus() {
 		return currentStatus;
 	}
+	
+	
+
+	public String getBatch() {
+		return batch;
+	}
 
 	/**
 	 * Gets the processed record count.
@@ -96,16 +98,21 @@ public class ComponentStatus {
 		return processedRecordCount;
 	}
 
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((batch == null) ? 0 : batch.hashCode());
 		result = prime * result + ((componentId == null) ? 0 : componentId.hashCode());
 		result = prime * result + ((componentName == null) ? 0 : componentName.hashCode());
 		result = prime * result + ((currentStatus == null) ? 0 : currentStatus.hashCode());
 		result = prime * result + ((processedRecordCount == null) ? 0 : processedRecordCount.hashCode());
 		return result;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -116,6 +123,11 @@ public class ComponentStatus {
 		if (getClass() != obj.getClass())
 			return false;
 		ComponentStatus other = (ComponentStatus) obj;
+		if (batch == null) {
+			if (other.batch != null)
+				return false;
+		} else if (!batch.equals(other.batch))
+			return false;
 		if (componentId == null) {
 			if (other.componentId != null)
 				return false;
@@ -138,4 +150,5 @@ public class ComponentStatus {
 			return false;
 		return true;
 	}
+
 }

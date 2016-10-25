@@ -277,6 +277,7 @@ public class SubJobUtility {
 		inputSubComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 		propogateSchemaToSubjob((((ComponentEditPart) componentEditPart).getCastedModel()), outSubComponent);
 		updateParametersInGrid((((ComponentEditPart) componentEditPart).getCastedModel()), file.getFullPath());
+		((ComponentEditPart) componentEditPart).getCastedModel().getProperties().put(Constants.SUBJOB_CONTAINER, container);
 	}
 
 	/**
@@ -360,6 +361,7 @@ public class SubJobUtility {
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid graph file.");
 			}
 		}
+		selectedSubjobComponent.getProperties().put(Constants.SUBJOB_CONTAINER, container);
 		return container;
 	}
 

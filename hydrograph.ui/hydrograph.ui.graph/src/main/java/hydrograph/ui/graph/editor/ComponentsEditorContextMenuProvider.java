@@ -71,10 +71,12 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		// Add standard action groups to the menu
 		GEFActionConstants.addStandardActionGroups(menu);
 		 
-        IAction[] actions = new IAction[3];
+        IAction[] actions = new IAction[4];
 		actions[0] = getAction(Constants.SUBJOB_CREATE);
 	    actions[1] = getAction(Constants.SUBJOB_OPEN);
 	    actions[2] = getAction(Constants.SUBJOB_UPDATE);
+	    actions[3] = getAction(Constants.SUBJOB_TRACKING);
+	    
 	    SubMenuAction subJobMenu=new SubMenuAction( actions, Constants.SUBJOB_ACTION, Constants.SUBJOB_ACTION_ToolTip,true);	// Add actions to the menu
 		IAction[] watcherAction = new IAction[2];
         watcherAction[0] = getAction(Constants.ADD_WATCH_POINT_ID);

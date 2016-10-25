@@ -13,19 +13,6 @@
 
 package hydrograph.ui.graph.execution.tracking.utils;
 
-import hydrograph.ui.common.util.ConfigFileReader;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.Activator;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.LinkEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.ComponentExecutionStatus;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +31,19 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.ConfigFileReader;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.LinkEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.ComponentExecutionStatus;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class TrackingDisplayUtils.
@@ -89,6 +89,7 @@ public class TrackingDisplayUtils {
 				.getWorkbench().getWorkbenchWindows()[0].getActivePage()
 				.getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor) {
+			editor.closeAllSubJobLinkedEditors();
 			clearTrackingStatusForEditor(editor);
 		}
 	}
@@ -106,6 +107,7 @@ public class TrackingDisplayUtils {
 				.getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor
 				&& (editor.getJobId().equals(jobId))) {
+			editor.closeAllSubJobLinkedEditors();
 			clearTrackingStatusForEditor(editor);
 		}
 	}

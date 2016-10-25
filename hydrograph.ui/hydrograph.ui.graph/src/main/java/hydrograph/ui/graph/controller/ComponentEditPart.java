@@ -14,24 +14,6 @@
  
 package hydrograph.ui.graph.controller;
 
-import hydrograph.ui.common.component.config.Policy;
-import hydrograph.ui.common.component.config.Property;
-import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.figure.ComponentBorder;
-import hydrograph.ui.graph.figure.ComponentFigure;
-import hydrograph.ui.graph.figure.ELTFigureConstants;
-import hydrograph.ui.graph.figure.PortFigure;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.ComponentLabel;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
-import hydrograph.ui.graph.propertywindow.ELTPropertyWindow;
-import hydrograph.ui.graph.utility.SubJobUtility;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -61,6 +43,24 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.component.config.Policy;
+import hydrograph.ui.common.component.config.Property;
+import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.figure.ComponentBorder;
+import hydrograph.ui.graph.figure.ComponentFigure;
+import hydrograph.ui.graph.figure.ELTFigureConstants;
+import hydrograph.ui.graph.figure.PortFigure;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.ComponentLabel;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.propertywindow.ELTPropertyWindow;
+import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.logging.factory.LogFactory;
+
 
 /**
  * The Class ComponentEditPart.
@@ -85,6 +85,14 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			((Component) getModel()).setComponentEditPart(this);
 		}
 		backwardCompatibilityForChangingPhaseToBatch();
+		backwardCompatibilityForLoadingComponentId();
+	}
+
+	// Temp method for loading component's Id.
+	private void backwardCompatibilityForLoadingComponentId() {
+		if(StringUtils.isBlank(getCastedModel().getComponentId())){
+			getCastedModel().setComponentId(getCastedModel().getComponentLabel().getLabelContents());
+		}
 	}
 
 	private void backwardCompatibilityForChangingPhaseToBatch() {
@@ -603,7 +611,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	private void adjustComponentFigure(Component component, ComponentFigure componentFigure){
 		Dimension d = null;
 		//an extra space has been added at the end of the component's name for handling component renaming issue#1370.
-		String label = (String) component.getPropertyValue(Component.Props.NAME_PROP.getValue())+" ";
+		String label = (String) component.getPropertyValue(Component.Props.NAME_PROP.getValue());
 		ComponentLabel componentLabel = component.getComponentLabel();
 		if(componentLabelFont==null){
 			componentLabelFont = new Font( Display.getDefault(), ELTFigureConstants.labelFont, 10,
