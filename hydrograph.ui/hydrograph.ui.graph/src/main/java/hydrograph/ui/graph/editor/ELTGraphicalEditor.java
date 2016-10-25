@@ -1724,16 +1724,25 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public String getUniqueJobId(){
 		return uniqueJobId;
 	}
-	
+	/**
+	 * Set flag use to dispose editor.
+	 * @param deleteOnDispose
+	 */
 	public void setDeleteOnDispose(boolean deleteOnDispose) {
 		this.deleteOnDispose = deleteOnDispose;
 	}
 	
+	/**
+	 * Add dependent editor
+	 * @param editor
+	 */
 	public void addSubJobEditor(ELTGraphicalEditor editor){
 		linkedSubJobEditors.add(editor);
 	}
 
-	
+	/**
+	 * close all linked subjob editor on main job closed.
+	 */
 	public void closeAllSubJobLinkedEditors() {
 		for(ELTGraphicalEditor editor:linkedSubJobEditors){
 			if(editor!=null)

@@ -22,21 +22,21 @@ import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.job.Job;
 
 /**
- * The Class ReplayExecutionTrackingUtility use to create collection of job and their status.
+ * The Class ViewExecutionHistoryUtility use to create collection of job and their status.
  * 
  * @author Bitwise
  */
 
-public class ReplayExecutionTrackingUtility {
+public class ViewExecutionHistoryUtility {
 
 	private Map<String, ExecutionStatus> trackingMap;
 	private Map<String, List<Job>> trackingJobMap;
 	
 	
-	public static ReplayExecutionTrackingUtility INSTANCE = new ReplayExecutionTrackingUtility();
+	public static ViewExecutionHistoryUtility INSTANCE = new ViewExecutionHistoryUtility();
 	
 	
-	private ReplayExecutionTrackingUtility() {
+	private ViewExecutionHistoryUtility() {
 		trackingMap = new HashMap<String, ExecutionStatus>();
 		trackingJobMap = new HashMap<String, List<Job>>();
 	}
@@ -68,7 +68,7 @@ public class ReplayExecutionTrackingUtility {
 	}
 	
 	/**
-	 * 
+	 * Return job list for tracking.
 	 * @return Job details 
 	 */
 	public Map<String, List<Job>> getTrackingJobs(){
@@ -76,6 +76,10 @@ public class ReplayExecutionTrackingUtility {
 		
 	}
 	
+	/**
+	 * Return job vs execution tracking status map.
+	 * @return
+	 */
 	public Map<String, ExecutionStatus> getTrackingStatus(){
 		return trackingMap;
 	}
