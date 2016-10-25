@@ -428,10 +428,10 @@ public class RunConfigDialog extends Dialog {
 			this.runGraph = false;
 		}
 		
-		loadgetPreferences();
+		setPreferences();
 	}
 
-	private void loadgetPreferences() {
+	private void setPreferences() {
 		if(StringUtils.isBlank(PlatformUI.getPreferenceStore().getString(Constants.HOST)))
 			PlatformUI.getPreferenceStore().setValue(Constants.HOST,this.host);
 		
