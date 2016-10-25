@@ -104,10 +104,13 @@ public class InputSubjobUiConverter extends UiConverter {
 						new LinkedHashMap<String, ComponentsOutputSchema>());
 			}
 
-			for (Component component : subJobContainer.getChildren()) {
+			for (Object object : subJobContainer.getChildren()) {
+				if(object != null && object instanceof Component){
+					Component component = (Component) object;
 				SchemaPropagation.INSTANCE.continuousSchemaPropagation(component,
 						(Map) component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
 			}
+		  }
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException
 				| ComponentNotFoundException exception) {

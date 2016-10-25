@@ -14,10 +14,13 @@
 package hydrograph.ui.graph.action;
 
 
+import hydrograph.ui.graph.command.CommentBoxDeleteCommand;
 import hydrograph.ui.graph.command.ComponentDeleteCommand;
 import hydrograph.ui.graph.command.LinkDeleteCommand;
+import hydrograph.ui.graph.controller.CommentBoxEditPart;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
+import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.Model;
@@ -70,22 +73,26 @@ public class DeleteAction extends SelectionAction {
 
 		ComponentDeleteCommand componentDeleteCommand = new ComponentDeleteCommand();
 		LinkDeleteCommand linkDeleteCommand = new LinkDeleteCommand();
+		CommentBoxDeleteCommand boxDeleteCommand = new CommentBoxDeleteCommand();
 
 		populateDeleteCommands(selectedObjects, componentDeleteCommand,
-				linkDeleteCommand);
+				linkDeleteCommand,boxDeleteCommand);
 
 		if(componentDeleteCommand.hasComponentToDelete())
 			return componentDeleteCommand;
 
 		if(linkDeleteCommand.hasLinkToDelete())
 			return linkDeleteCommand;
+		
+		if(boxDeleteCommand.hasComponentToDelete())
+			return boxDeleteCommand;
 
 		return null;
 	}
 
 	private void populateDeleteCommands(List<Object> selectedObjects,
 			ComponentDeleteCommand componentDeleteCommand,
-			LinkDeleteCommand linkDeleteCommand) {
+			LinkDeleteCommand linkDeleteCommand, CommentBoxDeleteCommand boxDeleteCommand) {
 		Model node;
 		for(Object obj:selectedObjects)
 		{
@@ -99,6 +106,12 @@ public class DeleteAction extends SelectionAction {
 				node = (Link) ((EditPart)obj).getModel();
 				linkDeleteCommand.addLinkToDelete((Link)node);
 			}	
+			
+			if(obj instanceof CommentBoxEditPart)
+			{
+				node = (CommentBox) ((EditPart)obj).getModel();
+				boxDeleteCommand.addComponentToDelete((CommentBox)node);
+			}
 		}
 	}
 

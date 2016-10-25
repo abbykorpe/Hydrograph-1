@@ -164,11 +164,15 @@ public class SubJobAction extends SelectionAction{
 			for (int i = 0; i < containerOld.getChildren().size(); i++) {
 				if (!(containerOld.getChildren().get(i) instanceof InputSubjobComponent || containerOld.getChildren()
 						.get(i) instanceof OutputSubjobComponent)) {
-					if (containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS) != null
-							&& ((StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), containerOld.getChildren()
-									.get(i).getProperties().get(Constants.VALIDITY_STATUS).toString()))
+					Object object = containerOld.getChildren().get(i);
+					Component component=null;
+					if(object instanceof Component){
+						component = (Component) object;
+					}
+					if (component.getProperties().get(Constants.VALIDITY_STATUS) != null
+							&& ((StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), component.getProperties().get(Constants.VALIDITY_STATUS).toString()))
 							|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(),
-									containerOld.getChildren().get(i).getProperties().get(Constants.VALIDITY_STATUS)
+									component.getProperties().get(Constants.VALIDITY_STATUS)
 											.toString()))) {
 						validityStatus = ValidityStatus.ERROR.name();
 						break;

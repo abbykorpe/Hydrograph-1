@@ -109,9 +109,14 @@ public class SubJobOpenAction extends SelectionAction{
 									if (container != null){
 										container.setLinkedMainGraphPath(mainJobFilePath);
 										container.setSubjobComponentEditPart(obj);
-										for (Component component : container.getChildren()) {
+										for (Object object : container.getChildren()) {
+											Component component = null;
+											  if(object instanceof Component){
+											     component = (Component)object;
 											subJobUtility.propogateSchemaToSubjob(subjobComponent, component);
-										}}
+										}
+									}
+								}	
 									((ComponentEditPart) obj).refresh();
 								} else
 									MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",

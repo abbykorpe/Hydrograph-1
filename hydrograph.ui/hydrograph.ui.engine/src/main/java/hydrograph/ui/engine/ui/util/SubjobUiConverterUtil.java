@@ -128,13 +128,16 @@ public class SubjobUiConverterUtil {
 	 * @return
 	 */
 	public static Component getOutputSubJobConnectorReference(Container subJobContainer) {
-		for(Component component:subJobContainer.getChildren()){
+		for(Object object:subJobContainer.getChildren()){
+			if(object instanceof Component){
+				 Component component = (Component)object;
 			if(StringUtils.equals(Constants.OUTPUT_SOCKET_FOR_SUBJOB, component.getType())){
 				return component;
 			}
 		}
+	  }
 		return null;
-	}
+  }
 
 	
 	/**
@@ -142,10 +145,13 @@ public class SubjobUiConverterUtil {
 	 * @return
 	 */
 	public static Component getInputSubJobConnectorReference(Container container) {
-		for(Component component:container.getChildren()){
+		for(Object object:container.getChildren()){
+			if(object instanceof Component){
+				 Component component = (Component)object;
 			if(StringUtils.equals(Constants.INPUT_SOCKET_FOR_SUBJOB, component.getType())){
 				return component;
 			}
+		  }
 		}
 		return null;
 	}
@@ -209,13 +215,13 @@ public class SubjobUiConverterUtil {
 			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
 		} else {
 			for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
-				if (!(subJobContainer.getChildren().get(i) instanceof InputSubjobComponent || subJobContainer
-						.getChildren().get(i) instanceof OutputSubjobComponent)) {
-					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), subJobContainer.getChildren()
-							.get(i).getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
+				if(subJobContainer.getChildren().get(i) instanceof Component){
+					Component component = (Component)subJobContainer.getChildren().get(i);
+				if (!(component instanceof InputSubjobComponent || component instanceof OutputSubjobComponent)) {
+					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
 							|| StringUtils.equalsIgnoreCase(
 									UIComponentsConstants.WARN.value(),
-									subJobContainer.getChildren().get(i).getProperties()
+									component.getProperties()
 											.get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())) {
 						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),
 								UIComponentsConstants.ERROR.value());
@@ -227,7 +233,8 @@ public class SubjobUiConverterUtil {
 						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
 					}
 				}
-			}
+			   }
+			}//
 		}
 	}
 }

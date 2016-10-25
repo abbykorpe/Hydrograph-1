@@ -175,14 +175,16 @@ public class SubJobPortLinkUtilty {
 	 */
 	public static int getMaxXCoordinate(Container container){
 		int maxXCoordinate=Integer.MIN_VALUE;
-		for (Component component : container.getChildren()) {
+		  for (Object object : container.getChildren()) {
+			  if(object instanceof Component){
+				  Component component = (Component)object;
 			 if(component.getLocation().x > maxXCoordinate){
 				 maxXCoordinate = component.getLocation().x ;
 		     }
 		}
+	  }
 		return maxXCoordinate;
-	}
-	
+	 }
 	/**
 	 * Fix component size.
 	 *

@@ -13,12 +13,6 @@
 
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.Model;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +26,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.model.CommentBox;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Model;
+import hydrograph.ui.logging.factory.LogFactory;
+
 
 /**
  * The Class ComponentPasteCommand.
@@ -39,7 +40,7 @@ import org.slf4j.Logger;
 public class ComponentPasteCommand extends Command {
 	private static final Logger log = LogFactory.INSTANCE.getLogger(ComponentPasteCommand.class);
 	private int pasteCounter=0;
-	private Map<Component,Component> list = new HashMap<>();
+	private Map<Object,Object> list = new HashMap<>();
 
 	@Override
 	public boolean canExecute() {
@@ -48,7 +49,7 @@ public class ComponentPasteCommand extends Command {
 			return false;
 		Iterator it = bList.iterator();
 		while (it.hasNext()) {
-			Component node = (Component) it.next();
+			Object node = (Object) it.next();
 			if (isPastableNode(node)) {
 				list.put(node, null);
 			}
@@ -61,21 +62,33 @@ public class ComponentPasteCommand extends Command {
 	public void execute() {
 		if (!canExecute())
 			return;
-		Iterator<Component> it = list.keySet().iterator();
+		Iterator<Object> it = list.keySet().iterator();
 		while (it.hasNext()) {
-       	Component node = it.next();                              
+			Object node = it.next();                              
 			try {
 				IWorkbenchPage page = PlatformUI.getWorkbench()
 						.getActiveWorkbenchWindow().getActivePage();
-					Component clonedComponent =  node.clone();
-					clonedComponent.setPrefix(node.getComponentLabel().getLabelContents());
+				if(node instanceof Component){
+					Component clonedComponent =  ((Component)node).clone();
+					clonedComponent.setPrefix(((Component) node).getComponentLabel().getLabelContents());
 					clonedComponent.setParent(((ELTGraphicalEditor) page.getActiveEditor()).getContainer());
-					Point location = node.getLocation();
+					Point location = ((Component) node).getLocation();
 					int incrementedLocation = pasteCounter * 20;
 					clonedComponent.setLocation(new Point(location.getCopy().x + incrementedLocation,
 						location.getCopy().y + incrementedLocation));
 					list.put(node,clonedComponent);
-			
+				}
+				
+				else if(node instanceof CommentBox){
+					CommentBox clonedLabel = ((CommentBox) node).clone();
+					clonedLabel.setParent(((ELTGraphicalEditor) page.getActiveEditor()).getContainer());
+					clonedLabel.setLabelContents(((CommentBox)node).getLabelContents());
+					Point location = ((CommentBox)node).getLocation();
+					int incrementedLocation = pasteCounter * 20;
+					clonedLabel.setLocation(new Point(location.getCopy().x + incrementedLocation,
+					location.getCopy().y + incrementedLocation));
+					list.put(node,clonedLabel);
+				}
 			} catch (CloneNotSupportedException e) {
 				log.error("Object could not cloned", e);
 				
@@ -86,11 +99,17 @@ public class ComponentPasteCommand extends Command {
 
 	@Override
 	public void redo() {
-		Iterator<Component> it = list.values().iterator();
+		Iterator<Object> it = list.values().iterator();
 		while (it.hasNext()) {
-			Component node = it.next();
+			Model node = (Model) it.next();
 			if (isPastableNode(node)) {
-				node.getParent().addChild(node);
+				if(node instanceof Component){
+					((Component)node).getParent().addChild(((Component)node));
+					}
+					
+					else if(node instanceof CommentBox){
+						((CommentBox)node).getParent().addChild(((CommentBox)node));
+					}
 			}
 		}
 		
@@ -99,13 +118,15 @@ public class ComponentPasteCommand extends Command {
 	}
 
 	private void pasteLinks() {
-		for(Component originalNode:list.keySet()){
-			if(!originalNode.getSourceConnections().isEmpty()){
+		for(Object originalNode:list.keySet()){
+			if(originalNode instanceof Component){ 
+				Component node =  (Component) originalNode;
+			if(!((Component) originalNode).getSourceConnections().isEmpty()){
 				
-				for(Link originlink: originalNode.getSourceConnections()){
+				for(Link originlink: ((Component) originalNode).getSourceConnections()){
 					Component targetComponent = originlink.getTarget();
-					Component newSource = list.get(originalNode);
-					Component newtarget = list.get(targetComponent);					
+					Component newSource = (Component) list.get(originalNode);
+					Component newtarget = (Component) list.get(targetComponent);					
 					
 					if(newSource!=null && newtarget!=null){
 						Link link = new Link();
@@ -118,6 +139,7 @@ public class ComponentPasteCommand extends Command {
 					}
 				}
 			}
+		   }
 		}
 	}
 
@@ -128,12 +150,15 @@ public class ComponentPasteCommand extends Command {
 
 	@Override
 	public void undo() {
-		Iterator<Component> it = list.values().iterator();
+		Iterator<Object> it = list.values().iterator();
 		while (it.hasNext()) {
-			Component node = it.next();
+			Object object = it.next();
+			if(object instanceof Component){
+			Component node = (Component) object;
 			if (isPastableNode(node)) {
 				node.getParent().removeChild(node);
-			}
+			  }
+		   }
 		}
 	}
 
@@ -144,10 +169,12 @@ public class ComponentPasteCommand extends Command {
 	 *            the node
 	 * @return true, if is pastable node
 	 */
-	public boolean isPastableNode(Model node) {
+	public boolean isPastableNode(Object node) {
 		if (node instanceof Component)
 			return true;
 		if (node instanceof Link)
+			return true;
+		if (node instanceof CommentBox)
 			return true;
 		return false;
 	}

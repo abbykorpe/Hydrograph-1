@@ -14,9 +14,12 @@
  
 package hydrograph.ui.graph.policy;
 
+import hydrograph.ui.graph.command.CommentBoxSetConstraintCommand;
 import hydrograph.ui.graph.command.ComponentCreateCommand;
 import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
+import hydrograph.ui.graph.controller.CommentBoxEditPart;
 import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 
@@ -55,12 +58,18 @@ public class ShapesXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			return new ComponentSetConstraintCommand((Component) child.getModel(),
 					request, (Rectangle) constraint);
 		}
+		else if (child instanceof CommentBoxEditPart && constraint instanceof Rectangle){
+			return new CommentBoxSetConstraintCommand((CommentBox) child.getModel(), request , (Rectangle) constraint);
+		}
 		return super.createChangeConstraintCommand(request, child,
 				constraint);
 	}
 	
 	@Override 
 	protected EditPolicy createChildEditPolicy(EditPart child) { 
+		if (child instanceof CommentBoxEditPart){
+			return new LogicResizableEditPolicy();
+		}
 		return new ComponentResizableEditPolicy();
 		//return new NonResizableEditPolicy(); 
 	} 

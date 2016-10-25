@@ -53,6 +53,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.ConnectionLayer;
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
@@ -161,7 +162,9 @@ import hydrograph.ui.graph.action.subjob.SubJobAction;
 import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
 import hydrograph.ui.graph.action.subjob.SubJobTrackingAction;
 import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
+import hydrograph.ui.graph.command.CommentBoxSetConstraintCommand;
 import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
+import hydrograph.ui.graph.controller.CommentBoxEditPart;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
@@ -252,9 +255,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		super.initializeGraphicalViewer();
 		viewer = getGraphicalViewer();
 		viewer.setContents(container);
-		// listen for dropped parts 
+		// listen for dropped parts 
 		viewer.addDropTargetListener(createTransferDropTargetListener());
-		// listener for selection on canvas 
+		// listener for selection on canvas 
 		viewer.addSelectionChangedListener(createISelectionChangedListener());
 		attachCanvasMouseListeners();
 		setDefaultToolUndoRedoStatus();
@@ -1628,12 +1631,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if (container!=null && container.isCurrentGraphSubjob()) {
 
 			for (int i = 0; i < container.getChildren().size(); i++) {
-				if (Constants.INPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
-					container.getChildren().get(i).getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
+				Object obj = container.getChildren().get(i);
+				if(obj instanceof Component){
+					hydrograph.ui.graph.model.Component component = (hydrograph.ui.graph.model.Component) obj;
+				if (Constants.INPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())) {
+					component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 				}
-				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(container.getChildren().get(i).getComponentName())) {
-					oldSubjob=(hydrograph.ui.graph.model.Component) container.getChildren().get(i).getProperties().put(Constants.SUBJOB_COMPONENT, null);
+				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())) {
+					oldSubjob=(hydrograph.ui.graph.model.Component) component.getProperties().put(Constants.SUBJOB_COMPONENT, null);
 				}
+			 }
 			}
 			return container;
 		} else
@@ -1672,32 +1679,35 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	
 	private void moveComponentWithArrowKey(KeyEvent event){ 
-		 CompoundCommand compoundCommand = new CompoundCommand();
+		CompoundCommand compoundCommand = new CompoundCommand();
 		 ComponentSetConstraintCommand componentSetConstraintCommand = null;
+		 CommentBoxSetConstraintCommand commentSetConstraintCommand = null;
 		 ChangeBoundsRequest request = new ChangeBoundsRequest(org.eclipse.gef.RequestConstants.REQ_MOVE);
 		 List<EditPart> editPartsList = getGraphicalViewer().getSelectedEditParts();
 		 for(EditPart editPart : editPartsList ){
-			if(editPart instanceof ComponentEditPart){
+			if(editPart instanceof ComponentEditPart ){
 				hydrograph.ui.graph.model.Component component = (hydrograph.ui.graph.model.Component) editPart.getModel();
-			    org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle(component.getLocation(),component.getSize());
+			    org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle
+			    		                                                        (component.getLocation(),component.getSize());
 			    
-			    switch (event.keyCode){
-				case SWT.ARROW_UP:
-					bounds.setLocation(bounds.x , bounds.y - 10);
-					break;
-				case SWT.ARROW_DOWN:
-					bounds.setLocation(bounds.x , bounds.y + 10);
-					break;
-				case SWT.ARROW_RIGHT:
-					bounds.setLocation(bounds.x + 10, bounds.y);
-					break;
-				case SWT.ARROW_LEFT:
-					bounds.setLocation(bounds.x - 10 , bounds.y);
-					break;
-			   } 
+			    getBounds(event, bounds); 
 			
-		    componentSetConstraintCommand = new ComponentSetConstraintCommand((hydrograph.ui.graph.model.Component) editPart.getModel(),request, bounds);
+		    componentSetConstraintCommand = new ComponentSetConstraintCommand
+		    		((hydrograph.ui.graph.model.Component) editPart.getModel(),request, bounds);
 		    compoundCommand.add(componentSetConstraintCommand);
+
+			   }
+			
+			else if(editPart instanceof CommentBoxEditPart ){
+				hydrograph.ui.graph.model.CommentBox label = (hydrograph.ui.graph.model.CommentBox) editPart.getModel();
+			    org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle
+			    		                                                              (label.getLocation(),label.getSize());
+			    
+			    getBounds(event, bounds); 
+			
+			    commentSetConstraintCommand = new CommentBoxSetConstraintCommand
+			    		((hydrograph.ui.graph.model.CommentBox) editPart.getModel(),request, bounds);
+			    compoundCommand.add(commentSetConstraintCommand);
 
 			   }
 		  }
@@ -1805,5 +1815,32 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			drawerFigure.getContentPane().setBackgroundColor(getCanvasControl().getBackground());
 			drawerFigure.getContentPane().setForegroundColor(contrastColor);
 		}
+	}
+	
+	protected void getBounds(KeyEvent event,
+			org.eclipse.draw2d.geometry.Rectangle bounds) {
+		switch (event.keyCode){
+		case SWT.ARROW_UP:
+			bounds.setLocation(bounds.x , bounds.y - 10);
+			break;
+		case SWT.ARROW_DOWN:
+			bounds.setLocation(bounds.x , bounds.y + 10);
+			break;
+		case SWT.ARROW_RIGHT:
+			bounds.setLocation(bounds.x + 10, bounds.y);
+			break;
+		case SWT.ARROW_LEFT:
+			bounds.setLocation(bounds.x - 10 , bounds.y);
+			break;
+			}
+	}
+	
+	public org.eclipse.swt.graphics.Point getCursorPosition(){
+		Display display = Display.getDefault();
+		org.eclipse.swt.graphics.Point point = getGraphicalViewer().getControl().toControl(display.getCursorLocation());
+		FigureCanvas figureCanvas = (FigureCanvas)getGraphicalViewer().getControl();
+		org.eclipse.draw2d.geometry.Point location = figureCanvas.getViewport().getViewLocation();
+		point = new org.eclipse.swt.graphics.Point(point.x + location.x, point.y + location.y);
+		return point;
 	}
 }
