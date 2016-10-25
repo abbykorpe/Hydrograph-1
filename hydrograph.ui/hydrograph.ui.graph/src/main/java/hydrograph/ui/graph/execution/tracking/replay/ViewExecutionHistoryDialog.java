@@ -39,11 +39,11 @@ import org.eclipse.swt.widgets.Text;
 import hydrograph.ui.graph.job.Job;
 
 /**
- * The Class ReplayExecutionTrackingDialog use to create dialog to manage previous tracking history.
+ * The Class ViewExecutionHistoryDialog use to create dialog to manage previous tracking history.
  * 
  * @author Bitwise
  */
-public class ReplayExecutionTrackingDialog extends Dialog{
+public class ViewExecutionHistoryDialog extends Dialog{
 
 	public static final int CLOSE = 9999;
 	private List<Job> jobDetails;
@@ -56,7 +56,7 @@ public class ReplayExecutionTrackingDialog extends Dialog{
 	private static final String BROWSE_TRACKING_FILE="Browse Tracking File"; 
 	private static final String EXECUTION_HISTORY_DIALOG="Execution History Dialog";
 	
-	public ReplayExecutionTrackingDialog(Shell parentShell, List<Job> jobDetails) {
+	public ViewExecutionHistoryDialog(Shell parentShell, List<Job> jobDetails) {
 		super(parentShell);
 		this.jobDetails = jobDetails;
 	}
@@ -174,7 +174,6 @@ public class ReplayExecutionTrackingDialog extends Dialog{
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		filePath = ((Text)event.widget).getText();
-	    		System.out.println("Text:"+trackingFileText.getText());
 	    	}
 		});
 	}
@@ -209,7 +208,6 @@ public class ReplayExecutionTrackingDialog extends Dialog{
 	protected void okPressed() {
 		filePath=trackingFileText.getText();
 		if(filePath != null){
-			System.out.println("Path::"+filePath);
 		}else{
 			selectedUniqueJobId = jobDetails.get(0).getUniqueJobId();
 		}

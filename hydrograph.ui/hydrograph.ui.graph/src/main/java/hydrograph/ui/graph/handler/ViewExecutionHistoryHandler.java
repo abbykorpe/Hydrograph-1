@@ -40,19 +40,24 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
-import hydrograph.ui.graph.execution.tracking.replay.ReplayExecutionTrackingDialog;
-import hydrograph.ui.graph.execution.tracking.replay.ReplayExecutionTrackingUtility;
-import hydrograph.ui.graph.execution.tracking.utils.ExecutionTrackingConsoleUtils;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDialog;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
-public class ReplayTrackingHistoryHandler extends AbstractHandler{
+/**
+ * 
+ * Open tracking dialog window where user can view previous execution tracking view history.
+ * @author Bitwise
+ *
+ */
+public class ViewExecutionHistoryHandler extends AbstractHandler{
 
 	/** The logger. */
-	private static Logger logger = LogFactory.INSTANCE.getLogger(ReplayTrackingHistoryHandler.class);
+	private static Logger logger = LogFactory.INSTANCE.getLogger(ViewExecutionHistoryHandler.class);
 
 	
 	/**
@@ -62,7 +67,7 @@ public class ReplayTrackingHistoryHandler extends AbstractHandler{
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		
-		Map<String, List<Job>> jobDetails1 = ReplayExecutionTrackingUtility.INSTANCE.getTrackingJobs();
+		Map<String, List<Job>> jobDetails1 = ViewExecutionHistoryUtility.INSTANCE.getTrackingJobs();
 		List<Job> tmpList = jobDetails1.get(consoleName);
 		
 		if(tmpList==null){
@@ -70,7 +75,7 @@ public class ReplayTrackingHistoryHandler extends AbstractHandler{
 			return "";
 		}
 		
-		ReplayExecutionTrackingDialog dialog = new ReplayExecutionTrackingDialog(Display.getDefault().getActiveShell(), tmpList);
+		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(), tmpList);
 		dialog.open();
 		
 		
@@ -94,7 +99,7 @@ public class ReplayTrackingHistoryHandler extends AbstractHandler{
 		IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
 		IEditorReference[] refs = page.getEditorReferences();
 
-		ReplayExecutionTrackingUtility.INSTANCE.addTrackingStatus(executionStatus.getJobId(), executionStatus);
+		ViewExecutionHistoryUtility.INSTANCE.addTrackingStatus(executionStatus.getJobId(), executionStatus);
 		for (IEditorReference ref : refs){
 			IEditorPart editor = ref.getEditor(false);
 			if(editor instanceof ELTGraphicalEditor){

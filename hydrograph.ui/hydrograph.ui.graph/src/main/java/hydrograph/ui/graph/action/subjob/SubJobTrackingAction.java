@@ -50,7 +50,7 @@ public class SubJobTrackingAction extends SelectionAction{
 
 	private static final String TEMP_DIRECTORY="temp"; 
 	
-	Logger logger = LogFactory.INSTANCE.getLogger(SubJobTrackingAction.class);
+	private static Logger logger = LogFactory.INSTANCE.getLogger(SubJobTrackingAction.class);
 
 	/**
 	 * Instantiates a new SubJobTracking action.
