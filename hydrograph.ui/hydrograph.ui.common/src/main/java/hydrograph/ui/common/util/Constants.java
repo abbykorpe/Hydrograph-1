@@ -264,5 +264,6 @@ public class Constants {
 	public static final String DBTABLE_WIDGET_NAME="tableName";
 	public static final String PARTITION_KEYS_WIDGET_NAME="partitionKeys";
 	public static final String EXTERNAL_TABLE_PATH_WIDGET_NAME="externalTablePath";
+	public static final String HOST = "host";
 
 }

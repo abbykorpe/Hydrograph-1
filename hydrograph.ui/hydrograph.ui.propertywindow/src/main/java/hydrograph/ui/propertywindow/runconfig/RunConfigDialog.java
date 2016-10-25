@@ -13,6 +13,7 @@
 
 package hydrograph.ui.propertywindow.runconfig;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
@@ -426,6 +427,14 @@ public class RunConfigDialog extends Dialog {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", e.getMessage());
 			this.runGraph = false;
 		}
+		
+		loadgetPreferences();
+	}
+
+	private void loadgetPreferences() {
+		if(StringUtils.isBlank(PlatformUI.getPreferenceStore().getString(Constants.HOST)))
+			PlatformUI.getPreferenceStore().setValue(Constants.HOST,this.host);
+		
 	}
 
 	@Override
