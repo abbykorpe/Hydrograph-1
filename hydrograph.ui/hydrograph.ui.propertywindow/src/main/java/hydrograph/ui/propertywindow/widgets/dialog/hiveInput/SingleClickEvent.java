@@ -24,13 +24,13 @@ import org.eclipse.swt.widgets.Control;
  * @author Bitwise
  *
  */
-class SingleClickEvent extends MouseAdapter {
+public class SingleClickEvent extends MouseAdapter {
 
 	public static final int LEFT_BUTTON = 1;
 	private final Runnable action;
 	private static Boolean armed;
 
-	SingleClickEvent(Runnable action) {
+	public SingleClickEvent(Runnable action) {
 		this.action = action;
 	}
 
