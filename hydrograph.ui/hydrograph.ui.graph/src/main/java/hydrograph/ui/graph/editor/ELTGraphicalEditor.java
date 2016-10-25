@@ -1602,7 +1602,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 
-	private Job getJobInstance(String currentJobName) {
+	/**
+	 * Return job object using job name.
+	 * @param currentJobName
+	 * @return Job
+	 */
+	public Job getJobInstance(String currentJobName) {
 		if(RunJobHandler.hasJob(currentJobName)){
 			return RunJobHandler.getJob(currentJobName);
 		}else if(DebugHandler.hasJob(currentJobName)){
