@@ -13,6 +13,8 @@
 
 package hydrograph.ui.graph.execution.tracking.preferences;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
 
@@ -22,9 +24,13 @@ import org.eclipse.debug.internal.ui.preferences.DebugPreferencesMessages;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
@@ -40,6 +46,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	
 	public static final String JOB_RUN_PREFRENCE="job_run_prefrence";
 	private RadioGroupFieldEditor edit;
+	private StringFieldEditor hostFieldEditor;
 	
 	public JobRunPreference() {
 		super();
@@ -52,6 +59,22 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	@Override
 	public void init(IWorkbench workbench) {
 		getPreferenceStore().setDefault(JOB_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
+		loadHostNameValue();
+	}
+
+	private String loadHostNameValue() {
+		String value = PlatformUI.getPreferenceStore().getString(Constants.HOST);
+		if (StringUtils.isNotBlank(value)) {
+			getPreferenceStore().setValue(Constants.HOST, value);
+			getPreferenceStore().setDefault(Constants.HOST,value); 
+		} else {
+			getPreferenceStore().setValue(Constants.HOST, "");
+			getPreferenceStore().setDefault(Constants.HOST, "");
+		}
+		return value;
+	}
+
+	private void loadSavePromptValue() {
 		String value=Activator.getDefault().getPreferenceStore().getString(JobRunPreference.JOB_RUN_PREFRENCE);
 		if(StringUtils.equals(MessageDialogWithToggle.ALWAYS, value)){
 			getPreferenceStore().setValue(JOB_RUN_PREFRENCE,value);
@@ -65,18 +88,28 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
+		createHostNameFieldEditor(parent); 
+
 		Composite comp = SWTFactory.createComposite(parent, 1, 1, GridData.FILL_HORIZONTAL);
 		edit = new RadioGroupFieldEditor(JOB_RUN_PREFRENCE, Messages.SAVE_JOBS_BEFORE_LAUNCHING_MESSAGE, 3,  
 				 new String[][] {{DebugPreferencesMessages.LaunchingPreferencePage_3, MessageDialogWithToggle.ALWAYS}, 
 				 {DebugPreferencesMessages.LaunchingPreferencePage_5, MessageDialogWithToggle.PROMPT}}, 
 				 comp,
 				 true);
+		addField(hostFieldEditor);
 		addField(edit);
-		
 		initialize();
 		return comp;
 	}
 
+	private void createHostNameFieldEditor(Composite parent) {
+		Group group = SWTFactory.createGroup(parent, Messages.RUN_CONFIG_PREFRENCE_TITLE, 2, 0, GridData.FILL_HORIZONTAL);
+		Composite composite = new Composite(group, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		hostFieldEditor = new StringFieldEditor(PreferenceConstants.HOST, "Host        ", composite);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#performOk()
 	 */
@@ -84,6 +117,7 @@ public class JobRunPreference extends FieldEditorPreferencePage implements IWork
 	public boolean performOk() {
 		boolean returnCode= super.performOk();
 		Activator.getDefault().getPreferenceStore().setValue(JOB_RUN_PREFRENCE, getPreferenceStore().getString(JOB_RUN_PREFRENCE));
+		Activator.getDefault().getPreferenceStore().setValue(Constants.HOST, getPreferenceStore().getString(Constants.HOST));
 		return returnCode; 
 	}
 	
