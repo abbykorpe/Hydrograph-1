@@ -305,7 +305,7 @@ public class TrackingStatusUpdateUtils {
 		String jobId = executionStatus.getJobId();
 		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(jobId);
 		if(console!=null){
-			updateExecutionTrackingConsole(executionStatus, console);	
+			updateExecutionTrackingConsole(executionStatus, console,jobId);	
 		}
 	}
 	/**
@@ -313,10 +313,11 @@ public class TrackingStatusUpdateUtils {
 	 *
 	 * @param executionStatus the execution status
 	 * @param console the console
+	 * @param jobId 
 	 */
 	private void updateExecutionTrackingConsole(
 			final ExecutionStatus executionStatus,
-			final ExecutionTrackingConsole console) {
+			final ExecutionTrackingConsole console, String jobId) {
 		Display.getDefault().asyncExec(new Runnable() {
 
 			@Override
@@ -324,11 +325,8 @@ public class TrackingStatusUpdateUtils {
 				console.clearConsole();
 				ExecutionStatus[] status = ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
 				
+				console.setStatus(ExecutionTrackingConsoleUtils.getHeader(jobId));	
 				for(int i=0;i<status.length;i++){		
-				if(i==0){
-					console.setStatus(ExecutionTrackingConsoleUtils.getHeader(status[i]));	
-				}
-					
 					console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.getExecutionStatusInString(status[i]));		
 				}	
 			}

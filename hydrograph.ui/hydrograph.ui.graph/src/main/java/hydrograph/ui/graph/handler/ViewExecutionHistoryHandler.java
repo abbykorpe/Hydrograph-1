@@ -46,6 +46,7 @@ import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -100,6 +101,12 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		for (IEditorReference ref : refs){
 			IEditorPart editor = ref.getEditor(false);
 			if(editor instanceof ELTGraphicalEditor){
+				String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "."
+						+ ((ELTGraphicalEditor) editor).getJobName();
+				Job job = ((ELTGraphicalEditor) editor).getJobInstance(currentJobName);
+				if (job != null) {
+					job.setJobStatus(JobStatus.SUCCESS);
+				}
 				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true); 
 			}
 		}
