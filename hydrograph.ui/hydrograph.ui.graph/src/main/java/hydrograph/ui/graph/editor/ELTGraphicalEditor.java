@@ -70,6 +70,7 @@ import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.internal.ui.palette.editparts.DrawerFigure;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -216,7 +217,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private String uniqueJobId;
 
 	private static final Color palatteTextColor=new Color(null,51,51,51);
+
+	private static final String JOB_ID_STRING_SEPARATOR = "_";
 	
+	private CustomPaletteEditPartFactory paletteEditPartFactory;
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -560,7 +564,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			@Override
 			protected void configurePaletteViewer(final PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
-				viewer.setEditPartFactory(new CustomPaletteEditPartFactory(palatteTextColor));
+				
+				paletteEditPartFactory = new CustomPaletteEditPartFactory(palatteTextColor,viewer.getControl().getBackground());
+				viewer.setEditPartFactory(paletteEditPartFactory);
+				
+				
 				// create a drag source listener for this palette viewer
 				// together with an appropriate transfer drop target listener,
 				// this will enable
@@ -889,7 +897,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void doSave(IProgressMonitor monitor) {
 		String METHOD_NAME = "doSave -";
 		logger.debug(METHOD_NAME);
-		
 		
 		try {
 			if(StringUtils.isEmpty(getContainer().getUniqueJobId())){
@@ -1774,6 +1781,17 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 	
 	}
-
-
+	
+	/**
+	 * Copy Canvas theme and apply it to palette
+	 */
+	public void applyPaletteTheme(){
+		paletteEditPartFactory.getPaletteTextFigure().setBackgroundColor(getCanvasControl().getBackground());
+		Color canvasBackColor = getCanvasControl().getBackground();
+		Color contrastColor = new Color(null, 255-canvasBackColor.getRed(), 255-canvasBackColor.getGreen(), 255-canvasBackColor.getBlue());
+		for(DrawerFigure drawerFigure:paletteEditPartFactory.getDrawerFigures()){
+			drawerFigure.getContentPane().setBackgroundColor(getCanvasControl().getBackground());
+			drawerFigure.getContentPane().setForegroundColor(contrastColor);
+		}
+	}
 }

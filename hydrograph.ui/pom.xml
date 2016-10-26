@@ -30,6 +30,13 @@
 			<url>${neon-repo.url}</url>
 			<layout>p2</layout>
 		</repository>
+		
+		<repository>
+			<id>marsx</id>
+			<url>http://download.eclipse.org/e4/snapshots/org.eclipse.e4.tools/latest/</url>
+			<layout>p2</layout>
+		</repository>
+		
 	</repositories>
 
 	<profiles>
@@ -278,5 +285,6 @@
 		<module>hydrograph.ui.dataviewer</module>
 		<module>hydrograph.ui.communication</module>
 		<module>hydrograph.ui.expression.editor</module>
+		<module>hydrograph.ui.theme</module>
 	</modules>
 </project>
