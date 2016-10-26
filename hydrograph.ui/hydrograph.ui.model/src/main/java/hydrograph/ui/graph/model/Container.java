@@ -437,12 +437,19 @@ public class Container extends Model {
 	public void setJobRunCount(int jobRunCount) {
 		this.jobRunCount = jobRunCount;
 	}
-
+	
+	/**
+	 *Check if subjob opened for tracking 
+	 *@return isOpenedForTracking
+	 */
 	public boolean isOpenedForTracking() {
 		return isOpenedForTracking;
 	}
 	
-
+	/**
+	 * Set flag that indicate subjob opened for tracking 
+	 * @param isOpenedForTracking
+	 */
 	public void openedForTracking(boolean isOpenedForTracking) {
 		this.isOpenedForTracking=isOpenedForTracking;
 	}
