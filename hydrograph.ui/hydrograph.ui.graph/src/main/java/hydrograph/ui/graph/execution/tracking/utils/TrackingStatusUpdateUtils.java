@@ -323,7 +323,12 @@ public class TrackingStatusUpdateUtils {
 			public void run() {
 				console.clearConsole();
 				ExecutionStatus[] status = ExecutionTrackingConsoleUtils.INSTANCE.readFile(executionStatus, null, JobManager.INSTANCE.isLocalMode());
+				
 				for(int i=0;i<status.length;i++){		
+				if(i==0){
+					console.setStatus(ExecutionTrackingConsoleUtils.getHeader(status[i]));	
+				}
+					
 					console.setStatus(ExecutionTrackingConsoleUtils.INSTANCE.getExecutionStatusInString(status[i]));		
 				}	
 			}
