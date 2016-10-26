@@ -152,7 +152,7 @@ public class ExecutionTrackingConsoleUtils {
 		}
 		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole){
 			ExecutionStatus[] executionStatus = readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode());
-			console.setStatus(getHeader(executionStatus[0]));
+			console.setStatus(getHeader(getUniqueJobId()));
 			for(int i =0; i<executionStatus.length; i++){
 				console.setStatus(getExecutionStatusInString(executionStatus[i]));
 			}
@@ -161,13 +161,13 @@ public class ExecutionTrackingConsoleUtils {
 	
 	/**
 	 * Creates header for execution tacking console view.
-	 * @param executionStatus
+	 * @param uniqueJobId
 	 * @return
 	 */
-	public static String getHeader(ExecutionStatus executionStatus) {
+	public static String getHeader(String uniqueJobId) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(JOB_ID);
-		stringBuilder.append(executionStatus.getJobId() + EXECUTION_STATUS_RECORD_SEPARATOR);
+		stringBuilder.append(uniqueJobId + EXECUTION_STATUS_RECORD_SEPARATOR);
 		stringBuilder.append(SUBMISSION_TIME);
 		
 		String timeStamp = getTimeStamp();
