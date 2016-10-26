@@ -14,7 +14,6 @@
 package hydrograph.ui.graph.action;
 
 
-import hydrograph.ui.graph.command.CommentBoxDeleteCommand;
 import hydrograph.ui.graph.command.ComponentDeleteCommand;
 import hydrograph.ui.graph.command.LinkDeleteCommand;
 import hydrograph.ui.graph.controller.CommentBoxEditPart;
@@ -73,10 +72,9 @@ public class DeleteAction extends SelectionAction {
 
 		ComponentDeleteCommand componentDeleteCommand = new ComponentDeleteCommand();
 		LinkDeleteCommand linkDeleteCommand = new LinkDeleteCommand();
-		CommentBoxDeleteCommand boxDeleteCommand = new CommentBoxDeleteCommand();
 
 		populateDeleteCommands(selectedObjects, componentDeleteCommand,
-				linkDeleteCommand,boxDeleteCommand);
+				linkDeleteCommand);
 
 		if(componentDeleteCommand.hasComponentToDelete())
 			return componentDeleteCommand;
@@ -84,22 +82,19 @@ public class DeleteAction extends SelectionAction {
 		if(linkDeleteCommand.hasLinkToDelete())
 			return linkDeleteCommand;
 		
-		if(boxDeleteCommand.hasComponentToDelete())
-			return boxDeleteCommand;
-
 		return null;
 	}
 
 	private void populateDeleteCommands(List<Object> selectedObjects,
 			ComponentDeleteCommand componentDeleteCommand,
-			LinkDeleteCommand linkDeleteCommand, CommentBoxDeleteCommand boxDeleteCommand) {
+			LinkDeleteCommand linkDeleteCommand) {
 		Model node;
 		for(Object obj:selectedObjects)
 		{
-			if(obj instanceof ComponentEditPart)
+			if(obj instanceof ComponentEditPart || obj instanceof CommentBoxEditPart)
 			{
-				node = (Component) ((EditPart)obj).getModel();
-				componentDeleteCommand.addComponentToDelete((Component)node);
+				node = (Model) ((EditPart)obj).getModel();
+				componentDeleteCommand.addComponentToDelete((Model)node);
 			}
 			if(obj instanceof LinkEditPart)
 			{
@@ -107,11 +102,6 @@ public class DeleteAction extends SelectionAction {
 				linkDeleteCommand.addLinkToDelete((Link)node);
 			}	
 			
-			if(obj instanceof CommentBoxEditPart)
-			{
-				node = (CommentBox) ((EditPart)obj).getModel();
-				boxDeleteCommand.addComponentToDelete((CommentBox)node);
-			}
 		}
 	}
 

@@ -86,10 +86,12 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	protected IFigure createFigure(){
 		CommentBoxFigure label = new CommentBoxFigure();
 		label.setSize(268, 56);
-		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(editor != null){
 		org.eclipse.swt.graphics.Point point = editor.getCursorPosition();
 		Point newLocation = resetLocation(new Point(point));
 		label.setLocation(newLocation);
+			}
 		if(label.getSize() != getLabel().getSize()){
 			label.setSize(getLabel().getSize());
 		}
@@ -106,7 +108,7 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	}
 
 	private Point resetLocation(Point newLocation){
-		if (newLocation.x < 146 || newLocation.y < 0){
+		if ((newLocation.x <= 135 && newLocation.y <= -53) || (newLocation.x <= 154 && newLocation.y <= -30 )){
 			newLocation.x = 0;
 			newLocation.y = 0;
 		}
