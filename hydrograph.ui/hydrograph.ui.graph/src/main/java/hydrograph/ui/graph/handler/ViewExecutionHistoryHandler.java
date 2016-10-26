@@ -120,7 +120,15 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 			return null;
 	}
 
-	private ExecutionStatus readJsonLogFile(String uniqueJobId, boolean isLocalMode, String filePath) throws FileNotFoundException{
+/**
+ * Return last execution tracking status from tracking log file.
+ * @param uniqueJobId
+ * @param isLocalMode
+ * @param filePath
+ * @return
+ * @throws FileNotFoundException
+ */
+	public ExecutionStatus readJsonLogFile(String uniqueJobId, boolean isLocalMode, String filePath) throws FileNotFoundException{
 		ExecutionStatus[] executionStatus;
 		String jobId = "";
 		String path = null;

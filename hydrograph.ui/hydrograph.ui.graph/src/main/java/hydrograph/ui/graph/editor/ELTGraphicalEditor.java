@@ -1327,7 +1327,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void removeSubjobProperties(Boolean isDirty) {
 		if (isDirty) {
 			loadFileAndDeleteSubjobProperties();
-		} else if (deleteSubjobProperties(getContainer())!=null)
+		} else if (deleteSubjobProperties(getContainer())!=null && !container.isOpenedForTracking())
 			doSave(null);
 	}		
 
@@ -1602,7 +1602,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 	}
 
-	private Job getJobInstance(String currentJobName) {
+	/**
+	 * Return job object using job name.
+	 * @param currentJobName
+	 * @return Job
+	 */
+	public Job getJobInstance(String currentJobName) {
 		if(RunJobHandler.hasJob(currentJobName)){
 			return RunJobHandler.getJob(currentJobName);
 		}else if(DebugHandler.hasJob(currentJobName)){

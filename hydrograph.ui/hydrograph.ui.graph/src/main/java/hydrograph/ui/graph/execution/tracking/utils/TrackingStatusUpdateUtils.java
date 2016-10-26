@@ -101,7 +101,7 @@ public class TrackingStatusUpdateUtils {
 								applyRecordCountOnSubjobComponent(component, componentNameAndLink, executionStatus);
 							} 
 							int successCount = 0;
-							updateStatusCountForSubjobComponent(executionStatus, component, successCount,isReplay);
+							updateStatusCountForSubjobComponent(executionStatus, component,isReplay);
 							
 						}else
 						{
@@ -133,36 +133,28 @@ public class TrackingStatusUpdateUtils {
 		}
 	}
 
-	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component, int successCount,boolean isReplay) {
-		boolean running = false;
-		boolean pending = false;
+	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component,boolean isReplay) {
 		ComponentExecutionStatus status=component.getStatus();
-		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-
-			if(!pending){
-					boolean isPending =applyPendingStatus(component, componentStatus, pending);
+			if(status!=null && !ComponentExecutionStatus.RUNNING.value().equalsIgnoreCase(status.value())){
+				boolean isPending =applyPendingStatus(component, executionStatus);
 				if(isPending){
 					component.updateStatus(ComponentExecutionStatus.PENDING.value());
 				}
 			}
-			if(!running){
-				boolean isRunning =applyRunningStatus(component, componentStatus, running);
+			if(status!=null && !ComponentExecutionStatus.SUCCESSFUL.value().equalsIgnoreCase(status.value())){
+				boolean isRunning =applyRunningStatus(component, executionStatus);
 				if(isRunning){
 					component.updateStatus(ComponentExecutionStatus.RUNNING.value());
 				}
 			} 
 
-			boolean isFail =applyFailStatus(component, componentStatus);
+			boolean isFail =applyFailStatus(component, executionStatus);
 				if(isFail){
 					component.updateStatus(ComponentExecutionStatus.FAILED.value());
-					break;
 				}
-				
-			}
-		
 		
 		if((status!=null && !ComponentExecutionStatus.BLANK.value().equalsIgnoreCase(status.value())) || isReplay){
-			boolean isSuccess=applySuccessStatus(component, executionStatus, successCount);
+			boolean isSuccess=applySuccessStatus(component, executionStatus);
 	 		if(isSuccess)
 	 			component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
 		}
@@ -229,42 +221,46 @@ public class TrackingStatusUpdateUtils {
 		}
 	}
 	
-	private boolean applyPendingStatus(Component component, ComponentStatus componentStatus, boolean pendingStatusApplied) {
+	private boolean applyPendingStatus(Component component, ExecutionStatus executionStatus) {
+
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (Component innerSubComponent : container.getChildren()) {
+			for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if(Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())){
-				applyPendingStatus(innerSubComponent, componentStatus, pendingStatusApplied);
+				applyPendingStatus(innerSubComponent, executionStatus);
 			}else{
 				String compName = component.getComponentId()+"."+innerSubComponent.getComponentId();
 				if(componentStatus.getComponentId().contains(compName) && componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.PENDING.value())){
-					pendingStatusApplied = true;
-					return pendingStatusApplied;
+					return true;
 				}
 			}
 			}
-		return pendingStatusApplied;
+		}
+		return false;
 	}
 
-	private boolean applyRunningStatus(Component component, ComponentStatus componentStatus, boolean runningStatusApplied) {
+	private boolean applyRunningStatus(Component component, ExecutionStatus executionStatus) {
 		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (Component innerSubComponent : container.getChildren()) {
+			for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
-				applyRunningStatus(innerSubComponent, componentStatus, runningStatusApplied);
+				applyRunningStatus(innerSubComponent, executionStatus);
 			} else {
 				String compName = component.getComponentId() + "."+ innerSubComponent.getComponentId();
 				if (componentStatus.getComponentId().contains(compName)&& componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.RUNNING.value())) {
-					runningStatusApplied = true;
-					return runningStatusApplied;
+					return true;
 				}
 			}
+		  }
 		}
-		return runningStatusApplied;
+		return false;
 	}
-	private boolean applyFailStatus(Component component, ComponentStatus componentStatus) {
+	private boolean applyFailStatus(Component component, ExecutionStatus executionStatus) {
 		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (Component innerSubComponent : container.getChildren()) {
+			for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
-				applyFailStatus(innerSubComponent, componentStatus);
+				applyFailStatus(innerSubComponent, executionStatus);
 			} else {
 				String compName = component.getComponentId() + "."+ innerSubComponent.getComponentId();
 				if (componentStatus.getComponentId().contains(compName)&& componentStatus.getCurrentStatus().equals(ComponentExecutionStatus.FAILED.value())) {
@@ -272,15 +268,16 @@ public class TrackingStatusUpdateUtils {
 				}
 			}
 		}
+		}
 		return false;
 	}
 	
-	private boolean applySuccessStatus(Component component, ExecutionStatus executionStatus,int successcount) {
+	private boolean applySuccessStatus(Component component, ExecutionStatus executionStatus) {
 		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for (ComponentStatus componentStatus : executionStatus.getComponentStatus()) {
 			for (Component innerSubComponent : container.getChildren()) {
 				if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
-					applySuccessStatus(innerSubComponent, executionStatus,successcount);
+					applySuccessStatus(innerSubComponent, executionStatus);
 				} else {
 					String compName = component.getComponentId() + "."+ innerSubComponent.getComponentId();
 					if (componentStatus.getComponentId().contains(compName)){

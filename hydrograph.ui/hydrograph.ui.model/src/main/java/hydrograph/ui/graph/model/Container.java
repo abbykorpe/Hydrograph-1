@@ -14,10 +14,6 @@
  
 package hydrograph.ui.graph.model;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructures.parametergrid.ParameterFile;
-import hydrograph.ui.graph.model.helper.LoggerUtil;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +30,10 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.graph.model.helper.LoggerUtil;
 
 
 
@@ -66,6 +66,9 @@ public class Container extends Model {
 	
 	private List<ParameterFile> jobLevelParameterFiles;
 	
+	@XStreamOmitField
+	private boolean isOpenedForTracking;
+
 	public Container(){
 		
 	}
@@ -434,7 +437,22 @@ public class Container extends Model {
 	public void setJobRunCount(int jobRunCount) {
 		this.jobRunCount = jobRunCount;
 	}
-
+	
+	/**
+	 *Check if subjob opened for tracking 
+	 *@return isOpenedForTracking
+	 */
+	public boolean isOpenedForTracking() {
+		return isOpenedForTracking;
+	}
+	
+	/**
+	 * Set flag that indicate subjob opened for tracking 
+	 * @param isOpenedForTracking
+	 */
+	public void openedForTracking(boolean isOpenedForTracking) {
+		this.isOpenedForTracking=isOpenedForTracking;
+	}
 
 
 }

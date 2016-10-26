@@ -14,20 +14,6 @@
  
 package hydrograph.ui.graph.action.subjob;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.action.PasteAction;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Component.ValidityStatus;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
-import hydrograph.ui.graph.model.components.OutputSubjobComponent;
-import hydrograph.ui.graph.utility.SubJobUtility;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +24,18 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
+import hydrograph.ui.graph.action.PasteAction;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobStatus;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.utility.SubJobUtility;
 
 
 /**
@@ -106,8 +104,15 @@ public class SubJobUpdateAction extends SelectionAction {
 			for (Object obj : selectedObjects) {
 				if (obj instanceof ComponentEditPart) {
 					if (Constants.SUBJOB_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel()
-							.getComponentName()))
+							.getComponentName())){
+						ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+						String currentJobName = editor.getActiveProject() + "." + editor.getJobName();
+						Job job = editor.getJobInstance(currentJobName);
+						if (job != null && (StringUtils.equalsIgnoreCase(job.getJobStatus(),JobStatus.RUNNING))){
+							return false;
+						}
 						return true;
+					}
 				}
 			}
 		}

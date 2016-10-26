@@ -14,6 +14,7 @@
  
 package hydrograph.ui.graph.action.subjob;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -35,6 +36,12 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
+import hydrograph.ui.graph.execution.tracking.utils.ExecutionTrackingConsoleUtils;
+import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.utility.SubJobUtility;
@@ -49,6 +56,8 @@ import hydrograph.ui.logging.factory.LogFactory;
 public class SubJobTrackingAction extends SelectionAction{
 
 	private static final String TEMP_DIRECTORY="temp"; 
+
+	private Job job;
 	
 	private static Logger logger = LogFactory.INSTANCE.getLogger(SubJobTrackingAction.class);
 
@@ -115,8 +124,17 @@ public class SubJobTrackingAction extends SelectionAction{
 							ELTGraphicalEditor editorPart=(ELTGraphicalEditor) IDE.openEditor(page, tempFile,true);
 						editorPart.setDeleteOnDispose(true);
 						eltGraphicalEditor.addSubJobEditor(editorPart);
+						editorPart.getContainer().openedForTracking(true);
 						} catch (PartInitException e) {
 							logger.error("Failed to open tracking view for subjob", e);
+						}
+						ExecutionStatus executionStatus;
+						try {
+							ViewExecutionHistoryHandler viewExecutionHistoryHandler=new ViewExecutionHistoryHandler();
+							executionStatus = viewExecutionHistoryHandler.readJsonLogFile(container.getUniqueJobId(), JobManager.INSTANCE.isLocalMode(), ExecutionTrackingConsoleUtils.INSTANCE.getLogPath());
+							viewExecutionHistoryHandler.replayExecutionTracking(executionStatus);
+						} catch (FileNotFoundException e) {
+							logger.error("Execution tracking logger file not found:"+e);
 						}
 					}
 				}
@@ -130,14 +148,27 @@ public class SubJobTrackingAction extends SelectionAction{
 		List<Object> selectedObjects = getSelectedObjects();
 		if (selectedObjects != null && !selectedObjects.isEmpty() && selectedObjects.size() == 1) {
 			for (Object obj : selectedObjects) {
-				if (obj instanceof ComponentEditPart) {
-					if (Constants.SUBJOB_COMPONENT.equalsIgnoreCase(((ComponentEditPart) obj).getCastedModel()
-							.getComponentName()))
-						return true;
+				if(obj instanceof ComponentEditPart){
+					ComponentEditPart componentEditPart = (ComponentEditPart) obj;
+				if (Constants.SUBJOB_COMPONENT.equalsIgnoreCase(componentEditPart.getCastedModel().getComponentName())) {
+						if (componentEditPart.getCastedModel().getParent().isOpenedForTracking()) {
+							return true;
+						} else {
+							ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+							String currentJobName = editor.getActiveProject() + "." + editor.getJobName();
+							job = editor.getJobInstance(currentJobName);
+							if (job != null && (job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)
+									|| job.getJobStatus().equalsIgnoreCase(JobStatus.SUCCESS)
+									|| job.getJobStatus().equalsIgnoreCase(JobStatus.FAILED))) {
+								return true;
+							}
+						}
+					}
 				}
 			}
 		}
 		return false;
-	}	
+
+	}
 	
    }
