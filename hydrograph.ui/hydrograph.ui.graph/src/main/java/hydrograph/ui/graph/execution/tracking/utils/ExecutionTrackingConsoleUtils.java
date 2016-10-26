@@ -159,6 +159,11 @@ public class ExecutionTrackingConsoleUtils {
 		}
 	}
 	
+	/**
+	 * Creates header for execution tacking console view.
+	 * @param executionStatus
+	 * @return
+	 */
 	public static String getHeader(ExecutionStatus executionStatus) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(JOB_ID);
