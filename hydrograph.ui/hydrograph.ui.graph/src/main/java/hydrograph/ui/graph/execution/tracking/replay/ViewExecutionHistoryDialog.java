@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -189,7 +190,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		
 		createBrowseButton(composite);
 		
-		Button okButton = createButton(composite, OK, "Ok", false);
+		Button okButton = createButton(composite, IDialogConstants.OK_ID, "Ok", false);
 		Button closeButton = createButton(composite, CLOSE, "Close", false);
 		closeButton.addSelectionListener(new SelectionAdapter() {
 			@Override

@@ -64,7 +64,10 @@ public class ExecutionTrackingConsoleUtils {
 	
 	private static final String EXECUTION_STATUS_RECORD_SEPARATOR = " | ";
 	private static final String TIMESTAMP_FORMAT = "MM/dd/yyyy HH:mm:ss";
-
+	
+	private static final String SUBMISSION_TIME = "Submission time: ";
+	private static final String JOB_ID = "Job ID: ";
+	private static final String CONSOLE_HEADER="Time Stamp | Component Id | Socket | Status | Batch | Count";
 	
 	/**
 	 * Instantiates a new execution tracking console utils.
@@ -149,10 +152,27 @@ public class ExecutionTrackingConsoleUtils {
 		}
 		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole){
 			ExecutionStatus[] executionStatus = readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode());
+			console.setStatus(getHeader(getUniqueJobId()));
 			for(int i =0; i<executionStatus.length; i++){
 				console.setStatus(getExecutionStatusInString(executionStatus[i]));
 			}
 		}
+	}
+	
+	/**
+	 * Creates header for execution tacking console view.
+	 * @param uniqueJobId
+	 * @return
+	 */
+	public static String getHeader(String uniqueJobId) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(JOB_ID);
+		stringBuilder.append(uniqueJobId + EXECUTION_STATUS_RECORD_SEPARATOR);
+		stringBuilder.append(SUBMISSION_TIME);
+		
+		String timeStamp = getTimeStamp();
+		stringBuilder.append(timeStamp + "\n"+CONSOLE_HEADER+"\n");
+		return stringBuilder.toString();
 	}
 	
 	/**
@@ -172,7 +192,7 @@ public class ExecutionTrackingConsoleUtils {
 			Map<String, Long> processCounts = componentStatus.getProcessedRecordCount();
 			
 			for(String portID: processCounts.keySet()){
-				stringBuilder.append("" + EXECUTION_STATUS_RECORD_SEPARATOR);
+				stringBuilder.append("");
 				stringBuilder.append(getTimeStamp() + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(componentStatus.getComponentId() + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(portID + EXECUTION_STATUS_RECORD_SEPARATOR);
@@ -281,7 +301,7 @@ public class ExecutionTrackingConsoleUtils {
 		return uniqueJobId;
 	}
 	
-	private String getTimeStamp() {
+	private static String getTimeStamp() {
 		String timeStamp = new SimpleDateFormat(TIMESTAMP_FORMAT).format(new Date());
 		return timeStamp;
 	}

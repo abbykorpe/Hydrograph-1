@@ -23,6 +23,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -45,6 +46,7 @@ import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -76,18 +78,14 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		}
 		
 		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(), tmpList);
-		dialog.open();
-		
-		
-		try {
-			ExecutionStatus executionStatus = readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
-			replayExecutionTracking(executionStatus);
-		} catch (FileNotFoundException e) {
-			logger.error("Failed to show view execution tracking history: "+e);
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			try {
+				ExecutionStatus executionStatus = readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
+				replayExecutionTracking(executionStatus);
+			} catch (FileNotFoundException e) {
+				logger.error("Failed to show view execution tracking history: " + e);
+			}
 		}
-		
-		
-		
 		return null;
 	}
 	
@@ -103,6 +101,12 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		for (IEditorReference ref : refs){
 			IEditorPart editor = ref.getEditor(false);
 			if(editor instanceof ELTGraphicalEditor){
+				String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "."
+						+ ((ELTGraphicalEditor) editor).getJobName();
+				Job job = ((ELTGraphicalEditor) editor).getJobInstance(currentJobName);
+				if (job != null) {
+					job.setJobStatus(JobStatus.SUCCESS);
+				}
 				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true); 
 			}
 		}
