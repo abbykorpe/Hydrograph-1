@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput;
 import org.eclipse.jdt.internal.ui.javaeditor.InternalClassFileEditorInput;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IFileEditorInput;
@@ -62,39 +63,31 @@ public boolean isClassFilePresentOnBuildPath(String filePath)
 	{	
 	String packageName=filePath.substring(0, filePath.lastIndexOf('.'));
 	String JavaFileName=filePath.substring(filePath.lastIndexOf('.')+1);
-	IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	
        IJavaProject javaProject=null;
-     
-	    if(page.getActiveEditor()!=null )
-	    {	
-	    
-	    if(page.getActiveEditor().getEditorInput() instanceof IFileEditorInput)
-	    {	
-		IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
-		IFile file = input.getFile();
-		IProject activeProject = file.getProject();
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(activeProject.getName());
-		 javaProject = JavaCore.create(project);
-	    }
-	    else if(page.getActiveEditor().getEditorInput() instanceof IClassFileEditorInput)
-	    {
-	    	  IClassFileEditorInput classFileEditorInput=(InternalClassFileEditorInput)page.getActiveEditor().getEditorInput() ;
-	          IClassFile classFile=classFileEditorInput.getClassFile();
-	          javaProject=classFile.getJavaProject();
-	    }	
-	    }
-	    else
-	    {
+       
+	   
 	    	 ISelectionService selectionService = Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();    
 	   		 ISelection selection = selectionService.getSelection();    
 
-	   		        if(selection instanceof IStructuredSelection) {    
-	   		            Object element = ((IStructuredSelection)selection).getFirstElement();    
-	   		          
-	   		         IProject project= ((IResource)element).getProject(); 
+	   		        if(selection instanceof IStructuredSelection) 
+	   		        {    
+	   		            Object element = ((IStructuredSelection)selection).getFirstElement(); 
+	   		          if(element instanceof IResource)
+	   		          { 	  
+	   		         IProject project= ((IResource)element).getProject();
 	   		         javaProject = JavaCore.create(project);
-	     }
-	    }
+	   		          }
+	   		          else
+	   		          {
+	   		        	javaProject=createJavaProjectThroughActiveEditor();
+	   		          } 
+        	     }
+	   		        else if(selection instanceof TextSelection)
+	   		        {
+	   		     	javaProject=createJavaProjectThroughActiveEditor();
+	   		        }
+	    
 		IPackageFragmentRoot[] ipackageFragmentRootList=null;
 		try {
 			ipackageFragmentRootList = javaProject.getPackageFragmentRoots();
@@ -119,5 +112,26 @@ public boolean isClassFilePresentOnBuildPath(String filePath)
 		} 
 	   }
 		return false;
+}
+
+
+private IJavaProject createJavaProjectThroughActiveEditor() {
+	
+	IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	 	    if(page.getActiveEditor().getEditorInput() instanceof IFileEditorInput)
+	 	    {	
+	 		IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
+	 		IFile file = input.getFile();
+	 		IProject activeProject = file.getProject();
+	 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(activeProject.getName());
+	 		return JavaCore.create(project);
+	 	    }
+	 	    else if(page.getActiveEditor().getEditorInput() instanceof IClassFileEditorInput)
+	 	    {
+	  IClassFileEditorInput classFileEditorInput=(InternalClassFileEditorInput)page.getActiveEditor().getEditorInput() ;
+	  IClassFile classFile=classFileEditorInput.getClassFile();
+	  return classFile.getJavaProject();
+	 	    }
+	 	    return null;
 }
 }
