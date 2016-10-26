@@ -145,7 +145,7 @@ public class SchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(fixedWidthGrid && !generateRecordSchemaGrid){
+			if(fixedWidthGrid && (!generateRecordSchemaGrid)){
 				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
 				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
 					errorMessage = "Length is mandatory";
