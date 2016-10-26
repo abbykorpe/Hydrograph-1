@@ -1327,7 +1327,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void removeSubjobProperties(Boolean isDirty) {
 		if (isDirty) {
 			loadFileAndDeleteSubjobProperties();
-		} else if (deleteSubjobProperties(getContainer())!=null)
+		} else if (deleteSubjobProperties(getContainer())!=null && !container.isOpenedForTracking())
 			doSave(null);
 	}		
 

@@ -258,7 +258,7 @@ public class ExecutionTrackingConsoleUtils {
 	}
 
 	/**
-	 * Gets the log path.
+	 * Get view execution tracking log file path.
 	 *
 	 * @return the log path
 	 */

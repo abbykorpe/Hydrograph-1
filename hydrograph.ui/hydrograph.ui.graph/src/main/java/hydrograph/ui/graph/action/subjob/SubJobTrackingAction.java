@@ -131,10 +131,10 @@ public class SubJobTrackingAction extends SelectionAction{
 						ExecutionStatus executionStatus;
 						try {
 							ViewExecutionHistoryHandler viewExecutionHistoryHandler=new ViewExecutionHistoryHandler();
-							executionStatus = viewExecutionHistoryHandler.readJsonLogFile(eltGraphicalEditor.getJobId(), JobManager.INSTANCE.isLocalMode(), ExecutionTrackingConsoleUtils.INSTANCE.getLogPath());
+							executionStatus = viewExecutionHistoryHandler.readJsonLogFile(container.getUniqueJobId(), JobManager.INSTANCE.isLocalMode(), ExecutionTrackingConsoleUtils.INSTANCE.getLogPath());
 							viewExecutionHistoryHandler.replayExecutionTracking(executionStatus);
-						} catch (FileNotFoundException e1) {
-							e1.printStackTrace();
+						} catch (FileNotFoundException e) {
+							logger.error("Execution tracking logger file not found:"+e);
 						}
 					}
 				}
