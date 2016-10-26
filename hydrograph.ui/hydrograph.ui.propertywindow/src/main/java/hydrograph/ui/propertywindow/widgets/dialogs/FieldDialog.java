@@ -22,6 +22,7 @@ import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
 import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
@@ -511,6 +512,15 @@ public class FieldDialog extends Dialog {
 		});
 		attachShortcutListner(Constants.PROPERTY_TABLE);
 		attachShortcutListner(Constants.PROPERTY_NAME);
+		
+		targetTable.addMouseListener(new SingleClickEvent(new Runnable() {
+			
+			@Override
+			public void run() {
+				validate();
+			}
+		}));
+		
 
 	}
 	
@@ -622,7 +632,9 @@ public class FieldDialog extends Dialog {
 			upButton.setEnabled(false);
 			downButton.setEnabled(false);
 		} 
-	
+		if(lblPropertyError.getVisible()){
+			lblPropertyError.setVisible(false);
+		}
 	}
 	
 	protected void operationOnDrop(DropTargetEvent event) {
