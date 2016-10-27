@@ -12,12 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.assembly.entity;
 
-import java.util.Arrays;
-import java.util.List;
-
 import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+
+import java.util.Arrays;
 
 public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 
@@ -25,6 +22,7 @@ public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 	private String charset;
 	private boolean safe;
 	private boolean strict;
+	private String quote = "";
 
 	public String getPath() {
 		return path;
@@ -57,7 +55,15 @@ public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 	public void setStrict(boolean strict) {
 		this.strict = strict;
 	}
+	
+	public String getQuote() {
+		return quote;
+	}
 
+	public void setQuote(String quote) {
+		this.quote = quote;
+	}
+	
 	/**
 	 * Returns a string with the values for all the members of this entity
 	 * object.
@@ -76,6 +82,7 @@ public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 		str.append(" | strict: " + strict);
 		str.append(" | safe: " + safe);
 		str.append(" | charset: " + charset);
+		str.append(" | quote: " + quote);
 
 		str.append("\nfields: ");
 		if (getFieldsList() != null) {
@@ -88,4 +95,5 @@ public class InputFileMixedSchemeEntity extends InputOutputEntityBase {
 		}
 		return str.toString();
 	}
+
 }
