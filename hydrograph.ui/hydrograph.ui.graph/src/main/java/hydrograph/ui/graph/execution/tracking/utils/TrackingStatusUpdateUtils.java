@@ -317,7 +317,7 @@ public class TrackingStatusUpdateUtils {
 	 */
 	private void updateExecutionTrackingConsole(
 			final ExecutionStatus executionStatus,
-			final ExecutionTrackingConsole console, String jobId) {
+			final ExecutionTrackingConsole console, final String jobId) {
 		Display.getDefault().asyncExec(new Runnable() {
 
 			@Override
