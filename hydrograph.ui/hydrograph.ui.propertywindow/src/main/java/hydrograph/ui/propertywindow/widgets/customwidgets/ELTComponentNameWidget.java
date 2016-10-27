@@ -15,6 +15,8 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.utils.ComponentNameValidator;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -145,12 +147,14 @@ public class ELTComponentNameWidget extends AbstractWidget {
 	public LinkedHashMap<String, Object> getProperties() {
 		newName = text.getText().trim();
 		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-		if (newName != null && newName != "" && isUniqueCompName(newName)) {
+		Container container = getComponent().getParent();
+		if (newName != null && newName != ""
+				&& ComponentNameValidator.INSTANCE.isUniqueComponentName(container, newName)) {
 			property.put(propertyName, newName);
-//			((ArrayList<String>) super.componentMiscellaneousProperties
-//					.getComponentMiscellaneousProperty(COMPONENT_NAMES)).remove(oldName);
-//			((ArrayList<String>) super.componentMiscellaneousProperties
-//					.getComponentMiscellaneousProperty(COMPONENT_NAMES)).add(newName);
+			// ((ArrayList<String>) super.componentMiscellaneousProperties
+			// .getComponentMiscellaneousProperty(COMPONENT_NAMES)).remove(oldName);
+			// ((ArrayList<String>) super.componentMiscellaneousProperties
+			// .getComponentMiscellaneousProperty(COMPONENT_NAMES)).add(newName);
 			oldName = newName;
 		} else {
 			// old name already should be there in the names arraylist
@@ -159,34 +163,6 @@ public class ELTComponentNameWidget extends AbstractWidget {
 
 		setToolTipErrorMessage();
 		return property;
-	}
-
-	private boolean isUniqueCompName(String componentName) {
-		componentName = componentName.trim();
-		boolean result = true;
-
-		if (!oldName.equals(componentName) && oldName.equalsIgnoreCase(componentName)) {
-			for (String cname : ((ArrayList<String>) super.componentMiscellaneousProperties
-					.getComponentMiscellaneousProperty(COMPONENT_NAMES))) {
-				if (cname.equalsIgnoreCase(componentName) && !cname.equals(oldName)) {
-					result = false;
-					break;
-				}
-			}
-
-		} else {
-
-			for (String cname : ((ArrayList<String>) super.componentMiscellaneousProperties
-					.getComponentMiscellaneousProperty(COMPONENT_NAMES))) {
-				if (cname.equalsIgnoreCase(componentName)) {
-					result = false;
-					break;
-				}
-			}
-		}
-		logger.debug("result: {}", result);
-
-		return result;
 	}
 
 	@Override
