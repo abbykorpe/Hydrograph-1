@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.slf4j.Logger;
 
 /**
@@ -82,7 +83,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.JOIN.value());
-		
+		uiComponent.setSize(new Dimension(((inPortCounter+1)*33), ((inPortCounter+1)*27) + 16));
 	}
 
 	private List<JoinConfigProperty> getJoinConfigProperty() {
