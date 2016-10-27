@@ -1760,7 +1760,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	
 	/**
-	 * Clear Tracking Status fon save
+	 * Clear tracking status on save
 	 *
 	 */
 	public void clearTrackingStatusForEditor() {
