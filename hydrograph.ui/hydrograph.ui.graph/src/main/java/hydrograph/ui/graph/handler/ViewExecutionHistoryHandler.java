@@ -101,11 +101,10 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		for (IEditorReference ref : refs){
 			IEditorPart editor = ref.getEditor(false);
 			if(editor instanceof ELTGraphicalEditor){
-				String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "."
-						+ ((ELTGraphicalEditor) editor).getJobName();
-				Job job = ((ELTGraphicalEditor) editor).getJobInstance(currentJobName);
-				if (job != null) {
-					job.setJobStatus(JobStatus.SUCCESS);
+				String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "." + ((ELTGraphicalEditor) editor).getJobName();	
+				Job job = ((ELTGraphicalEditor)editor).getJobInstance(currentJobName);			
+				if(job!=null){			
+					job.setJobStatus(JobStatus.SUCCESS);			
 				}
 				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true); 
 			}

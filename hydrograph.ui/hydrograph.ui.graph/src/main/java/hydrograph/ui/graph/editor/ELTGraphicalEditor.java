@@ -906,12 +906,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		} catch (NoSuchAlgorithmException exception) {
 			logger.error("Failed to generate Unique Job Id", exception);
 		}
-		
-		if(this.uniqueJobId!=null){
-			TrackingDisplayUtils.INSTANCE.clearTrackingStatus(this.uniqueJobId);
-		}else{
-			TrackingDisplayUtils.INSTANCE.clearTrackingStatus();
-		}
+			closeAllSubJobLinkedEditors();
+			clearTrackingStatusForEditor();
 
 		try {
 			if(container!=null)
@@ -1757,12 +1753,24 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 */
 	public void closeAllSubJobLinkedEditors() {
 		for(ELTGraphicalEditor editor:linkedSubJobEditors){
-			if(editor!=null)
+			if(editor!=null && editor.getContainer().isOpenedForTracking())
 			editor.getEditorSite().getPage().closeEditor(editor, false);
 		}
 	}
-
 	
+	
+	/**
+	 * Clear Tracking Status fon save
+	 *
+	 */
+	public void clearTrackingStatusForEditor() {
+		String currentJobName = this.getActiveProject() + "." + this.getJobName();	
+		Job job = this.getJobInstance(currentJobName);			
+		if(job!=null){			
+			job.setJobStatus(JobStatus.PENDING);			
+		}
+		TrackingDisplayUtils.INSTANCE.clearTrackingStatusForEditor(this);
+	}
 	/**
 	 * Remove temp tracking subjob file after tool close, rerun and modification. 
 	 */

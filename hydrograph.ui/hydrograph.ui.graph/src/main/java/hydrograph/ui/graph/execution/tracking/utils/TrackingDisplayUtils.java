@@ -129,7 +129,7 @@ public class TrackingDisplayUtils {
 	 * @param editor
 	 *            the editor
 	 */
-	private void clearTrackingStatusForEditor(ELTGraphicalEditor editor) {
+	public void clearTrackingStatusForEditor(ELTGraphicalEditor editor) {
 		GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
 				.getAdapter(GraphicalViewer.class);
 		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry()
