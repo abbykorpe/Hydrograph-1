@@ -56,7 +56,8 @@ public class ComponentLabelEditPart extends AbstractGraphicalEditPart implements
 		String compLabel = component.getComponentLabel().getLabelContents();
 		
 		label.setText(compLabel);
-		label.setLocation(new Point(1, 1));
+		Point p = new Point(((component.getSize().width/2) - 49), 1);
+		label.setLocation(p);
 		return label;
 	}
 

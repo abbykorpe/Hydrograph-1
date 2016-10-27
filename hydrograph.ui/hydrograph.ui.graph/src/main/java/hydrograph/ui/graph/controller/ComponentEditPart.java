@@ -407,7 +407,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		ComponentFigure compFig = (ComponentFigure)getFigure();
 		compFig.setHeight(inPortCountToBeApplied, outPortCount);
 
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight());
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
 		getCastedModel().setSize(newSize);
 		refresh();
 
@@ -449,7 +449,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		ComponentFigure compFig = (ComponentFigure)getFigure();
 		compFig.setHeight(inPortCount, outPortCountToBeApplied);
 
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight());
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
 		getCastedModel().setSize(newSize);
 		refresh();
 		
@@ -480,17 +480,16 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			{
 			 newUnunsedPortCount=Integer.parseInt((String)getCastedModel().getProperties().get("unusedPortCount"));
 			}
-		
+			
+			if(prevUnusedportCount != newUnunsedPortCount){
 		int unusedPortCountToBeApplied = newUnunsedPortCount!=prevUnusedportCount ? newUnunsedPortCount : prevUnusedportCount;		
 
 		ComponentFigure compFig = (ComponentFigure)getFigure();
 		compFig.setWidth(unusedPortCountToBeApplied);
 
-		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight());
+		Dimension newSize = new Dimension(compFig.getWidth(), compFig.getHeight()+getCastedModel().getComponentLabelMargin());
 		getCastedModel().setSize(newSize);
 		refresh();
-		
-		if(prevUnusedportCount != newUnunsedPortCount){
 
 			if(prevUnusedportCount < newUnunsedPortCount){
 				//Increment the ports
