@@ -112,7 +112,7 @@
          </activeWhen>
       </handler>
       <handler
-            class="hydrograph.ui.graph.handler.ExecutionTrackingConsoleHandler"
+            class="hydrograph.ui.graph.handler.ViewExecutionHistoryHandler"
             commandId="hydrograph.ui.graph.trackingHistory">
          <activeWhen>
             <with

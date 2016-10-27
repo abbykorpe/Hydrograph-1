@@ -100,7 +100,6 @@ public class TrackingStatusUpdateUtils {
 								populateSubjobRecordCount(componentNameAndLink, component,subjobPrefix,true);
 								applyRecordCountOnSubjobComponent(component, componentNameAndLink, executionStatus);
 							} 
-							int successCount = 0;
 							updateStatusCountForSubjobComponent(executionStatus, component,isReplay);
 							
 						}else
@@ -153,7 +152,7 @@ public class TrackingStatusUpdateUtils {
 					component.updateStatus(ComponentExecutionStatus.FAILED.value());
 				}
 		
-		if((status!=null && !ComponentExecutionStatus.BLANK.value().equalsIgnoreCase(status.value())) || isReplay){
+		if((status!=null && (ComponentExecutionStatus.RUNNING.value().equalsIgnoreCase(status.value()) || ComponentExecutionStatus.PENDING.value().equalsIgnoreCase(status.value()))) || isReplay){
 			boolean isSuccess=applySuccessStatus(component, executionStatus);
 	 		if(isSuccess)
 	 			component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
