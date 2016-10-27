@@ -106,7 +106,11 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 				if(job!=null){			
 					job.setJobStatus(JobStatus.SUCCESS);			
 				}
+				ELTGraphicalEditor editPart=(ELTGraphicalEditor)editor;
+				if(editPart.getJobId().equals(executionStatus.getJobId()) || (((editPart.getContainer()!=null) && 
+						(editPart.getContainer().getUniqueJobId().equals(executionStatus.getJobId()))) && editPart.getContainer().isOpenedForTracking() )){
 				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true); 
+				}
 			}
 		}
 	}
