@@ -30,6 +30,7 @@ import org.eclipse.draw2d.ManhattanConnectionRouter;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.LayerConstants;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
@@ -103,5 +104,10 @@ public class ContainerEditPart extends AbstractGraphicalEditPart implements Prop
 		if (Container.CHILD_ADDED_PROP.equals(prop)	|| Container.CHILD_REMOVED_PROP.equals(prop)) {
 			refreshChildren();
 		}
+	}
+	
+	@Override
+	public void performRequest(Request request){
+		System.out.println("out");
 	}
 }

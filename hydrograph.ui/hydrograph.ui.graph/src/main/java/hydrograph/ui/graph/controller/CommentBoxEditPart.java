@@ -58,6 +58,7 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 		((CommentBox) getModel()).removePropertyChangeListener(this);
 	}
 	
+	@Override
 	protected AccessibleEditPart getAccessibleEditPart(){
 		if (acc == null)
 			acc = createAccessible();
@@ -79,19 +80,16 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	@Override
 	protected void createEditPolicies(){
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new CommentBoxDirectEditPolicy());
-		installEditPolicy(EditPolicy.COMPONENT_ROLE,new LabelEditPolicy()); 
+		//installEditPolicy(EditPolicy.COMPONENT_ROLE,new LabelEditPolicy()); 
 	}
 
 	@Override
 	protected IFigure createFigure(){
 		CommentBoxFigure label = new CommentBoxFigure();
-		label.setSize(268, 56);
-		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(editor != null){
-		org.eclipse.swt.graphics.Point point = editor.getCursorPosition();
-		Point newLocation = resetLocation(new Point(point));
-		label.setLocation(newLocation);
-			}
+		Point loc = getLabel().getLocation();
+		Dimension size = getLabel().getSize();
+		Rectangle r = new Rectangle(loc ,size);
+		label.setBounds(r);
 		if(label.getSize() != getLabel().getSize()){
 			label.setSize(getLabel().getSize());
 		}
@@ -102,17 +100,21 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 		return (CommentBox)getModel();
 	}
 
+	public IFigure getCommentBoxFigure(){
+		return (CommentBoxFigure)getFigure();
+	}
+	
 	private void performDirectEdit(){
 		new CommentBoxLabelEditManager(this,
 				new CommentBoxCellEditorLocator((CommentBoxFigure)getFigure())).show();
 	}
 
-	private Point resetLocation(Point newLocation){
-		if ((newLocation.x <= 135 && newLocation.y <= -53) || (newLocation.x <= 154 && newLocation.y <= -30 )){
-			newLocation.x = 0;
-			newLocation.y = 0;
+	private Point resetLocation(int x , int y){
+		if ((x <= 135 && y <= -53) || (x <= 154 && y <= -30 )){
+			x = 0;
+			y = 0;
 		}
-		return newLocation;
+		return new Point(x,y);
 	}
 	
 	@Override

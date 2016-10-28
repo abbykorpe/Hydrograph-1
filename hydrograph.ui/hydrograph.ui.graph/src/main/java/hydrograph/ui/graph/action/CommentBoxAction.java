@@ -14,12 +14,12 @@
  
 package hydrograph.ui.graph.action;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -38,8 +38,9 @@ import hydrograph.ui.graph.model.Container;
 public class CommentBoxAction extends SelectionAction{
 	
 private PasteAction pasteAction;
+private org.eclipse.draw2d.geometry.Point location;
 	
-	public CommentBoxAction(IWorkbenchPart part, IAction action) {
+	public CommentBoxAction(IWorkbenchPart part, IAction action){
 		super(part);
 		this.pasteAction = (PasteAction) action;
 		setLazyEnablementCalculation(true);
@@ -67,17 +68,20 @@ private PasteAction pasteAction;
 		setEnabled(false);
 	}
 		
-	
-	private Command createLabelCommand(){
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	private Command createLabelCommand(boolean increaseCounter){
+		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(editor != null){
 		Container container = editor.getContainer();
+		
+		org.eclipse.draw2d.geometry.Point point = editor.location;
 		CommentBox label = new CommentBox("Label");
+		label.setSize(new Dimension(300, 60));
+		label.setLocation(point);
 		CommentBoxCommand command = new CommentBoxCommand(label,"Label",container);
-		Point point = editor.getCursorPosition();
-		label.setLocation(new org.eclipse.draw2d.geometry.Point(point));
 		return command;
+		}
+		return null;
 	}
-	
 	private ImageDescriptor getImageDisDescriptor() {
 		ImageDescriptor imageDescriptor = new ImageDescriptor() {
 
@@ -91,6 +95,6 @@ private PasteAction pasteAction;
 	
 	@Override
 	public void run() {
-		execute(createLabelCommand());
+		execute(createLabelCommand(true));
 	}
 }

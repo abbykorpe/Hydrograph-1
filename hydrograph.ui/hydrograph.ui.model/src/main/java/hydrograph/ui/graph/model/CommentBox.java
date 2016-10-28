@@ -15,8 +15,6 @@
 package hydrograph.ui.graph.model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -36,14 +34,11 @@ public class CommentBox extends Model{
 
 	private static final long serialVersionUID = 1201944115887893345L;
 	private String text;
-	private Dimension size = new Dimension(268, 56);
-
-	private static int count;
+	private Dimension size;
+	private  int count;
 	private Container parent;
-	private Point location;
+	private Point location = new Point(0, 0);
 	private boolean newInstance;
-	private Map<String, Object> clonedHashMap;
-	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(CommentBox.class);
 
 	/**
@@ -52,10 +47,14 @@ public class CommentBox extends Model{
 	 * @param compLabel
 	 *            the comp label
 	 */
-	public CommentBox(String compLabel) {
-		location = new Point(0, 0);
+	public CommentBox(String compLabel){
+		size = new Dimension(300, 60);
 		this.text = compLabel;
 		newInstance = true;
+		if(count>0){
+			location = new Point(getLocation().x+count*10, getLocation().y+count*10);
+		}
+		
 	}
 
 	/**
@@ -72,9 +71,9 @@ public class CommentBox extends Model{
 	 * 
 	 * @return the new ID
 	 */
-	protected String getNewID() {
+	/*protected String getNewID() {
 		return Integer.toString(count++);
-	}
+	}*/
 
 	/**
 	 * Gets the size.
@@ -96,7 +95,7 @@ public class CommentBox extends Model{
 	 * @param d
 	 *            the new size
 	 */
-	public void setSize(Dimension d) {
+	public void setSize(Dimension d){
 		if (size.equals(d))
 			return;
 		size = d;
@@ -109,25 +108,25 @@ public class CommentBox extends Model{
 	 * @param s
 	 *            the new label contents
 	 */
-	public void setLabelContents(String s) {
+	public void setLabelContents(String s){
 		text = s;
 		firePropertyChange("labelContents", null, text); //$NON-NLS-2$//$NON-NLS-1$
 	}
 
-	public String toString() {
+	public String toString(){
 		return "Label"
 				+ "=" + getLabelContents(); //$NON-NLS-1$ 
 	}
 
-	public Container getParent() {
+	public Container getParent(){
 		return parent;
 	}
 
-	public void setParent(Container parent) {
+	public void setParent(Container parent){
 		this.parent = parent;
 	}
 	
-	public void setLocation(Point newLocation) {
+	public void setLocation(Point newLocation){
 		resetLocation(newLocation);
 		location.setLocation(newLocation);
 		firePropertyChange(Props.LOCATION_PROP.getValue(), null, location);
@@ -178,7 +177,6 @@ public class CommentBox extends Model{
 	@Override
 	public CommentBox clone() throws CloneNotSupportedException{
 		CommentBox label = null;
-		clonedHashMap = new LinkedHashMap<String, Object>();
 		label = new CommentBox(getLabelContents());
 			
 		if(label!=null){
@@ -188,5 +186,13 @@ public class CommentBox extends Model{
 		label.setLocation(getLocation());
 		}
 		return label;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 }

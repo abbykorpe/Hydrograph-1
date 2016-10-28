@@ -47,8 +47,8 @@ public class CommentBoxFigure
 	 */
 	public CommentBoxFigure(){
 		this(BentCornerFigure.DEFAULT_CORNER_SIZE - 3);
-		/*setInitialColor();
-		setComponentColorAndBorder();*/
+		setInitialColor();
+		/*setComponentColorAndBorder();*/
 	}
 	
 	/** 
@@ -58,7 +58,7 @@ public class CommentBoxFigure
 	 * @param borderSize the size of the MarginBorder
 	 */
 	public CommentBoxFigure(int borderSize){
-		setBorder(new MarginBorder(borderSize));
+		setBorder(new MarginBorder(5));
 		FlowPage flowPage = new FlowPage();
 	
 		textFlow = new TextFlow();
@@ -74,6 +74,7 @@ public class CommentBoxFigure
 				SWT.NORMAL );
 		setFont(font);
 		setForegroundColor(ColorConstants.black);
+		setOpaque(false);
 	}
 	
 	/**
@@ -86,9 +87,9 @@ public class CommentBoxFigure
 	}
 	
 	private void setInitialColor(){
-		componentColor = new Color(null, ELTColorConstants.LIGHT_GREY_RGB[0], ELTColorConstants.LIGHT_GREY_RGB[1], ELTColorConstants.LIGHT_GREY_RGB[2]);
+		/*componentColor = new Color(null, ELTColorConstants.LIGHT_GREY_RGB[0], ELTColorConstants.LIGHT_GREY_RGB[1], ELTColorConstants.LIGHT_GREY_RGB[2]);
 		borderColor = new Color(null, ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
-		selectedComponentColor = new Color(null, ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[2]);
+		selectedComponentColor = new Color(null, ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[2]);*/
 		selectedBorderColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 	}
 	

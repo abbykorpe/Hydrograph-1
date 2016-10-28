@@ -30,21 +30,21 @@ public class CommentBoxDirectEditPolicy
 /**
  * @see DirectEditPolicy#getDirectEditCommand(DirectEditRequest)
  */
-protected Command getDirectEditCommand(DirectEditRequest edit) {
+protected Command getDirectEditCommand(DirectEditRequest edit){
 	String labelText = (String)edit.getCellEditor().getValue();
 	CommentBoxEditPart label = (CommentBoxEditPart)getHost();
-	CommentCommand command = new CommentCommand((CommentBox) (label.getModel()),labelText);
+	CommentCommand command = new CommentCommand((CommentBox)(label.getModel()), labelText);
 	return command;
 }
 
 /**
  * @see DirectEditPolicy#showCurrentEditValue(DirectEditRequest)
  */
-protected void showCurrentEditValue(DirectEditRequest request) {
+protected void showCurrentEditValue(DirectEditRequest request){
 	String value = (String)request.getCellEditor().getValue();
 	((CommentBoxFigure)getHostFigure()).setText(value);
-	//hack to prevent async layout from placing the cell editor twice.
-	getHostFigure().getUpdateManager().performUpdate();
+	//prevent async layout from placing the cell editor twice.
+	 getHostFigure().getUpdateManager().performUpdate();
 	
 }
 

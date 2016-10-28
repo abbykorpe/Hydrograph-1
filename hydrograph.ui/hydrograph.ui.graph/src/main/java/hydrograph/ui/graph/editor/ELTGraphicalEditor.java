@@ -225,6 +225,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private static final String JOB_ID_STRING_SEPARATOR = "_";
 	
 	private CustomPaletteEditPartFactory paletteEditPartFactory;
+	public Point location;
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -382,6 +383,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			@Override
 			public void mouseDown(MouseEvent e) {
 				setCustomToolUndoRedoStatus();
+				org.eclipse.swt.graphics.Point p = new org.eclipse.swt.graphics.Point(e.x, e.y);
+				location = new Point(p);
 			}
 
 			@Override
@@ -1838,14 +1841,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			bounds.setLocation(bounds.x - 10 , bounds.y);
 			break;
 			}
+		
 	}
 	
-	public org.eclipse.swt.graphics.Point getCursorPosition(){
-		Display display = Display.getDefault();
-		org.eclipse.swt.graphics.Point point = getGraphicalViewer().getControl().toControl(display.getCursorLocation());
-		FigureCanvas figureCanvas = (FigureCanvas)getGraphicalViewer().getControl();
-		org.eclipse.draw2d.geometry.Point location = figureCanvas.getViewport().getViewLocation();
-		point = new org.eclipse.swt.graphics.Point(point.x + location.x, point.y + location.y);
-		return point;
-	}
 }

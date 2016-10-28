@@ -35,7 +35,7 @@ private int cornerSize;
 
 /**
  * Constructs an empty BentCornerFigure with default background color of 
- * ColorConstants.tooltipBackground and default corner size.
+ * ColorConstants.white and default corner size.
  */
 public BentCornerFigure() {
 	setBackgroundColor(ColorConstants.white);

@@ -52,7 +52,7 @@ public class Container extends Model {
 	private String uniqueJobId;
 	private int jobRunCount;
 	
-	private  final List<CommentBox> comments = new ArrayList<CommentBox>();
+	private  final List<CommentBox> comments;
 	private final List<Component> components = new ArrayList<>();
 	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Container extends Model {
 	private boolean isOpenedForTracking;
 
 	public Container(){
-		
+		comments = new ArrayList<CommentBox>();
 	}
 	
 	
@@ -225,7 +225,9 @@ public class Container extends Model {
 	public List<Object> getChildren() {
 		List<Object> objects = new ArrayList<>();
 		objects.addAll(components);
+		if(comments != null){
 		objects.addAll(comments);
+		}
 		return objects;
 	}
 

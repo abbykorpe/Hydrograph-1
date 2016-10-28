@@ -14,16 +14,6 @@
 package hydrograph.ui.graph.action;
 
 
-import hydrograph.ui.graph.command.ComponentDeleteCommand;
-import hydrograph.ui.graph.command.LinkDeleteCommand;
-import hydrograph.ui.graph.controller.CommentBoxEditPart;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.LinkEditPart;
-import hydrograph.ui.graph.model.CommentBox;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.Model;
-
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
@@ -33,6 +23,14 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+
+import hydrograph.ui.graph.command.ComponentDeleteCommand;
+import hydrograph.ui.graph.command.LinkDeleteCommand;
+import hydrograph.ui.graph.controller.CommentBoxEditPart;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.LinkEditPart;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Model;
 
 
 
