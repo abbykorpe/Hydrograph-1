@@ -55,6 +55,7 @@ public class JoinAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing join entity for component: " + jaxbJoin.getId());
 		joinEntity.setComponentId(jaxbJoin.getId());
 		joinEntity.setBatch(jaxbJoin.getBatch());
+		joinEntity.setComponentName(jaxbJoin.getName());
 
 		if (jaxbJoin.getOutSocket() == null) {
 			throw new NullPointerException(

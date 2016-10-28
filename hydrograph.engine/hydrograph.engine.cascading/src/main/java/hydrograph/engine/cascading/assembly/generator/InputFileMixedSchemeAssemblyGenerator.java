@@ -67,6 +67,7 @@ public class InputFileMixedSchemeAssemblyGenerator extends
 		inputFileMixedSchemeEntity.setComponentId(jaxbTextFileMixedScheme
 				.getId());
 		inputFileMixedSchemeEntity.setBatch(jaxbTextFileMixedScheme.getBatch());
+		inputFileMixedSchemeEntity.setComponentName(jaxbTextFileMixedScheme.getName());
 		inputFileMixedSchemeEntity.setCharset(jaxbTextFileMixedScheme
 				.getCharset() != null ? jaxbTextFileMixedScheme.getCharset()
 				.getValue().value() : "UTF-8");

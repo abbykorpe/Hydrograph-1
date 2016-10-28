@@ -65,6 +65,7 @@ public class RemoveDupsAssemblyGenerator extends
 				+ jaxbRemoveDups.getId());
 		removeDupsEntity.setComponentId(jaxbRemoveDups.getId());
 		removeDupsEntity.setBatch(jaxbRemoveDups.getBatch());
+		removeDupsEntity.setComponentName(jaxbRemoveDups.getName());
 		removeDupsEntity.setKeep(jaxbRemoveDups.getKeep().getValue().name());
 		removeDupsEntity.setKeyFields(StraightPullEntityUtils
 				.extractKeyFields(jaxbRemoveDups.getPrimaryKeys()));

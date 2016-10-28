@@ -32,6 +32,7 @@ public class ComponentInfo {
 	private String componentId;
 	private String currentStatus;
 	private String batch;
+	private String componentName;
 	private Map<String, String> statusPerSocketMap = new HashMap<String, String>();
 	private Map<String, Long> mapofStats = new LinkedHashMap<String, Long>();
 
@@ -115,7 +116,7 @@ public class ComponentInfo {
 	@Override
 	public String toString() {
 		String message = "";
-		message = "ComponentInfo : \n" + "componentId :" + componentId + "\nbatch :"+ batch +"\ncurrentStatus :" + currentStatus;
+		message = "ComponentInfo : \n" + "componentId :" + componentId + "\ncomponentName :"+ componentName +"\nbatch :"+ batch +"\ncurrentStatus :" + currentStatus;
 		if (statusPerSocketMap != null) {
 			for (Entry<String, String> entry : statusPerSocketMap.entrySet()) {
 				message += "\nSocketid:" + entry.getKey() + "\nrecord processed :" + mapofStats.get(entry.getKey())
@@ -124,5 +125,13 @@ public class ComponentInfo {
 		}
 		message += "\n";
 		return message;
+	}
+
+	public String getComponentName() {
+		return componentName;
+	}
+
+	public void setComponentName(String componentName) {
+		this.componentName = componentName;
 	}
 }

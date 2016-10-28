@@ -92,7 +92,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 					+ joinEntity.getComponentId() + "' for socket: '"
 					+ outSocket.getSocketId() + "' of type: '"
 					+ outSocket.getSocketType() + "'");
-			Pipe join = new CoGroup(ComponentHelper.getComponentName("join",joinEntity.getComponentId(),outSocket.getSocketId()),inputLinks, uniqKeyFields,
+			Pipe join = new CoGroup(joinEntity.getComponentId()+outSocket.getSocketId(),inputLinks, uniqKeyFields,
 					getJoinOutputFields(outSocket), joiner);
 			setHadoopProperties(join.getStepConfigDef());
 

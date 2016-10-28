@@ -70,8 +70,7 @@ public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEn
 						+ e.getMessage());
 				throw new RuntimeException(e);
 			}
-			Pipe sinkPipe = new Pipe(
-					ComponentHelper.getComponentName("outputFileParquet", outputFileParquetEntity.getComponentId(), ""),
+			Pipe sinkPipe = new Pipe(outputFileParquetEntity.getComponentId()+"",
 					tailPipe);
 			setOutLink("output","NoSocketId",
 					outputFileParquetEntity.getComponentId(), sinkPipe, componentParameters

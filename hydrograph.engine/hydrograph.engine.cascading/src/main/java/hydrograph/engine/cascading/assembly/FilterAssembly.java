@@ -73,7 +73,7 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 			isUnused = true;
 		}
 
-		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("filter", filterEntity.getComponentId(), socketId),
+		Pipe filterPipe = new Pipe(filterEntity.getComponentId()+ socketId,
 				componentParameters.getInputPipe());
 		// validate expression
 		ValidationAPI validationAPI = null;

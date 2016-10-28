@@ -60,6 +60,7 @@ public class PartitionByExpressionAssemblyGenerator extends OperationAssemblyGen
 
 		partitionByExpressionEntity.setComponentId(jaxbPartitionByExpression.getId());
 		partitionByExpressionEntity.setBatch(jaxbPartitionByExpression.getBatch());
+		partitionByExpressionEntity.setComponentName(jaxbPartitionByExpression.getName());
 
 		// check if operation is present
 		if (jaxbPartitionByExpression.getOperationOrExpression() != null) {

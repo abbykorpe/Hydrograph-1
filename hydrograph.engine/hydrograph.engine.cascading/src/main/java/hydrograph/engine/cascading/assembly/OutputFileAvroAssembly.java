@@ -72,7 +72,7 @@ public class OutputFileAvroAssembly extends BaseComponent<OutputFileAvroEntity> 
 		filePathToWrite = outputFileAvroEntity.getPath();
 		tailPipe = componentParameters.getInputPipe();
 		prepareScheme();
-		Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileAvro",outputFileAvroEntity.getComponentId(),""),
+		Pipe sinkPipe = new Pipe(outputFileAvroEntity.getComponentId()+"",
 				tailPipe);
 		setOutLink("output","NoSocketId",
 				outputFileAvroEntity.getComponentId(), sinkPipe, componentParameters

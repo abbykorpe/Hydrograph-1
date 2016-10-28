@@ -90,7 +90,7 @@ public class InputFileAvroAssembly extends BaseComponent<InputFileAvroEntity> {
 		prepareScheme();
 		flowDef = componentParameters.getFlowDef();
 		tap = new Hfs(scheme, inputFileAvroEntity.getPath());
-		pipe = new Pipe(ComponentHelper.getComponentName("inputFileAvro",inputFileAvroEntity.getComponentId(),inputFileAvroEntity.getOutSocketList().get(0).getSocketId()));
+		pipe = new Pipe(inputFileAvroEntity.getComponentId()+inputFileAvroEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());

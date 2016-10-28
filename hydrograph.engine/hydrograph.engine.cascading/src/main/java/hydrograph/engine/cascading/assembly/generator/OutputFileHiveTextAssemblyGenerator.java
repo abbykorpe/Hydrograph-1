@@ -68,6 +68,7 @@ public class OutputFileHiveTextAssemblyGenerator extends
 				+ jaxbHiveTextFile.getId());
 		outputFileHiveTextEntity.setComponentId(jaxbHiveTextFile.getId());
 		outputFileHiveTextEntity.setBatch(jaxbHiveTextFile.getBatch());
+		outputFileHiveTextEntity.setComponentName(jaxbHiveTextFile.getName());
 		outputFileHiveTextEntity
 				.setFieldsList(OutputEntityUtils
 						.extractOutputFields(jaxbHiveTextFile.getInSocket()

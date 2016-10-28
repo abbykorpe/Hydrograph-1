@@ -94,7 +94,7 @@ public class InputFileDelimitedAssembly extends BaseComponent<InputFileDelimited
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileDelimitedEntity.getPath());
-		pipe = new Pipe(ComponentHelper.getComponentName("inputFileDelimited",inputFileDelimitedEntity.getComponentId(),inputFileDelimitedEntity.getOutSocketList().get(0).getSocketId()));
+		pipe = new Pipe(inputFileDelimitedEntity.getComponentId()+inputFileDelimitedEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(pipe.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());

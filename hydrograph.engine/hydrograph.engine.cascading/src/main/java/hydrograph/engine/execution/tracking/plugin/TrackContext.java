@@ -23,6 +23,7 @@ public class TrackContext {
 	private String fromOutSocketId;
 	private String fromOutSocketType;
 	private String batch;
+	private String componentName;
 
 	/**
 	 * Method getFromComponentId returns the previous component's id
@@ -92,6 +93,14 @@ public class TrackContext {
 	 */
 	public void setBatch(String batch) {
 		this.batch = batch;
+	}
+
+	public String getComponentName() {
+		return componentName;
+	}
+
+	public void setComponentName(String componentName) {
+		this.componentName = componentName;
 	}
 
 }

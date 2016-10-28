@@ -62,6 +62,7 @@ public class UnionAllAssemblyGenerator extends
 				+ jaxbUnionAll.getId());
 		unionAllEntity.setComponentId(jaxbUnionAll.getId());
 		unionAllEntity.setBatch(jaxbUnionAll.getBatch());
+		unionAllEntity.setComponentName(jaxbUnionAll.getName());
 		unionAllEntity.setOutSocket(StraightPullEntityUtils.extractOutSocketList(
 				jaxbUnionAll.getOutSocket()).get(0));
 		unionAllEntity.setRuntimeProperties(StraightPullEntityUtils

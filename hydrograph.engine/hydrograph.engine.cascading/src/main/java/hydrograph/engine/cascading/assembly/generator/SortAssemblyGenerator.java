@@ -93,6 +93,7 @@ public class SortAssemblyGenerator extends StraightPullAssemblyGeneratorBase {
 		LOG.trace("Initializing sort entity for component: " + jaxbSort.getId());
 		sortEntity.setComponentId(jaxbSort.getId());
 		sortEntity.setBatch(jaxbSort.getBatch());
+		sortEntity.setComponentName(jaxbSort.getName());
 		sortEntity.setRuntimeProperties(
 				StraightPullEntityUtils.extractRuntimeProperties(jaxbSort.getRuntimeProperties()));
 		sortEntity.setKeyFields(StraightPullEntityUtils.extractKeyFields(jaxbSort.getPrimaryKeys()));

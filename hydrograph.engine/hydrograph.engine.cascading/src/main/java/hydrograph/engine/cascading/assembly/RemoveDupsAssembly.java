@@ -100,7 +100,7 @@ public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 
 	private Pipe createFilterPipe(String linkType, String outSocketId, Pipe everyPipe) {
 
-		Pipe filterPipe = new Pipe(ComponentHelper.getComponentName("removeDups",removeDupsEntity.getComponentId() , "_RemoveDupsFilter_" + outSocketId), everyPipe);
+		Pipe filterPipe = new Pipe(removeDupsEntity.getComponentId() + "_RemoveDupsFilter_" + outSocketId, everyPipe);
 		setHadoopProperties(everyPipe.getStepConfigDef());
 
 		if (linkType.equals("unused")) {
@@ -113,7 +113,7 @@ public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {
 	}
 
 	private Pipe createEveryPipe(String linkType, String outSocketId, Pipe groupByPipe) {
-		groupByPipe = new Pipe("removeDups:"+removeDupsEntity.getComponentId() + "_" + outSocketId, groupByPipe);
+		groupByPipe = new Pipe(removeDupsEntity.getComponentId() + "_" + outSocketId, groupByPipe);
 
 		RemoveDupsHandler handler = new RemoveDupsHandler(linkType, removeDupsEntity.getKeep(),
 				componentParameters.getInputFields());
