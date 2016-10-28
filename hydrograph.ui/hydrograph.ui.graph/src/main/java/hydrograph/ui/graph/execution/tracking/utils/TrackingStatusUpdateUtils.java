@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -134,13 +135,13 @@ public class TrackingStatusUpdateUtils {
 
 	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component,boolean isReplay) {
 		ComponentExecutionStatus status=component.getStatus();
-			if(status!=null && !ComponentExecutionStatus.RUNNING.value().equalsIgnoreCase(status.value())){
+			if(status==null || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.BLANK.value(),status.value())){
 				boolean isPending =applyPendingStatus(component, executionStatus);
 				if(isPending){
 					component.updateStatus(ComponentExecutionStatus.PENDING.value());
 				}
 			}
-			if(status!=null && !ComponentExecutionStatus.SUCCESSFUL.value().equalsIgnoreCase(status.value())){
+			if(status!=null && !StringUtils.equalsIgnoreCase(ComponentExecutionStatus.SUCCESSFUL.value(),status.value())){
 				boolean isRunning =applyRunningStatus(component, executionStatus);
 				if(isRunning){
 					component.updateStatus(ComponentExecutionStatus.RUNNING.value());
@@ -152,7 +153,7 @@ public class TrackingStatusUpdateUtils {
 					component.updateStatus(ComponentExecutionStatus.FAILED.value());
 				}
 		
-		if((status!=null && (ComponentExecutionStatus.RUNNING.value().equalsIgnoreCase(status.value()) || ComponentExecutionStatus.PENDING.value().equalsIgnoreCase(status.value()))) || isReplay){
+		if((status!=null && (StringUtils.equalsIgnoreCase(ComponentExecutionStatus.RUNNING.value(),status.value()) || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.PENDING.value(),status.value()))) || isReplay){
 			boolean isSuccess=applySuccessStatus(component, executionStatus);
 	 		if(isSuccess)
 	 			component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
