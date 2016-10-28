@@ -51,6 +51,7 @@ public class ComponentPipeMapping {
 	private static Map<String, List<String>> componentFlowMap = new HashMap<String, List<String>>();
 	private static Set<String> allPipes = new HashSet<String>();
 	private static Map<String,String> batchMap = new HashMap<String,String>();
+	private static Map<String,String> componentNamesMap = new HashMap<String,String>();
 
 	/**
 	 * Method generateComponentToPipeMap generates map of component with
@@ -93,6 +94,7 @@ public class ComponentPipeMapping {
 				generateComponentAndPreviousMap(runtimeContext.getHydrographJob(), eachComponentId, outSockets,
 						inSockets);
 				batchMap.put(eachComponentId, eachBatchNumber);
+				componentNamesMap.put(eachComponentId, jaxbTraversal.getComponentNameFromComponentId(eachComponentId));
 			}
 		}
 	}
@@ -196,7 +198,6 @@ public class ComponentPipeMapping {
 	}
 
 	private static void addPipesInAllPipes(String pipename) {
-		// TODO Auto-generated method stub
 		allPipes.add(pipename);
 	}
 
@@ -255,6 +256,13 @@ public class ComponentPipeMapping {
 	 */
 	public static Map<String,String> getBatchMap(){
 		return batchMap;
+	}
+	
+	/**
+	 * @return Map of components with their component names 
+	 */
+	public static Map<String,String> getComponentNamesMap(){
+		return componentNamesMap;
 	}
 
 	/**

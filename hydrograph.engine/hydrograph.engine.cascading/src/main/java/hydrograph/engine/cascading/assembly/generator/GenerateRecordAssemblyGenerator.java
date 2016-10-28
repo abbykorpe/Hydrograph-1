@@ -61,6 +61,7 @@ public class GenerateRecordAssemblyGenerator extends InputAssemblyGeneratorBase 
 		LOG.trace("Initializing generate record entity for component: " + jaxbGenerateRecord.getId());
 		generateRecordEntity.setComponentId(jaxbGenerateRecord.getId());
 		generateRecordEntity.setBatch(jaxbGenerateRecord.getBatch());
+		generateRecordEntity.setComponentName(jaxbGenerateRecord.getName());
 		generateRecordEntity.setRecordCount(jaxbGenerateRecord.getRecordCount().getValue());
 
 		generateRecordEntity.setFieldsList(InputEntityUtils.extractInputFields(

@@ -97,8 +97,7 @@ public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 				passThroughFields, mapFields, operationFields);
 		NormalizeCustomHandler normalizeCustomHandler = null;
 
-		Pipe normalizePipe = new Pipe(ComponentHelper.getComponentName("normalize",
-				normalizeEntity.getComponentId(),outSocket.getSocketId()),
+		Pipe normalizePipe = new Pipe(normalizeEntity.getComponentId()+outSocket.getSocketId(),
 				componentParameters.getInputPipe());
 
 		normalizeCustomHandler = new NormalizeCustomHandler(

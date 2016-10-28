@@ -71,8 +71,7 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 			LOG.trace("Creating output file fixed width assembly for '" + outputFileFixedWidthEntity.getComponentId()
 					+ "'");
 			prepareAssembly();
-			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileFixedWidth",
-					outputFileFixedWidthEntity.getComponentId(), ""), tailPipe);
+			Pipe sinkPipe = new Pipe(outputFileFixedWidthEntity.getComponentId()+"", tailPipe);
 			setOutLink("output","NoSocketId",
 					outputFileFixedWidthEntity.getComponentId(), sinkPipe, componentParameters
 					.getInputFieldsList().get(0));

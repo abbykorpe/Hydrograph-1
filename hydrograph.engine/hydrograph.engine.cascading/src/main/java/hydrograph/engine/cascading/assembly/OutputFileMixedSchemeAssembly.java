@@ -59,8 +59,7 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 		LOG.trace("Creating output file mixed scheme assembly for '" + outputFileMixedSchemeEntity.getComponentId()
 				+ "'");
 		prepareAssembly();
-		Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileMixedScheme",
-				outputFileMixedSchemeEntity.getComponentId(), ""), tailPipe);
+		Pipe sinkPipe = new Pipe(outputFileMixedSchemeEntity.getComponentId()+"", tailPipe);
 		setOutLink("output","NoSocketId",
 				outputFileMixedSchemeEntity.getComponentId(), sinkPipe, componentParameters
 				.getInputFieldsList().get(0));

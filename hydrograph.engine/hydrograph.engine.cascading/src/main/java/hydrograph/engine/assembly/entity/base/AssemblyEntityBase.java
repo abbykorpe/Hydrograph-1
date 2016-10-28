@@ -19,6 +19,7 @@ public class AssemblyEntityBase {
 	private String componentId;
 	private Properties runtimeProperties;
 	private String batch;
+	private String componentName;
 
 	/**
 	 * @return the componentId
@@ -74,5 +75,20 @@ public class AssemblyEntityBase {
 
 		return "Component ID: " + componentId + " | batch: " + batch
 				+ " | runtime properties: " + runtimeProperties + "\n";
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getComponentName() {
+		return componentName;
+	}
+
+	/**
+	 * @param name
+	 * 				the name to set
+	 */
+	public void setComponentName(String name) {
+		this.componentName = name;
 	}
 }

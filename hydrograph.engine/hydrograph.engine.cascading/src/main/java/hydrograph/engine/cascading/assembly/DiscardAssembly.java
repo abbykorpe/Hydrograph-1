@@ -53,7 +53,7 @@ public class DiscardAssembly extends BaseComponent<DiscardEntity> {
 			inputPipes = componentParameters.getInputPipe();
 
 			nullTap = new NullTap();
-			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("discard", discardEntity.getComponentId(),""), inputPipes);
+			Pipe sinkPipe = new Pipe(discardEntity.getComponentId()+"", inputPipes);
 			setOutLink("output","NoSocketId",
 					discardEntity.getComponentId(), sinkPipe, componentParameters
 					.getInputFieldsList().get(0));

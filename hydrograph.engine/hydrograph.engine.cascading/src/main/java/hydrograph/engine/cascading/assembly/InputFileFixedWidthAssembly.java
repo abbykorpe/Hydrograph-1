@@ -101,7 +101,7 @@ public class InputFileFixedWidthAssembly extends BaseComponent<InputFileFixedWid
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileFixedWidthEntity.getPath());
-		pipe = new Pipe(ComponentHelper.getComponentName("inputFileFixedWidth",inputFileFixedWidthEntity.getComponentId(),inputFileFixedWidthEntity.getOutSocketList().get(0).getSocketId()));
+		pipe = new Pipe(inputFileFixedWidthEntity.getComponentId()+inputFileFixedWidthEntity.getOutSocketList().get(0).getSocketId());
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
 	}

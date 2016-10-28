@@ -69,6 +69,7 @@ public class OutputFileHiveParquetAssemblyGenerator extends
 				+ jaxbHiveParquetFile.getId());
 		outputFileHiveParquetEntity.setComponentId(jaxbHiveParquetFile.getId());
 		outputFileHiveParquetEntity.setBatch(jaxbHiveParquetFile.getBatch());
+		outputFileHiveParquetEntity.setComponentName(jaxbHiveParquetFile.getName());
 		outputFileHiveParquetEntity
 				.setFieldsList(OutputEntityUtils
 						.extractOutputFields(jaxbHiveParquetFile.getInSocket()

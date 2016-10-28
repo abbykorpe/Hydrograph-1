@@ -60,6 +60,7 @@ public class CumulateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing cumulate entity for component: " + jaxbCumulate.getId());
 		cumulateEntity.setComponentId(jaxbCumulate.getId());
 		cumulateEntity.setBatch(jaxbCumulate.getBatch());
+		cumulateEntity.setComponentName(jaxbCumulate.getName());
 
 		// check if operation is present
 		if (jaxbCumulate.getOperationOrExpression() != null && jaxbCumulate.getOperationOrExpression().size() > 0) {

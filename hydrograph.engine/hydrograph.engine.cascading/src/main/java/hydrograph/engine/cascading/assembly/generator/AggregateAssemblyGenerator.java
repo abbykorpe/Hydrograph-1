@@ -61,6 +61,7 @@ public class AggregateAssemblyGenerator extends OperationAssemblyGeneratorBase {
 		LOG.trace("Initializing aggregate entity for component: " + jaxbAggregate.getId());
 		aggregateEntity.setComponentId(jaxbAggregate.getId());
 		aggregateEntity.setBatch(jaxbAggregate.getBatch());
+		aggregateEntity.setComponentName(jaxbAggregate.getName());
 
 		// check if operation is present
 		if (jaxbAggregate.getOperationOrExpression() != null && jaxbAggregate.getOperationOrExpression().size() > 0) {

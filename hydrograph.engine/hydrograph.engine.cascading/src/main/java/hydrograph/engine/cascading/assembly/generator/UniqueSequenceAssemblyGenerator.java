@@ -57,6 +57,7 @@ public class UniqueSequenceAssemblyGenerator extends
 				+ jaxbGenerateSequence.getId());
 		uniqueSequenceEntity.setComponentId(jaxbGenerateSequence.getId());
 		uniqueSequenceEntity.setBatch(jaxbGenerateSequence.getBatch());
+		uniqueSequenceEntity.setComponentName(jaxbGenerateSequence.getName());
 		// check if operation is present
 		if (jaxbGenerateSequence.getOperationOrExpression() != null) {
 			LOG.trace("Operation(s) present for unique sequence component: "

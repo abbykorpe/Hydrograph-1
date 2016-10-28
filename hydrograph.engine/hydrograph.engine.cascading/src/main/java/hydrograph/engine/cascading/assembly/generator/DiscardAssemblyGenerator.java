@@ -61,6 +61,7 @@ public class DiscardAssemblyGenerator extends OutputAssemblyGeneratorBase {
 				+ jaxbDiscard.getId());
 		discardEntity.setComponentId(jaxbDiscard.getId());
 		discardEntity.setBatch(jaxbDiscard.getBatch());
+		discardEntity.setComponentName(jaxbDiscard.getName());
 	}
 
 	@Override

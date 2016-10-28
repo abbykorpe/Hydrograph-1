@@ -60,8 +60,7 @@ public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSe
 					+ outputFileSequenceFormatEntity.getComponentId() + "'");
 			fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputFileSequenceFormatEntity>(outputFileSequenceFormatEntity);
 			prepareAssembly();
-			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileSequenceFormat",
-					outputFileSequenceFormatEntity.getComponentId(), ""), tailPipe);
+			Pipe sinkPipe = new Pipe(outputFileSequenceFormatEntity.getComponentId()+"", tailPipe);
 			setOutLink("output","NoSocketId",
 					outputFileSequenceFormatEntity.getComponentId(), sinkPipe, componentParameters
 					.getInputFieldsList().get(0));

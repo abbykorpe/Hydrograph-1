@@ -59,6 +59,7 @@ public class InputFileSequenceAssemblyGenerator extends InputAssemblyGeneratorBa
 		LOG.trace("Initializing input file delimited entity for component: " + jaxbFileSequenceFormat.getId());
 		inputFileSequenceFormatEntity.setComponentId(jaxbFileSequenceFormat.getId());
 		inputFileSequenceFormatEntity.setBatch(jaxbFileSequenceFormat.getBatch());
+		inputFileSequenceFormatEntity.setComponentName(jaxbFileSequenceFormat.getName());
 		inputFileSequenceFormatEntity.setPath(jaxbFileSequenceFormat.getPath().getUri());
 		inputFileSequenceFormatEntity.setFieldsList(InputEntityUtils.extractInputFields(
 				jaxbFileSequenceFormat.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));

@@ -153,6 +153,7 @@ class TrackComponentUtils {
 		filter.setId(TrackComponentUtils.generateUniqueComponentId(trackContext.getFromComponentId(),
 				"generatedHydrographFilter", jaxbObjectList));
 		filter.setBatch(trackContext.getBatch());
+		filter.setName(trackContext.getComponentName());
 		filter.getInSocket().add(TrackComponentUtils.getStraightPullInSocket(trackContext.getFromComponentId(),
 				trackContext.getFromOutSocketId(), trackContext.getFromOutSocketType()));
 

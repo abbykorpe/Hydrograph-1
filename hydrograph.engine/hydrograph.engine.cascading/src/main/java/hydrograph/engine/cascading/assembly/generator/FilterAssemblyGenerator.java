@@ -55,6 +55,7 @@ public class FilterAssemblyGenerator extends OperationAssemblyGeneratorBase {
 				+ jaxbFilter.getId());
 		filterEntity.setComponentId(jaxbFilter.getId());
 		filterEntity.setBatch(jaxbFilter.getBatch());
+		filterEntity.setComponentName(jaxbFilter.getName());
 
 		// check if operation is present
 		if (jaxbFilter.getOperationOrExpression() != null) {

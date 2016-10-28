@@ -60,6 +60,7 @@ public class OutputFileParquetAssemblyGenerator extends OutputAssemblyGeneratorB
 		LOG.trace("Initializing output file parquet entity for component: " + jaxbParquetFile.getId());
 		outputFileParquetEntity.setComponentId(jaxbParquetFile.getId());
 		outputFileParquetEntity.setBatch(jaxbParquetFile.getBatch());
+		outputFileParquetEntity.setComponentName(jaxbParquetFile.getName());
 		outputFileParquetEntity.setPath(jaxbParquetFile.getPath().getUri());
 		outputFileParquetEntity.setFieldsList(OutputEntityUtils.extractOutputFields(
 				jaxbParquetFile.getInSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
