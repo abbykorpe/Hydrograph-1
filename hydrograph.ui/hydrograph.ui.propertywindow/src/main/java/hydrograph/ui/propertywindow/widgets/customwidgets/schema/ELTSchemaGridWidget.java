@@ -1016,6 +1016,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 AbstractELTWidget importButtonWidget = new ELTDefaultButton(Messages.IMPORT_XML);
 		 importExportComposite.attachWidget(importButtonWidget);
 		 importButton = (Button) importButtonWidget.getSWTWidgetControl();
+		 importButton.setEnabled(false);
 
 		 importButton.addSelectionListener(new SelectionAdapter() {
 			 @Override
@@ -1047,6 +1048,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 AbstractELTWidget exportButtonWidget = new ELTDefaultButton(Messages.EXPORT_XML).grabExcessHorizontalSpace(false);
 		 importExportComposite.attachWidget(exportButtonWidget);
 		 exportButton = (Button) exportButtonWidget.getSWTWidgetControl();
+		 exportButton.setEnabled(false);
 
 		 //Add listener
 		 exportButton.addSelectionListener(new SelectionAdapter() {
