@@ -142,7 +142,7 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 		// Check if job is executed in debug mode
 				Job job = JobManager.INSTANCE.getPreviouslyExecutedJobs().get(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
 				if(job==null){
-					MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.FORGOT_TO_EXECUTE_DEBUG_JOB);
+					MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB_IN_DEBUG_MODE);
 					return;
 				}
 				
