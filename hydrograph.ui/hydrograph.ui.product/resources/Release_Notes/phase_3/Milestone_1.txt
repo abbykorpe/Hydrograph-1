@@ -30,6 +30,7 @@ connection(link) on transform component.
 17.<1419> - [Ankit Sharma] - Output Component: Fixed width component was not showing error for length field.
 18.<1424>-[Pooja Yadav]-Join Component: Size of the Join Component having Input Count more than Two is Getting Reduced After Importing the Job.
 19.<1439> - [Ankit Sharma] - Alert message changed for View data when run without debug mode.
+20.<1434> - [Pooja Yadav] - Schema window : Import xml and Export xml buttons should be disable when you select internal schema.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
