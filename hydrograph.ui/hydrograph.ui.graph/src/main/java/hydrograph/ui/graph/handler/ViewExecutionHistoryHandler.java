@@ -73,7 +73,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		List<Job> tmpList = jobDetails1.get(consoleName);
 		
 		if(tmpList==null){
-			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.FORGOT_TO_EXECUTE_DEBUG_JOB);
+			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB_IN_DEBUG_MODE);
 			return "";
 		}
 		
