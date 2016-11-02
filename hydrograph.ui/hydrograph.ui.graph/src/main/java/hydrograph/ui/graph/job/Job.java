@@ -17,7 +17,7 @@ package hydrograph.ui.graph.job;
  * @author Bitwise
  *
  */
-public class Job {
+public class Job implements Cloneable{
 	
 	private String localJobID;
 	private Process localJobProcess;
@@ -221,6 +221,9 @@ public class Job {
 		this.isExecutionTrackOn = isExecutionTrack;
 	}	
 	
-	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 	
 }

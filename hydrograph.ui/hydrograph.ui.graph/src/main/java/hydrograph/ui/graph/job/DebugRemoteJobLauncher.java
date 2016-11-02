@@ -18,6 +18,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
@@ -99,10 +100,12 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
@@ -121,10 +124,12 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
@@ -144,10 +149,12 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
+				ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
 			if (JobStatus.KILLED.equals(job.getJobStatus())) {
+				ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
@@ -157,10 +164,12 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, true, true);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
@@ -169,10 +178,12 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
@@ -181,9 +192,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			return;
 		}
 
@@ -193,9 +206,11 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			return;
 		}
 
@@ -204,10 +219,12 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
@@ -218,12 +235,14 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
 		if (JobStatus.KILLED.equals(job.getJobStatus())) {
 			((StopJobHandler) RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(false);
 			((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(true);
+			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 			TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 			return;
 		}
@@ -233,6 +252,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		}
 		
 		releaseResources(job, gefCanvas, joblogger);
+		ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 	}
 	
