@@ -18,8 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class ViewExecutionHistoryUtility use to create collection of job and their status.
@@ -32,7 +35,9 @@ public class ViewExecutionHistoryUtility {
 	private Map<String, ExecutionStatus> trackingMap;
 	private Map<String, List<Job>> trackingJobMap;
 	
-	
+	/** The logger. */
+	private static Logger logger = LogFactory.INSTANCE.getLogger(ViewExecutionHistoryUtility.class);
+
 	public static ViewExecutionHistoryUtility INSTANCE = new ViewExecutionHistoryUtility();
 	
 	
@@ -58,12 +63,18 @@ public class ViewExecutionHistoryUtility {
 	 * @param jobDetails
 	 */
 	public void addTrackingJobs(String jobName, Job jobDetails){
-		if(trackingJobMap.get(jobName)==null){
+		Job cloneJob = null;
+		try {
+			cloneJob = (Job) jobDetails.clone();
+		} catch (CloneNotSupportedException e) {
+			logger.error("Failed to clone job: ",e);
+		}
+		if (trackingJobMap.get(jobName) == null) {
 			List<Job> jobs = new ArrayList<>();
-			jobs.add(jobDetails);
+			jobs.add(cloneJob);
 			trackingJobMap.put(jobName, jobs);
-		}else{
-			trackingJobMap.get(jobName).add(jobDetails);
+		} else {
+			trackingJobMap.get(jobName).add(cloneJob);
 		}
 	}
 	

@@ -16,6 +16,7 @@ package hydrograph.ui.graph.job;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
@@ -109,6 +110,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 			JobManager.INSTANCE.enableRunJob(true);
 		}
 		refreshProject(gefCanvas);
+		ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 	}
 

@@ -274,6 +274,12 @@ public class TrackingStatusUpdateUtils {
 	
 	private boolean applySuccessStatus(Component component, ExecutionStatus executionStatus) {
 		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
+		
+		boolean isSubjobComponentStatusAvailable= isSubjobAllComponentsStatusAvailable(container,executionStatus,component);
+		
+		if(!isSubjobComponentStatusAvailable)
+			return false;
+		
 		for (ComponentStatus componentStatus : executionStatus.getComponentStatus()) {
 			for (Component innerSubComponent : container.getChildren()) {
 				if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
@@ -291,7 +297,36 @@ public class TrackingStatusUpdateUtils {
 		
 		return true;
 	}
-
+	
+/**
+* Check for received status response contains status for all subjob component  
+*@param container
+*@param executionStatus
+*@param component
+*/
+private boolean isSubjobAllComponentsStatusAvailable(Container container,ExecutionStatus executionStatus,Component component){
+	int subjobSocketCount=0;
+	int subjobComponentCount=0;
+	for (Component innerSubComponent : container.getChildren()) {
+			if (Constants.INPUT_SUBJOB.equals(innerSubComponent.getComponentName()) || Constants.OUTPUT_SUBJOB.equals(innerSubComponent.getComponentName())) {
+				subjobSocketCount++;
+			}
+			for (ComponentStatus componentStatus : executionStatus.getComponentStatus()) {
+					String compName = component.getComponentId() + "."+ innerSubComponent.getComponentId();
+					if (componentStatus.getComponentId().contains(compName)){
+						subjobComponentCount++;	
+						break;
+					}
+			}
+	}
+	if(container.getChildren().size()-subjobSocketCount==subjobComponentCount)
+	{
+		return true;
+	}else{
+		return false;
+	}
+}
+	
 	
 
 	/**

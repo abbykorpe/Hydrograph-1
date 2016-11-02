@@ -80,7 +80,14 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(), tmpList);
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			try {
-				ExecutionStatus executionStatus = readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
+				ExecutionStatus executionStatus;
+				if(dialog.getTrackingFilePath().trim().isEmpty()){
+					executionStatus= readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
+				}
+				else{
+					executionStatus= readBrowsedJsonLogFile(dialog.getTrackingFilePath().trim());
+				}
+				
 				replayExecutionTracking(executionStatus);
 			} catch (FileNotFoundException e) {
 				logger.error("Failed to show view execution tracking history: " + e);
@@ -154,6 +161,22 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		executionStatus = gson.fromJson(jsonArray, ExecutionStatus[].class);
 		return executionStatus[executionStatus.length-1];
 	}
+	
+	/**
+	 * Return last execution tracking status from browsed tracking log file.
+	 * @param filePath
+	 * @return ExecutionStatus
+	 * @throws FileNotFoundException
+	 */
+		public ExecutionStatus readBrowsedJsonLogFile(String filePath) throws FileNotFoundException{
+			ExecutionStatus[] executionStatus;
+			JsonParser jsonParser = new JsonParser();
+			Gson gson = new Gson();
+			String jsonArray = jsonParser.parse(new FileReader(new File(filePath))).toString();
+			executionStatus = gson.fromJson(jsonArray, ExecutionStatus[].class);
+			return executionStatus[executionStatus.length-1];
+		}
+	
 	
 	/**
 	 * Gets the log path.
