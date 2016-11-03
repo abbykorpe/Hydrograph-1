@@ -98,6 +98,8 @@ public class BatchBreakPlugin implements ManipulatorListener {
 						// else update the subbatch of this component with the
 						// subbatch of source component
 						if (j > 0) {
+							if (Integer.parseInt(batch.split("\\.")[j-1]) == Integer
+									.parseInt(sourceComponent.getBatch().split("\\.")[j-1]))
 							jaxbComponent.setBatch(sourceComponent.getBatch());
 						} else {
 							throw new RuntimeException(
