@@ -36,7 +36,6 @@ public class JAXBTraversal {
 	private Map<String, Link> linkMap;
 	private static Logger LOG = LoggerFactory.getLogger(JAXBTraversal.class);
 	private SortedSet<String> flowCount = new TreeSet<String>();
-	private SortedSet<String> componentName = new TreeSet<String>();
 
 	private List<TypeBaseComponent> jaxbGraph;
 	private boolean isHiveComponentPresentInFlow = false;
@@ -45,7 +44,6 @@ public class JAXBTraversal {
 		jaxbGraph = graph.getInputsOrOutputsOrStraightPulls();
 		identifyHiveComponentInFlow();
 		populateBatch();
-//		fillComponentName();
 	}
 
 	private void identifyHiveComponentInFlow() {
@@ -171,16 +169,6 @@ public class JAXBTraversal {
 	private void populateBatch() {
 		for (TypeBaseComponent component : jaxbGraph) {
 			flowCount.add(component.getBatch());
-		}
-	}
-	
-	public SortedSet<String> getComponentNames() {
-		return componentName;
-	}
-	
-	private void fillComponentName() {
-		for (TypeBaseComponent component : jaxbGraph) {
-			componentName.add(component.getName());
 		}
 	}
 	
