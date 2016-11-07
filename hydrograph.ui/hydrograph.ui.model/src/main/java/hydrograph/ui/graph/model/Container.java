@@ -230,6 +230,10 @@ public class Container extends Model {
 		}
 		return objects;
 	}
+	
+	public List<Component> getUIComponentList(){
+		return components;
+	}
 
 	/**
 	 * Remove a component from this diagram.

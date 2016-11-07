@@ -164,7 +164,7 @@ public class UiConverterUtil {
 				uiConverter.prepareUIXML();
 				Component component = uiConverter.getComponent();
 				adjustComponentFigure(component);				
-				container.getChildren().add(component);
+				container.getUIComponentList().add(component);
 			}
 			createLinks();
 		}
