@@ -75,7 +75,8 @@ public class Messages extends NLS {
 	public static String NEW_JOB;
 	public static String OPEN_PROJECT_ERROR_MESSAGE;
 	public static String RUN_THE_JOB_IN_DEBUG_MODE;
-
+	public static String RUN_THE_JOB;
+	
 	public static String UNABLE_TO_CREATE_WATCH_RECORD;
 	public static String FORGOT_TO_EXECUTE_DEBUG_JOB;
 	public static String UNABLE_TO_FETCH_DEBUG_FILE;
