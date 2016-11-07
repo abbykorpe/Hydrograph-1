@@ -190,7 +190,8 @@ public class Messages extends NLS {
 	public static String LENGTH_SHOULD_NOT_BE_ZERO;
 	public static String MAPPING_WINDOW_DUPLICATE_FIELD;
 	public static String SCALE_MUST_BE_LESS_THAN_PRECISION;
-	
+	public static String FILE_DOES_NOT_EXIST;
+	public static String INVALID_FILE_FORMATE;
 	public static String OPERATION_ID_PREFIX;
     public static String OPERATION_LIST_EMPTY;
     public static String PULL_BUTTON_LABEL;

@@ -102,7 +102,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 				ELTGraphicalEditor editPart=(ELTGraphicalEditor)editor;
 				
 				if(!executionStatus.getJobId().startsWith(editPart.getContainer().getUniqueJobId())){
-					getMessageDialog("The Incorrect log file selected ,Please select the correct file starting with job id "+editPart.getContainer().getUniqueJobId());
+					getMessageDialog(Messages.INVALID_LOG_FILE +editPart.getContainer().getUniqueJobId());
 					return false;
 				}else{
 					TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true);
