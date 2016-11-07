@@ -13,10 +13,12 @@
 
 package hydrograph.ui.graph.execution.tracking.replay;
 
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -37,6 +39,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
+import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
 import hydrograph.ui.graph.job.Job;
 
 /**
@@ -53,13 +57,15 @@ public class ViewExecutionHistoryDialog extends Dialog{
 	private Table table;
 	private Text trackingFileText;
 	private String filePath;
+	private ViewExecutionHistoryHandler viewExecutionHistoryHandler;
 	private static final String VIEW_TRACKING_HISTORY="View Execution Tracking History"; 
 	private static final String BROWSE_TRACKING_FILE="Browse Tracking File"; 
 	private static final String EXECUTION_HISTORY_DIALOG="Execution History Dialog";
 	
-	public ViewExecutionHistoryDialog(Shell parentShell, List<Job> jobDetails) {
+	public ViewExecutionHistoryDialog(Shell parentShell, ViewExecutionHistoryHandler viewExecutionHistoryHandler, List<Job> jobDetails) {
 		super(parentShell);
 		this.jobDetails = jobDetails;
+		this.viewExecutionHistoryHandler=viewExecutionHistoryHandler;
 	}
 
 	/**
@@ -162,7 +168,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog fileDialog = new FileDialog(parent.getShell(),  SWT.OPEN  );
 			fileDialog.setText(EXECUTION_HISTORY_DIALOG);
-			String[] filterExt = { "*.log"/*,"*.*"*/ };
+			String[] filterExt = { "*.track.log"/*,"*.*""*.*"*/ };
 			fileDialog.setFilterExtensions(filterExt);
 			String path = fileDialog.open();
 			if (path == null) return;
@@ -191,7 +197,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		createBrowseButton(composite);
 		
 		Button okButton = createButton(composite, IDialogConstants.OK_ID, "Ok", false);
-		Button closeButton = createButton(composite, CLOSE, "Close", false);
+		Button closeButton = createButton(composite, IDialogConstants.CANCEL_ID, "Close", false);
 		closeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -212,6 +218,31 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		}else{
 			selectedUniqueJobId = jobDetails.get(0).getUniqueJobId();
 		}
+		
+		try {
+			ExecutionStatus executionStatus = null;
+			if(getTrackingFilePath().trim().isEmpty()){
+				if(!StringUtils.isEmpty(getSelectedUniqueJobId())){
+					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), true, viewExecutionHistoryHandler.getLogPath());
+				}
+			}
+			else{
+				executionStatus= viewExecutionHistoryHandler.readBrowsedJsonLogFile(getTrackingFilePath().trim());
+			}
+			if(executionStatus!=null){
+				boolean status = viewExecutionHistoryHandler.replayExecutionTracking(executionStatus);
+				if(!status){
+					return;
+				}
+			}else
+				return;
+		} catch (FileNotFoundException e) {
+			viewExecutionHistoryHandler.getMessageDialog("The File does not exists");
+			return;
+		}catch(Exception e){
+			viewExecutionHistoryHandler.getMessageDialog("Json Exception::Incorrect log file Format");
+			return;
+		}	
 		super.okPressed();
 	}
 	
