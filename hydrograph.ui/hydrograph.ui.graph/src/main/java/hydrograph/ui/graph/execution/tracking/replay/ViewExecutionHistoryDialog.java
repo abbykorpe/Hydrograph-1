@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Text;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The Class ViewExecutionHistoryDialog use to create dialog to manage previous tracking history.
@@ -237,10 +238,10 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			}else
 				return;
 		} catch (FileNotFoundException e) {
-			viewExecutionHistoryHandler.getMessageDialog("The File does not exists");
+			viewExecutionHistoryHandler.getMessageDialog(Messages.FILE_DOES_NOT_EXISTS);
 			return;
 		}catch(Exception e){
-			viewExecutionHistoryHandler.getMessageDialog("Json Exception::Incorrect log file Format");
+			viewExecutionHistoryHandler.getMessageDialog(Messages.INVALID_FILE_FORMATE);
 			return;
 		}	
 		super.okPressed();
