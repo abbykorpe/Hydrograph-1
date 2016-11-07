@@ -17,6 +17,8 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 
 /**
+ * The class ComponentNameValidator
+ * Used for compare component label with all available components in canvas.
  * @author Bitwise
  *
  */
@@ -25,10 +27,10 @@ public class ComponentNameValidator {
 	public static final ComponentNameValidator INSTANCE = new ComponentNameValidator();
 
 	/**
-	 * @param container
-	 * @param componentName
-	 *            return true if given component name is not match with other
-	 *            component in canvas.
+	 * Return true, if given component name does not match with other component in
+	 * canvas.
+	 * @param container               the container.
+	 * @param componentName           the componentName.
 	 * @return boolean
 	 */
 	public boolean isUniqueComponentName(Container container, String componentName) {
@@ -39,6 +41,7 @@ public class ComponentNameValidator {
 		for (Component component : container.getChildren()) {
 			if (component.getComponentLabel().getLabelContents().equals(componentName)) {
 				result = false;
+				break;
 			}
 		}
 		return result;
