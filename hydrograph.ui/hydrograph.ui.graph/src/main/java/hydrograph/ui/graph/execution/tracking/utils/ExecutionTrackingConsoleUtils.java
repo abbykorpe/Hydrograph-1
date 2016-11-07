@@ -63,6 +63,7 @@ public class ExecutionTrackingConsoleUtils {
 	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
 	
 	private static final String EXECUTION_STATUS_RECORD_SEPARATOR = " | ";
+	private static final String EXECUTION_STATUS_FOR_FAILED_RECORD = "?";
 	private static final String TIMESTAMP_FORMAT = "MM/dd/yyyy HH:mm:ss";
 	
 	private static final String SUBMISSION_TIME = "Submission time: ";
@@ -90,6 +91,7 @@ public class ExecutionTrackingConsoleUtils {
 		}else{
 			openExecutionTrackingConsoleWindow(localJobId);
 		}
+		
 		
 	}
 	
@@ -198,7 +200,12 @@ public class ExecutionTrackingConsoleUtils {
 				stringBuilder.append(portID + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(componentStatus.getCurrentStatus() + EXECUTION_STATUS_RECORD_SEPARATOR);
 				stringBuilder.append(componentStatus.getBatch() + EXECUTION_STATUS_RECORD_SEPARATOR);
-				stringBuilder.append(processCounts.get(portID) + "\n");
+				if(processCounts.get(portID) != -1){
+					stringBuilder.append(processCounts.get(portID) + "\n");
+				}
+				else{
+					stringBuilder.append( EXECUTION_STATUS_FOR_FAILED_RECORD + "\n");
+				}
 			}
 		}
 		

@@ -107,7 +107,7 @@ public class SubJobTrackingAction extends SelectionAction{
 						else{
 							container.setUniqueJobId(eltGraphicalEditor.getJobId());
 						}
-						String tempFileName =new Path(eltGraphicalEditor.getJobName()+"_"+subjobComponent.getComponentLabel().getLabelContents()).toString();
+						String tempFileName =new Path(eltGraphicalEditor.getJobName()+"."+subjobComponent.getComponentLabel().getLabelContents()).toString();
 						IFolder folder=ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(eltGraphicalEditor.getActiveProject()+"/"+TEMP_DIRECTORY));
 						if(!folder.exists()){
 							try {
