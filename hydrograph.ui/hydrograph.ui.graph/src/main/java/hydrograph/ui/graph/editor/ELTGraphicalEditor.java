@@ -479,8 +479,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}
 				}else{
 															
-					if(((ELTGraphicalEditor)partView).getContainer().isCurrentGraphSubjob()){
+					if(((ELTGraphicalEditor)partView).getContainer().isCurrentGraphSubjob() || ((ELTGraphicalEditor)partView).getContainer().isOpenedForTracking()){
 						((JobHandler)RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
+						((ExecutionTrackingConsoleHandler)RunStopButtonCommunicator.ExecutionTrackingConsole.getHandler()).setExecutionTrackingConsoleEnabled(false);
+						
 					} else{
 						logger.debug("enabling run job button");
 						enableRunJob(true);
@@ -491,6 +493,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					}else{
 						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 					}
+					
+					
 				}
 			}
 
