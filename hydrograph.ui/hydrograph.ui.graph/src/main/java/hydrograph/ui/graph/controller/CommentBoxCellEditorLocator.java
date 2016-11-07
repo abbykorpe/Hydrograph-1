@@ -39,7 +39,9 @@ public void relocate(CellEditor celleditor) {
 	rect.translate(trim.x, trim.y);
 	rect.width += trim.width;
 	rect.height += trim.height;
-	text.setBounds(rect.x, rect.y, rect.width, rect.height);
+	//text.setBounds(rect.x, rect.y, rect.width, rect.height);
+	
+	text.setBounds(rect.x - 5, rect.y - 8, rect.width+10, rect.height+16);
 }
 
 /**

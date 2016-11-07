@@ -119,7 +119,7 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	
 	@Override
 	public void performRequest(Request request){
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+		//if (request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 			performDirectEdit();
 	}
 
