@@ -190,21 +190,22 @@ public class ExecutionTrackingConsoleUtils {
 		}
 
 		for(ComponentStatus componentStatus : executionStatus.getComponentStatus()){
-			
-			Map<String, Long> processCounts = componentStatus.getProcessedRecordCount();
-			
-			for(String portID: processCounts.keySet()){
-				stringBuilder.append("");
-				stringBuilder.append(getTimeStamp() + EXECUTION_STATUS_RECORD_SEPARATOR);
-				stringBuilder.append(componentStatus.getComponentId() + EXECUTION_STATUS_RECORD_SEPARATOR);
-				stringBuilder.append(portID + EXECUTION_STATUS_RECORD_SEPARATOR);
-				stringBuilder.append(componentStatus.getCurrentStatus() + EXECUTION_STATUS_RECORD_SEPARATOR);
-				stringBuilder.append(componentStatus.getBatch() + EXECUTION_STATUS_RECORD_SEPARATOR);
-				if(processCounts.get(portID) != -1){
-					stringBuilder.append(processCounts.get(portID) + "\n");
-				}
-				else{
-					stringBuilder.append( EXECUTION_STATUS_FOR_FAILED_RECORD + "\n");
+			if(null!=componentStatus.getComponentName() && StringUtils.isNotBlank(componentStatus.getComponentName())){
+				Map<String, Long> processCounts = componentStatus.getProcessedRecordCount();
+		
+				for(String portID: processCounts.keySet()){
+					stringBuilder.append("");
+					stringBuilder.append(getTimeStamp() + EXECUTION_STATUS_RECORD_SEPARATOR);
+					stringBuilder.append(componentStatus.getComponentId() + EXECUTION_STATUS_RECORD_SEPARATOR);
+					stringBuilder.append(portID + EXECUTION_STATUS_RECORD_SEPARATOR);
+					stringBuilder.append(componentStatus.getCurrentStatus() + EXECUTION_STATUS_RECORD_SEPARATOR);
+					stringBuilder.append(componentStatus.getBatch() + EXECUTION_STATUS_RECORD_SEPARATOR);
+					if(processCounts.get(portID) != -1){
+						stringBuilder.append(processCounts.get(portID) + "\n");
+					}
+					else{
+						stringBuilder.append( EXECUTION_STATUS_FOR_FAILED_RECORD + "\n");
+					}
 				}
 			}
 		}
