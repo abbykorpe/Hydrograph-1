@@ -22,4 +22,5 @@ Export-Package: hydrograph.ui.graph.model,
  hydrograph.ui.graph.model.categories,
  hydrograph.ui.graph.model.components,
  hydrograph.ui.graph.model.processor,
+ hydrograph.ui.graph.model.utils,
  hydrograph.ui.graph.schema.propagation
