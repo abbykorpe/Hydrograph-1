@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.apache.commons.lang.StringUtils;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
@@ -224,7 +225,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			ExecutionStatus executionStatus = null;
 			if(getTrackingFilePath().trim().isEmpty()){
 				if(!StringUtils.isEmpty(getSelectedUniqueJobId())){
-					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), true, viewExecutionHistoryHandler.getLogPath());
+					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), JobManager.INSTANCE.isLocalMode(), viewExecutionHistoryHandler.getLogPath());
 				}else{
 					super.okPressed();
 				}
