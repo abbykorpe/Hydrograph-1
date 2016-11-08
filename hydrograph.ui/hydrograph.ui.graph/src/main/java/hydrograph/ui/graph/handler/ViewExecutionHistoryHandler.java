@@ -16,6 +16,7 @@ package hydrograph.ui.graph.handler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,10 +38,10 @@ import com.google.gson.JsonParser;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.graph.Activator;
-import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.replay.ReplayComponentDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
@@ -49,7 +50,7 @@ import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
-
+import hydrograph.ui.graph.Messages;
 /**
  * 
  * Open tracking dialog window where user can view previous execution tracking view history.
@@ -60,6 +61,11 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ViewExecutionHistoryHandler.class);
+	
+	/** The Constant ExecutionTrackingLogFileExtention. */
+	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".track.log";
+	private static final String EXECUTION_TRACKING_LOCAL_MODE = "L_";
+	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
 
 	
 	/**
@@ -92,6 +98,8 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		IEditorReference[] refs = page.getEditorReferences();
 
 		ViewExecutionHistoryUtility.INSTANCE.addTrackingStatus(executionStatus.getJobId(), executionStatus);
+		ViewExecutionHistoryUtility.INSTANCE.getUnusedCompsOnCanvas().clear();
+		
 		for (IEditorReference ref : refs){
 			IEditorPart editor = ref.getEditor(false);
 			if(editor instanceof ELTGraphicalEditor){
@@ -101,16 +109,32 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 					job.setJobStatus(JobStatus.SUCCESS);			
 				}
 				ELTGraphicalEditor editPart=(ELTGraphicalEditor)editor;
-				
 				if(!executionStatus.getJobId().startsWith(editPart.getContainer().getUniqueJobId())){
 					getMessageDialog(Messages.INVALID_LOG_FILE +editPart.getContainer().getUniqueJobId());
 					return false;
 				}else{
 					TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true);
 					return true;
-				}
+				} 
 			}
-		}return false;
+		}
+		
+		List<String> compNameList = new ArrayList<>();
+		List<String> missedCompList = ViewExecutionHistoryUtility.INSTANCE.getReplayMissedComponents(executionStatus);
+		
+		ViewExecutionHistoryUtility.INSTANCE.getExtraComponentList(executionStatus);
+		ViewExecutionHistoryUtility.INSTANCE.getUnusedCompsOnCanvas().forEach((compId, compName)->{
+			compNameList.add(compName);
+		});
+		
+		if(!(missedCompList.size() > 0) && !(compNameList.size() > 0)){
+			return false;
+		}
+		ReplayComponentDialog componentDialog = new ReplayComponentDialog(Display.getDefault().getActiveShell(), compNameList, missedCompList);
+		componentDialog.open();
+		
+		return false;
+		
 	}
 	
 	/**
@@ -139,11 +163,11 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		String path = null;
 		
 		if(isLocalMode){
-			jobId = "L_" + uniqueJobId;
+			jobId = EXECUTION_TRACKING_LOCAL_MODE + uniqueJobId;
 		}else{
-			jobId = "R_" + uniqueJobId;
+			jobId = EXECUTION_TRACKING_REMOTE_MODE + uniqueJobId;
 		}
-		path = getLogPath() + jobId + ".track.log";
+		path = getLogPath() + jobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION;
 		
 		JsonParser jsonParser = new JsonParser();
 		
@@ -160,7 +184,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	 * @throws FileNotFoundException
 	 */
 		public ExecutionStatus readBrowsedJsonLogFile(String filePath) throws FileNotFoundException{
-						ExecutionStatus[] executionStatus;
+			ExecutionStatus[] executionStatus;
 			JsonParser jsonParser = new JsonParser();
 			Gson gson = new Gson();
 			String jsonArray = jsonParser.parse(new FileReader(new File(filePath))).toString();
@@ -189,5 +213,4 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, message);
 		return;
 	}
-	
 }
