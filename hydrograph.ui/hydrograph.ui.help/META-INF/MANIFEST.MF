@@ -18,4 +18,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.help.aboutDialog
 Import-Package: com.thoughtworks.xstream,
  hydrograph.ui.logging.factory,
+ hydrograph.ui.propertywindow.widgets.utility,
  org.slf4j;version="1.7.2"
