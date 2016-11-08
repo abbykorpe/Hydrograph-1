@@ -125,7 +125,7 @@ public class HydrographMain {
 						if(!componentInfos.isEmpty()){
 							List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
 							for (ComponentInfo componentInfo : componentInfos) {
-								ComponentStatus componentStatus = new ComponentStatus(componentInfo.getComponentId(),
+								ComponentStatus componentStatus = new ComponentStatus(componentInfo.getComponentId(),componentInfo.getComponentName(),
 										componentInfo.getCurrentStatus(),componentInfo.getBatch(), componentInfo.getProcessedRecords());
 								componentStatusList.add(componentStatus);
 							}
