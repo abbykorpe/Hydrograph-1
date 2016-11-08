@@ -31,7 +31,12 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.CellEditorActionHandler;
 
 import hydrograph.ui.graph.figure.CommentBoxFigure;
-
+/**
+ * The Class CommentBoxLabelEditManager.
+ * 
+ * @author Bitwise
+ * 
+ */
 public class CommentBoxLabelEditManager 
 	extends DirectEditManager
 {

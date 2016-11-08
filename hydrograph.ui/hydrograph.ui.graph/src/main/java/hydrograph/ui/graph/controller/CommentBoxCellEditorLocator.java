@@ -19,7 +19,12 @@ import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.graph.figure.CommentBoxFigure;
 
-
+/**
+ * The Class CommentBoxCellEditorLocator.
+ * 
+ * @author Bitwise
+ * 
+ */
 final public class CommentBoxCellEditorLocator
 	implements CellEditorLocator
 {

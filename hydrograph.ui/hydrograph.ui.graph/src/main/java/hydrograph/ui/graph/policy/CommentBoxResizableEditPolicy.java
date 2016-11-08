@@ -12,9 +12,6 @@
  ******************************************************************************/
 package hydrograph.ui.graph.policy;
 
-import hydrograph.ui.graph.figure.CommentBoxFeedbackFigure;
-import hydrograph.ui.graph.model.CommentBox;
-
 import java.util.Iterator;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -26,8 +23,14 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.swt.graphics.Color;
 
+import hydrograph.ui.graph.figure.CommentBoxFeedbackFigure;
+import hydrograph.ui.graph.model.CommentBox;
+
 
 /**
+ * The Class CommentBoxResizableEditPolicy.
+ * 
+ * @author Bitwise
  * 
  */
 public class CommentBoxResizableEditPolicy

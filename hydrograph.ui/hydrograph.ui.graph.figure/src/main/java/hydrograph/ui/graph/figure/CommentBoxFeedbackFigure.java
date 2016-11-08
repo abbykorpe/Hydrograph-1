@@ -17,7 +17,12 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
-
+/**
+ * The Class CommentBoxFeedbackFigure.
+ * 
+ * @author Bitwise
+ * 
+ */
 public class CommentBoxFeedbackFigure
 	extends BentCornerFigure
 {

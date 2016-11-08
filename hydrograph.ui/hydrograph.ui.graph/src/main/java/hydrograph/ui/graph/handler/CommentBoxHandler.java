@@ -25,7 +25,12 @@ import hydrograph.ui.graph.command.CommentBoxCommand;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.model.Container;
-
+/**
+ * The Class CommentBoxHandler.
+ * 
+ * @author Bitwise
+ * 
+ */
 public class CommentBoxHandler extends AbstractHandler{
 	private Point oldLoc ;
 	private Point newLoc ;

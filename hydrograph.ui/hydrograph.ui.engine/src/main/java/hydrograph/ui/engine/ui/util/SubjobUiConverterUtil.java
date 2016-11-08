@@ -214,11 +214,12 @@ public class SubjobUiConverterUtil {
 		if (subJobContainer == null) {
 			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
 		} else {
-			for (int i = 0; i < subJobContainer.getChildren().size(); i++) {
+			for (int i = 0; i < subJobContainer.getUIComponentList().size(); i++) {
 				if(subJobContainer.getChildren().get(i) instanceof Component){
-					Component component = (Component)subJobContainer.getChildren().get(i);
+					Component component = (Component)subJobContainer.getUIComponentList().get(i);
 				if (!(component instanceof InputSubjobComponent || component instanceof OutputSubjobComponent)) {
-					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
+					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), 
+							component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
 							|| StringUtils.equalsIgnoreCase(
 									UIComponentsConstants.WARN.value(),
 									component.getProperties()

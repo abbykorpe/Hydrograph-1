@@ -15,6 +15,7 @@
 package hydrograph.ui.graph.command;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.RequestConstants;
@@ -64,9 +65,8 @@ public class CommentBoxSetConstraintCommand extends Command {
 	public boolean canExecute(){
 		Object type = request.getType();
 		// make sure the Request is of a type we support:
-		return (RequestConstants.REQ_MOVE.equals(type) ||
-				RequestConstants.REQ_MOVE_CHILDREN.equals(type) || RequestConstants.REQ_RESIZE.equals(type) ||
-				RequestConstants.REQ_RESIZE_CHILDREN.equals(type));
+		return (StringUtils.equals(RequestConstants.REQ_MOVE, (String) type) || StringUtils.equals(RequestConstants.REQ_MOVE_CHILDREN, (String) type)
+				|| StringUtils.equals(RequestConstants.REQ_RESIZE_CHILDREN, (String) type) || StringUtils.equals(RequestConstants.REQ_RESIZE, (String) type));
 	}
 	
 	@Override

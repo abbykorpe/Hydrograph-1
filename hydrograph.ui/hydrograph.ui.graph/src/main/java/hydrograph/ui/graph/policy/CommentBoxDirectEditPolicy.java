@@ -23,7 +23,12 @@ import hydrograph.ui.graph.controller.CommentBoxEditPart;
 import hydrograph.ui.graph.figure.CommentBoxFigure;
 import hydrograph.ui.graph.model.CommentBox;
 
-
+/**
+ * The Class CommentBoxDirectEditPolicy.
+ * 
+ * @author Bitwise
+ * 
+ */
 public class CommentBoxDirectEditPolicy 
 	extends DirectEditPolicy {
 

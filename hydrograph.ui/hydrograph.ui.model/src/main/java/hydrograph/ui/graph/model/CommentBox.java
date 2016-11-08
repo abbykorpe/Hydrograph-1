@@ -18,10 +18,8 @@ import java.io.IOException;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
-import org.slf4j.Logger;
 
 import hydrograph.ui.graph.model.Component.Props;
-import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class CommentBox.
@@ -39,8 +37,6 @@ public class CommentBox extends Model{
 	private Container parent;
 	private Point location = new Point(0, 0);
 	private boolean newInstance;
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(CommentBox.class);
-
 	/**
 	 * Instantiates a new CommentBox.
 	 * 

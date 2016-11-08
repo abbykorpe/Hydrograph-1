@@ -12,8 +12,6 @@
  ******************************************************************************/
 package hydrograph.ui.graph.figure;
 
-import hydrograph.ui.graph.figure.ELTColorConstants;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.StackLayout;
@@ -28,6 +26,8 @@ import org.eclipse.swt.widgets.Display;
 /**
  * A Figure with a bent corner and an embedded TextFlow within a FlowPage that contains
  * text.
+ * @author Bitwise
+ * 
  */
 public class CommentBoxFigure
 	extends BentCornerFigure
@@ -36,8 +36,6 @@ public class CommentBoxFigure
 	/** The inner TextFlow **/
 	private TextFlow textFlow;
 	private Font font;
-	private Color borderColor;
-	private Color selectedBorderColor;
 	private Color componentColor;
 	private Color selectedComponentColor;
 	
@@ -87,10 +85,7 @@ public class CommentBoxFigure
 	}
 	
 	private void setInitialColor(){
-		/*componentColor = new Color(null, ELTColorConstants.LIGHT_GREY_RGB[0], ELTColorConstants.LIGHT_GREY_RGB[1], ELTColorConstants.LIGHT_GREY_RGB[2]);
-		borderColor = new Color(null, ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
-		selectedComponentColor = new Color(null, ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[2]);*/
-		selectedBorderColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
+		new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 	}
 	
 	public void setComponentColorAndBorder(){

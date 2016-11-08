@@ -16,6 +16,7 @@ package hydrograph.ui.graph.controller;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -24,19 +25,20 @@ import org.eclipse.gef.AccessibleEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.accessibility.AccessibleControlEvent;
 import org.eclipse.swt.accessibility.AccessibleEvent;
-import org.eclipse.ui.PlatformUI;
 
 import hydrograph.ui.graph.action.CommentBoxLabelEditManager;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.figure.CommentBoxFigure;
 import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.policy.CommentBoxDirectEditPolicy;
-import hydrograph.ui.graph.policy.LabelEditPolicy;
-
+/**
+ * The Class CommentBoxEditPart.
+ * 
+ * @author Bitwise
+ * 
+ */
 public class CommentBoxEditPart extends AbstractGraphicalEditPart implements PropertyChangeListener
 
 {
@@ -109,13 +111,13 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 				new CommentBoxCellEditorLocator((CommentBoxFigure)getFigure())).show();
 	}
 
-	private Point resetLocation(int x , int y){
+	/*private Point resetLocation(int x , int y){
 		if ((x <= 135 && y <= -53) || (x <= 154 && y <= -30 )){
 			x = 0;
 			y = 0;
 		}
 		return new Point(x,y);
-	}
+	}*/
 	
 	@Override
 	public void performRequest(Request request){
@@ -126,10 +128,10 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	@Override
 	public void propertyChange(PropertyChangeEvent evt){
 		String prop = evt.getPropertyName();
-		if (prop.equalsIgnoreCase("labelContents")){
+		if (StringUtils.equalsIgnoreCase(prop, "labelContents")){
 			 refreshVisuals();
 		  }
-		else if (prop.equalsIgnoreCase("Size") || prop.equalsIgnoreCase("Location")){
+		else if (StringUtils.equalsIgnoreCase(prop, "Size") || StringUtils.equalsIgnoreCase(prop, "Location")){
 			Point loc = getLabel().getLocation();
 			Dimension size = getLabel().getSize();
 			Rectangle r = new Rectangle(loc ,size);

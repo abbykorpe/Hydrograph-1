@@ -20,7 +20,6 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -37,12 +36,8 @@ import hydrograph.ui.graph.model.Container;
  */
 public class CommentBoxAction extends SelectionAction{
 	
-private PasteAction pasteAction;
-private org.eclipse.draw2d.geometry.Point location;
-	
-	public CommentBoxAction(IWorkbenchPart part, IAction action){
+public CommentBoxAction(IWorkbenchPart part, IAction action){
 		super(part);
-		this.pasteAction = (PasteAction) action;
 		setLazyEnablementCalculation(true);
 	}
 
@@ -58,7 +53,6 @@ private org.eclipse.draw2d.geometry.Point location;
 	 */
 	@Override
 	protected void init() {
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		super.init();
 		setText("Comment Box"); 
 		setId("Add");

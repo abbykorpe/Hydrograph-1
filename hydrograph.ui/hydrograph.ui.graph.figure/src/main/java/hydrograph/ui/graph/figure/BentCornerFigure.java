@@ -19,7 +19,10 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 /**
- * A figure that has a bent corner in the top right hand. Typically used for sticky notes.
+ * The Class BentCornerFigure.
+ * 
+ * @author Bitwise
+ * 
  */
 public class BentCornerFigure
 	extends Figure
@@ -38,8 +41,8 @@ private int cornerSize;
  * ColorConstants.white and default corner size.
  */
 public BentCornerFigure() {
-	setBackgroundColor(ColorConstants.white);
-	setForegroundColor(ColorConstants.white);
+	setBackgroundColor(ColorConstants.tooltipBackground);
+	setForegroundColor(ColorConstants.tooltipForeground);
 	setCornerSize(DEFAULT_CORNER_SIZE);
 }
 
