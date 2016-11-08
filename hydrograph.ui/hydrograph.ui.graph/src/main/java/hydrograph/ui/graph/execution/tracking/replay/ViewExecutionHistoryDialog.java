@@ -210,8 +210,6 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			}
 		});
 		
-		
-		
 	}
 	
 	@Override
@@ -243,10 +241,10 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			}else
 				return;
 		} catch (FileNotFoundException e) {
-			viewExecutionHistoryHandler.getMessageDialog(Messages.FILE_DOES_NOT_EXISTS);
+			viewExecutionHistoryHandler.getMessageDialog(Messages.FILE_DOES_NOT_EXIST);
 			return;
 		}catch(Exception e){
-			viewExecutionHistoryHandler.getMessageDialog(Messages.INVALID_FILE_FORMATE);
+			viewExecutionHistoryHandler.getMessageDialog(Messages.INVALID_FILE_FORMAT);
 			return;
 		}
 		super.okPressed();

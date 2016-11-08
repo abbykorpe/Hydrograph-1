@@ -102,8 +102,8 @@ public class Messages extends NLS {
 
 	public static String SAVE_JOBS_BEFORE_LAUNCHING_MESSAGE;
 	
-	public static String FILE_DOES_NOT_EXISTS;
-	public static String INVALID_FILE_FORMATE;
+	public static String FILE_DOES_NOT_EXIST;
+	public static String INVALID_FILE_FORMAT;
 	
 	public static String RUN_CONFIG_PREFRENCE_TITLE;
 	
