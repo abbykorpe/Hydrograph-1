@@ -44,6 +44,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -54,6 +55,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.ui.IWorkbenchCommandConstants;
@@ -95,9 +97,9 @@ public class CustomAboutDialog extends TrayDialog {
 
 
 	private StyledText text;
-
+	private Shell parentShell;
 	private AboutTextManager aboutTextManager;
-
+	private Cursor handCursor;
 	private AboutItem item;
 	private GridData data_1;
 	private AboutBundleGroupData[] bundleGroupInfos;
@@ -108,6 +110,7 @@ public class CustomAboutDialog extends TrayDialog {
 	 */
 	public CustomAboutDialog(Shell parentShell) {
 		super(parentShell);
+		this.parentShell = parentShell;
 		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL | SWT.WRAP); 
 		product = Platform.getProduct();
 
@@ -201,7 +204,7 @@ public class CustomAboutDialog extends TrayDialog {
 				images.add(aboutImage);
 			}
 		}
-
+		 
 		// create a composite which is the parent of the top area and the bottom
 		// button bar, this allows there to be a second child of this composite with 
 		// a banner background on top but not have on the bottom
@@ -363,17 +366,19 @@ public class CustomAboutDialog extends TrayDialog {
 
 		text.setFont(parent.getFont());
 		text.setText(item.getText());
-		text.setCursor(null);
+		
 		text.setBackground(background);
 		text.setForeground(foreground);
-		text.setMargins(TEXT_MARGIN, TEXT_MARGIN, TEXT_MARGIN, 0);
-		
+		//text.setMargins(TEXT_MARGIN, TEXT_MARGIN, TEXT_MARGIN, 0);
+		 handCursor = new Cursor(text.getDisplay(), SWT.CURSOR_HAND);
+		text.setCursor(handCursor);
 		text.addMouseListener(new MouseAdapter() {
 				
 				@Override
 				public void mouseDown(MouseEvent e) 
 				{
 					try {
+						
 						int offset = text.getOffsetAtLocation(new Point (e.x, e.y));
 						StyleRange style1 = text.getStyleRangeAtOffset(offset);
 						if (style1 != null && style1.underline) {
@@ -385,7 +390,8 @@ public class CustomAboutDialog extends TrayDialog {
 					
 				}
 			});
-
+		
+		
 		aboutTextManager = new AboutTextManager(text);
 		aboutTextManager.setItem(item);
 
@@ -417,6 +423,8 @@ public class CustomAboutDialog extends TrayDialog {
 		
 		
 		text.setStyleRanges(rangesArray, styleRanges);
+	
+		
 	}
 
 	/**
@@ -492,7 +500,7 @@ public class CustomAboutDialog extends TrayDialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				CustomInstallationDialog dialog = new CustomInstallationDialog(getShell());
+				HydrographInstallationDialog dialog = new HydrographInstallationDialog(getShell());
 				dialog.open();
 			}
 			

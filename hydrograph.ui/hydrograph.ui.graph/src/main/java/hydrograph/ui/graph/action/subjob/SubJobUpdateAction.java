@@ -108,7 +108,7 @@ public class SubJobUpdateAction extends SelectionAction {
 						ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 						String currentJobName = editor.getActiveProject() + "." + editor.getJobName();
 						Job job = editor.getJobInstance(currentJobName);
-						if (job != null && (StringUtils.equalsIgnoreCase(job.getJobStatus(),JobStatus.RUNNING))){
+						if (job != null && ((StringUtils.equalsIgnoreCase(job.getJobStatus(),JobStatus.RUNNING)) || (StringUtils.equalsIgnoreCase(job.getJobStatus(),JobStatus.SSHEXEC)))){
 							return false;
 						}
 						return true;

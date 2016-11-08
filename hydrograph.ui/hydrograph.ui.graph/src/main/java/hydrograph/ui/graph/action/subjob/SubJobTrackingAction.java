@@ -159,6 +159,7 @@ public class SubJobTrackingAction extends SelectionAction{
 							job = editor.getJobInstance(currentJobName);
 							if (job != null && (job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)
 									|| job.getJobStatus().equalsIgnoreCase(JobStatus.SUCCESS)
+									|| job.getJobStatus().equalsIgnoreCase(JobStatus.SSHEXEC) // This status is only for remote run while using scp command 
 									|| job.getJobStatus().equalsIgnoreCase(JobStatus.FAILED))) {
 								return true;
 							}
