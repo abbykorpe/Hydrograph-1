@@ -23,6 +23,9 @@ public class ComponentStatus {
 	/** The component id. */
 	String componentId;  
 	
+	/** The component Name. */
+	String componentName;
+	
 	/** The current status. */
 	String currentStatus;
 	
@@ -38,10 +41,11 @@ public class ComponentStatus {
 	 * @param currentStatus the current status
 	 * @param processedRecordCount the processed record count
 	 */
-	public ComponentStatus(String componentId,String currentStatus,String batch,
+	public ComponentStatus(String componentId,String componentName,String currentStatus,String batch,
 			Map<String, Long> processedRecordCount) {
 		super();
 		this.componentId = componentId;
+		this.componentName = componentName;
 		this.currentStatus = currentStatus;
 		this.batch=batch;
 		this.processedRecordCount = processedRecordCount;
@@ -56,6 +60,17 @@ public class ComponentStatus {
 		return componentId;
 	}
 
+	
+	/**
+	 * Gets the component name.
+	 *
+	 * @return the component Name
+	 */
+	public String getComponentName() {
+		return componentName;
+	}
+	
+	
 	/**
 	 * Gets the current status.
 	 *
@@ -78,11 +93,12 @@ public class ComponentStatus {
 		return batch;
 	}
 
-
+	
+	
 	@Override
 	public String toString() {
-		return "ComponentStatus [componentId=" + componentId + ", currentStatus=" + currentStatus + ", batch=" + batch
-				+ ", processedRecordCount=" + processedRecordCount + "]";
+		return "ComponentStatus [componentId=" + componentId + ", componentName=" + componentName + ", currentStatus="
+				+ currentStatus + ", batch=" + batch + ", processedRecordCount=" + processedRecordCount + "]";
 	}
 
 	@Override
