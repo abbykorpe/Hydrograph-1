@@ -38,9 +38,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.apache.commons.lang.StringUtils;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
-import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The Class ViewExecutionHistoryDialog use to create dialog to manage previous tracking history.
@@ -225,6 +225,8 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			if(getTrackingFilePath().trim().isEmpty()){
 				if(!StringUtils.isEmpty(getSelectedUniqueJobId())){
 					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), true, viewExecutionHistoryHandler.getLogPath());
+				}else{
+					super.okPressed();
 				}
 			}
 			else{

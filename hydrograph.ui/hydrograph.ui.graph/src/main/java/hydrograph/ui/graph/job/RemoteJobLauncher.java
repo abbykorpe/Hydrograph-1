@@ -235,7 +235,10 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			return;
 		}
 
-		job.setJobStatus(JobStatus.SUCCESS);
+		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING) || job.getJobStatus().equalsIgnoreCase(JobStatus.SSHEXEC)){
+			job.setJobStatus(JobStatus.SUCCESS);
+		}
+		
 		releaseResources(job, gefCanvas, joblogger);
 		ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);

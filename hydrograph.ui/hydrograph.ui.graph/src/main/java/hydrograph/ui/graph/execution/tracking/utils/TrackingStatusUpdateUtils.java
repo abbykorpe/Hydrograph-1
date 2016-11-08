@@ -121,7 +121,7 @@ public class TrackingStatusUpdateUtils {
 			ExecutionStatus executionStatus, Component component) {
 		
 		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-			ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(component.getComponentId(), component.getComponentLabel().getLabelContents());
+				ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(component.getComponentId(), component.getComponentLabel().getLabelContents());
 			if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(component.getComponentId())){
 				logger.debug("Updating normal component {} status {}",component.getComponentId(), componentStatus.getCurrentStatus());
 				component.updateStatus(componentStatus.getCurrentStatus());

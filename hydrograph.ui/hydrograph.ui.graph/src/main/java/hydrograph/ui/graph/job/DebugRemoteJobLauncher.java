@@ -247,7 +247,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			return;
 		}
 
-		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)){
+		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING) || job.getJobStatus().equalsIgnoreCase(JobStatus.SSHEXEC)){
 			job.setJobStatus(JobStatus.SUCCESS);
 		}
 		

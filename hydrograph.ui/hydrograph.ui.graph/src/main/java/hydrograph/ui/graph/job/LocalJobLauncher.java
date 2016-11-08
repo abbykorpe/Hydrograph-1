@@ -80,7 +80,9 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile,userFunctionsPropertyFile, job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
-		job.setJobStatus(JobStatus.SUCCESS);
+		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)){
+			job.setJobStatus(JobStatus.SUCCESS);
+		}
 
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
