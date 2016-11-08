@@ -16,6 +16,7 @@ package hydrograph.ui.graph.handler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +24,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -41,15 +41,14 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.replay.ReplayComponentDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
-
 /**
  * 
  * Open tracking dialog window where user can view previous execution tracking view history.
@@ -60,6 +59,14 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ViewExecutionHistoryHandler.class);
+	
+	/** The Constant ExecutionTrackingLogFileExtention. */
+	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".track.log";
+	private static final String EXECUTION_TRACKING_LOCAL_MODE = "L_";
+	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
+	
+	private List<String> compNameList;
+	private List<String> missedCompList;
 
 	
 	/**
@@ -79,6 +86,17 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		
 		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(),this ,tmpList);
 		dialog.open();
+		
+		if(!(missedCompList.size() > 0) && !(compNameList.size() > 0)){
+			return true;
+		}
+		ReplayComponentDialog componentDialog = new ReplayComponentDialog(Display.getDefault().getActiveShell(), compNameList, missedCompList);
+		componentDialog.open();
+		
+		
+		compNameList.clear();
+		missedCompList.clear();
+		
 		return null;
 	}
 	
@@ -92,25 +110,30 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		IEditorReference[] refs = page.getEditorReferences();
 
 		ViewExecutionHistoryUtility.INSTANCE.addTrackingStatus(executionStatus.getJobId(), executionStatus);
-		for (IEditorReference ref : refs){
-			IEditorPart editor = ref.getEditor(false);
-			if(editor instanceof ELTGraphicalEditor){
-				String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "." + ((ELTGraphicalEditor) editor).getJobName();	
-				Job job = ((ELTGraphicalEditor)editor).getJobInstance(currentJobName);			
-				if(job!=null){			
-					job.setJobStatus(JobStatus.SUCCESS);			
-				}
-				ELTGraphicalEditor editPart=(ELTGraphicalEditor)editor;
+		ViewExecutionHistoryUtility.INSTANCE.getUnusedCompsOnCanvas().clear();
+		
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+			
+			if(!executionStatus.getJobId().startsWith(eltGraphicalEditor.getContainer().getUniqueJobId())){
+				getMessageDialog(Messages.INVALID_LOG_FILE +eltGraphicalEditor.getContainer().getUniqueJobId());
+				return false;
+			}else{
+				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, eltGraphicalEditor, true);
+				compNameList = new ArrayList<>();
+				missedCompList = ViewExecutionHistoryUtility.INSTANCE.getReplayMissedComponents(executionStatus);
 				
-				if(!executionStatus.getJobId().startsWith(editPart.getContainer().getUniqueJobId())){
-					getMessageDialog(Messages.INVALID_LOG_FILE +editPart.getContainer().getUniqueJobId());
-					return false;
-				}else{
-					TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true);
-					return true;
-				}
-			}
-		}return false;
+				ViewExecutionHistoryUtility.INSTANCE.getExtraComponentList(executionStatus);
+				ViewExecutionHistoryUtility.INSTANCE.getUnusedCompsOnCanvas().forEach((compId, compName)->{
+					compNameList.add(compName);
+				});
+				
+				return true;
+			} 
+		}
+		return false;
+		
 	}
 	
 	/**
@@ -139,11 +162,11 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		String path = null;
 		
 		if(isLocalMode){
-			jobId = "L_" + uniqueJobId;
+			jobId = EXECUTION_TRACKING_LOCAL_MODE + uniqueJobId;
 		}else{
-			jobId = "R_" + uniqueJobId;
+			jobId = EXECUTION_TRACKING_REMOTE_MODE + uniqueJobId;
 		}
-		path = getLogPath() + jobId + ".track.log";
+		path = getLogPath() + jobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION;
 		
 		JsonParser jsonParser = new JsonParser();
 		
@@ -160,7 +183,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	 * @throws FileNotFoundException
 	 */
 		public ExecutionStatus readBrowsedJsonLogFile(String filePath) throws FileNotFoundException{
-						ExecutionStatus[] executionStatus;
+			ExecutionStatus[] executionStatus;
 			JsonParser jsonParser = new JsonParser();
 			Gson gson = new Gson();
 			String jsonArray = jsonParser.parse(new FileReader(new File(filePath))).toString();
@@ -190,4 +213,14 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		return;
 	}
 	
+	
+	private String getUniqueJobId(){
+		String jobId = "";
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+			jobId = eltGraphicalEditor.getContainer().getUniqueJobId();
+			return jobId;
+		}
+		return jobId;
+	}
 }

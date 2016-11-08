@@ -13,12 +13,10 @@
 
 package hydrograph.ui.graph.execution.tracking.replay;
 
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
+import java.io.FileNotFoundException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -38,11 +36,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
+import org.apache.commons.lang.StringUtils;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The Class ViewExecutionHistoryDialog use to create dialog to manage previous tracking history.
@@ -51,17 +50,20 @@ import hydrograph.ui.propertywindow.messages.Messages;
  */
 public class ViewExecutionHistoryDialog extends Dialog{
 
-	public static final int CLOSE = 9999;
+	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = "*.track.log";
+	private static final String REMOTE_MODE = "Remote";
+	private static final String LOCAL_MODE = "Local";
+	
 	private List<Job> jobDetails;
 	private String selectedUniqueJobId;
 	private String[] titles = {"Job Id", "Time Stamp", "Execution Mode", "Job Status"};
 	private Table table;
 	private Text trackingFileText;
 	private String filePath;
-	private ViewExecutionHistoryHandler viewExecutionHistoryHandler;
 	private static final String VIEW_TRACKING_HISTORY="View Execution Tracking History"; 
 	private static final String BROWSE_TRACKING_FILE="Browse Tracking File"; 
 	private static final String EXECUTION_HISTORY_DIALOG="Execution History Dialog";
+	private ViewExecutionHistoryHandler viewExecutionHistoryHandler;
 	
 	public ViewExecutionHistoryDialog(Shell parentShell, ViewExecutionHistoryHandler viewExecutionHistoryHandler, List<Job> jobDetails) {
 		super(parentShell);
@@ -123,9 +125,9 @@ public class ViewExecutionHistoryDialog extends Dialog{
 	private String getJobExecutionMode(boolean executionMode){
 		String runningMode = "";
 		if(executionMode){
-			runningMode = "Remote";
+			runningMode = REMOTE_MODE;
 		}else{
-			runningMode = "Local";
+			runningMode = LOCAL_MODE;
 		}
 		return runningMode;
 	}
@@ -169,7 +171,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog fileDialog = new FileDialog(parent.getShell(),  SWT.OPEN  );
 			fileDialog.setText(EXECUTION_HISTORY_DIALOG);
-			String[] filterExt = { "*.track.log"/*,"*.*""*.*"*/ };
+			String[] filterExt = { EXECUTION_TRACKING_LOG_FILE_EXTENTION };
 			fileDialog.setFilterExtensions(filterExt);
 			String path = fileDialog.open();
 			if (path == null) return;
@@ -219,12 +221,13 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		}else{
 			selectedUniqueJobId = jobDetails.get(0).getUniqueJobId();
 		}
-		
 		try {
 			ExecutionStatus executionStatus = null;
 			if(getTrackingFilePath().trim().isEmpty()){
 				if(!StringUtils.isEmpty(getSelectedUniqueJobId())){
-					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), true, viewExecutionHistoryHandler.getLogPath());
+					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), JobManager.INSTANCE.isLocalMode(), viewExecutionHistoryHandler.getLogPath());
+				}else{
+					super.okPressed();
 				}
 			}
 			else{
@@ -245,7 +248,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		}catch(Exception e){
 			viewExecutionHistoryHandler.getMessageDialog(Messages.INVALID_FILE_FORMATE);
 			return;
-		}	
+		}
 		super.okPressed();
 	}
 	

@@ -15,11 +15,13 @@ package hydrograph.ui.graph.execution.tracking.replay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 
+import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -34,6 +36,7 @@ public class ViewExecutionHistoryUtility {
 
 	private Map<String, ExecutionStatus> trackingMap;
 	private Map<String, List<Job>> trackingJobMap;
+	private Map<String, String> unusedCompOnCanvas;
 	
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ViewExecutionHistoryUtility.class);
@@ -44,6 +47,7 @@ public class ViewExecutionHistoryUtility {
 	private ViewExecutionHistoryUtility() {
 		trackingMap = new HashMap<String, ExecutionStatus>();
 		trackingJobMap = new HashMap<String, List<Job>>();
+		unusedCompOnCanvas = new LinkedHashMap<>();
 	}
 	
 	/**
@@ -55,6 +59,17 @@ public class ViewExecutionHistoryUtility {
 		if(uniqueRunJobId != null){
 			trackingMap.put(uniqueRunJobId, executionStatus);
 		}
+	}
+	
+	
+	public void addUnusedCompLabel(String compId, String componentLabel){
+		if(!unusedCompOnCanvas.containsKey(compId)){
+			unusedCompOnCanvas.put(compId, componentLabel);
+		}
+	}
+	
+	public Map<String, String> getUnusedCompsOnCanvas(){
+		return unusedCompOnCanvas;
 	}
 	
 	/**
@@ -84,7 +99,25 @@ public class ViewExecutionHistoryUtility {
 	 */
 	public Map<String, List<Job>> getTrackingJobs(){
 		return trackingJobMap;
-		
+	}
+	
+	
+	public void getExtraComponentList(ExecutionStatus executionStatus){
+		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
+			if(unusedCompOnCanvas.get(componentStatus.getComponentId()) != null){
+				unusedCompOnCanvas.remove(componentStatus.getComponentId());
+			}
+		}
+	}
+	
+	public List<String> getReplayMissedComponents(ExecutionStatus executionStatus){
+		List<String> compList = new ArrayList<>(); 
+		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
+			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && !(componentStatus.getComponentId().startsWith("viewData"))){
+				compList.add(componentStatus.getComponentId());
+			}
+		}
+		return compList;
 	}
 	
 	/**

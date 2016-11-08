@@ -34,6 +34,7 @@ import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
@@ -103,8 +104,7 @@ public class TrackingStatusUpdateUtils {
 							} 
 							updateStatusCountForSubjobComponent(executionStatus, component,isReplay);
 							
-						}else
-						{
+						}else{
 							updateStatusCountForComponent(executionStatus,component);
 						}
 					}
@@ -119,14 +119,20 @@ public class TrackingStatusUpdateUtils {
 	 */
 	private void updateStatusCountForComponent(
 			ExecutionStatus executionStatus, Component component) {
-
+		
 		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
+				ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(component.getComponentId(), component.getComponentLabel().getLabelContents());
 			if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(component.getComponentId())){
 				logger.debug("Updating normal component {} status {}",component.getComponentId(), componentStatus.getCurrentStatus());
 				component.updateStatus(componentStatus.getCurrentStatus());
+				
 				for(Link link: component.getSourceConnections()){
 					if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(link.getSource().getComponentId())){
-						link.updateRecordCount(componentStatus.getProcessedRecordCount().get(link.getSourceTerminal()).toString());
+						if(componentStatus.getProcessedRecordCount().get(link.getSourceTerminal()) == null){
+							ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(link.getSource().getComponentId()+"_"+link.getSourceTerminal(), link.getSource().getComponentId()+"_"+link.getSourceTerminal());
+						}else{
+							link.updateRecordCount(componentStatus.getProcessedRecordCount().get(link.getSourceTerminal()).toString());
+						}
 					}
 				}
 			}
