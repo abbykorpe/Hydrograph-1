@@ -5,6 +5,7 @@ Sr.No. <date> - [developer names] - description
 1. .... - [Pooja Yadav] - Removal of Secondary key Widget from Sort Component.
 2. .... - [Rahul Mahajan] - Subjob Tracking feature, the execution tracking will be displayed even for components within subjob.
 3. .... - [Vibhor Tyagi] - View Execution History feature for displaying execution status of specified job execution. 
+4. <07/11/2016> - [Pooja Yadav] - Rearranged widget of schema tab for Input and Output Component.
 
 =====================================================================================================
 Issues/Defects fixed:

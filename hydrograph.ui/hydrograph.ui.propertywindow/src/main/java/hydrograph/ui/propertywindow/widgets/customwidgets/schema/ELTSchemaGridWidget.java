@@ -606,9 +606,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 }
 		 else{
 
-			 createSchemaTypesSection(container.getContainerControl());
 			 createButtonComposite(container.getContainerControl());
 			 createSchemaGridSection(container.getContainerControl(), 250, 360);
+			 createSchemaTypesSection(container.getContainerControl());
 			 createExternalSchemaSection(container.getContainerControl());
 		 }
 		 tableComposite.getShell().addControlListener(new ControlListener() {
@@ -657,7 +657,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 buttonSubGroup.attachWidget(defaultLable);
 		 }
 		 if(!(StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))&&!(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()))){
-			 buttonSubGroup.numberOfBasicWidgets(5);
+			 buttonSubGroup.numberOfBasicWidgets(7);
+			 ELTDefaultLable defaultLable2 = new ELTDefaultLable("");
+			 defaultLable2.lableWidth(215);
+			 buttonSubGroup.attachWidget(defaultLable2);
 			 ELTDefaultLable defaultLable1 = new ELTDefaultLable("");
 			 defaultLable1.lableWidth(0);
 			 buttonSubGroup.attachWidget(defaultLable1);
