@@ -715,7 +715,7 @@ public class ConverterHelper {
 
 	/**
 	 * 
-	 * returns true if multiple links allowed at give component and ant given port
+	 * returns true if multiple links allowed at given component and at given port
 	 * 
 	 * @param sourceComponent
 	 * @param portName
@@ -739,7 +739,7 @@ public class ConverterHelper {
 		if (isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
 			inSocketId = link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber();
 		if (link.getSource().getComponentName().equals("InputSubjobComponent")) {
-			return inSocketId.replace("out", "in");
+			return inSocketId.replace(Constants.OUTPUT_SOCKET_TYPE, Constants.INPUT_SOCKET_TYPE);
 		}
 		return inSocketId;
 
