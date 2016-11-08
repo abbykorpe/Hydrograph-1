@@ -230,6 +230,8 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			else{
 				executionStatus= viewExecutionHistoryHandler.readBrowsedJsonLogFile(getTrackingFilePath().trim());
 			}
+			/*Return from this method if replay not working for old history, so that the view history window will not be closed	and 
+			 * proper error message will be displayed over the view history window.*/
 			if(executionStatus!=null){
 				boolean status = viewExecutionHistoryHandler.replayExecutionTracking(executionStatus);
 				if(!status){

@@ -85,6 +85,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	/**
 	 * Apply status and count on editor according to jobid.
 	 * @param executionStatus
+	 * @return boolean (the status if replay was successful(true) or not(false))
 	 */
 	public boolean replayExecutionTracking(ExecutionStatus executionStatus){
 		IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
@@ -180,6 +181,10 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	}
 	
 	
+	/**
+	 * @param message Display the error message 
+	 * 
+	 */
 	public void getMessageDialog(String message){
 		MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, message);
 		return;
