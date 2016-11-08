@@ -65,11 +65,7 @@ public class DiscardConverter extends OutputConverter {
 		for (Link link : component.getTargetConnections()) {
 			TypeOutputInSocketIno outInSocket = new TypeOutputInSocketIno();
 			outInSocket.setId(link.getTargetTerminal());
-			if (converterHelper.isMultipleLinkAllowed(link.getSource(), link.getSourceTerminal()))
-				outInSocket.setFromSocketId(link.getSource().getPort(link.getSourceTerminal()).getPortType()
-						+ link.getLinkNumber());
-			else
-				outInSocket.setFromSocketId(link.getSourceTerminal());
+			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
 			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
 
