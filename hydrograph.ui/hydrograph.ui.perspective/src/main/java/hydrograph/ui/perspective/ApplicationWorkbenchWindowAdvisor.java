@@ -160,7 +160,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		}
 		else if(OSValidator.isMac()){
 			logger.debug("On Mac Operating System....");
-			String command="java -cp " + getInstallationConfigPath().trim() + ":" +Platform.getInstallLocation().getURL().getPath()+ properties.getProperty(SERVICE_JAR) + " " +properties.getProperty(DRIVER_CLASS);
+			String command="java -cp " + getInstallationConfigPath().trim() + ":" + properties.getProperty(SERVICE_JAR) + " " +properties.getProperty(DRIVER_CLASS);
 			logger.debug("command{}", command);
             ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", command});
             builder.start();
@@ -291,5 +291,4 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			builder.start();
 		}
 	}
-	
 }
