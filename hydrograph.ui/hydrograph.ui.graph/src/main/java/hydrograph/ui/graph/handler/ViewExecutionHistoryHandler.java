@@ -73,34 +73,21 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		List<Job> tmpList = jobDetails1.get(consoleName);
 		
 		if(tmpList==null){
-			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB_IN_DEBUG_MODE);
+			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB);
 			return "";
 		}
 		
-		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(), tmpList);
-		if (dialog.open() == IDialogConstants.OK_ID) {
-			try {
-				ExecutionStatus executionStatus;
-				if(dialog.getTrackingFilePath().trim().isEmpty()){
-					executionStatus= readJsonLogFile(dialog.getSelectedUniqueJobId(), true, getLogPath());
-				}
-				else{
-					executionStatus= readBrowsedJsonLogFile(dialog.getTrackingFilePath().trim());
-				}
-				
-				replayExecutionTracking(executionStatus);
-			} catch (FileNotFoundException e) {
-				logger.error("Failed to show view execution tracking history: " + e);
-			}
-		}
+		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(),this ,tmpList);
+		dialog.open();
 		return null;
 	}
 	
 	/**
 	 * Apply status and count on editor according to jobid.
 	 * @param executionStatus
+	 * @return boolean (the status if replay was successful(true) or not(false))
 	 */
-	public void replayExecutionTracking(ExecutionStatus executionStatus){
+	public boolean replayExecutionTracking(ExecutionStatus executionStatus){
 		IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
 		IEditorReference[] refs = page.getEditorReferences();
 
@@ -114,12 +101,16 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 					job.setJobStatus(JobStatus.SUCCESS);			
 				}
 				ELTGraphicalEditor editPart=(ELTGraphicalEditor)editor;
-				if(editPart.getJobId().equals(executionStatus.getJobId()) || (((editPart.getContainer()!=null) && 
-						(editPart.getContainer().getUniqueJobId().equals(executionStatus.getJobId()))) && editPart.getContainer().isOpenedForTracking() )){
-				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true); 
+				
+				if(!executionStatus.getJobId().startsWith(editPart.getContainer().getUniqueJobId())){
+					getMessageDialog(Messages.INVALID_LOG_FILE +editPart.getContainer().getUniqueJobId());
+					return false;
+				}else{
+					TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, (ELTGraphicalEditor)editor,true);
+					return true;
 				}
 			}
-		}
+		}return false;
 	}
 	
 	/**
@@ -169,7 +160,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	 * @throws FileNotFoundException
 	 */
 		public ExecutionStatus readBrowsedJsonLogFile(String filePath) throws FileNotFoundException{
-			ExecutionStatus[] executionStatus;
+						ExecutionStatus[] executionStatus;
 			JsonParser jsonParser = new JsonParser();
 			Gson gson = new Gson();
 			String jsonArray = jsonParser.parse(new FileReader(new File(filePath))).toString();
@@ -183,9 +174,20 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	 *
 	 * @return the log path
 	 */
-	private String getLogPath(){
+	public String getLogPath(){
 		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
 				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
 		return jobTrackingLogDirectory = jobTrackingLogDirectory + "/";
 	}
+	
+	
+	/**
+	 * @param message Display the error message 
+	 * 
+	 */
+	public void getMessageDialog(String message){
+		MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, message);
+		return;
+	}
+	
 }

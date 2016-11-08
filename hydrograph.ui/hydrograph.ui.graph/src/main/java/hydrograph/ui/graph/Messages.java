@@ -75,14 +75,14 @@ public class Messages extends NLS {
 	public static String NEW_JOB;
 	public static String OPEN_PROJECT_ERROR_MESSAGE;
 	public static String RUN_THE_JOB_IN_DEBUG_MODE;
-
+	public static String RUN_THE_JOB;
 	public static String UNABLE_TO_CREATE_WATCH_RECORD;
 	public static String FORGOT_TO_EXECUTE_DEBUG_JOB;
 	public static String UNABLE_TO_FETCH_DEBUG_FILE;
 	public static String EMPTY_DEBUG_FILE;
 	public static String UNABLE_TO_OPEN_DATA_VIEWER;
 	public static String UNABLE_TO_READ_DEBUG_FILE;
-
+	public static String INVALID_LOG_FILE;
 	public static String CONFIRM_FOR_GRAPH_PROPS_RUN_JOB;
 	public static String CONFIRM_FOR_GRAPH_PROPS_RUN_JOB_TITLE;
 	public static String KILLTIME;
