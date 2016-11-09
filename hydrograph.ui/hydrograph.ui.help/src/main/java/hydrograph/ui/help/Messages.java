@@ -29,6 +29,7 @@ public class Messages extends NLS {
 	public static String ABOUT_TEXT;
 	public static String ABOUT_HEADER_TEXT;
 	public static String HYDROGRAPH_URL;
+	public static String ABOUT_VERSION_INFO;
 
 	static {
 		// initialize resource bundle
