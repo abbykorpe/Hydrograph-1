@@ -43,6 +43,7 @@ Import-Package: com.jcraft.jsch;version="0.1.44",
  com.thoughtworks.xstream,
  hydrograph.ui.graph.model,
  hydrograph.ui.graph.model.processor,
+ org.apache.commons.io,
  org.eclipse.core.filesystem,
  org.eclipse.debug.internal.ui,
  org.eclipse.jdt.ui.wizards

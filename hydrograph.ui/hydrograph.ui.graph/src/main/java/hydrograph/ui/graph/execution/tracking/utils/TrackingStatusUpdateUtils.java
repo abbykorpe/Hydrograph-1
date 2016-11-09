@@ -102,7 +102,7 @@ public class TrackingStatusUpdateUtils {
 								populateSubjobRecordCount(componentNameAndLink, component,subjobPrefix,true);
 								applyRecordCountOnSubjobComponent(component, componentNameAndLink, executionStatus);
 							} 
-							updateStatusCountForSubjobComponent(executionStatus, component,isReplay);
+							updateStatusCountForSubjobComponent(executionStatus, component, isReplay);
 							
 						}else{
 							updateStatusCountForComponent(executionStatus,component);
@@ -139,7 +139,7 @@ public class TrackingStatusUpdateUtils {
 		}
 	}
 
-	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component,boolean isReplay) {
+	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component, boolean isReplay) {
 		ComponentExecutionStatus status=component.getStatus();
 			if(status==null || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.BLANK.value(),status.value())){
 				boolean isPending =applyPendingStatus(component, executionStatus);
@@ -374,5 +374,5 @@ private boolean isSubjobAllComponentsStatusAvailable(Container container,Executi
 		});
 	}
 
-	
+
 }
