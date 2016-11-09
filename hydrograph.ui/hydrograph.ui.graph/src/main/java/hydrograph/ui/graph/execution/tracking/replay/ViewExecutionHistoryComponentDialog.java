@@ -41,7 +41,7 @@ public class ViewExecutionHistoryComponentDialog extends Dialog{
 
 	public ViewExecutionHistoryComponentDialog(Shell parentShell, List<String> extraComponentList, List<String> missedComponentList) {
 		super(parentShell);
-		setShellStyle(SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
+		setShellStyle(SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.extraComponentList = extraComponentList;
 		this.missedComponentList = missedComponentList;
 	}
@@ -90,7 +90,6 @@ public class ViewExecutionHistoryComponentDialog extends Dialog{
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button okButton = createButton(parent, IDialogConstants.OK_ID, "Ok", false);
-		Button closeButton = createButton(parent, IDialogConstants.CANCEL_ID, "Ok", false);		
-		okButton.dispose();
+		Button closeButton = createButton(parent, IDialogConstants.CANCEL_ID, "Close", false);		
 	}
 }
