@@ -85,11 +85,10 @@ public class SchemaGridValidationRule implements IValidator {
 		
 		GridRow gridRowTest = gridRowList.iterator().next();
 		
-		if(GenerateRecordSchemaGridRow.class.isAssignableFrom(gridRowTest.getClass())){
+		if (gridRowTest instanceof GenerateRecordSchemaGridRow) {
 			generateRecordSchemaGrid = true;
 		}
-		
-		if(FixedWidthGridRow.class.isAssignableFrom(gridRowTest.getClass())){
+		if (gridRowTest instanceof FixedWidthGridRow) {
 			fixedWidthGrid = true;
 		}
 		
@@ -148,10 +147,10 @@ public class SchemaGridValidationRule implements IValidator {
 			if(fixedWidthGrid && (!generateRecordSchemaGrid)){
 				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
 				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
-					errorMessage = "Length is mandatory";
-					return false;
+					logger.debug("Length is mandatory for FixedWidthComponent");
+				return false;
 				} else if(!(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))|| (fixedWidthGridRow.getLength().equals("0"))){
-                errorMessage = "Length should be a positive Integer greater than 0";
+					logger.debug("Length should be a positive Integer greater than 0");
                 return false;
           }
 			}
