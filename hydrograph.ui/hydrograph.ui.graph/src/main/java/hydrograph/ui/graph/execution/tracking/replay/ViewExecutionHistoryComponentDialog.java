@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.graph.execution.tracking.replay;
 
 import java.util.List;
@@ -14,7 +26,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class ReplayComponentDialog extends Dialog{
+/**
+ * The Class ReplayComponentDialog use to create dialog to manage extra and missed components List.
+ * 
+ * @author Bitwise
+ */
+public class ViewExecutionHistoryComponentDialog extends Dialog{
 	private Text text;
 	private List<String> extraComponentList;
 	private List<String> missedComponentList;
@@ -22,9 +39,9 @@ public class ReplayComponentDialog extends Dialog{
 	private int extraCompcount = 1;
 	private int missedCompcount = 1;
 
-	public ReplayComponentDialog(Shell parentShell, List<String> extraComponentList, List<String> missedComponentList) {
+	public ViewExecutionHistoryComponentDialog(Shell parentShell, List<String> extraComponentList, List<String> missedComponentList) {
 		super(parentShell);
-		setShellStyle(SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
+		setShellStyle(SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL);
 		this.extraComponentList = extraComponentList;
 		this.missedComponentList = missedComponentList;
 	}
@@ -57,7 +74,7 @@ public class ReplayComponentDialog extends Dialog{
 		if(missedComponentList != null && missedComponentList.size() > 0 && !missedComponentList.isEmpty()){
 			stringBuilder.append("Below missed components and ports were introduced for which tracking is not present :" + "\n");
 			missedComponentList.forEach(componentName -> {
-				stringBuilder.append(missedCompcount + ". " + componentName + "\n");
+				stringBuilder.append(missedCompcount + "." + componentName + "\n");
 				missedCompcount++;
 			});
 		}
@@ -74,6 +91,5 @@ public class ReplayComponentDialog extends Dialog{
 	protected void createButtonsForButtonBar(Composite parent) {
 		Button okButton = createButton(parent, IDialogConstants.OK_ID, "Ok", false);
 		Button closeButton = createButton(parent, IDialogConstants.CANCEL_ID, "Close", false);		
-		parent.dispose();
 	}
 }

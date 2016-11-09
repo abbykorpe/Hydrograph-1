@@ -41,7 +41,7 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
-import hydrograph.ui.graph.execution.tracking.replay.ReplayComponentDialog;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryComponentDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
@@ -90,7 +90,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 		if(!(missedCompList.size() > 0) && !(compNameList.size() > 0)){
 			return true;
 		}
-		ReplayComponentDialog componentDialog = new ReplayComponentDialog(Display.getDefault().getActiveShell(), compNameList, missedCompList);
+		ViewExecutionHistoryComponentDialog componentDialog = new ViewExecutionHistoryComponentDialog(Display.getDefault().getActiveShell(), compNameList, missedCompList);
 		componentDialog.open();
 		
 		
@@ -122,7 +122,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 			}else{
 				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, eltGraphicalEditor, true);
 				compNameList = new ArrayList<>();
-				missedCompList = ViewExecutionHistoryUtility.INSTANCE.getReplayMissedComponents(executionStatus);
+				missedCompList = ViewExecutionHistoryUtility.INSTANCE.getMissedComponents(executionStatus);
 				
 				ViewExecutionHistoryUtility.INSTANCE.getExtraComponentList(executionStatus);
 				ViewExecutionHistoryUtility.INSTANCE.getUnusedCompsOnCanvas().forEach((compId, compName)->{
@@ -211,16 +211,5 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	public void getMessageDialog(String message){
 		MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, message);
 		return;
-	}
-	
-	
-	private String getUniqueJobId(){
-		String jobId = "";
-		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
-			jobId = eltGraphicalEditor.getContainer().getUniqueJobId();
-			return jobId;
-		}
-		return jobId;
 	}
 }

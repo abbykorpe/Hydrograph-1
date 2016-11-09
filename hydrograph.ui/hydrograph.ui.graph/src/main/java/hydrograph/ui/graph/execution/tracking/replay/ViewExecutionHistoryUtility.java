@@ -61,13 +61,21 @@ public class ViewExecutionHistoryUtility {
 		}
 	}
 	
-	
-	public void addUnusedCompLabel(String compId, String componentLabel){
-		if(!unusedCompOnCanvas.containsKey(compId)){
-			unusedCompOnCanvas.put(compId, componentLabel);
+	/**
+	 * The Function will add componentId and componentLabel
+	 * @param componentId
+	 * @param componentLabel
+	 */
+	public void addUnusedCompLabel(String componentId, String componentLabel){
+		if(!unusedCompOnCanvas.containsKey(componentId)){
+			unusedCompOnCanvas.put(componentId, componentLabel);
 		}
 	}
 	
+	/**
+	 * The Function will return component details map
+	 * @return Components Details map 
+	 */
 	public Map<String, String> getUnusedCompsOnCanvas(){
 		return unusedCompOnCanvas;
 	}
@@ -101,7 +109,11 @@ public class ViewExecutionHistoryUtility {
 		return trackingJobMap;
 	}
 	
-	
+	/**
+	 * The Function will return extra component list which exist on Job Canvas
+	 * @param ExecutionStatus
+	 * @return Component List
+	 */
 	public void getExtraComponentList(ExecutionStatus executionStatus){
 		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if(unusedCompOnCanvas.get(componentStatus.getComponentId()) != null){
@@ -110,7 +122,12 @@ public class ViewExecutionHistoryUtility {
 		}
 	}
 	
-	public List<String> getReplayMissedComponents(ExecutionStatus executionStatus){
+	/**
+	 * The Function will return missed component list
+	 * @param ExecutionStatus
+	 * @return Component List
+	 */
+	public List<String> getMissedComponents(ExecutionStatus executionStatus){
 		List<String> compList = new ArrayList<>(); 
 		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && !(componentStatus.getComponentId().startsWith("viewData"))){
