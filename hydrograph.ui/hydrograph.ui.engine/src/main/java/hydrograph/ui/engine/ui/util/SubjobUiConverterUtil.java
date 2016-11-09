@@ -46,7 +46,9 @@ import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.CloneComponent;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.LimitComponent;
 import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 
 /**
@@ -211,6 +213,7 @@ public class SubjobUiConverterUtil {
 			for (int i = 0; i < subJobContainer.getUIComponentList().size(); i++) {
 				if(subJobContainer.getUIComponentList().get(i) instanceof Component){
 					Component component = (Component)subJobContainer.getUIComponentList().get(i);
+				if(component.getComponentName()!="LimitComponent" || component.getComponentName()!="CloneComponent"){
 				if (!(component instanceof InputSubjobComponent || component instanceof OutputSubjobComponent)) {
 					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), 
 							component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
@@ -227,7 +230,7 @@ public class SubjobUiConverterUtil {
 								UIComponentsConstants.VALID.value());
 						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
 					}
-				}
+				}}
 			   }
 			}//
 		}
