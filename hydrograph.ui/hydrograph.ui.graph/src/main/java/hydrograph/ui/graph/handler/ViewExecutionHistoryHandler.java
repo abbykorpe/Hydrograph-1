@@ -120,7 +120,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 			}
 			
 			if(!executionStatus.getJobId().startsWith(eltGraphicalEditor.getContainer().getUniqueJobId())){
-				getMessageDialog(Messages.INVALID_LOG_FILE +eltGraphicalEditor.getContainer().getUniqueJobId());
+				getMessageDialog(Messages.INVALID_LOG_FILE +" "+eltGraphicalEditor.getContainer().getUniqueJobId());
 				return false;
 			}else{
 				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, eltGraphicalEditor, true);

@@ -17,11 +17,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.io.FileNotFoundException;
+
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -36,13 +38,16 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.apache.commons.lang.StringUtils;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
-
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 /**
  * The Class ViewExecutionHistoryDialog use to create dialog to manage previous tracking history.
  * 
@@ -67,6 +72,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 	
 	public ViewExecutionHistoryDialog(Shell parentShell, ViewExecutionHistoryHandler viewExecutionHistoryHandler, List<Job> jobDetails) {
 		super(parentShell);
+		setShellStyle(SWT.TITLE|SWT.RESIZE|SWT.CLOSE);
 		this.jobDetails = jobDetails;
 		this.viewExecutionHistoryHandler=viewExecutionHistoryHandler;
 	}
@@ -79,16 +85,15 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText(VIEW_TRACKING_HISTORY);
 		container.setLayout(new GridLayout(1, false));
-		
-		
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
+		container.getShell().setMinimumSize(844, 350);
+
 		Composite composite1 = new Composite(container, SWT.BORDER);
-		GridData gd_scrolledComposite1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_scrolledComposite1.heightHint = 236;
-		gd_scrolledComposite1.widthHint = 844;
+		GridData gd_scrolledComposite1 = new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
 		composite1.setLayoutData(gd_scrolledComposite1);
 		
 		table = new Table(composite1, SWT.BORDER | SWT.Selection | SWT.FULL_SELECTION );
-		table.setBounds(0, 0, 842, 234);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
@@ -97,7 +102,6 @@ public class ViewExecutionHistoryDialog extends Dialog{
 	      column.setWidth(212);
 	      column.setText(titles[i]);
 	    }
-		
 	    for(Job job : jobDetails){
 	    	String timeStamp = getTimeStamp(job.getUniqueJobId());
 	    	TableItem items = new TableItem(table, SWT.None);
@@ -118,7 +122,62 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			      }
 			}
 		});
-		return super.createDialogArea(parent);
+	    container.addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				table.setBounds(container.getBounds());
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+				
+			}
+		});
+	    
+	    Composite composite = new Composite(container, SWT.NONE);
+	    GridLayout gd = new GridLayout(3,false);
+	    gd.marginLeft = 0;
+	    gd.marginWidth = 0;
+	    composite.setLayout(gd);
+	    GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+	    gd_composite.widthHint = 523;
+	    
+	    composite.setLayoutData(gd_composite);
+	    Label label=new  Label(composite, SWT.None);
+		label.setText(BROWSE_TRACKING_FILE);
+		label.setBounds(0, 10, 113, 15);
+		
+		// Create the text box extra wide to show long paths
+		trackingFileText = new Text(composite, SWT.BORDER);
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
+		trackingFileText.setLayoutData(data);
+		trackingFileText.setBounds(114, 10, 100, 15);
+	    // Clicking the button will allow the user
+	    // to select a directory
+	    Button button = new Button(composite, SWT.PUSH);
+	    button.setText("...");
+	    button.addSelectionListener(new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			FileDialog fileDialog = new FileDialog(composite.getShell(),  SWT.OPEN  );
+			fileDialog.setText(EXECUTION_HISTORY_DIALOG);
+			String[] filterExt = { EXECUTION_TRACKING_LOG_FILE_EXTENTION };
+			fileDialog.setFilterExtensions(filterExt);
+			String path = fileDialog.open();
+			if (path == null) return;
+			trackingFileText.setText(path);
+			trackingFileText.setToolTipText(path);
+		}
+	    });
+	    
+	    trackingFileText.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent event) {
+	    		filePath = ((Text)event.widget).getText();
+	    	}
+		});
+		return container;
 	}
 	
 	
@@ -188,29 +247,6 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		});
 	}
 	
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		parent.setLayout(new GridLayout(1,true));
-		parent.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
-		
-		Composite composite=new Composite(parent, SWT.None);
-		composite.setLayout(new GridLayout(5,false));
-		composite.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,true,0,0));
-		
-		createBrowseButton(composite);
-		
-		Button okButton = createButton(composite, IDialogConstants.OK_ID, "Ok", false);
-		Button closeButton = createButton(composite, IDialogConstants.CANCEL_ID, "Close", false);
-		closeButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectedUniqueJobId = "";
-				filePath = "";
-				close();
-			}
-		});
-		
-	}
 	
 	@Override
 	protected void okPressed() {
@@ -244,12 +280,24 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			viewExecutionHistoryHandler.getMessageDialog(Messages.FILE_DOES_NOT_EXIST);
 			return;
 		}catch(Exception e){
-			viewExecutionHistoryHandler.getMessageDialog(Messages.INVALID_FILE_FORMAT);
+			viewExecutionHistoryHandler.getMessageDialog(Messages.INVALID_FILE_FORMAT+" " + getUniqueJobId());
 			return;
 		}
 		super.okPressed();
 	}
-	
+
+	/**
+	 * @return job id for current open job
+	 */
+	private String getUniqueJobId(){
+		String jobId = "";
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+			jobId = eltGraphicalEditor.getContainer().getUniqueJobId();
+			return jobId;
+		}
+		return jobId;
+	}
 	private String getTimeStamp(String jobId){
 		String timeStamp;
 		String jobUniqueId = jobId;
@@ -262,5 +310,4 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		
 		return timeStamp;
 	}
-		
 }
