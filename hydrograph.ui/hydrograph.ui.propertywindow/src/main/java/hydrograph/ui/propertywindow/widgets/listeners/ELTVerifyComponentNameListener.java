@@ -129,12 +129,15 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 		componentName = componentName.trim();
 		boolean result = true;
 
-		for (Component component : currentComponent.getParent().getChildren()) {
+		for (Object object : currentComponent.getParent().getChildren()) {
+			if(object instanceof Component){
+				Component component = (Component)object;
 			if (component.getComponentLabel()!=null && StringUtils.equalsIgnoreCase(component.getComponentLabel().getLabelContents(), componentName)) {
 				result = false;
 				break;
 			}
 		}
+	}
 		logger.debug("result: {}", result);
 		return result;
 	}

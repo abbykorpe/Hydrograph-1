@@ -14,10 +14,6 @@
  
 package hydrograph.ui.graph.action;
 
-import hydrograph.ui.graph.command.ComponentCopyCommand;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.model.Component;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,8 +26,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import hydrograph.ui.graph.command.ComponentCopyCommand;
+import hydrograph.ui.graph.controller.CommentBoxEditPart;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.model.CommentBox;
+import hydrograph.ui.graph.model.Component;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class CopyAction.
  */
@@ -70,12 +71,12 @@ public class CopyAction extends SelectionAction {
 		if (selectedObjects == null || selectedObjects.isEmpty()) {
 			return null;
 		}
-		Component node = null;
+		Object node = null;
 		Iterator<Object> it = selectedObjects.iterator();
 		boolean enabled=false;
 		for(Object obj:selectedObjects)
 		{
-			if(obj instanceof ComponentEditPart)
+			if(obj instanceof ComponentEditPart || obj instanceof CommentBoxEditPart)
 			{
 				enabled=true;
 				break;
@@ -87,6 +88,10 @@ public class CopyAction extends SelectionAction {
 		{
 			if (obj instanceof ComponentEditPart) {
 				node = (Component) ((EditPart)obj).getModel();
+				copyCommand.addElement(node);
+			}
+			else if(obj instanceof CommentBoxEditPart){
+				node = (CommentBox)((EditPart)obj).getModel();
 				copyCommand.addElement(node);
 			}
 		}

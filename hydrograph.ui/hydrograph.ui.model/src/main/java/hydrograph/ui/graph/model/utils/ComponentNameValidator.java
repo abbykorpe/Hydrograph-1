@@ -38,7 +38,7 @@ public class ComponentNameValidator {
 		if (container == null || componentName == null) {
 			return false;
 		}
-		for (Component component : container.getChildren()) {
+		for (Component component : container.getUIComponentList()) {
 			if (component.getComponentLabel().getLabelContents().equals(componentName)) {
 				result = false;
 				break;

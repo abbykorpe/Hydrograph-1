@@ -370,16 +370,22 @@ public class SubJobUtility {
 		int inPort = 0;
 		int outPort = 0;
 		if (subJobContainer != null && selectedSubjobComponent != null && jobFileIPath != null) {
-			for (Component subComponent : subJobContainer.getChildren()) {
+			  for (Object object : subJobContainer.getChildren()) {
+				  if(object instanceof Component){
+					  Component subComponent = (Component)object;
 				if (Constants.INPUT_SUBJOB.equalsIgnoreCase(subComponent.getComponentName())) {
 					inPort = subComponent.getOutPortCount();
 					break;
+				  }
 				}
 			}
-			for (Component subComponent : subJobContainer.getChildren()) {
+			  for (Object object : subJobContainer.getChildren()) {
+				  if(object instanceof Component){
+					  Component subComponent = (Component)object;
 				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(subComponent.getComponentName())) {
 					outPort = subComponent.getInPortCount();
 					break;
+				   }
 				}
 			}
 
@@ -436,11 +442,14 @@ public class SubJobUtility {
 	 *            the container
 	 */
 	private void linkSubJobToMainGraph(Component selectedSubjobComponent, Container container) {
-		for (Component component : container.getChildren()) {
+		  for (Object object : container.getChildren()) {
+			  if(object instanceof Component){
+				  Component component = (Component)object;
 			if (Constants.INPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())
 					|| Constants.OUTPUT_SUBJOB.equalsIgnoreCase(component.getComponentName()))
 				propogateSchemaToSubjob(selectedSubjobComponent, component);
 		}
+	   }
 	}
 
 	public static boolean isFileExistsOnLocalFileSystem(IPath jobFilePath){

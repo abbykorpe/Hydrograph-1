@@ -230,7 +230,7 @@ public class TrackingStatusUpdateUtils {
 	private boolean applyPendingStatus(Component component, ExecutionStatus executionStatus) {
 
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
-		for (Component innerSubComponent : container.getChildren()) {
+		for (Component innerSubComponent : container.getUIComponentList()) {
 			for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if(Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())){
 				applyPendingStatus(innerSubComponent, executionStatus);
@@ -247,7 +247,7 @@ public class TrackingStatusUpdateUtils {
 
 	private boolean applyRunningStatus(Component component, ExecutionStatus executionStatus) {
 		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
-		for (Component innerSubComponent : container.getChildren()) {
+		for (Component innerSubComponent : container.getUIComponentList()) {
 			for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
 				applyRunningStatus(innerSubComponent, executionStatus);
@@ -263,7 +263,7 @@ public class TrackingStatusUpdateUtils {
 	}
 	private boolean applyFailStatus(Component component, ExecutionStatus executionStatus) {
 		Container container = (Container) component.getProperties().get(Constants.SUBJOB_CONTAINER);
-		for (Component innerSubComponent : container.getChildren()) {
+		for (Component innerSubComponent : container.getUIComponentList()) {
 			for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
 				applyFailStatus(innerSubComponent, executionStatus);
@@ -287,7 +287,7 @@ public class TrackingStatusUpdateUtils {
 			return false;
 		
 		for (ComponentStatus componentStatus : executionStatus.getComponentStatus()) {
-			for (Component innerSubComponent : container.getChildren()) {
+			for (Component innerSubComponent : container.getUIComponentList()) {
 				if (Constants.SUBJOB_COMPONENT.equals(innerSubComponent.getComponentName())) {
 					applySuccessStatus(innerSubComponent, executionStatus);
 				} else {
@@ -313,7 +313,7 @@ public class TrackingStatusUpdateUtils {
 private boolean isSubjobAllComponentsStatusAvailable(Container container,ExecutionStatus executionStatus,Component component){
 	int subjobSocketCount=0;
 	int subjobComponentCount=0;
-	for (Component innerSubComponent : container.getChildren()) {
+	for (Component innerSubComponent : container.getUIComponentList()) {
 			if (Constants.INPUT_SUBJOB.equals(innerSubComponent.getComponentName()) || Constants.OUTPUT_SUBJOB.equals(innerSubComponent.getComponentName())) {
 				subjobSocketCount++;
 			}

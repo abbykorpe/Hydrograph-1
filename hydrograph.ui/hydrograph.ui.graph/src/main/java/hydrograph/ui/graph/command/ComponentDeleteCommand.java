@@ -14,15 +14,6 @@
  
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.Model;
-import hydrograph.ui.graph.model.Port;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -37,6 +28,16 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.model.CommentBox;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Model;
+import hydrograph.ui.graph.model.Port;
+
 
 
 /**
@@ -44,8 +45,8 @@ import org.eclipse.ui.PlatformUI;
  */
 public class ComponentDeleteCommand extends Command {
 	
-	private List<Component> selectedComponents;
-	private Set<Component> deleteComponents;
+	private List<Model> selectedComponents;
+	private Set<Model> deleteComponents;
 	private final Container parent;
 	private boolean wasRemoved;
 	private final List<Link> sourceConnections;
@@ -60,7 +61,7 @@ public class ComponentDeleteCommand extends Command {
 		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();	
 		this.parent=(((ELTGraphicalEditor) page.getActiveEditor()).getContainer());
-		selectedComponents = new ArrayList<Component>();
+		selectedComponents = new ArrayList<Model>();
 		deleteComponents = new LinkedHashSet<>();
 		sourceConnections = new ArrayList<Link>();
 		targetConnections = new ArrayList<Link>();
@@ -73,10 +74,11 @@ public class ComponentDeleteCommand extends Command {
 	 * 
 	 * @param node
 	 */
-	public void addComponentToDelete(Component node){
+	public void addComponentToDelete(Model node){
+		if(node instanceof Component || node instanceof CommentBox){
 		selectedComponents.add(node);
+		}
 	}
-
 	/**
 	 * 
 	 * returns false if selected component list is empty
@@ -92,9 +94,9 @@ public class ComponentDeleteCommand extends Command {
 		if (selectedComponents == null || selectedComponents.isEmpty())
 			return false;
 
-		Iterator<Component> it = selectedComponents.iterator();
+		Iterator<Model> it = selectedComponents.iterator();
 		while (it.hasNext()) {
-			Component node = (Component) it.next();
+			Model node = it.next();
 			if (isDeletableNode(node)) {
 				deleteComponents.add(node);
 			}
@@ -104,7 +106,7 @@ public class ComponentDeleteCommand extends Command {
 	}
 
 	private boolean isDeletableNode(Model node) {
-		if (node instanceof Component)
+		if (node instanceof Component || node instanceof CommentBox)
 			return true;
 		else
 			return false;
@@ -124,22 +126,36 @@ public class ComponentDeleteCommand extends Command {
 
 	@Override
 	public void redo() {
-		Iterator<Component> it = deleteComponents.iterator();
+		Iterator<Model> it = deleteComponents.iterator();
 		while(it.hasNext()){
-			Component deleteComp=(Component)it.next();
-			deleteConnections(deleteComp);
-			wasRemoved = parent.removeChild(deleteComp);
+			Model model = it.next();
+			if(model instanceof Component){
+				Component deleteComp = (Component) model;
+				deleteConnections(deleteComp);
+				wasRemoved = parent.removeChild(deleteComp);
+			}
+			else if(model instanceof CommentBox){
+				CommentBox deleteLable = (CommentBox)model;
+				wasRemoved = parent.removeChild(deleteLable);
+			}
 		}
 
 	}
 
 	@Override
 	public void undo() {
-		Iterator<Component> it = deleteComponents.iterator();
+		Iterator<Model> it = deleteComponents.iterator();
 		while(it.hasNext()){
-			Component restoreComp=(Component)it.next();
-			parent.addChild(restoreComp);
-			restoreConnections();
+			Model model = it.next();
+			if(model instanceof Component){
+				Component restoreComp=(Component)model;
+				parent.addChild(restoreComp);
+				restoreConnections();
+			}
+			else if(model instanceof CommentBox){
+				CommentBox restoreComp = (CommentBox)model;
+				parent.addChild(restoreComp);
+			}
 		}
 
 	}

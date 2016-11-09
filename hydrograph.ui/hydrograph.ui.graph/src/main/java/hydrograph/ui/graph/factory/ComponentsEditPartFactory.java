@@ -14,11 +14,13 @@
  
 package hydrograph.ui.graph.factory;
 
+import hydrograph.ui.graph.controller.CommentBoxEditPart;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.ComponentLabelEditPart;
 import hydrograph.ui.graph.controller.ContainerEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.ComponentLabel;
 import hydrograph.ui.graph.model.Container;
@@ -57,6 +59,9 @@ public class ComponentsEditPartFactory implements EditPartFactory{
 		}
 		else if (model instanceof ComponentLabel){
 			part = new ComponentLabelEditPart();
+		}
+		else if (model instanceof CommentBox){
+			part = new CommentBoxEditPart();
 		}
 		else{
 			logger.error("Can't create edit part for model element {}", ((model != null) ? model.getClass().getName() : "null"));

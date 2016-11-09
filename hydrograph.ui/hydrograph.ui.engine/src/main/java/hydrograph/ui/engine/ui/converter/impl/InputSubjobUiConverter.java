@@ -12,26 +12,6 @@
  ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.inputtypes.Subjob;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.engine.exceptions.EngineException;
-import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
-import hydrograph.ui.engine.ui.converter.UiConverter;
-import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
-import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
-import hydrograph.ui.engine.ui.util.UiConverterUtil;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
-import hydrograph.ui.graph.model.components.OutputSubjobComponent;
-import hydrograph.ui.graph.model.components.SubjobComponent;
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +21,6 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -49,6 +28,23 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
+
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
+import hydrograph.engine.jaxb.inputtypes.Subjob;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.engine.exceptions.EngineException;
+import hydrograph.ui.engine.ui.converter.UiConverter;
+import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
+import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
+import hydrograph.ui.engine.ui.util.UiConverterUtil;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.SubjobComponent;
+import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * Converter to convert jaxb subjob object of input type into subjob component
@@ -104,10 +100,13 @@ public class InputSubjobUiConverter extends UiConverter {
 						new LinkedHashMap<String, ComponentsOutputSchema>());
 			}
 
-			for (Component component : subJobContainer.getChildren()) {
+			for (Object object : subJobContainer.getChildren()) {
+				if(object != null && object instanceof Component){
+					Component component = (Component) object;
 				SchemaPropagation.INSTANCE.continuousSchemaPropagation(component,
 						(Map) component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
 			}
+		  }
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException | IOException | CoreException
 				| ComponentNotFoundException exception) {

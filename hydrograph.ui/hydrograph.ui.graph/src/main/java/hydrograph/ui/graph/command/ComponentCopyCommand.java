@@ -14,22 +14,18 @@
  
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.graph.model.Component;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class ComponentCopyCommand.
  */
 public class ComponentCopyCommand extends Command {
    
-	private ArrayList<Component> list = new ArrayList<Component>();
+	private ArrayList<Object> list = new ArrayList<Object>();
    
 	/**
 	 * Adds the element.
@@ -38,7 +34,7 @@ public class ComponentCopyCommand extends Command {
 	 *            the node
 	 * @return true, if successful
 	 */
-	public boolean addElement(Component node) {
+	public boolean addElement(Object node) {
 		if (!list.contains(node)) {
 
 			return list.add(node);
@@ -50,7 +46,7 @@ public class ComponentCopyCommand extends Command {
 	public boolean canExecute() {
 		if (list == null || list.isEmpty())
 			return false;
-		Iterator<Component> it = list.iterator();
+		Iterator<Object> it = list.iterator();
 		while (it.hasNext()) {
 			if (!isCopyableNode(it.next()))
 				return false;
@@ -77,8 +73,8 @@ public class ComponentCopyCommand extends Command {
 	 *            the node
 	 * @return true, if is copyable node
 	 */
-	public boolean isCopyableNode(Component node) {
-		if (node instanceof Component)
+	public boolean isCopyableNode(Object node) {
+		if (node instanceof Object)
 			return true;
 		return false;
 	}

@@ -14,15 +14,6 @@
 
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.Model;
-import hydrograph.ui.graph.model.Port;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -38,6 +29,15 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Model;
+import hydrograph.ui.graph.model.Port;
+import hydrograph.ui.logging.factory.LogFactory;
+
 
 
 /**
@@ -47,18 +47,18 @@ public class LinkDeleteCommand extends Command{
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(LinkDeleteCommand.class);
 	
-	private List<Link> selectedLinks;
-	private Set<Link> deleteLinks;
+	private List<Model> selectedLinks;
+	private Set<Model> deleteLinks;
 	
 
 	public LinkDeleteCommand() {
 		super("Delete connection");
-		selectedLinks=new ArrayList<Link>();
-		deleteLinks=new LinkedHashSet<Link>();
+		selectedLinks=new ArrayList<Model>();
+		deleteLinks=new LinkedHashSet<Model>();
 		setLabel("Delete Connection");
 	}
 	
-	public void addLinkToDelete(Link link){
+	public void addLinkToDelete(Model link){
 		selectedLinks.add(link);
 	}
 
@@ -73,7 +73,7 @@ public class LinkDeleteCommand extends Command{
 			return false;
 
 		deleteLinks.clear();
-		Iterator<Link> it = selectedLinks.iterator();
+		Iterator<Model> it = selectedLinks.iterator();
 		while (it.hasNext()) {
 			Link node = (Link) it.next();
 			if (isDeletableNode(node)) {
@@ -103,7 +103,7 @@ public class LinkDeleteCommand extends Command{
 	@Override
 	public void redo() {
 
-		Iterator<Link> it = deleteLinks.iterator();
+		Iterator<Model> it = deleteLinks.iterator();
 		while(it.hasNext()){
 			Link deleteLink=(Link)it.next();
 			Port sourcePort = deleteLink.getSource().getPort(deleteLink.getSourceTerminal());
@@ -148,7 +148,7 @@ public class LinkDeleteCommand extends Command{
 	@Override
 	public void undo() {
 		
-		Iterator<Link> it = deleteLinks.iterator();
+		Iterator<Model> it = deleteLinks.iterator();
 		while(it.hasNext()){
 			Link restoreLink=(Link)it.next();
 			

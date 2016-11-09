@@ -368,13 +368,16 @@ public class JobScpAndProcessUtility {
 			}
 			if(obj!=null && obj instanceof Container){
 			  Container container = (Container) obj;
-			  for (Component component : container.getChildren()) {
+			  for (Object object : container.getChildren()) {
+				  if(object instanceof Component){
+					  Component component = (Component)obj;
 					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
 						  String subJob=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
 						  subJobList.add(subJob);
 						  checkNestedSubJob(subJobList, subJob);
 					}
-			}
+				  }	
+	     		}
 		  }
 	}
 	
@@ -392,7 +395,9 @@ public class JobScpAndProcessUtility {
 		}
 		if(obj!=null && obj instanceof Container){
 		  Container container = (Container) obj;
-		  for (Component component : container.getChildren()) {
+		  for (Object object : container.getChildren()) {
+			  if(object instanceof Component){
+				  Component component = (Component)obj;
 			  	Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 				if(schema!=null && schema.getIsExternal()){
 					externalSchemaPathList.add(schema.getExternalSchemaPath());
@@ -402,6 +407,7 @@ public class JobScpAndProcessUtility {
 					  checkSubJobForExternalSchema(externalSchemaPathList, subJob);
 				}
 		  	}
+		  }
 		}
 	}
 

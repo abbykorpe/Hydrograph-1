@@ -14,13 +14,8 @@
  
 package hydrograph.ui.graph.editor;
 
-import hydrograph.ui.graph.command.ComponentCreateCommand;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.tooltip.tooltips.PaletteToolTip;
-
 import java.awt.MouseInfo;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -42,10 +37,15 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.widgets.Display;
-
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import hydrograph.ui.graph.command.ComponentCreateCommand;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.tooltip.tooltips.PaletteToolTip;
 
 
 /**
@@ -77,7 +77,14 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	 */
 	public List<Component> getCanvasCompAndUpdateCompList(){
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		List<Component> compListFromCanvas = ((ELTGraphicalEditor) page.getActiveEditor()).getContainer().getChildren();
+		List<Object> objectList = ((ELTGraphicalEditor) page.getActiveEditor()).getContainer().getChildren();
+		List<Component> compListFromCanvas = new ArrayList<Component>() ;
+		for(Object obj : objectList){
+			if(obj instanceof Component){
+			Component component = (Component) obj;
+			compListFromCanvas.add(component);
+			}
+		}
 		logger.debug("Existing components from Job canvas");
 		for (int i=0; i<compListFromCanvas.size(); i++){
 			String currentCompLabel = compListFromCanvas.get(i).getComponentLabel().getLabelContents();

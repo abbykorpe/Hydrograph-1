@@ -50,12 +50,15 @@ public class ImportedSchemaPropagation {
 	 * @return
 	 */
 	public void initiateSchemaPropagationAfterImport(Container container) {
-		for (Component component : container.getChildren()) {
+		for (Object object : container.getChildren()) {
+			if(object instanceof Component){
+				 Component component = (Component)object;
 			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) component
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 			if (schemaMap != null && !StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM))
 				SchemaPropagation.INSTANCE.continuousSchemaPropagation(component, schemaMap);
 		}
+	}
 		schemaPropagationForTransformCategory(container);
 		removeTempraryProperties(container);
 		validateAllComponents(container);
@@ -65,7 +68,9 @@ public class ImportedSchemaPropagation {
 	private void validateAllComponents(Container container) {
 
 		if (container != null) {
-			for (Component component : container.getChildren()) {
+			for (Object object : container.getChildren()) {
+				if(object instanceof Component){
+					 Component component = (Component)object;
 				if (component instanceof SubjobComponent) {
 					String previousValidityStatus = component.getValidityStatus();
 					component.validateComponentProperties();
@@ -79,6 +84,7 @@ public class ImportedSchemaPropagation {
 				} else {
 					component.validateComponentProperties();
 				}
+			  }
 			}
 		}
 
@@ -97,7 +103,9 @@ public class ImportedSchemaPropagation {
 
 	// This method propagates schema from transform components.
 	private void schemaPropagationForTransformCategory(Container container) {
-		for (Component component : container.getChildren()) {
+		for (Object object : container.getChildren()) {
+			if(object instanceof Component){
+				 Component component = (Component)object;
 			if (StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM)) {
 				Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) component
 						.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
@@ -109,6 +117,7 @@ public class ImportedSchemaPropagation {
 					SchemaPropagation.INSTANCE.continuousSchemaPropagation(component, (Map) component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
 				}
 			}
+		  }
 		}
 
 	}
@@ -163,9 +172,12 @@ public class ImportedSchemaPropagation {
 
 	// This method removes temporary properties from components.
 	private void removeTempraryProperties(Container container) {
-		for (Component component : container.getChildren()) {
+		for (Object object : container.getChildren()) {
+			if(object instanceof Component){
+				 Component component = (Component)object;
 			component.getProperties().remove(Constants.SCHEMA_FIELD_SEQUENCE);
 			component.getProperties().remove(Constants.COPY_FROM_INPUT_PORT_PROPERTY);
+		  }
 		}
 	}
 

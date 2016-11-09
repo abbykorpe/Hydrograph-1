@@ -51,6 +51,10 @@
             id="hydrograph.ui.graph.trackingHistory"
             name="Tracking History">
       </command>
+        <command
+            id="hydrograph.ui.graph.commentbox"
+            name="Comment Box">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -122,6 +126,17 @@
                </equals>
             </with>
          </activeWhen>
+      </handler>
+      <handler
+            class="hydrograph.ui.graph.handler.CommentBoxHandler"
+            commandId="hydrograph.ui.graph.commentbox">
+         <activeWhen>
+            <with
+                  variable="activeEditorId">
+               <equals
+                     value="hydrograph.ui.graph.etlgraphicaleditor">
+               </equals>
+            </with></activeWhen>
       </handler>
    </extension> 
    <extension
@@ -244,6 +259,12 @@
             commandId="hydrograph.ui.graph.command.removedebug"
             icon="resources/icons/remove_debug.png"
             label="Remove Watchers"
+            style="push">
+      </command>
+      <command
+            commandId="hydrograph.ui.graph.commentbox"
+            icon="resources/icons/comment-box-icon.png"
+            label="Comment Box"
             style="push">
       </command>
          </toolbar>

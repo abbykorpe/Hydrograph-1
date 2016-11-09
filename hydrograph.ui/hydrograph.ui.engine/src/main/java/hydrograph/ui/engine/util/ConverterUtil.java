@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +85,14 @@ public class ConverterUtil {
 			Graph graph = new ObjectFactory().createGraph();
 			graph.setUniqueJobId(container.getUniqueJobId());
 			graph.setName(getGraphName(outPutFile,externalOutputFile));
-			List<Component> children = container.getChildren();
+			List<Object> obj = container.getChildren();
+			List<Component> children = new ArrayList<>();
+			for(Object object:obj){
+				if(object instanceof Component){
+				Component component = (Component)object;
+				children.add(component);
+				}
+			}
 			if(children != null && !children.isEmpty()){
 				for (Component component : children) {
 					Converter converter = ConverterFactory.INSTANCE.getConverter(component); 

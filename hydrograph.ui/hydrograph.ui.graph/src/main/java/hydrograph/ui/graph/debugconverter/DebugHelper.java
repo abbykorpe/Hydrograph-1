@@ -68,11 +68,14 @@ public class DebugHelper {
 					XStream xs = new XStream();
 					container=(Container) xs.fromXML(jobPath.toFile());
 					List<Link> links = null;
-					for(Component component_temp:container.getChildren()){
+					for(Object object :container.getChildren()){
+						if(object instanceof Component){
+							Component component_temp = (Component)object;
 						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), Constants.OUTPUT_SUBJOB)){
 							links=component_temp.getTargetConnections();
 						}
 					}
+				}	
 					for(Link str : links){
 						String sub_comp = str.getSource().getComponentLabel().getLabelContents();
 						String sub_comp_port = str.getSourceTerminal();
@@ -86,11 +89,14 @@ public class DebugHelper {
 					container=(Container) xs.fromXML(ResourcesPlugin.getWorkspace().getRoot().getFile(jobPath).getContents(true));
 					List<Link> links = null;
 					
-					for(Component component_temp:container.getChildren()){
+					for(Object object:container.getChildren()){
+						if(object instanceof Component){
+							Component component_temp = (Component)object;
 						if(StringUtils.equalsIgnoreCase(component_temp.getComponentLabel().getLabelContents(), Constants.OUTPUT_SUBJOB)){
 							links=component_temp.getTargetConnections();
 							break;
 						}
+					   }	
 					}for(Link link : links){
 						Map<String, Port> map = link.getSource().getPorts();
 						for(Entry<String, Port> entry : map.entrySet()){

@@ -52,9 +52,11 @@ public class Container extends Model {
 	private String uniqueJobId;
 	private int jobRunCount;
 	
+	private List<CommentBox> comments ;
 	private final List<Component> components = new ArrayList<>();
 	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
+	
 	@XStreamOmitField
 	private boolean isVersionAlreadyUpdated;
 	@XStreamOmitField
@@ -70,7 +72,7 @@ public class Container extends Model {
 	private boolean isOpenedForTracking;
 
 	public Container(){
-		
+		comments = new ArrayList<CommentBox>();
 	}
 	
 	
@@ -156,6 +158,28 @@ public class Container extends Model {
 		return false;
 	}
 
+	public boolean addChild(CommentBox comment){
+		if (comment != null) {
+			if(comments==null){
+				comments = new ArrayList<>();
+			}
+			comments.add(comment);
+			comment.setParent(this);
+			firePropertyChange(CHILD_ADDED_PROP, null, comment);
+			return true;
+		   }
+			return false;
+		}
+	
+	public boolean removeChild(CommentBox comment){
+		if (comment != null){
+			comments.remove(comment);
+		firePropertyChange(CHILD_REMOVED_PROP,null ,comment);
+		return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Add a subjob to this graph.
 	 * @return true, if the subjob component was added, false otherwise
@@ -172,6 +196,7 @@ public class Container extends Model {
 		return false;
 }
 
+	
 	
 	/**
 	 * Checks if given subjob can be added to canvas.
@@ -200,7 +225,16 @@ public class Container extends Model {
 	 * Return a List of Components in this graph. The returned List should not be
 	 * modified.
 	 */
-	public List<Component> getChildren() {
+	public List<Object> getChildren() {
+		List<Object> objects = new ArrayList<>();
+		objects.addAll(components);
+		if(comments != null){
+		objects.addAll(comments);
+		}
+		return objects;
+	}
+	
+	public List<Component> getUIComponentList(){
 		return components;
 	}
 
@@ -334,9 +368,13 @@ public class Container extends Model {
 	 * @return true, if is current graph is a subjob
 	 */
 	public boolean isCurrentGraphSubjob() {
-		for (Component component : getChildren()) {
-			if (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB, component.getComponentName())
-					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, component.getComponentName())){
+		for (Object obj : getChildren()) {
+			Component component=null;
+			if(obj instanceof Component){
+				component = (Component) obj;
+			}
+			if (component != null && (StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB, component.getComponentName())
+					|| StringUtils.equalsIgnoreCase(Constants.OUTPUT_SUBJOB, component.getComponentName()))){
 				return true;
 			}
 		}
