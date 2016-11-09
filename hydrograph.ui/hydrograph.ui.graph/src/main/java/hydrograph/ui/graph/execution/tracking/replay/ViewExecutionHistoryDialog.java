@@ -82,7 +82,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
+		Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText(VIEW_TRACKING_HISTORY);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
@@ -90,8 +90,6 @@ public class ViewExecutionHistoryDialog extends Dialog{
 
 		Composite composite1 = new Composite(container, SWT.BORDER);
 		GridData gd_scrolledComposite1 = new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
-		gd_scrolledComposite1.heightHint = 346;
-		gd_scrolledComposite1.widthHint = 844;
 		composite1.setLayoutData(gd_scrolledComposite1);
 		
 		table = new Table(composite1, SWT.BORDER | SWT.Selection | SWT.FULL_SELECTION );
@@ -128,11 +126,6 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			
 			@Override
 			public void controlResized(ControlEvent e) {
-				Rectangle re= container.getBounds();
-				int height = re.height;
-				int width = re.width;
-				gd_scrolledComposite1.heightHint = height-20;
-				gd_scrolledComposite1.widthHint = width-20;
 				table.setBounds(container.getBounds());
 			}
 			
