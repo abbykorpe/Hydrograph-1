@@ -60,7 +60,8 @@ import hydrograph.ui.graph.model.components.OutputSubjobComponent;
  *
  */
 public class SubjobUiConverterUtil {
-	
+	private static String LIMIT_COMPONENT = "LimitComponent";
+	private static String CLONE_COMPONENT = "CloneComponent";
 	
 	/**
 	 * @param subJobXMLPath
@@ -211,7 +212,8 @@ public class SubjobUiConverterUtil {
 			for (int i = 0; i < subJobContainer.getUIComponentList().size(); i++) {
 				if(subJobContainer.getUIComponentList().get(i) instanceof Component){
 					Component component = (Component)subJobContainer.getUIComponentList().get(i);
-				if(component.getComponentName()!="LimitComponent" || component.getComponentName()!="CloneComponent"){
+					if(!(StringUtils.equalsIgnoreCase(component.getComponentName(), LIMIT_COMPONENT) 
+							||StringUtils.equalsIgnoreCase(component.getComponentName(), CLONE_COMPONENT))){
 				if (!(component instanceof InputSubjobComponent || component instanceof OutputSubjobComponent)) {
 					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), 
 							component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
