@@ -46,7 +46,7 @@
 	
 		<tns:property dataType="string" name="operation"
 			renderer="TRANSFORM_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="FALSE" tooltipDataType="NONE" usage="OPTIONAL" propertyHelpText="Fields mapping view.">
+			showAsTooltip="TRUE" tooltipDataType="LINK" usage="OPTIONAL" propertyHelpText="Fields mapping view.">
 			<tns:validator>TRANSFORM_MAPPING_VALIDATOR</tns:validator>
 			</tns:property>
 			
@@ -63,7 +63,10 @@
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
-		
+		<tns:property dataType="string" name="Propogate" value="0" renderer="PROPOGATE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="REQUIRED" propertyHelpText="Propogate data from left.">
+		</tns:property>
 	<tns:operations>
 		<tns:interface
 			class="hydrograph.engine.transformation.userfunctions.base.TransformBase" name="TRANSFORM" />
@@ -71,7 +74,7 @@
 			class="hydrograph.engine.transformation.userfunctions.transform.RegexSplitTransform"
 			name="RegexSplitTransform" />
 	</tns:operations>
-
-
+	
+	
 	</tns:component>
 </tns:Config>

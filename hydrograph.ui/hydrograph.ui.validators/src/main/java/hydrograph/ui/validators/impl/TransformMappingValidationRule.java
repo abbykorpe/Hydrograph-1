@@ -68,7 +68,6 @@ public class TransformMappingValidationRule implements IValidator{
 			}
 			
 		}
-		transformMapping.setInputFields(inputFieldsList);
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
 		{
 	    errorMessage = propertyName + "Output field(s) is mandatory";		 	

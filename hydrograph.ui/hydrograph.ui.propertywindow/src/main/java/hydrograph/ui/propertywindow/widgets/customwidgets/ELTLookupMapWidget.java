@@ -19,6 +19,7 @@ import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.Schema;
@@ -87,10 +88,18 @@ public class ELTLookupMapWidget extends AbstractWidget {
 
 		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
+		 LookupMappingGrid lookupMappingGridPopulatedFromTooTipAction=
+        		 (LookupMappingGrid) getComponent().getTooltipInformation().get("hash_join_map").getPropertyValue();
+		 if(lookupMappingGridPopulatedFromTooTipAction!=null)
+		 lookupMappingGrid.setAddPassThroughFields(lookupMappingGridPopulatedFromTooTipAction.isAddPassThroughFields());
+		 if(getComponent().isContinuousSchemaPropogationAllow())
+		 getPropagatedSchema();
+		 if(lookupMappingGrid.isAddPassThroughFields())
+		 addPassThroughFields();
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				getPropagatedSchema();
+               
 
 				LookupMapDialog lookupMapDialog = new LookupMapDialog(((Button) eltDefaultButton.getSWTWidgetControl()).getShell(), getComponent(),
 						lookupMappingGrid,propertyDialogButtonBar);
@@ -103,7 +112,25 @@ public class ELTLookupMapWidget extends AbstractWidget {
 		});
 		propagateInternalSchema();
 	}
-
+	private void addPassThroughFields() {
+		List<List<FilterProperties>> sourceFieldsListofList=lookupMappingGrid.getLookupInputProperties();
+		for(List<FilterProperties> filterProperties:sourceFieldsListofList)
+		{
+			for(FilterProperties filterProperties2:filterProperties)
+			{
+			 String socketId="in"+sourceFieldsListofList.indexOf(filterProperties)+"."+filterProperties2.getPropertyname();
+			 LookupMapProperty lookupMapProperty=new LookupMapProperty();
+			 lookupMapProperty.setSource_Field(socketId);
+			 lookupMapProperty.setOutput_Field(filterProperties2.getPropertyname());
+			 if(!lookupMappingGrid.getLookupMapProperties().contains(lookupMapProperty))
+			 {
+				 lookupMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+			 }
+			}
+			
+		}
+		lookupMappingGrid.setAddPassThroughFields(false);
+	}
 	private Schema propagateInternalSchema() {
 		if(lookupMappingGrid ==null){
 			return null;
@@ -213,7 +240,6 @@ public class ELTLookupMapWidget extends AbstractWidget {
 
 	private GridRow getInputFieldSchema(String fieldName,String linkNumber) {
 		ComponentsOutputSchema outputSchema = null;
-		//List<FixedWidthGridRow> fixedWidthGridRows = new LinkedList<>();
 		for (Link link : getComponent().getTargetConnections()) {
 
 			if(linkNumber.equals(link.getTargetTerminal())){				
@@ -235,6 +261,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 				.sortedFiledNamesBySocketId(getComponent());
 		if (sorceFieldList != null)
 			lookupMappingGrid.setLookupInputProperties(sorceFieldList);
+		
 	}
 
 	@Override

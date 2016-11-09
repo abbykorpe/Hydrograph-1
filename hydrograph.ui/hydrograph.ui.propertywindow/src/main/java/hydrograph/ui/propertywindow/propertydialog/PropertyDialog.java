@@ -19,6 +19,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaData;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.constants.ELTProperties;
@@ -338,9 +339,8 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		if (verifiedSchema){
 			super.okPressed();
 		}
-		
-		
-		
+		if(component.isContinuousSchemaPropogationAllow()&& !(component instanceof SubjobComponent))
+		component.setContinuousSchemaPropogationAllow(false);	
 	}
 
 	

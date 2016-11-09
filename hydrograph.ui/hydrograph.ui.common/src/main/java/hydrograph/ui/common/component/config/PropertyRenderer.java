@@ -81,6 +81,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="OVERWRITE_WIDGET"/>
  *     &lt;enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
  *     &lt;enumeration value="EXTRACT_METASTORE_DATA_WIDGET"/>
+ *     &lt;enumeration value="PROPOGATE_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -137,7 +138,8 @@ public enum PropertyRenderer {
     MIXED_SCHEME,
     OVERWRITE_WIDGET,
     PARTITION_KEYS_WIDGET_INPUT_HIVE,
-    EXTRACT_METASTORE_DATA_WIDGET;
+    EXTRACT_METASTORE_DATA_WIDGET,
+    PROPOGATE_WIDGET;
 
     public String value() {
         return name();

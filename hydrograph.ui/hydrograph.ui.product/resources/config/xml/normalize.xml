@@ -43,7 +43,7 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="operation" renderer="NORMALIZE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="LIST" usage="OPTIONAL" >
+			showAsTooltip="TRUE" tooltipDataType="LINK" usage="OPTIONAL" >
 			<tns:validator>TRANSFORM_MAPPING_VALIDATOR</tns:validator>
 			</tns:property>
 		
@@ -58,7 +58,10 @@
 			usage="REQUIRED">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>	
-		
+		 <tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="LINK"
+			usage="REQUIRED" propertyHelpText="Propogate data from left.">
+		</tns:property>
 
 			
 			

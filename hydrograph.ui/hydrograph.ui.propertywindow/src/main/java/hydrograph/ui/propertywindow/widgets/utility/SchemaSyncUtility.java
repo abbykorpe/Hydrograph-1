@@ -541,4 +541,14 @@ public class SchemaSyncUtility {
 		}
 		return indexAndValueOfParameter;
 	}
+	public List<String> converterFilterPropertyListToStringList(List<FilterProperties> filterProperties)
+	{
+		List<String> stringList=new ArrayList<>();
+		for(FilterProperties filterProperty:filterProperties)
+		{
+			stringList.add(filterProperty.getPropertyname());
+			
+		}	
+     return stringList;	
+	}
 }

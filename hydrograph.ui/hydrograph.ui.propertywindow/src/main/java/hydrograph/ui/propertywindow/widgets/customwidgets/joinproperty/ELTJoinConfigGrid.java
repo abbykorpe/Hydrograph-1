@@ -17,11 +17,13 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +63,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	private Map<String, List<String>> propagatedFiledNames;
 	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
 	private Component component;
-
+    private List<List<FilterProperties>> sourceFieldList;
 	/**
 	 * Create the dialog.
 	 * 
@@ -175,6 +177,7 @@ public class ELTJoinConfigGrid extends Dialog {
 				
 				@Override
 				public void mouseUp(MouseEvent e) {
+					
 					keyText.setText(launchDialogToSelectFields(keyText.getText(), joinConfigProperty.getPortIndex()));
 					keyText.setToolTipText(keyText.getText());
 					joinConfigProperty.setJoinKey(keyText.getText());
@@ -214,9 +217,11 @@ public class ELTJoinConfigGrid extends Dialog {
 	}
 	
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
+		String teminalNumber=socketId.substring(socketId.length()-1);
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
-		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(socketId));
+		fieldDialog.setSourceFieldsFromPropagatedSchema(SchemaSyncUtility.INSTANCE.
+				converterFilterPropertyListToStringList(sourceFieldList.get(Integer.parseInt(teminalNumber))));
 		fieldDialog.setComponentName(Constants.JOIN_KEYS_WINDOW_TITLE);
 		fieldDialog.open();
 		return fieldDialog.getResultAsCommaSeprated();
@@ -224,6 +229,10 @@ public class ELTJoinConfigGrid extends Dialog {
 
 	public void setPropagatedFieldProperty(Map<String, List<String>> propagatedFiledNames) {
 		this.propagatedFiledNames = propagatedFiledNames;
+	}
+
+	public void setSourceFieldList(List<List<FilterProperties>> sourceFieldList) {
+		this.sourceFieldList = sourceFieldList;
 	}
 
 	@Override

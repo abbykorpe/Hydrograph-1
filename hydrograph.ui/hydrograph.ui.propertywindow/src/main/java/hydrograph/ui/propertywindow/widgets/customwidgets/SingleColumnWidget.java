@@ -22,17 +22,22 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.mapping.InputField;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -130,9 +135,50 @@ public class SingleColumnWidget extends AbstractWidget {
 	}
 
 	protected List<String> getPropagatedSchema() {
+		List<String> propogatedFields=new ArrayList<>();	
+		if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"Aggregate")
+		 ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"Cumulate")		)
+		{
+			TransformWidget transformWidget = null;
+			for(AbstractWidget abstractWidget:widgets)
+			{
+				if(abstractWidget instanceof TransformWidget)
+				{
+					transformWidget=(TransformWidget)abstractWidget;
+					break;
+				}
+			}		
+			
+		TransformMapping transformMapping=(TransformMapping) transformWidget.getProperties().get("operation");
+	    for(InputField inputField:transformMapping.getInputFields())
+	    {
+	    	propogatedFields.add(inputField.getFieldName());
+	    }
+	    return propogatedFields;
+		}
+		else if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"filter")
+				||StringUtils.equalsIgnoreCase(getComponent().getCategory(),"STRAIGHTPULL"))
+		{	
+			ELTSchemaGridWidget  schemaWidget = null;
+			for(AbstractWidget abstractWidget:widgets)
+			{
+				if(abstractWidget instanceof ELTSchemaGridWidget)
+				{
+					schemaWidget=(ELTSchemaGridWidget)abstractWidget;
+					break;
+				}
+			}	
+			schemaWidget.refresh();
+			List<GridRow> gridRowList=(List<GridRow>)schemaWidget.getTableViewer().getInput();
+			for(GridRow gridRow:gridRowList)
+			{
+				propogatedFields.add(gridRow.getFieldName());
+			}
+			return propogatedFields;
+		}
 		return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
 				Constants.INPUT_SOCKET_TYPE + 0);
-	}
+		}
 
 	@Override
 	public boolean isWidgetValid() {

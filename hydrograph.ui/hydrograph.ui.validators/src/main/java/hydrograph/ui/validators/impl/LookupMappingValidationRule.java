@@ -52,19 +52,6 @@ public class LookupMappingValidationRule implements IValidator{
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}
-		List<List<FilterProperties>> lookupInputPropertiesList = new ArrayList<List<FilterProperties>>();
-		for(Entry< String,List<FixedWidthGridRow>> inputRow :inputSchemaMap.entrySet()){
-			List<FilterProperties> filterPropertiesList = new ArrayList<FilterProperties>(); 
-			
-			for(FixedWidthGridRow row : inputRow.getValue()){
-				FilterProperties filterProperties = new FilterProperties();
-				filterProperties.setPropertyname(row.getFieldName());
-				filterPropertiesList.add(filterProperties);
-			}
-			lookupInputPropertiesList.add(filterPropertiesList);
-		}
-		
-		lookupMappingGrid.setLookupInputProperties(lookupInputPropertiesList);
 		List<List<FilterProperties>> lookupInputProperties = lookupMappingGrid.getLookupInputProperties();
 		List<LookupMapProperty> lookupMapProperties = lookupMappingGrid.getLookupMapProperties();
 		if(lookupInputProperties == null || 

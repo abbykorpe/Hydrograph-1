@@ -14,6 +14,14 @@
  
 package hydrograph.ui.graph.action.subjob;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.action.PasteAction;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.logging.factory.LogFactory;
+
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -37,14 +45,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.slf4j.Logger;
-
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.action.PasteAction;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.utility.SubJobUtility;
-import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
@@ -94,6 +94,7 @@ public class SubJobOpenAction extends SelectionAction{
 		Container container = null;
 		if (selectedObjects != null && !selectedObjects.isEmpty()) {
 			for (Object obj : selectedObjects) {
+					
 				if (obj instanceof ComponentEditPart) {
 					if (((ComponentEditPart) obj).getCastedModel().getCategory()
 							.equalsIgnoreCase(Constants.SUBJOB_COMPONENT_CATEGORY)) {
@@ -104,19 +105,18 @@ public class SubJobOpenAction extends SelectionAction{
 							try {
 								IPath jobFilePath = new Path(pathProperty);
 								if (SubJobUtility.isFileExistsOnLocalFileSystem(jobFilePath)) {
-									
 									container = openEditor(jobFilePath);
 									if (container != null){
 										container.setLinkedMainGraphPath(mainJobFilePath);
 										container.setSubjobComponentEditPart(obj);
-										for (Object object : container.getChildren()) {
-											Component component = null;
-											  if(object instanceof Component){
-											     component = (Component)object;
+										for (Component component : container.getChildren()) {
+											if(subjobComponent.isContinuousSchemaPropogationAllow())
+											component.setContinuousSchemaPropogationAllow(true);	
 											subJobUtility.propogateSchemaToSubjob(subjobComponent, component);
 										}
+										subjobComponent.setContinuousSchemaPropogationAllow(false);
+										subjobComponent.getProperties().put(Constants.SUBJOB_CONTAINER, container);
 									}
-								}	
 									((ComponentEditPart) obj).refresh();
 								} else
 									MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",

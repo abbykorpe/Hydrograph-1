@@ -36,6 +36,7 @@ public class TransformMapping implements IDataStructure{
 	private List<MappingSheetRow> mappingSheetRows;
 	private List<NameValueProperty> mapAndPassthroughField;
 	private List<FilterProperties> outputFieldList;
+	private boolean addPassThroughFields;
 	
 	/**
 	 * Instantiates a new transform mapping.
@@ -84,6 +85,14 @@ public class TransformMapping implements IDataStructure{
 		this.outputFieldList = outputFieldList;
 	}
 
+
+	public boolean isAddPassThroughFields() {
+		return addPassThroughFields;
+	}
+
+	public void setAddPassThroughFields(boolean addPassThroughFields) {
+		this.addPassThroughFields = addPassThroughFields;
+	}
 
 	/**
 	 * Instantiates a new transform mapping.

@@ -1445,9 +1445,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void issueToolTip(ComponentTooltip componentTooltip,Rectangle toolTipComponentBounds) {
+		if(componentTooltip!=null &&toolTipComponentBounds!=null )
+		{	
 		this.toolTipComponentBounds = toolTipComponentBounds;
 		this.componentTooltip = componentTooltip;
+		}
 	}
+		
 
 	@Override
 	public ComponentTooltip getComponentTooltip() {

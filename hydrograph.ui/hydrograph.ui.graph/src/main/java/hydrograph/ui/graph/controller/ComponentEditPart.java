@@ -180,7 +180,7 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		
 		String label = (String) getCastedModel().getPropertyValue(Component.Props.NAME_PROP.getValue());
 		String acronym = XMLConfigUtil.INSTANCE.getComponent(componentName).getAcronym();
-		return new ComponentFigure(getCastedModel().getPortDetails(), canvasIconPath, label, acronym, getCastedModel().getProperties());
+		return new ComponentFigure(getCastedModel(), canvasIconPath, label, acronym, getCastedModel().getProperties());
 	}
 
 	public Component getCastedModel() {
