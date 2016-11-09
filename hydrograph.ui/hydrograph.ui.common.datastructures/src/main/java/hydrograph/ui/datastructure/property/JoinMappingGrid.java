@@ -35,7 +35,7 @@ public class JoinMappingGrid implements IDataStructure{
 	private List<List<FilterProperties>> lookupInputProperties;   //join left side
 	private List<FilterProperties> clonedInnerLookupInputProperties;
 	private List<List<FilterProperties>> clonedLookupInputProperties;
-	
+	private boolean addPassThroughFields;
 	/**
 	 * Instantiates a new join mapping grid.
 	 */
@@ -54,6 +54,14 @@ public class JoinMappingGrid implements IDataStructure{
 		return buttonText;
 	}
 	
+	public boolean isAddPassThroughFields() {
+		return addPassThroughFields;
+	}
+
+	public void setAddPassThroughFields(boolean addPassThroughFields) {
+		this.addPassThroughFields = addPassThroughFields;
+	}
+
 	/**
 	 * Sets the button text.
 	 * 

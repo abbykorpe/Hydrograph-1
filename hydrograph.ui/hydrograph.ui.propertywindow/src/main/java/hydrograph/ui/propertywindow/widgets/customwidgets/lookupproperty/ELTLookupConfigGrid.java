@@ -17,10 +17,12 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 import java.util.List;
 import java.util.Map;
@@ -70,7 +72,7 @@ public class ELTLookupConfigGrid extends Dialog {
 	
 	private static final String IN_PORT0= "in0";
 	private static final String IN_PORT1="in1";
-	
+	 private List<List<FilterProperties>> sourceFieldList;
 	/**
 	 * Create the dialog.
 	 * 
@@ -214,7 +216,9 @@ public class ELTLookupConfigGrid extends Dialog {
 
 		return text;
 	}
-
+	public void setSourceFieldList(List<List<FilterProperties>> sourceFieldList) {
+		this.sourceFieldList = sourceFieldList;
+	}
 	public Label labelWidget(Composite parent, int style, int[] bounds, String value) {
 		Label label = new Label(parent, style);
 		label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
@@ -250,9 +254,12 @@ public class ELTLookupConfigGrid extends Dialog {
 	
 
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
+		String teminalNumber=socketId.substring(socketId.length()-1);
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
-		fieldDialog.setSourceFieldsFromPropagatedSchema(propagatedFiledNames.get(StringUtils.lowerCase(socketId)));
+		if(!sourceFieldList.isEmpty())
+		fieldDialog.setSourceFieldsFromPropagatedSchema(SchemaSyncUtility.INSTANCE.
+				converterFilterPropertyListToStringList(sourceFieldList.get(Integer.parseInt(teminalNumber))));
 		fieldDialog.setComponentName(Constants.LOOKUP_KEYS_WINDOW_TITLE);
 		fieldDialog.open();
 		return fieldDialog.getResultAsCommaSeprated();

@@ -16,22 +16,26 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
+import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinConfigGrid;
+import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.JoinMapGrid;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -104,6 +108,17 @@ public class ELTJoinWidget extends AbstractWidget {
 			public void widgetSelected(SelectionEvent e) {
 				ELTJoinConfigGrid eltJoinConfigGrid = new ELTJoinConfigGrid(((Button) eltDefaultButton
 						.getSWTWidgetControl()).getShell(), propertyDialogButtonBar, configProperty,getComponent());
+				ELTJoinMapWidget  joinMapWidget = null;
+				for(AbstractWidget abstractWidget:widgets)
+				{
+					if(abstractWidget instanceof ELTJoinMapWidget)
+					{
+						joinMapWidget=(ELTJoinMapWidget)abstractWidget;
+						break;
+					}
+				}
+				JoinMappingGrid joinMappingGrid=(JoinMappingGrid)joinMapWidget.getProperties().get("join_mapping");
+				eltJoinConfigGrid.setSourceFieldList(joinMappingGrid.getLookupInputProperties());
 				eltJoinConfigGrid.setPropagatedFieldProperty(SchemaPropagationHelper.INSTANCE
 						.getFieldsForFilterWidget(getComponent()));
 				eltJoinConfigGrid.open();

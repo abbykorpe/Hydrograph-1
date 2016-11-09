@@ -17,14 +17,20 @@ import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.WordUtils;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
+import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
+import hydrograph.ui.datastructure.property.LookupMappingGrid;
+import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.mapping.InputField;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +44,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -47,6 +54,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.omg.CORBA.NamedValue;
 import org.slf4j.Logger;
 /**
  * 
@@ -86,9 +94,13 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	private static final String SCHEMA="schema";
 	private static final String EXTERNAL_SCHEMA_PATH="External schema path : ";
 	private static final String IN_PORT_COUNT="inPortCount|unusedPortCount";
-	
+	private static final String OPERATION="operation";
+	private static final String JOIN_MAPPING="join_mapping";
+	private static final String LOOKUP_MAPPING="hash_join_map";
 	private static final String ISSUE_PROPERTY_NAME="Other Issues";
-	
+	private TransformMapping transformMapping;
+	private JoinMappingGrid joinMappingGrid;
+	private LookupMappingGrid lookupMappingGrid;
 	/**
 	 * 
 	 * create tooltip with toolbar
@@ -162,6 +174,32 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	private void addToolTipContents(final Composite container) {
 		for(String property: componentToolTipInformation.keySet()){
 			PropertyToolTipInformation propertyInfo = componentToolTipInformation.get(property);
+			  if(OPERATION.equalsIgnoreCase(propertyInfo.getPropertyName()))
+			    {
+			    if(propertyInfo.getPropertyValue()==null)
+			    {	
+			    transformMapping=new TransformMapping();	
+			    propertyInfo.setPropertyValue(transformMapping);
+			    }
+			    }
+			  else  if(JOIN_MAPPING.equalsIgnoreCase(propertyInfo.getPropertyName()))
+			  {
+				  if(propertyInfo.getPropertyValue()==null)
+				    {	
+					  joinMappingGrid=new JoinMappingGrid();	
+				    propertyInfo.setPropertyValue(joinMappingGrid);
+				    }
+				  
+			  }	 
+			  else  if(LOOKUP_MAPPING.equalsIgnoreCase(propertyInfo.getPropertyName()))
+			  {
+				  if(propertyInfo.getPropertyValue()==null)
+				    {	
+					  lookupMappingGrid=new LookupMappingGrid();	
+				    propertyInfo.setPropertyValue(lookupMappingGrid);
+				    }
+				  
+			  }	 
 			if(propertyInfo.isShowAsTooltip()){
 					addPropertyInformationToToolTip(container, propertyInfo);
 			}
@@ -181,6 +219,23 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 			logger.debug("ComponentTooltip.addToolTipContents(): Its Opeartion class");
 			addOperationClassPropertyToToolTip(container, propertyInfo);
 		}
+		    else if(OPERATION.equalsIgnoreCase(propertyInfo.getPropertyName()))
+		    {
+		     transformMapping=(TransformMapping)propertyInfo.getPropertyValue();
+	         addlinkToAddPassThroughFieldsInMappingWindow(container,propertyInfo);		
+		    }	
+		    else if(JOIN_MAPPING.equalsIgnoreCase(propertyInfo.getPropertyName()))
+		    {
+		    	joinMappingGrid=(JoinMappingGrid)propertyInfo.getPropertyValue();
+		    	addlinkToAddPassThroughFieldsInMappingWindow(container,propertyInfo);		
+		    	
+		    }
+		    else if(LOOKUP_MAPPING.equalsIgnoreCase(propertyInfo.getPropertyName()))
+		    {
+		    	lookupMappingGrid=(LookupMappingGrid)propertyInfo.getPropertyValue();
+		    	addlinkToAddPassThroughFieldsInMappingWindow(container,propertyInfo);		
+		    	
+		    }
 			else if (JOIN_CONFIG.equalsIgnoreCase(propertyInfo.getPropertyName())) {
 				int joinKeyIndex = 0, recordRequiredIndex = 0;
 				if (propertyInfo.getPropertyValue() != null
@@ -220,6 +275,38 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 				addPropertyToToolTip(container, propertyInfo);
 			}
 		}
+		
+	}
+
+	private void addlinkToAddPassThroughFieldsInMappingWindow(final Composite container,
+			final PropertyToolTipInformation propertyInfo) {
+		String propertyNameCapitalized = getCapitalizedName(propertyInfo);
+		Link link = new Link(container, SWT.NONE);
+		String tempText= propertyNameCapitalized+" : <a>" + "Add fields as Passthrough fields"+ "</a>";		
+		link.setText(tempText);
+		link.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+		link.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			if(OPERATION.equalsIgnoreCase(propertyInfo.getPropertyName()))
+		     transformMapping.setAddPassThroughFields(true);
+			else if(JOIN_MAPPING.equalsIgnoreCase(propertyInfo.getPropertyName()))
+			{
+				joinMappingGrid.setAddPassThroughFields(true);
+			}
+			else if(LOOKUP_MAPPING.equalsIgnoreCase(propertyInfo.getPropertyName()))
+			{
+				lookupMappingGrid.setAddPassThroughFields(true);
+			}	
+				
+		     }
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+		});
 	}
 
 	private Label setExternalSchemaInTooltip(final Composite container, String externalSchemaPath) {
@@ -315,7 +402,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 		
 		return link;
 	}
-
+   
 	/**
 	 * Add listener to open operation class file
 	 * 

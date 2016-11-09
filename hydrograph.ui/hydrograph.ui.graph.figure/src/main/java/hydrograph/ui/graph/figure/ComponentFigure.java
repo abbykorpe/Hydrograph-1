@@ -19,9 +19,12 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.ComponentExecutionStatus;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Component.ValidityStatus;
 import hydrograph.ui.graph.model.PortAlignmentEnum;
 import hydrograph.ui.graph.model.PortDetails;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 
@@ -86,8 +89,8 @@ public class ComponentFigure extends Figure implements Validator {
 	private int componentLabelMargin;
 
 	private String canvasIconPath;
-	private Image canvasIcon, statusImage, compStatusImage;
-
+	private Image canvasIcon, statusImage, compStatusImage,schemaPropogationStopImage;
+    private Component component;
 	private String propertyStatus;
 
 	private Map<String, PropertyToolTipInformation> propertyToolTipInformation;
@@ -118,7 +121,7 @@ public class ComponentFigure extends Figure implements Validator {
 	 * 			  the properties of components
 	 */
 	
-		public ComponentFigure(List<PortDetails> portDetails, String cIconPath, String label, String acronym,
+		public ComponentFigure(Component component, String cIconPath, String label, String acronym,
 				LinkedHashMap<String, Object> properties) {
 		this.canvasIconPath = XMLConfigUtil.CONFIG_FILES_PATH + cIconPath;
 		this.acronym = acronym;
@@ -138,7 +141,7 @@ public class ComponentFigure extends Figure implements Validator {
 		}
 
 		canvasIcon = new Image(null, canvasIconPath);
-
+		this.component=component;
 		connectionAnchors = new HashMap<String, FixedConnectionAnchor>();
 		inputConnectionAnchors = new ArrayList<FixedConnectionAnchor>();
 		outputConnectionAnchors = new ArrayList<FixedConnectionAnchor>();
@@ -146,7 +149,7 @@ public class ComponentFigure extends Figure implements Validator {
 		setInitialColor();
 		setComponentColorAndBorder();
 
-		for (PortDetails pDetail : portDetails) {
+		for (PortDetails pDetail : component.getPortDetails()) {
 			setPortCount(pDetail);
 			setHeight(totalPortsAtLeftSide, totalPortsAtRightSide);
 			setWidth(totalPortsAtBottonSide);
@@ -168,7 +171,7 @@ public class ComponentFigure extends Figure implements Validator {
 		else
 			return null;
 	}
-
+   
 	private void setInitialColor() {
 		componentColor = new Color(null, ELTColorConstants.LIGHT_GREY_RGB[0], ELTColorConstants.LIGHT_GREY_RGB[1], ELTColorConstants.LIGHT_GREY_RGB[2]);
 		borderColor = new Color(null, ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
@@ -326,9 +329,22 @@ public class ComponentFigure extends Figure implements Validator {
 
 		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
 		drawPropertyStatus(graphics);
-
+		if((StringUtils.equalsIgnoreCase(component.getCategory(), "TRANSFORM")
+			&& component.isContinuousSchemaPropogationAllow()
+			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), "filter")
+			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), "uniquesequence"))
+			 )
+		{
+		 drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+		}
+		else if(component.isContinuousSchemaPropogationAllow() &&component instanceof SubjobComponent)
+		{
+			boolean isTransformComponentPresent=checkIfSubJobHasTransformComponent(component);
+			if(isTransformComponentPresent)
+			drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+		}	
 		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
-
+       
 		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.BATCH)) != null) {
 			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))).length() > 2)
 				graphics.drawText(
@@ -341,6 +357,32 @@ public class ComponentFigure extends Figure implements Validator {
 		}
 		
 		trackExecution(graphics);
+	}
+
+	private boolean checkIfSubJobHasTransformComponent(Component component) {
+		boolean containsTransformComponent=false;
+		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
+		for(Object object:container.getChildren())
+		{
+			if(object instanceof Component)
+			{
+			Component component1=(Component)object;	
+			if((StringUtils.equalsIgnoreCase(component1.getCategory(), "TRANSFORM")
+					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "filter")
+					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "uniquesequence"))
+					 )
+			{
+				containsTransformComponent=true;
+			    break;
+			}
+			else if(component1 instanceof SubjobComponent)
+			{
+				
+				containsTransformComponent=checkIfSubJobHasTransformComponent(component1);
+			}
+			}
+		}
+		return containsTransformComponent;
 	}
 
 	private void trackExecution(Graphics graphics) {
@@ -397,6 +439,18 @@ public class ComponentFigure extends Figure implements Validator {
 		if (statusImage != null && !statusImage.isDisposed()) {
 			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
 		}
+	}
+	
+	
+	/**
+	 * @param Draw the schema Propogation status image to left top corner of the component 
+	 */
+	private void drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(Graphics graphics)
+	{
+		Rectangle rectangle=getBounds().getCopy();
+		
+		schemaPropogationStopImage=new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.SCHEMA_PROPOGATION_STOP_ICON);
+		graphics.drawImage(schemaPropogationStopImage, new Point(rectangle.width - 90, 8 + componentLabelMargin));
 	}
 	
 	/**

@@ -54,21 +54,7 @@ public class JoinMappingValidationRule implements IValidator{
 		if(joinMappingGrid.isSelected() && joinMappingGrid.getButtonText()!=null){
 			return true;
 		}
-		
-		List<List<FilterProperties>> lookupInputProperties =  new ArrayList<List<FilterProperties>>();
-		
-		for(Entry< String,List<FixedWidthGridRow>> inputRow :inputSchemaMap.entrySet()){
-			List<FilterProperties> filterPropertiesList = new ArrayList<FilterProperties>(); 
-			
-			for(FixedWidthGridRow row : inputRow.getValue()){
-				FilterProperties filterProperties = new FilterProperties();
-				filterProperties.setPropertyname(row.getFieldName());
-				filterPropertiesList.add(filterProperties);
-			} 
-			lookupInputProperties.add(filterPropertiesList);
-		}
-		
-		
+		List<List<FilterProperties>> lookupInputProperties = joinMappingGrid.getLookupInputProperties();
 		
 		List<LookupMapProperty> lookupMapProperties = joinMappingGrid.getLookupMapProperties();
 		if(lookupInputProperties == null || 

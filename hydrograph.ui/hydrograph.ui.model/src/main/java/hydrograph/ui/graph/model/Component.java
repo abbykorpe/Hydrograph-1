@@ -252,6 +252,8 @@ public abstract class Component extends Model {
 	@XStreamOmitField
 	private ComponentExecutionStatus status;
 	
+	
+	private boolean isContinuousSchemaPropogationAllow;
 	/**
 	 * Instantiates a new component.
 	 */
@@ -1642,6 +1644,15 @@ public abstract class Component extends Model {
 	 */
 	public ComponentExecutionStatus getStatus() {
 		return status;
+	}
+
+	
+	public boolean isContinuousSchemaPropogationAllow() {
+		return isContinuousSchemaPropogationAllow;
+	}
+
+	public void setContinuousSchemaPropogationAllow(boolean isContinuousSchemaPropogationAllow) {
+		this.isContinuousSchemaPropogationAllow = isContinuousSchemaPropogationAllow;
 	}
 
 	/**

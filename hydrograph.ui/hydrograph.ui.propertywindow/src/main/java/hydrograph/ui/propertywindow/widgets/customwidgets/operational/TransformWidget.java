@@ -86,7 +86,6 @@ public class TransformWidget extends AbstractWidget {
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties, propertyDialogButtonBar);
-
 		this.transformMapping = (TransformMapping) componentConfigrationProperty.getPropertyValue();
 		if (transformMapping == null) {
 			transformMapping = new TransformMapping();
@@ -110,23 +109,29 @@ public class TransformWidget extends AbstractWidget {
 		transformComposite.attachWidget(defaultLable1);
 
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
-
+			
+		 TransformMapping transformMappingPopulatedFromTooTipAction=
+        		 (TransformMapping) getComponent().getTooltipInformation().get("operation").getPropertyValue();
+		 if(transformMappingPopulatedFromTooTipAction!=null)
+		 transformMapping.setAddPassThroughFields(transformMappingPopulatedFromTooTipAction.isAddPassThroughFields());
+		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
+		if(getComponent().isContinuousSchemaPropogationAllow())
 		getPropagatedSChema();
+		if(transformMapping.isAddPassThroughFields())
+		addPassThroughFields();
+		
 		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), outputList);
 		populateMappingOutputFieldIfTargetXmlImported();
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
-				getPropagatedSChema();
-
+                
 				TransformMapping oldATMappings = (TransformMapping) transformMapping.clone();
-
-				TransformDialog transformDialog=new TransformDialog(Display.getCurrent().getActiveShell(),getComponent(),widgetConfig,transformMapping);
 				
+				TransformDialog transformDialog=new TransformDialog(Display.getCurrent().getActiveShell(),getComponent(),widgetConfig,transformMapping);
 				int returncode=transformDialog.open();
 				outputList.clear();
                 outputList = transformDialog.getFinalSortedList();
@@ -159,7 +164,27 @@ public class TransformWidget extends AbstractWidget {
 		});
 		propagateOuputFieldsToSchemaTabFromTransformWidget();
 	}
-
+  
+	private void addPassThroughFields()
+	{
+		List<InputField> inputFieldList=transformMapping.getInputFields();	
+		for(InputField inputField:inputFieldList)
+		{
+			NameValueProperty nameValueProperty=new NameValueProperty();
+			nameValueProperty.setPropertyName(inputField.getFieldName());
+			nameValueProperty.setPropertyValue(inputField.getFieldName());
+			nameValueProperty.getFilterProperty().setPropertyname(inputField.getFieldName());
+			
+			if(!transformMapping.getMapAndPassthroughField().contains(nameValueProperty))
+			{
+			transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());	
+			transformMapping.getMapAndPassthroughField().add(nameValueProperty);
+			}
+		
+	     }
+	   transformMapping.setAddPassThroughFields(false);
+	}
+	
 	private void populateMappingOutputFieldIfTargetXmlImported() {
 		if(!transformMapping.getMappingSheetRows().isEmpty())
 		{

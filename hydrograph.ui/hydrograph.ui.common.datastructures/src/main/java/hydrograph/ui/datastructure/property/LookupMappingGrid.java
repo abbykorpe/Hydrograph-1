@@ -27,6 +27,7 @@ import java.util.List;
  * @author Bitwise
  */
 public class LookupMappingGrid  implements IDataStructure{
+	private boolean addPassThroughFields;
 	private List<List<FilterProperties>> lookupInputProperties;   //left side
 	private List<List<FilterProperties>> clonedLookupInputProperties; 
 	private List<FilterProperties> clonedInnerLookupInputProperties;
@@ -72,6 +73,20 @@ public class LookupMappingGrid  implements IDataStructure{
 		return lookupInputProperties;
 	}
 	
+	/**
+	 * @return true if automatic passthrough fields needs to add
+	 */
+	public boolean isAddPassThroughFields() {
+		return addPassThroughFields;
+	}
+
+	/**
+	 * @param set flag for adding automatic passthrough fields
+	 */
+	public void setAddPassThroughFields(boolean addPassThroughFields) {
+		this.addPassThroughFields = addPassThroughFields;
+	}
+
 	/**
 	 * Sets the lookup input properties.
 	 * 

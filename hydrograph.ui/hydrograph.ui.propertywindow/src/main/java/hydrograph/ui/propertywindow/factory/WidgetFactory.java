@@ -42,6 +42,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidge
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveInputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveOutputSingleColumnWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.PropogateWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
@@ -129,8 +130,8 @@ public class WidgetFactory {
 		HASH_JOIN_WIDGET(ELTLookupConfigWidget.class),
 		HASH_JOIN_MAPPING_WIDGET(ELTLookupMapWidget.class),
 		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class),
-		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class);
-		
+		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class),
+		PROPOGATE_WIDGET(PropogateWidget.class);
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
 		

@@ -15,6 +15,8 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.mapping.InputField;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -25,6 +27,7 @@ import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationH
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
@@ -151,6 +154,27 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 	}
 
 	private List<String> getPropagatedSchema() {
+		if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"Aggregate")
+				 ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"Cumulate")		)
+				{
+					TransformWidget transformWidget = null;
+					for(AbstractWidget abstractWidget:widgets)
+					{
+						if(abstractWidget instanceof TransformWidget)
+						{
+							transformWidget=(TransformWidget)abstractWidget;
+							break;
+						}
+					}		
+					
+				List<String> propogatedFields=new ArrayList<>();	
+				TransformMapping transformMapping=(TransformMapping) transformWidget.getProperties().get("operation");
+			    for(InputField inputField:transformMapping.getInputFields())
+			    {
+			    	propogatedFields.add(inputField.getFieldName());
+			    }
+			    return propogatedFields;
+				}
 		return SchemaPropagationHelper.INSTANCE.getFieldsForFilterWidget(getComponent()).get(
 				Constants.INPUT_SOCKET_TYPE + 0);
 	}

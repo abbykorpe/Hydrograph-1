@@ -600,10 +600,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 @Override
 	 public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
-		 if(transformSchemaType){
-			 createButtonComposite(container.getContainerControl());
+		 if((StringUtils.equalsIgnoreCase(getComponent().getCategory(), "STRAIGHTPULL"))
+				|| (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "filter")
+				|| (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "uniquesequence")))
+				 ){
 			 createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
 		 }
+		 else if(transformSchemaType)
+		 {
+			 createButtonComposite(container.getContainerControl());
+			 createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
+		 }	 
 		 else{
 
 			 createButtonComposite(container.getContainerControl());
@@ -1287,7 +1294,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 gl_composite_2.marginHeight = 0;
 		 gl_composite_2.horizontalSpacing = 0;
 		 tableComposite.setLayout(gl_composite_2);
-
+		
 		 tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				 1, 1));
 
@@ -1315,11 +1322,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 for (int columnIndex = 0, n = table.getColumnCount(); columnIndex < n; columnIndex++) {
 			 table.getColumn(columnIndex).pack();
 			 table.getColumn(columnIndex).setWidth(COLUMN_WIDTH);
-
 		 }
 		 editors = gridWidgetBuilder.createCellEditorList(table, columns);
 		 tableViewer.setCellEditors(editors);
-
+         
 		 // enables the tab functionality
 		 TableViewerEditor.create(tableViewer,
 				 new ColumnViewerEditorActivationStrategy(tableViewer),
@@ -1328,15 +1334,28 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
 				 | ColumnViewerEditor.TABBING_VERTICAL);
 
-
+		 if(StringUtils.equalsIgnoreCase(getComponent().getCategory(), "STRAIGHTPULL")
+				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "filter")
+				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "uniquesequence"))))
+		 
+		 {	
+			 //table.setEnabled(false);
+			 for(CellEditor cellEditor:editors)
+			 {
+				 tableViewerComposite.setToolTipText("Non-editable");
+				 cellEditor.getControl().setEnabled(false);
+			 }
+		} 
 		 helper = getListenerHelper();
 
 		 // Adding the decorator to show error message when field name same.
 		 setDecorator();
 
 		 addValidators();
+		 if(addButton!=null)
+		 {
 		 try {
-
+			 
 			 eltTable.attachListener(
 					 ListenerFactory.Listners.GRID_MOUSE_DOUBLE_CLICK
 					 .getListener(), propertyDialogButtonBar, helper,
@@ -1383,17 +1402,19 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 addShortcutKeyListener(editor.getControl());
 			 }
 			 addShortcutKeyListener(table);
-
+		 
+		 
 		 } catch (Exception e) {
 			 logger.error(Messages.ATTACH_LISTENER_ERROR, e);
 			 throw new RuntimeException(Messages.ATTACH_LISTENER_ERROR);
+		 
 		 }
 
 		 gridListener(editors);
 		 upButton.setEnabled(false);
 		 downButton.setEnabled(false);
 		 deleteButton.setEnabled(false);
-
+		 }
 		 TableViewerEditor.create(tableViewer, new ColumnViewerEditorActivationStrategy(tableViewer),
 				 ColumnViewerEditor.KEYBOARD_ACTIVATION
 				 | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
@@ -1423,7 +1444,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 }
 			 }
 		 });
-
+		 
 		 populateWidget();
 
 		 arrangeTableViewerColumns();
@@ -1636,6 +1657,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 }
 			 }
 		 }
+		 showHideErrorSymbol(isWidgetValid());
 		 SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(null, null,table,componentType);
 	 }
 
@@ -1648,6 +1670,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 }
 
 	 public void enableDisableButtons(int size) {
+		 if(deleteButton!=null)
+		 {	 
 		 if (size >= 1) {
 			 deleteButton.setEnabled(true);
 		 } else {
@@ -1659,6 +1683,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 } else {
 			 upButton.setEnabled(false);
 			 downButton.setEnabled(false);
+		 }
 		 }
 	 }
 
@@ -1715,7 +1740,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 });
 
 		 }
-
+if(deleteButton!=null)
+{	
 		 ((Button)deleteButton.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
 			 @Override
 			 public void widgetSelected(SelectionEvent e) {/*Do-Nothing*/}
@@ -1735,7 +1761,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 public void widgetSelected(SelectionEvent e) {
 			 }
 		 });
-
+}
 	 }
 
 	 protected boolean applySchemaValidationRule() {
@@ -1779,7 +1805,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 }
 
 
-	 public Table getTable() {
+	 public TableViewer getTableViewer() {
+		return tableViewer;
+	}
+
+	public Table getTable() {
 		 return table;
 	 }
 
