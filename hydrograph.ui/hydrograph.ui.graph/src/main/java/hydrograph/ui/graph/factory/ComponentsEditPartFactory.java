@@ -14,6 +14,10 @@
  
 package hydrograph.ui.graph.factory;
 
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartFactory;
+import org.slf4j.Logger;
+
 import hydrograph.ui.graph.controller.CommentBoxEditPart;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.ComponentLabelEditPart;
@@ -27,10 +31,6 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartFactory;
-import org.slf4j.Logger;
 
 
 /**

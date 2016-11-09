@@ -14,18 +14,6 @@
  
 package hydrograph.ui.engine.util;
 
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.engine.jaxb.main.ObjectFactory;
-import hydrograph.ui.engine.converter.Converter;
-import hydrograph.ui.engine.converter.ConverterFactory;
-import hydrograph.ui.engine.xpath.ComponentXpath;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +33,18 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.slf4j.Logger;
+
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.main.Graph;
+import hydrograph.engine.jaxb.main.ObjectFactory;
+import hydrograph.ui.engine.converter.Converter;
+import hydrograph.ui.engine.converter.ConverterFactory;
+import hydrograph.ui.engine.xpath.ComponentXpath;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 
@@ -85,14 +84,7 @@ public class ConverterUtil {
 			Graph graph = new ObjectFactory().createGraph();
 			graph.setUniqueJobId(container.getUniqueJobId());
 			graph.setName(getGraphName(outPutFile,externalOutputFile));
-			List<Object> obj = container.getChildren();
-			List<Component> children = new ArrayList<>();
-			for(Object object:obj){
-				if(object instanceof Component){
-				Component component = (Component)object;
-				children.add(component);
-				}
-			}
+			List<Component> children = container.getUIComponentList();
 			if(children != null && !children.isEmpty()){
 				for (Component component : children) {
 					Converter converter = ConverterFactory.INSTANCE.getConverter(component); 

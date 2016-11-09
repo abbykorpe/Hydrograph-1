@@ -364,14 +364,10 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	}
 
 	private void refreshComponentStatusOfAllComponent() {
-		for(Object object:getCastedModel().getParent().getChildren()){
-			Component component=null;
-			if(object instanceof Component){
-				component = (Component) object;
+		for(Component component:getCastedModel().getParent().getUIComponentList()){
 				if(component != null){
 			((ComponentEditPart)component.getComponentEditPart()).updateComponentStatus();
 			  }
-		    }
 		}
 	}
 

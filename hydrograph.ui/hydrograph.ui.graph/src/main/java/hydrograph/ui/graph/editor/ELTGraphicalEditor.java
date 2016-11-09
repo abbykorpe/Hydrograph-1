@@ -1642,16 +1642,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		hydrograph.ui.graph.model.Component oldSubjob=null;
 		if (container!=null && container.isCurrentGraphSubjob()) {
 
-			for (int i = 0; i < container.getChildren().size(); i++) {
-				Object obj = container.getChildren().get(i);
-				if(obj instanceof Component){
-					hydrograph.ui.graph.model.Component component = (hydrograph.ui.graph.model.Component) obj;
+			for (int i = 0; i < container.getUIComponentList().size(); i++) {
+				hydrograph.ui.graph.model.Component component = container.getUIComponentList().get(i);
 				if (Constants.INPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())) {
 					component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, new HashMap<>());
 				}
 				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())) {
 					oldSubjob=(hydrograph.ui.graph.model.Component) component.getProperties().put(Constants.SUBJOB_COMPONENT, null);
-				}
 			 }
 			}
 			return container;
@@ -1662,7 +1659,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private void updateMainGraphOnSavingSubjob() {
 		hydrograph.ui.graph.model.Component subjobComponent=null;
 		if (container != null && container.getLinkedMainGraphPath()!=null) {
-			for (int i = 0; i < container.getChildren().size(); i++) {
+			for (int i = 0; i < container.getUIComponentList().size(); i++) {
 				subjobComponent = ((ComponentEditPart)(container.getSubjobComponentEditPart())).getCastedModel();
 					break;
 			}

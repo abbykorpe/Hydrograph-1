@@ -160,14 +160,10 @@ public class SubJobAction extends SelectionAction{
 		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container containerOld=editor.getContainer(); 
 		String validityStatus = null;
-			for (int i = 0; i < containerOld.getChildren().size(); i++) {
-				if (!(containerOld.getChildren().get(i) instanceof InputSubjobComponent || containerOld.getChildren()
+			for (int i = 0; i < containerOld.getUIComponentList().size(); i++) {
+				if (!(containerOld.getUIComponentList().get(i) instanceof InputSubjobComponent || containerOld.getUIComponentList()
 						.get(i) instanceof OutputSubjobComponent)) {
-					Object object = containerOld.getChildren().get(i);
-					Component component=null;
-					if(object instanceof Component){
-						component = (Component) object;
-					}
+					Component component = containerOld.getUIComponentList().get(i);
 					if (component.getProperties().get(Constants.VALIDITY_STATUS) != null
 							&& ((StringUtils.equalsIgnoreCase(ValidityStatus.ERROR.name(), component.getProperties().get(Constants.VALIDITY_STATUS).toString()))
 							|| StringUtils.equalsIgnoreCase(ValidityStatus.WARN.name(),
