@@ -53,7 +53,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.ConnectionLayer;
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.ViewportAwareConnectionLayerClippingStrategy;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;

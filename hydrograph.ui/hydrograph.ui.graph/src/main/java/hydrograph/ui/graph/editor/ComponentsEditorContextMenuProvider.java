@@ -14,12 +14,6 @@ package hydrograph.ui.graph.editor;
 
 
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.action.debug.ViewDataActionMenu;
-import hydrograph.ui.graph.action.debug.WatcherMenuAction;
-import hydrograph.ui.graph.action.subjob.SubMenuAction;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.utility.SubJobUtility;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
@@ -30,6 +24,13 @@ import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.actions.ActionFactory;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.action.debug.ViewDataActionMenu;
+import hydrograph.ui.graph.action.debug.WatcherMenuAction;
+import hydrograph.ui.graph.action.subjob.SubMenuAction;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.utility.SubJobUtility;
 
 
 
@@ -105,7 +106,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subJobMenu);
-	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction("Add"));
+	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.COMMENT_BOX));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.GRAPH_PROPERTY));
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
 		//menu.appendToGroup(GEFActionConstants.GROUP_REST, actionWatchRecords);

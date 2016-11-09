@@ -30,7 +30,12 @@ final public class CommentBoxCellEditorLocator
 {
 
 private CommentBoxFigure comment;
-
+/**
+ * Instantiates a new CommentBoxCellEditorLocator.
+ * 
+ * @param comment
+ *            the comment
+*/
 public CommentBoxCellEditorLocator(CommentBoxFigure comment) {
 	setLabel(comment);
 }
@@ -50,15 +55,16 @@ public void relocate(CellEditor celleditor) {
 }
 
 /**
- * Returns the stickyNote figure.
+ * Returns the comment box figure.
+ * @return commentBoxFigure
  */
 protected CommentBoxFigure getLabel() {
 	return comment;
 }
 
 /**
- * Sets the Sticky note figure.
- * @param stickyNote The stickyNote to set
+ * Sets the comment box figure.
+ * @param comment box The comment box to set
  */
 protected void setLabel(CommentBoxFigure comment) {
 	this.comment = comment;

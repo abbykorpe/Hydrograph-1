@@ -14,12 +14,6 @@
  
 package hydrograph.ui.graph.action;
 
-import hydrograph.ui.graph.command.ComponentCopyCommand;
-import hydrograph.ui.graph.controller.CommentBoxEditPart;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.model.CommentBox;
-import hydrograph.ui.graph.model.Component;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,8 +26,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import hydrograph.ui.graph.command.ComponentCopyCommand;
+import hydrograph.ui.graph.controller.CommentBoxEditPart;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.model.CommentBox;
+import hydrograph.ui.graph.model.Component;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class CopyAction.
  */

@@ -13,22 +13,36 @@
 package hydrograph.ui.graph.command;
 
 
+import org.eclipse.gef.commands.Command;
+
 import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.model.Container;
 
-import org.eclipse.gef.commands.Command;
-
-
+/**
+ * implementation of CommentBoxCommand
+ *
+ *@author BITWISE
+ */
 public class CommentBoxCommand extends Command
 {
 	private  Container parent;
 	private String newName, oldName;
 	private CommentBox comment;
 
-	public CommentBoxCommand(CommentBox comment, String s, Container parent){
+	/**
+	 * Instantiates a new CommentBoxCommand.
+	 * 
+	 * @param comment
+	 *            the comment
+	 * @param label
+	 *            the label
+	 * @param parent
+	 * 			the parent
+	 */
+	public CommentBoxCommand(CommentBox comment, String label, Container parent){
 		this.comment = comment;
-		if (s != null)
-			newName = s;
+		if (label != null)
+			newName = label;
 		else
 			newName = ""; 
 		

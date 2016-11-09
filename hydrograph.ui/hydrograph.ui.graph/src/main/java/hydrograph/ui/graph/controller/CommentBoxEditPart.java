@@ -43,7 +43,14 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 
 {
 	private AccessibleEditPart acc;
-	
+	private String LABEL_CONTENTS = "labelContents";
+	private String SIZE = "Size";
+	private String LOCATION = "Location";
+	private String LABEL = "Label";
+	/**
+	 * Upon activation, attach to the model element as a property change
+	 * listener.
+	 */
 	@Override
 	public void activate() {
 		if (!isActive()) {
@@ -69,12 +76,12 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	
 	protected AccessibleEditPart createAccessible(){
 		return new AccessibleGraphicalEditPart(){
-			public void getValue(AccessibleControlEvent e) {
+			public void getValue(AccessibleControlEvent e){
 				e.result = getLabel().getLabelContents();
 			}
 
 			public void getName(AccessibleEvent e) {
-				e.result = "Label";
+				e.result = LABEL;
 			}
 		};
 	}
@@ -82,7 +89,6 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	@Override
 	protected void createEditPolicies(){
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new CommentBoxDirectEditPolicy());
-		//installEditPolicy(EditPolicy.COMPONENT_ROLE,new LabelEditPolicy()); 
 	}
 
 	@Override
@@ -97,28 +103,31 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 		}
 		return label;
 	}
-
+	/**
+	 * returns the model of comment box
+	 * @return CommentBox
+	 */
 	private CommentBox getLabel(){
 		return (CommentBox)getModel();
 	}
 
+	/**
+	 * return figure
+	 * @return figure
+	 */	
 	public IFigure getCommentBoxFigure(){
 		return (CommentBoxFigure)getFigure();
 	}
 	
+	/**
+	 * enable the comment box for editing
+	 *
+	 */	
 	private void performDirectEdit(){
 		new CommentBoxLabelEditManager(this,
 				new CommentBoxCellEditorLocator((CommentBoxFigure)getFigure())).show();
 	}
 
-	/*private Point resetLocation(int x , int y){
-		if ((x <= 135 && y <= -53) || (x <= 154 && y <= -30 )){
-			x = 0;
-			y = 0;
-		}
-		return new Point(x,y);
-	}*/
-	
 	@Override
 	public void performRequest(Request request){
 		//if (request.getType() == RequestConstants.REQ_DIRECT_EDIT)
@@ -128,10 +137,10 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	@Override
 	public void propertyChange(PropertyChangeEvent evt){
 		String prop = evt.getPropertyName();
-		if (StringUtils.equalsIgnoreCase(prop, "labelContents")){
+		if (StringUtils.equalsIgnoreCase(prop, LABEL_CONTENTS)){
 			 refreshVisuals();
 		  }
-		else if (StringUtils.equalsIgnoreCase(prop, "Size") || StringUtils.equalsIgnoreCase(prop, "Location")){
+		else if (StringUtils.equalsIgnoreCase(prop, SIZE) || StringUtils.equalsIgnoreCase(prop, LOCATION)){
 			Point loc = getLabel().getLocation();
 			Dimension size = getLabel().getSize();
 			Rectangle r = new Rectangle(loc ,size);

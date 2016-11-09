@@ -26,7 +26,6 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ComponentCutCommand represents Cut command for Component.
  * 

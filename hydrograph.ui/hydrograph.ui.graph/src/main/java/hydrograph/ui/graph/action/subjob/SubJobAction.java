@@ -14,24 +14,6 @@
  
 package hydrograph.ui.graph.action.subjob;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.action.ContributionItemManager;
-import hydrograph.ui.graph.action.PasteAction;
-import hydrograph.ui.graph.command.ComponentCreateCommand;
-import hydrograph.ui.graph.command.SubJobCommand;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Component.ValidityStatus;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.LinkComparatorBySourceLocation;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
-import hydrograph.ui.graph.model.components.OutputSubjobComponent;
-import hydrograph.ui.graph.model.components.SubjobComponent;
-import hydrograph.ui.graph.utility.SubJobUtility;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -53,6 +35,23 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.action.PasteAction;
+import hydrograph.ui.graph.command.ComponentCreateCommand;
+import hydrograph.ui.graph.command.SubJobCommand;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Component.ValidityStatus;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.LinkComparatorBySourceLocation;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
+import hydrograph.ui.graph.model.components.SubjobComponent;
+import hydrograph.ui.graph.utility.SubJobUtility;
 /**
  * The Class SubJobAction use to create sub graph.
  * 

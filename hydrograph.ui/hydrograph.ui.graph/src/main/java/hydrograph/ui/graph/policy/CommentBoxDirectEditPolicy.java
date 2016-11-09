@@ -32,9 +32,13 @@ import hydrograph.ui.graph.model.CommentBox;
 public class CommentBoxDirectEditPolicy 
 	extends DirectEditPolicy {
 
-/**
- * @see DirectEditPolicy#getDirectEditCommand(DirectEditRequest)
- */
+	/**
+	 * Returns the Command to perform the direct edit.
+	 * 
+	 * @param request
+	 *            the DirectEditRequest
+	 * @return the command to perform the direct edit
+	 */
 protected Command getDirectEditCommand(DirectEditRequest edit){
 	String labelText = (String)edit.getCellEditor().getValue();
 	CommentBoxEditPart label = (CommentBoxEditPart)getHost();
@@ -43,7 +47,13 @@ protected Command getDirectEditCommand(DirectEditRequest edit){
 }
 
 /**
- * @see DirectEditPolicy#showCurrentEditValue(DirectEditRequest)
+ * Override to show the current direct edit value in the host's Figure.
+ * Although the CellEditor will probably cover the figure's display of this
+ * value, updating the figure will cause its preferred size to reflect the
+ * new value.
+ * 
+ * @param request
+ *            the DirectEditRequest
  */
 protected void showCurrentEditValue(DirectEditRequest request){
 	String value = (String)request.getCellEditor().getValue();

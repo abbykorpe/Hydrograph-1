@@ -56,7 +56,10 @@ public int getCornerSize() {
 }
 
 /**
- * @see org.eclipse.draw2d.Figure#paintFigure(org.eclipse.draw2d.Graphics)
+ * Paints this Figure's primary representation, or background. Changes made
+ *to the graphics to the graphics current state will not affect the
+ * @param graphics
+ * 					The Graphics used to paint
  */
 protected void paintFigure(Graphics graphics) {
 	Rectangle rect = getBounds().getCopy();

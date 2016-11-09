@@ -48,7 +48,11 @@ protected IFigure createDragSourceFeedbackFigure(){
 	addFeedback(figure);
 	return figure;
 }
-
+/**
+ * Returns the CustomFeedbackFigure.
+ *  
+ * @return the CustomFeedbackFigure
+ */
 protected IFigure createFigure(GraphicalEditPart part, IFigure parent) {
 	IFigure child = getCustomFeedbackFigure(part.getModel());
 		
@@ -74,6 +78,11 @@ protected IFigure createFigure(GraphicalEditPart part, IFigure parent) {
 	return child;
 }
 
+/**
+ * Returns the CustomFeedbackFigure.
+ *  
+ * @return the CustomFeedbackFigure
+ */
 	protected IFigure getCustomFeedbackFigure(Object modelPart) {
 		IFigure figure; 
 		
@@ -101,7 +110,11 @@ protected IFigure createFigure(GraphicalEditPart part, IFigure parent) {
 	}
 	
 	/**
-	 * @see org.eclipse.gef.editpolicies.NonResizableEditPolicy#getInitialFeedbackBounds()
+	 * Returns the bounds of the host's figure by reference to be used to
+	 * calculate the initial location of the feedback. The returned Rectangle
+	 * should not be modified. Uses handle bounds if available.
+	 * 
+	 * @return the host figure's bounding Rectangle
 	 */
 	protected Rectangle getInitialFeedbackBounds() {
 		return getHostFigure().getBounds();

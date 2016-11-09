@@ -16,16 +16,27 @@ import org.eclipse.gef.commands.Command;
 
 import hydrograph.ui.graph.model.CommentBox;
 
-
+/**
+ * implementation of CommentBoxCommand
+ *
+ *@author BITWISE
+ */
 public class CommentCommand extends Command
 {
 	private String newName, oldName;
 	private CommentBox comment;
-
-	public CommentCommand(CommentBox comment, String s){
+	/**
+	 * Instantiates a new CommentBoxCommand.
+	 * 
+	 * @param comment
+	 *            the comment
+	 * @param label
+	 *            the label
+	 */
+	public CommentCommand(CommentBox comment, String label){
 		this.comment = comment;
-		if (s != null)
-			newName = s;
+		if (label != null)
+			newName = label;
 		else
 			newName = ""; 
 		

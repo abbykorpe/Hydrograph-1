@@ -142,24 +142,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>copy-resources-5</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target\products\hydrograph.ui.perspective.ID\macosx\cocoa\x86_64\Hydrograph.app</outputDirectory>
-							<resources>
-								<resource>
-									<directory>resources</directory>
-									<excludes>
-										<exclude>hydrograph.bat </exclude>
-									</excludes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
 						<id>copy-resources-6</id>
 						<phase>package</phase>
 						<goals>

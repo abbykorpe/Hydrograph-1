@@ -32,38 +32,44 @@ import hydrograph.ui.graph.model.Container;
  * 
  */
 public class CommentBoxHandler extends AbstractHandler{
-	private Point oldLoc ;
-	private Point newLoc ;
-	List <CommentBox> list = new ArrayList();
+	private Point oldLocation ;
+	private Point newLocation ;
+	private String LABEL = "Label";
+	List <CommentBox> commentBoxList = new ArrayList();
+	/**
+	 * display the comment box
+	 * @param event
+	 * @return Object
+	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException{
 		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container container = editor.getContainer();
 		
-		if(container.getChildren().isEmpty() && !(list.isEmpty())){
-			list.clear();
+		if(container.getChildren().isEmpty() && !(commentBoxList.isEmpty())){
+			commentBoxList.clear();
 		}
 		
 		for(Object obj : container.getChildren()){
 			if((obj instanceof CommentBox)){
-				list.add((CommentBox) obj);
+				commentBoxList.add((CommentBox) obj);
 			}
 			else{
-			list.clear();
+			commentBoxList.clear();
 			}
 		}
 		
-		if(list.isEmpty()){
-		oldLoc = new Point(0,0);
+		if(commentBoxList.isEmpty()){
+		oldLocation = new Point(0,0);
 		}
 		else{
-			oldLoc = (list.get(list.size()-1)).getLocation();	
+			oldLocation = (commentBoxList.get(commentBoxList.size()-1)).getLocation();	
 		}
 		
-		newLoc = new Point(oldLoc.x+6 ,oldLoc.y+6);
-		CommentBox comment = new CommentBox("Label");
-		comment.setLocation(newLoc);
-		CommentBoxCommand command = new CommentBoxCommand(comment,"Label",container);
+		newLocation = new Point(oldLocation.x+6 ,oldLocation.y+6);
+		CommentBox comment = new CommentBox(LABEL);
+		comment.setLocation(newLocation);
+		CommentBoxCommand command = new CommentBoxCommand(comment,LABEL,container);
 		command.execute();
 		return null;
 	}

@@ -63,15 +63,6 @@ public class CommentBox extends Model{
 	}
 
 	/**
-	 * Gets the new ID.
-	 * 
-	 * @return the new ID
-	 */
-	/*protected String getNewID() {
-		return Integer.toString(count++);
-	}*/
-
-	/**
 	 * Gets the size.
 	 * 
 	 * @return the size
@@ -113,15 +104,28 @@ public class CommentBox extends Model{
 		return "Label"
 				+ "=" + getLabelContents(); //$NON-NLS-1$ 
 	}
-
+	/**
+	 * Gets the parent.
+	 * 
+	 * @return the parent
+	 */
 	public Container getParent(){
 		return parent;
 	}
-
+	/**
+	 * Sets the parent.
+	 * 
+	 * @return the parent
+	 */
 	public void setParent(Container parent){
 		this.parent = parent;
 	}
 	
+	/**
+	 * Gets the newLocation.
+	 * 
+	 * @return the newLocation
+	 */
 	public void setLocation(Point newLocation){
 		resetLocation(newLocation);
 		location.setLocation(newLocation);
@@ -169,7 +173,22 @@ public class CommentBox extends Model{
 	public void setNewInstance(boolean newInstance) {
 		this.newInstance = newInstance;
 	}
-	
+	/**
+	 * Sets the count.
+	 * 
+	 * @return the count
+	 */
+	public int getCount() {
+		return count;
+	}
+	/**
+	 * Sets the count.
+	 * 
+	 * @return the count
+	 */
+	public void setCount(int count) {
+		this.count = count;
+	}
 	@Override
 	public CommentBox clone() throws CloneNotSupportedException{
 		CommentBox label = null;
@@ -184,11 +203,4 @@ public class CommentBox extends Model{
 		return label;
 	}
 
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
 }

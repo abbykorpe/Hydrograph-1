@@ -21,6 +21,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
@@ -51,13 +52,21 @@ private ZoomListener zoomListener = new ZoomListener() {
 		updateScaledFont(newZoom);
 	}
 };
-
+/**
+ * Instantiates a new CommentBoxLabelEditManager.
+ * 
+ * @param source
+ *            the source
+ * @param locator
+ *            the locator
+ */
 public CommentBoxLabelEditManager(GraphicalEditPart source, CellEditorLocator locator) {
 	super(source, null, locator);
 }
 
+
 /**
- * @see org.eclipse.gef.tools.DirectEditManager#bringDown()
+ * Cleanup is done here. Any feedback is erased and listeners unhooked.
  */
 protected void bringDown() {
 	ZoomManager zoomMgr = (ZoomManager)getEditPart().getViewer()
@@ -76,14 +85,24 @@ protected void bringDown() {
 	}
 	
 	super.bringDown();
-	// dispose any scaled fonts that might have been created
 	disposeScaledFont();
 }
-
+/**
+ * Creates the cell editor on the given composite. The cell editor is
+ * created by instantiating the cell editor type passed into this
+ * DirectEditManager's constuctor.
+ * 
+ * @param composite
+ *            the composite to create the cell editor on
+ * @return the newly created cell editor
+ */
 protected CellEditor createCellEditorOn(Composite composite) {
 	return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
 }
 
+/**
+ * dispose the font those are scaled
+ */
 private void disposeScaledFont() {
 	if (scaledFont != null) {
 		scaledFont.dispose();
@@ -91,23 +110,23 @@ private void disposeScaledFont() {
 	}
 }
 
+/**
+ * Initializes the cell editor. Subclasses should implement this to set the
+ * initial text and add things such as {@link VerifyListener
+ * VerifyListeners}, if needed.
+ */
 protected void initCellEditor() {
-	// update text
 	CommentBoxFigure comment = (CommentBoxFigure)getEditPart().getFigure();
 	getCellEditor().setValue(comment.getText());
-	// update font
 	ZoomManager zoomMgr = (ZoomManager)getEditPart().getViewer()
 			.getProperty(ZoomManager.class.toString());
 	if (zoomMgr != null) {
-		// this will force the font to be set
 		cachedZoom = -1.0;
 		updateScaledFont(zoomMgr.getZoom());
 		zoomMgr.addZoomListener(zoomListener);
 	} else
 		getCellEditor().getControl().setFont(comment.getFont());
 
-	// Hook the cell editor's copy/paste actions to the actionBars so that they can
-	// be invoked via keyboard shortcuts.
 	actionBars = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 			.getActiveEditor().getEditorSite().getActionBars();
 	saveCurrentActions(actionBars);
@@ -115,7 +134,11 @@ protected void initCellEditor() {
 	actionHandler.addCellEditor(getCellEditor());
 	actionBars.updateActionBars();
 }
-
+/**
+ * restores the saved actions
+ * @param actionbars
+ * 					at actionbars 
+ */
 private void restoreSavedActions(IActionBars actionBars){
 	actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
 	actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
@@ -127,6 +150,11 @@ private void restoreSavedActions(IActionBars actionBars){
 	actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redo);
 }
 
+/**
+ * save the current actions
+ * @param actionbars
+ * 					at actionbars 
+ */
 private void saveCurrentActions(IActionBars actionBars) {
 	copy = actionBars.getGlobalActionHandler(ActionFactory.COPY.getId());
 	paste = actionBars.getGlobalActionHandler(ActionFactory.PASTE.getId());
@@ -138,6 +166,11 @@ private void saveCurrentActions(IActionBars actionBars) {
 	redo = actionBars.getGlobalActionHandler(ActionFactory.REDO.getId());
 }
 
+/**
+ * update scaledFonts
+ * @param zoom
+ * 				at zoom 
+ */
 private void updateScaledFont(double zoom) {
 	if (cachedZoom == zoom)
 		return;

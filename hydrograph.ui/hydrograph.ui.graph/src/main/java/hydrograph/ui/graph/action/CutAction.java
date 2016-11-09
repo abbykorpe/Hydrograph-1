@@ -32,7 +32,6 @@ import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.model.Component;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CutAction.
  * 

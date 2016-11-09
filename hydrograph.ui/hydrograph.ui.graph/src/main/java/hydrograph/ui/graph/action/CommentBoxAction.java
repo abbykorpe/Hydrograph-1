@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.command.CommentBoxCommand;
 import hydrograph.ui.graph.controller.ContainerEditPart;
@@ -35,6 +36,16 @@ import hydrograph.ui.graph.model.Container;
  * @author Bitwise
  */
 public class CommentBoxAction extends SelectionAction{
+	private static String COMMENT_BOX = "Comment Box";
+	private String LABEL = "Label";
+	/**
+	 * Instantiates a new CommentBoxAction.
+	 * 
+	 * @param part
+	 *            the part
+	 * @param action
+	 *            the action
+	 */
 	
 public CommentBoxAction(IWorkbenchPart part, IAction action){
 		super(part);
@@ -48,34 +59,39 @@ public CommentBoxAction(IWorkbenchPart part, IAction action){
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#init()
-	 */
 	@Override
 	protected void init() {
 		super.init();
-		setText("Comment Box"); 
-		setId("Add");
+		setText(COMMENT_BOX); 
+		setId(Constants.COMMENT_BOX);
 		setHoverImageDescriptor(getImageDisDescriptor());
 		setImageDescriptor(getImageDisDescriptor());
 		setDisabledImageDescriptor(getImageDisDescriptor());
 		setEnabled(false);
 	}
-		
-	private Command createLabelCommand(boolean increaseCounter){
+	
+	/**
+	 * Creating command for comment box
+	 */
+	private Command createCommentBoxCommand(){
 		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(editor != null){
 		Container container = editor.getContainer();
 		
 		org.eclipse.draw2d.geometry.Point point = editor.location;
-		CommentBox label = new CommentBox("Label");
+		CommentBox label = new CommentBox(LABEL);
 		label.setSize(new Dimension(300, 60));
 		label.setLocation(point);
-		CommentBoxCommand command = new CommentBoxCommand(label,"Label",container);
+		CommentBoxCommand command = new CommentBoxCommand(label,LABEL,container);
 		return command;
 		}
 		return null;
 	}
+	
+	/**
+	 * return ImageDescriptor for comment box
+	 * @return ImageDescriptor
+	 */
 	private ImageDescriptor getImageDisDescriptor() {
 		ImageDescriptor imageDescriptor = new ImageDescriptor() {
 
@@ -89,6 +105,6 @@ public CommentBoxAction(IWorkbenchPart part, IAction action){
 	
 	@Override
 	public void run() {
-		execute(createLabelCommand(true));
+		execute(createCommentBoxCommand());
 	}
 }

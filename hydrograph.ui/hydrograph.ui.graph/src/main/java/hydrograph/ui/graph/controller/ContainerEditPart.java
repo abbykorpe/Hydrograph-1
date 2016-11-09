@@ -14,9 +14,6 @@
  
 package hydrograph.ui.graph.controller;
 
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.policy.ShapesXYLayoutEditPolicy;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -30,9 +27,11 @@ import org.eclipse.draw2d.ManhattanConnectionRouter;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.LayerConstants;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.policy.ShapesXYLayoutEditPolicy;
 
 
 /**
@@ -106,8 +105,4 @@ public class ContainerEditPart extends AbstractGraphicalEditPart implements Prop
 		}
 	}
 	
-	@Override
-	public void performRequest(Request request){
-		System.out.println("out");
-	}
 }

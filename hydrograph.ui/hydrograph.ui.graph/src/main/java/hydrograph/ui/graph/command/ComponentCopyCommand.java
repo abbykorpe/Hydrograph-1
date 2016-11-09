@@ -14,16 +14,12 @@
  
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.graph.model.Component;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class ComponentCopyCommand.
  */

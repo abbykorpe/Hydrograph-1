@@ -14,14 +14,6 @@
  
 package hydrograph.ui.graph.action.subjob;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.action.PasteAction;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.utility.SubJobUtility;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -45,6 +37,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.action.PasteAction;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**

@@ -27,9 +27,12 @@ public class CommentBoxFeedbackFigure
 	extends BentCornerFigure
 {
 
-/**
- * @see org.eclipse.draw2d.Figure#paintFigure(Graphics)
- */
+	/**
+	 * Paints this Figure's primary representation, or background
+	 * 
+	 * @param graphics
+	 *            The Graphics used to paint
+	 */
 protected void paintFigure(Graphics graphics) {
 	Rectangle rect = getBounds().getCopy();
 	

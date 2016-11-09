@@ -14,15 +14,6 @@
 
 package hydrograph.ui.graph.command;
 
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.Model;
-import hydrograph.ui.graph.model.Port;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -37,6 +28,15 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.Model;
+import hydrograph.ui.graph.model.Port;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 

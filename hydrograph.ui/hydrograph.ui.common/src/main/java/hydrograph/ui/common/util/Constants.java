@@ -227,7 +227,7 @@ public class Constants {
 	public static final String GRAPH_PROPERTY_COMMAND_ID = "hydrograph.ui.propertywindow.graphProperties";
 	public static final String SCHEMA_PROPERTY_NAME = "schema";
 	
-	
+	public static final String COMMENT_BOX="Add";
 	
 	//Types of UI- Schema 
 	public static final String FIXEDWIDTH_GRID_ROW = "FixedWidth";

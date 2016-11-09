@@ -36,21 +36,18 @@ public class CommentBoxFigure
 	/** The inner TextFlow **/
 	private TextFlow textFlow;
 	private Font font;
-	private Color componentColor;
-	private Color selectedComponentColor;
 	
 	/**
-	 *  Creates a new StickyNoteFigure with a default MarginBorder size of DEFAULT_CORNER_SIZE
+	 *  Creates a new CommentBoxFigure with a default MarginBorder size of DEFAULT_CORNER_SIZE
 	 *  - 3 and a FlowPage containing a TextFlow with the style WORD_WRAP_SOFT.
 	 */
 	public CommentBoxFigure(){
 		this(BentCornerFigure.DEFAULT_CORNER_SIZE - 3);
 		setInitialColor();
-		/*setComponentColorAndBorder();*/
 	}
 	
 	/** 
-	 * Creates a new StickyNoteFigure with a MarginBorder that is the given size and a
+	 * Creates a new CommentBoxFigure with a MarginBorder that is the given size and a
 	 * FlowPage containing a TextFlow with the style WORD_WRAP_SOFT.
 	 * 
 	 * @param borderSize the size of the MarginBorder
@@ -83,17 +80,11 @@ public class CommentBoxFigure
 	public String getText(){
 		return textFlow.getText();
 	}
-	
+	/**
+	 * Sets the initial color for border of comment box
+	 */
 	private void setInitialColor(){
 		new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
-	}
-	
-	public void setComponentColorAndBorder(){
-		setBackgroundColor(componentColor);
-	}
-	
-	public void setSelectedComponentColorAndBorder(){
-		setBackgroundColor(selectedComponentColor);
 	}
 	
 	/**

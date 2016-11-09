@@ -27,6 +27,7 @@ import hydrograph.ui.graph.model.CommentBox;
 
 /**
  * The Class ComponentSetConstraintCommand.
+ * @author BITWISE
  */
 public class CommentBoxSetConstraintCommand extends Command {
 	/** Stores the new size and location. */
