@@ -130,7 +130,8 @@ public class ViewExecutionHistoryUtility {
 	public List<String> getMissedComponents(ExecutionStatus executionStatus){
 		List<String> compList = new ArrayList<>(); 
 		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && !(componentStatus.getComponentId().startsWith("viewData"))){
+			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && !(componentStatus.getComponentId().startsWith("viewData")) 
+					&& !(componentStatus.getComponentId().contains("."))){
 				compList.add(componentStatus.getComponentId());
 			}
 		}

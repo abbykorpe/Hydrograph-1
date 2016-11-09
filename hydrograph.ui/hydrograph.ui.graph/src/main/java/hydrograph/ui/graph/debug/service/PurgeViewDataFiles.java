@@ -14,17 +14,21 @@
 
 package hydrograph.ui.graph.debug.service;
 
-import hydrograph.ui.common.debug.service.IDebugService;
-import hydrograph.ui.dataviewer.utilities.Utils;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.utility.ViewDataUtils;
-import hydrograph.ui.logging.factory.LogFactory;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.debug.service.IDebugService;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.utility.ViewDataUtils;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
@@ -35,6 +39,7 @@ import org.slf4j.Logger;
 public class PurgeViewDataFiles  implements IDebugService{
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(PurgeViewDataFiles.class);
+	private static final String JOB_TRACKING_LOG_PATH = "//logger//JobTrackingLog";
 
 	@Override
 	public void deleteDebugFiles() {
@@ -52,8 +57,21 @@ public class PurgeViewDataFiles  implements IDebugService{
 			}
 			dataUtils.getJob().clear();
 		}
+		
+		purgeViewExecutionHistoryLogs();
 	}
 	
+	/**
+	 * The Function will remove View Execution History Log Files. 
+	  */
+	private void purgeViewExecutionHistoryLogs(){
+		try {
+			FileUtils.cleanDirectory(new File(XMLConfigUtil.CONFIG_FILES_PATH + JOB_TRACKING_LOG_PATH));
+			logger.info("Removed ViewExecutionHistory logs file:::");
+		} catch (IOException exception) {
+			logger.error("Failed to remove ViewExecutionHistory logs file.", exception);
+		}
+	}
 	
 	
 	

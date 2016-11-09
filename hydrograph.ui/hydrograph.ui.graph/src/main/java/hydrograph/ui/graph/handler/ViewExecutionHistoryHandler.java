@@ -26,8 +26,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
@@ -47,6 +45,7 @@ import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
 /**
@@ -106,15 +105,19 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	 * @return boolean (the status if replay was successful(true) or not(false))
 	 */
 	public boolean replayExecutionTracking(ExecutionStatus executionStatus){
-		IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
-		IEditorReference[] refs = page.getEditorReferences();
-
 		ViewExecutionHistoryUtility.INSTANCE.addTrackingStatus(executionStatus.getJobId(), executionStatus);
 		ViewExecutionHistoryUtility.INSTANCE.getUnusedCompsOnCanvas().clear();
 		
-		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		ELTGraphicalEditor eltGraphicalEditor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().getActiveEditor();
 		
 		if(!(eltGraphicalEditor.getEditorInput() instanceof GraphicalEditor)){
+			
+			String currentJobName = eltGraphicalEditor.getActiveProject() + "." + eltGraphicalEditor.getJobName();
+			Job job = eltGraphicalEditor.getJobInstance(currentJobName);
+			if(job != null){
+				job.setJobStatus(JobStatus.SUCCESS);
+			}
 			
 			if(!executionStatus.getJobId().startsWith(eltGraphicalEditor.getContainer().getUniqueJobId())){
 				getMessageDialog(Messages.INVALID_LOG_FILE +eltGraphicalEditor.getContainer().getUniqueJobId());
