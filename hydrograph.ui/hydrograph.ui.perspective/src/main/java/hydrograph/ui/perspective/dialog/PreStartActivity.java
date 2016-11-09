@@ -37,7 +37,7 @@ import hydrograph.ui.logging.factory.LogFactory;
  *
  */
 public class PreStartActivity {
-	private static final long REQUIRED_JDK_VERSION = 17000; // i.e. 1.7.0_00
+	private static final long REQUIRED_JDK_VERSION = 18000; // i.e. 1.8.0_00
 	private static final String JAVAC_EXE = "\\javac.exe";
 	private static final String DOSGI_REQUIRED_JAVA_VERSION_PARAMETER_IN_INI_FILE = "-Dosgi.requiredJavaVersion";
 	private static final String SLASH_BIN = "\\bin";
