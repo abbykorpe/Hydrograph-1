@@ -52,7 +52,7 @@ public class Container extends Model {
 	private String uniqueJobId;
 	private int jobRunCount;
 	
-	private  final List<CommentBox> comments;
+	private List<CommentBox> comments ;
 	private final List<Component> components = new ArrayList<>();
 	private final Map<String, Integer> componentNextNameSuffixes = new HashMap<>();
 	private ArrayList<String> componentNames = new ArrayList<>();
@@ -160,6 +160,9 @@ public class Container extends Model {
 
 	public boolean addChild(CommentBox comment){
 		if (comment != null) {
+			if(comments==null){
+				comments = new ArrayList<>();
+			}
 			comments.add(comment);
 			comment.setParent(this);
 			firePropertyChange(CHILD_ADDED_PROP, null, comment);
