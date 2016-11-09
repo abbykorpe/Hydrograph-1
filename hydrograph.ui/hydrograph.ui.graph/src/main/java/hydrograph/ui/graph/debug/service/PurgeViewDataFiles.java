@@ -41,6 +41,9 @@ public class PurgeViewDataFiles  implements IDebugService{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(PurgeViewDataFiles.class);
 	private static final String JOB_TRACKING_LOG_PATH = "//logger//JobTrackingLog";
 
+	/* (non-Javadoc)
+	 * @see hydrograph.ui.common.debug.service.IDebugService#deleteDebugFiles()
+	 */
 	@Override
 	public void deleteDebugFiles() {
 		logger.info("call to api to remove debug files::::::::");
