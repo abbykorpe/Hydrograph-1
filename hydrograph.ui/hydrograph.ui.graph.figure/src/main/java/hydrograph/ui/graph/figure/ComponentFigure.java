@@ -362,8 +362,11 @@ public class ComponentFigure extends Figure implements Validator {
 	private boolean checkIfSubJobHasTransformComponent(Component component) {
 		boolean containsTransformComponent=false;
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
-		for(Component component1:container.getChildren())
+		for(Object object:container.getChildren())
 		{
+			if(object instanceof Component)
+			{
+			Component component1=(Component)object;	
 			if((StringUtils.equalsIgnoreCase(component1.getCategory(), "TRANSFORM")
 					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "filter")
 					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "uniquesequence"))
@@ -376,7 +379,8 @@ public class ComponentFigure extends Figure implements Validator {
 			{
 				
 				containsTransformComponent=checkIfSubJobHasTransformComponent(component1);
-			}	
+			}
+			}
 		}
 		return containsTransformComponent;
 	}

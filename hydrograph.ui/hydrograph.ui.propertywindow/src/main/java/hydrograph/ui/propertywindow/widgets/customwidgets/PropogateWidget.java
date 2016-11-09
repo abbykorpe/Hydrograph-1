@@ -127,9 +127,13 @@ public class PropogateWidget extends AbstractWidget{
 						
 					getComponent().setContinuousSchemaPropogationAllow(true);
 					Container container=(Container)getComponent().getProperties().get(Constants.SUBJOB_CONTAINER);
-					for(Component subjobComponent:container.getChildren())
+					for(Object object:container.getChildren())
 					{
+						if(object instanceof Component)
+						{
+						Component subjobComponent=(Component)object;	
 						subjobComponent.setContinuousSchemaPropogationAllow(true);
+						}
 					}	
 					}
 				    else if(
@@ -230,14 +234,18 @@ public class PropogateWidget extends AbstractWidget{
 			{	
 				nextComponent.setContinuousSchemaPropogationAllow(true);
 				Container container=(Container)nextComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
-				for(Component subjobComponent:container.getChildren())
+				for(Object object:container.getChildren())
 				{
+					if(object instanceof Component)
+					{
+					Component subjobComponent=(Component)object;
 					if(subjobComponent instanceof InputSubjobComponent)
 					{
 						
 						setFlagForContinuousSchemaPropogation(subjobComponent);
 						break;
-					}	
+					}
+					}
 				}	
 			}
 			if(StringUtils.equalsIgnoreCase(nextComponent.getCategory(),"TRANSFORM"))
