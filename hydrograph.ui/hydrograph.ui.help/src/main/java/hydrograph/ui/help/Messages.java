@@ -29,7 +29,9 @@ public class Messages extends NLS {
 	public static String ABOUT_TEXT;
 	public static String ABOUT_HEADER_TEXT;
 	public static String HYDROGRAPH_URL;
-
+	public static String ABOUT_VERSION_INFO;
+	public static String ERROR_MESSAGE_FOR_GITHUB_URL;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

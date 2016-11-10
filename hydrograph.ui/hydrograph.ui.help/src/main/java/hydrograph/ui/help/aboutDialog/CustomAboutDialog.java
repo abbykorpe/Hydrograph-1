@@ -16,6 +16,8 @@ package hydrograph.ui.help.aboutDialog;
 
 import hydrograph.ui.help.Activator;
 import hydrograph.ui.help.Messages;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,7 +34,6 @@ import org.eclipse.jface.resource.JFaceColors;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -57,7 +58,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -73,6 +73,7 @@ import org.eclipse.ui.internal.util.BundleUtility;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
 
 
 /**
@@ -95,7 +96,7 @@ public class CustomAboutDialog extends TrayDialog {
 
 	private ArrayList<Image> images = new ArrayList<Image>();
 
-
+	private Logger logger = LogFactory.INSTANCE.getLogger(CustomAboutDialog.class);
 	private StyledText text;
 	private Shell parentShell;
 	private AboutTextManager aboutTextManager;
@@ -187,7 +188,7 @@ public class CustomAboutDialog extends TrayDialog {
 			// if the about image is small enough, then show the text
 			if (aboutImage == null
 					|| aboutImage.getBounds().width <= MAX_IMAGE_WIDTH_FOR_TEXT) {
-				String aboutText = Messages.ABOUT_TEXT;
+				String aboutText =Messages.ABOUT_HEADER_TEXT+ Messages.ABOUT_TEXT;
 
 
 				if (aboutText != null) {
@@ -195,7 +196,7 @@ public class CustomAboutDialog extends TrayDialog {
 					if(StringUtils.isBlank(buildNumber)){
 						buildNumber = Platform.getBundle(Activator.PLUGIN_ID).getVersion().toString();
 					}
-					item = AboutTextManager.scan(aboutText + "\n" + "Build Number : " + buildNumber + "\n \n"+"License Information : " + Messages.ABOUT_LICENSE_INFO 
+					item = AboutTextManager.scan(Messages.ABOUT_VERSION_INFO + "\n" + "Build Number : " + buildNumber + "\n \n"+"License Information : " + Messages.ABOUT_LICENSE_INFO 
 							+ "\n \n " +Messages.ABOUT_COPYRIGHT_INFO + "\n \n");
 				}
 			}
@@ -253,7 +254,7 @@ public class CustomAboutDialog extends TrayDialog {
 		gc.dispose();
 
 		int topContainerHeightHint = 100;
-
+		
 		topContainerHeightHint = Math.max(topContainerHeightHint, lineHeight * 6);
 
 		//image on left side of dialog
@@ -272,15 +273,41 @@ public class CustomAboutDialog extends TrayDialog {
 			topContainerHeightHint = Math.max(topContainerHeightHint, aboutImage.getBounds().height);
 		}
 
+		
+		Composite newComposite=new Composite(topContainer, SWT.NONE);
+		newComposite.setLayout(new GridLayout(1,true));
+		newComposite.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		newComposite.setBackground( new Color (null, 255, 255, 255));
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		topContainer.setLayoutData(data);
 		// used only to drive initial size so that there are no hints in the
 		// layout data
 		topContainer.setSize(432, topContainerHeightHint);
-
+		final Link link = new Link(newComposite, SWT.NONE);
+		GridData data1 = new GridData(SWT.LEFT,SWT.FILL,true,false,0,0);
+		link.setLayoutData(data1);
+		link.setBackground(new Color (null, 255, 255, 255));
+		link.setText("<a>"+Messages.ABOUT_HEADER_TEXT+"</a>"+Messages.ABOUT_TEXT);
+		
+		link.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseDown(MouseEvent e) 
+			{
+				try {
+						PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(Messages.HYDROGRAPH_URL));
+					}
+				 catch (IllegalArgumentException | PartInitException | MalformedURLException e1) {
+					 logger.error(e1.getMessage());
+						WidgetUtility.errorMessage(Messages.ERROR_MESSAGE_FOR_GITHUB_URL);
+				}
+				
+			}
+		});
 		if (item != null) {
-			text = new StyledText(topContainer, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
-			configureText(topContainer);
+			
+			text = new StyledText(newComposite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
+			configureText(newComposite);
 
 			// computing trim for later
 			Rectangle rect = text.computeTrim(0, 0, 100, 100);
@@ -310,7 +337,9 @@ public class CustomAboutDialog extends TrayDialog {
 				}
 			});
 		}
-
+		
+	
+		
 		// horizontal bar
 		Label bar = new Label(workArea, SWT.HORIZONTAL | SWT.SEPARATOR);
 		data = new GridData();
@@ -369,62 +398,17 @@ public class CustomAboutDialog extends TrayDialog {
 		
 		text.setBackground(background);
 		text.setForeground(foreground);
-		//text.setMargins(TEXT_MARGIN, TEXT_MARGIN, TEXT_MARGIN, 0);
-		 handCursor = new Cursor(text.getDisplay(), SWT.CURSOR_HAND);
-		text.setCursor(handCursor);
-		text.addMouseListener(new MouseAdapter() {
-				
-				@Override
-				public void mouseDown(MouseEvent e) 
-				{
-					try {
-						
-						int offset = text.getOffsetAtLocation(new Point (e.x, e.y));
-						StyleRange style1 = text.getStyleRangeAtOffset(offset);
-						if (style1 != null && style1.underline) {
-							PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(Messages.HYDROGRAPH_URL));
-						}
-					} catch (IllegalArgumentException | PartInitException | MalformedURLException a) {
-						a.printStackTrace();
-					}
-					
-				}
-			});
+		text.setMargins(TEXT_MARGIN, TEXT_MARGIN, TEXT_MARGIN, 0);
 		
-		
-		aboutTextManager = new AboutTextManager(text);
-		aboutTextManager.setItem(item);
-
-		createTextMenu();
-
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		text.setLayoutData(gd);
 		
-		int[] rangesArray=new int[text.getRanges().length+2];
-		rangesArray[0]=(item.getText().indexOf(Messages.ABOUT_HEADER_TEXT));
-		rangesArray[1]=Messages.ABOUT_HEADER_TEXT.length();
-		
-		for(int index=2;index<rangesArray.length;index++){
-			rangesArray[index]=text.getRanges()[index-2];
-		}
-		
-		StyleRange[] styleRanges=new StyleRange[text.getStyleRanges().length+1];
-		
-		StyleRange style = new StyleRange();
-		style.start=rangesArray[rangesArray.length-2];
-		style.length=rangesArray[rangesArray.length-1];
-		style.underline = true;
-		style.foreground=new Color (null,0, 0, 128);		
-		styleRanges[0]=style;
-		
-		for(int index=1;index<styleRanges.length;index++){
-			styleRanges[index]=text.getStyleRanges()[index-1];
-		}
-		
-		
-		text.setStyleRanges(rangesArray, styleRanges);
+		aboutTextManager = new AboutTextManager(text);
+		aboutTextManager.setItem(item);
 	
-		
+
+		createTextMenu();
+
 	}
 
 	/**
