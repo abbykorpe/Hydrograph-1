@@ -45,6 +45,8 @@ public class SchemaField implements Cloneable {
 	private String fieldDefaultValue;
 	private String fieldToRangeValue;
 	private String fieldFromRangeValue;
+	private String colDef;
+	
 	private static Logger LOG = LoggerFactory.getLogger(SchemaField.class);
 
 	public SchemaField(String fieldName, String fieldDataType) {
