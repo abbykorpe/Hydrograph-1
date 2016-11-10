@@ -25,6 +25,7 @@ import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
@@ -225,9 +226,13 @@ public class WatchRecordAction extends SelectionAction {
 				
 		
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
-		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
-		Map<String, List<Job>> jobDetails1 = dataUtils.getJob();
+		
+		//ViewDataUtils dataUtils = ViewDataUtils.getInstance();
+		Map<String, List<Job>> jobDetails1 = ViewExecutionHistoryUtility.INSTANCE.getTrackingJobs();
+		
+		
 		List<Job> tmpList = jobDetails1.get(consoleName);
+		
 		ViewDataUniqueIdDialog dataUniqueIdDialog = new ViewDataUniqueIdDialog(Display.getDefault().getActiveShell(), tmpList);
 		dataUniqueIdDialog.open();
 		

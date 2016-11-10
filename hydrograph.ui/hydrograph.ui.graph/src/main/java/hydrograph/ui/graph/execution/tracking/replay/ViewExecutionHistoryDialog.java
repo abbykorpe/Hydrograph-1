@@ -86,7 +86,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		container.getShell().setText(VIEW_TRACKING_HISTORY);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
-		container.getShell().setMinimumSize(844, 350);
+		container.getShell().setMinimumSize(800, 346);
 
 		Composite composite1 = new Composite(container, SWT.BORDER);
 		GridData gd_scrolledComposite1 = new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
