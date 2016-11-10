@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.debug.service.IDebugService;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -48,7 +49,9 @@ public class PurgeViewDataFiles  implements IDebugService{
 	public void deleteDebugFiles() {
 		logger.info("call to api to remove debug files::::::::");
 		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
-		Map<String, List<Job>> viewDataJobMap = dataUtils.getJob();
+		ViewExecutionHistoryUtility viewExecutionHistoryUtility = ViewExecutionHistoryUtility.getInstance();
+		
+		Map<String, List<Job>> viewDataJobMap = viewExecutionHistoryUtility.getTrackingJobs();
 		
 		if(Utils.INSTANCE.isPurgeViewDataPrefSet()){
 			for(Entry<String, List<Job>> entry : viewDataJobMap.entrySet()){
@@ -58,7 +61,7 @@ public class PurgeViewDataFiles  implements IDebugService{
 		        	dataUtils.deleteSchemaAndDataViewerFiles(job.getUniqueJobId());
 		        }
 			}
-			dataUtils.getJob().clear();
+			viewExecutionHistoryUtility.getTrackingJobs().clear();
 		}
 		
 		purgeViewExecutionHistoryLogs();

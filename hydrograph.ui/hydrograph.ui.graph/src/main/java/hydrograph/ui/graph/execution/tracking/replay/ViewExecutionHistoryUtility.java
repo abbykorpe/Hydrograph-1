@@ -51,6 +51,14 @@ public class ViewExecutionHistoryUtility {
 	}
 	
 	/**
+	 * Static 'instance' method
+	 *
+	 */
+	public static ViewExecutionHistoryUtility getInstance( ) {
+      return INSTANCE;
+	}
+	
+	/**
 	 * Add JobId and Status in map
 	 * @param uniqueRunJobId
 	 * @param executionStatus

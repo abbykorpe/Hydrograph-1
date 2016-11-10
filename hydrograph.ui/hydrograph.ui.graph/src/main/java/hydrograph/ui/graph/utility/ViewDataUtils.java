@@ -13,24 +13,6 @@
 
 package hydrograph.ui.graph.utility;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
-import hydrograph.ui.dataviewer.utilities.Utils;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.Port;
-import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +27,21 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.logging.factory.LogFactory;
+
 /**
  * View Data Utils
  * 
@@ -55,12 +52,10 @@ public class ViewDataUtils {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataUtils.class);
 	/** The jobUniqueId map. */
-	private static Map<String, List<Job>> viewDataUniqueIdMap;
 	
 	private static ViewDataUtils INSTANCE = new ViewDataUtils();
 	
 	private ViewDataUtils() {
-		viewDataUniqueIdMap = new HashMap<>();
 	}
 	
 	
@@ -72,31 +67,7 @@ public class ViewDataUtils {
       return INSTANCE;
 	}
 	   
-	/**
-	 * Gets the job map.
-	 *
-	 * @param jobName the job name
-	 */
-	public  Map<String, List<Job>> getJob() {
-		return viewDataUniqueIdMap;
-	}
 	
-	/**
-	 * Adds the viewData uniqueJobId.
-	 *
-	 * @param jobName
-	 * @param jobDetails
-	 */
-	public void addDebugJob(String jobName, Job jobDetails){
-		
-		if(viewDataUniqueIdMap.get(jobName)==null){
-			List<Job> jobs = new ArrayList<>();
-			jobs.add(jobDetails);
-			viewDataUniqueIdMap.put(jobName, jobs);
-		}else{
-			viewDataUniqueIdMap.get(jobName).add(jobDetails);
-		}
-	}
 	
 	/**
 	 * Purge ViewData Files
