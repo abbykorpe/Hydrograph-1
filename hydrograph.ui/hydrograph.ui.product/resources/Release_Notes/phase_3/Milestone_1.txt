@@ -35,6 +35,7 @@ connection(link) on transform component.
 20.<1434> - [Pooja Yadav] - Schema window : Import xml and Export xml buttons should be disable when you select internal schema.
 21.<1376> - [Anshul Shivhare] - Default Name is Not Getting Displayed When User Revert the Component Name to its Default Name After Renaming.
 22. ..... - [Pooja Yadav] -  Subjob: Job is getting failed when user creates standalone subjob with Discard component.
+23. ..... - [Pooja Yadav] - Stop Job Button : fixed Stop job button image issue.
 
 =====================================================================================================
 Notes for QA:
