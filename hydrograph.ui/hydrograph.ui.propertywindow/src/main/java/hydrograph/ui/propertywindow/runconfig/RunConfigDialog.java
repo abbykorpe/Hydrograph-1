@@ -164,7 +164,7 @@ public class RunConfigDialog extends Dialog {
 		formToolkit.adapt(isDebugCheck, true, true);
 
 		final Label lblBasePath = new Label(compositeRunMode, SWT.NONE);
-		lblBasePath.setBounds(129, 49, 55, 15);
+		lblBasePath.setBounds(129, 49, 60, 15);
 		lblBasePath.setText("Base Path");
 		lblBasePath.setVisible(false);
 		formToolkit.adapt(lblBasePath, true, true);
