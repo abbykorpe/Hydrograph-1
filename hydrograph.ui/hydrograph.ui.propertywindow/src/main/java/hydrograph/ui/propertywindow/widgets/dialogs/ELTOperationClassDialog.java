@@ -351,8 +351,13 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 			
 			@Override
 			public void controlResized(ControlEvent e) {
-				table.getColumn(0).setWidth((table.getSize().x/2)-3);
-				table.getColumn(1).setWidth((table.getSize().x/2)-3);
+				if (OSValidator.isMac()) {
+					table.getColumn(0).setWidth((table.getSize().x / 2) - 1);
+					table.getColumn(1).setWidth((table.getSize().x / 2) - 1);
+				} else {
+					table.getColumn(0).setWidth((table.getSize().x / 2) - 3);
+					table.getColumn(1).setWidth((table.getSize().x / 2) - 3);
+				}
 			}
 			
 			public void controlMoved(ControlEvent e) {/*do nothing*/}

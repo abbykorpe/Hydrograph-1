@@ -155,12 +155,12 @@ public class RunConfigDialog extends Dialog {
 		btnRemoteMode.addSelectionListener(selectionListener);
 
 		Label lblDebug = new Label(compositeRunMode, SWT.NONE);
-		lblDebug.setBounds(129, 22, 55, 16);
+		lblDebug.setBounds(129, 22, 57, 16);
 		formToolkit.adapt(lblDebug, true, true);
 		lblDebug.setText("View Data");
 
 		final Button isDebugCheck = new Button(compositeRunMode, SWT.CHECK);
-		isDebugCheck.setBounds(190, 21, 13, 16);
+		isDebugCheck.setBounds(190, 21, 15, 16);
 		formToolkit.adapt(isDebugCheck, true, true);
 
 		final Label lblBasePath = new Label(compositeRunMode, SWT.NONE);

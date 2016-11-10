@@ -122,32 +122,32 @@ public class OperationClassComposite extends Composite {
 		composite_1 = new Composite(composite, SWT.NONE);
 		composite_1.setLayout(new GridLayout(1, false));
 		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 1, 4);
-		gd_composite_1.heightHint = 76;
-		gd_composite_1.widthHint = 76;
+		gd_composite_1.heightHint = 80;
+		gd_composite_1.widthHint = 90;
 		composite_1.setLayoutData(gd_composite_1);
 		
 		composite_2 = new Composite(composite_1, SWT.NONE);
 		GridData gd_composite_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_composite_2.heightHint = 69;
-		gd_composite_2.widthHint = 72;
+		gd_composite_2.heightHint = 75;
+		gd_composite_2.widthHint = 80;
 		composite_2.setLayoutData(gd_composite_2);
 		composite_2.setLayout(new GridLayout(1, false));
 		browseButton= new Button(composite_2, SWT.NONE);
 		browseButton.setToolTipText(Messages.OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP);
 		GridData gd_browseButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		if(OSValidator.isMac()){
-			gd_browseButton.widthHint = 35;
+			gd_browseButton.widthHint = 40;
 		}else{
 			gd_browseButton.widthHint = 28;
 		}
-		gd_browseButton.heightHint = 20;
+		gd_browseButton.heightHint = 25;
 		browseButton.setLayoutData(gd_browseButton);
 		browseButton.setText("...");
 		new Label(composite_2, SWT.NONE);
 		btnIsParam= new Button(composite_2, SWT.CHECK);
 		GridData gd_btnIsParam = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 1, 1);
 		gd_btnIsParam.heightHint = 19;
-		gd_btnIsParam.widthHint = 67;
+		gd_btnIsParam.widthHint = 75;
 		btnIsParam.setLayoutData(gd_btnIsParam);
 		btnIsParam.setAlignment(SWT.CENTER);
 		btnIsParam.setText(Messages.IS_PARAM);
