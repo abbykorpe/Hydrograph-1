@@ -34,7 +34,6 @@ import org.eclipse.jface.resource.JFaceColors;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -59,7 +58,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -190,7 +188,7 @@ public class CustomAboutDialog extends TrayDialog {
 			// if the about image is small enough, then show the text
 			if (aboutImage == null
 					|| aboutImage.getBounds().width <= MAX_IMAGE_WIDTH_FOR_TEXT) {
-				String aboutText = Messages.ABOUT_TEXT;
+				String aboutText =Messages.ABOUT_HEADER_TEXT+ Messages.ABOUT_TEXT;
 
 
 				if (aboutText != null) {
@@ -289,7 +287,7 @@ public class CustomAboutDialog extends TrayDialog {
 		GridData data1 = new GridData(SWT.LEFT,SWT.FILL,true,false,0,0);
 		link.setLayoutData(data1);
 		link.setBackground(new Color (null, 255, 255, 255));
-		link.setText("<a>Hydrograph</a> for ETL Developers");
+		link.setText("<a>"+Messages.ABOUT_HEADER_TEXT+"</a>"+Messages.ABOUT_TEXT);
 		
 		link.addMouseListener(new MouseAdapter() {
 			
@@ -301,7 +299,7 @@ public class CustomAboutDialog extends TrayDialog {
 					}
 				 catch (IllegalArgumentException | PartInitException | MalformedURLException e1) {
 					 logger.error(e1.getMessage());
-						WidgetUtility.errorMessage("Unable to open URL in external browser");
+						WidgetUtility.errorMessage(Messages.ERROR_MESSAGE_FOR_GITHUB_URL);
 				}
 				
 			}
