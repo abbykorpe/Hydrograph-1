@@ -535,14 +535,14 @@ public class DebugDataViewer extends ApplicationWindow {
 	protected Control createContents(Composite parent) {
 		setDataViewerWindowTitle();
 		getShell().setMinimumSize(ControlConstants.DATA_VIEWER_MINIMUM_SIZE);
-
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		tabFolder = new CTabFolder(container, SWT.BORDER);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		tabFolder.setSelectionBackground(new Color(null, 14, 76, 145));
+		/*Below code is to color the tabs of data viewer window*/
+		/*tabFolder.setSelectionBackground(new Color(null, 14, 76, 145));
 		tabFolder.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
-		tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		tabFolder.setSelectionForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));*/
 
 		createGridViewTabItem();
 		
