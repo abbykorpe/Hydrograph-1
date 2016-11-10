@@ -690,6 +690,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 public void widgetSelected(SelectionEvent e) {
 				 schemaFromConnectedLinks();
 				 showHideErrorSymbol(isWidgetValid());
+				 refresh();
 
 			 }
 		 });
@@ -760,11 +761,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 for (GridRow gridRow : schema.getGridRow()){
 				 if (!schemaGridRowList.contains(gridRow)){
 					 GridRow newGridRow;
+					 FixedWidthGridRow fixedWidthGridRow;
 					 try {
+						 if (Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){												
+						 fixedWidthGridRow = new FixedWidthGridRow();
+						 fixedWidthGridRow.updateBasicGridRow(gridRow);
+						 schemaGridRowList.add(fixedWidthGridRow);
+					 }else {
 						 newGridRow = (GridRow) Class.forName(gridRow.getClass().getCanonicalName()).getDeclaredConstructor().newInstance();
 						 newGridRow.updateBasicGridRow(gridRow);
 						 schemaGridRowList.add(newGridRow);
-					 } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						}
+					 }catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 							 | InvocationTargetException | NoSuchMethodException | SecurityException
 							 | ClassNotFoundException e) {
 						 logger.error("Exception occurred while creating new row for schema",e);
