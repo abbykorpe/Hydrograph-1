@@ -240,11 +240,6 @@
                   label="Graph Properties"
                   style="push">
             </command>
-            <command
-                  commandId="hydrograph.ui.graph.stopjob"
-                  icon="resources/iconspulldownp_job.png"
-                  label="Stop Job">
- 				 </command>
  				 
       <separator
             name="hydrograph.ui.graph.separator4">
@@ -280,6 +275,11 @@
                   icon="resources/icons/run.png"
                   label="Run"
                   style="pulldown">
+            </command>
+            <command
+                  commandId="hydrograph.ui.graph.stopjob"
+                  icon="resources/icons/stop_job.png"
+                  label="Stop Job">
             </command>
          </toolbar>
       </menuContribution>
