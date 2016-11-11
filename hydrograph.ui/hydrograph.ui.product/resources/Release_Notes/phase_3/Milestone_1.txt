@@ -37,6 +37,8 @@ connection(link) on transform component.
 22. ..... - [Pooja Yadav] -  Subjob: Job is getting failed when user creates standalone subjob with Discard component.
 23. ..... - [Pooja Yadav] - Stop Job Button : fixed Stop job button image issue.
 24. ..... - [Sonia Raheja] - Refresh icon should occur on subjob component in main job if user changes in disconnected subjob.
+25. ..... - [Pooja Yadav] - MAC: Fixed schema widget Import and Export Button alignment issue for mac.
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
