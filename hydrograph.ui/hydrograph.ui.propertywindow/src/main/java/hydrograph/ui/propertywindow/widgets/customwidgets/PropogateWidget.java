@@ -129,6 +129,7 @@ public class PropogateWidget extends AbstractWidget{
 						}
 					}
 				    if(eltSchemaGridWidget!=null &&!outputSchema.getBasicGridRowsOutputFields().isEmpty())
+				    eltSchemaGridWidget.refresh();
 				    eltSchemaGridWidget.showHideErrorSymbol(!outputSchema.getBasicGridRowsOutputFields().isEmpty());
 					}
 					else if(getComponent() instanceof SubjobComponent)
