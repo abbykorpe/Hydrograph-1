@@ -19,8 +19,12 @@ import hydrograph.ui.graph.action.PasteAction;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 
 import java.util.List;
 
@@ -113,7 +117,25 @@ public class SubJobOpenAction extends SelectionAction{
                                       for (Component component : container.getUIComponentList()) {
 										subJobUtility.propogateSchemaToSubjob(subjobComponent, component);
 										}
-                                        subjobComponent.setContinuousSchemaPropogationAllow(false);
+
+										if(subjobComponent.isContinuousSchemaPropogationAllow())
+										{
+											Component component1=null;
+											for(Object object:container.getChildren())
+											{
+												if(object instanceof Component)
+												{
+													 component1=(Component)object;
+													if(component1 instanceof InputSubjobComponent)
+													break;	
+												}
+													
+											}
+											if(component1!=null)
+											SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(component1);
+											subjobComponent.setContinuousSchemaPropogationAllow(false);
+										}	
+										
 										subjobComponent.getProperties().put(Constants.SUBJOB_CONTAINER, container);
 									}
 									((ComponentEditPart) obj).refresh();

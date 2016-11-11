@@ -33,10 +33,7 @@ import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.ErrorObject;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -51,6 +48,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 
 
 
@@ -134,7 +132,7 @@ public class PropogateWidget extends AbstractWidget{
 					}
 					else if(getComponent() instanceof SubjobComponent)
 					{
-					setFlagForContinuousSchemaPropogation(getComponent().getTargetConnections().get(0).getSource());
+					SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent().getTargetConnections().get(0).getSource());
 					}
 				    else if(
 				    		StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.AGGREGATE)
@@ -200,102 +198,13 @@ public class PropogateWidget extends AbstractWidget{
 				}
 					
 				}
-				setFlagForContinuousSchemaPropogation(getComponent());
+				SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent());
 			}
 
 			
 		});
 	}
-	private void setFlagForContinuousSchemaPropogation(Component component) {
-		for(Link link:component.getSourceConnections())
-		{
-			Component nextComponent=link.getTarget();
-			
-			while(StringUtils.equalsIgnoreCase(nextComponent.getCategory(), Constants.STRAIGHTPULL)
-					||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.FILTER)	
-					 ||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.UNIQUE_SEQUENCE)
-					 ||nextComponent instanceof SubjobComponent
-					)
-			{
-				nextComponent.setContinuousSchemaPropogationAllow(true);
-				
-				if(nextComponent instanceof SubjobComponent)
-				{	
-					Container container=(Container)nextComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
-					for(Object object:container.getChildren())
-					{
-						if(object instanceof Component)
-						{
-						Component subjobComponent=(Component)object;
-						if(subjobComponent instanceof InputSubjobComponent)
-						{
-							
-							setFlagForContinuousSchemaPropogation(subjobComponent);
-							break;
-						}
-						}
-					}
-				}
-				if(!nextComponent.getSourceConnections().isEmpty())
-				{
-				   if(nextComponent.getSourceConnections().size()==1)
-			    	{
-				     if(nextComponent instanceof SubjobComponent)
-				     {
-					   if(!checkIfSubJobHasTransformComponent(nextComponent))
-					    {
-						nextComponent=nextComponent.getSourceConnections().get(0).getTarget();	
-					    }
-					   else
-						break;   
-				     }	
-				    else
-				    {
-				    nextComponent=nextComponent.getSourceConnections().get(0).getTarget();
-				    }
-				   }
-			       else
-				   {
-					setFlagForContinuousSchemaPropogation(nextComponent);
-					break;
-				   }
-				}
-				else
-				break;	
-			}
-			if(StringUtils.equalsIgnoreCase(nextComponent.getCategory(),Constants.TRANSFORM))
-			{
-				nextComponent.setContinuousSchemaPropogationAllow(true);
-			}
-		}
-	}
-	private boolean checkIfSubJobHasTransformComponent(Component component) {
-		boolean containsTransformComponent=false;
-		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
-		for(Object object:container.getChildren())
-		{
-			if(object instanceof Component)
-			{
-			Component component1=(Component)object;	
-			if((StringUtils.equalsIgnoreCase(component1.getCategory(), "TRANSFORM")
-					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "filter")
-					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "uniquesequence"))
-					&& component1.isContinuousSchemaPropogationAllow()
-					 )
-			{
-				containsTransformComponent=true;
-			    break;
-			}
-			else if(component1 instanceof SubjobComponent)
-			{
-				containsTransformComponent=checkIfSubJobHasTransformComponent(component1);
-				if(containsTransformComponent)
-				break;	
-			}
-			}
-		}
-		return containsTransformComponent;
-	}
+    
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		return null;
