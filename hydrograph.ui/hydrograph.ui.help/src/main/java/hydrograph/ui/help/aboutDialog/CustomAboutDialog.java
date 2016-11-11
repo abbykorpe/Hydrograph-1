@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.help.aboutDialog;
 
 import hydrograph.ui.help.Activator;
@@ -75,10 +74,9 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 
-
 /**
- * The Class CustomAboutDialog.
- * Creates Custom AboutDialog of Hydrograph Application
+ * The Class CustomAboutDialog. Creates Custom AboutDialog of Hydrograph
+ * Application
  * 
  * @author Bitwise
  */
@@ -93,7 +91,6 @@ public class CustomAboutDialog extends TrayDialog {
 
 	private IProduct product;
 
-
 	private ArrayList<Image> images = new ArrayList<Image>();
 
 	private Logger logger = LogFactory.INSTANCE.getLogger(CustomAboutDialog.class);
@@ -107,12 +104,14 @@ public class CustomAboutDialog extends TrayDialog {
 
 	/**
 	 * Create an instance of the AboutDialog for the given window.
-	 * @param parentShell The parent of the dialog.
+	 * 
+	 * @param parentShell
+	 *            The parent of the dialog.
 	 */
 	public CustomAboutDialog(Shell parentShell) {
 		super(parentShell);
 		this.parentShell = parentShell;
-		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL | SWT.WRAP); 
+		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL | SWT.WRAP);
 		product = Platform.getProduct();
 
 		if (product != null) {
@@ -121,8 +120,8 @@ public class CustomAboutDialog extends TrayDialog {
 		if (productName == null) {
 			productName = WorkbenchMessages.AboutDialog_defaultProductName;
 		}
-		
-       // setDialogHelpAvailable(true);
+
+		// setDialogHelpAvailable(true);
 	}
 
 	/*
@@ -136,7 +135,7 @@ public class CustomAboutDialog extends TrayDialog {
 					IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 					InstallationDialog dialog = new InstallationDialog(getShell(), workbenchWindow);
 					dialog.setModalParent(CustomAboutDialog.this);
-					dialog.open();	
+					dialog.open();
 				}
 			});
 			break;
@@ -161,17 +160,18 @@ public class CustomAboutDialog extends TrayDialog {
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(NLS.bind(WorkbenchMessages.AboutDialog_shellTitle,productName ));
-		
+		newShell.setText(NLS.bind(WorkbenchMessages.AboutDialog_shellTitle, productName));
+
 	}
 
 	/**
-	 * Creates and returns the contents of the upper part 
-	 * of the dialog (above the button bar).
+	 * Creates and returns the contents of the upper part of the dialog (above
+	 * the button bar).
 	 *
 	 * Subclasses should overide.
 	 *
-	 * @param parent  the parent composite to contain the dialog area
+	 * @param parent
+	 *            the parent composite to contain the dialog area
 	 * @return the dialog area control
 	 */
 	protected Control createDialogArea(Composite parent) {
@@ -180,24 +180,23 @@ public class CustomAboutDialog extends TrayDialog {
 		item = null;
 		if (product != null) {
 			Bundle bundle = Platform.getBundle(Constants.ABOUT_DIALOG_IMAGE_BUNDLE_NAME);
-			URL fullPathString = BundleUtility.find(bundle,Constants.ABOUT_DIALOG_IMAGE_PATH);
-			aboutImage=ImageDescriptor.createFromURL(fullPathString).createImage();
-			
+			URL fullPathString = BundleUtility.find(bundle, Constants.ABOUT_DIALOG_IMAGE_PATH);
+			aboutImage = ImageDescriptor.createFromURL(fullPathString).createImage();
+
 			parent.getShell().setMinimumSize(450, 267);
 
 			// if the about image is small enough, then show the text
-			if (aboutImage == null
-					|| aboutImage.getBounds().width <= MAX_IMAGE_WIDTH_FOR_TEXT) {
-				String aboutText =Messages.ABOUT_HEADER_TEXT+ Messages.ABOUT_TEXT;
-
+			if (aboutImage == null || aboutImage.getBounds().width <= MAX_IMAGE_WIDTH_FOR_TEXT) {
+				String aboutText = Messages.ABOUT_HEADER_TEXT + Messages.ABOUT_TEXT;
 
 				if (aboutText != null) {
 					String buildNumber = System.getProperty(ECLIPSE_BUILD_ID);
-					if(StringUtils.isBlank(buildNumber)){
+					if (StringUtils.isBlank(buildNumber)) {
 						buildNumber = Platform.getBundle(Activator.PLUGIN_ID).getVersion().toString();
 					}
-					item = AboutTextManager.scan(Messages.ABOUT_VERSION_INFO + "\n" + "Build Number : " + buildNumber + "\n \n"+"License Information : " + Messages.ABOUT_LICENSE_INFO 
-							+ "\n \n " +Messages.ABOUT_COPYRIGHT_INFO + "\n \n");
+					item = AboutTextManager.scan(Messages.ABOUT_VERSION_INFO + "\n" + "Build Number : " + buildNumber
+							+ "\n \n" + "License Information : " + Messages.ABOUT_LICENSE_INFO + "\n \n "
+							+ Messages.ABOUT_COPYRIGHT_INFO + "\n \n");
 				}
 			}
 
@@ -205,9 +204,10 @@ public class CustomAboutDialog extends TrayDialog {
 				images.add(aboutImage);
 			}
 		}
-		 
+
 		// create a composite which is the parent of the top area and the bottom
-		// button bar, this allows there to be a second child of this composite with 
+		// button bar, this allows there to be a second child of this composite
+		// with
 		// a banner background on top but not have on the bottom
 		Composite workArea = new Composite(parent, SWT.NONE);
 		GridLayout workLayout = new GridLayout();
@@ -223,18 +223,19 @@ public class CustomAboutDialog extends TrayDialog {
 		Color foreground = JFaceColors.getBannerForeground(parent.getDisplay());
 		Composite top = (Composite) super.createDialogArea(workArea);
 
-		// override any layout inherited from createDialogArea 
+		// override any layout inherited from createDialogArea
 		GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.verticalSpacing = 0;
 		layout.horizontalSpacing = 0;
 		top.setLayout(layout);
-		top.setLayoutData(new GridData(GridData.FILL_BOTH));
+		top.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		top.setBackground(background);
 		top.setForeground(foreground);
+		
 
-		// the image & text	
+		// the image & text
 		final Composite topContainer = new Composite(top, SWT.NONE);
 		topContainer.setBackground(background);
 		topContainer.setForeground(foreground);
@@ -246,100 +247,64 @@ public class CustomAboutDialog extends TrayDialog {
 		layout.verticalSpacing = 0;
 		layout.horizontalSpacing = 0;
 		topContainer.setLayout(layout);
-
+		topContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		// Calculate a good height for the text
 		GC gc = new GC(parent);
 		int lineHeight = gc.getFontMetrics().getHeight();
 		gc.dispose();
 
-		int topContainerHeightHint = 100;
-		
-		topContainerHeightHint = Math.max(topContainerHeightHint, lineHeight * 6);
 
-		//image on left side of dialog
+		// image on left side of dialog
 		if (aboutImage != null) {
 			Label imageLabel = new Label(topContainer, SWT.NONE);
 			imageLabel.setBackground(background);
 			imageLabel.setForeground(foreground);
 
-			GridData data = new GridData(SWT.FILL,SWT.FILL,true,true,0,0);
+			GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
 			data.horizontalAlignment = GridData.FILL;
 			data.verticalAlignment = GridData.FILL;
 			data.grabExcessHorizontalSpace = true;
 			data.grabExcessVerticalSpace = true;
 			imageLabel.setLayoutData(data);
 			imageLabel.setImage(aboutImage);
-			topContainerHeightHint = Math.max(topContainerHeightHint, aboutImage.getBounds().height);
 		}
 
-		
-		Composite newComposite=new Composite(topContainer, SWT.NONE);
-		newComposite.setLayout(new GridLayout(1,true));
-		newComposite.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
-		newComposite.setBackground( new Color (null, 255, 255, 255));
+		Composite newComposite = new Composite(topContainer, SWT.NONE);
+		newComposite.setLayout(new GridLayout(1, true));
+		newComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		newComposite.setBackground(new Color(null, 255, 255, 255));
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		topContainer.setLayoutData(data);
 		// used only to drive initial size so that there are no hints in the
 		// layout data
-		topContainer.setSize(432, topContainerHeightHint);
 		final Link link = new Link(newComposite, SWT.NONE);
-		GridData data1 = new GridData(SWT.LEFT,SWT.FILL,true,false,0,0);
+		GridData data1 = new GridData(SWT.FILL, SWT.FILL, true, false, 0, 0);
 		link.setLayoutData(data1);
-		link.setBackground(new Color (null, 255, 255, 255));
-		link.setText("<a>"+Messages.ABOUT_HEADER_TEXT+"</a>"+Messages.ABOUT_TEXT);
-		
+		link.setBackground(new Color(null, 255, 255, 255));
+		link.setText("<a>" + Messages.ABOUT_HEADER_TEXT + "</a>" + Messages.ABOUT_TEXT);
+
 		link.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
-			public void mouseDown(MouseEvent e) 
-			{
+			public void mouseDown(MouseEvent e) {
 				try {
-						PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(Messages.HYDROGRAPH_URL));
-					}
-				 catch (IllegalArgumentException | PartInitException | MalformedURLException e1) {
-					 logger.error(e1.getMessage());
-						WidgetUtility.errorMessage(Messages.ERROR_MESSAGE_FOR_GITHUB_URL);
+					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser()
+							.openURL(new URL(Messages.HYDROGRAPH_URL));
+				} catch (IllegalArgumentException | PartInitException | MalformedURLException e1) {
+					logger.error(e1.getMessage());
+					WidgetUtility.errorMessage(Messages.ERROR_MESSAGE_FOR_GITHUB_URL);
 				}
-				
+
 			}
 		});
 		if (item != null) {
-			
+
 			text = new StyledText(newComposite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
 			configureText(newComposite);
 
-			// computing trim for later
-			Rectangle rect = text.computeTrim(0, 0, 100, 100);
-			final int xTrim = rect.width - 100;
-			final int yTrim = rect.height - 100;
-
-			topContainer.addControlListener(new ControlAdapter() {
-				public void controlResized(ControlEvent e) {
-					text.setSize(SWT.DEFAULT, SWT.DEFAULT);
-					topContainer.layout(true);
-					// do we need a scroll bar?
-					Point size = text.getSize();
-					int availableHeight = size.y - yTrim;
-					int availableWidth = size.x - xTrim - (2 * TEXT_MARGIN);
-					Point newSize = text.computeSize(availableWidth, SWT.DEFAULT, true);
-					int style = text.getStyle();
-					if (newSize.y > availableHeight) {
-						if ((style & SWT.V_SCROLL) == 0) {
-							recreateWrappedText(topContainer, true);
-						}
-					} else {
-						if ((style & SWT.V_SCROLL) != 0) {
-							recreateWrappedText(topContainer, false);
-						}
-					}
-					topContainer.layout(true);
-				}
-			});
 		}
-		
-	
-		
+
 		// horizontal bar
 		Label bar = new Label(workArea, SWT.HORIZONTAL | SWT.SEPARATOR);
 		data = new GridData();
@@ -348,7 +313,7 @@ public class CustomAboutDialog extends TrayDialog {
 
 		// add image buttons for bundle groups that have them
 		Composite bottom = (Composite) super.createDialogArea(workArea);
-		// override any layout inherited from createDialogArea 
+		// override any layout inherited from createDialogArea
 		layout = new GridLayout();
 		bottom.setLayout(layout);
 		data_1 = new GridData();
@@ -381,7 +346,7 @@ public class CustomAboutDialog extends TrayDialog {
 		text = new StyledText(parent, style);
 		configureText(parent);
 		if (hasFocus) {
-			//text.setFocus();
+			// text.setFocus();
 		}
 		text.setSelection(selection);
 	}
@@ -395,17 +360,16 @@ public class CustomAboutDialog extends TrayDialog {
 
 		text.setFont(parent.getFont());
 		text.setText(item.getText());
-		
+
 		text.setBackground(background);
 		text.setForeground(foreground);
 		text.setMargins(TEXT_MARGIN, TEXT_MARGIN, TEXT_MARGIN, 0);
-		
+
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		text.setLayoutData(gd);
-		
+
 		aboutTextManager = new AboutTextManager(text);
 		aboutTextManager.setItem(item);
-	
 
 		createTextMenu();
 
@@ -418,14 +382,10 @@ public class CustomAboutDialog extends TrayDialog {
 	 */
 	private void createTextMenu() {
 		final MenuManager textManager = new MenuManager();
-		textManager.add(new CommandContributionItem(
-				new CommandContributionItemParameter(PlatformUI
-						.getWorkbench(), null, IWorkbenchCommandConstants.EDIT_COPY,
-						CommandContributionItem.STYLE_PUSH)));
-		textManager.add(new CommandContributionItem(
-				new CommandContributionItemParameter(PlatformUI
-						.getWorkbench(), null, IWorkbenchCommandConstants.EDIT_SELECT_ALL,
-						CommandContributionItem.STYLE_PUSH)));
+		textManager.add(new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(),
+				null, IWorkbenchCommandConstants.EDIT_COPY, CommandContributionItem.STYLE_PUSH)));
+		textManager.add(new CommandContributionItem(new CommandContributionItemParameter(PlatformUI.getWorkbench(),
+				null, IWorkbenchCommandConstants.EDIT_SELECT_ALL, CommandContributionItem.STYLE_PUSH)));
 		text.setMenu(textManager.createContextMenu(text));
 		text.addDisposeListener(new DisposeListener() {
 
@@ -444,69 +404,65 @@ public class CustomAboutDialog extends TrayDialog {
 	protected boolean isResizable() {
 		return true;
 	}
-	
+
 	protected void createButtonsForButtonBar(Composite parent) {
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Button button =  createButton(parent, 0, "", false); 
+		Button button = createButton(parent, 0, "", false);
 		Bundle bundle = Platform.getBundle(Constants.ABOUT_DIALOG_IMAGE_BUNDLE_NAME);
-		URL fullPathString = BundleUtility.find(bundle,Constants.ABOUT_DIALOG_FEATURE_IMAGE_PATH);
+		URL fullPathString = BundleUtility.find(bundle, Constants.ABOUT_DIALOG_FEATURE_IMAGE_PATH);
 		button.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
 		button.setToolTipText("Help");
 		Image image = ImageDescriptor.createFromURL(fullPathString).createImage();
 		button.setImage(image);
-		images.add(image);		
-		 
+		images.add(image);
+
 		button.addSelectionListener(new SelectionAdapter() {
-			   @Override
-			    public void widgetSelected(SelectionEvent e) {
-			    	IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-								.getActivePart();
-			    	IHandlerService handlerService = (IHandlerService)workbenchPart.getSite()
-			                .getService(IHandlerService.class);
-			        try {
-			            handlerService.executeCommand("org.eclipse.ui.help.displayHelp", null);
-			        } catch (Exception ex) {
-			            throw new RuntimeException("Help File Not Found!");
-			        }
-			    }
-			}); 
-		
-		Button installationButton = new Button(parent,SWT.PUSH);
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getActivePart();
+				IHandlerService handlerService = (IHandlerService) workbenchPart.getSite()
+						.getService(IHandlerService.class);
+				try {
+					handlerService.executeCommand("org.eclipse.ui.help.displayHelp", null);
+				} catch (Exception ex) {
+					throw new RuntimeException("Help File Not Found!");
+				}
+			}
+		});
+
+		Button installationButton = new Button(parent, SWT.PUSH);
 		installationButton.setLayoutData(new GridData());
-	    GridLayout layout = (GridLayout) parent.getLayout();
-	    installationButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-	    layout.numColumns++;
-	    layout.makeColumnsEqualWidth = false;
+		GridLayout layout = (GridLayout) parent.getLayout();
+		installationButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+		layout.numColumns++;
+		layout.makeColumnsEqualWidth = false;
 		installationButton.setText("Installation Details");
 		installationButton.setToolTipText("Installation Details");
 		installationButton.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 				HydrographInstallationDialog dialog = new HydrographInstallationDialog(getShell());
 				dialog.open();
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				//{Do-nothing}
+				// {Do-nothing}
 			}
 		});
-		
+
 		Label installationLabel = new Label(parent, SWT.NONE);
 		installationLabel.setLayoutData(new GridData());
-	    GridLayout installationLabelLayout = (GridLayout) parent.getLayout();
-	    installationLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
-	    installationLabelLayout.numColumns++;
-	    installationLabelLayout.makeColumnsEqualWidth = false;
+		GridLayout installationLabelLayout = (GridLayout) parent.getLayout();
+		installationLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
+		installationLabelLayout.numColumns++;
+		installationLabelLayout.makeColumnsEqualWidth = false;
 
-	    Button ok = createButton(parent, IDialogConstants.OK_ID,
-	                IDialogConstants.OK_LABEL, true);
-	        ok.setFocus();	 
-	       
-	    }  
+		Button ok = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		ok.setFocus();
+
 	}
-
-
-
+}
