@@ -109,12 +109,11 @@ public class SubJobOpenAction extends SelectionAction{
 									if (container != null){
 										container.setLinkedMainGraphPath(mainJobFilePath);
 										container.setSubjobComponentEditPart(obj);
-										for (Component component : container.getUIComponentList()) {
-											if(subjobComponent.isContinuousSchemaPropogationAllow())
-											component.setContinuousSchemaPropogationAllow(true);	
-											subJobUtility.propogateSchemaToSubjob(subjobComponent, component);
+
+                                      for (Component component : container.getUIComponentList()) {
+										subJobUtility.propogateSchemaToSubjob(subjobComponent, component);
 										}
-										subjobComponent.setContinuousSchemaPropogationAllow(false);
+                                        subjobComponent.setContinuousSchemaPropogationAllow(false);
 										subjobComponent.getProperties().put(Constants.SUBJOB_CONTAINER, container);
 									}
 									((ComponentEditPart) obj).refresh();

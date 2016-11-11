@@ -221,8 +221,10 @@ public class ELTJoinConfigGrid extends Dialog {
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
 		if(!sourceFieldList.isEmpty())
+		{	
 		fieldDialog.setSourceFieldsFromPropagatedSchema(SchemaSyncUtility.INSTANCE.
 				converterFilterPropertyListToStringList(sourceFieldList.get(Integer.parseInt(teminalNumber))));
+		}
 		fieldDialog.setComponentName(Constants.JOIN_KEYS_WINDOW_TITLE);
 		fieldDialog.open();
 		return fieldDialog.getResultAsCommaSeprated();

@@ -14,15 +14,14 @@
 package hydrograph.ui.tooltip.tooltips;
 
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.WordUtils;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
-import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
@@ -30,7 +29,6 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -54,7 +52,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.omg.CORBA.NamedValue;
 import org.slf4j.Logger;
 /**
  * 
@@ -66,6 +63,8 @@ import org.slf4j.Logger;
 
 public class ComponentTooltip extends AbstractInformationControl implements IInformationControlExtension2 {
 	
+	
+
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentTooltip.class);
 	
 	private ToolBarManager toolBarManager=null;
@@ -282,7 +281,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 			final PropertyToolTipInformation propertyInfo) {
 		String propertyNameCapitalized = getCapitalizedName(propertyInfo);
 		Link link = new Link(container, SWT.NONE);
-		String tempText= propertyNameCapitalized+" : <a>" + "Add fields as Passthrough fields"+ "</a>";		
+		String tempText= propertyNameCapitalized+" : <a>" + Constants.ADD_FIELDS_AS_PASSTHROUGH_FIELDS+ "</a>";		
 		link.setText(tempText);
 		link.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		link.addSelectionListener(new SelectionListener() {
