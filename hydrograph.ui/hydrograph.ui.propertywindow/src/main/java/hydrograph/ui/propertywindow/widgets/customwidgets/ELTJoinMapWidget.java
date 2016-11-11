@@ -22,7 +22,6 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -265,9 +264,6 @@ public class ELTJoinMapWidget extends AbstractWidget {
 				.sortedFiledNamesBySocketId(getComponent());
 		if (sorceFieldList != null)
 			joinMappingGrid.setLookupInputProperties(sorceFieldList);
-	//	getEltComponenetProperties().getComponentConfigurationProperties().
-		//put(propertyName,joinMappingGrid);
-		//getComponent().setContinuousSchemaPropogationAllow(false);
 	}
 
 	@Override

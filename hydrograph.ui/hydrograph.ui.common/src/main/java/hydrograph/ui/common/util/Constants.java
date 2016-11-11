@@ -79,12 +79,16 @@ public class Constants {
 	public static final String TRANSFORM_DISPLAYNAME = "Transform";
 	public static final String CUMULATE_DISPLAYNAME = "Cumulate";
 	public static final String NORMALIZE_DISPLAYNAME = "Normalize";
-
+	public static final String ADD_FIELDS_AS_PASSTHROUGH_FIELDS = "Add fields as Passthrough fields";
 	public static final String AGGREGATE_WINDOW_TITLE = "Aggregate";
 	public static final String TRANSFORM_WINDOW_TITLE = "Transform";
 	public static final String CUMULATE_WINDOW_TITLE= "Cumulate";
 	public static final String NORMALIZE_WINDOW_TITLE = "Normalize";
-	
+	public static final String ISSUE_PROPERTY_NAME="Other Issues";
+    public static final String SHOW_TOOLTIP="TRUE";
+	public static final String HIDE_TOOLTIP="FALSE";
+	public static final String TOOLTIP_DATATYPE="TEXT";
+	 
 	public static final String INPUT_SOCKET_TYPE = "in";
 	public static final String OUTPUT_SOCKET_TYPE = "out";
 	public static final String UNUSED_SOCKET_TYPE = "unused";
@@ -142,6 +146,9 @@ public class Constants {
 	public static final String PARAMETER_PREFIX = "@{";
 	public static final String UNIQUE_SEQUENCE = "UniqueSequence";
 	public static final String UNIQUE_SEQUENCE_TYPE = "Unique Sequence";
+	public static final String PROPAGATE_FIELD_FROM_LEFT= "Propagate Field\nFrom Left";
+	public static final String PROPAGATE= "Propagate";
+	public static final String STRAIGHTPULL = "STRAIGHTPULL";
 	
 	public static final String PARAMETER_SUFFIX = "}";
 	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";
@@ -230,6 +237,7 @@ public class Constants {
 	public static final String COMMENT_BOX="Add";
 	
 	//Types of UI- Schema 
+	public static final String SCHEMA = "schema";
 	public static final String FIXEDWIDTH_GRID_ROW = "FixedWidth";
 	public static final String MIXEDSCHEMA_GRID_ROW = "MixedScheme";		
 	public static final String GENERATE_RECORD_GRID_ROW="GenerateRecord";

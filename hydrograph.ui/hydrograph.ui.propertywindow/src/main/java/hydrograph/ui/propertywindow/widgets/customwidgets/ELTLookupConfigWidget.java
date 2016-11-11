@@ -14,7 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupConfigProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.graph.model.PortTypeEnum;
@@ -23,7 +22,6 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty.ELTLookupConfigGrid;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
@@ -91,8 +89,6 @@ public class ELTLookupConfigWidget extends AbstractWidget {
 				ELTLookupConfigGrid eltLookupConfigGrid = new ELTLookupConfigGrid(((Button) eltDefaultButton
 						.getSWTWidgetControl()).getShell(), propertyDialogButtonBar, properties);
 				eltLookupConfigGrid.setSourceFieldList(joinMappingGrid.getLookupInputProperties());
-				/*eltLookupConfigGrid.setPropagatedFieldProperty(SchemaPropagationHelper.INSTANCE
-						.getFieldsForFilterWidget(getComponent()));*/
 				eltLookupConfigGrid.open();
 				
 				setPortTypes();

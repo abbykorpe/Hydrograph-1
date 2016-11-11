@@ -70,6 +70,8 @@ import org.slf4j.Logger;
  * 
  */
 public class ComponentFigure extends Figure implements Validator {
+	private static final String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB = "Continuous schema propagation stopped in Subjob.";
+
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentFigure.class);
 
 	private final XYLayout layout;
@@ -87,7 +89,6 @@ public class ComponentFigure extends Figure implements Validator {
 	private Color selectedComponentColor;
 	private boolean incrementedHeight;
 	private int componentLabelMargin;
-
 	private String canvasIconPath;
 	private Image canvasIcon, statusImage, compStatusImage,schemaPropogationStopImage;
     private Component component;
@@ -329,19 +330,33 @@ public class ComponentFigure extends Figure implements Validator {
 
 		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
 		drawPropertyStatus(graphics);
-		if((StringUtils.equalsIgnoreCase(component.getCategory(), "TRANSFORM")
+		if((StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM)
 			&& component.isContinuousSchemaPropogationAllow()
-			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), "filter")
-			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), "uniquesequence"))
+			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.FILTER)
+			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.UNIQUE_SEQUENCE))
 			 )
 		{
 		 drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
 		}
-		else if(component.isContinuousSchemaPropogationAllow() &&component instanceof SubjobComponent)
+		else if(component instanceof SubjobComponent)
 		{
 			boolean isTransformComponentPresent=checkIfSubJobHasTransformComponent(component);
+			PropertyToolTipInformation propertyToolTipInformation;
 			if(isTransformComponentPresent)
+			{	
 			drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+			propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.SHOW_TOOLTIP, 
+					Constants.TOOLTIP_DATATYPE);
+			propertyToolTipInformation.setPropertyValue(CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB);
+			
+			}
+			else
+			{
+				propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.HIDE_TOOLTIP, 
+						Constants.TOOLTIP_DATATYPE);
+				propertyToolTipInformation.setPropertyValue("");
+			}
+			component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}	
 		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
        
@@ -367,9 +382,10 @@ public class ComponentFigure extends Figure implements Validator {
 			if(object instanceof Component)
 			{
 			Component component1=(Component)object;	
-			if((StringUtils.equalsIgnoreCase(component1.getCategory(), "TRANSFORM")
-					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "filter")
-					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), "uniquesequence"))
+			if((StringUtils.equalsIgnoreCase(component1.getCategory(), Constants.TRANSFORM)
+					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), Constants.FILTER)
+					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), Constants.UNIQUE_SEQUENCE))
+					&& component1.isContinuousSchemaPropogationAllow()
 					 )
 			{
 				containsTransformComponent=true;
@@ -377,8 +393,9 @@ public class ComponentFigure extends Figure implements Validator {
 			}
 			else if(component1 instanceof SubjobComponent)
 			{
-				
 				containsTransformComponent=checkIfSubJobHasTransformComponent(component1);
+				if(containsTransformComponent)
+				break;	
 			}
 			}
 		}

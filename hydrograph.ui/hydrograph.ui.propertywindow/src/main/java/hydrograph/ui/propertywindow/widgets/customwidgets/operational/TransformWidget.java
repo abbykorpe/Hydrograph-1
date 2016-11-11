@@ -113,15 +113,17 @@ public class TransformWidget extends AbstractWidget {
 		 TransformMapping transformMappingPopulatedFromTooTipAction=
         		 (TransformMapping) getComponent().getTooltipInformation().get("operation").getPropertyValue();
 		 if(transformMappingPopulatedFromTooTipAction!=null)
+		 {	 
 		 transformMapping.setAddPassThroughFields(transformMappingPopulatedFromTooTipAction.isAddPassThroughFields());
-		
+		 }
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
 		if(getComponent().isContinuousSchemaPropogationAllow())
 		getPropagatedSChema();
 		if(transformMapping.isAddPassThroughFields())
+		{	
 		addPassThroughFields();
-		
+		}
 		SchemaSyncUtility.INSTANCE.unionFilter(transformMapping.getOutputFieldList(), outputList);
 		populateMappingOutputFieldIfTargetXmlImported();
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
@@ -217,7 +219,9 @@ public class TransformWidget extends AbstractWidget {
 		else if(!transformMapping.getMapAndPassthroughField().isEmpty()&&transformMapping.getOutputFieldList().isEmpty())
 		{
 			if(transformMapping.getMapAndPassthroughField().get(0).getFilterProperty()==null)
+			{	
 			backwardJobComapatabilityCode();	
+			}
 			for(NameValueProperty nameValueProperty:transformMapping.getMapAndPassthroughField())
 		 	{
 		 		transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
@@ -233,8 +237,10 @@ public class TransformWidget extends AbstractWidget {
 		List<FilterProperties> outputFileds = new ArrayList<>();
 		Schema schema = (Schema) getComponent().getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 		    if(schema==null)
+		    {	
 			 return outputFileds;  
-			for (GridRow gridRow : schema.getGridRow()) {
+		    }
+			 for (GridRow gridRow : schema.getGridRow()) {
 				FilterProperties filterProperty = new FilterProperties();
 				filterProperty.setPropertyname(gridRow.getFieldName());
 				outputFileds.add(filterProperty);
@@ -330,7 +336,9 @@ public class TransformWidget extends AbstractWidget {
 		Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) getComponent()
 				.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 		if (schemaMap != null && schemaMap.get(Constants.FIXED_OUTSOCKET_ID) != null)
+		{	
 			componentsOutputSchema = schemaMap.get(Constants.FIXED_OUTSOCKET_ID);
+		}
 		else {
 			componentsOutputSchema = new ComponentsOutputSchema();
 			schemaMap = new LinkedHashMap<>();

@@ -220,9 +220,11 @@ public class ELTJoinConfigGrid extends Dialog {
 		String teminalNumber=socketId.substring(socketId.length()-1);
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
-		if(!sourceFieldList.isEmpty())
+		if(!sourceFieldList.isEmpty()&& Integer.parseInt(teminalNumber) < sourceFieldList.size())
+		{	
 		fieldDialog.setSourceFieldsFromPropagatedSchema(SchemaSyncUtility.INSTANCE.
 				converterFilterPropertyListToStringList(sourceFieldList.get(Integer.parseInt(teminalNumber))));
+		}
 		fieldDialog.setComponentName(Constants.JOIN_KEYS_WINDOW_TITLE);
 		fieldDialog.open();
 		return fieldDialog.getResultAsCommaSeprated();

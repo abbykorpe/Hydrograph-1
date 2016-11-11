@@ -541,6 +541,12 @@ public class SchemaSyncUtility {
 		}
 		return indexAndValueOfParameter;
 	}
+	/**
+	 * This method converts list of filter properties to list of string.
+	 * 
+	 * @param List of filterProperties
+	 * @return List of String
+	 */
 	public List<String> converterFilterPropertyListToStringList(List<FilterProperties> filterProperties)
 	{
 		List<String> stringList=new ArrayList<>();
