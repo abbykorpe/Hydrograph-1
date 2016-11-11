@@ -166,6 +166,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		return figure;
 	}
 
+	
+	/**
+	 * updates version and validity status icon of subjob component
+	 * @param figure
+	 */
 	public void updateSubjobComponent(IFigure figure) {
 		LinkedHashMap<String, Object> properties = getCastedModel().getProperties();
 		if (StringUtils.equals(getCastedModel().getComponentName(), Constants.SUBJOB_COMPONENT)) {

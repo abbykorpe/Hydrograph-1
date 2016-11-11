@@ -36,7 +36,7 @@ connection(link) on transform component.
 21.<1376> - [Anshul Shivhare] - Default Name is Not Getting Displayed When User Revert the Component Name to its Default Name After Renaming.
 22. ..... - [Pooja Yadav] -  Subjob: Job is getting failed when user creates standalone subjob with Discard component.
 23. ..... - [Pooja Yadav] - Stop Job Button : fixed Stop job button image issue.
-
+24. ..... - [Sonia Raheja] - Refresh icon should occur on subjob component in main job if user changes in disconnected subjob.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
