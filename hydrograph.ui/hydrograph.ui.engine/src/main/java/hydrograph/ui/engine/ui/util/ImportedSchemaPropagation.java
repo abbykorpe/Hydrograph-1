@@ -13,6 +13,12 @@
 
 package hydrograph.ui.engine.ui.util;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.Schema;
@@ -22,13 +28,6 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.propertywindow.messages.Messages;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * @author Bitwise
@@ -50,14 +49,11 @@ public class ImportedSchemaPropagation {
 	 * @return
 	 */
 	public void initiateSchemaPropagationAfterImport(Container container) {
-		for (Object object : container.getChildren()) {
-			if(object instanceof Component){
-				 Component component = (Component)object;
+		for (Component component : container.getUIComponentList()) {
 			Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) component
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
 			if (schemaMap != null && !StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM))
 				SchemaPropagation.INSTANCE.continuousSchemaPropagation(component, schemaMap);
-		}
 	}
 		schemaPropagationForTransformCategory(container);
 		removeTempraryProperties(container);
@@ -68,9 +64,7 @@ public class ImportedSchemaPropagation {
 	private void validateAllComponents(Container container) {
 
 		if (container != null) {
-			for (Object object : container.getChildren()) {
-				if(object instanceof Component){
-					 Component component = (Component)object;
+			for (Component component : container.getUIComponentList()) {
 				if (component instanceof SubjobComponent) {
 					String previousValidityStatus = component.getValidityStatus();
 					component.validateComponentProperties();
@@ -84,7 +78,6 @@ public class ImportedSchemaPropagation {
 				} else {
 					component.validateComponentProperties();
 				}
-			  }
 			}
 		}
 
@@ -103,9 +96,7 @@ public class ImportedSchemaPropagation {
 
 	// This method propagates schema from transform components.
 	private void schemaPropagationForTransformCategory(Container container) {
-		for (Object object : container.getChildren()) {
-			if(object instanceof Component){
-				 Component component = (Component)object;
+		for (Component component : container.getUIComponentList()) {
 			if (StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM)) {
 				Map<String, ComponentsOutputSchema> schemaMap = (Map<String, ComponentsOutputSchema>) component
 						.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);
@@ -117,7 +108,6 @@ public class ImportedSchemaPropagation {
 					SchemaPropagation.INSTANCE.continuousSchemaPropagation(component, (Map) component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE));
 				}
 			}
-		  }
 		}
 
 	}
@@ -172,12 +162,9 @@ public class ImportedSchemaPropagation {
 
 	// This method removes temporary properties from components.
 	private void removeTempraryProperties(Container container) {
-		for (Object object : container.getChildren()) {
-			if(object instanceof Component){
-				 Component component = (Component)object;
+		for (Component component : container.getUIComponentList()){
 			component.getProperties().remove(Constants.SCHEMA_FIELD_SEQUENCE);
 			component.getProperties().remove(Constants.COPY_FROM_INPUT_PORT_PROPERTY);
-		  }
 		}
 	}
 

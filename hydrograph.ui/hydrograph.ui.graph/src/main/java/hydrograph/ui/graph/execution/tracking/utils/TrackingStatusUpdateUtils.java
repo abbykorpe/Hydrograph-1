@@ -325,7 +325,7 @@ private boolean isSubjobAllComponentsStatusAvailable(Container container,Executi
 					}
 			}
 	}
-	if(container.getChildren().size()-subjobSocketCount==subjobComponentCount)
+	if(container.getUIComponentList().size()-subjobSocketCount==subjobComponentCount)
 	{
 		return true;
 	}else{

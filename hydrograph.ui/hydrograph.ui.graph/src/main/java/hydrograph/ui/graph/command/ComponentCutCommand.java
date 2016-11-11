@@ -111,6 +111,10 @@ public class ComponentCutCommand extends Command {
 			node.getParent().addChild(node);
 			restoreConnections();
 			}
+			else if(object instanceof CommentBox){
+				CommentBox node = (CommentBox)object;
+				node.getParent().addChild(node);
+			}
 		}
 
 	}

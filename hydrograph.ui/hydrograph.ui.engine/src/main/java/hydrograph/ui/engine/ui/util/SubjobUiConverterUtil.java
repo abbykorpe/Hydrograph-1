@@ -13,16 +13,6 @@
 
 package hydrograph.ui.engine.ui.util;
 
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
-import hydrograph.ui.engine.ui.repository.UIComponentRepo;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
-import hydrograph.ui.graph.model.components.OutputSubjobComponent;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,6 +39,16 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
+import hydrograph.ui.engine.ui.repository.UIComponentRepo;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
+
 /**
  * The class SubjobUiConverterUtil
  * 
@@ -60,7 +60,9 @@ import org.xml.sax.SAXException;
  *
  */
 public class SubjobUiConverterUtil {
-	
+	private static String LIMIT_COMPONENT = "LimitComponent";
+	private static String CLONE_COMPONENT = "CloneComponent";
+	private static String UNION_ALL_COMPONENT = "UnionallComponent";
 	
 	/**
 	 * @param subJobXMLPath
@@ -128,12 +130,9 @@ public class SubjobUiConverterUtil {
 	 * @return
 	 */
 	public static Component getOutputSubJobConnectorReference(Container subJobContainer) {
-		for(Object object:subJobContainer.getChildren()){
-			if(object instanceof Component){
-				 Component component = (Component)object;
+		for(Component component:subJobContainer.getUIComponentList()){
 			if(StringUtils.equals(Constants.OUTPUT_SOCKET_FOR_SUBJOB, component.getType())){
 				return component;
-			}
 		}
 	  }
 		return null;
@@ -145,12 +144,9 @@ public class SubjobUiConverterUtil {
 	 * @return
 	 */
 	public static Component getInputSubJobConnectorReference(Container container) {
-		for(Object object:container.getChildren()){
-			if(object instanceof Component){
-				 Component component = (Component)object;
+		for(Component component:container.getUIComponentList()){
 			if(StringUtils.equals(Constants.INPUT_SOCKET_FOR_SUBJOB, component.getType())){
 				return component;
-			}
 		  }
 		}
 		return null;
@@ -215,8 +211,11 @@ public class SubjobUiConverterUtil {
 			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
 		} else {
 			for (int i = 0; i < subJobContainer.getUIComponentList().size(); i++) {
-				if(subJobContainer.getChildren().get(i) instanceof Component){
+				if(subJobContainer.getUIComponentList().get(i) instanceof Component){
 					Component component = (Component)subJobContainer.getUIComponentList().get(i);
+					if(!(StringUtils.equalsIgnoreCase(component.getComponentName(), LIMIT_COMPONENT) 
+							||StringUtils.equalsIgnoreCase(component.getComponentName(), CLONE_COMPONENT)
+							   ||StringUtils.equalsIgnoreCase(component.getComponentName(), UNION_ALL_COMPONENT))){
 				if (!(component instanceof InputSubjobComponent || component instanceof OutputSubjobComponent)) {
 					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), 
 							component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
@@ -233,7 +232,7 @@ public class SubjobUiConverterUtil {
 								UIComponentsConstants.VALID.value());
 						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
 					}
-				}
+				}}
 			   }
 			}//
 		}

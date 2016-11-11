@@ -14,25 +14,11 @@
  
 package hydrograph.ui.graph.utility;
 
-import hydrograph.ui.common.util.CanvasDataAdapter;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.engine.util.ConverterUtil;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.figure.ComponentFigure;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -54,6 +40,19 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.CanvasDataAdapter;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.engine.util.ConverterUtil;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.figure.ComponentFigure;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
@@ -370,23 +369,17 @@ public class SubJobUtility {
 		int inPort = 0;
 		int outPort = 0;
 		if (subJobContainer != null && selectedSubjobComponent != null && jobFileIPath != null) {
-			  for (Object object : subJobContainer.getChildren()) {
-				  if(object instanceof Component){
-					  Component subComponent = (Component)object;
+			  for (Component subComponent : subJobContainer.getUIComponentList()) {
 				if (Constants.INPUT_SUBJOB.equalsIgnoreCase(subComponent.getComponentName())) {
 					inPort = subComponent.getOutPortCount();
 					break;
 				  }
-				}
 			}
-			  for (Object object : subJobContainer.getChildren()) {
-				  if(object instanceof Component){
-					  Component subComponent = (Component)object;
+			  for (Component subComponent : subJobContainer.getUIComponentList()) {
 				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(subComponent.getComponentName())) {
 					outPort = subComponent.getInPortCount();
 					break;
 				   }
-				}
 			}
 
 			selectedSubjobComponent.getProperties().put(Constants.INPUT_PORT_COUNT_PROPERTY, String.valueOf(inPort));
@@ -442,13 +435,10 @@ public class SubJobUtility {
 	 *            the container
 	 */
 	private void linkSubJobToMainGraph(Component selectedSubjobComponent, Container container) {
-		  for (Object object : container.getChildren()) {
-			  if(object instanceof Component){
-				  Component component = (Component)object;
+		 for (Component component : container.getUIComponentList()){
 			if (Constants.INPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())
 					|| Constants.OUTPUT_SUBJOB.equalsIgnoreCase(component.getComponentName()))
 				propogateSchemaToSubjob(selectedSubjobComponent, component);
-		}
 	   }
 	}
 

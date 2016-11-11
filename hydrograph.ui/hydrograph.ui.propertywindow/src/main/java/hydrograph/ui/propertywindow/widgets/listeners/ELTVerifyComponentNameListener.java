@@ -14,12 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners;
 
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +28,12 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.slf4j.Logger;
+
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 
 /**
@@ -129,14 +129,11 @@ public class ELTVerifyComponentNameListener implements IELTListener {
 		componentName = componentName.trim();
 		boolean result = true;
 
-		for (Object object : currentComponent.getParent().getChildren()) {
-			if(object instanceof Component){
-				Component component = (Component)object;
+		for (Component component : currentComponent.getParent().getUIComponentList()) {
 			if (component.getComponentLabel()!=null && StringUtils.equalsIgnoreCase(component.getComponentLabel().getLabelContents(), componentName)) {
 				result = false;
 				break;
 			}
-		}
 	}
 		logger.debug("result: {}", result);
 		return result;

@@ -13,6 +13,33 @@
 
 package hydrograph.ui.graph.utility;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
+import javax.websocket.Session;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
@@ -32,33 +59,6 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.websocket.CloseReason;
-import javax.websocket.Session;
-import javax.websocket.CloseReason.CloseCodes;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
 /**
  * 
  * JobScpAndProcessUtility use to create gradle command and process builder.
@@ -368,15 +368,12 @@ public class JobScpAndProcessUtility {
 			}
 			if(obj!=null && obj instanceof Container){
 			  Container container = (Container) obj;
-			  for (Object object : container.getChildren()) {
-				  if(object instanceof Component){
-					  Component component = (Component)obj;
+			  for (Component component : container.getUIComponentList()) {
 					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
 						  String subJob=(String) component.getProperties().get(Constants.PATH_PROPERTY_NAME);
 						  subJobList.add(subJob);
 						  checkNestedSubJob(subJobList, subJob);
 					}
-				  }	
 	     		}
 		  }
 	}
@@ -395,9 +392,7 @@ public class JobScpAndProcessUtility {
 		}
 		if(obj!=null && obj instanceof Container){
 		  Container container = (Container) obj;
-		  for (Object object : container.getChildren()) {
-			  if(object instanceof Component){
-				  Component component = (Component)obj;
+		  for (Component component : container.getUIComponentList()){
 			  	Schema  schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 				if(schema!=null && schema.getIsExternal()){
 					externalSchemaPathList.add(schema.getExternalSchemaPath());
@@ -407,7 +402,6 @@ public class JobScpAndProcessUtility {
 					  checkSubJobForExternalSchema(externalSchemaPathList, subJob);
 				}
 		  	}
-		  }
 		}
 	}
 

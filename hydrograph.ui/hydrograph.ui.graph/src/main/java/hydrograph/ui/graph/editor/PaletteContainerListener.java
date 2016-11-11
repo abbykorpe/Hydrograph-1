@@ -15,7 +15,6 @@
 package hydrograph.ui.graph.editor;
 
 import java.awt.MouseInfo;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -77,14 +76,7 @@ public class PaletteContainerListener implements MouseListener, MouseTrackListen
 	 */
 	public List<Component> getCanvasCompAndUpdateCompList(){
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		List<Object> objectList = ((ELTGraphicalEditor) page.getActiveEditor()).getContainer().getChildren();
-		List<Component> compListFromCanvas = new ArrayList<Component>() ;
-		for(Object obj : objectList){
-			if(obj instanceof Component){
-			Component component = (Component) obj;
-			compListFromCanvas.add(component);
-			}
-		}
+		List<Component> compListFromCanvas = ((ELTGraphicalEditor) page.getActiveEditor()).getContainer().getUIComponentList();
 		logger.debug("Existing components from Job canvas");
 		for (int i=0; i<compListFromCanvas.size(); i++){
 			String currentCompLabel = compListFromCanvas.get(i).getComponentLabel().getLabelContents();
