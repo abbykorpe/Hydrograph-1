@@ -58,8 +58,6 @@ public class Container extends Model {
 	private ArrayList<String> componentNames = new ArrayList<>();
 	
 	@XStreamOmitField
-	private boolean isVersionAlreadyUpdated;
-	@XStreamOmitField
 	private String linkedMainGraphPath;
 	@XStreamOmitField
 	private Object subjobComponentEditPart;
@@ -438,9 +436,11 @@ public class Container extends Model {
 	 * Update subjob version.
 	 */
 	public void updateSubjobVersion() {
-		if(!isVersionAlreadyUpdated && isCurrentGraphSubjob()){
+		if(isCurrentGraphSubjob()){
+			if(subjobVersion>=Long.MAX_VALUE){
+				subjobVersion=1;
+			}
 			this.subjobVersion++;
-			isVersionAlreadyUpdated=true;
 		}
 	}
 

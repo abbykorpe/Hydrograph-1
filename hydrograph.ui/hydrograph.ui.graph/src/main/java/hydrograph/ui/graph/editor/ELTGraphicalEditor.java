@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +174,7 @@ import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceCon
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
+import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.RemoveDebugHandler;
@@ -183,12 +185,14 @@ import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
+
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 
 /**
@@ -338,6 +342,16 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			
 			@Override
 			public void focusGained(FocusEvent e) {
+				for (Iterator<EditPart> ite = viewer.getEditPartRegistry().values().iterator(); ite.hasNext();) {
+					EditPart editPart = (EditPart) ite.next();
+					if (editPart instanceof ComponentEditPart) {
+						hydrograph.ui.graph.model.Component component = ((ComponentEditPart) editPart).getCastedModel();
+						if (component instanceof SubjobComponent) {
+							((ComponentEditPart) editPart).updateSubjobComponent(
+									(ComponentFigure) ((ComponentEditPart) editPart).getFigure());
+						}
+					}
+				}
 				viewer.getEditDomain().loadDefaultTool();				
 			}
 		});
