@@ -30,6 +30,8 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLabl
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
+import java.util.List;
+
 
 /**
  * Helper class to provide configuration for customizing widgets.
@@ -106,12 +108,63 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+
+	/**
+	 * Configuration to customize text box as port property 
+	 */
+	public WidgetConfig getPortWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_PORT);
+		textBoxConfig.setCharacterLimit(4);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as chunk size property 
+	 */
+	public WidgetConfig getChunkSizeWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_CHUNK_SIZE);
+		textBoxConfig.setCharacterLimit(10);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
+		return textBoxConfig;
+	}
+	
 	/**
 	 * Configuration to customize text box as Table Name property 
 	 */
 	public WidgetConfig getTableNameWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_TABLE_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as User Name property 
+	 */
+	public WidgetConfig getUserNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_USER_NAME_WIDGET);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Password property 
+	 */
+	public WidgetConfig getPasswordWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_PASSWORD);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -136,6 +189,18 @@ public class WidgetHelper {
 		filePathConfig.setMandatory(false);
 		return filePathConfig;
 	}
+	
+	/*
+	 * Configuration to customize text box as Host Name property 
+	 */
+	public WidgetConfig getHostNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_HOST_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
 	
 	/**
 	 * Configuration to customize text box as noOfRecords property 
@@ -232,6 +297,19 @@ public class WidgetHelper {
 		dropDownConfig.getItems().add(Constants.UTF_16LE);
 		dropDownConfig.getItems().add(Constants.UTF_16);
 		dropDownConfig.getItems().add(Constants.PARAMETER);
+		addComboBoxListeners(dropDownConfig);
+		return dropDownConfig;
+	}
+	
+	/**
+	 * Configuration to customize dropdown as JDBC Driver property 
+	 */
+	public WidgetConfig getJdbcDriverWidgetConfig(){
+		DropDownConfig dropDownConfig = new DropDownConfig();
+		dropDownConfig.setName(Messages.LABEL_JDBC_DRIVER);
+		dropDownConfig.getItems().add(Constants.THIN);
+		dropDownConfig.getItems().add(Constants.OCI);
+		dropDownConfig.getItems().add(Constants.KPRB);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
@@ -334,7 +412,8 @@ public class WidgetHelper {
 		return filePathConfig;
 	}
 
-/**
+
+	/**
 	 * 
 	 *@return schema configuration for straight pull component
 	 */
@@ -352,4 +431,5 @@ public class WidgetHelper {
 		schemaConfig.setDoPropagateONOK(true);
 		return schemaConfig;
 	}
+
 }

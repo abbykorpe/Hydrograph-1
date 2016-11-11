@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+
 package hydrograph.ui.common.util;
 
 /**
@@ -45,7 +46,7 @@ public class Constants {
 	public static final String ISO_8859_1 = "ISO-8859-1";
 	public static final String US_ASCII = "US-ASCII";
 	public static final String UTF_8 = "UTF-8";
-	
+
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
 	public static final String OPERATION_FIELDS_WINDOW_TITLE = "Operation Fields";
@@ -292,3 +293,4 @@ public class Constants {
 	public static final String REMOVE_WATCH_POINTS_TOOLITEM_ID = "hydrograph.ui.graph.command.removedebug";
 	
 }
+

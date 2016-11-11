@@ -139,9 +139,14 @@ public enum PropertyRenderer {
     OVERWRITE_WIDGET,
     PARTITION_KEYS_WIDGET_INPUT_HIVE,
     EXTRACT_METASTORE_DATA_WIDGET,
+    HOST_NAME_WIDGET,
+    PORT_WIDGET,
+    JDBC_DRIVER_WIDGET,
+    USER_NAME_WIDGET,
+    PASSWORD_WIDGET,
+    CHUNK_SIZE_WIDGET,
     PROPOGATE_WIDGET,
     STRAIGHT_SCHEMA_WIDGET;
-
     public String value() {
         return name();
     }
