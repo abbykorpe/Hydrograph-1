@@ -46,6 +46,7 @@ public class CommentBoxHandler extends AbstractHandler{
 		ELTGraphicalEditor editor = (ELTGraphicalEditor)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		Container container = editor.getContainer();
 		
+		editor.setDirty(true);
 		if(container.getChildren().isEmpty() && !(commentBoxList.isEmpty())){
 			commentBoxList.clear();
 		}
