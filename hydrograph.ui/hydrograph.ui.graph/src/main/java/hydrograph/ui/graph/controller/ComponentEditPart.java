@@ -162,6 +162,11 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 	protected IFigure createFigure() {
 		IFigure figure = createFigureForModel();
 		figure.setOpaque(true); // non-transparent figure
+		updateSubjobComponent(figure);
+		return figure;
+	}
+
+	public void updateSubjobComponent(IFigure figure) {
 		LinkedHashMap<String, Object> properties = getCastedModel().getProperties();
 		if (StringUtils.equals(getCastedModel().getComponentName(), Constants.SUBJOB_COMPONENT)) {
 			SubJobUtility graphUtility=new SubJobUtility();
@@ -169,7 +174,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		}
 		String status = (String) properties.get(Component.Props.VALIDITY_STATUS.getValue());
 		((ComponentFigure)figure).setPropertyStatus(status);
-		return figure;
 	}
 
 	private IFigure createFigureForModel() {
