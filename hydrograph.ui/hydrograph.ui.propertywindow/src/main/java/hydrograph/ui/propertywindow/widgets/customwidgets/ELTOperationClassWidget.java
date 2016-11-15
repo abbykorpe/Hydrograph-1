@@ -107,7 +107,11 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		radioButtonCompositeLayout.marginRight = 1;
 		radioButtonCompositeLayout.marginWidth = 0;
 		radioButtonComposite.setLayout(radioButtonCompositeLayout);
-		radioButtonComposite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1));
+		GridData radioButtonCompositeGridData = new GridData(SWT.LEFT, SWT.LEFT, false, false, 1, 1);
+		if(OSValidator.isMac()){
+			radioButtonCompositeGridData.horizontalIndent = -3;
+		}
+		radioButtonComposite.setLayoutData(radioButtonCompositeGridData);
 		operationClassProperty.getExpressionEditorData().setComponentName(getComponent().getComponentName());
 		expressionRadioButton = new Button(radioButtonComposite, SWT.RADIO);
 		if(OSValidator.isMac()){
@@ -131,7 +135,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		
 		setToolTipMessage(Messages.OperationClassBlank);
 		((Button)eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-
+			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(((Button) expressionRadioButton).getSelection()){
