@@ -12,7 +12,6 @@
  ******************************************************************************/
 package hydrograph.ui.graph.controller;
 
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -29,12 +28,16 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.accessibility.AccessibleControlEvent;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 
-import hydrograph.ui.graph.action.CommentBoxLabelEditManager;
 import hydrograph.ui.graph.figure.CommentBoxFigure;
 import hydrograph.ui.graph.model.CommentBox;
 import hydrograph.ui.graph.policy.CommentBoxDirectEditPolicy;
+
 /**
- * The Class CommentBoxEditPart.
+ * 
+ * Default implementation for {@link AbstractGraphicalEditPart} and {@link PropertyChangeListener}
+ * 
+ * CommentBoxEditPart is a controller class for comment box and The documentation here is targeted at subclassing this
+ * class. Callers of public API should refer to the interface's documentation.
  * 
  * @author Bitwise
  * 
@@ -42,14 +45,14 @@ import hydrograph.ui.graph.policy.CommentBoxDirectEditPolicy;
 public class CommentBoxEditPart extends AbstractGraphicalEditPart implements PropertyChangeListener
 
 {
-	private AccessibleEditPart acc;
+	private AccessibleEditPart accessibleEditPart;
 	private String LABEL_CONTENTS = "labelContents";
 	private String SIZE = "Size";
 	private String LOCATION = "Location";
 	private String LABEL = "Label";
+
 	/**
-	 * Upon activation, attach to the model element as a property change
-	 * listener.
+	 * Upon activation, attach to the model element as a property change listener.
 	 */
 	@Override
 	public void activate() {
@@ -58,25 +61,25 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 			((CommentBox) getModel()).addPropertyChangeListener(this);
 		}
 	}
-	
+
 	@Override
-	public void deactivate(){
+	public void deactivate() {
 		if (!isActive())
 			return;
 		super.deactivate();
 		((CommentBox) getModel()).removePropertyChangeListener(this);
 	}
-	
+
 	@Override
-	protected AccessibleEditPart getAccessibleEditPart(){
-		if (acc == null)
-			acc = createAccessible();
-		return acc;
+	protected AccessibleEditPart getAccessibleEditPart() {
+		if (accessibleEditPart == null)
+			accessibleEditPart = createAccessible();
+		return accessibleEditPart;
 	}
-	
-	protected AccessibleEditPart createAccessible(){
-		return new AccessibleGraphicalEditPart(){
-			public void getValue(AccessibleControlEvent e){
+
+	protected AccessibleEditPart createAccessible() {
+		return new AccessibleGraphicalEditPart() {
+			public void getValue(AccessibleControlEvent e) {
 				e.result = getLabel().getLabelContents();
 			}
 
@@ -87,71 +90,66 @@ public class CommentBoxEditPart extends AbstractGraphicalEditPart implements Pro
 	}
 
 	@Override
-	protected void createEditPolicies(){
+	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new CommentBoxDirectEditPolicy());
 	}
 
 	@Override
-	protected IFigure createFigure(){
+	protected IFigure createFigure() {
 		CommentBoxFigure label = new CommentBoxFigure();
 		Point loc = getLabel().getLocation();
 		Dimension size = getLabel().getSize();
-		Rectangle r = new Rectangle(loc ,size);
+		Rectangle r = new Rectangle(loc, size);
 		label.setBounds(r);
-		if(label.getSize() != getLabel().getSize()){
+		if (label.getSize() != getLabel().getSize()) {
 			label.setSize(getLabel().getSize());
 		}
 		return label;
 	}
+
 	/**
 	 * returns the model of comment box
+	 * 
 	 * @return CommentBox
 	 */
-	private CommentBox getLabel(){
-		return (CommentBox)getModel();
+	private CommentBox getLabel() {
+		return (CommentBox) getModel();
 	}
 
 	/**
 	 * return figure
+	 * 
 	 * @return figure
-	 */	
-	public IFigure getCommentBoxFigure(){
-		return (CommentBoxFigure)getFigure();
-	}
-	
-	/**
-	 * enable the comment box for editing
-	 *
-	 */	
-	private void performDirectEdit(){
-		new CommentBoxLabelEditManager(this,
-				new CommentBoxCellEditorLocator((CommentBoxFigure)getFigure())).show();
+	 */
+	public IFigure getCommentBoxFigure() {
+		return (CommentBoxFigure) getFigure();
 	}
 
 	@Override
-	public void performRequest(Request request){
-		//if (request.getType() == RequestConstants.REQ_DIRECT_EDIT)
-			performDirectEdit();
+	public void performRequest(Request request) {
+		CommentBoxEditor commentBoxEditor = new CommentBoxEditor(
+				((CommentBoxFigure) getFigure()).getComponentCanvas().getCanvasControl().getShell(), 0,
+				((CommentBoxFigure) getFigure()), getLabel());
+		commentBoxEditor.open();
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt){
+	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
-		if (StringUtils.equalsIgnoreCase(prop, LABEL_CONTENTS)){
-			 refreshVisuals();
-		  }
-		else if (StringUtils.equalsIgnoreCase(prop, SIZE) || StringUtils.equalsIgnoreCase(prop, LOCATION)){
+		if (StringUtils.equalsIgnoreCase(prop, LABEL_CONTENTS)) {
+			refreshVisuals();
+		} else if (StringUtils.equalsIgnoreCase(prop, SIZE) || StringUtils.equalsIgnoreCase(prop, LOCATION)) {
 			Point loc = getLabel().getLocation();
 			Dimension size = getLabel().getSize();
-			Rectangle r = new Rectangle(loc ,size);
-			((GraphicalEditPart) getParent()).setLayoutConstraint(this,getFigure(),r);
-			 refreshVisuals();
+			Rectangle r = new Rectangle(loc, size);
+			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), r);
+			refreshVisuals();
 		}
 	}
-	
+
 	@Override
 	protected void refreshVisuals() {
-		((CommentBoxFigure)getFigure()).setText(getLabel().getLabelContents());
+		((CommentBoxFigure) getFigure()).setText(getLabel().getLabelContents(),(CommentBox)getModel());
 	}
 
 }
