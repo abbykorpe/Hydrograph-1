@@ -393,7 +393,8 @@ public abstract class AbstractWidget {
 					throw new RuntimeException("Failed to create validator", e);
 				}
 				isComponentValid=validator.validate(object,
-						getPropertyName(),schemaData.getInputSchema(getComponent()));
+						getPropertyName(),schemaData.getInputSchema(getComponent()),
+						false);
 				if(!isComponentValid)
 				break;	
 			}

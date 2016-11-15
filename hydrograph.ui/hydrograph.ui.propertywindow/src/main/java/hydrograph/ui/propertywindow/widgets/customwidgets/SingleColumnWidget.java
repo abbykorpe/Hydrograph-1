@@ -140,8 +140,8 @@ public class SingleColumnWidget extends AbstractWidget {
 
 	protected List<String> getPropagatedSchema() {
 		List<String> propogatedFields=new ArrayList<>();	
-		if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"Aggregate")
-		 ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"Cumulate")		)
+		if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.AGGREGATE)
+		 ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.CUMULATE)		)
 		{
 			TransformWidget transformWidget = null;
 			for(AbstractWidget abstractWidget:widgets)
@@ -153,15 +153,15 @@ public class SingleColumnWidget extends AbstractWidget {
 				}
 			}		
 			
-		TransformMapping transformMapping=(TransformMapping) transformWidget.getProperties().get("operation");
+		TransformMapping transformMapping=(TransformMapping) transformWidget.getProperties().get(Constants.OPERATION);
 	    for(InputField inputField:transformMapping.getInputFields())
 	    {
 	    	propogatedFields.add(inputField.getFieldName());
 	    }
 	    return propogatedFields;
 		}
-		else if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),"filter")
-				||StringUtils.equalsIgnoreCase(getComponent().getCategory(),"STRAIGHTPULL"))
+		else if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.FILTER)
+				||StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.STRAIGHTPULL))
 		{	
 			ELTSchemaGridWidget  schemaWidget = null;
 			for(AbstractWidget abstractWidget:widgets)

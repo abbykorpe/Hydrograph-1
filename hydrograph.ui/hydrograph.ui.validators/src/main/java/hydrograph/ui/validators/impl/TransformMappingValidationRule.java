@@ -44,13 +44,14 @@ public class TransformMappingValidationRule implements IValidator{
 	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap,false);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
+			,boolean isJobImported){
 		TransformMapping transformMapping=(TransformMapping) object;
 		
 		if(transformMapping==null)
@@ -61,12 +62,17 @@ public class TransformMappingValidationRule implements IValidator{
 		List<MappingSheetRow> mappingSheetRows=TransformMappingFeatureUtility.INSTANCE.getActiveMappingSheetRow
 				(transformMapping.getMappingSheetRows());
 		List<NameValueProperty>  mapOrPassthroughfields = transformMapping.getMapAndPassthroughField();
+		if(isJobImported)
+		{	
 		List<InputField> inputFieldsList = new ArrayList<InputField>();
 		for(Entry< String,List<FixedWidthGridRow>> inputList :inputSchemaMap.entrySet()){
 			for(FixedWidthGridRow row : inputList.getValue()){
 				inputFieldsList.add(new InputField(row.getFieldName(), new ErrorObject(false, "")));
 			}
 			
+		}
+		transformMapping.setInputFields(inputFieldsList);
+		isJobImported=false;
 		}
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
 		{

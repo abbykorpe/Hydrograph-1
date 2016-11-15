@@ -119,7 +119,7 @@ public class TransformWidget extends AbstractWidget {
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
 		if(getComponent().isContinuousSchemaPropogationAllow())
-		getPropagatedSChema();
+		getPropagatedSchema();
 		if(transformMapping.isAddPassThroughFields())
 		{	
 		addPassThroughFields();
@@ -548,7 +548,7 @@ public class TransformWidget extends AbstractWidget {
 		return property;
 	}
 
-	private void getPropagatedSChema() {
+	private void getPropagatedSchema() {
 		ComponentsOutputSchema outputSchema = null;
 		InputField inputField = null;
 		transformMapping.getInputFields().clear();

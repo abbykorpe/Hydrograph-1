@@ -38,14 +38,15 @@ public class JoinMappingValidationRule implements IValidator{
 	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap,false);
 		}
 		return false;
 	}
 
 
 	@Override
-	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
+			,boolean isJobImported){
 		JoinMappingGrid joinMappingGrid = (JoinMappingGrid)object;
 		if(joinMappingGrid == null){
 			errorMessage = propertyName + " is mandatory";
@@ -55,6 +56,22 @@ public class JoinMappingValidationRule implements IValidator{
 			return true;
 		}
 		List<List<FilterProperties>> lookupInputProperties = joinMappingGrid.getLookupInputProperties();
+		
+		if(isJobImported)
+		{
+			for(Entry< String,List<FixedWidthGridRow>> inputRow :inputSchemaMap.entrySet()){
+				List<FilterProperties> filterPropertiesList = new ArrayList<FilterProperties>(); 
+				
+				for(FixedWidthGridRow row : inputRow.getValue()){
+					FilterProperties filterProperties = new FilterProperties();
+					filterProperties.setPropertyname(row.getFieldName());
+					filterPropertiesList.add(filterProperties);
+				} 
+				lookupInputProperties.add(filterPropertiesList);
+			}
+			joinMappingGrid.setLookupInputProperties(lookupInputProperties);
+			isJobImported=false;
+		}	
 		
 		List<LookupMapProperty> lookupMapProperties = joinMappingGrid.getLookupMapProperties();
 		if(lookupInputProperties == null || 

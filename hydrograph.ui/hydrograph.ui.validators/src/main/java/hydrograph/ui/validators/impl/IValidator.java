@@ -21,6 +21,6 @@ import java.util.Map;
 
 public interface IValidator {
 		boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap);
-		boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap);
+		boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap,boolean isJobFileImported);
 		String getErrorMessage();
 }

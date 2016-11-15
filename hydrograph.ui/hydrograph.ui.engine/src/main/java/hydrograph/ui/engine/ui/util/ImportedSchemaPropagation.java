@@ -57,7 +57,17 @@ public class ImportedSchemaPropagation {
 	}
 		schemaPropagationForTransformCategory(container);
 		removeTempraryProperties(container);
+		addPropogatedSchemaToEachComponent(container);
 		validateAllComponents(container);
+		
+	}
+
+	private void addPropogatedSchemaToEachComponent(Container container) {
+		for(Component component:container.getUIComponentList())
+		{
+			addSchemaForTransformComponents(component);
+		}
+		
 	}
 
 	// Validates properties of all components present in graph
@@ -67,7 +77,7 @@ public class ImportedSchemaPropagation {
 			for (Component component : container.getUIComponentList()) {
 				if (component instanceof SubjobComponent) {
 					String previousValidityStatus = component.getValidityStatus();
-					component.validateComponentProperties();
+					component.validateComponentProperties(true);
 					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), previousValidityStatus)
 							&& StringUtils.equalsIgnoreCase(UIComponentsConstants.VALID.value(), component
 									.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())) {
@@ -76,7 +86,7 @@ public class ImportedSchemaPropagation {
 								UIComponentsConstants.WARN.value());
 					}
 				} else {
-					component.validateComponentProperties();
+					component.validateComponentProperties(true);
 				}
 			}
 		}
@@ -114,6 +124,12 @@ public class ImportedSchemaPropagation {
 
 	// This method creates rows for schema tab of transform components from propagated schema.
 	private void addSchemaForTransformComponents(Component component) {
+		if(StringUtils.equalsIgnoreCase(component.getCategory(), Constants.INPUT)
+				|| StringUtils.equalsIgnoreCase(component.getCategory(), Constants.OUTPUT)){
+			return;
+		}
+		
+		
 		if (component != null && component.getProperties().get(Constants.SCHEMA_TO_PROPAGATE) != null) {
 			Map<String, ComponentsOutputSchema> componentOutputSchemaMap = (Map<String, ComponentsOutputSchema>) component
 					.getProperties().get(Constants.SCHEMA_TO_PROPAGATE);

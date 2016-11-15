@@ -31,14 +31,15 @@ public class LookupConfigValidationRule implements IValidator{
 	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap,false);
 		}
 		return false;
 	}
 
 
 	@Override
-	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
+			,boolean isJobImported){
 		LookupConfigProperty lookupConfigProperty = (LookupConfigProperty)object;
 		if(lookupConfigProperty == null ){
 			errorMessage = propertyName + " is mandatory";
