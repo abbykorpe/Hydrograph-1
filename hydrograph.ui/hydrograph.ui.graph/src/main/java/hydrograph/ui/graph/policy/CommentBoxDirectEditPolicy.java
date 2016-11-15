@@ -57,7 +57,7 @@ protected Command getDirectEditCommand(DirectEditRequest edit){
  */
 protected void showCurrentEditValue(DirectEditRequest request){
 	String value = (String)request.getCellEditor().getValue();
-	((CommentBoxFigure)getHostFigure()).setText(value);
+	((CommentBoxFigure)getHostFigure()).setText(value,(CommentBox)getHost().getModel());
 	//prevent async layout from placing the cell editor twice.
 	 getHostFigure().getUpdateManager().performUpdate();
 	
