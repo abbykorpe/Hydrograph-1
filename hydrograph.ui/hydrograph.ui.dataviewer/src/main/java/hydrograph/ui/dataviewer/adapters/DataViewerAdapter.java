@@ -186,14 +186,14 @@ public class DataViewerAdapter {
 		StringBuffer typeString = new StringBuffer();
 		String debugFileName = debugDataViewer.getDebugFileName();
 		String debugFileLocation = debugDataViewer.getDebugFileLocation();
-		Fields dataViewerFileSchema = ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + 
-				debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION);
-		if(dataViewerFileSchema == null){
+		if(ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + 
+				debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION) == null){
 			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			return "";
 		}
 		Map<String, String> fieldAndTypes = new HashMap<String, String>();
-		for (Field field : dataViewerFileSchema.getField()) {
+		for (Field field : ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + 
+				debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION).getField()) {
 			fieldAndTypes.put(StringUtils.lowerCase(field.getName()), field.getType().value());
 		}
 		try(BufferedReader bufferedReader = new BufferedReader(new FileReader(

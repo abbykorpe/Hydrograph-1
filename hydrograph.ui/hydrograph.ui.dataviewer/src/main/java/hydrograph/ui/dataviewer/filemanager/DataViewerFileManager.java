@@ -115,7 +115,7 @@ public class DataViewerFileManager {
 			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 		}  catch (IOException e4) {
 			logger.error("Unable to fetch viewData file", e4);
-			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+			return new StatusMessage(StatusConstants.ERROR,"Unable to fetch viewData file : Please check if service is running");
 		}
 		if (csvDebugFileAbsolutePath != null) {
 			csvDebugFileName = csvDebugFileAbsolutePath
@@ -135,7 +135,8 @@ public class DataViewerFileManager {
 				}
 			} catch (IOException | JSchException e1) {
 				logger.error("Unable to fetch viewData file", e1);
-				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+ ": Unable to copy the files from temproary location");
+				//return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			}
 			
 			File debugFile = new File(dataViewerDebugFile);
@@ -233,6 +234,7 @@ public class DataViewerFileManager {
 			String sourceFile = csvDebugFileAbsolutePath.trim();
 			File file = new File(dataViewerDebugFile);
 			if (!file.exists()|| isOverWritten) {
+//				Files.delete(Paths.get(sourceFile));
 				Files.copy(Paths.get(sourceFile), Paths.get(dataViewerDebugFile), StandardCopyOption.REPLACE_EXISTING);
 			}
 		} else {
