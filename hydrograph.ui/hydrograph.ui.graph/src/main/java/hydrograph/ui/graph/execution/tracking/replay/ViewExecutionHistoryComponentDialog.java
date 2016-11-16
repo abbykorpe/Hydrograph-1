@@ -89,7 +89,7 @@ public class ViewExecutionHistoryComponentDialog extends Dialog{
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		Button okButton = createButton(parent, IDialogConstants.OK_ID, "Ok", false);
+		Button okButton = createButton(parent, IDialogConstants.OK_ID, "OK", false);
 		Button closeButton = createButton(parent, IDialogConstants.CANCEL_ID, "Close", false);		
 	}
 }

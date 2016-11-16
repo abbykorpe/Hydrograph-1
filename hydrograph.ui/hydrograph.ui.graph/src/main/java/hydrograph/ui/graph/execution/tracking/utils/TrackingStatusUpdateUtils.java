@@ -91,6 +91,15 @@ public class TrackingStatusUpdateUtils {
 					if (editPart instanceof ComponentEditPart) {
 						Component component = ((ComponentEditPart) editPart).getCastedModel();
 					
+						if(isReplay){
+							Map<String, String> componentNameAndLink = new HashMap();
+							if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+								ViewExecutionHistoryUtility.INSTANCE.subjobParams(componentNameAndLink, component, new StringBuilder(), true);
+								componentNameAndLink.forEach((compId, compName)->{
+									ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(compId, compName);
+								});
+							}
+						}
 						/**
 						 * Updating status and record count of subjob
 						 * component in main job.
@@ -105,12 +114,13 @@ public class TrackingStatusUpdateUtils {
 							updateStatusCountForSubjobComponent(executionStatus, component, isReplay);
 							
 						}else{
-							updateStatusCountForComponent(executionStatus,component);
+							updateStatusCountForComponent(executionStatus, component, isReplay);
 						}
 					}
 				}
 		}
 	}
+	
 	
 	/**
 	 * Updating status and count for canvas component according to received status.
@@ -118,10 +128,12 @@ public class TrackingStatusUpdateUtils {
 	 * @param component
 	 */
 	private void updateStatusCountForComponent(
-			ExecutionStatus executionStatus, Component component) {
+			ExecutionStatus executionStatus, Component component, boolean isReplay) {
 		
+		if(isReplay){
+			ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(component.getComponentId(), component.getComponentName());
+		}
 		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-				ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(component.getComponentId(), component.getComponentLabel().getLabelContents());
 			if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(component.getComponentId())){
 				logger.debug("Updating normal component {} status {}",component.getComponentId(), componentStatus.getCurrentStatus());
 				component.updateStatus(componentStatus.getCurrentStatus());
