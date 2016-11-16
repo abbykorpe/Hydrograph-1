@@ -17,13 +17,15 @@ Require-Bundle: org.eclipse.core.runtime,
  hydrograph.ui.logging;bundle-version="0.0.1",
  org.eclipse.swt,
  org.eclipse.draw2d,
- hydrograph.ui.logging;bundle-version="0.0.1"
+ hydrograph.ui.logging;bundle-version="0.0.1",
+ org.eclipse.jface
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.engine.jaxb.debug,
  hydrograph.ui.engine.exceptions,
  hydrograph.ui.engine.ui.constants,
  hydrograph.ui.engine.ui.exceptions,
+ hydrograph.ui.engine.ui.repository,
  hydrograph.ui.engine.ui.util,
  hydrograph.ui.engine.util
 Import-Package: hydrograph.ui.parametergrid.utils,

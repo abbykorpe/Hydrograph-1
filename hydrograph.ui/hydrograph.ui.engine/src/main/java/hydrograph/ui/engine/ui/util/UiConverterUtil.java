@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -33,12 +34,16 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.draw2d.TextUtilities;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -47,6 +52,7 @@ import com.thoughtworks.xstream.XStream;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.main.Graph;
 import hydrograph.ui.common.util.CanvasDataAdapter;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.parsing.XMLParser;
@@ -55,16 +61,20 @@ import hydrograph.ui.engine.ui.converter.UiConverter;
 import hydrograph.ui.engine.ui.converter.UiConverterFactory;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
 import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
+import hydrograph.ui.engine.ui.repository.ImportedJobsRepository;
 import hydrograph.ui.engine.ui.repository.ParameterData;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.engine.ui.xygenration.CoordinateProcessor;
+import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.ComponentLabel;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.ModelConstants;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.model.utils.GenerateUniqueJobIdUtil;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The class UiConverterUtil
@@ -91,6 +101,8 @@ public class UiConverterUtil {
 	 *            , Job file path
 	 * @param parameterFile
 	 *            , Parameter file path
+	 * @param isSubJob     
+	 *          , check whether it is subJob or not.      
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
@@ -103,16 +115,71 @@ public class UiConverterUtil {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	public Container convertToUiXml(File sourceXML, IFile jobFile, IFile parameterFile) throws InstantiationException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
-			SecurityException, EngineException, JAXBException, ParserConfigurationException, SAXException, IOException,
-			ComponentNotFoundException {
+	public Object[] convertToUiXml(File sourceXML, IFile jobFile, IFile parameterFile, boolean isSubJob)
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException, EngineException, JAXBException, ParserConfigurationException,
+			SAXException, IOException, ComponentNotFoundException {
+		Object[] array = new Object[2];
 		Container container = getJobContainer(sourceXML, parameterFile);
+		array[0] = container;
+		array[1] = null;
+		if (!container.isCurrentGraphSubjob() && !ImportedJobsRepository.INSTANCE.contains(jobFile)) {
+			int buttonId = showMessageForGeneratingUniqueJobId(container, jobFile, isSubJob);
+			if (buttonId == SWT.YES) {
+				try {
+					String newUniqueJobId = GenerateUniqueJobIdUtil.INSTANCE.generateUniqueJobId();
+					container.setUniqueJobId(newUniqueJobId);
+					IFile file = updateGraphAndMarshall(newUniqueJobId, jobFile,container);
+					array[1] = file;
+				} catch (NoSuchAlgorithmException e) {
+					LOGGER.warn("Exception while generating new UniqueJobId");
+				}
+			}
+		}
 		genrateUiXml(container, jobFile, parameterFile);
-		return container;
-		
+		return array;
+	}
+	
+	private IFile updateGraphAndMarshall(String newUniiqueJobId, IFile jobFile, Container container) {
+		IPath xmlFileIPath = new Path(jobFile.getFullPath().toOSString());
+		xmlFileIPath = xmlFileIPath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
+		IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
+		try {
+			ConverterUtil.INSTANCE.convertToXML(container, false, fileXml, null);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException
+				| NoSuchMethodException e) {
+			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);
+			messageBox.setMessage("Exception while converting into xml file");
+			messageBox.open();
+			LOGGER.warn("Exception while converting into xml");
+		}
+		return fileXml;
 	}
 
+	/**
+	 * Create a Message Box displays a currentJob UniqueId and a message to
+	 * generate new Unique Id.
+	 * @param container
+	 * @param jobFile
+	 * @param isSubjob
+	 * @return {@link Integer}
+	 */
+	private int showMessageForGeneratingUniqueJobId(Container container, IFile jobFile, boolean isSubJob) {
+		int buttonId = SWT.NO;
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
+				SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Question");
+		String previousUniqueJobId = container.getUniqueJobId();
+		if (isSubJob) {
+			messageBox.setMessage(Messages.bind(Messages.GENERATE_NEW_UNIQUE_JOB_ID_FOR_SUB_JOB, jobFile.getName(),
+					previousUniqueJobId));
+		} else {
+			messageBox.setMessage(
+					Messages.bind(Messages.GENERATE_NEW_UNIQUE_JOB_ID_FOR_JOB, jobFile.getName(), previousUniqueJobId));
+		}
+		buttonId = messageBox.open();
+		return buttonId;
+	}
 
 	
 	/**
@@ -257,6 +324,7 @@ public class UiConverterUtil {
 				LOGGER.error("IOException occurred while closing output stream", ioe);
 			}
 		}
+		ImportedJobsRepository.INSTANCE.addImportedJobName(jobFile);
 	}
 	
 	private void genrateSubjobUiXml(Container container, File file, IFile parameterFile) {
