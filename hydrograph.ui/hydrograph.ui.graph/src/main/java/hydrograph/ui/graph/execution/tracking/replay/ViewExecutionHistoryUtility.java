@@ -28,7 +28,6 @@ import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
 /**

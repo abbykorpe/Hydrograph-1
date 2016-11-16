@@ -111,7 +111,7 @@ public class TrackingStatusUpdateUtils {
 								populateSubjobRecordCount(componentNameAndLink, component,subjobPrefix,true);
 								applyRecordCountOnSubjobComponent(component, componentNameAndLink, executionStatus);
 							} 
-							updateStatusCountForSubjobComponent(executionStatus, component, isReplay);
+							updateStatusCountForSubjobComponent(executionStatus, component);
 							
 						}else{
 							updateStatusCountForComponent(executionStatus, component, isReplay);
@@ -151,7 +151,7 @@ public class TrackingStatusUpdateUtils {
 		}
 	}
 
-	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component, boolean isReplay) {
+	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component) {
 		ComponentExecutionStatus status=component.getStatus();
 			if(status==null || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.BLANK.value(),status.value())){
 				boolean isPending =applyPendingStatus(component, executionStatus);
@@ -171,7 +171,7 @@ public class TrackingStatusUpdateUtils {
 					component.updateStatus(ComponentExecutionStatus.FAILED.value());
 				}
 		
-		if((status!=null && (StringUtils.equalsIgnoreCase(ComponentExecutionStatus.RUNNING.value(),status.value()) || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.PENDING.value(),status.value()))) || isReplay){
+		if((status!=null && (StringUtils.equalsIgnoreCase(ComponentExecutionStatus.RUNNING.value(),status.value()) || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.PENDING.value(),status.value())))){
 			boolean isSuccess=applySuccessStatus(component, executionStatus);
 	 		if(isSuccess)
 	 			component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
