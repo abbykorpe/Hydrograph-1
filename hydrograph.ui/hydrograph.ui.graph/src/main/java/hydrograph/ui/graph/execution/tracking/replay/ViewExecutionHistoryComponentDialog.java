@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import hydrograph.ui.graph.Messages;
+
 /**
  * The Class ReplayComponentDialog use to create dialog to manage extra and missed components List.
  * 
@@ -64,17 +66,15 @@ public class ViewExecutionHistoryComponentDialog extends Dialog{
 		StringBuilder stringBuilder = new StringBuilder();
 		
 		if(extraComponentList != null && extraComponentList.size() > 0){
-			stringBuilder.append("Below new components and ports were introduced for which tracking is not present :" + "\n");
-			extraComponentList.forEach(componentName -> {
-				stringBuilder.append(extraCompcount + ". " + componentName + "\n");
+			stringBuilder.append(Messages.REPLAY_EXTRA_COMPONENTS + "\n");
+			extraComponentList.forEach(componentName -> { stringBuilder.append(extraCompcount + ". " + componentName + "\n");
 				extraCompcount++;
 			});
 		}
 		
 		if(missedComponentList != null && missedComponentList.size() > 0 && !missedComponentList.isEmpty()){
-			stringBuilder.append("Below missed components and ports were introduced for which tracking is not present :" + "\n");
-			missedComponentList.forEach(componentName -> {
-				stringBuilder.append(missedCompcount + "." + componentName + "\n");
+			stringBuilder.append(Messages.REPLAY_MISSING_COMPONENTS + "\n");
+			missedComponentList.forEach(componentName -> { stringBuilder.append(missedCompcount + "." + componentName + "\n");
 				missedCompcount++;
 			});
 		}
