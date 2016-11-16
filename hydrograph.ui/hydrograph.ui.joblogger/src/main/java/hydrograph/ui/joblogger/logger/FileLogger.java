@@ -14,6 +14,7 @@
  
 package hydrograph.ui.joblogger.logger;
 
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.joblogger.Activator;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -43,8 +44,9 @@ import org.slf4j.Logger;
 public class FileLogger extends AbstractJobLogger{
 	private static final String YYYY_M_MDD_H_HMMSS = "yyyyMMdd_HHmmss";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(FileLogger.class);
-	public final static String LOGGER_FOLDER_PATH = Platform.getInstallLocation().getURL().getPath()
-			+ "config\\logger\\job_logs\\";
+	public static String LOGGER_FOLDER_PATH = Platform.getInstallLocation().getURL().getPath();
+	private final static String PATH_FOR_WINDOWS="config\\logger\\job_logs\\";
+	private final static String PATH_FOR_MAC="config/logger/job_logs/";
 	public final String JOB_LOGS_ERROR = "Job_Logs will not be created in your workspace. Delete or Move Job_Logs to another location for smooth creation of logs.";
 	
 	private BufferedWriter logFileStream;
@@ -90,6 +92,11 @@ public class FileLogger extends AbstractJobLogger{
 	   
 		logger.debug("Created logfile- " + getFullJobName() + "_" +  dateFormat.format(date) + ".log");
 		
+		if (OSValidator.isMac()) {
+			LOGGER_FOLDER_PATH = LOGGER_FOLDER_PATH + PATH_FOR_MAC;
+		} else {
+			LOGGER_FOLDER_PATH = LOGGER_FOLDER_PATH + PATH_FOR_WINDOWS;
+		}
 		try {
 			File job_logs_folder = new File(LOGGER_FOLDER_PATH);
 			if (job_logs_folder.exists()) {
@@ -106,6 +113,7 @@ public class FileLogger extends AbstractJobLogger{
 				logFileStream = new BufferedWriter(new FileWriter(file, true));
 			}
 			logger.debug("Created job log file stream");
+			LOGGER_FOLDER_PATH=Platform.getInstallLocation().getURL().getPath();
 		} catch (IOException e) {
 			logger.debug("IOException while creating job log file stream", e);
 		}
