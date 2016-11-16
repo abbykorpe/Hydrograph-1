@@ -107,6 +107,9 @@ public class Messages extends NLS {
 	
 	public static String RUN_CONFIG_PREFRENCE_TITLE;
 	
+	public static String REPLAY_EXTRA_COMPONENTS;
+	public static String REPLAY_MISSING_COMPONENTS;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
