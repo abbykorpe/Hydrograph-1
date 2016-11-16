@@ -39,14 +39,15 @@ public class LookupMappingValidationRule implements IValidator{
 	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap,false);
 		}
 		return false;
 	}
 
 
 	@Override
-	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
+			,boolean isJobImported){
 		LookupMappingGrid lookupMappingGrid = (LookupMappingGrid)object;
 		if(lookupMappingGrid == null){
 			errorMessage = propertyName + " is mandatory";
@@ -54,6 +55,22 @@ public class LookupMappingValidationRule implements IValidator{
 		}
 		List<List<FilterProperties>> lookupInputProperties = lookupMappingGrid.getLookupInputProperties();
 		List<LookupMapProperty> lookupMapProperties = lookupMappingGrid.getLookupMapProperties();
+		if(isJobImported)
+		{	
+		for(Entry< String,List<FixedWidthGridRow>> inputRow :inputSchemaMap.entrySet()){
+			List<FilterProperties> filterPropertiesList = new ArrayList<FilterProperties>(); 
+			
+			for(FixedWidthGridRow row : inputRow.getValue()){
+				FilterProperties filterProperties = new FilterProperties();
+				filterProperties.setPropertyname(row.getFieldName());
+				filterPropertiesList.add(filterProperties);
+			}
+			lookupInputProperties.add(filterPropertiesList);
+		}
+		
+		lookupMappingGrid.setLookupInputProperties(lookupInputProperties);
+		isJobImported=false;
+		}
 		if(lookupInputProperties == null || 
 				lookupInputProperties.isEmpty() || lookupInputProperties.size() < 2){
 			errorMessage = "Invalid input for lookup component"; 

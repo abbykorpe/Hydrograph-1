@@ -147,6 +147,7 @@ public class Constants {
 	public static final String UNIQUE_SEQUENCE = "UniqueSequence";
 	public static final String UNIQUE_SEQUENCE_TYPE = "Unique Sequence";
 	public static final String PROPAGATE_FIELD_FROM_LEFT= "Propagate Field\nFrom Left";
+	public static final String PROPAGATE_FIELD_FROM_LEFT_ACTION= "Propagate Field From Left";
 	public static final String PROPAGATE= "Propagate";
 	public static final String STRAIGHTPULL = "STRAIGHTPULL";
 	

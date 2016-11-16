@@ -1670,7 +1670,7 @@ public abstract class Component extends Model {
 	 *  
 	 * @return properties 
 	 */
-	public Map<String, Object> validateComponentProperties() {
+	public Map<String, Object> validateComponentProperties(boolean isJobImported) {
 		boolean componentHasRequiredValues = Boolean.TRUE;
 		hydrograph.ui.common.component.config.Component component = XMLConfigUtil.INSTANCE.getComponent(this.getComponentName());
 		Map<String, Object> properties=this.properties;
@@ -1687,7 +1687,8 @@ public abstract class Component extends Model {
 					logger.error("Failed to create validator", e);
 					throw new RuntimeException("Failed to create validator", e);
 				}
-				boolean status = validator.validate(propertyValue, configProperty.getName(),new SchemaData().getInputSchema(this));
+				boolean status = validator.validate(propertyValue, configProperty.getName(),new SchemaData().getInputSchema(this),
+						isJobImported);
 				//NOTE : here if any of the property is not valid then whole component is not valid 
 				if(status == false){
 					componentHasRequiredValues = Boolean.FALSE;

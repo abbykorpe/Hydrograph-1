@@ -157,7 +157,7 @@ public class SchemaPropagation {
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, newComponentsOutputSchemaMap);
 			if(StringUtils.equalsIgnoreCase(component.getCategory(), Constants.OUTPUT)){
 				updateSchema(component,componentsOutputSchema);
-				component.validateComponentProperties();}
+				component.validateComponentProperties(false);}
 		}
 	}
 

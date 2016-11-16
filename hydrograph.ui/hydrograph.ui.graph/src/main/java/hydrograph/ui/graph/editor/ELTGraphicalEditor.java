@@ -155,6 +155,7 @@ import hydrograph.ui.graph.action.CutAction;
 import hydrograph.ui.graph.action.DeleteAction;
 import hydrograph.ui.graph.action.GraphRuntimePropertiesAction;
 import hydrograph.ui.graph.action.PasteAction;
+import hydrograph.ui.graph.action.PropogateDataAction;
 import hydrograph.ui.graph.action.debug.AddWatcherAction;
 import hydrograph.ui.graph.action.debug.RemoveWatcherAction;
 import hydrograph.ui.graph.action.debug.ViewDataCurrentJobAction;
@@ -825,6 +826,10 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		getSelectionActions().add(action.getId());
 		
 		action=new CommentBoxAction(this, pasteAction);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		
+		action=new PropogateDataAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		

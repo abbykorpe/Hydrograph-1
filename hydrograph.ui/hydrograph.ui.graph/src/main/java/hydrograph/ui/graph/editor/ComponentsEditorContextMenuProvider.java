@@ -106,6 +106,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.COPY.getId()));
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, getAction(ActionFactory.PASTE.getId()));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, subJobMenu);
+	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.PROPAGATE));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.COMMENT_BOX));
 	    menu.appendToGroup(GEFActionConstants.GROUP_REST, getAction(Constants.GRAPH_PROPERTY));
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, watcherMenu);
@@ -113,9 +114,6 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, viewDataActionMenu);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST,componentPropertiesAction);
 		menu.appendToGroup(GEFActionConstants.GROUP_REST, componentHelpAction);
-		
-		
-
 
 		if(subJobMenu.getActiveOperationCount()== 0)
 	    subJobMenu.setEnabled(false);

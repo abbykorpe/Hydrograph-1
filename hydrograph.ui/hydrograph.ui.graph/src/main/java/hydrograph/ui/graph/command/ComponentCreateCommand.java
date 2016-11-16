@@ -169,7 +169,7 @@ public class ComponentCreateCommand extends Command {
 					logger.error("Failed to create validator", e);
 					throw new RuntimeException("Failed to create validator", e);
 				}
-				boolean status = validator.validate(propertyValue, configProperty.getName(),schemaData.getInputSchema(this.component));
+				boolean status = validator.validate(propertyValue, configProperty.getName(),schemaData.getInputSchema(this.component),false);
 				//NOTE : here if any of the property is not valid then whole component is not valid 
 				if(status == false){
 					componentHasRequiredValues = Boolean.FALSE;

@@ -33,7 +33,7 @@ public class IntegerValidatorRule implements IValidator{
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
 		
 		if(propertyMap != null && !propertyMap.isEmpty()){ 
-			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap);
+			return validate(propertyMap.get(propertyName), propertyName,inputSchemaMap,false);
 		}
 		return false;
 	}
@@ -44,7 +44,8 @@ public class IntegerValidatorRule implements IValidator{
 	}
 
 	@Override
-	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap){
+	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
+			,boolean isJobImported){
 		try{
 			String value = (String)object;
 			Integer.parseInt(value);
