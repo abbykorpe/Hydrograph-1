@@ -21,9 +21,13 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
 
 /**
@@ -37,6 +41,7 @@ public class ViewExecutionHistoryUtility {
 	private Map<String, ExecutionStatus> trackingMap;
 	private Map<String, List<Job>> trackingJobMap;
 	private Map<String, String> unusedCompOnCanvas;
+	
 	
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ViewExecutionHistoryUtility.class);
@@ -68,6 +73,7 @@ public class ViewExecutionHistoryUtility {
 			trackingMap.put(uniqueRunJobId, executionStatus);
 		}
 	}
+	
 	
 	/**
 	 * The Function will add componentId and componentLabel
@@ -124,6 +130,7 @@ public class ViewExecutionHistoryUtility {
 	 */
 	public void getExtraComponentList(ExecutionStatus executionStatus){
 		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
+			
 			if(unusedCompOnCanvas.get(componentStatus.getComponentId()) != null){
 				unusedCompOnCanvas.remove(componentStatus.getComponentId());
 			}
@@ -138,8 +145,7 @@ public class ViewExecutionHistoryUtility {
 	public List<String> getMissedComponents(ExecutionStatus executionStatus){
 		List<String> compList = new ArrayList<>(); 
 		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && !(componentStatus.getComponentId().startsWith("viewData")) 
-					&& !(componentStatus.getComponentId().contains("."))){
+			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && !(componentStatus.getComponentId().startsWith("viewData"))){
 				compList.add(componentStatus.getComponentId());
 			}
 		}
@@ -153,4 +159,34 @@ public class ViewExecutionHistoryUtility {
 	public Map<String, ExecutionStatus> getTrackingStatus(){
 		return trackingMap;
 	}
+	
+	/*
+	 * The function will use to check componentId and componentName in subjob.
+	 */
+	public void subjobParams(Map<String, String> componentNameAndLink, Component subjobComponent, StringBuilder subjobPrefix, boolean isParent){
+		Container container = (Container) subjobComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
+		for(Object object:container.getChildren()){
+			Component component=(Component) object;
+			if( !(component.getComponentName().equals(Messages.INPUT_SUBJOB_COMPONENT)) && 
+					!(component.getComponentName().equals(Messages.OUTPUT_SUBJOB_COMPONENT))){
+				
+				if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+					subjobPrefix.append(subjobComponent.getComponentId()+".");
+					subjobParams(componentNameAndLink, component, subjobPrefix, false);
+				}
+				
+				if(!Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+				if(isParent){
+					componentNameAndLink.put(subjobComponent.getComponentId()+"."+component.getComponentId(), 
+							subjobComponent.getComponentId()+"."+component.getComponentLabel().getLabelContents());
+				}else{
+					componentNameAndLink.put(subjobPrefix+subjobComponent.getComponentId()+"."+component.getComponentId(), 
+							subjobPrefix+subjobComponent.getComponentId()+"."+component.getComponentLabel().getLabelContents());
+				}
+			   }
+			}
+		}
+		
+	}
+	
 }
