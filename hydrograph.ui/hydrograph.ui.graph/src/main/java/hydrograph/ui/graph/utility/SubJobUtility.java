@@ -248,7 +248,7 @@ public class SubJobUtility {
 	}
 
 	/**
-	 * Create sub graph xml and open the subjob in new editor.
+	 * Create sub graph xml,open the subjob in new editor and return subjob container.
 	 * 
 	 * @param componentEditPart
 	 *            the component edit part
@@ -256,8 +256,10 @@ public class SubJobUtility {
 	 *            the clipboard list
 	 * @param file
 	 *            the file
+	 * @return
 	 */
-	public void createSubJobXml(ComponentEditPart componentEditPart, List clipboardList, IFile file) {
+	
+	public Container createSubJobXmlAndGetContainer(ComponentEditPart componentEditPart, List clipboardList, IFile file) {
 		Container container = new Container();
 		/*
 		 * Add sub graph join component in subjob that use to link main graph with sub graph.
@@ -279,6 +281,7 @@ public class SubJobUtility {
 		propogateSchemaToSubjob((((ComponentEditPart) componentEditPart).getCastedModel()), outSubComponent);
 		updateParametersInGrid((((ComponentEditPart) componentEditPart).getCastedModel()), file.getFullPath());
 		((ComponentEditPart) componentEditPart).getCastedModel().getProperties().put(Constants.SUBJOB_CONTAINER, container);
+	    return container;
 	}
 
 	/**

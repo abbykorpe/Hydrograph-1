@@ -237,14 +237,14 @@ public class SubJobAction extends SelectionAction{
 		/*
 		 * Generate subjob target xml.
 		 */
-		subJobUtility.createSubJobXml(componentEditPart,clipboardList,file);
-		finishSubjobCreation(subjobComponent,componentEditPart);
+		Container container=subJobUtility.createSubJobXmlAndGetContainer(componentEditPart,clipboardList,file);
+		finishSubjobCreation(subjobComponent,componentEditPart,container);
 		}
 	}
 
 	
-	private void finishSubjobCreation(Component subjobComponent, ComponentEditPart componentEditPart) {
-		subjobComponent.getProperties().put(Constants.SUBJOB_VERSION,1);
+	private void finishSubjobCreation(Component subjobComponent, ComponentEditPart componentEditPart, Container container) {
+		subjobComponent.getProperties().put(Constants.SUBJOB_VERSION,container.getSubjobVersion());
 		SubJobUtility.getCurrentEditor().setDirty(true);
 		componentEditPart.updateComponentStatus();
 		SubJobUtility.getCurrentEditor().getViewer().select(componentEditPart);
