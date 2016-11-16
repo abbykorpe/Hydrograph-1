@@ -28,9 +28,9 @@ import cascading.pipe.SubAssembly;
 import cascading.property.ConfigDef;
 import cascading.property.ConfigDef.Mode;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.constants.ComponentLinkType;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.constants.ComponentLinkType;
 
 /**
  * @author gurdits

@@ -16,7 +16,7 @@ import cascading.operation.Insert;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 
 public class ComponentHelper {
 

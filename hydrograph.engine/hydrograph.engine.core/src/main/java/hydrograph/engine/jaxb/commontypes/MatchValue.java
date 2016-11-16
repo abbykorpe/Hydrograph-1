@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "match_value", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "match_value")
 @XmlEnum
 public enum MatchValue {
 

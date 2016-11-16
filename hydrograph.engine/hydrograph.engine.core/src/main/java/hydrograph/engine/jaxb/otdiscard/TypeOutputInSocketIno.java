@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-inSocket-ino", namespace = "hydrograph/engine/jaxb/otdiscard")
+@XmlType(name = "type-output-inSocket-ino")
 public class TypeOutputInSocketIno
     extends TypeOutputInSocket
 {

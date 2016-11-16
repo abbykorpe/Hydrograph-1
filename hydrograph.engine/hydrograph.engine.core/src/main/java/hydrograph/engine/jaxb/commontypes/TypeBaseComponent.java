@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="batch" type="{http://www.w3.org/2001/XMLSchema}string" default="0" />
+ *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -40,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-component", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "type-base-component")
 @XmlSeeAlso({
     TypeInputComponent.class,
     TypeOutputComponent.class,
@@ -56,6 +57,7 @@ public class TypeBaseComponent {
     protected String name;
     @XmlAttribute(name = "batch")
     protected String batch;
+    
 
     /**
      * Gets the value of the id property.
@@ -81,29 +83,9 @@ public class TypeBaseComponent {
         this.id = value;
     }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+    
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+   
 
     /**
      * Gets the value of the batch property.
@@ -131,6 +113,30 @@ public class TypeBaseComponent {
      */
     public void setBatch(String value) {
         this.batch = value;
+    }
+
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+        this.name = value;
     }
 
 }

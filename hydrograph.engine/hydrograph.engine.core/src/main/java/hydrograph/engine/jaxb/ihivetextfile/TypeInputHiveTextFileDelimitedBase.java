@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-hive-text-file-delimited-base", namespace = "hydrograph/engine/jaxb/ihivetextfile")
+@XmlType(name = "type-input-hive-text-file-delimited-base")
 @XmlSeeAlso({
     HiveTextFile.class
 })

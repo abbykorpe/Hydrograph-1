@@ -21,14 +21,14 @@ import cascading.pipe.assembly.Rename;
 import cascading.pipe.assembly.Retain;
 import cascading.pipe.joiner.Joiner;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.LookupEntity;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.JoinHelper;
 import hydrograph.engine.cascading.joiners.HashJoinJoiner;
 import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
+import hydrograph.engine.core.component.entity.LookupEntity;
+import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
 
 /**
@@ -171,7 +171,7 @@ public class LookupAssembly extends BaseComponent<LookupEntity> {
 		inputPipes = new Pipe[componentParameters.getInputPipes().size()];
 
 		Fields inputFields;
-		Fields keyFields = new Fields();
+		Fields keyFields = null;
 
 		joiner = new HashJoinJoiner(getMatchOption(lookupEntity.getMatch()));
 
@@ -194,7 +194,7 @@ public class LookupAssembly extends BaseComponent<LookupEntity> {
 			for (JoinKeyFields keyFieldsEntity : lookupEntity.getKeyFields()) {
 				if (keyFieldsEntity.getInSocketId().equalsIgnoreCase(
 						componentParameters.getinSocketId().get(i))) {
-					keyFields = keyFieldsEntity.getFields();
+					keyFields = new Fields(keyFieldsEntity.getFields());
 				}
 			}
 

@@ -98,4 +98,69 @@ public class GeneralUtilities {
 			return values.toArray(new String[values.size()]);
 		}
 	}
+	
+	public static String parseHex(String input) {
+		final int NO_OF_DIGITS = 2;
+
+		// Added support for \\t
+		if (input.contains("\\t")) {
+			input = input.replace("\\t", "\\x09");
+		}
+
+		String[] tokens = input.split("\\\\x");
+		String hex;
+		String temp;
+		boolean startsWithHex = input.startsWith("\\x");
+
+		for (int counter = 0; counter < tokens.length; counter++) {
+
+			if (counter == 0 && !startsWithHex)
+				continue;
+
+			if (tokens[counter].equals(""))
+				continue;
+
+			temp = tokens[counter];
+			hex = temp.substring(0, NO_OF_DIGITS);
+			// System.out.println("hex:" + hex + ":" + hexToChar(hex));
+			temp = temp.substring(NO_OF_DIGITS, temp.length());
+			// System.out.println("temp:" +temp);
+			tokens[counter] = hexToChar(hex) + temp;
+
+		}
+
+		String result = "";
+		for (String token : tokens) {
+			result = result + token;
+		}
+
+		return result;
+
+	}
+	
+	
+	/**
+	 * To check if a option is provided in commandline arguments Please check
+	 * tests for usage.
+	 * 
+	 * @param args
+	 * @param option
+	 * @return an string array containing all values found for given option
+	 */
+	public static boolean IsArgOptionPresent(String[] args, String option) {
+
+		String optionChar = "-";
+		String optionString = optionChar + option;
+
+		for (String arg : args) {
+			if (arg.equalsIgnoreCase(optionString))
+				return true;
+		}
+
+		return false;
+	}
+	
+	private static char hexToChar(String hex) {
+		return (char) Short.parseShort(hex, 16);
+	}
 }

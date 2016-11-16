@@ -22,7 +22,7 @@ import java.util.UUID;
 import org.apache.hadoop.conf.Configuration;
 
 import cascading.tap.hadoop.Hfs;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.entity.LinkInfo;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.flow.utils.FlowManipulationContext;

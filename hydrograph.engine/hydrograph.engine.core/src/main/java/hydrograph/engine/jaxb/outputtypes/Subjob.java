@@ -52,7 +52,7 @@ import hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "subjob", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
+@XmlType(name = "subjob", propOrder = {
     "path",
     "runtimeProperties",
     "subjobParameter"

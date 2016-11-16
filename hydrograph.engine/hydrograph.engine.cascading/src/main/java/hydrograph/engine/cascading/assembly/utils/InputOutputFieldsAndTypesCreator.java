@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
-import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
+import hydrograph.engine.core.component.entity.base.InputOutputEntityBase;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 
 import java.lang.reflect.Type;
 import java.util.List;

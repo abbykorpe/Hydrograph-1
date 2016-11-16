@@ -23,11 +23,11 @@ import cascading.scheme.Scheme;
 import cascading.tap.SinkMode;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.OutputFileParquetEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
+import hydrograph.engine.core.component.entity.OutputFileParquetEntity;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEntity> {

@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-inSocket-fixed-in0", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "type-base-inSocket-fixed-in0")
 public class TypeBaseInSocketFixedIn0
     extends TypeBaseInSocket
 {

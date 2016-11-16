@@ -21,12 +21,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hydrograph.engine.batchbreak.plugin.BatchBreakPlugin;
 import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.main.Graph;
-import hydrograph.engine.batchbreak.plugin.BatchBreakPlugin;
-import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.utilities.OrderedProperties;
 import hydrograph.engine.utilities.OrderedPropertiesHelper;
 

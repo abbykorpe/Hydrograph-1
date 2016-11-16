@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.otfs.TypeOutputFileSequenceBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "sequenceOutputFile", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
+@XmlType(name = "sequenceOutputFile", propOrder = {
     "path",
     "runtimeProperties"
 })

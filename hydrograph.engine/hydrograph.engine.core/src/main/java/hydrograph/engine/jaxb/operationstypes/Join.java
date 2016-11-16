@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.join.TypeKeyFields;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "join", namespace = "hydrograph/engine/jaxb/operationstypes", propOrder = {
+@XmlType(name = "join", propOrder = {
     "keys"
 })
 public class Join

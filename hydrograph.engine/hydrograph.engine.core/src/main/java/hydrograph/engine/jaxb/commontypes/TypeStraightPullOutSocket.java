@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.limit.TypeLimitOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-straight-pull-out-socket", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
+@XmlType(name = "type-straight-pull-out-socket", propOrder = {
     "copyOfInsocket"
 })
 @XmlSeeAlso({

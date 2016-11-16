@@ -51,7 +51,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-properties", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
+@XmlType(name = "type-properties", propOrder = {
     "property"
 })
 public class TypeProperties {

@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-file-sequence-base", namespace = "hydrograph/engine/jaxb/itfs")
+@XmlType(name = "type-input-file-sequence-base")
 @XmlSeeAlso({
     SequenceInputFile.class
 })

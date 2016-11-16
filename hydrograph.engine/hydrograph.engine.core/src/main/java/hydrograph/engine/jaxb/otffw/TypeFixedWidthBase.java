@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.outputtypes.TextFileFixedWidth;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-fixed-width-base", namespace = "hydrograph/engine/jaxb/otffw")
+@XmlType(name = "type-fixed-width-base")
 @XmlSeeAlso({
     TextFileFixedWidth.class
 })

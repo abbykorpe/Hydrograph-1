@@ -60,7 +60,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "keyfield_description_type", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
+@XmlType(name = "keyfield_description_type", propOrder = {
     "keyFields"
 })
 public class KeyfieldDescriptionType {

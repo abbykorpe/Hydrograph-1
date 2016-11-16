@@ -13,11 +13,12 @@
 package hydrograph.engine.cascading.assembly;
 
 import static data.InputData.outputFileDelimited;
-import hydrograph.engine.assembly.entity.OutputFileDelimitedEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+
 import hydrograph.engine.cascading.assembly.OutputFileDelimitedAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.coercetype.StrictDateType;
+import hydrograph.engine.core.component.entity.OutputFileDelimitedEntity;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
 

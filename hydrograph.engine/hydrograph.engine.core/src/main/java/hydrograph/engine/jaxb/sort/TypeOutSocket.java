@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-out-socket", namespace = "hydrograph/engine/jaxb/sort")
+@XmlType(name = "type-out-socket")
 public class TypeOutSocket
     extends TypeStraightPullOutSocket
 {

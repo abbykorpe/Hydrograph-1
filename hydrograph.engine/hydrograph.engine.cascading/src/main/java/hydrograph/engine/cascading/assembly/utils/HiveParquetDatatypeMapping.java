@@ -12,8 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilities.Constants;
 
 public enum HiveParquetDatatypeMapping {

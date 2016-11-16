@@ -114,6 +114,7 @@
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="batch" type="xs:string" use="optional"
 			default="0" />
+		
 	</xs:complexType>
 
 	<xs:complexType name="type-input-component" abstract="true">

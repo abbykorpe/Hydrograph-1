@@ -12,8 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.commandtype.component;
 
-import hydrograph.engine.assembly.entity.HplSqlEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.HplSqlEntity;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -95,5 +95,15 @@ public class HplSqlComponent extends BaseCommandComponent {
 		throw new RuntimeException(
 				"query or uri should be present with command");
 
+	}
+
+	@Override
+	public String resolveOutgoingDependency() {
+		return hplSqlEntity.getComponentId()+"_out";
+	}
+
+	@Override
+	public String resolveIncomingDependency() {
+		return hplSqlEntity.getComponentId()+"_in";
 	}
 }

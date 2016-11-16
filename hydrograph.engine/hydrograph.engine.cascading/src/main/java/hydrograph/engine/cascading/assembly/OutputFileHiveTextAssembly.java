@@ -26,13 +26,13 @@ import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
+import hydrograph.engine.core.component.entity.OutputFileHiveTextEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
 
 /**
  * Hive Output File Component - records written as output into Hive Table

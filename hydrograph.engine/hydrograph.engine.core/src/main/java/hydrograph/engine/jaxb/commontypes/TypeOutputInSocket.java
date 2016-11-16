@@ -45,7 +45,7 @@ import hydrograph.engine.jaxb.otfs.TypeOutputSequenceInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-inSocket", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
+@XmlType(name = "type-output-inSocket", propOrder = {
     "schema"
 })
 @XmlSeeAlso({

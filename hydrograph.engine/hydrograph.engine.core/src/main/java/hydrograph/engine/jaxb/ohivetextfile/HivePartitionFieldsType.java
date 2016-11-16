@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hive_partition_fields_type", namespace = "hydrograph/engine/jaxb/ohivetextfile", propOrder = {
+@XmlType(name = "hive_partition_fields_type", propOrder = {
     "field"
 })
 public class HivePartitionFieldsType {

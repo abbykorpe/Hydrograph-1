@@ -13,12 +13,13 @@
 package hydrograph.engine.cascading.assembly;
 
 import static data.InputData.uniqueSequenceInput;
-import hydrograph.engine.assembly.entity.UniqueSequenceEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
+
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.UniqueSequenceEntity;
+import hydrograph.engine.core.component.entity.elements.Operation;
+import hydrograph.engine.core.component.entity.elements.OperationField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.PassThroughField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 
 import java.util.ArrayList;

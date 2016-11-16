@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-pbe-operation-input-field", namespace = "hydrograph/engine/jaxb/partitionByExpression")
+@XmlType(name = "type-pbe-operation-input-field")
 public class TypePbeOperationInputField
     extends TypeInputField
 {

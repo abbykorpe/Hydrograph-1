@@ -24,13 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.OperationEntityBase;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.base.OperationEntityBase;
+import hydrograph.engine.core.component.entity.elements.Operation;
+import hydrograph.engine.core.component.entity.elements.OperationField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
 import hydrograph.engine.expression.api.ValidationAPI;
 
 public class OperationFieldsCreator<T extends OperationEntityBase> {
@@ -74,12 +74,22 @@ public class OperationFieldsCreator<T extends OperationEntityBase> {
 
 	private Fields initPassThroughFields() {
 		String[] passThroughFields = OutSocketUtils.getPassThroughFieldsFromOutSocket(
-				outSocket.getPassThroughFieldsList(), componentParameters.getInputFields());
+				outSocket.getPassThroughFieldsList(), getStringArrayFromFields(componentParameters.getInputFields()));
 		if (passThroughFields != null && passThroughFields.length == 0 && !assemblyEntityBase.isOperationPresent()) {
 			return initPassThroughFields = componentParameters.getInputFields();
 		} else {
 			return initPassThroughFields = new Fields(passThroughFields);
 		}
+	}
+
+	private String[] getStringArrayFromFields(Fields fields) {
+
+		String[] arrayFields = new String[fields.size()];
+
+		for (int i = 0; i < fields.size(); i++)
+			arrayFields[i] = fields.get(i).toString();
+
+		return arrayFields;
 	}
 
 	private void initializeOperationFieldsForOutSocket() {

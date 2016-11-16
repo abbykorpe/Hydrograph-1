@@ -14,11 +14,12 @@ package hydrograph.engine.cascading.assembly;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import hydrograph.engine.assembly.entity.PartitionByExpressionEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+
 import hydrograph.engine.cascading.assembly.PartitionByExpressionAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.PartitionByExpressionEntity;
+import hydrograph.engine.core.component.entity.elements.Operation;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 
 import java.util.ArrayList;
 import java.util.List;
