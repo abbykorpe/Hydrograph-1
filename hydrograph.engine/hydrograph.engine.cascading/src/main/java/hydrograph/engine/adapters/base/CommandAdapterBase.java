@@ -14,8 +14,8 @@ package hydrograph.engine.adapters.base;
 
 import hydrograph.engine.commandtype.component.BaseCommandComponent;
 
-public abstract class CommandAdapterBase extends BaseAdapter{
-	
+public abstract class CommandAdapterBase implements BaseAdapter {
+
 	private static final long serialVersionUID = -8968707165016525031L;
 
 	public abstract BaseCommandComponent getComponent();

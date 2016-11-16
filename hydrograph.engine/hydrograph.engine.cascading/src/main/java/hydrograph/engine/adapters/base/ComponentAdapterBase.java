@@ -15,13 +15,11 @@ package hydrograph.engine.adapters.base;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
-public abstract class ComponentAdapterBase extends BaseAdapter{
+public abstract class ComponentAdapterBase implements BaseAdapter {
 
-	
-	
 	private static final long serialVersionUID = 4854818779750920658L;
 
 	public abstract BaseComponent getAssembly();
-	
+
 	public abstract void createAssembly(ComponentParameters componentParameters);
 }

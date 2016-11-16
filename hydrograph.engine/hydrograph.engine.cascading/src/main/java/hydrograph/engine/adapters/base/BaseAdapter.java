@@ -14,12 +14,6 @@ package hydrograph.engine.adapters.base;
 
 import java.io.Serializable;
 
-public abstract class BaseAdapter implements Serializable{
+public interface BaseAdapter extends Serializable {
 
-	private static final long serialVersionUID = -6380229525756002080L;
-
-	
-	
-	
-	
 }
