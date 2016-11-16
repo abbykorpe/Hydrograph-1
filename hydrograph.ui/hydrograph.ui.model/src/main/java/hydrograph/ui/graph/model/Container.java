@@ -15,7 +15,6 @@
 package hydrograph.ui.graph.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -116,11 +115,13 @@ public class Container extends Model {
 	 *
 	 */
 	public boolean addChild(Component component) {
+		String compNewName=generateUniqueComponentName(component);
+		String componentId= generateUniqueComponentId(component);
 		if(component != null){
 			if (canAddSubjobToCanvas(component.getComponentName())
 				&& components.add(component)) {
 			component.setParent(this);
-			String compNewName = getDefaultNameForComponent(component.getPrefix());
+				
 			//Check length and increment height
 			Font font = new Font( Display.getDefault(), ModelConstants.labelFont, 10,
 					SWT.NORMAL );
@@ -143,7 +144,7 @@ public class Container extends Model {
 			}
 				
 			component.setComponentLabel(compNewName);
-			component.setComponentId(compNewName);
+			component.setComponentId(componentId);
 			
 			if (component.isNewInstance()) {
 				component.setNewInstance(false);
@@ -154,6 +155,25 @@ public class Container extends Model {
 			}
 		}
 		return false;
+	}
+
+
+
+	private String generateUniqueComponentName(Component component) {
+		String componentName = component.getComponentLabel().getLabelContents();
+		if (StringUtils.equals(componentName, component.getPrefix()) || StringUtils.equals(componentName, component.getComponentName())
+				|| checkIfDuplicateComponentExists(componentName, component, false)) {
+			componentName = getDefaultNameORIdForComponent(component.getPrefix(), component, false);
+		}
+		return componentName;
+	}
+	
+	private String generateUniqueComponentId(Component component) {
+		String componentId = component.getComponentId();
+		if (componentId ==null || checkIfDuplicateComponentExists(componentId, component, true)) {
+			componentId = getDefaultNameORIdForComponent(component.getPrefix(), component, true);
+		}
+		return componentId;
 	}
 
 	public boolean addChild(CommentBox comment){
@@ -255,92 +275,46 @@ public class Container extends Model {
 	}
 
 	/**
-	 * Get default name for the component for particular prefix type.
+	 * Get default Name or Id for the component for particular prefix type.
+	 * @param prefix
+	 * @param currentComponent
+	 * @param generateId
+	 * 			true for generating ID and false for generating 
 	 * @return generated default name.
 	 */
-	private String getDefaultNameForComponent(String prefix){
-
-		String newName = "";
-		Integer nextSuffix = componentNextNameSuffixes.get(prefix);
-		LoggerUtil.getLoger(this.getClass()).debug(
-				"componentNextNameSuffixes.size(): " + componentNextNameSuffixes.size());
-		int next = 1;
-		
-		if (nextSuffix == null) {
-			LoggerUtil.getLoger(this.getClass())
-					.debug( "component "
-							+ prefix
-							+ " not present in the map! will check if default component name is already taken by some other component. If not, then return default name.");
-
-		} else {
-			LoggerUtil.getLoger(this.getClass()).debug(
-					"component exists in the map. value of nextSuffix: " + nextSuffix.intValue());
-			next = nextSuffix.intValue();
+	private String getDefaultNameORIdForComponent(String prefix, Component currentComponent,boolean generateId){
+		boolean isNameUpdated=false;
+		String newName=null;
+		long suffix=1;
+		while (!isNameUpdated) {
+			newName=prefix+"_"+(suffix<10?0+""+suffix:""+suffix);
+			if(checkIfDuplicateComponentExists(newName,currentComponent,generateId)){
+				suffix++;
+			}else
+				isNameUpdated=true;
 		}
-
-		newName = prefix + "_" + (next < 10 ? "0" : "") + next;
-
-
-		// populate Hashtable
-		nextSuffix = new Integer(++next);
-		Integer i = componentNextNameSuffixes.put(prefix, nextSuffix);
-		LoggerUtil.getLoger(this.getClass()).debug("previous value for component " + prefix + " in map: " + i);
-		LoggerUtil.getLoger(this.getClass()).debug("Adding New component name to the list: " + newName);
-		
-
-		Boolean duplicate = checkIfDuplicateComponentExists(newName);
-		if (!duplicate) {
-			componentNames.add(newName);
-		} else {
-			int maxSequenceNo = getMaximumSequenceNoFromComponentName();
-			for (String componentName : componentNames) {
-				if (componentName.equalsIgnoreCase(newName)) {
-					String newValue = Integer.toString(maxSequenceNo + 1);
-					String componenetSequenceNo = newName.substring(newName.lastIndexOf("_") + 1);
-					if (componenetSequenceNo.startsWith("0") && !componenetSequenceNo.endsWith("9")
-							&& newValue.length() == 1) {
-						newName = newName.replace(newName.substring(newName.lastIndexOf("_") + 2), newValue);
-					} else {
-						newName = newName.replace(newName.substring(newName.lastIndexOf("_") + 1), newValue);
-					}
-				}
-			}
-			componentNames.add(newName);
-		}
-			
 		return newName;
-		
 	}
 
-	private boolean checkIfDuplicateComponentExists(String newName) {
-		if (!componentNames.isEmpty()) {
-			for (String componentName : componentNames) {
-				if (componentName.equalsIgnoreCase(newName)) {
-					LoggerUtil.getLoger(this.getClass()).
-						debug("Conainer.checkIfDuplicateComponentExists(): Duplicate component exists.");
-					return true;
+	private boolean checkIfDuplicateComponentExists(String newNameORComponentId, Component currentComponent,
+			boolean checkId) {
+		if (!getChildren().isEmpty()) {
+			for (Object object : getChildren()) {
+				if ( object instanceof Component && !object.equals(currentComponent)) {
+					Component component = (Component) object;
+					if (checkId && StringUtils.equalsIgnoreCase(component.getComponentId(), newNameORComponentId)) {
+						LoggerUtil.getLoger(this.getClass()).trace("Duplicate component exists.");
+						return true;
+					}else if(!checkId && StringUtils.equalsIgnoreCase(component.getComponentLabel().getLabelContents(), newNameORComponentId)) {
+						LoggerUtil.getLoger(this.getClass()).trace("Duplicate component exists.");
+						return true;
+					}
 				}
 			}
 		}
 		return false;
 	}
 
-	private int getMaximumSequenceNoFromComponentName() {
-		int maxSequenceValue = 0;
-		List<Integer> list = new ArrayList<>();
-		if (!componentNames.isEmpty()) {
-				for (String componentName : componentNames) {
-					String componentSequenceNo = componentName.substring(componentName.lastIndexOf("_") + 1);
-					if (componentSequenceNo.matches("[0-9]+")) {
-						list.add(Integer.parseInt(componentSequenceNo));
-					}
-				}
-				maxSequenceValue = Collections.max(list);
-		}
-		return maxSequenceValue;
-	}
-	
-	
 	
 	/**
 	 * Return a List of Component names in this graph. The returned List should not be
