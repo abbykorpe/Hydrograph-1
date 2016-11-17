@@ -119,8 +119,14 @@ public class UiConverterUtil {
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
 			NoSuchMethodException, SecurityException, EngineException, JAXBException, ParserConfigurationException,
 			SAXException, IOException, ComponentNotFoundException {
-		Object[] array = new Object[2];
 		Container container = getJobContainer(sourceXML, parameterFile);
+		Object[] array = updateUniqueIdForStandAloneJObs(jobFile, isSubJob, container);
+		genrateUiXml(container, jobFile, parameterFile);
+		return array;
+	}
+
+	private Object[] updateUniqueIdForStandAloneJObs(IFile jobFile, boolean isSubJob, Container container) {
+		Object[] array = new Object[2];
 		array[0] = container;
 		array[1] = null;
 		if (!container.isCurrentGraphSubjob() && !ImportedJobsRepository.INSTANCE.contains(jobFile)) {
@@ -129,29 +135,28 @@ public class UiConverterUtil {
 				try {
 					String newUniqueJobId = GenerateUniqueJobIdUtil.INSTANCE.generateUniqueJobId();
 					container.setUniqueJobId(newUniqueJobId);
-					IFile file = updateGraphAndMarshall(newUniqueJobId, jobFile,container);
+					IFile file = updateGraphAndConvertToTargetXML(newUniqueJobId, jobFile,container);
 					array[1] = file;
 				} catch (NoSuchAlgorithmException e) {
 					LOGGER.warn("Exception while generating new UniqueJobId");
 				}
 			}
 		}
-		genrateUiXml(container, jobFile, parameterFile);
 		return array;
 	}
 	
-	private IFile updateGraphAndMarshall(String newUniiqueJobId, IFile jobFile, Container container) {
+	private IFile updateGraphAndConvertToTargetXML(String newUniiqueJobId, IFile jobFile, Container container) {
 		IPath xmlFileIPath = new Path(jobFile.getFullPath().toOSString());
 		xmlFileIPath = xmlFileIPath.removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH);
 		IFile fileXml = ResourcesPlugin.getWorkspace().getRoot().getFile(xmlFileIPath);
 		try {
 			ConverterUtil.INSTANCE.convertToXML(container, false, fileXml, null);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException
-				| NoSuchMethodException e) {
+				| NoSuchMethodException exception) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);
-			messageBox.setMessage("Exception while converting into xml file");
+			messageBox.setMessage("Exception occurred while creating XML file. Please check logs.");
 			messageBox.open();
-			LOGGER.warn("Exception while converting into xml");
+			LOGGER.error("Exception while converting into xml",exception);
 		}
 		return fileXml;
 	}
