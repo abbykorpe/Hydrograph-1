@@ -39,6 +39,7 @@ import hydrograph.ui.logging.factory.LogFactory;
  * The Class ComponentPasteCommand.
  */
 public class ComponentPasteCommand extends Command {
+	private static final String UNDERSCORE = "_";
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ComponentPasteCommand.class);
 	private int pasteCounter=0;
 	private Map<Object,Object> list = new HashMap<>();
@@ -103,13 +104,13 @@ public class ComponentPasteCommand extends Command {
 		String prefix=currentName;
 		StringBuffer buffer=new StringBuffer(currentName);
 		try {
-		if(buffer.lastIndexOf("_")!=-1 && (buffer.lastIndexOf("_")!=buffer.length())){
-			if(StringUtils.isNumeric(buffer.substring(buffer.lastIndexOf("_")+1,buffer.length()))){
-				prefix=buffer.substring(0,buffer.lastIndexOf("_")); 
+		if(buffer.lastIndexOf(UNDERSCORE)!=-1 && (buffer.lastIndexOf(UNDERSCORE)!=buffer.length())){
+			if(StringUtils.isNumeric(buffer.substring(buffer.lastIndexOf(UNDERSCORE)+1,buffer.length()))){
+				prefix=buffer.substring(0,buffer.lastIndexOf(UNDERSCORE)); 
 			}
 		}}
 		catch (Exception exception) {
-			LOGGER.trace("Cannot process component name for detecting prefix",exception);
+			LOGGER.warn("Cannot process component name for detecting prefix : ",exception.getMessage());
 		}
 		return prefix;
 	}
