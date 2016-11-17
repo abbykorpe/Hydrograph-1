@@ -275,6 +275,9 @@ public class Messages extends NLS {
 	public static String ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT;
 	
 	public static String PARAMETER_NOT_FOUND;
+	public static String  GENERATE_NEW_UNIQUE_JOB_ID_FOR_JOB;
+	public static String  GENERATE_NEW_UNIQUE_JOB_ID_FOR_SUB_JOB;
+
 	
 	
 	static {

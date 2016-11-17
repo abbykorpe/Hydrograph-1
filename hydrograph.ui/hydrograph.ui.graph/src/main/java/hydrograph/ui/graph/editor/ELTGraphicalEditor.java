@@ -188,12 +188,12 @@ import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.model.processor.DynamicClassProcessor;
+import hydrograph.ui.graph.model.utils.GenerateUniqueJobIdUtil;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
-
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 
 /**
@@ -1022,23 +1022,11 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	}
 
-	
-	public String  generateUniqueJobId() throws NoSuchAlgorithmException{
-		SecureRandom random =  SecureRandom.getInstance("SHA1PRNG");
-		int number=0;
-		 for (int i = 0; i < 20; i++) {
-			 number= random.nextInt(21);
-		     }
-		 	byte[] secureRandom = random.getSeed(number);
-		    long milliSeconds = System.currentTimeMillis();
-		    String timeStampLong = Long.toString(milliSeconds);
-		    
-		    /*String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-		    this.uniqueJobId=jobId.concat(""+secureRandom.hashCode()).concat(JOB_ID_STRING_SEPARATOR+timeStampLong) + JOB_ID_STRING_SEPARATOR + timeStamp;
-		   */
-		    this.uniqueJobId="Job_".concat(""+secureRandom.hashCode()).concat("_"+timeStampLong);
-		    
-		    return uniqueJobId;
+	public String generateUniqueJobId() throws NoSuchAlgorithmException {
+
+		this.uniqueJobId = GenerateUniqueJobIdUtil.INSTANCE.generateUniqueJobId();
+
+		return uniqueJobId;
 	}
 	
 	@Override

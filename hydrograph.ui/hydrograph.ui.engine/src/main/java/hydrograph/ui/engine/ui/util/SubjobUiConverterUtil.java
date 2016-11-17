@@ -88,11 +88,11 @@ public class SubjobUiConverterUtil {
 			InvocationTargetException, NoSuchMethodException, JAXBException, ParserConfigurationException,
 			SAXException, IOException, CoreException, FileNotFoundException {
 		UiConverterUtil converterUtil = new UiConverterUtil();
-		Container subJobContainer=null;
+		Object[] subJobContainerArray=null;
 			IFile xmlFile = ResourcesPlugin.getWorkspace().getRoot().getFile(subJobXMLPath);
 			File file = new File(xmlFile.getFullPath().toString());
 		if (file.exists()) {
-			subJobContainer = converterUtil.convertToUiXml(importFromPath.toFile(), subJobFile, parameterFile);
+			subJobContainerArray = converterUtil.convertToUiXml(importFromPath.toFile(), subJobFile, parameterFile,true);
 		} else {
 			IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(parameterFilePath.segment(1));
 			IFolder iFolder = iProject.getFolder(subjobPath.substring(0, subjobPath.lastIndexOf('/')));
@@ -100,12 +100,12 @@ public class SubjobUiConverterUtil {
 				iFolder.create(true, true, new NullProgressMonitor());
 			}
 			IFile subjobXmlFile = iProject.getFile(subjobPath);
-			subJobContainer = converterUtil.convertToUiXml(importFromPath.toFile(), subJobFile, parameterFile);
-			if (!subjobXmlFile.exists()) {
+			subJobContainerArray = converterUtil.convertToUiXml(importFromPath.toFile(), subJobFile, parameterFile,true);
+			if (!subjobXmlFile.exists() && subJobContainerArray[1] == null) {
 				subjobXmlFile.create(new FileInputStream(importFromPath.toString()), true, new NullProgressMonitor());
 			}
 		}
-		return subJobContainer;
+		return (Container) subJobContainerArray[0];
 	}
 	
 	/**

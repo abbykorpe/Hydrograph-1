@@ -16,6 +16,7 @@ package hydrograph.ui.menus.importWizards;
 
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.ui.exceptions.ComponentNotFoundException;
+import hydrograph.ui.engine.ui.repository.ImportedJobsRepository;
 import hydrograph.ui.engine.ui.util.UiConverterUtil;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.menus.Activator;
@@ -194,8 +195,9 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 		UiConverterUtil uiConverterUtil = new UiConverterUtil();
 		IFile jobFile = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFilePath);
 		IFile parameterFile = ResourcesPlugin.getWorkspace().getRoot().getFile(parameterFilePath);
+		Object[] containerArray = null;
 		try {
-			uiConverterUtil.convertToUiXml(new File(targetxmlFilePath), jobFile, parameterFile);
+			containerArray = uiConverterUtil.convertToUiXml(new File(targetxmlFilePath), jobFile, parameterFile, false);
 			LOGGER.debug("Successfully created *job,*properties files in workspace");
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | EngineException  | IOException | ComponentNotFoundException exception) {
@@ -210,7 +212,11 @@ public class ImportEngineXmlWizardPage extends WizardNewFileCreationPage {
 			return null;
 		}
 		LOGGER.debug("Importing *xml file");
-		return super.createNewFile();
+		ImportedJobsRepository.INSTANCE.flush();
+		if (containerArray[1] == null) {
+			return super.createNewFile();
+		}
+		return (IFile) containerArray[1];
 	}
 
 	/*
