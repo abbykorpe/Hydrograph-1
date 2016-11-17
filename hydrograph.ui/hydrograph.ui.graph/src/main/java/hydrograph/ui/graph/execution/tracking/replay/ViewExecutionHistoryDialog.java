@@ -13,18 +13,19 @@
 
 package hydrograph.ui.graph.execution.tracking.replay;
 
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.io.FileNotFoundException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -40,15 +41,13 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
-import org.apache.commons.lang.StringUtils;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.job.JobManager;
+
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
 /**
  * The Class ViewExecutionHistoryDialog use to create dialog to manage previous tracking history.
  * 
@@ -165,6 +164,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			fileDialog.setText(EXECUTION_HISTORY_DIALOG);
 			String[] filterExt = { EXECUTION_TRACKING_LOG_FILE_EXTENTION };
 			fileDialog.setFilterExtensions(filterExt);
+			fileDialog.setFilterPath(viewExecutionHistoryHandler.getLogPath());
 			String path = fileDialog.open();
 			if (path == null) return;
 			trackingFileText.setText(path);
@@ -208,48 +208,6 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		return filePath;
 	}
 	
-	/**
-	   * Creates the browse file contents
-	   * 
-	   * @param shell the parent shell
-	   */
-	private void createBrowseButton(final Composite parent){
-		Label label=new  Label(parent, SWT.None);
-		label.setText(BROWSE_TRACKING_FILE);
-		
-		// Create the text box extra wide to show long paths
-		trackingFileText = new Text(parent, SWT.BORDER);
-		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 0);
-		trackingFileText.setLayoutData(data);
-	    
-	    // Clicking the button will allow the user
-	    // to select a directory
-	    Button button = new Button(parent, SWT.PUSH);
-	    button.setText("...");
-	    button.addSelectionListener(new SelectionAdapter() {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			FileDialog fileDialog = new FileDialog(parent.getShell(),  SWT.OPEN  );
-			fileDialog.setText(EXECUTION_HISTORY_DIALOG);
-			String[] filterExt = { EXECUTION_TRACKING_LOG_FILE_EXTENTION };
-			fileDialog.setFilterExtensions(filterExt);
-			String path = fileDialog.open();
-			if (path == null) return;
-			trackingFileText.setText(path);
-			trackingFileText.setToolTipText(path);
-		}
-	    });
-	    
-	    trackingFileText.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent event) {
-	    		filePath = ((Text)event.widget).getText();
-	    	}
-		});
-	}
-	
-	
-	@Override
 	protected void okPressed() {
 		filePath=trackingFileText.getText();
 		if(filePath != null){
@@ -260,7 +218,8 @@ public class ViewExecutionHistoryDialog extends Dialog{
 			ExecutionStatus executionStatus = null;
 			if(getTrackingFilePath().trim().isEmpty()){
 				if(!StringUtils.isEmpty(getSelectedUniqueJobId())){
-					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), JobManager.INSTANCE.isLocalMode(), viewExecutionHistoryHandler.getLogPath());
+					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), JobManager.INSTANCE.isLocalMode(), 
+							viewExecutionHistoryHandler.getLogPath());
 				}else{
 					super.okPressed();
 				}
@@ -311,4 +270,5 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		
 		return timeStamp;
 	}
+	
 }
