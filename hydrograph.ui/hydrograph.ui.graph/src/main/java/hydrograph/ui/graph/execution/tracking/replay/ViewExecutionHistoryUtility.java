@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.Constants;
@@ -144,11 +145,12 @@ public class ViewExecutionHistoryUtility {
 	 */
 	public List<String> getMissedComponents(ExecutionStatus executionStatus){
 		List<String> compList = new ArrayList<>(); 
-		for(ComponentStatus componentStatus: executionStatus.getComponentStatus()){
-			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && !(componentStatus.getComponentId().startsWith("viewData"))){
+		executionStatus.getComponentStatus().forEach(componentStatus ->{
+			if(!unusedCompOnCanvas.containsKey(componentStatus.getComponentId()) && componentStatus.getComponentName() != null 
+					&& StringUtils.isNotBlank(componentStatus.getComponentName())){
 				compList.add(componentStatus.getComponentId());
 			}
-		}
+		});
 		return compList;
 	}
 	
@@ -178,10 +180,10 @@ public class ViewExecutionHistoryUtility {
 				if(!Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
 				if(isParent){
 					componentNameAndLink.put(subjobComponent.getComponentId()+"."+component.getComponentId(), 
-							subjobComponent.getComponentId()+"."+component.getComponentLabel().getLabelContents());
+							subjobComponent.getComponentId()+"."+component.getComponentId());
 				}else{
 					componentNameAndLink.put(subjobPrefix+subjobComponent.getComponentId()+"."+component.getComponentId(), 
-							subjobPrefix+subjobComponent.getComponentId()+"."+component.getComponentLabel().getLabelContents());
+							subjobPrefix+subjobComponent.getComponentId()+"."+component.getComponentId());
 				}
 			   }
 			}

@@ -111,7 +111,7 @@ public class TrackingStatusUpdateUtils {
 								populateSubjobRecordCount(componentNameAndLink, component,subjobPrefix,true);
 								applyRecordCountOnSubjobComponent(component, componentNameAndLink, executionStatus);
 							} 
-							updateStatusCountForSubjobComponent(executionStatus, component);
+							updateStatusCountForSubjobComponent(executionStatus, component, isReplay);
 							
 						}else{
 							updateStatusCountForComponent(executionStatus, component, isReplay);
@@ -131,7 +131,7 @@ public class TrackingStatusUpdateUtils {
 			ExecutionStatus executionStatus, Component component, boolean isReplay) {
 		
 		if(isReplay){
-			ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(component.getComponentId(), component.getComponentName());
+			ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(component.getComponentId(), component.getComponentId());
 		}
 		for( ComponentStatus componentStatus: executionStatus.getComponentStatus()){
 			if(componentStatus.getComponentId().substring(componentStatus.getComponentId().lastIndexOf(".")+1).equals(component.getComponentId())){
@@ -151,7 +151,7 @@ public class TrackingStatusUpdateUtils {
 		}
 	}
 
-	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component) {
+	private void updateStatusCountForSubjobComponent(ExecutionStatus executionStatus,Component component, boolean isReplay) {
 		ComponentExecutionStatus status=component.getStatus();
 			if(status==null || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.BLANK.value(),status.value())){
 				boolean isPending =applyPendingStatus(component, executionStatus);
@@ -171,7 +171,7 @@ public class TrackingStatusUpdateUtils {
 					component.updateStatus(ComponentExecutionStatus.FAILED.value());
 				}
 		
-		if((status!=null && (StringUtils.equalsIgnoreCase(ComponentExecutionStatus.RUNNING.value(),status.value()) || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.PENDING.value(),status.value())))){
+		if((status!=null && (StringUtils.equalsIgnoreCase(ComponentExecutionStatus.RUNNING.value(),status.value()) || StringUtils.equalsIgnoreCase(ComponentExecutionStatus.PENDING.value(),status.value()))) || isReplay){
 			boolean isSuccess=applySuccessStatus(component, executionStatus);
 	 		if(isSuccess)
 	 			component.updateStatus(ComponentExecutionStatus.SUCCESSFUL.value());
