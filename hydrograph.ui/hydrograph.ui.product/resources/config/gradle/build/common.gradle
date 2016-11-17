@@ -1,0 +1,159 @@
+/*
+-------------------------------------------------------------------------------------------------
+                                  Hydrograph Execution Details 
+-------------------------------------------------------------------------------------------------
+*/
+ext.hydrographExecution='hydrograph.server.execution.tracking.client.main.HydrographMain'
+
+/*
+-------------------------------------------------------------------------------------------------
+                                   Project Repositories Section 
+-------------------------------------------------------------------------------------------------
+*/
+ext.BWUrl='http://10.30.127.67:9091/artifactory/libs-release';
+/*
+-------------------------------------------------------------------------------------------------
+                                       Version Section  
+-------------------------------------------------------------------------------------------------
+*/
+ext.cascadingVersion = '3.1.0'
+ext.hadoopVersion = '2.6.0'
+ext.hiveVersion = '1.2.0'
+
+/*
+-------------------------------------------------------------------------------------------------
+                     Function for evaluating arguments for Local, Local Debug job 
+-------------------------------------------------------------------------------------------------
+*/
+
+def getArgsForRunJob(runEvent) {
+   def runParameters = []
+   /*
+   Following are the common & required options and resolved values for Hydrograph
+   	-xmlpath      : Mandatory option for Hydrograph execution script  
+   	jobXML        : Resolved value for Job's XML
+   	-paramfiles   : Mandatory option for Hydrograph execution script
+   	parameterFile : Resolved value for Parameter XML
+   */
+   
+	   if (project.hasProperty("jobXML")) {
+	       	runParameters.add("-xmlpath")
+	       	runParameters.add(jobXML)
+	       	println "Job XML : $jobXML"
+	   	}
+	   if (project.hasProperty("parameterFile")) {
+	   	    runParameters.add("-paramfiles")
+	       	runParameters.add(parameterFile)
+	      	println "Parameter file : $parameterFile"
+	    }
+	   if (project.hasProperty("jobId")){
+	   	    runParameters.add("-jobid")
+	       	runParameters.add(jobId)
+        	println "Job ID : $jobId"
+	    }
+     
+   /*
+   Following additional options and resolved values are required for Local Debug execution  
+   -debugxmlpath : Optional option for Hydrograph execution script
+   debugJobXML	 : Resolved value for Job's Debug XML
+   -jobid		 : Optional option for Hydrograph execution script
+   jobId		 : Resolved value for Job ID
+   -basepath	 : Optional  option for Hydrograph execution script
+   basePath		 : Resolved value for Debug Path
+   */
+	   if (runEvent.equals("ExecuteLocalDebugRun")){
+	        if(project.hasProperty("debugJobXML")){
+		   	    runParameters.add("-debugxmlpath")
+		       	runParameters.add(debugJobXML)
+	        	println "View data XML : $debugJobXML"
+	   		 }
+	
+	    	if(project.hasProperty("basePath")){
+		   	    runParameters.add("-basepath")
+		       	runParameters.add(basePath)
+	        	println "View data created at : $basePath"
+	    	}
+	    }
+
+	if (project.hasProperty("udfpath")) {
+		runParameters.add("-udfpath")
+        if(udfpath==null)
+    	   	udfpath=''
+       	runParameters.add(udfpath)
+     }
+    if(project.hasProperty("isExecutionTracking")){
+   	    runParameters.add("-isexecutiontracking")
+       	runParameters.add(isExecutionTracking)
+        println isExecutionTracking
+    }
+    
+    if(project.hasProperty("executionTrackingPort")){
+   	    runParameters.add("-trackingclientsocketport")
+       	runParameters.add(executionTrackingPort)
+        println " executionTrackingPort is: "+executionTrackingPort
+    }
+  	  return runParameters+"";
+}
+
+def getFilePath(def path){
+	if(path.length() > 0 )
+		{
+		    def endIndex = path.lastIndexOf("/");
+		    if (endIndex != -1)  
+		    {
+		    	path = path.substring(0, endIndex);
+		    }
+		} 
+		return path  
+}
+
+def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,def password,def basePath){
+ 
+	     ant.taskdef(
+    	            	name: 'scp',
+        	        	classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+            	    	classpath: configurations.sshAntTask.asPath
+                	)
+     	
+          try {
+  		 	  	ant.scp(
+                   	 	file: fileToMove,
+                    	todir: ""+username+"@"+host+":"+basePath+ "/" +toDirectoryPath,
+                    	password: password,
+                    	trust: true,
+            	)
+          } 
+          catch (Exception gradleException) {
+           	println '#Gradle failed to execute task#'
+           	gradleException.printStackTrace();
+          }
+}
+
+def sshToRemoteServer(def host, def username, def password,def executeCommand ){
+
+   		ant.taskdef(
+               		name: 'sshexec',
+               		classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
+               		classpath: configurations.sshAntTask.asPath)
+
+        try {
+            ant.sshexec(
+                    host: host,
+                    username: username,
+                    password: password,
+                    trust: true,
+                    command: executeCommand
+            )
+        } 
+        catch (Exception gradleException) {
+            println '#Gradle failed to execute task#'
+            gradleException.printStackTrace();
+        }
+
+}
+ext{
+    getArgsForRunJob = this.&getArgsForRunJob
+    getFilePath = this.&getFilePath
+    scpToRemoteServer = this.&scpToRemoteServer
+    sshToRemoteServer = this.&sshToRemoteServer
+}
