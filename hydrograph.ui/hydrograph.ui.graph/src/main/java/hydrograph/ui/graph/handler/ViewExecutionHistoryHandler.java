@@ -129,7 +129,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 				
 				ViewExecutionHistoryUtility.INSTANCE.getExtraComponentList(executionStatus);
 				ViewExecutionHistoryUtility.INSTANCE.getUnusedCompsOnCanvas().forEach((compId, compName)->{
-					compNameList.add(compName);
+					compNameList.add(compId);
 				});
 				
 				return true;
