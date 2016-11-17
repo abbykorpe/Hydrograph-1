@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
@@ -38,7 +39,8 @@ import hydrograph.ui.logging.factory.LogFactory;
  * The Class ComponentPasteCommand.
  */
 public class ComponentPasteCommand extends Command {
-	private static final Logger log = LogFactory.INSTANCE.getLogger(ComponentPasteCommand.class);
+	private static final String UNDERSCORE = "_";
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ComponentPasteCommand.class);
 	private int pasteCounter=0;
 	private Map<Object,Object> list = new HashMap<>();
 
@@ -70,7 +72,7 @@ public class ComponentPasteCommand extends Command {
 						.getActiveWorkbenchWindow().getActivePage();
 				if(node instanceof Component){
 					Component clonedComponent =  ((Component)node).clone();
-					clonedComponent.setPrefix(((Component) node).getComponentLabel().getLabelContents());
+					clonedComponent.setPrefix(getPrefix(node));
 					clonedComponent.setParent(((ELTGraphicalEditor) page.getActiveEditor()).getContainer());
 					Point location = ((Component) node).getLocation();
 					int incrementedLocation = pasteCounter * 20;
@@ -90,11 +92,27 @@ public class ComponentPasteCommand extends Command {
 					list.put(node,clonedLabel);
 				}
 			} catch (CloneNotSupportedException e) {
-				log.error("Object could not cloned", e);
+				LOGGER.error("Object could not cloned", e);
 				
 			}
 		}
 		redo();
+	}
+
+	private String getPrefix(Object node) {
+		String currentName=((Component) node).getComponentLabel().getLabelContents();
+		String prefix=currentName;
+		StringBuffer buffer=new StringBuffer(currentName);
+		try {
+		if(buffer.lastIndexOf(UNDERSCORE)!=-1 && (buffer.lastIndexOf(UNDERSCORE)!=buffer.length())){
+			if(StringUtils.isNumeric(buffer.substring(buffer.lastIndexOf(UNDERSCORE)+1,buffer.length()))){
+				prefix=buffer.substring(0,buffer.lastIndexOf(UNDERSCORE)); 
+			}
+		}}
+		catch (Exception exception) {
+			LOGGER.warn("Cannot process component name for detecting prefix : ",exception.getMessage());
+		}
+		return prefix;
 	}
 
 	@Override
