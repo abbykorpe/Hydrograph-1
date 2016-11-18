@@ -189,7 +189,7 @@ public class ViewDataUtils {
 						subjobParams(componentNameAndLink, componentPrevToOutput,subjobPrefix, sourcePort);
 					}else{
 						String portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
-						SubjobDetails subjobDetails = new SubjobDetails(link.getSourceTerminal(), portNumber);
+						SubjobDetails subjobDetails = new SubjobDetails(link.getSource().getPort(link.getSourceTerminal()).getPortType() + link.getLinkNumber(), portNumber);
 						componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+subjobDetails.getSourceTerminal(), subjobDetails);
 					}
 				}
