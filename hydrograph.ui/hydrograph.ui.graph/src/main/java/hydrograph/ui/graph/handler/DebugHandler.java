@@ -13,18 +13,6 @@
 
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.dataviewer.utilities.Utils;
-import hydrograph.ui.graph.debugconverter.DebugConverter;
-import hydrograph.ui.graph.debugconverter.SchemaHelper;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.utility.CanvasUtils;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -42,6 +30,18 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.graph.debugconverter.DebugConverter;
+import hydrograph.ui.graph.debugconverter.SchemaHelper;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 
 /**
@@ -177,7 +177,7 @@ public class DebugHandler{
 	public Object execute(RunConfigDialog runConfigDialog){		
 		if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 			try{
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
+				//PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				JobManager.INSTANCE.enableRunJob(true);
 				if(getComponentCanvas().getParameterFile() == null || isDirtyEditor()){
 					CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();					

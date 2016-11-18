@@ -63,7 +63,6 @@ import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.graph.utility.MessageBox;
-import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
@@ -569,7 +568,7 @@ public class JobManager {
 	 */
 	private boolean saveJobBeforeExecute(final DefaultGEFCanvas gefCanvas) {
 			try {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
+				//PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 				enableRunJob(true);
 				if (gefCanvas.getParameterFile() == null || CanvasUtils.INSTANCE.isDirtyEditor()) {
 					return false;

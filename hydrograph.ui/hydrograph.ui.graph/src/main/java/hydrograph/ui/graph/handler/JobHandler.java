@@ -12,17 +12,6 @@
  ******************************************************************************/
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.dataviewer.utilities.Utils;
-import hydrograph.ui.graph.Activator;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.dialog.SaveJobFileBeforeRunDialog;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.preferences.JobRunPreference;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.graph.utility.SubJobUtility;
-import hydrograph.ui.graph.utility.ViewDataUtils;
-import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +28,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.dialog.SaveJobFileBeforeRunDialog;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.preferences.JobRunPreference;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.graph.utility.ViewDataUtils;
+import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
 
 /**
  * JobHandler Handles both debug and normal run.
@@ -94,17 +94,19 @@ public class JobHandler extends AbstractHandler {
 	
 	}
 	
-	private boolean jobIsSaved() {
-		ELTGraphicalEditor editor=SubJobUtility.getCurrentEditor();
-		if(editor.isDirty() && !StringUtils.equals(Activator.getDefault().getPreferenceStore().getString(JobRunPreference.JOB_RUN_PREFRENCE), MessageDialogWithToggle.ALWAYS))
+	private boolean jobIsSaved(){
+		ELTGraphicalEditor editor = SubJobUtility.getCurrentEditor();
+		if(editor.isDirty())
 		{
+			if(!StringUtils.equals(Activator.getDefault().getPreferenceStore().getString(JobRunPreference.JOB_RUN_PREFRENCE), MessageDialogWithToggle.ALWAYS)){
 			SaveJobFileBeforeRunDialog messageBox = new SaveJobFileBeforeRunDialog(Display.getCurrent().getActiveShell(),"'"+editor.getEditorInput().getName()+"' "+Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN );
 		    int rc = messageBox.open();
 		    if(rc!=IDialogConstants.OK_ID){
 		    	return false;
+		    	}
 		    }
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);	    
 		}
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
 		return true;
 	}
 	
