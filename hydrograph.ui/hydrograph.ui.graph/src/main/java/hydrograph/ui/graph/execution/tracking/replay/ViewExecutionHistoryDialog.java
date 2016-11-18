@@ -15,6 +15,7 @@ package hydrograph.ui.graph.execution.tracking.replay;
 
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -102,6 +103,10 @@ public class ViewExecutionHistoryDialog extends Dialog{
 	      column.setWidth(212);
 	      column.setText(titles[i]);
 	    }
+	    
+	    
+	    jobDetails.sort((job1, job2)-> job2.getUniqueJobId().compareTo(job1.getUniqueJobId()));
+	    
 	    for(Job job : jobDetails){
 	    	String timeStamp = getTimeStamp(job.getUniqueJobId());
 	    	TableItem items = new TableItem(table, SWT.None);

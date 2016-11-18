@@ -75,14 +75,18 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	      column.setText(titles[i]);
 	    }
 		
+	    jobDetails.sort((job1, job2)-> job2.getUniqueJobId().compareTo(job1.getUniqueJobId()));
+	    
 	    for(Job job : jobDetails){
-	    	String timeStamp = getTimeStamp(job.getUniqueJobId());
-	    	TableItem items = new TableItem(table, SWT.None);
-	    	items.setText(0, job.getUniqueJobId());
-	    	items.setText(1, timeStamp);
-	    	String mode = getJobExecutionMode(job.isRemoteMode());
-	    	items.setText(2, mode);
-	    	items.setText(3, job.getJobStatus());
+	    	if(job.isDebugMode()){
+	    		String timeStamp = getTimeStamp(job.getUniqueJobId());
+	    		TableItem items = new TableItem(table, SWT.None);
+	    		items.setText(0, job.getUniqueJobId());
+	    		items.setText(1, timeStamp);
+	    		String mode = getJobExecutionMode(job.isRemoteMode());
+	    		items.setText(2, mode);
+	    		items.setText(3, job.getJobStatus());
+	    	}
 	    }
 	    
 	    table.addListener(SWT.Selection, new Listener() {
