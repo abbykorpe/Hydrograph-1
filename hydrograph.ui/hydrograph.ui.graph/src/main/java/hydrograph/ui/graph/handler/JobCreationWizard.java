@@ -13,17 +13,19 @@
 
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.graph.Messages;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.graph.Messages;
 
 /**
  * Create new new .job-file. Those files can be used with the GraphicalEditor
@@ -45,6 +47,10 @@ public class JobCreationWizard extends Wizard implements INewWizard {
 	 */
 	public void addPages() {
 		// add pages to this wizard
+		if(page1==null){
+			page1 = new JobCreationPage(PlatformUI.getWorkbench(), (StructuredSelection) PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getSelectionService().getSelection(), true);
+		}
 		addPage(page1);
 	}
 
@@ -60,7 +66,7 @@ public class JobCreationWizard extends Wizard implements INewWizard {
 		if (projects != null && projects.length != 0) {
 			openProjectFound = isOpenProjectExists(openProjectFound, projects);
 			if (openProjectFound) {
-				page1 = new JobCreationPage(workbench, selection);
+				page1 = new JobCreationPage(workbench, selection,false);
 			} else {
 				MessageBox messageBox = createErrorDialog(Messages.OPEN_PROJECT_ERROR_MESSAGE);
 				if (messageBox.open() == SWT.OK) {
