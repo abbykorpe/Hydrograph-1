@@ -497,6 +497,18 @@ public class JoinMapDialog extends Dialog {
 
 			String tooltipText;
 
+			@Override
+			public Image getImage(Object element) {
+				Image image = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_ICON);
+
+				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
+
+				if (StringUtils.isBlank(lookupMapProperty.getOutput_Field()))
+					return image;
+				else
+					return super.getImage(element);
+			}
+			
 			private List<String> getOutputFieldList(){
 				List<String> outputFieldList = new LinkedList<>();
 				for(LookupMapProperty lookupMapProperty : mappingTableItemList){
@@ -568,6 +580,18 @@ public class JoinMapDialog extends Dialog {
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			String tooltipText;
 
+			@Override
+			public Image getImage(Object element) {
+				Image image = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_ICON);
+
+				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
+
+				if (StringUtils.isBlank(lookupMapProperty.getSource_Field()))
+					return image;
+				else
+					return super.getImage(element);
+			}
+			
 			@Override
 			public String getToolTipText(Object element) {
 				tooltipText = null;
