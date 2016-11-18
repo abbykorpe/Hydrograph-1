@@ -16,6 +16,7 @@ import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.communication.utilities.SCPUtility;
+import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
@@ -36,6 +37,8 @@ import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
@@ -110,12 +113,26 @@ public class DataViewerFileManager {
 			{
 				csvDebugFileAbsolutePath = getDebugFileAbsolutePath();
 			}
-		} catch (NumberFormatException | HttpException  | MalformedURLException e4) {
-			logger.error("Unable to fetch viewData file", e4);
-			return new StatusMessage(StatusConstants.ERROR,Messages.UNABLE_TO_FETCH_DEBUG_FILE);
-		}  catch (IOException e4) {
-			logger.error("Unable to fetch viewData file", e4);
-			return new StatusMessage(StatusConstants.ERROR,"Unable to fetch viewData file : Please check if service is running");
+		} catch (MalformedURLException malformedURLException) {
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  malformedURLException.getMessage(), malformedURLException);
+			StatusMessage statusMessage = new StatusMessage.Builder(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+": either no legal protocol could be found in a specification string or the path could not be parsed.").errorStatus(status).build();
+			logger.error("Unable to fetch viewData file", malformedURLException);	
+			return statusMessage;
+		}catch (HttpException httpException){
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  httpException.getMessage(), httpException);
+			StatusMessage statusMessage = new StatusMessage.Builder(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+": error from Http client").errorStatus(status).build();
+			logger.error("Unable to fetch viewData file", httpException);
+			return statusMessage;
+		}catch (NumberFormatException numberFormateException){
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  numberFormateException.getMessage(), numberFormateException);
+			StatusMessage statusMessage = new StatusMessage.Builder(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+": please check if port number is defined correctly").errorStatus(status).build();
+			logger.error("Unable to fetch viewData file", numberFormateException);
+			return statusMessage;
+		}catch (IOException ioException) {
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  ioException.getMessage(), ioException);
+			StatusMessage statusMessage = new StatusMessage.Builder(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+": please check if service is running").errorStatus(status).build();
+			logger.error("Unable to fetch viewData file", ioException);
+			return statusMessage;
 		}
 		if (csvDebugFileAbsolutePath != null) {
 			csvDebugFileName = csvDebugFileAbsolutePath
@@ -135,8 +152,7 @@ public class DataViewerFileManager {
 				}
 			} catch (IOException | JSchException e1) {
 				logger.error("Unable to fetch viewData file", e1);
-				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+ ": Unable to copy the files from temproary location");
-				//return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
+				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+ ": unable to copy the files from temproary location");
 			}
 			
 			File debugFile = new File(dataViewerDebugFile);
@@ -156,7 +172,7 @@ public class DataViewerFileManager {
 		}
 		return new StatusMessage(StatusConstants.SUCCESS);
 	}
-
+	
 	private String getFileName(String csvDebugFileAbsolutePath) {
 		
 		if (StringUtils.isNotBlank(csvDebugFileAbsolutePath)) {
@@ -234,7 +250,6 @@ public class DataViewerFileManager {
 			String sourceFile = csvDebugFileAbsolutePath.trim();
 			File file = new File(dataViewerDebugFile);
 			if (!file.exists()|| isOverWritten) {
-//				Files.delete(Paths.get(sourceFile));
 				Files.copy(Paths.get(sourceFile), Paths.get(dataViewerDebugFile), StandardCopyOption.REPLACE_EXISTING);
 			}
 		} else {

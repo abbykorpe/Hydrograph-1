@@ -16,7 +16,6 @@ package hydrograph.ui.dataviewer.adapters;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.constants.AdapterConstants;
-import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
@@ -24,7 +23,6 @@ import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.RowField;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
 import hydrograph.ui.dataviewer.filter.FilterHelper;
-import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.dataviewer.utilities.ViewDataSchemaHelper;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -188,7 +186,6 @@ public class DataViewerAdapter {
 		String debugFileLocation = debugDataViewer.getDebugFileLocation();
 		if(ViewDataSchemaHelper.INSTANCE.getFieldsFromSchema(debugFileLocation + 
 				debugFileName + AdapterConstants.SCHEMA_FILE_EXTENTION) == null){
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE);
 			return "";
 		}
 		Map<String, String> fieldAndTypes = new HashMap<String, String>();
