@@ -83,7 +83,7 @@ public class DebugService implements PrivilegedAction<Object> {
 		Spark.setPort(portNumber);
 		
 		
-		Spark.post(new Route("readFromMetastore") {
+		Spark.post("readFromMetastore",new Route() {
 			
 			@Override
 			public Object handle(Request request, Response response) {
@@ -168,7 +168,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 		});
 
-		Spark.post(new Route("/read") {
+		Spark.post("/read",new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				LOG.info("************************read endpoint - started************************");
@@ -302,7 +302,7 @@ public class DebugService implements PrivilegedAction<Object> {
 
 		});
 
-		Spark.post(new Route("/delete") {
+		Spark.post("/delete",new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				LOG.info("************************delete endpoint - started************************");
@@ -371,7 +371,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 		});
 
-		Spark.post(new Route("/deleteLocalDebugFile") {
+		Spark.post("/deleteLocalDebugFile",new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				String error = "";
@@ -402,7 +402,7 @@ public class DebugService implements PrivilegedAction<Object> {
 		});
 
 		// TODO : Keep this for test
-		Spark.post(new Route("/post") {
+		Spark.post("/post",new Route() {
 
 			@Override
 			public Object handle(Request request, Response response) {
@@ -412,7 +412,7 @@ public class DebugService implements PrivilegedAction<Object> {
 		});
 
 		// TODO : Keep this for test
-		Spark.get(new Route("/test") {
+		Spark.get("/test",new Route() {
 
 			@Override
 			public Object handle(Request request, Response response) {
@@ -423,7 +423,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 		});
 
-		Spark.post(new Route("/filter") {
+		Spark.post("/filter",new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 
