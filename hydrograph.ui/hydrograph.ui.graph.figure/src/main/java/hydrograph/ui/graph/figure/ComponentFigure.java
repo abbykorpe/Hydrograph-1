@@ -13,21 +13,6 @@
 
 package hydrograph.ui.graph.figure;
 
-import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
-import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.model.ComponentExecutionStatus;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Component.ValidityStatus;
-import hydrograph.ui.graph.model.PortAlignmentEnum;
-import hydrograph.ui.graph.model.PortDetails;
-import hydrograph.ui.graph.model.components.SubjobComponent;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
-
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Toolkit;
@@ -62,6 +47,21 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
+import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Component.ValidityStatus;
+import hydrograph.ui.graph.model.ComponentExecutionStatus;
+import hydrograph.ui.graph.model.PortAlignmentEnum;
+import hydrograph.ui.graph.model.PortDetails;
+import hydrograph.ui.graph.model.components.SubjobComponent;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
+import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 
 /**
  * The Class ComponentFigure.
@@ -70,7 +70,7 @@ import org.slf4j.Logger;
  * 
  */
 public class ComponentFigure extends Figure implements Validator {
-	private static final String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB = "Continuous schema propagation stopped in Subjob.";
+	
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentFigure.class);
 
@@ -336,18 +336,39 @@ public class ComponentFigure extends Figure implements Validator {
 			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.UNIQUE_SEQUENCE))
 			 )
 		{
-		 drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+		  drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+		}
+		else if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName())
+				)
+		{
+		PropertyToolTipInformation propertyToolTipInformation;	
+		   if(component.getProperties().get(Constants.IS_UNION_ALL_COMPONENT_SYNC)!=null
+			&&StringUtils.equalsIgnoreCase(((String)component.getProperties().get(Constants.IS_UNION_ALL_COMPONENT_SYNC)), Constants.FALSE)
+			)
+		   {
+		   drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+		   propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.SHOW_TOOLTIP, 
+				Constants.TOOLTIP_DATATYPE);
+		   propertyToolTipInformation.setPropertyValue(Messages.INPUTS_SCHEMA_ARE_NOT_IN_SYNC);
+		   }
+		   else
+		   {
+			propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.HIDE_TOOLTIP, 
+					Constants.TOOLTIP_DATATYPE);
+			propertyToolTipInformation.setPropertyValue("");
+		   }
+		    component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}
 		else if(component instanceof SubjobComponent)
 		{
-			boolean isTransformComponentPresent=checkIfSubJobHasTransformComponent(component);
+			boolean isTransformComponentPresent=SubjobUtility.INSTANCE.checkIfSubJobHasTransformOrUnionAllComponent(component);
 			PropertyToolTipInformation propertyToolTipInformation;
 			if(isTransformComponentPresent)
 			{	
 			drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
 			propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.SHOW_TOOLTIP, 
 					Constants.TOOLTIP_DATATYPE);
-			propertyToolTipInformation.setPropertyValue(CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB);
+			propertyToolTipInformation.setPropertyValue(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB);
 			
 			}
 			else
@@ -373,36 +394,8 @@ public class ComponentFigure extends Figure implements Validator {
 		
 		trackExecution(graphics);
 	}
-
-	private boolean checkIfSubJobHasTransformComponent(Component component) {
-		boolean containsTransformComponent=false;
-		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
-		for(Object object:container.getChildren())
-		{
-			if(object instanceof Component)
-			{
-			Component component1=(Component)object;	
-			if((StringUtils.equalsIgnoreCase(component1.getCategory(), Constants.TRANSFORM)
-					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), Constants.FILTER)
-					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), Constants.UNIQUE_SEQUENCE))
-					&& component1.isContinuousSchemaPropogationAllow()
-					 )
-			{
-				containsTransformComponent=true;
-			    break;
-			}
-			else if(component1 instanceof SubjobComponent)
-			{
-				containsTransformComponent=checkIfSubJobHasTransformComponent(component1);
-				if(containsTransformComponent)
-				break;	
-			}
-			}
-		}
-		return containsTransformComponent;
-	}
-
-	private void trackExecution(Graphics graphics) {
+	
+  private void trackExecution(Graphics graphics) {
 		Rectangle rectangle = getBounds().getCopy();
 		if(componentStatus!=null){
 
@@ -460,7 +453,7 @@ public class ComponentFigure extends Figure implements Validator {
 	
 	
 	/**
-	 * @param Draw the schema Propogation status image to left top corner of the component 
+	 * @param Draw the schema Propogation status image to left top corner of the component. 
 	 */
 	private void drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(Graphics graphics)
 	{

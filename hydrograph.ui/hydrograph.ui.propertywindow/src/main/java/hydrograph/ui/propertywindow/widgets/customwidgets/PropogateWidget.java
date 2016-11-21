@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -33,9 +34,13 @@ import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.ErrorObject;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -49,6 +54,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 
@@ -58,9 +64,9 @@ import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
  * @author Bitwise
  */
 public class PropogateWidget extends AbstractWidget{
-
-	
+    
 	private List<AbstractWidget> widgets;
+	
 	public PropogateWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar)
@@ -80,9 +86,7 @@ public class PropogateWidget extends AbstractWidget{
 		AbstractELTWidget eltDefaultButton = new ELTDefaultButton(Constants.PROPAGATE);
 		eltDefaultSubgroupComposite.attachWidget(eltDefaultButton);
       
-      // for Continuous Schema Propogation
-			
-	  if(getComponent().isContinuousSchemaPropogationAllow())
+       if(getComponent().isContinuousSchemaPropogationAllow())
 	   {  
 		  if(StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.STRAIGHTPULL)
 				  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.FILTER)	
@@ -93,7 +97,8 @@ public class PropogateWidget extends AbstractWidget{
 		for (Link link : getComponent().getTargetConnections()) {
 			outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 		getSchemaForInternalPropagation().getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
-		
+		if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
+		break;	
 		}
 		}
 	   }	  
@@ -103,7 +108,8 @@ public class PropogateWidget extends AbstractWidget{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ComponentsOutputSchema outputSchema = null;
-				getSchemaForInternalPropagation().getGridRow().clear();	
+				getSchemaForInternalPropagation().getGridRow().clear();
+				boolean isUnionAllInputSchemaSync=true;
 				for (Link link : getComponent().getTargetConnections()) {
 					Schema schema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
 					if(schema!=null&&!schema.getGridRow().isEmpty())	
@@ -115,8 +121,26 @@ public class PropogateWidget extends AbstractWidget{
 							)
 					{	
 					
-					if(schema!=null&&!schema.getGridRow().isEmpty())	
-				    getSchemaForInternalPropagation().getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+						if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
+						{
+							if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(getComponent()))
+							{
+							isUnionAllInputSchemaSync=false;
+							getComponent().getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
+							WidgetUtility.createMessageBox(Messages.INPUTS_SCHEMA_ARE_NOT_IN_SYNC, Constants.ERROR,SWT.ICON_ERROR|SWT.OK);
+							break;
+							}
+							else
+							getComponent().getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
+								
+						}		
+					if(schema!=null&&!schema.getGridRow().isEmpty())
+					{
+						 getSchemaForInternalPropagation().getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+						 getComponent().getProperties().put(Constants.SCHEMA_PROPERTY_NAME,getSchemaForInternalPropagation() );
+					     if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
+						 break;	
+				     }
 				    ELTSchemaGridWidget eltSchemaGridWidget=null;
 				    for(AbstractWidget abstractWidget:widgets)
 					{
@@ -132,7 +156,17 @@ public class PropogateWidget extends AbstractWidget{
 					}
 					else if(getComponent() instanceof SubjobComponent)
 					{
-					SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent().getTargetConnections().get(0).getSource());
+					Container container=(Container)getComponent().getProperties().get(Constants.SUBJOB_CONTAINER);
+					for(Component component:container.getUIComponentList())
+					{
+						if(component instanceof InputSubjobComponent)
+						{
+							getComponent().setContinuousSchemaPropogationAllow(true);
+							SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(component);
+							break;
+						}
+					}
+					break;
 					}
 				    else if(
 				    		StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.AGGREGATE)
@@ -198,6 +232,7 @@ public class PropogateWidget extends AbstractWidget{
 				}
 					
 				}
+				if(isUnionAllInputSchemaSync)
 				SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent());
 			}
 
