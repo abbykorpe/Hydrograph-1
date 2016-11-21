@@ -10,23 +10,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package hydrograph.ui.graph.execution.tracking.replay;
 
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -49,144 +49,159 @@ import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
-/**
- * The Class ViewExecutionHistoryDialog use to create dialog to manage previous tracking history.
- * 
- * @author Bitwise
- */
-public class ViewExecutionHistoryDialog extends Dialog{
 
+/**
+ * 
+ * The Class ViewExecutionHistoryDataDialog used to show execution tracking view history.
+ * @author Bitwise
+ *
+ */
+public class ViewExecutionHistoryDataDialog extends Dialog {
+	
+	private static final String VIEW_TRACKING_HISTORY = "View Execution Tracking History"; 
+	private static final String EXECUTION_HISTORY_DIALOG="Execution History Dialog";
+	private static final String BROWSE_TRACKING_FILE="Browse Tracking File"; 
 	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = "*.track.log";
 	private static final String REMOTE_MODE = "Remote";
 	private static final String LOCAL_MODE = "Local";
 	
-	private List<Job> jobDetails;
-	private String selectedUniqueJobId;
-	private String[] titles = {"Job Id", "Time Stamp", "Execution Mode", "Job Status"};
-	private Table table;
 	private Text trackingFileText;
+	private Table table;
 	private String filePath;
-	private static final String VIEW_TRACKING_HISTORY="View Execution Tracking History"; 
-	private static final String BROWSE_TRACKING_FILE="Browse Tracking File"; 
-	private static final String EXECUTION_HISTORY_DIALOG="Execution History Dialog";
+	private String selectedUniqueJobId;
+	private List<Job> jobDetails;
 	private ViewExecutionHistoryHandler viewExecutionHistoryHandler;
-	
-	public ViewExecutionHistoryDialog(Shell parentShell, ViewExecutionHistoryHandler viewExecutionHistoryHandler, List<Job> jobDetails) {
+
+	/**
+	 * Create the dialog.
+	 * @param parentShell
+	 */
+	public ViewExecutionHistoryDataDialog(Shell parentShell, ViewExecutionHistoryHandler viewExecutionHistoryHandler, List<Job> jobDetails) {
 		super(parentShell);
-		setShellStyle(SWT.TITLE|SWT.RESIZE|SWT.CLOSE);
+		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE);
 		this.jobDetails = jobDetails;
 		this.viewExecutionHistoryHandler=viewExecutionHistoryHandler;
 	}
 
 	/**
-	 * Create dialog for execution tracking view history, that use to manage all previous run tracking history. 
+	 * Create contents of the dialog.
+	 * @param parent
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.getShell().setText(VIEW_TRACKING_HISTORY);
 		container.setLayout(new GridLayout(1, false));
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
-		container.getShell().setMinimumSize(800, 346);
-
-		Composite composite1 = new Composite(container, SWT.BORDER);
-		GridData gd_scrolledComposite1 = new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
-		composite1.setLayoutData(gd_scrolledComposite1);
+		container.getShell().setText(VIEW_TRACKING_HISTORY);
 		
-		table = new Table(composite1, SWT.BORDER | SWT.Selection | SWT.FULL_SELECTION );
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
-		table.setHeaderVisible(true);
+		Composite composite = new Composite(container, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		Composite composite_1 = new Composite(composite, SWT.NONE);
+		composite_1.setLayout(new GridLayout(1, false));
+		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		TableViewer tableViewer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
+		table = tableViewer.getTable();
 		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-	    for (int i = 0; i < titles.length; i++) {
-	      TableColumn column = new TableColumn(table, SWT.NONE);
-	      column.setWidth(212);
-	      column.setText(titles[i]);
-	    }
-	    
-	    
-	    jobDetails.sort((job1, job2)-> job2.getUniqueJobId().compareTo(job1.getUniqueJobId()));
-	    
-	    for(Job job : jobDetails){
-	    	String timeStamp = getTimeStamp(job.getUniqueJobId());
-	    	TableItem items = new TableItem(table, SWT.None);
-	    	items.setText(0, job.getUniqueJobId());
-	    	items.setText(1, timeStamp);
-	    	String mode = getJobExecutionMode(job.isRemoteMode());
-	    	items.setText(2, mode);
-	    	items.setText(3, job.getJobStatus());
-	    }
-	    
-	    table.addListener(SWT.Selection, new Listener() {
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn = tableViewerColumn.getColumn();
+		tblclmnNewColumn.setWidth(263);
+		tblclmnNewColumn.setText("Job Id");
+		
+		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn_1 = tableViewerColumn_1.getColumn();
+		tblclmnNewColumn_1.setWidth(207);
+		tblclmnNewColumn_1.setText("Time Stamp");
+		
+		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn_2 = tableViewerColumn_2.getColumn();
+		tblclmnNewColumn_2.setWidth(154);
+		tblclmnNewColumn_2.setText("Execution Mode");
+		
+		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn_3 = tableViewerColumn_3.getColumn();
+		tblclmnNewColumn_3.setWidth(119);
+		tblclmnNewColumn_3.setText("Job Status");
+		
+		setTableColumnValues(tableViewer, jobDetails);
+		
+		tableViewer.getTable().addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				TableItem[] item = table.getSelection();
 				 for (int i = 0; i < item.length; i++){
 					 TableItem selectedItem = item[i];
 					 selectedUniqueJobId = selectedItem.getText();
+					 System.out.println("Job ID:::"+selectedUniqueJobId);
 			      }
 			}
 		});
-	    container.addControlListener(new ControlListener() {
-			
-			@Override
-			public void controlResized(ControlEvent e) {
-				table.setBounds(container.getBounds());
-			}
-			
-			@Override
-			public void controlMoved(ControlEvent e) {
-				
-			}
-		});
-	    
-	    Composite composite = new Composite(container, SWT.NONE);
-	    GridLayout gd = new GridLayout(3,false);
-	    gd.marginLeft = 0;
-	    gd.marginWidth = 0;
-	    composite.setLayout(gd);
-	    GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-	    gd_composite.widthHint = 523;
-	    
-	    composite.setLayoutData(gd_composite);
-	    Label label=new  Label(composite, SWT.None);
-		label.setText(BROWSE_TRACKING_FILE);
-		label.setBounds(0, 10, 113, 15);
 		
-		// Create the text box extra wide to show long paths
-		trackingFileText = new Text(composite, SWT.BORDER);
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
-		trackingFileText.setLayoutData(data);
-		trackingFileText.setBounds(114, 10, 100, 15);
-	    // Clicking the button will allow the user
-	    // to select a directory
-	    Button button = new Button(composite, SWT.PUSH);
-	    button.setText("...");
-	    button.addSelectionListener(new SelectionAdapter() {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			FileDialog fileDialog = new FileDialog(composite.getShell(),  SWT.OPEN  );
-			fileDialog.setText(EXECUTION_HISTORY_DIALOG);
-			String[] filterExt = { EXECUTION_TRACKING_LOG_FILE_EXTENTION };
-			fileDialog.setFilterExtensions(filterExt);
-			fileDialog.setFilterPath(viewExecutionHistoryHandler.getLogPath());
-			String path = fileDialog.open();
-			if (path == null) return;
-			trackingFileText.setText(path);
-			trackingFileText.setToolTipText(path);
-		}
-	    });
-	    
-	    trackingFileText.addSelectionListener(new SelectionAdapter() {
+		Composite composite_2 = new Composite(composite, SWT.NONE);
+		composite_2.setLayout(new GridLayout(3, false));
+		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
+		Label lblNewLabel = new Label(composite_2, SWT.NONE);
+		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblNewLabel.setText(BROWSE_TRACKING_FILE);
+		
+		trackingFileText = new Text(composite_2, SWT.BORDER);
+		trackingFileText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button browseButton = new Button(composite_2, SWT.NONE);
+		browseButton.setText("...");
+		browseButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fileDialog = new FileDialog(composite.getShell(),  SWT.OPEN  );
+				fileDialog.setText(EXECUTION_HISTORY_DIALOG);
+				String[] filterExt = { EXECUTION_TRACKING_LOG_FILE_EXTENTION };
+				fileDialog.setFilterExtensions(filterExt);
+				fileDialog.setFilterPath(viewExecutionHistoryHandler.getLogPath());
+				String path = fileDialog.open();
+				if (path == null) return;
+				trackingFileText.setText(path);
+				trackingFileText.setToolTipText(path);
+			}
+		    });
+
+		trackingFileText.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		filePath = ((Text)event.widget).getText();
 	    	}
 		});
+		
 		return container;
 	}
 	
 	
+	/**
+	 * The Function will set Table column values
+	 * @param tableViewer
+	 * @param jobDetails
+	 */
+	private void setTableColumnValues(TableViewer tableViewer, List<Job> jobDetails){
+		jobDetails.sort((job1, job2)-> job2.getUniqueJobId().compareTo(job1.getUniqueJobId()));
+		jobDetails.forEach(job -> {
+			String timeStamp = getTimeStamp(job.getUniqueJobId());
+	    	TableItem items = new TableItem(table, SWT.None);
+	    	items.setText(0, job.getUniqueJobId());
+	    	items.setText(1, timeStamp);
+	    	String mode = getJobExecutionMode(job.isRemoteMode());
+	    	items.setText(2, mode);
+	    	items.setText(3, job.getJobStatus());
+		});
+	}
+
+	/**
+	 * @param executionMode
+	 * @return Job Execution Mode
+	 */
 	private String getJobExecutionMode(boolean executionMode){
 		String runningMode = "";
 		if(executionMode){
@@ -197,6 +212,16 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		return runningMode;
 	}
 	
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+	}
+
 	/**
 	 * The function will return selected unique job id
 	 *@return String
@@ -213,6 +238,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		return filePath;
 	}
 	
+	@Override
 	protected void okPressed() {
 		filePath=trackingFileText.getText();
 		if(filePath != null){
@@ -250,7 +276,7 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		}
 		super.okPressed();
 	}
-
+	
 	/**
 	 * @return job id for current open job
 	 */
@@ -263,6 +289,20 @@ public class ViewExecutionHistoryDialog extends Dialog{
 		}
 		return jobId;
 	}
+	
+	
+	/**
+	 * Return the initial size of the dialog.
+	 */
+	@Override
+	protected Point getInitialSize() {
+		return new Point(800, 346);
+	}
+	
+	/**
+	 * @param jobId
+	 * @return Time Stamp
+	 */
 	private String getTimeStamp(String jobId){
 		String timeStamp;
 		String jobUniqueId = jobId;
