@@ -35,7 +35,6 @@ public class Messages extends NLS {
 	public static String CREATE_NEW_OPEARTION_CLASS_LABEL;
 	public static String WARNING;
 	public static String FILE_NOT_FOUND;
-	
 	public static String NOT_EXISTS;
 	public static String FILE_DOES_NOT_EXISTS ;
 
@@ -271,15 +270,15 @@ public class Messages extends NLS {
 	public static String EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 
 	public static String OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
-	public static  String METASTORE_IMPORT_SUCCESS;
+	public static String METASTORE_IMPORT_SUCCESS;
 	public static String ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT;
 	
 	public static String PARAMETER_NOT_FOUND;
 	public static String  GENERATE_NEW_UNIQUE_JOB_ID_FOR_JOB;
 	public static String  GENERATE_NEW_UNIQUE_JOB_ID_FOR_SUB_JOB;
 
-	
-	
+	public static String INPUTS_SCHEMA_ARE_NOT_IN_SYNC;
+	public static String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

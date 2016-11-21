@@ -186,7 +186,31 @@ public class GridRow implements IDataStructure {
 		public void setPrecision(String precision) {
 			this.precision = precision;
 		}
-
+        
+		/**
+		 * compare two object on the basis of field name and data type value
+		 * @param otherGridRow object
+		 * @return true if objects are same otherwise false
+		 */
+		public boolean checkGridRowEqauality(GridRow otherGridRow)
+		{
+			if (this == otherGridRow)
+				return true;
+			if (otherGridRow == null)
+				return false;
+			if (fieldName == null) {
+				if (otherGridRow.fieldName != null)
+					return false;
+			} else if (!fieldName.equals(otherGridRow.fieldName))
+				return false;
+			if (dataTypeValue == null) {
+				if (otherGridRow.dataTypeValue != null)
+					return false;
+			} else if (!dataTypeValue.equals(otherGridRow.dataTypeValue))
+				return false;
+			return true;
+		}	
+		
 		/**
 		 * Gets the description.
 		 * 
@@ -292,7 +316,7 @@ public class GridRow implements IDataStructure {
 			return tempschemaGrid;
 		}
 		
-		
+    		
 	/**
 	 * Updates current grid row properties.
 	 * 

@@ -1,21 +1,26 @@
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
-
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
+import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 
 public class SubjobUtility {
 public static final SubjobUtility INSTANCE= new SubjobUtility();
 	
-	private SubjobUtility(){
-		
-	}
-	
+     /**
+	 * This method set continuousSchema propagation flag to true until it encounters transform or union All component.
+	 * @param component through which continuous propagation starts. 
+	 */
 	public void setFlagForContinuousSchemaPropogation(Component component) {
 		for(Link link:component.getSourceConnections())
 		{
@@ -27,8 +32,30 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 					 ||nextComponent instanceof SubjobComponent
 					)
 			{
-				nextComponent.setContinuousSchemaPropogationAllow(true);
+				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,nextComponent.getComponentName()))
+				{
+					if(!isUnionAllInputSchemaInSync(nextComponent))
+					{	
+					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
+					break;
+					}
+					else
+					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
+				}
+				Schema schema=(Schema)nextComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+				if(schema==null)
+				schema=new Schema();	
+				ComponentsOutputSchema outputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+				if(schema.getGridRow()==null)
+				{
+					List<GridRow> gridRows=new ArrayList<>();
+					schema.setGridRow(gridRows);
+				}	
+				schema.getGridRow().clear();
+				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+				nextComponent.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
 				
+				nextComponent.setContinuousSchemaPropogationAllow(true);
 				if(nextComponent instanceof SubjobComponent)
 				{	
 					Container container=(Container)nextComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
@@ -52,7 +79,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 			    	{
 				     if(nextComponent instanceof SubjobComponent)
 				     {
-					   if(!checkIfSubJobHasTransformComponent(nextComponent))
+					   if(!checkIfSubJobHasTransformOrUnionAllComponent(nextComponent))
 					    {
 						nextComponent=nextComponent.getSourceConnections().get(0).getTarget();	
 					    }
@@ -80,8 +107,55 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 		}
 	}
 	
-	private boolean checkIfSubJobHasTransformComponent(Component component) {
-		boolean containsTransformComponent=false;
+	/**
+	 * check whether union compoent's  input schema are in sync or not
+	 * @param union All component
+	 * @return true if input schema are in sync otherwise false
+	 */
+	public boolean isUnionAllInputSchemaInSync(Component component) {
+		List<Component>	unionAllJustPreviousComponents=new ArrayList<>();
+        for(Link link:component.getTargetConnections())
+        {
+        	unionAllJustPreviousComponents.add(link.getSource());
+        }	
+        for(Component outerComponent:unionAllJustPreviousComponents)
+        {
+        	Schema outerSchema=(Schema)outerComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+        	
+        	for(Component innerComponent:unionAllJustPreviousComponents)
+        	{
+        		Schema innerSchema=(Schema)innerComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+        	if(outerSchema!=null &&innerSchema!=null)
+        	{	
+        	if(outerSchema.getGridRow()!=null &&innerSchema.getGridRow()!=null)
+        	{	
+        	 if(outerSchema.getGridRow().size()!=innerSchema.getGridRow().size())
+        	 {
+        		 return false;
+        	 }	 
+        	
+        		 for(GridRow inner:innerSchema.getGridRow())
+        		 {
+        			 if(!outerSchema.getGridRow().get(innerSchema.getGridRow().indexOf(inner)).checkGridRowEqauality(inner))
+        				return false; 
+        		 }	 
+        	
+        	}
+        	}
+        	else if(outerSchema!=null && innerSchema==null ||outerSchema==null &&innerSchema!=null)
+        	return false;	
+        	}
+        }	
+       return true;
+	}
+	/**
+	 * check if sub job contains transform or union All component
+	 * 
+	 * @param Subjob component
+	 * @return true if Sub job contains transform or union all component otherwise false
+	 */
+	public boolean checkIfSubJobHasTransformOrUnionAllComponent(Component component) {
+		boolean containsTransformOrUnionAllComponent=false;
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for(Object object:container.getChildren())
 		{
@@ -94,18 +168,26 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 					&& component1.isContinuousSchemaPropogationAllow()
 					 )
 			{
-				containsTransformComponent=true;
+				containsTransformOrUnionAllComponent=true;
 			    break;
 			}
+			else if((StringUtils.equalsIgnoreCase( Constants.UNION_ALL, component1.getComponentName())))
+			{
+				if(!isUnionAllInputSchemaInSync(component1))
+				{
+					containsTransformOrUnionAllComponent=true;
+				    break;
+				}	
+			}		
 			else if(component1 instanceof SubjobComponent)
 			{
-				containsTransformComponent=checkIfSubJobHasTransformComponent(component1);
-				if(containsTransformComponent)
+				containsTransformOrUnionAllComponent=checkIfSubJobHasTransformOrUnionAllComponent(component1);
+				if(containsTransformOrUnionAllComponent)
 				break;	
 			}
 			}
 		}
-		return containsTransformComponent;
+		return containsTransformOrUnionAllComponent;
 	}
 	
 }

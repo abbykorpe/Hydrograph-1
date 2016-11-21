@@ -46,6 +46,8 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -294,7 +296,7 @@ public class SubJobUtility {
 	 *            the component
 	 */
 	public void propogateSchemaToSubjob(Component subjobComponent, Component component) {
-
+		ComponentsOutputSchema componentsOutputSchema1=null;
 		if (Constants.INPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())) {
 			Map<String, ComponentsOutputSchema> inputSchemaMap = new HashMap<String, ComponentsOutputSchema>();
 			for (Link innerLink : component.getSourceConnections()) {
@@ -303,9 +305,9 @@ public class SubJobUtility {
 					if (link.getTargetTerminal().replaceAll(Constants.INPUT_SOCKET_TYPE, Constants.OUTPUT_SOCKET_TYPE)
 							.equalsIgnoreCase(innerLink.getSourceTerminal())) {
 						mainLink = link;
-						ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE
+						 componentsOutputSchema1 = SchemaPropagation.INSTANCE
 								.getComponentsOutputSchema(mainLink);
-						inputSchemaMap.put(innerLink.getSourceTerminal(), componentsOutputSchema);
+						inputSchemaMap.put(innerLink.getSourceTerminal(), componentsOutputSchema1);
 					}
 				}
 
@@ -505,6 +507,10 @@ public class SubJobUtility {
 		}
 	}
 	
+	/**
+	 * This method set continuousSchema propagation flag to true until it encounters transform or union All component.
+	 * @param component through which continuous propagation starts. 
+	 */
 	public void setFlagForContinuousSchemaPropogation(Component component) {
 		for(Link link:component.getSourceConnections())
 		{
@@ -516,23 +522,33 @@ public class SubJobUtility {
 					 ||nextComponent instanceof SubjobComponent
 					)
 			{
-				nextComponent.setContinuousSchemaPropogationAllow(true);
+				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,nextComponent.getComponentName()))
+				{
+					if(!isUnionAllInputSchemaInSync(nextComponent))
+					{	
+					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
+					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
+					break;
+					}
+					else
+					{	
+					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
+					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
+					}
+				}	
 				
+				nextComponent.setContinuousSchemaPropogationAllow(true);
 				if(nextComponent instanceof SubjobComponent)
 				{	
 					Container container=(Container)nextComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
-					for(Object object:container.getChildren())
+					for(Component subjobComponent:container.getUIComponentList())
 					{
-						if(object instanceof Component)
-						{
-						Component subjobComponent=(Component)object;
 						if(subjobComponent instanceof InputSubjobComponent)
 						{
-							
 							setFlagForContinuousSchemaPropogation(subjobComponent);
 							break;
 						}
-						}
+						
 					}
 				}
 				if(!nextComponent.getSourceConnections().isEmpty())
@@ -541,7 +557,7 @@ public class SubJobUtility {
 			    	{
 				     if(nextComponent instanceof SubjobComponent)
 				     {
-					   if(!checkIfSubJobHasTransformComponent(nextComponent))
+					   if(!checkIfSubJobHasTransformOrUnionAllComponent(nextComponent))
 					    {
 						nextComponent=nextComponent.getSourceConnections().get(0).getTarget();	
 					    }
@@ -572,9 +588,54 @@ public class SubJobUtility {
 			}
 		}
 	}
+	/**
+	 * check whether union compoent's  input schema are in sync or not
+	 * @param union All component
+	 * @return true if input schema are in sync otherwise false
+	 */
+	public boolean isUnionAllInputSchemaInSync(Component component) {
+		List<Component>	unionAllJustPreviousComponents=new ArrayList<>();
+        for(Link link:component.getTargetConnections())
+        {
+        	unionAllJustPreviousComponents.add(link.getSource());
+        }	
+        for(Component outerComponent:unionAllJustPreviousComponents)
+        {
+        	Schema outerSchema=(Schema)outerComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+        	
+        	for(Component innerComponent:unionAllJustPreviousComponents)
+        	{
+        		Schema innerSchema=(Schema)innerComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+        	if(outerSchema!=null &&innerSchema!=null)
+        	{	
+        	if(outerSchema.getGridRow()!=null &&innerSchema.getGridRow()!=null)
+        	{	
+        	 if(outerSchema.getGridRow().size()!=innerSchema.getGridRow().size())
+        	 {
+        		 return false;
+        	 }	
+        	 for(GridRow inner:innerSchema.getGridRow())
+    		 {
+    			 if(!outerSchema.getGridRow().get(innerSchema.getGridRow().indexOf(inner)).checkGridRowEqauality(inner))
+    				return false; 
+    		 }	 
+        	}
+        	}
+        	else if(outerSchema!=null && innerSchema==null ||outerSchema==null &&innerSchema!=null)
+        	return false;	
+        	}
+        }	
+       return true;
+	}
 	
-	private boolean checkIfSubJobHasTransformComponent(Component component) {
-		boolean containsTransformComponent=false;
+	/**
+	 * check if sub job contains transform or union All component
+	 * 
+	 * @param Subjob component
+	 * @return true if Sub job contains transform or union all component otherwise false
+	 */
+	private boolean checkIfSubJobHasTransformOrUnionAllComponent(Component component) {
+		boolean containsTransformOrUnionAllComponent=false;
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
 		for(Object object:container.getChildren())
 		{
@@ -587,18 +648,26 @@ public class SubJobUtility {
 					&& component1.isContinuousSchemaPropogationAllow()
 					 )
 			{
-				containsTransformComponent=true;
+				containsTransformOrUnionAllComponent=true;
 			    break;
 			}
+			else if((StringUtils.equalsIgnoreCase( Constants.UNION_ALL, component1.getComponentName())))
+			{
+				if(!isUnionAllInputSchemaInSync(component1))
+				{
+					containsTransformOrUnionAllComponent=true;
+				    break;
+				}	
+			}	
 			else if(component1 instanceof SubjobComponent)
 			{
-				containsTransformComponent=checkIfSubJobHasTransformComponent(component1);
-				if(containsTransformComponent)
+				containsTransformOrUnionAllComponent=checkIfSubJobHasTransformOrUnionAllComponent(component1);
+				if(containsTransformOrUnionAllComponent)
 				break;	
 			}
 			}
 		}
-		return containsTransformComponent;
+		return containsTransformOrUnionAllComponent;
 	}
 
 }

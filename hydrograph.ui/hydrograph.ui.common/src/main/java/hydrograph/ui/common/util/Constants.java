@@ -37,7 +37,8 @@ public class Constants {
 	public static final String PARAM_DEPENDS_ON = "dependsOn";
 	public static final String PARAM_PROPERTY_NAME = "propertyName";
 	public static final String PARAM_COUNT = "count";
-	
+	public static final String UNION_ALL = "UnionallComponent";
+	public static final String IS_UNION_ALL_COMPONENT_SYNC = "isUnionAllComponentSync";
 	
 	public static final String PARAMETER = "Parameter";
 	public static final String UTF_16 = "UTF-16";
