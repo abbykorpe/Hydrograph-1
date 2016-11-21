@@ -157,6 +157,8 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 	public boolean checkIfSubJobHasTransformOrUnionAllComponent(Component component) {
 		boolean containsTransformOrUnionAllComponent=false;
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
+		if(container!=null)
+		{
 		for(Object object:container.getChildren())
 		{
 			if(object instanceof Component)
@@ -186,6 +188,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 				break;	
 			}
 			}
+		}
 		}
 		return containsTransformOrUnionAllComponent;
 	}
