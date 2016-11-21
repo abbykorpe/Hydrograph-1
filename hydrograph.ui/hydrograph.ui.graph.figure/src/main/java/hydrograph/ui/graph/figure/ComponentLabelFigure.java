@@ -95,11 +95,11 @@ public class ComponentLabelFigure extends Figure {
 	public void setText(String newText) {
 		textFlow.setText(newText);
 		Dimension lineDimensions = TextUtilities.INSTANCE.getStringExtents(textFlow.getText(), getFont());
-		if(lineDimensions.width >= ELTFigureConstants.compLabelOneLineLengthLimit)
+		if(lineDimensions.width >= ELTFigureConstants.compLabelOneLineLengthLimitForText)
 		{
-			getBounds().setSize(ELTFigureConstants.compLabelOneLineLengthLimit, ELTFigureConstants.componentTwoLineLabelMargin);
-		}else if(lineDimensions.width < ELTFigureConstants.compLabelOneLineLengthLimit){
-			getBounds().setSize(ELTFigureConstants.compLabelOneLineLengthLimit, ELTFigureConstants.componentOneLineLabelMargin);
+			getBounds().setSize(ELTFigureConstants.compLabelOneLineLengthLimitForText, ELTFigureConstants.componentTwoLineLabelMargin);
+		}else if(lineDimensions.width < ELTFigureConstants.compLabelOneLineLengthLimitForText){
+			getBounds().setSize(ELTFigureConstants.compLabelOneLineLengthLimitForText, ELTFigureConstants.componentOneLineLabelMargin);
 		}
 	}
 	
