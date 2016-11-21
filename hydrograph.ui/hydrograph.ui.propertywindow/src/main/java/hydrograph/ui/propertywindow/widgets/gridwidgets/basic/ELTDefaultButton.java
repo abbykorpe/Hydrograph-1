@@ -53,9 +53,12 @@ public class ELTDefaultButton extends AbstractELTWidget{
 	public void attachWidget(Composite container) {
 		defaultELTButton = new Button(container, SWT.CENTER);
 		GridData gd_defaultELTButton = new GridData(SWT.FILL, SWT.CENTER, grabExcessSpace, false, 1, 1);
-		gd_defaultELTButton.widthHint = buttonWidth;		//change in edit button 
 		if (OSValidator.isMac()) {
 		gd_defaultELTButton.horizontalIndent=-3;
+		gd_defaultELTButton.widthHint = buttonWidth+28;
+		}
+		else{
+			gd_defaultELTButton.widthHint = buttonWidth;
 		}
 		gd_defaultELTButton.heightHint = buttonHeight;
 		defaultELTButton.setLayoutData(gd_defaultELTButton);
@@ -72,7 +75,12 @@ public class ELTDefaultButton extends AbstractELTWidget{
 	 * @return the ELT default button
 	 */
 	public ELTDefaultButton buttonWidth(int buttonWidth){
-		this.buttonWidth = buttonWidth;
+		if(OSValidator.isMac() && this.buttonText.equals("...")){
+			this.buttonWidth=buttonWidth-10;
+		}
+		else{
+			this.buttonWidth = buttonWidth;
+		}
 		return this;
 	}
 	
