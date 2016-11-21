@@ -90,11 +90,11 @@ public class SubJobUtility {
 			} catch (CoreException coreException) {
 				logger.error("Error while opening create job wizard", coreException);
 			}
-			WizardDialog wd = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-			wd.setTitle(wizard.getWindowTitle());
-			wd.open();
-			JobCreationPage creationPage = (JobCreationPage) wd.getSelectedPage();
-			iFile = creationPage.getNewFile();
+			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+			wizardDialog.setTitle(wizard.getWindowTitle());
+			wizardDialog.open();
+			JobCreationPage jobCreationPage = (JobCreationPage) wizardDialog.getSelectedPage();
+			iFile = jobCreationPage.getNewFile();
 		}
 		return iFile;
 	}
