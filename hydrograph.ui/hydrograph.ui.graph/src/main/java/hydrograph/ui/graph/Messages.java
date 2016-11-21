@@ -18,6 +18,7 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages"; //$NON-NLS-1$
 
+
 	public static String GRADLE_RUN;
 	public static String XMLPATH;
 	public static String PARAM_FILE;
@@ -109,6 +110,7 @@ public class Messages extends NLS {
 	
 	public static String REPLAY_EXTRA_COMPONENTS;
 	public static String REPLAY_MISSING_COMPONENTS;
+	public static String JOB_WIZARD_ID;
 	
 	static {
 		// initialize resource bundle

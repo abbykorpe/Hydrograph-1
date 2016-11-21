@@ -35,19 +35,23 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.SaveAsDialog;
+import org.eclipse.ui.wizards.IWizardDescriptor;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.engine.util.ConverterUtil;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.figure.ComponentFigure;
+import hydrograph.ui.graph.handler.JobCreationPage;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
@@ -77,22 +81,22 @@ public class SubJobUtility {
 	 * @return the i file
 	 */
 	public IFile openSubJobSaveDialog() {
-
-		SaveAsDialog obj = new SaveAsDialog(Display.getDefault().getActiveShell());
-		IFile file = null;
-		obj.setOriginalName(Constants.SUBJOB_NAME);
-		obj.open();
-
-		if (obj.getReturnCode() == 0) {
-			getCurrentEditor().validateLengthOfJobName(obj);
+		IFile iFile = null;
+		IWizardDescriptor descriptor = PlatformUI.getWorkbench().getNewWizardRegistry().findWizard(Messages.JOB_WIZARD_ID);
+		if (descriptor != null) {
+			IWizard wizard = null;
+			try {
+				wizard = descriptor.createWizard();
+			} catch (CoreException coreException) {
+				logger.error("Error while opening create job wizard", coreException);
+			}
+			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+			wizardDialog.setTitle(wizard.getWindowTitle());
+			wizardDialog.open();
+			JobCreationPage jobCreationPage = (JobCreationPage) wizardDialog.getSelectedPage();
+			iFile = jobCreationPage.getNewFile();
 		}
-
-		if (obj.getResult() != null && obj.getReturnCode() != 1) {
-			IPath filePath = obj.getResult().removeFileExtension().addFileExtension("job");
-			file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-		}
-
-		return file;
+		return iFile;
 	}
 
 	/**
@@ -127,10 +131,7 @@ public class SubJobUtility {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
 				
-				if (file.exists())
-					file.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
-				else
-					file.create(new ByteArrayInputStream(out.toByteArray()), true, null);
+				file.create(new ByteArrayInputStream(out.toByteArray()), true, null);
 				
 				getCurrentEditor().genrateTargetXml(file, null, container);
 				getCurrentEditor().setDirty(false);

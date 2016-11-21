@@ -51,6 +51,10 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	private final IWorkbench workbench;
     private static final String ERROR="Error";
     private static final String ERROR_MESSAGE="File Name Too Long";
+    private boolean isPageCreatedForSavingSubJob;
+	private IFile newFile;
+    
+    
 	/**
 	 * Create a new wizard page instance.
 	 * 
@@ -60,11 +64,12 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	 *            the current object selection
 	 * @see JobCreationWizard#init(IWorkbench, IStructuredSelection)
 	 */
-	JobCreationPage(IWorkbench workbench, IStructuredSelection selection) {
+	JobCreationPage(IWorkbench workbench, IStructuredSelection selection,boolean isPageCreatedForSavingSubJob) {
 		super("jobCreationPage1", selection);
 		this.workbench = workbench;
 		setTitle(Messages.JOB_WIZARD_TITLE);
 		setDescription(Messages.CREATE_NEW + DEFAULT_EXTENSION + " " + Messages.FILE);
+		this.isPageCreatedForSavingSubJob=isPageCreatedForSavingSubJob;
 	}
 
 	/*
@@ -89,8 +94,11 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 		}
        else {
 			IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-			if (file.getFullPath().toOSString().contains(" ")) {
+			newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+			if(isPageCreatedForSavingSubJob){
+				return true;
+			}
+			if (newFile.getFullPath().toOSString().contains(" ")) {
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);
 				messageBox.setText("Error");
 				messageBox.setMessage("The Job Name has spaces");
@@ -180,5 +188,10 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	 */
 	protected boolean validatePage() {
 		return super.validatePage() && validateFilename();
+	}
+	
+	
+	public IFile getNewFile() {
+		return newFile;
 	}
 }
