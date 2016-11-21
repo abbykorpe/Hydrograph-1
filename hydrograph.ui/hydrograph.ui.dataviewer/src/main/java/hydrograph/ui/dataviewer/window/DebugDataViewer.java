@@ -311,7 +311,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						
 						@Override
 						public void run() {
-							Utils.INSTANCE.showDetailErrorMessage(statusMessage.getStatusMessage(), statusMessage.geterrorStatus());
+							Utils.INSTANCE.showDetailErrorMessage(statusMessage.getStatusMessage(), statusMessage.getErrorStatus());
 							getShell().close();
 						}
 					});

@@ -152,7 +152,7 @@ public class DataViewerFileManager {
 				}
 			} catch (IOException | JSchException e1) {
 				logger.error("Unable to fetch viewData file", e1);
-				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+ ": unable to copy the files from temproary location");
+				return new StatusMessage(StatusConstants.ERROR, Messages.UNABLE_TO_FETCH_DEBUG_FILE+ ": unable to copy the files from temporary location");
 			}
 			
 			File debugFile = new File(dataViewerDebugFile);

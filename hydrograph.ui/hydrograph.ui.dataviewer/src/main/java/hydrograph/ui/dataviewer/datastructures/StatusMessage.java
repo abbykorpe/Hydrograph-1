@@ -59,7 +59,7 @@ public class StatusMessage {
 		this.returnCode = returnCode;
 	}
 
-	public Status geterrorStatus(){
+	public Status getErrorStatus(){
 		return errorStatus;
 	}
 	
