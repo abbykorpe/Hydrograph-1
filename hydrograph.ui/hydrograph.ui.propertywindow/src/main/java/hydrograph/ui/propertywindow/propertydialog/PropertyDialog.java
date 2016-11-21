@@ -14,6 +14,26 @@
  
 package hydrograph.ui.propertywindow.propertydialog;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
@@ -31,30 +51,6 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.validators.impl.IValidator;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTError;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.forms.widgets.ColumnLayout;
-import org.slf4j.Logger;
 
 
 
@@ -74,9 +70,6 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	private Button applyButton;
 	private boolean propertyChanged=false;	
 	private final ELTComponenetProperties componentProperties;
-	private   final String DIALOG_FONT_DATA = "DIALOG_FONT_NAME"; //$NON-NLS-1$
-	private   final String DIALOG_WIDTH = "DIALOG_WIDTH"; //$NON-NLS-1$
-	private   final String DIALOG_HEIGHT = "DIALOG_HEIGHT";
 	
 	private boolean isPropertyWindowValid;
 	
@@ -139,11 +132,6 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	}
 
 	private void setPropertyDialogContainerLayout() {
-		/*ColumnLayout cl_container = new ColumnLayout();
-		cl_container.maxNumColumns = 1;
-		//container.setLayout(new GridLayout(1, false));
-		container.setLayout(cl_container);*/
-		
 		container.setLayout(new GridLayout(1, false));
 	}
 

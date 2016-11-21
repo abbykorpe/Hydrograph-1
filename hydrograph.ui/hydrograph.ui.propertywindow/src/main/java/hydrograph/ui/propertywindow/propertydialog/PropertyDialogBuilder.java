@@ -69,7 +69,6 @@ public class PropertyDialogBuilder {
 	private Component component;
 	private AbstractWidget schemaWidget;
 	private Schema setSchemaForInternalPapogation;
-	private List<String> deletedInternalSchema;
 	private List<String> operationFieldList;
 	private PropertyDialog propertyDialog;
 	private Map<String, String> propertyHelpTextMap;
@@ -115,8 +114,6 @@ public class PropertyDialogBuilder {
 		setSchemaForInternalPapogation.setGridRow(gridRows);
 		setSchemaForInternalPapogation.setExternalSchemaPath("");
 		operationFieldList = new LinkedList<>();
-		deletedInternalSchema= new ArrayList<>();
-
 	}
 	
 	/**
@@ -171,10 +168,6 @@ public class PropertyDialogBuilder {
 	private void addEmptyGroupWidget(
 			ScrolledCompositeHolder scrolledCompositeHolder) {
 		AbstractELTContainerWidget subGroupContainerx=addSubgroupToPropertyWindowTab("",scrolledCompositeHolder);
-		/*ColumnLayout subGroupLayout = getGroupWidgetLayout();
-		((Group)subGroupContainerx.getContainerControl()).setLayout(subGroupLayout);
-		((Group)subGroupContainerx.getContainerControl()).setVisible(false);*/
-		
 		GridLayout subGroupLayout = getGroupWidgetLayout();
 		((Composite)subGroupContainerx.getContainerControl()).setLayout(subGroupLayout);
 		((Composite)subGroupContainerx.getContainerControl()).setVisible(false);
@@ -183,10 +176,6 @@ public class PropertyDialogBuilder {
 
 	private GridLayout getGroupWidgetLayout() {
 		GridLayout subGroupLayout = new GridLayout(1,false);
-		/*subGroupLayout.maxNumColumns = 1;
-		subGroupLayout.bottomMargin = 0;
-		subGroupLayout.topMargin = 0;
-		subGroupLayout.rightMargin = 0;*/
 		return subGroupLayout;
 	}
 
@@ -298,20 +287,6 @@ public class PropertyDialogBuilder {
 	public TabFolder addTabFolderToPropertyWindow(){
 		TabFolder tabFolder = new TabFolder(container, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		/*final ColumnLayoutData cld_tabFolder = new ColumnLayoutData();
-		cld_tabFolder.heightHint = 303;
-		tabFolder.setLayoutData(cld_tabFolder);*/
-		
-		/*GridData containerData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));*/
-		
-		/*container.addControlListener(new ControlAdapter() {
-			@Override
-			public void controlResized(ControlEvent e) {
-				cld_tabFolder.heightHint = container.getBounds().height - 50;
-			}
-		});*/
-		
 		tabFolder.addListener(SWT.FOCUSED,getMouseClickListener() );
        
 		return tabFolder;
@@ -348,12 +323,6 @@ public class PropertyDialogBuilder {
 
 	private Composite addCompositeToScrolledComposite(ScrolledComposite scrolledComposite) {
 		Composite composite = new Composite(scrolledComposite, SWT.NONE);
-		//composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		/*ColumnLayout cl_composite = new ColumnLayout();
-		cl_composite.maxNumColumns = 1;
-		cl_composite.bottomMargin = -10;
-		
-		composite.setLayout(cl_composite);*/
 		composite.setLayout(new GridLayout(1, false));
 		
 		return composite;
