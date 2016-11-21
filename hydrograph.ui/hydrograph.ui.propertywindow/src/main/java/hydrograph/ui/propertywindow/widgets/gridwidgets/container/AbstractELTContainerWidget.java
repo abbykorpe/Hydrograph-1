@@ -10,18 +10,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
  
 package hydrograph.ui.propertywindow.widgets.gridwidgets.container;
 
+import org.eclipse.swt.widgets.Composite;
+
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-
-
-// TODO: Auto-generated Javadoc
 /**
  * 
  * @author Bitwise
@@ -41,6 +36,12 @@ public abstract class AbstractELTContainerWidget {
 	 */
 	public AbstractELTContainerWidget(Composite container){
 		this.inputContainer = container;
+	};
+	
+	
+	public AbstractELTContainerWidget(Composite container,Composite clientArea){
+		this.inputContainer = container;
+		this.outputContainer = clientArea;
 	};
 	
 	/**

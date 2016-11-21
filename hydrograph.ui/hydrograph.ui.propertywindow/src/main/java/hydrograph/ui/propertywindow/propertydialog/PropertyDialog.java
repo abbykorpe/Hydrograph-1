@@ -46,6 +46,7 @@ import org.eclipse.swt.SWTError;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -138,9 +139,12 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	}
 
 	private void setPropertyDialogContainerLayout() {
-		ColumnLayout cl_container = new ColumnLayout();
+		/*ColumnLayout cl_container = new ColumnLayout();
 		cl_container.maxNumColumns = 1;
-		container.setLayout(cl_container);
+		//container.setLayout(new GridLayout(1, false));
+		container.setLayout(cl_container);*/
+		
+		container.setLayout(new GridLayout(1, false));
 	}
 
 	private void setPropertyDialogTitle() {
@@ -250,57 +254,9 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	 */
 	@Override
 	protected Point getInitialSize() {
-		Point result = getDefaultSize();
-		getShell().setMinimumSize(result);
-	    // Check the dialog settings for a stored size.
-	    if((getDialogBoundsStrategy() & DIALOG_PERSISTSIZE) != 0)
-	    {
-	      IDialogSettings settings = getDialogBoundsSettings();
-
-	      if(settings != null)
-	      {
-	 
-	        boolean useStoredBounds = true;
-	        String previousDialogFontData = settings.get(DIALOG_FONT_DATA);
- 
-	        if(previousDialogFontData != null && previousDialogFontData.length() > 0)
-	        {
-	          FontData[] fontDatas = JFaceResources.getDialogFont().getFontData();
-
-	          if(fontDatas.length > 0)
-	          {
-	            String currentDialogFontData = fontDatas[0].toString();
-	            useStoredBounds = currentDialogFontData.equalsIgnoreCase(previousDialogFontData);
-	          }
-	        }
-
-	        if(useStoredBounds)
-	        {
-	          try
-	          {
-	            // Get the stored width and height.
-	            int width = settings.getInt(DIALOG_WIDTH);
-
-	            if(width != DIALOG_DEFAULT_BOUNDS)
-	            {
-	              result.x = width;
-	            }
-
-	            int height = settings.getInt(DIALOG_HEIGHT);
-
-	            if(height != DIALOG_DEFAULT_BOUNDS)
-	            {
-	              result.y = height;
-	            }
-	          }
-	          catch(NumberFormatException e)
-	          {
-	          }
-	        }
-	      }
-	    }
- 
-	    return result;
+		
+		return new Point(500,600);
+		
 	  }
 	
 	 protected Point getDefaultSize()
