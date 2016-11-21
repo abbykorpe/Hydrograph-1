@@ -637,6 +637,8 @@ public class SubJobUtility {
 	private boolean checkIfSubJobHasTransformOrUnionAllComponent(Component component) {
 		boolean containsTransformOrUnionAllComponent=false;
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);
+		if(container!=null)
+		{	
 		for(Object object:container.getChildren())
 		{
 			if(object instanceof Component)
@@ -666,6 +668,7 @@ public class SubJobUtility {
 				break;	
 			}
 			}
+		}	
 		}
 		return containsTransformOrUnionAllComponent;
 	}
