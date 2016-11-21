@@ -39,8 +39,8 @@ import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDataDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryComponentDialog;
-import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
@@ -64,8 +64,8 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	private static final String EXECUTION_TRACKING_LOCAL_MODE = "L_";
 	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
 	
-	private List<String> compNameList;
-	private List<String> missedCompList;
+	private List<String> compNameList = new ArrayList<>();
+	private List<String> missedCompList = new ArrayList<>();;
 
 	
 	/**
@@ -82,8 +82,8 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB);
 			return "";
 		}
-		
-		ViewExecutionHistoryDialog dialog = new ViewExecutionHistoryDialog(Display.getDefault().getActiveShell(),this ,tmpList);
+		logger.debug("Call to Execution history Dialog");
+		ViewExecutionHistoryDataDialog dialog = new ViewExecutionHistoryDataDialog(Display.getDefault().getActiveShell(), this, tmpList);
 		dialog.open();
 		
 		if(!(missedCompList.size() > 0) && !(compNameList.size() > 0)){
