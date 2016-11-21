@@ -35,7 +35,7 @@ import hydrograph.ui.graph.Messages;
  */
 public class JobCreationWizard extends Wizard implements INewWizard {
 
-	private JobCreationPage page1;
+	private JobCreationPage jobCreationpage;
 	
 	public JobCreationWizard(){
 	setWindowTitle(Messages.NEW_JOB);
@@ -47,11 +47,11 @@ public class JobCreationWizard extends Wizard implements INewWizard {
 	 */
 	public void addPages() {
 		// add pages to this wizard
-		if(page1==null){
-			page1 = new JobCreationPage(PlatformUI.getWorkbench(), (StructuredSelection) PlatformUI.getWorkbench()
+		if(jobCreationpage==null){
+			jobCreationpage = new JobCreationPage(PlatformUI.getWorkbench(), (StructuredSelection) PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getSelectionService().getSelection(), true);
 		}
-		addPage(page1);
+		addPage(jobCreationpage);
 	}
 
 	/*
@@ -66,7 +66,7 @@ public class JobCreationWizard extends Wizard implements INewWizard {
 		if (projects != null && projects.length != 0) {
 			openProjectFound = isOpenProjectExists(openProjectFound, projects);
 			if (openProjectFound) {
-				page1 = new JobCreationPage(workbench, selection,false);
+				jobCreationpage = new JobCreationPage(workbench, selection,false);
 			} else {
 				MessageBox messageBox = createErrorDialog(Messages.OPEN_PROJECT_ERROR_MESSAGE);
 				if (messageBox.open() == SWT.OK) {
@@ -85,7 +85,7 @@ public class JobCreationWizard extends Wizard implements INewWizard {
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
 	public boolean performFinish() {
-		return page1.finish();
+		return jobCreationpage.finish();
 	}
 	private Boolean isOpenProjectExists(Boolean openProjectFound, IProject[] projects) {
 		for (IProject project : projects) {

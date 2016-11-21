@@ -83,18 +83,19 @@ public class SubJobUtility {
 	public IFile openSubJobSaveDialog() {
 		IFile iFile = null;
 		IWizardDescriptor descriptor = PlatformUI.getWorkbench().getNewWizardRegistry().findWizard(Messages.JOB_WIZARD_ID);
-		try  {
-			   if(descriptor != null) {
-			     IWizard wizard = descriptor.createWizard();
-			     WizardDialog wd = new  WizardDialog(Display.getDefault().getActiveShell(), wizard);
-			     wd.setTitle(wizard.getWindowTitle());
-			     wd.open();
-			     JobCreationPage creationPage=(JobCreationPage) wd.getSelectedPage();
-			     iFile=creationPage.getNewFile();
-			   }
-			 } catch  (CoreException coreException) {
-				 logger.error("Error while opening job wizard", coreException);
-			 }
+		if (descriptor != null) {
+			IWizard wizard = null;
+			try {
+				wizard = descriptor.createWizard();
+			} catch (CoreException coreException) {
+				logger.error("Error while opening create job wizard", coreException);
+			}
+			WizardDialog wd = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+			wd.setTitle(wizard.getWindowTitle());
+			wd.open();
+			JobCreationPage creationPage = (JobCreationPage) wd.getSelectedPage();
+			iFile = creationPage.getNewFile();
+		}
 		return iFile;
 	}
 
