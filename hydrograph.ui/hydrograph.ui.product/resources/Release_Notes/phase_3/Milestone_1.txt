@@ -39,6 +39,7 @@ connection(link) on transform component.
 24. ..... - [Sonia Raheja] - Refresh icon should occur on subjob component in main job if user changes in disconnected subjob.
 25. ..... - [Pooja Yadav] - MAC: Fixed schema widget Import and Export Button alignment issue for mac.
 26.<1447> - [Ankit Sharma] - MAC: Fixed issue related to log creation at Incorrect path.
+27. ..... - [Kalyan Rajpoot] - Job is saving multiple times when user hit the run button.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
