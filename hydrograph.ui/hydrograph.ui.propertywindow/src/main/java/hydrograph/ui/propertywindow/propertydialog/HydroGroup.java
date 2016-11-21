@@ -54,7 +54,7 @@ public class HydroGroup extends Composite {
 		gl_hydroGroupBoder.marginHeight = 1;
 		gl_hydroGroupBoder.horizontalSpacing = 1;
 		hydroGroupBoder.setLayout(gl_hydroGroupBoder);
-		hydroGroupBoder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		hydroGroupBoder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		hydroGroupBoder.setBackground(new Color(null, 0, 0, 0));
 		hydroGroupBoder.setData("org.eclipse.e4.ui.css.id", "HydroGroupBorder");
 		

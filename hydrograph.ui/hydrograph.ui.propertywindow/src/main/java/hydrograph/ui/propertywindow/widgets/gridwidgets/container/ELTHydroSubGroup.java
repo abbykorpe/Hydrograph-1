@@ -54,7 +54,7 @@ public class ELTHydroSubGroup extends AbstractELTContainerWidget{
 	@Override
 	public void createContainerWidget(){
 		createGroupWidget();
-		subGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		subGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		subGroup.getHydroGroupClientArea().setLayout(new GridLayout(1, false));
 		super.outputContainer = subGroup.getHydroGroupClientArea();
 	}
@@ -84,7 +84,7 @@ public class ELTHydroSubGroup extends AbstractELTContainerWidget{
 		subGroup = new HydroGroup(inputContainer, SWT.NONE);
 		subGroup.setHydroGroupText(subgroupName);
 		subGroup.setHydroGroupImage(getImage(subgroupName));
-		subGroup.setHydroGroupLabelFont(new Font(null, "Arial", 10,SWT.ITALIC | SWT.BOLD));
+		subGroup.setHydroGroupLabelFont(new Font(null, "Arial", 8, SWT.BOLD));
 	}
 	
 	@Override

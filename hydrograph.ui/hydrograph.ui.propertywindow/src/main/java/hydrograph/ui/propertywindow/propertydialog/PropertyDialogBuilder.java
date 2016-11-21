@@ -21,6 +21,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -286,9 +288,21 @@ public class PropertyDialogBuilder {
 	 */
 	public TabFolder addTabFolderToPropertyWindow(){
 		TabFolder tabFolder = new TabFolder(container, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		GridData tabFolderGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		
+		tabFolder.setLayoutData(tabFolderGridData);
 		tabFolder.addListener(SWT.FOCUSED,getMouseClickListener() );
        
+		container.addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				tabFolderGridData.heightHint = container.getBounds().height - 500;
+			}
+		});
+		
+		tabFolder.addListener(SWT.FOCUSED,getMouseClickListener() );
+		
 		return tabFolder;
 	}
 	private Listener getMouseClickListener() {
