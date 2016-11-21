@@ -54,7 +54,7 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 		
 		
 		
-		gd_defaultELTTextBox.widthHint = textboxWidth;
+		gd_defaultELTTextBox.widthHint = textboxWidth;		// text box width changes 
 		defaultELTTextBox.setLayoutData(gd_defaultELTTextBox);
 		defaultELTTextBox.setText(defaultTextMessage);
 		
