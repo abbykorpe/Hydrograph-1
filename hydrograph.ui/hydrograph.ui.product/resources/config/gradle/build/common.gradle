@@ -34,6 +34,9 @@ def getArgsForRunJob(runEvent) {
    	jobXML        : Resolved value for Job's XML
    	-paramfiles   : Mandatory option for Hydrograph execution script
    	parameterFile : Resolved value for Parameter XML
+   -jobid		  : Mandatory option for Hydrograph execution script
+    jobId		  : Resolved value for Job ID
+   
    */
    
 	   if (project.hasProperty("jobXML")) {
@@ -56,8 +59,6 @@ def getArgsForRunJob(runEvent) {
    Following additional options and resolved values are required for Local Debug execution  
    -debugxmlpath : Optional option for Hydrograph execution script
    debugJobXML	 : Resolved value for Job's Debug XML
-   -jobid		 : Optional option for Hydrograph execution script
-   jobId		 : Resolved value for Job ID
    -basepath	 : Optional  option for Hydrograph execution script
    basePath		 : Resolved value for Debug Path
    */
