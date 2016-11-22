@@ -20,6 +20,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -31,8 +33,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 import hydrograph.ui.common.util.ImagePathConstant;
@@ -55,6 +55,8 @@ import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 
 /**
+ *
+ * Class to build property window for given component
  * 
  * @author Bitwise
  * Sep 07, 2015
@@ -79,7 +81,7 @@ public class PropertyDialogBuilder {
 	private final String TYPE_PROPERTY_HELP="Basic Category";
 	private final String BASE_TYPE_PROPERTY_HELP="Abstraction";
 	
-    private TabFolder tabFolder;
+    private CTabFolder tabFolder;
 	/**
 	 * Instantiates a new property dialog builder.
 	 * 
@@ -129,7 +131,7 @@ public class PropertyDialogBuilder {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TabItem tabItem=(TabItem) e.item;
+				CTabItem tabItem=(CTabItem) e.item;
 				if(tabItem!=null){
 					propertyDialog.setSelectedTab(tabItem.getText());
 				}
@@ -151,10 +153,10 @@ public class PropertyDialogBuilder {
 			}
 		});
 		
-        
+        tabFolder.setSelection(0);
 	}
 
-	private void addTabsInTabFolder(TabFolder tabFolder) {
+	private void addTabsInTabFolder(CTabFolder tabFolder) {
 	
 		for(String groupName : propertyTree.keySet()){
 			ScrolledCompositeHolder scrolledCompositeHolder = getPropertyWindowTab(groupName,tabFolder);
@@ -222,7 +224,7 @@ public class PropertyDialogBuilder {
 		}
 		
 		if (isError) {
-			for (TabItem item : tabFolder.getItems()) {
+			for (CTabItem item : tabFolder.getItems()) {
 				if (StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()), subgroupTree
 						.get(subgroupName).get(0).getPropertyGroup())) {
 					item.setImage(new Image(null,
@@ -286,8 +288,8 @@ public class PropertyDialogBuilder {
 	 * 
 	 * @return the tab folder
 	 */
-	public TabFolder addTabFolderToPropertyWindow(){
-		TabFolder tabFolder = new TabFolder(container, SWT.NONE);
+	public CTabFolder addTabFolderToPropertyWindow(){
+		CTabFolder tabFolder = new CTabFolder(container, SWT.NONE);
 		
 		GridData tabFolderGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		
@@ -327,8 +329,8 @@ public class PropertyDialogBuilder {
 	 *            the tab folder
 	 * @return the property window tab
 	 */
-	public ScrolledCompositeHolder getPropertyWindowTab(String groupName,TabFolder tabFolder){	
-		TabItem tabItem = createTab(groupName, tabFolder);
+	public ScrolledCompositeHolder getPropertyWindowTab(String groupName,CTabFolder tabFolder){	
+		CTabItem tabItem = createTab(groupName, tabFolder);
 		
 		ScrolledComposite scrolledComposite = addScrolledCompositeToTab(tabFolder,tabItem);	
 		Composite composite = addCompositeToScrolledComposite(scrolledComposite);
@@ -342,7 +344,7 @@ public class PropertyDialogBuilder {
 		return composite;
 	}
 
-	private ScrolledComposite addScrolledCompositeToTab(TabFolder tabFolder,TabItem tabItem) {
+	private ScrolledComposite addScrolledCompositeToTab(CTabFolder tabFolder,CTabItem tabItem) {
 		ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder,SWT.V_SCROLL);
 		tabItem.setControl(scrolledComposite);
 		//scrolledComposite.setLayout(new GridLayout(1, false));
@@ -353,8 +355,8 @@ public class PropertyDialogBuilder {
 		return scrolledComposite;
 	}
 
-	private TabItem createTab(String groupName, TabFolder tabFolder) {
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+	private CTabItem createTab(String groupName, CTabFolder tabFolder) {
+		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 		
 		if (OSValidator.isMac()) {
 			tabItem.setText(" "+WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));

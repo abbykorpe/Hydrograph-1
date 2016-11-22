@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.propertywindow.propertydialog;
+package hydrograph.ui.common.swt.customwidget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;

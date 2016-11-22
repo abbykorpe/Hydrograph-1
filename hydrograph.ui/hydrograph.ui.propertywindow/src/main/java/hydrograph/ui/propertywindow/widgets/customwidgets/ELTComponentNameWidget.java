@@ -95,7 +95,7 @@ public class ELTComponentNameWidget extends AbstractWidget {
 		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 
 		AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().defaultText("Hello")
-				.grabExcessHorizontalSpace(true).textBoxWidth(200);
+				.grabExcessHorizontalSpace(true);
 		eltDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
 
 		text = (Text) eltDefaultTextBox.getSWTWidgetControl();

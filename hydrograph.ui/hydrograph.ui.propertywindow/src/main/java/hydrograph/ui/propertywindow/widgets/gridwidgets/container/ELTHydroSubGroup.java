@@ -27,13 +27,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.internal.util.BundleUtility;
 import org.osgi.framework.Bundle;
 
-import hydrograph.ui.propertywindow.propertydialog.HydroGroup;
+import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 
 /**
  * 
+ * Property window compatible HydroGroup widget
+ * 
  * @author Bitwise
- * Sep 18, 2015
  * 
  */
 
@@ -77,13 +78,12 @@ public class ELTHydroSubGroup extends AbstractELTContainerWidget{
 		}else{
 			return null;
 		}
-		
 	}
 	
 	private void createGroupWidget() {
 		subGroup = new HydroGroup(inputContainer, SWT.NONE);
 		subGroup.setHydroGroupText(subgroupName);
-		subGroup.setHydroGroupImage(getImage(subgroupName));
+		//subGroup.setHydroGroupImage(getImage(subgroupName));
 		subGroup.setHydroGroupLabelFont(new Font(null, "Arial", 8, SWT.BOLD));
 	}
 	

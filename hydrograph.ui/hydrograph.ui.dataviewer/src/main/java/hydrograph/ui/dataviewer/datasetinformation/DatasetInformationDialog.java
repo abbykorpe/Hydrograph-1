@@ -27,8 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -47,6 +45,8 @@ import hydrograph.ui.propertywindow.widgets.utility.MouseWheelScrollingOnComposi
 
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 
 /**
@@ -104,10 +104,10 @@ public class DatasetInformationDialog extends Dialog {
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
+		CTabFolder tabFolder = new CTabFolder(composite, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		TabItem tbtmGeneral = new TabItem(tabFolder, SWT.NONE);
+		CTabItem tbtmGeneral = new CTabItem(tabFolder, SWT.NONE);
 		tbtmGeneral.setText(DatasetInformationConstants.GENERAL);
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -156,7 +156,7 @@ public class DatasetInformationDialog extends Dialog {
 		createLabel(genralTabDatacomposite,DatasetInformationConstants.ORIGINAL_FILTER_CONDITION);
 		setLabelValue(genralTabDatacomposite,datasetInformationVO.getRemoteFilter());
 		
-		TabItem tbtmSchema = new TabItem(tabFolder, SWT.NONE);
+		CTabItem tbtmSchema = new CTabItem(tabFolder, SWT.NONE);
 		tbtmSchema.setText(DatasetInformationConstants.SCHEMA);
 		
 		ScrolledComposite scrolledComposite1 = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);

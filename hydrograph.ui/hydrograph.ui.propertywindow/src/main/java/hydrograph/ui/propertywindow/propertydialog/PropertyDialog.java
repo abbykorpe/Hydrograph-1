@@ -243,7 +243,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	@Override
 	protected Point getInitialSize() {
 		
-		return new Point(500,600);
+		return new Point(500,670);
 		
 	  }
 	

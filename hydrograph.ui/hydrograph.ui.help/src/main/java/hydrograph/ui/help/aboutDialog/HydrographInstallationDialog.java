@@ -40,6 +40,8 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -58,8 +60,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PartInitException;
@@ -179,7 +179,7 @@ public class HydrographInstallationDialog extends TrayDialog implements
 	private IPath path = new Path("/xml/About_Window_Installation_Details.xml");
 	private static String lastSelectedTabId = null;
 	private Logger logger = LogFactory.INSTANCE.getLogger(HydrographInstallationDialog.class);
-	private TabFolder folder;
+	private CTabFolder folder;
 	IServiceLocator serviceLocator;
 	private ButtonManager buttonManager;
 	private Map pageToId = new HashMap();
@@ -214,7 +214,7 @@ public class HydrographInstallationDialog extends TrayDialog implements
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.getShell().setMinimumSize(950, 500);
-		folder = new TabFolder(composite, SWT.NONE);
+		folder = new CTabFolder(composite, SWT.NONE);
 		configureFolder();
 		createFolderItems(folder);
 
@@ -232,13 +232,13 @@ public class HydrographInstallationDialog extends TrayDialog implements
 		return composite;
 	}
 
-	protected void createFolderItems(TabFolder folder) {
+	protected void createFolderItems(CTabFolder folder) {
 		IConfigurationElement[] elements = ConfigurationInfo
 				.getSortedExtensions(loadElements());
 		for (int i = 0; i < elements.length; i++) {
 			IConfigurationElement element = elements[i];
 			if (!element.getAttribute(IWorkbenchRegistryConstants.ATT_NAME).equalsIgnoreCase("Features")) {
-				TabItem item = new TabItem(folder, SWT.NONE);
+				CTabItem item = new CTabItem(folder, SWT.NONE);
 
 				item.setText(element.getAttribute(IWorkbenchRegistryConstants.ATT_NAME));
 				item.setData(element);
@@ -252,7 +252,7 @@ public class HydrographInstallationDialog extends TrayDialog implements
 		
 		
 		
-		TabItem tbtmLibraries = new TabItem(folder, SWT.NONE);
+		CTabItem tbtmLibraries = new CTabItem(folder, SWT.NONE);
 		tbtmLibraries.setText("Libraries");
 
 		composite_1 = new Composite(folder, SWT.NONE);
@@ -371,7 +371,7 @@ public class HydrographInstallationDialog extends TrayDialog implements
 		boolean selected = false;
 		if (folder.getItemCount() > 0) {
 			if (lastSelectedTabId != null) {
-				TabItem[] items = folder.getItems();
+				CTabItem[] items = folder.getItems();
 				for (int i = 0; i < items.length; i++)
 					if (items[i].getData(ID).equals("30.PluginPage")) {
 						folder.setSelection(i);
@@ -394,7 +394,7 @@ public class HydrographInstallationDialog extends TrayDialog implements
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				tabSelected((TabItem) e.item);
+				tabSelected((CTabItem) e.item);
 			}
 		};
 	}
@@ -402,7 +402,7 @@ public class HydrographInstallationDialog extends TrayDialog implements
 	/*
 	 * Must be called after contributions and button manager are created.
 	 */
-	private void tabSelected(TabItem item) {
+	private void tabSelected(CTabItem item) {
 		if (item.getData() instanceof IConfigurationElement) {
 			final IConfigurationElement element = (IConfigurationElement) item
 					.getData();
