@@ -34,7 +34,8 @@ public class ELTDefaultButton extends AbstractELTWidget{
 	private Button defaultELTButton;
 	
 	private String buttonText="Button";
-	private int buttonWidth=92;
+	//private int buttonWidth=92;
+	private int buttonWidth=94;
 	private int buttonHeight=25;
 	private boolean grabExcessSpace=false;
 
