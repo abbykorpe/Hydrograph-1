@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
+import hydrograph.ui.common.util.OSValidator;
+
 // TODO: Auto-generated Javadoc
 /**
  * 
@@ -64,7 +66,11 @@ public class ELTDefaultLable extends AbstractELTWidget {
 		defaultELTLable = new Label(container, SWT.NONE);
 		GridData gd_defaultELTLable = new GridData(SWT.FILL, SWT.FILL, false,
 				false, 1, 1);
-		gd_defaultELTLable.widthHint = lableWidth;
+		if(OSValidator.isMac()){
+			gd_defaultELTLable.widthHint = lableWidth+4;
+		}else{
+			gd_defaultELTLable.widthHint = lableWidth;
+		}
 		defaultELTLable.setLayoutData(gd_defaultELTLable);
 		defaultELTLable.setText(lableText);
 

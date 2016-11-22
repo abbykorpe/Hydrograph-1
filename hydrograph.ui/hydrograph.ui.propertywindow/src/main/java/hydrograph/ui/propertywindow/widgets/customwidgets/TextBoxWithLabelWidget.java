@@ -117,7 +117,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		AbstractELTWidget textBoxWidget;
 		if(OSValidator.isMac() && textBoxConfig.getName().equals("Sequence Field")){
 			textBoxWidget = new ELTDefaultTextBox().
-					grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace()).textBoxWidth(textBoxConfig.getwidgetWidth()-28);
+					grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace()).textBoxWidth(textBoxConfig.getwidgetWidth()-34);
 		}else{
 			textBoxWidget = new ELTDefaultTextBox().
 				grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace()).textBoxWidth(textBoxConfig.getwidgetWidth());

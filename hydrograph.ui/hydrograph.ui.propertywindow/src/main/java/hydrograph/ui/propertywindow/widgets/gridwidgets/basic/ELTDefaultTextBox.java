@@ -46,7 +46,7 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 		defaultELTTextBox = new Text(container, SWT.BORDER);
 		GridData gd_defaultELTTextBox = new GridData(SWT.FILL, SWT.FILL, grabExcessSpace, false, 1, 1);
 		if (OSValidator.isMac()) {
-			gd_defaultELTTextBox.horizontalIndent=2;
+			gd_defaultELTTextBox.horizontalIndent=4;
 			gd_defaultELTTextBox.widthHint = textboxWidth+28;
 		}
 		else{
