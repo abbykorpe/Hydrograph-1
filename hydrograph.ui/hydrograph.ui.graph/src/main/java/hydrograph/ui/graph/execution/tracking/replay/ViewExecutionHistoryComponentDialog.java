@@ -62,7 +62,7 @@ public class ViewExecutionHistoryComponentDialog extends Dialog{
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		
-		text = new Text(scrolledComposite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		text = new Text(scrolledComposite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
 		StringBuilder stringBuilder = new StringBuilder();
 		
 		if(extraComponentList != null && extraComponentList.size() > 0){
