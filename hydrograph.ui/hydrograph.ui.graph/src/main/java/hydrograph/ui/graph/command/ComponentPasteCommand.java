@@ -105,7 +105,8 @@ public class ComponentPasteCommand extends Command {
 		StringBuffer buffer=new StringBuffer(currentName);
 		try {
 		if(buffer.lastIndexOf(UNDERSCORE)!=-1 && (buffer.lastIndexOf(UNDERSCORE)!=buffer.length())){
-			if(StringUtils.isNumeric(buffer.substring(buffer.lastIndexOf(UNDERSCORE)+1,buffer.length()))){
+			String substring = StringUtils.trim(buffer.substring(buffer.lastIndexOf(UNDERSCORE)+1,buffer.length()));
+			if(StringUtils.isNumeric(substring)){
 				prefix=buffer.substring(0,buffer.lastIndexOf(UNDERSCORE)); 
 			}
 		}}
