@@ -560,6 +560,13 @@ public class SchemaSyncUtility {
      return stringList;	
 	}
 	
+	/**
+	 * 
+	 * Convert GridRow object to BasicSchemaGridRow object.
+	 * 
+	 * @param list of GridRow object.
+	 * @return list of BasicSchemaGridRow object.
+	 */
 	public List<BasicSchemaGridRow> convertGridRowsSchemaToBasicSchemaGridRows(List<GridRow> gridRows) {
 		List<BasicSchemaGridRow> basicSchemaGridRows = null;
 		if (gridRows != null) {
