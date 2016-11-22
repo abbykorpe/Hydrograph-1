@@ -100,7 +100,20 @@ public class PropogateWidget extends AbstractWidget{
 		getSchemaForInternalPropagation().getGridRow().addAll(SchemaSyncUtility.INSTANCE.
 				convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
 		if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
-		break;	
+		break;
+		 if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.UNIQUE_SEQUENCE)
+					&&getComponent().getProperties().get(Constants.UNIQUE_SEQUENCE_PROPERTY_NAME)!=null		 
+				    )
+				 {
+			    String fieldName=(String)getComponent().getProperties().get(Constants.UNIQUE_SEQUENCE_PROPERTY_NAME);
+			    if(StringUtils.isNotBlank(fieldName))
+			    {
+			    BasicSchemaGridRow basicSchemaGridRow=SchemaPropagationHelper.INSTANCE.createSchemaGridRow(fieldName);
+				basicSchemaGridRow.setDataType(8);
+				basicSchemaGridRow.setDataTypeValue(Long.class.getCanonicalName());
+				getSchemaForInternalPropagation().getGridRow().add(basicSchemaGridRow);
+			    }
+				 }
 		}
 		}
 	   }	  
@@ -109,13 +122,11 @@ public class PropogateWidget extends AbstractWidget{
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ComponentsOutputSchema outputSchema = null;
-				getSchemaForInternalPropagation().getGridRow().clear();
+				
 				boolean isUnionAllInputSchemaSync=true;
 				for (Link link : getComponent().getTargetConnections()) {
 					Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
 					if(previousComponentSchema!=null&&!previousComponentSchema.getGridRow().isEmpty())	
-					outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 				
 					if (previousComponentSchema != null){
 					if(StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.STRAIGHTPULL)
@@ -123,7 +134,7 @@ public class PropogateWidget extends AbstractWidget{
 							  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.UNIQUE_SEQUENCE)
 							)
 					{	
-					
+						getSchemaForInternalPropagation().getGridRow().clear();
 						if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
 						{
 							if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(getComponent()))
@@ -136,14 +147,28 @@ public class PropogateWidget extends AbstractWidget{
 							else
 							getComponent().getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
 								
-						}		
+						}
 					if(previousComponentSchema!=null)
 					{
 						
 						 getSchemaForInternalPropagation().getGridRow().addAll(SchemaSyncUtility.INSTANCE.
 								convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
+						 
+						 if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.UNIQUE_SEQUENCE)
+							&&getComponent().getProperties().get(Constants.UNIQUE_SEQUENCE_PROPERTY_NAME)!=null		 
+						    )
+						 {
+							String fieldName=(String)getComponent().getProperties().get(Constants.UNIQUE_SEQUENCE_PROPERTY_NAME);
+						    if(StringUtils.isNotBlank(fieldName))
+						    {	
+							BasicSchemaGridRow basicSchemaGridRow=SchemaPropagationHelper.INSTANCE.createSchemaGridRow(fieldName);
+							basicSchemaGridRow.setDataType(8);
+							basicSchemaGridRow.setDataTypeValue(Long.class.getCanonicalName());
+							getSchemaForInternalPropagation().getGridRow().add(basicSchemaGridRow);
+						    }
+						 }		 
 						 getComponent().getProperties().put(Constants.SCHEMA_PROPERTY_NAME,getSchemaForInternalPropagation() );
-					     if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
+						 if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
 						 break;	
 				    }
 				    ELTSchemaGridWidget eltSchemaGridWidget=null;
