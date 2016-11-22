@@ -549,13 +549,13 @@ public class TransformWidget extends AbstractWidget {
 	}
 
 	private void getPropagatedSchema() {
-		ComponentsOutputSchema outputSchema = null;
 		InputField inputField = null;
 		transformMapping.getInputFields().clear();
 		for (Link link : getComponent().getTargetConnections()) {
-			outputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-			if (outputSchema != null){
-				for (FixedWidthGridRow row : outputSchema.getFixedWidthGridRowsOutputFields()) {
+			Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+			if (previousComponentSchema != null){
+				for (BasicSchemaGridRow row : SchemaSyncUtility.INSTANCE.
+						convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow())) {
 					inputField = new InputField(row.getFieldName(), new ErrorObject(false, ""));
 						transformMapping.getInputFields().add(inputField);
 				}

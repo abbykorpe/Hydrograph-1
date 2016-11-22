@@ -21,7 +21,6 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -30,8 +29,8 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 
 /**
@@ -110,14 +109,16 @@ public class PropagateDataAction extends SelectionAction {
 				Schema schema=(Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 				if(schema==null)
 				schema=new Schema();	
-				ComponentsOutputSchema outputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+				Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
 				if(schema.getGridRow()==null)
 				{
 					List<GridRow> gridRows=new ArrayList<>();
 					schema.setGridRow(gridRows);
 				}	
 				schema.getGridRow().clear();
-				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+				if(previousComponentSchema!=null)
+				schema.getGridRow().
+				addAll(SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
 				
 				component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
 				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName()))

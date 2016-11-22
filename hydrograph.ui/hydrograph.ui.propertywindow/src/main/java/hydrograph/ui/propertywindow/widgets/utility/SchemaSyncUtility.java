@@ -15,7 +15,9 @@ package hydrograph.ui.propertywindow.widgets.utility;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
@@ -556,5 +558,40 @@ public class SchemaSyncUtility {
 			
 		}	
      return stringList;	
+	}
+	
+	/**
+	 * 
+	 * Convert GridRow object to BasicSchemaGridRow object.
+	 * 
+	 * @param list of GridRow object.
+	 * @return list of BasicSchemaGridRow object.
+	 */
+	public List<BasicSchemaGridRow> convertGridRowsSchemaToBasicSchemaGridRows(List<GridRow> gridRows) {
+		List<BasicSchemaGridRow> basicSchemaGridRows = null;
+		if (gridRows != null) {
+			basicSchemaGridRows = new ArrayList<>();
+			for (GridRow gridRow1 : gridRows) {
+				basicSchemaGridRows.add(convertGridRowSchemaToBasicSchemaGridRow(gridRow1));
+			}
+		}
+		return basicSchemaGridRows;
+	}
+
+	private BasicSchemaGridRow convertGridRowSchemaToBasicSchemaGridRow(GridRow gridRow) {
+		BasicSchemaGridRow schemaGrid = null;
+		if (gridRow != null) {
+			schemaGrid = new BasicSchemaGridRow();
+			schemaGrid.setDataType(gridRow.getDataType());
+			schemaGrid.setDataTypeValue(gridRow.getDataTypeValue());
+			schemaGrid.setDateFormat(gridRow.getDateFormat());
+			schemaGrid.setPrecision(gridRow.getPrecision());
+			schemaGrid.setFieldName(gridRow.getFieldName());
+			schemaGrid.setScale(gridRow.getScale());
+			schemaGrid.setScaleType(gridRow.getScaleType());
+			schemaGrid.setScaleTypeValue(gridRow.getScaleTypeValue());
+			schemaGrid.setDescription(gridRow.getDescription());
+		}
+		return schemaGrid;
 	}
 }

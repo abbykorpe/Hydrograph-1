@@ -20,10 +20,12 @@ import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,15 +73,14 @@ public class SchemaPropagationHelper {
 
 	private List<FilterProperties> getFieldNameList(Component component, String targetTerminal) {
 		FilterProperties filedName = null;
-		ComponentsOutputSchema schema = null;
 		List<FilterProperties> filedNameList = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
-
+ 
 			if (link.getTargetTerminal().equals(targetTerminal)) {
-				schema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-
-				if (schema != null) {
-					for (FixedWidthGridRow row : schema.getFixedWidthGridRowsOutputFields()) {
+				Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+				if (previousComponentSchema != null) {
+					for (BasicSchemaGridRow row :  SchemaSyncUtility.INSTANCE.
+							convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow())) {
 						filedName = new FilterProperties();
 						filedName.setPropertyname(row.getFieldName());
 						filedNameList.add(filedName);
