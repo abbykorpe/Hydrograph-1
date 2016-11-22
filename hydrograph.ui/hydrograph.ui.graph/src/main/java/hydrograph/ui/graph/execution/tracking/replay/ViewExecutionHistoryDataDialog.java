@@ -136,7 +136,6 @@ public class ViewExecutionHistoryDataDialog extends Dialog {
 				 for (int i = 0; i < item.length; i++){
 					 TableItem selectedItem = item[i];
 					 selectedUniqueJobId = selectedItem.getText();
-					 System.out.println("Job ID:::"+selectedUniqueJobId);
 			      }
 			}
 		});

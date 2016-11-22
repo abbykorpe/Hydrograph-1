@@ -94,7 +94,7 @@ public class TrackingStatusUpdateUtils {
 						if(isReplay){
 							Map<String, String> componentNameAndLink = new HashMap();
 							if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
-								ViewExecutionHistoryUtility.INSTANCE.subjobParams(componentNameAndLink, component, new StringBuilder(), true);
+								ViewExecutionHistoryUtility.INSTANCE.subjobParams(componentNameAndLink, component, new StringBuilder(component.getComponentId()+"."), true);
 								componentNameAndLink.forEach((compId, compName)->{
 									ViewExecutionHistoryUtility.INSTANCE.addUnusedCompLabel(compId, compName);
 								});

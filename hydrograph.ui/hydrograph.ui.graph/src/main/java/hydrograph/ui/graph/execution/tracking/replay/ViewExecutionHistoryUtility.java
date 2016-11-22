@@ -173,18 +173,25 @@ public class ViewExecutionHistoryUtility {
 					!(component.getComponentName().equals(Messages.OUTPUT_SUBJOB_COMPONENT))){
 				
 				if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
-					subjobPrefix.append(subjobComponent.getComponentId()+".");
+					subjobPrefix.append(component.getComponentId()+".");
 					subjobParams(componentNameAndLink, component, subjobPrefix, false);
 				}
 				
 				if(!Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
-				if(isParent){
-					componentNameAndLink.put(subjobComponent.getComponentId()+"."+component.getComponentId(), 
-							subjobComponent.getComponentId()+"."+component.getComponentId());
-				}else{
-					componentNameAndLink.put(subjobPrefix+subjobComponent.getComponentId()+"."+component.getComponentId(), 
-							subjobPrefix+subjobComponent.getComponentId()+"."+component.getComponentId());
-				}
+					if(isParent){
+						componentNameAndLink.put(subjobComponent.getComponentId()+"."+component.getComponentId(), 
+								subjobComponent.getComponentId()+"."+component.getComponentId());
+					}else{
+						componentNameAndLink.put(subjobPrefix+component.getComponentId(), 
+								subjobPrefix+component.getComponentId());
+					}
+			   }else{
+				  String string[]=StringUtils.split(subjobPrefix.toString(),".");
+				  subjobPrefix.delete(0, subjobPrefix.length());
+				  for(int index=0;index<string.length-1;index++){
+					  subjobPrefix.append(string[index]+".");
+				  }
+				  
 			   }
 			}
 		}
