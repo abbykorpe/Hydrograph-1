@@ -535,8 +535,19 @@ public class SubJobUtility {
 					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
 					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 					}
+				}
+				Schema schema=(Schema)nextComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+				if(schema==null)
+				schema=new Schema();	
+				ComponentsOutputSchema outputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+				if(schema.getGridRow()==null)
+				{
+					List<GridRow> gridRows=new ArrayList<>();
+					schema.setGridRow(gridRows);
 				}	
-				
+				schema.getGridRow().clear();
+				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+				nextComponent.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
 				nextComponent.setContinuousSchemaPropogationAllow(true);
 				if(nextComponent instanceof SubjobComponent)
 				{	
