@@ -13,6 +13,8 @@
 
 package hydrograph.ui.dataviewer.datastructures;
 
+import org.eclipse.core.runtime.Status;
+
 /**
  * The Class StatusMessage.
  * Provides the Status message to be displayed in status bar of the View Data Windows.
@@ -23,7 +25,31 @@ package hydrograph.ui.dataviewer.datastructures;
 public class StatusMessage {
 	private int returnCode;
 	private String returnMessage="";
+	private Status errorStatus;
 	
+	public static class Builder{
+		private final int returnCode;
+		private final String returnMessage;
+		private Status errorStatus;
+	
+	public Builder(int returnCode,String returnMessage){
+		this.returnCode = returnCode;
+		this.returnMessage = returnMessage;
+	}
+	
+	public Builder errorStatus(Status val){
+		errorStatus = val;
+		return this;
+	}
+	public StatusMessage build(){
+		return new StatusMessage(this);
+	}
+	}
+	private StatusMessage(Builder builder){
+		returnCode = builder.returnCode;
+		returnMessage = builder.returnMessage;
+		errorStatus = builder.errorStatus;
+	}
 	public StatusMessage(int returnCode, String returnMessage) {
 		this.returnCode = returnCode;
 		this.returnMessage = returnMessage;
@@ -33,6 +59,13 @@ public class StatusMessage {
 		this.returnCode = returnCode;
 	}
 
+	public Status getErrorStatus(){
+		return errorStatus;
+	}
+	
+	
+	
+	
 	/**
 	 * 
 	 * Get return code

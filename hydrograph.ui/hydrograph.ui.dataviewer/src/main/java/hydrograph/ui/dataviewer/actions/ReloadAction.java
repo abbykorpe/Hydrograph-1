@@ -17,7 +17,7 @@ import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.communication.utilities.SCPUtility;
-import hydrograph.ui.dataviewer.constants.MessageBoxText;
+import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.StatusMessage;
@@ -115,10 +115,6 @@ public class ReloadAction extends Action {
 					closeExistingDebugFileConnection();
 					if(lastDownloadedFileSize!=viewDataPreferencesVO.getFileSize()|| ifFilterReset){
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferencesVO.getPageSize(),true);	
-
-
-						
-
 					}else{
 						SelectColumnAction selectColumnAction =(SelectColumnAction) debugDataViewer.getActionFactory().getAction(SelectColumnAction.class.getName());
 						debugDataViewer.getDataViewerAdapter().reinitializeAdapter(viewDataPreferencesVO.getPageSize(),false);
@@ -127,10 +123,20 @@ public class ReloadAction extends Action {
 						}
 					}
 					
-				} catch (ClassNotFoundException | SQLException | IOException exception) {
-					Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
+				} 
+				
+				catch (ClassNotFoundException e){
+					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  e.getMessage(), e);
+					showDetailErrorMessage(Messages.UNABLE_TO_RELOAD_DEBUG_FILE+": unable to load CSV Driver", status);
+					return Status.CANCEL_STATUS;
+				}
+				catch (SQLException | IOException exception) {
+					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  exception.getMessage(), exception);
+					showDetailErrorMessage(Messages.UNABLE_TO_RELOAD_DEBUG_FILE+": unable to read view data file", status);
+
 					if(debugDataViewer.getDataViewerAdapter()!=null){
 						debugDataViewer.getDataViewerAdapter().closeConnection();
+						return Status.CANCEL_STATUS ;
 					}
 					debugDataViewer.close();
 				}
@@ -171,8 +177,6 @@ public class ReloadAction extends Action {
 
 		String csvDebugFileLocation = getCSVDebugFileLocation();
 		if(csvDebugFileLocation==null){
-			logger.error("No debug file recieved from service");
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_LOAD_DEBUG_FILE);
 			return StatusConstants.ERROR;
 		}
 		
@@ -189,6 +193,17 @@ public class ReloadAction extends Action {
 		}
 		return returnCode;
 	}
+
+	private void showDetailErrorMessage(final String errorType, final Status status) {
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				Utils.INSTANCE.showDetailErrorMessage(errorType, status);
+			}
+		});
+	}
+	
 	
 	private void updateDataViewerViews() {
 		this.debugDataViewer.getDataViewLoader().updateDataViewLists();
@@ -201,7 +216,10 @@ public class ReloadAction extends Action {
 					jobDetails.getPassword(), csvDebugFileLocation.trim(), dataViewerFilePath);
 		} catch (JSchException | IOException e) {
 			logger.error("unable to copy Debug csv file to data viewer file location",e);
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
+			
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  e.getMessage(), e);
+			showDetailErrorMessage(Messages.UNABLE_TO_RELOAD_DEBUG_FILE+": Unable to copy Debug csv file to data viewer file location", status);
+			
 			return StatusConstants.ERROR;
 		}
 		
@@ -213,7 +231,8 @@ public class ReloadAction extends Action {
 			Files.copy(Paths.get(csvDebugFileLocation), Paths.get(dataViewerFileAbsolutePath), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			logger.error("unable to copy Debug csv file to data viewer file location",e);
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR, Messages.UNABLE_TO_RELOAD_DEBUG_FILE);
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  e.getMessage(), e);
+			showDetailErrorMessage(Messages.UNABLE_TO_RELOAD_DEBUG_FILE+": Unable to copy Debug csv file to data viewer file location", status);
 			return StatusConstants.ERROR;
 		}
 		return StatusConstants.SUCCESS;
@@ -239,8 +258,10 @@ public class ReloadAction extends Action {
 		try {
 			csvDebugFileLocation = getDebugFilePathFromDebugService();
 		} catch (IOException e) {
-			Utils.INSTANCE.showMessage(MessageBoxText.ERROR,Messages.UNABLE_TO_RELOAD_DEBUG_FILE + e.getMessage());
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  e.getMessage(), e);
+			showDetailErrorMessage(Messages.UNABLE_TO_RELOAD_DEBUG_FILE + ": unable to reload files ,please check if service is running", status);
 			logger.error("Failed to get csv debug file path from service", e);
+			return csvDebugFileLocation;
 		}
 		return csvDebugFileLocation;
 	}

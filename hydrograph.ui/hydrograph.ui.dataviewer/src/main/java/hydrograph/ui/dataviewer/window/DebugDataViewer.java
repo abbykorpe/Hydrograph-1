@@ -311,7 +311,7 @@ public class DebugDataViewer extends ApplicationWindow {
 						
 						@Override
 						public void run() {
-							Utils.INSTANCE.showMessage(MessageBoxText.ERROR, statusMessage.getStatusMessage());
+							Utils.INSTANCE.showDetailErrorMessage(statusMessage.getStatusMessage(), statusMessage.getErrorStatus());
 							getShell().close();
 						}
 					});
@@ -431,11 +431,19 @@ public class DebugDataViewer extends ApplicationWindow {
 			public void run() {
 				try {
 					initializeDataFileAdapter(filterApplied,getConditions());
-				} catch (ClassNotFoundException | SQLException | IOException exception) {
-					Utils.INSTANCE.showMessage(MessageBoxText.ERROR,
-							Messages.UNABLE_TO_LOAD_DEBUG_FILE + exception.getMessage());
+				} catch (ClassNotFoundException e){
+					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  e.getMessage(), e);
+					Utils.INSTANCE.showDetailErrorMessage(Messages.UNABLE_TO_LOAD_DEBUG_FILE+": unable to load CSV Driver", status);
+					logger.error("Unable to load debug file", e);					
+					if (dataViewerAdapter != null) {
+						dataViewerAdapter.closeConnection();
+					}
+					getShell().close();
+				}
+				catch (SQLException | IOException exception) {
+					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID,  exception.getMessage(), exception);
+					Utils.INSTANCE.showDetailErrorMessage(Messages.UNABLE_TO_LOAD_DEBUG_FILE+": unable to read view data schema/file", status);
 					logger.error("Unable to load debug file", exception);					
-
 					if (dataViewerAdapter != null) {
 						dataViewerAdapter.closeConnection();
 					}

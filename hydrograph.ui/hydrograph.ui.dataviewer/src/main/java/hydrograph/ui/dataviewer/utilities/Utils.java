@@ -20,9 +20,11 @@ import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * 
@@ -128,7 +130,7 @@ public class Utils {
 	 */
 	public void showMessage(String messageBoxTitle, String message) {
 		int shellStyle= SWT.APPLICATION_MODAL | SWT.OK | getMessageBoxIcon(messageBoxTitle);
-		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(),shellStyle);
+		MessageBox messageBox = new MessageBox(new Shell(),shellStyle);
 		messageBox.setText(messageBoxTitle);
 		messageBox.setMessage(message);
 		messageBox.open();
@@ -144,6 +146,9 @@ public class Utils {
 		return portNo;
 	}
 	
+	public void showDetailErrorMessage(String errorType,Status status){
+	ErrorDialog.openError(new Shell(), "Error", errorType, status);
+	}
 	/**
 	 * Set Host Value
 	 * @param String
