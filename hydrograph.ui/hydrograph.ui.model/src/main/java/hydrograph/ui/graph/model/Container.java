@@ -298,14 +298,15 @@ public class Container extends Model {
 
 	private boolean checkIfDuplicateComponentExists(String newNameORComponentId, Component currentComponent,
 			boolean checkId) {
+		newNameORComponentId=StringUtils.trim(newNameORComponentId);
 		if (!getChildren().isEmpty()) {
 			for (Object object : getChildren()) {
 				if ( object instanceof Component && !object.equals(currentComponent)) {
 					Component component = (Component) object;
-					if (checkId && StringUtils.equalsIgnoreCase(component.getComponentId(), newNameORComponentId)) {
+					if (checkId && StringUtils.equalsIgnoreCase(StringUtils.trim(component.getComponentId()), newNameORComponentId)) {
 						LoggerUtil.getLoger(this.getClass()).trace("Duplicate component exists.");
 						return true;
-					}else if(!checkId && StringUtils.equalsIgnoreCase(component.getComponentLabel().getLabelContents(), newNameORComponentId)) {
+					}else if(!checkId && StringUtils.equalsIgnoreCase(StringUtils.trim(component.getComponentLabel().getLabelContents()), newNameORComponentId)) {
 						LoggerUtil.getLoger(this.getClass()).trace("Duplicate component exists.");
 						return true;
 					}

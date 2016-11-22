@@ -7,6 +7,7 @@ Sr.No. <date> - [developer names] - description
 3. .... - [Vibhor Tyagi] - View Execution History feature for displaying execution status of specified job execution. 
 4. <07/11/2016> - [Pooja Yadav] - Rearranged widget of schema tab for Input and Output Component.
 5. .... - [Akhilesh Joshi] - Changed error dialogs for view data feature to show detailed error messages.
+6. 		  [Anshul Shivhare] - Code changes to show confirm-message box while importing target XML for updating new unique job id.
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -41,7 +42,8 @@ connection(link) on transform component.
 26.<1447> - [Ankit Sharma] - MAC: Fixed issue related to log creation at Incorrect path.
 27. ..... - [Kalyan Rajpoot] - Job is saving multiple times when user hit the run button.
 28. <1451> - [Pooja Yadav] - Subjob Component: Job is Getting Failed, When Clone Component is Present Inside Subjob and Watch Point is Added to both the Links coming from Subjob.
-
+29.<1436> - [Anshul Shivhare] -	Join Component: Validation is Not Present in Join Mapping Window
+30.<1430> - [Anshul Shivhare] - Output Component: Name of the Output Component is Getting Moved Upward After clicking on Pull Schema button.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
