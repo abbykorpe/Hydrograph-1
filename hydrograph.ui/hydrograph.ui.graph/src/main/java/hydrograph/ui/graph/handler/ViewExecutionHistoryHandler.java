@@ -13,9 +13,6 @@
 
 package hydrograph.ui.graph.handler;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,26 +20,19 @@ import java.util.Map;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
-import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
-import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
-import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDataDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryComponentDialog;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryDataDialog;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingStatusUpdateUtils;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobStatus;
@@ -59,10 +49,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ViewExecutionHistoryHandler.class);
 	
-	/** The Constant ExecutionTrackingLogFileExtention. */
-	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".track.log";
-	private static final String EXECUTION_TRACKING_LOCAL_MODE = "L_";
-	private static final String EXECUTION_TRACKING_REMOTE_MODE = "R_";
+	
 	
 	private List<String> compNameList = new ArrayList<>();
 	private List<String> missedCompList = new ArrayList<>();;
@@ -120,7 +107,7 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 			}
 			
 			if(!executionStatus.getJobId().startsWith(eltGraphicalEditor.getContainer().getUniqueJobId())){
-				getMessageDialog(Messages.INVALID_LOG_FILE +" "+eltGraphicalEditor.getContainer().getUniqueJobId());
+				ViewExecutionHistoryUtility.INSTANCE.getMessageDialog(Messages.INVALID_LOG_FILE +" "+eltGraphicalEditor.getContainer().getUniqueJobId());
 				return false;
 			}else{
 				TrackingStatusUpdateUtils.INSTANCE.updateEditorWithCompStatus(executionStatus, eltGraphicalEditor, true);
@@ -151,68 +138,5 @@ public class ViewExecutionHistoryHandler extends AbstractHandler{
 			return null;
 	}
 
-/**
- * Return last execution tracking status from tracking log file.
- * @param uniqueJobId
- * @param isLocalMode
- * @param filePath
- * @return
- * @throws FileNotFoundException
- */
-	public ExecutionStatus readJsonLogFile(String uniqueJobId, boolean isLocalMode, String filePath) throws FileNotFoundException{
-		ExecutionStatus[] executionStatus;
-		String jobId = "";
-		String path = null;
-		
-		if(isLocalMode){
-			jobId = EXECUTION_TRACKING_LOCAL_MODE + uniqueJobId;
-		}else{
-			jobId = EXECUTION_TRACKING_REMOTE_MODE + uniqueJobId;
-		}
-		path = getLogPath() + jobId + EXECUTION_TRACKING_LOG_FILE_EXTENTION;
-		
-		JsonParser jsonParser = new JsonParser();
-		
-		Gson gson = new Gson();
-		String jsonArray = jsonParser.parse(new FileReader(new File(path))).toString();
-		executionStatus = gson.fromJson(jsonArray, ExecutionStatus[].class);
-		return executionStatus[executionStatus.length-1];
-	}
 	
-	/**
-	 * Return last execution tracking status from browsed tracking log file.
-	 * @param filePath
-	 * @return ExecutionStatus
-	 * @throws FileNotFoundException
-	 */
-		public ExecutionStatus readBrowsedJsonLogFile(String filePath) throws FileNotFoundException{
-			ExecutionStatus[] executionStatus;
-			JsonParser jsonParser = new JsonParser();
-			Gson gson = new Gson();
-			String jsonArray = jsonParser.parse(new FileReader(new File(filePath))).toString();
-			executionStatus = gson.fromJson(jsonArray, ExecutionStatus[].class);
-			return executionStatus[executionStatus.length-1];
-		}
-	
-	
-	/**
-	 * Gets the log path.
-	 *
-	 * @return the log path
-	 */
-	public String getLogPath(){
-		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
-				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
-		return jobTrackingLogDirectory = jobTrackingLogDirectory + "/";
-	}
-	
-	
-	/**
-	 * @param message Display the error message 
-	 * 
-	 */
-	public void getMessageDialog(String message){
-		MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, message);
-		return;
-	}
 }
