@@ -160,7 +160,7 @@ public class ViewExecutionHistoryDataDialog extends Dialog {
 				fileDialog.setText(EXECUTION_HISTORY_DIALOG);
 				String[] filterExt = { EXECUTION_TRACKING_LOG_FILE_EXTENTION };
 				fileDialog.setFilterExtensions(filterExt);
-				fileDialog.setFilterPath(viewExecutionHistoryHandler.getLogPath());
+				fileDialog.setFilterPath(ViewExecutionHistoryUtility.INSTANCE.getLogPath());
 				String path = fileDialog.open();
 				if (path == null) return;
 				trackingFileText.setText(path);
@@ -248,14 +248,14 @@ public class ViewExecutionHistoryDataDialog extends Dialog {
 			ExecutionStatus executionStatus = null;
 			if(getTrackingFilePath().trim().isEmpty()){
 				if(!StringUtils.isEmpty(getSelectedUniqueJobId())){
-					executionStatus= viewExecutionHistoryHandler.readJsonLogFile(getSelectedUniqueJobId(), JobManager.INSTANCE.isLocalMode(), 
-							viewExecutionHistoryHandler.getLogPath());
+					executionStatus= ViewExecutionHistoryUtility.INSTANCE.readJsonLogFile(getSelectedUniqueJobId(), JobManager.INSTANCE.isLocalMode(), 
+							ViewExecutionHistoryUtility.INSTANCE.getLogPath());
 				}else{
 					super.okPressed();
 				}
 			}
 			else{
-				executionStatus= viewExecutionHistoryHandler.readBrowsedJsonLogFile(getTrackingFilePath().trim());
+				executionStatus= ViewExecutionHistoryUtility.INSTANCE.readBrowsedJsonLogFile(getTrackingFilePath().trim());
 			}
 			/*Return from this method if replay not working for old history, so that the view history window will not be closed	and 
 			 * proper error message will be displayed over the view history window.*/
@@ -267,10 +267,10 @@ public class ViewExecutionHistoryDataDialog extends Dialog {
 			}else
 				return;
 		} catch (FileNotFoundException e) {
-			viewExecutionHistoryHandler.getMessageDialog(Messages.FILE_DOES_NOT_EXIST);
+			ViewExecutionHistoryUtility.INSTANCE.getMessageDialog(Messages.FILE_DOES_NOT_EXIST);
 			return;
 		}catch(Exception e){
-			viewExecutionHistoryHandler.getMessageDialog(Messages.INVALID_FILE_FORMAT+" " + getUniqueJobId());
+			ViewExecutionHistoryUtility.INSTANCE.getMessageDialog(Messages.INVALID_FILE_FORMAT+" " + getUniqueJobId());
 			return;
 		}
 		super.okPressed();

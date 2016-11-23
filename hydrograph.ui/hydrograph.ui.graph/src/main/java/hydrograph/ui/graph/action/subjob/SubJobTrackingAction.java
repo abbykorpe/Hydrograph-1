@@ -37,6 +37,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.ExecutionTrackingConsoleUtils;
 import hydrograph.ui.graph.handler.ViewExecutionHistoryHandler;
 import hydrograph.ui.graph.job.Job;
@@ -131,7 +132,7 @@ public class SubJobTrackingAction extends SelectionAction{
 						ExecutionStatus executionStatus;
 						try {
 							ViewExecutionHistoryHandler viewExecutionHistoryHandler=new ViewExecutionHistoryHandler();
-							executionStatus = viewExecutionHistoryHandler.readJsonLogFile(container.getUniqueJobId(), JobManager.INSTANCE.isLocalMode(), ExecutionTrackingConsoleUtils.INSTANCE.getLogPath());
+							executionStatus = ViewExecutionHistoryUtility.INSTANCE.readJsonLogFile(container.getUniqueJobId(), JobManager.INSTANCE.isLocalMode(), ExecutionTrackingConsoleUtils.INSTANCE.getLogPath());
 							viewExecutionHistoryHandler.replayExecutionTracking(executionStatus);
 						} catch (FileNotFoundException e) {
 							logger.error("Execution tracking logger file not found:"+e);
