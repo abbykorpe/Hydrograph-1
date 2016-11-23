@@ -124,10 +124,7 @@ public class ELTLookupMapWidget extends AbstractWidget {
 			 lookupMapProperty.setSource_Field(socketId);
 			 lookupMapProperty.setOutput_Field(filterProperties2.getPropertyname());
 			 prependSocketIdForDuplicateOutputField(socketId, lookupMapProperty);
-			 if(!lookupMappingGrid.getLookupMapProperties().contains(lookupMapProperty))
-			 {
-				 lookupMappingGrid.getLookupMapProperties().add(lookupMapProperty);
-			 }
+			 lookupMappingGrid.getLookupMapProperties().add(lookupMapProperty);
 			 }
 			}
 			

@@ -125,10 +125,7 @@ public class ELTJoinMapWidget extends AbstractWidget {
 			 lookupMapProperty.setSource_Field(socketId);
 			 lookupMapProperty.setOutput_Field(filterProperties2.getPropertyname());
 			 prependSocketIdForDuplicateOutputField(socketId, lookupMapProperty);
-			 if(!joinMappingGrid.getLookupMapProperties().contains(lookupMapProperty))
-			 {
-				 joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
-			 }
+			 joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
 			 }
 			}
 			
