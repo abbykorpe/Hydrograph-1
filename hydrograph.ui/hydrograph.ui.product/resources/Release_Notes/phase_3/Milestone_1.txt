@@ -44,6 +44,8 @@ connection(link) on transform component.
 28. <1451> - [Pooja Yadav] - Subjob Component: Job is Getting Failed, When Clone Component is Present Inside Subjob and Watch Point is Added to both the Links coming from Subjob.
 29.<1436> - [Anshul Shivhare] -	Join Component: Validation is Not Present in Join Mapping Window
 30.<1430> - [Anshul Shivhare] - Output Component: Name of the Output Component is Getting Moved Upward After clicking on Pull Schema button.
+31. ..... - [Sonia Raheja] - Subjob is not getting refreshed if user replace the subjob file.
+32. ..... - [Sonia Raheja] - Tracking logs of 1st job is also getting displayed along with current job.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
