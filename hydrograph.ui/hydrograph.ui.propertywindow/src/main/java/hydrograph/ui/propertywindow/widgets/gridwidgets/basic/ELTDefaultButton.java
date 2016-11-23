@@ -72,7 +72,7 @@ public class ELTDefaultButton extends AbstractELTWidget{
 	 * @return the ELT default button
 	 */
 	public ELTDefaultButton buttonWidth(int buttonWidth){
-		this.buttonWidth = buttonWidth;
+			this.buttonWidth = buttonWidth;
 		return this;
 	}
 	

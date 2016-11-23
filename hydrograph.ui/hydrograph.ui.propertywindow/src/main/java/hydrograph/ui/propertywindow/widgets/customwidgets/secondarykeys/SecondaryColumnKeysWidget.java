@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
@@ -102,6 +103,9 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Edit");
+		if(OSValidator.isMac()){
+			eltDefaultButton.buttonWidth(120);
+		}
 
 		runtimeComposite.attachWidget(eltDefaultButton);
 
