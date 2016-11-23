@@ -114,22 +114,49 @@ public class ELTJoinMapWidget extends AbstractWidget {
 	
 	private void addPassThroughFields() {
 		List<List<FilterProperties>> sourceFieldsListofList=joinMappingGrid.getLookupInputProperties();
-		for(List<FilterProperties> filterProperties:sourceFieldsListofList)
+		for(int i=0;i<sourceFieldsListofList.size();i++)
 		{
-			for(FilterProperties filterProperties2:filterProperties)
+			for(FilterProperties filterProperties2:sourceFieldsListofList.get(i))
 			{
-			 String socketId="in"+sourceFieldsListofList.indexOf(filterProperties)+"."+filterProperties2.getPropertyname();
+			 String socketId="in"+i+"."+filterProperties2.getPropertyname();
+			 if(!isSourceFieldAlreadyPresent(socketId))
+			 {	
 			 LookupMapProperty lookupMapProperty=new LookupMapProperty();
 			 lookupMapProperty.setSource_Field(socketId);
 			 lookupMapProperty.setOutput_Field(filterProperties2.getPropertyname());
+			 prependSocketIdForDuplicateOutputField(socketId, lookupMapProperty);
 			 if(!joinMappingGrid.getLookupMapProperties().contains(lookupMapProperty))
 			 {
 				 joinMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+			 }
 			 }
 			}
 			
 		}
 		joinMappingGrid.setAddPassThroughFields(false);
+	}
+	private void prependSocketIdForDuplicateOutputField(String socketId, LookupMapProperty lookupMapProperty) {
+		for(LookupMapProperty lookupMapProperty2:joinMappingGrid.getLookupMapProperties())
+		 {
+			 if(lookupMapProperty2.getOutput_Field().contains(lookupMapProperty.getOutput_Field()))
+			 {
+				 lookupMapProperty.setOutput_Field(socketId.replace(".","_"));
+				 break;
+			 }	 
+		 }
+	}
+
+	private boolean isSourceFieldAlreadyPresent(String socketId) {
+		boolean isSourceFieldDuplicate=false;
+		 for(LookupMapProperty lookupMapProperty2:joinMappingGrid.getLookupMapProperties())
+		 {
+			 if(lookupMapProperty2.getSource_Field().contains(socketId))
+			 {
+				 isSourceFieldDuplicate=true;
+				 break;
+			 }	 
+		 }
+		return isSourceFieldDuplicate;
 	}
 
 	private void propagateInternalSchema() {

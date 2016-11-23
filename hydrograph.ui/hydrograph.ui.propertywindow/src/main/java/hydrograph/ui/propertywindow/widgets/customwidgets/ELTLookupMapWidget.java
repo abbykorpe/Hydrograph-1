@@ -19,7 +19,6 @@ import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.Schema;
@@ -114,22 +113,48 @@ public class ELTLookupMapWidget extends AbstractWidget {
 	}
 	private void addPassThroughFields() {
 		List<List<FilterProperties>> sourceFieldsListofList=lookupMappingGrid.getLookupInputProperties();
-		for(List<FilterProperties> filterProperties:sourceFieldsListofList)
+		for(int i=0;i<sourceFieldsListofList.size();i++)
 		{
-			for(FilterProperties filterProperties2:filterProperties)
+			for(FilterProperties filterProperties2:sourceFieldsListofList.get(i))
 			{
-			 String socketId="in"+sourceFieldsListofList.indexOf(filterProperties)+"."+filterProperties2.getPropertyname();
+			 String socketId="in"+i+"."+filterProperties2.getPropertyname();
+			 if(!isSourceFieldAlreadyPresent(socketId))
+			 {
 			 LookupMapProperty lookupMapProperty=new LookupMapProperty();
 			 lookupMapProperty.setSource_Field(socketId);
 			 lookupMapProperty.setOutput_Field(filterProperties2.getPropertyname());
+			 prependSocketIdForDuplicateOutputField(socketId, lookupMapProperty);
 			 if(!lookupMappingGrid.getLookupMapProperties().contains(lookupMapProperty))
 			 {
 				 lookupMappingGrid.getLookupMapProperties().add(lookupMapProperty);
+			 }
 			 }
 			}
 			
 		}
 		lookupMappingGrid.setAddPassThroughFields(false);
+	}
+	private void prependSocketIdForDuplicateOutputField(String socketId, LookupMapProperty lookupMapProperty) {
+		for(LookupMapProperty lookupMapProperty2:lookupMappingGrid.getLookupMapProperties())
+		 {
+			 if(lookupMapProperty2.getOutput_Field().contains(lookupMapProperty.getOutput_Field()))
+			 {
+				 lookupMapProperty.setOutput_Field(socketId.replace(".","_"));
+				 break;
+			 }	 
+		 }
+	}
+	private boolean isSourceFieldAlreadyPresent(String socketId) {
+		boolean isSourceFieldDuplicate=false;
+		 for(LookupMapProperty lookupMapProperty2:lookupMappingGrid.getLookupMapProperties())
+		 {
+			 if(lookupMapProperty2.getSource_Field().contains(socketId))
+			 {
+				 isSourceFieldDuplicate=true;
+				 break;
+			 }	 
+		 }
+		return isSourceFieldDuplicate;
 	}
 	private Schema propagateInternalSchema() {
 		if(lookupMappingGrid ==null){
