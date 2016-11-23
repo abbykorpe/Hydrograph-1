@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -53,6 +54,7 @@ import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
@@ -222,9 +224,14 @@ public class JobManager {
 			return;
 		}
 		
-		//ExecutionTrackingFileLogger.INSTANCE.removeLastExecutionStatus(runningJobsMap.get(canvasId).getUniqueJobId());
-		ExecutionTrackingFileLogger.INSTANCE.getExecutionStatusList().clear();
-		
+		List<ExecutionStatus> executionStatusListOfCurrentJob = new ArrayList<>();
+		List<ExecutionStatus> executionStatusList = ExecutionTrackingFileLogger.INSTANCE.getExecutionStatusList();
+		for (ExecutionStatus executionStatus : executionStatusList) {
+			if (executionStatus.getJobId().equalsIgnoreCase(runningJobsMap.get(canvasId).getUniqueJobId())) {
+				 executionStatusListOfCurrentJob.add(executionStatus);
+			}
+		}
+		ExecutionTrackingFileLogger.INSTANCE.getExecutionStatusList().removeAll(executionStatusListOfCurrentJob);
 		runningJobsMap.remove(canvasId);		
 		logger.debug("Removed job " + canvasId + " from jobmap");
 	}

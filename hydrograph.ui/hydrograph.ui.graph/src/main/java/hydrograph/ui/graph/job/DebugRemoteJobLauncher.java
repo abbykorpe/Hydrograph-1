@@ -268,6 +268,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		refreshProject(gefCanvas);
 		joblogger.logJobEndInfo();
 		joblogger.close();
+		JobManager.INSTANCE.removeJob(job.getRemoteJobProcessID());
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
 		}
