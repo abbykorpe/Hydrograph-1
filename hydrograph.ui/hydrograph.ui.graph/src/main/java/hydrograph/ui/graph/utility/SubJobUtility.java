@@ -562,8 +562,8 @@ public class SubJobUtility {
 							setFlagForContinuousSchemaPropogation(subjobComponent);
 							break;
 						}
-						
 					}
+					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 				}
 				if(!nextComponent.getSourceConnections().isEmpty())
 				{
@@ -593,7 +593,7 @@ public class SubJobUtility {
 				   }
 				}
 				else
-				break;	
+				break;
 			}
 			if(StringUtils.equalsIgnoreCase(nextComponent.getCategory(),Constants.TRANSFORM))
 			{
