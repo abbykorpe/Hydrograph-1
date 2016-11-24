@@ -15,8 +15,10 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
@@ -26,7 +28,6 @@ import org.eclipse.swt.widgets.Button;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
@@ -39,7 +40,6 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -95,7 +95,7 @@ public class PropogateWidget extends AbstractWidget{
 						)	
 		  {	  
 		for (Link link : getComponent().getTargetConnections()) {
-		Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+		 Schema previousComponentSchema=getSchemaFromPreviousComponentSchema(link);
 		if(previousComponentSchema!=null)
 		getSchemaForInternalPropagation().getGridRow().addAll(SchemaSyncUtility.INSTANCE.
 				convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
@@ -125,9 +125,7 @@ public class PropogateWidget extends AbstractWidget{
 				
 				boolean isUnionAllInputSchemaSync=true;
 				for (Link link : getComponent().getTargetConnections()) {
-					Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
-					if(previousComponentSchema!=null&&!previousComponentSchema.getGridRow().isEmpty())	
-				
+					Schema previousComponentSchema=getSchemaFromPreviousComponentSchema(link);
 					if (previousComponentSchema != null){
 					if(StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.STRAIGHTPULL)
 							  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.FILTER)	
@@ -148,9 +146,7 @@ public class PropogateWidget extends AbstractWidget{
 							getComponent().getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
 								
 						}
-					if(previousComponentSchema!=null)
-					{
-						
+						 
 						 getSchemaForInternalPropagation().getGridRow().addAll(SchemaSyncUtility.INSTANCE.
 								convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
 						 
@@ -170,7 +166,7 @@ public class PropogateWidget extends AbstractWidget{
 						 getComponent().getProperties().put(Constants.SCHEMA_PROPERTY_NAME,getSchemaForInternalPropagation() );
 						 if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
 						 break;	
-				    }
+				    
 				    ELTSchemaGridWidget eltSchemaGridWidget=null;
 				    for(AbstractWidget abstractWidget:widgets)
 					{
@@ -191,6 +187,7 @@ public class PropogateWidget extends AbstractWidget{
 					{
 						if(component instanceof InputSubjobComponent)
 						{
+							SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(component, getComponent());
 							getComponent().setContinuousSchemaPropogationAllow(true);
 							SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(component);
 							break;
@@ -268,11 +265,26 @@ public class PropogateWidget extends AbstractWidget{
 				if(isUnionAllInputSchemaSync)
 				SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent());
 			}
-
-			
-		});
+           });
 	}
     
+	private Schema getSchemaFromPreviousComponentSchema(Link link) {
+		Schema previousComponentSchema=null;
+		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName()))
+		{
+			Map<String,Schema> inputSchemaMap=(HashMap<String,Schema>)link.getSource().getProperties().
+					get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);
+			if(inputSchemaMap!=null)
+			previousComponentSchema=inputSchemaMap.get(Constants.INPUT_SOCKET_TYPE+getComponent().
+					getTargetConnections().indexOf(link));
+		}	
+		else
+		{
+			 previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+		}
+		return previousComponentSchema;
+	}
+	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		return null;

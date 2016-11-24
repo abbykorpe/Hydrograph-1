@@ -92,7 +92,7 @@ public class PropagateDataAction extends SelectionAction {
 			{	
 				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName()))
 				{
-					if(!new SubJobUtility().isUnionAllInputSchemaInSync(component))
+					if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(component))
 					{	
 						component.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
 					((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
@@ -131,6 +131,7 @@ public class PropagateDataAction extends SelectionAction {
 			{
 				if(componentIterator instanceof InputSubjobComponent)
 				{
+					SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(componentIterator,component);
 					SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(componentIterator);
 					break;
 				}
@@ -144,5 +145,4 @@ public class PropagateDataAction extends SelectionAction {
 		new SubJobUtility().setFlagForContinuousSchemaPropogation(component);
 		}
 	}
-	
 }

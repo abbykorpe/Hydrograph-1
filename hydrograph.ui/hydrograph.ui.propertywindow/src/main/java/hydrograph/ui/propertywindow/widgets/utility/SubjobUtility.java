@@ -1,8 +1,11 @@
 package hydrograph.ui.propertywindow.widgets.utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 
 import hydrograph.ui.common.util.Constants;
@@ -54,7 +57,9 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 					schema.setGridRow(gridRows);
 				}	
 				schema.getGridRow().clear();
+				if(outputSchema!=null)
 				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+				if(!(nextComponent instanceof SubjobComponent))
 				nextComponent.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
 				
 				nextComponent.setContinuousSchemaPropogationAllow(true);
@@ -68,7 +73,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 						Component subjobComponent=(Component)object;
 						if(subjobComponent instanceof InputSubjobComponent)
 						{
-							
+							initializeSchemaMapForInputSubJobComponent(subjobComponent,nextComponent);
 							setFlagForContinuousSchemaPropogation(subjobComponent);
 							break;
 						}
@@ -194,5 +199,21 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 		}
 		return containsTransformOrUnionAllComponent;
 	}
+	/**
+	 * 
+	 * initialize SchemaMap for inputSubjobComponent.
+	 * @param inputSubJobComponent
+	 * @param subjobComponent
+	 */
+	public void initializeSchemaMapForInputSubJobComponent(Component inputSubJobComponent,Component subjobComponent) {
+		Map<String,Schema> inputSubJobComponentHashMap=new HashMap<>();
+		for(int i=0;i<subjobComponent.getTargetConnections().size();i++)
+		{
+			inputSubJobComponentHashMap.put(Constants.INPUT_SOCKET_TYPE+i,((Schema)subjobComponent.getTargetConnections()
+					.get(i).getSource().getProperties().get(Constants.SCHEMA)));
+		}	
+		inputSubJobComponent.getProperties().put(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT, inputSubJobComponentHashMap);
+	}
+	
 	
 }
