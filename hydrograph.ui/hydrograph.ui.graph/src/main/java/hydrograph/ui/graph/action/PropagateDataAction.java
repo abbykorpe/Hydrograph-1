@@ -92,7 +92,7 @@ public class PropagateDataAction extends SelectionAction {
 			{	
 				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName()))
 				{
-					if(!new SubJobUtility().isUnionAllInputSchemaInSync(component))
+					if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(component))
 					{	
 						component.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
 					((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
