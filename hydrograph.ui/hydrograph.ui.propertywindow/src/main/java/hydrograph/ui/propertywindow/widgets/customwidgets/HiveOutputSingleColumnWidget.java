@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -78,12 +77,7 @@ public class HiveOutputSingleColumnWidget extends AbstractWidget {
 		setPropertyHelpWidget((Control) defaultLable.getSWTWidgetControl());
 		
 		
-		AbstractELTWidget defaultButton;
-		if(OSValidator.isMac()){
-			defaultButton = new ELTDefaultButton(Constants.EDIT).buttonWidth(120);
-		}else{
-			defaultButton = new ELTDefaultButton(Constants.EDIT);
-		}
+		AbstractELTWidget defaultButton = new ELTDefaultButton(Constants.EDIT);
 		defaultSubgroupComposite.attachWidget(defaultButton);
 		Button button = (Button) defaultButton.getSWTWidgetControl();
 		button.addSelectionListener(new SelectionAdapter() {

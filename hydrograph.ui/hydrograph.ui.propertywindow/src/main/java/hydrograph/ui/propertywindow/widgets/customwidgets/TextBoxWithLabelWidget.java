@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -114,14 +113,9 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		AbstractELTWidget label = new ELTDefaultLable(textBoxConfig.getName() + " ");
 		lableAndTextBox.attachWidget(label);
 		setPropertyHelpWidget((Control) label.getSWTWidgetControl());
-		AbstractELTWidget textBoxWidget;
-		if(OSValidator.isMac() && textBoxConfig.getName().equals("Sequence Field")){
-			textBoxWidget = new ELTDefaultTextBox().
-					grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace()).textBoxWidth(textBoxConfig.getwidgetWidth()-34);
-		}else{
-			textBoxWidget = new ELTDefaultTextBox().
+		
+		AbstractELTWidget textBoxWidget = new ELTDefaultTextBox().
 				grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace()).textBoxWidth(textBoxConfig.getwidgetWidth());
-		}
 		lableAndTextBox.attachWidget(textBoxWidget);
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();

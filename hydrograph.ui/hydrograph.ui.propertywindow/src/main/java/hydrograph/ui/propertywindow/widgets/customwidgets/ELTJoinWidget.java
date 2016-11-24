@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -102,12 +101,7 @@ public class ELTJoinWidget extends AbstractWidget {
 
 		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 		
-		final AbstractELTWidget eltDefaultButton;
-		if(OSValidator.isMac()){
-			eltDefaultButton = new ELTDefaultButton("Edit").buttonWidth(120);
-		}else{
-			eltDefaultButton = new ELTDefaultButton("Edit");
-		}
+		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
