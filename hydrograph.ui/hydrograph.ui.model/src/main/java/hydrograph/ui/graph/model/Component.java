@@ -1309,9 +1309,10 @@ public abstract class Component extends Model {
 		component.setCategory(getCategory());
 		component.setParent(getParent());
 		component.setProperties(clonedHashMap);
-		component.setPropertyValue("name", getPrefix());
 		component.setSize(getSize());
 		component.setLocation(getLocation());
+		component.setComponentLabel(new ComponentLabel((String) clonedHashMap.get(Constants.NAME)));
+		component.setComponentId(this.getComponentId());
 		HashMap<String, Port> clonedPorts=new HashMap<String, Port>();
 		
 	    for (Map.Entry<String, Port> entry : ports.entrySet()) {

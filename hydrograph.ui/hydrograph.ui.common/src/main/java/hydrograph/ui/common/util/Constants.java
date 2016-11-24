@@ -279,4 +279,13 @@ public class Constants {
 	public static final String EXTERNAL_TABLE_PATH_WIDGET_NAME="externalTablePath";
 	public static final String HOST = "host";
 
+	//Workbench - ToolBar ,CoolBar, MenuBar, MenuItems, ToolItems IDs
+	
+	// ID of tool-bar having stop and run tool-items which is defined in Graph plugin's plugin.xml 
+	public static final String RUN_STOP_BUTTON_TOOLBAR_ID="hydrograph.ui.graph.toolbar2";
+	public static final String RUN_BUITTON_TOOLITEM_ID="hydrograph.ui.graph.command.runjob";
+	public static final String STOP_BUITTON_TOOLITEM_ID="hydrograph.ui.graph.stopjob";
+	public static final String FIRST_TOOLBAR_ID = "hydrograph.ui.graph.toolbar1";
+	public static final String REMOVE_WATCH_POINTS_TOOLITEM_ID = "hydrograph.ui.graph.command.removedebug";
+	
 }

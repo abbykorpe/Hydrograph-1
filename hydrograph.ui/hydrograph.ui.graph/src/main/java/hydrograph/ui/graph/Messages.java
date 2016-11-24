@@ -111,6 +111,9 @@ public class Messages extends NLS {
 	public static String REPLAY_EXTRA_COMPONENTS;
 	public static String REPLAY_MISSING_COMPONENTS;
 	public static String JOB_WIZARD_ID;
+
+	public static String WATCH_POINT_REMOVED_SUCCESSFULLY;
+	public static String NO_WATCH_POINT_AVAILABLE;
 	
 	static {
 		// initialize resource bundle

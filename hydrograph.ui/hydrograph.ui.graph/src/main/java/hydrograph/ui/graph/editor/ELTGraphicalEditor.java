@@ -26,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -168,7 +167,6 @@ import hydrograph.ui.graph.command.CommentBoxSetConstraintCommand;
 import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
 import hydrograph.ui.graph.controller.CommentBoxEditPart;
 import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.debugconverter.DebugHelper;
 import hydrograph.ui.graph.editorfactory.GenrateContainerData;
 import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
@@ -178,7 +176,6 @@ import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.handler.DebugHandler;
 import hydrograph.ui.graph.handler.JobHandler;
-import hydrograph.ui.graph.handler.RemoveDebugHandler;
 import hydrograph.ui.graph.handler.RunJobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.job.Job;
@@ -442,7 +439,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		boolean isWatch = false;
+		
 		IWorkbenchPart partView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();		
 		IHydrographConsole currentConsoleView = (IHydrographConsole) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().findView(CONSOLE_VIEW_ID);
@@ -450,7 +447,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		if (partView instanceof ELTGraphicalEditor) {
 			
 			if (getActiveProject() != null) {
-				isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
+				
 				ConsolePlugin plugin = ConsolePlugin.getDefault();
 				IConsoleManager consoleManager = plugin.getConsoleManager();
 
@@ -488,7 +485,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						enableRunJob(true);
 					}else{
 					if(JobStatus.KILLED.equals(job.getJobStatus()) || JobStatus.SUCCESS.equals(job.getJobStatus()) 
-							|| JobStatus.PENDING.equals(job.getJobStatus())){
+							){
 						enableRunJob(true);
 					}else{
 						if(job.isRemoteMode()){
@@ -509,14 +506,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						logger.debug("enabling run job button");
 						enableRunJob(true);
 					}
-					
-					if(isWatch){
-						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
-					}else{
-						((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
-					}
-					
-					
 				}
 			}
 

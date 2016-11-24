@@ -61,8 +61,8 @@ import org.eclipse.core.resources.IFile;
 		 * Generate basic properties that are common in all components.
 		 */
 		public void prepareUIXML() {
-			componentId = typeBaseComponent.getId();
-			componentName=typeBaseComponent.getName();
+			componentId = StringUtils.trim(typeBaseComponent.getId());
+			componentName=StringUtils.trim(typeBaseComponent.getName());
 			if(StringUtils.isBlank(componentName)){
 				componentName=componentId;
 			}

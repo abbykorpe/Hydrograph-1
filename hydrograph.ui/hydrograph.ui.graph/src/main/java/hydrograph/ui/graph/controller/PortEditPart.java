@@ -14,16 +14,6 @@
  
 package hydrograph.ui.graph.controller;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.figure.ComponentFigure;
-import hydrograph.ui.graph.figure.ELTColorConstants;
-import hydrograph.ui.graph.figure.PortFigure;
-import hydrograph.ui.graph.handler.RemoveDebugHandler;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Port;
-import hydrograph.ui.graph.model.PortAlignmentEnum;
-
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
@@ -34,6 +24,14 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.graphics.Color;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.figure.ComponentFigure;
+import hydrograph.ui.graph.figure.ELTColorConstants;
+import hydrograph.ui.graph.figure.PortFigure;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Port;
+import hydrograph.ui.graph.model.PortAlignmentEnum;
 
 /**
  * The Class PortEditPart.
@@ -157,9 +155,6 @@ public class PortEditPart extends AbstractGraphicalEditPart {
 				getCastedModel().setWatched(true);
 				getPortFigure().setWatched(true);
 				getPortFigure().repaint();
-			}
-			if((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler() != null){
-				((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
 			}
 		}
 		

@@ -14,13 +14,6 @@
  
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.graph.model.Component;
-
 import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -31,52 +24,50 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.utility.MessageBox;
+
 
 public class RemoveDebugHandler extends AbstractHandler{
 
 	public RemoveDebugHandler() {
-		setBaseEnabled(false);
 		RunStopButtonCommunicator.Removewatcher.setHandler(this);
-	}
-	
-	private DefaultGEFCanvas getComponentCanvas() {
-		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof DefaultGEFCanvas)
-			return (DefaultGEFCanvas) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.getActiveEditor();
-		else
-			return null;
 	}
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-
-		ELTGraphicalEditor editor=(ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		GraphicalViewer	graphicalViewer =(GraphicalViewer) ((GraphicalEditor)editor).getAdapter(GraphicalViewer.class);
-		for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator.hasNext();){
-			EditPart editPart = (EditPart) iterator.next();
-			if(editPart instanceof ComponentEditPart){
-				Component comp = ((ComponentEditPart)editPart).getCastedModel();
-				comp.clearWatchers();
-				setRemoveWatcherEnabled(false);
-			} else if(editPart instanceof PortEditPart){
-				((PortEditPart)editPart).getPortFigure().removeWatcherColor();
-				((PortEditPart)editPart).getPortFigure().setWatched(false);
-				((PortEditPart)editPart).getCastedModel().setWatched(false);
+		if (DebugHelper.INSTANCE.hasMoreWatchPoints()) {
+			ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().getActiveEditor();
+			GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor)
+					.getAdapter(GraphicalViewer.class);
+			for (Iterator<EditPart> iterator = graphicalViewer.getEditPartRegistry().values().iterator(); iterator
+					.hasNext();) {
+				EditPart editPart = (EditPart) iterator.next();
+				if (editPart instanceof ComponentEditPart) {
+					Component comp = ((ComponentEditPart) editPart).getCastedModel();
+					comp.clearWatchers();
+				} else if (editPart instanceof PortEditPart) {
+					((PortEditPart) editPart).getPortFigure().removeWatcherColor();
+					((PortEditPart) editPart).getPortFigure().setWatched(false);
+					((PortEditPart) editPart).getCastedModel().setWatched(false);
+				}
 			}
+			showMessage(Messages.WATCH_POINT_REMOVED_SUCCESSFULLY);
+		} else {
+			showMessage(Messages.NO_WATCH_POINT_AVAILABLE);
 		}
-		
 		return null;
-		
+
 	}
 
-	/**
-	 * 
-	 * Enable/Disable removeWatcher button in toolBar
-	 * 
-	 * @param enable
-	 */
-	public void setRemoveWatcherEnabled(boolean enable) {
-		setBaseEnabled(enable);
+	private void showMessage(String message) {
+		MessageBox.INSTANCE.showMessage("Information", message);
 	}
-	
 }
