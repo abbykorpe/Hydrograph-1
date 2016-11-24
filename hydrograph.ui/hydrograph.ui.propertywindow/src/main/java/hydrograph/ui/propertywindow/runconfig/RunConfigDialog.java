@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.propertywindow.runconfig;
 
 import java.io.ByteArrayInputStream;
@@ -38,6 +51,14 @@ import org.eclipse.ui.PlatformUI;
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
 
+/**
+ * 
+ * Run configuration dialog allows user to change run configurations 
+ * before running the job.  
+ * 
+ * @author bitwise
+ *
+ */
 public class RunConfigDialog extends Dialog {
 	private Text txtBasePath;
 	private Text txtEdgeNode;
@@ -65,7 +86,7 @@ public class RunConfigDialog extends Dialog {
 
 	private final String RUN_UTILITY = "runUtility";
 	private final String REMOTE_DIRECTORY = "remoteDirectory";
-	private final String Base_PATH = "basePath";
+	private final String BASE_PATH = "basePath";
 	private final String VIEW_DATA_CHECK = "viewDataCheck";
 
 	
@@ -232,7 +253,7 @@ public class RunConfigDialog extends Dialog {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 		
-		loadbuildProperties();
+		loadBuildProperties();
 	}
 
 	/**
@@ -283,7 +304,7 @@ public class RunConfigDialog extends Dialog {
 	};
 	
 	
-	private void loadbuildProperties() {
+	private void loadBuildProperties() {
 		String buildPropFilePath = buildPropFilePath();
 		IPath bldPropPath = new Path(buildPropFilePath);
 		IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFile(bldPropPath);
@@ -293,7 +314,7 @@ public class RunConfigDialog extends Dialog {
 
 		} catch (CoreException | IOException e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
-					"Exception occured while loading build properties from file -\n" + e.getMessage());
+					"Exception occurred while loading build properties from file -\n" + e.getMessage());
 		}
 
 		Enumeration<?> propertyNames = buildProps.propertyNames();
@@ -325,7 +346,7 @@ public class RunConfigDialog extends Dialog {
 		txtUserName.setText(getBuildProperty(USER_NAME));
 		txtRunUtility.setText(getBuildProperty(RUN_UTILITY));
 		txtProjectPath.setText(getBuildProperty(REMOTE_DIRECTORY));
-		txtBasePath.setText(getBuildProperty(Base_PATH));
+		txtBasePath.setText(getBuildProperty(BASE_PATH));
 		
 		if(StringUtils.equals(buildProps.getProperty(VIEW_DATA_CHECK), "true")){
 			viewDataCheckBox.setSelection(true);
@@ -341,27 +362,53 @@ public class RunConfigDialog extends Dialog {
 		}
 	}
 	
-	/*public static void main(String[] args) {
-		NewRunConfigDialog newRunConfigDialog = new NewRunConfigDialog(new Shell());
-		newRunConfigDialog.open();
-	}*/
-	
+	/**
+	 * 
+	 * Returns cluster password
+	 * 
+	 * @return cluster password
+	 */
 	public String getClusterPassword() {
 		return this.password;
 	}
 
+	/**
+	 * 
+	 * Returns user id
+	 * 
+	 * @return user id
+	 */
 	public String getUserId() {
 		return this.userId;
 	}
 
+	/**
+	 * 
+	 * Returns Host name / IP
+	 * 
+	 * @return Host name / IP
+	 */
 	public String getEdgeNodeIp() {
 		return this.edgeNodeText;
 	}
 
+	/**
+	 * 
+	 * Returns base path on remote server.
+	 * The base path is directory path on remote server which contains temporary debug files 
+	 * 
+	 * @return
+	 */
 	public String getBasePath() {
 		return this.basePath;
 	}
 	
+	/**
+	 * 
+	 * Get host name
+	 * 
+	 * @return
+	 */
 	public String getHost() {
 		if (remoteMode) {
 			return this.host;
@@ -371,14 +418,32 @@ public class RunConfigDialog extends Dialog {
 
 	}
 
+	/**
+	 * 
+	 * Return user name
+	 * 
+	 * @return
+	 */
 	public String getUsername() {
 		return this.username;
 	}
 
+	/**
+	 * 
+	 * Returns true if job is running on remote mode
+	 * 
+	 * @return
+	 */
 	public boolean isRemoteMode() {
 		return remoteMode;
 	}
 
+	/**
+	 * 
+	 * Returns true if job is running in debug mode
+	 * 
+	 * @return
+	 */
 	public boolean isDebug() {
 		return isDebug;
 	}
@@ -400,7 +465,7 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(USER_NAME, txtUserName.getText());
 			buildProps.put(RUN_UTILITY, txtRunUtility.getText());
 			buildProps.put(REMOTE_DIRECTORY, txtProjectPath.getText());
-			buildProps.put(Base_PATH, txtBasePath.getText());
+			buildProps.put(BASE_PATH, txtBasePath.getText());
 			buildProps.put(VIEW_DATA_CHECK, String.valueOf(viewDataCheckBox.getSelection()));
 			buildProps.store(out, null);
 
@@ -412,7 +477,7 @@ public class RunConfigDialog extends Dialog {
 
 		} catch (IOException | CoreException e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
-					"Exception occured while saving run configuration file -\n" + e.getMessage());
+					"Exception occurred while saving run configuration file -\n" + e.getMessage());
 		}
 		this.userId = txtUserName.getText();
 		this.password = txtPassword.getText();
@@ -458,7 +523,7 @@ public class RunConfigDialog extends Dialog {
 				note.addError("Edge Node value not specified");
 
 			if (StringUtils.isEmpty(txtUserName.getText()))
-				note.addError("User value not specified");
+				note.addError("Username not specified");
 
 			if (StringUtils.isEmpty(txtPassword.getText()))
 				note.addError("Password not specified");
@@ -473,7 +538,7 @@ public class RunConfigDialog extends Dialog {
 
 		return note;
 	}
-
+	
 	public boolean proceedToRunGraph() {
 		return runGraph;
 	}

@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Font;
  */
 public class HydroGroup extends Composite {
 	private CLabel hydroGroupLabel;
-	private Composite hydroGroupBoder;
+	private Composite hydroGroupBorder;
 	private Composite hydroGroupClientArea;
 
 	/**
@@ -47,22 +47,19 @@ public class HydroGroup extends Composite {
 		hydroGroupLabel.setText("Hydro Group Label");
 		hydroGroupLabel.setData("org.eclipse.e4.ui.css.id", "HydroGroupLabel");
 		
-		hydroGroupBoder = new Composite(this, SWT.NONE);
-		hydroGroupBoder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		GridLayout gl_hydroGroupBoder = new GridLayout(1, false);
-		gl_hydroGroupBoder.verticalSpacing = 1;
-		gl_hydroGroupBoder.marginWidth = 1;
-		gl_hydroGroupBoder.marginHeight = 1;
-		gl_hydroGroupBoder.horizontalSpacing = 1;
-		hydroGroupBoder.setLayout(gl_hydroGroupBoder);
-		//hydroGroupBoder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		hydroGroupBoder.setBackground(new Color(null, 0, 0, 0));
-		hydroGroupBoder.setData("org.eclipse.e4.ui.css.id", "HydroGroupBorder");
+		hydroGroupBorder = new Composite(this, SWT.NONE);
+		hydroGroupBorder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridLayout gl_hydroGroupBorder = new GridLayout(1, false);
+		gl_hydroGroupBorder.verticalSpacing = 1;
+		gl_hydroGroupBorder.marginWidth = 1;
+		gl_hydroGroupBorder.marginHeight = 1;
+		gl_hydroGroupBorder.horizontalSpacing = 1;
+		hydroGroupBorder.setLayout(gl_hydroGroupBorder);
+		hydroGroupBorder.setBackground(new Color(null, 0, 0, 0));
+		hydroGroupBorder.setData("org.eclipse.e4.ui.css.id", "HydroGroupBorder");
 		
-		hydroGroupClientArea = new Composite(hydroGroupBoder, SWT.NONE);
+		hydroGroupClientArea = new Composite(hydroGroupBorder, SWT.NONE);
 		hydroGroupClientArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		//hydroGroupClientArea.setLayout(new GridLayout(1, false));
-		//hydroGroupClientArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		hydroGroupClientArea.setData("org.eclipse.e4.ui.css.id", "HydroGroupClientArea");
 	}
 
@@ -83,11 +80,11 @@ public class HydroGroup extends Composite {
 		hydroGroupLabel.setImage(image);
 	}	
 	
-	public Color getHydroGroupBoderBackground() {
-		return hydroGroupBoder.getBackground();
+	public Color getHydroGroupBorderBackground() {
+		return hydroGroupBorder.getBackground();
 	}
-	public void setHydroGroupBoderBackground(Color background) {
-		hydroGroupBoder.setBackground(background);
+	public void setHydroGroupBorderBackground(Color background) {
+		hydroGroupBorder.setBackground(background);
 	}
 	
 	public Color getHydroGroupWidgetBackground() {
