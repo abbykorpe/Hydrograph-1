@@ -97,8 +97,8 @@ public class SingleColumnWidget extends AbstractWidget {
 	
 	private void addDataToGroup(Button button) {
 		Composite composite=(button.getParent());
-		Group grup=(Group) composite.getParent();
-		grup.setData(SINGLE_COLUMN_WIDGET_KEY,button);
+		//Group grup=(Group) composite.getParent();
+		composite.getParent().setData(SINGLE_COLUMN_WIDGET_KEY,button);
 	}
 
 	public void setEditButtonEnable(Boolean enable){

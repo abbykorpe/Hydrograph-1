@@ -33,7 +33,7 @@ public class ELTSchemaTableComposite extends AbstractELTContainerWidget{
 	@Override
 	public void createContainerWidget() {
 		composite = new Composite(inputContainer, SWT.NONE);
-		GridLayout layout = new GridLayout(4, false);
+		GridLayout layout = new GridLayout(1, false);
 		layout.marginTop = -4;
 		composite.setLayout(layout);
 		super.outputContainer = composite;	

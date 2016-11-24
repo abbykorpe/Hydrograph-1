@@ -12,6 +12,28 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.propertydialog;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
@@ -28,35 +50,13 @@ import hydrograph.ui.propertywindow.utils.WordUtils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroup;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTHydroSubGroup;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.forms.widgets.ColumnLayout;
-import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 
 
 /**
+ *
+ * Class to build property window for given component
  * 
  * @author Bitwise
  * Sep 07, 2015
@@ -73,7 +73,6 @@ public class PropertyDialogBuilder {
 	private Component component;
 	private AbstractWidget schemaWidget;
 	private Schema setSchemaForInternalPapogation;
-	private List<String> deletedInternalSchema;
 	private List<String> operationFieldList;
 	private PropertyDialog propertyDialog;
 	private Map<String, String> propertyHelpTextMap;
@@ -82,7 +81,7 @@ public class PropertyDialogBuilder {
 	private final String TYPE_PROPERTY_HELP="Basic Category";
 	private final String BASE_TYPE_PROPERTY_HELP="Abstraction";
 	
-    private TabFolder tabFolder;
+    private CTabFolder tabFolder;
 	/**
 	 * Instantiates a new property dialog builder.
 	 * 
@@ -119,8 +118,6 @@ public class PropertyDialogBuilder {
 		setSchemaForInternalPapogation.setGridRow(gridRows);
 		setSchemaForInternalPapogation.setExternalSchemaPath("");
 		operationFieldList = new LinkedList<>();
-		deletedInternalSchema= new ArrayList<>();
-
 	}
 	
 	/**
@@ -134,7 +131,7 @@ public class PropertyDialogBuilder {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TabItem tabItem=(TabItem) e.item;
+				CTabItem tabItem=(CTabItem) e.item;
 				if(tabItem!=null){
 					propertyDialog.setSelectedTab(tabItem.getText());
 				}
@@ -156,10 +153,10 @@ public class PropertyDialogBuilder {
 			}
 		});
 		
-        
+        tabFolder.setSelection(0);
 	}
 
-	private void addTabsInTabFolder(TabFolder tabFolder) {
+	private void addTabsInTabFolder(CTabFolder tabFolder) {
 	
 		for(String groupName : propertyTree.keySet()){
 			ScrolledCompositeHolder scrolledCompositeHolder = getPropertyWindowTab(groupName,tabFolder);
@@ -175,17 +172,15 @@ public class PropertyDialogBuilder {
 	private void addEmptyGroupWidget(
 			ScrolledCompositeHolder scrolledCompositeHolder) {
 		AbstractELTContainerWidget subGroupContainerx=addSubgroupToPropertyWindowTab("",scrolledCompositeHolder);
-		ColumnLayout subGroupLayout = getGroupWidgetLayout();
-		((Group)subGroupContainerx.getContainerControl()).setLayout(subGroupLayout);
-		((Group)subGroupContainerx.getContainerControl()).setVisible(false);
+		GridLayout subGroupLayout = getGroupWidgetLayout();
+		((Composite)subGroupContainerx.getContainerControl()).setLayout(subGroupLayout);
+		((Composite)subGroupContainerx.getContainerControl()).setVisible(false);
+		((Composite)subGroupContainerx.getContainerControl().getParent()).setVisible(false);
+		((Composite)subGroupContainerx.getContainerControl().getParent().getParent()).setData("org.eclipse.e4.ui.css.id", "EmptyHydroGroup");
 	}
 
-	private ColumnLayout getGroupWidgetLayout() {
-		ColumnLayout subGroupLayout = new ColumnLayout();
-		subGroupLayout.maxNumColumns = 1;
-		subGroupLayout.bottomMargin = 0;
-		subGroupLayout.topMargin = 0;
-		subGroupLayout.rightMargin = 0;
+	private GridLayout getGroupWidgetLayout() {
+		GridLayout subGroupLayout = new GridLayout(1,false);
 		return subGroupLayout;
 	}
 
@@ -230,7 +225,7 @@ public class PropertyDialogBuilder {
 		}
 		
 		if (isError) {
-			for (TabItem item : tabFolder.getItems()) {
+			for (CTabItem item : tabFolder.getItems()) {
 				if (StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()), subgroupTree
 						.get(subgroupName).get(0).getPropertyGroup())) {
 					item.setImage(new Image(null,
@@ -294,21 +289,23 @@ public class PropertyDialogBuilder {
 	 * 
 	 * @return the tab folder
 	 */
-	public TabFolder addTabFolderToPropertyWindow(){
-		TabFolder tabFolder = new TabFolder(container, SWT.NONE);
-		final ColumnLayoutData cld_tabFolder = new ColumnLayoutData();
-		cld_tabFolder.heightHint = 303;
-		tabFolder.setLayoutData(cld_tabFolder);
+	public CTabFolder addTabFolderToPropertyWindow(){
+		CTabFolder tabFolder = new CTabFolder(container, SWT.NONE);
 		
+		GridData tabFolderGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		
+		tabFolder.setLayoutData(tabFolderGridData);
+		tabFolder.addListener(SWT.FOCUSED,getMouseClickListener() );
+       
 		container.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				cld_tabFolder.heightHint = container.getBounds().height - 50;
+				tabFolderGridData.heightHint = container.getBounds().height - 500;
 			}
 		});
 		
 		tabFolder.addListener(SWT.FOCUSED,getMouseClickListener() );
-       
+		
 		return tabFolder;
 	}
 	private Listener getMouseClickListener() {
@@ -333,8 +330,8 @@ public class PropertyDialogBuilder {
 	 *            the tab folder
 	 * @return the property window tab
 	 */
-	public ScrolledCompositeHolder getPropertyWindowTab(String groupName,TabFolder tabFolder){	
-		TabItem tabItem = createTab(groupName, tabFolder);
+	public ScrolledCompositeHolder getPropertyWindowTab(String groupName,CTabFolder tabFolder){	
+		CTabItem tabItem = createTab(groupName, tabFolder);
 		
 		ScrolledComposite scrolledComposite = addScrolledCompositeToTab(tabFolder,tabItem);	
 		Composite composite = addCompositeToScrolledComposite(scrolledComposite);
@@ -343,18 +340,15 @@ public class PropertyDialogBuilder {
 
 	private Composite addCompositeToScrolledComposite(ScrolledComposite scrolledComposite) {
 		Composite composite = new Composite(scrolledComposite, SWT.NONE);
-		ColumnLayout cl_composite = new ColumnLayout();
-		cl_composite.maxNumColumns = 1;
-		cl_composite.bottomMargin = -10;
-		
-		composite.setLayout(cl_composite);
+		composite.setLayout(new GridLayout(1, false));
 		
 		return composite;
 	}
 
-	private ScrolledComposite addScrolledCompositeToTab(TabFolder tabFolder,TabItem tabItem) {
+	private ScrolledComposite addScrolledCompositeToTab(CTabFolder tabFolder,CTabItem tabItem) {
 		ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder,SWT.V_SCROLL);
 		tabItem.setControl(scrolledComposite);
+		//scrolledComposite.setLayout(new GridLayout(1, false));
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setAlwaysShowScrollBars(false);
@@ -362,8 +356,9 @@ public class PropertyDialogBuilder {
 		return scrolledComposite;
 	}
 
-	private TabItem createTab(String groupName, TabFolder tabFolder) {
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+	private CTabItem createTab(String groupName, CTabFolder tabFolder) {
+		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+		
 		if (OSValidator.isMac()) {
 			tabItem.setText(" "+WordUtils.capitalize(groupName.replace("_", " ").toLowerCase(), null));
 		}
@@ -402,11 +397,11 @@ public class PropertyDialogBuilder {
 	 * @return the abstract elt container widget
 	 */
 	public AbstractELTContainerWidget addSubgroupToPropertyWindowTab(String subgroupName,ScrolledCompositeHolder scrolledCompositeHolder){
-		AbstractELTContainerWidget eltDefaultSubgroup= new ELTDefaultSubgroup(scrolledCompositeHolder.getComposite()).subGroupName(WordUtils.capitalize(subgroupName.replace("_", " ").toLowerCase(), null));
+		AbstractELTContainerWidget eltDefaultSubgroup= new ELTHydroSubGroup(scrolledCompositeHolder.getComposite()).subGroupName(WordUtils.capitalize(subgroupName.replace("_", " ").toLowerCase(), null));
 		eltDefaultSubgroup.createContainerWidget();		
-		if (OSValidator.isMac()) {
+		/*if (OSValidator.isMac()) {
 			((Group)eltDefaultSubgroup.getContainerControl()).setFont(new Font(null, "Arial", 13,SWT.BOLD));
-		}
+		}*/
 			scrolledCompositeHolder.getScrolledComposite().setContent(scrolledCompositeHolder.getComposite());
 			scrolledCompositeHolder.getScrolledComposite().setMinSize(scrolledCompositeHolder.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			return eltDefaultSubgroup;

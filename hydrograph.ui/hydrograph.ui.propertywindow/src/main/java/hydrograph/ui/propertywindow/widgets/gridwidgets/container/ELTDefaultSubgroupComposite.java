@@ -17,12 +17,15 @@ package hydrograph.ui.propertywindow.widgets.gridwidgets.container;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-// TODO: Auto-generated Javadoc
 /**
+ * 
+ * 
+ * Default composite for widgets in property window
  * 
  * @author Bitwise
  * Sep 21, 2015
@@ -49,6 +52,7 @@ public class ELTDefaultSubgroupComposite extends AbstractELTContainerWidget{
 		GridLayout layout = new GridLayout(3, false);
 		layout.horizontalSpacing = 10;
 		subGroupComposite.setLayout(layout);
+		subGroupComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		super.outputContainer = subGroupComposite;		
 	}
 
@@ -60,6 +64,7 @@ public class ELTDefaultSubgroupComposite extends AbstractELTContainerWidget{
 	@Override
 	public ELTDefaultSubgroupComposite numberOfBasicWidgets(int subWidgetCount){
 		subGroupComposite.setLayout(new GridLayout(subWidgetCount, false));
+		subGroupComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		return this;
 	}
 

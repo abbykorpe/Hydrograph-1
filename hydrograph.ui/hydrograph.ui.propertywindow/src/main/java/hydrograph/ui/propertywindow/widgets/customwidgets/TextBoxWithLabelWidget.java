@@ -46,6 +46,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
@@ -115,13 +116,14 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		setPropertyHelpWidget((Control) label.getSWTWidgetControl());
 		
 		AbstractELTWidget textBoxWidget = new ELTDefaultTextBox().
-				grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace()).textBoxWidth(textBoxConfig.getwidgetWidth());
+				grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace());//.textBoxWidth(textBoxConfig.getwidgetWidth());
 		lableAndTextBox.attachWidget(textBoxWidget);
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
-		
+		GridData gridData = (GridData)textBox.getLayoutData();
+		gridData.widthHint = 80;
 		attachListeners(textBoxWidget);
 		
 		 /**

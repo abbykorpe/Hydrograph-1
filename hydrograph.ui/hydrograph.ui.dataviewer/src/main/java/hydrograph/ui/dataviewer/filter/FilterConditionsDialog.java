@@ -39,6 +39,8 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -58,8 +60,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -197,7 +197,7 @@ public class FilterConditionsDialog extends Dialog {
 		gdMainComposite.widthHint = 832;
 		mainComposite.setLayoutData(gdMainComposite);
 		
-		TabFolder tabFolder = new TabFolder(mainComposite, SWT.NONE);
+		CTabFolder tabFolder = new CTabFolder(mainComposite, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		createRemoteTabItem(tabFolder, remoteTableViewer);
@@ -207,7 +207,7 @@ public class FilterConditionsDialog extends Dialog {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                  TabItem tabItem = (TabItem) e.item;
+                  CTabItem tabItem = (CTabItem) e.item;
                   if (StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.ORIGINAL_DATASET)) {
                         parent.getShell().setDefaultButton(remoteSaveButton);
                   } else if(StringUtils.equalsIgnoreCase(tabItem.getText(),Messages.DOWNLOADED_DATASET)){
@@ -222,8 +222,8 @@ public class FilterConditionsDialog extends Dialog {
 	}
 
 
-	private void createRemoteTabItem(TabFolder tabFolder, TableViewer tableViewer) {
-		TabItem tbtmLocal = new TabItem(tabFolder, SWT.NONE);
+	private void createRemoteTabItem(CTabFolder tabFolder, TableViewer tableViewer) {
+		CTabItem tbtmLocal = new CTabItem(tabFolder, SWT.NONE);
 		tbtmLocal.setText(Messages.ORIGINAL_DATASET);
 		
 		Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -388,8 +388,8 @@ public class FilterConditionsDialog extends Dialog {
 		};
 	}
 
-	private void createLocalTabItem(TabFolder tabFolder, TableViewer tableViewer) {
-		TabItem tbtmLocal = new TabItem(tabFolder, SWT.NONE);
+	private void createLocalTabItem(CTabFolder tabFolder, TableViewer tableViewer) {
+		CTabItem tbtmLocal = new CTabItem(tabFolder, SWT.NONE);
 		tbtmLocal.setText(Messages.DOWNLOADED_DATASET);
 		
 		Composite composite = new Composite(tabFolder, SWT.NONE);

@@ -36,11 +36,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 
@@ -65,10 +65,10 @@ public abstract class AbstractWidget {
 	protected PropertyDialog propertyDialog;
 	private Control propertyHelpWidget;
 	private String propertyHelpText;
-	private TabFolder tabFolder; 
+	private CTabFolder tabFolder; 
 	private Property property; 
 	private SchemaData schemaData;
-	public TabFolder getTabFolder() {
+	public CTabFolder getTabFolder() {
 		return tabFolder;
 	}
 
@@ -80,7 +80,7 @@ public abstract class AbstractWidget {
 		this.property = property;
 	}
 
-	public void setTabFolder(TabFolder tabFolder) {
+	public void setTabFolder(CTabFolder tabFolder) {
 		this.tabFolder = tabFolder;
 	}
 
@@ -277,7 +277,7 @@ public abstract class AbstractWidget {
 	   {
 		   if(!isWidgetValid)
 		   {
-			   for(TabItem item:getTabFolder().getItems())
+			   for(CTabItem item:getTabFolder().getItems())
 				{
 					if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),getPropertyName()))
 							{
@@ -287,7 +287,7 @@ public abstract class AbstractWidget {
 		   }
 		   else
 		   {
-			   for(TabItem item:getTabFolder().getItems())
+			   for(CTabItem item:getTabFolder().getItems())
 				{
 					if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),getPropertyName()))
 							{
@@ -360,7 +360,7 @@ public abstract class AbstractWidget {
 	 	 }	
 	 	if(isErrorPresent)
 	 	{
-	 	for(TabItem item:getTabFolder().getItems())
+	 	for(CTabItem item:getTabFolder().getItems())
 		{
 			if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),property.getPropertyGroup()))
 					{
@@ -370,7 +370,7 @@ public abstract class AbstractWidget {
 	 	}
 	 	else
 	 	{
-	 		for(TabItem item:getTabFolder().getItems())
+	 		for(CTabItem item:getTabFolder().getItems())
 			{
 				if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),property.getPropertyGroup()))
 						{

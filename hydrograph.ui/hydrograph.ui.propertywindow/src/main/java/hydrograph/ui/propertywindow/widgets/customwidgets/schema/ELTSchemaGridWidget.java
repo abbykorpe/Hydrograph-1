@@ -160,7 +160,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	private static final String COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH = "Could not locate the external schema file path";
 	private static Logger logger = LogFactory.INSTANCE.getLogger(ELTSchemaGridWidget.class);
-	private ColumnLayoutData compositeOfOutsideTable;
+	//private ColumnLayoutData compositeOfOutsideTable;
+	private GridData compositeOfOutsideTable;
 	public static final String FIELDNAME = Messages.FIELDNAME;
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
@@ -1277,7 +1278,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 container);
 		 gridSubGroup.createContainerWidget();
 
-		 compositeOfOutsideTable = new ColumnLayoutData();
+		 //compositeOfOutsideTable = new ColumnLayoutData();
+		 compositeOfOutsideTable = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		 compositeOfOutsideTable.heightHint = 260;
 		 compositeOfOutsideTable.widthHint = 400;
 		 gridSubGroup.getContainerControl().setLayoutData(compositeOfOutsideTable);
