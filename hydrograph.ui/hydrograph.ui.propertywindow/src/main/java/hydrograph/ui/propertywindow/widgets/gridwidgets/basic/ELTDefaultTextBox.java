@@ -47,12 +47,14 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 		GridData gd_defaultELTTextBox = new GridData(SWT.FILL, SWT.FILL, grabExcessSpace, false, 1, 1);
 		if (OSValidator.isMac()) {
 			gd_defaultELTTextBox.horizontalIndent=2;
-			gd_defaultELTTextBox.widthHint = textboxWidth+28;
 		}
 		else{
 			gd_defaultELTTextBox.horizontalIndent=1;
-			gd_defaultELTTextBox.widthHint = textboxWidth;
 		}
+		
+		
+		
+		gd_defaultELTTextBox.widthHint = textboxWidth;
 		defaultELTTextBox.setLayoutData(gd_defaultELTTextBox);
 		defaultELTTextBox.setText(defaultTextMessage);
 		

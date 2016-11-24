@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
@@ -117,10 +116,7 @@ public class TransformWidget extends AbstractWidget {
 		 {	 
 		 transformMapping.setAddPassThroughFields(transformMappingPopulatedFromTooTipAction.isAddPassThroughFields());
 		 }
-		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT);
-		if(OSValidator.isMac()){
-			eltDefaultButton.buttonWidth(120);
-		}
+		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
 		transformComposite.attachWidget(eltDefaultButton);
 		if(getComponent().isContinuousSchemaPropogationAllow())
 		getPropagatedSchema();

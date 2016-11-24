@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Button;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.JoinMappingGrid;
@@ -85,12 +84,7 @@ public class PropogateWidget extends AbstractWidget{
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Constants.PROPAGATE_FIELD_FROM_LEFT);
 		eltDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 		
-		AbstractELTWidget eltDefaultButton;
-		if(OSValidator.isMac()){
-			eltDefaultButton = new ELTDefaultButton(Constants.PROPAGATE).buttonWidth(120);
-		}else{
-			eltDefaultButton = new ELTDefaultButton(Constants.PROPAGATE);
-		}
+		AbstractELTWidget eltDefaultButton = new ELTDefaultButton(Constants.PROPAGATE);
 		eltDefaultSubgroupComposite.attachWidget(eltDefaultButton);
       
        if(getComponent().isContinuousSchemaPropogationAllow())

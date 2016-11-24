@@ -13,7 +13,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.metastore;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -98,13 +97,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 		setPropertyHelpWidget((Control) defaultLable.getSWTWidgetControl());
 		
 		
-		AbstractELTWidget defaultButton;
-		if(OSValidator.isMac()){
-			defaultButton = new ELTDefaultButton(Messages.EXTRACT).buttonWidth(120);
-		}else{
-			defaultButton = new ELTDefaultButton(Messages.EXTRACT);
-		}
-		
+		AbstractELTWidget defaultButton = new ELTDefaultButton(Messages.EXTRACT);
 		defaultSubgroupComposite.attachWidget(defaultButton);
 		Button button = (Button) defaultButton.getSWTWidgetControl();
 		
