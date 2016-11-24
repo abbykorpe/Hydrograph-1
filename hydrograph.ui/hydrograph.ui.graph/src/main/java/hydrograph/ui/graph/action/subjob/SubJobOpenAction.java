@@ -14,18 +14,6 @@
  
 package hydrograph.ui.graph.action.subjob;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.action.PasteAction;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.model.components.InputSubjobComponent;
-import hydrograph.ui.graph.model.components.SubjobComponent;
-import hydrograph.ui.graph.utility.SubJobUtility;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -49,6 +37,16 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.action.PasteAction;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 
 
 /**
@@ -127,7 +125,11 @@ public class SubJobOpenAction extends SelectionAction{
 												{
 													 component1=(Component)object;
 													if(component1 instanceof InputSubjobComponent)
-													break;	
+													{
+														SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent
+														(component1, subjobComponent);
+														break;
+													}	
 												}
 													
 											}

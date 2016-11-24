@@ -547,6 +547,7 @@ public class SubJobUtility {
 				}	
 				schema.getGridRow().clear();
 				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+				if(!(nextComponent instanceof SubjobComponent))
 				nextComponent.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
 				nextComponent.setContinuousSchemaPropogationAllow(true);
 				if(nextComponent instanceof SubjobComponent)
@@ -556,6 +557,7 @@ public class SubJobUtility {
 					{
 						if(subjobComponent instanceof InputSubjobComponent)
 						{
+							initializeSchemaMapForInputSubJobComponent(subjobComponent,nextComponent);
 							setFlagForContinuousSchemaPropogation(subjobComponent);
 							break;
 						}
@@ -639,12 +641,24 @@ public class SubJobUtility {
        return true;
 	}
 	
+	
 	/**
-	 * check if sub job contains transform or union All component
 	 * 
-	 * @param Subjob component
-	 * @return true if Sub job contains transform or union all component otherwise false
+	 * initialize SchemaMap for inputSubjobComponent.
+	 * @param inputSubJobComponent
+	 * @param subjobComponent
 	 */
+	public void initializeSchemaMapForInputSubJobComponent(Component inputSubJobComponent,Component subjobComponent) {
+		Map<String,Schema> inputSubJobComponentHashMap=new HashMap<>();
+		for(int i=0;i<subjobComponent.getTargetConnections().size();i++)
+		{
+			inputSubJobComponentHashMap.put(Constants.INPUT_SOCKET_TYPE+i,((Schema)subjobComponent.getTargetConnections()
+					.get(i).getSource().getProperties().get(Constants.SCHEMA)));
+		}	
+		inputSubJobComponent.getProperties().put(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT, inputSubJobComponentHashMap);
+	}
+	
+	
 	private boolean checkIfSubJobHasTransformOrUnionAllComponent(Component component) {
 		boolean containsTransformOrUnionAllComponent=false;
 		Container container=(Container)component.getProperties().get(Constants.SUBJOB_CONTAINER);

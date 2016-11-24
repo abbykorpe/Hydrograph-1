@@ -193,6 +193,7 @@ public class Constants {
 	public static final String PROPERTIES="properties";
 	public static final String SUBJOB_INPUT_COMPONENT_NAME="InSubjob_01";
 	public static final String SUBJOB_OUTPUT_COMPONENT_NAME="OutSubjob_01";
+	public static final String SCHEMA_FOR_INPUTSUBJOBCOMPONENT="schema_for_Inputsubjobcomponent";
 	
 	/*
 	 * Debug required constants 

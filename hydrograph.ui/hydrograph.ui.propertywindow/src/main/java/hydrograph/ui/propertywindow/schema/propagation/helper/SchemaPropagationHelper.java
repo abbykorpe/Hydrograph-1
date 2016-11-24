@@ -77,19 +77,45 @@ public class SchemaPropagationHelper {
 		for (Link link : component.getTargetConnections()) {
  
 			if (link.getTargetTerminal().equals(targetTerminal)) {
-				Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
-				if (previousComponentSchema != null) {
-					for (BasicSchemaGridRow row :  SchemaSyncUtility.INSTANCE.
-							convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow())) {
+				List<BasicSchemaGridRow> basicSchemaGridRows = getBasicSchemaGridRowList(targetTerminal, link);
+				if(basicSchemaGridRows!=null)
+				{	
+					for (BasicSchemaGridRow row :basicSchemaGridRows  ) {
 						filedName = new FilterProperties();
 						filedName.setPropertyname(row.getFieldName());
 						filedNameList.add(filedName);
 					}
 				}
-
 			}
 		}
 		return filedNameList;
+	}
+
+	 /**
+	  * pull out basicSchemaGridRow object from Schema object.
+	  * 
+	 * @param targetTerminal  
+	 * @param link
+	 * @return list of BasicSchemaGridRow
+	 */
+	public List<BasicSchemaGridRow> getBasicSchemaGridRowList(String targetTerminal, Link link) {
+		 List<BasicSchemaGridRow> basicSchemaGridRows=null;
+		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName()))
+		{
+			Map<String,Schema> inputSchemaMap=(HashMap<String,Schema>)link.getSource().getProperties().
+					get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);
+			if(inputSchemaMap!=null &&inputSchemaMap.get(targetTerminal)!=null)
+			basicSchemaGridRows=SchemaSyncUtility.INSTANCE.
+					convertGridRowsSchemaToBasicSchemaGridRows(inputSchemaMap.get(targetTerminal).getGridRow());
+		}
+		else 
+		{	
+		Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+		if (previousComponentSchema != null)
+		basicSchemaGridRows=SchemaSyncUtility.INSTANCE.
+		convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow());
+		}
+		return basicSchemaGridRows;
 	}
 	
 

@@ -14,13 +14,25 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
@@ -43,20 +55,6 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 
 /**
@@ -552,10 +550,10 @@ public class TransformWidget extends AbstractWidget {
 		InputField inputField = null;
 		transformMapping.getInputFields().clear();
 		for (Link link : getComponent().getTargetConnections()) {
-			Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
-			if (previousComponentSchema != null){
-				for (BasicSchemaGridRow row : SchemaSyncUtility.INSTANCE.
-						convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow())) {
+			List<BasicSchemaGridRow> basicSchemaGridRows=SchemaPropagationHelper.INSTANCE.
+			getBasicSchemaGridRowList(Constants.INPUT_SOCKET_TYPE+0, link);
+			if (basicSchemaGridRows != null){
+				for (BasicSchemaGridRow row :basicSchemaGridRows ) {
 					inputField = new InputField(row.getFieldName(), new ErrorObject(false, ""));
 						transformMapping.getInputFields().add(inputField);
 				}

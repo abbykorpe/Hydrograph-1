@@ -131,6 +131,7 @@ public class PropagateDataAction extends SelectionAction {
 			{
 				if(componentIterator instanceof InputSubjobComponent)
 				{
+					SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(componentIterator,component);
 					SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(componentIterator);
 					break;
 				}
@@ -144,5 +145,4 @@ public class PropagateDataAction extends SelectionAction {
 		new SubJobUtility().setFlagForContinuousSchemaPropogation(component);
 		}
 	}
-	
 }
