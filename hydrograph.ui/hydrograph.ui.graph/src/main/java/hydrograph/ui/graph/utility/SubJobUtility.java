@@ -58,6 +58,7 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -521,6 +522,7 @@ public class SubJobUtility {
 					||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.FILTER)	
 					 ||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.UNIQUE_SEQUENCE)
 					 ||nextComponent instanceof SubjobComponent
+					 ||nextComponent instanceof OutputSubjobComponent
 					)
 			{
 				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,nextComponent.getComponentName()))
@@ -548,7 +550,7 @@ public class SubJobUtility {
 				}	
 				schema.getGridRow().clear();
 				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
-				if(!(nextComponent instanceof SubjobComponent))
+				if(!StringUtils.equalsIgnoreCase(Constants.SUBJOB_COMPONENT_CATEGORY, nextComponent.getCategory()))
 				nextComponent.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
 				nextComponent.setContinuousSchemaPropogationAllow(true);
 				if(nextComponent instanceof SubjobComponent)
@@ -565,6 +567,14 @@ public class SubJobUtility {
 					}
 					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 				}
+				else if(nextComponent instanceof OutputSubjobComponent)
+				{
+					Component subJobComponent=(Component)nextComponent.getProperties().get(Constants.SUBJOB_COMPONENT);
+					if(subJobComponent!=null)
+					SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(subJobComponent, nextComponent);
+					setFlagForContinuousSchemaPropogation(subJobComponent);
+					
+				}	
 				if(!nextComponent.getSourceConnections().isEmpty())
 				{
 				   if(nextComponent.getSourceConnections().size()==1)
