@@ -81,7 +81,7 @@ public class PropagateDataAction extends SelectionAction {
     
 	@Override
 	public void run() {
-		boolean isUnionAllInputsSchemaSync=true;
+		boolean shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=true;
 		for(Link link:component.getTargetConnections())
 		{
 			
@@ -96,7 +96,7 @@ public class PropagateDataAction extends SelectionAction {
 					{	
 					component.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
 					((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
-					isUnionAllInputsSchemaSync=false;
+					shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
 					break;
 					}
 					else
@@ -134,19 +134,21 @@ public class PropagateDataAction extends SelectionAction {
 					SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(componentIterator);
 					break;
 				}
+				
 			}
+			shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=!SubjobUtility.INSTANCE.checkIfSubJobHasTransformOrUnionAllComponent(component);
 			((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
 			break;
 			}
 			else if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM,component.getCategory()))
 			{
+			 shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;	
 			((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
 			}	
 		}	
-		
-		if(isUnionAllInputsSchemaSync)
+		component.setContinuousSchemaPropogationAllow(true);
+		if(shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents)
 		{
-		component.setContinuousSchemaPropogationAllow(true);	
 		new SubJobUtility().setFlagForContinuousSchemaPropogation(component);
 		}
 	}

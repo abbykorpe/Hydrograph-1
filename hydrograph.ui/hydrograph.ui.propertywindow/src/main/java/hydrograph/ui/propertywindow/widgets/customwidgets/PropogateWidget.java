@@ -123,7 +123,7 @@ public class PropogateWidget extends AbstractWidget{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				boolean isUnionAllInputSchemaSync=true;
+				boolean shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=true;
 				for (Link link : getComponent().getTargetConnections()) {
 					Schema previousComponentSchema=getSchemaFromPreviousComponentSchema(link);
 					if (previousComponentSchema != null){
@@ -137,7 +137,7 @@ public class PropogateWidget extends AbstractWidget{
 						{
 							if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(getComponent()))
 							{
-							isUnionAllInputSchemaSync=false;
+							shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
 							getComponent().getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
 							WidgetUtility.createMessageBox(Messages.INPUTS_SCHEMA_ARE_NOT_IN_SYNC, Constants.ERROR,SWT.ICON_ERROR|SWT.OK);
 							break;
@@ -193,6 +193,8 @@ public class PropogateWidget extends AbstractWidget{
 							break;
 						}
 					}
+					shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=!
+							SubjobUtility.INSTANCE.checkIfSubJobHasTransformOrUnionAllComponent(getComponent());
 					break;
 					}
 				    else if(
@@ -221,6 +223,7 @@ public class PropogateWidget extends AbstractWidget{
 									transformMapping.getInputFields().add(inputField);
 							}
 						 }
+						 shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
 					}
 				    else if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.JOIN))
 				    {
@@ -238,7 +241,7 @@ public class PropogateWidget extends AbstractWidget{
 						JoinMappingGrid joinMappingGrid=(JoinMappingGrid)joinMapWidget.getProperties().get(Constants.JOIN_MAP_FIELD);
 							
 						joinMappingGrid.setLookupInputProperties(sorceFieldList);
-						
+						shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
 				    }	
 					
 				    else if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.LOOKUP))
@@ -257,12 +260,12 @@ public class PropogateWidget extends AbstractWidget{
 						LookupMappingGrid joinMappingGrid=(LookupMappingGrid)lookupMapWidget.getProperties().get(Constants.LOOKUP_MAP_FIELD);
 							
 						joinMappingGrid.setLookupInputProperties(sorceFieldList);
-						
+						shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
 				    }	
 				}
 					
 				}
-				if(isUnionAllInputSchemaSync)
+				if(shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents)
 				SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent());
 			}
            });
