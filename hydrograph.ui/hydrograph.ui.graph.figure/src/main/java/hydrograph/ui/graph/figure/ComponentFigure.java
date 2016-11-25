@@ -331,12 +331,26 @@ public class ComponentFigure extends Figure implements Validator {
 		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
 		drawPropertyStatus(graphics);
 		if((StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM)
-			&& component.isContinuousSchemaPropogationAllow()
 			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.FILTER)
 			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.UNIQUE_SEQUENCE))
 			 )
 		{
+			PropertyToolTipInformation propertyToolTipInformation;	
+			if(component.isContinuousSchemaPropogationAllow())
+			{
 		  drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+		  propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.SHOW_TOOLTIP, 
+					Constants.TOOLTIP_DATATYPE);
+			   propertyToolTipInformation.setPropertyValue(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED); 
+			}
+			else
+			{
+				propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.HIDE_TOOLTIP, 
+						Constants.TOOLTIP_DATATYPE);
+				propertyToolTipInformation.setPropertyValue("");
+				
+			}
+			 component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}
 		else if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName())
 				)
