@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.gridwidgets.container;
 
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import org.eclipse.swt.layout.GridData;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,6 +36,7 @@ public class ELTSchemaSubgroupComposite extends AbstractELTContainerWidget{
 		GridLayout layout = new GridLayout(4, false);
 		layout.horizontalSpacing = -45;
 		layout.marginLeft = 350;
+		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false, 1, 1));
 		composite.setLayout(layout);
 		super.outputContainer = composite;	
 	}

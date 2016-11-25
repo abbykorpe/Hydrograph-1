@@ -80,7 +80,7 @@ public class MixedSchemeGridLabelProvider implements ITableLabelProvider,ITableC
 
 	@Override
 	public Color getBackground(Object element, int columnIndex) {
-		return new Color(Display.getDefault(), new RGB(255, 255, 230));
+		return null;
 	}
 
 	/**

@@ -100,7 +100,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -145,7 +144,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
@@ -643,33 +641,54 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	  * creates group of add,delete,up,down buttons and pull schema button
 	  */
 	 private ELTSchemaSubgroupComposite createButtonComposite(Composite containerControl){
-		 ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(containerControl);
-
+		 ELTSchemaSubgroupComposite pull = new ELTSchemaSubgroupComposite(containerControl);
+		 pull.createContainerWidget();
+		 pull.numberOfBasicWidgets(2);
+		 pull.getContainerControl().setLayout(getPullCompositeLayout(1, 2, 2, 5));
+		 if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
+			 pull.numberOfBasicWidgets(3);
+			 pull.getContainerControl().setLayout(getPullCompositeLayout(2, 2, 2, 5));
+			 pull.getContainerControl().setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,false));
+			 createPullInternallyPropagatedSchema(pull);
+		 }
+		 if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT)){
+			 pull.numberOfBasicWidgets(3);
+			 pull.getContainerControl().setLayout(getPullCompositeLayout(2, 2, 2, 5));
+			 pull.getContainerControl().setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,false));
+			 createPullPropagtedSchemaButton(pull);
+		 }
+		 
+		 ELTSchemaSubgroupComposite buttonSubGroup = new ELTSchemaSubgroupComposite(pull.getContainerControl());
 		 buttonSubGroup.createContainerWidget();
-
 		 buttonSubGroup.numberOfBasicWidgets(4);
-
+		 GridLayout layout = new GridLayout(4, false);
+		 layout.horizontalSpacing = -45;
+		 layout.marginLeft = 350;
+		 layout.marginRight= 0;
+		 layout.marginWidth = 0;
+		 buttonSubGroup.getContainerControl().setLayout(layout);
 		 if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT)){
 			 buttonSubGroup.numberOfBasicWidgets(7);
+			 buttonSubGroup.getContainerControl().setLayout(getButtonCompositeLayout(6, 0, 0));
 			 ELTDefaultLable defaultLable1 = new ELTDefaultLable("");
 			 defaultLable1.lableWidth(0);
 			 buttonSubGroup.attachWidget(defaultLable1);
-			 createPullPropagtedSchemaButton(buttonSubGroup);
 			 ELTDefaultLable defaultLable = new ELTDefaultLable("");
 			 buttonSubGroup.attachWidget(defaultLable);
 		 }
 
 		 if(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName())){
 			 buttonSubGroup.numberOfBasicWidgets(7);
+			 buttonSubGroup.getContainerControl().setLayout(getButtonCompositeLayout(6, 0, 0));
 			 ELTDefaultLable defaultLable1 = new ELTDefaultLable("");
 			 defaultLable1.lableWidth(0);
 			 buttonSubGroup.attachWidget(defaultLable1);
-			 createPullInternallyPropagatedSchema(buttonSubGroup);
 			 ELTDefaultLable defaultLable = new ELTDefaultLable("");
 			 buttonSubGroup.attachWidget(defaultLable);
 		 }
 		 if(!(StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))&&!(SchemaSyncUtility.INSTANCE.isSchemaSyncAllow(getComponent().getComponentName()))){
 			 buttonSubGroup.numberOfBasicWidgets(7);
+			 buttonSubGroup.getContainerControl().setLayout(getButtonCompositeLayout(6, 0, 0));
 			 ELTDefaultLable defaultLable2 = new ELTDefaultLable("");
 			 defaultLable2.lableWidth(215);
 			 buttonSubGroup.attachWidget(defaultLable2);
@@ -685,7 +704,20 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		 return buttonSubGroup;
 	 }
-
+	 
+	 private GridLayout getPullCompositeLayout(int noOfColumns,int widthMar,int rightMar,int leftMar){
+		 GridLayout pullCompositeLayout = new GridLayout(noOfColumns,false);
+		 pullCompositeLayout.marginWidth = widthMar;
+		 pullCompositeLayout.marginRight = rightMar;
+		 pullCompositeLayout.marginLeft = leftMar;
+		 return pullCompositeLayout;
+	 }
+	 private GridLayout getButtonCompositeLayout(int noOfColumns,int widthMar,int rightMar){
+		 GridLayout buttonCompositeLayout = new GridLayout(noOfColumns,false);
+		 buttonCompositeLayout.marginWidth = widthMar;
+		 buttonCompositeLayout.marginRight = rightMar;
+		 return buttonCompositeLayout;
+	 }
 	 private void createPullPropagtedSchemaButton(ELTSchemaSubgroupComposite containerControl) {
 		 ELTDefaultButton pullButtonForOuputComponents = new ELTDefaultButton("Pull Schema");
 		 pullButtonForOuputComponents.buttonWidth(120);
@@ -864,16 +896,19 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 private void createExternalSchemaSection(Composite containerControl) {
 		 ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
 		 eltSuDefaultSubgroupComposite.createContainerWidget();
-		 eltSuDefaultSubgroupComposite.numberOfBasicWidgets(6);
+		 eltSuDefaultSubgroupComposite.getContainerControl().setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,false,1,1));
+		 eltSuDefaultSubgroupComposite.numberOfBasicWidgets(5);
 
-		 ELTDefaultLable defaultLable = new ELTDefaultLable("");
-		 defaultLable.lableWidth(0);
-		 eltSuDefaultSubgroupComposite.attachWidget(defaultLable);
+		 GridLayout gd = new GridLayout(3,false);
+		 gd.marginRight = 0;
+		 gd.marginWidth = 5;
+		 gd.horizontalSpacing = 9;
+		 eltSuDefaultSubgroupComposite.getContainerControl().setLayout(gd);
 
 		 AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.EXTERNAL_SCHEMA);
 		 eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
-		 AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(false).textBoxWidth(218);
+		 AbstractELTWidget eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(218);
 		 eltSuDefaultSubgroupComposite.attachWidget(eltDefaultTextBox);
 
 		 extSchemaPathText = (Text) eltDefaultTextBox.getSWTWidgetControl();
@@ -881,7 +916,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 decorator = WidgetUtility.addDecorator(extSchemaPathText, Messages.EMPTYFIELDMESSAGE);
 		 decorator.hide();
 		 GridData data=(GridData) extSchemaPathText.getLayoutData();
-		 data.horizontalIndent=10;
+//		 data.horizontalIndent=10;
 		 extSchemaPathText.addModifyListener(new ModifyListener() {
 
 			 @Override
@@ -1031,7 +1066,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 ELTDefaultSubgroupComposite importExportComposite = new ELTDefaultSubgroupComposite(containerControl);
 		 importExportComposite.createContainerWidget();
 		 importExportComposite.numberOfBasicWidgets(3);
-
+		 importExportComposite.getContainerControl().setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false, 1, 1));
 		 ELTDefaultLable defaultLable = new ELTDefaultLable("");
 		 defaultLable.lableWidth(0);
 		 importExportComposite.attachWidget(defaultLable);
@@ -1105,9 +1140,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 private void createSchemaTypesSection(Composite containerControl) {
 		 ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(containerControl);
 		 eltSuDefaultSubgroupComposite.createContainerWidget();
-		 eltSuDefaultSubgroupComposite.numberOfBasicWidgets(4);
+		 eltSuDefaultSubgroupComposite.numberOfBasicWidgets(3);
 
-		 AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.SCHEMA_TYPES);
+		 AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.SCHEMA_TYPES).lableWidth(91);
 		 eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
 		 // Radio button listener
