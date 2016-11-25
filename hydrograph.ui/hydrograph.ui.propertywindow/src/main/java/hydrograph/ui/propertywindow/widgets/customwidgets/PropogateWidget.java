@@ -270,7 +270,9 @@ public class PropogateWidget extends AbstractWidget{
     
 	private Schema getSchemaFromPreviousComponentSchema(Link link) {
 		Schema previousComponentSchema=null;
-		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName()))
+		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName())
+		||StringUtils.equalsIgnoreCase(Constants.SUBJOB_COMPONENT, link.getSource().getComponentName())		
+				)
 		{
 			Map<String,Schema> inputSchemaMap=(HashMap<String,Schema>)link.getSource().getProperties().
 					get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);

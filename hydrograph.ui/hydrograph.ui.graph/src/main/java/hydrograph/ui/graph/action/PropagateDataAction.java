@@ -94,16 +94,15 @@ public class PropagateDataAction extends SelectionAction {
 				{
 					if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(component))
 					{	
-						component.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
+					component.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
 					((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
 					isUnionAllInputsSchemaSync=false;
 					break;
 					}
 					else
 					{
-						component.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
-						((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
-						
+					component.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
+					((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
 					}	
 				}
 				Schema schema=(Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
@@ -136,12 +135,18 @@ public class PropagateDataAction extends SelectionAction {
 					break;
 				}
 			}
+			((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
 			break;
 			}
+			else if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM,component.getCategory()))
+			{
+			((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
+			}	
 		}	
+		
 		if(isUnionAllInputsSchemaSync)
-		{	
-		component.setContinuousSchemaPropogationAllow(true);
+		{
+		component.setContinuousSchemaPropogationAllow(true);	
 		new SubJobUtility().setFlagForContinuousSchemaPropogation(component);
 		}
 	}

@@ -100,7 +100,8 @@ public class SchemaPropagationHelper {
 	 */
 	public List<BasicSchemaGridRow> getBasicSchemaGridRowList(String targetTerminal, Link link) {
 		 List<BasicSchemaGridRow> basicSchemaGridRows=null;
-		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName()))
+		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName())
+		   ||StringUtils.equalsIgnoreCase(Constants.SUBJOB_COMPONENT, link.getSource().getComponentName()))
 		{
 			Map<String,Schema> inputSchemaMap=(HashMap<String,Schema>)link.getSource().getProperties().
 					get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);
