@@ -218,8 +218,17 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 		Map<String,Schema> inputSubJobComponentHashMap=new HashMap<>();
 		for(int i=0;i<subjobComponent.getTargetConnections().size();i++)
 		{
-			inputSubJobComponentHashMap.put(Constants.INPUT_SOCKET_TYPE+i,((Schema)subjobComponent.getTargetConnections()
-					.get(i).getSource().getProperties().get(Constants.SCHEMA)));
+			Component previousComponentToSubJobComponenet=subjobComponent.getTargetConnections().get(i).getSource();
+			if(previousComponentToSubJobComponenet instanceof SubjobComponent)
+			{
+				inputSubJobComponentHashMap	=(Map<String,Schema>)previousComponentToSubJobComponenet.getProperties()
+						.get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);
+			}	
+			else
+			{
+				inputSubJobComponentHashMap.put(Constants.INPUT_SOCKET_TYPE+i,((Schema)previousComponentToSubJobComponenet
+						.getProperties().get(Constants.SCHEMA)));	
+			}	
 		}	
 		inputSubJobComponent.getProperties().put(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT, inputSubJobComponentHashMap);
 	}
