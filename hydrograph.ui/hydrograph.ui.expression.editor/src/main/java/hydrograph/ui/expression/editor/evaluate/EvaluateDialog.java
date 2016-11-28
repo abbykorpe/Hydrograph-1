@@ -18,7 +18,7 @@ import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
-
+import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -82,28 +81,31 @@ public class EvaluateDialog extends Dialog {
 		SashForm sashForm = new SashForm(container, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
 		
-		Group expressionEditorcomposite = new Group(sashForm, SWT.NORMAL);
-		expressionEditorcomposite.setText(Messages.EVALUATE_EXPRESSION_EDITOR_GROUP_HEADER);
-		expressionEditor.setParent(expressionEditorcomposite);
+		HydroGroup expressionEditorcomposite = new HydroGroup(sashForm, SWT.NORMAL);
+		expressionEditorcomposite.setHydroGroupText(Messages.EVALUATE_EXPRESSION_EDITOR_GROUP_HEADER);
+		GridLayout gd = new GridLayout(1, false);
+		expressionEditorcomposite.getHydroGroupClientArea().setLayout(gd);
+		expressionEditor.setParent(expressionEditorcomposite.getHydroGroupClientArea());
 		expressionEditorcomposite.setLayout(new GridLayout(1, false));
 		
-		Group fieldTableComposite = new Group(sashForm, SWT.NORMAL);
+		HydroGroup fieldTableComposite = new HydroGroup(sashForm, SWT.NORMAL);
 		fieldTableComposite.setLayout(new GridLayout(1, false));
-		fieldTableComposite.setText(Messages.EVALUATE_FIELD_NAMES_GROUP_HEADER);
-		
-		createSearchTextBox(fieldTableComposite);
+		fieldTableComposite.setHydroGroupText(Messages.EVALUATE_FIELD_NAMES_GROUP_HEADER);
+		fieldTableComposite.getHydroGroupClientArea().setLayout(gd);
+		createSearchTextBox(fieldTableComposite.getHydroGroupClientArea());
 
-		evalDialogFieldTable = new EvalDialogFieldTable().createFieldTable(fieldTableComposite,
+
+		evalDialogFieldTable = new EvalDialogFieldTable().createFieldTable(fieldTableComposite.getHydroGroupClientArea(),
 				(Map<String, Class<?>>) expressionEditor.getData(ExpressionEditorDialog.FIELD_DATA_TYPE_MAP),
 				(List<FixedWidthGridRow>) expressionEditor.getData(ExpressionEditorDialog.INPUT_FILEDS_SCHEMA_KEY));
 		
 		
-		Group errorComposite = new Group(sashForm, SWT.NORMAL);
+		HydroGroup errorComposite = new HydroGroup(sashForm, SWT.NORMAL);
 		errorComposite.setLayout(new GridLayout(1, false));
-		errorComposite.setText(Messages.EVALUATE_OUTPUT_CONSOLE_GROUP_HEADER);
-				
-		createOutputConsole(errorComposite);
-		sashForm.setWeights(new int[] {101, 263, 140});
+		errorComposite.setHydroGroupText(Messages.EVALUATE_OUTPUT_CONSOLE_GROUP_HEADER);
+		errorComposite.getHydroGroupClientArea().setLayout(gd);	
+		createOutputConsole(errorComposite.getHydroGroupClientArea());
+		sashForm.setWeights(new int[] {121, 242, 140});
 		
 		return container;
 	}

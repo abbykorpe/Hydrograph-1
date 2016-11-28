@@ -22,8 +22,6 @@ import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
 
 
 /**
@@ -118,7 +116,7 @@ public class GenerateRecordsGridLabelProvider implements ITableLabelProvider, IT
 	 */
 	@Override
 	public Color getBackground(Object element, int columnIndex) {
-        return new Color(Display.getDefault(), new RGB(255, 255, 230));
+        return null;
 	}
 
 	/*

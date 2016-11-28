@@ -35,6 +35,8 @@ public class ELTSchemaTableComposite extends AbstractELTContainerWidget{
 		composite = new Composite(inputContainer, SWT.NONE);
 		GridLayout layout = new GridLayout(1, false);
 		layout.marginTop = -4;
+		layout.marginWidth=0;
+		layout.marginLeft = 0;
 		composite.setLayout(layout);
 		super.outputContainer = composite;	
 		
