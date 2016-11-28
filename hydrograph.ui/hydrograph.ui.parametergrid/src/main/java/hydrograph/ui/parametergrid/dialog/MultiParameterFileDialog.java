@@ -14,6 +14,7 @@
 package hydrograph.ui.parametergrid.dialog;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -108,7 +109,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -152,7 +152,7 @@ public class MultiParameterFileDialog extends Dialog {
 	private Composite container_1;
 	private Table table_2;
 	private static final String TABLE_TYPE_KEY="TABLE_TYPE";
-	IStructuredSelection previousSelection = null;
+	private IStructuredSelection previousSelection = null;
 	/**
 	 * Create the dialog.
 	 * 
@@ -208,8 +208,8 @@ public class MultiParameterFileDialog extends Dialog {
 		
 		container_1 = (Composite) super.createDialogArea(parent);
 		mainSashForm = new SashForm(container_1, SWT.HORIZONTAL);
-		mainSashForm.setSashWidth(1);
-		GridData gd_mainSashForm = new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0);
+		mainSashForm.setSashWidth(6);
+		GridData gd_mainSashForm = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_mainSashForm.heightHint = 476;
 		gd_mainSashForm.widthHint = 851;
 		mainSashForm.setLayoutData(gd_mainSashForm);
@@ -293,7 +293,7 @@ public class MultiParameterFileDialog extends Dialog {
 	}
 
 	private void createParameterSearchBox(Composite composite) {
-		Group grpAllProperties = new Group(composite, SWT.NONE);
+		HydroGroup grpAllProperties = new HydroGroup(composite, SWT.NONE);
 		grpAllProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
 		GridLayout gl_grpAllProperties = new GridLayout(1, false);
@@ -302,10 +302,10 @@ public class MultiParameterFileDialog extends Dialog {
 		gl_grpAllProperties.marginHeight = 0;
 		gl_grpAllProperties.marginWidth = 0;
 		grpAllProperties.setLayout(gl_grpAllProperties);
-		grpAllProperties
-				.setText(MultiParameterFileDialogConstants.SEARCH_ALL_PARAMETERS);
-
-		Composite composite_5 = new Composite(grpAllProperties, SWT.NONE);
+		grpAllProperties.setHydroGroupText(MultiParameterFileDialogConstants.SEARCH_ALL_PARAMETERS);
+		grpAllProperties.setHydroGroupBorderBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GRAY));
+		grpAllProperties.getHydroGroupClientArea().setLayout(new GridLayout(1, false));
+		Composite composite_5 = new Composite(grpAllProperties.getHydroGroupClientArea(), SWT.NONE);
 		GridLayout gl_composite_5 = new GridLayout(1, false);
 		gl_composite_5.verticalSpacing = 0;
 		gl_composite_5.marginWidth = 0;
@@ -572,19 +572,19 @@ public class MultiParameterFileDialog extends Dialog {
 	}
 
 	private void createViewParameterFileBox(Composite composite) {
-		Group grpPropertyFileView = new Group(composite, SWT.NONE);
+		HydroGroup  grpPropertyFileView = new HydroGroup(composite, SWT.NONE);
 		grpPropertyFileView.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, true, 1, 1));
-		grpPropertyFileView
-				.setText(MultiParameterFileDialogConstants.PARAMETER_FILE_VIEW);
+		grpPropertyFileView.setHydroGroupText(MultiParameterFileDialogConstants.PARAMETER_FILE_VIEW);
+		grpPropertyFileView.setHydroGroupBorderBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GRAY));
 		GridLayout gl_grpPropertyFileView = new GridLayout(1, false);
 		gl_grpPropertyFileView.verticalSpacing = 0;
 		gl_grpPropertyFileView.marginHeight = 0;
 		gl_grpPropertyFileView.horizontalSpacing = 0;
 		gl_grpPropertyFileView.marginWidth = 0;
 		grpPropertyFileView.setLayout(gl_grpPropertyFileView);
-
-		Composite composite_4 = new Composite(grpPropertyFileView, SWT.NONE);
+		grpPropertyFileView.getHydroGroupClientArea().setLayout(new GridLayout(1, false));
+		Composite composite_4 = new Composite(grpPropertyFileView.getHydroGroupClientArea(), SWT.None);
 		composite_4.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		composite_4.setLayout(new GridLayout(1, false));
@@ -1048,7 +1048,6 @@ public class MultiParameterFileDialog extends Dialog {
 		Composite composite_1 = new Composite(mainSashForm, SWT.NONE);
 		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1);
-		gd_composite_1.widthHint = 100;
 		composite_1.setLayoutData(gd_composite_1);
 		GridLayout gl_composite_1 = new GridLayout(1, false);
 		gl_composite_1.verticalSpacing = 0;
@@ -1056,21 +1055,24 @@ public class MultiParameterFileDialog extends Dialog {
 		gl_composite_1.marginHeight = 0;
 		gl_composite_1.horizontalSpacing = 0;
 		composite_1.setLayout(gl_composite_1);
-		Group grpPropertyFiles = new Group(composite_1, SWT.NONE);
+		HydroGroup grpPropertyFiles = new HydroGroup(composite_1, SWT.NONE);
 		grpPropertyFiles.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
 		GridLayout gl_grpPropertyFiles = new GridLayout(1, false);
 		gl_grpPropertyFiles.marginWidth = 0;
+		gl_grpPropertyFiles.marginHeight = 0;
+		gl_grpPropertyFiles.horizontalSpacing =0;
+		gl_grpPropertyFiles.verticalSpacing =0;
 		grpPropertyFiles.setLayout(gl_grpPropertyFiles);
-		grpPropertyFiles
-				.setText(MultiParameterFileDialogConstants.TABLE_COLUMN_LIST_OF_PARAMETER_FILES);
-
-		Composite composite_2 = new Composite(grpPropertyFiles, SWT.NONE);
+		grpPropertyFiles.getHydroGroupClientArea().setLayout(new GridLayout(1, false));
+		grpPropertyFiles.setHydroGroupText(MultiParameterFileDialogConstants.TABLE_COLUMN_LIST_OF_PARAMETER_FILES);
+		grpPropertyFiles.setHydroGroupBorderBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GRAY));
+		Composite composite_2 = new Composite(grpPropertyFiles.getHydroGroupClientArea(), SWT.NONE);
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 		GridLayout gl_composite_2 = new GridLayout(1, false);
-		gl_composite_2.marginHeight = 4;
-		gl_composite_2.marginWidth = 4;
+		gl_composite_2.marginHeight = 0;
+		gl_composite_2.marginWidth = 0;
 		composite_2.setLayout(gl_composite_2);
 
 		createParameterFilesBoxButtonPanel(composite_2);
@@ -1081,28 +1083,53 @@ public class MultiParameterFileDialog extends Dialog {
 	}
 
 	private void createParameterFilesBoxTrashBox(Composite composite_2) {
-		Composite composite_1_1 = new Composite(composite_2, SWT.NONE);
+		Composite composite_1 = new Composite(composite_2, SWT.None);
+		GridLayout gl_composite_1 = new GridLayout(2, false);
+		gl_composite_1.verticalSpacing = 0;
+		gl_composite_1.marginWidth = 0;
+		gl_composite_1.marginHeight = 0;
+		gl_composite_1.horizontalSpacing = 0;
+		composite_1.setLayout(gl_composite_1);
+		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_composite_1.heightHint = 70;
+		composite_1.setLayoutData(gd_composite_1);
+		composite_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+		composite_1.setData("org.eclipse.e4.ui.css.id", "ParameterFileDropBox");
+		
+		Composite composite_1_1 = new Composite(composite_1, SWT.NONE);
+		composite_1_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite_1_1 = new GridLayout(1, false);
-		gl_composite_1_1.verticalSpacing = 0;
-		gl_composite_1_1.marginWidth = 0;
-		gl_composite_1_1.marginHeight = 0;
-		gl_composite_1_1.horizontalSpacing = 0;
+		gl_composite_1_1.verticalSpacing = 10;
+		gl_composite_1_1.marginWidth = 10;
+		gl_composite_1_1.marginHeight = 10;
+		gl_composite_1_1.horizontalSpacing = 10;
 		composite_1_1.setLayout(gl_composite_1_1);
-		GridData gd_composite_1_1 = new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1);
-		gd_composite_1_1.heightHint = 50;
+		composite_1_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+		GridData gd_composite_1_1 = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		composite_1_1.setLayoutData(gd_composite_1_1);
 
-		final Label lblDrop = new Label(composite_1_1, SWT.BORDER
-				| SWT.SHADOW_NONE | SWT.CENTER);
-		lblDrop.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		lblDrop.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		lblDrop.setBackground(SWTResourceManager
-				.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
-		lblDrop.setAlignment(SWT.CENTER);
-		lblDrop.setText(DROP_BOX_TEXT);
+		Label lblDrop1 = new Label(composite_1_1, SWT.NONE);
+		lblDrop1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+		lblDrop1.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		lblDrop1.setText(DROP_BOX_TEXT);
+		
+		Composite composite_1_2 = new Composite(composite_1, SWT.NONE);
+		GridLayout gl_composite = new GridLayout(1, false);
+		gl_composite.verticalSpacing = 10;
+		gl_composite.marginWidth = 10;
+		gl_composite.marginHeight = 10;
+		gl_composite.horizontalSpacing = 10;
+		composite_1_2.setLayout(gl_composite);
+		composite_1_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+		GridData gd_composite = new GridData(SWT.RIGHT, SWT.TOP, true, false, 1, 1);
+		composite_1_2.setLayoutData(gd_composite);
 
-		DropTarget dt = new DropTarget(lblDrop, DND.DROP_MOVE);
+		Label lblForImage = new Label(composite_1_2, SWT.NONE);
+		Image image = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
+		lblForImage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+		lblForImage.setImage(image);
+	   
+		DropTarget dt = new DropTarget(composite_1, DND.DROP_MOVE);
 		dt.setTransfer(new Transfer[] { TextTransfer.getInstance() });
 		dt.addDropListener(new DropTargetAdapter() {
 
