@@ -705,20 +705,40 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 return buttonSubGroup;
 	 }
 	 
-	 private GridLayout getPullCompositeLayout(int noOfColumns,int widthMar,int rightMar,int leftMar){
+	 /**
+	 * retruns GridLayout with given arguments 
+	 * @param noOfColumns
+	 * @param widthMar
+	 * @param rightMar
+	 * @param leftMar
+	 * @return GridLayout
+	 * 
+	 */
+	private GridLayout getPullCompositeLayout(int noOfColumns,int widthMar,int rightMar,int leftMar){
 		 GridLayout pullCompositeLayout = new GridLayout(noOfColumns,false);
 		 pullCompositeLayout.marginWidth = widthMar;
 		 pullCompositeLayout.marginRight = rightMar;
 		 pullCompositeLayout.marginLeft = leftMar;
 		 return pullCompositeLayout;
 	 }
-	 private GridLayout getButtonCompositeLayout(int noOfColumns,int widthMar,int rightMar){
+	 /**
+	 * returns GridDataLayout with given arguments 
+	 * @param noOfColumns
+	 * @param widthMar
+	 * @param rightMar
+	 * @return
+	 */
+	private GridLayout getButtonCompositeLayout(int noOfColumns,int widthMar,int rightMar){
 		 GridLayout buttonCompositeLayout = new GridLayout(noOfColumns,false);
 		 buttonCompositeLayout.marginWidth = widthMar;
 		 buttonCompositeLayout.marginRight = rightMar;
 		 return buttonCompositeLayout;
 	 }
-	 private void createPullPropagtedSchemaButton(ELTSchemaSubgroupComposite containerControl) {
+	 /**
+	 * Creates PullSchema buttton on schema tab 
+	 * @param containerControl
+	 */
+	private void createPullPropagtedSchemaButton(ELTSchemaSubgroupComposite containerControl) {
 		 ELTDefaultButton pullButtonForOuputComponents = new ELTDefaultButton("Pull Schema");
 		 pullButtonForOuputComponents.buttonWidth(120);
 		 containerControl.attachWidget(pullButtonForOuputComponents);
@@ -915,8 +935,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 extSchemaPathText.setToolTipText(Messages.CHARACTERSET);
 		 decorator = WidgetUtility.addDecorator(extSchemaPathText, Messages.EMPTYFIELDMESSAGE);
 		 decorator.hide();
-		 GridData data=(GridData) extSchemaPathText.getLayoutData();
-//		 data.horizontalIndent=10;
 		 extSchemaPathText.addModifyListener(new ModifyListener() {
 
 			 @Override
