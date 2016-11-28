@@ -1094,7 +1094,8 @@ public class MultiParameterFileDialog extends Dialog {
 		gd_composite_1.heightHint = 70;
 		composite_1.setLayoutData(gd_composite_1);
 		composite_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
-
+		composite_1.setData("org.eclipse.e4.ui.css.id", "ParameterFileDropBox");
+		
 		Composite composite_1_1 = new Composite(composite_1, SWT.NONE);
 		composite_1_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite_1_1 = new GridLayout(1, false);
@@ -1111,7 +1112,6 @@ public class MultiParameterFileDialog extends Dialog {
 		lblDrop1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 		lblDrop1.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblDrop1.setText(DROP_BOX_TEXT);
-		lblDrop1.setData("org.eclipse.e4.ui.css.id", "ParameterFileDropBox");
 		
 		Composite composite_1_2 = new Composite(composite_1, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(1, false);
