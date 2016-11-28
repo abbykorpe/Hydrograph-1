@@ -109,7 +109,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -153,7 +152,7 @@ public class MultiParameterFileDialog extends Dialog {
 	private Composite container_1;
 	private Table table_2;
 	private static final String TABLE_TYPE_KEY="TABLE_TYPE";
-	IStructuredSelection previousSelection = null;
+	private IStructuredSelection previousSelection = null;
 	/**
 	 * Create the dialog.
 	 * 
@@ -1112,7 +1111,8 @@ public class MultiParameterFileDialog extends Dialog {
 		lblDrop1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 		lblDrop1.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		lblDrop1.setText(DROP_BOX_TEXT);
-
+		lblDrop1.setData("org.eclipse.e4.ui.css.id", "ParameterFileDropBox");
+		
 		Composite composite_1_2 = new Composite(composite_1, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(1, false);
 		gl_composite.verticalSpacing = 10;
