@@ -133,10 +133,10 @@ public class ComponentFigure extends Figure implements Validator {
 		labelFont = new Font(Display.getDefault(), ELTFigureConstants.labelFont, 9, SWT.NORMAL);
 		int labelLength = TextUtilities.INSTANCE.getStringExtents(label, labelFont).width;
 
-		if (labelLength >= ELTFigureConstants.compLabelOneLineLengthLimit) {
+		if (labelLength >= ELTFigureConstants.compLabelOneLineLengthLimitForText) {
 			this.componentLabelMargin = ELTFigureConstants.componentTwoLineLabelMargin;
 			this.incrementedHeight = true;
-		} else if (labelLength < ELTFigureConstants.compLabelOneLineLengthLimit) {
+		} else if (labelLength < ELTFigureConstants.compLabelOneLineLengthLimitForText) {
 			this.componentLabelMargin = ELTFigureConstants.componentOneLineLabelMargin;
 			this.incrementedHeight = false;
 		}
