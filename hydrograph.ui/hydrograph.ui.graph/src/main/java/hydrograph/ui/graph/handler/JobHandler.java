@@ -27,8 +27,11 @@ import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.PlatformUI;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.WorkbenchWidgetsUtils;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
@@ -39,7 +42,6 @@ import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
-
 /**
  * JobHandler Handles both debug and normal run.
  *
@@ -63,7 +65,17 @@ public class JobHandler extends AbstractHandler {
 	 * @param enable the new run job enabled
 	 */
 	public void setRunJobEnabled(boolean enable) {
-		setBaseEnabled(enable);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				setBaseEnabled(enable);
+				ToolItem item = WorkbenchWidgetsUtils.INSTANCE.getToolItemFromToolBarManger(
+						Constants.RUN_STOP_BUTTON_TOOLBAR_ID, Constants.RUN_BUITTON_TOOLITEM_ID);
+				if (item != null) {
+					item.setEnabled(enable);
+				}
+			}
+		});
 	}
 
 	/**
@@ -72,7 +84,7 @@ public class JobHandler extends AbstractHandler {
 	 * @param enable the new debug job enabled
 	 */
 	public void setDebugJobEnabled(boolean enable){
-		setBaseEnabled(enable);
+		setRunJobEnabled(enable);
 	}
 	
 	/* (non-Javadoc)

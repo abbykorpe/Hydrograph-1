@@ -13,16 +13,6 @@
 
 package hydrograph.ui.graph.action.debug;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.controller.LinkEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.debugconverter.DebugHelper;
-import hydrograph.ui.graph.handler.RemoveDebugHandler;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
@@ -30,6 +20,14 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.LinkEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.debugconverter.DebugHelper;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
 
 /**
  * @author Bitwise
@@ -74,13 +72,6 @@ public class RemoveWatcherAction extends SelectionAction{
 				changePortColor(link.getSource(), link.getSourceTerminal());
 				if(!PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().isDirty()){
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().doSave(null);
-				}
-				
-				boolean isWatch = DebugHelper.INSTANCE.hasMoreWatchPoints();
-				if(isWatch){
-					((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(true);
-				}else{
-					((RemoveDebugHandler)RunStopButtonCommunicator.Removewatcher.getHandler()).setRemoveWatcherEnabled(false);
 				}
 			}	
 		}

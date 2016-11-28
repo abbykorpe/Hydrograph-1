@@ -14,12 +14,16 @@
  
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.job.RunStopButtonCommunicator;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ToolItem;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.WorkbenchWidgetsUtils;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.job.RunStopButtonCommunicator;
 
 
 /**
@@ -46,12 +50,22 @@ public class StopJobHandler extends AbstractHandler {
 	}
 
 	/**
-	 * 
 	 * Enable/Disable stop button
 	 * 
 	 * @param enable
 	 */
 	public void setStopJobEnabled(boolean enable) {
-		setBaseEnabled(enable);
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					setBaseEnabled(enable);
+					ToolItem item = WorkbenchWidgetsUtils.INSTANCE.getToolItemFromToolBarManger(
+							Constants.RUN_STOP_BUTTON_TOOLBAR_ID, Constants.STOP_BUITTON_TOOLITEM_ID);
+					if (item != null) {
+						item.setEnabled(enable);
+					}
+				}
+			});
+
 	}
 }
