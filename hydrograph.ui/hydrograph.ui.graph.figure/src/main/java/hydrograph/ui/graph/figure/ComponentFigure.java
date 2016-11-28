@@ -338,39 +338,31 @@ public class ComponentFigure extends Figure implements Validator {
 			PropertyToolTipInformation propertyToolTipInformation;	
 			if(component.isContinuousSchemaPropogationAllow())
 			{
-		  drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
-		  propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.SHOW_TOOLTIP, 
-					Constants.TOOLTIP_DATATYPE);
-			   propertyToolTipInformation.setPropertyValue(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED); 
-			}
+		    drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+		    propertyToolTipInformation =createPropertyToolTipInformation(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED, 
+		    		Constants.SHOW_TOOLTIP);
+		    }
 			else
 			{
-				propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.HIDE_TOOLTIP, 
-						Constants.TOOLTIP_DATATYPE);
-				propertyToolTipInformation.setPropertyValue("");
-				
+				 propertyToolTipInformation =createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);
 			}
 			 component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}
 		else if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName())
 				)
 		{
-		PropertyToolTipInformation propertyToolTipInformation;	
+		    PropertyToolTipInformation propertyToolTipInformation;	
 		   if(component.getProperties().get(Constants.IS_UNION_ALL_COMPONENT_SYNC)!=null
 			&&StringUtils.equalsIgnoreCase(((String)component.getProperties().get(Constants.IS_UNION_ALL_COMPONENT_SYNC)), Constants.FALSE)
 			)
 		   {
 		   drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
-		   propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.SHOW_TOOLTIP, 
-				Constants.TOOLTIP_DATATYPE);
-		   propertyToolTipInformation.setPropertyValue(Messages.INPUTS_SCHEMA_ARE_NOT_IN_SYNC);
+		   propertyToolTipInformation =createPropertyToolTipInformation(Messages.INPUTS_SCHEMA_ARE_NOT_IN_SYNC, Constants.SHOW_TOOLTIP);
 		   }
 		   else
 		   {
-			propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.HIDE_TOOLTIP, 
-					Constants.TOOLTIP_DATATYPE);
-			propertyToolTipInformation.setPropertyValue("");
-		   }
+			   propertyToolTipInformation =createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);   
+			}
 		    component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}
 		else if(component instanceof SubjobComponent)
@@ -380,16 +372,12 @@ public class ComponentFigure extends Figure implements Validator {
 			if(isTransformComponentPresent)
 			{	
 			drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
-			propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.SHOW_TOOLTIP, 
-					Constants.TOOLTIP_DATATYPE);
-			propertyToolTipInformation.setPropertyValue(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB);
-			
+			 propertyToolTipInformation =createPropertyToolTipInformation(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB, 
+					 Constants.SHOW_TOOLTIP); 
 			}
 			else
 			{
-				propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, Constants.HIDE_TOOLTIP, 
-						Constants.TOOLTIP_DATATYPE);
-				propertyToolTipInformation.setPropertyValue("");
+			  propertyToolTipInformation =createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);   
 			}
 			component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}	
@@ -408,7 +396,15 @@ public class ComponentFigure extends Figure implements Validator {
 		
 		trackExecution(graphics);
 	}
-	
+ 
+  private PropertyToolTipInformation createPropertyToolTipInformation(String message,String showHide)
+  {
+	  PropertyToolTipInformation propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, showHide, 
+				Constants.TOOLTIP_DATATYPE);
+	  propertyToolTipInformation.setPropertyValue(message);
+	  return propertyToolTipInformation;
+  }
+  
   private void trackExecution(Graphics graphics) {
 		Rectangle rectangle = getBounds().getCopy();
 		if(componentStatus!=null){
