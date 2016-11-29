@@ -52,6 +52,7 @@ import com.thoughtworks.xstream.XStream;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.main.Graph;
 import hydrograph.ui.common.util.CanvasDataAdapter;
+import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.engine.exceptions.EngineException;
@@ -234,7 +235,8 @@ public class UiConverterUtil {
 				uiConverter.setParameterFile(parameterFile);
 				uiConverter.prepareUIXML();
 				Component component = uiConverter.getComponent();
-				adjustComponentFigure(component);				
+				adjustComponentFigure(component);
+				ComponentCacheUtil.INSTANCE.getProperties(component.getComponentName());
 				container.getUIComponentList().add(component);
 			}
 			createLinks();
