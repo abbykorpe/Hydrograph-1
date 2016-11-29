@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 public class JobLogger {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JobLogger.class);
 	
+	private static final String EXECUTION_TRACKING_LOG_FILE_EXTENTION = ".track.log";
 	private List<AbstractJobLogger> loggers;
 		
 	private String projectName;
@@ -145,11 +146,13 @@ public class JobLogger {
 	 * Log job start information
 	 * 
 	 */
-	public void logJobStartInfo(){
+	public void logJobStartInfo(String jobRunId){
 		for(AbstractJobLogger jobLogger: loggers){
 			jobLogger.logWithNoTimeStamp("====================================================================");
 			jobLogger.logWithNoTimeStamp("Job Start Timestamp: " + JobLoggerUtils.getTimeStamp());
-			jobLogger.logWithNoTimeStamp("Job name: " + jobLogger.getFullJobName());
+			jobLogger.logWithNoTimeStamp("Job Name: " + jobLogger.getFullJobName());
+			jobLogger.logWithNoTimeStamp("Job Id: " + getJobId(jobRunId));
+			jobLogger.logWithNoTimeStamp("Run Id: " + jobRunId);
 			jobLogger.logWithNoTimeStamp("====================================================================");
 			
 			logger.debug("Logged job start info on {}",jobLogger.getClass().getName());
@@ -161,11 +164,14 @@ public class JobLogger {
 	 * Log job end information
 	 * 
 	 */
-	public void logJobEndInfo(){
+	public void logJobEndInfo(String jobRunId, String trackingFilePath){
 		for(AbstractJobLogger jobLogger: loggers){
 			jobLogger.logWithNoTimeStamp("====================================================================");
 			jobLogger.logWithNoTimeStamp("Job End Timestamp: " + JobLoggerUtils.getTimeStamp());
-			jobLogger.logWithNoTimeStamp("Job name: " + jobLogger.getFullJobName());
+			jobLogger.logWithNoTimeStamp("Job Name: " + jobLogger.getFullJobName());
+			jobLogger.logWithNoTimeStamp("Job Tracking File: " + trackingFilePath + jobRunId + EXECUTION_TRACKING_LOG_FILE_EXTENTION);
+			jobLogger.logWithNoTimeStamp("Job Id: " + getJobId(jobRunId));
+			jobLogger.logWithNoTimeStamp("Run Id: " + jobRunId);
 			jobLogger.logWithNoTimeStamp("====================================================================");
 			jobLogger.logWithNoTimeStamp("\n\n");
 			
@@ -173,6 +179,18 @@ public class JobLogger {
 		}
 	}
 	
+	/**
+	 * @param jobRunId
+	 * @return Job Id
+	 */
+	private String getJobId(String jobRunId){
+		String id[] = jobRunId.split("_");
+		jobRunId = id[0];
+		for(int i = 1; i < id.length-1; i++){
+			jobRunId = jobRunId + "_" + id[i];
+		}
+		return jobRunId;
+	}
 	
 	/**
 	 * Release used resources

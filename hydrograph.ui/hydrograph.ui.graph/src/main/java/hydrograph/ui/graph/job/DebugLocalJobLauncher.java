@@ -129,7 +129,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 			Process process = processBuilder.start();
 
 			job.setLocalJobProcess(process);
-			JobLogger joblogger = initJobLogger(gefCanvas,true,true);
+			JobLogger joblogger = initJobLogger(gefCanvas,true,true, job.getUniqueJobId());
 
 			JobManager.INSTANCE.addJob(job);
 			logProcessLogsAsynchronously(joblogger, process, job);
@@ -212,7 +212,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 				}
 			}
 		}
-		joblogger.logJobEndInfo();
+		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getLogPath());
 		joblogger.close();
 	}
 

@@ -247,7 +247,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
-		joblogger.logJobEndInfo();
+		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getLogPath());
 		joblogger.close();
 		JobManager.INSTANCE.removeJob(job.getLocalJobID());
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
@@ -262,7 +262,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			Process process = processBuilder.start();
 
 			job.setLocalJobProcess(process);
-			JobLogger joblogger = initJobLogger(gefCanvas, logSystemInfo, logJobStartInfo);
+			JobLogger joblogger = initJobLogger(gefCanvas, logSystemInfo, logJobStartInfo, job.getUniqueJobId());
 
 			JobManager.INSTANCE.addJob(job);
 			logProcessLogsAsynchronously(joblogger, process, job, gefCanvas);
