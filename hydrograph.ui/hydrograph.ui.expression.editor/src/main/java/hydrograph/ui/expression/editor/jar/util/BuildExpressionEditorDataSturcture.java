@@ -155,11 +155,14 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 	private IProject getProjectFromActiveGraph() {
+		if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()!=null)
+		{	
 		IEditorInput editorInput=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
 		if(editorInput instanceof IFileEditorInput){
 			return ((IFileEditorInput)editorInput).getFile().getProject();
 		}else if(editorInput instanceof FileStoreEditorInput){
 			new CustomMessageBox(SWT.ERROR ,Messages.ERROR_WHILE_LOADING_CONFIGURATIONS_FOR_EXTERNAL_JOBS,Messages.TITLE_FOR_PROBLEM_IN_LOADING_EXPRESSION_EDITOR).open();
+		}
 		}
 		return null;
 	}
