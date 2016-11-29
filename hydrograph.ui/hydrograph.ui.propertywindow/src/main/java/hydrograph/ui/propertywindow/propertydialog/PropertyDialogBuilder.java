@@ -177,6 +177,7 @@ public class PropertyDialogBuilder {
 		((Composite)subGroupContainerx.getContainerControl()).setVisible(false);
 		((Composite)subGroupContainerx.getContainerControl().getParent()).setVisible(false);
 		((Composite)subGroupContainerx.getContainerControl().getParent().getParent()).setData("org.eclipse.e4.ui.css.id", "EmptyHydroGroup");
+		((Composite)subGroupContainerx.getContainerControl().getParent().getParent()).setVisible(false);
 	}
 
 	private GridLayout getGroupWidgetLayout() {
