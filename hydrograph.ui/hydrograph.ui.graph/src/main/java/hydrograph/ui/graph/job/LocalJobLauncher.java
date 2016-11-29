@@ -99,7 +99,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		try {
 			Process process = processBuilder.start();
 			job.setLocalJobProcess(process);
-			JobLogger joblogger = initJobLogger(gefCanvas,true,true);
+			JobLogger joblogger = initJobLogger(gefCanvas,true,true, job.getUniqueJobId());
 
 			JobManager.INSTANCE.addJob(job);
 			logProcessLogsAsynchronously(joblogger, process, job);
@@ -165,7 +165,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 				}
 			}
 		}
-		joblogger.logJobEndInfo();
+		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getLogPath());
 		joblogger.close();
 		JobManager.INSTANCE.removeJob(job.getLocalJobID());
 	}

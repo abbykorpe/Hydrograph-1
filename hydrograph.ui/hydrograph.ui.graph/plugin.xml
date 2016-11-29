@@ -296,7 +296,7 @@
          <command
                commandId="hydrograph.ui.graph.trackingHistory"
                icon="resources/icons/replay.png"
-               label="Tracking History"
+               label="View Execution History"
                style="push">
          </command>
       </menuContribution>

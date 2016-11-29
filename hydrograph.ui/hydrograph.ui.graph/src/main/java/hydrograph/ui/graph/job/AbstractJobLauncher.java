@@ -96,10 +96,10 @@ abstract public class AbstractJobLauncher {
 	 * @param gefCanvas
 	 * @return
 	 */
-	protected JobLogger initJobLogger(DefaultGEFCanvas gefCanvas,boolean logSystemInfo,boolean logJobStartInfo) {
+	protected JobLogger initJobLogger(DefaultGEFCanvas gefCanvas,boolean logSystemInfo,boolean logJobStartInfo, String jobRunId) {
 		final JobLogger joblogger = new JobLogger(gefCanvas.getActiveProject(), gefCanvas.getJobName());
 		if(logJobStartInfo)
-			joblogger.logJobStartInfo();
+			joblogger.logJobStartInfo(jobRunId);;
 		
 		if(logSystemInfo)
 			joblogger.logSystemInformation();
