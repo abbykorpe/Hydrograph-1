@@ -13,16 +13,20 @@
 
 package hydrograph.ui.communication.debugservice.method;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.common.util.PreferenceConstants;
+import hydrograph.ui.communication.debugservice.constants.DebugServiceMethods;
+import hydrograph.ui.communication.debugservice.constants.DebugServicePostParameters;
+import hydrograph.ui.logging.factory.LogFactory;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
-import hydrograph.ui.communication.debugservice.constants.DebugServiceMethods;
-import hydrograph.ui.communication.debugservice.constants.DebugServicePostParameters;
-
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
+import org.slf4j.Logger;
 
 /**
  * The class Provider
@@ -32,9 +36,10 @@ import org.eclipse.core.runtime.Platform;
  *
  */
 public class Provider {	
+	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private static String POST_PROTOCOL="http";
 	public static Provider INSTANCE = new Provider();
-	
+	private static Logger LOGGER = LogFactory.INSTANCE.getLogger(Provider.class);
 	private Provider(){
 		
 	}
@@ -50,14 +55,33 @@ public class Provider {
 	 */
 	public PostMethod getDeleteDebugFileMethod(JobDetails jobDetails) throws NumberFormatException, MalformedURLException {
 		
-		URL url = new URL(POST_PROTOCOL, jobDetails.getHost(), Integer.valueOf(jobDetails.getPort()), DebugServiceMethods.DELETE_DEBUG_CSV_FILE);
+		URL url = new URL(POST_PROTOCOL, getHost(jobDetails), getPortNo(jobDetails), DebugServiceMethods.DELETE_DEBUG_CSV_FILE);
 		
 		PostMethod postMethod = new PostMethod(url.toString());
 		postMethod.addParameter(DebugServicePostParameters.JOB_ID, jobDetails.getUniqueJobID());
 		postMethod.addParameter(DebugServicePostParameters.COMPONENT_ID, jobDetails.getComponentID());
 		postMethod.addParameter(DebugServicePostParameters.SOCKET_ID, jobDetails.getComponentSocketID());
-
+		
+		LOGGER.debug("Calling debug service for deleting csv debug file url :: "+url);
+		
 		return postMethod;
+	}
+
+	private Integer getPortNo(JobDetails jobDetails) {
+		String localPortNo=Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.LOCAL_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
+		String remotePortNo=Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
+		if(jobDetails.isRemote() && StringUtils.isNotBlank(remotePortNo)){
+			return	Integer.parseInt(remotePortNo);
+		}else
+			return Integer.parseInt(localPortNo);
+	}
+
+	private String getHost(JobDetails jobDetails) {
+		String remoteHost=Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_HOST, "", null);
+		if(jobDetails.isRemote() && Platform.getPreferencesService().getBoolean(PLUGIN_ID,PreferenceConstants.USE_REMOTE_CONFIGURATION ,false, null)){
+			return remoteHost;
+		}
+		return jobDetails.getHost();
 	}
 
 	/**
@@ -72,7 +96,7 @@ public class Provider {
 	 */
 	public PostMethod getDebugFileMethod(JobDetails jobDetails,String fileSize) throws NumberFormatException, MalformedURLException {
 		
-		URL url = new URL(POST_PROTOCOL, jobDetails.getHost(), Integer.valueOf(jobDetails.getPort()), DebugServiceMethods.GET_DEBUG_FILE_PATH);
+		URL url = new URL(POST_PROTOCOL, getHost(jobDetails), getPortNo(jobDetails), DebugServiceMethods.GET_DEBUG_FILE_PATH);
 				
 		PostMethod postMethod = new PostMethod(url.toString());
 		postMethod.addParameter(DebugServicePostParameters.JOB_ID, jobDetails.getUniqueJobID());
@@ -82,7 +106,9 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.USER_ID, jobDetails.getUsername());
 		postMethod.addParameter(DebugServicePostParameters.PASSWORD, jobDetails.getPassword());
 		postMethod.addParameter(DebugServicePostParameters.FILE_SIZE, fileSize);
-		postMethod.addParameter(DebugServicePostParameters.HOST_NAME, jobDetails.getHost());
+		postMethod.addParameter(DebugServicePostParameters.HOST_NAME, getHost(jobDetails));
+		
+		LOGGER.debug("Calling debug service to get csv debug file from url :: "+url);
 		
 		return postMethod;
 	}
@@ -97,12 +123,23 @@ public class Provider {
 	 * @param base path
 	 * @param User
 	 * @param password
+	 * @param isRemote 
 	 * @return {@link PostMethod}
 	 * @throws NumberFormatException
 	 * @throws MalformedURLException
 	 */
-	public PostMethod getDeleteBasePathFileMethod(String host, String port, String uniqJobID, String basePath, String user, String password
+	public PostMethod getDeleteBasePathFileMethod(String host, String port, String uniqJobID, String basePath, String user, String password, boolean isRemote
 			) throws NumberFormatException, MalformedURLException {
+		
+		if (isRemote) {
+			port = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_PORT_NO,
+					PreferenceConstants.DEFAULT_PORT_NO, null);
+			if (Platform.getPreferencesService().getBoolean(PLUGIN_ID, PreferenceConstants.USE_REMOTE_CONFIGURATION,
+					false, null)) {
+				host = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST,
+						"", null);
+			}
+		}
 		
 		URL url = new URL(POST_PROTOCOL, host, Integer.valueOf(port), DebugServiceMethods.DELETE_BASEPATH_FILES);
 		
@@ -111,6 +148,9 @@ public class Provider {
 		postMethod.addParameter(DebugServicePostParameters.BASE_PATH, basePath);
 		postMethod.addParameter(DebugServicePostParameters.USER_ID, user);
 		postMethod.addParameter(DebugServicePostParameters.PASSWORD, password);
+		
+		LOGGER.debug("Calling debug service to delete basepath debug files through url :: "+url);
+		
 		return postMethod;
 	}
 	
@@ -123,9 +163,12 @@ public class Provider {
 	 * @throws MalformedURLException
 	 */
 	public PostMethod getFilteredFileMethod(String jsonString,JobDetails jobDetails) throws NumberFormatException, MalformedURLException {
-		URL url = new URL(POST_PROTOCOL,jobDetails.getHost(),Integer.valueOf(jobDetails.getPort()), DebugServiceMethods.GET_FILTERED_FILE_PATH);
+		URL url = new URL(POST_PROTOCOL,getHost(jobDetails),getPortNo(jobDetails), DebugServiceMethods.GET_FILTERED_FILE_PATH);
 		PostMethod postMethod = new PostMethod(url.toString());
 		postMethod.addParameter(DebugServicePostParameters.FILTER_JSON_OBJECT,jsonString);
+		
+		LOGGER.debug("Calling debug service to get file based on the filter condition through url :: "+url);
+		
 		return postMethod;
 	}
 	
@@ -146,6 +189,8 @@ public class Provider {
         postMethod.addParameter(DebugServicePostParameters.METASTORE_TABLE_NAME, jsonString.split("\\|")[1]);
         postMethod.addParameter(DebugServicePostParameters.USERNAME, userCredentials.get(0));
         postMethod.addParameter(DebugServicePostParameters.PASSWORD,userCredentials.get(1));
+        
+        LOGGER.debug("Calling debug service to get hive table details through url :: "+url);
         
 		return postMethod;
 	}

@@ -8,6 +8,7 @@ Sr.No. <date> - [developer names] - description
 4. <07/11/2016> - [Pooja Yadav] - Rearranged widget of schema tab for Input and Output Component.
 5. .... - [Akhilesh Joshi] - Changed error dialogs for view data feature to show detailed error messages.
 6. 		  [Anshul Shivhare] - Code changes to show confirm-message box while importing target XML for updating new unique job id.
+7. <1453> [Nitin Gupta] Preferences window: Add Local and Remote Port no Details in Preference Window Under Execution Tracking and View Data
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================

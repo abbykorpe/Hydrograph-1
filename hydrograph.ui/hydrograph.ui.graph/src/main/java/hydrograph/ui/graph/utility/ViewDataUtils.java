@@ -140,7 +140,7 @@ public class ViewDataUtils {
 	public void deleteBasePathDebugFiles(Job job){
 		try {
 			DebugServiceClient.INSTANCE.deleteBasePathFiles(job.getHost(), job.getPortNumber(), job.getUniqueJobId(), job.getBasePath(),
-					job.getUserId(), job.getPassword());
+					job.getUserId(), job.getPassword(),job.isRemoteMode());
 		} catch (Exception exception) {
 			logger.warn("Unable to delete debug Base path file",exception);
 		} 

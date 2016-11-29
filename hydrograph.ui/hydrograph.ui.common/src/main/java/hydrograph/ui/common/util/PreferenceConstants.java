@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package hydrograph.ui.dataviewer.constants;
+package hydrograph.ui.common.util;
 
 /**
  * 
@@ -31,8 +31,10 @@ public class PreferenceConstants {
 	public static final String INCLUDE_HEADER = "includeHeader";
 	public static final String DEFAULTPATH = "exportDataDefaultpath";
 	public static final String PURGE_DATA_FILES = "purgeDataFiles";
-	public static final String PORT_NO = "portNo";
-	public static final String HOST="host";
+	public static final String LOCAL_PORT_NO = "localPortNo";
+	public static final String REMOTE_PORT_NO = "remotePortNo";
+	public static final String USE_REMOTE_CONFIGURATION="useRemoteConfiguration";
+	public static final String REMOTE_HOST="host";
 	
 	public static final String DEFAULT_VIEW_DATA_PAGE_SIZE="100";
 	public static final String DEFAULT_VIEW_DATA_FILE_SIZE="100";

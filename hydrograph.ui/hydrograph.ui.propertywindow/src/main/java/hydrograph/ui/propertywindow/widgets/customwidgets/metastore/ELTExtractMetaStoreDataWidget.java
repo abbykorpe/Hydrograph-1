@@ -12,26 +12,6 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets.metastore;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
-import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
-import hydrograph.ui.propertywindow.property.Property;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
-import hydrograph.ui.propertywindow.widgets.dialogs.HiveInputExtractMetaStoreDialog;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -53,6 +33,27 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PreferenceConstants;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
+import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
+import hydrograph.ui.propertywindow.widgets.dialogs.HiveInputExtractMetaStoreDialog;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 /**
  * This class to extract the details of hive component from metastore.
  * @author Bitwise
@@ -62,7 +63,6 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 
 	private static final String ERROR = "ERR";
 	private static final String INFO = "INF";
-	private static final String DEFAULT_PORTNO = "8004";
 	private static final String PORT_NO = "portNo";
 	private static final String HOST = "host";
 	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
@@ -115,8 +115,8 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String host = Platform.getPreferencesService().getString(PLUGIN_ID,HOST, "", null);
-				String port_no =Platform.getPreferencesService().getString(PLUGIN_ID,PORT_NO, DEFAULT_PORTNO, null);
+				String host = Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_HOST, "", null);
+				String port_no =Platform.getPreferencesService().getString(PLUGIN_ID,PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
 
 				if(null!=host&& StringUtils.isNotBlank(host)){
 					

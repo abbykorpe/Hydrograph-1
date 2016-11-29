@@ -114,6 +114,16 @@ public class Messages extends NLS{
 	public static String DISPLAY;
 	public static String DISPLAY_TOOLTIP;
 	public static String COMMA_SEPERATED_VALUE;
+
+	public static String LOCAL_PORT_NO_LABEL;
+	public static String REMOTE_PORT_NO_LABEL;
+	public static String OVERRIDE_REMOTE_HOST_LABEL;
+	public static String REMOTE_HOST_NAME_LABEL;
+	public static String TRACKING_LOG_PATH_LABEL;
+
+
+	public static String BLANK_REMOTE_HOST_NAME_ERROR;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

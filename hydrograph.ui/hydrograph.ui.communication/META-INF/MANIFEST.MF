@@ -9,11 +9,11 @@ Require-Bundle: org.eclipse.ui,
  org.slf4j.api,
  hydrograph.ui.logging;bundle-version="0.0.1",
  org.apache.commons.httpclient,
- org.apache.commons.lang,
+ org.apache.commons.lang;bundle-version="2.4.0",
  hydrograph.ui.common.datastructures;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: hydrograph.ui.communication.debugservice,
  hydrograph.ui.communication.utilities
-Import-Package: com.jcraft.jsch;version="0.1.53"
-Bundle-Vendor: BITWISE
+Import-Package: com.jcraft.jsch;version="0.1.44",
+ hydrograph.ui.common.util
