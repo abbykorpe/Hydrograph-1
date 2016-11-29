@@ -17,7 +17,7 @@ import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.dataviewer.constants.AdapterConstants;
 import hydrograph.ui.dataviewer.constants.Messages;
-import hydrograph.ui.dataviewer.constants.PreferenceConstants;
+import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.dataviewer.constants.StatusConstants;
 import hydrograph.ui.dataviewer.datastructures.RowData;
 import hydrograph.ui.dataviewer.datastructures.RowField;

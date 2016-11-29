@@ -14,9 +14,9 @@
 package hydrograph.ui.dataviewer.preferencepage;
 
 import hydrograph.ui.common.util.ConvertHexValues;
+import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;
-import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.propertywindow.runconfig.Notification;
 
@@ -38,6 +38,9 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
@@ -65,13 +68,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	private IntegerFieldEditor pageSizeEditor;
 	private StringFieldEditor delimiterEditor;
 	private IntegerFieldEditor memoryFieldEditor;
-	private IntegerFieldEditor portNo;
+	private IntegerFieldEditor localPortNo;
 	private StringFieldEditor quoteEditor;
 	private DirectoryFieldEditor tempPathFieldEditor;
 	private DirectoryFieldEditor defaultPathFieldEditor;
 	private BooleanFieldEditor purgeEditor;
 	private List<FieldEditor> editorList;
-	private StringFieldEditor hostFieldEditor;
+	private StringFieldEditor remoteHostFieldEditor;
+	private IntegerFieldEditor remotePortNo;
+	private BooleanFieldEditor useRemoteConfigBooleanFieldEditor;
+	private Composite grpServiceDetailsCmposite;
+	private Button useRemoteConfigbutton;
 	
 	public ViewDataPreference() {
 		super();
@@ -88,7 +95,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		final Composite parentComposite = new Composite(parent, SWT.None);
 		parentComposite.setToolTipText("Export Data");
 		GridData parentCompositeData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
-		parentCompositeData.heightHint = 396;
+		parentCompositeData.heightHint = 455;
 		parentCompositeData.widthHint = 662;
 		parentCompositeData.grabExcessHorizontalSpace = true;
 		parentCompositeData.grabExcessVerticalSpace = true;
@@ -104,7 +111,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		generalGroupLayout.marginHeight = 0;
 		generalGroupLayout.horizontalSpacing = 0;
 		GridData gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
-		gridData.heightHint =110;
+		gridData.heightHint =145;
 		gridData.widthHint = 580;
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
@@ -198,8 +205,8 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpExportLayout.marginHeight = 0;
 		grpExportLayout.horizontalSpacing = 0;
 		GridData gd_grpExportData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);
-		gd_grpExportData.widthHint = 580;
-		gd_grpExportData.heightHint = 140;
+		gd_grpExportData.widthHint = 590;
+		gd_grpExportData.heightHint = 170;
 		gd_grpExportData.grabExcessHorizontalSpace = true;
 		gd_grpExportData.grabExcessVerticalSpace = true;
 		
@@ -341,50 +348,79 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		
 		Group grpServiceDetails = new Group(parentComposite, SWT.NONE);
 		GridLayout gl_grpServiceDetails = new GridLayout(1, true);
-		GridData gd_grpServiceDetailsData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
-		gd_grpServiceDetailsData.widthHint = 580;
-		gd_grpServiceDetailsData.heightHint = 60;
+		GridData gd_grpServiceDetailsData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
+		gd_grpServiceDetailsData.heightHint = 110;
 		grpServiceDetails.setLayoutData(gd_grpServiceDetailsData);
 		grpServiceDetails.setLayout(gl_grpServiceDetails);
 		grpServiceDetails.setText("Service Details");
 		
-		Composite grpServiceDetailsCmposite = new Composite(grpServiceDetails, SWT.None);
-		GridData serviceGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		serviceGridData.heightHint = 50;
-		serviceGridData.widthHint = 556;
+		grpServiceDetailsCmposite = new Composite(grpServiceDetails, SWT.None);
+		GridData serviceGridData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		serviceGridData.heightHint = 100;
 		grpServiceDetailsCmposite.setLayout(new GridLayout());
 		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 
-		portNo = new IntegerFieldEditor(PreferenceConstants.PORT_NO, "Port No               ", grpServiceDetailsCmposite, 4);
-		hostFieldEditor = new StringFieldEditor(PreferenceConstants.HOST, "Host	           ", grpServiceDetailsCmposite);
-		hostFieldEditor.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if(StringUtils.isEmpty(hostFieldEditor.getStringValue())){
-					hostFieldEditor.setStringValue(PreferenceConstants.DEFAULT_HOST);
-				}
-			}
-		});
-		hostFieldEditor.setPreferenceStore(getPreferenceStore());
-		hostFieldEditor.load();
-		portNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
+		localPortNo = new IntegerFieldEditor(PreferenceConstants.LOCAL_PORT_NO, Messages.LOCAL_PORT_NO_LABEL, grpServiceDetailsCmposite, 4);
+
+		remotePortNo = new IntegerFieldEditor(PreferenceConstants.REMOTE_PORT_NO, Messages.REMOTE_PORT_NO_LABEL, grpServiceDetailsCmposite, 4);
+		remotePortNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
+				validationForIntegerField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
-		portNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
+		remotePortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) { }
 			@Override
 			public void focusGained(FocusEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,portNo,Messages.PORTNO_FIELD_VALIDATION);
+				validationForIntegerField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
-		portNo.setPreferenceStore(getPreferenceStore());
-		portNo.load();
+		remotePortNo.setPreferenceStore(getPreferenceStore());
+		remotePortNo.load();
+		
+		new Label(grpServiceDetailsCmposite, SWT.None).setText(Messages.OVERRIDE_REMOTE_HOST_LABEL);
+		Composite headerRemoteComposite = new Composite(grpServiceDetailsCmposite, SWT.None);
+		headerComposite.setBounds(0, 0, 20, 16);
+		
+		useRemoteConfigBooleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.USE_REMOTE_CONFIGURATION, "", SWT.DEFAULT, headerRemoteComposite);
+		useRemoteConfigbutton = (Button) useRemoteConfigBooleanFieldEditor.getDescriptionControl(headerRemoteComposite);
+		getPreferenceStore().setDefault(PreferenceConstants.USE_REMOTE_CONFIGURATION, false);
+		useRemoteConfigBooleanFieldEditor.setPreferenceStore(getPreferenceStore());
+		useRemoteConfigBooleanFieldEditor.load();
+		
+		remoteHostFieldEditor = new StringFieldEditor(PreferenceConstants.REMOTE_HOST, Messages.REMOTE_HOST_NAME_LABEL, grpServiceDetailsCmposite);
+		remoteHostFieldEditor.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				validateRemoteHost();
+			}
+		});
+		remoteHostFieldEditor.setPreferenceStore(getPreferenceStore());
+		remoteHostFieldEditor.load();
+		remoteHostFieldEditor.setErrorMessage(null);
+		localPortNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent event) {
+				String value = ((Text)event.getSource()).getText();
+				validationForIntegerField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
+			}
+		});
+		localPortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) { }
+			@Override
+			public void focusGained(FocusEvent event) {
+				String value = ((Text)event.getSource()).getText();
+				validationForIntegerField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
+			}
+		});
+		localPortNo.setPreferenceStore(getPreferenceStore());
+		localPortNo.load();
+		addListenerToRemoteConfigBooleanEditor(headerRemoteComposite);
 		 
 		booleanFieldEditor = new BooleanFieldEditor(PreferenceConstants.INCLUDE_HEADER, "", SWT.DEFAULT, headerComposite);
 		getPreferenceStore().setDefault(PreferenceConstants.INCLUDE_HEADER, true);
@@ -411,9 +447,20 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		addFields(delimiterEditor);
 		addFields(pageSizeEditor);
 		addFields(quoteEditor);
-		addFields(portNo);
+		addFields(localPortNo);
+		addFields(remotePortNo);
+		addFields(remoteHostFieldEditor);
 		
 		return null;
+	}
+
+	private void addListenerToRemoteConfigBooleanEditor(Composite headerRemoteComposite) {
+		useRemoteConfigbutton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				validateRemoteHost();
+			}
+		});
 	}
 
 
@@ -490,8 +537,9 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		preferenceStore.setDefault(PreferenceConstants.QUOTE_CHARACTOR, "\"");
 		preferenceStore.setDefault(PreferenceConstants.INCLUDE_HEADER, true);
 		preferenceStore.setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
-		preferenceStore.setDefault(PreferenceConstants.PORT_NO, "8004");
-		
+		preferenceStore.setDefault(PreferenceConstants.LOCAL_PORT_NO, "8004");
+		preferenceStore.setDefault(PreferenceConstants.REMOTE_PORT_NO, "8004");
+		preferenceStore.setDefault(PreferenceConstants.USE_REMOTE_CONFIGURATION, false);
 		setPreferenceStore(preferenceStore);
 	}
 	
@@ -505,15 +553,21 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		memoryFieldEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.VIEW_DATA_FILE_SIZE));
 		delimiterEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.DELIMITER));
 		quoteEditor.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.QUOTE_CHARACTOR));
-		portNo.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.PORT_NO));
-		if(StringUtils.isEmpty(hostFieldEditor.getStringValue())){
-			hostFieldEditor.setStringValue(PreferenceConstants.DEFAULT_HOST);
-		}
-
+		localPortNo.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.LOCAL_PORT_NO));
+		remotePortNo.setStringValue(preferenceStore.getDefaultString(PreferenceConstants.REMOTE_PORT_NO));
+		useRemoteConfigBooleanFieldEditor.loadDefault();
 		booleanFieldEditor.loadDefault();
 		purgeEditor.loadDefault();
+		loadDefaultToRemoteHostEditor();
 	}
 	
+	private void loadDefaultToRemoteHostEditor() {
+		setErrorMessage(null);
+		remoteHostFieldEditor.setErrorMessage("");
+		setValid(true);
+		checkState();;
+	}
+
 	@Override
 	protected void performApply() {
 		memoryFieldEditor.store();
@@ -524,8 +578,10 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.store();
 		booleanFieldEditor.store();
 		pageSizeEditor.store();
-		portNo.store();
-		hostFieldEditor.store();
+		localPortNo.store();
+		remotePortNo.store();
+		useRemoteConfigBooleanFieldEditor.store();
+		remoteHostFieldEditor.store();
 	}
 	
 	@Override
@@ -538,8 +594,22 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		defaultPathFieldEditor.store();
 		booleanFieldEditor.store();
 		purgeEditor.store();
-		portNo.store();
-		hostFieldEditor.store();
+		localPortNo.store();
+		remotePortNo.store();
+		remoteHostFieldEditor.store();
+		useRemoteConfigBooleanFieldEditor.store();
 		return super.performOk();
+	}
+
+	private void validateRemoteHost() {
+		if(useRemoteConfigbutton.getSelection() && StringUtils.isEmpty(remoteHostFieldEditor.getStringValue())){
+			remoteHostFieldEditor.setErrorMessage(Messages.BLANK_REMOTE_HOST_NAME_ERROR);
+			checkState();
+		}else{
+			setErrorMessage(null);
+			remoteHostFieldEditor.setErrorMessage("");
+			setValid(true);
+			checkState();;
+		}
 	}
 }

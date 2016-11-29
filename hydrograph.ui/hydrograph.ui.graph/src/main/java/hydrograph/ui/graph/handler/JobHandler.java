@@ -110,7 +110,7 @@ public class JobHandler extends AbstractHandler {
 		ELTGraphicalEditor editor = SubJobUtility.getCurrentEditor();
 		if(editor.isDirty())
 		{
-			if(!StringUtils.equals(Activator.getDefault().getPreferenceStore().getString(JobRunPreference.JOB_RUN_PREFRENCE), MessageDialogWithToggle.ALWAYS)){
+			if(!StringUtils.equals(Activator.getDefault().getPreferenceStore().getString(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE), MessageDialogWithToggle.ALWAYS)){
 			SaveJobFileBeforeRunDialog messageBox = new SaveJobFileBeforeRunDialog(Display.getCurrent().getActiveShell(),"'"+editor.getEditorInput().getName()+"' "+Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN );
 		    int rc = messageBox.open();
 		    if(rc!=IDialogConstants.OK_ID){

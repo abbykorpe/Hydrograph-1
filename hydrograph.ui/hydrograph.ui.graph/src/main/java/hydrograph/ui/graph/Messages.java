@@ -115,6 +115,10 @@ public class Messages extends NLS {
 	public static String WATCH_POINT_REMOVED_SUCCESSFULLY;
 	public static String NO_WATCH_POINT_AVAILABLE;
 	
+	public static String ENABLE_TRACKING_LABEL;
+	 
+	public static String EXECUTION_TRACKING_GROUP_LABEL;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -14,9 +14,9 @@
 package hydrograph.ui.dataviewer.utilities;
 
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
-import hydrograph.ui.dataviewer.constants.PreferenceConstants;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
@@ -142,7 +142,7 @@ public class Utils {
 	 */
 	public String getServicePortNo(){
 		String portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
-				PreferenceConstants.PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
+				PreferenceConstants.LOCAL_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
 		return portNo;
 	}
 	

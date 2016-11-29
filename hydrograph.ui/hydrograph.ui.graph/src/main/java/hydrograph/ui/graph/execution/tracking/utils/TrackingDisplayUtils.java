@@ -73,7 +73,7 @@ public class TrackingDisplayUtils {
 
 	/** The websocket route. */
 	private String websocketRoute;
-	private static final String WEB_SOCKET = "ws://";
+	public static final String WEB_SOCKET = "ws://";
 	private static final String COLON = ":";
 	/**
 	 * Instantiates a new tracking display utils.
@@ -170,8 +170,23 @@ public class TrackingDisplayUtils {
 	 * @return the web socket remote url
 	 */
 	public String getWebSocketRemoteUrl(Job job) {
+		String remoteUrl = null;
 		String portNo = getPortFromPreference();
-		String remoteUrl = WEB_SOCKET + job.getHost() + COLON + portNo + websocketRoute;
+		if (job.isRemoteMode()
+				&& Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID,
+						ExecutionPreferenceConstants.USE_REMOTE_CONFIGURATION, false, null)) {
+			portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
+					ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO, getExecutiontrackingPortNo(), null);
+			String remoteHost = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
+					ExecutionPreferenceConstants.REMOTE_TRACKING_HOST, "", null);
+			remoteUrl = WEB_SOCKET + remoteHost + COLON + portNo + websocketRoute;
+		} else {
+			if (job.isRemoteMode()) {
+				portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
+						ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO, getExecutiontrackingPortNo(), null);
+			}
+			remoteUrl = WEB_SOCKET + job.getHost() + COLON + portNo + websocketRoute;
+		}
 		return remoteUrl;
 	}
 
@@ -195,7 +210,7 @@ public class TrackingDisplayUtils {
 	public String getPortFromPreference() {
 		String portNo = Platform.getPreferencesService().getString(
 				Activator.PLUGIN_ID,
-				ExecutionPreferenceConstants.TRACKING_PORT_NO,
+				ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO,
 				getExecutiontrackingPortNo(), null);
 
 		return portNo;

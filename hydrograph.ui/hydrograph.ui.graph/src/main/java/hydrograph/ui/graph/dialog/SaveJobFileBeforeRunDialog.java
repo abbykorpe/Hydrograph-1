@@ -120,7 +120,7 @@ public class SaveJobFileBeforeRunDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		if(alwaysSaveCheckButton.getSelection()){
-			Activator.getDefault().getPreferenceStore().setValue(JobRunPreference.JOB_RUN_PREFRENCE, MessageDialogWithToggle.ALWAYS);
+			Activator.getDefault().getPreferenceStore().setValue(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE, MessageDialogWithToggle.ALWAYS);
 		}
 		super.okPressed();
 	}
