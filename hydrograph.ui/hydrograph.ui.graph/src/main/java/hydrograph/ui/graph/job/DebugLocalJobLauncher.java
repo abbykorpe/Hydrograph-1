@@ -14,6 +14,18 @@
  
 package hydrograph.ui.graph.job;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.List;
+
+import javax.websocket.Session;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
@@ -21,22 +33,9 @@ import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import javax.websocket.CloseReason;
-import javax.websocket.CloseReason.CloseCodes;
-import javax.websocket.Session;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.slf4j.Logger;
 
 
 /**
@@ -102,13 +101,15 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile,userFunctionsPropertyFile, debugXmlPath,job);
 		executeCommand(job, project, gradleCommand, gefCanvas);
 
-		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)){
+		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING) || job.getJobStatus().equalsIgnoreCase(JobStatus.PENDING)){
 			job.setJobStatus(JobStatus.SUCCESS);
 		}
 
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
 		}
+		
+		ViewDataUtils.getInstance().addViewDataJobDetails(job.getConsoleName(), job);
 		refreshProject(gefCanvas);
 		JobManager.INSTANCE.removeJob(job.getCanvasName());
 		ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);

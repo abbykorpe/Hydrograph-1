@@ -31,6 +31,7 @@ public class JobDetails {
 	private String componentSocketID;
 
 	private boolean isRemote;
+	private String jobStatus;
 
 	/**
 	 * Instantiates a new job details.
@@ -55,7 +56,7 @@ public class JobDetails {
 	 *            the is remote
 	 */
 	public JobDetails(String host, String port, String username, String password, String basepath, String uniqueJobID,
-			String componentID, String componentSocketID, boolean isRemote) {
+			String componentID, String componentSocketID, boolean isRemote, String jobStatus) {
 		this.host = host;
 		this.port = port;
 		this.username = username;
@@ -65,6 +66,7 @@ public class JobDetails {
 		this.componentID = componentID;
 		this.componentSocketID = componentSocketID;
 		this.isRemote = isRemote;
+		this.jobStatus = jobStatus;
 	}
 	
 
@@ -137,6 +139,36 @@ public class JobDetails {
 		return componentID;
 	}
 
+	
+
+	public String getJobStatus() {
+		return jobStatus;
+	}
+
+
+	/**
+	 * @param jobStatus
+	 */
+	public void setJobStatus(String jobStatus) {
+		this.jobStatus = jobStatus;
+	}
+
+
+	/**
+	 * @param componentID
+	 */
+	public void setComponentID(String componentID) {
+		this.componentID = componentID;
+	}
+
+
+	/**
+	 * @param componentSocketID
+	 */
+	public void setComponentSocketID(String componentSocketID) {
+		this.componentSocketID = componentSocketID;
+	}
+
 
 	/**
 	 * Gets the component socket ID.
@@ -157,8 +189,10 @@ public class JobDetails {
 		return isRemote;
 	}
 	
-	
 
+	/**
+	 * @param uniqueJobID
+	 */
 	public void setUniqueJobID(String uniqueJobID) {
 		this.uniqueJobID = uniqueJobID;
 	}
@@ -166,9 +200,88 @@ public class JobDetails {
 
 	@Override
 	public String toString() {
-		return "JobDetails [host=" + host + ", port=" + port + ", basepath=" + basepath + ", uniqueJobID="
-				+ uniqueJobID + ", componentID=" + componentID + ", componentSocketID=" + componentSocketID
-				+ ", isRemote=" + isRemote + "]";
+		return "JobDetails [host=" + host + ", port=" + port + ", username=" + username + ", password=" + password
+				+ ", basepath=" + basepath + ", uniqueJobID=" + uniqueJobID + ", componentID=" + componentID
+				+ ", componentSocketID=" + componentSocketID + ", isRemote=" + isRemote + ", jobStatus=" + jobStatus
+				+ "]";
 	}
-	
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((basepath == null) ? 0 : basepath.hashCode());
+		result = prime * result + ((componentID == null) ? 0 : componentID.hashCode());
+		result = prime * result + ((componentSocketID == null) ? 0 : componentSocketID.hashCode());
+		result = prime * result + ((host == null) ? 0 : host.hashCode());
+		result = prime * result + (isRemote ? 1231 : 1237);
+		result = prime * result + ((jobStatus == null) ? 0 : jobStatus.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((port == null) ? 0 : port.hashCode());
+		result = prime * result + ((uniqueJobID == null) ? 0 : uniqueJobID.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JobDetails other = (JobDetails) obj;
+		if (basepath == null) {
+			if (other.basepath != null)
+				return false;
+		} else if (!basepath.equals(other.basepath))
+			return false;
+		if (componentID == null) {
+			if (other.componentID != null)
+				return false;
+		} else if (!componentID.equals(other.componentID))
+			return false;
+		if (componentSocketID == null) {
+			if (other.componentSocketID != null)
+				return false;
+		} else if (!componentSocketID.equals(other.componentSocketID))
+			return false;
+		if (host == null) {
+			if (other.host != null)
+				return false;
+		} else if (!host.equals(other.host))
+			return false;
+		if (isRemote != other.isRemote)
+			return false;
+		if (jobStatus == null) {
+			if (other.jobStatus != null)
+				return false;
+		} else if (!jobStatus.equals(other.jobStatus))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (port == null) {
+			if (other.port != null)
+				return false;
+		} else if (!port.equals(other.port))
+			return false;
+		if (uniqueJobID == null) {
+			if (other.uniqueJobID != null)
+				return false;
+		} else if (!uniqueJobID.equals(other.uniqueJobID))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+
 }

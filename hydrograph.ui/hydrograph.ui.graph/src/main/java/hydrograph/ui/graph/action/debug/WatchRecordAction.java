@@ -13,28 +13,6 @@
 
 package hydrograph.ui.graph.action.debug;
 
-import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.dataviewer.constants.MessageBoxText;
-import hydrograph.ui.dataviewer.filter.FilterConditions;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.controller.ComponentEditPart;
-import hydrograph.ui.graph.controller.LinkEditPart;
-import hydrograph.ui.graph.controller.PortEditPart;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
-import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.graph.job.JobManager;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.utility.MessageBox;
-import hydrograph.ui.graph.utility.ViewDataUtils;
-import hydrograph.ui.graph.viewdatadialog.ViewDataUniqueIdDialog;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -56,6 +34,27 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.dataviewer.constants.MessageBoxText;
+import hydrograph.ui.dataviewer.filter.FilterConditions;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.LinkEditPart;
+import hydrograph.ui.graph.controller.PortEditPart;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.utility.MessageBox;
+import hydrograph.ui.graph.utility.ViewDataUtils;
+import hydrograph.ui.graph.viewdatadialog.ViewDataUniqueIdDialog;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class WatchRecordAction used to view data history at watch points after job execution
@@ -227,11 +226,11 @@ public class WatchRecordAction extends SelectionAction {
 		
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		
-		//ViewDataUtils dataUtils = ViewDataUtils.getInstance();
-		Map<String, List<Job>> jobDetails1 = ViewExecutionHistoryUtility.INSTANCE.getTrackingJobs();
+		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
+		//Map<String, List<Job>> jobDetails1 = ViewExecutionHistoryUtility.INSTANCE.getTrackingJobs();
+		Map<String, List<JobDetails>> jobDetails1 = dataUtils.getViewDataJobDetails();
 		
-		
-		List<Job> tmpList = jobDetails1.get(consoleName);
+		List<JobDetails> tmpList = jobDetails1.get(consoleName);
 		
 		ViewDataUniqueIdDialog dataUniqueIdDialog = new ViewDataUniqueIdDialog(Display.getDefault().getActiveShell(), tmpList);
 		dataUniqueIdDialog.open();
@@ -239,12 +238,12 @@ public class WatchRecordAction extends SelectionAction {
 		
 		
 		String selectedUniqueJobId = dataUniqueIdDialog.getSelectedUniqueJobId();
-		Job selectedJob = null;
-		for(Map.Entry<String, List<Job>> entry1 : jobDetails1.entrySet()){
+		JobDetails selectedJob = null;
+		for(Map.Entry<String, List<JobDetails>> entry1 : jobDetails1.entrySet()){
 			if(consoleName.equalsIgnoreCase(entry1.getKey())){
-				List<Job> jobList = entry1.getValue();
-				for(Job jobDetail: jobList){
-					if(StringUtils.isNotEmpty(selectedUniqueJobId) && jobDetail.getUniqueJobId().equalsIgnoreCase(selectedUniqueJobId)){
+				List<JobDetails> jobList = entry1.getValue();
+				for(JobDetails jobDetail: jobList){
+					if(StringUtils.isNotEmpty(selectedUniqueJobId) && jobDetail.getUniqueJobID().equalsIgnoreCase(selectedUniqueJobId)){
 						selectedJob = jobDetail;
 						break;
 					}
@@ -294,8 +293,10 @@ public class WatchRecordAction extends SelectionAction {
 	}
 
 	
-	private JobDetails getJobDetails(Job job) {
-		final JobDetails jobDetails = new JobDetails(
+	private JobDetails getJobDetails(JobDetails jobDetails) {
+		jobDetails.setComponentID(watchRecordInner.getComponentId());
+		jobDetails.setComponentSocketID(watchRecordInner.getSocketId());
+		/*final JobDetails jobDetails = new JobDetails(
 				job.getHost(), 
 				job.getPortNumber(), 
 				job.getUserId(), 
@@ -304,7 +305,7 @@ public class WatchRecordAction extends SelectionAction {
 				job.getUniqueJobId(), 
 				watchRecordInner.getComponentId(), 
 				watchRecordInner.getSocketId(),
-				job.isRemoteMode());
+				job.isRemoteMode(), "local");*/
 		return jobDetails;
 	}
 }
