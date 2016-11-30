@@ -13,11 +13,6 @@
 
 package hydrograph.ui.help.aboutDialog;
 
-import hydrograph.ui.help.Activator;
-import hydrograph.ui.help.Messages;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,8 +29,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -48,7 +41,6 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -73,6 +65,11 @@ import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
+
+import hydrograph.ui.help.Activator;
+import hydrograph.ui.help.Messages;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * The Class CustomAboutDialog. Creates Custom AboutDialog of Hydrograph
@@ -287,7 +284,7 @@ public class CustomAboutDialog extends TrayDialog {
 		link.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				try {
 					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser()
 							.openURL(new URL(Messages.HYDROGRAPH_URL));
