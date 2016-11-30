@@ -58,6 +58,7 @@ public class ViewDataUtils {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataUtils.class);
 	/** The jobUniqueId map. */
 	
+	private static final String DATAVIEWER_PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private Map<String, List<JobDetails>> viewDataJobDetails;
 	
 	private static ViewDataUtils INSTANCE = new ViewDataUtils();
@@ -206,6 +207,7 @@ public class ViewDataUtils {
 	}
 	
 	/**
+	 * The function will add viewData job details in a list and list is maintaining a map.
 	 * @param jobName
 	 * @param job
 	 */
@@ -233,6 +235,11 @@ public class ViewDataUtils {
 	}
 	
 	
+	/**
+	 * The function will fetch the remote value from viewData preferencePage/runConfig dialog
+	 * @param job
+	 * @return remote host
+	 */
 	private String getRemoteHostFromPreference(Job job){
 		String remoteHost = null;
 		if(isOverrideRemoteHost()){
@@ -242,45 +249,50 @@ public class ViewDataUtils {
 		}
 		return remoteHost;
 	}
+	
 	/**
+	 * The function will return remote host value
 	 * @return host name
 	 */
-	public String getHostFromPreference(){
-		String jobTrackingLogDirectory = Platform.getPreferencesService().getString("hydrograph.ui.dataviewer", 
+	private String getHostFromPreference(){
+		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, 
 				PreferenceConstants.REMOTE_HOST, PreferenceConstants.DEFAULT_HOST, null);
 		return jobTrackingLogDirectory;
 	}
 	
 	/**
+	 * The function will check remote host value is overridable
 	 * @return
 	 */
 	private boolean isOverrideRemoteHost(){
-		boolean isRemoteHost = Platform.getPreferencesService().getBoolean("hydrograph.ui.dataviewer", 
+		boolean isRemoteHost = Platform.getPreferencesService().getBoolean(DATAVIEWER_PLUGIN_ID, 
 				PreferenceConstants.USE_REMOTE_CONFIGURATION, false, null);
 		return isRemoteHost;
 	}
 	
 	/**
+	 * The function will return local service port value from viewData preference page
 	 * @return viewData service port no
 	 */
-	public String getViewDataLocalPort(){
-		String localPortNo = Platform.getPreferencesService().getString("hydrograph.ui.dataviewer", PreferenceConstants.LOCAL_PORT_NO, 
+	private String getViewDataLocalPort(){
+		String localPortNo = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, PreferenceConstants.LOCAL_PORT_NO, 
 				PreferenceConstants.DEFAULT_PORT_NO, null);
 		return localPortNo;
 	}
 	
 	/**
+	 * The function will return remote service port value from viewData preference page
 	 * @return
 	 */
-	public String getViewDataRemotePort(){
-		String remotePortNo = Platform.getPreferencesService().getString("hydrograph.ui.dataviewer", PreferenceConstants.LOCAL_PORT_NO, 
+	private String getViewDataRemotePort(){
+		String remotePortNo = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, PreferenceConstants.LOCAL_PORT_NO, 
 				PreferenceConstants.DEFAULT_PORT_NO, null);
 		
 		return remotePortNo;
 	}
 	
 	/**
-	 * @return
+	 * @return jobDetails map
 	 */
 	public Map<String, List<JobDetails>> getViewDataJobDetails(){
 		return viewDataJobDetails;

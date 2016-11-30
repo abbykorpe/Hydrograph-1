@@ -227,7 +227,6 @@ public class WatchRecordAction extends SelectionAction {
 		String consoleName = getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName();
 		
 		ViewDataUtils dataUtils = ViewDataUtils.getInstance();
-		//Map<String, List<Job>> jobDetails1 = ViewExecutionHistoryUtility.INSTANCE.getTrackingJobs();
 		Map<String, List<JobDetails>> jobDetails1 = dataUtils.getViewDataJobDetails();
 		
 		List<JobDetails> tmpList = jobDetails1.get(consoleName);
@@ -296,16 +295,7 @@ public class WatchRecordAction extends SelectionAction {
 	private JobDetails getJobDetails(JobDetails jobDetails) {
 		jobDetails.setComponentID(watchRecordInner.getComponentId());
 		jobDetails.setComponentSocketID(watchRecordInner.getSocketId());
-		/*final JobDetails jobDetails = new JobDetails(
-				job.getHost(), 
-				job.getPortNumber(), 
-				job.getUserId(), 
-				job.getPassword(), 
-				job.getBasePath(),
-				job.getUniqueJobId(), 
-				watchRecordInner.getComponentId(), 
-				watchRecordInner.getSocketId(),
-				job.isRemoteMode(), "local");*/
+		
 		return jobDetails;
 	}
 }
