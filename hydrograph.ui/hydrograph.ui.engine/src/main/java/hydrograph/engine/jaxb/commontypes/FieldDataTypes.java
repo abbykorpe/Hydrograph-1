@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="java.lang.Boolean"/>
  *     &lt;enumeration value="java.util.Date"/>
  *     &lt;enumeration value="java.math.BigDecimal"/>
+ *     &lt;enumeration value="java.sql.Timestamp"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -64,7 +65,9 @@ public enum FieldDataTypes {
     @XmlEnumValue("java.util.Date")
     JAVA_UTIL_DATE("java.util.Date"),
     @XmlEnumValue("java.math.BigDecimal")
-    JAVA_MATH_BIG_DECIMAL("java.math.BigDecimal");
+    JAVA_MATH_BIG_DECIMAL("java.math.BigDecimal"),
+    @XmlEnumValue("java.sql.Timestamp")
+    JAVA_SQL_TIMESTAMP("java.sql.Timestamp");
     private final String value;
 
     FieldDataTypes(String v) {

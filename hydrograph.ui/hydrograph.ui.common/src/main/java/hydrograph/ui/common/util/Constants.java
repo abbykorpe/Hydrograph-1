@@ -159,12 +159,17 @@ public class Constants {
 	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
 	public static final String INPUT_SUBJOB_COMPONENT_NAME = "InputSubjobComponent";
 	
+	public static final String TEST_CONNECTION = "Test Connection";
 	public static final String EDIT = "Edit";
 	public static final String RUNTIME_PROPERTIES_COLUMN_NAME = "Runtime\nProperties";
 	public static final String RUNTIME_PROPERTIES_WINDOW_LABEL = "Runtime Properties";
+	public static final String LOAD_TYPE_CONFIGURATION_WINDOW_LABEL = "Load Type Configuration";
+	public static final String UPDATE_KEYS_WINDOW_LABEL="Update Keys";
+	public static final String PRIMARY_KEYS_WINDOW_LABEL="Primary Keys";
 	public static final String RUNTIME_PROPERTY_NAME = "runtime_properties";
 	
 	public static final String RUNTIME_PROPERTY_LABEL = "Runtime\nProperties";
+	public static final String LOAD_TYPE_CONFIGURATION_LABEL = "Loadtype\nConfiguration";
 	public static final String SUBJOB_PROPERTY_LABEL = "Subjob\nProperties";
 	public static final String UNUSED_PORT_COUNT_PROPERTY = "unusedPortCount";
 	public static final String UNUSED_AND_INPUT_PORT_COUNT_PROPERTY = "inPortCount|unusedPortCount";
@@ -283,6 +288,7 @@ public class Constants {
 	public static final String EXTERNAL_TABLE_PATH_WIDGET_NAME="externalTablePath";
 	public static final String HOST = "host";
 
+
 	//Workbench - ToolBar ,CoolBar, MenuBar, MenuItems, ToolItems IDs
 	
 	// ID of tool-bar having stop and run tool-items which is defined in Graph plugin's plugin.xml 
@@ -292,5 +298,20 @@ public class Constants {
 	public static final String FIRST_TOOLBAR_ID = "hydrograph.ui.graph.toolbar1";
 	public static final String REMOVE_WATCH_POINTS_TOOLITEM_ID = "hydrograph.ui.graph.command.removedebug";
 	
-}
 
+	// Oracle Component
+	public static final String ORACLE_DATABASE_WIDGET_NAME="sid";
+	public static final String ORACLE_HOST_WIDGET_NAME="hostName";
+	public static final String ORACLE_PORT_WIDGET_NAME="port";
+	public static final String ORACLE_JDBC_DRIVER_WIDGET_NAME="jdbcDriver";
+	public static final String ORACLE_SCHEMA_WIDGET_NAME="oracleSchema";
+	public static final String ORACLE_USER_NAME_WIDGET_NAME="userName";
+	public static final String ORACLE_PASSWORD_WIDGET_NAME="password";
+	public static final String LOAD_TYPE_UPDATE_KEY = "Update";
+	public static final String LOAD_TYPE_NEW_TABLE_KEY = "New Table";
+	public static final String LOAD_TYPE_INSERT_KEY = "Insert";
+	public static final String LOAD_TYPE_REPLACE_KEY = "Replace";
+	public static String LOAD_TYPE_UPDATE_VALUE_SEPERATOR=",";
+	public static String LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR=",";
+
+}

@@ -246,6 +246,9 @@ public class FieldDialog extends Dialog {
 		if(Constants.PARTITION_KEYS_WINDOW_TITLE.equalsIgnoreCase(componentName)){
 			getShell().setText(Constants.PARTITION_KEYS_WINDOW_TITLE);
 		}
+		if(Constants.UPDATE_KEYS_WINDOW_LABEL.equalsIgnoreCase(componentName)){
+			getShell().setText(Constants.UPDATE_KEYS_WINDOW_LABEL);
+		}
 		Composite container = (Composite) super.createDialogArea(parent);
 		ColumnLayout cl_container = new ColumnLayout();
 		cl_container.verticalSpacing = 0;

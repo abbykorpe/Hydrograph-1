@@ -71,6 +71,7 @@ public class Messages extends NLS {
 	public static String DEFAULT_VALUE;
 	public static String FIELDNAMEERROR;
 	public static String FIELDBATCH;
+	public static String FIELDCHARACTER;
 	public static String CHARACTERSET;
 	public static String SCALE;
 	public static String SCALEERROR;
@@ -226,6 +227,7 @@ public class Messages extends NLS {
 	public static String LABEL_QUOTE;
 	public static String LABEL_DATABASE_NAME;
 	public static String LABEL_HOST_NAME;
+	public static String LABEL_ORACLE_SCHEMA;
 	public static String LABEL_PORT;
 	public static String LABEL_TABLE_NAME;
 	public static String LABEL_EXTERNAL_TABLE_PATH;
@@ -233,7 +235,8 @@ public class Messages extends NLS {
 	public static String LABEL_OUTPUT_COUNT;
 	public static String LABEL_CHARACTER_SET;
 	public static String LABEL_JDBC_DRIVER;
-	public static String LABEL_USER_NAME_WIDGET;
+	public static String LABEL_USER_NAME;
+	public static String LABEL_JDBC_URL;
 	public static String LABEL_PASSWORD;
 	public static String LABEL_CHUNK_SIZE;
 	public static String LABEL_NO_OF_RECORDS;

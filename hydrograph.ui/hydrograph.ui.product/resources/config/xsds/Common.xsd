@@ -101,6 +101,11 @@
 			<enumeration value="USER_NAME_WIDGET"/>
 			<enumeration value="PASSWORD_WIDGET"/>
 			<enumeration value="CHUNK_SIZE_WIDGET"/>
+			<enumeration value="LOAD_TYPE_CONFIGURATION_WIDGET"/>
+			<enumeration value="SELECT_JDBC_VALUES_WIDGET"/>
+			<enumeration value="ORACLE_SCHEMA_WIDGET"/>
+			<enumeration value="TEST_CONNECTION_WIDGET"/>
+			
 			
 		</restriction>
 	</simpleType>
@@ -296,6 +301,13 @@
 			 <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="LongValidatorRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="TOGGlE_SELECTION_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="ToggleSelectionValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

@@ -36,9 +36,9 @@
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="databaseName" value="" renderer="DATABASE_NAME_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Hive Database Name provided by the user">
+		<tns:property dataType="string" name="jdbcDriver" value="Oracle Thin" renderer="JDBC_DRIVER_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="REQUIRED" propertyHelpText="Denotes the JDBC Driver selected by user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -48,28 +48,23 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="port" value="" renderer="PORT_WIDGET"
+		<tns:property dataType="string" name="port" value="1521" renderer="PORT_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Port provided by the user">
-			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+			<tns:validator>INTEGER_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
-			
-		<tns:property dataType="string" name="jdbcDriver" value="OCI" renderer="JDBC_DRIVER_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="Denotes the JDBC Driver selected by user">
+		
+		<tns:property dataType="string" name="sid" value="" renderer="DATABASE_NAME_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays the Oracle Database Name provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="tableName" value="" renderer="TABLE_NAME_WIDGET"
+		<tns:property dataType="string" name="oracleSchema" value="" renderer="ORACLE_SCHEMA_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
-			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
+			usage="OPTIONAL" propertyHelpText="Displays the Oracle Sehema Name provided by the user">
 		</tns:property>
-		<tns:property dataType="string" name="extractMetaStoreData" renderer="EXTRACT_METASTORE_DATA_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Extract Hive schema,delimeter,partition keys from remote.">
-		</tns:property>		
-			
+		
 		<tns:property dataType="string" name="userName" value="" renderer="USER_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database User Name provided by the user">
@@ -82,10 +77,15 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="chunkSize" value="" renderer="CHUNK_SIZE_WIDGET"
+		<tns:property dataType="string" name="testConnection" value="" renderer="TEST_CONNECTION_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Displays the Chunk Size provided by the user">
-			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+			usage="REQUIRED" propertyHelpText="Used to test the connection for connecting Oracle DB">
+		</tns:property>
+		
+		<tns:property dataType="string" name="selectOption" renderer="SELECT_JDBC_VALUES_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			usage="REQUIRED" propertyHelpText="">
+			<tns:validator>TOGGlE_SELECTION_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"

@@ -32,6 +32,8 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 import java.util.List;
 
+import org.eclipse.swt.widgets.Text;
+
 
 /**
  * Helper class to provide configuration for customizing widgets.
@@ -53,6 +55,10 @@ public class WidgetHelper {
 	}
 	
 	public WidgetConfig getPartitionKeysConfigInputHive(){
+		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
+	}
+	
+	public WidgetConfig getOracleTestConnection(){
 		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
 	}
 
@@ -143,6 +149,8 @@ public class WidgetHelper {
 	public WidgetConfig getTableNameWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_TABLE_NAME);
+		textBoxConfig.setCharacterLimit(50);
+		textBoxConfig.getListeners().add(Listners.VERIFY_CHARACTER_LIMIT_LISTENER);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -153,7 +161,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getUserNameWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Messages.LABEL_USER_NAME_WIDGET);
+		textBoxConfig.setName(Messages.LABEL_USER_NAME);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -191,6 +199,17 @@ public class WidgetHelper {
 	}
 	
 	/*
+	 * Configuration to customize text box as Oracle Schema Name property 
+	 */
+	public WidgetConfig getOracleSchemaWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_ORACLE_SCHEMA);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
 	 * Configuration to customize text box as Host Name property 
 	 */
 	public WidgetConfig getHostNameWidgetConfig(){
@@ -302,16 +321,14 @@ public class WidgetHelper {
 	}
 	
 	/**
-	 * Configuration to customize dropdown as JDBC Driver property 
+	 * Configuration to customize text box as JDBC Driver property 
 	 */
 	public WidgetConfig getJdbcDriverWidgetConfig(){
-		DropDownConfig dropDownConfig = new DropDownConfig();
-		dropDownConfig.setName(Messages.LABEL_JDBC_DRIVER);
-		dropDownConfig.getItems().add(Constants.THIN);
-		dropDownConfig.getItems().add(Constants.OCI);
-		dropDownConfig.getItems().add(Constants.KPRB);
-		addComboBoxListeners(dropDownConfig);
-		return dropDownConfig;
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_JDBC_DRIVER);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
 	}
 	
 	/**
@@ -430,6 +447,13 @@ public class WidgetHelper {
 		SchemaConfig schemaConfig=new SchemaConfig();
 		schemaConfig.setDoPropagateONOK(true);
 		return schemaConfig;
+	}
+	
+	public WidgetConfig getSelectWidgetConfig() {
+		TextBoxWithLableConfig textBoxWithLableConfig = new TextBoxWithLableConfig();
+		textBoxWithLableConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxWithLableConfig);
+		return textBoxWithLableConfig;
 	}
 
 }

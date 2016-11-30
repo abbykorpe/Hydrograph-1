@@ -29,7 +29,7 @@ public class OOracle extends OutputCategory{
 	}
 
 	public String getConverter() {
-		return "hydrograph.ui.engine.converter.impl.OutputParquetConverter";
+		return "hydrograph.ui.engine.converter.impl.OutputOracleConverter";
 
 	}
 }

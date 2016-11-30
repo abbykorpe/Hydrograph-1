@@ -30,7 +30,7 @@ public class IOracle extends InputCategory {
 	}
 
 	public String getConverter() {
-		return "hydrograph.ui.engine.converter.impl.InputHiveParquetConverter";
+		return "hydrograph.ui.engine.converter.impl.InputOracleConverter";
 
 	}
 
