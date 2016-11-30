@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -79,7 +80,6 @@ import com.thoughtworks.xstream.XStream;
 import hydrograph.ui.datastructure.property.InstallationWindowDetails;
 import hydrograph.ui.datastructure.property.JarInformationDetails;
 import hydrograph.ui.logging.factory.LogFactory;
-
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
@@ -314,19 +314,20 @@ public class HydrographInstallationDialog extends TrayDialog implements
 		tableViewer.getControl().addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				StructuredSelection selection = (StructuredSelection) tableViewer.getSelection();
 				JarInformationDetails details = (JarInformationDetails) selection.getFirstElement();
-				IPath iPath = new Path(details.getPath());
-				try {
-					URL url = FileLocator.find(bundle, iPath, null);
-					 URL fileUrlForPath = FileLocator.toFileURL(url);
-					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(fileUrlForPath);
-				} catch (PartInitException | IOException e1) {
-					logger.error(e1.getMessage());
-					WidgetUtility.errorMessage("Unable to open URL in external browser");
+				if(details != null){
+					IPath iPath = new Path(details.getPath());
+					try {
+						URL url = FileLocator.find(bundle, iPath, null);
+						URL fileUrlForPath = FileLocator.toFileURL(url);
+						PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(fileUrlForPath);
+					} catch (PartInitException | IOException e1) {
+						logger.error(e1.getMessage());
+						WidgetUtility.errorMessage("Unable to open URL in external browser");
+					}
 				}
-				;
 
 			}
 		});

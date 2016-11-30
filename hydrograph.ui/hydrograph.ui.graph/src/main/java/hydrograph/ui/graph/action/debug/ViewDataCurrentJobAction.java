@@ -13,6 +13,19 @@
 
 package hydrograph.ui.graph.action.debug;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
@@ -29,19 +42,6 @@ import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
 
 /**
  * The Class WatchRecordAction used to view data at watch points after job execution
@@ -176,18 +176,18 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 				
 				window.open();
 				if(window.getConditions()!=null){
-				if(!window.getConditions().getRetainLocal()){
-					window.getConditions().setLocalCondition("");
-					window.getConditions().getLocalConditions().clear();
-					window.getConditions().getLocalGroupSelectionMap().clear();
+					if(!window.getConditions().getRetainLocal()){
+						window.getConditions().setLocalCondition("");
+						window.getConditions().getLocalConditions().clear();
+						window.getConditions().getLocalGroupSelectionMap().clear();
+					}
+					if(!window.getConditions().getRetainRemote()){
+						window.getConditions().setRemoteCondition("");
+						window.getConditions().getRemoteConditions().clear();
+						window.getConditions().getRemoteGroupSelectionMap().clear();
+					}
+					watcherAndConditon.put(watcherId,window.getConditions());
 				}
-				if(!window.getConditions().getRetainRemote()){
-					window.getConditions().setRemoteCondition("");
-					window.getConditions().getRemoteConditions().clear();
-					window.getConditions().getRemoteGroupSelectionMap().clear();
-				}
-				watcherAndConditon.put(watcherId,window.getConditions());
-			}
 			}
 
 			
@@ -201,7 +201,7 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 					job.getUniqueJobId(), 
 					watchRecordInner.getComponentId(), 
 					watchRecordInner.getSocketId(),
-					job.isRemoteMode());
+					job.isRemoteMode(), job.getJobStatus());
 			return jobDetails;
 		}
 	}

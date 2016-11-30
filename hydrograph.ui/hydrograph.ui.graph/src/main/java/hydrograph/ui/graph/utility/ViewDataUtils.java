@@ -13,13 +13,16 @@
 
 package hydrograph.ui.graph.utility;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -27,9 +30,11 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
 import hydrograph.ui.graph.Messages;
@@ -53,9 +58,13 @@ public class ViewDataUtils {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ViewDataUtils.class);
 	/** The jobUniqueId map. */
 	
+	private static final String DATAVIEWER_PLUGIN_ID = "hydrograph.ui.dataviewer";
+	private Map<String, List<JobDetails>> viewDataJobDetails;
+	
 	private static ViewDataUtils INSTANCE = new ViewDataUtils();
 	
 	private ViewDataUtils() {
+		viewDataJobDetails = new LinkedHashMap<>();
 	}
 	
 	
@@ -195,6 +204,97 @@ public class ViewDataUtils {
 				}
 			}
 		}
-			
+	}
+	
+	/**
+	 * The function will add viewData job details in a list and list is maintaining a map.
+	 * @param jobName
+	 * @param job
+	 */
+	public void addViewDataJobDetails(String jobName, Job job){
+		String host = null;
+		String port;
+		if(job.isRemoteMode()){
+			host = getRemoteHostFromPreference(job);
+			port = getViewDataRemotePort();
+		}else{
+			host = job.getHost();
+			port = getViewDataLocalPort();
+		}
+		
+		JobDetails jobDetails = new JobDetails(host, port, job.getUserId(), job.getPassword(), job.getBasePath(),
+				job.getUniqueJobId(), null, null,job.isRemoteMode(), job.getJobStatus());
+		
+		if (viewDataJobDetails.get(jobName) == null) {
+			List<JobDetails> jobs = new ArrayList<>();
+			jobs.add(jobDetails);
+			viewDataJobDetails.put(jobName, jobs);
+		} else {
+			viewDataJobDetails.get(jobName).add(jobDetails);
+		}
+	}
+	
+	
+	/**
+	 * The function will fetch the remote value from viewData preferencePage/runConfig dialog
+	 * @param job
+	 * @return remote host
+	 */
+	private String getRemoteHostFromPreference(Job job){
+		String remoteHost = null;
+		if(isOverrideRemoteHost()){
+			remoteHost = getHostFromPreference();
+		}else{
+			remoteHost = job.getHost();
+		}
+		return remoteHost;
+	}
+	
+	/**
+	 * The function will return remote host value
+	 * @return host name
+	 */
+	private String getHostFromPreference(){
+		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, 
+				PreferenceConstants.REMOTE_HOST, PreferenceConstants.DEFAULT_HOST, null);
+		return jobTrackingLogDirectory;
+	}
+	
+	/**
+	 * The function will check remote host value is overridable
+	 * @return
+	 */
+	private boolean isOverrideRemoteHost(){
+		boolean isRemoteHost = Platform.getPreferencesService().getBoolean(DATAVIEWER_PLUGIN_ID, 
+				PreferenceConstants.USE_REMOTE_CONFIGURATION, false, null);
+		return isRemoteHost;
+	}
+	
+	/**
+	 * The function will return local service port value from viewData preference page
+	 * @return viewData service port no
+	 */
+	private String getViewDataLocalPort(){
+		String localPortNo = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, PreferenceConstants.LOCAL_PORT_NO, 
+				PreferenceConstants.DEFAULT_PORT_NO, null);
+		return localPortNo;
+	}
+	
+	/**
+	 * The function will return remote service port value from viewData preference page
+	 * @return
+	 */
+	private String getViewDataRemotePort(){
+		String remotePortNo = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, PreferenceConstants.LOCAL_PORT_NO, 
+				PreferenceConstants.DEFAULT_PORT_NO, null);
+		
+		return remotePortNo;
+	}
+	
+	/**
+	 * @return jobDetails map
+	 */
+	public Map<String, List<JobDetails>> getViewDataJobDetails(){
+		return viewDataJobDetails;
 	}
 }

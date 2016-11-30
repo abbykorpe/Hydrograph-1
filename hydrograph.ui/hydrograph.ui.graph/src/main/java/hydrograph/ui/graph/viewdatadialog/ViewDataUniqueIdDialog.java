@@ -13,8 +13,6 @@
 
 package hydrograph.ui.graph.viewdatadialog;
 
-import hydrograph.ui.graph.job.Job;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +30,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+
 
 /**
  * The class ViewDataUniqueIdDialog is used to show view data history
@@ -40,12 +40,12 @@ import org.eclipse.swt.widgets.TableItem;
  */
 public class ViewDataUniqueIdDialog extends Dialog{
 	
-	private List<Job> jobDetails;
+	private List<JobDetails> jobDetails;
 	private String selectedUniqueJobId;
 	private String[] titles = {"Job Id", "Time Stamp", "Execution Mode", "Job Status"};
 	private Table table;
 	
-	public ViewDataUniqueIdDialog(Shell parentShell, List<Job> jobDetails) {
+	public ViewDataUniqueIdDialog(Shell parentShell, List<JobDetails> jobDetails) {
 		super(parentShell);
 		this.jobDetails = jobDetails;
 	}
@@ -75,18 +75,16 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	      column.setText(titles[i]);
 	    }
 		
-	    jobDetails.sort((job1, job2)-> job2.getUniqueJobId().compareTo(job1.getUniqueJobId()));
+	    jobDetails.sort((job1, job2)-> job2.getUniqueJobID().compareTo(job1.getUniqueJobID()));
 	    
-	    for(Job job : jobDetails){
-	    	if(job.isDebugMode()){
-	    		String timeStamp = getTimeStamp(job.getUniqueJobId());
-	    		TableItem items = new TableItem(table, SWT.None);
-	    		items.setText(0, job.getUniqueJobId());
-	    		items.setText(1, timeStamp);
-	    		String mode = getJobExecutionMode(job.isRemoteMode());
-	    		items.setText(2, mode);
-	    		items.setText(3, job.getJobStatus());
-	    	}
+	    for(JobDetails job : jobDetails){
+    		String timeStamp = getTimeStamp(job.getUniqueJobID());
+    		TableItem items = new TableItem(table, SWT.None);
+    		items.setText(0, job.getUniqueJobID());
+    		items.setText(1, timeStamp);
+    		String mode = getJobExecutionMode(job.isRemote());
+    		items.setText(2, mode);
+    		items.setText(3, job.getJobStatus());
 	    }
 	    
 	    table.addListener(SWT.Selection, new Listener() {
@@ -124,7 +122,7 @@ public class ViewDataUniqueIdDialog extends Dialog{
 	@Override
 	protected void okPressed() {
 		if(selectedUniqueJobId == null){
-			selectedUniqueJobId = jobDetails.get(0).getUniqueJobId();
+			selectedUniqueJobId = jobDetails.get(0).getUniqueJobID();
 		}
 		super.okPressed();
 	}

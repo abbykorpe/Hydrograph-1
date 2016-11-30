@@ -23,6 +23,7 @@ import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
 import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
+import hydrograph.ui.graph.utility.ViewDataUtils;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 
@@ -247,11 +248,13 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			return;
 		}
 
-		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING) || job.getJobStatus().equalsIgnoreCase(JobStatus.SSHEXEC)){
+		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING) || job.getJobStatus().equalsIgnoreCase(JobStatus.SSHEXEC)
+				|| job.getJobStatus().equalsIgnoreCase(JobStatus.PENDING)){
 			job.setJobStatus(JobStatus.SUCCESS);
 		}
 		
 		releaseResources(job, gefCanvas, joblogger);
+		ViewDataUtils.getInstance().addViewDataJobDetails(job.getConsoleName(), job);
 		ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
 		TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 	}
