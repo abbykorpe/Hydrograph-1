@@ -79,6 +79,8 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,new ArrayList<String>(externalSchemaFiles),new ArrayList<>(subJobList));
 
+		JobManager.INSTANCE.enableRunJob(false);
+		
 		enableLockedResources(gefCanvas);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
@@ -106,6 +108,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 			gradleCommand = JobScpAndProcessUtility.INSTANCE.getSubjobScpCommand(subJobFullPath,job);
 
 			joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+			
 			if (JobStatus.FAILED.equals(job.getJobStatus())) {
 				releaseResources(job, gefCanvas, joblogger);
 				ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
@@ -117,6 +120,9 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
+			
+
+			
 		}
 
 
@@ -237,6 +243,10 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 
 		if(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING) || job.getJobStatus().equalsIgnoreCase(JobStatus.SSHEXEC)){
 			job.setJobStatus(JobStatus.SUCCESS);
+		}
+		
+		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
+			JobManager.INSTANCE.enableRunJob(true);
 		}
 		
 		releaseResources(job, gefCanvas, joblogger);

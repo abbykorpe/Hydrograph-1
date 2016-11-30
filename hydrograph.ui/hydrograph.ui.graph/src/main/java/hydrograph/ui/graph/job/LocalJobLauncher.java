@@ -71,10 +71,8 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 		job.setJobProjectDirectory(project.getLocation().toOSString());
 
 		String gradleCommand;
-
 		job.setJobStatus(JobStatus.RUNNING);
-		((JobHandler) RunStopButtonCommunicator.RunJob.getHandler()).setRunJobEnabled(false);
-		((StopJobHandler)RunStopButtonCommunicator.StopJob.getHandler()).setStopJobEnabled(true);
+		JobManager.INSTANCE.enableRunJob(false);
 		
 		enableLockedResources(gefCanvas);
 		gradleCommand = getExecututeJobCommand(xmlPath, paramFile,userFunctionsPropertyFile, job);

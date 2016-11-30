@@ -99,6 +99,9 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		gradleCommand = JobScpAndProcessUtility.INSTANCE.getCreateDirectoryCommand(job,paramFile,xmlPath,projectName,externalSchemaFiles,subJobList);
 		enableLockedResources(gefCanvas);
 		joblogger = executeCommand(job, project, gradleCommand, gefCanvas, false, false);
+			
+		JobManager.INSTANCE.enableRunJob(false);
+		
 		if (JobStatus.FAILED.equals(job.getJobStatus())) {
 			releaseResources(job, gefCanvas, joblogger);
 			ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
@@ -253,6 +256,9 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 			job.setJobStatus(JobStatus.SUCCESS);
 		}
 		
+		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
+			JobManager.INSTANCE.enableRunJob(true);
+		}
 		releaseResources(job, gefCanvas, joblogger);
 		ViewDataUtils.getInstance().addViewDataJobDetails(job.getConsoleName(), job);
 		ViewExecutionHistoryUtility.INSTANCE.addTrackingJobs(job.getConsoleName(), job);
