@@ -24,6 +24,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.figure.ComponentFigure;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
@@ -120,6 +121,10 @@ public class PropagateDataAction extends SelectionAction {
 				addAll(SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
 				
 				component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
+				ComponentFigure componentFigure=(ComponentFigure)((ComponentEditPart)component.getComponentEditPart()).getFigure();
+				component.validateComponentProperties(false);
+				componentFigure.setPropertyStatus((String)(component.getProperties().get(Constants.VALIDITY_STATUS)));
+				componentFigure.repaint();
 				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName()))
 				break;	
 			}
@@ -149,7 +154,7 @@ public class PropagateDataAction extends SelectionAction {
 		component.setContinuousSchemaPropogationAllow(true);
 		if(shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents)
 		{
-		new SubJobUtility().setFlagForContinuousSchemaPropogation(component);
+			SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(component);
 		}
 	}
 }

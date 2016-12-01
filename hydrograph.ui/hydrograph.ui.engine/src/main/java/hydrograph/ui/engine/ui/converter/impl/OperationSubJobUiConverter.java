@@ -32,6 +32,7 @@ import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,7 +125,7 @@ public class OperationSubJobUiConverter extends UiConverter {
 		getOutPort((TypeOperationsComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
-		SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(subJobContainer,uiComponent);
+		SubjobUtility.INSTANCE.showOrHideErrorSymbolOnComponent(subJobContainer,uiComponent);
 	}
 
 	

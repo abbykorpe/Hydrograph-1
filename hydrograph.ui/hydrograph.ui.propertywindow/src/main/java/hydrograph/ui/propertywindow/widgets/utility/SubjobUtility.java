@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.validator.Validator;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -44,10 +45,14 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 					if(!isUnionAllInputSchemaInSync(nextComponent))
 					{	
 					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
+					((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 					break;
 					}
 					else
-					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
+					{	
+					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);
+					((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
+					}
 				}
 				Schema schema=(Schema)nextComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 				if(schema==null)
@@ -62,25 +67,32 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 				if(outputSchema!=null)
 				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
 				if(!StringUtils.equalsIgnoreCase(Constants.SUBJOB_COMPONENT_CATEGORY, nextComponent.getCategory()))
+				{	
 				nextComponent.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
+				nextComponent.validateComponentProperties(false);
+				Validator validator=(Validator)((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure();
+				validator.setPropertyStatus((String)nextComponent.getProperties().get(Constants.VALIDITY_STATUS));
+				((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
+				}
 				
 				nextComponent.setContinuousSchemaPropogationAllow(true);
+				
 				if(nextComponent instanceof SubjobComponent)
 				{	
 					Container container=(Container)nextComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
-					for(Object object:container.getChildren())
+					for(Component subjobComponent:container.getUIComponentList())
 					{
-						if(object instanceof Component)
-						{
-						Component subjobComponent=(Component)object;
 						if(subjobComponent instanceof InputSubjobComponent)
 						{
 							initializeSchemaMapForInputSubJobComponent(subjobComponent,nextComponent);
 							setFlagForContinuousSchemaPropogation(subjobComponent);
 							break;
 						}
-						}
 					}
+					showOrHideErrorSymbolOnComponent(container,nextComponent);
+					Validator validator=(Validator)((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure();
+					validator.setPropertyStatus((String)nextComponent.getProperties().get(Constants.VALIDITY_STATUS));
+					((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();	
 				}
 				else if(nextComponent instanceof OutputSubjobComponent)
 				{
@@ -88,7 +100,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 					if(subJobComponent!=null)
 					SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(subJobComponent, nextComponent);
 					setFlagForContinuousSchemaPropogation(subJobComponent);
-				}	
+				}
 				if(!nextComponent.getSourceConnections().isEmpty())
 				{
 				   if(nextComponent.getSourceConnections().size()==1)
@@ -100,7 +112,10 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 						nextComponent=nextComponent.getSourceConnections().get(0).getTarget();	
 					    }
 					   else
-						break;   
+					   {
+						((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();      
+						break; 
+					   }
 				     }	
 				    else
 				    {
@@ -231,6 +246,39 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 			}	
 		}	
 		inputSubJobComponent.getProperties().put(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT, inputSubJobComponentHashMap);
+	}
+	/**
+	 * This method shows or hides error icon on component
+	 * @param subJobContainer
+	 * @param uiComponent
+	 */
+	public void showOrHideErrorSymbolOnComponent(Container subJobContainer, Component uiComponent) {
+		if (subJobContainer == null) {
+			uiComponent.setValidityStatus(Constants.ERROR);
+		} else {
+			for (int i = 0; i < subJobContainer.getUIComponentList().size(); i++) {
+				if(subJobContainer.getUIComponentList().get(i) instanceof Component){
+					Component component = (Component)subJobContainer.getUIComponentList().get(i);
+				if (!(component instanceof InputSubjobComponent || component instanceof OutputSubjobComponent)) {
+					if (StringUtils.equalsIgnoreCase(Constants.ERROR, 
+							component.getProperties().get(Constants.VALIDITY_STATUS).toString())
+							|| StringUtils.equalsIgnoreCase(
+									Constants.WARN,
+									component.getProperties()
+											.get(Constants.VALIDITY_STATUS).toString())) {
+						uiComponent.getProperties().put(Constants.VALIDITY_STATUS,
+								Constants.ERROR);
+						uiComponent.setValidityStatus(Constants.ERROR);
+						break;
+					} else {
+						uiComponent.getProperties().put(Constants.VALIDITY_STATUS,
+								Constants.VALID);
+						uiComponent.setValidityStatus(Constants.VALID);
+					}
+				}
+			   }
+			}
+		}
 	}
 	
 	

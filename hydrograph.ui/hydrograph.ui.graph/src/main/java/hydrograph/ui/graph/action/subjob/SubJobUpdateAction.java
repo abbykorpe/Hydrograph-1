@@ -36,6 +36,7 @@ import hydrograph.ui.graph.job.JobStatus;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.utility.SubJobUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 
 
 /**
@@ -133,7 +134,7 @@ public class SubJobUpdateAction extends SelectionAction {
 				filePath=(String) selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubJobUtility subJobUtility=new SubJobUtility();
 				Container container=subJobUtility.updateSubjobPropertyAndGetSubjobContainer(null,filePath, selectedSubjobComponent);
-				SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(container,selectedSubjobComponent);
+				SubjobUtility.INSTANCE.showOrHideErrorSymbolOnComponent(container,selectedSubjobComponent);
 				componentEditPart.changePortSettings();
 				componentEditPart.updateComponentStatus();
 				componentEditPart.refresh();

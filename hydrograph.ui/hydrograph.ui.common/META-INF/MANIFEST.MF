@@ -25,7 +25,8 @@ Export-Package: hydrograph.ui.common.component.config,
  hydrograph.ui.common.debug.service,
  hydrograph.ui.common.schema,
  hydrograph.ui.common.swt.customwidget,
- hydrograph.ui.common.util
+ hydrograph.ui.common.util,
+ hydrograph.ui.common.validator
 Import-Package: hydrograph.ui.datastructure.property,
  hydrograph.ui.datastructure.property.mapping,
  org.apache.commons.lang,
