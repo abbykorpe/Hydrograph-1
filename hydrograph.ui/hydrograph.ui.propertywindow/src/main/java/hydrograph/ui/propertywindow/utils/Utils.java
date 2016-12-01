@@ -264,7 +264,7 @@ public class Utils {
 			IFile file = input.getFile();
 			IProject activeProject = file.getProject();
 			String activeProjectName = activeProject.getName();
-			
+			InputStream reader=null;
 			String propFilePath = null;
 			for(File propFileName : FileNameList){
 				String fileName = propFileName.getName();
@@ -277,12 +277,22 @@ public class Utils {
 				IPath propPath = new Path(propFilePath);
 				IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFile(propPath);
 				try {
-					InputStream reader = iFile.getContents();
+					reader = iFile.getContents();
 					jobProps.load(reader);
-
+					
 				} catch (CoreException | IOException e) {
 					MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
 							"Exception occured while loading build properties from file -\n" + e.getMessage());
+				}
+				
+				finally{
+					if(reader!=null){
+						try {
+							reader.close();
+						} catch (IOException ioException) {
+							ioException.printStackTrace();
+						}
+					}
 				}
 			
 				Enumeration<?> e = jobProps.propertyNames();

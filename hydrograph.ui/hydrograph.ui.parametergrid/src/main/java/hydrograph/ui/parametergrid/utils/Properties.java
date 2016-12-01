@@ -84,7 +84,9 @@ public class Properties {
 	 */
 	public void load(String path) throws IOException {
 		logger.debug("Loading properties from file {}",propertyMap);
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path))));
+		FileInputStream paramFileInputStream = new FileInputStream(new File(path));
+		InputStreamReader paramInputReader = new InputStreamReader(paramFileInputStream);
+		BufferedReader bufferedReader = new BufferedReader(paramInputReader);
 		logger.debug("Created buffered reader");
 		String line = null;
 		
@@ -96,6 +98,8 @@ public class Properties {
 		logger.debug("properties load operation compleleted, current map - ",propertyMap);
 		
 		bufferedReader.close();
+		paramFileInputStream.close();
+		paramInputReader.close();
 		logger.debug("Closed buffered reader");
 	}
 
@@ -124,7 +128,9 @@ public class Properties {
 		
 		logger.debug("Storing propertymap {} to file {}",propertyMap,path);
 		
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(path))));
+		FileOutputStream paramFileOutputStream = new FileOutputStream(new File(path));
+		OutputStreamWriter paramOutputStreamWriter = new OutputStreamWriter(paramFileOutputStream);
+		BufferedWriter bw = new BufferedWriter(paramOutputStreamWriter);
 		logger.debug("Created buffered writer");
 		for (Object key: propertyMap.keySet()) {
 			bw.write(key + "=" + propertyMap.get(key));
@@ -133,6 +139,8 @@ public class Properties {
 		}
 	 
 		bw.close();
+		paramFileOutputStream.close();
+		paramOutputStreamWriter.close();
 		logger.debug("Closed Buffered writer");
 	}
 	

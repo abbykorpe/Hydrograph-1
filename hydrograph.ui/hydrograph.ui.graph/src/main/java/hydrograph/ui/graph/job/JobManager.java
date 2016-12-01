@@ -518,8 +518,8 @@ public class JobManager {
 	private MultiParameterFileDialog getParameterFileDialog(){
 		
 	    String activeProjectLocation=MultiParameterFileUIUtils.getActiveProjectLocation();
-	 
-		
+		FileInputStream paramInputStream =null;
+		ObjectInputStream objectInputStream=null;
 		List<ParameterFile> filepathList = new LinkedList<>();
 		
 		updateParameterFileListWithJobSpecificFile(filepathList,activeProjectLocation);
@@ -537,8 +537,9 @@ public class JobManager {
 		try{
 			File metadataFile = new File(activeProjectLocation + PROJECT_METADATA_FILE);
 			if(metadataFile.exists() && !metadataFile.isDirectory()) { 
-				ObjectInputStream ois= new ObjectInputStream(new FileInputStream(metadataFile));			
-				filepathList.addAll((LinkedList<ParameterFile>)ois.readObject());
+				 paramInputStream = new FileInputStream(metadataFile);
+				 objectInputStream= new ObjectInputStream(paramInputStream);			
+				filepathList.addAll((LinkedList<ParameterFile>)objectInputStream.readObject());
 			}
 		} catch (FileNotFoundException fileNotfoundException) {
 			logger.debug("Unable to read file" , fileNotfoundException);
@@ -547,6 +548,20 @@ public class JobManager {
 		} catch (ClassNotFoundException classNotFoundException) {
 			logger.debug("Unable to read file" , classNotFoundException);
 		}
+		finally {
+			try{
+				if(objectInputStream!=null){
+					objectInputStream.close();
+				}
+				if(paramInputStream!=null){
+					paramInputStream.close();
+				}
+				
+			}catch (IOException ioException) {
+				logger.warn("Error occurred while closuing stream.",ioException);
+			}
+		}
+		
 		filepathList.addAll(getComponentCanvas().getJobLevelParamterFiles());
 		
 		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(Display.getDefault().getActiveShell(), activeProjectLocation);

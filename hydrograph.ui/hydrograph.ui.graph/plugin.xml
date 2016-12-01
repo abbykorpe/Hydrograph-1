@@ -417,4 +417,17 @@
           name="Job Run">
     </page>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.renameParticipants">
+    <renameParticipant
+          class="hydrograph.ui.graph.editor.RenameJobParticipant"
+          id="hydrograph.ui.graph.jobRenameParticipant"
+          name="JobRenameParticipant">
+       <enablement>
+          <instanceof
+                value="org.eclipse.core.resources.IFile">
+          </instanceof>
+       </enablement>
+    </renameParticipant>
+ </extension>
 </plugin>
