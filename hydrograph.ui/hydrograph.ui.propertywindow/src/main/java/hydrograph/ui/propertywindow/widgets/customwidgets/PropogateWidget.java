@@ -95,7 +95,7 @@ public class PropogateWidget extends AbstractWidget{
 						)	
 		  {	  
 		for (Link link : getComponent().getTargetConnections()) {
-		 Schema previousComponentSchema=getSchemaFromPreviousComponentSchema(link);
+		 Schema previousComponentSchema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(getComponent(),link);
 		if(previousComponentSchema!=null)
 		getSchemaForInternalPropagation().getGridRow().addAll(SchemaSyncUtility.INSTANCE.
 				convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
@@ -125,7 +125,7 @@ public class PropogateWidget extends AbstractWidget{
 				
 				boolean shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=true;
 				for (Link link : getComponent().getTargetConnections()) {
-					Schema previousComponentSchema=getSchemaFromPreviousComponentSchema(link);
+					Schema previousComponentSchema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(getComponent(),link);
 					if (previousComponentSchema != null){
 					if(StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.STRAIGHTPULL)
 							  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.FILTER)	
@@ -271,24 +271,6 @@ public class PropogateWidget extends AbstractWidget{
            });
 	}
     
-	private Schema getSchemaFromPreviousComponentSchema(Link link) {
-		Schema previousComponentSchema=null;
-		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName())
-		||StringUtils.equalsIgnoreCase(Constants.SUBJOB_COMPONENT, link.getSource().getComponentName())		
-				)
-		{
-			Map<String,Schema> inputSchemaMap=(HashMap<String,Schema>)link.getSource().getProperties().
-					get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);
-			if(inputSchemaMap!=null)
-			previousComponentSchema=inputSchemaMap.get(Constants.INPUT_SOCKET_TYPE+getComponent().
-					getTargetConnections().indexOf(link));
-		}	
-		else
-		{
-			 previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
-		}
-		return previousComponentSchema;
-	}
 	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {

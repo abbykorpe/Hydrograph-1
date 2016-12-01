@@ -109,7 +109,7 @@ public class PropagateDataAction extends SelectionAction {
 				Schema schema=(Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 				if(schema==null)
 				schema=new Schema();	
-				Schema previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+				Schema previousComponentSchema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(component, link);
 				if(schema.getGridRow()==null)
 				{
 					List<GridRow> gridRows=new ArrayList<>();

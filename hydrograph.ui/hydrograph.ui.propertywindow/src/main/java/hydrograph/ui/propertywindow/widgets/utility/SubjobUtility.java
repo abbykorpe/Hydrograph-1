@@ -279,7 +279,35 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 			   }
 			}
 		}
+		
 	}
+	
+	/**
+	 * 
+	 * gets the schema of previous component
+	 * @param present component
+	 * @param link
+	 * @return
+	 */
+	public Schema getSchemaFromPreviousComponentSchema(Component component,Link link) {
+		Schema previousComponentSchema=null;
+		if(StringUtils.equalsIgnoreCase(Constants.INPUT_SUBJOB_COMPONENT_NAME, link.getSource().getComponentName())
+		||StringUtils.equalsIgnoreCase(Constants.SUBJOB_COMPONENT, link.getSource().getComponentName())		
+				)
+		{
+			Map<String,Schema> inputSchemaMap=(HashMap<String,Schema>)link.getSource().getProperties().
+					get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);
+			if(inputSchemaMap!=null)
+			previousComponentSchema=inputSchemaMap.get(Constants.INPUT_SOCKET_TYPE+component.
+					getTargetConnections().indexOf(link));
+		}	
+		else
+		{
+			 previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+		}
+		return previousComponentSchema;
+	}
+	
 	
 	
 }
