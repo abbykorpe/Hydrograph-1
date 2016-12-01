@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package hydrograph.ui.common.util;
 
 /**
@@ -24,7 +23,8 @@ public class Constants {
 	
 	
 	public static final String ERROR = "ERROR";
-	
+	public static final String FILE_PATH_LABEL = "File Path";
+	public static final String EXTERNAL_TABLE_PATH_LABEL = "Ext. Table Path";
 	public static final String BATCH = "Batch";
 	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
 	

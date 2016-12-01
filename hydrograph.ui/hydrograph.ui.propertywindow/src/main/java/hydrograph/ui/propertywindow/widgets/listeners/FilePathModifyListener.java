@@ -14,8 +14,7 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners;
 
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import java.io.File;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -27,6 +26,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+
 
 /**
  * The listener interface for receiving ELTModify events. The class that is interested in processing a ELTModify event
@@ -37,7 +40,7 @@ import org.eclipse.swt.widgets.Widget;
  * 
  * @see ELTModifyEvent
  */
-public class ELTModifyListener implements IELTListener{
+public class FilePathModifyListener implements IELTListener{
 	private ControlDecoration txtDecorator;
 	
 	@Override
@@ -51,33 +54,41 @@ public class ELTModifyListener implements IELTListener{
 		if (helper != null) {
 			txtDecorator = (ControlDecoration) helper.get(HelperType.CONTROL_DECORATION);
 		}
+		
 		Listener listener=new Listener() {
 			
 			@Override
 			public void handleEvent(Event event) {
-				String string=((Text)widgetList[0]).getText().trim();
+				String path=((Text)widgetList[0]).getText().trim();
+				
 				if(event.type==SWT.Modify){
-					if(StringUtils.isBlank(string)){
-						//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
-						
-						txtDecorator.show();
-						((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
-					}else{
-						//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
-						txtDecorator.hide();
-						((Text) widgetList[0]).setToolTipText("");
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+					if(StringUtils.isNotBlank(path)){
+						if(isFile(path)){
+							txtDecorator.show();
+							txtDecorator.setDescriptionText("please enter folder location instead of file.");	
+							((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
+							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+							
+						}else{
+							//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
+							txtDecorator.hide();
+							((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
+							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+							
+						}
 					}
-					
-				}else{
-					//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
-					txtDecorator.hide();
-					((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
 				}
 			}		
 		};
 		
 		return listener;
 	}
+
+	private boolean isFile(String path){
+		File file=new File(path);
+		if(file.isFile())
+			return true; 
+		return false;
+	}
+	
 }

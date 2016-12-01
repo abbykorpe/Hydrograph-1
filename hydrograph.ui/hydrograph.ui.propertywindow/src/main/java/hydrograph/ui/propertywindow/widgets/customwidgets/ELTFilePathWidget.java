@@ -24,6 +24,9 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.utils.Utils;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.FilePathConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -70,6 +74,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 	private ControlDecoration decorator;
 	private Button button;
 	private Cursor cursor;
+	protected FilePathConfig filepathConfig;
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(ELTFilePathWidget.class);
 	/**
 	 * Instantiates a new ELT file path widget.
@@ -92,6 +97,9 @@ public class ELTFilePathWidget extends AbstractWidget{
 		this.propertyName = componentConfigrationProperty.getPropertyName();
 	}
 	
+	public void setWidgetConfig(WidgetConfig widgetConfig) {
+		filepathConfig = (FilePathConfig) widgetConfig;
+	}
 
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
@@ -99,7 +107,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(container.getContainerControl());
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("File Path");
+		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(filepathConfig.getLabel());
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 		
@@ -113,7 +121,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 			
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(textBox.getText().isEmpty()){
+				if(textBox.getText().isEmpty() && filepathConfig.isMandatory()){
 					decorator.show();
 					textBox.setBackground(new Color(Display.getDefault(), 255, 255, 204));
 				}
@@ -128,6 +136,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 				textBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 			}
 		});
+	
 		
 		AbstractELTWidget eltDefaultButton = new ELTDefaultButton("...").buttonWidth(35);
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
@@ -160,11 +169,15 @@ public class ELTFilePathWidget extends AbstractWidget{
 
 		try {
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(), propertyDialogButtonBar,  null,eltDefaultTextBox.getSWTWidgetControl());
+			if(filepathConfig.isMandatory())
 			eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,  helper, eltDefaultTextBox.getSWTWidgetControl());
-			if (StringUtils.equalsIgnoreCase(Constants.OUTPUT, getComponent().getCategory()))
+			
+			if (StringUtils.equalsIgnoreCase(Constants.OUTPUT, getComponent().getCategory())){
 				eltDefaultButton.attachListener(ListenerFactory.Listners.DIRECTORY_DIALOG_SELECTION.getListener(),
 						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
 						eltDefaultTextBox.getSWTWidgetControl());
+				eltDefaultTextBox.attachListener(ListenerFactory.Listners.FILE_PATH_MODIFY.getListener(), propertyDialogButtonBar,  helper, eltDefaultTextBox.getSWTWidgetControl());
+			}
 			else
 				eltDefaultButton.attachListener(ListenerFactory.Listners.FILE_DIALOG_SELECTION.getListener(),
 						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
@@ -185,16 +198,16 @@ public class ELTFilePathWidget extends AbstractWidget{
 	
 	private void populateWidget(){		
 		String property = (String)properties;
-		if(StringUtils.isNotBlank(property)){
-			textBox.setText(property);	
-			decorator.hide();
-			txtDecorator.hide();
-			Utils.INSTANCE.addMouseMoveListener(textBox, cursor);
-		}
-		else{
+		if(StringUtils.isBlank(property) && filepathConfig.isMandatory()){
 			textBox.setText("");
 			decorator.show();
 			//setToolTipMessage(toolTipErrorMessage)
+		}
+		else{
+			textBox.setText(property);
+			decorator.hide();
+			txtDecorator.hide();
+			Utils.INSTANCE.addMouseMoveListener(textBox, cursor);
 		}
 	}
 
