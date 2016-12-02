@@ -14,33 +14,9 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-/**
- * TextBoxWithIsParameterCheckBoxWidget class creates a text-box with a check-box Text-Box accepts Alphanumeric text
- * Check-box used to format the text-box text into parameter format
- * 
- * @author Bitwise
- * 
- */
-
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
-import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.ModifyEvent;
@@ -50,13 +26,37 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 
+/**
+ * TextBoxWithIsParameterCheckBoxWidget class creates a text-box with a check-box Text-Box accepts Alphanumeric text
+ * Check-box used to format the text-box text into parameter format
+ * 
+ * @author Bitwise
+ * 
+ */
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
+import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+
 
 public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget {
 
 	private PropertyDialogButtonBar propDialogButtonBar;
 	private String lastValue;
 	private List<String> availableFieldList = new ArrayList<>();
-
+	
 	public TextBoxWithIsParameterCheckBoxWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
@@ -178,25 +178,64 @@ public class TextBoxWithIsParameterCheckBoxWidget extends TextBoxWithLabelWidget
 	}
 
 	private void loadNewFieldAndPropagate(String fieldName) {
-		Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
-		ComponentsOutputSchema newComponentsOutputSchema = new ComponentsOutputSchema();
-		ComponentsOutputSchema sourceOutputSchema = null;
-		for (Link link : getComponent().getTargetConnections())
-			sourceOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-		if (sourceOutputSchema != null) {
-			newComponentsOutputSchema.copySchemaFromOther(sourceOutputSchema);
+		List<GridRow> internalSchemaGridRows=getSchemaForInternalPropagation().getGridRow();
+		String previousValue=(String)getComponent().getProperties().get(Constants.UNIQUE_SEQUENCE_PROPERTY_NAME);
+		if(StringUtils.isNotBlank(previousValue))
+		{	
+		removePreviousSequenceFieldFromSchema(internalSchemaGridRows,previousValue);
 		}
-		if (StringUtils.isNotBlank(textBox.getText()))
-			newComponentsOutputSchema.getFixedWidthGridRowsOutputFields().add(createSchemaForNewField(fieldName));
-		schemaMap.put(Constants.FIXED_OUTSOCKET_ID, newComponentsOutputSchema);
-		SchemaPropagation.INSTANCE.continuousSchemaPropagation(getComponent(), schemaMap);
+		Schema schema=(Schema)getComponent().getProperties().get(Constants.SCHEMA);
+		
+		if(schema!=null && internalSchemaGridRows.isEmpty() )
+		{
+		removePreviousSequenceFieldFromSchema(schema.getGridRow(), previousValue);	
+		internalSchemaGridRows.addAll(schema.getGridRow());
+		}
+        if (StringUtils.isNotBlank(textBox.getText()))
+        {	
+        	internalSchemaGridRows.add(createSchemaForNewField(fieldName));
+        }
+        refreshSchemaWidget(internalSchemaGridRows);
 	}
 
-	private FixedWidthGridRow createSchemaForNewField(String fieldName) {
-		FixedWidthGridRow fixedWidthGridRow = SchemaPropagationHelper.INSTANCE.createFixedWidthGridRow(fieldName);
-		fixedWidthGridRow.setDataType(8);
-		fixedWidthGridRow.setDataTypeValue(Long.class.getCanonicalName());
-		return fixedWidthGridRow;
+	private void refreshSchemaWidget(List<GridRow> gridRowList) {
+		ELTSchemaGridWidget eltSchemaGridWidget=null;
+	    for(AbstractWidget abstractWidget:widgets)
+		{
+			if(abstractWidget instanceof ELTSchemaGridWidget)
+			{
+				eltSchemaGridWidget=(ELTSchemaGridWidget)abstractWidget;
+				break;
+			}
+		}
+	    eltSchemaGridWidget.refresh();
+	    if(gridRowList.isEmpty())
+	    {
+	    	eltSchemaGridWidget.getSchemaGridRowList().clear();
+	    	eltSchemaGridWidget.getTableViewer().refresh();
+	    	eltSchemaGridWidget.showHideErrorSymbol(eltSchemaGridWidget.isWidgetValid());
+	    }
+	    
 	}
 
+    private void removePreviousSequenceFieldFromSchema(List<GridRow> gridRows, String previousValue) {
+		
+		if(!gridRows.isEmpty())
+		{
+		GridRow gridRow=gridRows.get(gridRows.size()-1);
+		if(StringUtils.equalsIgnoreCase(gridRow.getFieldName(),previousValue)
+		 && StringUtils.equalsIgnoreCase(Long.class.getCanonicalName(),gridRow.getDataTypeValue())
+		  )
+		{
+			gridRows.remove(gridRow);
+		}	
+		}
+	}
+
+	private BasicSchemaGridRow createSchemaForNewField(String fieldName) {
+		BasicSchemaGridRow basicSchemaGridRow = SchemaPropagationHelper.INSTANCE.createSchemaGridRow(fieldName);
+		basicSchemaGridRow.setDataType(8);
+		basicSchemaGridRow.setDataTypeValue(Long.class.getCanonicalName());
+		return basicSchemaGridRow;
+	}
 }
