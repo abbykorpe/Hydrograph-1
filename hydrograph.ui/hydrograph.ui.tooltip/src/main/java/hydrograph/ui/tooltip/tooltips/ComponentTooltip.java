@@ -13,6 +13,33 @@
 
 package hydrograph.ui.tooltip.tooltips;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.text.AbstractInformationControl;
+import org.eclipse.jface.text.IInformationControlExtension2;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseTrackAdapter;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.SWTResourceManager;
@@ -26,33 +53,6 @@ import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.text.AbstractInformationControl;
-import org.eclipse.jface.text.IInformationControlExtension2;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
-import org.slf4j.Logger;
 /**
  * 
  * Class for component tooltip
@@ -280,12 +280,17 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	private void addlinkToAddPassThroughFieldsInMappingWindow(final Composite container,
 			final PropertyToolTipInformation propertyInfo) {
 		String propertyNameCapitalized = getCapitalizedName(propertyInfo);
-		Link link = new Link(container, SWT.NONE);
+		final Link link = new Link(container, SWT.NONE);
 		String tempText= propertyNameCapitalized+" : <a>" + Constants.ADD_FIELDS_AS_PASSTHROUGH_FIELDS+ "</a>";		
 		link.setText(tempText);
+		
 		link.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-		link.addSelectionListener(new SelectionListener() {
-			
+		addMouseHoverListenerToLink(link,container);
+		addSelectionListenerToLink(propertyInfo, link);
+	}
+
+	private void addSelectionListenerToLink(final PropertyToolTipInformation propertyInfo, final Link link) {
+		link.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			if(OPERATION.equalsIgnoreCase(propertyInfo.getPropertyName()))
@@ -298,13 +303,17 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 			{
 				lookupMappingGrid.setAddPassThroughFields(true);
 			}	
-				
-		     }
-			
+				link.setLinkForeground(new Color(null, 0,0,255));
+		    }
+		});
+	}
+	
+     private void addMouseHoverListenerToLink(Link link,final Composite container) {
+		link.addMouseTrackListener(new MouseTrackAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				
-			}
+			public void mouseHover(MouseEvent e) {
+				container.setFocus();
+	 		}
 		});
 	}
 
@@ -462,29 +471,17 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	}
 	
 	/**
-	 * adds listener to focus container when clicked on container 
+	 * adds listener to focus container when mouse hover on container 
 	 * @param container
 	 */
 	private void addToolTipContainerFocusListener(final Composite container) {
-		container.addMouseListener(new MouseListener() {
-			
+		container.addMouseTrackListener(new MouseTrackAdapter() {
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void mouseHover(MouseEvent e) {
 				container.setFocus();
-				logger.debug("ComponentTooltip.addToolTipContainerFocusListener() - mouseUp - container focused");
-			}
-			
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// Do nothing				
-			}
-			
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// Do nothing				
+				logger.debug("ComponentTooltip.addToolTipContainerFocusListener() - mouseHover - container focused");
 			}
 		});
-		
 		logger.debug("ComponentTooltip.addToolTipContainerFocusListener() - added container focus listener");
 	}
 

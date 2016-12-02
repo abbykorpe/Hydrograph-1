@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.Constants;
@@ -774,6 +775,7 @@ public class ComponentFigure extends Figure implements Validator {
 		if (componentCanvas != null) {
 			if (componentCanvas.getComponentTooltip() != null) {
 				componentCanvas.getComponentTooltip().setVisible(false);
+				    if(componentCanvas!=null)
 					componentCanvas.issueToolTip(null, null);
 			}
 		}
