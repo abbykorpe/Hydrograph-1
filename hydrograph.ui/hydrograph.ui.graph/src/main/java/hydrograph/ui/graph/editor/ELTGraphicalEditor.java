@@ -1135,7 +1135,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	 * @param file
 	 */
 	public void saveJob(IFile file) {
-		
+		ByteArrayOutputStream out =null;
 		try {
 			if(getContainer().getUniqueJobId() == null){
 				generateUniqueJobId();
@@ -1146,7 +1146,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			else
 				ConverterUtil.INSTANCE.convertToXML(this.container, true, null, null);		
 			if(file!=null){
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				out = new ByteArrayOutputStream();
 				createOutputStream(out);
 				
 				if (file.exists())
@@ -1165,6 +1165,15 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			logger.error("Failed to Save the file : ", e);
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
 		}	
+		finally {
+			try{
+			if(out!=null){
+				out.close();
+			}
+		}catch(IOException ioException){
+			logger.warn("Error occurred while closing stream.",ioException);
+		}
+	}
 	}
 
 	@Override
