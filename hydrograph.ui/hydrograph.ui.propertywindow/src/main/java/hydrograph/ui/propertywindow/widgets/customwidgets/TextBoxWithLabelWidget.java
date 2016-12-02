@@ -37,6 +37,7 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,6 +66,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	protected ControlDecoration txtDecorator;
 	protected TextBoxWithLableConfig textBoxConfig;
 	protected ELTDefaultSubgroupComposite lableAndTextBox;
+	protected List<AbstractWidget> widgets;
 	private Cursor cursor;
 	/**
 	 * Instantiates a new text box widget with provided configurations
@@ -187,6 +189,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 
 	@Override
 	public void addModifyListener(final Property property,  final ArrayList<AbstractWidget> widgetList) {
+		widgets=widgetList;
        textBox.addModifyListener(new ModifyListener() {
 			
 			@Override
