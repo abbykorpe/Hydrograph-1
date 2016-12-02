@@ -45,6 +45,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * @author Bitwise
+ * This class creates Evaluate Dialog of expression Editor
+ *
+ */
 public class EvaluateDialog extends Dialog {
 	private static final String OUTPUT_COSOLE_ERROR_PREFIX = "Error\t\t: ";
 	private static final String OUTPUT_CONSOLE_PREFIX = "Output\t\t: ";
