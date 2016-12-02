@@ -191,6 +191,7 @@ import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 
 /**
@@ -1665,7 +1666,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath().toString();
 				IPath subJobFilePath=new Path(path);
 				SubJobUtility subJobUtility=new SubJobUtility();
-				SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(container,subjobComponent);
+				SubjobUtility.INSTANCE.showOrHideErrorSymbolOnComponent(container,subjobComponent);
 				if (subjobComponent.getComponentEditPart() != null) {
 					((ComponentEditPart) subjobComponent.getComponentEditPart()).updateComponentStatus();
 				}

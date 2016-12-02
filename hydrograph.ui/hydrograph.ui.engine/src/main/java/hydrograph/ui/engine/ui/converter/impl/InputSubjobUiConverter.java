@@ -45,6 +45,7 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 
 /**
  * Converter to convert jaxb subjob object of input type into subjob component
@@ -117,7 +118,7 @@ public class InputSubjobUiConverter extends UiConverter {
 		getOutPort((TypeInputComponent) typeBaseComponent);
 		SubjobUiConverterUtil.setUiComponentProperties(uiComponent, container, currentRepository, name_suffix,
 				componentName, propertyMap);
-		SubjobUiConverterUtil.showOrHideErrorSymbolOnComponent(subJobContainer,uiComponent);
+		SubjobUtility.INSTANCE.showOrHideErrorSymbolOnComponent(subJobContainer,uiComponent);
 		
 	}
 	private void getOutPort(TypeInputComponent inputComponent) {

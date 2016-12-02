@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.collections,
  hydrograph.ui.communication;bundle-version="0.0.1",
  org.apache.commons.httpclient,
- org.junit
+ org.junit,
+ org.eclipse.gef;bundle-version="3.11.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.common.util,
@@ -38,6 +39,7 @@ Import-Package: hydrograph.ui.common.util,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.observable.value,
  org.eclipse.gef.commands,
+ org.eclipse.gef.editparts,
  org.eclipse.ui.forms.widgets
 Export-Package: hydrograph.ui.propertywindow,
  hydrograph.ui.propertywindow.adapters,

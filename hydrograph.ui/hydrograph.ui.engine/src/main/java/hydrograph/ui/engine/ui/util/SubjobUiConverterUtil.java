@@ -199,39 +199,4 @@ public class SubjobUiConverterUtil {
 		}
 		return runtimeMap;
 	}
-	
-	
-	/**
-	 * This method shows or hides error icon on component
-	 * @param subJobContainer
-	 * @param uiComponent
-	 */
-	public static void showOrHideErrorSymbolOnComponent(Container subJobContainer, Component uiComponent) {
-		if (subJobContainer == null) {
-			uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
-		} else {
-			for (int i = 0; i < subJobContainer.getUIComponentList().size(); i++) {
-				if(subJobContainer.getUIComponentList().get(i) instanceof Component){
-					Component component = (Component)subJobContainer.getUIComponentList().get(i);
-				if (!(component instanceof InputSubjobComponent || component instanceof OutputSubjobComponent)) {
-					if (StringUtils.equalsIgnoreCase(UIComponentsConstants.ERROR.value(), 
-							component.getProperties().get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())
-							|| StringUtils.equalsIgnoreCase(
-									UIComponentsConstants.WARN.value(),
-									component.getProperties()
-											.get(UIComponentsConstants.VALIDITY_STATUS.value()).toString())) {
-						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),
-								UIComponentsConstants.ERROR.value());
-						uiComponent.setValidityStatus(UIComponentsConstants.ERROR.value());
-						break;
-					} else {
-						uiComponent.getProperties().put(UIComponentsConstants.VALIDITY_STATUS.value(),
-								UIComponentsConstants.VALID.value());
-						uiComponent.setValidityStatus(UIComponentsConstants.VALID.value());
-					}
-				}
-			   }
-			}
-		}
-	}
 }

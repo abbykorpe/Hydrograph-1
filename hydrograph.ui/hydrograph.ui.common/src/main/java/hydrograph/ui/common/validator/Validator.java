@@ -12,7 +12,7 @@
  ******************************************************************************/
 
  
-package hydrograph.ui.graph.figure;
+package hydrograph.ui.common.validator;
 
 
 /**
