@@ -169,7 +169,7 @@ public class JobLogger {
 			jobLogger.logWithNoTimeStamp("====================================================================");
 			jobLogger.logWithNoTimeStamp("Job End Timestamp: " + JobLoggerUtils.getTimeStamp());
 			jobLogger.logWithNoTimeStamp("Job Name: " + jobLogger.getFullJobName());
-			if(StringUtils.isNotEmpty(trackingFilePath)){
+			if(StringUtils.isNotBlank(trackingFilePath)){
 				jobLogger.logWithNoTimeStamp("Job Tracking log File on local: " + trackingFilePath + jobRunId + EXECUTION_TRACKING_LOG_FILE_EXTENTION);
 			}
 			jobLogger.logWithNoTimeStamp("Job Id: " + getJobId(jobRunId));
