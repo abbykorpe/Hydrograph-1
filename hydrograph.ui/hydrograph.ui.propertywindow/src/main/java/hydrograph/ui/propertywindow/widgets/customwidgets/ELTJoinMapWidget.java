@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -86,7 +87,12 @@ public class ELTJoinMapWidget extends AbstractWidget {
         		 (JoinMappingGrid) getComponent().getTooltipInformation().get("join_mapping").getPropertyValue();
 		 if(joinMappingGridPopulatedFromTooTipAction!=null)
 		 joinMappingGrid.setAddPassThroughFields(joinMappingGridPopulatedFromTooTipAction.isAddPassThroughFields());
-		final AbstractELTWidget eltDefaultButton = new ELTDefaultButton("Edit");
+		final AbstractELTWidget eltDefaultButton;
+		if(OSValidator.isMac()){
+			eltDefaultButton = new ELTDefaultButton("Edit").buttonWidth(120);
+		}else{
+			eltDefaultButton = new ELTDefaultButton("Edit");
+		}
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultButton);
 		if(getComponent().isContinuousSchemaPropogationAllow())
 		getPropagatedSchema();

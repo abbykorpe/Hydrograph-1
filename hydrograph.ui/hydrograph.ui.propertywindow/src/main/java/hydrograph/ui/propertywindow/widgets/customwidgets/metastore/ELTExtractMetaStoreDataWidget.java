@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
@@ -97,7 +98,12 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 		setPropertyHelpWidget((Control) defaultLable.getSWTWidgetControl());
 		
 		
-		AbstractELTWidget defaultButton = new ELTDefaultButton(Messages.EXTRACT);
+		AbstractELTWidget defaultButton;
+		if(OSValidator.isMac()){
+			defaultButton = new ELTDefaultButton(Messages.EXTRACT).buttonWidth(120);
+		}else{
+			defaultButton = new ELTDefaultButton(Messages.EXTRACT);
+		}
 		defaultSubgroupComposite.attachWidget(defaultButton);
 		Button button = (Button) defaultButton.getSWTWidgetControl();
 		

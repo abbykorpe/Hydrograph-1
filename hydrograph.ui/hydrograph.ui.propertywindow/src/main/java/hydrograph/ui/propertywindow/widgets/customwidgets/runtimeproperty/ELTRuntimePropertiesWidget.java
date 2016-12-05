@@ -99,6 +99,9 @@ public class ELTRuntimePropertiesWidget extends AbstractWidget {
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Constants.EDIT);
+		if(OSValidator.isMac()){
+			eltDefaultButton.buttonWidth(120);
+		}
 
 		runtimeComposite.attachWidget(eltDefaultButton);
 
