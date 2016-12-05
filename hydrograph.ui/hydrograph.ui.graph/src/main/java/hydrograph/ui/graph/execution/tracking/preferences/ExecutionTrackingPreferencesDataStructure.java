@@ -109,14 +109,6 @@ public class ExecutionTrackingPreferencesDataStructure {
 	public void setOverrideRemoteHostButton(boolean overrideRemoteHostButton) {
 		this.overrideRemoteHostButton = overrideRemoteHostButton;
 	}
-
-	
-	/**
-	 * 
-	 */
-	public ExecutionTrackingPreferencesDataStructure(){
-		
-	}
 	
 	
 }

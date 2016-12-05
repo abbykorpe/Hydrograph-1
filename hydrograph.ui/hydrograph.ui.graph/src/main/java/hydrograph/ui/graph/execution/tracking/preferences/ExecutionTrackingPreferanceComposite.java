@@ -73,20 +73,20 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		storePrefernces = new ExecutionTrackingPreferencesDataStructure();
 
 		HydroGroup hydroGroup = new HydroGroup(this, SWT.NONE);
-		hydroGroup.setHydroGroupText("Execution Tracking");
+		hydroGroup.setHydroGroupText(hydrograph.ui.graph.Messages.EXECUTION_TRACKING_GROUP_LABEL);
 		hydroGroup.setLayout(new GridLayout(1, false));
 		hydroGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		hydroGroup.getHydroGroupClientArea().setLayout(new GridLayout(2, false));
 		hydroGroup.getHydroGroupClientArea().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		Label enableTrackingLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		enableTrackingLabel.setText("Enable Tracking");
+		enableTrackingLabel.setText(hydrograph.ui.graph.Messages.ENABLE_TRACKING_LABEL);
 
 		enableTrackingCheckBox = new Button(hydroGroup.getHydroGroupClientArea(), SWT.CHECK);
 		enableTrackingCheckBox.setSelection(prefernce.isEnableTrackingCheckBox());
 
 
 		localPortNoLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		localPortNoLabel.setText("Local Port No");
+		localPortNoLabel.setText(Messages.LOCAL_PORT_NO_LABEL);
 
 		localPortNoText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
 		localPortNoText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -95,7 +95,7 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		localPortNoText.setTextLimit(6);
 
 		remotePortNo = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		remotePortNo.setText("Remote Port No");
+		remotePortNo.setText(Messages.REMOTE_PORT_NO_LABEL);
 
 		remotePortNoText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
 		remotePortNoText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -104,13 +104,13 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		remotePortNoText.setTextLimit(6);
 
 		overrideRemoteHostLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		overrideRemoteHostLabel.setText("Override Remote Host");
+		overrideRemoteHostLabel.setText(Messages.OVERRIDE_REMOTE_HOST_LABEL);
 
 		overrideRemoteHostCheckBox = new Button(hydroGroup.getHydroGroupClientArea(), SWT.CHECK);
 		overrideRemoteHostCheckBox.setSelection(prefernce.isOverrideRemoteHostButton());
 
 		remoteHostNameLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		remoteHostNameLabel.setText("Remote Host Name");
+		remoteHostNameLabel.setText(Messages.REMOTE_HOST_NAME_LABEL);
 
 		remoteHostNameText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
 		remoteHostNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -121,7 +121,7 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		remoteHostNameText.setData(ERROR_KEY, null);
 
 		trackingLogPathLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		trackingLogPathLabel.setText("Tracking Log Path");
+		trackingLogPathLabel.setText(Messages.TRACKING_LOG_PATH_LABEL);
 
 		trackingLogPathText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
 		trackingLogPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
