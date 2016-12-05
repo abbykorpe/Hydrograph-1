@@ -554,8 +554,10 @@ public class TransformWidget extends AbstractWidget {
 		InputField inputField = null;
 		transformMapping.getInputFields().clear();
 		for (Link link : getComponent().getTargetConnections()) {
+			String sourceTerminalId=link.getSourceTerminal();
 			List<BasicSchemaGridRow> basicSchemaGridRows=SchemaPropagationHelper.INSTANCE.
-			getBasicSchemaGridRowList(Constants.INPUT_SOCKET_TYPE+0, link);
+			getBasicSchemaGridRowList(Constants.INPUT_SOCKET_TYPE+sourceTerminalId.charAt(sourceTerminalId.length()-1)
+					, link);
 			if (basicSchemaGridRows != null){
 				for (BasicSchemaGridRow row :basicSchemaGridRows ) {
 					inputField = new InputField(row.getFieldName(), new ErrorObject(false, ""));

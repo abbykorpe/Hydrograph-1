@@ -320,6 +320,7 @@ public class SubJobUtility {
 			SchemaPropagation.INSTANCE.continuousSchemaPropagation(subjobComponent, inputSchemaMap);
 		}
 		if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())) {
+			boolean intializeSchemaMap=true;
 			Map<String, ComponentsOutputSchema> outputSchemaMap = new HashMap<String, ComponentsOutputSchema>();
 			for (Link innerLink : component.getTargetConnections()) {
 				ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE
@@ -327,11 +328,18 @@ public class SubJobUtility {
 				outputSchemaMap.put(
 						innerLink.getTargetTerminal().replaceAll(Constants.INPUT_SOCKET_TYPE,
 								Constants.OUTPUT_SOCKET_TYPE), componentsOutputSchema);
-			}
+				if(StringUtils.equalsIgnoreCase(Constants.STRAIGHTPULL,innerLink.getSource().getCategory())
+						&&StringUtils.equalsIgnoreCase(Constants.FILTER,innerLink.getSource().getComponentName())
+						&&StringUtils.equalsIgnoreCase(Constants.UNIQUE_SEQUENCE,innerLink.getSource().getComponentName()))
+					intializeSchemaMap=false;
+			}	
+		
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, outputSchemaMap);
 			subjobComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, outputSchemaMap);
 			subjobComponent.getProperties().put(Constants.OUTPUT_SUBJOB, component);
 			component.getProperties().put(Constants.SUBJOB_COMPONENT, subjobComponent);
+			if(intializeSchemaMap)
+			SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(subjobComponent, component);
 		}
 	}
 
@@ -386,9 +394,22 @@ public class SubJobUtility {
 					break;
 				  }
 			}
+			  boolean intializeSchemaMap=true;
 			  for (Component subComponent : subJobContainer.getUIComponentList()) {
 				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(subComponent.getComponentName())) {
 					outPort = subComponent.getInPortCount();
+					for(Link innerLink:subComponent.getTargetConnections())
+					{
+						if(StringUtils.equalsIgnoreCase(Constants.STRAIGHTPULL,innerLink.getSource().getCategory())
+								&&StringUtils.equalsIgnoreCase(Constants.FILTER,innerLink.getSource().getComponentName())
+								&&StringUtils.equalsIgnoreCase(Constants.UNIQUE_SEQUENCE,innerLink.getSource().getComponentName()))
+							{
+							intializeSchemaMap=false;
+							break;
+							}
+					}
+					if(intializeSchemaMap)
+					SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(selectedSubjobComponent, subComponent);	
 					break;
 				   }
 			}
