@@ -163,7 +163,7 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 				}
 			}
 		}
-		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getLogPath());
+		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getTrackingLogPath());
 		joblogger.close();
 		JobManager.INSTANCE.removeJob(job.getLocalJobID());
 	}

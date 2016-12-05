@@ -275,7 +275,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
-		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getLogPath());
+		joblogger.logJobEndInfo(job.getUniqueJobId(), "");
 		joblogger.close();
 		JobManager.INSTANCE.removeJob(job.getRemoteJobProcessID());
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {

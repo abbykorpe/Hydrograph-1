@@ -58,9 +58,6 @@ public class ExecutionTrackingFileLogger {
 	 * Instantiates a new execution tracking file logger.
 	 */
 	private ExecutionTrackingFileLogger(){
-
-		jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
-				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);			
 		createJobTrackingLogDirectory();
 	}
 
@@ -114,7 +111,8 @@ public class ExecutionTrackingFileLogger {
 	 * @param uniqJobId the uniq job id
 	 * @return the execution status logger
 	 */
-	private void getExecutionStatusLogger(String uniqJobId, boolean isLocalMode, List<ExecutionStatus> executionStatusList) {	
+	private void getExecutionStatusLogger(String uniqJobId, boolean isLocalMode, List<ExecutionStatus> executionStatusList) {
+		createJobTrackingLogDirectory();
 		if(isLocalMode){
 			uniqJobId = EXECUTION_TRACKING_LOCAL_MODE + uniqJobId;
 		}else{

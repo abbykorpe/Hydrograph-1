@@ -213,7 +213,7 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 				}
 			}
 		}
-		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getLogPath());
+		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getTrackingLogPath());
 		joblogger.close();
 	}
 
