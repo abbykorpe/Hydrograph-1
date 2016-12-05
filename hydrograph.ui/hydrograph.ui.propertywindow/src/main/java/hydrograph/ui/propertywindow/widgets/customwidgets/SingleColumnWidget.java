@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -79,7 +80,12 @@ public class SingleColumnWidget extends AbstractWidget {
 		setPropertyHelpWidget((Control) defaultLable.getSWTWidgetControl());
 		
 		
-		AbstractELTWidget defaultButton = new ELTDefaultButton(Constants.EDIT);
+		AbstractELTWidget defaultButton;
+		if(OSValidator.isMac()){
+			defaultButton = new ELTDefaultButton(Constants.EDIT).buttonWidth(120);
+		}else{
+			defaultButton = new ELTDefaultButton(Constants.EDIT);
+		}
 		defaultSubgroupComposite.attachWidget(defaultButton);
 		button = (Button) defaultButton.getSWTWidgetControl();
 		button.addSelectionListener(new SelectionAdapter() {

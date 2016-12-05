@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
@@ -115,6 +116,9 @@ public class TransformWidget extends AbstractWidget {
 		 transformMapping.setAddPassThroughFields(transformMappingPopulatedFromTooTipAction.isAddPassThroughFields());
 		 }
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(EDIT).grabExcessHorizontalSpace(false);
+		if(OSValidator.isMac()){
+			eltDefaultButton.buttonWidth(120);
+		}
 		transformComposite.attachWidget(eltDefaultButton);
 		if(getComponent().isContinuousSchemaPropogationAllow())
 		getPropagatedSchema();

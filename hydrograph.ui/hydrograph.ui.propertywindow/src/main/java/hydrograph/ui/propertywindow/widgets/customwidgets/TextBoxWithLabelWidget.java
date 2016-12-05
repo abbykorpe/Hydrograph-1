@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -125,7 +126,11 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
 		GridData gridData = (GridData)textBox.getLayoutData();
-		gridData.widthHint = 80;
+		if(OSValidator.isMac()){
+			gridData.widthHint = 106;
+		}else{
+			gridData.widthHint = 80;
+		}
 		attachListeners(textBoxWidget);
 		
 		 /**

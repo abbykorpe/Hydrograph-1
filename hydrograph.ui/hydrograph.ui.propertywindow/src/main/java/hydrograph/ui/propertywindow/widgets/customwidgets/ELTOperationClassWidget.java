@@ -124,6 +124,9 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		addSelectionListenerOnExpression();
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
 				Messages.EDIT_BUTTON_LABEL).grabExcessHorizontalSpace(false);
+		if(OSValidator.isMac()){
+			eltDefaultButton.buttonWidth(120);
+		}
 		runtimeComposite.attachWidget(eltDefaultButton);
 		
 		operationRadioButton = new Button(radioButtonComposite, SWT.RADIO);
