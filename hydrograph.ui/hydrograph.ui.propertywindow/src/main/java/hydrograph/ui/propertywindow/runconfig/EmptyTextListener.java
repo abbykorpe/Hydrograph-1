@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 
 
@@ -35,11 +36,22 @@ public class EmptyTextListener implements ModifyListener {
 	
 	@Override
 	public void modifyText(ModifyEvent event) {
-		String txt= ((Text)event.getSource()).getText();
+		Text textBox = (Text)event.getSource();
+		Button btnRemoteMode = (Button)textBox.getData(RunConfigDialog.SELECTION_BUTTON_KEY);
+		String txt= textBox.getText();
 
-		if (StringUtils.isEmpty(txt)) {
-			errorDecorator = WidgetUtility.addDecorator((Text)event.getSource(),Messages.bind(Messages.EMPTY_FIELD, fieldName));
-			errorDecorator.show();
+		if (StringUtils.isBlank(txt)) {
+			if(errorDecorator==null){
+			errorDecorator = WidgetUtility.addDecorator(textBox,Messages.bind(Messages.EMPTY_FIELD, fieldName));
+			}
+			if(btnRemoteMode!=null){
+				if(btnRemoteMode.getSelection()){
+					errorDecorator.show();
+				}else
+					errorDecorator.hide();
+			}else{
+				errorDecorator.show();
+			}
 			errorDecorator.setMarginWidth(3);
 
 		} else {
@@ -48,6 +60,10 @@ public class EmptyTextListener implements ModifyListener {
 
 		}
 
+	}
+	
+	public ControlDecoration getErrorDecoration(){
+		return errorDecorator;
 	}
 
 }

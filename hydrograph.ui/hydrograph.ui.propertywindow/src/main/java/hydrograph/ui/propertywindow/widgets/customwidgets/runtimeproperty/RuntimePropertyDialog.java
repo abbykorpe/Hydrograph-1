@@ -148,7 +148,9 @@ public class RuntimePropertyDialog extends Dialog {
 
 	  	private void addErrorLabel(Composite container) {
 		Composite composite_3 = new Composite(container, SWT.NONE);
-		composite_3.setLayout(new ColumnLayout());
+		ColumnLayout cl_coposite_3 = new ColumnLayout();
+		cl_coposite_3.topMargin=0;
+		composite_3.setLayout(cl_coposite_3);
 		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();
 		cld_composite_3.heightHint = 19;
 		composite_3.setLayoutData(cld_composite_3);
