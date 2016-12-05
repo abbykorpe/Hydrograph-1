@@ -43,6 +43,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.IWizardDescriptor;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
@@ -475,11 +476,11 @@ public class SubJobUtility {
 	 *  
 	 * @param subjobComponent
 	 */
-	
-	public void updateVersionOfSubjob(Component subJobComponent) {
+	private boolean updateVersionOfSubjob(Component subJobComponent) {
 		IPath jobFileIPath = null;
 		String filePath = null;
 		Container subJobContainer = null;
+		boolean isVersionChanged = false;
 		int versionStoredInSubjobComponent = 0;
 		if (subJobComponent != null && subJobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME) != null
 				&& subJobComponent.getProperties().get(Constants.SUBJOB_VERSION) != null) {
@@ -497,14 +498,166 @@ public class SubJobUtility {
 								new FileInputStream(jobFileIPath.toFile()));
 				}
 				if (subJobContainer != null && subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
+					isVersionChanged = true;
 					subJobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(),
 							Constants.UPDATE_AVAILABLE);
 				}
 
-
 			} catch (CoreException |IOException exception) {
 
 				logger.error("Exception occurred while updating Subjob version", exception);
+			}
+		}
+		return isVersionChanged;
+	}
+	
+	
+	public void updateSubjobCompVersion(Component subJobComponent){
+		updateSubjobVersionForRefresh(subJobComponent);
+	}
+	
+	/**
+	 * @param subJobComponent
+	 * @return
+	 */
+	private boolean updateSubjobVersionForRefresh(Component subJobComponent){
+		boolean isVersionChanged = false;
+		Container container = (Container) subJobComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
+		
+		if (subJobComponent != null && subJobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME) != null
+				&& subJobComponent.getProperties().get(Constants.SUBJOB_VERSION) != null) {
+			
+			isVersionChanged = updateVersionOfSubjob(subJobComponent);
+			
+			for(Object object:container.getChildren()){
+				Component component=(Component) object;
+				if( !(component.getComponentName().equals(Messages.INPUT_SUBJOB_COMPONENT)) && 
+						!(component.getComponentName().equals(Messages.OUTPUT_SUBJOB_COMPONENT))){
+					if(Constants.SUBJOB_COMPONENT.equals(component.getComponentName())){
+						isVersionChanged = updateSubjobVersionForRefresh(component);
+					}
+					
+					if(isVersionChanged){
+						subJobComponent.getProperties().put(Component.Props.VALIDITY_STATUS.getValue(), Constants.UPDATE_AVAILABLE);
+						PropertyToolTipInformation information = createPropertyToolTipInformation(Messages.SUBJOB_REFRESH_INFO, Constants.SHOW_TOOLTIP);
+						if(subJobComponent.getTooltipInformation() != null){
+							subJobComponent.getTooltipInformation().put(Constants.SUBJOB_TOOLTIP_INFO, information);
+						}
+					}
+				}
+			}
+		}
+		
+		return isVersionChanged;
+	}
+
+	public PropertyToolTipInformation createPropertyToolTipInformation(String message,String showHide){
+		  PropertyToolTipInformation propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, showHide, 
+					Constants.TOOLTIP_DATATYPE);
+		  propertyToolTipInformation.setPropertyValue(message);
+		  return propertyToolTipInformation;
+	  }
+	
+	/**
+	 * This method set continuousSchema propagation flag to true until it encounters transform or union All component.
+	 * @param component through which continuous propagation starts. 
+	 */
+	public void setFlagForContinuousSchemaPropogation(Component component) {
+		for(Link link:component.getSourceConnections())
+		{
+			Component nextComponent=link.getTarget();
+			
+			while(StringUtils.equalsIgnoreCase(nextComponent.getCategory(), Constants.STRAIGHTPULL)
+					||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.FILTER)	
+					 ||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.UNIQUE_SEQUENCE)
+					 ||nextComponent instanceof SubjobComponent
+					 ||nextComponent instanceof OutputSubjobComponent
+					)
+			{
+				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,nextComponent.getComponentName()))
+				{
+					if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(nextComponent))
+					{	
+					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.FALSE);
+					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
+					break;
+					}
+					else
+					{	
+					nextComponent.getProperties().put(Constants.IS_UNION_ALL_COMPONENT_SYNC,Constants.TRUE);	
+					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
+					}
+				}
+				Schema schema=(Schema)nextComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+				if(schema==null)
+				schema=new Schema();	
+				ComponentsOutputSchema outputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+				if(schema.getGridRow()==null)
+				{
+					List<GridRow> gridRows=new ArrayList<>();
+					schema.setGridRow(gridRows);
+				}	
+				schema.getGridRow().clear();
+				schema.getGridRow().addAll(outputSchema.getBasicGridRowsOutputFields());
+				if(!StringUtils.equalsIgnoreCase(Constants.SUBJOB_COMPONENT_CATEGORY, nextComponent.getCategory()))
+				nextComponent.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
+				nextComponent.setContinuousSchemaPropogationAllow(true);
+				if(nextComponent instanceof SubjobComponent)
+				{	
+					Container container=(Container)nextComponent.getProperties().get(Constants.SUBJOB_CONTAINER);
+					for(Component subjobComponent:container.getUIComponentList())
+					{
+						if(subjobComponent instanceof InputSubjobComponent)
+						{
+							SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(subjobComponent,nextComponent);
+							setFlagForContinuousSchemaPropogation(subjobComponent);
+							break;
+						}
+					}
+					((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
+				}
+				else if(nextComponent instanceof OutputSubjobComponent)
+				{
+					Component subJobComponent=(Component)nextComponent.getProperties().get(Constants.SUBJOB_COMPONENT);
+					if(subJobComponent!=null)
+					SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(subJobComponent, nextComponent);
+					setFlagForContinuousSchemaPropogation(subJobComponent);
+					
+				}	
+				if(!nextComponent.getSourceConnections().isEmpty())
+				{
+				   if(nextComponent.getSourceConnections().size()==1)
+			    	{
+				     if(nextComponent instanceof SubjobComponent)
+				     {
+					   if(!SubjobUtility.INSTANCE.checkIfSubJobHasTransformOrUnionAllComponent(nextComponent))
+					    {
+						nextComponent=nextComponent.getSourceConnections().get(0).getTarget();	
+					    }
+					   else
+					   {
+						((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();   
+						break;   
+					   }
+				     }	
+				    else
+				    {
+				    nextComponent=nextComponent.getSourceConnections().get(0).getTarget();
+				    }
+				   }
+			       else
+				   {
+					setFlagForContinuousSchemaPropogation(nextComponent);
+					break;
+				   }
+				}
+				else
+				break;
+			}
+			if(StringUtils.equalsIgnoreCase(nextComponent.getCategory(),Constants.TRANSFORM))
+			{
+				nextComponent.setContinuousSchemaPropogationAllow(true);
+				((ComponentEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 			}
 		}
 	}

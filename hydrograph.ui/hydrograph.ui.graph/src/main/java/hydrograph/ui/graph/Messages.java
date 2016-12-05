@@ -118,6 +118,7 @@ public class Messages extends NLS {
 	public static String ENABLE_TRACKING_LABEL;
 	 
 	public static String EXECUTION_TRACKING_GROUP_LABEL;
+	public static String SUBJOB_REFRESH_INFO; 
 	
 	static {
 		// initialize resource bundle
