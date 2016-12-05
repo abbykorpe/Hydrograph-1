@@ -14,20 +14,18 @@
 package hydrograph.ui.graph.execution.tracking.preferences;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.debug.internal.ui.SWTFactory;
-import org.eclipse.debug.internal.ui.preferences.DebugPreferencesMessages;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-
+import hydrograph.ui.graph.execution.tracking.preferences.JobRunPreferenceComposite;
 import hydrograph.ui.graph.Activator;
-import hydrograph.ui.graph.Messages;
 
 /**
  * 
@@ -36,63 +34,80 @@ import hydrograph.ui.graph.Messages;
  * @author Bitwise
  *
  */
-public class JobRunPreference extends FieldEditorPreferencePage implements IWorkbenchPreferencePage{
-	
-	public static final String SAVE_JOB_BEFORE_RUN_PREFRENCE="save_job__before_run_prefrence";
-	private RadioGroupFieldEditor edit;
-	
+public class JobRunPreference extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+
+	public static final String SAVE_JOB_BEFORE_RUN_PREFRENCE = "save_job__before_run_prefrence";
+	private JobRunPreferenceComposite jobRunPreferenceComposite;
+
 	public JobRunPreference() {
 		super();
 		setPreferenceStore(PlatformUI.getPreferenceStore());
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
 	public void init(IWorkbench workbench) {
 		getPreferenceStore().setDefault(SAVE_JOB_BEFORE_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
-		String value=Activator.getDefault().getPreferenceStore().getString(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE);
-		if(StringUtils.equals(MessageDialogWithToggle.ALWAYS, value)){
-			getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE,value);
-		}else{
-			getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE,MessageDialogWithToggle.PROMPT);
+		String value = Activator.getDefault().getPreferenceStore()
+				.getString(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE);
+		if (StringUtils.equals(MessageDialogWithToggle.ALWAYS, value)) {
+			getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, value);
+		} else {
+			getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, MessageDialogWithToggle.PROMPT);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.preference.FieldEditorPreferencePage#createContents(org
+	 * .eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
-		Composite comp = SWTFactory.createComposite(parent, 1, 1, GridData.FILL_HORIZONTAL);
-		edit = new RadioGroupFieldEditor(SAVE_JOB_BEFORE_RUN_PREFRENCE, Messages.SAVE_JOBS_BEFORE_LAUNCHING_MESSAGE, 3,  
-				 new String[][] {{DebugPreferencesMessages.LaunchingPreferencePage_3, MessageDialogWithToggle.ALWAYS}, 
-				 {DebugPreferencesMessages.LaunchingPreferencePage_5, MessageDialogWithToggle.PROMPT}}, 
-				 comp,
-				 true);
-		addField(edit);
-		
-		initialize();
-		return comp;
+		getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE);
+		jobRunPreferenceComposite = new JobRunPreferenceComposite(parent, SWT.NONE,
+				getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE));
+		jobRunPreferenceComposite.setLayout(new GridLayout(1, false));
+		jobRunPreferenceComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#performOk()
 	 */
 	@Override
 	public boolean performOk() {
-		boolean returnCode= super.performOk();
-		Activator.getDefault().getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, getPreferenceStore().getString(SAVE_JOB_BEFORE_RUN_PREFRENCE));
-		return returnCode; 
+		boolean returnCode = super.performOk();
+		String selection = MessageDialogWithToggle.PROMPT;
+		if (jobRunPreferenceComposite.getAlwaysButtonSelection()) {
+			selection = MessageDialogWithToggle.ALWAYS;
+		}
+		Activator.getDefault().getPreferenceStore().setValue(SAVE_JOB_BEFORE_RUN_PREFRENCE, selection);
+		return returnCode;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors
+	 * ()
 	 */
 	@Override
 	protected void createFieldEditors() {
-		// TODO Auto-generated method stub
 	}
 
+	@Override
+	protected void performDefaults() {
+		jobRunPreferenceComposite.storeDefaults();
+	}
 }
