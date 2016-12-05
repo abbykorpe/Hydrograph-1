@@ -120,9 +120,6 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 				TrackingDisplayUtils.INSTANCE.closeWebSocketConnection(session);
 				return;
 			}
-			
-
-			
 		}
 
 
@@ -257,7 +254,7 @@ public class RemoteJobLauncher extends AbstractJobLauncher {
 	private void releaseResources(Job job, DefaultGEFCanvas gefCanvas, JobLogger joblogger) {
 		enableLockedResources(gefCanvas);
 		refreshProject(gefCanvas);
-		joblogger.logJobEndInfo(job.getUniqueJobId(), ViewExecutionHistoryUtility.getInstance().getLogPath());
+		joblogger.logJobEndInfo(job.getUniqueJobId(), "");
 		joblogger.close();
 		JobManager.INSTANCE.removeJob(job.getLocalJobID());
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {

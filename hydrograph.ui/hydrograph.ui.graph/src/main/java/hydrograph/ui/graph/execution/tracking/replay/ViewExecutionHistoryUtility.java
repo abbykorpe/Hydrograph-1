@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
@@ -253,6 +254,22 @@ public class ViewExecutionHistoryUtility {
 		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
 				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
 		return jobTrackingLogDirectory = jobTrackingLogDirectory + "/";
+	}
+	
+	/**
+	 * Gets the log path.
+	 *
+	 * @return the log path
+	 */
+	public String getTrackingLogPath(){
+		String jobTrackingLogDirectory = Platform.getPreferencesService().getString(Activator.PLUGIN_ID, ExecutionPreferenceConstants.TRACKING_LOG_PATH, 
+				TrackingDisplayUtils.INSTANCE.getInstallationPath(), null);
+		if(OSValidator.isWindows()){
+			jobTrackingLogDirectory = jobTrackingLogDirectory + "\\";
+		}else if (OSValidator.isMac()) {
+			jobTrackingLogDirectory = jobTrackingLogDirectory + "/";
+		}
+		return jobTrackingLogDirectory;
 	}
 	
 	/**
