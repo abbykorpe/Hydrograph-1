@@ -53,8 +53,8 @@ import hydrograph.ui.common.util.Constants;
 
 /**
  * 
- * Run configuration dialog allows user to change run configurations 
- * before running the job.  
+ * Run configuration dialog allows user to change run configurations before
+ * running the job.
  * 
  * @author bitwise
  *
@@ -72,13 +72,13 @@ public class RunConfigDialog extends Dialog {
 	private HydroGroup remotePathConfigGroup;
 	private Composite groupHolderComposite;
 	private Composite remoteRunDetailsHolder;
-	
+
 	private Button viewDataCheckBox;
 	private Button btnLocalMode;
 	private Button btnRemoteMode;
-	
+
 	private Properties buildProps;
-	
+
 	private final String LOCAL_MODE = "local";
 	private final String REMOTE_MODE = "remote";
 	private final String HOST = "host";
@@ -88,8 +88,8 @@ public class RunConfigDialog extends Dialog {
 	private final String REMOTE_DIRECTORY = "remoteDirectory";
 	private final String BASE_PATH = "basePath";
 	private final String VIEW_DATA_CHECK = "viewDataCheck";
+	public static final String SELECTION_BUTTON_KEY = "REMOTE_BUTTON_KEY";
 
-	
 	private String password;
 	private String userId;
 	private String edgeNodeText;
@@ -98,14 +98,15 @@ public class RunConfigDialog extends Dialog {
 	private String host;
 	private String username;
 	private boolean isDebug;
-	private boolean runGraph;	
-	
+	private boolean runGraph;
+
 	private static String LOCAL_HOST = "localhost";
-	
-	
+
 	Composite container;
+
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parentShell
 	 */
 	public RunConfigDialog(Shell parentShell) {
@@ -117,6 +118,7 @@ public class RunConfigDialog extends Dialog {
 
 	/**
 	 * Create contents of the dialog.
+	 * 
 	 * @param parent
 	 */
 	@Override
@@ -124,56 +126,59 @@ public class RunConfigDialog extends Dialog {
 		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
 		container.getShell().setText("Run Configuration Settings");
-		
+
 		groupHolderComposite = new Composite(container, SWT.BORDER);
 		groupHolderComposite.setLayout(new GridLayout(1, false));
 		groupHolderComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
+
 		runModeGroup = new HydroGroup(groupHolderComposite, SWT.NONE);
 		runModeGroup.setHydroGroupText("Run Mode");
 		runModeGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		runModeGroup.getHydroGroupClientArea().setLayout(new GridLayout(1, false));
-		
+
 		Composite composite_3 = new Composite(runModeGroup.getHydroGroupClientArea(), SWT.NONE);
 		composite_3.setLayout(new GridLayout(1, false));
 		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Composite composite_1 = new Composite(composite_3, SWT.NONE);
 		composite_1.setLayout(new GridLayout(2, false));
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Composite composite_4 = new Composite(composite_1, SWT.NONE);
 		composite_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		composite_4.setLayout(new GridLayout(2, false));
-		
+
 		btnLocalMode = new Button(composite_4, SWT.RADIO);
 		btnLocalMode.setText("Local Mode");
 		btnLocalMode.addSelectionListener(runModeSelectionListener);
-		
+
 		btnRemoteMode = new Button(composite_4, SWT.RADIO);
 		btnRemoteMode.setText("Remote mode");
 		btnRemoteMode.addSelectionListener(runModeSelectionListener);
-		
+
 		Composite composite_5 = new Composite(composite_1, SWT.NONE);
 		composite_5.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		composite_5.setLayout(new GridLayout(1, false));
-		
+
 		viewDataCheckBox = new Button(composite_5, SWT.CHECK);
 		viewDataCheckBox.setText("View Data");
 		viewDataCheckBox.addSelectionListener(viewDataSelectionListener);
-		
+
 		Composite composite_2 = new Composite(composite_3, SWT.NONE);
 		composite_2.setLayout(new GridLayout(2, false));
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Label lblDebugFileLocation = new Label(composite_2, SWT.NONE);
 		lblDebugFileLocation.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblDebugFileLocation.setText("Base Path ");
-		
+
 		txtBasePath = new Text(composite_2, SWT.BORDER);
 		txtBasePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtBasePath.setEnabled(false);
-		
+		txtBasePath.setData(SELECTION_BUTTON_KEY, viewDataCheckBox);
+		EmptyTextListener basePathListener = new EmptyTextListener("Base Path ");
+		txtBasePath.addModifyListener(basePathListener);
+
 		remoteRunDetailsHolder = new Composite(groupHolderComposite, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(1, false);
 		gl_composite.verticalSpacing = 0;
@@ -182,77 +187,81 @@ public class RunConfigDialog extends Dialog {
 		gl_composite.horizontalSpacing = 0;
 		remoteRunDetailsHolder.setLayout(gl_composite);
 		remoteRunDetailsHolder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		serverDetailsGroup = new HydroGroup(remoteRunDetailsHolder, SWT.NONE);
 		serverDetailsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		serverDetailsGroup.setHydroGroupText("Server Details");
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.horizontalSpacing = 15;
 		serverDetailsGroup.getHydroGroupClientArea().setLayout(gridLayout);
-		
+
 		Label lblEdgeNode = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblEdgeNode.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEdgeNode.setText("Edge Node ");
-		
+
 		txtEdgeNode = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtEdgeNode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtEdgeNode.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		EmptyTextListener textEdgeNodeListener = new EmptyTextListener("Edge Node");
 		txtEdgeNode.addModifyListener(textEdgeNodeListener);
-		
+
 		Label lblUser = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblUser.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblUser.setText("User");
-		
+
 		txtUserName = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtUserName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtUserName.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		EmptyTextListener textUserListener = new EmptyTextListener("Host");
 		txtUserName.addModifyListener(textUserListener);
-		
+
 		Label lblPassword = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblPassword.setText("Password");
-		
+
 		txtPassword = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.PASSWORD | SWT.BORDER);
 		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtPassword.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		EmptyTextListener textPasswordListener = new EmptyTextListener("Password");
 		txtPassword.addModifyListener(textPasswordListener);
-		
+
 		remotePathConfigGroup = new HydroGroup(remoteRunDetailsHolder, SWT.NONE);
 		remotePathConfigGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		remotePathConfigGroup.setHydroGroupText("Remote Path Configurations");
 		GridLayout gridLayout_1 = new GridLayout(2, false);
 		gridLayout_1.horizontalSpacing = 15;
 		remotePathConfigGroup.getHydroGroupClientArea().setLayout(gridLayout_1);
-		
+
 		Label lblRunUtility = new Label(remotePathConfigGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblRunUtility.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblRunUtility.setText("Run Utility ");
-		
+
 		txtRunUtility = new Text(remotePathConfigGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtRunUtility.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Label lblProjectPath = new Label(remotePathConfigGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblProjectPath.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblProjectPath.setText("Project Path ");
-		
+
 		txtProjectPath = new Text(remotePathConfigGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtProjectPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		serverDetailsGroup.setVisible(false);
 		remotePathConfigGroup.setVisible(false);
-		
+
 		return container;
 	}
 
 	/**
 	 * Create contents of the button bar.
+	 * 
 	 * @param parent
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
-		
+
 		loadBuildProperties();
 	}
 
@@ -263,47 +272,50 @@ public class RunConfigDialog extends Dialog {
 	protected Point getInitialSize() {
 		return new Point(499, 483);
 	}
-	
+
 	SelectionListener runModeSelectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			Button button = ((Button) event.widget);
-			if (button.getText().equals("Remote mode")) {				
-				showRemoteRunDetailsHolderComposite();				
-			}else{
+			if (button.getText().equals("Remote mode")) {
+				showRemoteRunDetailsHolderComposite();
+			} else {
 				hideRemoteRunDetailsHolderComposite();
 			}
-		}		
+		}
 	};
-	
+
 	private void showRemoteRunDetailsHolderComposite() {
 		Point shellSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		getShell().setSize(shellSize);
-		
+		txtEdgeNode.setText(txtEdgeNode.getText());
+		txtUserName.setText(txtUserName.getText());
+		txtPassword.setText(txtPassword.getText());
 		serverDetailsGroup.setVisible(true);
 		remotePathConfigGroup.setVisible(true);
 	}
 
 	private void hideRemoteRunDetailsHolderComposite() {
-		Point remoteRunDetailsHolderSize = remoteRunDetailsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT);				
+		Point remoteRunDetailsHolderSize = remoteRunDetailsHolder.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		Point shellSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		Point newShellSize = new Point(shellSize.x, shellSize.y-remoteRunDetailsHolderSize.y);
+		Point newShellSize = new Point(shellSize.x, shellSize.y - remoteRunDetailsHolderSize.y);
 		getShell().setSize(newShellSize);
-		
+		txtEdgeNode.setText(txtEdgeNode.getText());
+		txtUserName.setText(txtUserName.getText());
+		txtPassword.setText(txtPassword.getText());
 		serverDetailsGroup.setVisible(false);
 		remotePathConfigGroup.setVisible(false);
 	}
-	
+
 	SelectionListener viewDataSelectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			Button button = ((Button) event.widget);
-			
 			txtBasePath.setEnabled(button.getSelection());
+			txtBasePath.setText(txtBasePath.getText());
 		}
 	};
-	
-	
+
 	private void loadBuildProperties() {
 		String buildPropFilePath = buildPropFilePath();
 		IPath bldPropPath = new Path(buildPropFilePath);
@@ -321,7 +333,7 @@ public class RunConfigDialog extends Dialog {
 		populateTextBoxes(propertyNames);
 
 	}
-	
+
 	private String buildPropFilePath() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
@@ -331,7 +343,7 @@ public class RunConfigDialog extends Dialog {
 		String activeProjectName = activeProject.getName();
 		return "/" + activeProjectName + "/build.properties";
 	}
-	
+
 	private void populateTextBoxes(Enumeration propertyNames) {
 		if (StringUtils.equals(buildProps.getProperty("local"), "true")) {
 			btnLocalMode.setSelection(true);
@@ -347,21 +359,22 @@ public class RunConfigDialog extends Dialog {
 		txtRunUtility.setText(getBuildProperty(RUN_UTILITY));
 		txtProjectPath.setText(getBuildProperty(REMOTE_DIRECTORY));
 		txtBasePath.setText(getBuildProperty(BASE_PATH));
-		
-		if(StringUtils.equals(buildProps.getProperty(VIEW_DATA_CHECK), "true")){
+
+		if (StringUtils.equals(buildProps.getProperty(VIEW_DATA_CHECK), "true")) {
 			viewDataCheckBox.setSelection(true);
 			txtBasePath.setEnabled(true);
-		}	
+
+		}
 	}
-	
-	private String getBuildProperty(String key){
-		if(buildProps.getProperty(VIEW_DATA_CHECK) == null){
+
+	private String getBuildProperty(String key) {
+		if (buildProps.getProperty(VIEW_DATA_CHECK) == null) {
 			return "";
-		}else{
+		} else {
 			return buildProps.getProperty(key);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Returns cluster password
@@ -394,15 +407,15 @@ public class RunConfigDialog extends Dialog {
 
 	/**
 	 * 
-	 * Returns base path on remote server.
-	 * The base path is directory path on remote server which contains temporary debug files 
+	 * Returns base path on remote server. The base path is directory path on
+	 * remote server which contains temporary debug files
 	 * 
 	 * @return
 	 */
 	public String getBasePath() {
 		return this.basePath;
 	}
-	
+
 	/**
 	 * 
 	 * Get host name
@@ -447,7 +460,7 @@ public class RunConfigDialog extends Dialog {
 	public boolean isDebug() {
 		return isDebug;
 	}
-	
+
 	@Override
 	protected void okPressed() {
 		saveRunConfigurations();
@@ -493,14 +506,14 @@ public class RunConfigDialog extends Dialog {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", e.getMessage());
 			this.runGraph = false;
 		}
-		
+
 		setPreferences();
 	}
-	
+
 	private void setPreferences() {
-		if(StringUtils.isBlank(PlatformUI.getPreferenceStore().getString(Constants.HOST)))
-			PlatformUI.getPreferenceStore().setValue(Constants.HOST,this.host);
-		
+		if (StringUtils.isBlank(PlatformUI.getPreferenceStore().getString(Constants.HOST)))
+			PlatformUI.getPreferenceStore().setValue(Constants.HOST, this.host);
+
 	}
 
 	@Override
@@ -508,7 +521,7 @@ public class RunConfigDialog extends Dialog {
 		runGraph = false;
 		super.cancelPressed();
 	}
-	
+
 	private void checkBuildProperties(boolean remote) {
 		Notification notification = validate(remote);
 		if (notification.hasErrors()) {
@@ -538,9 +551,9 @@ public class RunConfigDialog extends Dialog {
 
 		return note;
 	}
-	
+
 	public boolean proceedToRunGraph() {
 		return runGraph;
 	}
-	
+
 }
