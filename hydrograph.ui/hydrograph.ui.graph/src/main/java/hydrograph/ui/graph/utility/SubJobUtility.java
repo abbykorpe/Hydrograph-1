@@ -129,11 +129,11 @@ public class SubJobUtility {
 	 */
 	public IFile doSaveAsSubJob(IFile file, Container container) {
 
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
 		
 			if (file != null) {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
 				
 				file.create(new ByteArrayInputStream(out.toByteArray()), true, null);
@@ -144,7 +144,13 @@ public class SubJobUtility {
 		} catch (Exception e ) {
 			MessageDialog.openError(new Shell(), "Error", "Exception occured while saving the graph -\n" + e.getMessage());
 		}
-		
+		finally {
+			try {
+				out.close();
+			} catch (IOException ioException) {
+				logger.warn("Exception occurred while closing stream");
+			}
+		}
 		return file;
 	}
 
@@ -320,6 +326,7 @@ public class SubJobUtility {
 			SchemaPropagation.INSTANCE.continuousSchemaPropagation(subjobComponent, inputSchemaMap);
 		}
 		if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(component.getComponentName())) {
+			boolean intializeSchemaMap=true;
 			Map<String, ComponentsOutputSchema> outputSchemaMap = new HashMap<String, ComponentsOutputSchema>();
 			for (Link innerLink : component.getTargetConnections()) {
 				ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE
@@ -327,11 +334,18 @@ public class SubJobUtility {
 				outputSchemaMap.put(
 						innerLink.getTargetTerminal().replaceAll(Constants.INPUT_SOCKET_TYPE,
 								Constants.OUTPUT_SOCKET_TYPE), componentsOutputSchema);
-			}
+				if(StringUtils.equalsIgnoreCase(Constants.STRAIGHTPULL,innerLink.getSource().getCategory())
+						&&StringUtils.equalsIgnoreCase(Constants.FILTER,innerLink.getSource().getComponentName())
+						&&StringUtils.equalsIgnoreCase(Constants.UNIQUE_SEQUENCE,innerLink.getSource().getComponentName()))
+					intializeSchemaMap=false;
+			}	
+		
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, outputSchemaMap);
 			subjobComponent.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, outputSchemaMap);
 			subjobComponent.getProperties().put(Constants.OUTPUT_SUBJOB, component);
 			component.getProperties().put(Constants.SUBJOB_COMPONENT, subjobComponent);
+			if(intializeSchemaMap)
+			SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(subjobComponent, component);
 		}
 	}
 
@@ -345,6 +359,8 @@ public class SubJobUtility {
 			Component selectedSubjobComponent) {
 		IPath jobFileIPath = null;
 		Container container = null;
+		InputStream inputStream =null;
+		FileInputStream fileInputStream=null;
 		if (StringUtils.isNotBlank(filePath) && selectedSubjobComponent != null) {
 			jobFileIPath = new Path(filePath);
 		} else if (componentEditPart != null
@@ -358,17 +374,30 @@ public class SubJobUtility {
 			try {
 
 				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
-					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-					container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inp);
-				} else if (jobFileIPath !=null && isFileExistsOnLocalFileSystem(jobFileIPath))
-					container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(
-							new FileInputStream(jobFileIPath.toFile()));
+					inputStream = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+					container = (Container)CanvasUtils.INSTANCE.fromXMLToObject(inputStream);
+				} else if (jobFileIPath !=null && isFileExistsOnLocalFileSystem(jobFileIPath)) {
+					fileInputStream = new FileInputStream(jobFileIPath.toFile());
+					container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(fileInputStream);
+				}
 
 				updateContainerAndSubjob(container, selectedSubjobComponent, jobFileIPath);
 
 			} catch (CoreException | IOException e) {
 				logger.error("Cannot update subgrap-component's property..", e);
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Invalid graph file.");
+			}
+			finally {
+				try {
+					if (inputStream != null) {
+						inputStream.close();
+					}
+					if (fileInputStream != null) {
+						fileInputStream.close();
+					}
+				} catch (IOException e) {
+					logger.warn("Exception occurred while closing stream");
+				}
 			}
 		}
 		selectedSubjobComponent.getProperties().put(Constants.SUBJOB_CONTAINER, container);
@@ -386,9 +415,22 @@ public class SubJobUtility {
 					break;
 				  }
 			}
+			  boolean intializeSchemaMap=true;
 			  for (Component subComponent : subJobContainer.getUIComponentList()) {
 				if (Constants.OUTPUT_SUBJOB.equalsIgnoreCase(subComponent.getComponentName())) {
 					outPort = subComponent.getInPortCount();
+					for(Link innerLink:subComponent.getTargetConnections())
+					{
+						if(StringUtils.equalsIgnoreCase(Constants.STRAIGHTPULL,innerLink.getSource().getCategory())
+								&&StringUtils.equalsIgnoreCase(Constants.FILTER,innerLink.getSource().getComponentName())
+								&&StringUtils.equalsIgnoreCase(Constants.UNIQUE_SEQUENCE,innerLink.getSource().getComponentName()))
+							{
+							intializeSchemaMap=false;
+							break;
+							}
+					}
+					if(intializeSchemaMap)
+					SubjobUtility.INSTANCE.initializeSchemaMapForInputSubJobComponent(selectedSubjobComponent, subComponent);	
 					break;
 				   }
 			}
@@ -481,6 +523,8 @@ public class SubJobUtility {
 		String filePath = null;
 		Container subJobContainer = null;
 		boolean isVersionChanged = false;
+		InputStream inputStream=null;
+		FileInputStream fileInputStream=null;
 		int versionStoredInSubjobComponent = 0;
 		if (subJobComponent != null && subJobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME) != null
 				&& subJobComponent.getProperties().get(Constants.SUBJOB_VERSION) != null) {
@@ -490,12 +534,13 @@ public class SubJobUtility {
 			jobFileIPath = new Path(filePath);
 			try {
 				if (ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).exists()) {
-					InputStream inp = ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
-					subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(inp);
+					 inputStream= ResourcesPlugin.getWorkspace().getRoot().getFile(jobFileIPath).getContents();
+					subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(inputStream);
 				} else {
-					if (isFileExistsOnLocalFileSystem(jobFileIPath))
-						subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(
-								new FileInputStream(jobFileIPath.toFile()));
+					if (isFileExistsOnLocalFileSystem(jobFileIPath)) {
+						fileInputStream = new FileInputStream(jobFileIPath.toFile());
+						subJobContainer = (Container) CanvasUtils.INSTANCE.fromXMLToObject(fileInputStream);
+					}
 				}
 				if (subJobContainer != null && subJobComponent != null && subJobContainer.getSubjobVersion() != versionStoredInSubjobComponent) {
 					isVersionChanged = true;
@@ -506,6 +551,18 @@ public class SubJobUtility {
 			} catch (CoreException |IOException exception) {
 
 				logger.error("Exception occurred while updating Subjob version", exception);
+			}
+			finally {
+				try {
+					if (inputStream != null) {
+						inputStream.close();
+					}
+					if (fileInputStream != null) {
+						fileInputStream.close();
+					}
+				} catch (IOException e) {
+					logger.warn("Exception occurred while closing stream");
+				}
 			}
 		}
 		return isVersionChanged;
