@@ -556,7 +556,7 @@ public class TransformWidget extends AbstractWidget {
 		for (Link link : getComponent().getTargetConnections()) {
 			String sourceTerminalId=link.getSourceTerminal();
 			List<BasicSchemaGridRow> basicSchemaGridRows=SchemaPropagationHelper.INSTANCE.
-			getBasicSchemaGridRowList(Constants.INPUT_SOCKET_TYPE+sourceTerminalId.charAt(sourceTerminalId.length()-1)
+			getBasicSchemaGridRowList(Constants.INPUT_SOCKET_TYPE+getPortCount(sourceTerminalId)
 					, link);
 			if (basicSchemaGridRows != null){
 				for (BasicSchemaGridRow row :basicSchemaGridRows ) {
@@ -565,6 +565,16 @@ public class TransformWidget extends AbstractWidget {
 				}
 			}
 		}
+	}
+
+	private String getPortCount(String sourceTerminalId) {
+		String portCount=null;
+		if(StringUtils.startsWithIgnoreCase(sourceTerminalId, Constants.UNUSED_SOCKET_TYPE)){
+			portCount=StringUtils.remove(sourceTerminalId, Constants.UNUSED_SOCKET_TYPE);
+		}else if(StringUtils.startsWithIgnoreCase(sourceTerminalId, Constants.OUTPUT_SOCKET_TYPE)){
+			portCount=StringUtils.remove(sourceTerminalId, Constants.OUTPUT_SOCKET_TYPE);
+		}
+		return portCount;
 	}
 
 	@Override
