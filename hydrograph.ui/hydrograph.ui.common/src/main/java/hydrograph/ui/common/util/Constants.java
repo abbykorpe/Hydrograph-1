@@ -86,6 +86,7 @@ public class Constants {
 	public static final String CUMULATE_WINDOW_TITLE= "Cumulate";
 	public static final String NORMALIZE_WINDOW_TITLE = "Normalize";
 	public static final String ISSUE_PROPERTY_NAME="Other Issues";
+	
     public static final String SHOW_TOOLTIP="TRUE";
 	public static final String HIDE_TOOLTIP="FALSE";
 	public static final String TOOLTIP_DATATYPE="TEXT";
@@ -113,6 +114,8 @@ public class Constants {
 	public static final String ASCENDING_SORT_ORDER = "Asc";
 	public static final String DESCENDING_SORT_ORDER="Desc";
 	public static final String NONE_SORT_ORDER="From Param";
+	
+	public static final String SUBJOB_TOOLTIP_INFO = "Subjob Info";
 
 
 	/*
@@ -233,6 +236,7 @@ public class Constants {
 	public static final String PROPERTY_COLUMN_NAME = "Key_fields";
 	public static final String PROPERTY_SECONDARY_COLUMN_KEYS = "Secondary_keys";
 	public static final String  WARN="WARN";
+	
 
 	public static final String GRAPH_PROPERTY = "Graph Property";
 	public static final String GRAPH_PROPERTY_COMMAND_ID = "hydrograph.ui.propertywindow.graphProperties";

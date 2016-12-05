@@ -25,6 +25,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
@@ -135,6 +136,11 @@ public class SubJobUpdateAction extends SelectionAction {
 				SubJobUtility subJobUtility=new SubJobUtility();
 				Container container=subJobUtility.updateSubjobPropertyAndGetSubjobContainer(null,filePath, selectedSubjobComponent);
 				SubjobUtility.INSTANCE.showOrHideErrorSymbolOnComponent(container,selectedSubjobComponent);
+				
+				//Hide the tooltip message on subjob component
+				PropertyToolTipInformation information = subJobUtility.createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);
+				selectedSubjobComponent.getTooltipInformation().put(Constants.SUBJOB_TOOLTIP_INFO, information);
+				
 				componentEditPart.changePortSettings();
 				componentEditPart.updateComponentStatus();
 				componentEditPart.refresh();
