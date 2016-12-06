@@ -14,58 +14,6 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
-import hydrograph.ui.common.schema.Field;
-import hydrograph.ui.common.schema.Fields;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.Activator;
-import hydrograph.ui.propertywindow.factory.ListenerFactory;
-import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
-import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
-import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-import hydrograph.ui.propertywindow.utils.Utils;
-import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTable;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTableViewer;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaSubgroupComposite;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaTableComposite;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
-import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
-import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -147,6 +95,58 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
+
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.Activator;
+import hydrograph.ui.propertywindow.factory.ListenerFactory;
+import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
+import hydrograph.ui.propertywindow.fixedwidthschema.ELTFixedWidget;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
+import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
+import hydrograph.ui.propertywindow.utils.Utils;
+import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTTableViewer;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSchemaTableComposite;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.GridChangeListener;
+import hydrograph.ui.propertywindow.widgets.utility.GridComparator;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 /**
@@ -903,7 +903,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 }
 
 	 public void updateSchemaWithPropogatedSchema(){
-		 schemaGridRowList.clear();
+		 if(!getComponent().getComponentName().equals(Constants.TRANSFORM_DISPLAYNAME)){
+			 schemaGridRowList.clear();
+		 }
 		 tableViewer.refresh();
 		 syncInternallyPropagatedSchema();
 		 showHideErrorSymbol(applySchemaValidationRule());
@@ -1764,11 +1766,25 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	 private void syncInternallyPropagatedSchema() {
 		 Schema schema = getSchemaForInternalPropagation();
-		 schemaGridRowList.clear();
-		 schemaGridRowList.addAll(schema.getGridRow());
-		 ELTGridDetails eLTDetails = (ELTGridDetails) helper
-				 .get(HelperType.SCHEMA_GRID);
-		 eLTDetails.setGrids(schemaGridRowList);
+		 if(getComponent().getComponentName().equals(Constants.TRANSFORM_DISPLAYNAME)){
+			 List<GridRow> tempList = new ArrayList<>();
+			 schemaGridRowList =(List<GridRow>) tableViewer.getInput();
+			 tempList.addAll(propogateInternalSchemaForTransform(schemaGridRowList, schema.getGridRow()));
+			 schemaGridRowList.clear();
+			 schemaGridRowList.addAll(tempList);
+			  /*remove duplicates*/
+			//schemaGridRowList = schemaGridRowList.parallelStream().distinct().collect(Collectors.toList());
+			 ELTGridDetails eLTDetails = (ELTGridDetails) helper
+					 .get(HelperType.SCHEMA_GRID);
+			 eLTDetails.setGrids(schemaGridRowList);
+			 tableViewer.setInput(schemaGridRowList);
+		 }else{
+			 schemaGridRowList.clear();
+			 schemaGridRowList.addAll(schema.getGridRow());
+			 ELTGridDetails eLTDetails = (ELTGridDetails) helper
+					 .get(HelperType.SCHEMA_GRID);
+			 eLTDetails.setGrids(schemaGridRowList);
+		 }
 
 		 tableViewer.refresh();
 	 }
@@ -1943,4 +1959,37 @@ if(deleteButton!=null)
 		 LinkedHashMap<String, Object> currentSchemaProperty = new LinkedHashMap<>();
 		 currentSchemaProperty.put(propertyName, schema);
 	 }
+	 
+	 
+	 /**
+		 * This Function calls to merge Transform component Dialog's outputField schema fields to schema tab schema than overwrite
+		 * @param schemaGridRowList
+		 * @param transformInternalSchema
+		 * @return 
+		 */
+		private List<GridRow> propogateInternalSchemaForTransform(List<GridRow> schemaGridRowList, List<GridRow> transformInternalSchema){
+			 List<GridRow> tempSchema = new ArrayList<>();
+			 if(schemaGridRowList.isEmpty()){
+				 tempSchema.addAll(transformInternalSchema);
+			 }else{
+				 tempSchema.addAll(compareInternalSchemaForTransForm(schemaGridRowList, transformInternalSchema));
+			 }
+			 
+			return tempSchema;
+		 }
+		 
+		 
+		 /**
+		  * The function will used to compare Transform component Dialog's outputField schema to schema tab schema 
+		 * @param outputSchema
+		 * @param internalSchema
+		 * @return List of Schema Fields
+		 */
+		private List<GridRow> compareInternalSchemaForTransForm(List<GridRow> outputSchema, List<GridRow> internalSchema){
+			List<GridRow> tempList = (List<GridRow>) ((ArrayList<GridRow>)outputSchema).clone();
+			tempList.forEach(gridRow -> {if(!internalSchema.contains(gridRow)){ outputSchema.remove(gridRow);}});
+			internalSchema.forEach(gridRow -> {if(!outputSchema.contains(gridRow)){outputSchema.add(gridRow);}});
+			 
+			return outputSchema;
+		 }
 }
