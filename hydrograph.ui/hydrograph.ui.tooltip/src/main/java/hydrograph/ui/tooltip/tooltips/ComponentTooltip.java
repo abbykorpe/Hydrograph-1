@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
-
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.SWTResourceManager;
@@ -50,6 +49,7 @@ import hydrograph.ui.datastructure.property.LookupConfigProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
@@ -66,7 +66,7 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ComponentTooltip.class);
-	
+	private Component component; 
 	private ToolBarManager toolBarManager=null;
 	private Map<String,PropertyToolTipInformation> componentToolTipInformation;
 	private Composite tooltipContainer;
@@ -108,9 +108,10 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	 * @param toolBarManager
 	 * @param propertyToolTipInformation
 	 */
-	public ComponentTooltip(Shell parent, ToolBarManager toolBarManager,Map<String,PropertyToolTipInformation> propertyToolTipInformation) {
+	public ComponentTooltip(Component component,Shell parent, ToolBarManager toolBarManager,Map<String,PropertyToolTipInformation> propertyToolTipInformation) {
 		super(parent, toolBarManager);
 		this.toolBarManager= getToolBarManager();
+		this.component=component;
 		this.componentToolTipInformation = propertyToolTipInformation;		
 		logger.debug("ComponentTooltip.ComponentTooltip: Creating tooltip with toolbar: " + this.toolBarManager + " , " + this.componentToolTipInformation.toString());
 		create();
@@ -124,8 +125,9 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 	 * @param status - status message
 	 * @param propertyToolTipInformation - Information to be display in tooltip
 	 */
-	public ComponentTooltip(Shell parent, String status,Map<String,PropertyToolTipInformation> propertyToolTipInformation) {
+	public ComponentTooltip(Component component,Shell parent, String status,Map<String,PropertyToolTipInformation> propertyToolTipInformation) {
 		super(parent, status);
+		this.component=component;
 		this.componentToolTipInformation = propertyToolTipInformation;
 		logger.debug("ComponentTooltip.ComponentTooltip: Creating tooltip with statusbar: " + status + " , " + this.componentToolTipInformation.toString());
 		create();
@@ -283,7 +285,8 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 		final Link link = new Link(container, SWT.NONE);
 		String tempText= propertyNameCapitalized+" : <a>" + Constants.ADD_FIELDS_AS_PASSTHROUGH_FIELDS+ "</a>";		
 		link.setText(tempText);
-		
+		if(component.getTargetConnections().isEmpty())
+		link.setEnabled(false);	
 		link.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		addMouseHoverListenerToLink(link,container);
 		addSelectionListenerToLink(propertyInfo, link);

@@ -687,7 +687,7 @@ public class ComponentFigure extends Figure implements Validator {
 	}
 
 	private ComponentTooltip getStatusToolTip(Shell parent, org.eclipse.swt.graphics.Point location) {
-		ComponentTooltip tooltip = new ComponentTooltip(parent, Constants.CLICK_TO_FOCUS, propertyToolTipInformation);
+		ComponentTooltip tooltip = new ComponentTooltip(component,parent, Constants.CLICK_TO_FOCUS, propertyToolTipInformation);
 		tooltip.setSize(300, 100);
 		tooltip.setLocation(location);
 		return tooltip;
@@ -695,7 +695,7 @@ public class ComponentFigure extends Figure implements Validator {
 
 	private ComponentTooltip getToolBarToolTip(Shell parent, org.eclipse.swt.graphics.Rectangle toltipBounds) {
 		ToolBarManager toolBarManager = new ToolBarManager();
-		ComponentTooltip tooltip = new ComponentTooltip(parent, toolBarManager, propertyToolTipInformation);
+		ComponentTooltip tooltip = new ComponentTooltip(component,parent, toolBarManager, propertyToolTipInformation);
 		org.eclipse.swt.graphics.Point location = new org.eclipse.swt.graphics.Point(toltipBounds.x, toltipBounds.y);
 		tooltip.setLocation(location);
 		tooltip.setSize(toltipBounds.width + 20, toltipBounds.height + 20);
