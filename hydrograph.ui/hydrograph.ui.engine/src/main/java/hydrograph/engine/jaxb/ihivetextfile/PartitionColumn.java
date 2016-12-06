@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "partition_column", propOrder = {
+@XmlType(name = "partition_column", namespace = "hydrograph/engine/jaxb/ihivetextfile", propOrder = {
     "partitionColumn"
 })
 public class PartitionColumn {

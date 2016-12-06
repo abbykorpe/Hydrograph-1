@@ -17,6 +17,7 @@ apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
 
+group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.cascading'
 ext.cascadingVersion = '3.1.0'
 ext.hadoopVersion = '2.6.0'
@@ -68,6 +69,7 @@ test {
     exclude '**/OutputFileHiveParquetFileTest*'
     exclude '**/InputFileHiveTextFileTest*'
     exclude '**/OutputFileHiveTextFileTest*'
+	exclude '**/RunProgramTest*'
 }
 
 uploadArchives {
@@ -85,17 +87,33 @@ repositories {
     maven {
         url 'http://maven.twttr.com/'
     }
-
+	maven {
+        url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
+    }
 }
 
 dependencies {
+	compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion, changing: true
+    testCompile( group: 'org.apache.tez', name: 'tez-tests', version: tezVersion, classifier: 'tests' )
+    testCompile( group: 'org.apache.tez', name: 'tez-api', version: tezVersion )
+    testCompile( group: 'org.apache.tez', name: 'tez-dag', version: tezVersion )
+    
+
+	compile group: 'cascading', name: 'cascading-jdbc-core', version: '3.0.0'
+ 	compile group: 'cascading', name: 'cascading-jdbc-mysql', version: '3.0.0'
+  	compile group: 'cascading', name: 'cascading-jdbc-redshift', version: '3.0.0'
+    compile (group: 'cascading', name: 'cascading-jdbc-oracle', version: '0.1')
+    compile (group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
+
+
 	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'
     compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
     compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion
     //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
-    compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
+ 
+ compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
 
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion //required for plunger
 
@@ -127,6 +145,8 @@ dependencies {
     compile 'org.hamcrest:hamcrest-core:1.3' //required by plunger
     testCompile 'org.mockito:mockito-core:1.9.5' //required by plunger
     testCompile 'commons-io:commons-io:2.4' //required by plunger
+    compile(group: 'cascading', name: 'cascading-jdbc-oracle', version: '0.1')
+    compile(group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
 }
 
 task writePom {

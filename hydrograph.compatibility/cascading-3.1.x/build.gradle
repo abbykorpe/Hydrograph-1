@@ -1,0 +1,28 @@
+ext.cascadingVersion = '3.1.0'
+
+ext.hiveVersion = '1.2.0'
+
+
+repositories {
+  maven{ url 'https://repository.apache.org/content/repositories/releases/' }
+}
+
+dependencies {
+
+    runtime group: 'cascading', name: 'cascading-core', version: cascadingVersion
+    runtime group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion 
+    runtime group: 'cascading', name: 'cascading-local', version: cascadingVersion 
+    runtime group: 'cascading', name: 'cascading-hive', version: '2.0.0'
+    runtime group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion 
+
+    runtime 'com.google.guava:guava:14.0.1'
+    runtime 'org.slf4j:slf4j-api:1.7.2'
+    testRuntime 'com.hotels:plunger:2.1.1'
+    runtime 'com.twitter:parquet-cascading:1.6.0'
+    runtime 'com.twitter:parquet-hadoop:1.6.0'
+    runtime 'com.twitter:parquet-column:1.6.0'
+    runtime 'org.fluttercode.datafactory:datafactory:0.8'
+    runtime 'org.hamcrest:hamcrest-core:1.3' 
+    testRuntime 'org.mockito:mockito-core:1.9.5' 
+    testRuntime 'commons-io:commons-io:2.4' 
+}

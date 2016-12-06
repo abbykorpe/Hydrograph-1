@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Properties;
 
+
 /**
  * This is a POJO which holds the information for one operation in any of the
  * operation type components like

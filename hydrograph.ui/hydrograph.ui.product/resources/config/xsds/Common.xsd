@@ -22,6 +22,7 @@
 			<enumeration value="STRAIGHTPULL" />
 			<enumeration value="UNKNOWN" />
 			<enumeration value="SUBJOB" />
+			<enumeration value="COMMAND" />	
 		</restriction>
 	</simpleType>
 	
@@ -47,6 +48,7 @@
 		<enumeration value="GENERATE_RECORDS_SCHEMA_WIDGET" />
 		<enumeration value="TRANSFORM_SCHEMA_WIDGET" />
 			<enumeration value="SCHEMA_WIDGET" />
+			<enumeration value="SQL_SCHEMA_WIDGET" />
 			<enumeration value="FIELD_SEQUENCE_WIDGET" />
 			<enumeration value="FIXED_WIDGET"/>
 			<enumeration value="RUNTIME_PROPERTIES_WIDGET" />
@@ -85,14 +87,31 @@
 			<enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
 			<enumeration value="PRIMARY_COLUMN_KEYS_WIDGET"/>
 			<enumeration value="DATABASE_NAME_WIDGET"/>
+			<enumeration value="DATABASE_TYPE_WIDGET"/>
+			<enumeration value="RDBMS_LOADTYPE_PROPERTIES_WIDGET"/>
+			<enumeration value="REDSHIFT_LOADTYPE_PROPERTIES_WIDGET"/>
 			<enumeration value="TABLE_NAME_WIDGET"/>
+			<enumeration value="USER_NAME_WIDGET"/>
+			<enumeration value="PASSWORD_NAME_WIDGET"/>
+			<enumeration value="QUERY_WIDGET"/>
+			<enumeration value="JDBC_URL_WIDGET"/>
+			<enumeration value="BATCH_SIZE_WIDGET"/>
 			<enumeration value="PARTITION_KEYS_WIDGET"/>
 			<enumeration value="QUOTE_WIDGET"/>
 			<enumeration value="EXTERNAL_TABLE_PATH_WIDGET"/>
 			<enumeration value="MIXED_SCHEME"/>
 			<enumeration value="OVERWRITE_WIDGET"/>
+			<enumeration value="RUN_MODEL_TEXT_WIDGET"/>
+			<enumeration value="RUN_INPUT_TEXT_WIDGET"/>
+			<enumeration value="RUN_OUTPUT_TEXT_WIDGET"/>
+			<enumeration value="RUNPROGRAM_TEXT_WIDGET"/>
+			<enumeration value="RUN_TRAINING_TEXT_WIDGET"/>
+			<enumeration value="RUN_TEST_TEXT_WIDGET"/>
+			<enumeration value="RUN_THRESHOLD_TEXT_WIDGET"/>
+			<enumeration value="PARTITION_PROPERTIES_WIDGET"/>			
 			<enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
 			<enumeration value="EXTRACT_METASTORE_DATA_WIDGET"/>
+			<enumeration value="SQL_CONDITION_WIDGET"/>
 		</restriction>
 	</simpleType>
 
@@ -196,6 +215,13 @@
 			 <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="MixedSchemeGridValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>		
+		<enumeration value="SQL_SCHEME_GRID_VALIDATOR">
+			 <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="SQLSchemeGridValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>		

@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.partitionbyexpression.TypePbeOperation;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-transform-operation", propOrder = {
+@XmlType(name = "type-transform-operation", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inputFields",
     "outputFields",
     "properties"

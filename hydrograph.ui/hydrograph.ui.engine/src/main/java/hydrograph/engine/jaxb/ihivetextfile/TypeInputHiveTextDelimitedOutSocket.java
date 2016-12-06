@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-hive-text-delimited-out-socket")
+@XmlType(name = "type-input-hive-text-delimited-out-socket", namespace = "hydrograph/engine/jaxb/ihivetextfile")
 public class TypeInputHiveTextDelimitedOutSocket
     extends TypeInputOutSocket
 {

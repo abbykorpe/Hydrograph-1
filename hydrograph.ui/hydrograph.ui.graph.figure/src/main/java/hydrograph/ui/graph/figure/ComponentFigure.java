@@ -382,15 +382,26 @@ public class ComponentFigure extends Figure implements Validator {
 	private void drawPropertyStatus(Graphics graphics) {
 		
 		Rectangle rectangle = getBounds().getCopy();
-		if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.WARN.name())) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_WARN_ICON);
-		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.ERROR.name())) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON);
-		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(Constants.UPDATE_AVAILABLE)) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_UPDATE_ICON);
+		if (StringUtils.isNotBlank(getPropertyStatus())
+				&& getPropertyStatus().equals(ValidityStatus.WARN.name())) {
+			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH
+					+ ImagePathConstant.COMPONENT_WARN_ICON);
+		} else if (StringUtils.isNotBlank(getPropertyStatus())
+				&& getPropertyStatus().equals(ValidityStatus.ERROR.name())) {
+			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH
+					+ ImagePathConstant.COMPONENT_ERROR_ICON);
+		} else if (StringUtils.isNotBlank(getPropertyStatus())
+				&& getPropertyStatus().equals(Constants.UPDATE_AVAILABLE)) {
+			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH
+					+ ImagePathConstant.COMPONENT_UPDATE_ICON);
+		} else if (StringUtils.isNotBlank(getPropertyStatus())
+				&& getPropertyStatus().equals(ValidityStatus.VALID.name())) {
+			if (statusImage != null && !statusImage.isDisposed()) {
+				statusImage.dispose();
+			}
 		}
 		logger.debug("Component has {} property status.", getPropertyStatus());
-		if (statusImage != null) {
+		if (statusImage != null && !statusImage.isDisposed()) {
 			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
 		}
 	}

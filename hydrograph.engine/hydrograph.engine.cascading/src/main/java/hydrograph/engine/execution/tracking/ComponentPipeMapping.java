@@ -53,6 +53,7 @@ public class ComponentPipeMapping {
 	private static Map<String,String> batchMap = new HashMap<String,String>();
 	private static Map<String,String> componentNamesMap = new HashMap<String,String>();
 
+
 	/**
 	 * Method generateComponentToPipeMap generates map of component with
 	 * corresponding pipe.
@@ -95,6 +96,7 @@ public class ComponentPipeMapping {
 						inSockets);
 				batchMap.put(eachComponentId, eachBatchNumber);
 				componentNamesMap.put(eachComponentId, jaxbTraversal.getComponentNameFromComponentId(eachComponentId));
+
 			}
 		}
 	}

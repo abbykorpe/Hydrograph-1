@@ -64,7 +64,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
     "runtimeProperties",
     "inputsOrOutputsOrStraightPulls"
 })
-@XmlRootElement(name = "graph")
+@XmlRootElement(name = "graph", namespace = "hydrograph/engine/jaxb/main")
 public class Graph {
 
     protected TypeProperties runtimeProperties;

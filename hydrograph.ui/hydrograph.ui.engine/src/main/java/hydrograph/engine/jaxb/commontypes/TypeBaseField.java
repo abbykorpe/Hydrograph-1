@@ -24,6 +24,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 import hydrograph.engine.jaxb.generatesequence.TypeNameField;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordField;
+import hydrograph.engine.jaxb.omysql.TypeMysqlField;
+import hydrograph.engine.jaxb.ooracle.TypeOracleField;
+import hydrograph.engine.jaxb.oredshift.TypeRedshiftField;
 
 
 /**
@@ -45,13 +48,16 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-field")
+@XmlType(name = "type-base-field", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlSeeAlso({
     hydrograph.engine.jaxb.itffw.TypeFixedwidthField.class,
     TypeGenerateRecordField.class,
     hydrograph.engine.jaxb.ifmixedscheme.TypeMixedField.class,
     hydrograph.engine.jaxb.otffw.TypeFixedwidthField.class,
     hydrograph.engine.jaxb.ofmixedscheme.TypeMixedField.class,
+    TypeMysqlField.class,
+    TypeRedshiftField.class,
+    TypeOracleField.class,
     TypeNameField.class
 })
 public class TypeBaseField {

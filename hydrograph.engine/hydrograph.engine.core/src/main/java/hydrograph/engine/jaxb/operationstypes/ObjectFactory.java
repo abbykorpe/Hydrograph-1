@@ -42,6 +42,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PartitionByExpression }
+     * 
+     */
+    public PartitionByExpression createPartitionByExpression() {
+        return new PartitionByExpression();
+    }
+
+    /**
      * Create an instance of {@link Lookup }
      * 
      */
@@ -58,43 +66,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionByExpression }
+     * Create an instance of {@link Filter }
      * 
      */
-    public PartitionByExpression createPartitionByExpression() {
-        return new PartitionByExpression();
-    }
-
-    /**
-     * Create an instance of {@link Normalize }
-     * 
-     */
-    public Normalize createNormalize() {
-        return new Normalize();
-    }
-
-    /**
-     * Create an instance of {@link GenerateSequence }
-     * 
-     */
-    public GenerateSequence createGenerateSequence() {
-        return new GenerateSequence();
-    }
-
-    /**
-     * Create an instance of {@link Transform }
-     * 
-     */
-    public Transform createTransform() {
-        return new Transform();
-    }
-
-    /**
-     * Create an instance of {@link Aggregate }
-     * 
-     */
-    public Aggregate createAggregate() {
-        return new Aggregate();
+    public Filter createFilter() {
+        return new Filter();
     }
 
     /**
@@ -106,6 +82,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Transform }
+     * 
+     */
+    public Transform createTransform() {
+        return new Transform();
+    }
+
+    /**
+     * Create an instance of {@link GenerateSequence }
+     * 
+     */
+    public GenerateSequence createGenerateSequence() {
+        return new GenerateSequence();
+    }
+
+    /**
+     * Create an instance of {@link Normalize }
+     * 
+     */
+    public Normalize createNormalize() {
+        return new Normalize();
+    }
+
+    /**
      * Create an instance of {@link Join }
      * 
      */
@@ -114,11 +114,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Filter }
+     * Create an instance of {@link Aggregate }
      * 
      */
-    public Filter createFilter() {
-        return new Filter();
+    public Aggregate createAggregate() {
+        return new Aggregate();
+    }
+
+    /**
+     * Create an instance of {@link PartitionByExpression.NoOfPartitions }
+     * 
+     */
+    public PartitionByExpression.NoOfPartitions createPartitionByExpressionNoOfPartitions() {
+        return new PartitionByExpression.NoOfPartitions();
     }
 
     /**
@@ -135,14 +143,6 @@ public class ObjectFactory {
      */
     public Subjob.Path createSubjobPath() {
         return new Subjob.Path();
-    }
-
-    /**
-     * Create an instance of {@link PartitionByExpression.NoOfPartitions }
-     * 
-     */
-    public PartitionByExpression.NoOfPartitions createPartitionByExpressionNoOfPartitions() {
-        return new PartitionByExpression.NoOfPartitions();
     }
 
 }

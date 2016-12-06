@@ -50,7 +50,7 @@ import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "parquetHiveFile", propOrder = {
+@XmlType(name = "parquetHiveFile", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "partitionKeys",
     "partitionFilter",
     "databaseName",

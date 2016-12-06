@@ -42,27 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TextFileDelimited }
+     * Create an instance of {@link AvroFile }
      * 
      */
-    public TextFileDelimited createTextFileDelimited() {
-        return new TextFileDelimited();
-    }
-
-    /**
-     * Create an instance of {@link ParquetFile }
-     * 
-     */
-    public ParquetFile createParquetFile() {
-        return new ParquetFile();
-    }
-
-    /**
-     * Create an instance of {@link SequenceInputFile }
-     * 
-     */
-    public SequenceInputFile createSequenceInputFile() {
-        return new SequenceInputFile();
+    public AvroFile createAvroFile() {
+        return new AvroFile();
     }
 
     /**
@@ -74,19 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GenerateRecord }
+     * Create an instance of {@link TextFileDelimited }
      * 
      */
-    public GenerateRecord createGenerateRecord() {
-        return new GenerateRecord();
-    }
-
-    /**
-     * Create an instance of {@link Subjob }
-     * 
-     */
-    public Subjob createSubjob() {
-        return new Subjob();
+    public TextFileDelimited createTextFileDelimited() {
+        return new TextFileDelimited();
     }
 
     /**
@@ -98,11 +74,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AvroFile }
+     * Create an instance of {@link GenerateRecord }
      * 
      */
-    public AvroFile createAvroFile() {
-        return new AvroFile();
+    public GenerateRecord createGenerateRecord() {
+        return new GenerateRecord();
     }
 
     /**
@@ -114,11 +90,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ParquetHiveFile }
+     * Create an instance of {@link SequenceInputFile }
      * 
      */
-    public ParquetHiveFile createParquetHiveFile() {
-        return new ParquetHiveFile();
+    public SequenceInputFile createSequenceInputFile() {
+        return new SequenceInputFile();
+    }
+
+    /**
+     * Create an instance of {@link ParquetFile }
+     * 
+     */
+    public ParquetFile createParquetFile() {
+        return new ParquetFile();
+    }
+
+    /**
+     * Create an instance of {@link Subjob }
+     * 
+     */
+    public Subjob createSubjob() {
+        return new Subjob();
+    }
+
+    /**
+     * Create an instance of {@link Oracle }
+     * 
+     */
+    public Oracle createOracle() {
+        return new Oracle();
     }
 
     /**
@@ -127,6 +127,54 @@ public class ObjectFactory {
      */
     public SubjobInput createSubjobInput() {
         return new SubjobInput();
+    }
+
+    /**
+     * Create an instance of {@link Redshift }
+     * 
+     */
+    public Redshift createRedshift() {
+        return new Redshift();
+    }
+
+    /**
+     * Create an instance of {@link Mysql }
+     * 
+     */
+    public Mysql createMysql() {
+        return new Mysql();
+    }
+
+    /**
+     * Create an instance of {@link ParquetHiveFile }
+     * 
+     */
+    public ParquetHiveFile createParquetHiveFile() {
+        return new ParquetHiveFile();
+    }
+
+    /**
+     * Create an instance of {@link AvroFile.Path }
+     * 
+     */
+    public AvroFile.Path createAvroFilePath() {
+        return new AvroFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileFixedWidth.Path }
+     * 
+     */
+    public TextFileFixedWidth.Path createTextFileFixedWidthPath() {
+        return new TextFileFixedWidth.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileFixedWidth.Charset }
+     * 
+     */
+    public TextFileFixedWidth.Charset createTextFileFixedWidthCharset() {
+        return new TextFileFixedWidth.Charset();
     }
 
     /**
@@ -162,54 +210,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ParquetFile.Path }
-     * 
-     */
-    public ParquetFile.Path createParquetFilePath() {
-        return new ParquetFile.Path();
-    }
-
-    /**
-     * Create an instance of {@link SequenceInputFile.Path }
-     * 
-     */
-    public SequenceInputFile.Path createSequenceInputFilePath() {
-        return new SequenceInputFile.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileFixedWidth.Path }
-     * 
-     */
-    public TextFileFixedWidth.Path createTextFileFixedWidthPath() {
-        return new TextFileFixedWidth.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileFixedWidth.Charset }
-     * 
-     */
-    public TextFileFixedWidth.Charset createTextFileFixedWidthCharset() {
-        return new TextFileFixedWidth.Charset();
-    }
-
-    /**
-     * Create an instance of {@link GenerateRecord.RecordCount }
-     * 
-     */
-    public GenerateRecord.RecordCount createGenerateRecordRecordCount() {
-        return new GenerateRecord.RecordCount();
-    }
-
-    /**
-     * Create an instance of {@link Subjob.Path }
-     * 
-     */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
-    }
-
-    /**
      * Create an instance of {@link TextFileMixedScheme.Path }
      * 
      */
@@ -234,11 +234,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AvroFile.Path }
+     * Create an instance of {@link GenerateRecord.RecordCount }
      * 
      */
-    public AvroFile.Path createAvroFilePath() {
-        return new AvroFile.Path();
+    public GenerateRecord.RecordCount createGenerateRecordRecordCount() {
+        return new GenerateRecord.RecordCount();
     }
 
     /**
@@ -255,6 +255,30 @@ public class ObjectFactory {
      */
     public HiveTextFile.Quote createHiveTextFileQuote() {
         return new HiveTextFile.Quote();
+    }
+
+    /**
+     * Create an instance of {@link SequenceInputFile.Path }
+     * 
+     */
+    public SequenceInputFile.Path createSequenceInputFilePath() {
+        return new SequenceInputFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link ParquetFile.Path }
+     * 
+     */
+    public ParquetFile.Path createParquetFilePath() {
+        return new ParquetFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link Subjob.Path }
+     * 
+     */
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
 }

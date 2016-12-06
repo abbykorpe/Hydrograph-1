@@ -105,6 +105,63 @@ public class WidgetHelper {
 	}
 	
 	/**
+	 * Configuration to customize text box as User Name property 
+	 */
+	public WidgetConfig getUserNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_USER_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Password property 
+	 */
+	public WidgetConfig getPasswordWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_PASSWORD);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	
+	/**
+	 * Configuration to customize text box as Password property 
+	 */
+	public WidgetConfig getQueryWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_QUERY);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as JDBC URL property 
+	 */
+	public WidgetConfig getJDBCURLWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_JDBC_URL);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Batch Size property 
+	 */
+	public WidgetConfig getBatchSizeWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_BATCH_SIZE);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		return textBoxConfig;
+	}
+	
+	/**
 	 * Configuration to customize text box as Table Name property 
 	 */
 	public WidgetConfig getTableNameWidgetConfig(){
@@ -121,6 +178,17 @@ public class WidgetHelper {
 	public WidgetConfig getDatabaseNameWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_DATABASE_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Database Type property 
+	 */
+	public WidgetConfig getDatabaseTypeWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_DATABASE_TYPE);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -326,5 +394,70 @@ public class WidgetHelper {
 		return runtimeConfig;
 	}
 
+	public WidgetConfig getRunInputWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.INPUT_DATA);
+		textBoxConfig.setWidgetWidth(250);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	public WidgetConfig getRunModelWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.MODEL_DATA);
+		textBoxConfig.setWidgetWidth(250);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	public WidgetConfig getRunOutputWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.OUTPUT_DATA);
+		textBoxConfig.setWidgetWidth(250);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	public WidgetConfig getRunProgramWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.COMMAND);
+		textBoxConfig.setWidgetWidth(250);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	public WidgetConfig getRunTrainingWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.TRAINING_DATA);
+		textBoxConfig.setWidgetWidth(250);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+
+	public WidgetConfig getRunTestWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.TEST_DATA);
+		textBoxConfig.setWidgetWidth(250);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	public WidgetConfig getThresholdOutputWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Constants.THRESHOLD_DATA);
+		textBoxConfig.setWidgetWidth(250);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}	
+	
+	/**
+	 * Configuration to customize text box as SQL condition property 
+	 */
+	public WidgetConfig getSqlConditionWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABLE_CONDITION);
+		textBoxConfig.setGrabExcessSpace(true);
+		return textBoxConfig;
+	}
 
 }

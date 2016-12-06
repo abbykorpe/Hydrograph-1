@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-mixed-base")
+@XmlType(name = "type-mixed-base", namespace = "hydrograph/engine/jaxb/ofmixedscheme")
 @XmlSeeAlso({
     TextFileMixedScheme.class
 })

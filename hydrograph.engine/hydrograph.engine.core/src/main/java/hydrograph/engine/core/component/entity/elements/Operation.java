@@ -27,7 +27,9 @@ import java.util.Properties;
  * @author Prabodh
  *
  */
+
 public class Operation implements Serializable{
+
 
 	private String operationId;
 	private String operationClass;

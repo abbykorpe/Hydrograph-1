@@ -47,6 +47,7 @@ public class SchemaField implements Cloneable,Serializable {
 	private String fieldDefaultValue;
 	private String fieldToRangeValue;
 	private String fieldFromRangeValue;
+	private String colDef;
 	private static Logger LOG = LoggerFactory.getLogger(SchemaField.class);
 	
 	public SchemaField(String fieldName, String fieldDataType) {
@@ -225,6 +226,20 @@ public class SchemaField implements Cloneable,Serializable {
 		this.typeFieldLengthDelimiter = typeFieldLengthDelimiter;
 	}
 
+	/**
+	 * @return the colDef
+	 */
+	public String getColDef() {
+		return colDef;
+	}
+	
+	/**
+	 * @param colDef
+	 *            the colDef to set
+	 */
+	public void setColDef(String colDef) {
+		this.colDef = colDef;
+	}
 	public String toString() {
 		StringBuilder str = new StringBuilder("schema field: ");
 		str.append("name: " + fieldName);
@@ -335,6 +350,4 @@ public class SchemaField implements Cloneable,Serializable {
 			return false;
 		return true;
 	}
-	
-	
 }

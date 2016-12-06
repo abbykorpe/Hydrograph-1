@@ -68,6 +68,7 @@ public class Messages extends NLS {
 	public static String FIELD_LENGTH_LESS_THAN_ZERO;
 	public static String FIELD_SCALE_LESS_THAN_ZERO;
 	public static String FIELD_SCALE_NOT_LESS_THAN_FIELD_LENGTH;
+	public static String COL_DEF;
 	public static String DEFAULT_VALUE;
 	public static String FIELDNAMEERROR;
 	public static String FIELDBATCH;
@@ -207,7 +208,8 @@ public class Messages extends NLS {
     public static String FIXEDWIDTH_GRID_ROW ;
 	public static String GENERATE_RECORD_GRID_ROW;
 	public static String GENERIC_GRID_ROW;
-	public static String MIXEDSCHEME_GRID_ROW ;
+	public static String MIXEDSCHEME_GRID_ROW;
+	public static String SQL_GRID_ROW;
 
 	public static String MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA;
 	public static String TITLE_FOR_MESSAGE_BOX_OF_FETCHING_PROPAGATED_SCHEMA;
@@ -225,7 +227,13 @@ public class Messages extends NLS {
 	public static String LABEL_DELIMITER;
 	public static String LABEL_QUOTE;
 	public static String LABEL_DATABASE_NAME;
+	public static String LABEL_DATABASE_TYPE;
 	public static String LABEL_TABLE_NAME;
+	public static String LABEL_USER_NAME;
+	public static String LABEL_PASSWORD;
+	public static String LABEL_QUERY;
+	public static String LABEL_JDBC_URL;
+	public static String LABEL_BATCH_SIZE;
 	public static String LABEL_EXTERNAL_TABLE_PATH;
 	public static String LABEL_INPUT_COUNT;
 	public static String LABEL_OUTPUT_COUNT;
@@ -271,6 +279,8 @@ public class Messages extends NLS {
 
 	public static String OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 	public static  String METASTORE_IMPORT_SUCCESS;
+	public static String LABLE_CONDITION;
+
 	
 	
 	

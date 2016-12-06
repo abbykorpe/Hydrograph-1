@@ -45,7 +45,7 @@ import hydrograph.engine.jaxb.commontypes.TypeFieldName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-key-fields", propOrder = {
+@XmlType(name = "type-key-fields", namespace = "hydrograph/engine/jaxb/join", propOrder = {
     "field"
 })
 public class TypeKeyFields {

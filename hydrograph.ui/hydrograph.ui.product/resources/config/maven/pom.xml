@@ -28,16 +28,17 @@
 	<dependencies>
 		
 		<dependency>
-			<groupId>hydrograph</groupId>
+			<groupId>bitwise</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
-			<version>0.1.10-SNAPSHOT</version>
+			<version>0.0.3</version>
 		</dependency>
 		
 		<dependency>
-    		<groupId>hydrograph</groupId>
-    		<artifactId>hydrograph.engine.transformation</artifactId>
-    		<version>0.1.10-SNAPSHOT</version>
-    		<classifier>sources</classifier>
+    		<groupId>bitwise</groupId>
+			<artifactId>hydrograph.engine.transformation</artifactId>
+			<version>0.0.3</version>
+			<classifier>sources</classifier>
+
 		</dependency>
 		
 	</dependencies> 

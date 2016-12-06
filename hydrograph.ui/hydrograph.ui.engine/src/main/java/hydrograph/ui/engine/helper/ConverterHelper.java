@@ -13,6 +13,8 @@
 
 package hydrograph.ui.engine.helper;
 
+import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
+import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
 import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
 import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
@@ -41,9 +43,11 @@ import hydrograph.ui.datastructure.property.LookupMapProperty;
 import hydrograph.ui.datastructure.property.LookupMappingGrid;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.QueryProperty;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.xpath.ComponentXpath;
 import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.engine.xpath.ComponentsAttributeAndValue;
@@ -53,8 +57,9 @@ import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.logging.factory.LogFactory;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -538,6 +543,42 @@ public class ConverterHelper {
 	/**
 	 * returns Schema
 	 * 
+	 * @param {@link SQLGridRow}
+	 * @return {@link TypeBaseField}
+	 */
+	public TypeBaseField getSQLTargetData(BasicSchemaGridRow object) {
+		TypeBaseField typeBaseField = new TypeBaseField();
+		typeBaseField.setName(object.getFieldName());
+
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_UTIL_DATE.value())
+				&& !object.getDateFormat().trim().isEmpty()){
+			typeBaseField.setFormat(object.getDateFormat());
+		}
+		if (!object.getScale().trim().isEmpty()){
+			typeBaseField.setScale(Integer.parseInt(object.getScale()));
+		}
+		if (object.getDataTypeValue().equals(FieldDataTypes.JAVA_LANG_DOUBLE.value())
+				|| object.getDataTypeValue().equals(FieldDataTypes.JAVA_MATH_BIG_DECIMAL.value())) {
+			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
+			if (!object.getScale().trim().isEmpty()){
+				typeBaseField.setScale(Integer.parseInt(object.getScale()));
+			}
+		}
+
+		for (FieldDataTypes fieldDataType : FieldDataTypes.values()) {
+			if (fieldDataType.value().equalsIgnoreCase(object.getDataTypeValue())){
+				typeBaseField.setType(fieldDataType);
+			}
+		}
+		/*if (object.getColumnDefinition() != null && !object.getColumnDefinition().trim().isEmpty()) {
+			typeBaseField.getOtherAttributes().put(new QName(Constants.COLUMN_DEFINITION_QNAME), object.getColumnDefinition());
+		}*/
+		return typeBaseField;
+	}
+	
+	/**
+	 * returns Schema
+	 * 
 	 * @param {@link FixedWidthGridRow}
 	 * @return {@link TypeBaseField}
 	 */
@@ -753,5 +794,114 @@ public class ConverterHelper {
 					new ComponentsAttributeAndValue(true,fieldName,hasEmptyNode));
 		else
 			tempAndValue.setNewNodeText(tempAndValue.getNewNodeText()+" "+fieldName);
+	}
+	
+	/**
+	 * Converts the String to {@link ElementValueStringType}
+	 * 
+	 * @param propertyName
+	 * @return {@link ElementValueStringType}
+	 */
+	public ElementValueStringType getString(String propertyName) {
+		logger.debug("Getting boolean Value for {}={}", new Object[] {
+				propertyName, properties.get(propertyName) });
+		if (properties.get(propertyName) != null) {
+			ElementValueStringType stringValue = new ElementValueStringType();
+			stringValue.setValue(String.valueOf(properties.get(propertyName)));
+
+			if (!stringValue.getValue().equalsIgnoreCase((String) properties.get(propertyName))) {
+				ComponentXpath.INSTANCE.getXpathMap()
+						.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(
+								ID, componentName)).replace(Constants.PARAM_PROPERTY_NAME,
+								propertyName),
+								new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
+				return stringValue;
+			} else {
+				return stringValue;
+			}
+		}
+		return null;
+	}
+	
+	public ElementValueStringType getStringTypeValue() {
+		ElementValueStringType stringValue = new ElementValueStringType();
+		String query = "";
+		if(null != properties.get(PropertyNameConstants.QUERY.value())){
+			query = ((QueryProperty) properties.get(PropertyNameConstants.QUERY.value())).getQueryText();
+			logger.debug("Getting String Value for {}", new Object[] {query});
+			stringValue.setValue(query);
+		}
+		return stringValue;
+	}
+	
+	/**
+	 * Converts the String to {@link ElementValueIntegerType}
+	 * 
+	 * @param propertyName
+	 * @return {@link ElementValueIntegerType}
+	 */
+	public ElementValueIntegerType getInteger(String propertyName) {
+		logger.debug("Getting integer Value for {}={}", new Object[] {propertyName, properties.get(propertyName) });
+		if (StringUtils.isNotBlank((String) properties.get(propertyName))) {
+			ElementValueIntegerType integerValue = new ElementValueIntegerType();
+			integerValue.setValue(getBigInteger(properties.get(propertyName)));
+
+			if (!(integerValue.getValue().toString().equals(((String) properties.get(propertyName))))) {
+				ComponentXpath.INSTANCE
+						.getXpathMap()
+						.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(
+								ID, componentName)).replace(Constants.PARAM_PROPERTY_NAME,
+								propertyName),
+								new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
+				return integerValue;
+			} else {
+				return integerValue;
+			}
+		}
+		return null;
+	}
+	
+	private BigInteger getBigInteger(Object value) {
+	    BigInteger ret = null;
+	    if ( value != null ) {
+	        if ( value instanceof BigInteger ) {
+	            ret = (BigInteger) value;
+	        } else if ( value instanceof String ) {
+	            ret = new BigInteger( (String) value );
+	        } else if ( value instanceof BigDecimal ) {
+	            ret = ((BigDecimal) value).toBigInteger();
+	        } else if ( value instanceof Number ) {
+	            ret = BigInteger.valueOf( ((Number) value).longValue() );
+	        } else {
+	            throw new ClassCastException( "Not possible to coerce [" + value + "] from class " + value.getClass() + " into a BigInteger." );
+	        }
+	    }
+	    return ret;
+	}
+	
+	/**
+	 * Converts the String to {@link DatabaseTypeValue}
+	 * 
+	 * @param propertyName
+	 * @return {@link DatabaseType}
+	 */
+	public hydrograph.engine.jaxb.omysql.DatabaseTypeValue getOutputDatabaseTypeValue(String propertyName) {
+		logger.debug("Getting boolean Value for {}={}", new Object[] {
+				propertyName, properties.get(propertyName) });
+		logger.debug("Getting Database Type for {}", properties.get(Constants.PARAM_NAME));
+		String databaseTypeValue = (String) properties.get(PropertyNameConstants.DATABASE_TYPE
+				.value());
+		hydrograph.engine.jaxb.omysql.DatabaseTypeValue targetDatabaseTypeValue = null;
+		for (hydrograph.engine.jaxb.omysql.DatabaseTypeValue dbTypeValues : hydrograph.engine.jaxb.omysql.DatabaseTypeValue.values()) {
+			if (dbTypeValues.value().equalsIgnoreCase(databaseTypeValue)) {
+				targetDatabaseTypeValue = dbTypeValues;
+				break;
+			}
+		}
+		if (targetDatabaseTypeValue == null)
+			ComponentXpath.INSTANCE.getXpathMap().put(
+					ComponentXpathConstants.COMPONENT_CHARSET_XPATH.value()
+							.replace(ID, componentName), new ComponentsAttributeAndValue(null, databaseTypeValue));
+		return targetDatabaseTypeValue;
 	}
 }

@@ -46,7 +46,7 @@
 				</os>
 			</activation>
 			<properties>
-				<tycho.version>0.23.1</tycho.version>
+				<tycho.version>0.23.0</tycho.version>
 			</properties>
 			<build>
 				<plugins>

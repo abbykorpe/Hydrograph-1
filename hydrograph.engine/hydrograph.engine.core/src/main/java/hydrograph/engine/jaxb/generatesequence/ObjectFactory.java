@@ -42,19 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeNameField }
+     * Create an instance of {@link TypeOperation }
      * 
      */
-    public TypeNameField createTypeNameField() {
-        return new TypeNameField();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperationOutputField }
-     * 
-     */
-    public TypeOperationOutputField createTypeOperationOutputField() {
-        return new TypeOperationOutputField();
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
     }
 
     /**
@@ -74,11 +66,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperation }
+     * Create an instance of {@link TypeOperationOutputField }
      * 
      */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
+    public TypeOperationOutputField createTypeOperationOutputField() {
+        return new TypeOperationOutputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeNameField }
+     * 
+     */
+    public TypeNameField createTypeNameField() {
+        return new TypeNameField();
     }
 
 }

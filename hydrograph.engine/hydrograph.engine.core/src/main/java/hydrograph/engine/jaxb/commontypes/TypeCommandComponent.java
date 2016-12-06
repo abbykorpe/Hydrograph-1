@@ -42,9 +42,9 @@ import hydrograph.engine.jaxb.commandtypes.Subjob;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-command-component")
 @XmlSeeAlso({
-    RunProgram.class,
-    FtpIn.class,
     Subjob.class,
+    FtpIn.class,
+    RunProgram.class,
     Hplsql.class
 })
 public abstract class TypeCommandComponent

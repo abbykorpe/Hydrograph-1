@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.operationstypes.Join;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "join-base")
+@XmlType(name = "join-base", namespace = "hydrograph/engine/jaxb/join")
 @XmlSeeAlso({
     Join.class
 })

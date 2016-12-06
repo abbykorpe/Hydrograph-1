@@ -42,10 +42,10 @@ import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-file-delimited-base")
+@XmlType(name = "type-input-file-delimited-base", namespace = "hydrograph/engine/jaxb/itfd")
 @XmlSeeAlso({
-    AvroFile.class,
-    TextFileDelimited.class
+    TextFileDelimited.class,
+    AvroFile.class
 })
 public class TypeInputFileDelimitedBase
     extends TypeInputComponent

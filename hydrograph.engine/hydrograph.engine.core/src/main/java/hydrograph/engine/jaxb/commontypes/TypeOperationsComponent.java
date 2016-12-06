@@ -66,10 +66,10 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
     "runtimeProperties"
 })
 @XmlSeeAlso({
-    Normalize.class,
-    GenerateSequence.class,
-    Transform.class,
     Filter.class,
+    Transform.class,
+    GenerateSequence.class,
+    Normalize.class,
     AggregateBase.class,
     JoinBase.class,
     CumulateBase.class,

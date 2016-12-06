@@ -39,7 +39,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "discard")
+@XmlType(name = "discard", namespace = "hydrograph/engine/jaxb/outputtypes")
 public class Discard
     extends TypeOutputComponent
 {

@@ -42,7 +42,10 @@ public enum ComponentAdapterMapping {
 	HPLSQL(ComponentType.HPLSQL),AVROFILE(ComponentType.AVROFILE),
 	HIVETEXTFILE(ComponentType.HIVETEXTFILE),
 	PARQUETHIVEFILE(ComponentType.PARQUETHIVEFILE),
-	PARQUETFILE(ComponentType.PARQUETFILE);
+	PARQUETFILE(ComponentType.PARQUETFILE),
+	MYSQL(ComponentType.MYSQL),
+	REDSHIFT(ComponentType.REDSHIFT),
+	ORACLE(ComponentType.ORACLE);
 
 	private final ComponentType componentType;
 
@@ -255,9 +258,45 @@ public enum ComponentAdapterMapping {
 					return ADAPTER_PACKAGE + ".OutputFileParquetAdapter";
 				}
 			}
+		},
+		MYSQL {
+			@Override
+			public String getMapping(TypeBaseComponent typeBaseComponent) {
+				if (typeBaseComponent.getClass().getCanonicalName().contains("inputtypes")
+						&& typeBaseComponent.getClass().getSimpleName().equals("Mysql")) {
+					return ADAPTER_PACKAGE + ".InputMysqlAdapter";
+				} else {
+					return ADAPTER_PACKAGE + ".OutputMysqlAdapter";
+				}
+			}
+		},
+		
+		REDSHIFT {
+			@Override
+			public String getMapping(TypeBaseComponent typeBaseComponent) {
+				if (typeBaseComponent.getClass().getCanonicalName().contains("inputtypes")
+						&& typeBaseComponent.getClass().getSimpleName().equals("Redshift")) {
+					return ADAPTER_PACKAGE + ".InputRedShiftAdapter";
+				} else {
+					return ADAPTER_PACKAGE + ".OutputRedShiftAdapter";
+				}
+			}
+		},
+		
+		
+		ORACLE {
+			@Override
+			public String getMapping(TypeBaseComponent typeBaseComponent) {
+				if (typeBaseComponent.getClass().getCanonicalName().contains("inputtypes")
+						&& typeBaseComponent.getClass().getSimpleName().equals("Oracle")) {
+					return ADAPTER_PACKAGE + ".InputOracleAdapter";
+				} else {
+					return ADAPTER_PACKAGE + ".OutputOracleAdapter";
+				}
+			}
 		};
 
-		private static final String GENERATOR = "hydrograph.engine.core.component.generator";
+		
 		private static final String ADAPTER_PACKAGE = "hydrograph.engine.adapters";
 
 		abstract String getMapping(TypeBaseComponent typeBaseComponent);

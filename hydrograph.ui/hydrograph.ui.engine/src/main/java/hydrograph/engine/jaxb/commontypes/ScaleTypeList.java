@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "scale-type-list")
+@XmlType(name = "scale-type-list", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlEnum
 public enum ScaleTypeList {
 

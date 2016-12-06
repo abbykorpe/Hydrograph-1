@@ -45,8 +45,8 @@ import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-output-file-delimited-base")
 @XmlSeeAlso({
-    AvroFile.class,
-    TextFileDelimited.class
+    TextFileDelimited.class,
+    AvroFile.class
 })
 public class TypeOutputFileDelimitedBase
     extends TypeOutputComponent

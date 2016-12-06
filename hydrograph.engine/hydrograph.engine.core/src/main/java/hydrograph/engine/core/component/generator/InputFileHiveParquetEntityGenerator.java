@@ -101,6 +101,8 @@ public class InputFileHiveParquetEntityGenerator extends
 		return listOfPartitionColumn;
 	}
 
+
+
 	private ArrayList<String> fillArrayList(PartitionColumn partitionColumn,
 			ArrayList<String> listOfPartitionColumn) {
 		listOfPartitionColumn.add(partitionColumn.getValue());

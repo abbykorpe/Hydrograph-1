@@ -48,7 +48,7 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-transform-expression", propOrder = {
+@XmlType(name = "type-transform-expression", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inputFields",
     "outputFields",
     "properties"

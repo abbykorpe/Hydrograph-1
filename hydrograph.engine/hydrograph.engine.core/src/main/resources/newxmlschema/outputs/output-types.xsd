@@ -20,6 +20,9 @@
 	xmlns:ohivetextfile="hydrograph/engine/jaxb/ohivetextfile"
 	xmlns:ofMixedScheme="hydrograph/engine/jaxb/ofmixedscheme"
 	xmlns:ofsubjob="hydrograph/engine/jaxb/ofsubjob"
+	xmlns:omysql="hydrograph/engine/jaxb/omysql"
+	xmlns:oredshift="hydrograph/engine/jaxb/oredshift"
+	xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="hydrograph/engine/jaxb/outputtypes"
 	elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
@@ -38,12 +41,16 @@
 		namespace="hydrograph/engine/jaxb/ohiveparquet" />
 	<xs:import schemaLocation="./hive-text-file/output-hive-text-file-types.xsd"
 		namespace="hydrograph/engine/jaxb/ohivetextfile" />
-	<xs:import
-		schemaLocation="./text-file-mixedScheme/output-file-mixedScheme-text-types.xsd"
+	<xs:import schemaLocation="./text-file-mixedScheme/output-file-mixedScheme-text-types.xsd"
 		namespace="hydrograph/engine/jaxb/ofmixedscheme" />
 	<xs:import schemaLocation="./subjob/output-subjob-types.xsd"
 		namespace="hydrograph/engine/jaxb/ofsubjob" />
-
+	<xs:import schemaLocation="./mysql-type/output-mysql-types.xsd"
+		namespace="hydrograph/engine/jaxb/omysql"  />
+	<xs:import schemaLocation="./redshift-type/output-redshift-types.xsd"
+		namespace="hydrograph/engine/jaxb/oredshift"  />
+	<xs:import schemaLocation="./oracle-type/output-oracle-types.xsd"
+		namespace="hydrograph/engine/jaxb/ooracle"  />
 
 	<xs:complexType name="avroFile">
 		<xs:complexContent>
@@ -279,6 +286,79 @@
 		<xs:complexContent>
 			<xs:extension base="ofsubjob:type-output-file-delimited-subjob">
 				<xs:sequence>
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="mysql">
+		<xs:complexContent>
+			<xs:extension base="omysql:type-output-mysql-base">
+				<xs:sequence>
+					<xs:element name="databaseName" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="tableName" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="username" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="password" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="jdbcurl" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="loadType" type="omysql:type-load-choice"
+						minOccurs="0" />
+					<xs:element name="batchSize" type="cmn:element-value-integer-type"
+						minOccurs="1" maxOccurs="1" />	
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="redshift">
+		<xs:complexContent>
+			<xs:extension base="oredshift:type-output-redshift-base">
+				<xs:sequence>
+					<xs:element name="databaseName" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="tableName" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="username" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="password" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="jdbcurl" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="loadType" type="oredshift:type-load-choice"
+						minOccurs="0" />
+					<xs:element name="batchSize" type="cmn:element-value-integer-type"
+						minOccurs="1" maxOccurs="1" />	
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="oracle">
+		<xs:complexContent>
+			<xs:extension base="ooracle:type-output-oracle-base">
+				<xs:sequence>
+					<xs:element name="tableName" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="username" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="password" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="jdbcurl" type="cmn:element-value-string-type"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="loadType" type="ooracle:type-load-choice"
+						minOccurs="0" />
+					<xs:element name="batchSize" type="cmn:element-value-integer-type"
+						minOccurs="1" maxOccurs="1" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
 				</xs:sequence>

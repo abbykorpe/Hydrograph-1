@@ -45,7 +45,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "filter")
+@XmlType(name = "filter", namespace = "hydrograph/engine/jaxb/operationstypes")
 public class Filter
     extends TypeOperationsComponent
 {

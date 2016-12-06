@@ -47,8 +47,8 @@ import hydrograph.engine.jaxb.limit.TypeLimitOutSocket;
     "copyOfInsocket"
 })
 @XmlSeeAlso({
-    TypeLimitOutSocket.class,
     hydrograph.engine.jaxb.limit.TypeOutSocket.class,
+    TypeLimitOutSocket.class,
     TypeCloneOutSocket.class,
     hydrograph.engine.jaxb.removedups.TypeOutSocket.class,
     hydrograph.engine.jaxb.sort.TypeOutSocket.class

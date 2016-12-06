@@ -45,7 +45,7 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-outSocket")
+@XmlType(name = "type-base-outSocket", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlSeeAlso({
     TypeInputOutSocket.class,
     TypeStraightPullOutSocket.class,

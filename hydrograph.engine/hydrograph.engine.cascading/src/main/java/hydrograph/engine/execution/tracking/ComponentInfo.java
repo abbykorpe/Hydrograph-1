@@ -33,6 +33,7 @@ public class ComponentInfo {
 	private String currentStatus;
 	private String batch;
 	private String componentName;
+
 	private Map<String, String> statusPerSocketMap = new HashMap<String, String>();
 	private Map<String, Long> mapofStats = new LinkedHashMap<String, Long>();
 
@@ -127,6 +128,7 @@ public class ComponentInfo {
 		return message;
 	}
 
+
 	public String getComponentName() {
 		return componentName;
 	}
@@ -134,4 +136,5 @@ public class ComponentInfo {
 	public void setComponentName(String componentName) {
 		this.componentName = componentName;
 	}
+
 }
