@@ -1,10 +1,14 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.oracle;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -25,7 +29,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.PreferenceConstants;
+import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
@@ -38,6 +46,8 @@ import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.HiveTableSchema;
+import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.OracleTableSchema;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -66,18 +76,15 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 	private Text sqlQueryTextBox;
 	private ArrayList<AbstractWidget> widgets;
 	private Text textBoxTableName;
-	private Map<String, String> initialMap;
 	private ELTDefaultLable selectLable;
 	private ModifyListener textboxSQLQueryModifyListner;
 	private ModifyListener textboxTableNameModifyListner;
-	private static final String DEFAULT_PORTNO = "8004";
-	private static final String PORT_NO = "portNo";
-	private static final String HOST = "host";
 	private static final String ERROR = "ERR";
 	private static final String INFO = "INF";
 	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private Cursor cursor;
 	private String sqlQueryStatement;
+	private static final String SEPARATOR = "|";
 	private ControlDecoration sqlQueryCounterDecorator;
 	private Text sqlQueryCountertextbox;
 	private ModifyListener sqlQueryCounterModifyListner;
@@ -88,6 +95,10 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 	private String oracleSchemaName;
 	private String oracleUserName;
 	private String oraclePassword;
+	private String databaseType;
+	private OracleTableSchema oracleTableSchema;
+	private static final String ORACLE = "Oracle";
+	private static final String REDSHIFT = "RedShift";
 
 	public ELTSelectionDatabaseWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -107,7 +118,7 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 
 		selectLable = new ELTDefaultLable("Select");
 		eltSuDefaultSubgroupComposite.attachWidget(selectLable);
-		
+
 		tableNameRadioButton = new ELTRadioButton("TableName");
 		eltSuDefaultSubgroupComposite.attachWidget(tableNameRadioButton);
 		propertyDialogButtonBar.enableApplyButton(true);
@@ -225,8 +236,10 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 
 		createWidgetlabel("Query Counter", sqlQueryComposite);
 		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox("Query Counter", sqlQueryComposite);
-		/*sqlQueryCounterDecorator = attachDecoratorToTextbox("Query Counter", sqlQueryCounterWgt,
-				sqlQueryCounterDecorator);*/
+		/*
+		 * sqlQueryCounterDecorator = attachDecoratorToTextbox("Query Counter",
+		 * sqlQueryCounterWgt, sqlQueryCounterDecorator);
+		 */
 		sqlQueryCountertextbox = (Text) sqlQueryCounterWgt.getSWTWidgetControl();
 		attachListeners(sqlQueryCounterWgt);
 
@@ -240,11 +253,10 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		sqlQueryCounterData.verticalIndent = 5;
 		openSQLQueryCounterStatement(sqlQueryCounterButtonWgt);
 
-
 	}
 
 	private void openSQLQueryCounterStatement(ELTDefaultButton sqlQueryCounterButtonWgt) {
-		
+
 		((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			private String sqlQueryCounterStatement;
@@ -254,8 +266,8 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
 						Display.getCurrent().getActiveShell());
 				sqlQueryStatementDialog.open();
-				 sqlQueryCounterStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
-				 sqlQueryCountertextbox.setText(sqlQueryCounterStatement);
+				sqlQueryCounterStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
+				sqlQueryCountertextbox.setText(sqlQueryCounterStatement);
 			}
 
 		});
@@ -270,8 +282,8 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
 						Display.getCurrent().getActiveShell());
 				sqlQueryStatementDialog.open();
-				 sqlQueryStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
-				 sqlQueryTextBox.setText(sqlQueryStatement);
+				sqlQueryStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
+				sqlQueryTextBox.setText(sqlQueryStatement);
 			}
 
 		});
@@ -343,10 +355,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 			setToolTipMessage(toolTipErrorMessage);
 		}
 
-		/*if (sqlQueryCounterDecorator.isVisible()) {
-			toolTipErrorMessage = sqlQueryCounterDecorator.getDescriptionText();
-			setToolTipMessage(toolTipErrorMessage);
-		}*/
+		/*
+		 * if (sqlQueryCounterDecorator.isVisible()) { toolTipErrorMessage =
+		 * sqlQueryCounterDecorator.getDescriptionText();
+		 * setToolTipMessage(toolTipErrorMessage); }
+		 */
 
 	}
 
@@ -432,22 +445,28 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_JDBC_DRIVER_WIDGET_NAME)) {
 				oracleJdbcName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_JDBC_DRIVER_WIDGET_NAME);
-			}else if (textAbtractWgt.getProperty().getPropertyName()
+			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_SCHEMA_WIDGET_NAME)) {
 				oracleSchemaName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_SCHEMA_WIDGET_NAME);
-			}else if (textAbtractWgt.getProperty().getPropertyName()
+			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_USER_NAME_WIDGET_NAME)) {
 				oracleUserName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_USER_NAME_WIDGET_NAME);
-			}else if (textAbtractWgt.getProperty().getPropertyName()
+			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_PASSWORD_WIDGET_NAME)) {
 				oraclePassword = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PASSWORD_WIDGET_NAME);
 			}
-
+			
+			if(ORACLE.equalsIgnoreCase(getComponent().getType())){
+				databaseType=ORACLE;
+			}else{
+				databaseType=REDSHIFT;
+			}
 		}
 
 		if (StringUtils.isNotEmpty(oracleDatabaseName) && StringUtils.isNotEmpty(oracleHostName)
-				&& StringUtils.isNotEmpty(oracleJdbcName) && StringUtils.isNotEmpty(oraclePortNo) && StringUtils.isNotEmpty(oracleSchemaName)
-						&& StringUtils.isNotEmpty(oracleUserName) && StringUtils.isNotEmpty(oraclePassword)) {
+				&& StringUtils.isNotEmpty(oracleJdbcName) && StringUtils.isNotEmpty(oraclePortNo)
+				&& StringUtils.isNotEmpty(oracleSchemaName) && StringUtils.isNotEmpty(oracleUserName)
+				&& StringUtils.isNotEmpty(oraclePassword)) {
 
 			return true;
 		}
@@ -461,20 +480,24 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String host = Platform.getPreferencesService().getString(PLUGIN_ID, HOST, "", null);
-				String port_no = Platform.getPreferencesService().getString(PLUGIN_ID, PORT_NO, DEFAULT_PORTNO, null);
+				String host = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST, "",
+						null);
+				String port_no = Platform.getPreferencesService().getString(PLUGIN_ID,
+						PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
 
 				if (null != host && StringUtils.isNotBlank(host)) {
 
 					if (getOracleTableDetailsFromWidgets()) {
-						List<String> oracleDBValues = new ArrayList<String>();
+						List<String> oracleDatabaseValues = new ArrayList<String>();
 						LinkedHashMap<String, Object> property = getProperties();
 						databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
 						if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-							oracleDBValues.add(databaseSelectionConfig.getTableName());
-						} else {
-							oracleDBValues.add(databaseSelectionConfig.getSqlQuery());
-							oracleDBValues.add(databaseSelectionConfig.getSqlQueryCounter());
+							oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
+						}else{
+							createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
+						}
+						if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
+							extractOracleMetaStoreDetails(oracleDatabaseValues, host, port_no);
 						}
 					} else {
 						createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
@@ -494,7 +517,74 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues, String host, String port_no) {
 
 		String jsonResponse = "";
-	}
+
+		try {
+			if (StringUtils.isEmpty(oracleSchemaName) || StringUtils.isBlank(oracleSchemaName)) {
+				oracleSchemaName = "";
+			}
+			ObjectMapper mapper = new ObjectMapper();
+			String input = oracleDatabaseName + SEPARATOR + oracleHostName + SEPARATOR + oracleJdbcName + SEPARATOR
+					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR
+					+ oracleSchemaName;
+			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input, host, port_no, oracleDatabaseValues);
+			oracleTableSchema = mapper.readValue(jsonResponse,
+					OracleTableSchema.class);
+
+		} catch (NumberFormatException | HttpException | MalformedURLException exp) {
+			logger.error("Json to object Mapping issue ", exp);
+		} catch (IOException ex) {
+			logger.error("Json to object Mapping issue ", ex.getMessage());
+		}
+		
+		/*if(null != oracleTableSchema){
+			if(databaseType.equalsIgnoreCase(oracleTableSchema.getDatabaseType())){
+				
+				for (AbstractWidget abstractWgt : widgets) {
+	
+					if (abstractWgt.getProperty().getPropertyName()
+							.equalsIgnoreCase(Constants.ORACLE_DATABASE_WIDGET_NAME)&& null != oracleTableSchema.getSid()) {
+						
+						abstractWgt.refresh(oracleTableSchema.getSid());
+				
+					}else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
+						
+						abstractWgt.refresh(getComponentSchema(oracleTableSchema));
+						
+					}else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.PARTITION_KEYS_WIDGET_NAME)
+							&& null != oracleTableSchema.getPartitionKeys()) {
+	
+						List<String> keys = new ArrayList<>(Arrays.asList(oracleTableSchema.getPartitionKeys().split(",")));
+						
+						List<Object> temp = new ArrayList<>();
+						temp.add(keys);
+						temp.add(getComponentSchema(oracleTableSchema));
+						
+						abstractWgt.refresh(temp);
+						
+					} else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.EXTERNAL_TABLE_PATH_WIDGET_NAME)
+							&& null != oracleTableSchema.getExternalTableLocation()) {
+						
+						abstractWgt.refresh(oracleTableSchema.getExternalTableLocation());
+					}
+					
+					
+				}
+	
+			createMessageDialog(Messages.METASTORE_IMPORT_SUCCESS,INFO).open();
+			propertyDialogButtonBar.enableApplyButton(true);
+		
+		}else{
+			createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
+		 }
+	} else {
+		if(StringUtils.isNotBlank(jsonResponse)){
+			createMessageDialog(jsonResponse,ERROR).open();
+		}else{
+			createMessageDialog("Invalid Host Name:" +host,ERROR).open();
+		}
+}*/
+		}
+	
 
 	/**
 	 * 
@@ -539,7 +629,6 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 					tableNameDecorator.show();
 				}
 
-
 			} else {
 
 				((Button) sqlQueryRadioButton.getSWTWidgetControl()).setSelection(true);
@@ -550,20 +639,19 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 					sqlQueryDecorator.show();
 				}
 
-
 				if (validateField(databaseSelectionConfig.getSqlQueryCounter())) {
-					//sqlQueryCounterDecorator.hide();
+					// sqlQueryCounterDecorator.hide();
 					sqlQueryCountertextbox.setText(databaseSelectionConfig.getSqlQueryCounter());
 
-				} /*else {
-					sqlQueryCounterDecorator.show();
-				}*/
+				} /*
+					 * else { sqlQueryCounterDecorator.show(); }
+					 */
 			}
 
 		} else {
 			tableNameDecorator.show();
 			sqlQueryDecorator.show();
-			//sqlQueryCounterDecorator.show();
+			// sqlQueryCounterDecorator.show();
 		}
 
 	}
@@ -613,14 +701,14 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 	private AbstractELTWidget createWidgetTextbox(String labelName, ELTSubGroupCompositeWithStack compositeWithStack) {
 
 		AbstractELTWidget textboxWgt = new ELTDefaultTextBox()
-				.grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace())
-				.textBoxWidth(textBoxConfig.getwidgetWidth());
+				.grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace());
 		compositeWithStack.attachWidget(textboxWgt);
 		Text textbox = ((Text) textboxWgt.getSWTWidgetControl());
 
 		GridData data = (GridData) textbox.getLayoutData();
 		data.horizontalIndent = 16;
 		data.verticalIndent = 5;
+		data.widthHint = 260;
 		return textboxWgt;
 	}
 

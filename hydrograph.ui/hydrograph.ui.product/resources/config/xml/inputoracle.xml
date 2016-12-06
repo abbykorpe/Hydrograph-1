@@ -51,7 +51,7 @@
 		<tns:property dataType="string" name="port" value="1521" renderer="PORT_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Port provided by the user">
-			<tns:validator>INTEGER_OR_PARAMETER_VALIDATOR</tns:validator>
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="sid" value="" renderer="DATABASE_NAME_WIDGET"

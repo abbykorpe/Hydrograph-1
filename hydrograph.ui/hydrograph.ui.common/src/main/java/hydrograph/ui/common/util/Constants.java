@@ -57,6 +57,8 @@ public class Constants {
 	public static final String COMPONENT_NAME = "Component Name";
 	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
+	public static final String REGEX_NUMERIC_AND_PARAMETER = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\d]{4}";
+	
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}"; 
 	

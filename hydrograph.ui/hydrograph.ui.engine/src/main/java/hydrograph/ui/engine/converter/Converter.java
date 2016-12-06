@@ -14,6 +14,18 @@
  
 package hydrograph.ui.engine.converter;
 
+import java.math.BigInteger;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.StandardCharsets;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -31,17 +43,6 @@ import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.engine.xpath.ComponentsAttributeAndValue;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.slf4j.Logger;
 
 /**
  * Base class for converter implementation. Consists of common methods used by
@@ -116,6 +117,29 @@ public abstract class Converter {
 		return null;
 	}
 
+	/**
+	 * Converts the String to {@link BigInteger}
+	 * 
+	 * @param propertyName
+	 * @return {@link BigInteger}
+	 */
+	protected BigInteger getBigInteger(String propertyName) {
+		logger.debug("Getting boolean Value for {}={}", new Object[] { propertyName, properties.get(propertyName) });
+		BigInteger bigInteger = null;
+		String propertyValue = (String) properties.get(propertyName);
+		if (StringUtils.isNotBlank(propertyValue) && StringUtils.isNumeric(propertyValue)) {
+			bigInteger = new BigInteger(String.valueOf(propertyValue));
+		} else if (ParameterUtil.isParameter(propertyValue)) {
+			ComponentXpath.INSTANCE.getXpathMap()
+					.put((ComponentXpathConstants.COMPONENTS_BIG_INTEGER_PROPERTY_XPATH.value().replace(ID, componentName))
+							.replace(Constants.PARAM_PROPERTY_NAME, propertyName),
+							new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
+			bigInteger = new BigInteger(String.valueOf(0));
+		}
+		return bigInteger;
+
+	}
+	
 	/**
 	 * Converts String value to {@link StandardCharsets}
 	 * 

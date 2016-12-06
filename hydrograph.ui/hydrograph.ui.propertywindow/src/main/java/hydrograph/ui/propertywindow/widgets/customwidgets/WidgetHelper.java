@@ -121,11 +121,9 @@ public class WidgetHelper {
 	public WidgetConfig getPortWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_PORT);
-		textBoxConfig.setCharacterLimit(4);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
-		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
-		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
+		textBoxConfig.getListeners().add(Listners.MODIFY_NUMERIC_AND_PARAMETER);
 		return textBoxConfig;
 	}
 	

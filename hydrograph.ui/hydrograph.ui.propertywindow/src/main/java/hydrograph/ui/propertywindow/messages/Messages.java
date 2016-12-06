@@ -274,6 +274,7 @@ public class Messages extends NLS {
 	public static String EXTRACT;
 	public static  String HOST_NAME_BLANK_ERROR ;
 	public static  String METASTORE_FORMAT_ERROR;
+	public static String  METASTORE_FORMAT_ERROR_FOR_SQL_QUERY;
 	public static  String INVALID_DB_ERROR;
 
 	public static String EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;

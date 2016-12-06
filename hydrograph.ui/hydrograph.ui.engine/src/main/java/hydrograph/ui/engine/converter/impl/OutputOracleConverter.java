@@ -61,7 +61,7 @@ public class OutputOracleConverter extends OutputConverter {
 		oracleOutput.setHostname(hostName);
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = new BigInteger(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PORT_NO.value())));
+		BigInteger portValue = getBigInteger(PropertyNameConstants.ORACLE_PORT_NO.value());
 		portNo.setValue(portValue);
 		oracleOutput.setPort(portNo);
 		
@@ -82,7 +82,7 @@ public class OutputOracleConverter extends OutputConverter {
 		oracleOutput.setPassword(password);
 		
 		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		BigInteger chunkValue = new BigInteger(String.valueOf(properties.get(PropertyNameConstants.ORACLE_CHUNK_SIZE.value())));
+		BigInteger chunkValue = getBigInteger(PropertyNameConstants.ORACLE_CHUNK_SIZE.value());
 		chunkSize.setValue(chunkValue);
 		oracleOutput.setChunkSize(chunkSize);
 		

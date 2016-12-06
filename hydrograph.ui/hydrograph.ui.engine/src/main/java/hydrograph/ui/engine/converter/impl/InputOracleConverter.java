@@ -65,7 +65,7 @@ public class InputOracleConverter extends InputConverter {
 		oracleInput.setHostname(hostName);
 
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = new BigInteger(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PORT_NO.value())));
+		BigInteger portValue = getBigInteger(PropertyNameConstants.ORACLE_PORT_NO.value());
 		portNo.setValue(portValue);
 		oracleInput.setPort(portNo);
 
