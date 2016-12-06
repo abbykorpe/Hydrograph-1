@@ -134,6 +134,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 			if(StringUtils.equalsIgnoreCase(nextComponent.getCategory(),Constants.TRANSFORM))
 			{
 				nextComponent.setContinuousSchemaPropogationAllow(true);
+				((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 			}
 		}
 	}
