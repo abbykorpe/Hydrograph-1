@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.slf4j.api,
  org.eclipse.ui,
  hydrograph.ui.logging;bundle-version="0.0.1",
- org.apache.commons.lang
+ org.apache.commons.lang,
+ hydrograph.ui.model;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.tooltip.tooltips
