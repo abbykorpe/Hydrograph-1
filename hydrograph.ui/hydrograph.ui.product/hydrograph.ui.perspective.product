@@ -139,8 +139,6 @@ openFile
       <plugin id="hydrograph.ui.theme"/>
       <plugin id="hydrograph.ui.tooltip"/>
       <plugin id="hydrograph.ui.validators"/>
-      <plugin id="hydrograph.ui.xstream"/>
-      <plugin id="hydrograph.ui.xstream.annotations"/>
       <plugin id="javaewah"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.el"/>
