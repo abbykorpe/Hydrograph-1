@@ -10,41 +10,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.assembly.generator;
+package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.tap.Tap;
-import hydrograph.engine.assembly.entity.InputRDBMSEntity;
-import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
-import hydrograph.engine.cascading.assembly.InputOracleAssembly;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.InputRDBMSEntity;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
+import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.Oracle;
 
 
-public class InputOracleAssemblyGenerator extends
-InputAssemblyGeneratorBase {
+public class InputOracleEntityGenerator extends
+InputComponentGeneratorBase {
 
 	private Oracle inputOracleJaxb;
 	private InputRDBMSEntity inputRDBMSEntity;
-	private InputOracleAssembly inputOracleAssembly;
 	private static Logger LOG = LoggerFactory
-			.getLogger(InputOracleAssemblyGenerator.class);
+			.getLogger(InputOracleEntityGenerator.class);
 
-	public InputOracleAssemblyGenerator(TypeBaseComponent baseComponent) {
+	public InputOracleEntityGenerator(TypeBaseComponent baseComponent) {
 		super(baseComponent);
 	}
 
-	@Override
-	public Map<String, Tap> getSourceTap() {
-		return null;
-	}
+	
 
 	@Override
 	public void castComponentFromBase(TypeBaseComponent baseComponent) {
@@ -89,14 +82,10 @@ InputAssemblyGeneratorBase {
 
 
 	
-	@Override
-	public BaseComponent getAssembly() {
-		return inputOracleAssembly;
-	}
+	
 
 	@Override
-	public void createAssembly(ComponentParameters componentParameters) {
-		inputOracleAssembly = new InputOracleAssembly(
-				inputRDBMSEntity, componentParameters);
+	public InputRDBMSEntity getEntity() {
+		return inputRDBMSEntity;
 	}
 }

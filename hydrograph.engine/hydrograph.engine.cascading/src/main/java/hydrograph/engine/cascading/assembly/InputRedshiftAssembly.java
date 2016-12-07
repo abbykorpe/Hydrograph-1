@@ -23,7 +23,7 @@ import cascading.jdbc.RedshiftTap;
 import cascading.jdbc.db.DBInputFormat;
 import cascading.tap.SinkMode;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.assembly.entity.InputRDBMSEntity;
+import hydrograph.engine.core.component.entity.InputRDBMSEntity;
 
 
 
