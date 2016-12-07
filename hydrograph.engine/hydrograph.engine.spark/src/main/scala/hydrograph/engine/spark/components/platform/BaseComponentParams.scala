@@ -10,7 +10,7 @@ import scala.collection.mutable.ListBuffer
 /**
   * Created by gurdits on 10/17/2016.
   */
-case class BaseComponentParams() {
+class BaseComponentParams() {
 
 
   val dataFrameList = new ListBuffer[DataFrame]()
