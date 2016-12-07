@@ -94,6 +94,7 @@
 			<enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
 			<enumeration value="EXTRACT_METASTORE_DATA_WIDGET"/>
 			<enumeration value="PROPOGATE_WIDGET"/>
+			<enumeration value="STRAIGHT_SCHEMA_WIDGET"/>
 		</restriction>
 	</simpleType>
 

@@ -73,11 +73,12 @@ public class WidgetFactory {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(WidgetFactory.class);
 	
 	public enum Widgets{
-		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class),
-		FIXED_WIDGET(ELTFixedWidget.class),
-		MIXED_SCHEME(ELTMixedSchemeWidget.class),		
-		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class),
-		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class),
+		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
+		STRAIGHT_SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class, WidgetHelper.INSTANCE.getStraightPullSchemaConfig()),
+		FIXED_WIDGET(ELTFixedWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
+		MIXED_SCHEME(ELTMixedSchemeWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),		
+		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
+		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class),
 		BROWSE_WORKSPACE_WIDGET(ELTBrowseWorkspaceWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),

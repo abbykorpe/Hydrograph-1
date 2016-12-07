@@ -37,7 +37,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
+		<tns:property dataType="string" name="schema" renderer="STRAIGHT_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED">
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>

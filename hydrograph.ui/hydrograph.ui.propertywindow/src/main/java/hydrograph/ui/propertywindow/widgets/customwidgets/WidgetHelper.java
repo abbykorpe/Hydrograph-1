@@ -21,6 +21,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.RuntimeConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.SchemaConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
@@ -324,6 +325,25 @@ public class WidgetHelper {
 		runtimeConfig.setLabel(label);
 		runtimeConfig.setWindowLabel(windowLabel);
 		return runtimeConfig;
+	}
+
+	/**
+	 * 
+	 *@return schema configuration for straight pull component
+	 */
+	public SchemaConfig getStraightPullSchemaConfig() {
+		SchemaConfig schemaConfig=new SchemaConfig();
+		schemaConfig.setDoPropagateONOK(false);
+		return schemaConfig;
+	}
+
+	/**
+	 * @return schema configuration for component other than straight pull
+	 */
+	public SchemaConfig getSchemaConfig() {
+		SchemaConfig schemaConfig=new SchemaConfig();
+		schemaConfig.setDoPropagateONOK(true);
+		return schemaConfig;
 	}
 
 
