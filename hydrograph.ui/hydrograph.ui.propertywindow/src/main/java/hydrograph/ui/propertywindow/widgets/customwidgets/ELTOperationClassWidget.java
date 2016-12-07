@@ -66,7 +66,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 	private List<NameValueProperty> nameValuePropertyList;
 	private Button operationRadioButton;
 	private Button expressionRadioButton;
-	
+	private boolean isOpenedFirstTime;
 	/**
 	 * Instantiates a new ELT operation class widget.
 	 * 
@@ -86,6 +86,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		nameValuePropertyList=new ArrayList<>(); 
 		this.operationClassProperty = (OperationClassProperty) componentConfigrationProperty.getPropertyValue();
 		if(operationClassProperty == null){
+			isOpenedFirstTime=true;
 			operationClassProperty = new OperationClassProperty(Messages.CUSTOM, "", false, "",nameValuePropertyList,null,null);
 		}
 		this.propertyName = componentConfigrationProperty.getPropertyName();
@@ -212,7 +213,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 
 	public void initialize()
 	{
-		if(!operationClassProperty.isExpression())
+		if(operationClassProperty.isExpression() || isOpenedFirstTime)
 		{
 			((Button) expressionRadioButton).setSelection(true);
 		}else{

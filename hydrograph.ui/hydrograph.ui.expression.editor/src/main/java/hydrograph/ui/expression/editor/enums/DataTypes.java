@@ -13,20 +13,15 @@
 
 package hydrograph.ui.expression.editor.enums;
 
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.evaluate.InvalidDataTypeValueException;
-import hydrograph.ui.expression.editor.javasourceviewerconfiguration.HydrographCompletionProposalComputer;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import javax.management.InstanceNotFoundException;
-
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
+
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.evaluate.InvalidDataTypeValueException;
 
 
 public enum DataTypes {
@@ -58,6 +53,38 @@ public enum DataTypes {
 			}
 		}
 	},
+	
+	BigDecimal("B","bigdecimal") {
+		@Override
+		protected String getDefaultValue(FixedWidthGridRow inputFieldSchema) {
+			return "0";
+		}
+
+		@Override
+		protected String getDataTypeName() {
+			return java.math.BigDecimal.class.getSimpleName();
+		}
+
+		@Override
+		protected Class<?> getDataTypeClass() {
+			return java.math.BigDecimal.class;
+		}
+
+		@Override
+		protected Object validateValue(String inputValue,String filedName,FixedWidthGridRow inputFieldSchema) throws InvalidDataTypeValueException {
+			try {
+				
+				java.math.BigDecimal bigDecimal=new java.math.BigDecimal(inputValue);
+				return bigDecimal;
+			}
+			catch (Exception exception) {
+				throw new InvalidDataTypeValueException(exception,"Invalid value for "+filedName+". Requires numeric value.");
+			}
+		}
+	},
+	
+	
+	
 	Float("F","float") {
 		@Override
 		protected String getDefaultValue(FixedWidthGridRow inputFieldSchema) {

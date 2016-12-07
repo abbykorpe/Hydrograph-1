@@ -20,7 +20,7 @@ public class InvalidDataTypeValueException extends Exception {
 
 	public InvalidDataTypeValueException(Exception exception,String customMessage) {
 		super(exception);
-		this.customMessage=customMessage+"\n\t\t\t\t"+exception.getMessage();
+		this.customMessage=customMessage+"\n\t\t\t\t"+(exception.getMessage()==null?"":exception.getMessage());
 	}
 	
 	@Override

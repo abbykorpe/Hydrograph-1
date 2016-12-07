@@ -271,12 +271,10 @@
 		<module>hydrograph.ui.graph.figure</module>
 		<module>hydrograph.ui.propertywindow</module>	
 		<module>hydrograph.ui.model</module>	
-		<module>hydrograph.ui.xstream</module>
 		<module>hydrograph.ui.engine</module>
 		<module>hydrograph.ui.common.datastructures</module>
 		<module>hydrograph.ui.tooltip</module>
 		<module>hydrograph.ui.common.interfaces</module>
-		<module>hydrograph.ui.xstream.annotations</module>
 		<module>hydrograph.ui.parametergrid</module>
 		<module>hydrograph.ui.joblogger</module>
 	    <module>hydrograph.ui.help</module>
