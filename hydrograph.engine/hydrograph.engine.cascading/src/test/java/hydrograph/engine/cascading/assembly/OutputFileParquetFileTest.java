@@ -13,10 +13,11 @@
 package hydrograph.engine.cascading.assembly;
 
 import static data.InputData.outputFileParquet;
-import hydrograph.engine.assembly.entity.OutputFileParquetEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+
 import hydrograph.engine.cascading.assembly.OutputFileParquetAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.OutputFileParquetEntity;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
 

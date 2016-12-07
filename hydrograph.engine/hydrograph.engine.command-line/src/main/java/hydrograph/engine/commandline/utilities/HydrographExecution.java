@@ -49,13 +49,12 @@ public class HydrographExecution {
 	public static void main(String args[]) throws Exception {
 		
 		
-		if(GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)){
-			
+		if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)) {
+
 			CommandLineOptionsProcessor.printUsage();
-		}
-		else{
-		HydrographExecution execution = new HydrographExecution();
-		execution.run(args);
+		} else {
+			HydrographExecution execution = new HydrographExecution();
+			execution.run(args);
 		}
 		
 	}

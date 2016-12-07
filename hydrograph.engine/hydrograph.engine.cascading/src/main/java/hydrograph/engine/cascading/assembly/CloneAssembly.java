@@ -12,10 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.CloneEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.CloneEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
 
 import org.slf4j.Logger;
@@ -46,8 +46,7 @@ public class CloneAssembly extends BaseComponent<CloneEntity> {
 
 				LOG.trace("Creating clone assembly for '" + cloneEntity.getComponentId() + "' for socket: '"
 						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
-				clonePipe = new Pipe(ComponentHelper.getComponentName("clone", cloneEntity.getComponentId(),
-						outSocket.getSocketId()), inputPipes);
+				clonePipe = new Pipe(cloneEntity.getComponentId()+outSocket.getSocketId(), inputPipes);
 				setHadoopProperties(clonePipe.getStepConfigDef());
 				setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), cloneEntity.getComponentId(), clonePipe,
 						componentParameters.getInputFields());

@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "true_false", namespace = "hydrograph/engine/jaxb/commontypes")
+@XmlType(name = "true_false")
 @XmlEnum
 public enum TrueFalse {
 

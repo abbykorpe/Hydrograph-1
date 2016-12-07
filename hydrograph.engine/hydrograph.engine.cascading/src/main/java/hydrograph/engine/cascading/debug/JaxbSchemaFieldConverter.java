@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.debug;
 
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
 import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;

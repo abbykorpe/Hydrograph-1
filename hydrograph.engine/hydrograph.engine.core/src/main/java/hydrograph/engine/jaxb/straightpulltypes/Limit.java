@@ -49,7 +49,7 @@ import hydrograph.engine.jaxb.limit.TypeLimitBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "limit", namespace = "hydrograph/engine/jaxb/straightpulltypes", propOrder = {
+@XmlType(name = "limit", propOrder = {
     "maxRecords"
 })
 public class Limit

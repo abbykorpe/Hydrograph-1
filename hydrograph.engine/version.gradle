@@ -10,8 +10,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
- ext.repo = Grgit.open()
-version = new Version(major: 0, minor:1, revision: 10, branch :ext.repo.branch.current.name)
+ext.repo = Grgit.open()
+version = new Version(major: 2, minor:1, revision: 1, branch :ext.repo.branch.current.name)
+
 
 buildscript {
 repositories {

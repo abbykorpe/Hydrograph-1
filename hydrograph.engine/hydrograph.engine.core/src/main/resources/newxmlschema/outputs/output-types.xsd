@@ -254,6 +254,11 @@
 					</xs:element>
 					<xs:element name="runtimeProperties" type="cmn:type-properties"
 						minOccurs="0" />
+					<xs:element name="quote" minOccurs="0">
+						<xs:complexType>
+							<xs:attribute name="value" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>

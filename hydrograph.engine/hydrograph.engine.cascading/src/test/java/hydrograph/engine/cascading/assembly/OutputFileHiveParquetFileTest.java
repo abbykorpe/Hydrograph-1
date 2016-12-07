@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.OutputFileHiveParquetAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.coercetype.StrictDateType;
+import hydrograph.engine.core.component.entity.OutputFileHiveParquetEntity;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
 

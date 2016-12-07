@@ -20,11 +20,11 @@ package hydrograph.engine.cascading.assembly;
 
 
 
-import hydrograph.engine.assembly.entity.OutputFileAvroEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
 import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
+import hydrograph.engine.core.component.entity.OutputFileAvroEntity;
 import hydrograph.engine.utilities.ComponentHelper;
 
 import org.slf4j.Logger;
@@ -72,7 +72,7 @@ public class OutputFileAvroAssembly extends BaseComponent<OutputFileAvroEntity> 
 		filePathToWrite = outputFileAvroEntity.getPath();
 		tailPipe = componentParameters.getInputPipe();
 		prepareScheme();
-		Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileAvro",outputFileAvroEntity.getComponentId(),""),
+		Pipe sinkPipe = new Pipe(outputFileAvroEntity.getComponentId()+"",
 				tailPipe);
 		setOutLink("output","NoSocketId",
 				outputFileAvroEntity.getComponentId(), sinkPipe, componentParameters

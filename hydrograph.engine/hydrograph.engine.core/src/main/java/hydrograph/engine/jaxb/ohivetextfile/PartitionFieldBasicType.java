@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "partition_field_basic_type", namespace = "hydrograph/engine/jaxb/ohivetextfile", propOrder = {
+@XmlType(name = "partition_field_basic_type", propOrder = {
     "field"
 })
 public class PartitionFieldBasicType {

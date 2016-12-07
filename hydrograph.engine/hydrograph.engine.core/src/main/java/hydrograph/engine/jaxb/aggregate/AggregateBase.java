@@ -44,7 +44,7 @@ import hydrograph.engine.jaxb.operationstypes.Aggregate;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "aggregate-base", namespace = "hydrograph/engine/jaxb/aggregate")
+@XmlType(name = "aggregate-base")
 @XmlSeeAlso({
     Aggregate.class
 })

@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.flow.utils;
 
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 
 import java.util.List;
 import java.util.Map;

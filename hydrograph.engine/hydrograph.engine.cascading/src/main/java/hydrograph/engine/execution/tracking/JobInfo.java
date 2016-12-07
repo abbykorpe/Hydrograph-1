@@ -43,7 +43,8 @@ public class JobInfo {
 
 	private final String COUNTER_GROUP = "com.hydrograph.customgroup";
 	private Map<String, ComponentInfo> componentInfoMap = new HashMap<>();
-	private Map<String,String> batchMap; 
+	private Map<String,String> batchMap;
+	private Map<String,String> componentNamesMap;
 	private Map<String, Pipe> componentPipeMap;
 	private Map<String, List<String>> componentSocketMap;
 	private Map<String, List<String>> componentAndPreviousMap;
@@ -81,6 +82,7 @@ public class JobInfo {
 		}
 	}
 	private void checkAndCreateMaps() {
+		componentNamesMap = ComponentPipeMapping.getComponentNamesMap();
 		batchMap = ComponentPipeMapping.getBatchMap();
 		componentPipeMap = ComponentPipeMapping.getComponentToPipeMapping();
 		componentSocketMap = ComponentPipeMapping.getComponentSocketMap();
@@ -159,8 +161,9 @@ public class JobInfo {
 	private void createComponentInfoForComponent(String component_SocketId, CascadingStats<?> cascadingStats) {
 		ComponentInfo componentInfo = null;
 		String currentComponentId = getComponentIdFromComponentSocketID(component_SocketId);
-		String batchNumber = batchMap.get(currentComponentId);
 		if (currentComponentId != null) {
+			String batchNumber = batchMap.get(currentComponentId);
+			String componentName = componentNamesMap.get(currentComponentId);
 			removeCompletedFlowFromComponent(cascadingStats, currentComponentId);
 			if (componentInfoMap.containsKey(currentComponentId)) {
 				componentInfo = componentInfoMap.get(currentComponentId);
@@ -170,6 +173,7 @@ public class JobInfo {
 				componentInfo = new ComponentInfo();
 				componentInfo.setComponentId(currentComponentId);
 				componentInfo.setBatch(batchNumber);
+				componentInfo.setComponentName(componentName);
 				for (String socketId : componentSocketMap.get(currentComponentId)) {
 					componentInfo.setStatusPerSocketMap(socketId, cascadingStats.getStatus());
 					componentInfo.setProcessedRecordCount(socketId, 0);

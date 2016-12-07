@@ -20,11 +20,11 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.PartitionByExpressionEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.functions.CustomTuplesPartitioner;
+import hydrograph.engine.core.component.entity.PartitionByExpressionEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
 import hydrograph.engine.utilities.ComponentHelper;
 import hydrograph.engine.utilities.UserClassLoader;
@@ -93,7 +93,7 @@ public class PartitionByExpressionAssembly extends BaseComponent<PartitionByExpr
 	}
 
 	private Pipe getNewPipe(String outSocketId, Pipe pipe) {
-		Pipe tempPipe = new Pipe(ComponentHelper.getComponentName("partitionByExpression",partitionByExpressionEntity.getComponentId() , outSocketId), pipe);
+		Pipe tempPipe = new Pipe(partitionByExpressionEntity.getComponentId()+outSocketId, pipe);
 		tempPipe = new Each(tempPipe, getNewPartitioner(outSocketId));
 
 		return tempPipe;

@@ -13,10 +13,11 @@
 package hydrograph.engine.cascading.assembly;
 
 import static data.InputData.discardInput;
-import hydrograph.engine.assembly.entity.DiscardEntity;
+
 import hydrograph.engine.cascading.assembly.DiscardAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.coercetype.StrictDateType;
+import hydrograph.engine.core.component.entity.DiscardEntity;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
 

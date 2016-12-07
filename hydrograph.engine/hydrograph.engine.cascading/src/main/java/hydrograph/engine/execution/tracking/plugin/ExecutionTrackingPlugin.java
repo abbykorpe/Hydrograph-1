@@ -24,9 +24,9 @@ import cascading.stats.CascadingStats;
 import cascading.stats.CascadingStats.Status;
 import cascading.stats.FlowNodeStats;
 import cascading.stats.FlowStepStats;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.integration.RuntimeContext;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.execution.tracking.ComponentInfo;
 import hydrograph.engine.execution.tracking.ComponentPipeMapping;
@@ -58,6 +58,7 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 				trackContext = new TrackContext();
 				trackContext.setFromComponentId(typeBaseComponent.getId());
 				trackContext.setBatch(typeBaseComponent.getBatch());
+				trackContext.setComponentName(typeBaseComponent.getName());
 				trackContext.setFromOutSocketId(outSocket.getSocketId());
 				trackContext.setFromOutSocketType(outSocket.getSocketType());
 				Filter newFilter = TrackComponentUtils.generateFilterAfterEveryComponent(trackContext, jaxbObjectList,

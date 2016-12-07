@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-clone-in-socket", namespace = "hydrograph/engine/jaxb/clone")
+@XmlType(name = "type-clone-in-socket")
 public class TypeCloneInSocket
     extends TypeBaseInSocket
 {

@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.ifparquet.TypeInputFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "parquetFile", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
+@XmlType(name = "parquetFile", propOrder = {
     "path",
     "runtimeProperties"
 })

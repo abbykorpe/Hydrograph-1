@@ -22,11 +22,11 @@ import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.OutputFileMixedSchemeEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
+import hydrograph.engine.core.component.entity.OutputFileMixedSchemeEntity;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixedSchemeEntity> {
@@ -59,8 +59,7 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 		LOG.trace("Creating output file mixed scheme assembly for '" + outputFileMixedSchemeEntity.getComponentId()
 				+ "'");
 		prepareAssembly();
-		Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileMixedScheme",
-				outputFileMixedSchemeEntity.getComponentId(), ""), tailPipe);
+		Pipe sinkPipe = new Pipe(outputFileMixedSchemeEntity.getComponentId()+"", tailPipe);
 		setOutLink("output","NoSocketId",
 				outputFileMixedSchemeEntity.getComponentId(), sinkPipe, componentParameters
 				.getInputFieldsList().get(0));
@@ -94,7 +93,7 @@ public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixed
 		scheme = new TextDelimitedAndFixedWidth(outputFields, fieldsCreator.getFieldLengthOrDelimiter(),
 				fieldsCreator.getTypeFieldLengthDelimiter(), outputFields.getTypes(),
 				outputFileMixedSchemeEntity.getStrict(), outputFileMixedSchemeEntity.getSafe(),
-				outputFileMixedSchemeEntity.getCharset());
+				outputFileMixedSchemeEntity.getCharset(), outputFileMixedSchemeEntity.getQuote());
 	}
 
 	@Override

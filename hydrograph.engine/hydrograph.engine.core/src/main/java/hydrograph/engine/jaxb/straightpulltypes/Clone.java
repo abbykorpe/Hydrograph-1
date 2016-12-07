@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "clone", namespace = "hydrograph/engine/jaxb/straightpulltypes")
+@XmlType(name = "clone")
 public class Clone
     extends TypeStraightPullComponent
 {

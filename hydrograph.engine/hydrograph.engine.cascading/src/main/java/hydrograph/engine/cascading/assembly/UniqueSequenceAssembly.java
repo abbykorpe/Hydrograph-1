@@ -12,13 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.UniqueSequenceEntity;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.functions.UniqueSequenceNumberOperation;
+import hydrograph.engine.core.component.entity.UniqueSequenceEntity;
+import hydrograph.engine.core.component.entity.elements.Operation;
+import hydrograph.engine.core.component.entity.elements.OperationField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
 
 import org.slf4j.Logger;
@@ -60,8 +60,7 @@ public class UniqueSequenceAssembly extends BaseComponent<UniqueSequenceEntity> 
 				UniqueSequenceNumberOperation seqNo = new UniqueSequenceNumberOperation(
 						outputFieldsList);
 
-				Pipe uniSeqPipe = new Pipe(ComponentHelper.getComponentName("uniqueSequence",
-						uniqueSequenceEntity.getComponentId(),outSocket.getSocketId()),
+				Pipe uniSeqPipe = new Pipe(uniqueSequenceEntity.getComponentId()+outSocket.getSocketId(),
 						componentParameters.getInputPipe());
 				setHadoopProperties(uniSeqPipe.getStepConfigDef());
 				uniSeqPipe = new Each(uniSeqPipe, Fields.NONE, seqNo,

@@ -23,12 +23,12 @@ import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.InputFileMixedSchemeEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
+import hydrograph.engine.core.component.entity.InputFileMixedSchemeEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSchemeEntity> {
@@ -88,7 +88,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileMixedSchemeEntity.getPath());
-		pipe = new Pipe(ComponentHelper.getComponentName("inputFileMixedScheme",inputFileMixedSchemeEntity.getComponentId(),inputFileMixedSchemeEntity.getOutSocketList().get(0).getSocketId()));
+		pipe = new Pipe(inputFileMixedSchemeEntity.getComponentId()+inputFileMixedSchemeEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());
@@ -100,7 +100,7 @@ public class InputFileMixedSchemeAssembly extends BaseComponent<InputFileMixedSc
 		scheme = new TextDelimitedAndFixedWidth(inputFields, fieldsCreator.getFieldLengthOrDelimiter(),
 				fieldsCreator.getTypeFieldLengthDelimiter(), inputFields.getTypes(),
 				inputFileMixedSchemeEntity.getStrict(), inputFileMixedSchemeEntity.getSafe(),
-				inputFileMixedSchemeEntity.getCharset());
+				inputFileMixedSchemeEntity.getCharset(),inputFileMixedSchemeEntity.getQuote());
 
 	}
 

@@ -16,12 +16,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import hydrograph.engine.assembly.entity.UnionAllEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.UnionAllAssembly;
 import hydrograph.engine.cascading.assembly.UnionAllAssembly.SchemaMismatchException;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.UnionAllEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;

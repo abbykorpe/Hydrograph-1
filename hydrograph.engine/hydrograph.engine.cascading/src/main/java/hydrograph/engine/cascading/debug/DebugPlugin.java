@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.debug;
 
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
 import hydrograph.engine.flow.utils.ManipulatorListener;

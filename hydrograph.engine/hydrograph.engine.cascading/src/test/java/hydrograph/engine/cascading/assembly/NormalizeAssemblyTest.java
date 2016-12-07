@@ -15,14 +15,15 @@ package hydrograph.engine.cascading.assembly;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import hydrograph.engine.assembly.entity.NormalizeEntity;
-import hydrograph.engine.assembly.entity.elements.MapField;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
+
 import hydrograph.engine.cascading.assembly.NormalizeAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.NormalizeEntity;
+import hydrograph.engine.core.component.entity.elements.MapField;
+import hydrograph.engine.core.component.entity.elements.Operation;
+import hydrograph.engine.core.component.entity.elements.OperationField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.PassThroughField;
 
 import java.io.IOException;
 import java.util.ArrayList;

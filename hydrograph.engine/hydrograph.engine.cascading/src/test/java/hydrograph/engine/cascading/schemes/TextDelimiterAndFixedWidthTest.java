@@ -28,6 +28,7 @@ import static data.InputData.itShouldProduceValidResultsForRecordWithLastFixedWi
 import static data.InputData.itShouldProduceValidResultsForRecordWithLastFixedWidthFieldAndDelimitedNewlineField;
 import static data.InputData.itShouldProduceValidResultsForRecordWithLastFixedWidthFieldAndFixedNewlineField;
 import static data.InputData.itShouldProduceValidResultsForSimpleMixedScheme;
+import static data.InputData.itShouldProduceValidResultsForSimpleMixedSchemeWithQuoteChar;
 import static data.InputData.itShouldProduceValidResultsForSimpleMixedSchemeWithDelimitedNewlineField;
 import static data.InputData.itShouldProduceValidResultsForSimpleMixedSchemeWithFixedNewlineField;
 import static org.junit.Assert.assertEquals;
@@ -767,6 +768,36 @@ public class TextDelimiterAndFixedWidthTest {
 		inTap = new Hfs(inScheme, itShouldProduceValidResultsForAllDataTypes);
 		outTap = new Hfs(outScheme, outPath
 				+ "/itShouldProduceValidResultsForAllDataTypes",
+				SinkMode.REPLACE);
+		pipe = new Pipe("pipe");
+		flowDef = FlowDef.flowDef().addSource(pipe, inTap)
+				.addTailSink(pipe, outTap);
+		flow = flowConnector.connect(flowDef);
+		flow.complete();
+	}
+
+	@Test
+	public void itShouldProduceValidResultsForSimpleMixedSchemeWithQuoteChar()
+			throws IOException {
+
+		String[] inputLengthsAndDelimiters = { "@,@", "3", "4", "3", "|" };
+		String[] outputLengthsAndDelimiters1 = { ",", "2", "6", "4", "|" };
+		types = new Class[] { String.class, String.class, Integer.class,
+				String.class, String.class };
+		Type[] typesOfLengthsAndDelimiters = new Class[] { String.class,
+				Integer.class, Integer.class, Integer.class, String.class };
+		inScheme = new TextDelimitedAndFixedWidth(fields,
+				inputLengthsAndDelimiters, typesOfLengthsAndDelimiters, types,
+				false, false, "UTF-8", ".");
+		outScheme = new TextDelimitedAndFixedWidth(fields,
+				outputLengthsAndDelimiters1, typesOfLengthsAndDelimiters, types,
+				false, false, "UTF-8","*");
+		inTap = new Hfs(inScheme,
+				itShouldProduceValidResultsForSimpleMixedSchemeWithQuoteChar);
+		outTap = new Hfs(
+				outScheme,
+				outPath
+						+ "/itShouldProduceValidResultsForSimpleMixedSchemeWithQuoteChar",
 				SinkMode.REPLACE);
 		pipe = new Pipe("pipe");
 		flowDef = FlowDef.flowDef().addSource(pipe, inTap)

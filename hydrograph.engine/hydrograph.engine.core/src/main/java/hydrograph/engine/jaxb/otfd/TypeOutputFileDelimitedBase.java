@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-file-delimited-base", namespace = "hydrograph/engine/jaxb/otfd")
+@XmlType(name = "type-output-file-delimited-base")
 @XmlSeeAlso({
     TextFileDelimited.class,
     AvroFile.class

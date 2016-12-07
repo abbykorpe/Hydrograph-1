@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.oredshift.TypeRedshiftRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-record", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
+@XmlType(name = "type-base-record", propOrder = {
     "fieldOrRecordOrIncludeExternalSchema"
 })
 @XmlSeeAlso({

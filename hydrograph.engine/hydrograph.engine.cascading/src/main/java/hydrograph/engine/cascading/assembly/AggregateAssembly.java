@@ -12,15 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.AggregateEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.AggregateCustomHandler;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.core.component.entity.AggregateEntity;
+import hydrograph.engine.core.component.entity.elements.KeyField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
 import hydrograph.engine.utilities.ComponentHelper;
 
 import java.util.Arrays;
@@ -88,8 +88,7 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket.getOperationFieldList()));
 
 		
-		Pipe sortAggPipe = new Pipe(ComponentHelper.getComponentName("aggregate",
-				aggregateEntity.getComponentId(), aggregateEntity.getOutSocketList().get(0).getSocketId()),
+		Pipe sortAggPipe = new Pipe(aggregateEntity.getComponentId()+ aggregateEntity.getOutSocketList().get(0).getSocketId(),
 				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys

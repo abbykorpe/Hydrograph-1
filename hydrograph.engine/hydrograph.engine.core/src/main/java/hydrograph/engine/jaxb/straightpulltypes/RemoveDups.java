@@ -54,7 +54,7 @@ import hydrograph.engine.jaxb.removedups.TypeSecondaryKeyFields;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "removeDups", namespace = "hydrograph/engine/jaxb/straightpulltypes", propOrder = {
+@XmlType(name = "removeDups", propOrder = {
     "keep",
     "primaryKeys",
     "secondaryKeys"

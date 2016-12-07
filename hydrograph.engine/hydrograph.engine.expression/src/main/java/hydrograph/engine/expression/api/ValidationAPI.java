@@ -312,4 +312,10 @@ public class ValidationAPI implements Serializable {
 
 	}
 
+	public static List<String> getFieldNameList(Map<String, Class<?>> schemaFields, String expression, String propertiesFilePath)
+	  {
+	    return new ValidationAPI(expression, propertiesFilePath).getFieldNameList(schemaFields);
+	  }
+
+	
 }

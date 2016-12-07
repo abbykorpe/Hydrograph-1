@@ -52,7 +52,7 @@ import hydrograph.engine.jaxb.outputtypes.Discard;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
+@XmlType(name = "type-output-component", propOrder = {
     "inSocket",
     "overWrite"
 })

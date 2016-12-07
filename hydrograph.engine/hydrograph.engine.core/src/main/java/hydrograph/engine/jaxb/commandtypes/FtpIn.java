@@ -49,7 +49,7 @@ import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ftpIn", namespace = "hydrograph/engine/jaxb/commandtypes", propOrder = {
+@XmlType(name = "ftpIn", propOrder = {
     "host"
 })
 public class FtpIn

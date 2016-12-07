@@ -171,6 +171,16 @@ public class JAXBTraversal {
 			flowCount.add(component.getBatch());
 		}
 	}
+	
+	public String getComponentNameFromComponentId(String componentId){
+		for (TypeBaseComponent component : jaxbGraph) {
+			if(component.getId().equals(componentId)){
+				return component.getName();
+			}
+		}
+		return null;
+		
+	}
 
 	public boolean isHiveComponentPresentInFlow() {
 		return isHiveComponentPresentInFlow;

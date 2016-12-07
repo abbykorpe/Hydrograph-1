@@ -99,17 +99,18 @@ dependencies {
     testCompile( group: 'org.apache.tez', name: 'tez-dag', version: tezVersion )
     
 
-	compileOnly group: 'cascading', name: 'cascading-jdbc-core', version: '3.0.0'
- 	compileOnly group: 'cascading', name: 'cascading-jdbc-mysql', version: '3.0.0'
-  	compileOnly group: 'cascading', name: 'cascading-jdbc-redshift', version: '3.0.0'
-    compileOnly(group: 'cascading', name: 'cascading-jdbc-oracle', version: '0.1')
-    compileOnly(group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
+	compile group: 'cascading', name: 'cascading-jdbc-core', version: '3.0.0'
+ 	compile group: 'cascading', name: 'cascading-jdbc-mysql', version: '3.0.0'
+  	compile group: 'cascading', name: 'cascading-jdbc-redshift', version: '3.0.0'
+    compile (group: 'cascading', name: 'cascading-jdbc-oracle', version: '0.1')
+    compile (group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
 
 
 	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'
     compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
     compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
+    compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion
     //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
  
  compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger

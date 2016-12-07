@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-limit-out-socket", namespace = "hydrograph/engine/jaxb/limit")
+@XmlType(name = "type-limit-out-socket")
 public class TypeLimitOutSocket
     extends TypeStraightPullOutSocket
 {

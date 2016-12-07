@@ -14,13 +14,14 @@ package hydrograph.engine.cascading.assembly;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import hydrograph.engine.assembly.entity.JoinEntity;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.MapField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
+
 import hydrograph.engine.cascading.assembly.JoinAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.JoinEntity;
+import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
+import hydrograph.engine.core.component.entity.elements.MapField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.PassThroughField;
 
 import java.util.ArrayList;
 import java.util.HashSet;

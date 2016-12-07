@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "types-outSocket-types", namespace = "hydrograph/engine/jaxb/join")
+@XmlType(name = "types-outSocket-types")
 @XmlEnum
 public enum TypesOutSocketTypes {
 

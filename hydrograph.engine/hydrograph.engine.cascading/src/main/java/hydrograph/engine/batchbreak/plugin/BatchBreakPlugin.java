@@ -22,7 +22,7 @@ import java.util.UUID;
 import org.apache.hadoop.conf.Configuration;
 
 import cascading.tap.hadoop.Hfs;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.entity.LinkInfo;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.flow.utils.FlowManipulationContext;
@@ -98,6 +98,8 @@ public class BatchBreakPlugin implements ManipulatorListener {
 						// else update the subbatch of this component with the
 						// subbatch of source component
 						if (j > 0) {
+							if (Integer.parseInt(batch.split("\\.")[j-1]) == Integer
+									.parseInt(sourceComponent.getBatch().split("\\.")[j-1]))
 							jaxbComponent.setBatch(sourceComponent.getBatch());
 						} else {
 							throw new RuntimeException(

@@ -21,14 +21,14 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.NormalizeEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.handlers.NormalizeCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.core.component.entity.NormalizeEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
@@ -97,8 +97,7 @@ public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 				passThroughFields, mapFields, operationFields);
 		NormalizeCustomHandler normalizeCustomHandler = null;
 
-		Pipe normalizePipe = new Pipe(ComponentHelper.getComponentName("normalize",
-				normalizeEntity.getComponentId(),outSocket.getSocketId()),
+		Pipe normalizePipe = new Pipe(normalizeEntity.getComponentId()+outSocket.getSocketId(),
 				componentParameters.getInputPipe());
 
 		normalizeCustomHandler = new NormalizeCustomHandler(

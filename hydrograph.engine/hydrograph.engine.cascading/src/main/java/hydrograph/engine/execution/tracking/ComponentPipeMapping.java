@@ -29,10 +29,10 @@ import cascading.flow.planner.Scope;
 import cascading.flow.planner.graph.ElementGraph;
 import cascading.pipe.Pipe;
 import cascading.stats.FlowNodeStats;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.integration.FlowContext;
 import hydrograph.engine.cascading.integration.RuntimeContext;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.utilities.SocketUtilities;
@@ -51,6 +51,8 @@ public class ComponentPipeMapping {
 	private static Map<String, List<String>> componentFlowMap = new HashMap<String, List<String>>();
 	private static Set<String> allPipes = new HashSet<String>();
 	private static Map<String,String> batchMap = new HashMap<String,String>();
+	private static Map<String,String> componentNamesMap = new HashMap<String,String>();
+
 
 	/**
 	 * Method generateComponentToPipeMap generates map of component with
@@ -93,6 +95,8 @@ public class ComponentPipeMapping {
 				generateComponentAndPreviousMap(runtimeContext.getHydrographJob(), eachComponentId, outSockets,
 						inSockets);
 				batchMap.put(eachComponentId, eachBatchNumber);
+				componentNamesMap.put(eachComponentId, jaxbTraversal.getComponentNameFromComponentId(eachComponentId));
+
 			}
 		}
 	}
@@ -196,7 +200,6 @@ public class ComponentPipeMapping {
 	}
 
 	private static void addPipesInAllPipes(String pipename) {
-		// TODO Auto-generated method stub
 		allPipes.add(pipename);
 	}
 
@@ -255,6 +258,13 @@ public class ComponentPipeMapping {
 	 */
 	public static Map<String,String> getBatchMap(){
 		return batchMap;
+	}
+	
+	/**
+	 * @return Map of components with their component names 
+	 */
+	public static Map<String,String> getComponentNamesMap(){
+		return componentNamesMap;
 	}
 
 	/**

@@ -13,11 +13,12 @@
 package hydrograph.engine.cascading.assembly;
 
 import static data.InputData.inputFileFixedWidth;
-import hydrograph.engine.assembly.entity.InputFileFixedWidthEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+
 import hydrograph.engine.cascading.assembly.InputFileFixedWidthAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.InputFileFixedWidthEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
 

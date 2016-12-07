@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-filter-operation-input-field", namespace = "hydrograph/engine/jaxb/filter")
+@XmlType(name = "type-filter-operation-input-field")
 public class TypeFilterOperationInputField
     extends TypeInputField
 {

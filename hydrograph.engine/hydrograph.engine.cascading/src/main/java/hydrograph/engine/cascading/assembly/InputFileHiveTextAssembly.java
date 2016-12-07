@@ -30,14 +30,14 @@ import cascading.tap.hive.HiveTableDescriptor;
 import cascading.tap.hive.HiveTableDescriptor.Factory;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
 import hydrograph.engine.cascading.filters.PartitionFilter;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
+import hydrograph.engine.core.component.entity.InputFileHiveTextEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
 
 public class InputFileHiveTextAssembly extends InputFileHiveBase {

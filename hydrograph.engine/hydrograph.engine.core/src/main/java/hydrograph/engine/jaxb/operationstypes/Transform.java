@@ -45,7 +45,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "transform", namespace = "hydrograph/engine/jaxb/operationstypes")
+@XmlType(name = "transform")
 public class Transform
     extends TypeOperationsComponent
 {

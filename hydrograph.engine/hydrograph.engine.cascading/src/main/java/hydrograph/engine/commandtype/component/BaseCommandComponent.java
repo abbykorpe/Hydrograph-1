@@ -12,22 +12,57 @@
  *******************************************************************************/
 package hydrograph.engine.commandtype.component;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import riffle.process.DependencyIncoming;
+import riffle.process.DependencyOutgoing;
+import riffle.process.Process;
+import riffle.process.ProcessComplete;
+import riffle.process.ProcessStop;
 
+@Process
 public abstract class BaseCommandComponent {
 
 	int status = -1;
 
-	public BaseCommandComponent(AssemblyEntityBase baseComponentEntity) throws Throwable  {
+	public BaseCommandComponent(AssemblyEntityBase baseComponentEntity) throws Throwable {
 		castEntityFromBase(baseComponentEntity);
-		status = executeCommand();
 	}
 
 	public abstract void castEntityFromBase(AssemblyEntityBase baseComponentEntity);
 
-	public abstract int executeCommand() throws Throwable ;
+	public abstract int executeCommand();
+
+	@ProcessComplete
+	public int executeComponent() {
+		try {
+			status = executeCommand();
+		} catch (Throwable e) {
+
+			e.printStackTrace();
+		}
+		return status;
+	}
 	
-	public int getStatus(){
+	@ProcessStop
+	public void stop(){
+		
+	}
+	
+	@DependencyIncoming
+	public String incomingDependency() {
+		return resolveIncomingDependency();
+	}
+
+	@DependencyOutgoing
+	public String outgoingDependency() {
+		return resolveOutgoingDependency();
+	}
+
+	public abstract String resolveOutgoingDependency();
+
+	public abstract String resolveIncomingDependency();
+
+	public int getStatus() {
 		return status;
 	}
 }
