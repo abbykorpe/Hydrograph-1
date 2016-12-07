@@ -14,13 +14,18 @@
  
 package hydrograph.ui.parametergrid.utils;
 
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.slf4j.Logger;
+
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * 
@@ -66,9 +71,11 @@ public class ParameterFileManager {
 	 * Save parameters to file
 	 * 
 	 * @param parameterMap
+	 * @param object 
+	 * @param filename 
 	 * @throws IOException
 	 */
-	public void storeParameters(Map<String, String> parameterMap) throws IOException{
+	public void storeParameters(Map<String, String> parameterMap,IFile filename) throws IOException{
 		Properties prop = new Properties();
 		prop.setProperty(parameterMap);
 		
@@ -77,6 +84,41 @@ public class ParameterFileManager {
 		if(file.exists()){
 			prop.store(parameterFilePath);
 			logger.debug("Saved properties {} to file {}", prop.toString(),parameterFilePath);
+		}
+		else
+		{
+			InputStream inputStream=null;
+			OutputStream outputStream=null;
+			try{
+			if (filename != null) {
+				inputStream = new FileInputStream(filename.getRawLocation().toString());
+				outputStream = new FileOutputStream(file);
+				int read = 0;
+				byte[] bytes = new byte[1024];
+				while ((read = inputStream.read(bytes)) != -1) {
+					outputStream.write(bytes, 0, read);
+				}
+			}
+			}catch(IOException ioException)
+			{
+				logger.warn("Exception occured while writing contens in property file");
+			}finally {
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException ioException) {
+						logger.warn("Exception occured while closing stream");
+					}
+				}
+				if (outputStream != null) {
+					try {
+						outputStream.close();
+					} catch (IOException ioException) {
+						logger.warn("Exception occured while closing stream");
+					}
+
+				}
+			}
 		}
 	}
 }

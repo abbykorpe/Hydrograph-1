@@ -150,7 +150,7 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 				.getActivePage().getActiveEditor();
 		IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-		editor.saveJob(file);
+		editor.saveJob(file,false);
 		editor.saveParameters();
 		
 	}

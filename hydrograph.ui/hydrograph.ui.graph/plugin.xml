@@ -430,4 +430,40 @@
        </enablement>
     </renameParticipant>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.copyParticipants">
+    <copyParticipant
+          class="hydrograph.ui.graph.editor.JobCopyParticipant"
+          id="hydrograph.ui.graph.editor.JobCopyParticipant"
+          name="CopyJob">
+       <enablement></enablement>
+    </copyParticipant>
+ </extension>
+ <extension
+       point="org.eclipse.ui.navigator.viewer">
+    <viewerActionBinding
+          viewerId="hydrograph.ui.project.structure.navigator">
+       <includes>
+          <actionExtension
+                pattern="hydrograph.ui.graph.actions.EditActionExtension">
+          </actionExtension></includes>
+    </viewerActionBinding>
+ </extension>
+ <extension
+       point="org.eclipse.ui.navigator.navigatorContent">
+    <actionProvider
+          class="hydrograph.ui.graph.editor.CustomEditActionProvider"
+          id="hydrograph.ui.graph.actions.EditActionExtension"
+          overrides="org.eclipse.ui.navigator.resources.actions.EditActions"
+          priority="highest">
+          <enablement>
+            <not>
+               <systemTest
+                     property="MyApp"
+                     value="WONT-EVER-BE-SET">
+               </systemTest>
+            </not>
+         </enablement>
+    </actionProvider>
+ </extension>
 </plugin>

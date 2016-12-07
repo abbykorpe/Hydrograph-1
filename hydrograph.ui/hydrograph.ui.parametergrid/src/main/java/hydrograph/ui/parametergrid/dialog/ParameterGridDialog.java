@@ -755,7 +755,7 @@ public class ParameterGridDialog extends Dialog {
 		}
 		if(error == false){
 			try {
-				parameterFileManager.storeParameters(dataMap);
+				parameterFileManager.storeParameters(dataMap,null);
 			} catch (IOException e) {
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 

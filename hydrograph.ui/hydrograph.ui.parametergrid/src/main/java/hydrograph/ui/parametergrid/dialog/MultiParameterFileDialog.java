@@ -1018,7 +1018,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 			try {
-				parameterFileManager.storeParameters(parameterMap);
+				parameterFileManager.storeParameters(parameterMap,null);
 				ifNotified = false;
 			} catch (IOException e1) {
 				e1.printStackTrace();

@@ -121,6 +121,14 @@ public class Messages extends NLS {
 	public static String SUBJOB_REFRESH_INFO; 
 	public static String JOB_OPENED_FROM_OUTSIDE_WORKSPACE_WARNING;
 	public static String WARNING;
+	public static String MenuPluginName;
+	public static String PasteImagePath;
+	public static String CopyActionId;
+	public static String PasteActionId;
+	public static String PasteCommandId;
+	public static String PasteActionText;
+	public static String propertiesExtension;
+	public static String param;
 	
 	static {
 		// initialize resource bundle
@@ -130,3 +138,4 @@ public class Messages extends NLS {
 	private Messages() {
 	}
 }
+
