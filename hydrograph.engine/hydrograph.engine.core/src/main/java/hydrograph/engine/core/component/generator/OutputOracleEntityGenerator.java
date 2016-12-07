@@ -10,39 +10,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.assembly.generator;
+package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.tap.Tap;
-import hydrograph.engine.assembly.entity.OutputRDBMSEntity;
-import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
-import hydrograph.engine.cascading.assembly.generator.base.OutputAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.OutputMysqlAssembly;
-import hydrograph.engine.cascading.assembly.OutputOracleAssembly;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
+import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.Oracle;
 
-public class OutputOracleAssemblyGenerator extends OutputAssemblyGeneratorBase {
+public class OutputOracleEntityGenerator extends OutputComponentGeneratorBase {
 
 	private Oracle jaxbOutputOracle;
 	private OutputRDBMSEntity outputRDBMSEntity;
-	private OutputOracleAssembly outputOracleAssembly;
-	private static Logger LOG = LoggerFactory
-			.getLogger(OutputOracleAssemblyGenerator.class);
+	private static Logger LOG = LoggerFactory.getLogger(OutputOracleEntityGenerator.class);
 
-	public OutputOracleAssemblyGenerator(TypeBaseComponent baseComponent) {
+	public OutputOracleEntityGenerator(TypeBaseComponent baseComponent) {
 		super(baseComponent);
-	}
-
-	@Override
-	public Map<String, Tap> getSinkTap() {
-		return null;
 	}
 
 	@Override
@@ -55,61 +44,44 @@ public class OutputOracleAssemblyGenerator extends OutputAssemblyGeneratorBase {
 		outputRDBMSEntity = new OutputRDBMSEntity();
 	}
 
-	
-	
-	
-	
-	
-	
 	@Override
 	public void initializeEntity() {
 
-		LOG.trace("Initializing input file RDBMS component: "
-				+ jaxbOutputOracle.getId());
+		LOG.trace("Initializing input file RDBMS component: " + jaxbOutputOracle.getId());
 
 		outputRDBMSEntity.setComponentId(jaxbOutputOracle.getId());
 
-		outputRDBMSEntity
-				.setFieldsList(OutputEntityUtils.extractOutputFields(jaxbOutputOracle
-						.getInSocket().get(0).getSchema()
-						.getFieldOrRecordOrIncludeExternalSchema()));
-//		outputRDBMSEntity.setDatabaseName(jaxbOutputOracle.getDatabaseName().getValue());
+		outputRDBMSEntity.setFieldsList(OutputEntityUtils.extractOutputFields(
+				jaxbOutputOracle.getInSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
+		// outputRDBMSEntity.setDatabaseName(jaxbOutputOracle.getDatabaseName().getValue());
 		outputRDBMSEntity.setTableName(jaxbOutputOracle.getTableName().getValue());
 		outputRDBMSEntity.setDatabaseType("Oracle");
-		outputRDBMSEntity.setRuntimeProperties(OutputEntityUtils
-				.extractRuntimeProperties(jaxbOutputOracle.getRuntimeProperties()));
+		outputRDBMSEntity.setRuntimeProperties(
+				OutputEntityUtils.extractRuntimeProperties(jaxbOutputOracle.getRuntimeProperties()));
 		outputRDBMSEntity.setBatch(jaxbOutputOracle.getBatch());
 		outputRDBMSEntity.setUsername(jaxbOutputOracle.getUsername().getValue());
 		outputRDBMSEntity.setPassword(jaxbOutputOracle.getPassword().getValue());
 		outputRDBMSEntity.setJdbcurl(jaxbOutputOracle.getJdbcurl().getValue());
 		outputRDBMSEntity.setBatchSize(jaxbOutputOracle.getBatchSize().getValue().intValue());
-		if (jaxbOutputOracle.getLoadType().getNewTable() != null) 
+		if (jaxbOutputOracle.getLoadType().getNewTable() != null)
 			outputRDBMSEntity.setLoadType("newTable");
-		else if(jaxbOutputOracle.getLoadType().getTruncateLoad() != null) 
+		else if (jaxbOutputOracle.getLoadType().getTruncateLoad() != null)
 			outputRDBMSEntity.setLoadType("truncateLoad");
-		else if (jaxbOutputOracle.getLoadType().getInsert() != null) 
+		else if (jaxbOutputOracle.getLoadType().getInsert() != null)
 			outputRDBMSEntity.setLoadType("insert");
-		else 
+		else
 			outputRDBMSEntity.setLoadType("update");
-		
 
-		if("newTable".equals(outputRDBMSEntity.getLoadType()))
-		outputRDBMSEntity
-				.setPrimaryKeys(jaxbOutputOracle.getLoadType().getNewTable().getPrimaryKeys() == null ? null
-						: jaxbOutputOracle.getLoadType().getNewTable().getPrimaryKeys().getField());
-		if(outputRDBMSEntity.getLoadType().equals("update"))
-			outputRDBMSEntity
-			.setUpdateByKeys(jaxbOutputOracle.getLoadType().getUpdate().getUpdateByKeys().getField());
+		if ("newTable".equals(outputRDBMSEntity.getLoadType()))
+			outputRDBMSEntity.setPrimaryKeys(jaxbOutputOracle.getLoadType().getNewTable().getPrimaryKeys() == null
+					? null : jaxbOutputOracle.getLoadType().getNewTable().getPrimaryKeys().getField());
+		if (outputRDBMSEntity.getLoadType().equals("update"))
+			outputRDBMSEntity.setUpdateByKeys(jaxbOutputOracle.getLoadType().getUpdate().getUpdateByKeys().getField());
 	}
 
 	@Override
-	public void createAssembly(ComponentParameters componentParameters) {
-		outputOracleAssembly = new OutputOracleAssembly(
-				outputRDBMSEntity, componentParameters);
-	}
-
-	@Override
-	public BaseComponent getAssembly() {
-		return outputOracleAssembly;
+	public OutputRDBMSEntity getEntity() {
+		// TODO Auto-generated method stub
+		return outputRDBMSEntity;
 	}
 }

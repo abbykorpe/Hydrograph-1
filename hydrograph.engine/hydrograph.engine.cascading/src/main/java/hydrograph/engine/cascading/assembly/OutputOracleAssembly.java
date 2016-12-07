@@ -12,9 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputRDBMSEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
 import cascading.jdbc.db.OracleDBInputFormat;
 
 

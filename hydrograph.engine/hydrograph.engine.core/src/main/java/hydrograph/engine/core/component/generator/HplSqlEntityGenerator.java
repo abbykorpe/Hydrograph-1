@@ -44,10 +44,7 @@ public class HplSqlEntityGenerator extends CommandComponentGeneratorBase {
 			hplSqlEntity.setQuery(hplsql.getExecute().getQuery().getValue());
 	}
 
-/*	@Override
-	public CommandComponentGeneratorBase getCommandComponent() {
-		return this;
-	}*/
+
 
 	@Override
 	public AssemblyEntityBase getEntity() {
@@ -59,23 +56,5 @@ public class HplSqlEntityGenerator extends CommandComponentGeneratorBase {
 		this.hplsql = (Hplsql) baseComponent;
 	}
 
-	/*@Override
-	public void onComplete() throws Throwable {
-		new hydrograph.engine.commandtype.component.HplSqlComponent(
-				hplSqlEntity);
-	}
-
-	@Override
-	public void onStop() {
-	}
-
-	@Override
-	public String inCommingDependency() {
-		return hplSqlEntity.getComponentId() + "_in";
-	}
-
-	@Override
-	public String outGoingDependency() {
-		return hplSqlEntity.getComponentId() + "_out";
-	}*/
+	
 }

@@ -26,12 +26,12 @@ import cascading.jdbc.db.DBInputFormat;
 import cascading.pipe.Pipe;
 import cascading.tap.SinkMode;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.InputRDBMSEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.core.component.entity.InputRDBMSEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 
 public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 

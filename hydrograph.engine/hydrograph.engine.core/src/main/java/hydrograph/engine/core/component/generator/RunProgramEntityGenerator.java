@@ -40,10 +40,6 @@ public class RunProgramEntityGenerator extends CommandComponentGeneratorBase {
 		runProgramEntity.setCommand(runProgram.getCommand().getValue());
 	}
 
-	/*@Override
-	public CommandComponentGeneratorBase getCommandComponent() {
-		return this;
-	}*/
 
 	@Override
 	public AssemblyEntityBase getEntity() {
@@ -55,22 +51,5 @@ public class RunProgramEntityGenerator extends CommandComponentGeneratorBase {
 		this.runProgram = (RunProgram) baseComponent;
 	}
 
-	/*@Override
-	public void onComplete() throws Throwable {
-		new hydrograph.engine.commandtype.component.RunProgram(runProgramEntity);
-	}
-
-	@Override
-	public void onStop() {
-	}
-
-	@Override
-	public String inCommingDependency() {
-		return runProgramEntity.getComponentId() + "_in";
-	}
-
-	@Override
-	public String outGoingDependency() {
-		return runProgramEntity.getComponentId() + "_out";
-	}*/
+	
 }

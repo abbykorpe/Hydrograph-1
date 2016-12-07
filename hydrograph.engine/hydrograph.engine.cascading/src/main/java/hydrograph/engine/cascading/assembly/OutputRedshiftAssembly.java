@@ -20,8 +20,8 @@ import cascading.jdbc.RedshiftTableDesc;
 import cascading.jdbc.RedshiftTap;
 import cascading.jdbc.db.DBInputFormat;
 import cascading.tap.SinkMode;
-import hydrograph.engine.assembly.entity.OutputRDBMSEntity;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import java.sql.*;
 

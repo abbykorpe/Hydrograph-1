@@ -10,39 +10,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.assembly.generator;
+package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.tap.Tap;
-import hydrograph.engine.assembly.entity.OutputRDBMSEntity;
-import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
-import hydrograph.engine.cascading.assembly.generator.base.OutputAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.OutputMysqlAssembly;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
+import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.Mysql;
 
-public class OutputMysqlAssemblyGenerator extends OutputAssemblyGeneratorBase {
+public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 
 	private Mysql jaxbOutputMysql;
 	private OutputRDBMSEntity outputRDBMSEntity;
-	private OutputMysqlAssembly outputMysqlAssembly;
 	private static Logger LOG = LoggerFactory
-			.getLogger(OutputMysqlAssemblyGenerator.class);
+			.getLogger(OutputMysqlEntityGenerator.class);
 
-	public OutputMysqlAssemblyGenerator(TypeBaseComponent baseComponent) {
+	public OutputMysqlEntityGenerator(TypeBaseComponent baseComponent) {
 		super(baseComponent);
 	}
 
-	@Override
-	public Map<String, Tap> getSinkTap() {
-		return null;
-	}
+	
 
 	@Override
 	public void castComponentFromBase(TypeBaseComponent baseComponent) {
@@ -102,14 +95,12 @@ public class OutputMysqlAssemblyGenerator extends OutputAssemblyGeneratorBase {
 			.setUpdateByKeys(jaxbOutputMysql.getLoadType().getUpdate().getUpdateByKeys().getField());
 	}
 
-	@Override
-	public void createAssembly(ComponentParameters componentParameters) {
-		outputMysqlAssembly = new OutputMysqlAssembly(
-				outputRDBMSEntity, componentParameters);
-	}
+	
+
+
 
 	@Override
-	public BaseComponent getAssembly() {
-		return outputMysqlAssembly;
+	public OutputRDBMSEntity getEntity() {
+		return outputRDBMSEntity;
 	}
 }

@@ -10,41 +10,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.assembly.generator;
+package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.tap.Tap;
-import hydrograph.engine.assembly.entity.InputRDBMSEntity;
-import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
-import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.InputMysqlAssembly;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.InputRDBMSEntity;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
+import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.Mysql;
 
 
-public class InputMysqlAssemblyGenerator extends
-InputAssemblyGeneratorBase {
+public class InputMysqlEntityGenerator extends
+InputComponentGeneratorBase {
 
 	private Mysql inputMysqlJaxb;
 	private InputRDBMSEntity inputRDBMSEntity;
-	private InputMysqlAssembly inputMysqlAssembly;
 	private static Logger LOG = LoggerFactory
-			.getLogger(InputMysqlAssemblyGenerator.class);
+			.getLogger(InputMysqlEntityGenerator.class);
 
-	public InputMysqlAssemblyGenerator(TypeBaseComponent baseComponent) {
+	public InputMysqlEntityGenerator(TypeBaseComponent baseComponent) {
 		super(baseComponent);
 	}
 
-	@Override
-	public Map<String, Tap> getSourceTap() {
-		return null;
-	}
+	
 
 	@Override
 	public void castComponentFromBase(TypeBaseComponent baseComponent) {
@@ -89,15 +82,13 @@ InputAssemblyGeneratorBase {
 	}
 
 
-	
-	@Override
-	public BaseComponent getAssembly() {
-		return inputMysqlAssembly;
-	}
 
 	@Override
-	public void createAssembly(ComponentParameters componentParameters) {
-		inputMysqlAssembly = new InputMysqlAssembly(
-				inputRDBMSEntity, componentParameters);
+	public InputRDBMSEntity getEntity() {
+		return inputRDBMSEntity;
 	}
+
+
+	
+	
 }

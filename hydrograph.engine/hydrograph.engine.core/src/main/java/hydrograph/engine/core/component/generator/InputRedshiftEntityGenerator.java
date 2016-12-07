@@ -10,41 +10,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.assembly.generator;
+package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.tap.Tap;
-import hydrograph.engine.assembly.entity.InputRDBMSEntity;
-import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
-import hydrograph.engine.cascading.assembly.InputRedshiftAssembly;
-import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGeneratorBase;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.InputRDBMSEntity;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
+import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.Redshift;
 
 
-public class InputRedshiftAssemblyGenerator extends
-InputAssemblyGeneratorBase {
+public class InputRedshiftEntityGenerator extends
+InputComponentGeneratorBase {
 
 	private Redshift inputRedshiftJaxb;
 	private InputRDBMSEntity inputRDBMSEntity;
-	private InputRedshiftAssembly inputRedshiftAssembly;
 	private static Logger LOG = LoggerFactory
-			.getLogger(InputRedshiftAssemblyGenerator.class);
+			.getLogger(InputRedshiftEntityGenerator.class);
 
-	public InputRedshiftAssemblyGenerator(TypeBaseComponent baseComponent) {
+	public InputRedshiftEntityGenerator(TypeBaseComponent baseComponent) {
 		super(baseComponent);
 	}
 
-	@Override
-	public Map<String, Tap> getSourceTap() {
-		return null;
-	}
+	
 
 	@Override
 	public void castComponentFromBase(TypeBaseComponent baseComponent) {
@@ -88,15 +81,13 @@ InputAssemblyGeneratorBase {
 		//inputRDBMSEntity.setColumnDefs(inputRDBMS.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema().get== null?null:inputRDBMS.getPrimaryKeys().getField());
 	}
 
-	
-	@Override
-	public BaseComponent getAssembly() {
-		return inputRedshiftAssembly;
-	}
+
 
 	@Override
-	public void createAssembly(ComponentParameters componentParameters) {
-		inputRedshiftAssembly = new InputRedshiftAssembly(
-				inputRDBMSEntity, componentParameters);
+	public InputRDBMSEntity getEntity() {
+		return inputRDBMSEntity;
 	}
+
+	
+	
 }

@@ -27,12 +27,12 @@ import cascading.jdbc.db.DBOutputFormat;
 import cascading.pipe.Pipe;
 import cascading.tap.SinkMode;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.OutputRDBMSEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.assembly.utils.JavaToSQLTypeMapping;
+import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 
 

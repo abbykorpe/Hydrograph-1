@@ -13,8 +13,8 @@
 package hydrograph.engine.cascading.assembly;
 
 import cascading.jdbc.db.MySqlDBInputFormat;
-import hydrograph.engine.assembly.entity.OutputRDBMSEntity;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
 
 public class OutputMysqlAssembly extends OutputRDBMSAssembly {
 
