@@ -13,13 +13,20 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.config;
 
+/**
+ * 
+ * Schema configuration for generic schema
+ *  
+ * @author Bitwise
+ *
+ */
 public class SchemaConfig implements WidgetConfig {
-	private boolean doPropagateONOK;
+	private boolean doPropagateOnClickingOK;
 	
 	public void setDoPropagateONOK(boolean doPropagateONOK) {
-		this.doPropagateONOK = doPropagateONOK;
+		this.doPropagateOnClickingOK = doPropagateONOK;
 	}
 	public boolean doPropagateONOK() {
-		return doPropagateONOK;
+		return doPropagateOnClickingOK;
 	}
 }

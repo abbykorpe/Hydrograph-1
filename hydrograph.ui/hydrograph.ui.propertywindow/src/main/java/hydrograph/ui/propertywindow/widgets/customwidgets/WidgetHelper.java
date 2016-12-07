@@ -327,12 +327,19 @@ public class WidgetHelper {
 		return runtimeConfig;
 	}
 
+	/**
+	 * 
+	 *@return schema configuration for straight pull component
+	 */
 	public SchemaConfig getStraightPullSchemaConfig() {
 		SchemaConfig schemaConfig=new SchemaConfig();
 		schemaConfig.setDoPropagateONOK(false);
 		return schemaConfig;
 	}
 
+	/**
+	 * @return schema configuration for component other than straight pull
+	 */
 	public SchemaConfig getSchemaConfig() {
 		SchemaConfig schemaConfig=new SchemaConfig();
 		schemaConfig.setDoPropagateONOK(true);

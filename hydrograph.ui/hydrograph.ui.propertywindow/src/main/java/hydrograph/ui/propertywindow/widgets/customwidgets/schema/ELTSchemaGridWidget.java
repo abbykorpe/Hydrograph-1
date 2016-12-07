@@ -312,18 +312,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 		 ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
 
-		 if(getWidgetConfig()!=null && ((SchemaConfig)getWidgetConfig()).doPropagateONOK())
-			 propagateSchemaToNextComponenet(currentSchemaProperty, schemaGridRowListClone,
-				 schemaMap, componentsOutputSchema);
-		
-		 else if (!schemaGridRowList.isEmpty()) {
-			 for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
-				 if (gridRow != null) {
-					 schemaGridRowListClone.add(gridRow.copy());
-					
-				 }
-			 }
-		 }
+		if (getWidgetConfig() != null && ((SchemaConfig) getWidgetConfig()).doPropagateONOK()) {
+			propagateSchemaToNextComponenet(currentSchemaProperty, schemaGridRowListClone, schemaMap,
+					componentsOutputSchema);
+		} else if (!schemaGridRowList.isEmpty()) {
+			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
+				if (gridRow != null) {
+					schemaGridRowListClone.add(gridRow.copy());
+				}
+			}
+		}
 		 //propagateInternalSchema();
 
 		 Schema schema = new Schema();
