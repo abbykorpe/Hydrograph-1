@@ -32,7 +32,7 @@
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 				
-		<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
+		<tns:property dataType="string" name="schema" renderer="STRAIGHT_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED">
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>

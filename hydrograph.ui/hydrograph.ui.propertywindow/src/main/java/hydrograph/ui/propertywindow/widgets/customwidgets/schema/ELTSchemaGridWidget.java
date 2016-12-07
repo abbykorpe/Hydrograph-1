@@ -126,6 +126,7 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.SchemaConfig;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -311,10 +312,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 		 ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
 
-
-		 propagateSchemaToNextComponenet(currentSchemaProperty, schemaGridRowListClone,
+		 if(getWidgetConfig()!=null && ((SchemaConfig)getWidgetConfig()).doPropagateONOK())
+			 propagateSchemaToNextComponenet(currentSchemaProperty, schemaGridRowListClone,
 				 schemaMap, componentsOutputSchema);
-
+		
+		 else if (!schemaGridRowList.isEmpty()) {
+			 for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
+				 if (gridRow != null) {
+					 schemaGridRowListClone.add(gridRow.copy());
+					
+				 }
+			 }
+		 }
 		 //propagateInternalSchema();
 
 		 Schema schema = new Schema();
