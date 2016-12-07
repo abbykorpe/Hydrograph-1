@@ -1,0 +1,3 @@
+3211001,Smith1,credit,344,6
+3211002,rahul and Dona,credit,56,2
+3211002,Figd,debit,13,2

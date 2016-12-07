@@ -131,26 +131,26 @@ public class CustomHandlerContext<T> {
 
 		if (operationInputFields != null) {
 			for (Fields fields : operationInputFields) {
-				inputRows.add(new ReusableRow(ReusableRowHelper.getListFromFields(fields)));
+				inputRows.add(new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(fields)));
 			}
 		}
 
 		if (operationOutputFields != null) {
 			for (Fields fields : operationOutputFields) {
-				outputRows.add(new ReusableRow(ReusableRowHelper.getListFromFields(fields)));
+				outputRows.add(new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(fields)));
 			}
 		}
 
 		if (passThrough == null) {
 			passthroughRow = null;
 		} else {
-			passthroughRow = new ReusableRow(ReusableRowHelper.getListFromFields(passThrough));
+			passthroughRow = new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(passThrough));
 		}
 
 		if (mapSourceFields == null) {
 			mapRow = null;
 		} else {
-			mapRow = new ReusableRow(ReusableRowHelper.getListFromFields(mapSourceFields));
+			mapRow = new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(mapSourceFields));
 		}
 	}
 
@@ -163,7 +163,7 @@ public class CustomHandlerContext<T> {
 		if (operationFields == null) {
 			operationRow = null;
 		} else {
-			operationRow = new ReusableRow(ReusableRowHelper.getListFromFields(operationFields));
+			operationRow = new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(operationFields));
 		}
 	}
 

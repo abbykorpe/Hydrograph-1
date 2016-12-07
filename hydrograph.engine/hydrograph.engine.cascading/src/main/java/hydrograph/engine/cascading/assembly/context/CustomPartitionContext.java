@@ -13,6 +13,7 @@
 package hydrograph.engine.cascading.assembly.context;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 import cascading.tuple.Fields;
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
@@ -23,14 +24,14 @@ public class CustomPartitionContext {
 
 	private ReusableRow currentRow;
 	private ReusableRow currentKeys;
-	private ArrayList<String> keyFields;
+	private LinkedHashSet<String> keyFields;
 	private int numOfPartitions;
 	private CustomPartitionExpression partitionLogic;
 
 	public CustomPartitionContext(
 			CustomPartitionExpression customPartitionExpression) {
 		this.setPartitionLogic(customPartitionExpression);
-		keyFields = new ArrayList<String>();
+		keyFields = new LinkedHashSet<String>();
 	}
 
 	public ReusableRow getCurrentRow() {
@@ -49,7 +50,7 @@ public class CustomPartitionContext {
 		this.currentKeys = currentKeys;
 	}
 
-	public ArrayList<String> getKeyFields() {
+	public LinkedHashSet<String> getKeyFields() {
 		return keyFields;
 	}
 
