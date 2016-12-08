@@ -27,6 +27,23 @@ jar {
     version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
 }
 
+test {
+    exclude '**/ExecutionTrackingCloneXmlTest*'
+    exclude '**/ExecutionTrackingCumulateXmlTest*'
+    exclude '**/ExecutionTrackingDiscardXmlTest*'
+    exclude '**/ExecutionTrackingFilterXmltest*'
+    exclude '**/ExecutionTrackingGenerateRecordXmlTest*'
+    exclude '**/ExecutionTrackingJoinXmlTest*'
+    exclude '**/ExecutionTrackingLimitXmltest*'
+    exclude '**/ExecutionTrackingNormalizeXmlTest*'
+    exclude '**/ExecutionTrackingPartitionByExpressionXmlTest*'
+    exclude '**/ExecutionTrackingRemoveDupXmlTest*'
+    exclude '**/ExecutionTrackingTransformXmltest*'
+    exclude '**/ExecutionTrackingUnionAllXmlTest*'
+    exclude '**/ExecutionTrackingUniqueSequenceXmlTest*'
+}
+
+
 uploadArchives {
     repositories {
         mavenLocal()
