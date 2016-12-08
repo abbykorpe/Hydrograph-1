@@ -76,8 +76,10 @@ public class NormalizeAssemblyTest {
 															// to an input of
 															// normalize
 															// component
-
+		ArrayList<Fields>fieldList = new ArrayList<Fields>();
+		fieldList.add(fields);
 		ComponentParameters parameters = new ComponentParameters();
+		parameters.setInputFieldsList(fieldList);
 		parameters.addInputPipe(pipe1);
 
 		NormalizeEntity normalizeEnitity = new NormalizeEntity();
@@ -167,8 +169,10 @@ public class NormalizeAssemblyTest {
 															// to an input of
 															// normalize
 															// component
-
+		ArrayList<Fields>fieldList = new ArrayList<Fields>();
+		fieldList.add(fields);
 		ComponentParameters parameters = new ComponentParameters();
+		parameters.setInputFieldsList(fieldList);
 		parameters.addInputPipe(pipe1);
 
 		NormalizeEntity normalizeEnitity = new NormalizeEntity();
