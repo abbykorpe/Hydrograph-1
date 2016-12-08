@@ -52,16 +52,28 @@ object ComponentParameterBuilder {
       this
     }
 
-    def setSchemaFields(): Builder = {
+    def setOutputSchemaFields(): Builder = {
       val linkGenerator = new LinkGenerator(runtimeContext.hydrographJob.getJAXBObject)
 
-      val inSocketList: util.List[_ <: TypeBaseInSocket] = linkGenerator.getLink().get(componentID).getInSocket
       val outSocketList: util.List[_ <: TypeBaseOutSocket] = linkGenerator.getLink().get(componentID).getOutSocket
 
       for (outSocket: TypeBaseOutSocket <- outSocketList.asScala) {
         val schemaFieldList = runtimeContext.schemaFieldHandler.getSchemaFieldMap.get(componentID + "_" + outSocket.getId)
         baseComponent.addSchemaFields(schemaFieldList.toArray[SchemaField](new Array[SchemaField](schemaFieldList.size())))
       }
+      this
+    }
+
+    def setInputSchemaFields(): Builder = {
+      val linkGenerator = new LinkGenerator(runtimeContext.hydrographJob.getJAXBObject)
+
+      val inSocketList: util.List[_ <: TypeBaseInSocket] = linkGenerator.getLink().get(componentID).getInSocket
+
+      for (inSocket: TypeBaseInSocket <- inSocketList.asScala) {
+        val schemaFieldList = runtimeContext.schemaFieldHandler.getSchemaFieldMap.get(inSocket.getFromComponentId + "_" + inSocket.getFromSocketId)
+        baseComponent.addInputSchema(schemaFieldList)
+      }
+
       this
     }
 

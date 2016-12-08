@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.base;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,7 +30,7 @@ import java.util.LinkedHashSet;
  * @author bitwise
  *
  */
-public abstract class ReusableRow implements Comparable<ReusableRow> {
+public abstract class ReusableRow implements Comparable<ReusableRow>,Serializable {
 
 	private LinkedHashSet<String> fields;
 

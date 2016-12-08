@@ -39,7 +39,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
       if (adapterBase.isInstanceOf[InputAdatperBase]) {
         baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap,new BaseComponentParams())
-          .setInputDataFrame().setSparkSession(runtimeContext.sparkSession).build()
+          .setSparkSession(runtimeContext.sparkSession).build()
 
         adapterBase.createComponent(baseComponentParams)
         val inputDataFrame= adapterBase.asInstanceOf[InputAdatperBase].getComponent().createComponent()
@@ -48,7 +48,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
       else if (adapterBase.isInstanceOf[OperationAdatperBase]) {
         baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap,new BaseComponentParams())
-          .setInputDataFrame().setInputDataFrameWithCompID().setSchemaFields().build()
+          .setInputDataFrame().setInputDataFrameWithCompID().setOutputSchemaFields().setInputSchemaFields().build()
 
         adapterBase.createComponent(baseComponentParams)
         val opDataFrame= adapterBase.asInstanceOf[OperationAdatperBase].getComponent().createComponent()
@@ -56,7 +56,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
       }
       else if (adapterBase.isInstanceOf[StraightPullAdatperBase]) {
         baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap,new BaseComponentParams())
-          .setInputDataFrame().setSchemaFields().build()
+          .setInputDataFrame().setOutputSchemaFields().setInputSchemaFields().build()
 
         adapterBase.createComponent(baseComponentParams)
         val opDataFrame= adapterBase.asInstanceOf[StraightPullAdatperBase].getComponent().createComponent()

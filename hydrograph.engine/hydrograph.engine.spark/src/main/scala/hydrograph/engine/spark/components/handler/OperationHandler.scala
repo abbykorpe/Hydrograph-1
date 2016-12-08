@@ -22,7 +22,7 @@ trait AggregateOperation{
   def initializeAggregate( operationList:java.util.List[Operation], fieldManupulating: FieldManupulating):
   List[Operatioin[AggregateTransformBase]] = {
 
-    def aggregate[T]( operationList:List[Operation], fieldManupulating: FieldManupulating):
+    def aggregate( operationList:List[Operation], fieldManupulating: FieldManupulating):
     List[Operatioin[AggregateTransformBase]] =operationList match {
       case List() => List()
       case x :: xs =>
