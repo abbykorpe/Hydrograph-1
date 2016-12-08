@@ -34,19 +34,21 @@ public class JobCopyParticipant extends CopyParticipant {
 	@Override
 	protected boolean initialize(Object element) {
 		this.modifiedResource = (IFile) element;
-		InputStream contents = null;
-	    try {
-	    	contents = modifiedResource.getContents();
-	    	Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(contents);
-			copiedFilesMap.put(modifiedResource,container);
-		} catch (CoreException coreException) {
-			logger.error("Error while getting contents from ifile", coreException);
-		}
-	    finally {
-	    	try {
-				contents.close();
-			} catch (IOException ioException) {
-				logger.warn("Exception occured while closing stream");
+		if (modifiedResource.getFileExtension().equalsIgnoreCase("job")) {
+			InputStream contents = null;
+			try {
+
+				contents = modifiedResource.getContents();
+				Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(contents);
+				copiedFilesMap.put(modifiedResource, container);
+			} catch (CoreException coreException) {
+				logger.error("Error while getting contents from ifile", coreException);
+			} finally {
+				try {
+					contents.close();
+				} catch (IOException ioException) {
+					logger.warn("Exception occured while closing stream");
+				}
 			}
 		}
 		if (modifiedResource == null && StringUtils.isEmpty(modifiedResource.toString())) {
@@ -70,6 +72,7 @@ public class JobCopyParticipant extends CopyParticipant {
 	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		
 		this.copyToPath=getArguments().getDestination().toString();
+		if (modifiedResource.getFileExtension().equalsIgnoreCase("job")) {
 		InputStream contents = modifiedResource.getContents();
 		Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(contents);
 		String uniqueJobId;
@@ -95,6 +98,7 @@ public class JobCopyParticipant extends CopyParticipant {
 			} catch (IOException e) {
 				logger.warn("Exception occured while closing stream");
 			}
+		}
 		}
 		return null;
 	}
