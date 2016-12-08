@@ -53,7 +53,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="sid" value="" renderer="DATABASE_NAME_WIDGET"
+		<tns:property dataType="string" name="sid" value="" renderer="SID_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Hive Database Name provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>

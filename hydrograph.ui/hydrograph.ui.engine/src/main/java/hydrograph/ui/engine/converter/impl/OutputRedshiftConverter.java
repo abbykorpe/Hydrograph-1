@@ -26,11 +26,11 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.ooracle.TypeLoadChoice;
-import hydrograph.engine.jaxb.ooracle.TypeOutputOracleInSocket;
-import hydrograph.engine.jaxb.ooracle.TypePriamryKeys;
-import hydrograph.engine.jaxb.ooracle.TypeUpdateKeys;
-import hydrograph.engine.jaxb.outputtypes.Oracle;
+import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
+import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
+import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
+import hydrograph.engine.jaxb.oredshift.TypePriamryKeys;
+import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -39,63 +39,58 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
-public class OutputOracleConverter extends OutputConverter {
+public class OutputRedshiftConverter extends OutputConverter {
 	
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputOracleConverter.class);
-	private Oracle oracleOutput;
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputRedshiftConverter.class);
+	private Redshift redshiftOutput;
 
-
-	public OutputOracleConverter(Component component) {
+	public OutputRedshiftConverter(Component component) {
 		super(component);
 		this.component = component;
 		this.properties = component.getProperties();
-		this.baseComponent = new Oracle();
+		this.baseComponent = new Redshift();
 	}
 	
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		oracleOutput = (Oracle) baseComponent;
-		oracleOutput.setRuntimeProperties(getRuntimeProperties());
+		redshiftOutput = (Redshift) baseComponent;
+		redshiftOutput.setRuntimeProperties(getRuntimeProperties());
 		
-		ElementValueStringType sid = new ElementValueStringType();
-		sid.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SID.value())));
-		oracleOutput.setSid(sid);
+		ElementValueStringType databaseName = new ElementValueStringType();
+		databaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
+		redshiftOutput.setDatabaseName(databaseName);
 		
 		ElementValueStringType tableName = new ElementValueStringType();
-		tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value())));
-		oracleOutput.setTableName(tableName);
+		tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_TABLE_NAME.value())));
+		redshiftOutput.setTableName(tableName);
 		
 		ElementValueStringType hostName = new ElementValueStringType();
-		hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value())));
-		oracleOutput.setHostname(hostName);
+		hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value())));
+		redshiftOutput.setHostname(hostName);
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = getBigInteger(PropertyNameConstants.ORACLE_PORT_NO.value());
-		portNo.setValue(portValue);
-		oracleOutput.setPort(portNo);
+		BigInteger sum = BigInteger.valueOf(5439);
+		portNo.setValue(sum);
+		redshiftOutput.setPort(portNo);
 		
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
-		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_JDBC_DRIVER.value())));
-		oracleOutput.setDrivertype(jdbcDriver);
-		
-		ElementValueStringType oracleSchema = new ElementValueStringType();
-		oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
-		oracleOutput.setSchemaname(oracleSchema);
+		jdbcDriver.setValue("JDBC-4.2"/*String.valueOf(properties.get(PropertyNameConstants.ORACLE_JDBC_DRIVER.value()))*/);
+		redshiftOutput.setDrivertype(jdbcDriver);
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		userName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_USER_NAME.value())));
-		oracleOutput.setUsername(userName);
+		userName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value())));
+		redshiftOutput.setUsername(userName);
 		
 		ElementValueStringType password = new ElementValueStringType();
-		password.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PASSWORD.value())));
-		oracleOutput.setPassword(password);
+		password.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value())));
+		redshiftOutput.setPassword(password);
 		
 		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		BigInteger chunkValue = getBigInteger(PropertyNameConstants.ORACLE_CHUNK_SIZE.value());
+		BigInteger chunkValue = BigInteger.valueOf(1000);
 		chunkSize.setValue(chunkValue);
-		oracleOutput.setChunkSize(chunkSize);
+		redshiftOutput.setChunkSize(chunkSize);
 		
 		addTypeLoadChoice();
 		
@@ -106,17 +101,18 @@ public class OutputOracleConverter extends OutputConverter {
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
 		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
 			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
+			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
 			loadValue.setNewTable(getPrimaryKeys((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
 			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
 			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+			
 		}
 
-		oracleOutput.setLoadType(loadValue);
+		redshiftOutput.setLoadType(loadValue);
 	}
-
 	private TypePriamryKeys getPrimaryKeys(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
 		String[] primaryKeyColumsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
@@ -133,7 +129,7 @@ public class OutputOracleConverter extends OutputConverter {
 		return primaryKeys;
 	}
 
-	private TypeUpdateKeys getUpdateKeys(String fields) {
+	private hydrograph.engine.jaxb.oredshift.TypeUpdateKeys getUpdateKeys(String fields) {
 		TypeUpdateKeys updateKeys = null;
 		String[] columnFields = StringUtils.split(fields, Constants.LOAD_TYPE_UPDATE_VALUE_SEPERATOR);
 		if (columnFields != null && columnFields.length > 0) {
@@ -149,13 +145,13 @@ public class OutputOracleConverter extends OutputConverter {
 		
 		return updateKeys;
 	}
-
+	
 	@Override
 	protected List<TypeOutputInSocket> getOutInSocket() {
 		logger.debug("Generating TypeOutputInSocket data");
 		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
-			TypeOutputOracleInSocket outInSocket = new TypeOutputOracleInSocket();
+			TypeOutputRedshiftInSocket outInSocket = new TypeOutputRedshiftInSocket();
 			outInSocket.setId(link.getTargetTerminal());
 			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
 			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());

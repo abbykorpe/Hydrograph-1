@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
@@ -41,7 +42,7 @@ public class VerifyCharacterLimitListener implements IELTListener{
 				Text text = (Text)widgetList[0];
 				text.setTextLimit(characterLimit);
 				String string=event.text;
-				Matcher matchs=Pattern.compile("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*").matcher(string);
+				Matcher matchs=Pattern.compile(Constants.REGEX).matcher(string);
 				if((!matchs.matches())){
 					txtDecorator.setDescriptionText(Messages.FIELDCHARACTER);
 					txtDecorator.show();

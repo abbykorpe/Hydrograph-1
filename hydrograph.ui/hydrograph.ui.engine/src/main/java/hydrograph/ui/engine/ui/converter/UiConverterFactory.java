@@ -21,6 +21,7 @@ import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
 import hydrograph.engine.jaxb.inputtypes.Oracle;
 import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
+import hydrograph.engine.jaxb.inputtypes.Redshift;
 import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 import hydrograph.engine.jaxb.inputtypes.TextFileFixedWidth;
 import hydrograph.engine.jaxb.operationstypes.Aggregate;
@@ -52,6 +53,7 @@ import hydrograph.ui.engine.ui.converter.impl.InputHiveTextFileUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputMixedSchemeUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.JoinComponentUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LimitUiConverter;
@@ -66,6 +68,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputHiveTextFileUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputMixedSchemeUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
@@ -180,6 +183,12 @@ public class UiConverterFactory {
 		if((Normalize.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new NormalizeUiConverter(typeBaseComponent, container);
 		}
+		if((Redshift.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new InputRedshiftUiConverter(typeBaseComponent,container);
+ 		}
+		if((hydrograph.engine.jaxb.outputtypes.Redshift.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new OutputRedshiftUiConverter(typeBaseComponent,container);
+ 		}
 
 		if((hydrograph.engine.jaxb.inputtypes.ParquetFile.class).isAssignableFrom(typeBaseComponent.getClass())) {
 			return new InputParquetUiConverter(typeBaseComponent, container);

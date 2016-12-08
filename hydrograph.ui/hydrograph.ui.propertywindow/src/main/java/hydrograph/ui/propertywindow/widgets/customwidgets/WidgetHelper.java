@@ -186,6 +186,17 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
+	/**
+	 * Configuration to customize text box as SID Name property 
+	 */
+	public WidgetConfig getSIDNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_SID_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
 	
 	/**
 	 * Configuration to customize text box as External Table Path property 

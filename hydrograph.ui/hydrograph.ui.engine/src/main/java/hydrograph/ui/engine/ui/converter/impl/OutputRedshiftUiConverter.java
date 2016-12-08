@@ -28,9 +28,9 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.ooracle.TypePriamryKeys;
-import hydrograph.engine.jaxb.ooracle.TypeUpdateKeys;
-import hydrograph.engine.jaxb.outputtypes.Oracle;
+import hydrograph.engine.jaxb.oredshift.TypePriamryKeys;
+import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
+import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -39,88 +39,77 @@ import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.OutputUiConverter;
 import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.components.OOracle;
+import hydrograph.ui.graph.model.components.ORedshift;
 import hydrograph.ui.logging.factory.LogFactory;
 
-public class OutputOracleUiConverter extends OutputUiConverter {
+public class OutputRedshiftUiConverter extends OutputUiConverter {
 
-	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputOracleUiConverter.class);
-	private Oracle outputOracle;
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputRedshiftUiConverter.class);
+	Redshift redshift;
 	private LinkedHashMap<String, String> loadSelectedDetails;
-	
-	public OutputOracleUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
+
+	public OutputRedshiftUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
 		this.typeBaseComponent = typeBaseComponent;
-		this.uiComponent = new OOracle();
+		this.uiComponent = new ORedshift();
 		this.propertyMap = new LinkedHashMap<>();
+		redshift = (Redshift) typeBaseComponent;
 	}
-	
+
 	@Override
 	public void prepareUIXML() {
 		super.prepareUIXML();
-		LOGGER.debug("Fetching Input-HiveParquet-Properties for {}", componentName);
-		outputOracle = (Oracle) typeBaseComponent;
 		loadSelectedDetails = new LinkedHashMap<String, String>();
 		
-		if(outputOracle.getDrivertype() != null && StringUtils.isNotBlank(outputOracle.getDrivertype().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_JDBC_DRIVER.value(), (String)(outputOracle.getDrivertype().getValue()));
+		LOGGER.debug("Fetching OutPut-Redshift-Component for {}", componentName);
+		redshift = (Redshift) typeBaseComponent;
+		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())
+				&& redshift.getDatabaseName().getValue() != null) {
+			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
+		}
+		if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())
+				&& redshift.getDrivertype().getValue() != null) {
+			propertyMap.put(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value(), redshift.getDrivertype().getValue());
+		}
+		if (StringUtils.isNotBlank(redshift.getHostname().getValue()) && redshift.getHostname().getValue() != null) {
+			propertyMap.put(PropertyNameConstants.REDSHIFT_HOST_NAME.value(), redshift.getHostname().getValue());
+		}
+		if (redshift.getPort().getValue()!=null && StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
+			propertyMap.put(PropertyNameConstants.REDSHIFT_PORT_NAME.value(),redshift.getPort().getValue().toString());
+		}
+		if (StringUtils.isNotBlank(redshift.getUsername().getValue()) && redshift.getUsername().getValue() != null) {
+			propertyMap.put(PropertyNameConstants.REDSHIFT_USER_NAME.value(), redshift.getUsername().getValue());
+		}
+		if (StringUtils.isNotBlank(redshift.getPassword().getValue()) && redshift.getPassword().getValue() != null) {
+			propertyMap.put(PropertyNameConstants.REDSHIFT_PASSWORD.value(), redshift.getPassword().getValue());
+		}
+		if (StringUtils.isNotBlank(redshift.getTableName().getValue()) && redshift.getTableName().getValue() != null) {
+			propertyMap.put(PropertyNameConstants.REDSHIFT_TABLE_NAME.value(), redshift.getTableName().getValue());
+		}
+		if (redshift.getChunkSize().getValue()!=null && StringUtils.isNotBlank(redshift.getChunkSize().getValue().toString()) ) {
+			propertyMap.put(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value(),redshift.getChunkSize().getValue().toString());
 		}
 		
-		if(outputOracle.getHostname() != null && StringUtils.isNotBlank(outputOracle.getHostname().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_HOST_NAME.value(), (String)(outputOracle.getHostname().getValue()));
-		}
 		
-		if(outputOracle.getPort() != null){
-			propertyMap.put(PropertyNameConstants.ORACLE_PORT_NO.value(), outputOracle.getPort().getValue().toString());
-		}
-		
-		if(outputOracle.getSid() != null && StringUtils.isNotBlank(outputOracle.getSid().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_SID.value(), (String)(outputOracle.getSid().getValue()));
-		}
-		
-		if(outputOracle.getSchemaname() != null && StringUtils.isNotBlank(outputOracle.getSchemaname().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(outputOracle.getSchemaname().getValue()));
-		}
-		
-		if(outputOracle.getUsername() != null && StringUtils.isNotBlank(outputOracle.getUsername().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_USER_NAME.value(), (String)(outputOracle.getUsername().getValue()));
-		}
-		
-		if(outputOracle.getPassword() != null && StringUtils.isNotBlank(outputOracle.getPassword().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_PASSWORD.value(), (String)(outputOracle.getPassword().getValue()));
-		}
-		
-		if(outputOracle.getTableName() != null && StringUtils.isNotBlank(outputOracle.getTableName().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), (String)(outputOracle.getTableName().getValue()));
-		}
-		
-		if(outputOracle.getChunkSize() != null){
-			propertyMap.put(PropertyNameConstants.ORACLE_CHUNK_SIZE.value(), (String)(outputOracle.getChunkSize().getValue().toString()));
-		}
-		
-		if(outputOracle.getLoadType() !=null){
-			if(outputOracle.getLoadType().getInsert() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_INSERT_KEY, outputOracle.getLoadType().getInsert().toString());
-			}else if(outputOracle.getLoadType().getTruncateLoad() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_REPLACE_KEY,outputOracle.getLoadType().getTruncateLoad().toString());
-			} else if(outputOracle.getLoadType().getUpdate() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_UPDATE_KEY,getLoadTypeUpdateKeyUIValue(outputOracle.getLoadType().getUpdate()));
-			}else if(outputOracle.getLoadType().getNewTable() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue(outputOracle.getLoadType().getNewTable()));
+		if(redshift.getLoadType() !=null){
+			if(redshift.getLoadType().getInsert() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_INSERT_KEY, redshift.getLoadType().getInsert().toString());
+			}else if(redshift.getLoadType().getTruncateLoad() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_REPLACE_KEY,redshift.getLoadType().getTruncateLoad().toString());
+			} else if(redshift.getLoadType().getUpdate() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_UPDATE_KEY,getLoadTypeUpdateKeyUIValue(redshift.getLoadType().getUpdate()));
+			}else if(redshift.getLoadType().getNewTable() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue((TypePriamryKeys) redshift.getLoadType().getNewTable()));
 			}
 				
 		}
 		propertyMap.put(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value(), loadSelectedDetails);
 		
-		uiComponent.setType(UIComponentsConstants.ORACLE.value());
+		uiComponent.setType(UIComponentsConstants.REDSHIFT.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
-		
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
-		container.getComponentNames().add(outputOracle.getId());
+		container.getComponentNames().add(redshift.getId());
 		uiComponent.setProperties(propertyMap);
-		
-		
-		
 	}
 	
 	
@@ -148,20 +137,24 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		
 		return StringUtils.removeEnd(buffer.toString(), ",");
 	}
-
+	
 	@Override
 	protected Object getSchema(TypeOutputInSocket inSocket) {
-		LOGGER.debug("Generating UI-Schema data for OutPut-Oracle-Component - {}", componentName);
+		LOGGER.debug("Generating UI-Schema data for OutPut-Redshift-Component - {}", componentName);
 		Schema schema = null;
 		List<GridRow> gridRow = new ArrayList<>();
 		ConverterUiHelper converterUiHelper = new ConverterUiHelper(uiComponent);
-		if (inSocket.getSchema() != null && inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
-			schema=new Schema();
+		if (inSocket.getSchema() != null
+				&& inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema().size() != 0) {
+			schema = new Schema();
 			for (Object record : inSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
 					if (((TypeExternalSchema) record).getUri() != null)
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+					gridRow.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),
+							Constants.GENERIC_GRID_ROW));
+					schema.setGridRow(gridRow);
 				} else {
 					gridRow.add(converterUiHelper.getSchema(record));
 					schema.setGridRow(gridRow);
@@ -174,9 +167,9 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
-		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
+		LOGGER.debug("Fetching runtime properties for -", componentName);
 		TreeMap<String, String> runtimeMap = null;
-		TypeProperties typeProperties = ((Oracle) typeBaseComponent).getRuntimeProperties();
+		TypeProperties typeProperties = ((Redshift) typeBaseComponent).getRuntimeProperties();
 		if (typeProperties != null) {
 			runtimeMap = new TreeMap<>();
 			for (Property runtimeProperty : typeProperties.getProperty()) {
@@ -184,6 +177,6 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 			}
 		}
 		return runtimeMap;
-	}
 
+	}
 }

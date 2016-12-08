@@ -225,6 +225,7 @@ public class Messages extends NLS {
 	
 	public static String LABEL_DELIMITER;
 	public static String LABEL_QUOTE;
+	public static String LABEL_SID_NAME;
 	public static String LABEL_DATABASE_NAME;
 	public static String LABEL_HOST_NAME;
 	public static String LABEL_ORACLE_SCHEMA;

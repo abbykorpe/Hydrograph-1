@@ -43,10 +43,21 @@ public enum PropertyNameConstants {
 		ORACLE_SCHEMA("oracleSchema"),
 		ORACLE_SELECT_OPTION("selectOption"),
 		EXTERNAL_TABLE_PATH("externalTablePath"),
-		ORACLE_LOAD_TYPE("load_type_configuration"),
+		LOAD_TYPE_CONFIGURATION("load_type_configuration"),
 		PARTITION_KEYS("partitionKeys"),
 		QUOTE("quote"),
+		REDSHIFT_JDBC_DRIVER("jdbcDriver"),
+		REDSHIFT_HOST_NAME("hostName"),
+		REDSHIFT_PORT_NAME("port"),
+		REDSHIFT_PASSWORD("password"),
+		SELECT_OPTION("selectOption"),
+		REDSHIFT_USER_NAME("userName"),
+		REDSHIFT_TABLE_NAME("tableName"), 
+		REDSHIFT_SQL_QUERY("selectQuery"),
+		REDSHIFT_COUNT_QUERY("countQuery"), 
+		REDSHIFT_CHUNK_SIZE("chunkSize"),
 		OVER_WRITE("overWrite");
+	
 		private final String value;
 
 	PropertyNameConstants(String value) {

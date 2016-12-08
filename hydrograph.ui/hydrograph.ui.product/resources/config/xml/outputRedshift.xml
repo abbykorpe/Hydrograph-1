@@ -11,18 +11,17 @@
  limitations under the License. -->
  
  
-
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
-	<tns:component paletteIconPath="/icons/oracle_palette.png" canvasIconPath="/icons/oracle_canvas.png"
-		name="IOracle" nameInPalette="Oracle" defaultNamePrefix="IOracle" 
-		description="Used to read and fetch data from Oracle tables"
+	<tns:component paletteIconPath="/icons/redshift_palette.png" canvasIconPath="/icons/redshift_canvas.png"
+		name="ORedshift" nameInPalette="Redshift" defaultNamePrefix="ORedshift" 
+		description="Used to write data from Redshift tables"
 		helpFilePath=""
-		acronym="IOrac">
-		<tns:category>INPUT</tns:category>
+		acronym="OReds">
+		<tns:category>OUTPUT</tns:category>
 		<tns:port>
-			<tns:portSpecification numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
-				<tns:port sequenceOfPort="0" typeOfPort="out" labelOfPort="out0" portTerminal="out0" />
+			<tns:portSpecification numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+				<tns:port sequenceOfPort="0" typeOfPort="in" labelOfPort="in0" portTerminal="in0" />
 			</tns:portSpecification>
 		</tns:port>
 		
@@ -30,13 +29,19 @@
 			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 			
-		<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
+			<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="REQUIRED">
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="jdbcDriver" value="Oracle Thin" renderer="JDBC_DRIVER_WIDGET"
+		<tns:property dataType="string" name="databaseName" value="" renderer="DATABASE_NAME_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays the Hive Database Name provided by the user">
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+			
+		<tns:property dataType="string" name="jdbcDriver" value="JDBC4.2" renderer="JDBC_DRIVER_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="Denotes the JDBC Driver selected by user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
@@ -48,22 +53,12 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="port" value="1521" renderer="PORT_WIDGET"
+		<tns:property dataType="string" name="port" value="5439" renderer="PORT_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Port provided by the user">
-			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
+			<tns:validator>INTEGER_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>
-		
-		<tns:property dataType="string" name="sid" value="" renderer="SID_NAME_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Oracle Database Name provided by the user">
-			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
-		</tns:property>
-		
-		<tns:property dataType="string" name="oracleSchema" value="" renderer="ORACLE_SCHEMA_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Displays the Oracle Sehema Name provided by the user">
-		</tns:property>
+			
 		
 		<tns:property dataType="string" name="userName" value="" renderer="USER_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
@@ -77,18 +72,30 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="testConnection" value="" renderer="TEST_CONNECTION_WIDGET"
+		<tns:property dataType="string" name="testConnection" renderer="TEST_CONNECTION_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Used to test the connection for connecting Oracle DB">
+			usage="OPTIONAL" propertyHelpText="Displays the button for testing out the above given values">
 		</tns:property>
 		
-		<tns:property dataType="string" name="selectOption" renderer="SELECT_JDBC_VALUES_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="">
-			<tns:validator>TOGGlE_SELECTION_VALIDATOR</tns:validator>
+		
+		<tns:property dataType="string" name="tableName" value="" renderer="TABLE_NAME_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
+		<tns:property dataType="string" name="chunkSize" value="1000" renderer="CHUNK_SIZE_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Displays the Chunk Size provided by the user">
+			<tns:validator>INTEGER_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="load_type_configuration" renderer="LOAD_TYPE_CONFIGURATION_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Provides user to select the Load Type i.e. records are to be inserted,updated or to create a new table.">
+		</tns:property>
+		
+			<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Used to override runtime \nHadoop configurations specific to \nthis component at run time.">
 			<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>

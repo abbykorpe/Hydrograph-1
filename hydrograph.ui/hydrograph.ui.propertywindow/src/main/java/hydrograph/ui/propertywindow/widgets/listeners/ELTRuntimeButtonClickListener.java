@@ -15,7 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.listeners;
 
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.oracle.ELTLoadTypeConfigurationWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.ELTLoadTypeConfigurationWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
 

@@ -54,9 +54,9 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
 import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.ELTExtractMetaStoreDataWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.oracle.ELTLoadTypeConfigurationWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.oracle.ELTDatabaseTestConnectionWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.oracle.ELTSelectionDatabaseWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.ELTLoadTypeConfigurationWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.ELTDatabaseTestConnectionWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.ELTSelectionDatabaseWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
@@ -106,6 +106,7 @@ public class WidgetFactory {
 		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
 		BATCH_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getBatchWidgetConfig()),
 		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
+		SID_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getSIDNameWidgetConfig()),
 		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
 		ORACLE_SCHEMA_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getOracleSchemaWidgetConfig()),
 		HOST_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getHostNameWidgetConfig()),
