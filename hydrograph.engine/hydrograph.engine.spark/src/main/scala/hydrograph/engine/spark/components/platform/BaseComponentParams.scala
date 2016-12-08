@@ -6,16 +6,17 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+import java.util.Set
 
 /**
   * Created by gurdits on 10/17/2016.
   */
-class BaseComponentParams() {
+class BaseComponentParams() extends Serializable {
 
 
   val dataFrameList = new ListBuffer[DataFrame]()
 
-  val schemaFieldList = new ListBuffer[StructType]()
+  val schemaFieldList = new ListBuffer[Set[SchemaField]]()
 
   val dataFameMap=new mutable.HashMap[String,DataFrame]()
 
@@ -64,7 +65,12 @@ class BaseComponentParams() {
     dataFameMap
   }
 
- /* def getStructType(): StructType = {
-    schemaFieldList.head
-  }*/
+  def addInputSchema(schema: Set[SchemaField]): Unit = {
+    schemaFieldList += schema
+  }
+  
+  def getSchemaFieldList(): ListBuffer[Set[SchemaField]] = {
+    schemaFieldList
+  }
+  
 }

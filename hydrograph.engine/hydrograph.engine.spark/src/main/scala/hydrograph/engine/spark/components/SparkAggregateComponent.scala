@@ -39,7 +39,6 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
       //Passthrough Fields
       RowHelper.setTupleFromRow(outRow, fm.determineInputPassThroughFieldsPos(), iterable.get(0), fm.determineOutputPassThroughFieldsPos())
 
-      if (aggregateEntity.isOperationPresent()) {
 
           iterable.foreach(row => {
             aggregateList.foreach(agt => {
@@ -53,7 +52,7 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
           agt.baseClassInstance.onCompleteGroup(agt.outputReusableRow)
           RowHelper.setTupleFromReusableRow(outRow, agt.outputReusableRow, agt.outputFieldPositions)
         })
-      }
+
       Row.fromSeq(outRow)
     })(RowEncoder(EncoderHelper().getEncoder(fm.getOutputFields(), componentsParams.getSchemaFields())))
 
