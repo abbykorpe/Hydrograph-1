@@ -121,7 +121,7 @@
 	
 	<simpleType name="sub_group">
 		<restriction base="string">
-			<enumeration value="DISPLAY" />
+			<enumeration value="DETAILS" />
 			<enumeration value="CONFIGURATION" />
 			<enumeration value="RECORD_STRUCTURE_DETAILS" />
 		</restriction>

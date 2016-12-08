@@ -34,7 +34,7 @@
 		</tns:port>			
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
-			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
+			subGroup="DETAILS" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
 			
 		<tns:property dataType="string" name="outPortCount" value="1" renderer="OUTPUT_COUNT_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"

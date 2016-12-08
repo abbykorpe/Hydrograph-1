@@ -32,7 +32,7 @@
 		
 		<tns:property dataType="string" name="name"
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
-			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
+			subGroup="DETAILS" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" propertyHelpText="Displays Name provided by the user"/>
         
         <tns:property dataType="string" name="schema" renderer="STRAIGHT_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
