@@ -171,7 +171,7 @@ public class Container extends Model {
 	private String generateUniqueComponentId(Component component) {
 		String componentId = component.getComponentId();
 		if (componentId ==null || checkIfDuplicateComponentExists(componentId, component, true)) {
-			componentId = getDefaultNameORIdForComponent(component.getComponentName(), component, true);
+			componentId = getDefaultNameORIdForComponent(component.getDefaultPrefix(), component, true);
 		}
 		return componentId;
 	}

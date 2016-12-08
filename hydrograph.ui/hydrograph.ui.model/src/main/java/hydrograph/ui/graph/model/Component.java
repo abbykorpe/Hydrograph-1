@@ -1,5 +1,4 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -252,6 +251,9 @@ public abstract class Component extends Model {
 	@XStreamOmitField
 	private ComponentExecutionStatus status;
 	
+	/* Default prefix is used for creating unique component id */
+	@XStreamOmitField
+	private String defaultPrefix;
 	
 	private boolean isContinuousSchemaPropogationAllow;
 	/**
@@ -281,6 +283,9 @@ public abstract class Component extends Model {
 		componentLabelMargin = 16;
 
 		prefix = XMLConfigUtil.INSTANCE.getComponent(componentName)
+				.getDefaultNamePrefix();
+		
+		defaultPrefix=XMLConfigUtil.INSTANCE.getComponent(componentName)
 				.getDefaultNamePrefix();
 		initPortSettings();
 		toolTipErrorMessages = new LinkedHashMap<>();
@@ -1729,5 +1734,9 @@ public abstract class Component extends Model {
 			return true;
 		}
 		return false;
+	}
+	
+	public String getDefaultPrefix() {
+		return defaultPrefix;
 	}
 }
