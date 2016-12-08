@@ -14,7 +14,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/generate_records_palette.png" canvasIconPath="/icons/generate_records_canvas.png"
-		name="GenerateRecords" nameInPalette="Generate Records" defaultNamePrefix="GRecords" 
+		name="GRecords" nameInPalette="Generate Records" defaultNamePrefix="GRecords" 
 		description="Generates dummy records as per the schema specified by the user."
 		helpFilePath="/hydrograph.ui.help/html/Components/Generate_Records.html"
 		acronym="Genrec">
