@@ -116,11 +116,14 @@ public class PropagateDataAction extends SelectionAction {
 					schema.setGridRow(gridRows);
 				}	
 				schema.getGridRow().clear();
-				if(previousComponentSchema!=null)
-				schema.getGridRow().
-				addAll(SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
+				if(previousComponentSchema!=null &&!previousComponentSchema.getGridRow().isEmpty())
+				{	
+				schema.getGridRow().addAll(SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToBasicSchemaGridRows(previousComponentSchema.getGridRow()));
+				}
 				else
-				shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;	
+				{	
+				shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
+				}
 				component.getProperties().put(Constants.SCHEMA_PROPERTY_NAME,schema);
 				ComponentFigure componentFigure=(ComponentFigure)((ComponentEditPart)component.getComponentEditPart()).getFigure();
 				component.validateComponentProperties(false);
