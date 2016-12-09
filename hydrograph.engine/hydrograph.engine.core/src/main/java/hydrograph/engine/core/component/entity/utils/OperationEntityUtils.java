@@ -39,6 +39,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutputRecordCount;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
@@ -56,6 +57,11 @@ import hydrograph.engine.jaxb.join.TypeKeyFields;
  *
  */
 public class OperationEntityUtils implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7977314904706287826L;
 
 	private OperationEntityUtils() {
 	}
@@ -93,13 +99,32 @@ public class OperationEntityUtils implements Serializable{
 						((TypeTransformExpression) typeTransformOperation).getInputFields()));
 				operation.setOperationOutputFields(new String[] { extractExpressionOutputFields(
 						((TypeTransformExpression) typeTransformOperation).getOutputFields()) });
-				operation.setExpression(((TypeTransformExpression) typeTransformOperation).getExpr());
+				operation.setExpression(addSemiColonIfNotPresent(((TypeTransformExpression) typeTransformOperation).getExpr()));
+				operation.setAccumulatorInitialValue(addQuotes(((TypeTransformExpression) typeTransformOperation).getAccumulatorInitalValue()));
+				operation.setOperationClass(null);
 				operation.setOperationProperties(
 						extractOperationProperties(((TypeTransformExpression) typeTransformOperation).getProperties()));
 				operationList.add(operation);
 			}
 		}
 		return operationList;
+	}
+	
+	private static String addQuotes(String accumulatorInitalValue) {
+		if (accumulatorInitalValue != null
+				&& accumulatorInitalValue.matches("^[_a-zA-Z].+")
+				&& !accumulatorInitalValue.trim().startsWith("\"")
+				&& !accumulatorInitalValue.endsWith("\"")) {
+			accumulatorInitalValue = "\"" + accumulatorInitalValue + "\"";
+		}
+		return accumulatorInitalValue;
+	}
+
+	private static String addSemiColonIfNotPresent(String expr) {
+		if (expr.trim().endsWith(";")) {
+			return expr;
+		}
+		return expr.concat(";");
 	}
 
 	/**
@@ -801,5 +826,25 @@ public class OperationEntityUtils implements Serializable{
 			i++;
 		}
 		return keyFields;
+	}
+	
+	public static String extractOutputRecordCount(
+			TypeOutputRecordCount outputRecordCount) {
+		if(outputRecordCount != null){
+			return outputRecordCount.getValue();
+		}
+		return "";
+	}
+
+	public static void checkIfOutputRecordCountIsPresentInCaseOfExpressionProcessing(
+			List<Operation> operationsList,
+			TypeOutputRecordCount outputRecordCount) {
+		if (operationsList.get(0).getExpression() != null
+				&& !"".equals(operationsList.get(0).getExpression())) {
+			if (outputRecordCount == null) {
+				throw new RuntimeException(
+						"Output Record Count is a mandatory parameter in case of Expression Processing.");
+			}
+		}
 	}
 }

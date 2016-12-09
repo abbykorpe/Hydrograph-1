@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -39,7 +27,7 @@ import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedBase;
  *         &lt;element name="partitionKeys" type="{hydrograph/engine/jaxb/ohivetextfile}hive_partition_fields_type" minOccurs="0"/>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/ohivetextfile}hive_type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/ohivetextfile}hive_type"/>
- *         &lt;element name="delimiter">
+ *         &lt;element name="delimiter" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -70,7 +58,7 @@ import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hiveTextFile", propOrder = {
+@XmlType(name = "hiveTextFile", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
     "partitionKeys",
     "databaseName",
     "tableName",
@@ -90,7 +78,6 @@ public class HiveTextFile
     protected HiveType databaseName;
     @XmlElement(required = true)
     protected HiveType tableName;
-    @XmlElement(required = true)
     protected HiveTextFile.Delimiter delimiter;
     protected HivePathType externalTablePath;
     protected HiveTextFile.Quote quote;

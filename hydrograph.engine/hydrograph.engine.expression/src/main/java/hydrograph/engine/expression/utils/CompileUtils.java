@@ -16,9 +16,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
@@ -34,9 +32,9 @@ import javax.tools.ToolProvider;
  */
 public class CompileUtils {
 
-	private final static JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-	private final static DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-	private final static StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
+	private static JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+	private static DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+	private static StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
 	private static CompilationTask task;
 
 	/**
@@ -52,7 +50,7 @@ public class CompileUtils {
 	 */
 	public static DiagnosticCollector<JavaFileObject> javaCompile(String fields, String expression,
 			String packageName,String returnTypeOfExprClass) {
-
+		diagnostics = new DiagnosticCollector<JavaFileObject>();
 		StringWriter writer = generateRuntimeClass(fields, expression, packageName,returnTypeOfExprClass);
 		JavaFileObject file = new JavaSourceFromString("Expression", writer.toString());
 		final Iterable<? extends JavaFileObject> sources = Arrays.asList(file);
@@ -77,7 +75,7 @@ public class CompileUtils {
 	 */
 	public static DiagnosticCollector<JavaFileObject> javaCompile(String fields, String expression,
 			String externalJarPath, String packageName,String returnTypeOfExprClass) {
-
+		diagnostics = new DiagnosticCollector<JavaFileObject>();
 		StringWriter writer = generateRuntimeClass(fields, expression, packageName,returnTypeOfExprClass);
 		JavaFileObject file = new JavaSourceFromString("Expression", writer.toString());
 		final Iterable<? extends JavaFileObject> sources = Arrays.asList(file);
@@ -158,4 +156,5 @@ class JavaSourceFromString extends SimpleJavaFileObject {
 	public CharSequence getCharContent(boolean ignoreEncodingErrors) {
 		return code;
 	}
+	
 }

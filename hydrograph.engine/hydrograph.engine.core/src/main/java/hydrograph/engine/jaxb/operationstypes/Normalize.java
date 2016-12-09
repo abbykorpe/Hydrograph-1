@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.operationstypes;
 
@@ -30,7 +18,11 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  *     &lt;restriction base="{hydrograph/engine/jaxb/commontypes}type-operations-component">
  *       &lt;sequence>
  *         &lt;element name="inSocket" type="{hydrograph/engine/jaxb/normalize}type-in-socket"/>
- *         &lt;element name="operation" type="{hydrograph/engine/jaxb/normalize}type-operation"/>
+ *         &lt;choice>
+ *           &lt;element name="operation" type="{hydrograph/engine/jaxb/normalize}type-operation"/>
+ *           &lt;element name="expression" type="{hydrograph/engine/jaxb/normalize}type-transform-expression" maxOccurs="unbounded"/>
+ *         &lt;/choice>
+ *         &lt;element name="outputRecordCount" type="{hydrograph/engine/jaxb/commontypes}type-output-record-count" minOccurs="0"/>
  *         &lt;element name="outSocket" type="{hydrograph/engine/jaxb/normalize}type-out-socket"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
@@ -42,7 +34,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "normalize")
+@XmlType(name = "normalize", namespace = "hydrograph/engine/jaxb/operationstypes")
 public class Normalize
     extends TypeOperationsComponent
 {

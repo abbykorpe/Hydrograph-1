@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.inputtypes;
 
@@ -42,30 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AvroFile }
-     * 
-     */
-    public AvroFile createAvroFile() {
-        return new AvroFile();
-    }
-
-    /**
-     * Create an instance of {@link TextFileFixedWidth }
-     * 
-     */
-    public TextFileFixedWidth createTextFileFixedWidth() {
-        return new TextFileFixedWidth();
-    }
-
-    /**
-     * Create an instance of {@link TextFileDelimited }
-     * 
-     */
-    public TextFileDelimited createTextFileDelimited() {
-        return new TextFileDelimited();
-    }
-
-    /**
      * Create an instance of {@link TextFileMixedScheme }
      * 
      */
@@ -90,11 +54,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AvroFile }
+     * 
+     */
+    public AvroFile createAvroFile() {
+        return new AvroFile();
+    }
+
+    /**
+     * Create an instance of {@link TextFileFixedWidth }
+     * 
+     */
+    public TextFileFixedWidth createTextFileFixedWidth() {
+        return new TextFileFixedWidth();
+    }
+
+    /**
      * Create an instance of {@link SequenceInputFile }
      * 
      */
     public SequenceInputFile createSequenceInputFile() {
         return new SequenceInputFile();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited }
+     * 
+     */
+    public TextFileDelimited createTextFileDelimited() {
+        return new TextFileDelimited();
     }
 
     /**
@@ -114,38 +102,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Oracle }
-     * 
-     */
-    public Oracle createOracle() {
-        return new Oracle();
-    }
-
-    /**
-     * Create an instance of {@link SubjobInput }
-     * 
-     */
-    public SubjobInput createSubjobInput() {
-        return new SubjobInput();
-    }
-
-    /**
-     * Create an instance of {@link Redshift }
-     * 
-     */
-    public Redshift createRedshift() {
-        return new Redshift();
-    }
-
-    /**
-     * Create an instance of {@link Mysql }
-     * 
-     */
-    public Mysql createMysql() {
-        return new Mysql();
-    }
-
-    /**
      * Create an instance of {@link ParquetHiveFile }
      * 
      */
@@ -154,59 +110,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AvroFile.Path }
+     * Create an instance of {@link SubjobInput }
      * 
      */
-    public AvroFile.Path createAvroFilePath() {
-        return new AvroFile.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileFixedWidth.Path }
-     * 
-     */
-    public TextFileFixedWidth.Path createTextFileFixedWidthPath() {
-        return new TextFileFixedWidth.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileFixedWidth.Charset }
-     * 
-     */
-    public TextFileFixedWidth.Charset createTextFileFixedWidthCharset() {
-        return new TextFileFixedWidth.Charset();
-    }
-
-    /**
-     * Create an instance of {@link TextFileDelimited.Path }
-     * 
-     */
-    public TextFileDelimited.Path createTextFileDelimitedPath() {
-        return new TextFileDelimited.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileDelimited.Delimiter }
-     * 
-     */
-    public TextFileDelimited.Delimiter createTextFileDelimitedDelimiter() {
-        return new TextFileDelimited.Delimiter();
-    }
-
-    /**
-     * Create an instance of {@link TextFileDelimited.Charset }
-     * 
-     */
-    public TextFileDelimited.Charset createTextFileDelimitedCharset() {
-        return new TextFileDelimited.Charset();
-    }
-
-    /**
-     * Create an instance of {@link TextFileDelimited.Quote }
-     * 
-     */
-    public TextFileDelimited.Quote createTextFileDelimitedQuote() {
-        return new TextFileDelimited.Quote();
+    public SubjobInput createSubjobInput() {
+        return new SubjobInput();
     }
 
     /**
@@ -258,11 +166,67 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AvroFile.Path }
+     * 
+     */
+    public AvroFile.Path createAvroFilePath() {
+        return new AvroFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileFixedWidth.Path }
+     * 
+     */
+    public TextFileFixedWidth.Path createTextFileFixedWidthPath() {
+        return new TextFileFixedWidth.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileFixedWidth.Charset }
+     * 
+     */
+    public TextFileFixedWidth.Charset createTextFileFixedWidthCharset() {
+        return new TextFileFixedWidth.Charset();
+    }
+
+    /**
      * Create an instance of {@link SequenceInputFile.Path }
      * 
      */
     public SequenceInputFile.Path createSequenceInputFilePath() {
         return new SequenceInputFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Path }
+     * 
+     */
+    public TextFileDelimited.Path createTextFileDelimitedPath() {
+        return new TextFileDelimited.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Delimiter }
+     * 
+     */
+    public TextFileDelimited.Delimiter createTextFileDelimitedDelimiter() {
+        return new TextFileDelimited.Delimiter();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Charset }
+     * 
+     */
+    public TextFileDelimited.Charset createTextFileDelimitedCharset() {
+        return new TextFileDelimited.Charset();
+    }
+
+    /**
+     * Create an instance of {@link TextFileDelimited.Quote }
+     * 
+     */
+    public TextFileDelimited.Quote createTextFileDelimitedQuote() {
+        return new TextFileDelimited.Quote();
     }
 
     /**

@@ -174,6 +174,28 @@ public abstract class ReusableRow implements Comparable<ReusableRow>,Serializabl
 	public String getString(int index) {
 		return (String) getField(index);
 	}
+	
+	/**
+	 * Fetches a object field value
+	 * 
+	 * @param fieldName
+	 *            The name of the field whose value to be fetched
+	 * @return The value of the field
+	 */
+	public Object getObject(String fieldName) {
+		return (Object) getField(fieldName);
+	}
+
+	/**
+	 * Fetches a object field value
+	 * 
+	 * @param index
+	 *            The index of the field whose value to be fetched
+	 * @return The value of the field
+	 */
+	public Object getObject(int index) {
+		return (Object) getField(index);
+	}
 
 	/**
 	 * Fetches a float field value
