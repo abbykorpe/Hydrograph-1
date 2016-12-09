@@ -191,6 +191,7 @@ import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
 
@@ -903,8 +904,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void setInput(IEditorInput input) {
-		
-
+		if(input instanceof FileStoreEditorInput){
+			MessageBox messageBox=new MessageBox(Display.getCurrent().getActiveShell(),SWT.ICON_WARNING);
+			messageBox.setText(Messages.WARNING);
+			messageBox.setMessage(Messages.JOB_OPENED_FROM_OUTSIDE_WORKSPACE_WARNING);
+			messageBox.open();
+		}	
 		try {
 			GenrateContainerData genrateContainerData = new GenrateContainerData();
 			genrateContainerData.setEditorInput(input, this);

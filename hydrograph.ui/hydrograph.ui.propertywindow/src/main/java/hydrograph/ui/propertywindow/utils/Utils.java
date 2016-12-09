@@ -45,15 +45,18 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 
 /**
  * 
@@ -182,21 +185,23 @@ public class Utils {
 	 * 
 	 * loading the properties files
 	 */
-	 public void loadProperties(){
-			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	public void loadProperties() {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		if (page.getActiveEditor().getEditorInput() instanceof IFileEditorInput) {
 			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
-			List<File> paramNameList=null;
+			List<File> paramNameList = null;
 			IFile file = input.getFile();
 			IProject activeProject = file.getProject();
-			String activeProjectName = activeProject.getName();
-			final File globalparamFilesPath = new File(activeProject.getLocation().toString()+"/"+activeProjectName+"/"+"globalparam");
-			final File localParamFilePath = new File(activeProject.getLocation().toString()+"/"+activeProjectName+"/"+"param");
-			File[] files = (File[]) ArrayUtils.addAll(listFilesForFolder(globalparamFilesPath), listFilesForFolder(localParamFilePath));
-			if(files!=null){
-			 paramNameList= Arrays.asList(files);
-			getParamMap(paramNameList);
+			final File globalparamFilesPath = new File(activeProject.getLocation().toString() + "/" + "globalparam");
+			final File localParamFilePath = new File(activeProject.getLocation().toString() + "/" + "param");
+			File[] files = (File[]) ArrayUtils.addAll(listFilesForFolder(globalparamFilesPath),
+					listFilesForFolder(localParamFilePath));
+			if (files != null) {
+				paramNameList = Arrays.asList(files);
+				getParamMap(paramNameList);
 			}
 		}
+	}
 		
 	 	/**
 		 * 
