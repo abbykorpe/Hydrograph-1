@@ -79,8 +79,8 @@ public class WidgetFactory {
 		MIXED_SCHEME(ELTMixedSchemeWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),		
 		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
 		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
-		FILE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getFilePathWidgetConfig(Constants.FILE_PATH_LABEL)),
-		EXTERNAL_TABLE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getExternalTablePathWidgetConfig(Constants.EXTERNAL_TABLE_PATH_LABEL)),
+		FILE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getFilePathWidgetConfig(Messages.FILE_PATH_LABEL)),
+		EXTERNAL_TABLE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getExternalTablePathWidgetConfig(Messages.EXTERNAL_TABLE_PATH_LABEL)),
 		
 		BROWSE_WORKSPACE_WIDGET(ELTBrowseWorkspaceWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),

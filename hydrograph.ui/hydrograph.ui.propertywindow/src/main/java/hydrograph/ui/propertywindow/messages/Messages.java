@@ -280,6 +280,10 @@ public class Messages extends NLS {
 	public static String INPUTS_SCHEMA_ARE_NOT_IN_SYNC;
 	public static String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB;
 	public static String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED; 
+	public static String FILE_PATH_LABEL;
+	public static String EXTERNAL_TABLE_PATH_LABEL;
+	
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
