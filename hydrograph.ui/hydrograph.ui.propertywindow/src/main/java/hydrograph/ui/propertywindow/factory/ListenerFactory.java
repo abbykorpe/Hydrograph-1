@@ -14,6 +14,8 @@
  
 package hydrograph.ui.propertywindow.factory;
 
+import org.slf4j.Logger;
+
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.listeners.DelimiterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.DelimiterFocusOutListener;
@@ -40,10 +42,12 @@ import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyComponentNameList
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyNumbericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifySequenceFieldName;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyTextListener;
+import hydrograph.ui.propertywindow.widgets.listeners.FilePathModifyListener;
 import hydrograph.ui.propertywindow.widgets.listeners.FocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.JoinInputCountFocusOutListener;
 import hydrograph.ui.propertywindow.widgets.listeners.OperationClassComboChangeListener;
+import hydrograph.ui.propertywindow.widgets.listeners.OverWriteWidgetSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyDigitLimitNumericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusOutListener;
@@ -59,8 +63,6 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseExitSchemaGridLi
 import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseHoverOnSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseMoveOnSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.transform.ELTTransformDeleteSelectionListener;
-
-import org.slf4j.Logger;
 
 
 /**
@@ -97,6 +99,7 @@ public class ListenerFactory {
 		GRID_DELETE_SELECTION(ELTGridDeleteSelectionListener.class),
 		GRID_DELETE_ALL(ELTGridDeleteAllSelectionListener.class),
 		MODIFY(ELTModifyListener.class), 
+		FILE_PATH_MODIFY(FilePathModifyListener.class),
 		NORMAL_FOCUS_OUT(ELTNormalFocusOutListener.class),
 		TRANSFORM_DELETE_SELECTION(ELTTransformDeleteSelectionListener.class),
 		NORMAL_FOCUS_IN(FocusInListener.class),
@@ -115,7 +118,8 @@ public class ListenerFactory {
 		MOUSE_EXIT_LISTENER(MouseExitSchemaGridListener.class),
 		MOUSE_HOVER_LISTENER(MouseHoverOnSchemaGridListener.class),
 		MOUSE_MOVE_LISTENER(MouseMoveOnSchemaGridListener.class),
-		GRID_KEY_LISTENER(ELTShortcutKeyGridListener.class);
+		GRID_KEY_LISTENER(ELTShortcutKeyGridListener.class),
+		OVER_WRITE_LISTENER(OverWriteWidgetSelectionListener.class);
 		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {

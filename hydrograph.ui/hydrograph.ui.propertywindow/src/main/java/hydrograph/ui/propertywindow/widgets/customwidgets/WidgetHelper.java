@@ -14,11 +14,14 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import java.util.List;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.FilePathConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.RuntimeConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.SchemaConfig;
@@ -26,8 +29,6 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.config.SingleColumnGri
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-
-import java.util.List;
 
 
 /**
@@ -130,12 +131,10 @@ public class WidgetHelper {
 	/**
 	 * Configuration to customize text box as External Table Path property 
 	 */
-	public WidgetConfig getExternalTablePathWidgetConfig(){
-		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Messages.LABEL_EXTERNAL_TABLE_PATH);
-		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
-		return textBoxConfig;
+	public FilePathConfig getExternalTablePathWidgetConfig(String label){
+		FilePathConfig filePathConfig=getFilePathWidgetConfig(label);
+		filePathConfig.setMandatory(false);
+		return filePathConfig;
 	}
 	
 	/**
@@ -207,6 +206,7 @@ public class WidgetHelper {
 	public WidgetConfig getOverWriteWidgetConfig(){
 		DropDownConfig dropDownConfig =  populateTrueFalseConfig(Messages.LABEL_OVERWRITE);
 		addComboBoxListeners(dropDownConfig);
+		dropDownConfig.getDropDownListeners().add(Listners.OVER_WRITE_LISTENER);
 		return dropDownConfig;
 	}
 	
@@ -326,8 +326,15 @@ public class WidgetHelper {
 		runtimeConfig.setWindowLabel(windowLabel);
 		return runtimeConfig;
 	}
+	
+	public FilePathConfig getFilePathWidgetConfig(String label) {
+		FilePathConfig filePathConfig= new FilePathConfig();
+		filePathConfig.setLabel(label);
+		filePathConfig.setMandatory(true);
+		return filePathConfig;
+	}
 
-	/**
+/**
 	 * 
 	 *@return schema configuration for straight pull component
 	 */
@@ -345,6 +352,4 @@ public class WidgetHelper {
 		schemaConfig.setDoPropagateONOK(true);
 		return schemaConfig;
 	}
-
-
 }
