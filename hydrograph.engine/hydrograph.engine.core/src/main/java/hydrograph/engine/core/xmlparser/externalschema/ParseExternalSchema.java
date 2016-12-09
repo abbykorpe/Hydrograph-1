@@ -69,7 +69,9 @@ public class ParseExternalSchema {
 			try {
 				xmlDocument = documentBuilder.parse(new InputSource(
 						new StringReader(xmlContents)));
-			} catch (SAXException | IOException e) {
+			} catch (SAXException e) {
+				throw new RuntimeException(e);
+			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		} catch (ParserConfigurationException e) {
@@ -132,7 +134,9 @@ public class ParseExternalSchema {
 						String xml = parameterSubstitutor.substitute(XmlParsingUtils.getXMLStringFromPath(path));
 						xmlDocument2 = documentBuilder.parse(new InputSource(
 								new StringReader(xml)));
-					} catch (SAXException | IOException e) {
+					} catch (SAXException e) {
+						throw new RuntimeException(e);
+					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
 					nodeList.addAll(createNodes(xmlDocument2.getElementsByTagName("fields").item(0)));

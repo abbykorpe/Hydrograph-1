@@ -306,7 +306,7 @@ public class ComponentPipeMapping {
 	}
 
 	private static Map<String, String> createReverseMap(Map<String, Pipe> allMapOfPipes) {
-		Map<String, String> pipeComponent = new HashMap<>();
+		Map<String, String> pipeComponent = new HashMap<String, String>();
 		for (Map.Entry<String, Pipe> entry : allMapOfPipes.entrySet()) {
 			pipeComponent.put(entry.getValue().getName(), entry.getKey());
 		}

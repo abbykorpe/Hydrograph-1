@@ -54,7 +54,9 @@ public class XmlUtilities {
 			try {
 				xmlDocument = documentBuilder.parse(new InputSource(
 						new StringReader(xmlContent)));
-			} catch (SAXException | IOException e) {
+			} catch (SAXException e) {
+				throw new RuntimeException(e);
+			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		} catch (ParserConfigurationException e) {

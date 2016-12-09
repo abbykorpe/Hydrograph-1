@@ -521,7 +521,7 @@ public class OperationEntityUtils implements Serializable{
 		if (typeOperationsOutSocket == null) {
 			throw new NullPointerException("Out socket cannot be null");
 		}
-		List<OperationField> operationFieldList = new ArrayList<>();
+		List<OperationField> operationFieldList = new ArrayList<OperationField>();
 		for (Object field : typeOperationsOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField()) {
 			if (field instanceof TypeOperationField) {
 				TypeOperationField typeOperationField = (TypeOperationField) field;

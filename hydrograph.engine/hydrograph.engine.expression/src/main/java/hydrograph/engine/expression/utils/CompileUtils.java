@@ -33,7 +33,7 @@ import javax.tools.ToolProvider;
 public class CompileUtils {
 
 	private static JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-	private static DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+	private static DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 	private static StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
 	private static CompilationTask task;
 

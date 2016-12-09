@@ -99,7 +99,9 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		if (traversal.isHiveComponentPresentInFlow()) {
 			try {
 				HiveMetastoreTokenProvider.obtainTokenForHiveMetastore(conf);
-			} catch (TException | IOException e) {
+			} catch (TException e) {
+				throw new HydrographRuntimeException(e);
+			} catch (IOException e) {
 				throw new HydrographRuntimeException(e);
 			}
 		}

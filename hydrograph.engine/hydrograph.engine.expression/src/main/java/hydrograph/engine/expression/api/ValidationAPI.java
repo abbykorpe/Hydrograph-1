@@ -107,8 +107,13 @@ public class ValidationAPI implements Serializable {
 			customExpressionVisitor.visit(generateAntlrTree());
 			return true;
 		} catch (Exception e) {
-			throw e;
+			try {
+				throw e;
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
+		return false;
 	}
 
 	/**

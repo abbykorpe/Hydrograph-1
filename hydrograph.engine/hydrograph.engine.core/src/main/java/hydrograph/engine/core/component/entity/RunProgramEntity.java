@@ -58,6 +58,6 @@ public class RunProgramEntity extends OperationEntityBase {
 
 	@Override
 	public List<Operation> getOperationsList() {
-		return new ArrayList<>();
+		return new ArrayList<Operation>();
 	}
 }
