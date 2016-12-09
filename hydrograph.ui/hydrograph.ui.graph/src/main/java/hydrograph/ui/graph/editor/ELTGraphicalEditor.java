@@ -485,7 +485,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						JobManager.INSTANCE.getDataViewerMap().remove(consoleName);
 						enableRunJob(true);
 					}else{
-					if(JobStatus.KILLED.equals(job.getJobStatus()) || JobStatus.SUCCESS.equals(job.getJobStatus()) 
+					if(JobStatus.KILLED.equals(job.getJobStatus()) || JobStatus.SUCCESS.equals(job.getJobStatus()) || JobStatus.PENDING.equals(job.getJobStatus()) 
 							){
 						enableRunJob(true);
 					}else{

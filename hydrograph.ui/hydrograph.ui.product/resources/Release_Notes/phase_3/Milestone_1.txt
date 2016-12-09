@@ -48,6 +48,7 @@ connection(link) on transform component.
 31. ..... - [Sonia Raheja] - Subjob editor is not getting refreshed if user replace the subjob file with existing file name that is already open in editor.
 32. ..... - [Sonia Raheja] - Execution tracking logs of 1st job that was run in debug mode are getting appended on second job's execution tracking console if second job is running in normal mode.
 33. ..... - [Pooja Yadav] - Mac : Fixed mac ui related issues.
+34.<511> - [Pooja Yadav] - Fixed issue related to RunJob button while running job in Remote and Debug Mode.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
