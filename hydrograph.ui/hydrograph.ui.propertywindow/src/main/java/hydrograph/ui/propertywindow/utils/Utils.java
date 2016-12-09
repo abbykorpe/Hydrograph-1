@@ -185,15 +185,17 @@ public class Utils {
 	 public void loadProperties(){
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IFileEditorInput input = (IFileEditorInput) page.getActiveEditor().getEditorInput();
-			
+			List<File> paramNameList=null;
 			IFile file = input.getFile();
 			IProject activeProject = file.getProject();
 			String activeProjectName = activeProject.getName();
-			final File globalparamFilesPath = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString()+"/"+activeProjectName+"/"+"globalparam");
-			final File localParamFilePath = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString()+"/"+activeProjectName+"/"+"param");
+			final File globalparamFilesPath = new File(activeProject.getLocation().toString()+"/"+activeProjectName+"/"+"globalparam");
+			final File localParamFilePath = new File(activeProject.getLocation().toString()+"/"+activeProjectName+"/"+"param");
 			File[] files = (File[]) ArrayUtils.addAll(listFilesForFolder(globalparamFilesPath), listFilesForFolder(localParamFilePath));
-			List<File> paramNameList = Arrays.asList(files);
+			if(files!=null){
+			 paramNameList= Arrays.asList(files);
 			getParamMap(paramNameList);
+			}
 		}
 		
 	 	/**
