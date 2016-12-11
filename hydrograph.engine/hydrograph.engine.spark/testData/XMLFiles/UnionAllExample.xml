@@ -28,7 +28,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/inputFiles/delimitedInputFile.txt" />
+		<path uri="../hydrograph.engine.spark/testData/inputFiles/delimitedInputFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="0" />
 		<safe value="true" />
@@ -43,7 +43,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/inputFiles/delimitedInputFile1.txt" />
+		<path uri="../hydrograph.engine.spark/testData/inputFiles/delimitedInputFile1.txt" />
 		<delimiter value="," />
 	</inputs>
 
@@ -65,7 +65,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData\Output\gather-out" />
+		<path uri="../hydrograph.engine.spark/testData\Output\gather-out" />
 		<delimiter value="," />
 		<safe value="false" />
 		<strict value="true" />

@@ -12,11 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.base;
 
+import java.io.Serializable;
+
 /**
  * @author bitwise
  *
  */
-public interface OutputDispatcher {
+public interface OutputDispatcher extends Serializable {
 
 	/**
 	 * This method sends the current output row to the out port.
