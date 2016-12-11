@@ -26,8 +26,12 @@ public class TransformForExpression implements TransformBase {
 	String[] fieldNames;
 	Object[] tuples;
 
-	public TransformForExpression(ValidationAPI validationAPI) {
+	public void setValidationAPI(ValidationAPI validationAPI){
 		this.validationAPI = validationAPI;
+	}
+
+	public TransformForExpression() {
+
 	}
 
 	@Override

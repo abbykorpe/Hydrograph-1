@@ -1,11 +1,13 @@
 package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.base.OperationEntityBase
-import hydrograph.engine.core.component.entity.elements.{Operation, OutSocket}
+import hydrograph.engine.core.component.entity.elements.{SchemaField, Operation, OutSocket}
 import hydrograph.engine.core.component.entity.utils.OutSocketUtils
+import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import java.util.Properties
 
@@ -18,6 +20,7 @@ import java.util.Properties
   var outputFields = ListBuffer[ListBuffer[String]]()
   var transformClass = ListBuffer[String]()
   var operationProperties = ListBuffer[Properties]()
+  var expressionObject = ListBuffer[Any]()
 
 
   def getMapFields(): ListBuffer[(String, String)] = {
@@ -49,12 +52,42 @@ import java.util.Properties
     passthroughFields
   }
 
+  def expressionValidate(validationAPI: ValidationAPI, getAccumulatorInitialValue: String) = {
+//    schemaMap:Map[String, Class]= new mutable.HashMap[String, Class]();
+//    try {
+//      for (SchemaField schemaField : componentParameters
+//        .getSchemaFields()) {
+//        schemaMap.put(schemaField.getFieldName(),
+//          Class.forName(checkIfFieldIsBigDecimal(schemaField.getFieldDataType())));
+//      }
+//      schemaMap.put("index", Class.forName("java.lang.Integer"));
+//      if (accumulatorInitialValue != null)
+//        schemaMap.put("accumulator",
+//          Class.forName(inferType(accumulatorInitialValue)));
+//      DiagnosticCollector<JavaFileObject> diagnostic = validationAPI
+//        .transformCompiler(schemaMap);
+//      if (diagnostic.getDiagnostics().size() > 0) {
+//        throw new RuntimeException(diagnostic.getDiagnostics()
+//          .get(0).getMessage(null));
+//      }
+//    } catch (ClassNotFoundException e) {
+//      e.printStackTrace();
+//    }
+  }
+
   def initializeOperationFieldsForOutSocket: Unit = {
     if (entity.isOperationPresent)
       entity.getOperationsList.filter(x => isOperationIDExistsInOperationFields(x.getOperationId, outSocket))foreach { opr =>
         inputFieldList += extractInputFields(opr)
         outputFields += extractOutputFields(opr)
         transformClass += opr.getOperationClass
+        if(opr.getExpression != null && !opr.getExpression.equals("")){
+          var validationAPI:ValidationAPI = new ValidationAPI(opr.getExpression,"")
+          expressionValidate(validationAPI,opr.getAccumulatorInitialValue)
+          expressionObject = expressionObject ++ List(validationAPI)
+        } else {
+          expressionObject = expressionObject ++ List(None)
+        }
         operationProperties += extractProperties(opr)
       }
   }
@@ -70,6 +103,10 @@ import java.util.Properties
 
   def getOperationClass(): ListBuffer[String] = {
     transformClass
+  }
+
+  def getExpressionObject(): ListBuffer[Any] = {
+    expressionObject
   }
 
   def extractOutputFields(operation: Operation): ListBuffer[String] = {

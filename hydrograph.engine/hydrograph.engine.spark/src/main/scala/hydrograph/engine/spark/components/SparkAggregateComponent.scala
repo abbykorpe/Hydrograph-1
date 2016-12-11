@@ -1,6 +1,9 @@
 package hydrograph.engine.spark.components
 
+import java.util
+
 import hydrograph.engine.core.component.entity.AggregateEntity
+import hydrograph.engine.core.component.entity.elements.Operation
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.handler.{ AggregateOperation }
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -12,12 +15,21 @@ import org.apache.spark.sql.{ Column, DataFrame, KeyValueGroupedDataset, Row }
 
 import scala.collection.JavaConversions._
 import hydrograph.engine.core.component.entity.elements.KeyField
+import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 /**
  * Created by gurdits on 10/24/2016.
  */
 class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with AggregateOperation with Serializable {
+
+  def extractInitialValues(getOperationsList: List[Operation]):List[String] = {
+    def extract(operationList:List[Operation],stringList:List[String]): List[String] = (operationList,stringList) match {
+      case (List(),_) => stringList
+      case (x::xs,str) => extract(xs,str ++ List(x.getAccumulatorInitialValue))
+    }
+    extract(getOperationsList,List[String]())
+  }
 
   override def createComponent(): Map[String, DataFrame] = {
 
@@ -42,7 +54,7 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
     val outputDf = sortedDf.mapPartitions(itr => {
 
       //Initialize Aggregarte to call prepare Method
-      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm)
+      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm,op.getExpressionObject,extractInitialValues(aggregateEntity.getOperationsList.asScala.toList)))
       var prevKeysArray: Array[Any] = null
       val resultRows = ListBuffer[Row]()
 

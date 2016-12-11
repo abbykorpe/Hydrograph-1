@@ -30,8 +30,11 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	private ArrayList<ArrayList<String>> operationOutputFields;
 	private ArrayList<String> listOfExpressions;
 
-	public NormalizeForExpression(ValidationAPI validationAPI) {
+	public void setValidationAPI(ValidationAPI validationAPI){
 		this.validationAPI = validationAPI;
+	}
+
+	public NormalizeForExpression() {
 	}
 
 	@Override

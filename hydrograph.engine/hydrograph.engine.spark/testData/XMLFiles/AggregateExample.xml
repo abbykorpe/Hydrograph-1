@@ -17,85 +17,61 @@
 	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">
-				<field name="id" type="java.lang.Long" />
+				<field name="id" type="java.lang.Integer" />
 				<field name="name" type="java.lang.String" />
-				<field name="city" type="java.lang.Long" />
+				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
 
-		<path
-			uri="../hydrograph.engine.spark/testData/inputFiles/delimitedInputFile.txt" />
+		<path uri="C:\Users\sanketc\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\delimitedInputFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
 	</inputs>
 
-	<operations id="reformat" xsi:type="op:aggregate" batch="0">
-
+	<operations id="aggregate" batch="0" xsi:type="op:aggregate">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<operation id="opt1"
-			class="hydrograph.engine.transformation.userfunctions.aggregate.Count">
+		<expression accumulatorInitalValue="-99999" expr="(id&gt;accumulator)?id:accumulator;" id="e1">
 			<inputFields>
 				<field name="id" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
-				<field name="count1" type="java.lang.Long" />
+				<field name="new_field" type="java.lang.Integer" />
 			</outputFields>
-		</operation>
-		<operation id="opt2"
-			class="hydrograph.engine.transformation.userfunctions.aggregate.Sum">
+		</expression>
+		<operation id="opt4"
+				   class="hydrograph.engine.transformation.userfunctions.aggregate.StringAppend">
 			<inputFields>
-				<field name="id" inSocketId="in0" />
+				<field name="name" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
-				<field name="sum1" type="java.lang.Long" />
+				<field name="sum2" type="java.lang.String" />
 			</outputFields>
 		</operation>
-		<operation id="opt3"
-			class="hydrograph.engine.transformation.userfunctions.aggregate.Max">
-			<inputFields>
-				<field name="city" inSocketId="in0" />
-			</inputFields>
-			<outputFields>
-				<field name="max1" type="java.lang.Long" />
-			</outputFields>
-		</operation>
-
 		<outSocket id="out0">
-			<passThroughField name="*" inSocketId="in0" />
 			<passThroughField name="id" inSocketId="in0" />
-			<operationField name="count1" operationId="opt1" />
-			<operationField name="sum1" operationId="opt2" />
-			<mapField sourceName="id" name="new_id" inSocketId="in0" />
-			<mapField sourceName="city" name="new_city1" inSocketId="in0" />
-			<mapField sourceName="city" name="new_city2" inSocketId="in0" />
-			<operationField name="max1" operationId="opt3" />
-
+			<passThroughField name="name" inSocketId="in0" />
+			<mapField sourceName="city" name="new_city" inSocketId="in0" />
+			<operationField name="sum2" operationId="opt4" />
+			<expressionField name="new_field" expressionId="e1"/>
 		</outSocket>
 		<primaryKeys>
 			<field name="name" />
 		</primaryKeys>
 	</operations>
 
-
-	<outputs id="output1" xsi:type="ot:textFileDelimited" batch="0">
-		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0">
+	<outputs id="output1" batch="0" xsi:type="ot:textFileDelimited" >
+		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
+				<field name="id" type="java.lang.String" />
 				<field name="name" type="java.lang.String" />
-				<field name="city" type="java.lang.String" />
-				<field name="id" type="java.lang.Long" />
-				<field name="count1" type="java.lang.Long" />
-				<field name="sum1" type="java.lang.Long" />
-				<field name="new_id" type="java.lang.Long" />
-				<field name="new_city1" type="java.lang.String" />
-				<field name="new_city2" type="java.lang.String" />
-				<field name="max1" type="java.lang.Long" />
+				<field name="new_field" type="java.lang.Integer" />
+				<field name="sum2" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="../hydrograph.engine.spark/testData\Output\AggregateOutput" />
+		<path uri="testData\output\AggregateOutput1" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
 	</outputs>
-
 </p:graph>

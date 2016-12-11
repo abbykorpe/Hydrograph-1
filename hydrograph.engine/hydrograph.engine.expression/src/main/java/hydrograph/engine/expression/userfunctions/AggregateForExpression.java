@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -39,7 +40,7 @@ public class AggregateForExpression implements AggregateTransformBase {
 		this.initialValueExpressions = initialValueExpression;
 	}
 
-	public AggregateForExpression(ValidationAPI validationAPI) {
+	public AggregateForExpression() {
 	}
 	
 	public void callPrepare(){

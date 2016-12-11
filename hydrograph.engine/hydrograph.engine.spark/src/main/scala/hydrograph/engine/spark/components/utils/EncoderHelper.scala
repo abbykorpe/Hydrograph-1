@@ -22,6 +22,8 @@ class EncoderHelper extends Serializable{
       case "Integer" => DataTypes.IntegerType
       case "String" => DataTypes.StringType
       case "Long" => DataTypes.LongType
+      case "Boolean" => DataTypes.BooleanType
+      case "Double" => DataTypes.DoubleType
     }
   }
 

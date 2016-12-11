@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
+import hydrograph.engine.core.component.entity.elements.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,8 @@ import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.generator.base.OperationComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Aggregate;
+
+import java.util.List;
 
 public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 
@@ -60,7 +63,7 @@ public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 			// operation present to true
 			aggregateEntity.setNumOperations(jaxbAggregate.getOperationOrExpression().size());
 			aggregateEntity.setOperationPresent(true);
-			aggregateEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbAggregate.getOperationOrExpression()));
+			aggregateEntity.setOperationsList(setOperationClassInCaseExpression(OperationEntityUtils.extractOperations(jaxbAggregate.getOperationOrExpression())));
 		} else {
 			LOG.trace("Operation not present for aggregate component: " + jaxbAggregate.getId()
 					+ ", skipped operation processing");
@@ -82,6 +85,16 @@ public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 
 		aggregateEntity.setRuntimeProperties(
 				OperationEntityUtils.extractRuntimeProperties(jaxbAggregate.getRuntimeProperties()));
+	}
+
+	private List<Operation> setOperationClassInCaseExpression(List<Operation> extractOperations) {
+		for (int i = 0; i < extractOperations.size(); i++) {
+			if (extractOperations.get(i).getOperationClass() == null) {
+				extractOperations.get(i)
+						.setOperationClass("hydrograph.engine.expression.userfunctions.AggregateForExpression");
+			}
+		}
+		return extractOperations;
 	}
 
 	@Override

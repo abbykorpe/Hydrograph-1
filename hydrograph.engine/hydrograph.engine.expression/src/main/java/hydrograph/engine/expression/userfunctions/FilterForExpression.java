@@ -25,8 +25,11 @@ public class FilterForExpression implements FilterBase {
 	String[] fieldNames;
 	Object[] tuples;
 
-	public FilterForExpression(ValidationAPI validationAPI) {
+	public void setValidationAPI(ValidationAPI validationAPI){
 		this.validationAPI = validationAPI;
+	}
+
+	public FilterForExpression() {
 	}
 
 	@Override
