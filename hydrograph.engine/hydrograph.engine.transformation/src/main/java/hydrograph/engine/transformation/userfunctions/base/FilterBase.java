@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.base;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -27,7 +28,7 @@ import java.util.Properties;
  * @author bitwise
  *
  */
-public interface FilterBase {
+public interface FilterBase extends Serializable {
 
 	/**
 	 * This method is called before processing the first record in the input.

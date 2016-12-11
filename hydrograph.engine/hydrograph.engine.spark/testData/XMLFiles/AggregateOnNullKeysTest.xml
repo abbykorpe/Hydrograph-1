@@ -26,7 +26,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData\inputFiles\delimitedInputFile.txt" />
+		<path uri="../hydrograph.engine.spark/testData\inputFiles\delimitedInputFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
@@ -35,68 +35,33 @@
 	<operations id="aggregate" xsi:type="op:aggregate">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
 		<operation id="opt1"
-			class="hydrograph.engine.transformation.userfunctions.aggregate.Count">
+			class="hydrograph.engine.userclass.Count">
 			<inputFields>
-				<field name="id" inSocketId="in0" />
+				<field name="city" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
 				<field name="count1" type="java.lang.Long" />
 			</outputFields>
 		</operation>
-		<operation id="opt2"
-			class="hydrograph.engine.transformation.userfunctions.aggregate.Sum">
-			<inputFields>
-				<field name="id" inSocketId="in0" />
-			</inputFields>
-			<outputFields>
-				<field name="sum1" type="java.lang.Long" />
-			</outputFields>
-		</operation>
-		<operation id="opt3"
-			class="hydrograph.engine.transformation.userfunctions.aggregate.Count">
-			<inputFields>
-				<field name="id" inSocketId="in0" />
-			</inputFields>
-			<outputFields>
-				<field name="count2" type="java.lang.Long" />
-			</outputFields>
-		</operation>
-		<operation id="opt4"
-			class="hydrograph.engine.transformation.userfunctions.aggregate.Sum">
-			<inputFields>
-				<field name="id" inSocketId="in0" />
-			</inputFields>
-			<outputFields>
-				<field name="sum2" type="java.lang.Long" />
-			</outputFields>
-		</operation>
 		<outSocket id="out0">
 			<passThroughField name="id" inSocketId="in0" />
 			<passThroughField name="name" inSocketId="in0" />
-			<mapField sourceName="city" name="new_city" inSocketId="in0" />
 			<operationField name="count1" operationId="opt1" />
-			<operationField name="count2" operationId="opt3" />
-			<operationField name="sum1" operationId="opt2" />
-			<operationField name="sum2" operationId="opt4" />
 		</outSocket>
 		<primaryKeys>
 			<none />
 		</primaryKeys>
 	</operations>
 
-	<outputs id="output1" xsi:type="ot:textFileDelimited" batch="1">
+	<outputs id="output1" xsi:type="ot:textFileDelimited" batch="0">
 		<inSocket fromComponentId="aggregate" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
-				<field name="id" type="java.lang.String" />
+				<field name="id" type="java.lang.Integer" />
 				<field name="name" type="java.lang.String" />
 				<field name="count1" type="java.lang.Long" />
-				<field name="count2" type="java.lang.Long" />
-				<field name="new_city" type="java.lang.String" />
-				<field name="sum1" type="java.lang.Long" />
-				<field name="sum2" type="java.lang.Long" />
 			</schema>
 		</inSocket>
-		<path uri="testData\output\AggregateOnNullKeysTest" />
+		<path uri="../hydrograph.engine.spark/testData\output\AggregateOnNullKeysTest" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />

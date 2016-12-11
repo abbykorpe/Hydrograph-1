@@ -5,8 +5,8 @@ import hydrograph.engine.core.component.entity.elements.KeyField
 import scala.collection.mutable.ListBuffer
 
 /**
-  * Created by gurdits on 10/19/2016.
-  */
+ * Created by gurdits on 10/19/2016.
+ */
 class FieldManupulating(operationInputFields: ListBuffer[ListBuffer[String]], operationOutputFields: ListBuffer[ListBuffer[String]], passthrougFields: ListBuffer[String], mapFields: ListBuffer[(String, String)], operationFields: ListBuffer[String], keyFields: Array[KeyField]) extends Serializable {
 
   val mapSourceFields = new ListBuffer[String]()
@@ -55,7 +55,6 @@ class FieldManupulating(operationInputFields: ListBuffer[ListBuffer[String]], op
         if (!outputField.contains(f)) outputField += f
         if (!inputField.contains(f)) inputField += f
       })
-
 
   }
 
@@ -158,12 +157,16 @@ class FieldManupulating(operationInputFields: ListBuffer[ListBuffer[String]], op
 
   def determineKeyFieldPos(): ListBuffer[Int] = {
     val inputPos = new ListBuffer[Int]()
-    keyFields.foreach(k => {
-      inputField.zipWithIndex.foreach(f => {
-        if (f._1.equals(k.getName))
-          inputPos += f._2
+
+    if (keyFields != null) {
+      keyFields.foreach(k => {
+        inputField.zipWithIndex.foreach(f => {
+          if (f._1.equals(k.getName))
+            inputPos += f._2
+        })
       })
-    })
+    }
+
     inputPos
   }
 

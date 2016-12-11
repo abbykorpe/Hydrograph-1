@@ -27,7 +27,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="C:\Users\gurdits\Hydrograph-workspace\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\delimitedInputFile.txt" />
+		<path uri="../hydrograph.engine.spark/testData/inputFiles/delimitedInputFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="0" />
 	</inputs>
@@ -52,7 +52,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData/Output/replicate-out1" />
+		<path uri="../hydrograph.engine.spark/testData/output/replicate-out1" />
 		<delimiter value="," />
 	</outputs>
 
@@ -66,7 +66,7 @@
 			</schema>
 		</inSocket>
 		<path
-				uri="C:\Users\gurdits\Hydrograph-workspace\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\output\clone" />
+				uri="../hydrograph.engine.spark/testData/output/replicate-out2" />
 		<delimiter value="," />
 	</outputs>
 
