@@ -8,6 +8,7 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import hydrograph.engine.transformation.userfunctions.base.FilterBase
 import org.apache.spark.sql.{DataFrame, Row}
+import scala.collection.JavaConverters._
 
 /**
   * Created by vaijnathp on 12/12/2016.
@@ -22,22 +23,26 @@ class SparkFilterComponent(filterEntity: FilterEntity, componentsParams: BaseCom
     scheme.foreach(e => arr.add(e))
     var map: Map[String, DataFrame] = Map()
 
-   for(i <- 0 until filterEntity.getOutSocketList.size()){
+    val filterClass=classLoader[FilterBase](filterEntity.getOperation.getOperationClass)
+    val fieldPosition=ReusableRowHelper(filterEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
+    val inputReusableRow=new SparkReusableRow(arr)
+
+
+   filterEntity.getOutSocketList.asScala.foreach{outSocket=>
     val df = componentsParams.getDataFrame.filter(
        row =>{
-         if(filterEntity.getOutSocketList.get(i).getSocketType.equalsIgnoreCase("unused"))
-           !filter(scheme, arr, row)
+         if(outSocket.getSocketType.equalsIgnoreCase("unused"))
+           !filterClass
+             .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
+
          else
-            filter(scheme, arr, row)
+           filterClass
+             .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
+
        })
-    map += (filterEntity.getOutSocketList.get(i).getSocketId -> df)
+    map += (outSocket.getSocketId -> df)
   }
     map
-  }
-
-  def filter(scheme: Seq[String], arr: util.LinkedHashSet[String], row: Row): Boolean = {
-    classLoader[FilterBase](filterEntity.getOperation.getOperationClass)
-      .isRemove(RowHelper.convertToReusebleRow(ReusableRowHelper(filterEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme), row, new SparkReusableRow(arr)))
   }
 
   def classLoader[T](className: String): T = {
