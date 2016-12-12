@@ -1,3 +1,16 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 package hydrograph.ui.graph.editor;
 
 import java.util.ArrayList;
@@ -22,6 +35,12 @@ import org.slf4j.Logger;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * JobCopyParticipant to prepare the information required for paste action of project explorer.
+ * 
+ * @author Bitwise
+ *
+ */
 public class JobCopyParticipant extends CopyParticipant {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(JobCopyParticipant.class);
@@ -66,8 +85,8 @@ public class JobCopyParticipant extends CopyParticipant {
 				IFile iFile = (IFile) iResource;
 				 if (iFile.getFileExtension().equalsIgnoreCase(Messages.XML_EXT)) {
 					String fileName=iFile.getName();
-					IFile xmlFile= jobFolder.getFile(fileName.replace(Messages.XMLEXTENSION,Messages.JOBEXTENSION));
-					if(!xmlFile.exists())
+					IFile jobFile= jobFolder.getFile(fileName.replace(Messages.XMLEXTENSION,Messages.JOBEXTENSION));
+					if(!jobFile.exists())
 					xmlFiles.add(jobFolder.getFile(fileName));
 				}
 			}

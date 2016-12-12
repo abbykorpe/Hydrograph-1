@@ -87,8 +87,10 @@ public class ParameterFileManager {
 		}
 		else
 		{
-			properties.load(filename.getRawLocation().toString());
-			properties.store(file.getAbsolutePath());
+			if (filename != null) {
+				properties.load(filename.getRawLocation().toString());
+				properties.store(file.getAbsolutePath());
+			}
 		}
 	}
 }

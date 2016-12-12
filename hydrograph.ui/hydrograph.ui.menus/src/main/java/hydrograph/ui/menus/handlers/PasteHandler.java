@@ -111,37 +111,25 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 	}
 	private void generateUniqueJobIdForPastedFiles(List<IFile> pastedFileList) {
 		for (IFile file : pastedFileList) {
-			InputStream inputStream = null;
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
-				inputStream = file.getContents();
+			try(ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+					InputStream inputStream=file.getContents()) {
 				Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(inputStream);
 				container.setUniqueJobId(GenerateUniqueJobIdUtil.INSTANCE.generateUniqueJobId());
-				out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
-				file.setContents(new ByteArrayInputStream(out.toByteArray()), true, false, null);
+				outStream.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
+				file.setContents(new ByteArrayInputStream(outStream.toByteArray()), true, false, null);
 				
 
 			} catch (CoreException | NoSuchAlgorithmException | IOException exception) {
 				logger.warn("Exception while generating unique job id for pasted files.");
 
-			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException ioException) {
-					logger.warn("Exception occured while closing stream");
-				}
-			}
+			} 
 		}
 		
 	}
 	private void createPropertiesFilesForPastedFiles(IFolder paramFolder, List<IFile> pastedFileList,
 			List<String> copiedPropertiesList){
 		for (int i = 0; i < copiedPropertiesList.size(); i++) {
-			InputStream inputStream = null;
-			try {
-				inputStream = paramFolder.getFile(copiedPropertiesList.get(i)).getContents();
+			try(InputStream inputStream = paramFolder.getFile(copiedPropertiesList.get(i)).getContents()) {
 				IFile file = paramFolder
 						.getFile(pastedFileList.get(i).getName().replace(JOB_EXTENSION,PROPERTIES_EXTENSION));
 				if (!file.exists()) {
@@ -152,18 +140,10 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 						file.setContents(inputStream, true,false, null);
 					}
 				}
-			} catch (CoreException coreException) {
+			} catch (CoreException | IOException coreException) {
 				logger.error("Error while creating properties files for pasted files ::{}", coreException.getMessage());
 				
-			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException ioException) {
-					logger.warn("Exception occured while closing stream");
-				}
-			}
+			} 
 		}
 	}
 	
@@ -179,9 +159,7 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 
 	private void createXmlFilesForPastedJobFiles(List<IFile> pastedFileList) {
 		for (IFile file : pastedFileList) {
-			InputStream inputStream = null;
-			try {
-				inputStream = file.getContents();
+			try(InputStream inputStream=file.getContents()) {
 				Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(inputStream);
 				IPath path = file.getFullPath().removeFileExtension().addFileExtension(XML);
 				IFile xmlFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
@@ -196,24 +174,16 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 				}
 
 			} catch (CoreException | InstantiationException | IllegalAccessException | InvocationTargetException
-					| NoSuchMethodException exception) {
+					| NoSuchMethodException | IOException exception) {
 				logger.error("Error while generating xml files for pasted job files", exception);
 
-			} finally {
-				try {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-				} catch (IOException ioException) {
-					logger.warn("Exception occured while closing stream");
-				}
-			}
+			} 
 		}
 	}
 	private int showErrorMessage(IFile xmlFile,String message) {
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
 				SWT.ERROR | SWT.YES | SWT.NO);
-		messageBox.setText("Error");
+		messageBox.setText(ERROR);
 		messageBox.setMessage(message);
 		int returnCode = messageBox.open();
 		return returnCode;
@@ -246,6 +216,10 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 				}
 			}
 		}
+		removeXmlFileFromXmlFileListWhoseCorrospondingJobFileIsNotPresent(xmlFiles);
+		
+	}
+	private void removeXmlFileFromXmlFileListWhoseCorrospondingJobFileIsNotPresent(List<IFile> xmlFiles) {
 		List<IFile> unionOfFiles = new ArrayList(xmlFiles);
 		unionOfFiles.addAll(JobCopyParticipant.getXmlFiles());
 		List<IFile> intersectionOfFiles = new ArrayList(xmlFiles);
@@ -254,7 +228,6 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 		differentFiles.removeAll(intersectionOfFiles);
 		xmlFiles.clear();
 		xmlFiles.addAll(differentFiles);
-		
 	}
 
 
