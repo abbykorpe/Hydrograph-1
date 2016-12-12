@@ -11,7 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 ext.repo = Grgit.open()
-version = new Version(major: 0, minor:1, revision: "spark", branch :ext.repo.branch.current.name))
+	version = new Version(major: 0, minor:1, revision: "spark", branch :ext.repo.branch.current.name)
 
 buildscript {
 repositories {

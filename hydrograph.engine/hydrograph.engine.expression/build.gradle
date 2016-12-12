@@ -25,7 +25,7 @@ jar {
         attributes 'Implementation-Title': archivesBaseName
                 //,'Implementation-Version': version
     }
-    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
+   // version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
 }
 
 publishing {

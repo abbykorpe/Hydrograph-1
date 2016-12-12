@@ -28,7 +28,7 @@ jar {
                 'Implementation-Version': version,
                 'Main-Class': 'hydrograph.engine.commandline.utilities.HydrographExecution'
     }
-    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
+   // version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
 }
 
 publishing {
