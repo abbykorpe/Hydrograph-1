@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+
+apply from: '../version.gradle'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -18,14 +20,39 @@ sourceCompatibility = 1.7
 
 archivesBaseName = 'hydrograph.engine.command-line'
 
+group = 'hydrograph'
+
 jar {
     manifest {
         attributes 'Implementation-Title': archivesBaseName,
-                //'Implementation-Version': version,
+                'Implementation-Version': version,
                 'Main-Class': 'hydrograph.engine.commandline.utilities.HydrographExecution'
     }
-    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
 }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact (testJar) { 
+                classifier = 'tests'
+            }
+             artifact (sourcesJar) { 
+                classifier = 'sources'
+            }
+            
+            pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+  		}
+  	}
+  }
 
 test {
     exclude '**/ExecutionTrackingCloneXmlTest*'
@@ -59,9 +86,10 @@ repositories {
     maven {
         url 'http://maven.twttr.com/'
     }
-    maven {
+       maven {
         url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
     }
+
 }
 
 
@@ -71,11 +99,6 @@ dependencies {
     compile project(':hydrograph.engine.spark')
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'org.slf4j:slf4j-log4j12:1.7.12'
+    compile 'commons-lang:commons-lang:2.6'
+ 	compile 'commons-cli:commons-cli:1.2'
 }
-
-task writePom {
-    pom {
-        project {
-           }
-    	}.writeTo("$buildDir/pom.xml")
-	}

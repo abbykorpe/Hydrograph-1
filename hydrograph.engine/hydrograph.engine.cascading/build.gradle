@@ -10,12 +10,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+apply from: '../version.gradle'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
+//version = '0.1'
 
 group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.cascading'
@@ -54,13 +56,11 @@ publishing {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': archivesBaseName
-                //,'Implementation-Version': version
-    }
-    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
+        attributes 'Implementation-Title': archivesBaseName,
+                'Implementation-Version': version
+       }
+       version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
 }
-
-
 
 test {
     exclude '**/CascadingTestCase*'
@@ -69,7 +69,7 @@ test {
     exclude '**/OutputFileHiveParquetFileTest*'
     exclude '**/InputFileHiveTextFileTest*'
     exclude '**/OutputFileHiveTextFileTest*'
-	exclude '**/RunProgramTest*'
+    exclude '**/RunProgramTest*'
 }
 
 uploadArchives {
@@ -87,10 +87,12 @@ repositories {
     maven {
         url 'http://maven.twttr.com/'
     }
-	maven {
+    maven {
         url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
     }
+
 }
+
 
 dependencies {
 	compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion, changing: true
@@ -113,7 +115,7 @@ dependencies {
     compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion
     //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
  
- compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
+ 	compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
 
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion //required for plunger
 

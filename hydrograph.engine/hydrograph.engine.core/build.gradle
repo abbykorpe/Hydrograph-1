@@ -10,13 +10,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+apply from: '../version.gradle'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
+
+
 sourceCompatibility = 1.7
 
+group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.core'
 
 //compileJava.dependsOn xjc
@@ -29,16 +33,17 @@ sourceSets{
 
 jar {
     manifest {
-        attributes 'Implementation-Title': archivesBaseName
-                //,'Implementation-Version': version
+        attributes 'Implementation-Title': archivesBaseName,
+                'Implementation-Version': version
     }
 
 	from ('src/main/resources') {
  	'newxmlschema/.*'  
     }
-    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
+ 
 }
     
+
 uploadArchives {
     repositories {
         mavenLocal()
@@ -56,11 +61,34 @@ repositories {
     mavenCentral()
 }
 
+    
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact (testJar) { 
+                classifier = 'tests'
+            }
+             artifact (sourcesJar) { 
+                classifier = 'sources'
+            }
+            
+            pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+  }}}
+
 dependencies { 
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'org.slf4j:slf4j-log4j12:1.7.12'
     compile 'commons-lang:commons-lang:2.6'
-    compile 'commons-cli:commons-cli:1.2'
+ 	compile 'commons-cli:commons-cli:1.2'
 }
 
 task writePom {
@@ -69,3 +97,4 @@ task writePom {
            }
     	}.writeTo("$buildDir/pom.xml")
 	}
+ 
