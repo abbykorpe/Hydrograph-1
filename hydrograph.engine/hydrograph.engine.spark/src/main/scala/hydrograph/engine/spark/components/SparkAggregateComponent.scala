@@ -54,7 +54,7 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
     val outputDf = sortedDf.mapPartitions(itr => {
 
       //Initialize Aggregarte to call prepare Method
-      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm,op.getExpressionObject,extractInitialValues(aggregateEntity.getOperationsList.asScala.toList)))
+      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm,op.getExpressionObject,extractInitialValues(aggregateEntity.getOperationsList.asScala.toList))
       var prevKeysArray: Array[Any] = null
       val resultRows = ListBuffer[Row]()
 
