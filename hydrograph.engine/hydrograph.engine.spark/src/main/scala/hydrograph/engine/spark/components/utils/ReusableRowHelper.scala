@@ -11,6 +11,14 @@ import hydrograph.engine.core.component.entity.elements.Operation
  * Created by gurdits on 10/20/2016.
  */
 class ReusableRowHelper(opr: Operation, fm: FieldManupulating) {
+  def determineInputFieldPositionsForFilter(scheme: Seq[String]): ListBuffer[Int] ={
+    val inputPos = new ListBuffer[Int]()
+    scheme.zipWithIndex.foreach(e=>
+      if(e._1.equalsIgnoreCase(opr.getOperationInputFields.head))
+        inputPos += e._2
+    )
+    inputPos
+  }
 
   def convertToInputReusableRow(): ReusableRow = {
     val arr = new util.LinkedHashSet[String]()
