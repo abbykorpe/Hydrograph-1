@@ -4,3 +4,5 @@
 /schema/
 /.classpath
 /.settings/
+/.idea/
+/build/
