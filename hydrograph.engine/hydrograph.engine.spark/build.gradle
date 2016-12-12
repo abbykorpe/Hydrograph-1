@@ -47,6 +47,9 @@ publishing {
 test {
     exclude '**/SparkUnionAllComponentTest*'
 	}
+
+//  version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
+	
 	
 repositories {
     mavenLocal()
