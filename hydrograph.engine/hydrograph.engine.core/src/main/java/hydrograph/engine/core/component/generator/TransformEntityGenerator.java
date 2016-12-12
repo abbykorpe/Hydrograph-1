@@ -12,16 +12,24 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.core.component.entity.TransformEntity;
+import hydrograph.engine.core.component.entity.elements.Operation;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.generator.base.OperationComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Transform;
 
 public class TransformEntityGenerator extends OperationComponentGeneratorBase {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1853841267537936752L;
 
 	public TransformEntityGenerator(TypeBaseComponent baseComponent) {
 		super(baseComponent);
@@ -60,7 +68,7 @@ public class TransformEntityGenerator extends OperationComponentGeneratorBase {
 			// operation present to true
 			transformEntity.setNumOperations(jaxbTransform.getOperationOrExpression().size());
 			transformEntity.setOperationPresent(true);
-			transformEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbTransform.getOperationOrExpression()));
+			transformEntity.setOperationsList(setOperationClassInCaseExpression(OperationEntityUtils.extractOperations(jaxbTransform.getOperationOrExpression())));
 		} else {
 
 			LOG.trace("Operation not present for transform component: " + jaxbTransform.getId()
@@ -80,7 +88,17 @@ public class TransformEntityGenerator extends OperationComponentGeneratorBase {
 		transformEntity.setOutSocketList(OperationEntityUtils.extractOutSocketList(jaxbTransform.getOutSocket()));
 
 	}
-
+	
+	private List<Operation> setOperationClassInCaseExpression(List<Operation> extractOperations) {
+		for (int i = 0; i < extractOperations.size(); i++) {
+			if (extractOperations.get(i).getOperationClass() == null) {
+				extractOperations.get(i)
+						.setOperationClass("hydrograph.engine.expression.userfunctions.TransformForExpression");
+			}
+		}
+		return extractOperations;
+	}
+	
 	@Override
 	public TransformEntity getEntity() {
 		return transformEntity;

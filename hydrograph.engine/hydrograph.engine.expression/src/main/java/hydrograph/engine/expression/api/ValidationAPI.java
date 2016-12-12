@@ -12,6 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.expression.api;
 
+import hydrograph.engine.expression.antlr.ExpressionEditorLexer;
+import hydrograph.engine.expression.antlr.ExpressionEditorParser;
+import hydrograph.engine.expression.utils.ClassToDataTypeConversion;
+import hydrograph.engine.expression.utils.CompileUtils;
+import hydrograph.engine.expression.utils.PropertiesLoader;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,11 +33,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import bsh.EvalError;
 import bsh.Interpreter;
-import hydrograph.engine.expression.antlr.ExpressionEditorLexer;
-import hydrograph.engine.expression.antlr.ExpressionEditorParser;
-import hydrograph.engine.expression.utils.ClassToDataTypeConversion;
-import hydrograph.engine.expression.utils.CompileUtils;
-import hydrograph.engine.expression.utils.PropertiesLoader;
 
 /**
  * @author gurdits
@@ -42,8 +43,8 @@ public class ValidationAPI implements Serializable {
 	private final static String USER_FUNCTIONS_PROPS = "UserFunctions.properties";
 	private String packageNames = "";
 	private String expr;
+	private Interpreter interpreter;
 
-	@SuppressWarnings("unused")
 	public ValidationAPI(String expression, String propertiesFilePath) {
 		if (propertiesFilePath != null && !propertiesFilePath.equals(""))
 			this.packageNames += generatePackageName(propertiesFilePath);
@@ -106,8 +107,13 @@ public class ValidationAPI implements Serializable {
 			customExpressionVisitor.visit(generateAntlrTree());
 			return true;
 		} catch (Exception e) {
-			throw e;
+			try {
+				throw e;
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
+		return false;
 	}
 
 	/**
@@ -245,7 +251,43 @@ public class ValidationAPI implements Serializable {
 		}
 		return interpreter.eval(getValidExpression());
 	}
-
+	
+	/**
+	 * @param fieldNames
+	 *            values are {@link String} array which contains field name used
+	 *            in expression
+	 * @param data
+	 *            values are {@link Object} array which contains data used in
+	 *            expression
+	 * @param validExpression
+	 * 			  values are {@link String} which contains expression
+	 * @return the object value {@link Object} w.r.t expression.
+	 * @throws EvalError
+	 */
+	public Object execute(String[] fieldNames, Object[] data, String validExpression) throws EvalError {
+		validExpression = packageNames + validExpression;
+		if(null == interpreter ) {
+			interpreter = new Interpreter();
+		}
+		for (int i = 0; i < fieldNames.length; i++) {
+			interpreter.set(fieldNames[i], data[i]);
+		}
+		return interpreter.eval(validExpression);
+	}
+	
+	/**
+	 * @param validExpression
+	 * 			  values are {@link String} which contains expression
+	 * @return the object value {@link Object} w.r.t expression.
+	 * @throws EvalError
+	 */
+	public Object execute(String validExpression) throws EvalError {
+		if(null == interpreter ) {
+			interpreter = new Interpreter();
+		}
+		return interpreter.eval(validExpression);
+	}
+	
 	/**
 	 * @param expression
 	 *            {@link String} is a construct made up of fields, operators,
@@ -282,6 +324,10 @@ public class ValidationAPI implements Serializable {
 		return new ValidationAPI(expression, propertiesFilePath).transformCompiler(schemaFields, externalJarPath);
 	}
 
+	public static List<String> getFieldNameList(Map<String, Class<?>> schemaFields,String expression,String propertiesFilePath) {
+		return new ValidationAPI(expression, propertiesFilePath).getFieldNameList(schemaFields);
+	}
+	
 	/**
 	 * @param expression
 	 *            {@link String} is a construct made up of fields, operators,
@@ -311,11 +357,13 @@ public class ValidationAPI implements Serializable {
 		}
 
 	}
+	
+	public String getExpr() {
+		return expr;
+	}
 
-	public static List<String> getFieldNameList(Map<String, Class<?>> schemaFields, String expression, String propertiesFilePath)
-	  {
-	    return new ValidationAPI(expression, propertiesFilePath).getFieldNameList(schemaFields);
-	  }
-
+	public void setExpr(String expr) {
+		this.expr = expr;
+	}
 	
 }

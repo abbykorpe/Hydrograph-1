@@ -28,7 +28,7 @@ class SparkTransformComponent(transformEntity: TransformEntity, componentsParams
 
     val df = componentsParams.getDataFrame.select(inputColumn: _*).mapPartitions(itr => {
       //Initialize Transform to call prepare Method
-      val transformsList = initializeTransform(transformEntity.getOperationsList,fm)
+      val transformsList = initializeTransform(transformEntity.getOperationsList,fm,op.getExpressionObject)
 
       val it = itr.map(row => {
         val outRow = new Array[Any](fm.getOutputFields().size)

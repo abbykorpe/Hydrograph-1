@@ -29,6 +29,7 @@ import java.util.Properties;
  * @author bitwise
  *
  */
+
 public interface AggregateTransformBase extends Serializable {
 
 	/**

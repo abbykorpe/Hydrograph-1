@@ -49,7 +49,7 @@ public class ComponentParameters implements Cloneable {
 
 	public ComponentParameters() {
 		this.parameters = new HashMap<String, Object>();
-		this.copyOfInSocket = new HashMap<>();
+		this.copyOfInSocket = new HashMap<String, Fields>();
 	}
 
 	public ComponentParameters(HashMap<String, Object> parameters) {

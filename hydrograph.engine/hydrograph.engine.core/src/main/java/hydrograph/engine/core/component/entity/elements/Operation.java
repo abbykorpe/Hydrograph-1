@@ -31,12 +31,17 @@ import java.util.Properties;
 public class Operation implements Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9115691570772361681L;
 	private String operationId;
 	private String operationClass;
 	private String[] operationInputFields;
 	private String[] operationOutputFields;
 	private Properties operationProperties;
 	private String expression;
+	private String accumulatorInitialValue;
 	
 	public Operation() {
 
@@ -131,6 +136,21 @@ public class Operation implements Serializable{
 	 */
 	public void setOperationId(String operationId) {
 		this.operationId = operationId;
+	}
+	
+	/**
+	 * @return the accumulatorInitialValue
+	 */	
+	public String getAccumulatorInitialValue() {
+		return accumulatorInitialValue;
+	}
+
+	/**
+	 * @param accumulatorInitialValue
+	 *            the accumulatorInitialValue to set
+	 */
+	public void setAccumulatorInitialValue(String accumulatorInitialValue) {
+		this.accumulatorInitialValue = accumulatorInitialValue;
 	}
 
 	@Override

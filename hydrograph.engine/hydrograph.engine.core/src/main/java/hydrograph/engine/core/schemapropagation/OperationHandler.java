@@ -181,14 +181,14 @@ public class OperationHandler implements Serializable {
 	private static Set<SchemaField> inputComponentSchemaFields(TypeBaseComponent baseComponent) {
 		List<Object> jaxbInFields = ((TypeInputComponent) baseComponent).getOutSocket().get(0).getSchema()
 				.getFieldOrRecordOrIncludeExternalSchema();
-		return new LinkedHashSet<>(InputEntityUtils.extractInputFields(jaxbInFields));
+		return new LinkedHashSet<SchemaField>(InputEntityUtils.extractInputFields(jaxbInFields));
 	}
 
 	private static Set<SchemaField> outputComponentSchemaFields(TypeBaseComponent baseComponent) {
 		TypeBaseRecord inputSchema = ((TypeOutputComponent) baseComponent).getInSocket().get(0).getSchema();
 		List<Object> jaxbInFields = inputSchema != null ? inputSchema.getFieldOrRecordOrIncludeExternalSchema()
 				: new ArrayList<Object>();
-		return new HashSet<>(OutputEntityUtils.extractOutputFields(jaxbInFields));
+		return new HashSet<SchemaField>(OutputEntityUtils.extractOutputFields(jaxbInFields));
 	}
 
 	public Map<String, Set<SchemaField>> getStraightPullSchemaFields() {

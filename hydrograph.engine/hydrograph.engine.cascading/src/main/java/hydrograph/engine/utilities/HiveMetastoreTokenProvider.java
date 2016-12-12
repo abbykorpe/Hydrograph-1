@@ -69,7 +69,7 @@ public class HiveMetastoreTokenProvider {
 						}
 
 						// Create the token from the token string.
-						Token<DelegationTokenIdentifier> hmsToken = new Token<>();
+						Token<DelegationTokenIdentifier> hmsToken = new Token<DelegationTokenIdentifier>();
 						hmsToken.decodeFromUrlString(tokenStr);
 						// LOG.debug("Hive Token: " + hmsToken);
 

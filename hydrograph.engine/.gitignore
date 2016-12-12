@@ -4,5 +4,6 @@
 /schema/
 /.classpath
 /.settings/
-/.idea/
 /build/
+hydrograph.engine.iml
+.idea/

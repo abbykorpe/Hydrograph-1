@@ -3,6 +3,8 @@ package hydrograph.engine.spark.components.handler
 import java.util.{Properties, ArrayList}
 
 import hydrograph.engine.core.component.entity.elements.Operation
+import hydrograph.engine.expression.api.ValidationAPI
+import hydrograph.engine.expression.userfunctions.{AggregateForExpression, TransformForExpression}
 import hydrograph.engine.spark.components.utils.{ReusableRowHelper, FieldManupulating}
 import hydrograph.engine.transformation.userfunctions.base.{TransformBase, AggregateTransformBase, ReusableRow}
 import scala.collection.JavaConversions._
@@ -20,13 +22,23 @@ case class Operatioin[T](baseClassInstance:T,inputReusableRow:ReusableRow,
 
 
 trait AggregateOperation{
-  def initializeAggregate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating):
+
+  def convertToListOfValidation(list: List[Any]): Array[ValidationAPI] = {
+    def convert(li:List[Any],converted:ListBuffer[ValidationAPI]):Array[ValidationAPI] = (li,converted) match {
+      case (List(),conv) => conv.toArray
+      case (x::xs,ys) if x == None => convert(xs,ys++ListBuffer(null))
+      case (x::xs,ys) => convert(xs,ys++ListBuffer(x.asInstanceOf[ValidationAPI]))
+    }
+    convert(list,ListBuffer[ValidationAPI]())
+  }
+
+  def initializeAggregate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating, expressionObjectList: ListBuffer[Any], initialValueExprs: List[String]):
   List[Operatioin[AggregateTransformBase]] = {
 
-    def aggregate( operationList:List[Operation], fieldManupulating: FieldManupulating):
-    List[Operatioin[AggregateTransformBase]] =operationList match {
-      case List() => List()
-      case x :: xs =>
+    def aggregate( operationList:List[Operation], fieldManupulating: FieldManupulating, expressionObjectList: List[Any], initialValueExprs: List[String], counter:Int):
+    List[Operatioin[AggregateTransformBase]] = (operationList,expressionObjectList,initialValueExprs) match {
+      case (List(),_,_) => List()
+      case (x :: xs,y :: ys,z :: zs) =>
                 val operationInputFieldList = new ArrayList[String]()
         x.getOperationInputFields.foreach(v => operationInputFieldList.add(v))
 
@@ -37,7 +49,6 @@ trait AggregateOperation{
          keyFields.foreach(v => keyFieldList.add(v.getName))
 
         val props: Properties = x.getOperationProperties
-
         val blankOutRR = ReusableRowHelper(x, fieldManupulating).convertToOutputReusableRow()
         val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
         val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
@@ -45,13 +56,19 @@ trait AggregateOperation{
         val aggregateBase: AggregateTransformBase = classLoader[AggregateTransformBase](x.getOperationClass)
 
         aggregateBase.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
-        
+        if(y != None && x.getOperationClass.toString.contains("hydrograph.engine.expression.userfunctions.AggregateForExpression")){
+          aggregateBase.asInstanceOf[AggregateForExpression].setValidationAPI(convertToListOfValidation(y :: ys))
+          aggregateBase.asInstanceOf[AggregateForExpression].setCounter(counter)
+          aggregateBase.asInstanceOf[AggregateForExpression].setInitialValueExpression((z::zs).toArray)
+          aggregateBase.asInstanceOf[AggregateForExpression].callPrepare()
+        }
+
         Operatioin[AggregateTransformBase](aggregateBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
-          aggregate(xs, fieldManupulating)
+          aggregate(xs, fieldManupulating,y::ys,z::zs,counter+1)
     }
 
     if(operationList!=null)
-      aggregate(operationList.asScala.toList,fieldManupulating)
+      aggregate(operationList.asScala.toList,fieldManupulating,expressionObjectList.toList,initialValueExprs,0)
     else
       List()
   }
@@ -65,13 +82,13 @@ trait AggregateOperation{
 
 trait TransformOperation{
 
-  def initializeTransform( operationList:java.util.List[Operation], fieldManupulating: FieldManupulating):
+  def initializeTransform( operationList:java.util.List[Operation], fieldManupulating: FieldManupulating, expressionObjectList: ListBuffer[Any]):
   List[Operatioin[TransformBase]] = {
 
-    def transform(operationList: List[Operation], fieldManupulating: FieldManupulating):
-    List[Operatioin[TransformBase]] = operationList match {
-      case List() => List()
-      case x :: xs =>
+    def transform(operationList: List[Operation], fieldManupulating: FieldManupulating,expressionObjectList: List[Any]):
+    List[Operatioin[TransformBase]] = (operationList,expressionObjectList) match {
+      case (List(),_) => List()
+      case (x :: xs,y :: ys) =>
         val operationInputFieldList = new ArrayList[String]()
         x.getOperationInputFields.foreach(v => operationInputFieldList.add(v))
 
@@ -85,13 +102,17 @@ trait TransformOperation{
         val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
         val transformBase: TransformBase = classLoader[TransformBase](x.getOperationClass)
 
+        if(y != None && x.getOperationClass.toString.contains("hydrograph.engine.expression.userfunctions.TransformForExpression")){
+          transformBase.asInstanceOf[TransformForExpression].setValidationAPI(y.asInstanceOf[ValidationAPI])
+        }
+
         transformBase.prepare(props, operationInputFieldList, operationOutputFieldList)
 
         Operatioin[TransformBase](transformBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
-          transform(xs, fieldManupulating)
+          transform(xs, fieldManupulating, ys)
     }
     if(operationList!=null)
-      transform(operationList.asScala.toList,fieldManupulating)
+      transform(operationList.asScala.toList,fieldManupulating,expressionObjectList.toList)
     else
       List()
   }

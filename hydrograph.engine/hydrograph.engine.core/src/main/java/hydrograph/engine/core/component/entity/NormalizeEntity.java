@@ -19,6 +19,28 @@ import hydrograph.engine.core.component.entity.base.OperationEntityBase;
 public class NormalizeEntity extends OperationEntityBase {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String outputRecordCount = "";
+	
+	/**
+	 * @return the outputRecordCount
+	 */
+	public String getOutputRecordCount() {
+		return outputRecordCount;
+	}
+
+	/**
+	 * @param outputRecordCount
+	 *            the outputRecordCount to set
+	 */
+	public void setOutputRecordCount(String outputRecordCount) {
+		this.outputRecordCount = outputRecordCount;
+	}
+	
+	/**
 	 * Returns a string with the values for all the members of this entity
 	 * object.
 	 * <p>
