@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum SubGroup {
 
-    DISPLAY,
+	DETAILS,
     CONFIGURATION,
     RECORD_STRUCTURE_DETAILS;
 

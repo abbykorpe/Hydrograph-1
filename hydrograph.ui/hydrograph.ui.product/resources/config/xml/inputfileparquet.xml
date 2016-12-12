@@ -25,7 +25,7 @@
 		</tns:port>
 		
 		<tns:property dataType="string" name="name" renderer="COMPONENT_NAME_WIDGET" type="USER"
-			group="GENERAL" subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			group="GENERAL" subGroup="DETAILS" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED"/>
 		
 		<tns:property dataType="string" name="schema" renderer="SCHEMA_WIDGET" type="USER"

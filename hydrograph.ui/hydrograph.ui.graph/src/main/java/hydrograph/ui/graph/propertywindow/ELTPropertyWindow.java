@@ -48,7 +48,7 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 	private static final String STRING = "String";
 	private static final String TYPE = "Type";
 	private static final String COMPONENT_ID = "ID";
-	private static final String DISPLAY = "DISPLAY";
+	private static final String DETAILS = "DETAILS";
 	private static final String GENERAL = "GENERAL";
 
 	
@@ -96,13 +96,13 @@ public class ELTPropertyWindow implements IELTPropertyWindow{
 	
 	private Property getComponentBaseTypeProperty(){
 		Property property = new Property.Builder(STRING, COMPONENT_ID, Widgets.COMPONENT_ID_WIDGET.name())
-									.group(GENERAL).subGroup(DISPLAY).build();
+									.group(GENERAL).subGroup(DETAILS).build();
 		return property;
 	}
 	
 	private Property getComponentTypeProperty(){
 		Property property = new Property.Builder(STRING, TYPE, Widgets.COMPONENT_TYPE_WIDGET.name())
-									.group(GENERAL).subGroup(DISPLAY).build();
+									.group(GENERAL).subGroup(DETAILS).build();
 		return property;
 	}
 	

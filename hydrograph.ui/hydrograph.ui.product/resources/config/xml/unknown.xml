@@ -35,7 +35,7 @@
 		
 		<tns:property dataType="string" name="name"
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL"
-			subGroup="DISPLAY" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
+			subGroup="DETAILS" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED" />
 
 		<tns:property dataType="string" name="xml_properties_content"
 			renderer="XML_CONTENT_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
