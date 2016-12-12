@@ -1,9 +1,12 @@
 /.project
+/.gitignore
 /.gradle/
 /bin/
+
+/gradle.properties
+/build/
 /schema/
 /.classpath
 /.settings/
-/build/
-hydrograph.engine.iml
-.idea/
+/idea/
+/hydrograph.engine.spark.iml

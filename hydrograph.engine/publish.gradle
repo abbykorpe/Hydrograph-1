@@ -6,7 +6,7 @@ allprojects {
         publish {
          contextUrl = "http://10.30.127.67:9091/artifactory"
             repository {
-            repoKey = 'libs-release-local'
+            repoKey = 'hydrograph-for-spark'
             username = "${repoUserName}" 
             password = "${repoPassword}"
           	    maven = true

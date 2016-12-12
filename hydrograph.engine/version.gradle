@@ -11,8 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 ext.repo = Grgit.open()
-version = new Version(major: 2, minor:1, revision: 1, branch :ext.repo.branch.current.name)
-
+	version = new Version(major: 0, minor:1, revision: "spark", branch :ext.repo.branch.current.name)
 
 buildscript {
 repositories {
@@ -24,14 +23,14 @@ repositories {
 }
 
 import org.ajoberstar.grgit.*
-
 class Version {
-	int major, minor, revision
-	String branch	
+	int major, minor
+	String revision,branch
+	
 	String toString() {
-	if(branch=="master")
-		"$major.$minor.$revision${''}"
-	else
+		if(branch=="master")
+	"$major.$minor.$revision${''}"
+		else
 		"$major.$minor.$revision${'-SNAPSHOT'}"
-				}
-}
+		}
+	}
