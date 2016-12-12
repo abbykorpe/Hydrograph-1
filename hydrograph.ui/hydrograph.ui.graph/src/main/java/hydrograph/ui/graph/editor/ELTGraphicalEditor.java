@@ -1132,7 +1132,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		IWorkspaceRoot workSpaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workSpaceRoot.getProject(getActiveProject());
 		IFolder paramFolder = project.getFolder(Messages.PARAM);
-		IFile filename=paramFolder.getFile(oldFileName.replace(Messages.JOBEXTENSION,Messages.propertiesExtension));
+		IFile filename=paramFolder.getFile(oldFileName.replace(Messages.JOBEXTENSION,Messages.PROPERTIES_EXTENSION));
 		copyParameterFile(currentParameterMap,filename);
 		
 	}

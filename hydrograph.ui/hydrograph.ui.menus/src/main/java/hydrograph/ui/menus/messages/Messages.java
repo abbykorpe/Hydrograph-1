@@ -39,11 +39,7 @@ public class Messages extends NLS {
 	public static String INF_TRANFORM_BASE_CLASS;
 	public static String INF_CUMULATE_BASE_CLASS;
 	public static String INF_NORMALIZE_BASE_CLASS;
-	public static String paramFolderName;
-	public static String jobExtension;
-	public static String properties;
-	public static String job;
-	public static String xml;
+
 	
 	static {
 		// initialize resource bundle

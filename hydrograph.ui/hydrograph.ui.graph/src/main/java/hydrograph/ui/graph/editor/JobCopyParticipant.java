@@ -1,14 +1,15 @@
 package hydrograph.ui.graph.editor;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -18,41 +19,25 @@ import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.CopyParticipant;
 import org.slf4j.Logger;
 
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.utils.GenerateUniqueJobIdUtil;
-import hydrograph.ui.graph.utility.CanvasUtils;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.logging.factory.LogFactory;
 
 public class JobCopyParticipant extends CopyParticipant {
 
-	private Logger logger = LogFactory.INSTANCE.getLogger(JobCopyParticipant.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(JobCopyParticipant.class);
 	private IFile modifiedResource;
-	private static HashMap<IFile,Container> copiedFilesMap;
+	private static List<IFile> copiedFileList;
 	private static String copyToPath;
+	private static List<IFile> xmlFiles;
 	
 
 	@Override
 	protected boolean initialize(Object element) {
-		this.modifiedResource = (IFile) element;
-		if (modifiedResource.getFileExtension().equalsIgnoreCase("job")) {
-			InputStream contents = null;
-			try {
-
-				contents = modifiedResource.getContents();
-				Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(contents);
-				copiedFilesMap.put(modifiedResource, container);
-			} catch (CoreException coreException) {
-				logger.error("Error while getting contents from ifile", coreException);
-			} finally {
-				try {
-					contents.close();
-				} catch (IOException ioException) {
-					logger.warn("Exception occured while closing stream");
-				}
+		if (element instanceof IFile) {
+			this.modifiedResource = (IFile) element;
+			if (modifiedResource == null && StringUtils.isEmpty(modifiedResource.toString())) {
+				return false;
 			}
-		}
-		if (modifiedResource == null && StringUtils.isEmpty(modifiedResource.toString())) {
-			return false;
 		}
 		return true;
 	}
@@ -71,35 +56,23 @@ public class JobCopyParticipant extends CopyParticipant {
 	@Override
 	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		
-		this.copyToPath=getArguments().getDestination().toString();
-		if (modifiedResource.getFileExtension().equalsIgnoreCase("job")) {
-		InputStream contents = modifiedResource.getContents();
-		Container container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(contents);
-		String uniqueJobId;
-		
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try {
-			uniqueJobId = GenerateUniqueJobIdUtil.INSTANCE.generateUniqueJobId();
-			container.setUniqueJobId(uniqueJobId);
-			out.write(CanvasUtils.INSTANCE.fromObjectToXML(container).getBytes());
-			modifiedResource.setContents(new ByteArrayInputStream(out.toByteArray()),true, false, null);
-			
-		} catch (NoSuchAlgorithmException noSuchAlgorithmException) {
-			logger.error("Exception occured while generating new Unique JobId",noSuchAlgorithmException);
-
-		} catch (IOException ioException) {
-			logger.error("Exception occured while converting xml into object",ioException);
-		}
-
-		finally {
-			try {
-				contents.close();
-				out.close();
-			} catch (IOException e) {
-				logger.warn("Exception occured while closing stream");
+		copyToPath=getArguments().getDestination().toString();
+		IWorkspaceRoot workSpaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		IProject project = workSpaceRoot.getProject(copyToPath.split("/")[1]);
+		IFolder jobFolder = project.getFolder(copyToPath.substring(copyToPath.indexOf('/', 2)));
+		xmlFiles=new ArrayList<>();
+		for (IResource iResource : jobFolder.members()) {
+			if (!(iResource instanceof IFolder)) {
+				IFile iFile = (IFile) iResource;
+				 if (iFile.getFileExtension().equalsIgnoreCase(Messages.XML_EXT)) {
+					String fileName=iFile.getName();
+					IFile xmlFile= jobFolder.getFile(fileName.replace(Messages.XMLEXTENSION,Messages.JOBEXTENSION));
+					if(!xmlFile.exists())
+					xmlFiles.add(jobFolder.getFile(fileName));
+				}
 			}
 		}
-		}
+		copiedFileList.add(modifiedResource);
 		return null;
 	}
 
@@ -108,16 +81,24 @@ public class JobCopyParticipant extends CopyParticipant {
 	public Change createPreChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		return super.createPreChange(pm);
 	}
-	public static void setCopiedFilesMap(HashMap<IFile, Container> copiedFilesMap) {
-		JobCopyParticipant.copiedFilesMap = copiedFilesMap;
-	}
+
 
 	public static String getCopyToPath() {
 		return copyToPath;
 	}
 
-	public static HashMap<IFile, Container> getCopiedFilesMap() {
-		return copiedFilesMap;
+
+	
+	public static List<IFile> getCopiedFileList() {
+		return copiedFileList;
 	}
+
+	public static void setCopiedFileList(List<IFile> copiedFileList) {
+		JobCopyParticipant.copiedFileList = copiedFileList;
+	}
+	public static List<IFile> getXmlFiles() {
+		return xmlFiles;
+	}
+
 	
 }

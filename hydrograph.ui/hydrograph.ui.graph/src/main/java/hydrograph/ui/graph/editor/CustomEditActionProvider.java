@@ -1,7 +1,7 @@
 package hydrograph.ui.graph.editor;
 
 import java.net.URL;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
@@ -19,44 +19,55 @@ import org.eclipse.ui.internal.util.BundleUtility;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 
-import hydrograph.ui.graph.Messages;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * @author soniar
+ *
+ */
 public class CustomEditActionProvider extends EditActionProvider {
 
-	private Logger logger = LogFactory.INSTANCE.getLogger(CustomEditActionProvider.class);
-	
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(CustomEditActionProvider.class);
+	private static final String COPY_ACTION_ID="org.eclipse.ui.CopyAction";
+	private static final String PASTE_ACTION_ID="org.eclipse.ui.PasteAction";
+	private static final String PASTE_COMMAND_ID="org.eclipse.ui.edit.paste";
+	private static final String MENU_PLUGIN_NAME="hydrograph.ui.menus";
+	private static final String PASTE_ACTION_TEXT="&Paste@Ctrl+V";
+	private static final String PROPERTIES_EXTENSION=".properties";
+	private static final String PARAM="param";
 
 	@SuppressWarnings("restriction")
+	@Override
 	public void fillContextMenu(IMenuManager menu) {
 		super.fillContextMenu(menu);
 
 		ActionContributionItem pasteContribution = getPasteContribution(menu.getItems());
 		menu.remove(pasteContribution);
-		IAction pasteAction = new Action(Messages.PasteActionText) {
+		IAction pasteAction = new Action(PASTE_ACTION_TEXT) {
 			@Override
 			public void run() {
 				IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench()
 						.getService(IHandlerService.class);
 				try {
-					JobCopyParticipant.setCopiedFilesMap(new HashMap<>());
-					handlerService.executeCommand(Messages.PasteCommandId, null);
+					JobCopyParticipant.setCopiedFileList(new ArrayList<>());
+					handlerService.executeCommand(PASTE_COMMAND_ID, null);
 				} catch (Exception exception) {
 					logger.warn("Error while pasting job files :: {}",exception.getMessage());
 				}
 			}
 		};
 		pasteAction.setAccelerator(SWT.MOD1 | 'v');
-		Bundle bundle = Platform.getBundle(Messages.MenuPluginName);
-		URL imagePath = BundleUtility.find(bundle, Messages.PasteImagePath);
+		Bundle bundle = Platform.getBundle(MENU_PLUGIN_NAME);
+		URL imagePath = BundleUtility.find(bundle,ImagePathConstant.PASTE_IMAGE_PATH);
 		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(imagePath);
 		pasteAction.setImageDescriptor(imageDescriptor);
-		menu.insertAfter(Messages.CopyActionId, pasteAction);
+		menu.insertAfter(COPY_ACTION_ID, pasteAction);
 	}
 
 	private ActionContributionItem getPasteContribution(IContributionItem[] items) {
 		for (IContributionItem contributionItem : items) {
-			if (StringUtils.equals(contributionItem.getId(), Messages.PasteActionId)) {
+			if (StringUtils.equals(contributionItem.getId(),PASTE_ACTION_ID)) {
 				return (ActionContributionItem) contributionItem;
 			}
 		}

@@ -76,49 +76,19 @@ public class ParameterFileManager {
 	 * @throws IOException
 	 */
 	public void storeParameters(Map<String, String> parameterMap,IFile filename) throws IOException{
-		Properties prop = new Properties();
-		prop.setProperty(parameterMap);
+		Properties properties = new Properties();
+		properties.setProperty(parameterMap);
 		
 		File file = new File(parameterFilePath);
 		
 		if(file.exists()){
-			prop.store(parameterFilePath);
-			logger.debug("Saved properties {} to file {}", prop.toString(),parameterFilePath);
+			properties.store(parameterFilePath);
+			logger.debug("Saved properties {} to file {}", properties.toString(),parameterFilePath);
 		}
 		else
 		{
-			InputStream inputStream=null;
-			OutputStream outputStream=null;
-			try{
-			if (filename != null) {
-				inputStream = new FileInputStream(filename.getRawLocation().toString());
-				outputStream = new FileOutputStream(file);
-				int read = 0;
-				byte[] bytes = new byte[1024];
-				while ((read = inputStream.read(bytes)) != -1) {
-					outputStream.write(bytes, 0, read);
-				}
-			}
-			}catch(IOException ioException)
-			{
-				logger.warn("Exception occured while writing contens in property file");
-			}finally {
-				if (inputStream != null) {
-					try {
-						inputStream.close();
-					} catch (IOException ioException) {
-						logger.warn("Exception occured while closing stream");
-					}
-				}
-				if (outputStream != null) {
-					try {
-						outputStream.close();
-					} catch (IOException ioException) {
-						logger.warn("Exception occured while closing stream");
-					}
-
-				}
-			}
+			properties.load(filename.getRawLocation().toString());
+			properties.store(file.getAbsolutePath());
 		}
 	}
 }

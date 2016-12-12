@@ -129,6 +129,7 @@ public class Messages extends NLS {
 	public static String PasteActionText;
 	public static String propertiesExtension;
 	public static String param;
+	public static String PROPERTIES_EXTENSION;
 	
 	static {
 		// initialize resource bundle
@@ -138,4 +139,3 @@ public class Messages extends NLS {
 	private Messages() {
 	}
 }
-

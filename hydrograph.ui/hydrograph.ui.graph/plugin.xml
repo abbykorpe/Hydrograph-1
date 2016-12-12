@@ -459,7 +459,7 @@
           <enablement>
             <not>
                <systemTest
-                     property="MyApp"
+                     property="PasteSelection"
                      value="WONT-EVER-BE-SET">
                </systemTest>
             </not>
