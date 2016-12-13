@@ -1,6 +1,7 @@
 package hydrograph.engine.transformation.userfunctions.base;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
@@ -24,13 +25,6 @@ public class ListBasedReusableRow extends ReusableRow {
 	}
 
 	@Override
-	public void reset() {
-		for (int i = 0; i < values.size(); i++) {
-			values.set(i, null);
-		}
-	}
-
-	@Override
 	protected Comparable getFieldInternal(int index) {
 		return (Comparable) values.get(index);
 	}
@@ -50,6 +44,11 @@ public class ListBasedReusableRow extends ReusableRow {
 	protected void setFieldInternal(String fieldName, Comparable value) {
 		values.set(fieldPos.get(fieldName), value);
 
+	}
+
+	@Override
+	public Collection<Comparable> getFields() {
+		return values;
 	}
 
 }
