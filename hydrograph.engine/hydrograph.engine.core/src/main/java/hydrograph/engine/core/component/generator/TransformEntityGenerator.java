@@ -27,7 +27,7 @@ import hydrograph.engine.jaxb.operationstypes.Transform;
 public class TransformEntityGenerator extends OperationComponentGeneratorBase {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1853841267537936752L;
 
@@ -68,7 +68,7 @@ public class TransformEntityGenerator extends OperationComponentGeneratorBase {
 			// operation present to true
 			transformEntity.setNumOperations(jaxbTransform.getOperationOrExpression().size());
 			transformEntity.setOperationPresent(true);
-			transformEntity.setOperationsList(setOperationClassInCaseExpression(OperationEntityUtils.extractOperations(jaxbTransform.getOperationOrExpression())));
+			transformEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbTransform.getOperationOrExpression()));
 		} else {
 
 			LOG.trace("Operation not present for transform component: " + jaxbTransform.getId()
@@ -88,17 +88,7 @@ public class TransformEntityGenerator extends OperationComponentGeneratorBase {
 		transformEntity.setOutSocketList(OperationEntityUtils.extractOutSocketList(jaxbTransform.getOutSocket()));
 
 	}
-	
-	private List<Operation> setOperationClassInCaseExpression(List<Operation> extractOperations) {
-		for (int i = 0; i < extractOperations.size(); i++) {
-			if (extractOperations.get(i).getOperationClass() == null) {
-				extractOperations.get(i)
-						.setOperationClass("hydrograph.engine.expression.userfunctions.TransformForExpression");
-			}
-		}
-		return extractOperations;
-	}
-	
+
 	@Override
 	public TransformEntity getEntity() {
 		return transformEntity;

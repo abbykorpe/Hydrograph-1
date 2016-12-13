@@ -25,7 +25,7 @@ class SparkTransformComponent(transformEntity: TransformEntity, componentsParams
     fm.getinputFields().zipWithIndex.foreach(f => {
       inputColumn(f._2) = col(f._1)
     })
-
+1
     val df = componentsParams.getDataFrame.select(inputColumn: _*).mapPartitions(itr => {
       //Initialize Transform to call prepare Method
       val transformsList = initializeTransform(transformEntity.getOperationsList,fm,op.getExpressionObject)

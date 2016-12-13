@@ -23,12 +23,15 @@ import scala.collection.mutable.ListBuffer
  */
 class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with AggregateOperation with Serializable {
 
-  def extractInitialValues(getOperationsList: List[Operation]):List[String] = {
+  def extractInitialValues(getOperationsList: util.List[Operation]):List[String] = {
     def extract(operationList:List[Operation],stringList:List[String]): List[String] = (operationList,stringList) match {
       case (List(),_) => stringList
       case (x::xs,str) => extract(xs,str ++ List(x.getAccumulatorInitialValue))
     }
-    extract(getOperationsList,List[String]())
+    if(getOperationsList != null)
+      extract(getOperationsList.asScala.toList,List[String]())
+    else
+      List[String]()
   }
 
   override def createComponent(): Map[String, DataFrame] = {
@@ -54,7 +57,7 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
     val outputDf = sortedDf.mapPartitions(itr => {
 
       //Initialize Aggregarte to call prepare Method
-      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm,op.getExpressionObject,extractInitialValues(aggregateEntity.getOperationsList.asScala.toList))
+      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm,op.getExpressionObject,extractInitialValues(aggregateEntity.getOperationsList))
       var prevKeysArray: Array[Any] = null
       val resultRows = ListBuffer[Row]()
 
