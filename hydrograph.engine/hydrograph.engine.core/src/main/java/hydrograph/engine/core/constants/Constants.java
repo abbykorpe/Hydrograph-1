@@ -28,12 +28,24 @@ public class Constants {
 	 * The default value of 'scale' attribute of big decimal fields used on input / output schema
 	 */
 	public static final int DEFAULT_SCALE = -999;
-	
+
 	/**
 	 * The default value of 'precision' attribute of big decimal fields used on input / output schema
 	 */
 	public static final int DEFAULT_PRECISION = -999;
-	
-	
 
+	/**
+	 * The default port for mysql
+	 */
+	public static final int DEFAULT_MYSQL_PORT=3306;
+
+	/**
+	 * The default number of record to be read per roundtrip
+	 */
+	//public static final int DEFAULT_DB_FETCHSIZE=1000;
+
+	/**
+	 * The default chunk size
+	 */
+	public static final int DEFAULT_CHUNKSIZE=1000;
 }

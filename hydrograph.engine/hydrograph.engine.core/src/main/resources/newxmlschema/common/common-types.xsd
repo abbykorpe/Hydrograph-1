@@ -362,6 +362,20 @@
 		<xs:attribute name="expressionId" type="xs:string" use="required" />
 	</xs:complexType>
 
+	<xs:complexType name="element-value-string-type">
+		<xs:attribute name="value" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="element-value-integer-type">
+		<xs:attribute name="value" type="xs:integer" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="type-key-fields">
+		<xs:choice>
+			<xs:element name="field" maxOccurs="unbounded" type="type-field-name" />
+		</xs:choice>
+	</xs:complexType>
+
 	<!--**************other standard types ends************ -->
 
 

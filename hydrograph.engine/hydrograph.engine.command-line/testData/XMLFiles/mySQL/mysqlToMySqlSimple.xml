@@ -17,58 +17,77 @@
 	xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"
 	xmlns:op="hydrograph/engine/jaxb/operationstypes" xmlns:ct="hydrograph/engine/jaxb/commandtypes"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
+	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
 
 
-	<inputs id="inputMysql" phase="0" xsi:type="it:rdbms">
+	<inputs id="inputMysql" xsi:type="it:mysql">
 		<outSocket id="out0">
 			<schema name="schema1">
-				<field name="num" type="java.lang.Integer" />
-				<field name="lwr" type="java.lang.String" />
-				<field name="upr" type="java.lang.String" />
+				<field name="empid" type="java.lang.Integer" />
+				<field name="ename" type="java.lang.String" />
+				<field name="salary" type="java.lang.Double" />
+				<field name="city" type="java.lang.String" />
+				<field name="country" type="java.lang.String" />
+				<field name="email" type="java.lang.String" />
+				<field name="Deptno" type="java.lang.Integer" />
+				<field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+				<field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+				<field name="extra" type="java.math.BigDecimal" scale="2"
+					precision="10" scaleType="explicit" />
 			</schema>
 		</outSocket>
-		<databaseType value="MySQL" />
-		<databaseName value="jdbc" />
-		<tableName value="sourcetable" />
-	<!-- 	<query value="select testingtable1.num as num,testingtable1.lwr as lwr,testingtable1.upr as upr from testingtable2 inner join testingtable1 on testingtable2.num!=testingtable1.num  " />  -->
+		<databaseName value="test" />
+		<hostName value="10.130.248.53"/>
+		<!-- <port value="3306" /> -->
+		<jdbcDriver value="Connector/J" />
+		<!-- <tableName value="emp" /> -->
+		<selectQuery value="select * from mysqltarget2 where empid > 700" />
 		<username value="root" />
 		<password value="root" />
-		<jdbcurl value="jdbc:mysql://10.30.126.82:3306" />
-		<batchSize value="1"/>
 	</inputs>
 
 
 	
-	<outputs id="outputMysql" phase="0" xsi:type="ot:rdbms">
+	<outputs id="outputMysql"  xsi:type="ot:mysql">
 		<inSocket fromComponentId="inputMysql" fromSocketId="out0" id="in0">
 			<schema name="schema1">
-				<field name="num" type="java.lang.Integer" />
-				<field name="lwr" type="java.lang.String" />
-				<field name="upr" type="java.lang.String" />
+				<field name="empid" type="java.lang.Integer" />
+				<field name="ename" type="java.lang.String" />
+				<field name="salary" type="java.lang.Double" />
+				<field name="city" type="java.lang.String" />
+				<field name="country" type="java.lang.String" />
+				<field name="email" type="java.lang.String" />
+				<field name="Deptno" type="java.lang.Integer" />
+				<field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+				<field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+				<field name="extra" type="java.math.BigDecimal" scale="2"
+					precision="10" scaleType="explicit" />
 			</schema>
 		</inSocket>
-		<databaseType value="MySQL" />
-		<databaseName value="jdbc" />
-		<tableName value="targettable" />
+		
+		<databaseName value="test" />
+		<hostName value="10.130.248.53"/>
+		<!-- <port value="3306" /> -->
+		<jdbcDriver value="Connector/J" />
+		<tableName value="targettable1" />
 		<username value="root" />
 		<password value="root" />
-			<jdbcurl value="jdbc:mysql://10.130.248.53:3306" />
+		<!-- <chunkSize value="2" /> -->
 		<loadType>
 			<newTable>
 				<primaryKeys>
-					<field name="num" />
+					<field name="empid" />
 				</primaryKeys> 
 			</newTable>  
-			<!--<truncateLoad/> -->
-		<!--   <Insert/>  
-			<update>
+			<!-- <truncateLoad/> -->
+		   <!-- <Insert/> -->  
+			<!-- <update>
 				<updateByKeys>
-					<field name="num" />
+					<field name="empid" />
+					<field name="Deptno" />
 				</updateByKeys>
 			</update> -->
 		</loadType>
-		<batchSize value="1"/>
 	</outputs>
 
 </p:graph>

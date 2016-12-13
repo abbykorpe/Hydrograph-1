@@ -73,7 +73,7 @@ public class InputRedshiftAssembly extends InputRDBMSAssembly {
 	@Override
 	protected void createTableDescAndScheme() {
 		// For sql query
-		if (inputRDBMSEntity.getQuery() != null
+		/*if (inputRDBMSEntity.getQuery() != null
 				&& inputRDBMSEntity.getQuery() != "") {
 			String sql = inputRDBMSEntity.getQuery();
 
@@ -87,14 +87,14 @@ public class InputRedshiftAssembly extends InputRDBMSAssembly {
 					, columnDefs, null, null);
 
 			scheme = new RedshiftScheme(inputFormatClass, fields, columnNames);
-		}
+		}*/
 	}
 
 	@Override
 	protected void initializeRdbmsTap() {
 		LOG.debug("Initializing Redshift Tap.");
 		
-		if (inputRDBMSEntity.getQuery() == null
+		/*if (inputRDBMSEntity.getQuery() == null
 				|| inputRDBMSEntity.getQuery() == "") {
 			
 			rdbmsTap = new RedshiftTap(inputRDBMSEntity.getJdbcurl() + "/" + inputRDBMSEntity.getDatabaseName(),
@@ -112,7 +112,7 @@ public class InputRedshiftAssembly extends InputRDBMSAssembly {
 			
 		}
 		((RedshiftTap) rdbmsTap).setBatchSize(inputRDBMSEntity.getBatchSize());
-
+*/
 	}
 
 

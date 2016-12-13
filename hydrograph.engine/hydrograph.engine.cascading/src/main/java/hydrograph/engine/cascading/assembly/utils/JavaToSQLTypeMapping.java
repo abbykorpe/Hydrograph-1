@@ -92,15 +92,29 @@ public enum JavaToSQLTypeMapping {
 		throw new NoJavaTODBTypeMappingFound();
 	}
 	
-	public static String[] createTypeMapping(String dbName,String[] dataType){
-		Map<String, String> map = selectMapping(dbName).mapping();
-		String[] arr = new String[dataType.length];
+	/**
+	 * this will map java data type to specific database type like mysql,oracle,teradata,redshit
+	 * //@param String databaseType
+	 * //@param String[] fieldsDataType
+	 * //@param int[] fieldsScale,
+	 * //@param int[] fieldsPrecision
+	 *
+	 * return String[] of database type
+	 */
+	public static String[] createTypeMapping(String databaseType, String[] fieldsDataType, int[] fieldsScale,
+											 int[] fieldsPrecision) {
+		Map<String, String> map = selectMapping(databaseType).mapping();
+		String[] arr = new String[fieldsDataType.length];
 		int counter = 0;
-		for (String key : dataType)
-			arr[counter++] = map.get(key);
+		for(int i=0;i<fieldsDataType.length;i++){
+			if(fieldsDataType[i].equals("java.math.BigDecimal"))
+				arr[i] = map.get(fieldsDataType[i]) + "(" + fieldsPrecision[i] + ","+ fieldsScale[i] +")";
+			else
+				arr[i] = map.get(fieldsDataType[i]);
+		}
 		return arr;
 	}
-	
+
 	static class NoJavaTODBTypeMappingFound extends RuntimeException{
 		private static final long serialVersionUID = 1L;
 	}

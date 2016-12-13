@@ -70,12 +70,12 @@ InputComponentGeneratorBase {
 				.extractRuntimeProperties(inputOracleJaxb
 						.getRuntimeProperties()));
 		inputRDBMSEntity.setBatch(inputOracleJaxb.getBatch());
-		inputRDBMSEntity.setQuery(inputOracleJaxb.getQuery() ==null?null:inputOracleJaxb.getQuery().getValue());
+	//	inputRDBMSEntity.setQuery(inputOracleJaxb.getQuery() ==null?null:inputOracleJaxb.getQuery().getValue());
 		inputRDBMSEntity.setUsername(inputOracleJaxb.getUsername().getValue());
 		inputRDBMSEntity.setPassword(inputOracleJaxb.getPassword().getValue());
-		inputRDBMSEntity.setJdbcurl(inputOracleJaxb.getJdbcurl().getValue());
-		inputRDBMSEntity.setBatchSize(inputOracleJaxb.getBatchSize().getValue().intValue());
-		inputRDBMSEntity.setCondition(inputOracleJaxb.getCondition()==null?null:inputOracleJaxb.getCondition().getValue());
+//		inputRDBMSEntity.setJdbcurl(inputOracleJaxb.getJdbcurl().getValue());
+//		inputRDBMSEntity.setBatchSize(inputOracleJaxb.getBatchSize().getValue().intValue());
+//		inputRDBMSEntity.setCondition(inputOracleJaxb.getCondition()==null?null:inputOracleJaxb.getCondition().getValue());
 	
 		//inputRDBMSEntity.setColumnDefs(inputRDBMS.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema().get== null?null:inputRDBMS.getPrimaryKeys().getField());
 	}

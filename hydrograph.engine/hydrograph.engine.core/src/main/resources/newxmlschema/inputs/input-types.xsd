@@ -15,6 +15,9 @@
 	xmlns:ihivetextfile="hydrograph/engine/jaxb/ihivetextfile"
 	xmlns:ifMixedScheme="hydrograph/engine/jaxb/ifmixedscheme"
 	xmlns:ifsubjob="hydrograph/engine/jaxb/ifsubjob" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:imysql="hydrograph/engine/jaxb/imysql"
+    xmlns:iredshift="hydrograph/engine/jaxb/iredshift"
+    xmlns:ioracle="hydrograph/engine/jaxb/ioracle"
 	targetNamespace="hydrograph/engine/jaxb/inputtypes" elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
 		namespace="hydrograph/engine/jaxb/commontypes" />
@@ -37,6 +40,12 @@
 		namespace="hydrograph/engine/jaxb/ifmixedscheme" />
 	<xs:import schemaLocation="./subjob/input-subjob-types.xsd"
 		namespace="hydrograph/engine/jaxb/ifsubjob" />
+    <xs:import schemaLocation="./mysql-type/input-mysql-types.xsd"
+        namespace="hydrograph/engine/jaxb/imysql" />
+    <xs:import schemaLocation="./redshift-type/input-redshift-types.xsd"
+        namespace="hydrograph/engine/jaxb/iredshift" />
+    <xs:import schemaLocation="./oracle-type/input-oracle-types.xsd"
+        namespace="hydrograph/engine/jaxb/ioracle" />
 
 
 
@@ -291,5 +300,91 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+
+	<xs:complexType name="mysql">
+		<xs:complexContent>
+			<xs:extension base="imysql:type-input-mysql-base">
+				<xs:sequence>
+					<xs:element name="databaseName" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="hostName" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="port" type="cmn:element-value-integer-type"
+								minOccurs="0" maxOccurs="1" />
+					<xs:element name="jdbcDriver" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:choice maxOccurs="1" minOccurs="1">
+						<xs:element name="tableName" type="cmn:element-value-string-type"
+									minOccurs="1" maxOccurs="1" />
+						<xs:sequence minOccurs="1" maxOccurs="1">
+							<xs:element name="selectQuery" type="cmn:element-value-string-type"
+										minOccurs="1" maxOccurs="1" />
+							<xs:element name="countQuery" type="cmn:element-value-string-type"
+										minOccurs="0" maxOccurs="1" />
+						</xs:sequence>
+					</xs:choice>
+
+					<xs:element name="username" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="password" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+								minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+    <xs:complexType name="redshift">
+        <xs:complexContent>
+            <xs:extension base="iredshift:type-input-redshift-base">
+                <xs:sequence>
+                    <xs:element name="databaseName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="tableName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="username" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="password" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="jdbcurl" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="query" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="condition" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="batchSize" type="cmn:element-value-integer-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="runtimeProperties" type="cmn:type-properties"
+                                minOccurs="0" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="oracle">
+        <xs:complexContent>
+            <xs:extension base="ioracle:type-input-oracle-base">
+                <xs:sequence>
+                    <xs:element name="tableName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="username" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="password" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="jdbcurl" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="query" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="condition" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="batchSize" type="cmn:element-value-integer-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="runtimeProperties" type="cmn:type-properties"
+                                minOccurs="0" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
 </xs:schema>

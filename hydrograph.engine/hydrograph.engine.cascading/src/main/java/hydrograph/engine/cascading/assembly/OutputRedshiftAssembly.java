@@ -96,11 +96,11 @@ protected  void initializeRDBMSTap()
 		else
 			sinkMode = SinkMode.UPDATE;
 		
-		rdbmsTap = new RedshiftTap(outputRDBMSEntity.getJdbcurl() + "/" + outputRDBMSEntity.getDatabaseName(),
+		/*rdbmsTap = new RedshiftTap(outputRDBMSEntity.getJdbcurl() + "/" + outputRDBMSEntity.getDatabaseName(),
 				outputRDBMSEntity.getUsername(), outputRDBMSEntity.getPassword(),null,null
 				,tableDesc, scheme, sinkMode, false, true);
 		
-		((RedshiftTap) rdbmsTap).setBatchSize(outputRDBMSEntity.getBatchSize());
+		((RedshiftTap) rdbmsTap).setBatchSize(outputRDBMSEntity.getBatchSize());*/
 	}
 
 }

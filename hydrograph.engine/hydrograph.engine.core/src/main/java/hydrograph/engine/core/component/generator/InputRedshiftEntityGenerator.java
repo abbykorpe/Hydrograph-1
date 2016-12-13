@@ -70,12 +70,12 @@ InputComponentGeneratorBase {
 				.extractRuntimeProperties(inputRedshiftJaxb
 						.getRuntimeProperties()));
 		inputRDBMSEntity.setBatch(inputRedshiftJaxb.getBatch());
-		inputRDBMSEntity.setQuery(inputRedshiftJaxb.getQuery() ==null?null:inputRedshiftJaxb.getQuery().getValue());
+//		inputRDBMSEntity.setQuery(inputRedshiftJaxb.getQuery() ==null?null:inputRedshiftJaxb.getQuery().getValue());
 		inputRDBMSEntity.setUsername(inputRedshiftJaxb.getUsername().getValue());
 		inputRDBMSEntity.setPassword(inputRedshiftJaxb.getPassword().getValue());
-		inputRDBMSEntity.setJdbcurl(inputRedshiftJaxb.getJdbcurl().getValue());
-		inputRDBMSEntity.setBatchSize(inputRedshiftJaxb.getBatchSize().getValue().intValue());
-		inputRDBMSEntity.setCondition(inputRedshiftJaxb.getCondition().getValue());
+//		inputRDBMSEntity.setJdbcurl(inputRedshiftJaxb.getJdbcurl().getValue());
+//		inputRDBMSEntity.setBatchSize(inputRedshiftJaxb.getBatchSize().getValue().intValue());
+//		inputRDBMSEntity.setCondition(inputRedshiftJaxb.getCondition().getValue());
 		
 	
 		//inputRDBMSEntity.setColumnDefs(inputRDBMS.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema().get== null?null:inputRDBMS.getPrimaryKeys().getField());

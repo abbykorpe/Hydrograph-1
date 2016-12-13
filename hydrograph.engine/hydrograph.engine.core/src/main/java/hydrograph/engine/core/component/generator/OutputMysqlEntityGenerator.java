@@ -14,11 +14,11 @@ package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
 
+import hydrograph.engine.core.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -28,6 +28,9 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 
 	private Mysql jaxbOutputMysql;
 	private OutputRDBMSEntity outputRDBMSEntity;
+	private final String databaseType="Mysql";
+	private final String jdbcDriver="Connector/J";
+	private final String driverName = "com.mysql.jdbc.Driver";
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputMysqlEntityGenerator.class);
 
@@ -35,7 +38,7 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 		super(baseComponent);
 	}
 
-	
+
 
 	@Override
 	public void castComponentFromBase(TypeBaseComponent baseComponent) {
@@ -47,12 +50,6 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 		outputRDBMSEntity = new OutputRDBMSEntity();
 	}
 
-	
-	
-	
-	
-	
-	
 	@Override
 	public void initializeEntity() {
 
@@ -60,6 +57,7 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 				+ jaxbOutputMysql.getId());
 
 		outputRDBMSEntity.setComponentId(jaxbOutputMysql.getId());
+		outputRDBMSEntity.setBatch(jaxbOutputMysql.getBatch());
 
 		outputRDBMSEntity
 				.setFieldsList(OutputEntityUtils.extractOutputFields(jaxbOutputMysql
@@ -67,37 +65,37 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 						.getFieldOrRecordOrIncludeExternalSchema()));
 		outputRDBMSEntity.setDatabaseName(jaxbOutputMysql.getDatabaseName().getValue());
 		outputRDBMSEntity.setTableName(jaxbOutputMysql.getTableName().getValue());
-		outputRDBMSEntity.setRuntimeProperties(OutputEntityUtils
-				.extractRuntimeProperties(jaxbOutputMysql.getRuntimeProperties()));
-		outputRDBMSEntity.setBatch(jaxbOutputMysql.getBatch());
+
 		outputRDBMSEntity.setUsername(jaxbOutputMysql.getUsername().getValue());
 		outputRDBMSEntity.setPassword(jaxbOutputMysql.getPassword().getValue());
-		outputRDBMSEntity.setJdbcurl(jaxbOutputMysql.getJdbcurl().getValue());
-		outputRDBMSEntity.setDatabaseType("Mysql");
-		outputRDBMSEntity.setBatchSize(jaxbOutputMysql.getBatchSize().getValue().intValue());
-		
-		if (jaxbOutputMysql.getLoadType().getNewTable() != null) 
+
+		outputRDBMSEntity.setHostName(jaxbOutputMysql.getHostName().getValue());
+		outputRDBMSEntity.setPort(jaxbOutputMysql.getPort()==null? Constants.DEFAULT_MYSQL_PORT:jaxbOutputMysql.getPort().getValue().intValue());
+		outputRDBMSEntity.setJdbcDriver(jaxbOutputMysql.getJdbcDriver().getValue().equals(jdbcDriver)?driverName:null);
+		outputRDBMSEntity.setChunkSize(jaxbOutputMysql.getChunkSize()==null?Constants.DEFAULT_CHUNKSIZE:jaxbOutputMysql.getChunkSize().getValue().intValue());
+		outputRDBMSEntity.setDatabaseType(databaseType);
+
+		if (jaxbOutputMysql.getLoadType().getNewTable() != null)
 			outputRDBMSEntity.setLoadType("newTable");
-		else if(jaxbOutputMysql.getLoadType().getTruncateLoad() != null) 
+		else if(jaxbOutputMysql.getLoadType().getTruncateLoad() != null)
 			outputRDBMSEntity.setLoadType("truncateLoad");
-		else if (jaxbOutputMysql.getLoadType().getInsert() != null) 
+		else if (jaxbOutputMysql.getLoadType().getInsert() != null)
 			outputRDBMSEntity.setLoadType("insert");
-		else 
+		else
 			outputRDBMSEntity.setLoadType("update");
-		
+
 
 		if("newTable".equals(outputRDBMSEntity.getLoadType()))
-		outputRDBMSEntity
-				.setPrimaryKeys(jaxbOutputMysql.getLoadType().getNewTable().getPrimaryKeys() == null ? null
-						: jaxbOutputMysql.getLoadType().getNewTable().getPrimaryKeys().getField());
+			outputRDBMSEntity
+					.setPrimaryKeys(jaxbOutputMysql.getLoadType().getNewTable().getPrimaryKeys() == null ? null
+							: jaxbOutputMysql.getLoadType().getNewTable().getPrimaryKeys().getField());
 		if(outputRDBMSEntity.getLoadType().equals("update"))
 			outputRDBMSEntity
-			.setUpdateByKeys(jaxbOutputMysql.getLoadType().getUpdate().getUpdateByKeys().getField());
+					.setUpdateByKeys(jaxbOutputMysql.getLoadType().getUpdate().getUpdateByKeys().getField());
+
+		outputRDBMSEntity.setRuntimeProperties(OutputEntityUtils
+				.extractRuntimeProperties(jaxbOutputMysql.getRuntimeProperties()));
 	}
-
-	
-
-
 
 	@Override
 	public OutputRDBMSEntity getEntity() {

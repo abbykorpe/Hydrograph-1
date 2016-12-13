@@ -61,8 +61,8 @@ public class OutputOracleEntityGenerator extends OutputComponentGeneratorBase {
 		outputRDBMSEntity.setBatch(jaxbOutputOracle.getBatch());
 		outputRDBMSEntity.setUsername(jaxbOutputOracle.getUsername().getValue());
 		outputRDBMSEntity.setPassword(jaxbOutputOracle.getPassword().getValue());
-		outputRDBMSEntity.setJdbcurl(jaxbOutputOracle.getJdbcurl().getValue());
-		outputRDBMSEntity.setBatchSize(jaxbOutputOracle.getBatchSize().getValue().intValue());
+	//	outputRDBMSEntity.setJdbcurl(jaxbOutputOracle.getJdbcurl().getValue());
+	//	outputRDBMSEntity.setBatchSize(jaxbOutputOracle.getBatchSize().getValue().intValue());
 		if (jaxbOutputOracle.getLoadType().getNewTable() != null)
 			outputRDBMSEntity.setLoadType("newTable");
 		else if (jaxbOutputOracle.getLoadType().getTruncateLoad() != null)

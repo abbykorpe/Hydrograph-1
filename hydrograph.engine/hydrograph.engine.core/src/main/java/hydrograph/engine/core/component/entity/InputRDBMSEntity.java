@@ -29,16 +29,32 @@ public class InputRDBMSEntity extends InputOutputEntityBase {
 	private List<OutSocket> outSocketList;
 	private List<SchemaField> schemaFieldsList;
 
-	protected String databaseName;
-	protected String tableName;
+	private String databaseType;
+
+	private String databaseName;
+	private String tableName;
 	private String username;
 	private String password;
-	private String jdbcurl;
-	private String query;
-	private Integer batchSize;
-	private String databaseType;
-	private String condition;
-	
+	private String hostName;
+	private Integer port;
+	private String jdbcDriver;
+	private String selectQuery;
+
+	private String countQuery;
+
+	/**
+	 * @return the countQuery
+	 */
+	public String getCountQuery() {
+		return countQuery;
+	}
+
+	/**
+	 * @param countQuery the countQuery to set
+	 */
+	public void setCountQuery(String countQuery) {
+		this.countQuery = countQuery;
+	}
 
 	/**
 	 * @return the outSocketList
@@ -46,44 +62,55 @@ public class InputRDBMSEntity extends InputOutputEntityBase {
 	public List<OutSocket> getOutSocketList() {
 		return outSocketList;
 	}
+
 	/**
-	 * @param outSocketList the outSocketList to set
+	 * @param outSocketList
+	 *            the outSocketList to set
 	 */
 	public void setOutSocketList(List<OutSocket> outSocketList) {
 		this.outSocketList = outSocketList;
 	}
+
 	/**
 	 * @return the schemaFieldsList
 	 */
 	public List<SchemaField> getFieldsList() {
 		return schemaFieldsList;
 	}
+
 	/**
-	 * @param schemaFieldsList the schemaFieldsList to set
+	 * @param schemaFieldsList
+	 *            the schemaFieldsList to set
 	 */
 	public void setFieldsList(List<SchemaField> schemaFieldsList) {
 		this.schemaFieldsList = schemaFieldsList;
 	}
+
 	/**
 	 * @return the databaseName
 	 */
 	public String getDatabaseName() {
 		return databaseName;
 	}
+
 	/**
-	 * @param databaseName the databaseName to set
+	 * @param databaseName
+	 *            the databaseName to set
 	 */
 	public void setDatabaseName(String databaseName) {
 		this.databaseName = databaseName;
 	}
+
 	/**
 	 * @return the tableName
 	 */
 	public String getTableName() {
 		return tableName;
 	}
+
 	/**
-	 * @param tableName the tableName to set
+	 * @param tableName
+	 *            the tableName to set
 	 */
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
@@ -95,48 +122,42 @@ public class InputRDBMSEntity extends InputOutputEntityBase {
 	public String getUsername() {
 		return username;
 	}
+
 	/**
-	 * @param username the username to set
+	 * @param username
+	 *            the username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	/**
 	 * @return the password
 	 */
 	public String getPassword() {
 		return password;
 	}
+
 	/**
-	 * @param password the password to set
+	 * @param password
+	 *            the password to set
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	/**
-	 * @return the jdbcurl
+	 * @return the selectQuery
 	 */
-	public String getJdbcurl() {
-		return jdbcurl;
+	public String getSelectQuery() {
+		return selectQuery;
 	}
+
 	/**
-	 * @param jdbcurl the jdbcurl to set
+	 * @param selectQuery the selectQuery to set
 	 */
-	public void setJdbcurl(String jdbcurl) {
-		this.jdbcurl = jdbcurl;
-	}
-	/**
-	 * @return the query
-	 */
-	public String getQuery() {
-		return query;
-	}
-	/**
-	 * @param query the query to set
-	 */
-	public void setQuery(String query) {
-		this.query = query;
+	public void setSelectQuery(String selectQuery) {
+		this.selectQuery = selectQuery;
 	}
 
 	/**
@@ -145,37 +166,54 @@ public class InputRDBMSEntity extends InputOutputEntityBase {
 	public String getDatabaseType() {
 		return databaseType;
 	}
+
 	/**
-	 * @param databaseType the databaseType to set
+	 * @param databaseType
+	 *            the databaseType to set
 	 */
 	public void setDatabaseType(String databaseType) {
 		this.databaseType = databaseType;
 	}
+
 	/**
-	 * @return the batchSize
+	 * @return the hostName
 	 */
-	public Integer getBatchSize() {
-		return batchSize;
-	}
-	/**
-	 * @param batchSize the batchSize to set
-	 */
-	public void setBatchSize(Integer batchSize) {
-		this.batchSize = batchSize;
-	}
-	/**
-	 * @return the condition
-	 */
-	public String getCondition() {
-		return condition;
-	}
-	/**
-	 * @param condition the condition to set
-	 */
-	public void setCondition(String condition) {
-		this.condition = condition;
+	public String getHostName() {
+		return hostName;
 	}
 
-	
-	
+	/**
+	 * @param hostName the hostName to set
+	 */
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+
+	/**
+	 * @return the port
+	 */
+	public Integer getPort() {
+		return port;
+	}
+
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(Integer port) {
+		this.port = port;
+	}
+
+	/**
+	 * @return the jdbcDriver
+	 */
+	public String getJdbcDriver() {
+		return jdbcDriver;
+	}
+
+	/**
+	 * @param jdbcDriver the jdbcDriver to set
+	 */
+	public void setJdbcDriver(String jdbcDriver) {
+		this.jdbcDriver = jdbcDriver;
+	}
 }
