@@ -165,7 +165,9 @@ public class RunConfigDialog extends Dialog {
 		viewDataCheckBox.addSelectionListener(viewDataSelectionListener);
 
 		Composite composite_2 = new Composite(composite_3, SWT.NONE);
-		composite_2.setLayout(new GridLayout(2, false));
+		GridLayout gl_composite_2 = new GridLayout(2, false);
+		gl_composite_2.horizontalSpacing = 15;
+		composite_2.setLayout(gl_composite_2);
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		Label lblDebugFileLocation = new Label(composite_2, SWT.NONE);
