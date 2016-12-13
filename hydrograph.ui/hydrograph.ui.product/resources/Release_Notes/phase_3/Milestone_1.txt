@@ -52,6 +52,7 @@ connection(link) on transform component.
 35. ..... - [Pooja Yadav] - Output Component : fixed issue related to file path and external table path in output components.
 36.<518> - [Pooja Yadav] - Join Component : Field Name validation is not present in Join/lookup Mapping dialog for Output field.
 37.<521> - [Pooja Yadav] - Run Configuration Window : Base Path field on Run configuration window is not shown with asterisk (*) when user selects view data checkbox.
+38. ..... - [Pooja Yadav] - Fixed theme related issues.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
