@@ -12,7 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.base;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,7 +29,7 @@ import java.util.LinkedHashSet;
  * @author bitwise
  *
  */
-public abstract class ReusableRow implements Comparable<ReusableRow>,Serializable {
+public abstract class ReusableRow implements Comparable<ReusableRow> {
 
 	private LinkedHashSet<String> fields;
 
@@ -47,7 +46,11 @@ public abstract class ReusableRow implements Comparable<ReusableRow>,Serializabl
 	/**
 	 * Resets all the fields to null
 	 */
-	public abstract void reset();
+	public void reset() {
+		for (int i = 0; i < this.fields.size(); i++) {
+			setFieldInternal(i, null);
+		}
+	}
 
 	/**
 	 * Returns all the field names in the row
@@ -173,28 +176,6 @@ public abstract class ReusableRow implements Comparable<ReusableRow>,Serializabl
 	 */
 	public String getString(int index) {
 		return (String) getField(index);
-	}
-	
-	/**
-	 * Fetches a object field value
-	 * 
-	 * @param fieldName
-	 *            The name of the field whose value to be fetched
-	 * @return The value of the field
-	 */
-	public Object getObject(String fieldName) {
-		return (Object) getField(fieldName);
-	}
-
-	/**
-	 * Fetches a object field value
-	 * 
-	 * @param index
-	 *            The index of the field whose value to be fetched
-	 * @return The value of the field
-	 */
-	public Object getObject(int index) {
-		return (Object) getField(index);
 	}
 
 	/**
@@ -406,7 +387,8 @@ public abstract class ReusableRow implements Comparable<ReusableRow>,Serializabl
 	 *            The format in which the date value is to be fetched
 	 * @return The value of the field as string
 	 */
-	public String getDate(String fieldName, String dateFormat) throws ParseException {
+	public String getDate(String fieldName, String dateFormat)
+			throws ParseException {
 		if (getDate(fieldName) != null) {
 			Long date = getDate(fieldName).getTime();
 			DateFormat df = new SimpleDateFormat(dateFormat);
@@ -523,7 +505,8 @@ public abstract class ReusableRow implements Comparable<ReusableRow>,Serializabl
 		int hash = 1;
 
 		for (int i = 0; i < this.fields.size(); i++) {
-			hash = 31 * hash + (getField(i) != null ? getField(i).hashCode() : 0);
+			hash = 31 * hash
+					+ (getField(i) != null ? getField(i).hashCode() : 0);
 		}
 		return hash;
 	}
