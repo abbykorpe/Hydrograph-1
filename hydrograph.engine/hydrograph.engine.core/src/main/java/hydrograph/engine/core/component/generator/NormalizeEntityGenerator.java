@@ -51,6 +51,13 @@ public class NormalizeEntityGenerator extends OperationComponentGeneratorBase {
 		normalizeEntity.setComponentId(jaxbNormalize.getId());
 		normalizeEntity.setBatch(jaxbNormalize.getBatch());
 		normalizeEntity.setComponentName(jaxbNormalize.getName());
+		OperationEntityUtils
+				.checkIfOutputRecordCountIsPresentInCaseOfExpressionProcessing(
+						normalizeEntity.getOperationsList(),
+						jaxbNormalize.getOutputRecordCount());
+		normalizeEntity.setOutputRecordCount(OperationEntityUtils
+				.extractOutputRecordCount(jaxbNormalize
+						.getOutputRecordCount()));
 		// check if operation is present
 		if (jaxbNormalize.getOperationOrExpression() != null && jaxbNormalize.getOperationOrExpression().size() > 0) {
 

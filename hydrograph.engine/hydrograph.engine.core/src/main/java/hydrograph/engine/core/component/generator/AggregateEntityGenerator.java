@@ -41,8 +41,6 @@ public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 
 	}
 
-	
-
 	@Override
 	public void createEntity() {
 		aggregateEntity = new AggregateEntity();
@@ -63,7 +61,7 @@ public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 			// operation present to true
 			aggregateEntity.setNumOperations(jaxbAggregate.getOperationOrExpression().size());
 			aggregateEntity.setOperationPresent(true);
-			aggregateEntity.setOperationsList(setOperationClassInCaseExpression(OperationEntityUtils.extractOperations(jaxbAggregate.getOperationOrExpression())));
+			aggregateEntity.setOperationsList(OperationEntityUtils.extractOperations(jaxbAggregate.getOperationOrExpression()));
 		} else {
 			LOG.trace("Operation not present for aggregate component: " + jaxbAggregate.getId()
 					+ ", skipped operation processing");
@@ -87,20 +85,10 @@ public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 				OperationEntityUtils.extractRuntimeProperties(jaxbAggregate.getRuntimeProperties()));
 	}
 
-	private List<Operation> setOperationClassInCaseExpression(List<Operation> extractOperations) {
-		for (int i = 0; i < extractOperations.size(); i++) {
-			if (extractOperations.get(i).getOperationClass() == null) {
-				extractOperations.get(i)
-						.setOperationClass("hydrograph.engine.expression.userfunctions.AggregateForExpression");
-			}
-		}
-		return extractOperations;
-	}
-
 	@Override
 	public AggregateEntity getEntity() {
 		return aggregateEntity;
 	}
 
-	
+
 }
