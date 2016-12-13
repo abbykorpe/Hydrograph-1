@@ -118,6 +118,13 @@ public class JobCopyParticipant extends CopyParticipant {
 	public static List<IFile> getXmlFiles() {
 		return xmlFiles;
 	}
+	
+	public static void cleanUpStaticResourcesAfterPasteOperation()
+	{
+		copyToPath=null;
+		copiedFileList=null;
+		xmlFiles=null;
+	}
 
 	
 }

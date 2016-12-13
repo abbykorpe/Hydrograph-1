@@ -95,6 +95,7 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 				createXmlFilesForPastedJobFiles(pastedFileList);
 				List<String> copiedPropertiesList = getCopiedPropertiesList();
 				createPropertiesFilesForPastedFiles(paramFolder, pastedFileList, copiedPropertiesList);
+				JobCopyParticipant.cleanUpStaticResourcesAfterPasteOperation();
 
 			} catch (CoreException  coreException) {
 				logger.warn("Error while copy paste jobFiles",coreException.getMessage() );
@@ -109,6 +110,7 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 		
 		return null;
 	}
+
 	private void generateUniqueJobIdForPastedFiles(List<IFile> pastedFileList) {
 		for (IFile file : pastedFileList) {
 			try(ByteArrayOutputStream outStream = new ByteArrayOutputStream();
