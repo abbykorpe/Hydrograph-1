@@ -24,6 +24,8 @@ version = '1.0'				// The version is used to create project jar version number
 -------------------------------------------------------------------------------------------------
 */
 repositories {  
+		mavenLocal()
+		maven{	url AWUrl }
    		maven{	url BWUrl }
 }
 /*
