@@ -120,11 +120,11 @@ public class OracleDatabaseType implements DataBaseType {
 			// execute the query otherwise selected table name query will be
 			// executed.
 			if (tableQuery != null)
-				res = stmt.executeQuery(tableQuery);
+				res = stmt.executeQuery("Select * from ("+ tableQuery + ") WHERE ROWNUM < 0");
 			else
 				res = stmt.executeQuery("Select * from " + table + " where 1<0");
 			ResultSetMetaData rsmd = res.getMetaData();
-			for (int count = 1; count < rsmd.getColumnCount(); count++) {
+			for (int count = 1; count < rsmd.getColumnCount() + 1; count++) {
 				TableSchemaField tableSchemaField = new TableSchemaField();
 				tableSchemaField.setFieldName(rsmd.getColumnLabel(count));
 				tableSchemaField.setFieldType(rsmd.getColumnTypeName(count));
