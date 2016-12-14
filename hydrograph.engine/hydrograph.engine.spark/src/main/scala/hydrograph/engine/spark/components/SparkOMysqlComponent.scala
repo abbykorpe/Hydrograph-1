@@ -43,7 +43,7 @@ BaseComponentParams) extends SparkFlow {
 
   def executeQuery(connectionURL:String, properties:java.util.Properties, query:String) : Unit = {
 
-    LOG.info("excuting : " + query)
+    LOG.info("executing : " + query)
 
     try {
       val connection = JdbcUtils.createConnectionFactory(connectionURL, properties)()

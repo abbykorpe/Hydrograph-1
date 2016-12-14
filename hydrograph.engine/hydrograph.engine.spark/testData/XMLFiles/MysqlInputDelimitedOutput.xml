@@ -27,6 +27,11 @@
             <field name="name" type="java.lang.String" />
             <field name="city" type="java.lang.String" />
             <field name="creditPoint" type="java.lang.Double" />
+            <field name="Deptno" type="java.lang.Integer" />
+            <field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+            <field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+            <field name="extra" type="java.math.BigDecimal" scale="2"
+                   precision="10" scaleType="explicit" />
         </schema>
     </outSocket>
     <databaseName value="test" />
@@ -34,7 +39,7 @@
     <!-- <port value="3306" /> -->
     <jdbcDriver value="Connector/J" />
     <!--<tableName value="ideaJDBC" />-->
-    <selectQuery value="select * from ideaJDBC where id=110" />
+    <selectQuery value="select * from ideaJDBC where id=10" />
 
     <username value="root" />
     <password value="root" />
@@ -44,9 +49,14 @@
         <inSocket  fromComponentId="inputMysql" fromSocketId="out0" id="in0">
             <schema name="outSchema">
                 <field name="id" type="java.lang.Integer" />
-                <field name="name" type="java.lang.String"/>
-                <field name="city" type="java.lang.String"/>
+                <field name="name" type="java.lang.String" />
+                <field name="city" type="java.lang.String" />
                 <field name="creditPoint" type="java.lang.Double" />
+                <field name="Deptno" type="java.lang.Integer" />
+                <field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+                <field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="extra" type="java.math.BigDecimal" scale="2"
+                       precision="10" scaleType="explicit" />
             </schema>
         </inSocket>
         <overWrite value="true"/>

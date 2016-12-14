@@ -26,6 +26,11 @@
                 <field name="name" type="java.lang.String" />
                 <field name="city" type="java.lang.String" />
                 <field name="creditPoint" type="java.lang.Double" />
+                <field name="Deptno" type="java.lang.Integer" />
+                <field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+                <field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="extra" type="java.math.BigDecimal" scale="2"
+                       precision="10" scaleType="explicit" />
 
             </schema>
         </outSocket>
@@ -41,6 +46,11 @@
                 <field name="name" type="java.lang.String" />
                 <field name="city" type="java.lang.String" />
                 <field name="creditPoint" type="java.lang.Double" />
+                <field name="Deptno" type="java.lang.Integer" />
+                <field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+                <field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="extra" type="java.math.BigDecimal" scale="2"
+                       precision="10" scaleType="explicit" />
             </schema>
         </inSocket>
 
@@ -52,14 +62,14 @@
         <username value="root" />
         <password value="root" />
         <loadType>
-            <!--<newTable>
+            <newTable>
                 <primaryKeys>
                     <field name="id" />
                     <field name="name" />
                 </primaryKeys>
-            </newTable>-->
+            </newTable>
              <!--<Insert/>-->
-            <truncateLoad/>
+         <!--   <truncateLoad/>-->
         </loadType>
     </outputs>
 </p:graph>
