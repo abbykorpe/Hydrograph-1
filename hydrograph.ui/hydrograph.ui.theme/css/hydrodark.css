@@ -494,10 +494,10 @@ Composite > CTabFolder{
   font-style: normal;
   font-weight: normal;
   swt-background-mode: none;
-  swt-maximize-visible: true;
+/*  swt-maximize-visible: true;
   swt-maximized: false;
   swt-minimize-visible: true;
-  swt-minimized: false;
+  swt-minimized: false; */
   swt-mru-visible: true;	/* declared in CSS: true */
   swt-simple: true;
   swt-single: false;
