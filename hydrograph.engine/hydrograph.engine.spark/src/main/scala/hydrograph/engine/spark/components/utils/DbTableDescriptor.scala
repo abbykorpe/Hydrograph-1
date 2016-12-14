@@ -5,7 +5,7 @@ import org.slf4j.{Logger, LoggerFactory}
 /**
   * Created by santlalg on 12/12/2016.
   */
-class DbTableDescriptor(tableName:String, columnNames:Array[String], columnDefs:Array[String], primaryKeys:Array[String])  extends Serializable{
+class DbTableDescriptor(tableName:String, columnNames:Array[String], columnDefs:Array[String], primaryKeys:Array[String], databaseType:String)  extends Serializable{
 
   var createTableStatement: List[String] = Nil
   var field:String  = ""
@@ -16,7 +16,7 @@ class DbTableDescriptor(tableName:String, columnNames:Array[String], columnDefs:
 
     createTableStatement = addCreateTableBody()
     val createTableStatment=String.format("CREATE TABLE %s ( %s )",tableName,joinField(createTableStatement.reverse,","))
-    LOG.info("Generated create statment : " + createTableStatment)
+    LOG.info("create query '" + createTableStatment + "' for " + databaseType + " output component")
     createTableStatment
   }
 

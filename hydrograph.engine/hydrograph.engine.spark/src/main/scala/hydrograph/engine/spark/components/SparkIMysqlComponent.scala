@@ -29,12 +29,15 @@ class SparkIMysqlComponent (inputRDBMSEntity: InputRDBMSEntity,iComponentsParams
 
     val tableorQuery = if (inputRDBMSEntity.getTableName == null) ("(" + inputRDBMSEntity.getSelectQuery + ") as alias") else inputRDBMSEntity.getTableName
 
-    LOG.info("executing : " + tableorQuery)
+    if (inputRDBMSEntity.getTableName != null)
+        LOG.info("executing table '" + inputRDBMSEntity.getTableName + "' for Mysql input component")
+    else
+        LOG.info("executing query '" + inputRDBMSEntity.getSelectQuery + "' for Mysql input component")
 
     val connectionURL = "jdbc:mysql://" + inputRDBMSEntity.getHostName() + ":" + inputRDBMSEntity.getPort() + "/" +
       inputRDBMSEntity.getDatabaseName();
 
-    LOG.info("connection  url : " + connectionURL)
+    LOG.info("connection  url for Mysql input component: " + connectionURL)
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, tableorQuery, prop)
@@ -42,7 +45,7 @@ class SparkIMysqlComponent (inputRDBMSEntity: InputRDBMSEntity,iComponentsParams
       Map(key -> df)
     } catch {
       case e: Exception =>
-        LOG.error("Error in SparkIMysql component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage , e )
+        LOG.error("Error in Mysql input component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage , e )
         throw new RuntimeException(e)
     }
 

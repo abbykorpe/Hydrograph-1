@@ -2,6 +2,10 @@ package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.utils.JavaToSQLTypeMapping
+import hydrograph.engine.jaxb.commontypes.{TypeBaseField, TypeFieldName}
+
+import scala.collection.JavaConverters._
+
 /**
   * Created by santlalg on 12/12/2016.
   */
@@ -21,9 +25,10 @@ object TableCreator {
         primaryKeys(index) = iterator.next().getName
         index += 1
       }
-      new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, primaryKeys).getCreateTableStatement()
+      new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, primaryKeys, outputRDBMSEntity.getDatabaseType).getCreateTableStatement()
     }
     else
-      new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, null).getCreateTableStatement()
+      new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, null, outputRDBMSEntity.getDatabaseType).getCreateTableStatement()
   }
+
 }
