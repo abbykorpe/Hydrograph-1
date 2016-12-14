@@ -5,9 +5,11 @@ import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
 import org.apache.spark.sql.DataFrame
+import org.slf4j.{Logger, LoggerFactory}
+import scala.collection.JavaConverters._
 
 class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity, iComponentsParams: BaseComponentParams) extends InputComponentBase {
-
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileDelimitedComponent])
   override def createComponent(): Map[String, DataFrame] = {
     val dateFormats=getDateFormats()
     val schemaField = SchemaCreator(iFileDelimitedEntity).makeSchema()
@@ -25,6 +27,11 @@ class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity
       .load(iFileDelimitedEntity.getPath)
 
     val key = iFileDelimitedEntity.getOutSocketList.get(0).getSocketId
+    LOG.info("Component Id: '"+ iFileDelimitedEntity.getComponentId
+      +"' in Batch: " + iFileDelimitedEntity.getBatch
+      + " having schema: [ " + iFileDelimitedEntity.getFieldsList.asScala.mkString(",")
+      + " ] with delimiter: " + iFileDelimitedEntity.getDelimiter + " and quote: " + iFileDelimitedEntity.getQuote
+      + " at Path: " + iFileDelimitedEntity.getPath)
     Map(key -> df)
 
   }
