@@ -39,28 +39,35 @@ trait AggregateOperation{
     List[Operatioin[AggregateTransformBase]] = (operationList,expressionObjectList,initialValueExprs) match {
       case (List(),_,_) => List()
       case (x :: xs,y :: ys,z :: zs) =>
-                val operationInputFieldList = new ArrayList[String]()
+        val operationInputFieldList = new ArrayList[String]()
         x.getOperationInputFields.foreach(v => operationInputFieldList.add(v))
 
         val operationOutputFieldList = new ArrayList[String]()
         x.getOperationOutputFields.foreach(v => operationOutputFieldList.add(v))
-        
-         val keyFieldList = new ArrayList[String]()
-         keyFields.foreach(v => keyFieldList.add(v.getName))
+
+        val keyFieldList = new ArrayList[String]()
+        keyFields.foreach(v => keyFieldList.add(v.getName))
 
         val props: Properties = x.getOperationProperties
         val blankOutRR = ReusableRowHelper(x, fieldManupulating).convertToOutputReusableRow()
         val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
         val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
         val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
-        val aggregateBase: AggregateTransformBase = classLoader[AggregateTransformBase](x.getOperationClass)
 
-        aggregateBase.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
-        if(y != None && x.getOperationClass.toString.contains("hydrograph.engine.expression.userfunctions.AggregateForExpression")){
-          aggregateBase.asInstanceOf[AggregateForExpression].setValidationAPI(convertToListOfValidation(y :: ys))
-          aggregateBase.asInstanceOf[AggregateForExpression].setCounter(counter)
-          aggregateBase.asInstanceOf[AggregateForExpression].setInitialValueExpression((z::zs).toArray)
-          aggregateBase.asInstanceOf[AggregateForExpression].callPrepare()
+        val aggregateBase: AggregateTransformBase = (x,y) match {
+          case (_,_) if(y != None && x.getOperationClass == null) => {
+            var aggregate = new AggregateForExpression
+              aggregate.setValidationAPI(convertToListOfValidation(y :: ys))
+              aggregate.setCounter(counter)
+              aggregate.setInitialValueExpression((z::zs).toArray)
+              aggregate.callPrepare
+            aggregate
+          }
+          case _ => {
+            var aggregate = classLoader[AggregateTransformBase](x.getOperationClass)
+            aggregate.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
+            aggregate
+          }
         }
 
         Operatioin[AggregateTransformBase](aggregateBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
@@ -100,14 +107,17 @@ trait TransformOperation{
         val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
         val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
         val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
-        val transformBase: TransformBase = classLoader[TransformBase](x.getOperationClass)
 
-        if(y != None && x.getOperationClass.toString.contains("hydrograph.engine.expression.userfunctions.TransformForExpression")){
-          transformBase.asInstanceOf[TransformForExpression].setValidationAPI(y.asInstanceOf[ValidationAPI])
+        val transformBase: TransformBase = (x,y) match {
+          case (_,_) if(y != None && x.getOperationClass == null) => {
+            var transform = new TransformForExpression()
+            transform.setValidationAPI(y.asInstanceOf[ValidationAPI])
+            transform
+          }
+          case _ => classLoader[TransformBase](x.getOperationClass)
         }
 
         transformBase.prepare(props, operationInputFieldList, operationOutputFieldList)
-
         Operatioin[TransformBase](transformBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
           transform(xs, fieldManupulating, ys)
     }
