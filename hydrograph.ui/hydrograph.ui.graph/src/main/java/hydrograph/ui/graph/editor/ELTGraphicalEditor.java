@@ -193,7 +193,7 @@ import hydrograph.ui.parametergrid.utils.ParameterFileManager;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
-import static hydrograph.ui.graph.execution.tracking.utils.EnableDisableCoolBarItemsUtility.COOLBAR_ITEMS_UTILITY;
+import static hydrograph.ui.graph.execution.tracking.utils.CoolBarHelperUtility.COOLBAR_ITEMS_UTILITY;
 /**
  * Responsible to render the palette and container.
  * 

@@ -28,9 +28,9 @@ import hydrograph.ui.graph.editor.ELTGraphicalEditor;
  * Utility to enable/disable cool bar items
  *
  */
-public class EnableDisableCoolBarItemsUtility {
+public class CoolBarHelperUtility {
 
-	public static EnableDisableCoolBarItemsUtility COOLBAR_ITEMS_UTILITY = new EnableDisableCoolBarItemsUtility();
+	public static CoolBarHelperUtility COOLBAR_ITEMS_UTILITY = new CoolBarHelperUtility();
 
 	/**
 	 * disable or enable coolbar icons
