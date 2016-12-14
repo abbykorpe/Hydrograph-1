@@ -63,7 +63,7 @@ dependencies {
 
 	sshAntTask (group: 'org.apache.ant', name: 'ant-jsch',version:'1.9.4')
 	
-  		compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '2.1.1-SNAPSHOT')
+  		compile(group: 'hg', name: 'hydrograph.engine.command-line', version: 'sp')
 
     	compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     
