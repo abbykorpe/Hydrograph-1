@@ -38,11 +38,10 @@ public class ParameterFileManager {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterFileManager.class);
 	
-	private String parameterFilePath;
+	private ParameterFileManager(){}
 	
-	public ParameterFileManager(String parameterFilePath){
-		this.parameterFilePath = parameterFilePath;
-		logger.debug("Intantiated parameter file manager");
+	public static ParameterFileManager getInstance(){
+	return new ParameterFileManager();
 	}
 	
 	/**
@@ -52,7 +51,7 @@ public class ParameterFileManager {
 	 * @return - Parameter map
 	 * @throws IOException
 	 */
-	public Map<String, String> getParameterMap() throws IOException{
+	public Map<String, String> getParameterMap(String parameterFilePath) throws IOException{
 		Properties prop = new Properties();
 		
 		File file = new File(parameterFilePath);
@@ -75,7 +74,7 @@ public class ParameterFileManager {
 	 * @param filename 
 	 * @throws IOException
 	 */
-	public void storeParameters(Map<String, String> parameterMap,IFile filename) throws IOException{
+	public void storeParameters(Map<String, String> parameterMap,IFile filename, String parameterFilePath) throws IOException{
 		Properties properties = new Properties();
 		properties.setProperty(parameterMap);
 		

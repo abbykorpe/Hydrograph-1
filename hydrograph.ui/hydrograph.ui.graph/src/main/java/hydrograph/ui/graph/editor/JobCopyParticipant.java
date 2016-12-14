@@ -47,8 +47,9 @@ public class JobCopyParticipant extends CopyParticipant {
 	private IFile modifiedResource;
 	private static List<IFile> copiedFileList;
 	private static String copyToPath;
-	private static List<IFile> xmlFiles;
+	private static List<IFile> previousJobFiles;
 	
+
 
 	@Override
 	protected boolean initialize(Object element) {
@@ -79,16 +80,13 @@ public class JobCopyParticipant extends CopyParticipant {
 		IWorkspaceRoot workSpaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = workSpaceRoot.getProject(copyToPath.split("/")[1]);
 		IFolder jobFolder = project.getFolder(copyToPath.substring(copyToPath.indexOf('/', 2)));
-		xmlFiles=new ArrayList<>();
+		previousJobFiles=new ArrayList<>();
 		for (IResource iResource : jobFolder.members()) {
 			if (!(iResource instanceof IFolder)) {
 				IFile iFile = (IFile) iResource;
-				 if (iFile.getFileExtension().equalsIgnoreCase(Messages.XML_EXT)) {
-					String fileName=iFile.getName();
-					IFile jobFile= jobFolder.getFile(fileName.replace(Messages.XMLEXTENSION,Messages.JOBEXTENSION));
-					if(!jobFile.exists())
-					xmlFiles.add(jobFolder.getFile(fileName));
-				}
+				 if (iFile.getFileExtension().equalsIgnoreCase(Messages.JOB_EXT)) {
+					 previousJobFiles.add(iFile);
+				 }
 			}
 		}
 		copiedFileList.add(modifiedResource);
@@ -115,16 +113,18 @@ public class JobCopyParticipant extends CopyParticipant {
 	public static void setCopiedFileList(List<IFile> copiedFileList) {
 		JobCopyParticipant.copiedFileList = copiedFileList;
 	}
-	public static List<IFile> getXmlFiles() {
-		return xmlFiles;
-	}
-	
+
 	public static void cleanUpStaticResourcesAfterPasteOperation()
 	{
 		copyToPath=null;
 		copiedFileList=null;
-		xmlFiles=null;
+		previousJobFiles=null;
 	}
+	
+	public static List<IFile> getPreviousJobFiles() {
+		return previousJobFiles;
+	}
+
 
 	
 }

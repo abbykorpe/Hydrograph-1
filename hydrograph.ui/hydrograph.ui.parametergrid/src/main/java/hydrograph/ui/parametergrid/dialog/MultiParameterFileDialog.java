@@ -259,10 +259,8 @@ public class MultiParameterFileDialog extends Dialog {
 	private void populateViewParameterFileBox(ParameterFile parameterFile) {
 		//parameterFileTextBox.setText(file.getPath());
 		try {
-			ParameterFileManager parameterFileManager = new ParameterFileManager(
-					getParamterFileLocation(parameterFile));
 			Map<String, String> parameterMap = new LinkedHashMap<>();
-			parameterMap = parameterFileManager.getParameterMap();
+			parameterMap = ParameterFileManager.getInstance().getParameterMap(getParamterFileLocation(parameterFile));
 			setGridData(parameters, parameterMap);
 			parameterTableViewer.setData("CURRENT_PARAM_FILE", getParamterFileLocation(parameterFile));
 		} catch (IOException ioException) {
@@ -535,10 +533,8 @@ public class MultiParameterFileDialog extends Dialog {
 
 		for (ParameterFile parameterFile : parameterFiles) {
 			try {
-				ParameterFileManager parameterFileManager = new ParameterFileManager(
-						getParamterFileLocation(parameterFile));
 				Map<String, String> parameterMap = new LinkedHashMap<>();
-				parameterMap = parameterFileManager.getParameterMap();
+				parameterMap = ParameterFileManager.getInstance().getParameterMap(getParamterFileLocation(parameterFile));
 
 				for (String paramater : parameterMap.keySet()) {
 					ParameterWithFilePath parameterWithFilePath = new ParameterWithFilePath(
@@ -1000,8 +996,6 @@ public class MultiParameterFileDialog extends Dialog {
 				.getData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE);
 		if (!StringUtils.isEmpty(currentFilePath)) {
 			
-			ParameterFileManager parameterFileManager = new ParameterFileManager(
-					currentFilePath);
 			Map<String, String> parameterMap = new LinkedHashMap<>();
 			for (Parameter parameter : parameters) {
 				if(StringUtils.isEmpty(parameter.getParameterName())){
@@ -1018,7 +1012,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 			try {
-				parameterFileManager.storeParameters(parameterMap,null);
+				ParameterFileManager.getInstance().storeParameters(parameterMap, null, currentFilePath);
 				ifNotified = false;
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -1375,11 +1369,10 @@ public class MultiParameterFileDialog extends Dialog {
 					jobLevelParamterFiles.add(new ParameterFile(fileName, paramterFileTypes));
 				}
 				try {
-					ParameterFileManager parameterFileManager = new ParameterFileManager(absoluteFileName);
 					parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE,
 							absoluteFileName);
 					Map<String, String> parameterMap = new LinkedHashMap<>();
-					parameterMap = parameterFileManager.getParameterMap();
+					parameterMap = ParameterFileManager.getInstance().getParameterMap(absoluteFileName);
 					setGridData(parameters, parameterMap);
 				} catch (IOException ioException) {
 					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);

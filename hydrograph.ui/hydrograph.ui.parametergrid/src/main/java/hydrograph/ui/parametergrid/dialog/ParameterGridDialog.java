@@ -418,12 +418,11 @@ public class ParameterGridDialog extends Dialog {
 	}
 
 	private void loadGridData() {
-		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFile);
 		
 		Map<String, String> parameterMap=new LinkedHashMap<>();
 		
 		try {
-			parameterMap = parameterFileManager.getParameterMap();
+			parameterMap = ParameterFileManager.getInstance().getParameterMap(parameterFile);
 		} catch (IOException e) {
 			//isValidParameterFile = false;
 			logger.debug("Unable to get parameter Map ", e);
@@ -742,7 +741,6 @@ public class ParameterGridDialog extends Dialog {
 
 		textGrid.clearSelections();
 
-		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFile);
 		Map<String,String> dataMap = new LinkedHashMap<>();
 		int rowId=0;
 		for(List<String> row: textGrid.getData()){
@@ -755,7 +753,7 @@ public class ParameterGridDialog extends Dialog {
 		}
 		if(error == false){
 			try {
-				parameterFileManager.storeParameters(dataMap,null);
+				ParameterFileManager.getInstance().storeParameters(dataMap,null,parameterFile);
 			} catch (IOException e) {
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 

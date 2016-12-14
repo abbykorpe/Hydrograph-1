@@ -988,9 +988,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			newParameterMap.put(parameterName, currentParameterMap.get(parameterName));
 		}
 
-		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());
 		try {
-			parameterFileManager.storeParameters(newParameterMap,null);
+			ParameterFileManager.getInstance().storeParameters(newParameterMap,null, getParameterFile());
 		} catch (IOException e) {
 			logger.error("Unable to store parameters to the file", e);
 
@@ -1083,9 +1082,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 
 		Map<String, String> parameters=new LinkedHashMap<>();
-		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());		
 		try{
-			parameters = parameterFileManager.getParameterMap();
+			parameters = ParameterFileManager.getInstance().getParameterMap(getParameterFile());
 		} catch (IOException e) {
 			logger.error("Failed to load parameters from the file", e);
 
@@ -1139,11 +1137,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 
 	private void copyParameterFile(Map<String, String> currentParameterMap, IFile filename) {
-		
-		ParameterFileManager parameterFilemanager = new ParameterFileManager(getParameterFile());
-		
 		try {
-			parameterFilemanager.storeParameters(currentParameterMap,filename);
+			ParameterFileManager.getInstance().storeParameters(currentParameterMap,filename, getParameterFile());
 		} catch (IOException io) {
 			logger.error("Failed to copy parameterMap to .properties file");
 		}

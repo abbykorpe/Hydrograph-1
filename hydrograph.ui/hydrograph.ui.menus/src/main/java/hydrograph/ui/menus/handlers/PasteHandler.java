@@ -53,7 +53,6 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.utils.GenerateUniqueJobIdUtil;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.menus.messages.Messages;
 
 
 
@@ -77,7 +76,6 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		List<IFile> jobFiles = new ArrayList<>();
-		List<IFile> xmlFiles = new ArrayList<>();
 		List<IFile> pastedFileList = new ArrayList<>();
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if(part instanceof CommonNavigator){
@@ -89,8 +87,8 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 					JobCopyParticipant.getCopyToPath().substring(JobCopyParticipant.getCopyToPath().indexOf('/', 2)));
 			IFolder paramFolder = project.getFolder(PARAMETER_FOLDER_NAME);
 			try {
-				createJobFileAndXmlFileList(jobFolder, jobFiles, xmlFiles);
-				createPastedFileList(jobFiles, xmlFiles, pastedFileList);
+				createCurrentJobFileList(jobFolder, jobFiles);
+				pastedFileList=getPastedFileList(jobFiles);
 				generateUniqueJobIdForPastedFiles(pastedFileList);
 				createXmlFilesForPastedJobFiles(pastedFileList);
 				List<String> copiedPropertiesList = getCopiedPropertiesList();
@@ -191,45 +189,30 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 		return returnCode;
 	}
 
-	private void createPastedFileList(List<IFile> jobFiles, List<IFile> xmlFiles, List<IFile> pastedFileList) {
-		for (int i = 0; i < jobFiles.size(); i++) {
-			int isXmlPresent=0;
-			for (int j = 0; j < xmlFiles.size(); j++) {
-				if(jobFiles.get(i).getFullPath().removeFileExtension().lastSegment().equalsIgnoreCase(xmlFiles.get(j).getFullPath().removeFileExtension().lastSegment()))
-				{
-					isXmlPresent=1;
-					break;
-				}
-			}
-			if(isXmlPresent!=1)
-			pastedFileList.add(jobFiles.get(i));
-		}
-	}
 
-	private void createJobFileAndXmlFileList(IFolder jobFolder, List<IFile> jobFiles, List<IFile> xmlFiles)
+
+	private void createCurrentJobFileList(IFolder jobFolder, List<IFile> jobFiles)
 			throws CoreException {
 		for (IResource iResource : jobFolder.members()) {
 			if (!(iResource instanceof IFolder)) {
 				IFile iFile = (IFile) iResource;
 				if (iFile.getFileExtension().equalsIgnoreCase(JOB)) {
 					jobFiles.add(iFile);
-				} else if (iFile.getFileExtension().equalsIgnoreCase(XML)) {
-					xmlFiles.add(iFile);
-				}
+				} 
 			}
 		}
-		removeXmlFileFromXmlFileListWhoseCorrospondingJobFileIsNotPresent(xmlFiles);
 		
 	}
-	private void removeXmlFileFromXmlFileListWhoseCorrospondingJobFileIsNotPresent(List<IFile> xmlFiles) {
-		List<IFile> unionOfFiles = new ArrayList(xmlFiles);
-		unionOfFiles.addAll(JobCopyParticipant.getXmlFiles());
-		List<IFile> intersectionOfFiles = new ArrayList(xmlFiles);
-		intersectionOfFiles.retainAll(JobCopyParticipant.getXmlFiles());
+	private List<IFile> getPastedFileList(List<IFile> jobFiles) {
+		List<IFile> unionOfFiles = new ArrayList(jobFiles);
+		unionOfFiles.addAll(JobCopyParticipant.getPreviousJobFiles());
+		List<IFile> intersectionOfFiles = new ArrayList(jobFiles);
+		intersectionOfFiles.retainAll(JobCopyParticipant.getPreviousJobFiles());
 		List<IFile> differentFiles = new ArrayList(unionOfFiles);
 		differentFiles.removeAll(intersectionOfFiles);
-		xmlFiles.clear();
-		xmlFiles.addAll(differentFiles);
+		jobFiles.clear();
+		jobFiles.addAll(differentFiles);
+		return jobFiles;
 	}
 
 
