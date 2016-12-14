@@ -1,16 +1,15 @@
 package hydrograph.engine.spark.components.handler
 
-import java.util.{Properties, ArrayList}
+import java.util.{ArrayList, Properties}
 
-import hydrograph.engine.core.component.entity.elements.Operation
+import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.{AggregateForExpression, TransformForExpression}
-import hydrograph.engine.spark.components.utils.{ReusableRowHelper, FieldManupulating}
-import hydrograph.engine.transformation.userfunctions.base.{TransformBase, AggregateTransformBase, ReusableRow}
-import scala.collection.JavaConversions._
+import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
+import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, CumulateTransformBase, ReusableRow, TransformBase}
+
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
-import hydrograph.engine.core.component.entity.elements.KeyField
 
 /**
   * Created by gurdits on 12/1/2016.
@@ -20,6 +19,43 @@ case class Operatioin[T](baseClassInstance:T,inputReusableRow:ReusableRow,
                          outputReusableRow:ReusableRow,inputFieldPositions: ListBuffer[Int], outputFieldPositions:
                          ListBuffer[Int],fieldManupulating: FieldManupulating)
 
+trait CumulateOperation extends ClassStringHandler{
+
+  def initializeCumulate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating):
+  List[Operatioin[CumulateTransformBase]] = {
+
+    def cumulate( operationList:List[Operation], fieldManupulating: FieldManupulating):
+    List[Operatioin[CumulateTransformBase]] = operationList match {
+      case List() => List()
+      case (x :: xs) =>
+        val operationInputFieldList = new ArrayList[String]()
+        x.getOperationInputFields.foreach(v => operationInputFieldList.add(v))
+
+        val operationOutputFieldList = new ArrayList[String]()
+        x.getOperationOutputFields.foreach(v => operationOutputFieldList.add(v))
+
+        val keyFieldList = new ArrayList[String]()
+        keyFields.foreach(v => keyFieldList.add(v.getName))
+
+        val props: Properties = x.getOperationProperties
+        val blankOutRR = ReusableRowHelper(x, fieldManupulating).convertToOutputReusableRow()
+        val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
+        val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
+        val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
+        val cumulateBase: CumulateTransformBase = classLoader[CumulateTransformBase](x.getOperationClass)
+
+        cumulateBase.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
+
+        Operatioin[CumulateTransformBase](cumulateBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
+          cumulate(xs, fieldManupulating)
+    }
+
+    if(operationList!=null)
+      cumulate(operationList.asScala.toList,fieldManupulating)
+    else
+      List()
+  }
+}
 
 trait AggregateOperation{
 
