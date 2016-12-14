@@ -33,11 +33,11 @@ import hydrograph.engine.core.component.entity.InputRDBMSEntity;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 
-public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
+public abstract class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 
 	/**
 	 * RDBMS Input Component - read records from RDBMS Table.
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -2946197683137950707L;
 	protected FlowDef flowDef;
@@ -50,15 +50,15 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 	protected JDBCScheme scheme;
 	private TableDesc tableDesc;
 	protected String driverName;
+	protected String jdbcURL;
 	protected String[] columnDefs = {};
 	protected String[] primaryKeys = null;
 	protected Fields fields;
 	protected String[] columnNames;
-	protected String condition;
 
 	protected JDBCTap rdbmsTap;
 
-	protected final static String TIME_STAMP = "hh:mm:ss";
+	protected final static String TIME_STAMP = "HH:mm:ss";
 
 	protected InputOutputFieldsAndTypesCreator<InputRDBMSEntity> fieldsCreator;
 
@@ -74,13 +74,11 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 
 	}
 
-	public void intializeRdbmsSpecificDrivers() {
-		// Todo
-	}
+	public abstract  void intializeRdbmsSpecificDrivers();
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.bitwiseglobal.cascading.assembly.base.BaseComponent#createAssembly()
 	 * This method call the generate Taps and Pipes and setOutlinks
@@ -128,7 +126,6 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 
 		fields = fieldsCreator.makeFieldsWithTypes();
 		columnNames = fieldsCreator.getFieldNames();
-		condition = inputRDBMSEntity.getCondition();
 		LOG.debug("Applying " + inputRDBMSEntity.getDatabaseType() + "  schema to read data from RDBMS");
 
 		createTableDescAndScheme();
@@ -136,54 +133,42 @@ public class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 
 	protected void createTableDescAndScheme() {
 		// For sql query
-		if (inputRDBMSEntity.getQuery() != null && inputRDBMSEntity.getQuery() != "") {
-			String sql = inputRDBMSEntity.getQuery();
+		if (inputRDBMSEntity.getSelectQuery() != null && inputRDBMSEntity.getSelectQuery() != "") {
+			String selectgSql = inputRDBMSEntity.getSelectQuery();
 
-			String countSql = "select count(*) from " + inputRDBMSEntity.getTableName();
-			scheme = new JDBCScheme(inputFormatClass, fields, columnNames, sql, countSql, -1);
+			String countSql = inputRDBMSEntity.getCountQuery();
+
+			scheme = new JDBCScheme(inputFormatClass, fields, columnNames, selectgSql, countSql, -1);
 
 		} else {
 			tableDesc = new TableDesc(inputRDBMSEntity.getTableName(), fieldsCreator.getFieldNames(), columnDefs,
 					primaryKeys);
 
-			// scheme = new JDBCScheme(inputFormatClass, fields, columnNames);
-			// scheme = new JDBCScheme(inputFormatClass,null, fields,
-			// columnNames, null, null,-1, null, null, true );
-			scheme = new JDBCScheme(inputFormatClass, null, fields, columnNames, null, condition, -1, null, null, true);
+			scheme = new JDBCScheme(inputFormatClass, null, fields, columnNames, null, null, -1, null, null, true);
 		}
 	}
 
 	protected void initializeRdbmsTap() {
 		LOG.debug("Initializing RDBMS Tap.");
-		// //JDBCTap replaceTap = new JDBCTap(inputRDBMSEntity.getJdbcurl(),
-		// inputRDBMSEntity.getDriverName(), tableDesc,scheme,
-		// SinkMode.REPLACE);
 
-		if (inputRDBMSEntity.getQuery() == null || inputRDBMSEntity.getQuery() == "") {
-			rdbmsTap = new JDBCTap(
-					inputRDBMSEntity.getJdbcurl() + (inputRDBMSEntity.getDatabaseName() == null ? ""
-							: "/" + inputRDBMSEntity.getDatabaseName()),
-					inputRDBMSEntity.getUsername(), inputRDBMSEntity.getPassword(), driverName, tableDesc, scheme,
-					SinkMode.REPLACE);
+		if (inputRDBMSEntity.getSelectQuery() == null || inputRDBMSEntity.getSelectQuery() == "") {
+			rdbmsTap = new JDBCTap(jdbcURL, inputRDBMSEntity.getUsername(), inputRDBMSEntity.getPassword(), driverName,
+					tableDesc, scheme, SinkMode.REPLACE);
 
 		} else {
-			rdbmsTap = new JDBCTap(
-					inputRDBMSEntity.getJdbcurl() + (inputRDBMSEntity.getDatabaseName() == null ? ""
-							: "/" + inputRDBMSEntity.getDatabaseName()),
-					inputRDBMSEntity.getUsername(), inputRDBMSEntity.getPassword(), driverName, scheme);
+			rdbmsTap = new JDBCTap(jdbcURL, inputRDBMSEntity.getUsername(), inputRDBMSEntity.getPassword(), driverName,
+					scheme);
 		}
-		((JDBCTap) rdbmsTap).setBatchSize(inputRDBMSEntity.getBatchSize());
-
 	}
 
 	public void generateTapsAndPipes() {
 
 		// initializing each pipe and tap
 		LOG.debug(inputRDBMSEntity.getDatabaseType() + " Input Component '" + inputRDBMSEntity.getComponentId()
-				+ "': [ Database Name: " + inputRDBMSEntity.getDatabaseName() + ", Table Name: "
-				+ inputRDBMSEntity.getTableName() + ", Column Names: " + Arrays.toString(fieldsCreator.getFieldNames())
-				+ "]");
-
+				+ "': [ Database Name: " + inputRDBMSEntity.getDatabaseName()
+				+ (inputRDBMSEntity.getTableName() == null ? (", Select Query: " + inputRDBMSEntity.getSelectQuery() + ", Count Query: " + inputRDBMSEntity.getCountQuery())
+				: (", Table Name: " + inputRDBMSEntity.getTableName()))
+				+ ", Column Names: " + Arrays.toString(fieldsCreator.getFieldNames()) + "]");
 		// scheme and tap to be initialized in its specific assembly
 		try {
 			schemaFieldList = inputRDBMSEntity.getFieldsList();

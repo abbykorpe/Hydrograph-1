@@ -14,6 +14,7 @@ package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
 
+import hydrograph.engine.core.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,9 @@ InputComponentGeneratorBase {
 
 	private Mysql inputMysqlJaxb;
 	private InputRDBMSEntity inputRDBMSEntity;
+	private  final String databaseType = "MySql";
+	private final String jdbcDriver="Connector/J";
+	private final String driverName = "com.mysql.jdbc.Driver";
 	private static Logger LOG = LoggerFactory
 			.getLogger(InputMysqlEntityGenerator.class);
 
@@ -37,7 +41,7 @@ InputComponentGeneratorBase {
 		super(baseComponent);
 	}
 
-	
+
 
 	@Override
 	public void castComponentFromBase(TypeBaseComponent baseComponent) {
@@ -56,39 +60,27 @@ InputComponentGeneratorBase {
 				+ inputMysqlJaxb.getId());
 
 		inputRDBMSEntity.setComponentId(inputMysqlJaxb.getId());
-
-		inputRDBMSEntity
-		.setFieldsList(InputEntityUtils
-				.extractInputFields(inputMysqlJaxb.getOutSocket()
-						.get(0).getSchema()
-						.getFieldOrRecordOrIncludeExternalSchema()));
-		inputRDBMSEntity.setOutSocketList(InputEntityUtils
-				.extractOutSocket(inputMysqlJaxb.getOutSocket()));
-		inputRDBMSEntity.setDatabaseName(inputMysqlJaxb.getDatabaseName().getValue());
-		inputRDBMSEntity.setTableName(inputMysqlJaxb.getTableName().getValue());
-		inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
-				.extractRuntimeProperties(inputMysqlJaxb
-						.getRuntimeProperties()));
 		inputRDBMSEntity.setBatch(inputMysqlJaxb.getBatch());
-		inputRDBMSEntity.setQuery(inputMysqlJaxb.getQuery() ==null?null:inputMysqlJaxb.getQuery().getValue());
+		inputRDBMSEntity.setFieldsList(InputEntityUtils.extractInputFields(
+				inputMysqlJaxb.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
+		inputRDBMSEntity.setOutSocketList(InputEntityUtils.extractOutSocket(inputMysqlJaxb.getOutSocket()));
+		inputRDBMSEntity.setDatabaseName(inputMysqlJaxb.getDatabaseName().getValue());
+		inputRDBMSEntity.setHostName(inputMysqlJaxb.getHostName().getValue());
+		inputRDBMSEntity.setPort(inputMysqlJaxb.getPort()==null? Constants.DEFAULT_MYSQL_PORT : inputMysqlJaxb.getPort().getValue().intValue());
+		inputRDBMSEntity.setJdbcDriver(inputMysqlJaxb.getJdbcDriver().getValue().equals(jdbcDriver)?driverName:null);
+		inputRDBMSEntity.setTableName(inputMysqlJaxb.getTableName()==null?null:inputMysqlJaxb.getTableName().getValue());
+		inputRDBMSEntity.setSelectQuery(inputMysqlJaxb.getSelectQuery()==null?null:inputMysqlJaxb.getSelectQuery().getValue());
 		inputRDBMSEntity.setUsername(inputMysqlJaxb.getUsername().getValue());
 		inputRDBMSEntity.setPassword(inputMysqlJaxb.getPassword().getValue());
-		inputRDBMSEntity.setJdbcurl(inputMysqlJaxb.getJdbcurl().getValue());
-		inputRDBMSEntity.setDatabaseType("Mysql");
-		inputRDBMSEntity.setBatchSize(inputMysqlJaxb.getBatchSize().getValue().intValue());
-		inputRDBMSEntity.setCondition(inputMysqlJaxb.getCondition()==null?null:inputMysqlJaxb.getCondition().getValue());
-	
-		//inputRDBMSEntity.setColumnDefs(inputRDBMS.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema().get== null?null:inputRDBMS.getPrimaryKeys().getField());
+//		inputRDBMSEntity.setFetchSize(inputMysqlJaxb.getFetchSize()==null?Constants.DEFAULT_DB_FETCHSIZE:inputMysqlJaxb.getFetchSize().getValue().intValue());
+		inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
+				.extractRuntimeProperties(inputMysqlJaxb.getRuntimeProperties()));
+		inputRDBMSEntity.setDatabaseType(databaseType);
 	}
-
-
 
 	@Override
 	public InputRDBMSEntity getEntity() {
 		return inputRDBMSEntity;
 	}
 
-
-	
-	
 }

@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
@@ -30,30 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TextFileMixedScheme }
-     * 
-     */
-    public TextFileMixedScheme createTextFileMixedScheme() {
-        return new TextFileMixedScheme();
-    }
-
-    /**
-     * Create an instance of {@link SequenceOutputFile }
-     * 
-     */
-    public SequenceOutputFile createSequenceOutputFile() {
-        return new SequenceOutputFile();
-    }
-
-    /**
-     * Create an instance of {@link HiveTextFile }
-     * 
-     */
-    public HiveTextFile createHiveTextFile() {
-        return new HiveTextFile();
-    }
-
-    /**
      * Create an instance of {@link AvroFile }
      * 
      */
@@ -75,6 +63,30 @@ public class ObjectFactory {
      */
     public TextFileDelimited createTextFileDelimited() {
         return new TextFileDelimited();
+    }
+
+    /**
+     * Create an instance of {@link TextFileMixedScheme }
+     * 
+     */
+    public TextFileMixedScheme createTextFileMixedScheme() {
+        return new TextFileMixedScheme();
+    }
+
+    /**
+     * Create an instance of {@link SequenceOutputFile }
+     * 
+     */
+    public SequenceOutputFile createSequenceOutputFile() {
+        return new SequenceOutputFile();
+    }
+
+    /**
+     * Create an instance of {@link HiveTextFile }
+     * 
+     */
+    public HiveTextFile createHiveTextFile() {
+        return new HiveTextFile();
     }
 
     /**
@@ -102,6 +114,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Oracle }
+     * 
+     */
+    public Oracle createOracle() {
+        return new Oracle();
+    }
+
+    /**
+     * Create an instance of {@link Redshift }
+     * 
+     */
+    public Redshift createRedshift() {
+        return new Redshift();
+    }
+
+    /**
+     * Create an instance of {@link Mysql }
+     * 
+     */
+    public Mysql createMysql() {
+        return new Mysql();
+    }
+
+    /**
      * Create an instance of {@link ParquetHiveFile }
      * 
      */
@@ -115,54 +151,6 @@ public class ObjectFactory {
      */
     public SubjobOutput createSubjobOutput() {
         return new SubjobOutput();
-    }
-
-    /**
-     * Create an instance of {@link TextFileMixedScheme.Path }
-     * 
-     */
-    public TextFileMixedScheme.Path createTextFileMixedSchemePath() {
-        return new TextFileMixedScheme.Path();
-    }
-
-    /**
-     * Create an instance of {@link TextFileMixedScheme.Charset }
-     * 
-     */
-    public TextFileMixedScheme.Charset createTextFileMixedSchemeCharset() {
-        return new TextFileMixedScheme.Charset();
-    }
-
-    /**
-     * Create an instance of {@link TextFileMixedScheme.Quote }
-     * 
-     */
-    public TextFileMixedScheme.Quote createTextFileMixedSchemeQuote() {
-        return new TextFileMixedScheme.Quote();
-    }
-
-    /**
-     * Create an instance of {@link SequenceOutputFile.Path }
-     * 
-     */
-    public SequenceOutputFile.Path createSequenceOutputFilePath() {
-        return new SequenceOutputFile.Path();
-    }
-
-    /**
-     * Create an instance of {@link HiveTextFile.Delimiter }
-     * 
-     */
-    public HiveTextFile.Delimiter createHiveTextFileDelimiter() {
-        return new HiveTextFile.Delimiter();
-    }
-
-    /**
-     * Create an instance of {@link HiveTextFile.Quote }
-     * 
-     */
-    public HiveTextFile.Quote createHiveTextFileQuote() {
-        return new HiveTextFile.Quote();
     }
 
     /**
@@ -219,6 +207,54 @@ public class ObjectFactory {
      */
     public TextFileDelimited.Quote createTextFileDelimitedQuote() {
         return new TextFileDelimited.Quote();
+    }
+
+    /**
+     * Create an instance of {@link TextFileMixedScheme.Path }
+     * 
+     */
+    public TextFileMixedScheme.Path createTextFileMixedSchemePath() {
+        return new TextFileMixedScheme.Path();
+    }
+
+    /**
+     * Create an instance of {@link TextFileMixedScheme.Charset }
+     * 
+     */
+    public TextFileMixedScheme.Charset createTextFileMixedSchemeCharset() {
+        return new TextFileMixedScheme.Charset();
+    }
+
+    /**
+     * Create an instance of {@link TextFileMixedScheme.Quote }
+     * 
+     */
+    public TextFileMixedScheme.Quote createTextFileMixedSchemeQuote() {
+        return new TextFileMixedScheme.Quote();
+    }
+
+    /**
+     * Create an instance of {@link SequenceOutputFile.Path }
+     * 
+     */
+    public SequenceOutputFile.Path createSequenceOutputFilePath() {
+        return new SequenceOutputFile.Path();
+    }
+
+    /**
+     * Create an instance of {@link HiveTextFile.Delimiter }
+     * 
+     */
+    public HiveTextFile.Delimiter createHiveTextFileDelimiter() {
+        return new HiveTextFile.Delimiter();
+    }
+
+    /**
+     * Create an instance of {@link HiveTextFile.Quote }
+     * 
+     */
+    public HiveTextFile.Quote createHiveTextFileQuote() {
+        return new HiveTextFile.Quote();
     }
 
     /**

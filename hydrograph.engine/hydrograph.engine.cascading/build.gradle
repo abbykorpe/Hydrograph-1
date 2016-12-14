@@ -66,6 +66,8 @@ test {
     exclude '**/CascadingTestCase*'
     exclude '**/DataGeneratorTest*'
     exclude '**/InputFileHiveParquetFileTest*'
+    exclude '**/InputMysqlAssemblyTest*'
+    exclude '**/OutputMysqlAssemblyTest*'
     exclude '**/OutputFileHiveParquetFileTest*'
     exclude '**/InputFileHiveTextFileTest*'
     exclude '**/OutputFileHiveTextFileTest*'

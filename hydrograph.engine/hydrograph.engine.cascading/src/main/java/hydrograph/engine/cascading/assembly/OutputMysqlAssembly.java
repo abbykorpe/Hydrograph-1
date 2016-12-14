@@ -20,7 +20,7 @@ public class OutputMysqlAssembly extends OutputRDBMSAssembly {
 
 	/**
 	 * Mysql Output Component - Output records to MySQl database.
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -2946197683137950707L;
 
@@ -32,6 +32,10 @@ public class OutputMysqlAssembly extends OutputRDBMSAssembly {
 	public void intializeRdbmsSpecificDrivers() {
 		// For MySQL
 		inputFormatClass = MySqlDBInputFormat.class;
-		driverName = "com.mysql.jdbc.Driver";
+		if (outputRDBMSEntity.getJdbcDriver().equals("Connector/J")) {
+			driverName = "com.mysql.jdbc.Driver";
+		}
+		jdbcURL = "jdbc:mysql://" + outputRDBMSEntity.getHostName() + ":" + outputRDBMSEntity.getPort() + "/"
+				+ outputRDBMSEntity.getDatabaseName();
 	}
 }

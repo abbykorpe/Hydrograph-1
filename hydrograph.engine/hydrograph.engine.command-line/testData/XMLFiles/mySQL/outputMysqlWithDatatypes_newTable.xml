@@ -14,7 +14,7 @@
 	xmlns:ct="hydrograph/engine/jaxb/commandtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
 
-	<inputs id="input1" phase="0" xsi:type="it:textFileDelimited">
+	<inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">
 				<field name="f_string" type="java.lang.String" />
@@ -44,7 +44,7 @@
 	</inputs>
 
 
-	<outputs id="out mysql" phase="0" xsi:type="ot:rdbms">
+	<outputs id="out mysql" batch="0" xsi:type="ot:mysql">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
 			<schema name="schema1">
 					<field name="f_string" type="java.lang.String" />
@@ -68,12 +68,15 @@
 					precision="10" scaleType="explicit" />
 			</schema>
 		</inSocket>
-		<databaseType value ="MySQL" />
-		<databaseName value="jdbc" />
-		<tableName value="testing1" />
+		
+		<databaseName value="test" />
+		<hostName value="10.130.248.53"/>
+		<!-- <port value="3306" /> -->
+		<jdbcDriver value="Connector/J" />
+		<tableName value="targettable1" />
 		<username value="root" />
 		<password value="root" />
-		<jdbcurl value="jdbc:mysql://10.130.248.53:3306" />
+		<!-- <chunkSize value="2" /> -->
 		<loadType>
 			<newTable>
 			</newTable>  
@@ -85,7 +88,6 @@
 <!-- 				</updateByKeys> -->
 <!--  			</update>  -->
 		</loadType>
-		<batchSize value="1"/>
 	</outputs>
 </p:graph>
 	

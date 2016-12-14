@@ -23,21 +23,23 @@ import hydrograph.engine.core.component.entity.InputRDBMSEntity;
 
 public class InputMysqlAssembly extends InputRDBMSAssembly {
 
-
 	private static final long serialVersionUID = 259297327567983856L;
 	private static Logger LOG = LoggerFactory
 			.getLogger(InputMysqlAssembly.class);
 
 
 	public InputMysqlAssembly(InputRDBMSEntity baseComponentEntity,
-			ComponentParameters componentParameters) {
+							  ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
 
 	@Override
 	public void intializeRdbmsSpecificDrivers() {
-			inputFormatClass = MySqlDBInputFormat.class;
+		inputFormatClass = MySqlDBInputFormat.class;
+		if (inputRDBMSEntity.getJdbcDriver().equals("Connector/J")) {
 			driverName = "com.mysql.jdbc.Driver";
+		}
+		jdbcURL = "jdbc:mysql://" + inputRDBMSEntity.getHostName() + ":" + inputRDBMSEntity.getPort()+"/"+
+				inputRDBMSEntity.getDatabaseName();
 	}
-
 }

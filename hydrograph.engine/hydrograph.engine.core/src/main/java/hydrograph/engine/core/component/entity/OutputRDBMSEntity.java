@@ -27,21 +27,26 @@ import hydrograph.engine.jaxb.commontypes.TypeFieldName;
  *
  */
 public class OutputRDBMSEntity  extends InputOutputEntityBase{
-	
+
 	private List<InSocket> inSocketList;
 	private List<SchemaField> schemaFieldsList;
+	private List<TypeFieldName> primaryKeys;
+	private List<TypeFieldName> updateByKeys;
+
 	private String databaseName;
 	private String tableName;
-	private boolean overWrite;
 	private String username;
 	private String password;
-	private String jdbcurl;
-	private String query;
-	private List<TypeFieldName> primaryKeys;
+
 	private String databaseType;
 	private String loadType;
-	private Integer batchSize;
-	private List<TypeFieldName> updateByKeys;
+	private Integer chunkSize;
+
+	private String hostName;
+	private Integer port;
+	private String jdbcDriver;
+
+
 	/**
 	 * @return the inSocketList
 	 */
@@ -90,18 +95,7 @@ public class OutputRDBMSEntity  extends InputOutputEntityBase{
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
-	/**
-	 * @return the overWrite
-	 */
-	public boolean isOverWrite() {
-		return overWrite;
-	}
-	/**
-	 * @param overWrite the overWrite to set
-	 */
-	public void setOverWrite(boolean overWrite) {
-		this.overWrite = overWrite;
-	}
+
 	/**
 	 * @return the username
 	 */
@@ -126,30 +120,7 @@ public class OutputRDBMSEntity  extends InputOutputEntityBase{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	/**
-	 * @return the jdbcurl
-	 */
-	public String getJdbcurl() {
-		return jdbcurl;
-	}
-	/**
-	 * @param jdbcurl the jdbcurl to set
-	 */
-	public void setJdbcurl(String jdbcurl) {
-		this.jdbcurl = jdbcurl;
-	}
-	/**
-	 * @return the query
-	 */
-	public String getQuery() {
-		return query;
-	}
-	/**
-	 * @param query the query to set
-	 */
-	public void setQuery(String query) {
-		this.query = query;
-	}
+
 	/**
 	 * @return the primaryKeys
 	 */
@@ -199,22 +170,54 @@ public class OutputRDBMSEntity  extends InputOutputEntityBase{
 		this.updateByKeys = updateByKeys;
 	}
 	/**
-	 * @return the batchSize
+	 * @return the hostName
 	 */
-	public Integer getBatchSize() {
-		return batchSize;
+	public String getHostName() {
+		return hostName;
 	}
+
 	/**
-	 * @param batchSize the batchSize to set
+	 * @param hostName the hostName to set
 	 */
-	public void setBatchSize(Integer batchSize) {
-		this.batchSize = batchSize;
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * @return the port
+	 */
+	public Integer getPort() {
+		return port;
+	}
+
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(Integer port) {
+		this.port = port;
+	}
+
+	/**
+	 * @return the jdbcDriver
+	 */
+	public String getJdbcDriver() {
+		return jdbcDriver;
+	}
+
+	/**
+	 * @param jdbcDriver the jdbcDriver to set
+	 */
+	public void setJdbcDriver(String jdbcDriver) {
+		this.jdbcDriver = jdbcDriver;
+	}
+
+	/**
+	 * @return the chunkSize
+	 */
+	public Integer getChunkSize() {		return chunkSize; 	}
+
+	/**
+	 * @param chunkSize the chunkSize to set
+	 */
+	public void setChunkSize(Integer chunkSize) { 		this.chunkSize = chunkSize; 	}
 }

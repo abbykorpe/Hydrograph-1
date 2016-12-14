@@ -42,6 +42,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypePrimaryKeys }
+     * 
+     */
+    public TypePrimaryKeys createTypePrimaryKeys() {
+        return new TypePrimaryKeys();
+    }
+
+    /**
      * Create an instance of {@link TypeMysqlRecord }
      * 
      */
@@ -55,14 +63,6 @@ public class ObjectFactory {
      */
     public DatabaseType createDatabaseType() {
         return new DatabaseType();
-    }
-
-    /**
-     * Create an instance of {@link TypePriamryKeys }
-     * 
-     */
-    public TypePriamryKeys createTypePriamryKeys() {
-        return new TypePriamryKeys();
     }
 
     /**
