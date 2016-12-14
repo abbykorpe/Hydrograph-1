@@ -84,17 +84,10 @@ public class DebugService implements PrivilegedAction<Object> {
 		} catch (Exception e) {
 			LOG.error("Error fetching port number. Defaulting to " + Constants.DEFAULT_PORT_NUMBER, e);
 		}
-		Spark.setPort(portNumber);
-<<<<<<< 4f091e840309f7de4e8e309c8f9913a9b016862b
-		
+		Spark.setPort(portNumber);		
 		
 		Spark.post("readFromMetastore",new Route() {
 			
-=======
-
-		Spark.post(new Route("readFromMetastore") {
-
->>>>>>> Refactored the readFromMetastore service path with logic for getting
 			@Override
 			public Object handle(Request request, Response response) {
 				LOG.info("************************readFromMetastore endpoint - started************************");
