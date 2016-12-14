@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -65,7 +66,7 @@ public class CumulateForExpression implements CumulateTransformBase {
 		int i = 0;
 		for (; i < input.getFieldNames().size(); i++) {
 			fieldNames[i] = input.getFieldNames().get(i);
-			tuples[i] = input.getObject(i);
+			tuples[i] = input.getField(i);
 		}
 		fieldNames[i] = "accumulator";
 		tuples[i] = accumulatorValue;
