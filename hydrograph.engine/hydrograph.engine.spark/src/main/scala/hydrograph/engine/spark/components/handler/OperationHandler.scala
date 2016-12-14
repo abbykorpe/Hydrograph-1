@@ -4,10 +4,10 @@ import java.util.{ArrayList, Properties}
 
 import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
 import hydrograph.engine.expression.api.ValidationAPI
-import hydrograph.engine.expression.userfunctions.{AggregateForExpression, TransformForExpression}
-import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
-import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, CumulateTransformBase, ReusableRow, TransformBase}
-
+import hydrograph.engine.expression.userfunctions.{NormalizeForExpression, AggregateForExpression, TransformForExpression}
+import hydrograph.engine.spark.components.utils.{ReusableRowHelper, FieldManupulating}
+import hydrograph.engine.transformation.userfunctions.base.{CumulateTransformBase, NormalizeTransformBase, TransformBase, AggregateTransformBase, ReusableRow}
+import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
@@ -126,6 +126,57 @@ trait AggregateOperation{
       List()
   }
 
+}
+
+trait NormalizeOperation{
+
+  def initializeNormalize( operationList:java.util.List[Operation], fieldManupulating: FieldManupulating, expressionObjectList: ListBuffer[Any]):
+  List[Operatioin[NormalizeTransformBase]] = {
+
+    def normalize(operationList: List[Operation], fieldManupulating: FieldManupulating,expressionObjectList: List[Any]):
+    List[Operatioin[NormalizeTransformBase]] = (operationList,expressionObjectList) match {
+      case (List(),_) => List()
+      case (x :: xs,y :: ys) =>
+        val operationInputFieldList = new ArrayList[String]()
+        x.getOperationInputFields.foreach(v => operationInputFieldList.add(v))
+
+        val operationOutputFieldList = new ArrayList[String]()
+        x.getOperationOutputFields.foreach(v => operationOutputFieldList.add(v))
+
+        val props: Properties = x.getOperationProperties
+        val blankOutRR = ReusableRowHelper(x, fieldManupulating).convertToOutputReusableRow()
+        val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
+        val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
+        val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
+
+        var fieldNames = {
+
+        }
+
+        val normalizeBase: NormalizeTransformBase = (x,y) match {
+          case (_,_) if(y != None && x.getOperationClass == null) => {
+            var normalize = new NormalizeForExpression()
+            normalize.setValidationAPI(y.asInstanceOf[ValidationAPI])
+            normalize
+          }
+          case _ => classLoader[NormalizeTransformBase](x.getOperationClass)
+        }
+
+        normalizeBase.prepare(props)
+        Operatioin[NormalizeTransformBase](normalizeBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
+          normalize(xs, fieldManupulating, ys)
+    }
+    if(operationList!=null)
+      normalize(operationList.asScala.toList,fieldManupulating,expressionObjectList.toList)
+    else
+      List()
+  }
+
+  def classLoader[T](className: String): T = {
+    val clazz = Class.forName(className).getDeclaredConstructors
+    clazz(0).setAccessible(true)
+    clazz(0).newInstance().asInstanceOf[T]
+  }
 }
 
 trait TransformOperation{

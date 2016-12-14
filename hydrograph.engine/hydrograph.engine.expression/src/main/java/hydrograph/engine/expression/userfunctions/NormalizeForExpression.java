@@ -72,7 +72,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 					outputDispatcher.sendOutput();
 				} catch (Exception e) {
 					throw new RuntimeException(
-							"Exception in tranform expression: "
+							"Exception in normalize expression: "
 									+ listOfExpressions
 											.get(i)
 									+ ".\nRow being processed: "
@@ -80,7 +80,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in tranform expression: "
+			throw new RuntimeException("Exception in normalize expression: "
 					+ countExpression + ".", e);
 		}
 		

@@ -22,7 +22,7 @@
 				<field name="Rewards" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/Input/delimitedInputFileForExpr" />
+		<path uri="C:\Users\sanketc\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\normalize_input.txt" />
 		<delimiter value="|" />
 		<hasHeader value="false" />
 		<safe value="true" />
@@ -78,7 +78,7 @@
 				<field name="RewardCategory" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData/Output/NormalizeOp1" />
+		<path uri="C:\Users\sanketc\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\Output" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />

@@ -81,6 +81,14 @@ public class NormalizeEntityGenerator extends OperationComponentGeneratorBase {
 				.extractOutputRecordCount(jaxbNormalize
 						.getOutputRecordCount()));
 
+		OperationEntityUtils
+				.checkIfOutputRecordCountIsPresentInCaseOfExpressionProcessing(
+						normalizeEntity.getOperationsList(),
+						jaxbNormalize.getOutputRecordCount());
+		normalizeEntity.setOutputRecordCount(OperationEntityUtils
+				.extractOutputRecordCount(jaxbNormalize
+						.getOutputRecordCount()));
+
 		if (jaxbNormalize.getOutSocket() == null) {
 			throw new NullPointerException("No out socket defined for normalize component: " + jaxbNormalize.getId());
 		}

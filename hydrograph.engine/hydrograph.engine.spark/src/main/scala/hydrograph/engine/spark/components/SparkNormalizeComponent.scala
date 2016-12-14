@@ -1,13 +1,11 @@
 package hydrograph.engine.spark.components
 
-import java.util
-import java.util.Properties
-import scala.collection.JavaConversions._
-import hydrograph.engine.core.component.entity.{ NormalizeEntity, TransformEntity }
+import hydrograph.engine.core.component.entity.{ NormalizeEntity}
 import hydrograph.engine.spark.components.base.OperationComponentBase
+import hydrograph.engine.spark.components.handler.{NormalizeOperation, Operatioin}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
-import hydrograph.engine.transformation.userfunctions.base.{ OutputDispatcher, NormalizeTransformBase, ReusableRow, TransformBase }
+import hydrograph.engine.transformation.userfunctions.base.{ OutputDispatcher, ReusableRow}
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{ Column, DataFrame, Row }
@@ -17,7 +15,7 @@ import scala.collection.mutable.ListBuffer
 /**
  * Created by gurdits on 10/18/2016.
  */
-class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
+class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with NormalizeOperation with Serializable {
 
   override def createComponent(): Map[String, DataFrame] = {
 
@@ -36,42 +34,59 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
 
     val df = componentsParams.getDataFrame.select(inputColumn: _*).mapPartitions(itr => {
 
-      val opr = normalizeEntity.getOperationsList()(0)
-      val props: Properties = opr.getOperationProperties
-      val outRR = ReusableRowHelper(opr, fm).convertToOutputReusableRow()
-      outputDispatcher = new NormalizeOutputCollector(outRR, outRow, fm)
-      val normalizeTransformBase: NormalizeTransformBase = classLoader[NormalizeTransformBase](opr.getOperationClass)
+//      val opr = normalizeEntity.getOperationsList()(0)
+//      val props: Properties = opr.getOperationProperties
+//      val outRR = ReusableRowHelper(opr, fm).convertToOutputReusableRow()
+//      outputDispatcher = new NormalizeOutputCollector(outRR, outRow, fm)
+//      val normalizeTransformBase: NormalizeTransformBase = classLoader[NormalizeTransformBase](opr.getOperationClass)
+//
+//      normalizeTransformBase.prepare(props)
+//
+//      val it = itr.flatMap(row => {
+//        outputDispatcher.initialize
+//        //Map Fields
+//        RowHelper.setTupleFromRow(outRow, fm.determineMapSourceFieldsPos(), row, fm.determineMapTargetFieldsPos())
+//        //Passthrough Fields
+//        RowHelper.setTupleFromRow(outRow, fm.determineInputPassThroughFieldsPos(), row, fm.determineOutputPassThroughFieldsPos())
+//        normalizeTransformBase.Normalize(RowHelper.convertToReusebleRow(ReusableRowHelper(opr, fm).determineInputFieldPositions(), row, ReusableRowHelper(opr, fm).convertToInputReusableRow()), outRR, outputDispatcher)
+//        if(itr.isEmpty)
+//          normalizeTransformBase.cleanup()
+//        outputDispatcher.getOutRows
+//      })
+//      it
 
-      normalizeTransformBase.prepare(props)
+      val normalizeList = initializeNormalize(normalizeEntity.getOperationsList,fm,op.getExpressionObject)
 
-      val it = itr.flatMap(row => {
-
-        outputDispatcher.initialize
+      val it = itr.map(row => {
+        val outRow = new Array[Any](fm.getOutputFields().size)
         //Map Fields
         RowHelper.setTupleFromRow(outRow, fm.determineMapSourceFieldsPos(), row, fm.determineMapTargetFieldsPos())
         //Passthrough Fields
         RowHelper.setTupleFromRow(outRow, fm.determineInputPassThroughFieldsPos(), row, fm.determineOutputPassThroughFieldsPos())
-
-        normalizeTransformBase.Normalize(RowHelper.convertToReusebleRow(ReusableRowHelper(opr, fm).determineInputFieldPositions(), row, ReusableRowHelper(opr, fm).convertToInputReusableRow()), outRR, outputDispatcher)
-
-        if(itr.isEmpty) 
-          normalizeTransformBase.cleanup()
-          
-        outputDispatcher.getOutRows
+        normalizeList.foreach { nr =>
+          //Calling Transform Method
+          nr.baseClassInstance.Normalize(RowHelper.convertToReusebleRow(nr.inputFieldPositions, row, nr.inputReusableRow), nr
+            .outputReusableRow, outputDispatcher)
+          RowHelper.setTupleFromReusableRow(outRow, nr.outputReusableRow, nr.outputFieldPositions)
+          //Calling Cleanup Method
+          if (itr.isEmpty)
+            nr.baseClassInstance.cleanup()
+        }
+        Row.fromSeq(outRow)
       })
-
       it
+
     })(RowEncoder(EncoderHelper().getEncoder(fm.getOutputFields(), componentsParams.getSchemaFields())))
 
     val key = normalizeEntity.getOutSocketList.get(0).getSocketId
     Map(key -> df)
   }
-
-  def classLoader[T](className: String): T = {
-    val clazz = Class.forName(className).getDeclaredConstructors();
-    clazz(0).setAccessible(true)
-    clazz(0).newInstance().asInstanceOf[T]
-  }
+//
+//  def classLoader[T](className: String): T = {
+//    val clazz = Class.forName(className).getDeclaredConstructors();
+//    clazz(0).setAccessible(true)
+//    clazz(0).newInstance().asInstanceOf[T]
+//  }
 
 }
 
