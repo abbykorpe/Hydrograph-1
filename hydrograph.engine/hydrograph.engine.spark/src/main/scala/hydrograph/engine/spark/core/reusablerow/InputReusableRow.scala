@@ -5,7 +5,7 @@ import java.util.LinkedHashSet
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 
 class InputReusableRow(inputRow: Row, fieldsIndexMap: Map[String, Int], fieldsIndexList: Array[Int], fields: LinkedHashSet[String])
-    extends ReusableRow(fields) {
+    extends ReusableRow(fields) with Serializable{
 
   def getFieldInternal(index: Int) = inputRow.get(fieldsIndexList(index)).asInstanceOf[Comparable[_]]
   def getFieldInternal(field: String) = inputRow.get(fieldsIndexMap(field)).asInstanceOf[Comparable[_]]
