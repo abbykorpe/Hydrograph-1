@@ -10,6 +10,7 @@ ext.hydrographExecution='hydrograph.server.execution.tracking.client.main.Hydrog
                                    Project Repositories Section 
 -------------------------------------------------------------------------------------------------
 */
+ext.AWUrl='http://10.30.127.67:9091/artifactory/hydrograph-for-spark';
 ext.BWUrl='http://10.30.127.67:9091/artifactory/libs-release';
 /*
 -------------------------------------------------------------------------------------------------
