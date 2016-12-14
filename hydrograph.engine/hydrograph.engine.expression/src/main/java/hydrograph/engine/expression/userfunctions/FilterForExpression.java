@@ -16,6 +16,7 @@ import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -42,7 +43,7 @@ public class FilterForExpression implements FilterBase {
 		tuples = new Object[reusableRow.getFields().size()];
 		for(int i=0;i<reusableRow.getFields().size();i++){
 			fieldNames[i] = reusableRow.getFieldName(i);
-			tuples[i] = reusableRow.getObject(i);
+			tuples[i] = reusableRow.getField(i);
 		}
 		try {
 			if (((Boolean) validationAPI.execute(fieldNames, tuples)) == false) {

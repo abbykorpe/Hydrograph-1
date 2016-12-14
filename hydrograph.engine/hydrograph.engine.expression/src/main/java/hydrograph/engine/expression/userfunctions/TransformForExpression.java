@@ -16,6 +16,7 @@ import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import hydrograph.engine.transformation.userfunctions.base.TransformBase;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -47,7 +48,7 @@ public class TransformForExpression implements TransformBase {
 		tuples = new Object[inputRow.getFields().size()];
 		for(int i=0;i<inputRow.getFields().size();i++){
 			fieldNames[i] = inputRow.getFieldName(i);
-			tuples[i] = inputRow.getObject(i);
+			tuples[i] = inputRow.getField(i);
 		}
 		try {
 			outputRow.setField(0,

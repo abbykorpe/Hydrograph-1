@@ -59,7 +59,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 						tuples = new Object[inputRow.getFields().size() + 1];
 						for (i = 0; i < inputRow.getFieldNames().size(); i++) {
 							fieldNames[i] = inputRow.getFieldName(i);
-							tuples[i] = inputRow.getObject(i);
+							tuples[i] = inputRow.getField(i);
 						}
 						fieldNames[i] = "index";
 						tuples[i] = j;
