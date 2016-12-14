@@ -5,6 +5,8 @@ import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
 import org.apache.spark.sql._
+import org.slf4j.{Logger, LoggerFactory}
+
 
 /**
   * Created by santlalg on 12/7/2016.
@@ -12,7 +14,10 @@ import org.apache.spark.sql._
 class SparkIMysqlComponent (inputRDBMSEntity: InputRDBMSEntity,iComponentsParams: BaseComponentParams) extends
   InputComponentBase {
 
+  val LOG: Logger = LoggerFactory.getLogger(classOf[SparkIMysqlComponent])
+
   override def createComponent(): Map[String,DataFrame] = {
+
     val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
 
     val sparkSession = iComponentsParams.getSparkSession()
@@ -24,11 +29,22 @@ class SparkIMysqlComponent (inputRDBMSEntity: InputRDBMSEntity,iComponentsParams
 
     val tableorQuery = if (inputRDBMSEntity.getTableName == null) ("(" + inputRDBMSEntity.getSelectQuery + ") as alias") else inputRDBMSEntity.getTableName
 
+    LOG.info("executing : " + tableorQuery)
+
     val connectionURL = "jdbc:mysql://" + inputRDBMSEntity.getHostName() + ":" + inputRDBMSEntity.getPort() + "/" +
       inputRDBMSEntity.getDatabaseName();
 
-    val df = sparkSession.read.jdbc(connectionURL, tableorQuery, prop)
-    val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
-    Map(key -> df)
+    LOG.info("connection  url : " + connectionURL)
+
+    try {
+      val df = sparkSession.read.jdbc(connectionURL, tableorQuery, prop)
+      val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
+      Map(key -> df)
+    } catch {
+      case e: Exception =>
+        LOG.error("Error in SparkIMysql component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage , e )
+        throw new RuntimeException(e)
+    }
+
   }
 }

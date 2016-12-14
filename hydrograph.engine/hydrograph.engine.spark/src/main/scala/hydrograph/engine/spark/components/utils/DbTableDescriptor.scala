@@ -1,5 +1,7 @@
 package hydrograph.engine.spark.components.utils
 
+import org.slf4j.{Logger, LoggerFactory}
+
 /**
   * Created by santlalg on 12/12/2016.
   */
@@ -7,11 +9,15 @@ class DbTableDescriptor(tableName:String, columnNames:Array[String], columnDefs:
 
   var createTableStatement: List[String] = Nil
   var field:String  = ""
+  val LOG: Logger = LoggerFactory.getLogger(classOf[DbTableDescriptor])
+
 
   def getCreateTableStatement(): String = {
 
     createTableStatement = addCreateTableBody()
-    String.format("CREATE TABLE %s ( %s )",tableName,joinField(createTableStatement.reverse,","))
+    val createTableStatment=String.format("CREATE TABLE %s ( %s )",tableName,joinField(createTableStatement.reverse,","))
+    LOG.info("Generated create statment : " + createTableStatment)
+    createTableStatment
   }
 
  def addCreateTableBody(): List[String] = {
@@ -19,7 +25,7 @@ class DbTableDescriptor(tableName:String, columnNames:Array[String], columnDefs:
     createTableStatement = addDefinitions();
     createTableStatement = addPrimaryKey();
 
-    return createTableStatement;
+    createTableStatement;
   }
   def addDefinitions(): List[String] = {
     for(i  <- 0 until columnNames.length){
