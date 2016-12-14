@@ -56,7 +56,7 @@ repositories {
         url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
     }
 }
-
+   
 dependencies {   
 	compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
 	compile group: 'cascading', name: 'lingual-hadoop2-mr1', version: '1.2.1', classifier:'jdbc'
@@ -72,7 +72,7 @@ dependencies {
 	
 	testCompile 'junit:junit:4.11' 
 
-}	
+
 	
 jar {
   manifest {

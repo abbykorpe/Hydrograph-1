@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+l * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -50,13 +50,13 @@ public class ExecutionTrackingUtils {
 	private static final long defaultStatusFrequency = 2000;
 
 	/** The route. */
-	private String route = "/executionTracking/engine-client";
+	private String route = "/executionTracking";
 	
 	/** The host. */
 	private String host = "ws://localhost:";
 	
 	/** The port no. */
-	private String portNo = "8877";
+	private String portNo = "8004";
 	
 	private long statusFrequency = defaultStatusFrequency;
 	

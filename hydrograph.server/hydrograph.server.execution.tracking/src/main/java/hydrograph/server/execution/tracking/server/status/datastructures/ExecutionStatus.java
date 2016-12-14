@@ -28,6 +28,9 @@ public class ExecutionStatus {
 	/** The type. */
 	private String type;
 	
+	/** The client id**/
+	private String clientId;
+	
 	/**
 	 * Instantiates a new execution status.
 	 *
@@ -96,6 +99,22 @@ public class ExecutionStatus {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	/**
+	 * Gets the client id 
+	 * @return the client id
+	 */
+	public String getClientId() {
+		return clientId;
+	}
+    
+	/**
+	 * Sets the client id
+	 * @param clientId
+	 */
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+	
 	@Override
 	public String toString() {
 		return "ExecutionStatus [componentStatus=" + componentStatus + ", jobId=" + jobId + ", type=" + type;
@@ -109,6 +128,7 @@ public class ExecutionStatus {
 				+ ((componentStatus == null) ? 0 : componentStatus.hashCode());
 		result = prime * result + ((jobId == null) ? 0 : jobId.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
 		return result;
 	}
 
@@ -136,8 +156,15 @@ public class ExecutionStatus {
 				return false;
 		} else if (!type.equals(other.type))
 			return false;
+		if(clientId==null){
+			if(other.clientId!=null)
+				return false;
+		} else if (!clientId.equals(other.clientId))
+			return false;
 		return true;
 	}
+
+	
 
 	
 
