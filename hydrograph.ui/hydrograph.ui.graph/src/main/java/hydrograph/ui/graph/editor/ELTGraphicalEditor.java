@@ -142,7 +142,6 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.engine.exceptions.EngineException;
-import hydrograph.ui.engine.ui.util.SubjobUiConverterUtil;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.action.CommentBoxAction;
@@ -194,7 +193,7 @@ import hydrograph.ui.parametergrid.utils.ParameterFileManager;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
-
+import static hydrograph.ui.graph.execution.tracking.utils.CoolBarHelperUtility.COOLBAR_ITEMS_UTILITY;
 /**
  * Responsible to render the palette and container.
  * 
@@ -508,6 +507,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						logger.debug("enabling run job button");
 						enableRunJob(true);
 					}
+				}
+				
+				if(((ELTGraphicalEditor)partView).getContainer().isCurrentGraphSubjob() || ((ELTGraphicalEditor)partView).getContainer().isOpenedForTracking()){
+					COOLBAR_ITEMS_UTILITY.disableCoolBarIcons(false);
+				} else{
+					COOLBAR_ITEMS_UTILITY.disableCoolBarIcons(true);
+					COOLBAR_ITEMS_UTILITY.enableSaveAs(true);
 				}
 			}
 
@@ -882,11 +888,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	public void setDirty(boolean dirty){
+		if(!getContainer().isOpenedForTracking()){
 		this.dirty = dirty;
 		if (dirty){
 			setMainGraphDirty(dirty);
 		}			
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
 	}
 
 

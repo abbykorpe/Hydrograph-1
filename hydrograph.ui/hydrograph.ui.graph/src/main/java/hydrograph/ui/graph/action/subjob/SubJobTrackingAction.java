@@ -47,7 +47,7 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
-
+import static hydrograph.ui.graph.execution.tracking.utils.CoolBarHelperUtility.COOLBAR_ITEMS_UTILITY;
 
 /**
  * The Class SubJobTrackingAction use to view subjob tracking,on this action new temp subjob tracking container will be open.
@@ -126,6 +126,7 @@ public class SubJobTrackingAction extends SelectionAction{
 						editorPart.setDeleteOnDispose(true);
 						eltGraphicalEditor.addSubJobEditor(editorPart);
 						editorPart.getContainer().openedForTracking(true);
+						COOLBAR_ITEMS_UTILITY.disableCoolBarIcons(false);
 						} catch (PartInitException e) {
 							logger.error("Failed to open tracking view for subjob", e);
 						}
@@ -158,7 +159,7 @@ public class SubJobTrackingAction extends SelectionAction{
 							ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 							String currentJobName = editor.getActiveProject() + "." + editor.getJobName();
 							job = editor.getJobInstance(currentJobName);
-							if (job != null && (job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)
+							if (job != null && job.getJobStatus()!=null &&(job.getJobStatus().equalsIgnoreCase(JobStatus.RUNNING)
 									|| job.getJobStatus().equalsIgnoreCase(JobStatus.SUCCESS)
 									|| job.getJobStatus().equalsIgnoreCase(JobStatus.SSHEXEC) // This status is only for remote run while using scp command 
 									|| job.getJobStatus().equalsIgnoreCase(JobStatus.FAILED))) {
