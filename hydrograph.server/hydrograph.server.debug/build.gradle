@@ -52,6 +52,9 @@ repositories {
     maven {
         url 'http://maven.twttr.com/'
     }
+     maven {
+        url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
+    }
 }
 
 dependencies {   
@@ -64,6 +67,7 @@ dependencies {
         exclude group: 'org.apache.curator'
     }
 	testCompile 'junit:junit:4.11'
+	compile(group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
 }	
 	
 jar {
