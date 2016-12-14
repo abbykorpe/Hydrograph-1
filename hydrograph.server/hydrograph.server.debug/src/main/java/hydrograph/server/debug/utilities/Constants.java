@@ -117,7 +117,7 @@ public class Constants {
 	/**
 	 * The default port number to be used for the service
 	 */
-	public static final int DEFAULT_PORT_NUMBER = 8004;
+	public static final int DEFAULT_PORT_NUMBER = 8006;
 
 	/**
 	 * The default record limit to be used to fetch data from avro file
