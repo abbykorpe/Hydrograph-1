@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import groovy.json.JsonException;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 import hydrograph.server.metadata.exception.TableOrQueryParamNotFound;
 import hydrograph.server.metadata.schema.TableSchema;
@@ -30,34 +31,34 @@ import spark.Request;
  */
 public interface DataBaseType {
 	/**
-	 * Used to get the database specific connection object.
 	 * 
-	 * @param request
-	 *            - of type Request
-	 * @throws ParamsCannotBeNullOrEmpty
-	 *             - throws when parameter passes through JSON if null or empty.
-	 * @throws JSONException
-	 *             - throws due to unable to parse the JSON at runtime.
-	 * @throws ClassNotFoundException 
-	 * @throws SQLException 
+	 * Used to set the database specific connection object.
+	 * 
+	 * @param userId - Username of database
+	 * @param password - Password of user
+	 * @param host - host name 
+	 * @param port - port to connect
+	 * @param sid - Service identifier
+	 * @param driverType
+	 * @param database - database to connect
+	 * @param tableName - table name
+	 * @throws ParamsCannotBeNullOrEmpty - throws when supplied parameters are null or empty
+	 * @throws JSONException - {@linkplain JSONException}
+	 * @throws ClassNotFoundException - {@linkplain ClassNotFoundException}
+	 * @throws SQLException - {@linkplain SQLException}
 	 */
 	void setConnection(String userId,String password,String host,String port,String sid,String driverType,String database,String tableName) throws ParamsCannotBeNullOrEmpty, JSONException, ClassNotFoundException, SQLException;
 
 	/**
-	 * Gets the database specific table schema. Which contains meta data details
-	 * of table columns.
+	 * Gets the database specific table schema. Which contains meta data details of table columns.
 	 * 
-	 * @param request
-	 *            - of type {@link Request}
-	 * @return schema object of type - {@link TableSchema}
-	 * @throws JSONException
-	 *             - throws due to unable to parse the JSON at runtime.
-	 * @throws TableOrQueryParamNotFound
-	 *             - Exception throws if one of the parameter i.e table or query
-	 *             not found.
-	 * @throws SQLException
-	 *             - Error while fetching data
-	 * @throws ParamsCannotBeNullOrEmpty 
+	 * @param query - query to execute
+	 * @param tableName - query to execute with tablename only
+	 * @param database - database need to connect
+	 * @return
+	 * @throws JSONException - {@linkplain JSONException}
+	 * @throws SQLException - {@linkplain SQLException}
+	 * @throws ParamsCannotBeNullOrEmpty - throws when supplied parameters are null or empty
 	 */
 	TableSchema fillComponentSchema(String query,String tableName,String database)
 			throws JSONException, SQLException, ParamsCannotBeNullOrEmpty;
