@@ -24,15 +24,13 @@ import javax.tools.JavaFileObject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import hydrograph.engine.expression.api.DescriptiveErrorListener;
-import hydrograph.engine.expression.api.ValidationAPI;
-
 public class ValidationAPITest {
 
-	@Test(expected = DescriptiveErrorListener.HydrographExpressionError.class)
+	@Test
 	public void itShouldThrowException() {
 		ValidationAPI validationAPI = new ValidationAPI("(1==1)12:20;", "");
-		validationAPI.isExpressionValid();
+		boolean isValid = validationAPI.isExpressionValid();
+		Assert.assertFalse(isValid);
 	}
 
 	@Test
