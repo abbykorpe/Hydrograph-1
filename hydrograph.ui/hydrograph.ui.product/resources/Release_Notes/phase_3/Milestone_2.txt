@@ -12,6 +12,7 @@ Issues/Defects fixed:
 Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 1. <537> [Akhiesh Joshi] - Disable cool bar when sub job tracking is open.
 2. <1383> [Sonia Raheja] - Unique Job Id is Not Getting Generated, When User tried Saving the Same job with Different Name.
+3. <538> [Pooja Yadav] -  Default size of Property window should be small.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
