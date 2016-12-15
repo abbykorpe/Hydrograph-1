@@ -108,7 +108,7 @@ class SparkJoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponent
     def innerJoinForUnused(lhs: JoinOperation, rhs: JoinOperation): JoinOperation = {
       val rhsModified = getJoinOpWithPrefixAdded(rhs, rhs.inSocketId)
 
-      val lhsDF = if(lhs.dataFrame.columns.contains("required")) (lhs.dataFrame.withColumnRenamed("required", "input1")) else (lhs.dataFrame.withColumn("input1", lit(1)))
+      val lhsDF = if (lhs.dataFrame.columns.contains("required")) (lhs.dataFrame.withColumnRenamed("required", "input1")) else (lhs.dataFrame.withColumn("input1", lit(1)))
       val rhsDF = rhsModified.dataFrame
       val lhsKeys = lhs.keyFields
       val rhsKeys = rhsModified.keyFields
@@ -116,9 +116,9 @@ class SparkJoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponent
       val joinedDF = lhsDF.join(rhsDF.withColumn("input2", lit(1)), createJoinKey(lhsKeys, rhsKeys), "outer")
       val joinedDF1 = joinedDF.withColumn("required", when((col("input1") === 1) && (col("input2") === 1), 1).otherwise(null))
       val joinedDF2 = joinedDF1.drop("input1", "input2")
-      
-     JoinOperation("join", "in", joinedDF2, lhsKeys, false, true, lhs.outSocketId, "")
-     
+
+      JoinOperation("join", "in", joinedDF2, lhsKeys, false, true, lhs.outSocketId, "")
+
     }
 
     def leftOuterJoinForUnused(lhs: JoinOperation, rhs: JoinOperation): JoinOperation = {
@@ -174,9 +174,13 @@ class SparkJoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponent
 
         val outDF = joinOp.dataFrame.filter("(required == 1)").drop("required")
         JoinOperation(joinOp.compID, joinOp.inSocketId, outDF, joinOp.keyFields, joinOp.unused, joinOp.recordRequired, joinOp.outSocketId, joinOp.unusedSocketId)
-      
+
       } else {
-        joinOp
+        if (joinOp.unused) {
+          outMap += (joinOp.unusedSocketId -> joinOp.dataFrame.filter("false").select(joinOp.dataFrame.columns.map(c => col(c).as(c.replaceFirst(joinOp.inSocketId + "_", ""))): _*))
+          joinOp
+        } else
+          joinOp
       }
     }
 
