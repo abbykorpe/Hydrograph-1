@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.ui,
  hydrograph.ui.common;bundle-version="0.0.1",
  hydrograph.ui.help;bundle-version="0.0.1",
  hydrograph.ui.common.datastructures;bundle-version="0.0.1",
- org.eclipse.core.filesystem
+ org.eclipse.core.filesystem,
+ org.apache.commons.collections
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.graph.figure,
  hydrograph.ui.graph.model,

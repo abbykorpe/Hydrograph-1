@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.ListUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -204,14 +205,9 @@ public class PasteHandler extends AbstractHandler implements IHandler {
 		
 	}
 	private List<IFile> getPastedFileList(List<IFile> jobFiles) {
-		List<IFile> unionOfFiles = new ArrayList(jobFiles);
-		unionOfFiles.addAll(JobCopyParticipant.getPreviousJobFiles());
-		List<IFile> intersectionOfFiles = new ArrayList(jobFiles);
-		intersectionOfFiles.retainAll(JobCopyParticipant.getPreviousJobFiles());
-		List<IFile> differentFiles = new ArrayList(unionOfFiles);
-		differentFiles.removeAll(intersectionOfFiles);
+		List<IFile> newJobFilesList = ListUtils.subtract(jobFiles, JobCopyParticipant.getPreviousJobFiles());
 		jobFiles.clear();
-		jobFiles.addAll(differentFiles);
+		jobFiles.addAll(newJobFilesList);
 		return jobFiles;
 	}
 
