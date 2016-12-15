@@ -13,11 +13,6 @@
 
 package hydrograph.ui.graph.handler;
 
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.editor.ELTGraphicalEditor;
-import hydrograph.ui.graph.editor.ELTGraphicalEditorInput;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,6 +35,11 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.slf4j.Logger;
+
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.editor.ELTGraphicalEditor;
+import hydrograph.ui.graph.editor.ELTGraphicalEditorInput;
+import hydrograph.ui.logging.factory.LogFactory;
 /**
  * This WizardPage can create an empty .job file for the GraphicalEditor.
  * @author Bitwise

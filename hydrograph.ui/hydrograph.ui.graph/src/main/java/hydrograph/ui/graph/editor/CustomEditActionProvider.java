@@ -48,7 +48,6 @@ public class CustomEditActionProvider extends EditActionProvider {
 	private static final String PASTE_COMMAND_ID="org.eclipse.ui.edit.paste";
 	private static final String MENU_PLUGIN_NAME="hydrograph.ui.menus";
 	private static final String PASTE_ACTION_TEXT="&Paste@Ctrl+V";
-	private static final String PROPERTIES_EXTENSION=".properties";
 	private static final String PARAM="param";
 
 	@SuppressWarnings("restriction")

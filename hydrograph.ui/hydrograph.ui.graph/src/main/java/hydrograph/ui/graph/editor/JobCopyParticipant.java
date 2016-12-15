@@ -30,10 +30,8 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.CopyParticipant;
-import org.slf4j.Logger;
 
 import hydrograph.ui.graph.Messages;
-import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * JobCopyParticipant to prepare the information required for paste action of project explorer.
@@ -43,7 +41,6 @@ import hydrograph.ui.logging.factory.LogFactory;
  */
 public class JobCopyParticipant extends CopyParticipant {
 
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(JobCopyParticipant.class);
 	private IFile modifiedResource;
 	private static List<IFile> copiedFileList;
 	private static String copyToPath;
