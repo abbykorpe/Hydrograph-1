@@ -4,7 +4,6 @@ import java.util
 
 import hydrograph.engine.core.component.entity.FilterEntity
 import hydrograph.engine.spark.components.base.OperationComponentBase
-import hydrograph.engine.spark.components.handler.ClassStringHandler
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import hydrograph.engine.transformation.userfunctions.base.FilterBase
@@ -17,38 +16,49 @@ import scala.collection.JavaConverters._
   * Created by vaijnathp on 12/12/2016.
   */
 class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponentParams) extends
-  OperationComponentBase with Serializable with ClassStringHandler{
+  OperationComponentBase with Serializable {
   val LOG = LoggerFactory.getLogger(classOf[FilterComponent])
   override def createComponent(): Map[String, DataFrame] = {
+
+    if (filterEntity.getOperation.getOperationInputFields==null) {
+      LOG.error("Filter Operation Input Fields Can not be Empty")
+      throw new Exception("Operation Input Fields are Empty Exception ")
+    }
+
     val scheme = componentsParams.getDataFrame.schema.map(e => e.name)
-    LOG.info("Filter Component Called with input Dataframe having Schema:", componentsParams.getDataFrame.schema)
+    LOG.info("Filter Component Called with input Dataframe having Schema in the form of(Column_name,DataType,IsNullable): {}", componentsParams.getDataFrame.schema)
 
     val fieldNameSet = new util.LinkedHashSet[String]()
     scheme.foreach(e => fieldNameSet.add(e))
     var map: Map[String, DataFrame] = Map()
 
+    LOG.info("Filter Operation Input Fields: {}",filterEntity.getOperation.getOperationInputFields)
     val filterClass=classLoader[FilterBase](filterEntity.getOperation.getOperationClass)
     val fieldPosition=ReusableRowHelper(filterEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
+
     val inputReusableRow=new SparkReusableRow(fieldNameSet)
 
-
-   filterEntity.getOutSocketList.asScala.foreach{outSocket=>
+    filterEntity.getOutSocketList.asScala.foreach{outSocket=>
      LOG.info("Creating filter assembly for '" + filterEntity.getComponentId + "' for socket: '"
        + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
 
-     val df = componentsParams.getDataFrame.filter(
-       row =>{
-         if(outSocket.getSocketType.equalsIgnoreCase("unused"))
-           !filterClass
-             .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
-
-         else
-           filterClass
-             .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
-
-       })
-    map += (outSocket.getSocketId -> df)
-  }
+       val df = componentsParams.getDataFrame.filter(
+         row =>{
+           if(outSocket.getSocketType.equalsIgnoreCase("unused"))
+             !filterClass
+               .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row,inputReusableRow))
+           else
+             filterClass
+               .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
+         })
+      map += (outSocket.getSocketId -> df)
+    }
     map
+  }
+
+  def classLoader[T](className: String): T = {
+    val clazz = Class.forName(className).getDeclaredConstructors
+    clazz(0).setAccessible(true)
+    clazz(0).newInstance().asInstanceOf[T]
   }
 }

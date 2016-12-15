@@ -19,7 +19,7 @@ case class Operatioin[T](baseClassInstance:T,inputReusableRow:ReusableRow,
                          outputReusableRow:ReusableRow,inputFieldPositions: ListBuffer[Int], outputFieldPositions:
                          ListBuffer[Int],fieldManupulating: FieldManupulating)
 
-trait CumulateOperation extends ClassStringHandler{
+trait CumulateOperation{
 
   def initializeCumulate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating):
   List[Operatioin[CumulateTransformBase]] = {
@@ -54,6 +54,11 @@ trait CumulateOperation extends ClassStringHandler{
       cumulate(operationList.asScala.toList,fieldManupulating)
     else
       List()
+  }
+  def classLoader[T](className: String): T = {
+    val clazz = Class.forName(className).getDeclaredConstructors
+    clazz(0).setAccessible(true)
+    clazz(0).newInstance().asInstanceOf[T]
   }
 }
 
