@@ -63,30 +63,28 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		
 		LOGGER.debug("Fetching OutPut-Redshift-Component for {}", componentName);
 		redshift = (Redshift) typeBaseComponent;
-		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())
-				&& redshift.getDatabaseName().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())
-				&& redshift.getDrivertype().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value(), redshift.getDrivertype().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getHostname().getValue()) && redshift.getHostname().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getHostname().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_HOST_NAME.value(), redshift.getHostname().getValue());
 		}
-		if (redshift.getPort().getValue()!=null && StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
+		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_PORT_NAME.value(),redshift.getPort().getValue().toString());
 		}
-		if (StringUtils.isNotBlank(redshift.getUsername().getValue()) && redshift.getUsername().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getUsername().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_USER_NAME.value(), redshift.getUsername().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getPassword().getValue()) && redshift.getPassword().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getPassword().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_PASSWORD.value(), redshift.getPassword().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getTableName().getValue()) && redshift.getTableName().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getTableName().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_TABLE_NAME.value(), redshift.getTableName().getValue());
 		}
-		if (redshift.getChunkSize().getValue()!=null && StringUtils.isNotBlank(redshift.getChunkSize().getValue().toString()) ) {
+		if (StringUtils.isNotBlank(redshift.getChunkSize().getValue().toString()) ) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value(),redshift.getChunkSize().getValue().toString());
 		}
 		
@@ -112,7 +110,11 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		uiComponent.setProperties(propertyMap);
 	}
 	
-	
+	/**
+	 *  Appends primary keys using a comma
+	 * @param newTable
+	 * @return
+	 */
 	private String getLoadTypePrimaryKeyUIValue(TypePriamryKeys newTable) {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(newTable !=null && newTable.getPrimaryKeys() !=null){
@@ -124,7 +126,12 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		}
 		return StringUtils.removeEnd(stringBuffer.toString(), ",");
 	}
-
+	
+	/**
+	 *  Appends update keys using a comma
+	 * @param update
+	 * @return
+	 */
 	private String getLoadTypeUpdateKeyUIValue(TypeUpdateKeys update) {
 		StringBuffer buffer=new StringBuffer();
 			if(update!=null && update.getUpdateByKeys()!=null){

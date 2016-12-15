@@ -17,7 +17,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.metastore;
  * @author Bitwise
  *
  */
-public class OracleTableSchemaField {
+public class DatabaseTableSchemaField {
 
 	private String fieldName = "";
 	private String fieldType = "";

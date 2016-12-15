@@ -33,11 +33,14 @@ import hydrograph.ui.engine.converter.InputConverter;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
-
+/**
+ * Converter implementation for Input Oracle Component
+ * @author Bitwise
+ *
+ */
 public class InputOracleConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputOracleConverter.class);
-	private Oracle oracleInput;
 
 	public InputOracleConverter(Component component) {
 		super(component);
@@ -65,17 +68,21 @@ public class InputOracleConverter extends InputConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		oracleInput = (Oracle) baseComponent;
+		 Oracle oracleInput = (Oracle) baseComponent;
 		oracleInput.setRuntimeProperties(getRuntimeProperties());
 
 		ElementValueStringType sid = new ElementValueStringType();
-		sid.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SID.value())));
-		oracleInput.setSid(sid);
-
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SID.value()))){
+			sid.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SID.value())));
+			oracleInput.setSid(sid);
+		}
+		
 		ElementValueStringType hostName = new ElementValueStringType();
-		hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value())));
-		oracleInput.setHostname(hostName);
-
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value())));
+			oracleInput.setHostname(hostName);
+		}
+		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
 		BigInteger portValue = getBigInteger(PropertyNameConstants.ORACLE_PORT_NO.value());
 		portNo.setValue(portValue);
@@ -86,16 +93,22 @@ public class InputOracleConverter extends InputConverter {
 		oracleInput.setDrivertype(jdbcDriver);
 		
 		ElementValueStringType oracleSchema = new ElementValueStringType();
-		oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
-		oracleInput.setSchemaname(oracleSchema);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
+			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
+			oracleInput.setSchemaname(oracleSchema);
+		}
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		userName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_USER_NAME.value())));
-		oracleInput.setUsername(userName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_USER_NAME.value())));
+			oracleInput.setUsername(userName);
+		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		password.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PASSWORD.value())));
-		oracleInput.setPassword(password);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PASSWORD.value())));
+			oracleInput.setPassword(password);
+		}
 
 		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) properties
 				.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
@@ -104,20 +117,22 @@ public class InputOracleConverter extends InputConverter {
 
 			if (databaseSelectionConfig.isTableName()) {
 				ElementValueStringType tableName = new ElementValueStringType();
-				tableName.setValue(databaseSelectionConfig.getTableName());
-				oracleInput.setTableName(tableName);
+				if(StringUtils.isNotBlank(databaseSelectionConfig.getTableName())){
+					tableName.setValue(databaseSelectionConfig.getTableName());
+					oracleInput.setTableName(tableName);
+				}
 				
 			} else {
 				ElementValueStringType sqlQuery = new ElementValueStringType();
-				if(databaseSelectionConfig.getSqlQuery() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
-				sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
-				oracleInput.setSelectQuery(sqlQuery);
+				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
+					sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
+					oracleInput.setSelectQuery(sqlQuery);
 				}
 
 				ElementValueStringType sqlQueryCounter = new ElementValueStringType();
-				if(databaseSelectionConfig.getSqlQueryCounter() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
-				sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
-				oracleInput.setCountQuery(sqlQueryCounter);
+				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
+					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
+					oracleInput.setCountQuery(sqlQueryCounter);
 				}
 			}
 		}

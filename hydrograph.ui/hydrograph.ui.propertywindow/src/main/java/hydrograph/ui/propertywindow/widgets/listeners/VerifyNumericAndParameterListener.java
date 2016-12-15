@@ -24,11 +24,15 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
-public class ELTVerifyNumericAndParameterListener  implements IELTListener{
+/**
+ * ELTVerifyNumericAndParameterListener verifies value is numeric or parameter
+ * @author Bitwise
+ *
+ */
+public class VerifyNumericAndParameterListener  implements IELTListener{
 
 	private ControlDecoration txtDecorator;
 
@@ -51,7 +55,7 @@ public class ELTVerifyNumericAndParameterListener  implements IELTListener{
 				
 				Text text = (Text)widgetList[0];
 				String string=text.getText();
-				Matcher matchs=Pattern.compile("[\\@]{1}[\\{]{1}[\\w]{1,}[\\}]{1}||[\\d]{1,4}").matcher(string);
+				Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(string);
 				if(StringUtils.isNotBlank(string) && matchs.matches()){
 					txtDecorator.hide();
 			}else{

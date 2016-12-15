@@ -39,10 +39,14 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.IRedshift;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * Converter to convert jaxb RedShift object into input RedShift component
+ * @author Bitwise
+ *
+ */
 public class InputRedshiftUiConverter extends InputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputRedshiftUiConverter.class);
-	Redshift redshift;
 	
 	public InputRedshiftUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -54,25 +58,25 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 	public void prepareUIXML() {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Redshift-Properties for {}", componentName);
-		redshift = (Redshift) typeBaseComponent;
+		Redshift redshift = (Redshift) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 
-		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())&&redshift.getDatabaseName().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())&&redshift.getDrivertype().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value(), redshift.getDrivertype().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getHostname().getValue())&&redshift.getHostname().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getHostname().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_HOST_NAME.value(), redshift.getHostname().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())&&redshift.getPort().getValue().toString() != null) {
+		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_PORT_NAME.value(), redshift.getPort().getValue().toString());
 		}
-		if (StringUtils.isNotBlank(redshift.getUsername().getValue()) && redshift.getUsername().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getUsername().getValue()) ) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_USER_NAME.value(), redshift.getUsername().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getPassword().getValue()) && redshift.getPassword().getValue() != null) {
+		if (StringUtils.isNotBlank(redshift.getPassword().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_PASSWORD.value(), redshift.getPassword().getValue());
 		}
 		if ((redshift.getTableName()!= null)&& StringUtils.isNotBlank(redshift.getTableName().toString())){

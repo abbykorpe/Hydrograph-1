@@ -25,7 +25,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.Constants;
@@ -43,30 +42,25 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTCon
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
-public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
+/***
+ * The class to test the connection for different DB components
+ * @author Bitwise
+ *
+ */
+public class DatabaseTestConnectionWidget extends AbstractWidget{
 	
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTDatabaseTestConnectionWidget.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(DatabaseTestConnectionWidget.class);
 	private Map<String, String> initialMap;
 	private String propertyName;
-	private Shell shell;
 	protected ControlDecoration buttonDecorator;
 	private Button testConnectionButton;
 	private ArrayList<AbstractWidget> widgets;
-	private String oracleDatabaseName;
-	private String oracleHostName;
-	private String oraclePortNo;
-	private String oracleJdbcName;
-	private String oracleSchemaName;
-	private String oracleUserName;
-	private String oraclePassword;
 	private static final String DEFAULT_PORTNO = "8004";
 	private static final String PORT_NO = "portNo";
 	private static final String HOST = "host";
-	private static final String ERROR = "ERR";
-	private static final String INFO = "INF";
 	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	
-	public ELTDatabaseTestConnectionWidget(
+	public DatabaseTestConnectionWidget(
 			ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps,
 			PropertyDialogButtonBar propDialogButtonBar) {
@@ -75,7 +69,7 @@ public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
 		this.propertyName = componentConfigProp.getPropertyName();
 		if(initialMap==null){
 			this.initialMap = new LinkedHashMap<String, String>();
-			}
+		}
 		
 	}
 	
@@ -98,7 +92,7 @@ public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
 
 		buttonDecorator = WidgetUtility.addDecorator(
 				(Control) eltDefaultButton.getSWTWidgetControl(),
-				Messages.bind(Messages.EmptyValueNotification,"TestConnection"));
+				Messages.bind(Messages.EmptyValueNotification,Constants.TEST_CONNECTION));
 		if (OSValidator.isMac()) {
 			buttonDecorator.setMarginWidth(-2);
 		}
@@ -111,6 +105,10 @@ public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
 		
 	}
 
+	/**
+	 * Attaches selection listener on TestConnection button
+	 * @param testConnectionButton
+	 */
 	private void attachButtonListner(Button testConnectionButton) {
 		
 		testConnectionButton.addSelectionListener(new SelectionAdapter() {
@@ -122,7 +120,7 @@ public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
 				
 				if (null != host && StringUtils.isNotBlank(host)) {
 					
-					if (getOracleTableDetailsFromWidgets()) {
+					if (getDatabaseConnectionDetails()) {
 					
 					}
 				}
@@ -131,9 +129,19 @@ public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
 		
 	}
 	
-	
-	private boolean getOracleTableDetailsFromWidgets() {
-
+	/**
+	 * Provides the value for all the DB details
+	 * @return 
+	 */
+	private boolean getDatabaseConnectionDetails() {
+		
+		String oracleDatabaseName = "";
+		String oracleHostName = "";
+		String oraclePortNo = "";
+		String oracleJdbcName = "";
+		String oracleSchemaName = "";
+		String oracleUserName = "";
+		String oraclePassword = "";
 		for (AbstractWidget textAbtractWgt : widgets) {
 
 			if (textAbtractWgt.getProperty().getPropertyName()
@@ -190,7 +198,9 @@ public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
 			widgets = widgetList;
 		}
 		
-	
+	/**
+	 * Sets the tool tip error message
+	 */
 	protected void setToolTipErrorMessage() {
 		String toolTipErrorMessage = null;
 
@@ -200,6 +210,9 @@ public class ELTDatabaseTestConnectionWidget extends AbstractWidget{
 		setToolTipMessage(toolTipErrorMessage);
 	}
 	
+	/**
+	 * Show or hides the decorator
+	 */
 	protected void setDecoratorsVisibility() {
 
 		if (!isWidgetValid()) {

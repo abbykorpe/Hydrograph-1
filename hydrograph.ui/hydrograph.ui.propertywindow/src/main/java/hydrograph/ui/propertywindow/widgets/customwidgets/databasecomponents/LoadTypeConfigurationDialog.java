@@ -36,7 +36,11 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 
 import org.eclipse.swt.widgets.Button;
-
+/**
+ * LoadTypeConfigurationDialog class creates the dialog for different load types in DB components
+ * @author Bitwise
+ *
+ */
 public class LoadTypeConfigurationDialog extends Dialog {
 	private Text updateTextBox;
 	private Text newTableTextBox;
@@ -50,7 +54,6 @@ public class LoadTypeConfigurationDialog extends Dialog {
 	private Button newTableRadioButton;
 	private Button insertRadioButton;
 	private Button replaceRadioButton;
-	private Button primaryKeysButton;
 	private String valueForNewTableTextBox;
 	/**
 	 * Create the dialog.
@@ -82,7 +85,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		composite.setLayout(new GridLayout(1, false));
 		
 		Group grpLoadType = new Group(composite, SWT.NONE);
-		grpLoadType.setText("Load Type");
+		grpLoadType.setText(Constants.LOAD_TYPE);
 		grpLoadType.setLayout(new GridLayout(1, false));
 		grpLoadType.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
@@ -96,18 +99,29 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		updateTextBox = new Text(loadConfigurationComposite, SWT.BORDER);
 		updateTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		final Button updateKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
+		Button updateKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
+		
 		updateKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		updateKeysButton.setText("Update By Keys");
+		updateKeysButton.setText(Constants.UPDATE_BY_KEYS);
 		updateKeysButton.setEnabled(false);
-		updateRadioButton.addSelectionListener(new SelectionAdapter() {
+		
+		newTableRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
+		newTableRadioButton.setText(Constants.LOAD_TYPE_NEW_TABLE_KEY);
+		
+		newTableTextBox = new Text(loadConfigurationComposite, SWT.BORDER);
+		newTableTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button primaryKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
+		primaryKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		primaryKeysButton.setText(Constants.PRIMARY_KEYS_WINDOW_LABEL);
+		primaryKeysButton.setEnabled(false);
+		
+	updateRadioButton.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(updateRadioButton.getSelection()){
 					updateKeysButton.setEnabled(true);
 					updateKeysButton.addSelectionListener(new SelectionAdapter() {
-						
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 							FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
@@ -120,32 +134,16 @@ public class LoadTypeConfigurationDialog extends Dialog {
 								}
 						}
 					}) ;
-				}else{
-					updateKeysButton.setEnabled(false);
-					updateTextBox.setText("");
+					
+					primaryKeysButton.setEnabled(false);
+					newTableTextBox.setText("");
 				}
-			}
 		});
-		
-		
-		
-		
-		 newTableRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
-		newTableRadioButton.setText(Constants.LOAD_TYPE_NEW_TABLE_KEY);
-		
-		newTableTextBox = new Text(loadConfigurationComposite, SWT.BORDER);
-		newTableTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		primaryKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
-		primaryKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		primaryKeysButton.setText("Primary Keys");
-		primaryKeysButton.setEnabled(false);
 		
 		newTableRadioButton.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(newTableRadioButton.getSelection()){
 					primaryKeysButton.setEnabled(true);
 					primaryKeysButton.addSelectionListener(new SelectionAdapter() {
 						@Override
@@ -160,17 +158,10 @@ public class LoadTypeConfigurationDialog extends Dialog {
 								}
 						}
 					});
-				}else{
-					primaryKeysButton.setEnabled(false);
-					newTableTextBox.setText("");
-				}
-				
+					updateKeysButton.setEnabled(false);
+					updateTextBox.setText("");
 			}
-			
-			
 		});
-		
-		
 		
 		insertRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
 		insertRadioButton.setText(Constants.LOAD_TYPE_INSERT_KEY);
@@ -179,8 +170,8 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		
 		 replaceRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
 		 replaceRadioButton.setText(Constants.LOAD_TYPE_REPLACE_KEY);
-		new Label(loadConfigurationComposite, SWT.NONE);
-		new Label(loadConfigurationComposite, SWT.NONE);
+		 new Label(loadConfigurationComposite, SWT.NONE);
+		 new Label(loadConfigurationComposite, SWT.NONE);
 		
 		if(loadTypeConfigurationSelectedValue!=null && !loadTypeConfigurationSelectedValue.isEmpty() ){
 			if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY) != null){
@@ -196,8 +187,6 @@ public class LoadTypeConfigurationDialog extends Dialog {
 				updateTextBox.setText(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY));
 				updateKeysButton.setEnabled(true);
 			}
-			
-		
 		}else{
 			updateRadioButton.setEnabled(true);
 		}
@@ -215,6 +204,10 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 	}
 	
+	/**
+	 * Getter for LoadType Selected value
+	 * @return
+	 */
 	public Map<String, String> getSelectedPropertyValue(){
 		return loadTypeConfigurationSelectedValue;
 	}
@@ -232,20 +225,18 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		loadTypeConfigurationSelectedValue.clear();
 		if(updateRadioButton.getSelection()){
 				loadTypeConfigurationSelectedValue.put(updateRadioButton.getText() ,updateTextBox.getText() );
-		}else
+		}
 		
 		if(newTableRadioButton.getSelection()){
-			{
 			loadTypeConfigurationSelectedValue.put(newTableRadioButton.getText(), newTableTextBox.getText());
-			}
-		}else
+		}
 		
 		if(insertRadioButton.getSelection()){
-				loadTypeConfigurationSelectedValue.put(insertRadioButton.getText(), insertRadioButton.getText());
-		}else
+			loadTypeConfigurationSelectedValue.put(insertRadioButton.getText(), insertRadioButton.getText());
+		}
 		
 		if(replaceRadioButton.getSelection()){
-				loadTypeConfigurationSelectedValue.put(replaceRadioButton.getText(), replaceRadioButton.getText());
+			loadTypeConfigurationSelectedValue.put(replaceRadioButton.getText(), replaceRadioButton.getText());
 		}	
 		super.okPressed();
 	}

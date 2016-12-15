@@ -56,7 +56,7 @@ import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.OracleTableSchema;
+import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.DatabaseTableSchema;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -70,9 +70,14 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
-public class ELTSelectionDatabaseWidget extends AbstractWidget {
+/**
+ * SelectionDatabaseWidget provides 
+ * @author Bitwise
+ *
+ */
+public class SelectionDatabaseWidget extends AbstractWidget {
 
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTLoadTypeConfigurationWidget.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LoadTypeConfigurationWidget.class);
 	private String propertyName;
 	private DatabaseSelectionConfig databaseSelectionConfig;
 	private ELTRadioButton tableNameRadioButton;
@@ -94,7 +99,6 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 	private Cursor cursor;
 	private String sqlQueryStatement;
 	private static final String SEPARATOR = "|";
-	private ControlDecoration sqlQueryCounterDecorator;
 	private Text sqlQueryCountertextbox;
 	private ModifyListener sqlQueryCounterModifyListner;
 	private String oracleDatabaseName;
@@ -105,11 +109,10 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 	private String oracleUserName;
 	private String oraclePassword;
 	private String databaseType;
-	private OracleTableSchema oracleTableSchema;
 	private static final String ORACLE = "Oracle";
 	private static final String REDSHIFT = "RedShift";
 
-	public ELTSelectionDatabaseWidget(ComponentConfigrationProperty componentConfigProp,
+	public SelectionDatabaseWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
 
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
@@ -173,6 +176,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		populateWidget();
 	}
 
+	/**
+	 * 
+	 * @param selectionComposite
+	 * @param layout
+	 */
 	private void attachSQLQueryListner(final ELTSubGroupCompositeWithStack selectionComposite,
 			final StackLayout layout) {
 		final Button sqlRadioBtn = (Button) sqlQueryRadioButton.getSWTWidgetControl();
@@ -196,6 +204,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		});
 	}
 
+	/**
+	 * 
+	 * @param selectionComposite
+	 * @param layout
+	 */
 	private void attachTableButtonListner(final ELTSubGroupCompositeWithStack selectionComposite,
 			final StackLayout layout) {
 		final Button tableRadioBtn = (Button) tableNameRadioButton.getSWTWidgetControl();
@@ -218,6 +231,10 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		});
 	}
 
+	/**
+	 * Creates the stack layout composite for SQLQuery 
+	 * @param selectionComposite
+	 */
 	private void createSQLQueryComposite(ELTSubGroupCompositeWithStack selectionComposite) {
 
 		Utils.INSTANCE.loadProperties();
@@ -241,14 +258,10 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		Button buttonAlignment = ((Button) sqlQueryButtonWgt.getSWTWidgetControl());
 		GridData data = (GridData) buttonAlignment.getLayoutData();
 		data.verticalIndent = 5;
-		openSQLQueryStatement(sqlQueryButtonWgt);
+		sqlQuerySelectionListner(sqlQueryButtonWgt);
 
 		createWidgetlabel("Query Counter", sqlQueryComposite);
 		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox("Query Counter", sqlQueryComposite);
-		/*
-		 * sqlQueryCounterDecorator = attachDecoratorToTextbox("Query Counter",
-		 * sqlQueryCounterWgt, sqlQueryCounterDecorator);
-		 */
 		sqlQueryCountertextbox = (Text) sqlQueryCounterWgt.getSWTWidgetControl();
 		attachListeners(sqlQueryCounterWgt);
 
@@ -260,12 +273,16 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		Button sqlQueryCounterButton = ((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl());
 		GridData sqlQueryCounterData = (GridData) sqlQueryCounterButton.getLayoutData();
 		sqlQueryCounterData.verticalIndent = 5;
-		openSQLQueryCounterStatement(sqlQueryCounterButtonWgt);
+		sqlQueryCounterSelectionListner(sqlQueryCounterButtonWgt);
 
 	}
 
-	private void openSQLQueryCounterStatement(ELTDefaultButton sqlQueryCounterButtonWgt) {
-
+	/**
+	 * Opens the SQL Query Counter Dialog
+	 * @param sqlQueryCounterButtonWgt
+	 */
+	private void sqlQueryCounterSelectionListner(ELTDefaultButton sqlQueryCounterButtonWgt) {
+		
 		((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
 			private String sqlQueryCounterStatement;
@@ -282,7 +299,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		});
 	}
 
-	private void openSQLQueryStatement(ELTDefaultButton sqlQueryButtonWgt) {
+	/**
+	 * Opens the SQL Query Statement Dialog
+	 * @param sqlQueryButtonWgt
+	 */
+	private void sqlQuerySelectionListner(ELTDefaultButton sqlQueryButtonWgt) {
 
 		((Button) sqlQueryButtonWgt.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 
@@ -319,6 +340,9 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		return property;
 	}
 
+	/**
+	 * Unregisters all the modify listeners on TextBoxes
+	 */
 	protected void unRegisterTableOrSQLQueryTextListner() {
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
 
@@ -334,7 +358,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		}
 
 	}
-
+	
+	/**
+	 * Registers all the modify listeners on TextBoxes
+	 * @param isTableNameRadioButton
+	 */
 	private void registerTextBoxListner(boolean isTableNameRadioButton) {
 
 		if (isTableNameRadioButton) {
@@ -346,10 +374,16 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 
 	}
 
+	/**
+	 * Sets the data structure used for TextBoxes
+	 */
 	public void setWidgetConfig(WidgetConfig widgetConfig) {
 		textBoxConfig = (TextBoxWithLableConfig) widgetConfig;
 	}
 
+	/**
+	 * Sets the tool tip error message
+	 */
 	protected void setToolTipErrorMessage() {
 
 		String toolTipErrorMessage = null;
@@ -363,12 +397,6 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 			toolTipErrorMessage = tableNameDecorator.getDescriptionText();
 			setToolTipMessage(toolTipErrorMessage);
 		}
-
-		/*
-		 * if (sqlQueryCounterDecorator.isVisible()) { toolTipErrorMessage =
-		 * sqlQueryCounterDecorator.getDescriptionText();
-		 * setToolTipMessage(toolTipErrorMessage); }
-		 */
 
 	}
 
@@ -390,7 +418,12 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
 
 	}
-
+	
+	/**
+	 * Applies multiple listeners to textBoxes 
+	 * @param widgetList
+	 * @return
+	 */
 	private ModifyListener attachTextModifyListner(final ArrayList<AbstractWidget> widgetList) {
 		return new ModifyListener() {
 
@@ -405,7 +438,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 			}
 		};
 	}
-
+	
+	/**
+	 * Creates the stack layout composite for Table option
+	 * @param eltSuDefaultSubgroupComposite
+	 */
 	private void createTableNameComposite(ELTSubGroupCompositeWithStack eltSuDefaultSubgroupComposite) {
 
 		Utils.INSTANCE.loadProperties();
@@ -431,14 +468,14 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		data.horizontalIndent = 15;
 		button.setLayoutData(data);
 
-		button.addSelectionListener(attachButtonSelectionListner());
+		button.addSelectionListener(attachExtractButtonSelectionListner());
 
 	}
 
 	/**
-	 * 
+	 * Provides all the DB details
 	 */
-	private boolean getOracleTableDetailsFromWidgets() {
+	private boolean getDatabaseConnectionDetails() {
 
 		for (AbstractWidget textAbtractWgt : widgets) {
 
@@ -483,7 +520,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		return false;
 	}
 
-	private SelectionAdapter attachButtonSelectionListner() {
+	/**
+	 * Selection listener on Extract MetaStore button
+	 * @return
+	 */
+	private SelectionAdapter attachExtractButtonSelectionListner() {
 
 		SelectionAdapter adapter = new SelectionAdapter() {
 
@@ -496,7 +537,7 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 
 				if (null != host && StringUtils.isNotBlank(host)) {
 
-					if (getOracleTableDetailsFromWidgets()) {
+					if (getDatabaseConnectionDetails()) {
 						List<String> oracleDatabaseValues = new ArrayList<String>();
 						LinkedHashMap<String, Object> property = getProperties();
 						databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
@@ -522,22 +563,26 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 
 		return adapter;
 	}
-
+	
+	/**
+	 * Extracts the details from MetaStore for DB components
+	 * @param oracleDatabaseValues
+	 * @param host
+	 * @param port_no
+	 */
 	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues, String host, String port_no) {
 
 		String jsonResponse = "";
 
 		try {
-			if (StringUtils.isEmpty(oracleSchemaName) || StringUtils.isBlank(oracleSchemaName)) {
-				oracleSchemaName = "";
-			}
+			
 			ObjectMapper mapper = new ObjectMapper();
 			String input = oracleDatabaseName + SEPARATOR + oracleHostName + SEPARATOR + oracleJdbcName + SEPARATOR
 					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR
 					+ oracleSchemaName;
 			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input, host, port_no, oracleDatabaseValues);
-			oracleTableSchema = mapper.readValue(jsonResponse,
-					OracleTableSchema.class);
+			DatabaseTableSchema databaseTableSchema = mapper.readValue(jsonResponse,
+					DatabaseTableSchema.class);
 
 		} catch (NumberFormatException | HttpException | MalformedURLException exp) {
 			logger.error("Json to object Mapping issue ", exp);
@@ -596,7 +641,7 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 	
 
 	/**
-	 * 
+	 * Create the message dialog
 	 * @param errorMessage
 	 * @return
 	 */
@@ -616,6 +661,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		return messageBox;
 	}
 
+	/**
+	 * Validates the feild values
+	 * @param value
+	 * @return
+	 */
 	private boolean validateField(String value) {
 		if (null != value && StringUtils.isNotBlank(value)) {
 			return true;
@@ -623,6 +673,9 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		return false;
 	}
 
+	/**
+	 * Populates the data in the textBoxes 
+	 */
 	private void populateWidget() {
 
 		if (null != databaseSelectionConfig) {
@@ -649,22 +702,24 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 				}
 
 				if (validateField(databaseSelectionConfig.getSqlQueryCounter())) {
-					// sqlQueryCounterDecorator.hide();
 					sqlQueryCountertextbox.setText(databaseSelectionConfig.getSqlQueryCounter());
 
-				} /*
-					 * else { sqlQueryCounterDecorator.show(); }
-					 */
+				} 
+					 
 			}
 
 		} else {
 			tableNameDecorator.show();
 			sqlQueryDecorator.show();
-			// sqlQueryCounterDecorator.show();
 		}
 
 	}
 
+	/**
+	 * Attach listener to textBox widgets
+	 * @param textBoxWidget
+	 * @param txtDecorator
+	 */
 	protected void attachListeners(AbstractELTWidget textBoxWidget, ControlDecoration txtDecorator) {
 		ListenerHelper helper = prepareListenerHelper(txtDecorator);
 		try {
@@ -678,6 +733,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		}
 	}
 
+	/**
+	 * Prepares listener helper 
+	 * @param txtDecorator
+	 * @return
+	 */
 	protected ListenerHelper prepareListenerHelper(ControlDecoration txtDecorator) {
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
@@ -685,7 +745,11 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		helper.put(HelperType.CHARACTER_LIMIT, textBoxConfig.getCharacterLimit());
 		return helper;
 	}
-
+	
+	/**
+	 * Attach event change listener on TextBoxes
+	 * @param textBoxWidget
+	 */
 	protected void attachListeners(AbstractELTWidget textBoxWidget) {
 		try {
 
@@ -695,7 +759,13 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 			logger.error("Failed in attaching listeners to {}, {}", textBoxConfig.getName(), exception);
 		}
 	}
-
+	
+	/**
+	 * Create Label on Stack layout composite
+	 * @param labelName
+	 * @param compositeWithStack
+	 * @return
+	 */
 	private AbstractELTWidget createWidgetlabel(String labelName, ELTSubGroupCompositeWithStack compositeWithStack) {
 		ELTDefaultLable label = new ELTDefaultLable(labelName).lableWidth(80);
 		compositeWithStack.attachWidget(label);
@@ -706,7 +776,13 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 
 		return label;
 	}
-
+	
+	/**
+	 * Create TextBoxes on Stack layout composite
+	 * @param labelName
+	 * @param compositeWithStack
+	 * @return
+	 */
 	private AbstractELTWidget createWidgetTextbox(String labelName, ELTSubGroupCompositeWithStack compositeWithStack) {
 
 		AbstractELTWidget textboxWgt = new ELTDefaultTextBox()
@@ -720,7 +796,14 @@ public class ELTSelectionDatabaseWidget extends AbstractWidget {
 		data.widthHint = 260;
 		return textboxWgt;
 	}
-
+	
+	/**
+	 * Attach decorators to the TextBoxes 
+	 * @param labelName
+	 * @param textboxWgt
+	 * @param txtDecorator
+	 * @return
+	 */
 	private ControlDecoration attachDecoratorToTextbox(String labelName, AbstractELTWidget textboxWgt,
 			ControlDecoration txtDecorator) {
 

@@ -54,9 +54,9 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
 import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.ELTExtractMetaStoreDataWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.ELTLoadTypeConfigurationWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.ELTDatabaseTestConnectionWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.ELTSelectionDatabaseWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.LoadTypeConfigurationWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.DatabaseTestConnectionWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.SelectionDatabaseWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
@@ -108,13 +108,13 @@ public class WidgetFactory {
 		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
 		SID_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getSIDNameWidgetConfig()),
 		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
-		ORACLE_SCHEMA_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getOracleSchemaWidgetConfig()),
+		ORACLE_SCHEMA_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getOracleSchemaWidgetConfig()),
 		HOST_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getHostNameWidgetConfig()),
 		PORT_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPortWidgetConfig()),
 		TABLE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getTableNameWidgetConfig()),
 		USER_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getUserNameWidgetConfig()),
 		PASSWORD_WIDGET(TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents.class, WidgetHelper.INSTANCE.getPasswordWidgetConfig()),
-		CHUNK_SIZE_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getChunkSizeWidgetConfig()),
+		CHUNK_SIZE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getChunkSizeWidgetConfig()),
 		
 		NO_OF_RECORDS_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getNoOfRecordsWidgetConfig()),
 		COUNT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getCountWidgetConfig ()),
@@ -122,7 +122,7 @@ public class WidgetFactory {
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
 		PARTITION_KEYS_WIDGET(HiveOutputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
 		
-		TEST_CONNECTION_WIDGET(ELTDatabaseTestConnectionWidget.class),
+		TEST_CONNECTION_WIDGET(DatabaseTestConnectionWidget.class),
 		PARTITION_KEYS_WIDGET_INPUT_HIVE(HiveInputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.RUNTIME_PROPERTY_LABEL,Constants.RUNTIME_PROPERTIES_WINDOW_LABEL)),
@@ -141,14 +141,14 @@ public class WidgetFactory {
 		INPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Messages.LABEL_INPUT_COUNT,1)),
 		OUTPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Messages.LABEL_OUTPUT_COUNT,1)),
 		
-		SELECT_JDBC_VALUES_WIDGET(ELTSelectionDatabaseWidget.class, WidgetHelper.INSTANCE.getSelectWidgetConfig() ),
+		SELECT_JDBC_VALUES_WIDGET(SelectionDatabaseWidget.class, WidgetHelper.INSTANCE.getSelectWidgetConfig() ),
 		JOIN_TYPE_WIDGET(ELTJoinWidget.class),
 		JOIN_MAPPING_WIDGET(ELTJoinMapWidget.class),
 		HASH_JOIN_WIDGET(ELTLookupConfigWidget.class),
 		HASH_JOIN_MAPPING_WIDGET(ELTLookupMapWidget.class),
 		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class),
 		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class),
-		LOAD_TYPE_CONFIGURATION_WIDGET(ELTLoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Constants.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
+		LOAD_TYPE_CONFIGURATION_WIDGET(LoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Constants.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
 		PROPOGATE_WIDGET(PropogateWidget.class);
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;

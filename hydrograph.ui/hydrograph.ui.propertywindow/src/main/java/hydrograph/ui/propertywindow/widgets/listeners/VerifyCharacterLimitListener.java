@@ -15,7 +15,11 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-
+/***
+ * VerifyCharacterLimitListener class verifies the character limit provided for values
+ * @author Bitwise
+ *
+ */
 public class VerifyCharacterLimitListener implements IELTListener{
 	
 	private ControlDecoration txtDecorator;

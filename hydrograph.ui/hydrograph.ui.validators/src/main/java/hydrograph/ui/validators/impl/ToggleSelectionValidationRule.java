@@ -21,6 +21,11 @@ import org.apache.commons.lang.StringUtils;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 
+/**
+ * ToggleSelectionValidationRule validates the selected option for database components
+ * @author Bitwise
+ *
+ */
 public class ToggleSelectionValidationRule implements IValidator {
 	private String errorMessage;
 
@@ -48,22 +53,16 @@ public class ToggleSelectionValidationRule implements IValidator {
 
 		if (databaseSelectionConfig != null) {
 			if (databaseSelectionConfig.isTableName()) {
-				if (databaseSelectionConfig.getTableName() != null
-						&& StringUtils.isNotBlank(databaseSelectionConfig.getTableName())) {
-
+				if (StringUtils.isNotBlank(databaseSelectionConfig.getTableName())) {
 					return true;
 				} else {
 					errorMessage = propertyName + " can not be blank";
 					return false;
 				}
 			} else {
-
-				if ((databaseSelectionConfig.getSqlQuery() != null
-						&& StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery()))) {
-
+				if ((StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery()))) {
 					return true;
 				}
-
 				else {
 					errorMessage = propertyName + " can not be blank";
 					return false;

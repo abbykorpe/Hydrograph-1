@@ -57,7 +57,8 @@ public class Constants {
 	public static final String COMPONENT_NAME = "Component Name";
 	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
-	public static final String REGEX_NUMERIC_AND_PARAMETER = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\d]{4}";
+	// Used for validating Numeric values (only 4 digits) E.g. 1234 and Parameters E.g  @{Param_123}
+	public static final String REGEX_NUMERIC_AND_PARAMETER = "[\\@]{1}[\\{]{1}[\\w]{1,}[\\}]{1}||[\\d]{1,4}";
 	
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}"; 
@@ -303,6 +304,7 @@ public class Constants {
 
 	// Oracle Component
 	public static final String ORACLE_DATABASE_WIDGET_NAME="sid";
+	public static final String ORACLE_CHUNKSIZE_WIDGET_NAME="chunkSize";
 	public static final String ORACLE_HOST_WIDGET_NAME="hostName";
 	public static final String ORACLE_PORT_WIDGET_NAME="port";
 	public static final String ORACLE_JDBC_DRIVER_WIDGET_NAME="jdbcDriver";
@@ -313,6 +315,8 @@ public class Constants {
 	public static final String LOAD_TYPE_NEW_TABLE_KEY = "New Table";
 	public static final String LOAD_TYPE_INSERT_KEY = "Insert";
 	public static final String LOAD_TYPE_REPLACE_KEY = "Replace";
+	public static final String UPDATE_BY_KEYS = "Update By Keys";
+	public static final String LOAD_TYPE = "Load Type";
 	public static String LOAD_TYPE_UPDATE_VALUE_SEPERATOR=",";
 	public static String LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR=",";
 

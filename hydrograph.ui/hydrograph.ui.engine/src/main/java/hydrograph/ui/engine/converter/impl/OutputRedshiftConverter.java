@@ -39,10 +39,14 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * Converter implementation for Output RedShift Component
+ * @author Bitwise
+ *
+ */
 public class OutputRedshiftConverter extends OutputConverter {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputRedshiftConverter.class);
-	private Redshift redshiftOutput;
 
 	public OutputRedshiftConverter(Component component) {
 		super(component);
@@ -55,65 +59,77 @@ public class OutputRedshiftConverter extends OutputConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		redshiftOutput = (Redshift) baseComponent;
+		 Redshift redshiftOutput = (Redshift) baseComponent;
 		redshiftOutput.setRuntimeProperties(getRuntimeProperties());
 		
 		ElementValueStringType databaseName = new ElementValueStringType();
-		databaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
-		redshiftOutput.setDatabaseName(databaseName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.DATABASE_NAME.value()))){
+			databaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
+			redshiftOutput.setDatabaseName(databaseName);
+		}
 		
 		ElementValueStringType tableName = new ElementValueStringType();
-		tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_TABLE_NAME.value())));
-		redshiftOutput.setTableName(tableName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_TABLE_NAME.value()))){
+			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_TABLE_NAME.value())));
+			redshiftOutput.setTableName(tableName);
+		}
 		
 		ElementValueStringType hostName = new ElementValueStringType();
-		hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value())));
-		redshiftOutput.setHostname(hostName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value())));
+			redshiftOutput.setHostname(hostName);
+		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger sum = BigInteger.valueOf(5439);
-		portNo.setValue(sum);
+		BigInteger portValue = getBigInteger(PropertyNameConstants.REDSHIFT_PORT_NAME.value());
+		portNo.setValue(portValue);
 		redshiftOutput.setPort(portNo);
 		
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
-		jdbcDriver.setValue("JDBC-4.2"/*String.valueOf(properties.get(PropertyNameConstants.ORACLE_JDBC_DRIVER.value()))*/);
+		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value())));
 		redshiftOutput.setDrivertype(jdbcDriver);
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		userName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value())));
-		redshiftOutput.setUsername(userName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value())));
+			redshiftOutput.setUsername(userName);
+		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		password.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value())));
-		redshiftOutput.setPassword(password);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value())));
+			redshiftOutput.setPassword(password);
+		}
 		
 		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		BigInteger chunkValue = BigInteger.valueOf(1000);
-		chunkSize.setValue(chunkValue);
-		redshiftOutput.setChunkSize(chunkSize);
+		if(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value() !=null){
+			BigInteger chunkValue = getBigInteger(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value());
+			chunkSize.setValue(chunkValue);
+			redshiftOutput.setChunkSize(chunkSize);
+		}
 		
-		addTypeLoadChoice();
-		
+		TypeLoadChoice loadValue = addTypeLoadChoice();
+		redshiftOutput.setLoadType(loadValue);
 	}
 	
-	private void addTypeLoadChoice() {
+	private TypeLoadChoice addTypeLoadChoice() {
 		TypeLoadChoice loadValue = new TypeLoadChoice();
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
 		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
 			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-			loadValue.setNewTable(getPrimaryKeys((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+			loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
 			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
 			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
 			
 		}
-
-		redshiftOutput.setLoadType(loadValue);
+		return loadValue;
 	}
-	private TypePriamryKeys getPrimaryKeys(String primaryKeyFeilds) {
+	
+	private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
 		String[] primaryKeyColumsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 		if(primaryKeyColumsFeilds !=null && primaryKeyColumsFeilds.length>0){

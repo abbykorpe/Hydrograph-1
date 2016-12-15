@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
@@ -33,10 +34,14 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * Converter implementation for Input RedShift Component
+ * @author Bitwise
+ *
+ */
 public class InputRedshiftConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputRedshiftConverter.class);
-	private Redshift redshiftInput;
 
 	public InputRedshiftConverter(Component component) {
 		super(component);
@@ -64,34 +69,42 @@ public class InputRedshiftConverter extends InputConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		redshiftInput = (Redshift) baseComponent;
+		Redshift redshiftInput = (Redshift) baseComponent;
 		redshiftInput.setRuntimeProperties(getRuntimeProperties());
 
 		ElementValueStringType dataBaseName = new ElementValueStringType();
-		dataBaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
-		redshiftInput.setDatabaseName(dataBaseName);
-
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.DATABASE_NAME.value()))){
+			dataBaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
+			redshiftInput.setDatabaseName(dataBaseName);
+		}
+		
 		ElementValueStringType hostName = new ElementValueStringType();
-		hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value())));
-		redshiftInput.setHostname(hostName);
-
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value())));
+			redshiftInput.setHostname(hostName);
+		}
+		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger sum = BigInteger.valueOf(5439);
-		portNo.setValue(sum);
+		BigInteger portValue = getBigInteger(PropertyNameConstants.REDSHIFT_PORT_NAME.value());
+		portNo.setValue(portValue);
 		redshiftInput.setPort(portNo);
 
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
-		jdbcDriver.setValue("JDBC-4.2");
+		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value())));
 		redshiftInput.setDrivertype(jdbcDriver);
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		userName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value())));
-		redshiftInput.setUsername(userName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value())));
+			redshiftInput.setUsername(userName);
+		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		password.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value())));
-		redshiftInput.setPassword(password);
-
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value())));
+			redshiftInput.setPassword(password);
+		}
+		
 		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) properties
 				.get(PropertyNameConstants.SELECT_OPTION.value());
 		if (databaseSelectionConfig != null) {

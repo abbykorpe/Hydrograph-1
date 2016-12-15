@@ -131,7 +131,7 @@ public abstract class Converter {
 			bigInteger = new BigInteger(String.valueOf(propertyValue));
 		} else if (ParameterUtil.isParameter(propertyValue)) {
 			ComponentXpath.INSTANCE.getXpathMap()
-					.put((ComponentXpathConstants.COMPONENTS_BIG_INTEGER_PROPERTY_XPATH.value().replace(ID, componentName))
+					.put((ComponentXpathConstants.COMPONENT_XPATH_BOOLEAN.value().replace(ID, componentName))
 							.replace(Constants.PARAM_PROPERTY_NAME, propertyName),
 							new ComponentsAttributeAndValue(null, properties.get(propertyName).toString()));
 			bigInteger = new BigInteger(String.valueOf(0));

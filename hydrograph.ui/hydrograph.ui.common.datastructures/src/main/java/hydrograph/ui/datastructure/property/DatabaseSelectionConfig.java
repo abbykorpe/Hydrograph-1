@@ -14,6 +14,13 @@ package hydrograph.ui.datastructure.property;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
+/**
+ * The DatabaseSelectionConfig class 
+ * Provides the data structure for database selection 
+ * @author Bitwise
+ *
+ */
+
 public class DatabaseSelectionConfig implements IDataStructure {
 
 	private boolean isTableName;

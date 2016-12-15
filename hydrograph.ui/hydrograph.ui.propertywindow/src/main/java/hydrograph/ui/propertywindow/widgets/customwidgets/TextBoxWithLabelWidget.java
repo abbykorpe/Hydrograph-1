@@ -88,11 +88,10 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 
 	protected void setToolTipErrorMessage(){
 		String toolTipErrorMessage = null;
-			if(!(textBoxConfig.getName().equals("Oracle Schema") || textBoxConfig.getName().equals("Chunk Size"))){	
-		if(txtDecorator.isVisible())
+		if(txtDecorator.isVisible()){
 			toolTipErrorMessage = txtDecorator.getDescriptionText();
-		
-			}
+		}
+			
 			setToolTipMessage(toolTipErrorMessage);
 	}
 	
@@ -126,7 +125,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();
 		
-	if(!(textBoxConfig.getName().equals("Oracle Schema") || textBoxConfig.getName().equals("Chunk Size"))){
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
 
@@ -138,10 +136,9 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			gridData.widthHint = 80;
 		}
 		attachListeners(textBoxWidget);
-	}else{
 		String property = propertyValue;
 		textBox.setText(property);
-	}
+	
 		
 		
 		 /**
@@ -177,7 +174,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	protected void populateWidget(){
 		logger.debug("Populating {} textbox", textBoxConfig.getName());
 		String property = propertyValue;
-		if(!(textBoxConfig.getName().equals("Oracle Schema") || textBoxConfig.getName().equals("Chunk Size"))){
 		if(StringUtils.isNotBlank(property) ){
 			textBox.setText(property);
 			txtDecorator.hide();
@@ -187,7 +183,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			textBox.setText("");
 			txtDecorator.show();
 		}
-		}
+		
 	}
 	
 	protected boolean isParameter(String input) {

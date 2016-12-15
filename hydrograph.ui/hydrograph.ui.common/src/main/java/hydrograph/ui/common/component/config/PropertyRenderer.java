@@ -81,6 +81,17 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="OVERWRITE_WIDGET"/>
  *     &lt;enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
  *     &lt;enumeration value="EXTRACT_METASTORE_DATA_WIDGET"/>
+ *     &lt;enumeration value="HOST_NAME_WIDGET"/>
+ *     &lt;enumeration value="SID_NAME_WIDGET"/>
+ *     &lt;enumeration value="PORT_WIDGET"/>
+ *     &lt;enumeration value="USER_NAME_WIDGET"/>
+ *     &lt;enumeration value="PASSWORD_WIDGET"/>
+ *     &lt;enumeration value="CHUNK_SIZE_WIDGET"/>
+ *     &lt;enumeration value="SELECT_JDBC_VALUES_WIDGET"/>
+ *     &lt;enumeration value="LOAD_TYPE_CONFIGURATION_WIDGET"/>
+ *     &lt;enumeration value="ORACLE_SCHEMA_WIDGET"/>
+ *     &lt;enumeration value="TEST_CONNECTION_WIDGET"/>
+ *     &lt;enumeration value="DATABASE_NAME_WIDGET"/>
  *     &lt;enumeration value="PROPOGATE_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>

@@ -62,11 +62,11 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		outputOracle = (Oracle) typeBaseComponent;
 		loadSelectedDetails = new LinkedHashMap<String, String>();
 		
-		if(outputOracle.getDrivertype() != null && StringUtils.isNotBlank(outputOracle.getDrivertype().getValue())){
+		if(StringUtils.isNotBlank(outputOracle.getDrivertype().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_JDBC_DRIVER.value(), (String)(outputOracle.getDrivertype().getValue()));
 		}
 		
-		if(outputOracle.getHostname() != null && StringUtils.isNotBlank(outputOracle.getHostname().getValue())){
+		if(StringUtils.isNotBlank(outputOracle.getHostname().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_HOST_NAME.value(), (String)(outputOracle.getHostname().getValue()));
 		}
 		
@@ -74,23 +74,23 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 			propertyMap.put(PropertyNameConstants.ORACLE_PORT_NO.value(), outputOracle.getPort().getValue().toString());
 		}
 		
-		if(outputOracle.getSid() != null && StringUtils.isNotBlank(outputOracle.getSid().getValue())){
+		if(StringUtils.isNotBlank(outputOracle.getSid().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_SID.value(), (String)(outputOracle.getSid().getValue()));
 		}
 		
-		if(outputOracle.getSchemaname() != null && StringUtils.isNotBlank(outputOracle.getSchemaname().getValue())){
+		if(StringUtils.isNotBlank(outputOracle.getSchemaname().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(outputOracle.getSchemaname().getValue()));
 		}
 		
-		if(outputOracle.getUsername() != null && StringUtils.isNotBlank(outputOracle.getUsername().getValue())){
+		if(StringUtils.isNotBlank(outputOracle.getUsername().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_USER_NAME.value(), (String)(outputOracle.getUsername().getValue()));
 		}
 		
-		if(outputOracle.getPassword() != null && StringUtils.isNotBlank(outputOracle.getPassword().getValue())){
+		if(StringUtils.isNotBlank(outputOracle.getPassword().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_PASSWORD.value(), (String)(outputOracle.getPassword().getValue()));
 		}
 		
-		if(outputOracle.getTableName() != null && StringUtils.isNotBlank(outputOracle.getTableName().getValue())){
+		if(StringUtils.isNotBlank(outputOracle.getTableName().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), (String)(outputOracle.getTableName().getValue()));
 		}
 		
@@ -118,12 +118,12 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(outputOracle.getId());
 		uiComponent.setProperties(propertyMap);
-		
-		
-		
 	}
 	
-	
+	/**
+	 * Appends primary keys using a comma
+	 * @param newTable
+	 */
 	private String getLoadTypePrimaryKeyUIValue(TypePriamryKeys newTable) {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(newTable !=null && newTable.getPrimaryKeys() !=null){
@@ -135,7 +135,11 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		}
 		return StringUtils.removeEnd(stringBuffer.toString(), ",");
 	}
-
+	
+	/**
+	 *  Appends update keys using a comma
+	 * @param update
+	 */
 	private String getLoadTypeUpdateKeyUIValue(TypeUpdateKeys update) {
 		StringBuffer buffer=new StringBuffer();
 			if(update!=null && update.getUpdateByKeys()!=null){

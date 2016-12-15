@@ -20,10 +20,10 @@ import java.util.List;
  * @author Bitwise
  *
  */
-public class OracleTableSchema {
+public class DatabaseTableSchema {
 	
 	private String tableName="";
-	private List<OracleTableSchemaField> schemaFields = new ArrayList<OracleTableSchemaField>();
+	private List<DatabaseTableSchemaField> schemaFields = new ArrayList<DatabaseTableSchemaField>();
 	private String sid="";
 	private String hostName="";
 	private String portNo="";
@@ -37,10 +37,10 @@ public class OracleTableSchema {
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
-	public List<OracleTableSchemaField> getSchemaFields() {
+	public List<DatabaseTableSchemaField> getSchemaFields() {
 		return schemaFields;
 	}
-	public void setSchemaFields(List<OracleTableSchemaField> schemaFields) {
+	public void setSchemaFields(List<DatabaseTableSchemaField> schemaFields) {
 		this.schemaFields = schemaFields;
 	}
 	public String getSid() {

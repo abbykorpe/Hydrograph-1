@@ -38,11 +38,14 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.IOracle;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * Converter to convert jaxb oracle object into input Oracle component
+ * @author Bitwise
+ *
+ */
 public class InputOracleUiConverter extends InputUiConverter {
 	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputOracleUiConverter.class);
-	private Oracle inputOracle;
-	DatabaseSelectionConfig databaseSelectionConfig ;
 	
 	public InputOracleUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
 		this.container = container;
@@ -57,14 +60,14 @@ public class InputOracleUiConverter extends InputUiConverter {
 	public void prepareUIXML() {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Oracle-Properties for {}", componentName);
-		inputOracle = (Oracle) typeBaseComponent;
-		databaseSelectionConfig = new DatabaseSelectionConfig();
+		 Oracle inputOracle = (Oracle) typeBaseComponent;
+		 DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 		
-		if(inputOracle.getDrivertype() != null && StringUtils.isNotBlank(inputOracle.getDrivertype().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getDrivertype().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_JDBC_DRIVER.value(), (String)(inputOracle.getDrivertype().getValue()));
 		}
 		
-		if(inputOracle.getHostname() != null && StringUtils.isNotBlank(inputOracle.getHostname().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getHostname().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_HOST_NAME.value(), (String)(inputOracle.getHostname().getValue()));
 		}
 		
@@ -72,33 +75,32 @@ public class InputOracleUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.ORACLE_PORT_NO.value(), inputOracle.getPort().getValue().toString());
 		}
 		
-		if(inputOracle.getSid() != null && StringUtils.isNotBlank(inputOracle.getSid().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getSid().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_SID.value(), (String)(inputOracle.getSid().getValue()));
 		}
 		
-		if(inputOracle.getSchemaname() != null && StringUtils.isNotBlank(inputOracle.getSchemaname().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getSchemaname().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(inputOracle.getSchemaname().getValue()));
 		}
 		
-		if(inputOracle.getUsername() != null && StringUtils.isNotBlank(inputOracle.getUsername().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getUsername().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_USER_NAME.value(), (String)(inputOracle.getUsername().getValue()));
 		}
 		
-		if(inputOracle.getPassword() != null && StringUtils.isNotBlank(inputOracle.getPassword().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getPassword().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_PASSWORD.value(), (String)(inputOracle.getPassword().getValue()));
 		}
 		
-		if(inputOracle.getTableName() !=null && StringUtils.isNotBlank(inputOracle.getTableName().getValue())){
-			
+		if(StringUtils.isNotBlank(inputOracle.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputOracle.getTableName().getValue());
 			databaseSelectionConfig.setTableName(true);
 		}
 		
-		if(inputOracle.getSelectQuery() !=null && StringUtils.isNotBlank(inputOracle.getSelectQuery().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getSelectQuery().getValue())){
 			databaseSelectionConfig.setSqlQuery(inputOracle.getSelectQuery().getValue());
 		}
 		
-		if(inputOracle.getCountQuery() !=null && StringUtils.isNotBlank(inputOracle.getCountQuery().getValue())){
+		if(StringUtils.isNotBlank(inputOracle.getCountQuery().getValue())){
 			databaseSelectionConfig.setSqlQueryCounter(inputOracle.getCountQuery().getValue());
 		}
 		

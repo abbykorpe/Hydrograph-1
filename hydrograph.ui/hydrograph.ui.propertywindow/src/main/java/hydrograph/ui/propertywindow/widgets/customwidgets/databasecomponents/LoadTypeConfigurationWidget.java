@@ -42,15 +42,20 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubg
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
-public class ELTLoadTypeConfigurationWidget extends AbstractWidget {
+/**
+ * The class LoadTypeConfigurationWidget
+ * @author Bitwise
+ *
+ */
+public class LoadTypeConfigurationWidget extends AbstractWidget {
 	
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(ELTLoadTypeConfigurationWidget.class);
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(LoadTypeConfigurationWidget.class);
 	private Shell shell;
 	private RuntimeConfig runtimeConfig;
 	private List<AbstractWidget> widgets;
 	protected ControlDecoration buttonDecorator;
 	private String propertyName;
-	List<String> schemaFeilds;
+	List<String> schemaFields;
 	LinkedHashMap<String, Object> tempPropertyMap;
 
 	private Map<String, String> initialMap;
@@ -65,7 +70,7 @@ public class ELTLoadTypeConfigurationWidget extends AbstractWidget {
 	 * @param propDialogButtonBar
 	 *            the property dialog button bar
 	 */
-	public ELTLoadTypeConfigurationWidget(
+	public LoadTypeConfigurationWidget(
 			ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps,
 			PropertyDialogButtonBar propDialogButtonBar) {
@@ -74,8 +79,9 @@ public class ELTLoadTypeConfigurationWidget extends AbstractWidget {
 		this.propertyName = componentConfigProp.getPropertyName();
 		this.initialMap = (Map<String, String>) componentConfigProp
 				.getPropertyValue();
-if(initialMap==null)
-	this.initialMap = new LinkedHashMap<String, String>();
+		if(initialMap==null){
+			this.initialMap = new LinkedHashMap<String, String>();
+		}
 	}
 
 	@Override
@@ -128,11 +134,11 @@ if(initialMap==null)
 	 * New window launcher.
 	 */
 	public void newWindowLauncher() {
-		schemaFeilds=getPropagatedSchema();
+		schemaFields=getPropagatedSchema();
 		
 		initialMap=new LinkedHashMap<>(initialMap); 
 		LoadTypeConfigurationDialog loadTypeConfigurationPropertyDialog = new LoadTypeConfigurationDialog(
-			shell, propertyDialogButtonBar, runtimeConfig.getWindowLabel(), schemaFeilds,initialMap);
+			shell, propertyDialogButtonBar, runtimeConfig.getWindowLabel(), schemaFields,initialMap);
 	
 		loadTypeConfigurationPropertyDialog.open();
 		if (loadTypeConfigurationPropertyDialog.isOkPressed()) {
@@ -145,6 +151,9 @@ if(initialMap==null)
 
 	}
 	
+	/**
+	 * Propogates the schema from GridRow
+	 */
 	protected List<String> getPropagatedSchema() {
 		List<String> list = new ArrayList<String>();
 		Schema schema = (Schema) getComponent().getProperties().get(
@@ -179,6 +188,9 @@ if(initialMap==null)
 		
 	}
 	
+	/**
+	 * Set the tool tip error message
+	 */
 	protected void setToolTipErrorMessage() {
 		String toolTipErrorMessage = null;
 
@@ -188,6 +200,9 @@ if(initialMap==null)
 		setToolTipMessage(toolTipErrorMessage);
 	}
 	
+	/**
+	 * Show or hide the decorator
+	 */
 	protected void setDecoratorsVisibility() {
 
 		if (!isWidgetValid()) {

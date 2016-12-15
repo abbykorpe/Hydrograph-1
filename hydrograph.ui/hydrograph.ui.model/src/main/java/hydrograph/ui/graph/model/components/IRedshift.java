@@ -20,10 +20,11 @@ import hydrograph.ui.graph.model.categories.InputCategory;
  */
 public class IRedshift extends InputCategory {
 
+	private static final long serialVersionUID = -7980731522006666953L;
+
 	/**
 	 * Instantiates a new Input Redshift .
 	 */
-//	private static final long serialVersionUID = -3309636208394041320L;
 
 	public IRedshift() {
 		super();

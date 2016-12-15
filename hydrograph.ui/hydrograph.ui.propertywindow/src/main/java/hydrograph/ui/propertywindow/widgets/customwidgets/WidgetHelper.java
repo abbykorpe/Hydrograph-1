@@ -30,10 +30,6 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLabl
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
-import java.util.List;
-
-import org.eclipse.swt.widgets.Text;
-
 
 /**
  * Helper class to provide configuration for customizing widgets.

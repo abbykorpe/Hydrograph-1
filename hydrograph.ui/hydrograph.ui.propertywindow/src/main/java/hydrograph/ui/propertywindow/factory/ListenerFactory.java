@@ -40,7 +40,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.ELTSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTShortcutKeyGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyComponentNameListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyNumbericListener;
-import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyNumericAndParameterListener;
+import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumericAndParameterListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifySequenceFieldName;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyTextListener;
 import hydrograph.ui.propertywindow.widgets.listeners.FilePathModifyListener;
@@ -125,7 +125,7 @@ public class ListenerFactory {
 		MOUSE_MOVE_LISTENER(MouseMoveOnSchemaGridListener.class),
 		GRID_KEY_LISTENER(ELTShortcutKeyGridListener.class),
 		OVER_WRITE_LISTENER(OverWriteWidgetSelectionListener.class),
-		MODIFY_NUMERIC_AND_PARAMETER(ELTVerifyNumericAndParameterListener.class); 
+		MODIFY_NUMERIC_AND_PARAMETER(VerifyNumericAndParameterListener.class); 
 		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {

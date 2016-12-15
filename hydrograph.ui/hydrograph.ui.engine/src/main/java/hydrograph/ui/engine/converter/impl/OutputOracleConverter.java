@@ -39,11 +39,14 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * Converter implementation for Output Oracle Component
+ * @author Bitwise
+ *
+ */
 public class OutputOracleConverter extends OutputConverter {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputOracleConverter.class);
-	private Oracle oracleOutput;
-
 
 	public OutputOracleConverter(Component component) {
 		super(component);
@@ -56,20 +59,26 @@ public class OutputOracleConverter extends OutputConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		oracleOutput = (Oracle) baseComponent;
+		 Oracle oracleOutput = (Oracle) baseComponent;
 		oracleOutput.setRuntimeProperties(getRuntimeProperties());
 		
 		ElementValueStringType sid = new ElementValueStringType();
-		sid.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SID.value())));
-		oracleOutput.setSid(sid);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SID.value()))){
+			sid.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SID.value())));
+			oracleOutput.setSid(sid);
+		}
 		
 		ElementValueStringType tableName = new ElementValueStringType();
-		tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value())));
-		oracleOutput.setTableName(tableName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value()))){
+			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value())));
+			oracleOutput.setTableName(tableName);
+		}
 		
 		ElementValueStringType hostName = new ElementValueStringType();
-		hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value())));
-		oracleOutput.setHostname(hostName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value())));
+			oracleOutput.setHostname(hostName);
+		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
 		BigInteger portValue = getBigInteger(PropertyNameConstants.ORACLE_PORT_NO.value());
@@ -81,43 +90,55 @@ public class OutputOracleConverter extends OutputConverter {
 		oracleOutput.setDrivertype(jdbcDriver);
 		
 		ElementValueStringType oracleSchema = new ElementValueStringType();
-		oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
-		oracleOutput.setSchemaname(oracleSchema);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
+			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
+			oracleOutput.setSchemaname(oracleSchema);
+		}
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		userName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_USER_NAME.value())));
-		oracleOutput.setUsername(userName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_USER_NAME.value())));
+			oracleOutput.setUsername(userName);
+		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		password.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PASSWORD.value())));
-		oracleOutput.setPassword(password);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PASSWORD.value())));
+			oracleOutput.setPassword(password);
+		}
 		
 		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		BigInteger chunkValue = getBigInteger(PropertyNameConstants.ORACLE_CHUNK_SIZE.value());
-		chunkSize.setValue(chunkValue);
-		oracleOutput.setChunkSize(chunkSize);
+		if(PropertyNameConstants.ORACLE_CHUNK_SIZE.value() !=null){
+			BigInteger chunkValue = getBigInteger(PropertyNameConstants.ORACLE_CHUNK_SIZE.value());
+			chunkSize.setValue(chunkValue);
+			oracleOutput.setChunkSize(chunkSize);
+		}
 		
-		addTypeLoadChoice();
-		
+		TypeLoadChoice loadValue = addTypeLoadChoice();
+		oracleOutput.setLoadType(loadValue);
 	}
 	
-	private void addTypeLoadChoice() {
+	private TypeLoadChoice addTypeLoadChoice() {
 		TypeLoadChoice loadValue = new TypeLoadChoice();
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
 		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
 			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-			loadValue.setNewTable(getPrimaryKeys((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+			loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
 			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
 			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
 		}
-
-		oracleOutput.setLoadType(loadValue);
+		return loadValue;
 	}
-
-	private TypePriamryKeys getPrimaryKeys(String primaryKeyFeilds) {
+	
+	/**
+	 * Creates primary key fields
+	 * @param primaryKeyFeilds
+	 * @return
+	 */
+	private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
 		String[] primaryKeyColumsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 		if(primaryKeyColumsFeilds !=null && primaryKeyColumsFeilds.length>0){
@@ -132,7 +153,12 @@ public class OutputOracleConverter extends OutputConverter {
 				
 		return primaryKeys;
 	}
-
+	
+	/**
+	 * Creates update key fields 
+	 * @param fields
+	 * @return
+	 */
 	private TypeUpdateKeys getUpdateKeys(String fields) {
 		TypeUpdateKeys updateKeys = null;
 		String[] columnFields = StringUtils.split(fields, Constants.LOAD_TYPE_UPDATE_VALUE_SEPERATOR);
