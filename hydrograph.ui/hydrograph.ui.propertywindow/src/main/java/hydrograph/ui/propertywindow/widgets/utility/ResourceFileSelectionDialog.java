@@ -32,6 +32,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -133,15 +135,20 @@ public class ResourceFileSelectionDialog extends ElementTreeSelectionDialog {
         /*
          * Refresh projects tree.
          */
-        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-        for (int i = 0; i < projects.length; i++) {
-            try {
-                projects[i].refreshLocal(IResource.DEPTH_INFINITE, null);
-            } catch (CoreException e) {
-            	logger.debug("Unable to refresh local file");
-            }
-        }
-
+    		
+    	IFileEditorInput editorInput=(IFileEditorInput) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
+    	IProject[] projects = new IProject[1];
+    	projects[0]=editorInput.getFile().getProject();
+    	
+    	if(projects !=null){
+    		for (int i = 0; i < projects.length; i++) {
+    			try {
+    				projects[i].refreshLocal(IResource.DEPTH_INFINITE, null);
+    			} catch (CoreException e) {
+    				logger.debug("Unable to refresh local file");
+    			}
+    		}
+    	}
         try {
             ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_ONE, null);
         } catch (CoreException e) {
@@ -156,7 +163,8 @@ public class ResourceFileSelectionDialog extends ElementTreeSelectionDialog {
     }
 
     /*
-     * Check file extension
+     * Check file extension{
+     * 
      */
     private boolean checkExtension(String name) {
         if (name.equals("*")) {
