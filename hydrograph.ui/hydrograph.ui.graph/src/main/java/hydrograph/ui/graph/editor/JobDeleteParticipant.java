@@ -13,18 +13,18 @@
 
 package hydrograph.ui.graph.editor;
 
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.utility.ResourceChangeUtil;
-import hydrograph.ui.project.structure.CustomMessages;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -34,6 +34,14 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
 import org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.utility.ResourceChangeUtil;
+import hydrograph.ui.project.structure.CustomMessages;
 
 /**
  * JobDeleteParticipant- If any of the .job, .xml and .properties file is deleted in Project explorer, then the corresponding 
@@ -45,11 +53,86 @@ import org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange;
 
 public class JobDeleteParticipant extends DeleteParticipant{
 	private IFile modifiedResource;
+	private static final String ERROR = "Error"; 
+	private boolean flag;
 	
 	@Override
 	protected boolean initialize(Object element) {
 		this.modifiedResource = (IFile)element;
+		IProject[] iProjects=ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		for(IProject iProject:iProjects){
+			if (StringUtils.equals(iProject.getName(), modifiedResource.getParent().getParent().getName())) {
+				if (StringUtils.equalsIgnoreCase("properties", modifiedResource.getFileExtension())) {
+					if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],
+							"param")) {
+						IFolder jobsFolder = iProject.getFolder("jobs");
+						IFile jobFileName = jobsFolder
+								.getFile(modifiedResource.getName().replace(".properties", ".job"));
+						IFile xmlFileName = jobsFolder
+								.getFile(modifiedResource.getName().replace(".properties", ".xml"));
+						showErrorMessage(jobFileName, xmlFileName, "if you delete " + modifiedResource.getName()
+								+ " file then the corrosponding xml and job files will be deleted.Do you really want to delete these files.");
+						return flag;
+					} else {
+						return false;
+					}
+				}
+				else if (StringUtils.equalsIgnoreCase("job", modifiedResource.getFileExtension())) {
+					if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2], "jobs")) {
+						IFolder jobsFolder = iProject.getFolder("jobs");
+						IFolder propertiesFolder = iProject.getFolder("param");
+						IFile xmlFileName = jobsFolder.getFile(modifiedResource.getName().replace(".job", ".xml"));
+						IFile propertyFileName = propertiesFolder
+								.getFile(modifiedResource.getName().replace(".job", ".properties"));
+						showErrorMessage(xmlFileName, propertyFileName, "if you delete " + modifiedResource.getName()
+								+ " file then the corrosponding xml and property files will be deleted.Do you really want to delete these files.");
+						return flag;
+					} else {
+						return false;
+					}
+				}
+				else if (StringUtils.equalsIgnoreCase("xml", modifiedResource.getFileExtension())) {
+					if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2], "jobs")) {
+						IFolder jobsFolder = iProject.getFolder("jobs");
+						IFolder propertiesFolder = iProject.getFolder("param");
+						IFile jobFileName = jobsFolder.getFile(modifiedResource.getName().replace(".xml", ".job"));
+						IFile propertyFileName = propertiesFolder
+								.getFile(modifiedResource.getName().replace(".xml", ".properties"));
+						showErrorMessage(jobFileName, propertyFileName, "if you delete " + modifiedResource.getName()
+								+ " file then the corrosponding job and property files will be deleted.Do you really want to delete these files.");
+						return flag;
+					} else {
+						return false;
+					}
+				}
+			}
+		}
+		
 		return true;
+	}
+	
+	private void showErrorMessage(IFile fileName1, IFile fileName2, String errorMessage) {
+		if(fileName1.exists() || fileName2.exists())
+		{
+			Display.getDefault().syncExec(new Runnable() {
+				@Override
+				public void run() {
+				int returnCode=openErrorMessageBox(errorMessage);
+						if (returnCode == SWT.YES) {
+							flag=true;
+						} else {
+							flag=false;
+						}
+				}
+			});
+		}
+	}
+	
+	private int openErrorMessageBox(String message) {
+		MessageBox messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.YES | SWT.NO);
+		messageBox.setText(ERROR);
+		messageBox.setMessage(message);
+		return messageBox.open();
 	}
 
 	@Override
