@@ -37,7 +37,6 @@ import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.thrift.TException;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,7 @@ import hydrograph.server.debug.utilities.ServiceUtilities;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 import hydrograph.server.metadata.schema.TableSchema;
 import hydrograph.server.metadata.schema.TableSchemaField;
-import spark.Request;
+import hydrograph.server.metadata.type.base.DataBaseType;
 
 /**
  * 
@@ -63,8 +62,7 @@ import spark.Request;
  *
  */
 public class HiveDatabaseType implements DataBaseType, PrivilegedAction<Object> {
-	JSONObject jsonObject = null;
-	
+		
 	private enum InputOutputFormat {
 		PARQUET("parquet"), TEXTDELIMITED("textdelimited"), SEQUENCE("sequence");
 
@@ -85,22 +83,12 @@ public class HiveDatabaseType implements DataBaseType, PrivilegedAction<Object> 
 	StorageDescriptor storageDescriptor = null;
 	Table table;
 	boolean isTableExternal;
-	String database = null;
-	String tableName = null;
-	String userId = null;
-	String password = null;
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void getConnection(Request request) throws ParamsCannotBeNullOrEmpty, JSONException {
-
-		jsonObject = new JSONObject(request.queryParams(Constants.JSON));
-		userId = jsonObject.getString(Constants.userName);
-		password = jsonObject.getString(Constants.PASSWORD);
-		tableName = jsonObject.getString(Constants.tableName);
-		database = jsonObject.getString(Constants.databaseName);
+	public void setConnection(String userId,String password,String host,String port,String sid,String driverType,String database,String tableName) throws ParamsCannotBeNullOrEmpty, JSONException {
 
 		try {
 			getKerberosToken(userId, password);
@@ -209,7 +197,7 @@ public class HiveDatabaseType implements DataBaseType, PrivilegedAction<Object> 
 	 */
 
 	@Override
-	public TableSchema fillComponentSchema(Request request) {
+	public TableSchema fillComponentSchema(String query,String tableName,String database) {
 
 		// hiveTableSchema = new HiveTableSchema(database, tableName);
 		hiveTableSchema = new TableSchema();

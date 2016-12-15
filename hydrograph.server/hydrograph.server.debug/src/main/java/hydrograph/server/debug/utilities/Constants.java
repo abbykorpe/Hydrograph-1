@@ -99,7 +99,7 @@ public class Constants {
 	 * The json key for schema and condition set in ServiceConfig.properties
 	 * file
 	 */
-	public static final String JSON = "json_object";
+	public static final String REQUEST_PARAMETERS= "request_parameters";
 
 	/**
 	 * The URL parameter for password sent in the request object to the service
@@ -143,27 +143,27 @@ public class Constants {
 	/**
 	 * Constants to define the database name.
 	 */
-	public static final String databaseName = "database";
+	public static final String DATABASE_NAME = "database";
 	/**
 	 * Constants to define the table name.
 	 */
-	public static final String tableName = "table";
+	public static final String TABLENAME = "table";
 	/**
 	 * Constants used to store the value user while connecting to databases.
 	 */
-	public static final String userName = "username";
+	public static final String USERNAME = "username";
 	/**
-	 * hostname used to connect to database
+	 * HOSTNAME used to connect to database
 	 */
-	public static final String hostName = "hostname";
+	public static final String HOST_NAME = "hostname";
 	/**
 	 * Constants used to store the portNo on which database service is running.
 	 */
-	public static final String portNo = "port";
+	public static final String PORT_NUMBER = "port";
 	/**
 	 * Store the query value for retrieving data from database.
 	 */
-	public static final String query = "query";
+	public static final String QUERY = "query";
 	/**
 	 * dbtype determines at runtime which database type to use. ex:
 	 * oracle,MySql, etc
@@ -176,7 +176,7 @@ public class Constants {
 	/**
 	 * Used to store the database driverType name.
 	 */
-	public static final String driverType = "drivertype";
+	public static final String DRIVER_TYPE = "drivertype";
 	/**
 	 * Used to get the class name for oracle
 	 */

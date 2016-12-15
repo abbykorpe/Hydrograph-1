@@ -13,7 +13,7 @@
 package hydrograph.server.metadata.exception;
 
 /**
- * Class checks the exception , if Table or query is not found while
+ * Class checks the exception , whether table or query found or not.
  * 
  * @author amiyam
  *
@@ -36,7 +36,7 @@ public class TableOrQueryParamNotFound extends Exception {
 	/**
 	 * 
 	 * @param message
-	 *            - message to display in case of occurrence of exception.
+	 *            - Message to display in case of occurrence of exception.
 	 */
 	public TableOrQueryParamNotFound(String message) {
 		super(message);

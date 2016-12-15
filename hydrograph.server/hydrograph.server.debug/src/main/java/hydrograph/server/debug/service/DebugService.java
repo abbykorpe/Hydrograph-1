@@ -59,7 +59,7 @@ import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.debug.utilities.ServiceUtilities;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 import hydrograph.server.metadata.exception.TableOrQueryParamNotFound;
-import hydrograph.server.metadata.type.DataBaseType;
+import hydrograph.server.metadata.type.base.DataBaseType;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -84,107 +84,98 @@ public class DebugService implements PrivilegedAction<Object> {
 		} catch (Exception e) {
 			LOG.error("Error fetching port number. Defaulting to " + Constants.DEFAULT_PORT_NUMBER, e);
 		}
-		Spark.setPort(portNumber);		
-		
-		Spark.post("readFromMetastore",new Route() {
-			
+		Spark.setPort(portNumber);
+
+		Spark.post("readFromMetastore", new Route() {
+
 			@Override
-			public Object handle(Request request, Response response) {
+			public Object handle(Request request, Response response)
+					throws ParamsCannotBeNullOrEmpty, ClassNotFoundException, IllegalAccessException, JSONException,
+					JsonProcessingException, TableOrQueryParamNotFound, SQLException, InstantiationException {
 				LOG.info("************************readFromMetastore endpoint - started************************");
 				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
-				String objectAsString = "";
-				String dbClassName = "";
+				String objectAsString = "",dbClassName="",dbType=null,userId=null,password=null,host=null,port=null,sid=null,driverType=null,query=null,tableName=null,database=null;
 				ObjectMapper objectMapper = new ObjectMapper();
-
-				try {
-					String json = request.queryParams(Constants.JSON);
-					JSONObject jsonObject = new JSONObject(json);
-					String dbPropertyName = jsonObject.getString(Constants.dbType);
-					if (dbPropertyName != null && !dbPropertyName.isEmpty()) {
-						try {
-							try {
-								dbClassName = ServiceUtilities.getServiceConfigResourceBundle()
-										.getString(dbPropertyName);
-							} catch (Exception e) {
-								switch (dbPropertyName.toLowerCase()) {
-									case Constants.ORACLE:
-										LOG.error("Error fetching database class name . Defaulting to " + Constants.oracle,
-												e);
-										dbClassName = Constants.oracle;
-										break;
-									case Constants.HIVE:
-										LOG.error("Error fetching database class name . Defaulting to " + Constants.hive, e);
-										dbClassName = Constants.hive;
-										break;
-									case Constants.REDSHIFT:
-										LOG.error("Error fetching database class name . Defaulting to " + Constants.redshift,
-												e);
-										dbClassName = Constants.redshift;
-										break;
-								}
-							}
-						} catch (Exception e) {
-							LOG.error("Unable to find out the dbType supplied");
-							response.status(400);
-							return e.getMessage();
-						}
-						LOG.debug("Class Name for " + dbPropertyName + "is : " + dbClassName);
-						Object dbClass;
-						if ((dbClass = Class.forName(dbClassName).newInstance()) instanceof DataBaseType) {
-							DataBaseType dbTypes = (DataBaseType) dbClass;
-							dbTypes.getConnection(request);
-							objectAsString = objectMapper.writeValueAsString(dbTypes.fillComponentSchema(request));
-							LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
-						} else {
-							LOG.debug("Invalid class name supplied");
-							response.status(400);
-							return 0;
-						}
-					} else {
-						throw new ParamsCannotBeNullOrEmpty("dbType name canot be null or empty");
-					}
-				} catch (RuntimeException e) {
-					LOG.error("Error in fetching table metadata from database: ", e);
-					response.status(400);
-					return e.getMessage();
-				} catch (JsonProcessingException e) {
-					LOG.error("Error in fetching table metadata from database: ", e);
-					response.status(400);
-					return e.getMessage();
-				} catch (JSONException e) {
-					LOG.error("Unable to process the json",e);
-					response.status(400);
-					return e.getMessage();
-				} catch (InstantiationException e) {
-					LOG.error("Unable to create new instance",e);
-					response.status(400);
-					return e.getMessage();
-				} catch (IllegalAccessException e) {
-					LOG.error(
-							"Unable to create instance reflectively as the currently executing method does not have access to the definition of the specified class, field, method or constructor",e);
-					response.status(400);
-					return e.getMessage();
-				} catch (ClassNotFoundException e) {
-					LOG.error("definition for the class with the specified name couldnot be found.",e);
-					response.status(400);
-					return e.getMessage();
-				} catch (TableOrQueryParamNotFound e) {
-					LOG.error("Unable to find out tablename or query",e);
-					response.status(400);
-					return e.getMessage();
-				} catch (ParamsCannotBeNullOrEmpty e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					LOG.error("Unale to execute the query : " + e);
-					response.status(400);
-					return e.getMessage();
+				String requestParameters = request.queryParams(Constants.REQUEST_PARAMETERS);
+				JSONObject requestParameterValues = new JSONObject(requestParameters);
+				if(!requestParameterValues.isNull(Constants.dbType)){
+					dbType = requestParameterValues.getString(Constants.dbType);
 				}
+				if(!requestParameterValues.isNull(Constants.USERNAME)){
+				userId = requestParameterValues.getString(Constants.USERNAME);
+				}
+				if(!requestParameterValues.isNull(Constants.PASSWORD)){
+				password = requestParameterValues.getString(Constants.PASSWORD);
+				}
+				if(!requestParameterValues.isNull(Constants.HOST_NAME)){
+				host = requestParameterValues.getString(Constants.HOST_NAME);
+				}
+				if(!requestParameterValues.isNull(Constants.PORT_NUMBER)){
+				port = requestParameterValues.getString(Constants.PORT_NUMBER);
+				}
+				if(!requestParameterValues.isNull(Constants.SID)){
+				sid = requestParameterValues.getString(Constants.SID);
+				}
+				if(!requestParameterValues.isNull(Constants.DRIVER_TYPE)){
+				driverType = requestParameterValues.getString(Constants.DRIVER_TYPE);
+				}
+				if(!requestParameterValues.isNull(Constants.QUERY)){
+				query = requestParameterValues.getString(Constants.QUERY);
+				}
+				if(!requestParameterValues.isNull(Constants.TABLENAME)){
+				tableName = requestParameterValues.getString(Constants.TABLENAME);
+				}
+				if(!requestParameterValues.isNull(Constants.DATABASE_NAME)){
+				database = requestParameterValues.getString(Constants.DATABASE_NAME);
+				}
+				LOG.debug("Fetched request parameters are: " + Constants.dbType + " => " + dbType + " "
+						+ Constants.USERNAME + " => " + userId + " " + Constants.HOST_NAME + " => " + host + " "
+						+ Constants.PORT_NUMBER + " => " + port + " " + Constants.SID + " => " + sid + " "
+						+ Constants.DRIVER_TYPE + " => " + driverType + " " + Constants.QUERY + " => " + query + " "
+						+ Constants.TABLENAME + " => " + tableName + " " + Constants.DATABASE_NAME + " => " + database+ " ");
+
+				if (dbType != null && !dbType.isEmpty()) {
+					try {
+						switch (dbType.toLowerCase()) {
+						case Constants.ORACLE:
+							dbClassName = Constants.oracle;
+							break;
+						case Constants.HIVE:
+							dbClassName = Constants.hive;
+							break;
+						case Constants.REDSHIFT:
+							dbClassName = Constants.redshift;
+							break;
+						}
+					} catch (Exception e) {
+						LOG.error("Unable to find out the " + dbType + " supplied as request parameter " + e);
+						response.status(400);
+						return e.getMessage();
+					}
+					LOG.info("Class Name used for " + dbType + " is : " + dbClassName);
+					Object dbClass;
+
+					if ((dbClass = Class.forName(dbClassName).newInstance()) instanceof DataBaseType) {
+						DataBaseType dbTypes = (DataBaseType) dbClass;
+						dbTypes.setConnection(userId, password, host, port, sid, driverType,database,tableName);
+						objectAsString = objectMapper.writeValueAsString(dbTypes.fillComponentSchema(query, tableName,database));
+						LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+					} else {
+						LOG.debug("Invalid " + dbClass + " name supplied");
+						response.status(400);
+						return 1;
+					}
+
+				} else {
+					throw new ParamsCannotBeNullOrEmpty("Supplied " + dbType + " name cannot be null or empty");
+				}
+
 				return objectAsString;
 			}
 
 		});
 
-		Spark.post("/read",new Route() {
+		Spark.post("/read", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				LOG.info("************************read endpoint - started************************");
@@ -236,7 +227,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			 *
 			 */
 			private void readFileFromHDFS(String hdfsFilePath, double sizeOfData, String remoteFileName, String userId,
-										  String password) {
+					String password) {
 				try {
 					Path path = new Path(hdfsFilePath);
 					LOG.debug("Reading Debug file:" + hdfsFilePath);
@@ -318,7 +309,7 @@ public class DebugService implements PrivilegedAction<Object> {
 
 		});
 
-		Spark.post("/delete",new Route() {
+		Spark.post("/delete", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				LOG.info("************************delete endpoint - started************************");
@@ -344,7 +335,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 
 			private void removeDebugFiles(String basePath, String jobId, String componentId, String socketId,
-										  String userID, String password) {
+					String userID, String password) {
 				try {
 					// DebugFilesReader debugFilesReader = new
 					// DebugFilesReader(basePath, jobId, componentId, socketId,
@@ -370,7 +361,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			 * @throws IOException
 			 */
 			public void delete(String basePath, String jobId, String componentId, String socketId, String userID,
-							   String password) throws IOException {
+					String password) throws IOException {
 				LOG.trace("Entering method delete()");
 				String deletePath = basePath + "/debug/" + jobId;
 				Configuration configuration = new Configuration();
@@ -387,7 +378,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 		});
 
-		Spark.post("/deleteLocalDebugFile",new Route() {
+		Spark.post("/deleteLocalDebugFile", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				String error = "";
@@ -418,7 +409,7 @@ public class DebugService implements PrivilegedAction<Object> {
 		});
 
 		// TODO : Keep this for test
-		Spark.post("/post",new Route() {
+		Spark.post("/post", new Route() {
 
 			@Override
 			public Object handle(Request request, Response response) {
@@ -428,7 +419,7 @@ public class DebugService implements PrivilegedAction<Object> {
 		});
 
 		// TODO : Keep this for test
-		Spark.get("/test",new Route() {
+		Spark.get("/test", new Route() {
 
 			@Override
 			public Object handle(Request request, Response response) {
@@ -439,7 +430,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 		});
 
-		Spark.post("/filter",new Route() {
+		Spark.post("/filter", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 
@@ -447,7 +438,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
 
 				Gson gson = new Gson();
-				String json = request.queryParams(Constants.JSON);
+				String json = request.queryParams(Constants.REQUEST_PARAMETERS);
 				RemoteFilterJson remoteFilterJson = gson.fromJson(json, RemoteFilterJson.class);
 
 				String jobId = remoteFilterJson.getJobDetails().getUniqueJobID();

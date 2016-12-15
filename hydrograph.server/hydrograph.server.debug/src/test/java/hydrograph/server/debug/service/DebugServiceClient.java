@@ -44,12 +44,12 @@ public class DebugServiceClient {
 		// String json =
 		// "{\"condition\":\"abc\",\"schema\":[{\"fieldName\":\"f1\",\"dateFormat\":\"\",\"dataType\":\"1\",\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.String\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f2\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f3\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f4\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.math.BigDecimal\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"}],\"fileSize\":1,\"jobDetails\":{\"host\":\"127.0.0.1\",\"port\":\"8005\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"basepath\":\"C:/Users/santlalg/git/Hydrograph/hydrograph.engine/hydrograph.engine.command-line\",\"uniqueJobID\":\"debug_job\",\"componentID\":\"input\",\"componentSocketID\":\"out0\",\"isRemote\":false}}";
 		 String oraclejson =
-		 "{\"table\":\"testingTable400\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		 "{\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
 		//String hivejson = "{\"database\":\"textdata\",\"table\":\"personal\",\"username\":\"username\",\"password\":\"yourpassword\",\"dbtype\":\"hive\"}";
 
 		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/readFromMetastore");
 
-		postMethod.addParameter("json_object", oraclejson);
+		postMethod.addParameter("request_parameters", oraclejson);
 
 		int response = httpClient.executeMethod(postMethod);
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
@@ -60,7 +60,7 @@ public class DebugServiceClient {
 		while ((length = inputStream.read(buffer)) > 0) {
 			path = new String(buffer);
 		}
-		System.out.println("response of service: " + path);
+		System.out.println("Response of service: " + path);
         System.out.println("==================");
 	}
 	public void calltoFilterService() throws ClientProtocolException,
@@ -93,7 +93,7 @@ public class DebugServiceClient {
 		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":"
 				+ PORT + "/filter");
 
-		postMethod.addParameter("json_object", json);
+		postMethod.addParameter("request_parameters", json);
 
 		int response = httpClient.executeMethod(postMethod);
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
