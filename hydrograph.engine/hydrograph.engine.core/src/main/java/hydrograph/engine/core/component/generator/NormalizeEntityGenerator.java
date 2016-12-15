@@ -23,6 +23,10 @@ import hydrograph.engine.jaxb.operationstypes.Normalize;
 
 public class NormalizeEntityGenerator extends OperationComponentGeneratorBase {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private NormalizeEntity normalizeEntity;
 	private Normalize jaxbNormalize;
 	private static Logger LOG = LoggerFactory.getLogger(NormalizeEntityGenerator.class);
@@ -51,13 +55,6 @@ public class NormalizeEntityGenerator extends OperationComponentGeneratorBase {
 		normalizeEntity.setComponentId(jaxbNormalize.getId());
 		normalizeEntity.setBatch(jaxbNormalize.getBatch());
 		normalizeEntity.setComponentName(jaxbNormalize.getName());
-		OperationEntityUtils
-				.checkIfOutputRecordCountIsPresentInCaseOfExpressionProcessing(
-						normalizeEntity.getOperationsList(),
-						jaxbNormalize.getOutputRecordCount());
-		normalizeEntity.setOutputRecordCount(OperationEntityUtils
-				.extractOutputRecordCount(jaxbNormalize
-						.getOutputRecordCount()));
 		// check if operation is present
 		if (jaxbNormalize.getOperationOrExpression() != null && jaxbNormalize.getOperationOrExpression().size() > 0) {
 
@@ -76,6 +73,13 @@ public class NormalizeEntityGenerator extends OperationComponentGeneratorBase {
 			normalizeEntity.setNumOperations(0);
 			normalizeEntity.setOperationPresent(false);
 		}
+		OperationEntityUtils
+		.checkIfOutputRecordCountIsPresentInCaseOfExpressionProcessing(
+				normalizeEntity.getOperationsList(),
+				jaxbNormalize.getOutputRecordCount());
+		normalizeEntity.setOutputRecordCount(OperationEntityUtils
+				.extractOutputRecordCount(jaxbNormalize
+						.getOutputRecordCount()));
 
 		if (jaxbNormalize.getOutSocket() == null) {
 			throw new NullPointerException("No out socket defined for normalize component: " + jaxbNormalize.getId());
