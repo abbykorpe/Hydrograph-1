@@ -13,12 +13,6 @@
 
 package hydrograph.ui.graph.execution.tracking.connection;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.net.URI;
 import java.util.Collections;
 
@@ -32,6 +26,11 @@ import org.glassfish.tyrus.client.ClientManager;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
+
+import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * Class HydrographServerConnection. use to connect web-socket server for execution tracking status.
