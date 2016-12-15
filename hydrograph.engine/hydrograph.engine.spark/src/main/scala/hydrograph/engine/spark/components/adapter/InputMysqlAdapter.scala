@@ -2,7 +2,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.InputMysqlEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.SparkIMysqlComponent
+import hydrograph.engine.spark.components.InputMysqlComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -12,14 +12,14 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
   */
 class InputMysqlAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
   private var inputMysql:InputMysqlEntityGenerator=null
-  private var sparkIMysqlComponent:SparkIMysqlComponent=null
+  private var sparkIMysqlComponent:InputMysqlComponent=null
 
   override def createGenerator(): Unit = {
     inputMysql=new InputMysqlEntityGenerator(typeBaseComponent)
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    sparkIMysqlComponent= new SparkIMysqlComponent(inputMysql.getEntity,
+    sparkIMysqlComponent= new InputMysqlComponent(inputMysql.getEntity,
       baseComponentParams)
   }
 

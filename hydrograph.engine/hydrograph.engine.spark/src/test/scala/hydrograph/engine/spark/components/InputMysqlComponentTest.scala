@@ -12,7 +12,7 @@ import org.scalatest.Matchers._
 /**
   * Created by santlalg on 12/8/2016.
   */
-class SparkIMysqlComponentTest {
+class InputMysqlComponentTest {
 
   @Test
   def itShouldReadRecordFromTableUsingTable(): Unit ={
@@ -51,7 +51,7 @@ class SparkIMysqlComponentTest {
     cp.setSparkSession(sparkSession)
 
     //when
-    val df:Map[String,DataFrame] = new SparkIMysqlComponent(inputRDBMSEntity,cp).createComponent()
+    val df:Map[String,DataFrame] = new InputMysqlComponent(inputRDBMSEntity,cp).createComponent()
 
     val rows=df.get("outSocket").get.select("id").collect().toList
 
@@ -97,7 +97,7 @@ class SparkIMysqlComponentTest {
     cp.setSparkSession(sparkSession)
 
     //when
-    val df:Map[String,DataFrame] = new SparkIMysqlComponent(inputRDBMSEntity,cp).createComponent()
+    val df:Map[String,DataFrame] = new InputMysqlComponent(inputRDBMSEntity,cp).createComponent()
 
     val rows=df.get("outSocket").get.select("id").collect()
 
