@@ -39,7 +39,7 @@ public class Filter implements FilterBase {
 	public boolean isRemove(ReusableRow reusableRow) {
 		LOG.info("Test Logging message...  from filter (transform) class ");
 		String input = reusableRow.getString(1);
-		return input.equals("AAA") || reusableRow.getString(0).equals("Raju");
+		return input.equals("AAA") || reusableRow.getString(0).equals("XYZ");
 	}
 
 
