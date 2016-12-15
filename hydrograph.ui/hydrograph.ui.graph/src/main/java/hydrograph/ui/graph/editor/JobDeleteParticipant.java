@@ -53,7 +53,8 @@ import hydrograph.ui.project.structure.CustomMessages;
 
 public class JobDeleteParticipant extends DeleteParticipant{
 	private IFile modifiedResource;
-	private static final String ERROR = "Error"; 
+	private static final String ERROR = "Error";
+	private static final String JOBS="jobs";
 	private boolean flag;
 	
 	@Override
@@ -62,53 +63,65 @@ public class JobDeleteParticipant extends DeleteParticipant{
 		IProject[] iProjects=ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for(IProject iProject:iProjects){
 			if (StringUtils.equals(iProject.getName(), modifiedResource.getParent().getParent().getName())) {
-				if (StringUtils.equalsIgnoreCase("properties", modifiedResource.getFileExtension())) {
-					if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],
-							"param")) {
-						IFolder jobsFolder = iProject.getFolder("jobs");
-						IFile jobFileName = jobsFolder
-								.getFile(modifiedResource.getName().replace(".properties", ".job"));
-						IFile xmlFileName = jobsFolder
-								.getFile(modifiedResource.getName().replace(".properties", ".xml"));
-						showErrorMessage(jobFileName, xmlFileName, "if you delete " + modifiedResource.getName()
-								+ " file then the corrosponding xml and job files will be deleted.Do you really want to delete these files.");
-						return flag;
-					} else {
-						return false;
-					}
+				if (StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, modifiedResource.getFileExtension())) {
+					return deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(iProject);
 				}
-				else if (StringUtils.equalsIgnoreCase("job", modifiedResource.getFileExtension())) {
-					if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2], "jobs")) {
-						IFolder jobsFolder = iProject.getFolder("jobs");
-						IFolder propertiesFolder = iProject.getFolder("param");
-						IFile xmlFileName = jobsFolder.getFile(modifiedResource.getName().replace(".job", ".xml"));
-						IFile propertyFileName = propertiesFolder
-								.getFile(modifiedResource.getName().replace(".job", ".properties"));
-						showErrorMessage(xmlFileName, propertyFileName, "if you delete " + modifiedResource.getName()
-								+ " file then the corrosponding xml and property files will be deleted.Do you really want to delete these files.");
-						return flag;
-					} else {
-						return false;
-					}
+				else if (StringUtils.equalsIgnoreCase(Messages.JOB_EXT, modifiedResource.getFileExtension())) {
+					return deleteCorrospondingXmlAndPropertyFileifUserDeleteJobFile(iProject);
 				}
-				else if (StringUtils.equalsIgnoreCase("xml", modifiedResource.getFileExtension())) {
-					if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2], "jobs")) {
-						IFolder jobsFolder = iProject.getFolder("jobs");
-						IFolder propertiesFolder = iProject.getFolder("param");
-						IFile jobFileName = jobsFolder.getFile(modifiedResource.getName().replace(".xml", ".job"));
-						IFile propertyFileName = propertiesFolder
-								.getFile(modifiedResource.getName().replace(".xml", ".properties"));
-						showErrorMessage(jobFileName, propertyFileName, "if you delete " + modifiedResource.getName()
-								+ " file then the corrosponding job and property files will be deleted.Do you really want to delete these files.");
-						return flag;
-					} else {
-						return false;
-					}
+				else if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, modifiedResource.getFileExtension())) {
+					return deleteCorrospondingJobAndPropertyFileifUserDeleteXmlFile(iProject);
 				}
 			}
 		}
 		
 		return true;
+	}
+
+	private boolean deleteCorrospondingJobAndPropertyFileifUserDeleteXmlFile(IProject iProject) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],JOBS)) {
+			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
+			IFile jobFileName = jobsFolder.getFile(modifiedResource.getName().replace(Messages.XMLEXTENSION,Messages.JOBEXTENSION));
+			IFile propertyFileName = propertiesFolder
+					.getFile(modifiedResource.getName().replace(Messages.XMLEXTENSION,Messages.PROPERTIES_EXTENSION));
+			showErrorMessage(jobFileName, propertyFileName, "Deleting  " + modifiedResource.getName()
+					+ " file also delete corrosponding job and property files.Do you want to continue?.");
+			return flag;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean deleteCorrospondingXmlAndPropertyFileifUserDeleteJobFile(IProject iProject) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],JOBS)) {
+			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
+			IFile xmlFileName = jobsFolder.getFile(modifiedResource.getName().replace(Messages.JOBEXTENSION,Messages.XMLEXTENSION));
+			IFile propertyFileName = propertiesFolder
+					.getFile(modifiedResource.getName().replace(Messages.JOBEXTENSION,Messages.PROPERTIES_EXTENSION));
+			showErrorMessage(xmlFileName, propertyFileName, "Deleting  " + modifiedResource.getName()
+					+ " file also delete corrosponding xml and property files.Do you want to continue?.");
+			return flag;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(IProject iProject) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],
+				Messages.PARAM)) {
+			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFile jobFileName = jobsFolder
+					.getFile(modifiedResource.getName().replace(Messages.PROPERTIES_EXTENSION,Messages.JOBEXTENSION));
+			IFile xmlFileName = jobsFolder
+					.getFile(modifiedResource.getName().replace(Messages.PROPERTIES_EXTENSION,Messages.XMLEXTENSION));
+			showErrorMessage(jobFileName, xmlFileName, "Deleting  " + modifiedResource.getName()
+					+ " file also delete corrosponding xml and job files.Do you want to continue?.");
+			return flag;
+		} else {
+			return false;
+		}
 	}
 	
 	private void showErrorMessage(IFile fileName1, IFile fileName2, String errorMessage) {
