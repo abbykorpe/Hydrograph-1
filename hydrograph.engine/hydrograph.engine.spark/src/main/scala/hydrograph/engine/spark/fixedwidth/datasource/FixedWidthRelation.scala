@@ -68,7 +68,7 @@ class FixedWidthRelation(path: String, charset: String, fieldslength: String,
         Row.fromSeq(getValue(toIntLength(fieldslength), 0,0))
       })
     })
-    LOG.info("Fixed Width Input File successfully read at path " + path )
+    LOG.info("Fixed Width Input File successfully read from path " + path )
     rowRDD
   }
 

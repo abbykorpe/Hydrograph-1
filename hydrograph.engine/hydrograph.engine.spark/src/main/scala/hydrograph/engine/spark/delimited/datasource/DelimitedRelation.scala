@@ -23,7 +23,7 @@ case class DelimitedRelation(
   override val schema: StructType = userSchema
 
   private def tokenRdd(header: Array[String]): RDD[List[Any]] = {
-
+  LOG.trace("In method tokenRdd for creating tokens of fields from input row")
 
     val filterLine = if (useHeader) baseRDD().first() else null
 
@@ -60,14 +60,13 @@ case class DelimitedRelation(
           LOG.warn(s"Ignoring empty line: $line")
           None
         } else {
-
           Some(fields.toList)
         }
       } catch {
-        case NonFatal(e) =>
+        case e =>
           LOG.error(s"Exception while parsing line: $line. ", e)
-          None
-      }
+          throw e
+        }
     }
   }
 

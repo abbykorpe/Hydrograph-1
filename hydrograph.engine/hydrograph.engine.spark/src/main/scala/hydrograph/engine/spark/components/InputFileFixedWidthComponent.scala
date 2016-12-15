@@ -9,11 +9,12 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 
-class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEntity, iComponentsParams: BaseComponentParams) extends
-  InputComponentBase {
+class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEntity, iComponentsParams: BaseComponentParams)
+  extends InputComponentBase with Serializable {
 
   private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileFixedWidthComponent])
   override def createComponent(): Map[String,DataFrame] = {
+    LOG.trace("In method createComponent()")
     val dateFormats=getDateFormats()
     val schemaField = SchemaCreator(fileFixedWidthEntity).makeSchema()
 
@@ -22,7 +23,7 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
     fileFixedWidthEntity.getFieldsList().asScala.zipWithIndex.foreach{ case(s,i)=>
       fieldsLen(i)=s.getFieldLength
     }
-
+    try {
     val df = iComponentsParams.getSparkSession().read
       .option("charset", fileFixedWidthEntity.getCharset)
       .option("length",fieldsLen.mkString(","))
@@ -34,20 +35,29 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
       .load(fileFixedWidthEntity.getPath)
 
     val key=fileFixedWidthEntity.getOutSocketList.get(0).getSocketId
-    LOG.info("Component Id: '"+ fileFixedWidthEntity.getComponentId
+    LOG.info("Created Input File Fixed Width Component "+ fileFixedWidthEntity.getComponentId
+      + " in Batch "+ fileFixedWidthEntity.getBatch +" with output socket " + key
+      + " and path "  + fileFixedWidthEntity.getPath)
+    LOG.debug("Component Id: '"+ fileFixedWidthEntity.getComponentId
       +"' in Batch: " + fileFixedWidthEntity.getBatch
       + " having schema: [ " + fileFixedWidthEntity.getFieldsList.asScala.mkString(",")
       + " ] at Path: " + fileFixedWidthEntity.getPath)
     Map(key->df)
+    } catch {
+      case e =>
+        LOG.error("Error in Input File Fixed Width Component "+ fileFixedWidthEntity.getComponentId, e)
+        throw new RuntimeException("Error in Input File Fixed Width Component " + fileFixedWidthEntity.getComponentId, e)
+    }
   }
-  def getDateFormats(): String = {
 
+  def getDateFormats(): String = {
+    LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")
     var dateFormats: String = ""
     for (i <- 0 until fileFixedWidthEntity.getFieldsList.size()) {
       dateFormats += fileFixedWidthEntity.getFieldsList.get(i).getFieldFormat + "\t"
     }
-
-    return dateFormats
+    LOG.debug("Date Formats for Date fields : " + dateFormats)
+    dateFormats
   }
 
 }

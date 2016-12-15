@@ -8,17 +8,24 @@ import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
 
 
-class DefaultSource extends RelationProvider with SchemaRelationProvider with CreatableRelationProvider {
+class DefaultSource extends RelationProvider
+  with SchemaRelationProvider with CreatableRelationProvider with Serializable {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[DefaultSource])
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String]): BaseRelation =
     createRelation(sqlContext, parameters, null)
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): BaseRelation = {
-    parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Input File Fixed Width Component"))
-    parameters.getOrElse("length", throw new RuntimeException("length option must be specified for Input File Fixed Width Component"))
+    LOG.trace("In method createRelation for Fixed Width Input File Component")
+    val path: String = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Input File Fixed Width Component"))
+    val fieldLengths = parameters.getOrElse("length", throw new RuntimeException("length option must be specified for Input File Fixed Width Component"))
     val inDateFormats: String = parameters.getOrElse("dateFormats", "null")
-    new FixedWidthRelation(parameters.get("path").get, parameters.get("charset").get,
-      parameters.get("length").get, parameters.getOrElse("strict","true").toBoolean,
+    if (path == null || path.equals("")){
+      LOG.error("Fixed Width Input File path cannot be null or empty")
+      throw new RuntimeException("Delimited Input File path cannot be null or empty")
+    }
+
+    new FixedWidthRelation(path, parameters.get("charset").get,
+      fieldLengths, parameters.getOrElse("strict","true").toBoolean,
       parameters.getOrElse("safe","false").toBoolean, inDateFormats.split("\t"), schema)(sqlContext)
   }
 
@@ -28,6 +35,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
   }
 
   def saveAsFW(dataFrame: DataFrame, path: String, parameters: Map[String, String]) = {
+    LOG.trace("In method saveAsFW for creating Fixed Width Output File")
     val inDateFormats: Array[String] = parameters.getOrElse("dateFormats", "null").split("\t")
     val strict: Boolean = parameters.getOrElse("strict","true").toBoolean
     val safe: Boolean = parameters.getOrElse("safe","false").toBoolean
@@ -93,23 +101,36 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
       })
     })
     valueRDD.saveAsTextFile(path)
-    LOG.info("Fixed Width Output File is successfully written at path : " + path)
+    LOG.info("Fixed Width Output File is successfully created at path : " + path)
   }
 
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
-
-    parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Output File Fixed Width Component"))
+    LOG.trace("In method createRelation for creating Fixed Width Output File")
+    val path = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Output File Fixed Width Component"))
     parameters.getOrElse("length", throw new RuntimeException("length option must be specified for Output File Fixed Width Component"))
-    val path = parameters.get("path").get
+
+    if (path == null || path.equals("")){
+      LOG.error("Fixed Width Output File path cannot be null or empty")
+      throw new RuntimeException("Delimited Input File path cannot be null or empty")
+    }
+
     val fsPath = new Path(path)
     val fs = fsPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
 
     val isSave = if (fs.exists(fsPath)) {
       mode match {
-        case SaveMode.Append => throw new RuntimeException("Output file append operation is not supported")
+        case SaveMode.Append => LOG.error("Output file append operation is not supported")
+          throw new RuntimeException("Output file append operation is not supported")
         case SaveMode.Overwrite =>
-          if (fs.delete(fsPath, true)) true else  throw new RuntimeException("Output directory path '"+ path +"' cannot be deleted")
-        case SaveMode.ErrorIfExists => throw new RuntimeException("Output path already exists")
+          if (fs.delete(fsPath, true))
+            true
+          else{
+            LOG.error("Output directory path '"+ path +"' cannot be deleted")
+            throw new RuntimeException("Output directory path '"+ path +"' cannot be deleted")
+          }
+        case SaveMode.ErrorIfExists =>
+          LOG.error("Output directory path '"+ path +"' already exists")
+          throw new RuntimeException("Output directory path '"+ path +"' already exists")
         case SaveMode.Ignore => false
       }
     } else
