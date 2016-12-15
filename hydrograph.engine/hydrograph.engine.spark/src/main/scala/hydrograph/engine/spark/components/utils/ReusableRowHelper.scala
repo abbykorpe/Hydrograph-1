@@ -29,6 +29,13 @@ class ReusableRowHelper(opr: Operation, fm: FieldManupulating) {
     reusableRow
   }
 
+  def convertToReusableRow(list:List[String]): ReusableRow = {
+    val arr = new util.LinkedHashSet[String]()
+    list.foreach { str => arr.add(str) }
+    val reusableRow = new SparkReusableRow(arr)
+    reusableRow
+  }
+
   def convertToOutputReusableRow(): ReusableRow = {
 
     val arr = new util.LinkedHashSet[String]()

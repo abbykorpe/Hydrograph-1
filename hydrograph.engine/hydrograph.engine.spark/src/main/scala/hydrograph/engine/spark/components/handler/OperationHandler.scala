@@ -143,16 +143,6 @@ trait NormalizeOperation{
         val operationOutputFieldList = new ArrayList[String]()
         x.getOperationOutputFields.foreach(v => operationOutputFieldList.add(v))
 
-        val props: Properties = x.getOperationProperties
-        val blankOutRR = ReusableRowHelper(x, fieldManupulating).convertToOutputReusableRow()
-        val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
-        val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
-        val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
-
-        var fieldNames = {
-
-        }
-
         val normalizeBase: NormalizeTransformBase = (x,y) match {
           case (_,_) if(y != None && x.getOperationClass == null) => {
             var normalize = new NormalizeForExpression()
@@ -161,6 +151,13 @@ trait NormalizeOperation{
           }
           case _ => classLoader[NormalizeTransformBase](x.getOperationClass)
         }
+
+        val props: Properties = x.getOperationProperties
+        val blankOutRR = ReusableRowHelper(x, fieldManupulating).convertToOutputReusableRow()
+        val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
+        val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
+        val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
+
 
         normalizeBase.prepare(props)
         Operatioin[NormalizeTransformBase](normalizeBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
