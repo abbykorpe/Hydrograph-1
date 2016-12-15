@@ -48,9 +48,8 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 			OutputDispatcher outputDispatcher) {
 		
 		try {
-			Object obj1 = new ValidationAPI(countExpression,
+			int exprCount =(int) new ValidationAPI(countExpression,
 					"").execute(fieldNames, tuples);
-			int exprCount = Integer.valueOf((String)obj1);
 			int i=0,j=0;
 			for (j = 0; j < exprCount; j++) {
 				try {
