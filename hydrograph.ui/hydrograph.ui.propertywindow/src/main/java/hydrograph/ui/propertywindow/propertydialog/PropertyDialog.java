@@ -342,7 +342,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.APP_ICON;
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
-			newShell.setMinimumSize(new Point(500,670));
+			newShell.setMinimumSize(new Point(500,525));
 		}catch(SWTError e){
 			logger.debug("Unable to access image" , e);
 		}
