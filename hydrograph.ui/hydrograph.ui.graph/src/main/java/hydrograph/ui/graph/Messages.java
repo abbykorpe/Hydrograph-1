@@ -121,6 +121,7 @@ public class Messages extends NLS {
 	public static String SUBJOB_REFRESH_INFO; 
 	public static String JOB_OPENED_FROM_OUTSIDE_WORKSPACE_WARNING;
 	public static String WARNING;
+	public static String PROPERTIES_EXTENSION;
 	
 	static {
 		// initialize resource bundle

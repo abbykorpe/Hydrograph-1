@@ -13,6 +13,8 @@
 
 package hydrograph.ui.graph.editor;
 
+import static hydrograph.ui.graph.execution.tracking.utils.CoolBarHelperUtility.COOLBAR_ITEMS_UTILITY;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,9 +42,11 @@ import java.util.Scanner;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -144,6 +148,7 @@ import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Activator;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.action.CommentBoxAction;
 import hydrograph.ui.graph.action.ComponentHelpAction;
 import hydrograph.ui.graph.action.ComponentPropertiesAction;
@@ -190,10 +195,8 @@ import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.utils.ParameterFileManager;
-import hydrograph.ui.graph.Messages;
 import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 import hydrograph.ui.tooltip.tooltips.ComponentTooltip;
-import static hydrograph.ui.graph.execution.tracking.utils.CoolBarHelperUtility.COOLBAR_ITEMS_UTILITY;
 /**
  * Responsible to render the palette and container.
  * 
@@ -228,6 +231,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	
 	private CustomPaletteEditPartFactory paletteEditPartFactory;
 	public Point location;
+	private String oldFileName;
 	/**
 	 * Instantiates a new ETL graphical editor.
 	 */
@@ -984,9 +988,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			newParameterMap.put(parameterName, currentParameterMap.get(parameterName));
 		}
 
-		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());
 		try {
-			parameterFileManager.storeParameters(newParameterMap);
+			ParameterFileManager.getInstance().storeParameters(newParameterMap,null, getParameterFile());
 		} catch (IOException e) {
 			logger.error("Unable to store parameters to the file", e);
 
@@ -1079,9 +1082,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 
 		Map<String, String> parameters=new LinkedHashMap<>();
-		ParameterFileManager parameterFileManager = new ParameterFileManager(getParameterFile());		
 		try{
-			parameters = parameterFileManager.getParameterMap();
+			parameters = ParameterFileManager.getInstance().getParameterMap(getParameterFile());
 		} catch (IOException e) {
 			logger.error("Failed to load parameters from the file", e);
 
@@ -1124,18 +1126,19 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 		Map<String, String> currentParameterMap = getCurrentParameterMap();
 		IFile file=opeSaveAsDialog();
-		saveJob(file);
-		copyParameterFile(currentParameterMap);
+		saveJob(file,true);
+		IWorkspaceRoot workSpaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		IProject project = workSpaceRoot.getProject(getActiveProject());
+		IFolder paramFolder = project.getFolder(Messages.PARAM);
+		IFile filename=paramFolder.getFile(oldFileName.replace(Messages.JOBEXTENSION,Messages.PROPERTIES_EXTENSION));
+		copyParameterFile(currentParameterMap,filename);
 		
 	}
 
 
-	private void copyParameterFile(Map<String, String> currentParameterMap) {
-		
-		ParameterFileManager parameterFilemanager = new ParameterFileManager(getParameterFile());
-		
+	private void copyParameterFile(Map<String, String> currentParameterMap, IFile filename) {
 		try {
-			parameterFilemanager.storeParameters(currentParameterMap);
+			ParameterFileManager.getInstance().storeParameters(currentParameterMap,filename, getParameterFile());
 		} catch (IOException io) {
 			logger.error("Failed to copy parameterMap to .properties file");
 		}
@@ -1146,11 +1149,12 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	/**
 	 * Generate Target XML from container
 	 * @param file
+	 * @param b 
 	 */
-	public void saveJob(IFile file) {
+	public void saveJob(IFile file, boolean isSaveAsJob) {
 		ByteArrayOutputStream out =null;
 		try {
-			if(getContainer().getUniqueJobId() == null){
+			if(getContainer().getUniqueJobId() == null || isSaveAsJob==true){
 				generateUniqueJobId();
 				getContainer().setUniqueJobId(uniqueJobId);
 			}
@@ -1204,6 +1208,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 		else
 			obj.setOriginalName(getEditorInput().getName() + ".job");
+		oldFileName=getEditorInput().getName();
 		obj.open();
 		if (obj.getReturnCode() == 0) {
 			validateLengthOfJobName(obj);

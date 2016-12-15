@@ -13,26 +13,6 @@
 
 package hydrograph.ui.parametergrid.dialog;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.swt.customwidget.HydroGroup;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.common.util.XMLUtil;
-import hydrograph.ui.datastructures.parametergrid.ParameterFile;
-import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.parametergrid.constants.ErrorMessages;
-import hydrograph.ui.parametergrid.constants.MessageType;
-import hydrograph.ui.parametergrid.constants.MultiParameterFileDialogConstants;
-import hydrograph.ui.parametergrid.dialog.models.Parameter;
-import hydrograph.ui.parametergrid.dialog.models.ParameterWithFilePath;
-import hydrograph.ui.parametergrid.dialog.support.ParameterEditingSupport;
-import hydrograph.ui.parametergrid.utils.ParameterFileManager;
-import hydrograph.ui.parametergrid.utils.SWTResourceManager;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -118,6 +98,26 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.swt.customwidget.HydroGroup;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.common.util.XMLUtil;
+import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.parametergrid.constants.ErrorMessages;
+import hydrograph.ui.parametergrid.constants.MessageType;
+import hydrograph.ui.parametergrid.constants.MultiParameterFileDialogConstants;
+import hydrograph.ui.parametergrid.dialog.models.Parameter;
+import hydrograph.ui.parametergrid.dialog.models.ParameterWithFilePath;
+import hydrograph.ui.parametergrid.dialog.support.ParameterEditingSupport;
+import hydrograph.ui.parametergrid.utils.ParameterFileManager;
+import hydrograph.ui.parametergrid.utils.SWTResourceManager;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * 
@@ -259,10 +259,8 @@ public class MultiParameterFileDialog extends Dialog {
 	private void populateViewParameterFileBox(ParameterFile parameterFile) {
 		//parameterFileTextBox.setText(file.getPath());
 		try {
-			ParameterFileManager parameterFileManager = new ParameterFileManager(
-					getParamterFileLocation(parameterFile));
 			Map<String, String> parameterMap = new LinkedHashMap<>();
-			parameterMap = parameterFileManager.getParameterMap();
+			parameterMap = ParameterFileManager.getInstance().getParameterMap(getParamterFileLocation(parameterFile));
 			setGridData(parameters, parameterMap);
 			parameterTableViewer.setData("CURRENT_PARAM_FILE", getParamterFileLocation(parameterFile));
 		} catch (IOException ioException) {
@@ -535,10 +533,8 @@ public class MultiParameterFileDialog extends Dialog {
 
 		for (ParameterFile parameterFile : parameterFiles) {
 			try {
-				ParameterFileManager parameterFileManager = new ParameterFileManager(
-						getParamterFileLocation(parameterFile));
 				Map<String, String> parameterMap = new LinkedHashMap<>();
-				parameterMap = parameterFileManager.getParameterMap();
+				parameterMap = ParameterFileManager.getInstance().getParameterMap(getParamterFileLocation(parameterFile));
 
 				for (String paramater : parameterMap.keySet()) {
 					ParameterWithFilePath parameterWithFilePath = new ParameterWithFilePath(
@@ -1000,8 +996,6 @@ public class MultiParameterFileDialog extends Dialog {
 				.getData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE);
 		if (!StringUtils.isEmpty(currentFilePath)) {
 			
-			ParameterFileManager parameterFileManager = new ParameterFileManager(
-					currentFilePath);
 			Map<String, String> parameterMap = new LinkedHashMap<>();
 			for (Parameter parameter : parameters) {
 				if(StringUtils.isEmpty(parameter.getParameterName())){
@@ -1018,7 +1012,7 @@ public class MultiParameterFileDialog extends Dialog {
 				}
 			}
 			try {
-				parameterFileManager.storeParameters(parameterMap);
+				ParameterFileManager.getInstance().storeParameters(parameterMap, null, currentFilePath);
 				ifNotified = false;
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -1375,11 +1369,10 @@ public class MultiParameterFileDialog extends Dialog {
 					jobLevelParamterFiles.add(new ParameterFile(fileName, paramterFileTypes));
 				}
 				try {
-					ParameterFileManager parameterFileManager = new ParameterFileManager(absoluteFileName);
 					parameterTableViewer.setData(MultiParameterFileDialogConstants.CURRENT_PARAM_FILE,
 							absoluteFileName);
 					Map<String, String> parameterMap = new LinkedHashMap<>();
-					parameterMap = parameterFileManager.getParameterMap();
+					parameterMap = ParameterFileManager.getInstance().getParameterMap(absoluteFileName);
 					setGridData(parameters, parameterMap);
 				} catch (IOException ioException) {
 					MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK);

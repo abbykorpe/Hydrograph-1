@@ -63,6 +63,8 @@ public class ImagePathConstant {
 	public static final String COMPONENT_SUCCESS_ICON = "/icons/componentSuccess.png";
 	public static final String COMPONENT_FAILED_ICON = "/icons/componentFail.png";
 	public static final String COMPONENT_PENDING_ICON = "/icons/componentPending.png";
+	public static final String PASTE_IMAGE_PATH="icons/paste_o.png";
+	
 
 	public static final String CLEAR_EXEC_TRACKING_CONSOLE =  "/icons/exectracking/clear_console.png";
 	

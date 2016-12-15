@@ -15,18 +15,6 @@
 package hydrograph.ui.parametergrid.dialog;
 
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.parametergrid.constants.ErrorMessages;
-import hydrograph.ui.parametergrid.constants.MessageType;
-import hydrograph.ui.parametergrid.textgridwidget.TextGrid;
-import hydrograph.ui.parametergrid.textgridwidget.columns.TextGridColumnLayout;
-import hydrograph.ui.parametergrid.textgridwidget.columns.TextGridRowLayout;
-import hydrograph.ui.parametergrid.utils.ParameterFileManager;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -81,6 +69,18 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.parametergrid.constants.ErrorMessages;
+import hydrograph.ui.parametergrid.constants.MessageType;
+import hydrograph.ui.parametergrid.textgridwidget.TextGrid;
+import hydrograph.ui.parametergrid.textgridwidget.columns.TextGridColumnLayout;
+import hydrograph.ui.parametergrid.textgridwidget.columns.TextGridRowLayout;
+import hydrograph.ui.parametergrid.utils.ParameterFileManager;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 public class ParameterGridDialog extends Dialog {
@@ -418,12 +418,11 @@ public class ParameterGridDialog extends Dialog {
 	}
 
 	private void loadGridData() {
-		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFile);
 		
 		Map<String, String> parameterMap=new LinkedHashMap<>();
 		
 		try {
-			parameterMap = parameterFileManager.getParameterMap();
+			parameterMap = ParameterFileManager.getInstance().getParameterMap(parameterFile);
 		} catch (IOException e) {
 			//isValidParameterFile = false;
 			logger.debug("Unable to get parameter Map ", e);
@@ -742,7 +741,6 @@ public class ParameterGridDialog extends Dialog {
 
 		textGrid.clearSelections();
 
-		ParameterFileManager parameterFileManager = new ParameterFileManager(parameterFile);
 		Map<String,String> dataMap = new LinkedHashMap<>();
 		int rowId=0;
 		for(List<String> row: textGrid.getData()){
@@ -755,7 +753,7 @@ public class ParameterGridDialog extends Dialog {
 		}
 		if(error == false){
 			try {
-				parameterFileManager.storeParameters(dataMap);
+				ParameterFileManager.getInstance().storeParameters(dataMap,null,parameterFile);
 			} catch (IOException e) {
 				MessageBox messageBox = new MessageBox(new Shell(), SWT.ICON_ERROR | SWT.OK );
 

@@ -19,10 +19,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  hydrograph.ui.common;bundle-version="0.0.1",
  hydrograph.ui.help;bundle-version="0.0.1",
- hydrograph.ui.common.datastructures;bundle-version="0.0.1"
+ hydrograph.ui.common.datastructures;bundle-version="0.0.1",
+ org.eclipse.core.filesystem,
+ org.apache.commons.collections
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.graph.figure,
  hydrograph.ui.graph.model,
+ hydrograph.ui.graph.model.utils,
  hydrograph.ui.help.aboutDialog,
  org.eclipse.jdt.internal.ui.refactoring.reorg,
  org.eclipse.ui.console,
