@@ -37,8 +37,8 @@ import org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.utility.ResourceChangeUtil;
 import hydrograph.ui.project.structure.CustomMessages;
@@ -62,7 +62,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 		this.modifiedResource = (IFile)element;
 		IProject[] iProjects=ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for(IProject iProject:iProjects){
-			if (StringUtils.equals(iProject.getName(), modifiedResource.getParent().getParent().getName())) {
+			if (modifiedResource.getParent().getParent().getName()!=null && StringUtils.equals(iProject.getName(), modifiedResource.getParent().getParent().getName())) {
 				if (StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, modifiedResource.getFileExtension())) {
 					return deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(iProject);
 				}
@@ -79,14 +79,13 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	}
 
 	private boolean deleteCorrospondingJobAndPropertyFileifUserDeleteXmlFile(IProject iProject) {
-		if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],JOBS)) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
 			IFolder jobsFolder = iProject.getFolder(JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
-			IFile jobFileName = jobsFolder.getFile(modifiedResource.getName().replace(Messages.XMLEXTENSION,Messages.JOBEXTENSION));
+			IFile jobFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
 			IFile propertyFileName = propertiesFolder
-					.getFile(modifiedResource.getName().replace(Messages.XMLEXTENSION,Messages.PROPERTIES_EXTENSION));
-			showErrorMessage(jobFileName, propertyFileName, "Deleting  " + modifiedResource.getName()
-					+ " file also delete corrosponding job and property files.Do you want to continue?.");
+					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.PROPERTIES).toFile().getName());
+			showErrorMessage(jobFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED_RESOURCE,modifiedResource.getName()));
 			return flag;
 		} else {
 			return false;
@@ -94,14 +93,13 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	}
 
 	private boolean deleteCorrospondingXmlAndPropertyFileifUserDeleteJobFile(IProject iProject) {
-		if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],JOBS)) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
 			IFolder jobsFolder = iProject.getFolder(JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
-			IFile xmlFileName = jobsFolder.getFile(modifiedResource.getName().replace(Messages.JOBEXTENSION,Messages.XMLEXTENSION));
+			IFile xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
 			IFile propertyFileName = propertiesFolder
-					.getFile(modifiedResource.getName().replace(Messages.JOBEXTENSION,Messages.PROPERTIES_EXTENSION));
-			showErrorMessage(xmlFileName, propertyFileName, "Deleting  " + modifiedResource.getName()
-					+ " file also delete corrosponding xml and property files.Do you want to continue?.");
+					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.PROPERTIES).toFile().getName());
+			showErrorMessage(xmlFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_RESOURCE,modifiedResource.getName()));
 			return flag;
 		} else {
 			return false;
@@ -109,15 +107,14 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	}
 
 	private boolean deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(IProject iProject) {
-		if (StringUtils.equalsIgnoreCase(modifiedResource.getFullPath().toString().split("/")[2],
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),
 				Messages.PARAM)) {
 			IFolder jobsFolder = iProject.getFolder(JOBS);
 			IFile jobFileName = jobsFolder
-					.getFile(modifiedResource.getName().replace(Messages.PROPERTIES_EXTENSION,Messages.JOBEXTENSION));
+					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
 			IFile xmlFileName = jobsFolder
-					.getFile(modifiedResource.getName().replace(Messages.PROPERTIES_EXTENSION,Messages.XMLEXTENSION));
-			showErrorMessage(jobFileName, xmlFileName, "Deleting  " + modifiedResource.getName()
-					+ " file also delete corrosponding xml and job files.Do you want to continue?.");
+					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
+			showErrorMessage(jobFileName, xmlFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_RESOURCE,modifiedResource.getName()));
 			return flag;
 		} else {
 			return false;
@@ -142,7 +139,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	}
 	
 	private int openErrorMessageBox(String message) {
-		MessageBox messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ERROR | SWT.YES | SWT.NO);
 		messageBox.setText(ERROR);
 		messageBox.setMessage(message);
 		return messageBox.open();
