@@ -14,7 +14,7 @@ class ReusableRowHelper(opr: Operation, fm: FieldManupulating) {
   def determineInputFieldPositionsForFilter(scheme: Seq[String]): ListBuffer[Int] ={
     val inputPos = new ListBuffer[Int]()
     scheme.zipWithIndex.foreach(e=>
-      if(e._1.equalsIgnoreCase(opr.getOperationInputFields.head))
+      if(opr.getOperationInputFields.contains(e._1))
         inputPos += e._2
     )
     inputPos

@@ -79,7 +79,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
           val isEndOfIterator: Boolean = itr.isEmpty
           prevKeysArray = currKeysArray
 
-          if ((isPrevKeyDifferent && !isPrevKeyNull) || isEndOfIterator) {
+          if ((isPrevKeyDifferent && !isPrevKeyNull) ) {
             //Calling OnCompleteGroup
             cumulateList.foreach(cmt => {
               cmt.baseClassInstance.onCompleteGroup()
@@ -95,6 +95,13 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
             cmt.baseClassInstance.cumulate(RowHelper.convertToReusebleRow(cmt.inputFieldPositions, row, cmt.inputReusableRow), cmt.outputReusableRow)
             RowHelper.setTupleFromReusableRow(outRow, cmt.outputReusableRow, cmt.outputFieldPositions)
           })
+
+          if (isEndOfIterator) {
+            //Calling OnCompleteGroup
+            cumulateList.foreach(cmt => {
+              cmt.baseClassInstance.onCompleteGroup()
+            })
+          }
           Row.fromSeq(outRow)
         }
       }
