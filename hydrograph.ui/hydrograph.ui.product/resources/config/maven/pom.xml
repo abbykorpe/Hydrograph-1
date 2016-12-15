@@ -21,25 +21,29 @@
 	<repositories>
 		<repository>
 			<id>mavenRepo</id>
-			<url>http://10.30.127.67:9091/artifactory/libs-release/</url>
+			<url>http://10.30.127.67:9091/artifactory/libs-release</url>
+		</repository>
+		<repository>
+			<id>mavenRepo1</id>
+			<url>http://10.30.127.67:9091/artifactory/hydrograph-for-spark</url>
 		</repository>
 	</repositories>
-	
+
 	<dependencies>
-		
+
 		<dependency>
 			<groupId>hydrograph</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
+			<version>0.1.spark-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
-    		<groupId>hydrograph</groupId>
-    		<artifactId>hydrograph.engine.transformation</artifactId>
-    		<version>2.1.1-SNAPSHOT</version>
-    		<classifier>sources</classifier>
+			<groupId>hydrograph</groupId>
+			<artifactId>hydrograph.engine.transformation</artifactId>
+			<version>0.1.spark-SNAPSHOT</version>
+			<classifier>sources</classifier>
 		</dependency>
-		
-	</dependencies> 
-	
+
+	</dependencies>
+
 </project>
