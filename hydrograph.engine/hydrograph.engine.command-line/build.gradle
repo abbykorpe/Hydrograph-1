@@ -16,7 +16,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 archivesBaseName = 'hydrograph.engine.command-line'
 
