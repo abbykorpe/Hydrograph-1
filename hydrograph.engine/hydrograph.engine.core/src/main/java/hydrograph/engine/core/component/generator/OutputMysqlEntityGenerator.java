@@ -70,6 +70,11 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 		outputRDBMSEntity.setPassword(jaxbOutputMysql.getPassword().getValue());
 
 		outputRDBMSEntity.setHostName(jaxbOutputMysql.getHostName().getValue());
+
+		if(jaxbOutputMysql.getPort()==null)
+			LOG.warn("Output Mysql component '" + outputRDBMSEntity.getComponentId() + "' "
+					+ " port is not provided, using default port " + Constants.DEFAULT_MYSQL_PORT);
+
 		outputRDBMSEntity.setPort(jaxbOutputMysql.getPort()==null? Constants.DEFAULT_MYSQL_PORT:jaxbOutputMysql.getPort().getValue().intValue());
 		outputRDBMSEntity.setJdbcDriver(jaxbOutputMysql.getJdbcDriver().getValue().equals(jdbcDriver)?driverName:null);
 		outputRDBMSEntity.setChunkSize(jaxbOutputMysql.getChunkSize()==null?Constants.DEFAULT_CHUNKSIZE:jaxbOutputMysql.getChunkSize().getValue().intValue());

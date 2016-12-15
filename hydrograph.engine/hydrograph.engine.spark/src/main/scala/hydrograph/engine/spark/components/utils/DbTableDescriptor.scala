@@ -16,7 +16,7 @@ class DbTableDescriptor(tableName:String, columnNames:Array[String], columnDefs:
 
     createTableStatement = addCreateTableBody()
     val createTableStatment=String.format("CREATE TABLE %s ( %s )",tableName,joinField(createTableStatement.reverse,","))
-    LOG.info("create query '" + createTableStatment + "' for " + databaseType + " output component")
+    LOG.info("Create query '" + createTableStatment + "' for " + databaseType + " output component")
     createTableStatment
   }
 
