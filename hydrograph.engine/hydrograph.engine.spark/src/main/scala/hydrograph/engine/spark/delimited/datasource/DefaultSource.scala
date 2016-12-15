@@ -1,20 +1,17 @@
 
 package hydrograph.engine.spark.delimited.datasource
 
-import org.apache.hadoop.fs.FileSystem
-import org.apache.hadoop.fs.Path
-import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.SaveMode
+import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
+import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.DataFrame
-import hydrograph.engine.spark.datasource.utils.TypeCast
-
-import hydrograph.engine.spark.datasource.utils.TextFile
+import org.slf4j.{Logger, LoggerFactory}
 
 
-class DefaultSource extends RelationProvider with SchemaRelationProvider with CreatableRelationProvider {
-
+class DefaultSource extends RelationProvider
+  with SchemaRelationProvider with CreatableRelationProvider with Serializable {
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[DefaultSource])
   /**
     * Creates a new relation for data store in delimited given parameters.
     * Parameters have to include 'path' and optionally 'delimiter', 'quote', and 'header'
@@ -31,7 +28,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): DelimitedRelation = {
 
-    val path: String = checkPath(parameters)
+    val path = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Input File Delimited Component"))
     val delimiter: String = parameters.getOrElse("delimiter", ",")
     val inDateFormats: String = parameters.getOrElse("dateFormats", "null")
     val useHeader: Boolean = parameters.getOrElse("header", "false").toBoolean
@@ -40,6 +37,10 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     val nullValue: String = parameters.getOrElse("nullValue", "")
     val quote: String = if (parameters.getOrElse("quote", "\"") == null ) "\"" else parameters.getOrElse("quote", "\"")
 
+    if (path == null || path.equals("")){
+      LOG.error("Delimited Input File path cannot be null or empty")
+      throw new RuntimeException("Delimited Input File path cannot be null or empty")
+    }
     val delimitedParser = new HydrographDelimitedParser(
       delimiter,
       quote, null, strict,
@@ -59,41 +60,47 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
     )(sqlContext)
   }
 
-  private def checkPath(parameters: Map[String, String]): String = {
-    parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
-  }
-
   /*Saving Data in delimited format*/
 
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
-    parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
-    val path: String = parameters.get("path").get
-    val filesystemPath: Path = new Path(path)
-    val fs: FileSystem = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
-
-    val doSave: Boolean = if (fs.exists(filesystemPath)) {
-      mode match {
-        case SaveMode.Append =>
-          sys.error(s"Append mode is not supported by ${this.getClass.getCanonicalName}")
-        case SaveMode.Overwrite =>
-          fs.delete(filesystemPath, true)
-          true
-        case SaveMode.ErrorIfExists =>
-          sys.error(s"path $path already exists.")
-        case SaveMode.Ignore => false
-      }
-    } else {
-      true
+    LOG.trace("In method createRelation for creating Delimited Output File")
+    val path: String = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Output File Delimited Component"))
+    if (path == null || path.equals("")){
+      LOG.error("Delimited Output File path cannot be null or empty")
+      throw new RuntimeException("Delimited Input File path cannot be null or empty")
     }
 
-    if (doSave) {
-      saveAsCsvFile(data, parameters, path)
+    val fsPath: Path = new Path(path)
+    val fs: FileSystem = fsPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
+
+    val isSave = if (fs.exists(fsPath)) {
+      mode match {
+        case SaveMode.Append => LOG.error("Output file append operation is not supported")
+          throw new RuntimeException("Output file append operation is not supported")
+        case SaveMode.Overwrite =>
+          if (fs.delete(fsPath, true))
+            true
+          else{
+            LOG.error("Output directory path '"+ path +"' cannot be deleted")
+            throw new RuntimeException("Output directory path '"+ path +"' cannot be deleted")
+          }
+        case SaveMode.ErrorIfExists =>
+          LOG.error("Output directory path '"+ path +"' already exists")
+          throw new RuntimeException("Output directory path '"+ path +"' already exists")
+        case SaveMode.Ignore => false
+      }
+    } else
+      true
+
+
+    if (isSave) {
+      saveAsDelimitedFile(data, parameters, path)
     }
     createRelation(sqlContext, parameters, data.schema)
   }
 
-  def saveAsCsvFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
-
+  def saveAsDelimitedFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
+    LOG.trace("In method saveAsFW for creating Delimited Output File")
     val delimiter: String = parameters.getOrElse("delimiter", ",")
     val outDateFormats: String = parameters.getOrElse("dateFormats","null")
     val strict: Boolean = parameters.getOrElse("strict", "true").toBoolean
@@ -118,6 +125,11 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
             if (iter.nonEmpty) {
               val tuple = iter.next()
               if (strict && tuple.length != schema.fields.length){
+                LOG.error("Output row does not have enough length to parse all fields. Output length is "
+                  + tuple.length
+                  + ". Number of fields in output schema are "
+                  + schema.fields.length
+                  + "\nRow being parsed: " + tuple)
                 throw new RuntimeException("Output row does not have enough length to parse all fields. Output length is "
                   + tuple.length
                   + ". Number of fields in output schema are "
@@ -127,7 +139,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
               }
 
               val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({
-                case (value, i) =>{
+                case (value, i) =>
                   val castedValue = TypeCast.castingOutputData(value, schema.fields(i).dataType, outDateFormats.split("\t")(i))
                   var string:String = ""
                   if (castedValue != null ){
@@ -138,7 +150,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
                       string = quote + string + quote
                   }
                   string
-                }
+
 
               })
 
@@ -157,7 +169,7 @@ class DefaultSource extends RelationProvider with SchemaRelationProvider with Cr
         }
     }
     strRDD.saveAsTextFile(path)
-
+    LOG.info("Delimited Output File is successfully created at path : " + path)
   }
 
 }

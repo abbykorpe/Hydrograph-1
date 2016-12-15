@@ -17,19 +17,24 @@ class EncoderHelper extends Serializable{
     ,StructField("name", DataTypes.StringType, true)))
   }
 
-  def getDataType(dataType: String):DataType = {
-    Class.forName(dataType).getSimpleName match {
+  def getDataType(schema: SchemaField):DataType = {
+    Class.forName(schema.getFieldDataType).getSimpleName match {
       case "Integer" => DataTypes.IntegerType
       case "String" => DataTypes.StringType
       case "Long" => DataTypes.LongType
+      case "Short" => DataTypes.ShortType
       case "Boolean" => DataTypes.BooleanType
+      case "Float" => DataTypes.FloatType
       case "Double" => DataTypes.DoubleType
+      case "Date" if (schema.getFieldFormat.matches(".*[H|m|s|S].*")) => DataTypes.TimestampType
+      case "Date" => DataTypes.DateType
+      case "BigDecimal" => DataTypes.createDecimalType(schema.getFieldPrecision, schema.getFieldScale)
     }
   }
 
 
   def getStructFieldType(fieldName:String,schemaFields:Array[SchemaField]): DataType ={
-    getDataType(schemaFields.filter(s=> s.getFieldName.equals(fieldName))(0).getFieldDataType)
+    getDataType(schemaFields.filter(s=> s.getFieldName.equals(fieldName))(0))
   }
 
   def getEncoder(outFields:ListBuffer[String],schemaFields:Array[SchemaField]): StructType ={

@@ -1,16 +1,12 @@
 package hydrograph.engine.spark.delimited.datasource
 
-import scala.util.control.NonFatal
-
-import org.apache.spark.annotation.DeveloperApi
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.sources.BaseRelation
-import org.apache.spark.sql.sources.TableScan
-import org.apache.spark.sql.types.StructField
-import org.apache.spark.sql.types.StructType
-import org.slf4j.LoggerFactory
+import org.apache.spark.sql.{Row, SQLContext}
+import org.apache.spark.sql.sources.{BaseRelation, TableScan}
+import org.apache.spark.sql.types.{StructField, StructType}
+import org.slf4j.{Logger, LoggerFactory}
+
+import scala.util.control.NonFatal
 
 case class DelimitedRelation(
                         baseRDD: () => RDD[String],
@@ -23,23 +19,23 @@ case class DelimitedRelation(
                       )(@transient val sqlContext: SQLContext)
   extends BaseRelation with TableScan {
 
-  private val logger = LoggerFactory.getLogger(DelimitedRelation.getClass)
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[DelimitedRelation])
   override val schema: StructType = userSchema
 
   private def tokenRdd(header: Array[String]): RDD[List[Any]] = {
-
+  LOG.trace("In method tokenRdd for creating tokens of fields from input row")
 
     val filterLine = if (useHeader) baseRDD().first() else null
 
     baseRDD().mapPartitions { iter =>
 
-      val csvIter = if (useHeader) {
+      val delimitedIter = if (useHeader) {
         iter.filter(_ != filterLine)
       } else {
         iter
       }
 
-      parseCSV(csvIter, delimitedParser)
+      parseDelimited(delimitedIter, delimitedParser)
     }
   }
 
@@ -55,23 +51,22 @@ case class DelimitedRelation(
     }
   }
 
-  private def parseCSV(iter: Iterator[String],delimitedParser: HydrographDelimitedParser): Iterator[List[Any]] = {
+  private def parseDelimited(iter: Iterator[String],delimitedParser: HydrographDelimitedParser): Iterator[List[Any]] = {
     iter.flatMap { line =>
       try {
 
         val fields = delimitedParser.parseLine(line)
         if (fields.isEmpty) {
-          logger.warn(s"Ignoring empty line: $line")
+          LOG.warn(s"Ignoring empty line: $line")
           None
         } else {
-
           Some(fields.toList)
         }
       } catch {
-        case NonFatal(e) =>
-          logger.error(s"Exception while parsing line: $line. ", e)
-          None
-      }
+        case e =>
+          LOG.error(s"Exception while parsing line: $line. ", e)
+          throw e
+        }
     }
   }
 

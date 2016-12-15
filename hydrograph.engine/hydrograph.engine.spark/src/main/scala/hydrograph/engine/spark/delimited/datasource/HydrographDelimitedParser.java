@@ -8,8 +8,11 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import org.apache.spark.sql.types.StructType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HydrographDelimitedParser implements Serializable {
+    private static Logger LOG= LoggerFactory.getLogger(HydrographDelimitedParser.class);
 
     private static final long serialVersionUID = 4546944494735373827L;
 
@@ -202,6 +205,7 @@ public class HydrographDelimitedParser implements Serializable {
             } catch (Exception exception) {
                 result[i] = null;
                 if (!safe) {
+                    LOG.error(getSafeMessage(split[i], i) + "\n Line being parsed => " + line);
                     throw new RuntimeException(getSafeMessage(split[i], i) + "\n Line being parsed => " + line);
                 }
             }
@@ -231,8 +235,10 @@ public class HydrographDelimitedParser implements Serializable {
 
         if (numValues != 0 && split.length != numValues) {
 
-            if( enforceStrict )
+            if( enforceStrict ){
+                LOG.error(getParseMessage( split ) );
                 throw new RuntimeException( getParseMessage( split ) ); // trap actual line data
+            }
 
             Object[] array = new Object[numValues];
             Arrays.fill(array, "");
