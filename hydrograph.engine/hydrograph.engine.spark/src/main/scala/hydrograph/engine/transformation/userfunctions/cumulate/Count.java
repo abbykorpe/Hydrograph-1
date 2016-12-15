@@ -34,7 +34,6 @@ public class Count implements CumulateTransformBase {
 	public void cumulate(ReusableRow input, ReusableRow output) {
 		if (input.getField(0) != null)
 			count = count + 1;
-
 		output.setField(0, count);
 	}
 

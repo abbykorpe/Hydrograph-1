@@ -38,8 +38,8 @@ public class Filter implements FilterBase {
 	@Override
 	public boolean isRemove(ReusableRow reusableRow) {
 		LOG.info("Test Logging message...  from filter (transform) class ");
-		String input = reusableRow.getString(0);
-		return input.equals("AAA");
+		String input = reusableRow.getString(1);
+		return input.equals("AAA") || reusableRow.getString(0).equals("Raju");
 	}
 
 
