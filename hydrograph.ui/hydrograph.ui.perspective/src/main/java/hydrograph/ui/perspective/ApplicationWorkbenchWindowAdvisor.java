@@ -149,7 +149,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			logger.error("Failure in IO", exception);
 		}
 		
-		startExecutionTrackingServer(properties);
+		//startExecutionTrackingServer(properties);
 	}
 	
 	private void serviceInitiator(Properties properties) throws IOException{
@@ -205,7 +205,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		Properties properties = ConfigFileReader.INSTANCE.getCommonConfigurations();
 		try {
 			killPortProcess(properties);
-			killTrackingPortProcess(properties);
+			//killTrackingPortProcess(properties);
 		} catch (IOException e) {
 			logger.debug("Socket is not closed.");
 		}
