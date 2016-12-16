@@ -93,7 +93,8 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
 						.addFileExtension(Constants.PROPERTIES).toFile().getName());
 			}
-			showErrorMessage(jobFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED_RESOURCE,modifiedResource.getName()));
+			String message=getErrorMessageIfUserDeleteXmlRelatedFiles(jobFileName,propertyFileName);
+			showErrorMessage(jobFileName, propertyFileName, Messages.bind(message,modifiedResource.getName()));
 		} 
 		return flag;
 	}
@@ -112,7 +113,8 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
 						.addFileExtension(Constants.PROPERTIES).toFile().getName());
 			}
-			showErrorMessage(xmlFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_RESOURCE,modifiedResource.getName()));
+			String message=getErrorMessageIfUserDeleteJobRelatedFiles(propertyFileName,xmlFileName);
+			showErrorMessage(xmlFileName, propertyFileName, Messages.bind(message,modifiedResource.getName()));
 		}
 		return flag;
 	}
@@ -129,11 +131,52 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
 						.addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
 			}
-			showErrorMessage(jobFileName, xmlFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_RESOURCE,modifiedResource.getName()));
+			String message=getErrorMessageIfUserDeletePropertyRelatedFiles(jobFileName,xmlFileName);
+			showErrorMessage(jobFileName, xmlFileName, Messages.bind(message,modifiedResource.getName()));
 		} 
 		return flag;
 	}
 	
+	private String getErrorMessageIfUserDeletePropertyRelatedFiles(IFile jobFileName, IFile xmlFileName) {
+		String message = "";
+		if (jobFileName != null && xmlFileName != null) {
+			if ((jobFileName.exists()) && (!xmlFileName.exists())) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_JOB_RESOURCE;
+			} else if (!jobFileName.exists() && xmlFileName.exists()) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_XML_RESOURCE;
+			} else if (jobFileName.exists() && xmlFileName.exists()) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_RESOURCE;
+			}
+		}
+		return message;
+	}
+	private String getErrorMessageIfUserDeleteJobRelatedFiles(IFile propertyFileName, IFile xmlFileName) {
+		String message = "";
+		if (propertyFileName != null && xmlFileName != null) {
+			if ((propertyFileName.exists()) && (!xmlFileName.exists())) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_PROPERTY_RESOURCE;
+			} else if (!propertyFileName.exists() && xmlFileName.exists()) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_XML_RESOURCE;
+			} else if (propertyFileName.exists() && xmlFileName.exists()) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_RESOURCE;
+			}
+		}
+		return message;
+	}
+	private String getErrorMessageIfUserDeleteXmlRelatedFiles(IFile jobFileName, IFile propertyFileName) {
+		String message = "";
+		if (jobFileName != null && propertyFileName != null) {
+			if ((jobFileName.exists()) && (!propertyFileName.exists())) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED_JOB_RESOURCE;
+			} else if (!jobFileName.exists() && propertyFileName.exists()) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED__PROPERTY_RESOURCE;
+			} else if (jobFileName.exists() && propertyFileName.exists()) {
+				message = Messages.SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED_RESOURCE;
+			}
+		}
+		return message;
+	}
+
 	private void showErrorMessage(IFile fileName1, IFile fileName2, String errorMessage) {
 		if((fileName1!=null && fileName1.exists()) || (fileName2!=null && fileName2.exists()))
 		{
