@@ -11,14 +11,14 @@
  * limitations under the License.
  *******************************************************************************/
 
-package hydrograph.server.metadata.schema;
+package hydrograph.server.metadata.entity;
 
 /**
  * 
- * POJO Stores all the hive table related fields.
+ * Simple POJO to store column specific values of database meta data.
  *
  */
-public class HiveTableSchemaField {
+public class TableSchemaFieldEntity {
 	String fieldName = "";
 	String fieldType = "";
 	String precision = "";
@@ -27,7 +27,7 @@ public class HiveTableSchemaField {
 
 	/**
 	 * 
-	 * @return fieldName - of type String
+	 * @return filed Name - of helper String
 	 */
 	public String getFieldName() {
 		return fieldName;
@@ -36,6 +36,7 @@ public class HiveTableSchemaField {
 	/**
 	 * 
 	 * @param fieldName
+	 *            - of helper String
 	 */
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
@@ -43,7 +44,7 @@ public class HiveTableSchemaField {
 
 	/**
 	 * 
-	 * @return fieldType - of type String
+	 * @return fieldType - of helper String
 	 */
 	public String getFieldType() {
 		return fieldType;
@@ -52,7 +53,7 @@ public class HiveTableSchemaField {
 	/**
 	 * 
 	 * @param fieldType
-	 *            - of type String
+	 *            - of helper String
 	 */
 	public void setFieldType(String fieldType) {
 		this.fieldType = fieldType;
@@ -60,7 +61,7 @@ public class HiveTableSchemaField {
 
 	/**
 	 * 
-	 * @return precision - of type String
+	 * @return precision - of helper String
 	 */
 	public String getPrecision() {
 		return precision;
@@ -69,7 +70,7 @@ public class HiveTableSchemaField {
 	/**
 	 * 
 	 * @param precision
-	 *            - of type String
+	 *            - of helper String
 	 */
 	public void setPrecision(String precision) {
 		this.precision = precision;
@@ -77,7 +78,7 @@ public class HiveTableSchemaField {
 
 	/**
 	 * 
-	 * @return scale - of type String
+	 * @return scale - of helper String
 	 */
 	public String getScale() {
 		return scale;
@@ -86,7 +87,7 @@ public class HiveTableSchemaField {
 	/**
 	 * 
 	 * @param scale
-	 *            - of type String
+	 *            - of helper String
 	 */
 	public void setScale(String scale) {
 		this.scale = scale;
@@ -94,7 +95,7 @@ public class HiveTableSchemaField {
 
 	/**
 	 * 
-	 * @return format - of type String
+	 * @return format - of helper String
 	 */
 	public String getFormat() {
 		return format;
@@ -103,7 +104,7 @@ public class HiveTableSchemaField {
 	/**
 	 * 
 	 * @param format
-	 *            - of type String
+	 *            - of helper String
 	 */
 	public void setFormat(String format) {
 		this.format = format;

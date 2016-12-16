@@ -10,21 +10,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.server.metadata.schema;
+package hydrograph.server.metadata.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Simple POJO class to store the schema fields related to respective databases.
- * 
+ *
  */
-public class TableSchema {
+public class TableEntity {
 
 	String databaseName = "";
 	String tableName = "";
 	String owner = "";
-	List<TableSchemaField> schemaFields = new ArrayList<TableSchemaField>();
+	List<TableSchemaFieldEntity> schemaFields = new ArrayList<TableSchemaFieldEntity>();
 	String fieldDelimiter = "";
 	String partitionKeys = "";
 	String location = "";
@@ -33,7 +33,7 @@ public class TableSchema {
 
 	/**
 	 * Sets the database name.
-	 * 
+	 *
 	 * @param databaseName
 	 *            - of type String
 	 */
@@ -43,7 +43,7 @@ public class TableSchema {
 
 	/**
 	 * Sets the table name.
-	 * 
+	 *
 	 * @param tableName
 	 *            - of type String
 	 */
@@ -53,7 +53,7 @@ public class TableSchema {
 
 	/**
 	 * Returns the location of meta store.
-	 * 
+	 *
 	 * @return String
 	 */
 	public String getLocation() {
@@ -62,7 +62,7 @@ public class TableSchema {
 
 	/**
 	 * Sets the location of meta store.
-	 * 
+	 *
 	 * @param location
 	 *            - of type String
 	 */
@@ -72,7 +72,7 @@ public class TableSchema {
 
 	/**
 	 * Returns the external table location.
-	 * 
+	 *
 	 * @return externalTableLocation - of type String
 	 */
 	public String getExternalTableLocation() {
@@ -81,7 +81,7 @@ public class TableSchema {
 
 	/**
 	 * Sets the external table location.
-	 * 
+	 *
 	 * @param externalTableLocation
 	 *            - of type String
 	 */
@@ -92,7 +92,7 @@ public class TableSchema {
 
 	/**
 	 * Returns the input Output format.
-	 * 
+	 *
 	 * @return inputOutputFormat - of type String
 	 */
 	public String getInputOutputFormat() {
@@ -101,7 +101,7 @@ public class TableSchema {
 
 	/**
 	 * Sets the input output format
-	 * 
+	 *
 	 * @param inputOutputFormat
 	 *            - of type String
 	 */
@@ -110,7 +110,7 @@ public class TableSchema {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return database name - of type String
 	 */
 	public String getDatabaseName() {
@@ -118,7 +118,7 @@ public class TableSchema {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return table name - of type String
 	 */
 	public String getTableName() {
@@ -126,7 +126,7 @@ public class TableSchema {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return owner - of type String
 	 */
 	public String getOwner() {
@@ -135,7 +135,7 @@ public class TableSchema {
 
 	/**
 	 * Sets the owner.
-	 * 
+	 *
 	 * @param owner
 	 *            - of type String
 	 */
@@ -144,24 +144,24 @@ public class TableSchema {
 	}
 
 	/**
-	 * 
-	 * @return schema Fields - of type List&lt;TableSchemaField&gt; object
+	 *
+	 * @return schema Fields - of type List&lt;TableSchemaFieldEntity&gt; object
 	 */
-	public List<TableSchemaField> getSchemaFields() {
+	public List<TableSchemaFieldEntity> getSchemaFields() {
 		return schemaFields;
 	}
 
 	/**
-	 * 
-	 * @param listOfHiveTableSchemaField
-	 *            -of type List&lt;TableSchemaField&gt; object
+	 *
+	 * @param listOfHiveTableSchemaFieldEntity
+	 *            -of type List&lt;TableSchemaFieldEntity&gt; object
 	 */
-	public void setSchemaFields(List<TableSchemaField> listOfHiveTableSchemaField) {
-		this.schemaFields = listOfHiveTableSchemaField;
+	public void setSchemaFields(List<TableSchemaFieldEntity> listOfHiveTableSchemaFieldEntity) {
+		this.schemaFields = listOfHiveTableSchemaFieldEntity;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return partitionKeys - of type String
 	 */
 	public String getPartitionKeys() {
@@ -169,7 +169,7 @@ public class TableSchema {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param partitionKeys
 	 *            - of type String
 	 */
@@ -178,7 +178,7 @@ public class TableSchema {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return field delimiter - of type String
 	 */
 	public String getFieldDelimiter() {
@@ -186,7 +186,7 @@ public class TableSchema {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param fieldDelimiter
 	 *            - of type String
 	 */
