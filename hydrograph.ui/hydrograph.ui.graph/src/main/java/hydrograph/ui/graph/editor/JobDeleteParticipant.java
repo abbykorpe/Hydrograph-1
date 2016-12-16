@@ -135,7 +135,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	}
 	
 	private void showErrorMessage(IFile fileName1, IFile fileName2, String errorMessage) {
-		if(fileName1.exists() || fileName2.exists())
+		if((fileName1!=null && fileName1.exists()) || (fileName2!=null && fileName2.exists()))
 		{
 			Display.getDefault().syncExec(new Runnable() {
 				@Override
