@@ -40,7 +40,7 @@ BaseComponentParams) extends SparkFlow {
 
     outputRDBMSEntity.getLoadType match {
       case "newTable" =>
-        executeQuery(connectionURL, prop, TableCreator.getCreateTableQuery(outputRDBMSEntity))
+        executeQuery(connectionURL, prop, TableCreator().getCreateTableQuery(outputRDBMSEntity))
         cp.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
 
       case "insert" => cp.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)

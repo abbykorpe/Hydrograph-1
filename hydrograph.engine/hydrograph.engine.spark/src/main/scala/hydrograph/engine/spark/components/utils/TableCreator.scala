@@ -10,9 +10,9 @@ import scala.collection.JavaConverters._
 /**
   * Created by santlalg on 12/12/2016.
   */
-object TableCreator {
+case class TableCreator() {
 
-  val LOG: Logger = LoggerFactory.getLogger("TableCreator")
+  val LOG: Logger = LoggerFactory.getLogger(classOf[TableCreator])
 
   def getCreateTableQuery(outputRDBMSEntity: OutputRDBMSEntity): String = {
 
