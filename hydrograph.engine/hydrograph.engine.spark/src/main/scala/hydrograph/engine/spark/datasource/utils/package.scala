@@ -5,7 +5,7 @@ import java.util.{TimeZone, Locale}
 
 package object utils {
   def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")){
-    val date = new SimpleDateFormat(dateFormat)
+    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
     date.setLenient(false)
     date.setTimeZone(TimeZone.getDefault)
     date

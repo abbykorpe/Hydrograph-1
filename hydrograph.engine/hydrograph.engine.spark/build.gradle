@@ -49,10 +49,10 @@ publishing {
         }
     }
 }
-
+InputMysqlComponentTest
 test {
     exclude '**/SparkUnionAllComponentTest*'
-    exclude '**/SparkIMysqlComponentTest*'
+    exclude '**/InputMysqlComponentTest*'
 	}
 
 //  version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 

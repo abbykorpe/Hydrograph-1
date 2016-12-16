@@ -27,64 +27,62 @@ import hydrograph.engine.jaxb.inputtypes.Mysql;
 
 
 public class InputMysqlEntityGenerator extends
-InputComponentGeneratorBase {
+        InputComponentGeneratorBase {
 
-	private Mysql inputMysqlJaxb;
-	private InputRDBMSEntity inputRDBMSEntity;
-	private  final String databaseType = "MySql";
-	private final String jdbcDriver="Connector/J";
-	private final String driverName = "com.mysql.jdbc.Driver";
-	private static Logger LOG = LoggerFactory
-			.getLogger(InputMysqlEntityGenerator.class);
+    private Mysql inputMysqlJaxb;
+    private InputRDBMSEntity inputRDBMSEntity;
+    private final String databaseType = "MySql";
+    private final String jdbcDriver = "Connector/J";
+    private final String driverName = "com.mysql.jdbc.Driver";
+    private static Logger LOG = LoggerFactory
+            .getLogger(InputMysqlEntityGenerator.class);
 
-	public InputMysqlEntityGenerator(TypeBaseComponent baseComponent) {
-		super(baseComponent);
-	}
+    public InputMysqlEntityGenerator(TypeBaseComponent baseComponent) {
+        super(baseComponent);
+    }
 
 
+    @Override
+    public void castComponentFromBase(TypeBaseComponent baseComponent) {
+        inputMysqlJaxb = (Mysql) baseComponent;
+    }
 
-	@Override
-	public void castComponentFromBase(TypeBaseComponent baseComponent) {
-		inputMysqlJaxb = (Mysql) baseComponent;
-	}
+    @Override
+    public void createEntity() {
+        inputRDBMSEntity = new InputRDBMSEntity();
+    }
 
-	@Override
-	public void createEntity() {
-		inputRDBMSEntity = new InputRDBMSEntity();
-	}
+    @Override
+    public void initializeEntity() {
 
-	@Override
-	public void initializeEntity() {
+        LOG.trace("Initializing input file MySql component: "
+                + inputMysqlJaxb.getId());
 
-		LOG.trace("Initializing input file MySql component: "
-				+ inputMysqlJaxb.getId());
+        inputRDBMSEntity.setComponentId(inputMysqlJaxb.getId());
+        inputRDBMSEntity.setBatch(inputMysqlJaxb.getBatch());
+        inputRDBMSEntity.setFieldsList(InputEntityUtils.extractInputFields(
+                inputMysqlJaxb.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
+        inputRDBMSEntity.setOutSocketList(InputEntityUtils.extractOutSocket(inputMysqlJaxb.getOutSocket()));
+        inputRDBMSEntity.setDatabaseName(inputMysqlJaxb.getDatabaseName().getValue());
+        inputRDBMSEntity.setHostName(inputMysqlJaxb.getHostName().getValue());
 
-		inputRDBMSEntity.setComponentId(inputMysqlJaxb.getId());
-		inputRDBMSEntity.setBatch(inputMysqlJaxb.getBatch());
-		inputRDBMSEntity.setFieldsList(InputEntityUtils.extractInputFields(
-				inputMysqlJaxb.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
-		inputRDBMSEntity.setOutSocketList(InputEntityUtils.extractOutSocket(inputMysqlJaxb.getOutSocket()));
-		inputRDBMSEntity.setDatabaseName(inputMysqlJaxb.getDatabaseName().getValue());
-		inputRDBMSEntity.setHostName(inputMysqlJaxb.getHostName().getValue());
-
-        if(inputMysqlJaxb.getPort()==null)
-            LOG.warn("Input Mysql component '" + inputRDBMSEntity.getComponentId() + "' "
-            + " port is not provided, using default port " + Constants.DEFAULT_MYSQL_PORT);
-        inputRDBMSEntity.setPort(inputMysqlJaxb.getPort()==null? Constants.DEFAULT_MYSQL_PORT : inputMysqlJaxb.getPort().getValue().intValue());
-		inputRDBMSEntity.setJdbcDriver(inputMysqlJaxb.getJdbcDriver().getValue().equals(jdbcDriver)?driverName:null);
-		inputRDBMSEntity.setTableName(inputMysqlJaxb.getTableName()==null?null:inputMysqlJaxb.getTableName().getValue());
-		inputRDBMSEntity.setSelectQuery(inputMysqlJaxb.getSelectQuery()==null?null:inputMysqlJaxb.getSelectQuery().getValue());
-		inputRDBMSEntity.setUsername(inputMysqlJaxb.getUsername().getValue());
-		inputRDBMSEntity.setPassword(inputMysqlJaxb.getPassword().getValue());
+        if (inputMysqlJaxb.getPort() == null)
+            LOG.warn("Input Mysql component '" + inputRDBMSEntity.getComponentId() + "' port is not provided, using default port " + Constants.DEFAULT_MYSQL_PORT);
+        inputRDBMSEntity.setPort(inputMysqlJaxb.getPort() == null ? Constants.DEFAULT_MYSQL_PORT : inputMysqlJaxb.getPort().getValue().intValue());
+        inputRDBMSEntity.setJdbcDriver(inputMysqlJaxb.getJdbcDriver().getValue().equals(jdbcDriver) ? driverName : null);
+        inputRDBMSEntity.setTableName(inputMysqlJaxb.getTableName() == null ? null : inputMysqlJaxb.getTableName().getValue());
+        inputRDBMSEntity.setSelectQuery(inputMysqlJaxb.getSelectQuery() == null ? null : inputMysqlJaxb.getSelectQuery().getValue());
+        inputRDBMSEntity.setUsername(inputMysqlJaxb.getUsername().getValue());
+        inputRDBMSEntity.setPassword(inputMysqlJaxb.getPassword().getValue());
 //		inputRDBMSEntity.setFetchSize(inputMysqlJaxb.getFetchSize()==null?Constants.DEFAULT_DB_FETCHSIZE:inputMysqlJaxb.getFetchSize().getValue().intValue());
-		inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
-				.extractRuntimeProperties(inputMysqlJaxb.getRuntimeProperties()));
-		inputRDBMSEntity.setDatabaseType(databaseType);
-	}
+        inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
+                .extractRuntimeProperties(inputMysqlJaxb.getRuntimeProperties()));
+        inputRDBMSEntity.setDatabaseType(databaseType);
+    }
 
-	@Override
-	public InputRDBMSEntity getEntity() {
-		return inputRDBMSEntity;
-	}
+    @Override
+    public InputRDBMSEntity getEntity() {
+        return inputRDBMSEntity;
+    }
 
 }
