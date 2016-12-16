@@ -13,18 +13,18 @@
 
 package hydrograph.ui.graph.editor;
 
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.utility.ResourceChangeUtil;
-import hydrograph.ui.project.structure.CustomMessages;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -34,6 +34,14 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
 import org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.utility.ResourceChangeUtil;
+import hydrograph.ui.project.structure.CustomMessages;
 
 /**
  * JobDeleteParticipant- If any of the .job, .xml and .properties file is deleted in Project explorer, then the corresponding 
@@ -45,11 +53,107 @@ import org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange;
 
 public class JobDeleteParticipant extends DeleteParticipant{
 	private IFile modifiedResource;
+	private static final String JOBS="jobs";
+	private boolean flag;
 	
 	@Override
 	protected boolean initialize(Object element) {
 		this.modifiedResource = (IFile)element;
+		IProject[] iProjects=ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		for(IProject iProject:iProjects){
+			if (modifiedResource.getParent()!=null && modifiedResource.getParent().getParent()!=null 
+					&& StringUtils.equals(iProject.getName(), modifiedResource.getParent().getParent().getName())) {
+				if (StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, modifiedResource.getFileExtension())) {
+					return deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(iProject);
+				}
+				else if (StringUtils.equalsIgnoreCase(Messages.JOB_EXT, modifiedResource.getFileExtension())) {
+					return deleteCorrospondingXmlAndPropertyFileifUserDeleteJobFile(iProject);
+				}
+				else if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, modifiedResource.getFileExtension())) {
+					return deleteCorrospondingJobAndPropertyFileifUserDeleteXmlFile(iProject);
+				}
+			}
+		}
+		
 		return true;
+	}
+
+	private boolean deleteCorrospondingJobAndPropertyFileifUserDeleteXmlFile(IProject iProject) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
+			IFile jobFileName = null;
+			IFile propertyFileName = null;
+			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
+			
+			if (jobsFolder != null) {
+				jobFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
+			}
+			if (propertiesFolder != null) {
+				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.PROPERTIES).toFile().getName());
+			}
+			showErrorMessage(jobFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED_RESOURCE,modifiedResource.getName()));
+		} 
+		return flag;
+	}
+
+	private boolean deleteCorrospondingXmlAndPropertyFileifUserDeleteJobFile(IProject iProject) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
+			IFile xmlFileName = null;
+			IFile propertyFileName = null;
+			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
+			if (jobsFolder != null) {
+				xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
+			}
+			if (propertiesFolder != null) {
+				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.PROPERTIES).toFile().getName());
+			}
+			showErrorMessage(xmlFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_RESOURCE,modifiedResource.getName()));
+		}
+		return flag;
+	}
+
+	private boolean deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(IProject iProject) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),
+				Messages.PARAM)) {
+			IFile jobFileName = null;
+			IFile xmlFileName = null;
+			IFolder jobsFolder = iProject.getFolder(JOBS);
+			if (jobsFolder != null) {
+				jobFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
+				xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
+			}
+			showErrorMessage(jobFileName, xmlFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_RESOURCE,modifiedResource.getName()));
+		} 
+		return flag;
+	}
+	
+	private void showErrorMessage(IFile fileName1, IFile fileName2, String errorMessage) {
+		if((fileName1!=null && fileName1.exists()) || (fileName2!=null && fileName2.exists()))
+		{
+			Display.getDefault().syncExec(new Runnable() {
+				@Override
+				public void run() {
+				int returnCode=openErrorMessageBox(errorMessage);
+						if (returnCode == SWT.YES) {
+							flag=true;
+						}
+				}
+			});
+		}
+	}
+	
+	private int openErrorMessageBox(String message) {
+		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ERROR | SWT.YES | SWT.NO);
+		messageBox.setText(Constants.ERROR);
+		messageBox.setMessage(message);
+		return messageBox.open();
 	}
 
 	@Override

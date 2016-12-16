@@ -122,6 +122,15 @@ public class Messages extends NLS {
 	public static String JOB_OPENED_FROM_OUTSIDE_WORKSPACE_WARNING;
 	public static String WARNING;
 	public static String PROPERTIES_EXTENSION;
+
+
+	public static String SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_RESOURCE;
+
+
+	public static String SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED_RESOURCE;
+
+
+	public static String SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_RESOURCE;
 	
 	static {
 		// initialize resource bundle
