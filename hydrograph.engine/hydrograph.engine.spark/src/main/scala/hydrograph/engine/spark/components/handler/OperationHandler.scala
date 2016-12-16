@@ -4,9 +4,10 @@ import java.util.{ArrayList, Properties}
 
 import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
 import hydrograph.engine.expression.api.ValidationAPI
-import hydrograph.engine.expression.userfunctions.{NormalizeForExpression, AggregateForExpression, TransformForExpression}
-import hydrograph.engine.spark.components.utils.{ReusableRowHelper, FieldManupulating}
-import hydrograph.engine.transformation.userfunctions.base.{CumulateTransformBase, NormalizeTransformBase, TransformBase, AggregateTransformBase, ReusableRow}
+import hydrograph.engine.expression.userfunctions.{AggregateForExpression, CumulateForExpression, NormalizeForExpression, TransformForExpression}
+import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
+import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, CumulateTransformBase, NormalizeTransformBase, ReusableRow, TransformBase}
+
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
@@ -29,13 +30,29 @@ case class Operatioin[T](baseClassInstance:T,inputReusableRow:ReusableRow,
 
 trait CumulateOperation{
 
-  def initializeCumulate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating):
-  List[Operatioin[CumulateTransformBase]] = {
+  def convertToListOfValidation(list: List[Any]): Array[ValidationAPI] = {
+    def convert(li:List[Any],converted:ListBuffer[ValidationAPI]):Array[ValidationAPI] = (li,converted) match {
+      case (List(),conv) => conv.toArray
+      case (x::xs,ys) if x == None => convert(xs,ys++ListBuffer(null))
+      case (x::xs,ys) => convert(xs,ys++ListBuffer(x.asInstanceOf[ValidationAPI]))
+    }
+    convert(list,ListBuffer[ValidationAPI]())
+  }
 
-    def cumulate( operationList:List[Operation], fieldManupulating: FieldManupulating):
-    List[Operatioin[CumulateTransformBase]] = operationList match {
-      case List() => List()
-      case (x :: xs) =>
+//  def initializeCumulate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating):
+//  List[Operatioin[CumulateTransformBase]] = {
+//
+//    def cumulate( operationList:List[Operation], fieldManupulating: FieldManupulating):
+//    List[Operatioin[CumulateTransformBase]] = operationList match {
+//      case List() => List()
+//      case (x :: xs) =>
+        def initializeCumulate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating, expressionObjectList: ListBuffer[Any], initialValueExprs: List[String]):
+        List[Operatioin[CumulateTransformBase]] = {
+
+          def cumulate( operationList:List[Operation], fieldManupulating: FieldManupulating, expressionObjectList: List[Any], initialValueExprs: List[String], counter:Int):
+          List[Operatioin[CumulateTransformBase]] = (operationList,expressionObjectList,initialValueExprs) match {
+            case (List(),_,_) => List()
+            case (x :: xs,y :: ys,z :: zs) =>
         val operationInputFieldList = new ArrayList[String]()
         x.getOperationInputFields.foreach(v => operationInputFieldList.add(v))
 
@@ -50,17 +67,29 @@ trait CumulateOperation{
         val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
         val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
         val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
-        val cumulateBase: CumulateTransformBase = CustomClassLoader.initializeObject[CumulateTransformBase](x
-          .getOperationClass)
 
-        cumulateBase.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
+              val cumulateBase: CumulateTransformBase = (x,y) match {
+                case (_,_) if(y != None && x.getOperationClass == null) => {
+                  var cumulate = new CumulateForExpression
+                  cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
+                  cumulate.setCounter(counter)
+                  cumulate.setInitialValueExpression((z::zs).toArray)
+                  cumulate.callPrepare
+                  cumulate
+                }
+                case _ => {
+                  var cumulate = CustomClassLoader.initializeObject[CumulateTransformBase](x.getOperationClass)
+                  cumulate.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
+                  cumulate
+                }
+              }
 
         Operatioin[CumulateTransformBase](cumulateBase, blankInRR, blankOutRR, inputFieldPositions, outputFieldPositions, fieldManupulating) ::
-          cumulate(xs, fieldManupulating)
+          cumulate(xs, fieldManupulating,y::ys,z::zs,counter+1)
     }
 
     if(operationList!=null)
-      cumulate(operationList.asScala.toList,fieldManupulating)
+      cumulate(operationList.asScala.toList,fieldManupulating,expressionObjectList.toList,initialValueExprs,0)
     else
       List()
   }

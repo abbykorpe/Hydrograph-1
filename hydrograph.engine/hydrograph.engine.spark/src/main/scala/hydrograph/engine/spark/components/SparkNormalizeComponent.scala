@@ -107,17 +107,19 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
       outputDispatcher = new NormalizeOutputCollector(outRR, outRow, fm.determineOutputFieldPositions()(0))
 
       val normalizeList = initializeNormalize(normalizeEntity.getOperationsList,fm,op.getExpressionObject)
+
       val it = itr.map(row => {
         //Map Fields
         RowHelper.setTupleFromRow(outRow, fm.determineMapSourceFieldsPos(), row, fm.determineMapTargetFieldsPos())
         //Passthrough Fields
         RowHelper.setTupleFromRow(outRow, fm.determineInputPassThroughFieldsPos(), row, fm.determineOutputPassThroughFieldsPos())
+
         normalizeList.foreach { nr =>
           var inputReusableRow = RowHelper.convertToReusebleRow(nr.inputFieldPositions, row, nr.inputReusableRow)
           var outputReusableRow = nr.outputReusableRow
           var outputPositions = nr.outputFieldPositions
 
-          if(nr.isInstanceOf[Operatioin[NormalizeForExpression]]){
+          if(nr.baseClassInstance.isInstanceOf[NormalizeForExpression]){
 
             var fieldNames:ListBuffer[String] = fm.getinputFields()
             var tuples: Array[Object] = (0 to (fieldNames.length-1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
@@ -137,15 +139,16 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
             nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setFieldNames(convertToList(fieldNames).toArray(new Array[String](fieldNames.size)))
             nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setTuples(tuples)
 
-            outputDispatcher = new NormalizeOutputCollector(outRR, outRow, outputPositions)
+            outputDispatcher = new NormalizeOutputCollector(outputReusableRow, outRow, outputPositions)
           }
           outputDispatcher.initialize
           //Calling Transform Method
           nr.baseClassInstance.Normalize(inputReusableRow, outputReusableRow, outputDispatcher)
-          RowHelper.setTupleFromReusableRow(outRow, outputReusableRow, outputPositions)
+//          RowHelper.setTupleFromReusableRow(outRow, outputReusableRow, outputPositions)
           //Calling Cleanup Method
           if (itr.isEmpty)
             nr.baseClassInstance.cleanup()
+          outputDispatcher.getOutRows
         }
         Row.fromSeq(outRow)
       })
