@@ -77,7 +77,7 @@ class SparkJoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponent
       val lhsKeys = lhs.keyFields
       val rhsKeys = rhsModified.keyFields
 
-      val joinedDF = lhsDF.join(rhsDF, createJoinKey(lhsKeys, rhsKeys), "left-outer")
+      val joinedDF = lhsDF.join(rhsDF, createJoinKey(lhsKeys, rhsKeys), "leftouter")
 
       JoinOperation("join", "in", joinedDF, lhsKeys, false, true, lhs.outSocketId, "")
     }

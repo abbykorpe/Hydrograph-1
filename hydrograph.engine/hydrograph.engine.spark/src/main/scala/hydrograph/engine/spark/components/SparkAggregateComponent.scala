@@ -23,13 +23,13 @@ import scala.collection.mutable.ListBuffer
  */
 class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with AggregateOperation with Serializable {
 
-  def extractInitialValues(getOperationsList: util.List[Operation]):List[String] = {
-    def extract(operationList:List[Operation],stringList:List[String]): List[String] = (operationList,stringList) match {
-      case (List(),_) => stringList
-      case (x::xs,str) => extract(xs,str ++ List(x.getAccumulatorInitialValue))
+  def extractInitialValues(getOperationsList: util.List[Operation]): List[String] = {
+    def extract(operationList: List[Operation], stringList: List[String]): List[String] = (operationList, stringList) match {
+      case (List(), _)    => stringList
+      case (x :: xs, str) => extract(xs, str ++ List(x.getAccumulatorInitialValue))
     }
-    if(getOperationsList != null)
-      extract(getOperationsList.asScala.toList,List[String]())
+    if (getOperationsList != null)
+      extract(getOperationsList.asScala.toList, List[String]())
     else
       List[String]()
   }
@@ -39,6 +39,8 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
     val op = OperationSchemaCreator[AggregateEntity](aggregateEntity, componentsParams, aggregateEntity.getOutSocketList().get(0))
     val fm = FieldManupulating(op.getOperationInputFields(), op.getOperationOutputFields(), op.getPassThroughFields(), op.getMapFields(), op.getOperationFields(), aggregateEntity.getKeyFields)
     val outRow = new Array[Any](fm.getOutputFields().size)
+    var outRowToReturn = ListBuffer[Row]()
+    val nullRow = Iterable(Row.fromSeq(new Array[Any](fm.getOutputFields().size)))
 
     val inputColumn = new Array[Column](fm.getinputFields().size)
     fm.getinputFields().zipWithIndex.foreach(f => {
@@ -54,20 +56,19 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
 
     val sortedDf = repartitionedDf.sortWithinPartitions(populateSortKeys(primaryKeys ++ secondaryKeys): _*)
 
-    val outputDf = sortedDf.mapPartitions(itr => {
+    val intermediateDf = sortedDf.mapPartitions(itr => {
 
       //Initialize Aggregarte to call prepare Method
-      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm,op.getExpressionObject,extractInitialValues(aggregateEntity.getOperationsList))
+      val aggregateList = initializeAggregate(aggregateEntity.getOperationsList, primaryKeys, fm, op.getExpressionObject, extractInitialValues(aggregateEntity.getOperationsList))
       var prevKeysArray: Array[Any] = null
-      val resultRows = ListBuffer[Row]()
 
-      itr.foreach { row =>
+      itr.flatMap { row =>
         {
           val currKeysArray: Array[Any] = RowHelper.extractKeyFields(row, fm.determineKeyFieldPos())
           val isPrevKeyDifferent: Boolean = {
             if (prevKeysArray == null)
               (true)
-            else if (!((prevKeysArray.size == currKeysArray.size) && (prevKeysArray.zip(currKeysArray).forall(p => p._1 == p._2))))
+            else if (!(prevKeysArray.zip(currKeysArray).forall(p => p._1 == p._2)))
               (true)
             else (false)
           }
@@ -82,7 +83,7 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
                 agt.baseClassInstance.onCompleteGroup(agt.outputReusableRow)
                 RowHelper.setTupleFromReusableRow(outRow, agt.outputReusableRow, agt.outputFieldPositions)
               })
-              resultRows += Row.fromSeq(outRow.clone())
+              outRowToReturn += Row.fromSeq(outRow.clone())
             }
 
             //Map Fields
@@ -102,21 +103,25 @@ class SparkAggregateComponent(aggregateEntity: AggregateEntity, componentsParams
               agt.baseClassInstance.onCompleteGroup(agt.outputReusableRow)
               RowHelper.setTupleFromReusableRow(outRow, agt.outputReusableRow, agt.outputFieldPositions)
             })
-            resultRows += Row.fromSeq(outRow.clone())
+            outRowToReturn += Row.fromSeq(outRow.clone())
           }
+
+          if (((isPrevKeyDifferent) && (!isPrevKeyNull)) || (isEndOfIterator)) { val tempRow = outRowToReturn; outRowToReturn = ListBuffer[Row](); tempRow }
+          else
+            nullRow
         }
       }
-
-      resultRows.toIterator
     })(RowEncoder(EncoderHelper().getEncoder(fm.getOutputFields(), componentsParams.getSchemaFields())))
 
+    val outputDf = intermediateDf.na.drop("all")
+    
     val key = aggregateEntity.getOutSocketList.get(0).getSocketId
     Map(key -> outputDf)
 
   }
 
   def populateSortKeys(keysArray: Array[KeyField]): Array[Column] = {
-    keysArray.map { field => if (field.getSortOrder == "desc") (col(field.getName).desc) else (col(field.getName)) }
+    keysArray.map { field => if (field.getSortOrder.toLowerCase() == "desc") (col(field.getName).desc) else (col(field.getName)) }
   }
 
 }

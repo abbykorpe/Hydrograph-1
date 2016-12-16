@@ -55,10 +55,10 @@ object Fields {
     }
 
   private def getDataType(dataType: Type):DataType = {
-    dataType.getTypeName.split("\\.").last match {
-      case "Integer" => DataTypes.IntegerType
-      case "String" => DataTypes.StringType
-      case "Long" => DataTypes.LongType
+    dataType.toString().split("\\.").last.toLowerCase() match {
+      case "integer" => DataTypes.IntegerType
+      case "string" => DataTypes.StringType
+      case "long" => DataTypes.LongType
     }
   }
 }
