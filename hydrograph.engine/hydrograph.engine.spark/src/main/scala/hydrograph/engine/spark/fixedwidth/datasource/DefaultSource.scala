@@ -82,16 +82,17 @@ class DefaultSource extends RelationProvider
               getFieldValues(value + res + data, acc + 1)
             }
           } else {
-            val lengthDiff = data.toString.length - fieldlen(acc)
+
+            val coercedVal = TypeCast.castingOutputData(data, schema.fields(acc).dataType, inDateFormats(acc))
+            val lengthDiff = coercedVal.toString.length - fieldlen(acc)
             val result = lengthDiff match {
-              case _ if lengthDiff == 0 => TypeCast.castingOutputData(data, schema.fields(acc).dataType, inDateFormats(acc))
-              case _ if lengthDiff > 0 =>
-                TypeCast.castingOutputData(data.toString.substring(0, fieldlen(acc)), schema.fields(acc).dataType, inDateFormats(acc))
+              case _ if lengthDiff == 0 => coercedVal
+              case _ if lengthDiff > 0 => coercedVal.toString.substring(0, fieldlen(acc))
               case _ if lengthDiff < 0 =>
                 schema(acc).dataType match {
                   case BooleanType | ByteType | DateType
-                       | StringType | TimestampType | CalendarIntervalType => data + getFiller(" ",lengthDiff)
-                  case _ =>  getFiller("0",lengthDiff) + data
+                       | StringType | TimestampType | CalendarIntervalType => coercedVal + getFiller(" ",lengthDiff)
+                  case _ =>  getFiller("0",lengthDiff) + coercedVal
                 }
             }
             getFieldValues(value + result.toString, acc + 1)
