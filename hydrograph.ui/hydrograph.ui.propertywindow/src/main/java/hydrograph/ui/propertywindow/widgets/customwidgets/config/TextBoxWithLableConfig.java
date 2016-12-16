@@ -29,7 +29,14 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	private boolean grabExcessSpace = false;
 	private int widgetWidth=100;
 	private Map<String, String> otherAttributes = new HashMap<String, String>();
-	
+	private boolean enabled;
+    
+    public boolean isEnabled() {
+                    return enabled;
+    }
+    public void setEnabled(boolean enabled) {
+                    this.enabled = enabled;
+    }
 	public String getName() {
 		return name;
 	}
@@ -63,5 +70,6 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	public void setCharacterLimit(int characterLimit) {
 		this.characterLimit = characterLimit;
 	}
+	
 	
 }

@@ -31,11 +31,33 @@ public enum PropertyNameConstants {
 		SECONDARY_COLUMN_KEYS("Secondary_keys"),
 		DEDUP_FILEDS("Key_fields"),
 		DATABASE_NAME("databaseName"),
+		ORACLE_SID("sid"),
+		ORACLE_HOST_NAME("hostName"),
+		ORACLE_PORT_NO("port"),
+		ORACLE_JDBC_DRIVER("jdbcDriver"),
+		ORACLE_TABLE_NAME("oracleTableName"),
+		ORACLE_USER_NAME("userName"),
+		ORACLE_PASSWORD("password"),
+		ORACLE_CHUNK_SIZE("chunkSize"),
 		TABLE_NAME("tableName"),
+		ORACLE_SCHEMA("oracleSchema"),
+		ORACLE_SELECT_OPTION("selectOption"),
 		EXTERNAL_TABLE_PATH("externalTablePath"),
+		LOAD_TYPE_CONFIGURATION("load_type_configuration"),
 		PARTITION_KEYS("partitionKeys"),
 		QUOTE("quote"),
+		REDSHIFT_JDBC_DRIVER("jdbcDriver"),
+		REDSHIFT_HOST_NAME("hostName"),
+		REDSHIFT_PORT_NAME("port"),
+		REDSHIFT_PASSWORD("password"),
+		SELECT_OPTION("selectOption"),
+		REDSHIFT_USER_NAME("userName"),
+		REDSHIFT_TABLE_NAME("tableName"), 
+		REDSHIFT_SQL_QUERY("selectQuery"),
+		REDSHIFT_COUNT_QUERY("countQuery"), 
+		REDSHIFT_CHUNK_SIZE("chunkSize"),
 		OVER_WRITE("overWrite");
+	
 		private final String value;
 
 	PropertyNameConstants(String value) {

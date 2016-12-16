@@ -24,6 +24,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 import hydrograph.engine.jaxb.generatesequence.TypeNameField;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordField;
+import hydrograph.engine.jaxb.omysql.TypeMysqlField;
+import hydrograph.engine.jaxb.ooracle.TypeOracleField;
+import hydrograph.engine.jaxb.oredshift.TypeRedshiftField;
 
 
 /**
@@ -52,6 +55,9 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordField;
     hydrograph.engine.jaxb.ifmixedscheme.TypeMixedField.class,
     hydrograph.engine.jaxb.otffw.TypeFixedwidthField.class,
     hydrograph.engine.jaxb.ofmixedscheme.TypeMixedField.class,
+    TypeMysqlField.class,
+    TypeRedshiftField.class,
+    TypeOracleField.class,
     TypeNameField.class
 })
 public class TypeBaseField {

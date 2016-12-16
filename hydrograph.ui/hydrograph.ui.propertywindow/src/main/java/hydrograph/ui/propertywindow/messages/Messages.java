@@ -71,6 +71,7 @@ public class Messages extends NLS {
 	public static String DEFAULT_VALUE;
 	public static String FIELDNAMEERROR;
 	public static String FIELDBATCH;
+	public static String FIELDCHARACTER;
 	public static String CHARACTERSET;
 	public static String SCALE;
 	public static String SCALEERROR;
@@ -224,12 +225,21 @@ public class Messages extends NLS {
 	
 	public static String LABEL_DELIMITER;
 	public static String LABEL_QUOTE;
+	public static String LABEL_SID_NAME;
 	public static String LABEL_DATABASE_NAME;
+	public static String LABEL_HOST_NAME;
+	public static String LABEL_ORACLE_SCHEMA;
+	public static String LABEL_PORT;
 	public static String LABEL_TABLE_NAME;
 	public static String LABEL_EXTERNAL_TABLE_PATH;
 	public static String LABEL_INPUT_COUNT;
 	public static String LABEL_OUTPUT_COUNT;
 	public static String LABEL_CHARACTER_SET;
+	public static String LABEL_JDBC_DRIVER;
+	public static String LABEL_USER_NAME;
+	public static String LABEL_JDBC_URL;
+	public static String LABEL_PASSWORD;
+	public static String LABEL_CHUNK_SIZE;
 	public static String LABEL_NO_OF_RECORDS;
 	public static String LABEL_HAS_HEADER;
 	public static String LABEL_SAFE_PROPERTY;	
@@ -265,6 +275,7 @@ public class Messages extends NLS {
 	public static String EXTRACT;
 	public static  String HOST_NAME_BLANK_ERROR ;
 	public static  String METASTORE_FORMAT_ERROR;
+	public static String  METASTORE_FORMAT_ERROR_FOR_SQL_QUERY;
 	public static  String INVALID_DB_ERROR;
 
 	public static String EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
@@ -282,6 +293,20 @@ public class Messages extends NLS {
 	public static String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED; 
 	public static String FILE_PATH_LABEL;
 	public static String EXTERNAL_TABLE_PATH_LABEL;
+	
+	public static String DATABASE_SELECT;
+	public static String DATABASE_TABLE_NAME;
+	public static String DATABASE_SQL_QUERY;
+	
+	public static String SQL_QUERY_COUNTER;
+	public static String SQL_QUERY;
+	public static String TEST_CONNECTION;
+	public static String UPDATE_KEYS_WINDOW_LABEL;
+	public static String PRIMARY_KEYS_WINDOW_LABEL;
+	public static String LOAD_TYPE_CONFIGURATION_WINDOW_LABEL;
+	public static String UPDATE_BY_KEYS;
+	public static String LOAD_TYPE;
+	public static String SQL_QUERY_STATEMENT;
 	
 	
 	static {

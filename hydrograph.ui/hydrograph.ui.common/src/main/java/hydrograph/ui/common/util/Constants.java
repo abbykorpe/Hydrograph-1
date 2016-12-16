@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+
 package hydrograph.ui.common.util;
 
 /**
@@ -45,7 +46,7 @@ public class Constants {
 	public static final String ISO_8859_1 = "ISO-8859-1";
 	public static final String US_ASCII = "US-ASCII";
 	public static final String UTF_8 = "UTF-8";
-	
+
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
 	public static final String OPERATION_FIELDS_WINDOW_TITLE = "Operation Fields";
@@ -56,6 +57,9 @@ public class Constants {
 	public static final String COMPONENT_NAME = "Component Name";
 	 // Used for validating AlphaNumeric or Parameter E.g Aplha_123 or @{Param_123}
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
+	// Used for validating Numeric values (only 4 digits) E.g. 1234 and Parameters E.g  @{Param_123}
+	public static final String REGEX_NUMERIC_AND_PARAMETER = "[\\@]{1}[\\{]{1}[\\w]{1,}[\\}]{1}||[\\d]{1,4}";
+	
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}"; 
 	
@@ -158,12 +162,16 @@ public class Constants {
 	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
 	public static final String INPUT_SUBJOB_COMPONENT_NAME = "InputSubjobComponent";
 	
+
 	public static final String EDIT = "Edit";
 	public static final String RUNTIME_PROPERTIES_COLUMN_NAME = "Runtime\nProperties";
 	public static final String RUNTIME_PROPERTIES_WINDOW_LABEL = "Runtime Properties";
+	
+	
 	public static final String RUNTIME_PROPERTY_NAME = "runtime_properties";
 	
 	public static final String RUNTIME_PROPERTY_LABEL = "Runtime\nProperties";
+	public static final String LOAD_TYPE_CONFIGURATION_LABEL = "Loadtype\nConfiguration";
 	public static final String SUBJOB_PROPERTY_LABEL = "Subjob\nProperties";
 	public static final String UNUSED_PORT_COUNT_PROPERTY = "unusedPortCount";
 	public static final String UNUSED_AND_INPUT_PORT_COUNT_PROPERTY = "inPortCount|unusedPortCount";
@@ -282,6 +290,7 @@ public class Constants {
 	public static final String EXTERNAL_TABLE_PATH_WIDGET_NAME="externalTablePath";
 	public static final String HOST = "host";
 
+
 	//Workbench - ToolBar ,CoolBar, MenuBar, MenuItems, ToolItems IDs
 	
 	// ID of tool-bar having stop and run tool-items which is defined in Graph plugin's plugin.xml 
@@ -291,4 +300,21 @@ public class Constants {
 	public static final String FIRST_TOOLBAR_ID = "hydrograph.ui.graph.toolbar1";
 	public static final String REMOVE_WATCH_POINTS_TOOLITEM_ID = "hydrograph.ui.graph.command.removedebug";
 	
+
+	// Oracle Component
+	public static final String ORACLE_DATABASE_WIDGET_NAME="sid";
+	public static final String ORACLE_CHUNKSIZE_WIDGET_NAME="chunkSize";
+	public static final String ORACLE_HOST_WIDGET_NAME="hostName";
+	public static final String ORACLE_PORT_WIDGET_NAME="port";
+	public static final String ORACLE_JDBC_DRIVER_WIDGET_NAME="jdbcDriver";
+	public static final String ORACLE_SCHEMA_WIDGET_NAME="oracleSchema";
+	public static final String ORACLE_USER_NAME_WIDGET_NAME="userName";
+	public static final String ORACLE_PASSWORD_WIDGET_NAME="password";
+	public static final String LOAD_TYPE_UPDATE_KEY = "Update";
+	public static final String LOAD_TYPE_NEW_TABLE_KEY = "New Table";
+	public static final String LOAD_TYPE_INSERT_KEY = "Insert";
+	public static final String LOAD_TYPE_REPLACE_KEY = "Replace";
+	public static String LOAD_TYPE_UPDATE_VALUE_SEPERATOR=",";
+	public static String LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR=",";
+
 }

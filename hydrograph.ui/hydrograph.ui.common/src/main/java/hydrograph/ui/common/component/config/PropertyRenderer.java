@@ -81,6 +81,17 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="OVERWRITE_WIDGET"/>
  *     &lt;enumeration value="PARTITION_KEYS_WIDGET_INPUT_HIVE"/>
  *     &lt;enumeration value="EXTRACT_METASTORE_DATA_WIDGET"/>
+ *     &lt;enumeration value="HOST_NAME_WIDGET"/>
+ *     &lt;enumeration value="SID_NAME_WIDGET"/>
+ *     &lt;enumeration value="PORT_WIDGET"/>
+ *     &lt;enumeration value="USER_NAME_WIDGET"/>
+ *     &lt;enumeration value="PASSWORD_WIDGET"/>
+ *     &lt;enumeration value="CHUNK_SIZE_WIDGET"/>
+ *     &lt;enumeration value="SELECT_JDBC_VALUES_WIDGET"/>
+ *     &lt;enumeration value="LOAD_TYPE_CONFIGURATION_WIDGET"/>
+ *     &lt;enumeration value="ORACLE_SCHEMA_WIDGET"/>
+ *     &lt;enumeration value="TEST_CONNECTION_WIDGET"/>
+ *     &lt;enumeration value="DATABASE_NAME_WIDGET"/>
  *     &lt;enumeration value="PROPOGATE_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
@@ -130,7 +141,7 @@ public enum PropertyRenderer {
     TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET,
     COUNT_WIDGET,
     PRIMARY_COLUMN_KEYS_WIDGET,
-    DATABASE_NAME_WIDGET,
+    SID_NAME_WIDGET,
     TABLE_NAME_WIDGET,
     PARTITION_KEYS_WIDGET,
     QUOTE_WIDGET,
@@ -139,8 +150,19 @@ public enum PropertyRenderer {
     OVERWRITE_WIDGET,
     PARTITION_KEYS_WIDGET_INPUT_HIVE,
     EXTRACT_METASTORE_DATA_WIDGET,
-    PROPOGATE_WIDGET,
-    STRAIGHT_SCHEMA_WIDGET;
+    HOST_NAME_WIDGET,
+    PORT_WIDGET,
+    JDBC_DRIVER_WIDGET,
+    USER_NAME_WIDGET,
+    PASSWORD_WIDGET,
+    CHUNK_SIZE_WIDGET,
+    STRAIGHT_SCHEMA_WIDGET,
+    SELECT_JDBC_VALUES_WIDGET,
+    LOAD_TYPE_CONFIGURATION_WIDGET,
+    ORACLE_SCHEMA_WIDGET,
+    TEST_CONNECTION_WIDGET,
+    DATABASE_NAME_WIDGET,
+    PROPOGATE_WIDGET;
 
     public String value() {
         return name();

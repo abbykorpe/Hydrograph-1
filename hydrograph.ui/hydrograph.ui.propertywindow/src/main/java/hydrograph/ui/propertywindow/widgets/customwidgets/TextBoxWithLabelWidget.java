@@ -88,11 +88,11 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 
 	protected void setToolTipErrorMessage(){
 		String toolTipErrorMessage = null;
-				
-		if(txtDecorator.isVisible())
+		if(txtDecorator.isVisible()){
 			toolTipErrorMessage = txtDecorator.getDescriptionText();
-		
-		setToolTipMessage(toolTipErrorMessage);
+		}
+			
+			setToolTipMessage(toolTipErrorMessage);
 	}
 	
 	@Override
@@ -120,18 +120,26 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		
 		AbstractELTWidget textBoxWidget = new ELTDefaultTextBox().
 				grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace());//.textBoxWidth(textBoxConfig.getwidgetWidth());
+		
 		lableAndTextBox.attachWidget(textBoxWidget);
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();
+		
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
+
 		GridData gridData = (GridData)textBox.getLayoutData();
+		
 		if(OSValidator.isMac()){
 			gridData.widthHint = 106;
 		}else{
 			gridData.widthHint = 80;
 		}
 		attachListeners(textBoxWidget);
+		String property = propertyValue;
+		textBox.setText(property);
+	
+		
 		
 		 /**
 		 *parameter resolution at dev phase 
@@ -175,6 +183,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			textBox.setText("");
 			txtDecorator.show();
 		}
+		
 	}
 	
 	protected boolean isParameter(String input) {
@@ -186,7 +195,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		}
 		return false;
 	}
-
 	@Override
 	public boolean isWidgetValid() {
 	  return validateAgainstValidationRule(textBox.getText());

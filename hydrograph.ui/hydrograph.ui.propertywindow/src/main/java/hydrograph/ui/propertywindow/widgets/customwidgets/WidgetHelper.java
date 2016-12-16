@@ -53,6 +53,10 @@ public class WidgetHelper {
 	public WidgetConfig getPartitionKeysConfigInputHive(){
 		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
 	}
+	
+	public WidgetConfig getOracleTestConnection(){
+		return populateSingleColumnGridConfig(Messages.LABEL_PARTITION_KEYS, Constants.PARTITION_KEYS_WINDOW_TITLE);
+	}
 
 	public WidgetConfig getOperationFieldsConfig(){
 		return populateSingleColumnGridConfig(Messages.LABEL_OPERATION_FIELDS, Constants.OPERATION_FIELDS_WINDOW_TITLE);
@@ -106,12 +110,63 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+
+	/**
+	 * Configuration to customize text box as port property 
+	 */
+	public WidgetConfig getPortWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_PORT);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.MODIFY_NUMERIC_AND_PARAMETER);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as chunk size property 
+	 */
+	public WidgetConfig getChunkSizeWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_CHUNK_SIZE);
+		textBoxConfig.setCharacterLimit(10);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.VERIFY_NUMERIC);
+		textBoxConfig.getListeners().add(Listners.VERIFY_DIGIT_LIMIT_NUMERIC_LISTENER);
+		return textBoxConfig;
+	}
+	
 	/**
 	 * Configuration to customize text box as Table Name property 
 	 */
 	public WidgetConfig getTableNameWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_TABLE_NAME);
+		textBoxConfig.setCharacterLimit(50);
+		textBoxConfig.getListeners().add(Listners.VERIFY_CHARACTER_LIMIT_LISTENER);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as User Name property 
+	 */
+	public WidgetConfig getUserNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_USER_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Password property 
+	 */
+	public WidgetConfig getPasswordWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_PASSWORD);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -127,6 +182,17 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
+	/**
+	 * Configuration to customize text box as SID Name property 
+	 */
+	public WidgetConfig getSIDNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_SID_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
 	
 	/**
 	 * Configuration to customize text box as External Table Path property 
@@ -136,6 +202,29 @@ public class WidgetHelper {
 		filePathConfig.setMandatory(false);
 		return filePathConfig;
 	}
+	
+	/*
+	 * Configuration to customize text box as Oracle Schema Name property 
+	 */
+	public WidgetConfig getOracleSchemaWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_ORACLE_SCHEMA);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
+	 * Configuration to customize text box as Host Name property 
+	 */
+	public WidgetConfig getHostNameWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_HOST_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
 	
 	/**
 	 * Configuration to customize text box as noOfRecords property 
@@ -237,6 +326,17 @@ public class WidgetHelper {
 	}
 	
 	/**
+	 * Configuration to customize text box as JDBC Driver property 
+	 */
+	public WidgetConfig getJdbcDriverWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_JDBC_DRIVER);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
+	
+	/**
 	 * Configuration for operation class widget
 	 */
 	public WidgetConfig getOperationClassForFilterWidgetConfig() {
@@ -334,7 +434,8 @@ public class WidgetHelper {
 		return filePathConfig;
 	}
 
-/**
+
+	/**
 	 * 
 	 *@return schema configuration for straight pull component
 	 */
@@ -352,4 +453,12 @@ public class WidgetHelper {
 		schemaConfig.setDoPropagateONOK(true);
 		return schemaConfig;
 	}
+	
+	public WidgetConfig getSelectWidgetConfig() {
+		TextBoxWithLableConfig textBoxWithLableConfig = new TextBoxWithLableConfig();
+		textBoxWithLableConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxWithLableConfig);
+		return textBoxWithLableConfig;
+	}
+
 }

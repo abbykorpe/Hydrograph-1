@@ -36,6 +36,7 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 	private String defaultTextMessage = "";
 	private boolean grabExcessSpace = true;
 		
+
 	/**
 	 * Instantiates a new ELT default text box.
 	 */
@@ -120,4 +121,5 @@ public class ELTDefaultTextBox extends AbstractELTWidget{
 		defaultELTTextBox.setEnabled(enabled);
 		return this;
 	}
+	
 }
