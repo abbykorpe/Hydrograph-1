@@ -67,8 +67,7 @@ public class InputMysqlEntityGenerator extends
         inputRDBMSEntity.setHostName(inputMysqlJaxb.getHostName().getValue());
 
         if (inputMysqlJaxb.getPort() == null)
-            LOG.warn("Input Mysql component '" + inputRDBMSEntity.getComponentId() + "' "
-                    + " port is not provided, using default port " + Constants.DEFAULT_MYSQL_PORT);
+            LOG.warn("Input Mysql component '" + inputRDBMSEntity.getComponentId() + "' port is not provided, using default port " + Constants.DEFAULT_MYSQL_PORT);
         inputRDBMSEntity.setPort(inputMysqlJaxb.getPort() == null ? Constants.DEFAULT_MYSQL_PORT : inputMysqlJaxb.getPort().getValue().intValue());
         inputRDBMSEntity.setJdbcDriver(inputMysqlJaxb.getJdbcDriver().getValue().equals(jdbcDriver) ? driverName : null);
         inputRDBMSEntity.setTableName(inputMysqlJaxb.getTableName() == null ? null : inputMysqlJaxb.getTableName().getValue());
