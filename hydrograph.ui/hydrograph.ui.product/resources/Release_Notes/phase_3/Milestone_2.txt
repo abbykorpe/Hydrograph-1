@@ -22,6 +22,8 @@ Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 10. <523> [Ashika Holkar] - Error bubble is getting removed even if there is error inside the subjob component
 11. <541> [Ashika Holkar] -  Error bubble is not getting displayed on filter component if Operation field is not specified
 12. <539> [Ashika Holkar] - Multiple Run Configuration Window are getting opened when User click on Run button
+13. <529> [Pooja Yadav] - Default size of below window should be small.
+
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

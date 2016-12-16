@@ -43,6 +43,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceAdapter;
@@ -102,6 +103,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private List<String> sourceFieldsList;
 	private EditButtonWithLabelConfig buttonWithLabelConfig;
 	private PropertyDialogButtonBar propertyDialogButtonBar;
+	private SashForm mainSashForm;
 
 	private boolean closeDialog;
 	private boolean okPressed;
@@ -111,6 +113,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	private static final String INFORMATION="Information";
 	
 	private boolean ctrlKeyPressed = false;
+	private Composite container_1;
 	
 	public SecondaryColumnKeysDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar, EditButtonWithLabelConfig buttonWithLabelConfig) {
 		super(parentShell);
@@ -118,6 +121,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		secondaryColumnsMap = new LinkedHashMap<String, String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
 		this.buttonWithLabelConfig = buttonWithLabelConfig;
+		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
 	}
 
 	/**
@@ -129,35 +133,40 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 
 		isAnyUpdatePerformed = false;
+		if(OSValidator.isMac()){
+			getShell().setMinimumSize(new Point(500, 500));
+		}else{
+			getShell().setMinimumSize(new Point(500, 525));
+		}
 		getShell().setText(buttonWithLabelConfig.getWindowName());
 
-		Composite container = (Composite) super.createDialogArea(parent);
-		ColumnLayout cl_container = new ColumnLayout();
-		cl_container.verticalSpacing = 0;
-		cl_container.maxNumColumns = 1;
-		container.setLayout(cl_container);
+		container_1 = (Composite) super.createDialogArea(parent);
+		container_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		addButtonPanel(container_1);
 
-		addSeperator(container);
-		addButtonPanel(container);
+		Composite tableComposite = new Composite(container_1, SWT.NONE);
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tableComposite.setLayout(new GridLayout(2, false));
+		
+		mainSashForm = new SashForm(tableComposite, SWT.HORIZONTAL);
+		mainSashForm.setSashWidth(6);
+		mainSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		createSourceTable(mainSashForm);
 
-		Composite composite_2 = new Composite(container, SWT.NONE);
-		composite_2.setLayout(new GridLayout(2, false));
-		ColumnLayoutData cld_composite_2 = new ColumnLayoutData();
-		cld_composite_2.heightHint = 453;
-		composite_2.setLayoutData(cld_composite_2);
-
-		createSourceTable(composite_2);
-
-		createTargetTable(composite_2);
+		createTargetTable(mainSashForm);
+		mainSashForm.setWeights(new int[] {200, 285});
 		
 		attachShortcutListner();
-		addErrorLabel(container);
+		addErrorLabel(container_1);
 
-		return container;
+		return container_1;
+		
 	}
 
 	private void createTargetTable(Composite container) {
-		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
 		targetTable = targetTableViewer.getTable();
 		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 		gd_table_1.heightHint = 401;
@@ -183,7 +192,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		for (int i = 0, n = targetTable.getColumnCount(); i < n; i++) {
 			targetTable.getColumn(i).pack();
 		}
-		targetTableColumnFieldName.setWidth(252);
+		targetTableColumnFieldName.setWidth(175);
 		
 		if(OSValidator.isMac()){
 			targetTableColumnSortOrder.setWidth(128);
@@ -415,7 +424,12 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		sourceTable.setLinesVisible(true);
 
 		TableColumn sourceTableColumnFieldName = new TableColumn(sourceTable, SWT.LEFT);
-		sourceTableColumnFieldName.setWidth(237);
+		if(OSValidator.isMac()){
+			sourceTableColumnFieldName.setWidth(212);
+		}else{
+			sourceTableColumnFieldName.setWidth(202);
+		}
+		
 		sourceTableColumnFieldName.setText(Messages.AVAILABLE_FIELDS_HEADER);
 		getSourceFieldsFromPropagatedSchema(sourceTable);
 		dragSource = new DragSource(sourceTable, DND.DROP_MOVE);
@@ -429,26 +443,11 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		});
 	}
 
-	private void addSeperator(Composite container) {
-		Composite composite = new Composite(container, SWT.NONE);
-		ColumnLayout cl_composite = new ColumnLayout();
-		cl_composite.maxNumColumns = 1;
-		composite.setLayout(cl_composite);
-		ColumnLayoutData cld_composite = new ColumnLayoutData();
-		cld_composite.heightHint = 0;
-		composite.setLayoutData(cld_composite);
-
-		new Label(composite, SWT.NONE);
-
-		new Label(composite, SWT.HORIZONTAL);
-	}
 
 	private void addErrorLabel(Composite container) {
 		Composite composite_3 = new Composite(container, SWT.NONE);
+		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		composite_3.setLayout(new ColumnLayout());
-		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();
-		cld_composite_3.heightHint = 25;
-		composite_3.setLayoutData(cld_composite_3);
 
 		lblPropertyError = new Label(composite_3, SWT.NONE);
 		lblPropertyError.setVisible(false);
@@ -465,12 +464,10 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private void addButtonPanel(Composite container) {
+		container_1.setLayout(new GridLayout(1, false));
 		Composite composite_1 = new Composite(container, SWT.NONE);
+		composite_1.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
 		composite_1.setLayout(new GridLayout(4, false));
-		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
-		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
-		cld_composite_1.heightHint = 30;
-		composite_1.setLayoutData(cld_composite_1);
 
 		Button addButton = new Button(composite_1, SWT.NONE);
 		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
@@ -486,7 +483,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 
 		upButton = new Button(composite_1, SWT.NONE);
 		upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
-		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
 		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
 		attachUpButtonListener(upButton);
 
@@ -561,7 +558,8 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(646, 587);
+		return new Point(550, 587);
+		//return new Point(646, 587);
 	}
 
 	// Add New Property After Validating old properties

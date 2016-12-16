@@ -14,20 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.dialogs;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -46,6 +32,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceAdapter;
@@ -77,10 +64,23 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.forms.widgets.ColumnLayout;
-import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+//import org.eclipse.ui.forms.widgets.ColumnLayout;
+//import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * 
@@ -124,6 +124,9 @@ public class FieldDialog extends Dialog {
 	protected Button okButton;
 	private static final String INFORMATION="Information";
 	private boolean ctrlKeyPressed = false;
+	private SashForm mainSashForm;
+	private Composite tableComposite;
+	private Composite container_1;
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
@@ -131,6 +134,7 @@ public class FieldDialog extends Dialog {
 		propertyList = new ArrayList<FilterProperties>();
 		fieldNameList = new ArrayList<String>();
 		this.propertyDialogButtonBar = propertyDialogButtonBar;
+		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
 	}
 
 	// Add New Property After Validating old properties
@@ -245,33 +249,39 @@ public class FieldDialog extends Dialog {
 		}
 		if(Constants.PARTITION_KEYS_WINDOW_TITLE.equalsIgnoreCase(componentName)){
 			getShell().setText(Constants.PARTITION_KEYS_WINDOW_TITLE);
-		}
+		}		
 		if(Messages.UPDATE_KEYS_WINDOW_LABEL.equalsIgnoreCase(componentName)){
 			getShell().setText(Messages.UPDATE_KEYS_WINDOW_LABEL);
 		}
 		if(Messages.PRIMARY_KEYS_WINDOW_LABEL.equalsIgnoreCase(componentName)){
 			getShell().setText(Messages.PRIMARY_KEYS_WINDOW_LABEL);
 		}
-		Composite container = (Composite) super.createDialogArea(parent);
-		ColumnLayout cl_container = new ColumnLayout();
-		cl_container.verticalSpacing = 0;
-		cl_container.maxNumColumns = 1;
-		container.setLayout(cl_container);
+		
+		if(OSValidator.isMac()){
+			getShell().setMinimumSize(new Point(500, 500));
+		}else{
+			getShell().setMinimumSize(new Point(500, 525));
+		}
+		
+		container_1 = (Composite) super.createDialogArea(parent);
+		container_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		addButtonPanel(container_1);
+			
+		tableComposite = new Composite(container_1, SWT.NONE);
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		mainSashForm = new SashForm(tableComposite, SWT.HORIZONTAL);
+		mainSashForm.setSashWidth(6);
+		mainSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		addButtonPanel(container);
+		createSourceTable(mainSashForm);
+		createTargetTable(mainSashForm);
+		mainSashForm.setWeights(new int[] {230, 255});
 
-		Composite tableComposite = new Composite(container, SWT.NONE);
-		tableComposite.setLayout(new GridLayout(2, false));
-		ColumnLayoutData cld_composite_2 = new ColumnLayoutData();
-		cld_composite_2.heightHint = 453;
-		tableComposite.setLayoutData(cld_composite_2);
-
-		createSourceTable(tableComposite);
-		createTargetTable(tableComposite);
-
-		addErrorLabel(container);
+		addErrorLabel(container_1);
 		checkFieldsOnStartup();
-		return container;
+		return container_1;
 	}
 	
 	protected void checkFieldsOnStartup() {
@@ -281,28 +291,20 @@ public class FieldDialog extends Dialog {
 
 	private void addErrorLabel(Composite container) {
 		Composite composite_3 = new Composite(container, SWT.NONE);
-		ColumnLayout cl_coposite_3 = new ColumnLayout();
-		cl_coposite_3.topMargin=0;
-		composite_3.setLayout(cl_coposite_3);
-		ColumnLayoutData cld_composite_3 = new ColumnLayoutData();
-		cld_composite_3.heightHint = 72;
-		composite_3.setLayoutData(cld_composite_3);
-
+		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		composite_3.setLayout(new GridLayout(1, false));
+		
 		lblPropertyError = new Label(composite_3, SWT.NONE);
-		ColumnLayoutData cld_lblPropertyError = new ColumnLayoutData();
-		cld_lblPropertyError.heightHint = 24;
-		lblPropertyError.setLayoutData(cld_lblPropertyError);
+		lblPropertyError.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lblPropertyError.setVisible(false);
 		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
 	}
 
 	protected Composite addButtonPanel(Composite container) {
+		container_1.setLayout(new GridLayout(1, false));
 		Composite composite_1 = new Composite(container, SWT.NONE);
+		composite_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		composite_1.setLayout(new GridLayout(5, false));
-		ColumnLayoutData cld_composite_1 = new ColumnLayoutData();
-		cld_composite_1.horizontalAlignment = ColumnLayoutData.RIGHT;
-		cld_composite_1.heightHint = 30;
-		composite_1.setLayoutData(cld_composite_1);
 
 		Button addButton = new Button(composite_1, SWT.NONE);
 		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
@@ -330,6 +332,7 @@ public class FieldDialog extends Dialog {
 		deleteButton.setEnabled(false);
 		upButton.setEnabled(false);
 		downButton.setEnabled(false);
+		new Label(composite_1, SWT.NONE);
 		return composite_1;
 	}
 
@@ -435,16 +438,14 @@ public class FieldDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(646, 587);
+		return new Point(550, 587);
+		
 	}
 
 	private void createTargetTable(Composite container) {
 		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
 		targetTable = targetTableViewer.getTable();
-		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_table_1.heightHint = 449;
-		gd_table_1.widthHint = 285;
-		targetTable.setLayoutData(gd_table_1);
+		targetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		targetTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -479,9 +480,9 @@ public class FieldDialog extends Dialog {
 		TableColumn targetTableColumn = new TableColumn(targetTable, SWT.LEFT);
 		targetTableColumn.setText("Field Name");
 		if(OSValidator.isMac()){
-			targetTableColumn.setWidth(357);
+			targetTableColumn.setWidth(271); 
 		}else{
-			targetTableColumn.setWidth(352);
+			targetTableColumn.setWidth(260);
 		}
 		targetTable.setHeaderVisible(true);
 		targetTable.setLinesVisible(true);
@@ -529,7 +530,6 @@ public class FieldDialog extends Dialog {
 			}
 		}));
 		
-
 	}
 	
 	private void attachShortcutListner(String controlName){
@@ -652,6 +652,7 @@ public class FieldDialog extends Dialog {
 	}
 
 	public void createSourceTable(Composite container) {
+		tableComposite.setLayout(new GridLayout(2, false));
 
 		sourceTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		sourceTableViewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -663,19 +664,16 @@ public class FieldDialog extends Dialog {
 			}
 		});
 		sourceTable = sourceTableViewer.getTable();
+		sourceTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		sourceTable.setLinesVisible(true);
 		sourceTable.setHeaderVisible(true);
-		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_table.heightHint = 437;
-		gd_table.widthHint = 189;
-		sourceTable.setLayoutData(gd_table);
 
 		tableViewerColumn = new TableViewerColumn(sourceTableViewer, SWT.LEFT);
 		sourceTableColumn = tableViewerColumn.getColumn();
 		if(OSValidator.isMac()){
-			sourceTableColumn.setWidth(260);
+			sourceTableColumn.setWidth(244);
 		}else{
-			sourceTableColumn.setWidth(255);
+			sourceTableColumn.setWidth(234);
 		}
 		sourceTableColumn.setText(Messages.AVAILABLE_FIELDS_HEADER);
 		getSourceFieldsFromPropagatedSchema(sourceTable);
@@ -892,4 +890,6 @@ public class FieldDialog extends Dialog {
 	protected TableViewer getTargetTableViewer() {
 		return targetTableViewer;
 	}
+	
+	
 }
