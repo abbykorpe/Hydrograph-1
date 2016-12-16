@@ -48,13 +48,13 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	private StyledText styledText;
 	
 	/** The console name. */
-	private String consoleName;
+	public String consoleName;
 	
 	/** The action factory. */
 	private ActionFactory actionFactory;
 	
 	/** The status line manager. */
-	private StatusLineManager statusLineManager;
+	public StatusLineManager statusLineManager;
 	
 	private String jobID;
 	/**

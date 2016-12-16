@@ -175,6 +175,7 @@ import hydrograph.ui.graph.editorfactory.GenrateContainerData;
 import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.factory.ComponentsEditPartFactory;
 import hydrograph.ui.graph.factory.CustomPaletteEditPartFactory;
 import hydrograph.ui.graph.figure.ComponentFigure;
@@ -949,6 +950,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 			closeAllSubJobLinkedEditors();
 			clearTrackingStatusForEditor();
+			//clearExecutionConsole();
 
 		try {
 			if(container!=null)
@@ -1869,4 +1871,14 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		
 	}
 	
+	/**
+ 	 * Clear Execution Tracking Console on save the job
+ 	 *
+ 	 */
+ 	private void clearExecutionConsole(){
+ 		ExecutionTrackingConsole console = JobManager.INSTANCE.getExecutionTrackingConsoles().get(getJobId());
+ 		if(console!=null){
+ 			console.clearConsole();
+ 		}
+ 	}
 }
