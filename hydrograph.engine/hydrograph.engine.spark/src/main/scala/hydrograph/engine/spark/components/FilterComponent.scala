@@ -45,10 +45,10 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
        val df = componentsParams.getDataFrame.filter(
          row =>{
            if(outSocket.getSocketType.equalsIgnoreCase("unused"))
-             !filterClass
+             filterClass
                .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row,inputReusableRow))
            else
-             filterClass
+             !filterClass
                .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
          })
       map += (outSocket.getSocketId -> df)
