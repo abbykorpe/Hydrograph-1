@@ -180,15 +180,15 @@ public class Constants {
 	/**
 	 * Used to get the class name for oracle
 	 */
-	public static final String oracle = "hydrograph.server.metadata.type.OracleDatabaseType";
+	public static final String oracle = "hydrograph.server.metadata.helper.OracleMetadataHelper";
 	/**
 	 * Used to get the class name for hive
 	 */
-	public static final String hive = "hydrograph.server.metadata.type.HiveDatabaseType";
+	public static final String hive = "hydrograph.server.metadata.helper.HiveMetadataHelper";
 	/**
 	 * Used to get the class name for redshift
 	 */
-	public static final String redshift = "hydrograph.server.metadata.type.RedShiftDatabaseType";
+	public static final String redshift = "hydrograph.server.metadata.helper.RedShiftMetadataHelper";
 	/**
 	 * checking the ORACLE type
 	 */

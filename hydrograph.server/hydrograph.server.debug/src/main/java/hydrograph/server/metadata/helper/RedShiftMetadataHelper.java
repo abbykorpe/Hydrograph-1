@@ -21,15 +21,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import hydrograph.server.metadata.entity.TableEntity;
-import hydrograph.server.metadata.entity.TableSchemaFieldEntity;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hydrograph.server.debug.utilities.Constants;
+import hydrograph.server.metadata.entity.TableEntity;
+import hydrograph.server.metadata.entity.TableSchemaFieldEntity;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
-import hydrograph.server.metadata.helper.base.MetadataHelperBase;
 
 /**
  * Concrete implementation for RedShift database and getting the table entity
@@ -37,19 +36,27 @@ import hydrograph.server.metadata.helper.base.MetadataHelperBase;
  * 
  *
  */
-public class RedShiftMetadataHelper implements MetadataHelperBase {
+public class RedShiftMetadataHelper{
 	Logger LOG = LoggerFactory.getLogger(RedShiftMetadataHelper.class);
 	final static String REDSHIFT_JDBC_CLASSNAME = "com.amazon.redshift.jdbc42.Driver";
 	Connection connection = null;
 
+	
 	/**
-	 * {@inheritDoc}
+	 * Used to set the connection for RedShift
 	 * 
+	 * @param userId 
+	 * @param password
+	 * @param host
+	 * @param port
+	 * @param database
+	 * @throws ParamsCannotBeNullOrEmpty
+	 * @throws JSONException
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	@Override
-	public void setConnection(String userId, String password, String host, String port, String sid, String driverType,String database,String tableName)
+	
+	public void setConnection(String userId, String password, String host, String port,String database)
 			throws ParamsCannotBeNullOrEmpty, JSONException, ClassNotFoundException, SQLException {
 		String jdbcurl = "jdbc:redshift//" + host + ":" + port + "/" + database;
 
@@ -79,12 +86,15 @@ public class RedShiftMetadataHelper implements MetadataHelperBase {
 	}
 
 	/**
-	 * {@inheritDoc}
 	 * 
+	 * @param query
+	 * @param tableName
+	 * @return
+	 * @throws JSONException
+	 * @throws ParamsCannotBeNullOrEmpty
 	 * @throws SQLException
 	 */
-	@Override
-	public TableEntity fillComponentSchema(String query, String tableName, String database)
+	public TableEntity fillComponentSchema(String query, String tableName)
 			throws JSONException, ParamsCannotBeNullOrEmpty, SQLException {
 		ResultSet res = null;
 		TableEntity tableEntity = new TableEntity();

@@ -43,10 +43,9 @@ import org.slf4j.LoggerFactory;
 import hydrograph.server.debug.service.UserPassCallbackHandler;
 import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.debug.utilities.ServiceUtilities;
-import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 import hydrograph.server.metadata.entity.TableEntity;
 import hydrograph.server.metadata.entity.TableSchemaFieldEntity;
-import hydrograph.server.metadata.helper.base.MetadataHelperBase;
+import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 
 /**
  * <p>
@@ -56,7 +55,7 @@ import hydrograph.server.metadata.helper.base.MetadataHelperBase;
  * This class requires kerberos token for security purpose authentication.
  * </p>
  */
-public class HiveMetadataHelper implements MetadataHelperBase, PrivilegedAction<Object> {
+public class HiveMetadataHelper implements PrivilegedAction<Object> {
 
     private enum InputOutputFormat {
         PARQUET("parquet"), TEXTDELIMITED("textdelimited"), SEQUENCE("sequence");
@@ -78,12 +77,17 @@ public class HiveMetadataHelper implements MetadataHelperBase, PrivilegedAction<
     StorageDescriptor storageDescriptor = null;
     Table table;
     boolean isTableExternal;
-
     /**
-     * {@inheritDoc}
+     * Setting the connection for Hive  
+     * 
+     * @param userId - user who have access to database
+     * @param password - password of user
+     * @param database - Database name 
+     * @param tableName - tableName to get the connection
+     * @throws ParamsCannotBeNullOrEmpty - throws if parameter cannot be found
+     * @throws JSONException - throws while parsing the exception
      */
-    @Override
-    public void setConnection(String userId, String password, String host, String port, String sid, String driverType, String database, String tableName) throws ParamsCannotBeNullOrEmpty, JSONException {
+    public void setConnection(String userId, String password,String database, String tableName) throws ParamsCannotBeNullOrEmpty, JSONException {
 
         try {
             getKerberosToken(userId, password);
@@ -182,11 +186,13 @@ public class HiveMetadataHelper implements MetadataHelperBase, PrivilegedAction<
     }
 
     /**
-     * {@inheritDoc}
+     * Used to get the Schema from supplied tablename
+     * 
+     * @param tableName
+     * @param database
+     * @return TableEntity - {@linkplain } 
      */
-
-    @Override
-    public TableEntity fillComponentSchema(String query, String tableName, String database) {
+    public TableEntity fillComponentSchema(String tableName, String database) {
 
         // hiveTableEntity = new HiveTableSchema(database, tableName);
         hiveTableEntity = new TableEntity();
