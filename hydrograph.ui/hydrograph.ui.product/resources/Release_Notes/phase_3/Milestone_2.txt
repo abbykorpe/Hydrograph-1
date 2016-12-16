@@ -13,6 +13,8 @@ Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 1. <537> [Akhiesh Joshi] - Disable cool bar when sub job tracking is open.
 2. <1383> [Sonia Raheja] - Unique Job Id is Not Getting Generated, When User tried Saving the Same job with Different Name.
 3. <538> [Pooja Yadav] -  Default size of Property window should be small.
+4. <531> [Sonia Raheja] - Tool delete .job and .xml file if user delete .properties file.
+5. <532> [Sonia Raheja]	- Tool should show proper message when we delete any file.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

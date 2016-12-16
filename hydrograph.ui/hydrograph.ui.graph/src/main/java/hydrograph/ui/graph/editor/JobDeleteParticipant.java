@@ -53,7 +53,6 @@ import hydrograph.ui.project.structure.CustomMessages;
 
 public class JobDeleteParticipant extends DeleteParticipant{
 	private IFile modifiedResource;
-	private static final String ERROR = "Error";
 	private static final String JOBS="jobs";
 	private boolean flag;
 	
@@ -62,7 +61,8 @@ public class JobDeleteParticipant extends DeleteParticipant{
 		this.modifiedResource = (IFile)element;
 		IProject[] iProjects=ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for(IProject iProject:iProjects){
-			if (modifiedResource.getParent().getParent().getName()!=null && StringUtils.equals(iProject.getName(), modifiedResource.getParent().getParent().getName())) {
+			if (modifiedResource.getParent()!=null && modifiedResource.getParent().getParent()!=null 
+					&& StringUtils.equals(iProject.getName(), modifiedResource.getParent().getParent().getName())) {
 				if (StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, modifiedResource.getFileExtension())) {
 					return deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(iProject);
 				}
@@ -80,45 +80,58 @@ public class JobDeleteParticipant extends DeleteParticipant{
 
 	private boolean deleteCorrospondingJobAndPropertyFileifUserDeleteXmlFile(IProject iProject) {
 		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
+			IFile jobFileName = null;
+			IFile propertyFileName = null;
 			IFolder jobsFolder = iProject.getFolder(JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
-			IFile jobFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
-			IFile propertyFileName = propertiesFolder
-					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.PROPERTIES).toFile().getName());
+			
+			if (jobsFolder != null) {
+				jobFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
+			}
+			if (propertiesFolder != null) {
+				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.PROPERTIES).toFile().getName());
+			}
 			showErrorMessage(jobFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED_RESOURCE,modifiedResource.getName()));
-			return flag;
-		} else {
-			return false;
-		}
+		} 
+		return flag;
 	}
 
 	private boolean deleteCorrospondingXmlAndPropertyFileifUserDeleteJobFile(IProject iProject) {
 		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
+			IFile xmlFileName = null;
+			IFile propertyFileName = null;
 			IFolder jobsFolder = iProject.getFolder(JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
-			IFile xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
-			IFile propertyFileName = propertiesFolder
-					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.PROPERTIES).toFile().getName());
+			if (jobsFolder != null) {
+				xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
+			}
+			if (propertiesFolder != null) {
+				propertyFileName = propertiesFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.PROPERTIES).toFile().getName());
+			}
 			showErrorMessage(xmlFileName, propertyFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_JOB_RELATED_RESOURCE,modifiedResource.getName()));
-			return flag;
-		} else {
-			return false;
 		}
+		return flag;
 	}
 
 	private boolean deleteCorrospondingXmlAndJobFileifUserDeletePropertyFile(IProject iProject) {
 		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),
 				Messages.PARAM)) {
+			IFile jobFileName = null;
+			IFile xmlFileName = null;
 			IFolder jobsFolder = iProject.getFolder(JOBS);
-			IFile jobFileName = jobsFolder
-					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
-			IFile xmlFileName = jobsFolder
-					.getFile(modifiedResource.getFullPath().removeFileExtension().addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
+			if (jobsFolder != null) {
+				jobFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
+				xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
+						.addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toFile().getName());
+			}
 			showErrorMessage(jobFileName, xmlFileName, Messages.bind(Messages.SHOW_ERROR_MESSAGE_ON_DELETING_PROPERTY_RELATED_RESOURCE,modifiedResource.getName()));
-			return flag;
-		} else {
-			return false;
-		}
+		} 
+		return flag;
 	}
 	
 	private void showErrorMessage(IFile fileName1, IFile fileName2, String errorMessage) {
@@ -130,8 +143,6 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				int returnCode=openErrorMessageBox(errorMessage);
 						if (returnCode == SWT.YES) {
 							flag=true;
-						} else {
-							flag=false;
 						}
 				}
 			});
@@ -140,7 +151,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	
 	private int openErrorMessageBox(String message) {
 		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ERROR | SWT.YES | SWT.NO);
-		messageBox.setText(ERROR);
+		messageBox.setText(Constants.ERROR);
 		messageBox.setMessage(message);
 		return messageBox.open();
 	}
