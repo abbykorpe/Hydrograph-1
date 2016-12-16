@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
 
@@ -66,7 +67,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		if(StringUtils.isNotBlank(windowLabel))
 			this.windowLabel=windowLabel;
 		else
-			this.windowLabel=Constants.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL;
+			this.windowLabel=Messages.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL;
 		this.schemaFields = fields;
 		this.loadTypeConfigurationSelectedValue = loadTypeConfigurationSelectedValue;
 	}
@@ -85,7 +86,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		composite.setLayout(new GridLayout(1, false));
 		
 		Group grpLoadType = new Group(composite, SWT.NONE);
-		grpLoadType.setText(Constants.LOAD_TYPE);
+		grpLoadType.setText(Messages.LOAD_TYPE);
 		grpLoadType.setLayout(new GridLayout(1, false));
 		grpLoadType.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
@@ -102,7 +103,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		Button updateKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
 		
 		updateKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		updateKeysButton.setText(Constants.UPDATE_BY_KEYS);
+		updateKeysButton.setText(Messages.UPDATE_BY_KEYS);
 		updateKeysButton.setEnabled(false);
 		
 		newTableRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
@@ -113,7 +114,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		
 		Button primaryKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
 		primaryKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		primaryKeysButton.setText(Constants.PRIMARY_KEYS_WINDOW_LABEL);
+		primaryKeysButton.setText(Messages.PRIMARY_KEYS_WINDOW_LABEL);
 		primaryKeysButton.setEnabled(false);
 		
 	updateRadioButton.addSelectionListener(new SelectionAdapter() {
@@ -125,7 +126,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 							FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
-							fieldDialog.setComponentName(Constants.UPDATE_KEYS_WINDOW_LABEL);
+							fieldDialog.setComponentName(Messages.UPDATE_KEYS_WINDOW_LABEL);
 							fieldDialog.setSourceFieldsFromPropagatedSchema(schemaFields);
 							fieldDialog.open();
 							valueForUpdateTextBox=fieldDialog.getResultAsCommaSeprated();
@@ -149,7 +150,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 							FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
-							fieldDialog.setComponentName(Constants.PRIMARY_KEYS_WINDOW_LABEL);
+							fieldDialog.setComponentName(Messages.PRIMARY_KEYS_WINDOW_LABEL);
 							fieldDialog.setSourceFieldsFromPropagatedSchema(schemaFields);
 							fieldDialog.open();
 							valueForNewTableTextBox = fieldDialog.getResultAsCommaSeprated();

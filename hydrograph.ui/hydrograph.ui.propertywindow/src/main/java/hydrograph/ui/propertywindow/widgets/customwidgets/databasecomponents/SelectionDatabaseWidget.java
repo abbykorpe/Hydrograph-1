@@ -128,17 +128,17 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		eltSuDefaultSubgroupComposite.createContainerWidget();
 		eltSuDefaultSubgroupComposite.numberOfBasicWidgets(6);
 
-		selectLable = new ELTDefaultLable("Select");
+		selectLable = new ELTDefaultLable(Messages.DATABASE_SELECT);
 		eltSuDefaultSubgroupComposite.attachWidget(selectLable);
 
-		tableNameRadioButton = new ELTRadioButton("TableName");
+		tableNameRadioButton = new ELTRadioButton(Messages.DATABASE_TABLE_NAME);
 		eltSuDefaultSubgroupComposite.attachWidget(tableNameRadioButton);
 		propertyDialogButtonBar.enableApplyButton(true);
 
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
-		sqlQueryRadioButton = new ELTRadioButton("SQL Query");
+		sqlQueryRadioButton = new ELTRadioButton(Messages.DATABASE_SQL_QUERY);
 		eltSuDefaultSubgroupComposite.attachWidget(sqlQueryRadioButton);
 
 		final ELTSubGroupCompositeWithStack selectionComposite = new ELTSubGroupCompositeWithStack(
@@ -244,9 +244,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		sqlQueryComposite.numberOfBasicWidgets(3);
 
-		createWidgetlabel("SQLQuery", sqlQueryComposite);
-		AbstractELTWidget sqlQueryWgt = createWidgetTextbox("SQLQuery", sqlQueryComposite);
-		sqlQueryDecorator = attachDecoratorToTextbox("SQLQuery", sqlQueryWgt, sqlQueryDecorator);
+		createWidgetlabel(Messages.SQL_QUERY, sqlQueryComposite);
+		AbstractELTWidget sqlQueryWgt = createWidgetTextbox(Messages.SQL_QUERY, sqlQueryComposite);
+		sqlQueryDecorator = attachDecoratorToTextbox(Messages.SQL_QUERY, sqlQueryWgt, sqlQueryDecorator);
 		sqlQueryTextBox = (Text) sqlQueryWgt.getSWTWidgetControl();
 		attachListeners(sqlQueryWgt);
 
@@ -260,8 +260,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		data.verticalIndent = 5;
 		sqlQuerySelectionListner(sqlQueryButtonWgt);
 
-		createWidgetlabel("Query Counter", sqlQueryComposite);
-		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox("Query Counter", sqlQueryComposite);
+		createWidgetlabel(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
+		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
 		sqlQueryCountertextbox = (Text) sqlQueryCounterWgt.getSWTWidgetControl();
 		attachListeners(sqlQueryCounterWgt);
 
@@ -429,12 +429,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-
-				Utils.INSTANCE.addMouseMoveListener(sqlQueryTextBox, cursor);
-				Utils.INSTANCE.addMouseMoveListener(textBoxTableName, cursor);
-				Utils.INSTANCE.addMouseMoveListener(sqlQueryCountertextbox, cursor);
 				showHideErrorSymbol(widgetList);
-
 			}
 		};
 	}
@@ -451,14 +446,14 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		tableComposite.createContainerWidget();
 
 		tableComposite.numberOfBasicWidgets(2);
-		createWidgetlabel("Table Name", tableComposite);
-		AbstractELTWidget tableNameWgt = createWidgetTextbox("TableName", tableComposite);
-		tableNameDecorator = attachDecoratorToTextbox("TableName", tableNameWgt, tableNameDecorator);
+		createWidgetlabel(Messages.LABEL_TABLE_NAME, tableComposite);
+		AbstractELTWidget tableNameWgt = createWidgetTextbox(Messages.LABEL_TABLE_NAME, tableComposite);
+		tableNameDecorator = attachDecoratorToTextbox(Messages.LABEL_TABLE_NAME, tableNameWgt, tableNameDecorator);
 		textBoxTableName = (Text) tableNameWgt.getSWTWidgetControl();
 
 		attachListeners(tableNameWgt);
 
-		createWidgetlabel("Import from \n Metastore", tableComposite);
+		createWidgetlabel(Messages.EXTRACT_FROM_METASTORE, tableComposite);
 		ELTDefaultButton editButton = new ELTDefaultButton(Messages.EXTRACT);
 		tableComposite.attachWidget(editButton);
 
@@ -475,8 +470,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	/**
 	 * Provides all the DB details
 	 */
-	private boolean getDatabaseConnectionDetails() {
-
+	private void getDatabaseConnectionDetails() {
+		//TODO
 		for (AbstractWidget textAbtractWgt : widgets) {
 
 			if (textAbtractWgt.getProperty().getPropertyName()
@@ -509,15 +504,43 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			}
 		}
 
+	}
+	
+	private void validateDatabaseParams(){
+		
+		String host = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST, "",
+				null);
+		//TODO
+		String port_no = Platform.getPreferencesService().getString(PLUGIN_ID,
+				PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
+		List<String> oracleDatabaseValues = new ArrayList<String>();
+		if (null != host && StringUtils.isNotBlank(host)) {
+			return;
+		}
+		getDatabaseConnectionDetails();
+		
 		if (StringUtils.isNotEmpty(oracleDatabaseName) && StringUtils.isNotEmpty(oracleHostName)
-				&& StringUtils.isNotEmpty(oracleJdbcName) && StringUtils.isNotEmpty(oraclePortNo)
-				&& StringUtils.isNotEmpty(oracleSchemaName) && StringUtils.isNotEmpty(oracleUserName)
-				&& StringUtils.isNotEmpty(oraclePassword)) {
+			&& StringUtils.isNotEmpty(oracleJdbcName) && StringUtils.isNotEmpty(oraclePortNo)
+			&& StringUtils.isNotEmpty(oracleSchemaName) && StringUtils.isNotEmpty(oracleUserName)
+			&& StringUtils.isNotEmpty(oraclePassword)) {
 
-			return true;
+			LinkedHashMap<String, Object> property = getProperties();
+			databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
+			
+			if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
+				oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
+			}else{
+				createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
+			}
+			if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
+				extractOracleMetaStoreDetails(oracleDatabaseValues, host, port_no);
+			}
+		} else {
+			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
 		}
 
-		return false;
+
+		
 	}
 
 	/**
@@ -525,41 +548,14 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 * @return
 	 */
 	private SelectionAdapter attachExtractButtonSelectionListner() {
-
+		
 		SelectionAdapter adapter = new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String host = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST, "",
-						null);
-				String port_no = Platform.getPreferencesService().getString(PLUGIN_ID,
-						PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
-
-				if (null != host && StringUtils.isNotBlank(host)) {
-
-					if (getDatabaseConnectionDetails()) {
-						List<String> oracleDatabaseValues = new ArrayList<String>();
-						LinkedHashMap<String, Object> property = getProperties();
-						databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
-						if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-							oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
-						}else{
-							createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
-						}
-						if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
-							extractOracleMetaStoreDetails(oracleDatabaseValues, host, port_no);
-						}
-					} else {
-						createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
-					}
-
-				} else {
-					createMessageDialog(Messages.HOST_NAME_BLANK_ERROR, ERROR).open();
+				validateDatabaseParams();
 				}
-
-			}
-
-		};
+			};
 
 		return adapter;
 	}
@@ -576,6 +572,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		try {
 			
+			//TODO
 			ObjectMapper mapper = new ObjectMapper();
 			String input = oracleDatabaseName + SEPARATOR + oracleHostName + SEPARATOR + oracleJdbcName + SEPARATOR
 					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR
@@ -590,6 +587,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			logger.error("Json to object Mapping issue ", ex.getMessage());
 		}
 		
+		//TODO This functionality will used in the future for fetching the json response for RedShift,Oracle and SQL Component
 		/*if(null != oracleTableSchema){
 			if(databaseType.equalsIgnoreCase(oracleTableSchema.getDatabaseType())){
 				

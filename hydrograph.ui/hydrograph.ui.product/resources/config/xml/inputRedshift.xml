@@ -75,11 +75,13 @@
 		<tns:property dataType="string" name="testConnection" renderer="TEST_CONNECTION_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the button for testing out the above given values">
+			
 		</tns:property>
 			
 		<tns:property dataType="string" name="selectOption" renderer="SELECT_JDBC_VALUES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="">
+			<tns:validator>TOGGLE_SELECTION_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"

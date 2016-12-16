@@ -305,7 +305,7 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
-		<enumeration value="TOGGlE_SELECTION_VALIDATOR">
+		<enumeration value="TOGGLE_SELECTION_VALIDATOR">
 			 <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="ToggleSelectionValidationRule" />

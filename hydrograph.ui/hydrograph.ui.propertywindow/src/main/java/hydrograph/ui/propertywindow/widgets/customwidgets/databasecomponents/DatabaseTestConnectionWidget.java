@@ -84,7 +84,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		testConnectionComposite.attachWidget(defaultLable1);
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 		
-		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Constants.TEST_CONNECTION);
+		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Messages.TEST_CONNECTION);
 
 		testConnectionComposite.attachWidget(eltDefaultButton);
 		 testConnectionButton=(Button)eltDefaultButton.getSWTWidgetControl();
@@ -92,7 +92,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 
 		buttonDecorator = WidgetUtility.addDecorator(
 				(Control) eltDefaultButton.getSWTWidgetControl(),
-				Messages.bind(Messages.EmptyValueNotification,Constants.TEST_CONNECTION));
+				Messages.bind(Messages.EmptyValueNotification,Messages.TEST_CONNECTION));
 		if (OSValidator.isMac()) {
 			buttonDecorator.setMarginWidth(-2);
 		}
@@ -115,6 +115,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				//TODO
 				String host = Platform.getPreferencesService().getString(PLUGIN_ID, HOST, "", null);
 				String port_no = Platform.getPreferencesService().getString(PLUGIN_ID, PORT_NO, DEFAULT_PORTNO, null);
 				
@@ -134,6 +135,8 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	 * @return 
 	 */
 	private boolean getDatabaseConnectionDetails() {
+		
+		//TODO
 		
 		String oracleDatabaseName = "";
 		String oracleHostName = "";

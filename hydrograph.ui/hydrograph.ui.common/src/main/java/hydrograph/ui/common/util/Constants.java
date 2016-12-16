@@ -162,13 +162,12 @@ public class Constants {
 	public static final String ADD_ALL_FIELDS_SYMBOL = "*";
 	public static final String INPUT_SUBJOB_COMPONENT_NAME = "InputSubjobComponent";
 	
-	public static final String TEST_CONNECTION = "Test Connection";
+
 	public static final String EDIT = "Edit";
 	public static final String RUNTIME_PROPERTIES_COLUMN_NAME = "Runtime\nProperties";
 	public static final String RUNTIME_PROPERTIES_WINDOW_LABEL = "Runtime Properties";
-	public static final String LOAD_TYPE_CONFIGURATION_WINDOW_LABEL = "Load Type Configuration";
-	public static final String UPDATE_KEYS_WINDOW_LABEL="Update Keys";
-	public static final String PRIMARY_KEYS_WINDOW_LABEL="Primary Keys";
+	
+	
 	public static final String RUNTIME_PROPERTY_NAME = "runtime_properties";
 	
 	public static final String RUNTIME_PROPERTY_LABEL = "Runtime\nProperties";
@@ -315,8 +314,6 @@ public class Constants {
 	public static final String LOAD_TYPE_NEW_TABLE_KEY = "New Table";
 	public static final String LOAD_TYPE_INSERT_KEY = "Insert";
 	public static final String LOAD_TYPE_REPLACE_KEY = "Replace";
-	public static final String UPDATE_BY_KEYS = "Update By Keys";
-	public static final String LOAD_TYPE = "Load Type";
 	public static String LOAD_TYPE_UPDATE_VALUE_SEPERATOR=",";
 	public static String LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR=",";
 

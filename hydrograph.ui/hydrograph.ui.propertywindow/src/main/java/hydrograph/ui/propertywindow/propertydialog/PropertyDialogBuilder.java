@@ -293,7 +293,7 @@ public class PropertyDialogBuilder {
 	public CTabFolder addTabFolderToPropertyWindow(){
 		CTabFolder tabFolder = new CTabFolder(container, SWT.NONE);
 		
-		final GridData tabFolderGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		GridData tabFolderGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		
 		tabFolder.setLayoutData(tabFolderGridData);
 		tabFolder.addListener(SWT.FOCUSED,getMouseClickListener() );

@@ -100,8 +100,8 @@ public enum Validators {
     RuntimePropertyValueValidationRule("RUNTIME_PROPERTY_VALIDATOR"),
     @XmlEnumValue("LONG_VALIDATOR")
     LongValidatorRule("LONG_VALIDATOR"),
-    @XmlEnumValue("TOGGlE_SELECTION_VALIDATOR")
-    ToggleSelectionValidationRule("TOGGlE_SELECTION_VALIDATOR");
+    @XmlEnumValue("TOGGLE_SELECTION_VALIDATOR")
+    ToggleSelectionValidationRule("TOGGLE_SELECTION_VALIDATOR");
 
     
     private final String value;

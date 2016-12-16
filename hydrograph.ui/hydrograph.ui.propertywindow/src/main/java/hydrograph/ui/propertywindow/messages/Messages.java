@@ -294,6 +294,20 @@ public class Messages extends NLS {
 	public static String FILE_PATH_LABEL;
 	public static String EXTERNAL_TABLE_PATH_LABEL;
 	
+	public static String DATABASE_SELECT;
+	public static String DATABASE_TABLE_NAME;
+	public static String DATABASE_SQL_QUERY;
+	
+	public static String SQL_QUERY_COUNTER;
+	public static String SQL_QUERY;
+	public static String TEST_CONNECTION;
+	public static String UPDATE_KEYS_WINDOW_LABEL;
+	public static String PRIMARY_KEYS_WINDOW_LABEL;
+	public static String LOAD_TYPE_CONFIGURATION_WINDOW_LABEL;
+	public static String UPDATE_BY_KEYS;
+	public static String LOAD_TYPE;
+	public static String SQL_QUERY_STATEMENT;
+	
 	
 	static {
 		// initialize resource bundle

@@ -22,6 +22,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
+
+import hydrograph.ui.propertywindow.messages.Messages;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -49,13 +52,13 @@ public class SQLQueryStatementDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		final Composite container = (Composite) super.createDialogArea(parent);
-		container.getShell().setText("SQL Query");
+		container.getShell().setText(Messages.DATABASE_SQL_QUERY);
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		Label sqlQueryLabel = new Label(composite, SWT.NONE);
-		sqlQueryLabel.setText("SQL Query Statement");
+		sqlQueryLabel.setText(Messages.SQL_QUERY_STATEMENT);
 		
 		styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL);
 		styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
