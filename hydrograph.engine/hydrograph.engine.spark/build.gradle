@@ -49,7 +49,7 @@ publishing {
         }
     }
 }
-InputMysqlComponentTest
+
 test {
     exclude '**/SparkUnionAllComponentTest*'
     exclude '**/InputMysqlComponentTest*'
