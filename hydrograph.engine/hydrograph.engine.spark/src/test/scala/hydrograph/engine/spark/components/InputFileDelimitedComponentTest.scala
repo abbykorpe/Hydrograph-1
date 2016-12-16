@@ -1,5 +1,6 @@
 package hydrograph.engine.spark.components
 
+import org.apache.spark.SparkException
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 import org.junit.Assert
@@ -51,7 +52,7 @@ class InputFileDelimitedComponentTest {
 
   }
   
-  @Test(expected = classOf[RuntimeException])
+  @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionForIncorrectDataTypeWhenSafeFalse(): Unit = {
 
     //when
@@ -122,7 +123,7 @@ class InputFileDelimitedComponentTest {
 
   }
   
-  @Test(expected = classOf[RuntimeException])
+  @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionWhenFieldIsNullAndSafeFalse(): Unit = {
     //when
     val df = spark.read.schema(schema)
@@ -146,7 +147,7 @@ class InputFileDelimitedComponentTest {
   
   /*Test Cases For Missing Fields Input Starts Here*/
   
-    @Test(expected = classOf[RuntimeException])
+    @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionWhenFieldMissingAndStrictTrue(): Unit = {
     //when
     val df = spark.read.schema(schema)
@@ -187,7 +188,7 @@ class InputFileDelimitedComponentTest {
 
   }
 
-   @Test(expected = classOf[RuntimeException])
+   @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionForMissingFieldWhenStrictFalseAndSafeFalse(): Unit = {
     //when
     val df = spark.read.schema(schema)
