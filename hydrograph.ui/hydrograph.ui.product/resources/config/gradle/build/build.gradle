@@ -13,7 +13,7 @@
 
 apply plugin: 'java'
 apply from: "common.gradle"
-sourceCompatibility = 1.7   // Hydrograph Java compatibility
+sourceCompatibility = 1.8   // Hydrograph Java compatibility
 version = '1.0'				// The version is used to create project jar version number
 
 
@@ -42,6 +42,11 @@ sourceSets {
         java.srcDir 'src'
     }
 }
+configurations.all {
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 
 /*
 -------------------------------------------------------------------------------------------------
@@ -63,7 +68,7 @@ dependencies {
 
 	sshAntTask (group: 'org.apache.ant', name: 'ant-jsch',version:'1.9.4')
 	
-  		compile(group: 'hg', name: 'hydrograph.engine.command-line', version: 'sp')
+  		compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.spark-SNAPSHOT')
 
     	compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     
