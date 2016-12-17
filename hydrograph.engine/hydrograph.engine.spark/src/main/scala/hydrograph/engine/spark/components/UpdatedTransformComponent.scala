@@ -7,7 +7,7 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{ Column, DataFrame, Row }
+import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.apache.spark.sql.types.StructType
 import hydrograph.engine.transformation.userfunctions.base.TransformBase
 import hydrograph.engine.spark.core.reusablerow.InputReusableRow

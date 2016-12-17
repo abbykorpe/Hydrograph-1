@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.spark.flow.utils;
+package hydrograph.engine.core.flowmanipulation;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.core.HydrographDebugInfo;
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.hadoop.conf.Configuration;
 
 public class FlowManipulationContext {
 
@@ -34,11 +33,10 @@ public class FlowManipulationContext {
 	private String basePath;
 	private TypeProperties jaxbJobLevelRuntimeProperties;
 	private String graphName;
-	private Configuration conf;
 	private List<String> tmpPath;
 
 	public FlowManipulationContext(HydrographJob hydrographJob, HydrographDebugInfo bhsDebug,
-			SchemaFieldHandler schemaFieldHandler, String jobId, String basePath, Configuration conf) {
+			SchemaFieldHandler schemaFieldHandler, String jobId, String basePath) {
 		this.jaxbMainGraph = hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls();
 		this.jaxbJobLevelRuntimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties();
 		this.graphName = hydrographJob.getJAXBObject().getName();
@@ -46,7 +44,6 @@ public class FlowManipulationContext {
 		this.jaxbDebugGraph = bhsDebug;
 		this.schemaFieldMap = schemaFieldHandler;
 		this.basePath = basePath;
-		this.conf = conf;
 	}
 
 	public List<String> getTmpPath() {
@@ -55,10 +52,6 @@ public class FlowManipulationContext {
 
 	public void setTmpPath(List<String> tmpPath) {
 		this.tmpPath = tmpPath;
-	}
-
-	public Configuration getConf() {
-		return conf;
 	}
 
 	public String getGraphName() {

@@ -15,6 +15,7 @@ package hydrograph.engine.cascading.integration;
 import java.io.IOException;
 import java.util.Properties;
 
+import hydrograph.engine.flow.utils.DefaultPluginManipulation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.thrift.TException;
@@ -32,8 +33,8 @@ import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.flow.utils.ExecutionTrackingListener;
-import hydrograph.engine.flow.utils.FlowManipulationContext;
-import hydrograph.engine.flow.utils.FlowManipulationHandler;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.utilities.GeneralUtilities;
@@ -81,9 +82,11 @@ public class HydrographRuntime implements HydrographRuntimeService {
 				hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
 		flowManipulationContext = new FlowManipulationContext(hydrographJob, hydrographDebugInfo, schemaFieldHandler,
-				jobId, basePath,conf);
+				jobId, basePath);
 
-		hydrographJob = FlowManipulationHandler.execute(flowManipulationContext);
+		FlowManipulationHandler flowManipulationHandler=new DefaultPluginManipulation();
+
+		hydrographJob = flowManipulationHandler.execute(flowManipulationContext);
 
 		if (hydrographJob.getJAXBObject().getRuntimeProperties() != null
 				&& hydrographJob.getJAXBObject().getRuntimeProperties().getProperty() != null) {
@@ -92,7 +95,6 @@ public class HydrographRuntime implements HydrographRuntimeService {
 			}
 		}
 
-		
 
 		JAXBTraversal traversal = new JAXBTraversal(hydrographJob.getJAXBObject());
 
