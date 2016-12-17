@@ -13,6 +13,7 @@
 apply from: '../version.gradle'
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
@@ -110,7 +111,9 @@ dependencies {
     compile (group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
 
 
-	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'
+	compile (group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'){
+        exclude group: 'cascading', module: 'cascading-hadoop'
+    }
     compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
     compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger

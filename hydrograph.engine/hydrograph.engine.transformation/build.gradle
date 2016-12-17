@@ -13,6 +13,7 @@
 apply from: '../version.gradle'
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
