@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.spark.flow.utils;
+package hydrograph.engine.core.flowmanipulation;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -18,14 +18,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
-import hydrograph.engine.spark.batchbreak.plugin.BatchBreakPlugin;
-import hydrograph.engine.spark.utils.OrderedProperties;
-import hydrograph.engine.spark.utils.OrderedPropertiesHelper;
+import hydrograph.engine.core.component.utils.OrderedProperties;
+import hydrograph.engine.core.component.utils.OrderedPropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.main.Graph;
@@ -34,17 +32,7 @@ import hydrograph.engine.jaxb.main.Graph;
  * @author gurdits
  *
  */
-public class FlowManipulationHandler {
-
-	enum Plugins {
-		batchBreak {
-			@Override
-			public String getPluginName() {
-				return BatchBreakPlugin.class.getName();
-			}
-		};
-		public abstract String getPluginName();
-	}
+public abstract class FlowManipulationHandler {
 
 	private static Logger LOG = LoggerFactory.getLogger(FlowManipulationHandler.class);
 	private static List<TypeBaseComponent> jaxbComponents;
@@ -55,7 +43,7 @@ public class FlowManipulationHandler {
 	 * @param flowManipulationContext
 	 * @return the HydrographJob
 	 */
-	public static HydrographJob execute(FlowManipulationContext flowManipulationContext) {
+	public  HydrographJob execute(FlowManipulationContext flowManipulationContext) {
 
 		jaxbComponents = flowManipulationContext.getJaxbMainGraph();
 		jaxbJobLevelRuntimeProperties = flowManipulationContext.getJaxbJobLevelRuntimeProperties();
@@ -75,7 +63,7 @@ public class FlowManipulationHandler {
 		return getJaxbObject();
 	}
 
-	private static List<String> addPluginFromFile(OrderedProperties properties) {
+	private List<String> addPluginFromFile(OrderedProperties properties) {
 		List<String> registerdPlugins = new LinkedList<String>();
 		// added batchbreak plugin.
 		registerdPlugins.addAll(addDefaultPlugins());
@@ -85,12 +73,7 @@ public class FlowManipulationHandler {
 		return registerdPlugins;
 	}
 
-	private static List<String> addDefaultPlugins() {
-		List<String> registerdPlugins = new LinkedList<String>();
-		for (Plugins plugin : Plugins.values())
-			registerdPlugins.add(plugin.getPluginName());
-		return registerdPlugins;
-	}
+	public abstract List<String> addDefaultPlugins() ;
 
 	private static HydrographJob getJaxbObject() {
 		Graph graph = new Graph();
@@ -108,19 +91,7 @@ public class FlowManipulationHandler {
 			ManipulatorListener inst = (ManipulatorListener) constructor.newInstance();
 			return inst.execute(flowManipulationContext);
 
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (InstantiationException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}

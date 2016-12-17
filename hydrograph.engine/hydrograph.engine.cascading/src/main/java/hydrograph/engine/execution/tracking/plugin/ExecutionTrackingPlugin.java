@@ -33,8 +33,8 @@ import hydrograph.engine.execution.tracking.ComponentPipeMapping;
 import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.execution.tracking.JobInfo.ElementGraphNotFoundException;
 import hydrograph.engine.flow.utils.ExecutionTrackingListener;
-import hydrograph.engine.flow.utils.FlowManipulationContext;
-import hydrograph.engine.flow.utils.ManipulatorListener;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
+import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Filter;
 

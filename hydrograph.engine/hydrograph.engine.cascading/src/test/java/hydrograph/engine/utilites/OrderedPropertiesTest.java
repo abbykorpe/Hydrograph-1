@@ -13,7 +13,6 @@
 package hydrograph.engine.utilites;
 
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -23,7 +22,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import hydrograph.engine.utilities.OrderedProperties;
+import hydrograph.engine.core.component.utils.OrderedProperties;
 
 /**
  * Unit tests for OrderedProperties class
