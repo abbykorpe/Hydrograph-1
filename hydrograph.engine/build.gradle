@@ -12,6 +12,7 @@
  ******************************************************************************/
 apply from: 'publish.gradle'
 apply from: 'version.gradle'
+apply plugin: 'idea'
 
 group = 'hydrograph'
 buildscript {
