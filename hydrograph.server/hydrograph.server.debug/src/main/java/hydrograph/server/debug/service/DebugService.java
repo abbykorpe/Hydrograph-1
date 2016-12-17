@@ -26,6 +26,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.security.auth.Subject;
@@ -59,9 +60,9 @@ import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.debug.utilities.ServiceUtilities;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 import hydrograph.server.metadata.exception.TableOrQueryParamNotFound;
-import hydrograph.server.metadata.helper.HiveMetadataHelper;
-import hydrograph.server.metadata.helper.OracleMetadataHelper;
-import hydrograph.server.metadata.helper.RedShiftMetadataHelper;
+import hydrograph.server.metadata.strategy.HiveMetadataStrategy;
+import hydrograph.server.metadata.strategy.OracleMetadataStrategy;
+import hydrograph.server.metadata.strategy.RedshiftMetadataStrategy;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -89,113 +90,119 @@ public class DebugService implements PrivilegedAction<Object> {
 
 		Spark.post("readFromMetastore", new Route() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object handle(Request request, Response response)
 					throws ParamsCannotBeNullOrEmpty, ClassNotFoundException, IllegalAccessException, JSONException,
 					JsonProcessingException, TableOrQueryParamNotFound, SQLException, InstantiationException {
 				LOG.info("************************readFromMetastore endpoint - started************************");
 				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
-				String objectAsString = "", dbClassName = "", dbType = null, userId = null, password = null,
-						host = null, port = null, sid = null, driverType = null, query = null, tableName = null,
-						database = null;
 				ObjectMapper objectMapper = new ObjectMapper();
-				String requestParameters = request.queryParams(Constants.REQUEST_PARAMETERS);
+				String requestParameters = request.queryParams(Constants.REQUEST_PARAMETERS), objectAsString = null,
+						dbClassName = null;
 				JSONObject requestParameterValues = new JSONObject(requestParameters);
+				// Method to extracting request parameter details from input
+				// json.
+				Map metadataProperties = extractingJsonObjects(requestParameterValues);
+
+				String dbType = metadataProperties
+						.getOrDefault(Constants.dbType,
+								new ParamsCannotBeNullOrEmpty(Constants.dbType + " Cannot be null or empty"))
+						.toString();
+				try {
+					Object dbClass;
+					switch (dbType.toLowerCase()) {
+					case Constants.ORACLE:
+						dbClassName = Constants.oracle;
+						OracleMetadataStrategy oracleMetadataHelper = (OracleMetadataStrategy) Class
+								.forName(dbClassName).newInstance();
+						oracleMetadataHelper.setConnection(metadataProperties);
+						objectAsString = objectMapper
+								.writeValueAsString(oracleMetadataHelper.fillComponentSchema(metadataProperties));
+						LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+						break;
+					case Constants.HIVE:
+						dbClassName = Constants.hive;
+						HiveMetadataStrategy hiveMetadataHelper = (HiveMetadataStrategy) Class.forName(dbClassName)
+								.newInstance();
+						hiveMetadataHelper.setConnection(metadataProperties);
+						objectAsString = objectMapper
+								.writeValueAsString(hiveMetadataHelper.fillComponentSchema(metadataProperties));
+						LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+						break;
+					case Constants.REDSHIFT:
+						dbClassName = Constants.redshift;
+						RedshiftMetadataStrategy redShiftMetadataHelper = (RedshiftMetadataStrategy) Class
+								.forName(dbClassName).newInstance();
+						redShiftMetadataHelper.setConnection(metadataProperties);
+						objectAsString = objectMapper
+								.writeValueAsString(redShiftMetadataHelper.fillComponentSchema(metadataProperties));
+						LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+						break;
+					}
+				} catch (Exception e) {
+					LOG.error("Metadata read for database : " + dbType + " Not supported." + e);
+					response.status(400);
+					return "Metadata read for database : " + dbType + " Not supported.";
+				}
+				LOG.info("Class Name used for " + dbType + " Is : " + dbClassName);
+				return objectAsString;
+			}
+
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			private Map extractingJsonObjects(JSONObject requestParameterValues) throws JSONException {
+
+				String dbType = null, userId = null, password = null, host = null, port = null, sid = null,
+						driverType = null, query = null, tableName = null, database = null;
+				Map metadataProperties = new HashMap();
 				if (!requestParameterValues.isNull(Constants.dbType)) {
 					dbType = requestParameterValues.getString(Constants.dbType);
+					metadataProperties.put(Constants.dbType, dbType);
 				}
 				if (!requestParameterValues.isNull(Constants.USERNAME)) {
 					userId = requestParameterValues.getString(Constants.USERNAME);
+					metadataProperties.put(Constants.USERNAME, userId);
 				}
 				if (!requestParameterValues.isNull(Constants.PASSWORD)) {
 					password = requestParameterValues.getString(Constants.PASSWORD);
+					metadataProperties.put(Constants.PASSWORD, password);
 				}
 				if (!requestParameterValues.isNull(Constants.HOST_NAME)) {
 					host = requestParameterValues.getString(Constants.HOST_NAME);
+					metadataProperties.put(Constants.HOST_NAME, host);
 				}
 				if (!requestParameterValues.isNull(Constants.PORT_NUMBER)) {
 					port = requestParameterValues.getString(Constants.PORT_NUMBER);
+					metadataProperties.put(Constants.PORT_NUMBER, port);
 				}
 				if (!requestParameterValues.isNull(Constants.SID)) {
 					sid = requestParameterValues.getString(Constants.SID);
+					metadataProperties.put(Constants.SID, sid);
 				}
 				if (!requestParameterValues.isNull(Constants.DRIVER_TYPE)) {
 					driverType = requestParameterValues.getString(Constants.DRIVER_TYPE);
+					metadataProperties.put(Constants.DRIVER_TYPE, driverType);
 				}
 				if (!requestParameterValues.isNull(Constants.QUERY)) {
 					query = requestParameterValues.getString(Constants.QUERY);
+					metadataProperties.put(Constants.QUERY, query);
 				}
 				if (!requestParameterValues.isNull(Constants.TABLENAME)) {
 					tableName = requestParameterValues.getString(Constants.TABLENAME);
+					metadataProperties.put(Constants.TABLENAME, tableName);
 				}
 				if (!requestParameterValues.isNull(Constants.DATABASE_NAME)) {
 					database = requestParameterValues.getString(Constants.DATABASE_NAME);
+					metadataProperties.put(Constants.DATABASE_NAME, database);
 				}
-				LOG.debug("Fetched request parameters are: " + Constants.dbType + " => " + dbType + " "
+
+				LOG.info("Fetched request parameters are: " + Constants.dbType + " => " + dbType + " "
 						+ Constants.USERNAME + " => " + userId + " " + Constants.HOST_NAME + " => " + host + " "
 						+ Constants.PORT_NUMBER + " => " + port + " " + Constants.SID + " => " + sid + " "
 						+ Constants.DRIVER_TYPE + " => " + driverType + " " + Constants.QUERY + " => " + query + " "
 						+ Constants.TABLENAME + " => " + tableName + " " + Constants.DATABASE_NAME + " => " + database
 						+ " ");
-
-				if (dbType != null && !dbType.isEmpty()) {
-					try {
-						Object dbClass;
-						switch (dbType.toLowerCase()) {
-						case Constants.ORACLE:
-							dbClassName = Constants.oracle;
-							if ((dbClass = Class.forName(dbClassName).newInstance()) instanceof OracleMetadataHelper) {
-								OracleMetadataHelper oracleMetadataHelper = (OracleMetadataHelper) dbClass;
-								oracleMetadataHelper.setConnection(userId, password, host, port, sid, driverType);
-								objectAsString = objectMapper
-										.writeValueAsString(oracleMetadataHelper.fillComponentSchema(query, tableName));
-								LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
-							} else {
-								LOG.debug("Invalid " + dbClass + " name supplied");
-								response.status(400);
-								return "Invalid " + dbClass + " name supplied";
-							}
-							break;
-						case Constants.HIVE:
-							dbClassName = Constants.hive;
-							if ((dbClass = Class.forName(dbClassName).newInstance()) instanceof HiveMetadataHelper) {
-								HiveMetadataHelper hiveMetadataHelper = (HiveMetadataHelper) dbClass;
-								hiveMetadataHelper.setConnection(userId, password,database,tableName);
-								objectAsString = objectMapper
-										.writeValueAsString(hiveMetadataHelper.fillComponentSchema(tableName,database));
-								LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
-							} else {
-								LOG.debug("Invalid " + dbClass + " name supplied");
-								response.status(400);
-								return "Invalid " + dbClass + " name supplied";
-							}
-							break;
-						case Constants.REDSHIFT:
-							dbClassName = Constants.redshift;
-							if ((dbClass = Class.forName(dbClassName)
-									.newInstance()) instanceof RedShiftMetadataHelper) {
-								RedShiftMetadataHelper redShiftMetadataHelper = (RedShiftMetadataHelper) dbClass;
-								redShiftMetadataHelper.setConnection(userId, password, host, port, database);
-								objectAsString = objectMapper.writeValueAsString(
-										redShiftMetadataHelper.fillComponentSchema(query, tableName));
-								LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
-							} else {
-								LOG.debug("Invalid " + dbClass + " name supplied");
-								response.status(400);
-								return "Invalid " + dbClass + " name supplied";
-							}
-							break;
-						}
-					} catch (Exception e) {
-						LOG.error("Metadata read for database helper: " + dbType + " not supported." + e);
-						response.status(400);
-						return "Metadata read for database helper: " + dbType + " not supported.";
-					}
-					LOG.info("Class Name used for " + dbType + " is : " + dbClassName);
-				} else {
-					throw new ParamsCannotBeNullOrEmpty("dbType cannot be null or empty!");
-				}
-				return objectAsString;
+				return metadataProperties;
 			}
 		});
 

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.server.metadata.helper;
+package hydrograph.server.metadata.strategy;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,8 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +29,7 @@ import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.metadata.entity.TableEntity;
 import hydrograph.server.metadata.entity.TableSchemaFieldEntity;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
+import hydrograph.server.metadata.strategy.base.MetadataStrategyTemplate;
 
 /**
  * Concrete implementation for RedShift database and getting the table entity
@@ -36,66 +37,65 @@ import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
  * 
  *
  */
-public class RedShiftMetadataHelper{
-	Logger LOG = LoggerFactory.getLogger(RedShiftMetadataHelper.class);
+public class RedshiftMetadataStrategy extends MetadataStrategyTemplate {
+	Logger LOG = LoggerFactory.getLogger(RedshiftMetadataStrategy.class);
 	final static String REDSHIFT_JDBC_CLASSNAME = "com.amazon.redshift.jdbc42.Driver";
 	Connection connection = null;
 
-	
 	/**
 	 * Used to set the connection for RedShift
 	 * 
-	 * @param userId 
-	 * @param password
-	 * @param host
-	 * @param port
-	 * @param database
-	 * @throws ParamsCannotBeNullOrEmpty
-	 * @throws JSONException
+	 * @param connectionProperties
+	 *            - contain request params details
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	
-	public void setConnection(String userId, String password, String host, String port,String database)
-			throws ParamsCannotBeNullOrEmpty, JSONException, ClassNotFoundException, SQLException {
-		String jdbcurl = "jdbc:redshift//" + host + ":" + port + "/" + database;
 
-		checkNullParams(new String[] { userId, password, host, port, database });
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setConnection(Map connectionProperties) throws ClassNotFoundException, SQLException {
+		String host = connectionProperties
+				.getOrDefault(Constants.HOST_NAME,
+						new ParamsCannotBeNullOrEmpty(Constants.HOST_NAME + " not found in request parameter"))
+				.toString();
+		String port = connectionProperties
+				.getOrDefault(Constants.PORT_NUMBER,
+						new ParamsCannotBeNullOrEmpty(Constants.PORT_NUMBER + " not found in request parameter"))
+				.toString();
+		String userId = connectionProperties
+				.getOrDefault(Constants.USERNAME,
+						new ParamsCannotBeNullOrEmpty(Constants.USERNAME + " not found in request parameter"))
+				.toString();
+		String password = connectionProperties
+				.getOrDefault(Constants.PASSWORD,
+						new ParamsCannotBeNullOrEmpty(Constants.PASSWORD + " not found in request parameter"))
+				.toString();
+		String database = connectionProperties
+				.getOrDefault(Constants.DATABASE_NAME,
+						new ParamsCannotBeNullOrEmpty(Constants.DATABASE_NAME + " not found in request parameter"))
+				.toString();
+		String jdbcurl = "jdbc:redshift//" + host + ":" + port + "/" + database;
 
 		Class.forName(REDSHIFT_JDBC_CLASSNAME);
 		connection = DriverManager.getConnection(jdbcurl, userId, password);
-
 	}
 
 	/**
-	 * Checks the presence of null or empty in field parameter.
+	 * @param componentSchemaProperties
+	 *            - Contains request parameter details
+	 * @return {@link TableEntity}
 	 * 
-	 * @param params
-	 *            - Of helper String[]
-	 * @throws ParamsCannotBeNullOrEmpty
-	 *             - Throws when the parameter supplied is null or empty.
 	 */
-	private void checkNullParams(String[] params) throws ParamsCannotBeNullOrEmpty {
-		for (String eachParam : params) {
-			if (eachParam == null) {
-				throw new ParamsCannotBeNullOrEmpty("Value for Parameter " + eachParam + " can not be null.");
-			} else if (eachParam.isEmpty()) {
-				throw new ParamsCannotBeNullOrEmpty("Value for Parameter " + eachParam + " can not be empty.");
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param query
-	 * @param tableName
-	 * @return
-	 * @throws JSONException
-	 * @throws ParamsCannotBeNullOrEmpty
-	 * @throws SQLException
-	 */
-	public TableEntity fillComponentSchema(String query, String tableName)
-			throws JSONException, ParamsCannotBeNullOrEmpty, SQLException {
+	@SuppressWarnings("unchecked")
+	@Override
+	public TableEntity fillComponentSchema(Map componentSchemaProperties)
+			throws SQLException, ParamsCannotBeNullOrEmpty {
+		String query = componentSchemaProperties.getOrDefault(Constants.QUERY,
+				new ParamsCannotBeNullOrEmpty(Constants.QUERY + " not found in request parameter")).toString();
+		String tableName = componentSchemaProperties
+				.getOrDefault(Constants.TABLENAME,
+						new ParamsCannotBeNullOrEmpty(Constants.TABLENAME + " not found in request parameter"))
+				.toString();
 		ResultSet res = null;
 		TableEntity tableEntity = new TableEntity();
 		List<TableSchemaFieldEntity> tableSchemaFieldEntities = new ArrayList<TableSchemaFieldEntity>();
@@ -105,9 +105,9 @@ public class RedShiftMetadataHelper{
 				res = stmt.executeQuery(query);
 			else if (tableName != null && !tableName.isEmpty())
 				res = stmt.executeQuery("Select * from " + tableName + " where 1<0");
-			else{
-				LOG.error("Table or query in request parameter cannot be null or empty " + Constants.QUERY + " => " + query + " "
-						+ Constants.TABLENAME + " => " + tableName + " ");
+			else {
+				LOG.error("Table or query in request parameter cannot be null or empty " + Constants.QUERY + " => "
+						+ query + " " + Constants.TABLENAME + " => " + tableName + " ");
 				throw new ParamsCannotBeNullOrEmpty("Table and query cannot be null or empty in request parameters: "
 						+ Constants.QUERY + " => " + query + " " + Constants.TABLENAME + " => " + tableName + " ");
 			}
@@ -120,7 +120,7 @@ public class RedShiftMetadataHelper{
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
 				} else {
 					tableSchemaFieldEntity.setFieldType(rsmd.getColumnClassName(count));
-				}				
+				}
 				tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
 				tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 				tableSchemaFieldEntities.add(tableSchemaFieldEntity);

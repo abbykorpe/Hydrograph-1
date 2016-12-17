@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.server.metadata.helper;
+package hydrograph.server.metadata.strategy;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,8 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +29,7 @@ import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.metadata.entity.TableEntity;
 import hydrograph.server.metadata.entity.TableSchemaFieldEntity;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
+import hydrograph.server.metadata.strategy.base.MetadataStrategyTemplate;
 
 /**
  * Concrete implementation for Oracle database and getting the table entity
@@ -36,75 +37,65 @@ import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
  *
  * @author amiyam
  */
-public class OracleMetadataHelper {
-	Logger LOG = LoggerFactory.getLogger(OracleMetadataHelper.class);
+public class OracleMetadataStrategy extends MetadataStrategyTemplate {
+	Logger LOG = LoggerFactory.getLogger(OracleMetadataStrategy.class);
 	final static String ORACLE_JDBC_CLASSNAME = "oracle.jdbc.OracleDriver";
 	Connection connection = null;
 
 	/**
+	 * Used to set the connection for RedShift
 	 * 
-	 *
+	 * @param connectionProperties
+	 *            - contain request params details
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-
-	public void setConnection(String userId, String password, String host, String port, String sid, String driverType)
-			throws ParamsCannotBeNullOrEmpty, JSONException, ClassNotFoundException, SQLException {
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setConnection(Map connectionProperties) throws ClassNotFoundException, SQLException {
+		String driverType = connectionProperties
+				.getOrDefault(Constants.DRIVER_TYPE,
+						new ParamsCannotBeNullOrEmpty(Constants.DRIVER_TYPE + " not found in request parameter"))
+				.toString();
+		String host = connectionProperties
+				.getOrDefault(Constants.HOST_NAME,
+						new ParamsCannotBeNullOrEmpty(Constants.HOST_NAME + " not found in request parameter"))
+				.toString();
+		String port = connectionProperties
+				.getOrDefault(Constants.PORT_NUMBER,
+						new ParamsCannotBeNullOrEmpty(Constants.PORT_NUMBER + " not found in request parameter"))
+				.toString();
+		String sid = connectionProperties.getOrDefault(Constants.SID,
+				new ParamsCannotBeNullOrEmpty(Constants.SID + " not found in request parameter")).toString();
+		String userId = connectionProperties
+				.getOrDefault(Constants.USERNAME,
+						new ParamsCannotBeNullOrEmpty(Constants.USERNAME + " not found in request parameter"))
+				.toString();
+		String password = connectionProperties
+				.getOrDefault(Constants.PASSWORD,
+						new ParamsCannotBeNullOrEmpty(Constants.PASSWORD + " not found in request parameter"))
+				.toString();
 		String jdbcUrl = "jdbc:oracle:" + driverType + "://@" + host + ":" + port + ":" + sid;
-		checkNullParams(userId, password, host, port, sid, driverType);
 		Class.forName(ORACLE_JDBC_CLASSNAME);
 		connection = DriverManager.getConnection(jdbcUrl, userId, password);
 	}
 
 	/**
-	 * Checks the presence of null or empty in field parameter.
+	 * @param componentSchemaProperties
+	 *            - Contain request parameter details
+	 * @return {@link TableEntity}
 	 * 
-	 * @param userId
-	 * @param password
-	 * @param host
-	 * @param port
-	 * @param sid
-	 * @param driverType
-	 * @throws ParamsCannotBeNullOrEmpty
-	 *             throws when the parameter supplied is null or empty.
 	 */
-	private void checkNullParams(String userId, String password, String host, String port, String sid,
-			String driverType) throws ParamsCannotBeNullOrEmpty {
-		if (userId == null || userId.isEmpty()) {
-			throw new ParamsCannotBeNullOrEmpty("UserID can not be null or empty.");
-		}
-		if (password == null || password.isEmpty()) {
-			throw new ParamsCannotBeNullOrEmpty("Password can not be null or empty.");
-		}
-		if (host == null || host.isEmpty()) {
-			throw new ParamsCannotBeNullOrEmpty("Host can not be null or empty.");
-		}
-		if (port == null || port.isEmpty()) {
-			throw new ParamsCannotBeNullOrEmpty("Port can not be null or empty.");
-		}
-		if (sid == null || sid.isEmpty()) {
-			throw new ParamsCannotBeNullOrEmpty("SID can not be null or empty.");
-		}
-		if (driverType == null || driverType.isEmpty()) {
-			throw new ParamsCannotBeNullOrEmpty("Driver helper can not be null or empty.");
-		}
-	}
-
-	/**
-	 * Used to get the table schema using query or tablename
-	 * 
-	 * @param query
-	 *            - SQL query used by oracle
-	 * @param tableName
-	 *            - table name from which schema will be removed
-	 * @return TableEntity {@link TableEntity}
-	 * @throws JSONException
-	 *             -
-	 * @throws SQLException
-	 * @throws ParamsCannotBeNullOrEmpty
-	 */
-	public TableEntity fillComponentSchema(String query, String tableName)
+	@SuppressWarnings("unchecked")
+	@Override
+	public TableEntity fillComponentSchema(Map componentSchemaProperties)
 			throws SQLException, ParamsCannotBeNullOrEmpty {
+		String query = componentSchemaProperties.getOrDefault(Constants.QUERY,
+				new ParamsCannotBeNullOrEmpty(Constants.QUERY + " not found in request parameter")).toString();
+		String tableName = componentSchemaProperties
+				.getOrDefault(Constants.QUERY,
+						new ParamsCannotBeNullOrEmpty(Constants.TABLENAME + " not found in request parameter"))
+				.toString();
 		ResultSet res = null;
 		TableEntity tableEntity = new TableEntity();
 		List<TableSchemaFieldEntity> tableSchemaFieldEntities = new ArrayList<TableSchemaFieldEntity>();
@@ -145,4 +136,5 @@ public class OracleMetadataHelper {
 		}
 		return tableEntity;
 	}
+
 }

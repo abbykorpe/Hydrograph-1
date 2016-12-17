@@ -99,7 +99,7 @@ public class Constants {
 	 * The json key for schema and condition set in ServiceConfig.properties
 	 * file
 	 */
-	public static final String REQUEST_PARAMETERS= "request_parameters";
+	public static final String REQUEST_PARAMETERS = "request_parameters";
 
 	/**
 	 * The URL parameter for password sent in the request object to the service
@@ -180,15 +180,15 @@ public class Constants {
 	/**
 	 * Used to get the class name for oracle
 	 */
-	public static final String oracle = "hydrograph.server.metadata.helper.OracleMetadataHelper";
+	public static final String oracle = "hydrograph.server.metadata.strategy.OracleMetadataStrategy";
 	/**
 	 * Used to get the class name for hive
 	 */
-	public static final String hive = "hydrograph.server.metadata.helper.HiveMetadataHelper";
+	public static final String hive = "hydrograph.server.metadata.strategy.HiveMetadataStrategy";
 	/**
 	 * Used to get the class name for redshift
 	 */
-	public static final String redshift = "hydrograph.server.metadata.helper.RedShiftMetadataHelper";
+	public static final String redshift = "hydrograph.server.metadata.strategy.RedshiftMetadataStrategy";
 	/**
 	 * checking the ORACLE type
 	 */
