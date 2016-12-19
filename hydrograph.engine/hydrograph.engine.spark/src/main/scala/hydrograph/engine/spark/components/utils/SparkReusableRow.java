@@ -2,11 +2,12 @@ package hydrograph.engine.spark.components.utils;
 
 import hydrograph.engine.transformation.userfunctions.base.ListBasedReusableRow;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashSet;
 
-public class SparkReusableRow extends ListBasedReusableRow {
+public class SparkReusableRow extends ListBasedReusableRow implements Serializable{
 
 	public SparkReusableRow(LinkedHashSet<String> fields) {
 		super(fields);

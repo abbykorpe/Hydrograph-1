@@ -36,13 +36,16 @@
 
 	<operations id="reformat" xsi:type="tt:transform">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<operation id="opt1" class="hydrograph.engine.userfunctions.TransformTest">
+		<operation id="opt1" class="hydrograph.engine.transformation.userfunctions.transform.RegexSplitTransform">
 			<inputFields>
 				<field name="name" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
 				<field name="new_name" type="java.lang.String" />
 			</outputFields>
+			<properties>
+				<property name="regex" value="regex" />
+			</properties>
 		</operation>
 		<outSocket id="out0">
 			<passThroughField name="id" inSocketId="in0" />

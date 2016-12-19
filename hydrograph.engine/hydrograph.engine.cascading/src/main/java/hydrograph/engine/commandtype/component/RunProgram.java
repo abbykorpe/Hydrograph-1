@@ -12,8 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.commandtype.component;
 
-import hydrograph.engine.core.component.entity.RunProgramEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.assembly.entity.RunProgramEntity;
+import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class RunProgram extends BaseCommandComponent {
 	}
 
 	@Override
-	public int executeCommand()   {
+	public int executeCommand() throws Throwable  {
 		String command = this.runProgramEntity.getCommand();
 		try {
 			if (System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -70,15 +70,5 @@ public class RunProgram extends BaseCommandComponent {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	@Override
-	public String resolveOutgoingDependency() {
-		return runProgramEntity.getComponentId()+"_out";
-	}
-
-	@Override
-	public String resolveIncomingDependency() {
-		return runProgramEntity.getComponentId()+"_in";
 	}
 }

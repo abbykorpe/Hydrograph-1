@@ -12,10 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.context;
 
-import java.util.ArrayList;
-
-import cascading.tuple.Fields;
-import cascading.tuple.TupleEntry;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.cascading.utilities.TupleHelper;
@@ -23,11 +19,18 @@ import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import hydrograph.engine.utilities.UserClassLoader;
 
+import java.util.ArrayList;
+
+import cascading.tuple.Fields;
+import cascading.tuple.TupleEntry;
+
 public class CustomHandlerContext<T> {
 
 	private ArrayList<T> transformInstances;
 	private ArrayList<ValidationAPI> exprValidationAPIList;
-
+	private String[] initialValues;
+	private Object[] accumulatorList;
+	private String exprCount;
 	private ArrayList<ReusableRow> inputRows;
 	private ArrayList<ReusableRow> outputRows;
 	private ReusableRow passthroughRow;
@@ -55,6 +58,31 @@ public class CustomHandlerContext<T> {
 				transformClassNames, null);
 	}
 
+	public CustomHandlerContext(FieldManupulatingHandler fieldManupulatingHandler,
+			ArrayList<String> transformClassNames, ArrayList<ValidationAPI> exprValidationObject, String[] initialValues2, Object[] objects) {
+
+		this.outputTupleEntry = (TupleHelper.initializeTupleEntry(fieldManupulatingHandler.getOutputFields()));
+		this.accumulatorList = objects;
+		this.initialValues = initialValues2;
+
+		initialize(fieldManupulatingHandler.getOperationInputFields(),
+				fieldManupulatingHandler.getOperationOutputFields(), fieldManupulatingHandler.getPassThroughFields(),
+				fieldManupulatingHandler.getMapSourceFields(), fieldManupulatingHandler.getOutputFields(),
+				transformClassNames, exprValidationObject);
+	}
+	
+	public CustomHandlerContext(FieldManupulatingHandler fieldManupulatingHandler,
+			ArrayList<String> transformClassNames, ArrayList<ValidationAPI> exprValidationObject, String exprCount) {
+
+		this.outputTupleEntry = (TupleHelper.initializeTupleEntry(fieldManupulatingHandler.getOutputFields()));
+		this.exprCount = exprCount;
+
+		initialize(fieldManupulatingHandler.getOperationInputFields(),
+				fieldManupulatingHandler.getOperationOutputFields(), fieldManupulatingHandler.getPassThroughFields(),
+				fieldManupulatingHandler.getMapSourceFields(), fieldManupulatingHandler.getOutputFields(),
+				transformClassNames, exprValidationObject);
+	}
+	
 	public CustomHandlerContext(FieldManupulatingHandler fieldManupulatingHandler,
 			ArrayList<String> transformClassNames, ArrayList<ValidationAPI> exprValidationObject) {
 
@@ -114,43 +142,41 @@ public class CustomHandlerContext<T> {
 		inputRows = new ArrayList<ReusableRow>();
 		outputRows = new ArrayList<ReusableRow>();
 		exprValidationAPIList = new ArrayList<ValidationAPI>();
-
-		if (transformClassNames != null) {
-			for (String transformClassName : transformClassNames) {
-				if (transformClassName != null)
-					transformInstances.add((T) UserClassLoader.loadAndInitClass(transformClassName));
-				else
-					transformInstances.add(null);
-			}
-		}
-
+		
 		if (exprValidationObjectList != null) {
 			for (ValidationAPI validationAPI : exprValidationObjectList)
 				exprValidationAPIList.add(validationAPI);
 		}
-
+		
+		if (transformClassNames != null) {
+			for (String transformClassName : transformClassNames) {
+				transformInstances.add((T) UserClassLoader
+						.loadAndInitClass(transformClassName));
+			}
+		}
+		
 		if (operationInputFields != null) {
 			for (Fields fields : operationInputFields) {
-				inputRows.add(new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(fields)));
+				inputRows.add(new ReusableRow(ReusableRowHelper.getListFromFields(fields)));
 			}
 		}
 
 		if (operationOutputFields != null) {
 			for (Fields fields : operationOutputFields) {
-				outputRows.add(new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(fields)));
+				outputRows.add(new ReusableRow(ReusableRowHelper.getListFromFields(fields)));
 			}
 		}
 
 		if (passThrough == null) {
 			passthroughRow = null;
 		} else {
-			passthroughRow = new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(passThrough));
+			passthroughRow = new ReusableRow(ReusableRowHelper.getListFromFields(passThrough));
 		}
 
 		if (mapSourceFields == null) {
 			mapRow = null;
 		} else {
-			mapRow = new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(mapSourceFields));
+			mapRow = new ReusableRow(ReusableRowHelper.getListFromFields(mapSourceFields));
 		}
 	}
 
@@ -163,7 +189,7 @@ public class CustomHandlerContext<T> {
 		if (operationFields == null) {
 			operationRow = null;
 		} else {
-			operationRow = new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(operationFields));
+			operationRow = new ReusableRow(ReusableRowHelper.getListFromFields(operationFields));
 		}
 	}
 
@@ -192,9 +218,17 @@ public class CustomHandlerContext<T> {
 	public ReusableRow getOutputRow(int index) {
 		return this.outputRows.get(index);
 	}
+	
+	public void setOutputRow(ReusableRow row) {
+		this.outputRows.add(0, row);
+	}
 
 	public ArrayList<ReusableRow> getAllOutputRow() {
 		return this.outputRows;
+	}
+	
+	public ArrayList<ReusableRow> getAllinputRow() {
+		return this.inputRows;
 	}
 
 	public ReusableRow getPassThroughRow() {
@@ -204,7 +238,7 @@ public class CustomHandlerContext<T> {
 	public ReusableRow getOperationRow() {
 		return this.operationRow;
 	}
-
+	
 	public ReusableRow getSingleOutputRow() {
 		return this.getOutputRow(0);
 	}
@@ -227,6 +261,36 @@ public class CustomHandlerContext<T> {
 
 	public TupleEntry getOutputTupleEntry() {
 		return outputTupleEntry;
+	}
+
+	public Object[] getAccumulatorList() {
+		return accumulatorList;
+	}
+
+	public void setAccumulatorList(Object[] accumulatorList) {
+		this.accumulatorList = accumulatorList;
+	}
+	
+	public Object getAccumulatorValue(int index) {
+		Object obj = accumulatorList[index];
+		return obj;
+	}
+
+	public void setAccumulatorValue(Object accumulatorValue, int index) {
+		this.accumulatorList[index] = accumulatorValue;
+	}
+
+	public String[] getInitialValues() {
+		return initialValues;
+	}
+	
+	public String getInitialValue(int index) {
+		String str = initialValues[index]; 
+		return str;
+	}
+	
+	public String getExprCount() {
+		return exprCount;
 	}
 
 	/**

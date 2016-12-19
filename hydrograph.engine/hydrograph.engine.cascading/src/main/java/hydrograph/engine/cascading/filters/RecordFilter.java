@@ -12,6 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.filters;
 
+import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
+import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
+import hydrograph.engine.cascading.assembly.handlers.RecordFilterHandlerBase;
+import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.userfunctions.FilterForExpression;
+import hydrograph.engine.transformation.userfunctions.base.FilterBase;
+import hydrograph.engine.utilities.UserClassLoader;
 import cascading.flow.FlowProcess;
 import cascading.management.annotation.Property;
 import cascading.management.annotation.PropertyDescription;
@@ -20,13 +27,10 @@ import cascading.operation.BaseOperation;
 import cascading.operation.Filter;
 import cascading.operation.FilterCall;
 import cascading.operation.OperationCall;
-import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
-import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
-import hydrograph.engine.cascading.assembly.handlers.RecordFilterHandlerBase;
-import hydrograph.engine.transformation.userfunctions.base.FilterBase;
-import hydrograph.engine.utilities.UserClassLoader;
 
-public class RecordFilter extends BaseOperation<RecordFilterContext> implements Filter<RecordFilterContext> {
+@SuppressWarnings("unchecked")
+public class RecordFilter extends BaseOperation<RecordFilterContext> implements
+		Filter<RecordFilterContext> {
 
 	/**
 	 * 
@@ -35,24 +39,39 @@ public class RecordFilter extends BaseOperation<RecordFilterContext> implements 
 	private RecordFilterHandlerBase filterHandler;
 	private String counterName;
 	private String filterClassName;
+	private ValidationAPI validationAPI;
 
-	public RecordFilter(RecordFilterHandlerBase selectCustomHandler, String previousName) {
-
+	public RecordFilter(RecordFilterHandlerBase selectCustomHandler,
+			String previousName, ValidationAPI validationAPI) {
+		this.validationAPI = validationAPI;
 		this.filterHandler = selectCustomHandler;
 		this.counterName = previousName;
-		this.filterClassName = ((FilterCustomHandler) filterHandler).getTransformClass();
+		this.filterClassName = ((FilterCustomHandler) filterHandler)
+				.getTransformClass();
+	}
+	
+	public RecordFilter(RecordFilterHandlerBase selectCustomHandler,
+			String previousName) {
+		this.filterHandler = selectCustomHandler;
+		this.counterName = previousName;
+		this.filterClassName = ((FilterCustomHandler) filterHandler)
+				.getTransformClass();
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void prepare(FlowProcess flowProcess, OperationCall<RecordFilterContext> call) {
+	public void prepare(FlowProcess flowProcess,
+			OperationCall<RecordFilterContext> call) {
 
 		RecordFilterContext context = new RecordFilterContext();
 		call.setContext(context);
 		if (filterClassName == null)
 			context.setHandlerContext(filterHandler.prepare());
 		else {
-			Object filterObject = UserClassLoader.loadAndInitClass(filterClassName);
+			Object filterObject = UserClassLoader
+						.loadAndInitClass(filterClassName);
+				if(filterObject instanceof FilterForExpression)
+				((FilterForExpression)filterObject).setValidationAPI(validationAPI);
 			context.setFilterClass(filterObject);
 			context.setCounterName(counterName);
 			if (filterObject instanceof FilterBase)
@@ -75,7 +94,8 @@ public class RecordFilter extends BaseOperation<RecordFilterContext> implements 
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void cleanup(FlowProcess flowProcess, OperationCall<RecordFilterContext> call) {
+	public void cleanup(FlowProcess flowProcess,
+			OperationCall<RecordFilterContext> call) {
 		if (call.getContext().getFilterClass() == null)
 			filterHandler.cleanup(call);
 		else if (call.getContext().getFilterClass() instanceof FilterBase) {

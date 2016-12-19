@@ -31,7 +31,7 @@
 
 	<operations id="reformat" batch="0" xsi:type="tt:transform">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<expression expr="StringFunctions.stringMatch(city,name)?true:false;" id="e1">
+		<expression expr="StringFunctions.stringMatch(city,name)?&quot;tRuE&quot;:&quot;fAlSe&quot;;" id="e1">
 			<inputFields>
 				<field name="name" inSocketId="in0" />
 				<field name="city" inSocketId="in0" />
@@ -40,19 +40,10 @@
 				<field name="new_field" type="java.lang.String" />
 			</outputFields>
 		</expression>
-		<operation id="opt1" class="hydrograph.engine.userfunctions.TransformTest">
-			<inputFields>
-				<field name="name" inSocketId="in0" />
-			</inputFields>
-			<outputFields>
-				<field name="new_name" type="java.lang.String" />
-			</outputFields>
-		</operation>
 		<outSocket id="out0">
 			<passThroughField name="id" inSocketId="in0" />
 			<mapField sourceName="city" name="new_city" inSocketId="in0" />
 			<expressionField name="new_field" expressionId="e1"/>
-			<operationField name="new_name" operationId="opt1"/>
 		</outSocket>
 	</operations>
 
@@ -60,7 +51,6 @@
 		<inSocket fromComponentId="reformat" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
 				<field name="id" type="java.lang.String" />
-				<field name="new_name" type="java.lang.String" />
 				<field name="new_city" type="java.lang.String" />
 				<field name="new_field" type="java.lang.String" />
 			</schema>

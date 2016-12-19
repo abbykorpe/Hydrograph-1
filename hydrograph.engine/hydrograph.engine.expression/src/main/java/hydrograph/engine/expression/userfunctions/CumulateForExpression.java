@@ -40,7 +40,7 @@ public class CumulateForExpression implements CumulateTransformBase {
 		this.initialValueExpressions = initialValueExpression;
 	}
 
-	public CumulateForExpression(ValidationAPI validationAPI) {
+	public CumulateForExpression() {
 	}
 	
 	public void callPrepare(){

@@ -23,11 +23,11 @@ import cascading.pipe.Each;
 import cascading.pipe.Merge;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.UnionAllEntity;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.functions.CopyFields;
-import hydrograph.engine.core.component.entity.UnionAllEntity;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {

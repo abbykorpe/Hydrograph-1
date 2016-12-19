@@ -28,7 +28,7 @@ import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 public class Counter extends BaseOperation<RecordFilterContext>implements Filter<RecordFilterContext> {
 
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 

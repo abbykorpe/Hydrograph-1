@@ -29,10 +29,10 @@ import cascading.flow.planner.Scope;
 import cascading.flow.planner.graph.ElementGraph;
 import cascading.pipe.Pipe;
 import cascading.stats.FlowNodeStats;
+import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.integration.FlowContext;
 import hydrograph.engine.cascading.integration.RuntimeContext;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.utilities.SocketUtilities;
@@ -52,7 +52,6 @@ public class ComponentPipeMapping {
 	private static Set<String> allPipes = new HashSet<String>();
 	private static Map<String,String> batchMap = new HashMap<String,String>();
 	private static Map<String,String> componentNamesMap = new HashMap<String,String>();
-
 
 	/**
 	 * Method generateComponentToPipeMap generates map of component with
@@ -96,7 +95,6 @@ public class ComponentPipeMapping {
 						inSockets);
 				batchMap.put(eachComponentId, eachBatchNumber);
 				componentNamesMap.put(eachComponentId, jaxbTraversal.getComponentNameFromComponentId(eachComponentId));
-
 			}
 		}
 	}
@@ -306,8 +304,8 @@ public class ComponentPipeMapping {
 	}
 
 	private static Map<String, String> createReverseMap(Map<String, Pipe> allMapOfPipes) {
-		Map<String, String> pipeComponent = new HashMap<String, String>();
-		for (Map.Entry<String, Pipe> entry : allMapOfPipes.entrySet()) {
+		Map<String, String> pipeComponent = new HashMap<>();
+		for (Entry<String, Pipe> entry : allMapOfPipes.entrySet()) {
 			pipeComponent.put(entry.getValue().getName(), entry.getKey());
 		}
 		return pipeComponent;

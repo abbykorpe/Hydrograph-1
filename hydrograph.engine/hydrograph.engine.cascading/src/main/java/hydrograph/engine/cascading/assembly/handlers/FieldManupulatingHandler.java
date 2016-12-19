@@ -243,6 +243,10 @@ public class FieldManupulatingHandler implements Serializable {
 	public int[] getInputPositions(int index) {
 		return inputPositions.get(index);
 	}
+	
+	public ArrayList<int[]> getAllInputPositions(){
+		return inputPositions;
+	}
 
 	/**
 	 * @return the field positions of pass through fields in the input row
@@ -277,6 +281,10 @@ public class FieldManupulatingHandler implements Serializable {
 
 	public ArrayList<int[]> getAllOutputPositions() {
 		return outputPositions;
+	}
+	
+	public void setAllOutputPositions(ArrayList<int[]> outputPositions) {
+		this.outputPositions = outputPositions;
 	}
 
 

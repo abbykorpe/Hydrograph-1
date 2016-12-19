@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
+import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
-import hydrograph.engine.core.component.entity.base.InputOutputEntityBase;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -35,7 +35,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	private String[] fieldFromRangeValue;
 	private String[] fieldLengthOrDelimiter;
 	private Type[] typefieldLengthDelimiter;
-	private String[] colDef;
 
 	private InputOutputEntityBase inputOutputEntityBase;
 
@@ -83,7 +82,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 		fieldFromRangeValue = new String[sizeOfFieldList];
 		fieldToRangeValue = new String[sizeOfFieldList];
 		fieldLengthOrDelimiter = new String[sizeOfFieldList];
-        colDef = new String[sizeOfFieldList];
 		typefieldLengthDelimiter = new Type[sizeOfFieldList];
 
 		for (int i = 0; i < sizeOfFieldList; i++) {
@@ -101,7 +99,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 			fieldLengthOrDelimiter[i] = schemaField.getFieldLengthDelimiter();
 			typefieldLengthDelimiter[i] = schemaField
 					.getTypeFieldLengthDelimiter();
-			colDef[i] = schemaField.getColDef();   
 		}
 	}
 
@@ -218,15 +215,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 		return fieldToRangeValue != null ? fieldToRangeValue.clone() : null;
 	}
 
-	  /**
-     * This method returns field colDef values.
-     * 
-      * @return String[]
-     */
-     public String[] getColDef() {
-           return colDef;
-     }
-     
 	/**
 	 * This method return types which is used to associate a Type with a field
 	 * name or position.
