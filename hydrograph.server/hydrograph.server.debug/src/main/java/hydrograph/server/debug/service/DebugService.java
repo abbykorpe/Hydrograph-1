@@ -22,9 +22,11 @@ import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.security.PrivilegedAction;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.security.auth.Subject;
@@ -39,6 +41,8 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathNotFoundException;
 import org.apache.hadoop.security.UserGroupInformation;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +58,11 @@ import hydrograph.server.debug.lingual.json.RemoteFilterJson;
 import hydrograph.server.debug.lingual.querygenerator.LingualQueryCreator;
 import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.debug.utilities.ServiceUtilities;
-import hydrograph.server.metastore.HiveTableSchema;
-import hydrograph.server.metastore.HiveTableSchemaUtils;
+import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
+import hydrograph.server.metadata.exception.TableOrQueryParamNotFound;
+import hydrograph.server.metadata.strategy.HiveMetadataStrategy;
+import hydrograph.server.metadata.strategy.OracleMetadataStrategy;
+import hydrograph.server.metadata.strategy.RedshiftMetadataStrategy;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -63,7 +70,6 @@ import spark.Spark;
 
 /**
  * @author Bitwise
- * 
  */
 public class DebugService implements PrivilegedAction<Object> {
 	private static final Logger LOG = LoggerFactory.getLogger(DebugService.class);
@@ -81,94 +87,126 @@ public class DebugService implements PrivilegedAction<Object> {
 			LOG.error("Error fetching port number. Defaulting to " + Constants.DEFAULT_PORT_NUMBER, e);
 		}
 		Spark.setPort(portNumber);
-		
-		
-		Spark.post("readFromMetastore",new Route() {
-			
+
+		Spark.post("readFromMetastore", new Route() {
+
+			@SuppressWarnings("unchecked")
 			@Override
-			public Object handle(Request request, Response response) {
+			public Object handle(Request request, Response response)
+					throws ParamsCannotBeNullOrEmpty, ClassNotFoundException, IllegalAccessException, JSONException,
+					JsonProcessingException, TableOrQueryParamNotFound, SQLException, InstantiationException {
 				LOG.info("************************readFromMetastore endpoint - started************************");
 				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
-				String database = request.queryParams("database");
-				String table = request.queryParams("table");
-				String userId = request.queryParams("userName");
-				String password = request.queryParams("password");
-
-				LOG.info("Fetching metadata for Database: {}, Table name: {}, with User Id: {}",
-						new Object[] { database, table, userId });
-
-				String objectAsString = "";
 				ObjectMapper objectMapper = new ObjectMapper();
+				String requestParameters = request.queryParams(Constants.REQUEST_PARAMETERS), objectAsString = null,
+						dbClassName = null;
+				JSONObject requestParameterValues = new JSONObject(requestParameters);
+				// Method to extracting request parameter details from input
+				// json.
+				Map metadataProperties = extractingJsonObjects(requestParameterValues);
 
+				String dbType = metadataProperties
+						.getOrDefault(Constants.dbType,
+								new ParamsCannotBeNullOrEmpty(Constants.dbType + " Cannot be null or empty"))
+						.toString();
 				try {
-					objectAsString = objectMapper
-							.writeValueAsString(fetchSchemaFromMetastore(database, table, userId, password));
-					LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
-				} catch (RuntimeException e) {
-					LOG.error("Error in fetching table metadata from hive metastore: ", e);
+					Object dbClass;
+					switch (dbType.toLowerCase()) {
+					case Constants.ORACLE:
+						dbClassName = Constants.oracle;
+						OracleMetadataStrategy oracleMetadataHelper = (OracleMetadataStrategy) Class
+								.forName(dbClassName).newInstance();
+						oracleMetadataHelper.setConnection(metadataProperties);
+						objectAsString = objectMapper
+								.writeValueAsString(oracleMetadataHelper.fillComponentSchema(metadataProperties));
+						LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+						break;
+					case Constants.HIVE:
+						dbClassName = Constants.hive;
+						HiveMetadataStrategy hiveMetadataHelper = (HiveMetadataStrategy) Class.forName(dbClassName)
+								.newInstance();
+						hiveMetadataHelper.setConnection(metadataProperties);
+						objectAsString = objectMapper
+								.writeValueAsString(hiveMetadataHelper.fillComponentSchema(metadataProperties));
+						LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+						break;
+					case Constants.REDSHIFT:
+						dbClassName = Constants.redshift;
+						RedshiftMetadataStrategy redShiftMetadataHelper = (RedshiftMetadataStrategy) Class
+								.forName(dbClassName).newInstance();
+						redShiftMetadataHelper.setConnection(metadataProperties);
+						objectAsString = objectMapper
+								.writeValueAsString(redShiftMetadataHelper.fillComponentSchema(metadataProperties));
+						LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+						break;
+					}
+				} catch (Exception e) {
+					LOG.error("Metadata read for database : " + dbType + " Not supported." + e);
 					response.status(400);
-					return e.getMessage();
-
-				} catch (JsonProcessingException e) {
-					LOG.error("Error in fetching table metadata from hive metastore: ", e);
-					response.status(400);
-					return e.getMessage();
+					return "Metadata read for database : " + dbType + " Not supported.";
 				}
+				LOG.info("Class Name used for " + dbType + " Is : " + dbClassName);
 				return objectAsString;
 			}
-			
-			/**
-			 * This method will fetch the metadata from hivemetastore and return
-			 * schema of the table {@code tableName} in database
-			 * {@code databaseName} passed in parameter.
-			 * 
-			 * @param databaseName
-			 *            name of the database in Hive
-			 * @param tableName
-			 *            name of the table in Hive
-			 * @param userId
-			 * @param password
-			 * @return instance of HiveTableSchema which
-			 *         contains all the metadata of a specific table.
-			 * 
-			 */
-			
-			private HiveTableSchema fetchSchemaFromMetastore(String databaseName, String tableName, String userId,
-					String password) {
 
-				HiveTableSchema hiveTableSchema = null;
-				
-				try {
-					getKerberosToken(userId, password);
-					hiveTableSchema = new HiveTableSchemaUtils(databaseName, tableName).getHiveTableSchema();
-				} catch (LoginException e) {
-					throw new RuntimeException(e.getMessage());
-				} catch (IOException e) {
-					throw new RuntimeException(e.getMessage());
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			private Map extractingJsonObjects(JSONObject requestParameterValues) throws JSONException {
+
+				String dbType = null, userId = null, password = null, host = null, port = null, sid = null,
+						driverType = null, query = null, tableName = null, database = null;
+				Map metadataProperties = new HashMap();
+				if (!requestParameterValues.isNull(Constants.dbType)) {
+					dbType = requestParameterValues.getString(Constants.dbType);
+					metadataProperties.put(Constants.dbType, dbType);
 				}
-				return hiveTableSchema;
-			}
-			
-			private void getKerberosToken(String userId, String password) throws LoginException, IOException {
-				Configuration conf = new Configuration();
+				if (!requestParameterValues.isNull(Constants.USERNAME)) {
+					userId = requestParameterValues.getString(Constants.USERNAME);
+					metadataProperties.put(Constants.USERNAME, userId);
+				}
+				if (!requestParameterValues.isNull(Constants.PASSWORD)) {
+					password = requestParameterValues.getString(Constants.PASSWORD);
+					metadataProperties.put(Constants.PASSWORD, password);
+				}
+				if (!requestParameterValues.isNull(Constants.HOST_NAME)) {
+					host = requestParameterValues.getString(Constants.HOST_NAME);
+					metadataProperties.put(Constants.HOST_NAME, host);
+				}
+				if (!requestParameterValues.isNull(Constants.PORT_NUMBER)) {
+					port = requestParameterValues.getString(Constants.PORT_NUMBER);
+					metadataProperties.put(Constants.PORT_NUMBER, port);
+				}
+				if (!requestParameterValues.isNull(Constants.SID)) {
+					sid = requestParameterValues.getString(Constants.SID);
+					metadataProperties.put(Constants.SID, sid);
+				}
+				if (!requestParameterValues.isNull(Constants.DRIVER_TYPE)) {
+					driverType = requestParameterValues.getString(Constants.DRIVER_TYPE);
+					metadataProperties.put(Constants.DRIVER_TYPE, driverType);
+				}
+				if (!requestParameterValues.isNull(Constants.QUERY)) {
+					query = requestParameterValues.getString(Constants.QUERY);
+					metadataProperties.put(Constants.QUERY, query);
+				}
+				if (!requestParameterValues.isNull(Constants.TABLENAME)) {
+					tableName = requestParameterValues.getString(Constants.TABLENAME);
+					metadataProperties.put(Constants.TABLENAME, tableName);
+				}
+				if (!requestParameterValues.isNull(Constants.DATABASE_NAME)) {
+					database = requestParameterValues.getString(Constants.DATABASE_NAME);
+					metadataProperties.put(Constants.DATABASE_NAME, database);
+				}
 
-				// load hdfs-site.xml and core-site.xml
-				String hdfsConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
-						.getString(Constants.HDFS_SITE_CONFIG_PATH);
-				String coreSiteConfigPath = ServiceUtilities.getServiceConfigResourceBundle()
-						.getString(Constants.CORE_SITE_CONFIG_PATH);
-				LOG.debug("Loading hdfs-site.xml:" + hdfsConfigPath);
-				conf.addResource(new Path(hdfsConfigPath));
-				LOG.debug("Loading hdfs-site.xml:" + coreSiteConfigPath);
-				conf.addResource(new Path(coreSiteConfigPath));
-
-				// apply kerberos token
-				applyKerberosToken(userId, password, conf);
-
+				LOG.info("Fetched request parameters are: " + Constants.dbType + " => " + dbType + " "
+						+ Constants.USERNAME + " => " + userId + " " + Constants.HOST_NAME + " => " + host + " "
+						+ Constants.PORT_NUMBER + " => " + port + " " + Constants.SID + " => " + sid + " "
+						+ Constants.DRIVER_TYPE + " => " + driverType + " " + Constants.QUERY + " => " + query + " "
+						+ Constants.TABLENAME + " => " + tableName + " " + Constants.DATABASE_NAME + " => " + database
+						+ " ");
+				return metadataProperties;
 			}
 		});
 
-		Spark.post("/read",new Route() {
+		Spark.post("/read", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				LOG.info("************************read endpoint - started************************");
@@ -205,7 +243,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			 * This method will read the HDFS file, fetch the records from it
 			 * and write its records to a local file on edge node with size <=
 			 * {@code sizeOfData} passed in parameter.
-			 * 
+			 *
 			 * @param hdfsFilePath
 			 *            path of HDFS file from where records to be read
 			 * @param sizeOfData
@@ -217,7 +255,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			 *            edge node with file name {@code remoteFileName}
 			 * @param userId
 			 * @param password
-			 * 
+			 *
 			 */
 			private void readFileFromHDFS(String hdfsFilePath, double sizeOfData, String remoteFileName, String userId,
 					String password) {
@@ -249,7 +287,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			 * This method will list all files for {@code path}, read all files
 			 * and writes its data to a local file on edge node with size <=
 			 * {@code sizeOfData} passed in parameter.
-			 * 
+			 *
 			 * @param remoteFileName
 			 * @param path
 			 * @param conf
@@ -290,7 +328,7 @@ public class DebugService implements PrivilegedAction<Object> {
 							}
 						}
 						br.close();
-						remoteFile.setReadable(true,false);
+						remoteFile.setReadable(true, false);
 					}
 				} catch (Exception e) {
 					throw new RuntimeException(e);
@@ -302,7 +340,7 @@ public class DebugService implements PrivilegedAction<Object> {
 
 		});
 
-		Spark.post("/delete",new Route() {
+		Spark.post("/delete", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				LOG.info("************************delete endpoint - started************************");
@@ -343,14 +381,14 @@ public class DebugService implements PrivilegedAction<Object> {
 
 			/**
 			 * Deletes the jobId directory
-			 * 
+			 *
 			 * @param password
 			 * @param userID
 			 * @param socketId
 			 * @param componentId
 			 * @param jobId
 			 * @param basePath
-			 * 
+			 *
 			 * @throws IOException
 			 */
 			public void delete(String basePath, String jobId, String componentId, String socketId, String userID,
@@ -371,7 +409,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 		});
 
-		Spark.post("/deleteLocalDebugFile",new Route() {
+		Spark.post("/deleteLocalDebugFile", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				String error = "";
@@ -402,7 +440,7 @@ public class DebugService implements PrivilegedAction<Object> {
 		});
 
 		// TODO : Keep this for test
-		Spark.post("/post",new Route() {
+		Spark.post("/post", new Route() {
 
 			@Override
 			public Object handle(Request request, Response response) {
@@ -412,7 +450,7 @@ public class DebugService implements PrivilegedAction<Object> {
 		});
 
 		// TODO : Keep this for test
-		Spark.get("/test",new Route() {
+		Spark.get("/test", new Route() {
 
 			@Override
 			public Object handle(Request request, Response response) {
@@ -423,7 +461,7 @@ public class DebugService implements PrivilegedAction<Object> {
 			}
 		});
 
-		Spark.post("/filter",new Route() {
+		Spark.post("/filter", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 
@@ -431,7 +469,7 @@ public class DebugService implements PrivilegedAction<Object> {
 				LOG.info("+++ Start: " + new Timestamp((new Date()).getTime()));
 
 				Gson gson = new Gson();
-				String json = request.queryParams(Constants.JSON);
+				String json = request.queryParams(Constants.REQUEST_PARAMETERS);
 				RemoteFilterJson remoteFilterJson = gson.fromJson(json, RemoteFilterJson.class);
 
 				String jobId = remoteFilterJson.getJobDetails().getUniqueJobID();
@@ -526,13 +564,14 @@ public class DebugService implements PrivilegedAction<Object> {
 				}
 				return header;
 			}
-			private Path filterOutSuccessFile(FileStatus[] fileStatus){
-				for(FileStatus status:fileStatus){
-					if(status.getPath().getName().toUpperCase().contains("_SUCCESS"))
+
+			private Path filterOutSuccessFile(FileStatus[] fileStatus) {
+				for (FileStatus status : fileStatus) {
+					if (status.getPath().getName().toUpperCase().contains("_SUCCESS"))
 						continue;
 					else
-						return	status.getPath();
-				}				
+						return status.getPath();
+				}
 				return null;
 			}
 
@@ -541,7 +580,8 @@ public class DebugService implements PrivilegedAction<Object> {
 				FileStatus[] status = fs.listStatus(path);
 				String line = "";
 				try {
-					BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(filterOutSuccessFile(status))));
+					BufferedReader br = new BufferedReader(
+							new InputStreamReader(fs.open(filterOutSuccessFile(status))));
 
 					line = br.readLine();
 					br.close();
@@ -679,5 +719,13 @@ public class DebugService implements PrivilegedAction<Object> {
 	public Object run() {
 		LOG.trace("Entering method run()");
 		return null;
+	}
+
+	private class UnableToLoadPropertiesException extends RuntimeException {
+		private static final long serialVersionUID = 4031525765978790699L;
+
+		public UnableToLoadPropertiesException(Throwable e) {
+			super(e);
+		}
 	}
 }

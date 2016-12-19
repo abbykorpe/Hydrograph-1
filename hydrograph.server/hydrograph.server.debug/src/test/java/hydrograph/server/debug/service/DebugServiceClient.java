@@ -28,46 +28,57 @@ public class DebugServiceClient {
 	String COMPONENT_ID = "input1";
 	String SOCKET_ID = "out0";
 
-//	String BASE_PATH = "C:/Users/Bhaveshs/git/hydrograph";
-	 String BASE_PATH = "hdfs://UbuntuD1.bitwiseglobal.net:8020/user/hduser";
+	// String BASE_PATH = "C:/Users/Bhaveshs/git/hydrograph";
+	String BASE_PATH = "hdfs://UbuntuD1.bitwiseglobal.net:8020/user/hduser";
 	String USER_ID = "hduser";
 	String PASSWORD = "Bitwise2012";
 	String FILE_SIZE_TO_READ = "1";
-//	String HOST_NAME = "127.0.0.1";
-	 String HOST_NAME = "10.130.248.53";
-	String PORT = "8004";
+	String HOST_NAME = "127.0.0.1";
+	// String HOST_NAME = "10.130.248.53";
+	String PORT = "8006";
 
-	public void calltoFilterService() throws ClientProtocolException,
-			IOException {
+	public void calltoReadMetastore() throws ClientProtocolException, IOException {
+
+		HttpClient httpClient = new HttpClient();
+
+		// String json =
+		// "{\"condition\":\"abc\",\"schema\":[{\"fieldName\":\"f1\",\"dateFormat\":\"\",\"dataType\":\"1\",\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.String\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f2\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f3\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f4\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.math.BigDecimal\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"}],\"fileSize\":1,\"jobDetails\":{\"host\":\"127.0.0.1\",\"port\":\"8005\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"basepath\":\"C:/Users/santlalg/git/Hydrograph/hydrograph.engine/hydrograph.engine.command-line\",\"uniqueJobID\":\"debug_job\",\"componentID\":\"input\",\"componentSocketID\":\"out0\",\"isRemote\":false}}";
+		String oraclejson = "{\"query\":\"Select * from testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		// String hivejson =
+		// "{\"database\":\"textdata\",\"table\":\"personal\",\"username\":\"username\",\"password\":\"yourpassword\",\"dbtype\":\"hive\"}";
+
+		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/readFromMetastore");
+
+		postMethod.addParameter("request_parameters", oraclejson);
+
+		int response = httpClient.executeMethod(postMethod);
+		InputStream inputStream = postMethod.getResponseBodyAsStream();
+
+		byte[] buffer = new byte[1024 * 1024 * 5];
+		String path = null;
+		int length;
+		while ((length = inputStream.read(buffer)) > 0) {
+			path = new String(buffer);
+		}
+		System.out.println("Response of service: " + path);
+		System.out.println("==================");
+	}
+
+	public void calltoFilterService() throws ClientProtocolException, IOException {
 
 		HttpClient httpClient = new HttpClient();
 
 		// String json =
 		// "{\"condition\":\"abc\",\"schema\":[{\"fieldName\":\"f1\",\"dateFormat\":\"\",\"dataType\":\"1\",\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.String\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f2\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f3\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f4\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.math.BigDecimal\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"}],\"fileSize\":1,\"jobDetails\":{\"host\":\"127.0.0.1\",\"port\":\"8005\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"basepath\":\"C:/Users/santlalg/git/Hydrograph/hydrograph.engine/hydrograph.engine.command-line\",\"uniqueJobID\":\"debug_job\",\"componentID\":\"input\",\"componentSocketID\":\"out0\",\"isRemote\":false}}";
 		String json = "{\"condition\":\"(f1 LIKE 'should')\",\"schema\":[{\"fieldName\":\"f1\",\"dateFormat\":\"\",\"dataType\":\"1\",\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.String\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f2\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f3\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.Float\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f4\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.Double\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"}],\"fileSize\":"
-				+ FILE_SIZE_TO_READ
-				+ ",\"jobDetails\":{\"host\":\""
-				+ HOST_NAME
-				+ "\",\"port\":\""
-				+ PORT
-				+ "\",\"username\":\""
-				+ USER_ID
-				+ "\",\"password\":\""
-				+ PASSWORD
-				+ "\",\"basepath\":\""
-				+ BASE_PATH
-				+ "\",\"uniqueJobID\":\""
-				+ JOB_ID
-				+ "\",\"componentID\":\""
-				+ COMPONENT_ID
-				+ "\",\"componentSocketID\":\""
-				+ SOCKET_ID
-				+ "\",\"isRemote\":false}}";
+				+ FILE_SIZE_TO_READ + ",\"jobDetails\":{\"host\":\"" + HOST_NAME + "\",\"port\":\"" + PORT
+				+ "\",\"username\":\"" + USER_ID + "\",\"password\":\"" + PASSWORD + "\",\"basepath\":\"" + BASE_PATH
+				+ "\",\"uniqueJobID\":\"" + JOB_ID + "\",\"componentID\":\"" + COMPONENT_ID
+				+ "\",\"componentSocketID\":\"" + SOCKET_ID + "\",\"isRemote\":false}}";
 
-		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":"
-				+ PORT + "/filter");
+		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/filter");
 
-		postMethod.addParameter("json_object", json);
+		postMethod.addParameter("request_parameters", json);
 
 		int response = httpClient.executeMethod(postMethod);
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
@@ -85,8 +96,7 @@ public class DebugServiceClient {
 
 		HttpClient httpClient = new HttpClient();
 
-		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":"
-				+ PORT + "/read");
+		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/read");
 		postMethod.addParameter("jobId", JOB_ID);
 		postMethod.addParameter("componentId", COMPONENT_ID);
 		postMethod.addParameter("socketId", SOCKET_ID);
@@ -107,13 +117,11 @@ public class DebugServiceClient {
 		System.out.println("response of service: " + path);
 	}
 
-	public void calltoDeleteLocalDebugService() throws HttpException,
-			IOException {
+	public void calltoDeleteLocalDebugService() throws HttpException, IOException {
 
 		HttpClient httpClient = new HttpClient();
 
-		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":"
-				+ PORT + "/deleteLocalDebugFile");
+		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/deleteLocalDebugFile");
 		postMethod.addParameter("jobId", JOB_ID);
 		postMethod.addParameter("componentId", COMPONENT_ID);
 		postMethod.addParameter("socketId", SOCKET_ID);
@@ -128,14 +136,13 @@ public class DebugServiceClient {
 	public static void main(String[] args) {
 		DebugServiceClient client = new DebugServiceClient();
 		try {
-			System.out.println("+++ Start: "
-					+ new Timestamp((new Date()).getTime()));
+			System.out.println("+++ Start: " + new Timestamp((new Date()).getTime()));
 			// client.calltoReadService();
-			client.calltoFilterService();
+			// client.calltoFilterService();
+			client.calltoReadMetastore();
 			// client.calltoDeleteLocalDebugService();
 			System.out.println("done:");
-			System.out.println("+++ End: "
-					+ new Timestamp((new Date()).getTime()));
+			System.out.println("+++ End: " + new Timestamp((new Date()).getTime()));
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
