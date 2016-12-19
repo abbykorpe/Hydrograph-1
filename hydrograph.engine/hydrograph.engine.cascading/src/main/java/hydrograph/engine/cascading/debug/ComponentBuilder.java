@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.debug;
 
-import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.StandardCharsets;
@@ -149,7 +149,7 @@ public enum ComponentBuilder {
 					+ debugContext.getJobId() + "/"
 					+ debugContext.getFromComponentId() + "_"
 					+ debugContext.getFromOutSocketId();
-			hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Path path = new hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Path();
+			TextFileDelimited.Path path = new TextFileDelimited.Path();
 			path.setUri(pathUri);
 			textOutputFileDelimited.setPath(path);
 

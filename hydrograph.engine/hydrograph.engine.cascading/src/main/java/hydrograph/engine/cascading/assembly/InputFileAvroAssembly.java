@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import hydrograph.engine.assembly.entity.InputFileAvroEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
 import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
-import hydrograph.engine.core.component.entity.InputFileAvroEntity;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
 
 import java.io.IOException;

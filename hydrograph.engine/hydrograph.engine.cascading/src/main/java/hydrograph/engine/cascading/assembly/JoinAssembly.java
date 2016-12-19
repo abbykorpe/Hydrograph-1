@@ -30,6 +30,9 @@ import cascading.pipe.joiner.Joiner;
 import cascading.pipe.joiner.MixedJoin;
 import cascading.pipe.joiner.OuterJoin;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.JoinEntity;
+import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.JoinHelper;
@@ -37,9 +40,6 @@ import hydrograph.engine.cascading.filters.BlockAllFilter;
 import hydrograph.engine.cascading.filters.JoinGetUnmatchedRecordsFilter;
 import hydrograph.engine.cascading.filters.JoinOutLinkFilter;
 import hydrograph.engine.cascading.filters.JoinUnusedLinkFilter;
-import hydrograph.engine.core.component.entity.JoinEntity;
-import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
 
 /**
@@ -127,7 +127,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 		joinTypes = new boolean[joinEntity.getAllKeyFieldSize()];
 
 		Fields inputFields;
-		Fields keyFields = null;
+		Fields keyFields = new Fields();
 
 		for (int i = 0; i < componentParameters.getinSocketId().size(); i++) {
 
@@ -137,7 +137,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 			for (JoinKeyFields joinKeyFields : joinEntity.getKeyFields()) {
 				if (joinKeyFields.getInSocketId().equalsIgnoreCase(
 						componentParameters.getinSocketId().get(i))) {
-					keyFields = new Fields(joinKeyFields.getFields());
+					keyFields = joinKeyFields.getFields();
 					joinTypes[i] = joinKeyFields.isRecordRequired();
 				}
 			}

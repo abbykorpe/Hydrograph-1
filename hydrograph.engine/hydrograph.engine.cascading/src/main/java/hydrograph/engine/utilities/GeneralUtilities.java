@@ -12,9 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.utilities;
 
-import hydrograph.engine.core.component.utils.OrderedProperties;
-import hydrograph.engine.core.component.utils.OrderedPropertiesHelper;
-
 import java.io.IOException;
 import java.util.ArrayList;
 

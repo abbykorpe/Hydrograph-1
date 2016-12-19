@@ -22,14 +22,13 @@ import org.apache.hadoop.mapred.JobConf;
 
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
-import hydrograph.engine.adapters.base.BaseAdapter;
+import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
+import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.component.mapping.ComponentAdapterFactory;
-import hydrograph.engine.core.component.generator.base.GeneratorBase;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
-import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
+import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 
 @SuppressWarnings("rawtypes")
 public class RuntimeContext {
@@ -41,17 +40,17 @@ public class RuntimeContext {
 	private HadoopConfigProvider hadoopConfProvider;
 	private LinkedHashMap<String, ComponentParameters> tempPathParameters;
 	private Properties hadoopProperties;
-	private ComponentAdapterFactory componentAdapterFactory;
+	private AssemblyGeneratorFactory assemblyGeneratorFactory;
 	private Map<String, FlowContext> flowContext;
 	private SchemaFieldHandler schemaFieldHandler;
 	private String UDFPath;
 
 	public RuntimeContext(HydrographJob hydrographJob, JAXBTraversal traversal, Properties hadoopProps,
-			ComponentAdapterFactory componentAdapterFactory, SchemaFieldHandler schemaFieldHandler, String UDFPath) {
+			AssemblyGeneratorFactory assemblyGeneratorFactory, SchemaFieldHandler schemaFieldHandler, String UDFPath) {
 		this.hydrographJob = hydrographJob;
 		this.traversal = traversal;
 		this.hadoopProperties = hadoopProps;
-		this.componentAdapterFactory = componentAdapterFactory;
+		this.assemblyGeneratorFactory = assemblyGeneratorFactory;
 		this.hadoopConfProvider = new HadoopConfigProvider(hadoopProps);
 		this.schemaFieldHandler = schemaFieldHandler;
 		this.UDFPath=UDFPath;
@@ -106,8 +105,8 @@ public class RuntimeContext {
 		return cascades != null ? cascades.clone() : null;
 	}
 
-	public Map<String, BaseAdapter> getAssemblyGeneratorMap() {
-		return componentAdapterFactory.getAssemblyGeneratorMap();
+	public Map<String, GeneratorBase> getAssemblyGeneratorMap() {
+		return assemblyGeneratorFactory.getAssemblyGeneratorMap();
 	}
 
 	/*

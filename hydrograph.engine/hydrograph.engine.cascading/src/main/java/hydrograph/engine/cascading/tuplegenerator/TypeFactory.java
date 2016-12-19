@@ -53,7 +53,7 @@ public class TypeFactory {
 			return FIELD_TYPE_DICTIONARY.get(String.class);
 		} else if (type instanceof IntegerObjectCoerce || type == Integer.class) {
 			return FIELD_TYPE_DICTIONARY.get(Integer.class);
-		} else if (type instanceof ImplicitBigDecimalType || type == java.math.BigDecimal.class) {
+		} else if (type instanceof ImplicitBigDecimalType || type == BigDecimal.class) {
 			return FIELD_TYPE_DICTIONARY.get(BigDecimal.class);
 		} else if (type instanceof DoubleObjectCoerce || type == Double.class) {
 			return FIELD_TYPE_DICTIONARY.get(Double.class);

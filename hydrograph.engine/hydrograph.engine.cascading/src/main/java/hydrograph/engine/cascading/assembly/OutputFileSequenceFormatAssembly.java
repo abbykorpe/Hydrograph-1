@@ -22,10 +22,10 @@ import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.OutputFileSequenceFormatEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.core.component.entity.OutputFileSequenceFormatEntity;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileSequenceFormatAssembly extends BaseComponent<OutputFileSequenceFormatEntity> {

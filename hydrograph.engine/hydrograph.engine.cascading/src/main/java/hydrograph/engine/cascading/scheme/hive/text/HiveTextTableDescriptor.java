@@ -138,6 +138,12 @@ public class HiveTextTableDescriptor extends HiveTableDescriptor {
 	}
 
 	/**
+	 * @param databaseName2
+	 * @param tableName2
+	 * @param inputFields
+	 * @param hiveDataTypeMapping
+	 * @param partitionKeys2
+	 * @param path
 	 */
 
 	private void verifyPartitionKeys() {
@@ -231,7 +237,7 @@ public class HiveTextTableDescriptor extends HiveTableDescriptor {
 		private static final Map<TypeInfo, Class<?>> PRIMITIVES;
 
 		static {
-			Map<TypeInfo, Class<?>> primitives = new HashMap<TypeInfo, Class<?>>();
+			Map<TypeInfo, Class<?>> primitives = new HashMap<>();
 			primitives.put(TypeInfoFactory.stringTypeInfo, String.class);
 			primitives.put(TypeInfoFactory.booleanTypeInfo, Boolean.class);
 			primitives.put(TypeInfoFactory.byteTypeInfo, Byte.class);
@@ -252,7 +258,7 @@ public class HiveTextTableDescriptor extends HiveTableDescriptor {
 		static Fields newFields(StructTypeInfo structTypeInfo) {
 			List<String> existingNames = structTypeInfo
 					.getAllStructFieldNames();
-			List<String> namesList = new ArrayList<String>(existingNames.size());
+			List<String> namesList = new ArrayList<>(existingNames.size());
 
 			namesList.addAll(existingNames);
 			String[] names = namesList.toArray(new String[namesList.size()]);

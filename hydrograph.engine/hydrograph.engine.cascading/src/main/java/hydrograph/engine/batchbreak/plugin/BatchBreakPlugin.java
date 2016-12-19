@@ -22,11 +22,11 @@ import java.util.UUID;
 import org.apache.hadoop.conf.Configuration;
 
 import cascading.tap.hadoop.Hfs;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.core.entity.LinkInfo;
 import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
-import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
+import hydrograph.engine.flow.utils.FlowManipulationContext;
+import hydrograph.engine.flow.utils.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
@@ -53,7 +53,7 @@ public class BatchBreakPlugin implements ManipulatorListener {
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
 		tempPathList=new ArrayList<String>();
-		conf = new Configuration();
+		conf = manipulationContext.getConf();
 		jaxbGraph = manipulationContext.getJaxbMainGraph();
 		schemaFieldsMap = manipulationContext.getSchemaFieldMap();
 		this.batchChangeOriginalLinks = new ArrayList<LinkInfo>();
@@ -189,7 +189,7 @@ public class BatchBreakPlugin implements ManipulatorListener {
 			jaxbSequenceOutputFile.setId(sequenceOutputComponentId);
 
 			jaxbSequenceOutputFile.setBatch(sourceComponent.getBatch());
-			hydrograph.engine.jaxb.outputtypes.SequenceOutputFile.Path outPath = new hydrograph.engine.jaxb.outputtypes.SequenceOutputFile.Path();
+			SequenceOutputFile.Path outPath = new SequenceOutputFile.Path();
 			outPath.setUri(tempPath);
 			jaxbSequenceOutputFile.setPath(outPath);
 			TypeOutputInSocket outputInSocket = new TypeOutputInSocket();
