@@ -15,6 +15,14 @@ import scala.collection.mutable.ListBuffer
   * Created by gurdits on 12/1/2016.
   */
 
+object CustomClassLoader{
+  def initializeObject[T](className: String): T = {
+    val clazz = Class.forName(className).getDeclaredConstructors
+    clazz(0).setAccessible(true)
+    clazz(0).newInstance().asInstanceOf[T]
+  }
+}
+
 case class Operatioin[T](baseClassInstance:T,inputReusableRow:ReusableRow,
                          outputReusableRow:ReusableRow,inputFieldPositions: ListBuffer[Int], outputFieldPositions:
                          ListBuffer[Int],fieldManupulating: FieldManupulating)
@@ -42,7 +50,8 @@ trait CumulateOperation{
         val blankInRR = ReusableRowHelper(x, fieldManupulating).convertToInputReusableRow()
         val inputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineInputFieldPositions()
         val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
-        val cumulateBase: CumulateTransformBase = classLoader[CumulateTransformBase](x.getOperationClass)
+        val cumulateBase: CumulateTransformBase = CustomClassLoader.initializeObject[CumulateTransformBase](x
+          .getOperationClass)
 
         cumulateBase.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
 
@@ -55,11 +64,7 @@ trait CumulateOperation{
     else
       List()
   }
-  def classLoader[T](className: String): T = {
-    val clazz = Class.forName(className).getDeclaredConstructors
-    clazz(0).setAccessible(true)
-    clazz(0).newInstance().asInstanceOf[T]
-  }
+
 }
 
 trait AggregateOperation{
@@ -105,7 +110,7 @@ trait AggregateOperation{
             aggregate
           }
           case _ => {
-            var aggregate = classLoader[AggregateTransformBase](x.getOperationClass)
+            var aggregate = CustomClassLoader.initializeObject[AggregateTransformBase](x.getOperationClass)
             aggregate.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
             aggregate
           }
@@ -121,11 +126,6 @@ trait AggregateOperation{
       List()
   }
 
-  def classLoader[T](className: String): T = {
-    val clazz = Class.forName(className).getDeclaredConstructors
-    clazz(0).setAccessible(true)
-    clazz(0).newInstance().asInstanceOf[T]
-  }
 }
 
 trait TransformOperation{
@@ -155,7 +155,7 @@ trait TransformOperation{
             transform.setValidationAPI(y.asInstanceOf[ValidationAPI])
             transform
           }
-          case _ => classLoader[TransformBase](x.getOperationClass)
+          case _ => CustomClassLoader.initializeObject[TransformBase](x.getOperationClass)
         }
 
         transformBase.prepare(props, operationInputFieldList, operationOutputFieldList)
@@ -168,11 +168,6 @@ trait TransformOperation{
       List()
   }
 
-  def classLoader[T](className: String): T = {
-    val clazz = Class.forName(className).getDeclaredConstructors
-    clazz(0).setAccessible(true)
-    clazz(0).newInstance().asInstanceOf[T]
-  }
 
 }
 
