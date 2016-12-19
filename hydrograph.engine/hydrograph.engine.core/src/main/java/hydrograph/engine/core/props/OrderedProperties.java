@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package hydrograph.engine.spark.utils;
+package hydrograph.engine.core.props;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -111,7 +111,7 @@ public class OrderedProperties extends Properties {
 	 * @see Object#equals(Object)
 	 * @see #get(Object)
 	 * 
-	 * @see java.util.Hashtable#put(Object, Object)
+	 * @see java.util.Hashtable#put(java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public synchronized Object put(Object key, Object value) {
@@ -131,7 +131,7 @@ public class OrderedProperties extends Properties {
 	 *         object, or <code>null</code> if the key did not have a mapping
 	 * @throws NullPointerException
 	 *             if the key is <code>null</code>
-	 * @see java.util.Hashtable#remove(Object)
+	 * @see java.util.Hashtable#remove(java.lang.Object)
 	 */
 	@Override
 	public synchronized Object remove(Object key) {
@@ -153,7 +153,7 @@ public class OrderedProperties extends Properties {
 	 * @throws NullPointerException
 	 *             if the specified map is null
 	 * 
-	 * @see java.util.Hashtable#putAll(Map)
+	 * @see java.util.Hashtable#putAll(java.util.Map)
 	 */
 	@Override
 	public synchronized void putAll(Map values) {
@@ -172,10 +172,10 @@ public class OrderedProperties extends Properties {
 	 * @return an enumeration of all the keys in this property list in order
 	 * @throws ClassCastException
 	 *             if any key in this property list is not a string.
-	 * @see Enumeration
-	 * @see Properties#defaults
+	 * @see java.util.Enumeration
+	 * @see java.util.Properties#defaults
 	 * @see #stringPropertyNames
-	 * @see Properties#propertyNames()
+	 * @see java.util.Properties#propertyNames()
 	 */
 	@Override
 	public Enumeration<?> propertyNames() {
@@ -204,10 +204,10 @@ public class OrderedProperties extends Properties {
 	 * @return an enumeration of all the keys in this property list in order
 	 * @throws ClassCastException
 	 *             if any key in this property list is not a string.
-	 * @see Enumeration
-	 * @see Properties#defaults
+	 * @see java.util.Enumeration
+	 * @see java.util.Properties#defaults
 	 * @see #propertyNames
-	 * @see Properties#stringPropertyNames()
+	 * @see java.util.Properties#stringPropertyNames()
 	 */
 	@Override
 	public Set<String> stringPropertyNames() {
