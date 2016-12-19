@@ -67,12 +67,6 @@ public class HydrographMain {
 		Session session = null;
 		String 	trackingClientSocketPort = null;
 		boolean isExecutionTracking = false;
-/*		String[] aaa={"-xmlpath","C:\\Users\\prateemt\\runtime-hydrograph.ui.perspective.product\\newww\\jobs\\job_10.xml","-paramfiles",
-				"C:\\Users\\prateemt\\runtime-hydrograph.ui.perspective.product\\newww\\param\\job_10.properties","-debugxmlpath",
-				"C:\\Users\\prateemt\\runtime-hydrograph.ui.perspective.product\\newww\\jobs\\job_10_debug.xml",
-				"-jobid","Job_1670283668_1480326369530_1481186995217","-basepath",
-				"C:\\Users\\prateemt\\runtime-hydrograph.ui.perspective.product\\two\\test",
-				"-udfpath","-isexecutiontracking","true","-trackingclientsocketport","8004"};*/
 		String[] argsList = args;
 		List<String> argumentList = Arrays.asList(args);
 		final String jobId = hydrographMain.getJobId(argumentList);

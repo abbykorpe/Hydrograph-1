@@ -13,8 +13,6 @@ l * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
 
 package hydrograph.server.execution.tracking.utils;
 
-import hydrograph.server.execution.tracking.server.websocket.StartServer;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,6 +25,8 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+
+import hydrograph.server.execution.tracking.client.main.HydrographMain;
 
 /**
  * The Class ExecutionTrackingUtils.
@@ -140,7 +140,7 @@ public class ExecutionTrackingUtils {
 		String dirPath = "";
 		FileInputStream fileInputStream = null;
 		try {
-			Path path = Paths.get(StartServer.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+			Path path = Paths.get(HydrographMain.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			String filePath = path.toString();
 			if (OSValidator.isWindows()) {
 				index = filePath.lastIndexOf("\\");
