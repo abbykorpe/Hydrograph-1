@@ -5,7 +5,7 @@
 /schema/
 /.classpath
 /.settings/
-/idea/
 /hydrograph.engine.ipr
 /hydrograph.engine.iml
 /hydrograph.engine.iws
+/.idea/
