@@ -27,7 +27,7 @@ class PartitionByExpressionComponentTest {
 
 
     val partitionByExpressionEntity: PartitionByExpressionEntity = new PartitionByExpressionEntity
-    partitionByExpressionEntity.setComponentId("unionAll")
+    partitionByExpressionEntity.setComponentId("partitionByExpressionComponent")
 
     val outSocketList: util.List[OutSocket] = new util.ArrayList[OutSocket]
     outSocketList.add(new OutSocket("out_credit", "out"))
