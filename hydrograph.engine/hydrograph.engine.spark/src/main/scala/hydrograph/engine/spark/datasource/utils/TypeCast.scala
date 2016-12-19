@@ -44,9 +44,9 @@ object TypeCast {
   def castingOutputData(value: Any, castType: DataType, outDateFormat:String) : AnyRef= {
 
     castType match {
-        case _: TimestampType => if (value == null) "" else  simpleDateFormat(outDateFormat).format(new Date(value.asInstanceOf[Timestamp].getTime))
-        case _: DateType => if (value == null) "" else  simpleDateFormat(outDateFormat).format(value)
-        case _ => value.asInstanceOf[AnyRef]
-      }
+      case _: TimestampType => if (value == null) "" else if (!outDateFormat.equals("null")) simpleDateFormat(outDateFormat).format(new Date(value.asInstanceOf[Timestamp].getTime)) else value.toString
+      case _: DateType => if (value == null) "" else if (!outDateFormat.equals("null")) simpleDateFormat(outDateFormat).format(value) else value.toString
+      case _ => value.asInstanceOf[AnyRef]
     }
+  }
 }
