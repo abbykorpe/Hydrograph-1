@@ -95,7 +95,11 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			}
 			String message=getErrorMessageIfUserDeleteXmlRelatedFiles(jobFileName,propertyFileName);
 			showErrorMessage(jobFileName, propertyFileName, Messages.bind(message,modifiedResource.getName()));
-		} 
+		}
+		else
+		{
+			flag=true;
+		}
 		return flag;
 	}
 
@@ -115,6 +119,10 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			}
 			String message=getErrorMessageIfUserDeleteJobRelatedFiles(propertyFileName,xmlFileName);
 			showErrorMessage(xmlFileName, propertyFileName, Messages.bind(message,modifiedResource.getName()));
+		}
+		else
+		{
+			flag=true;
 		}
 		return flag;
 	}
@@ -215,31 +223,47 @@ public class JobDeleteParticipant extends DeleteParticipant{
 			OperationCanceledException {
 		final HashMap<IFile,DeleteResourceChange> changes= new HashMap<IFile,DeleteResourceChange>();
 		
-		List<IResource> memberList = 
-				new ArrayList<IResource>(modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM).members().length
-										+modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS).members().length);
-		ResourceChangeUtil.addMembersToList(memberList, modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS));
-		ResourceChangeUtil.addMembersToList(memberList, modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM));
-		
-		final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
-		
-		for(IResource resource:memberList) {
-			if(Pattern.matches(fileName+".*", resource.getName())) {
-				if((Messages.XML_EXT.equals(resource.getFileExtension())
-						|| Messages.PROPERTIES_EXT.equals(resource.getFileExtension())
-						|| Messages.JOB_EXT.equals(resource.getFileExtension()))
-						&&!(modifiedResource.getName().equals(resource.getName()))) {
-					
-					
-					DeleteResourceChange change = (DeleteResourceChange) changes.get((IFile)resource);
-					if (change == null) {
-						change= new DeleteResourceChange(resource.getFullPath(), true);
-						changes.put((IFile)resource, change);
+		if(modifiedResource.getParent()!=null)
+		{
+			if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(), CustomMessages.ProjectSupport_JOBS)
+					|| StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),
+							CustomMessages.ProjectSupport_PARAM)) {
+				List<IResource> memberList = new ArrayList<IResource>(modifiedResource.getProject()
+						.getFolder(CustomMessages.ProjectSupport_PARAM).members().length
+						+ modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS).members().length);
+				ResourceChangeUtil.addMembersToList(memberList,
+						modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS));
+				ResourceChangeUtil.addMembersToList(memberList,
+						modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM));
+				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
+				for (IResource resource : memberList) {
+					if (Pattern.matches(fileName + ".*", resource.getName())) {
+						if ((Messages.XML_EXT.equals(resource.getFileExtension())
+								|| Messages.PROPERTIES_EXT.equals(resource.getFileExtension())
+								|| Messages.JOB_EXT.equals(resource.getFileExtension()))
+								&& !(modifiedResource.getName().equals(resource.getName()))) {
+							getDeleteChanges(changes, resource);
+						}
+					}
+				}
+			} else {
+				List<IResource> memberList = new ArrayList<IResource>(modifiedResource.getProject()
+						.getFolder(modifiedResource.getParent().getName()).members().length);
+				ResourceChangeUtil.addMembersToList(memberList,
+						modifiedResource.getProject().getFolder(modifiedResource.getParent().getName()));
+				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
+				for (IResource resource : memberList) {
+					if (Pattern.matches(fileName + ".*", resource.getName())) {
+						if ((Messages.XML_EXT.equals(resource.getFileExtension())
+								|| Messages.JOB_EXT.equals(resource.getFileExtension()))
+								&& !(modifiedResource.getName().equals(resource.getName()))) {
+							getDeleteChanges(changes, resource);
+						}
 					}
 				}
 			}
 		}
-				
+	
 		if (changes.isEmpty()) {
 	        return null;
 		}
@@ -251,6 +275,14 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	    }
 		return result;
 		
+	}
+
+	private void getDeleteChanges(final HashMap<IFile, DeleteResourceChange> changes, IResource resource) {
+		DeleteResourceChange change = (DeleteResourceChange) changes.get((IFile)resource);
+		if (change == null) {
+			change= new DeleteResourceChange(resource.getFullPath(), true);
+			changes.put((IFile)resource, change);
+		}
 	}
 
 }
