@@ -1,7 +1,7 @@
 package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.base.OperationEntityBase
-import hydrograph.engine.core.component.entity.elements.{SchemaField, Operation, OutSocket}
+import hydrograph.engine.core.component.entity.elements.{Operation, OutSocket, SchemaField}
 import hydrograph.engine.core.component.entity.utils.OutSocketUtils
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -10,6 +10,7 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import java.util.Properties
+import javax.tools.{DiagnosticCollector, JavaFileObject}
 
 /**
   * Created by gurdits on 10/18/2016.
@@ -53,26 +54,36 @@ import java.util.Properties
   }
 
   def expressionValidate(validationAPI: ValidationAPI, getAccumulatorInitialValue: String) = {
-//    schemaMap:Map[String, Class]= new mutable.HashMap[String, Class]();
+//    var schemaMap= new mutable.HashMap[String, java.lang.Class[_]]();
 //    try {
-//      for (SchemaField schemaField : componentParameters
-//        .getSchemaFields()) {
-//        schemaMap.put(schemaField.getFieldName(),
-//          Class.forName(checkIfFieldIsBigDecimal(schemaField.getFieldDataType())));
+//      for (schemaField:SchemaField <- baseComponentParams.getSchemaFieldList().flatten) {
+//        schemaMap.put(schemaField.getFieldName(),Class.forName(checkIfFieldIsBigDecimal(schemaField.getFieldDataType())))
 //      }
 //      schemaMap.put("index", Class.forName("java.lang.Integer"));
-//      if (accumulatorInitialValue != null)
+//      if (getAccumulatorInitialValue != null)
 //        schemaMap.put("accumulator",
-//          Class.forName(inferType(accumulatorInitialValue)));
-//      DiagnosticCollector<JavaFileObject> diagnostic = validationAPI
+//          Class.forName(inferType(getAccumulatorInitialValue)));
+//      var diagnostic:DiagnosticCollector[JavaFileObject] = validationAPI
 //        .transformCompiler(schemaMap);
 //      if (diagnostic.getDiagnostics().size() > 0) {
 //        throw new RuntimeException(diagnostic.getDiagnostics()
 //          .get(0).getMessage(null));
 //      }
-//    } catch (ClassNotFoundException e) {
-//      e.printStackTrace();
+//    } catch {
+//      case e:ClassNotFoundException => e.printStackTrace();
 //    }
+  }
+
+  def checkIfFieldIsBigDecimal(fieldDataType:String):String = fieldDataType match {
+    case x if x.equals("java.math.BigDecimal") => "java.lang.Double"
+    case y => y
+  }
+
+  def inferType(accumulatorInitialValue:String): String = accumulatorInitialValue match {
+    case acc if acc.contains("\"") => "java.lang.String"
+    case acc if accumulatorInitialValue.matches("[-\\d]+") => "java.lang.Long"
+    case acc if accumulatorInitialValue.matches("[-\\d]+.\\d+") => "java.lang.Double"
+    case acc => "java.util.Date"
   }
 
   def initializeOperationFieldsForOutSocket: Unit = {

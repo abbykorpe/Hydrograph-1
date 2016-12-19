@@ -39,13 +39,6 @@ trait CumulateOperation{
     convert(list,ListBuffer[ValidationAPI]())
   }
 
-//  def initializeCumulate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating):
-//  List[Operatioin[CumulateTransformBase]] = {
-//
-//    def cumulate( operationList:List[Operation], fieldManupulating: FieldManupulating):
-//    List[Operatioin[CumulateTransformBase]] = operationList match {
-//      case List() => List()
-//      case (x :: xs) =>
         def initializeCumulate( operationList:java.util.List[Operation], keyFields: Array[KeyField], fieldManupulating: FieldManupulating, expressionObjectList: ListBuffer[Any], initialValueExprs: List[String]):
         List[Operatioin[CumulateTransformBase]] = {
 
@@ -69,7 +62,7 @@ trait CumulateOperation{
         val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
 
               val cumulateBase: CumulateTransformBase = (x,y) match {
-                case (_,_) if(y != None && x.getOperationClass == null) => {
+                case (_,_) if(x.getOperationClass == null) => {
                   var cumulate = new CumulateForExpression
                   cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
                   cumulate.setCounter(counter)
@@ -130,7 +123,7 @@ trait AggregateOperation{
         val outputFieldPositions = ReusableRowHelper(x, fieldManupulating).determineOutputFieldPositions()
 
         val aggregateBase: AggregateTransformBase = (x,y) match {
-          case (_,_) if(y != None && x.getOperationClass == null) => {
+          case (_,_) if(x.getOperationClass == null) => {
             var aggregate = new AggregateForExpression
               aggregate.setValidationAPI(convertToListOfValidation(y :: ys))
               aggregate.setCounter(counter)

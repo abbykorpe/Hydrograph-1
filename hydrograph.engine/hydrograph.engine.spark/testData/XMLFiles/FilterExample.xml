@@ -36,13 +36,14 @@
 
 	<operations id="trans" batch="0" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<expression
-				expr="StringFunctions.stringMatch(Choice,&quot;AAA&quot;)?true:false;"
-				id="sadf">
+		<operation id="operation1" class="hydrograph.engine.transformation.userfunctions.filter.Filter">
 			<inputFields>
 				<field name="Choice" inSocketId="in0" />
 			</inputFields>
-		</expression>
+			<properties>
+				<property name="Filter" value="AAA" />
+			</properties>
+		</operation>
 		<outSocket id="out1" type="out">
 			<copyOfInsocket inSocketId="in0" />
 		</outSocket>

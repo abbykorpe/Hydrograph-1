@@ -31,13 +31,13 @@
 
 	<operations id="normalize" xsi:type="op:normalize">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<expression expr="(index >= (Transactions.split(&quot;,&quot;)).length)?0:(Transactions.split(&quot;,&quot;))[index]"
+		<expression expr="(index >= (Transactions.split(&quot;,&quot;)).length)?&quot;xxx&quot;:(Transactions.split(&quot;,&quot;))[index]"
 					id="e1" >
 			<inputFields>
 				<field name="Transactions" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
-				<field name="Transaction" type="java.lang.Integer" />
+				<field name="Transaction" type="java.lang.String" />
 			</outputFields>
 		</expression>
 		<expression expr="(Rewards.split(&quot;,&quot;))[index]"
@@ -49,7 +49,7 @@
 				<field name="Reward" type="java.lang.String" />
 			</outputFields>
 		</expression>
-		<expression expr="((Rewards.split(&quot;,&quot;))[index].equals(&quot;0.1&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
+		<expression expr="((Rewards.split(&quot;,&quot;))[index].equals(&quot;ddd&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
 					id="e3" >
 			<inputFields>
 				<field name="Rewards" inSocketId="in0" />
@@ -73,7 +73,7 @@
 		<inSocket fromComponentId="normalize" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
 				<field name="ID_new" type="java.lang.String" />
-				<field name="Transaction" type="java.lang.Integer" />
+				<field name="Transaction" type="java.lang.String" />
 				<field name="Reward" type="java.lang.String" />
 				<field name="RewardCategory" type="java.lang.String" />
 			</schema>
@@ -81,8 +81,6 @@
 		<path uri="testData\Output\NormalizeExample" />
 		<delimiter value="," />
 		<hasHeader value="true" />
-		<safe value="true"/>
-		<strict value="false"/>
 		<charset value="ISO-8859-1" />
 	</outputs>
 </p:graph>
