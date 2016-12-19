@@ -35,14 +35,14 @@ import hydrograph.engine.jaxb.ooracle.TypeOutputOracleBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/ooracle}type-output-oracle-base">
  *       &lt;sequence>
  *         &lt;element name="sid" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="hostname" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
- *         &lt;element name="drivertype" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="driverType" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="userName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/ooracle}type-load-choice"/>
- *         &lt;element name="schemaname" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
+ *         &lt;element name="schemaName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
@@ -56,14 +56,14 @@ import hydrograph.engine.jaxb.ooracle.TypeOutputOracleBase;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "oracle", propOrder = {
     "sid",
-    "hostname",
+    "hostName",
     "port",
-    "drivertype",
+    "driverType",
     "tableName",
-    "username",
+    "userName",
     "password",
     "loadType",
-    "schemaname",
+    "schemaName",
     "chunkSize",
     "runtimeProperties"
 })
@@ -74,19 +74,19 @@ public class Oracle
     @XmlElement(required = true)
     protected ElementValueStringType sid;
     @XmlElement(required = true)
-    protected ElementValueStringType hostname;
+    protected ElementValueStringType hostName;
     protected ElementValueIntegerType port;
     @XmlElement(required = true)
-    protected ElementValueStringType drivertype;
+    protected ElementValueStringType driverType;
     @XmlElement(required = true)
     protected ElementValueStringType tableName;
     @XmlElement(required = true)
-    protected ElementValueStringType username;
+    protected ElementValueStringType userName;
     @XmlElement(required = true)
     protected ElementValueStringType password;
     @XmlElement(required = true)
     protected TypeLoadChoice loadType;
-    protected ElementValueStringType schemaname;
+    protected ElementValueStringType schemaName;
     protected ElementValueIntegerType chunkSize;
     protected TypeProperties runtimeProperties;
 
@@ -115,27 +115,27 @@ public class Oracle
     }
 
     /**
-     * Gets the value of the hostname property.
+     * Gets the value of the hostName property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getHostname() {
-        return hostname;
+    public ElementValueStringType getHostName() {
+        return hostName;
     }
 
     /**
-     * Sets the value of the hostname property.
+     * Sets the value of the hostName property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setHostname(ElementValueStringType value) {
-        this.hostname = value;
+    public void setHostName(ElementValueStringType value) {
+        this.hostName = value;
     }
 
     /**
@@ -163,27 +163,27 @@ public class Oracle
     }
 
     /**
-     * Gets the value of the drivertype property.
+     * Gets the value of the driverType property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getDrivertype() {
-        return drivertype;
+    public ElementValueStringType getDriverType() {
+        return driverType;
     }
 
     /**
-     * Sets the value of the drivertype property.
+     * Sets the value of the driverType property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setDrivertype(ElementValueStringType value) {
-        this.drivertype = value;
+    public void setDriverType(ElementValueStringType value) {
+        this.driverType = value;
     }
 
     /**
@@ -211,27 +211,27 @@ public class Oracle
     }
 
     /**
-     * Gets the value of the username property.
+     * Gets the value of the userName property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getUsername() {
-        return username;
+    public ElementValueStringType getUserName() {
+        return userName;
     }
 
     /**
-     * Sets the value of the username property.
+     * Sets the value of the userName property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setUsername(ElementValueStringType value) {
-        this.username = value;
+    public void setUserName(ElementValueStringType value) {
+        this.userName = value;
     }
 
     /**
@@ -283,27 +283,27 @@ public class Oracle
     }
 
     /**
-     * Gets the value of the schemaname property.
+     * Gets the value of the schemaName property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getSchemaname() {
-        return schemaname;
+    public ElementValueStringType getSchemaName() {
+        return schemaName;
     }
 
     /**
-     * Sets the value of the schemaname property.
+     * Sets the value of the schemaName property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setSchemaname(ElementValueStringType value) {
-        this.schemaname = value;
+    public void setSchemaName(ElementValueStringType value) {
+        this.schemaName = value;
     }
 
     /**

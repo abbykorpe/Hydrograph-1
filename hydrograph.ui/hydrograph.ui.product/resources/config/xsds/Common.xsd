@@ -106,6 +106,7 @@
 			<enumeration value="ORACLE_SCHEMA_WIDGET"/>
 			<enumeration value="TEST_CONNECTION_WIDGET"/>
 			<enumeration value="DATABASE_NAME_WIDGET"/>
+			<enumeration value="MYSQL_DRIVER_NAME"/>
 			
 			
 		</restriction>

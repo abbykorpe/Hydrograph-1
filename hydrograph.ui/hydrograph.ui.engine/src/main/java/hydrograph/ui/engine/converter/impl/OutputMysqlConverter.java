@@ -1,15 +1,3 @@
-/********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package hydrograph.ui.engine.converter.impl;
 
 import java.math.BigInteger;
@@ -26,10 +14,11 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
-import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
-import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
-import hydrograph.engine.jaxb.outputtypes.Redshift;
+import hydrograph.engine.jaxb.omysql.TypeLoadChoice;
+import hydrograph.engine.jaxb.omysql.TypeOutputMysqlOutSocket;
+import hydrograph.engine.jaxb.omysql.TypePriamryKeys;
+import hydrograph.engine.jaxb.omysql.TypeUpdateKeys;
+import hydrograph.engine.jaxb.outputtypes.Mysql;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -38,97 +27,115 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
-/**
- * Converter implementation for Output RedShift Component
- * @author Bitwise
- *
- */
-public class OutputRedshiftConverter extends OutputConverter {
-	
-	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputRedshiftConverter.class);
+public class OutputMysqlConverter extends OutputConverter{
 
-	public OutputRedshiftConverter(Component component) {
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputMysqlConverter.class);
+	private Mysql mysqlOutput;
+	
+	public OutputMysqlConverter(Component component) {
 		super(component);
 		this.component = component;
 		this.properties = component.getProperties();
-		this.baseComponent = new Redshift();
+		this.baseComponent = new Mysql();
+	}
+
+	@Override
+	protected List<TypeOutputInSocket> getOutInSocket() {
+		logger.debug("Generating TypeOutputInSocket data");
+		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
+		for (Link link : component.getTargetConnections()) {
+			TypeOutputMysqlOutSocket outInSocket = new TypeOutputMysqlOutSocket();
+			outInSocket.setId(link.getTargetTerminal());
+			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
+			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
+			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
+			outInSocket.setSchema(getSchema());
+			outInSocket.getOtherAttributes();
+			outInSocket.setFromComponentId(link.getSource().getComponentId());
+			outputinSockets.add(outInSocket);
+		}
+		return outputinSockets;
 	}
 	
 	@Override
 	public void prepareForXML() {
 		logger.debug("Generating XML for {}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-		 Redshift redshiftOutput = (Redshift) baseComponent;
-		redshiftOutput.setRuntimeProperties(getRuntimeProperties());
-		
-		ElementValueStringType databaseName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.DATABASE_NAME.value()))){
-			databaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
-			redshiftOutput.setDatabaseName(databaseName);
-		}
+		mysqlOutput = (Mysql) baseComponent;
+		mysqlOutput.setRuntimeProperties(getRuntimeProperties());
 		
 		ElementValueStringType tableName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.TABLE_NAME.value()))){
-			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.TABLE_NAME.value())));
-			redshiftOutput.setTableName(tableName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value()))){
+			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value())));
+			mysqlOutput.setTableName(tableName);
 		}
 		
 		ElementValueStringType hostName = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
 			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
-			//redshiftOutput.setHostname(hostName);
+			mysqlOutput.setHostName(hostName);
 		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
 		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
 		portNo.setValue(portValue);
-		//redshiftOutput.setPort(portNo);
+		mysqlOutput.setPort(portNo);
 		
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
 		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
-		//redshiftOutput.setDrivertype(jdbcDriver);
+		mysqlOutput.setJdbcDriver(jdbcDriver);
+		
+		ElementValueStringType oracleSchema = new ElementValueStringType();
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
+			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
+			//mysqlOutput.setsetSchemaname(oracleSchema);
+		}
 		
 		ElementValueStringType userName = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.USER_NAME.value()))){
 			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
-			redshiftOutput.setUsername(userName);
+			mysqlOutput.setUsername(userName);
 		}
 		
 		ElementValueStringType password = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.PASSWORD.value()))){
 			password.setValue(String.valueOf(properties.get(PropertyNameConstants.PASSWORD.value())));
-			redshiftOutput.setPassword(password);
+			mysqlOutput.setPassword(password);
 		}
 		
 		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
 		if(PropertyNameConstants.CHUNK_SIZE.value() !=null){
 			BigInteger chunkValue = getBigInteger(PropertyNameConstants.CHUNK_SIZE.value());
 			chunkSize.setValue(chunkValue);
-			//redshiftOutput.setChunkSize(chunkSize);
+			mysqlOutput.setChunkSize(chunkSize);
 		}
 		
 		TypeLoadChoice loadValue = addTypeLoadChoice();
-		redshiftOutput.setLoadType(loadValue);
+		mysqlOutput.setLoadType(loadValue);
 	}
+
 	
 	private TypeLoadChoice addTypeLoadChoice() {
 		TypeLoadChoice loadValue = new TypeLoadChoice();
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
 		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
 			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
-			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-			//loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+			loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
 			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
 		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
 			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
-			
 		}
 		return loadValue;
 	}
 	
-	/*private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
+	/**
+	 * Creates primary key fields
+	 * @param primaryKeyFeilds
+	 * @return
+	 */
+	private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
 		String[] primaryKeyColumnsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 		if(primaryKeyColumnsFeilds !=null && primaryKeyColumnsFeilds.length>0){
@@ -142,9 +149,14 @@ public class OutputRedshiftConverter extends OutputConverter {
 		}
 				
 		return primaryKeys;
-	}*/
-
-	private hydrograph.engine.jaxb.oredshift.TypeUpdateKeys getUpdateKeys(String fields) {
+	}
+	
+	/**
+	 * Creates update key fields 
+	 * @param fields
+	 * @return
+	 */
+	private TypeUpdateKeys getUpdateKeys(String fields) {
 		TypeUpdateKeys updateKeys = null;
 		String[] columnFields = StringUtils.split(fields, Constants.LOAD_TYPE_UPDATE_VALUE_SEPERATOR);
 		if (columnFields != null && columnFields.length > 0) {
@@ -162,25 +174,6 @@ public class OutputRedshiftConverter extends OutputConverter {
 	}
 	
 	@Override
-	protected List<TypeOutputInSocket> getOutInSocket() {
-		logger.debug("Generating TypeOutputInSocket data");
-		List<TypeOutputInSocket> outputinSockets = new ArrayList<>();
-		for (Link link : component.getTargetConnections()) {
-			TypeOutputRedshiftInSocket outInSocket = new TypeOutputRedshiftInSocket();
-			outInSocket.setId(link.getTargetTerminal());
-			outInSocket.setFromSocketId(converterHelper.getFromSocketId(link));
-			outInSocket.setFromSocketType(link.getSource().getPorts().get(link.getSourceTerminal()).getPortType());
-			outInSocket.setType(link.getTarget().getPort(link.getTargetTerminal()).getPortType());
-			outInSocket.setSchema(getSchema());
-			outInSocket.getOtherAttributes();
-			outInSocket.setFromComponentId(link.getSource().getComponentId());
-			outputinSockets.add(outInSocket);
-		}
-		return outputinSockets;
-		
-	}
-
-	@Override
 	protected List<TypeBaseField> getFieldOrRecord(List<GridRow> list) {
 		logger.debug("Generating data for {} for property {}", new Object[] { properties.get(Constants.PARAM_NAME),
 				PropertyNameConstants.SCHEMA.value() });
@@ -193,6 +186,5 @@ public class OutputRedshiftConverter extends OutputConverter {
 		}
 		return typeBaseFields;
 	}
-	
 
 }

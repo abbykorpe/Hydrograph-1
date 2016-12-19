@@ -14,6 +14,10 @@
  
 package hydrograph.ui.propertywindow.factory;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.filemixedschema.ELTMixedSchemeWidget;
@@ -46,24 +50,19 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.PropogateWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents;
-import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelDriverNameWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidgetWithoutAnyValidation;
 import hydrograph.ui.propertywindow.widgets.customwidgets.WidgetHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.DatabaseTestConnectionWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.LoadTypeConfigurationWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.SelectionDatabaseWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty.ELTJoinPortCount;
 import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.ELTExtractMetaStoreDataWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.LoadTypeConfigurationWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.DatabaseTestConnectionWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.SelectionDatabaseWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
-
-import java.lang.reflect.InvocationTargetException;
-
-import org.slf4j.Logger;
 
 
 /**
@@ -100,7 +99,8 @@ public class WidgetFactory {
 		CHARACTER_SET_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getCharacterSetWidgetConfig()),
 		HAS_HEADER_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getHasHeaderWidgetConfig()),
 		OVERWRITE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getOverWriteWidgetConfig()),
-		JDBC_DRIVER_WIDGET(TextBoxWithLabelDriverNameWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
+		//JDBC_DRIVER_WIDGET(TextBoxWithLabelDriverNameWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
+		JDBC_DRIVER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
 
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
 		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
@@ -149,7 +149,8 @@ public class WidgetFactory {
 		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class),
 		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class),
 		LOAD_TYPE_CONFIGURATION_WIDGET(LoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Messages.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
-		PROPOGATE_WIDGET(PropogateWidget.class);
+		PROPOGATE_WIDGET(PropogateWidget.class),
+		MYSQL_DRIVER_NAME(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getMysqlDriverName());
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
 		

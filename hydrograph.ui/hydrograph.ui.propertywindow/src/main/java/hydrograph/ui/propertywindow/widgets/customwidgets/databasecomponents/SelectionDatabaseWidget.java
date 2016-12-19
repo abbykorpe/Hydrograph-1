@@ -12,15 +12,11 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -39,11 +35,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.PreferenceConstants;
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
@@ -95,22 +88,14 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	private ModifyListener textboxTableNameModifyListner;
 	private static final String ERROR = "ERR";
 	private static final String INFO = "INF";
-	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private Cursor cursor;
 	private String sqlQueryStatement;
-	private static final String SEPARATOR = "|";
 	private Text sqlQueryCountertextbox;
 	private ModifyListener sqlQueryCounterModifyListner;
-	private String oracleDatabaseName;
-	private String oracleHostName;
-	private String oraclePortNo;
-	private String oracleJdbcName;
-	private String oracleSchemaName;
-	private String oracleUserName;
-	private String oraclePassword;
-	private String databaseType;
 	private static final String ORACLE = "Oracle";
 	private static final String REDSHIFT = "RedShift";
+	private static final String MYSQL = "Mysql";
+	
 
 	public SelectionDatabaseWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -471,7 +456,15 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 * Provides all the DB details
 	 */
 	private void getDatabaseConnectionDetails() {
-		//TODO
+		String oracleDatabaseName = "";
+		String oracleHostName = "";
+		String oraclePortNo= "";
+		String oracleJdbcName= "";
+		String oracleSchemaName= "";
+		String oracleUserName= "";
+		String oraclePassword= "";
+		String databaseType= "";
+		
 		for (AbstractWidget textAbtractWgt : widgets) {
 
 			if (textAbtractWgt.getProperty().getPropertyName()
@@ -497,33 +490,34 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 				oraclePassword = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PASSWORD_WIDGET_NAME);
 			}
 			
-			if(ORACLE.equalsIgnoreCase(getComponent().getType())){
-				databaseType=ORACLE;
-			}else{
-				databaseType=REDSHIFT;
-			}
+			databaseType = getComponentType();
+			DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(databaseType, oracleHostName, 
+					oraclePortNo, oracleUserName, oraclePassword).jdbcName(oracleJdbcName).schemaName(oracleSchemaName)
+					.databaseName(oracleDatabaseName).build();
+			
+			DataBaseUtility.getInstance().getDatabaseParams().clear();
+			DataBaseUtility.getInstance().addDatabaseParams(parameterType);
 		}
 
 	}
 	
-	private void validateDatabaseParams(){
-		
-		String host = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST, "",
-				null);
-		//TODO
-		String port_no = Platform.getPreferencesService().getString(PLUGIN_ID,
-				PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
-		List<String> oracleDatabaseValues = new ArrayList<String>();
-		if (null != host && StringUtils.isNotBlank(host)) {
-			return;
+	private String getComponentType(){
+		String databaseType= "";
+		if(StringUtils.equalsIgnoreCase(getComponent().getType(), ORACLE)){
+			databaseType=ORACLE;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), REDSHIFT)){
+			databaseType=REDSHIFT;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
+			databaseType = MYSQL;
 		}
+		
+		return databaseType;
+	}
+	
+	private void validateDatabaseParams(){
+		List<String> oracleDatabaseValues = new ArrayList<String>();
 		getDatabaseConnectionDetails();
 		
-		if (StringUtils.isNotEmpty(oracleDatabaseName) && StringUtils.isNotEmpty(oracleHostName)
-			&& StringUtils.isNotEmpty(oracleJdbcName) && StringUtils.isNotEmpty(oraclePortNo)
-			&& StringUtils.isNotEmpty(oracleSchemaName) && StringUtils.isNotEmpty(oracleUserName)
-			&& StringUtils.isNotEmpty(oraclePassword)) {
-
 			LinkedHashMap<String, Object> property = getProperties();
 			databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
 			
@@ -533,16 +527,19 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 				createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
 			}
 			if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
-				extractOracleMetaStoreDetails(oracleDatabaseValues, host, port_no);
+				extractOracleMetaStoreDetails(oracleDatabaseValues);
 			}
-		} else {
-			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
-		}
-
-
-		
 	}
 
+	private void validateDatabaseFields(DatabaseParameterType parameterType){
+		if (StringUtils.isEmpty(parameterType.getDatabaseName()) && StringUtils.isEmpty(parameterType.getHostName())
+				&& StringUtils.isEmpty(parameterType.getJdbcName()) && StringUtils.isEmpty(parameterType.getPortNo())
+				&& StringUtils.isEmpty(parameterType.getSchemaName()) && StringUtils.isEmpty(parameterType.getUserName())
+				&& StringUtils.isEmpty(parameterType.getPassword())) {
+			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+		}
+	}
+	
 	/**
 	 * Selection listener on Extract MetaStore button
 	 * @return
@@ -566,17 +563,21 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 * @param host
 	 * @param port_no
 	 */
-	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues, String host, String port_no) {
+	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues) {
 
-		String jsonResponse = "";
-
-		try {
+		DatabaseParameterType parameterType =  DataBaseUtility.getInstance().getDatabaseParams().get(0);
+		validateDatabaseFields(parameterType);
+		
+		DatabaseTableSchema databaseTableSchema = DataBaseUtility.getInstance()
+				.extractDatabaseDetails(oracleDatabaseValues, parameterType);
+		/*try {
 			
 			//TODO
 			ObjectMapper mapper = new ObjectMapper();
 			String input = oracleDatabaseName + SEPARATOR + oracleHostName + SEPARATOR + oracleJdbcName + SEPARATOR
-					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR
-					+ oracleSchemaName;
+					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR+ oracleSchemaName;
+			
+			
 			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input, host, port_no, oracleDatabaseValues);
 			DatabaseTableSchema databaseTableSchema = mapper.readValue(jsonResponse,
 					DatabaseTableSchema.class);
@@ -585,7 +586,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			logger.error("Json to object Mapping issue ", exp);
 		} catch (IOException ex) {
 			logger.error("Json to object Mapping issue ", ex.getMessage());
-		}
+		}*/
 		
 		//TODO This functionality will used in the future for fetching the json response for RedShift,Oracle and SQL Component
 		/*if(null != oracleTableSchema){

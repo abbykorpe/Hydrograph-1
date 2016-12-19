@@ -1,15 +1,3 @@
-/********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
 import java.util.ArrayList;
@@ -28,8 +16,9 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.ooracle.TypePriamryKeys;
-import hydrograph.engine.jaxb.ooracle.TypeUpdateKeys;
+import hydrograph.engine.jaxb.omysql.TypePriamryKeys;
+import hydrograph.engine.jaxb.omysql.TypeUpdateKeys;
+import hydrograph.engine.jaxb.outputtypes.Mysql;
 import hydrograph.engine.jaxb.outputtypes.Oracle;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -39,74 +28,70 @@ import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.OutputUiConverter;
 import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.components.OOracle;
+import hydrograph.ui.graph.model.components.OMysql;
 import hydrograph.ui.logging.factory.LogFactory;
 
-public class OutputOracleUiConverter extends OutputUiConverter {
+public class OutputMysqlUiConverter extends OutputUiConverter{
 
-	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputOracleUiConverter.class);
-	private Oracle outputOracle;
+	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputMysqlUiConverter.class);
+	private Mysql outputMysql;
 	private LinkedHashMap<String, String> loadSelectedDetails;
 	
-	public OutputOracleUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
+	public OutputMysqlUiConverter(TypeBaseComponent typeBaseComponent, Container container){
 		this.container = container;
 		this.typeBaseComponent = typeBaseComponent;
-		this.uiComponent = new OOracle();
+		this.uiComponent = new OMysql();
 		this.propertyMap = new LinkedHashMap<>();
 	}
 	
 	@Override
 	public void prepareUIXML() {
 		super.prepareUIXML();
-		LOGGER.debug("Fetching Output-Oracle-Properties for {}", componentName);
-		outputOracle = (Oracle) typeBaseComponent;
+		LOGGER.debug("Fetching Output-MySql-Properties for {}", componentName);
+		outputMysql = (Mysql) typeBaseComponent;
 		loadSelectedDetails = new LinkedHashMap<String, String>();
 		
-		if(StringUtils.isNotBlank(outputOracle.getDriverType().getValue())){
-			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(outputOracle.getDriverType().getValue()));
+		if(StringUtils.isNotBlank(outputMysql.getJdbcDriver().getValue())){
+			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(outputMysql.getJdbcDriver().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputOracle.getHostName().getValue())){
-			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), (String)(outputOracle.getHostName().getValue()));
+		if(StringUtils.isNotBlank(outputMysql.getHostName().getValue())){
+			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), (String)(outputMysql.getHostName().getValue()));
 		}
 		
-		if(outputOracle.getPort() != null){
-			propertyMap.put(PropertyNameConstants.PORT_NO.value(), outputOracle.getPort().getValue().toString());
+		if(outputMysql.getPort() != null){
+			propertyMap.put(PropertyNameConstants.PORT_NO.value(), outputMysql.getPort().getValue().toString());
 		}
 		
-		if(StringUtils.isNotBlank(outputOracle.getSid().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_SID.value(), (String)(outputOracle.getSid().getValue()));
+		if(StringUtils.isNotBlank(outputMysql.getDatabaseName().getValue())){
+			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), (String)(outputMysql.getDatabaseName().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputOracle.getSchemaName().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(outputOracle.getSchemaName().getValue()));
+		if(StringUtils.isNotBlank(outputMysql.getUsername().getValue())){
+			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(outputMysql.getUsername().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputOracle.getUserName().getValue())){
-			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(outputOracle.getUserName().getValue()));
+		if(StringUtils.isNotBlank(outputMysql.getPassword().getValue())){
+			propertyMap.put(PropertyNameConstants.PASSWORD.value(), (String)(outputMysql.getPassword().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputOracle.getPassword().getValue())){
-			propertyMap.put(PropertyNameConstants.PASSWORD.value(), (String)(outputOracle.getPassword().getValue()));
+		if(StringUtils.isNotBlank(outputMysql.getTableName().getValue())){
+			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), (String)(outputMysql.getTableName().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputOracle.getTableName().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), (String)(outputOracle.getTableName().getValue()));
+		if(outputMysql.getChunkSize() != null){
+			propertyMap.put(PropertyNameConstants.CHUNK_SIZE.value(), (String)(outputMysql.getChunkSize().getValue().toString()));
 		}
 		
-		if(outputOracle.getChunkSize() != null){
-			propertyMap.put(PropertyNameConstants.CHUNK_SIZE.value(), (String)(outputOracle.getChunkSize().getValue().toString()));
-		}
-		
-		if(outputOracle.getLoadType() !=null){
-			if(outputOracle.getLoadType().getInsert() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_INSERT_KEY, outputOracle.getLoadType().getInsert().toString());
-			}else if(outputOracle.getLoadType().getTruncateLoad() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_REPLACE_KEY,outputOracle.getLoadType().getTruncateLoad().toString());
-			} else if(outputOracle.getLoadType().getUpdate() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_UPDATE_KEY,getLoadTypeUpdateKeyUIValue(outputOracle.getLoadType().getUpdate()));
-			}else if(outputOracle.getLoadType().getNewTable() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue(outputOracle.getLoadType().getNewTable()));
+		if(outputMysql.getLoadType() !=null){
+			if(outputMysql.getLoadType().getInsert() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_INSERT_KEY, outputMysql.getLoadType().getInsert().toString());
+			}else if(outputMysql.getLoadType().getTruncateLoad() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_REPLACE_KEY,outputMysql.getLoadType().getTruncateLoad().toString());
+			} else if(outputMysql.getLoadType().getUpdate() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_UPDATE_KEY,getLoadTypeUpdateKeyUIValue(outputMysql.getLoadType().getUpdate()));
+			}else if(outputMysql.getLoadType().getNewTable() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue(outputMysql.getLoadType().getNewTable()));
 			}
 				
 		}
@@ -116,7 +101,7 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
-		container.getComponentNames().add(outputOracle.getId());
+		container.getComponentNames().add(outputMysql.getId());
 		uiComponent.setProperties(propertyMap);
 	}
 	
@@ -152,7 +137,7 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		
 		return StringUtils.removeEnd(buffer.toString(), ",");
 	}
-
+	
 	@Override
 	protected Object getSchema(TypeOutputInSocket inSocket) {
 		LOGGER.debug("Generating UI-Schema data for OutPut-Oracle-Component - {}", componentName);

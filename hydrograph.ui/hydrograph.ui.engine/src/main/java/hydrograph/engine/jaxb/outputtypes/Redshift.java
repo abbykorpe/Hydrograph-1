@@ -35,14 +35,12 @@ import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/oredshift}type-output-redshift-base">
  *       &lt;sequence>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="hostname" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
- *         &lt;element name="drivertype" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="jdbcurl" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/oredshift}type-load-choice" minOccurs="0"/>
- *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
+ *         &lt;element name="batchSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -55,14 +53,12 @@ import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "redshift", propOrder = {
     "databaseName",
-    "hostname",
-    "port",
-    "drivertype",
     "tableName",
     "username",
     "password",
+    "jdbcurl",
     "loadType",
-    "chunkSize",
+    "batchSize",
     "runtimeProperties"
 })
 public class Redshift
@@ -72,19 +68,16 @@ public class Redshift
     @XmlElement(required = true)
     protected ElementValueStringType databaseName;
     @XmlElement(required = true)
-    protected ElementValueStringType hostname;
-    protected ElementValueIntegerType port;
-    @XmlElement(required = true)
-    protected ElementValueStringType drivertype;
-    @XmlElement(required = true)
     protected ElementValueStringType tableName;
     @XmlElement(required = true)
     protected ElementValueStringType username;
     @XmlElement(required = true)
     protected ElementValueStringType password;
+    @XmlElement(required = true)
+    protected ElementValueStringType jdbcurl;
     protected TypeLoadChoice loadType;
     @XmlElement(required = true)
-    protected ElementValueIntegerType chunkSize;
+    protected ElementValueIntegerType batchSize;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -109,78 +102,6 @@ public class Redshift
      */
     public void setDatabaseName(ElementValueStringType value) {
         this.databaseName = value;
-    }
-
-    /**
-     * Gets the value of the hostname property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getHostname() {
-        return hostname;
-    }
-
-    /**
-     * Sets the value of the hostname property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setHostname(ElementValueStringType value) {
-        this.hostname = value;
-    }
-
-    /**
-     * Gets the value of the port property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public ElementValueIntegerType getPort() {
-        return port;
-    }
-
-    /**
-     * Sets the value of the port property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public void setPort(ElementValueIntegerType value) {
-        this.port = value;
-    }
-
-    /**
-     * Gets the value of the drivertype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getDrivertype() {
-        return drivertype;
-    }
-
-    /**
-     * Sets the value of the drivertype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setDrivertype(ElementValueStringType value) {
-        this.drivertype = value;
     }
 
     /**
@@ -256,6 +177,30 @@ public class Redshift
     }
 
     /**
+     * Gets the value of the jdbcurl property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getJdbcurl() {
+        return jdbcurl;
+    }
+
+    /**
+     * Sets the value of the jdbcurl property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setJdbcurl(ElementValueStringType value) {
+        this.jdbcurl = value;
+    }
+
+    /**
      * Gets the value of the loadType property.
      * 
      * @return
@@ -280,27 +225,27 @@ public class Redshift
     }
 
     /**
-     * Gets the value of the chunkSize property.
+     * Gets the value of the batchSize property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueIntegerType }
      *     
      */
-    public ElementValueIntegerType getChunkSize() {
-        return chunkSize;
+    public ElementValueIntegerType getBatchSize() {
+        return batchSize;
     }
 
     /**
-     * Sets the value of the chunkSize property.
+     * Sets the value of the batchSize property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueIntegerType }
      *     
      */
-    public void setChunkSize(ElementValueIntegerType value) {
-        this.chunkSize = value;
+    public void setBatchSize(ElementValueIntegerType value) {
+        this.batchSize = value;
     }
 
     /**

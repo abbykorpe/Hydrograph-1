@@ -461,4 +461,14 @@ public class WidgetHelper {
 		return textBoxWithLableConfig;
 	}
 
+	/**
+	 * Configuration to customize text box as Driver name property 
+	 */
+	public WidgetConfig getMysqlDriverName(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.MYSQL_DRIVER_NAME);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
 }
