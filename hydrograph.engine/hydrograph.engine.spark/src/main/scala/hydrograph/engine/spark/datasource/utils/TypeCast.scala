@@ -2,8 +2,8 @@ package hydrograph.engine.spark.datasource.utils
 
 import java.math.BigDecimal
 import java.sql.{Date, Timestamp}
-import java.text.NumberFormat
-import java.util.Locale
+import java.text.{SimpleDateFormat, NumberFormat}
+import java.util.{TimeZone, Locale}
 import org.apache.spark.sql.types.{DateType, StringType, _}
 import scala.util.Try
 
@@ -13,6 +13,13 @@ import scala.util.Try
  */
 
 object TypeCast {
+
+  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
+    date.setLenient(false)
+    date.setTimeZone(TimeZone.getDefault)
+    date
+  } else null
 
 
   def castingInputData(value: Any, castType: DataType, nullable: Boolean = true, nullValue:String, treatEmptyValuesAsNulls:Boolean=true, inDateFormat:String) : Any= {
