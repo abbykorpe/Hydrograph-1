@@ -62,6 +62,10 @@ class FieldManupulating(operationInputFields: ListBuffer[ListBuffer[String]], op
     inputField
   }
 
+  def getOperationOutputFields(): ListBuffer[String] = {
+    outputOperationField
+  }
+
   def getOutputFields(): ListBuffer[String] = {
     outputField
   }

@@ -182,7 +182,7 @@ public class ParquetWritableUtils {
 			String v;
 			if (obj instanceof Long) {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				java.sql.Date date = new Date((long) obj);
+				Date date = new Date((long) obj);
 				v = df.format(date);
 			} else if (obj instanceof BigDecimal) {
 				BigDecimal bigDecimalObj = (BigDecimal) obj;

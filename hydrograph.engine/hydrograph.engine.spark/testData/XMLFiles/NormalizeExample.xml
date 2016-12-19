@@ -22,7 +22,7 @@
 				<field name="Rewards" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/Input/delimitedInputFileForExpr" />
+		<path uri="testData\inputFiles\normalize_input.txt" />
 		<delimiter value="|" />
 		<hasHeader value="false" />
 		<safe value="true" />
@@ -31,7 +31,7 @@
 
 	<operations id="normalize" xsi:type="op:normalize">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<expression expr="(index >= (Transactions.split(&quot;,&quot;)).length)?0:(Transactions.split(&quot;,&quot;))[index]"
+		<expression expr="(index >= (Transactions.split(&quot;,&quot;)).length)?&quot;xxx&quot;:(Transactions.split(&quot;,&quot;))[index]"
 					id="e1" >
 			<inputFields>
 				<field name="Transactions" inSocketId="in0" />
@@ -49,7 +49,7 @@
 				<field name="Reward" type="java.lang.String" />
 			</outputFields>
 		</expression>
-		<expression expr="((Rewards.split(&quot;,&quot;))[index].equals(&quot;0.1&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
+		<expression expr="((Rewards.split(&quot;,&quot;))[index].equals(&quot;ddd&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
 					id="e3" >
 			<inputFields>
 				<field name="Rewards" inSocketId="in0" />
@@ -78,7 +78,7 @@
 				<field name="RewardCategory" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData/Output/NormalizeOp1" />
+		<path uri="testData\Output\NormalizeExample" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />

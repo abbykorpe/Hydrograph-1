@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.debug;
 
-import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 
 import java.util.HashMap;

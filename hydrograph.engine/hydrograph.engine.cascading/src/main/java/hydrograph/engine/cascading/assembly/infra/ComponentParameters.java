@@ -22,8 +22,8 @@ import org.apache.hadoop.mapred.JobConf;
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.debug.DebugPoint;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
 
 public class ComponentParameters implements Cloneable {
 
@@ -49,7 +49,7 @@ public class ComponentParameters implements Cloneable {
 
 	public ComponentParameters() {
 		this.parameters = new HashMap<String, Object>();
-		this.copyOfInSocket = new HashMap<String, Fields>();
+		this.copyOfInSocket = new HashMap<>();
 	}
 
 	public ComponentParameters(HashMap<String, Object> parameters) {

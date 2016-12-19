@@ -20,8 +20,8 @@
 				<field name="account_no" type="java.lang.String" />
 				<field name="names" type="java.lang.String" />
 				<field name="transaction_type" type="java.lang.String" />
-				<field name="total_amount" type="java.math.BigDecimal" scale="2" />
-				<field name="total_count" type="java.math.BigDecimal" scale="2" />
+				<field name="total_amount" type="java.lang.String"/>
+				<field name="total_count" type="java.lang.String" />
 			</schema>
 		</outSocket>
 		<path uri="testData/Input/normalize_input.txt" />

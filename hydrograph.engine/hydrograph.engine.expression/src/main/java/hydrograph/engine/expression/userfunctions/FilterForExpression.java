@@ -46,10 +46,10 @@ public class FilterForExpression implements FilterBase {
 			tuples[i] = reusableRow.getField(i);
 		}
 		try {
-			if (((Boolean) validationAPI.execute(fieldNames, tuples)) == false) {
-				return false;
-			} else {
+			if ((Boolean) validationAPI.execute(fieldNames, tuples)) {
 				return true;
+			} else {
+				return false;
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in tranform expression: "

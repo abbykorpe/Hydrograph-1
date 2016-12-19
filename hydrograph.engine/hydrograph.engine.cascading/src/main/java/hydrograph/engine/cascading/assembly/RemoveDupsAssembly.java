@@ -23,14 +23,14 @@ import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Retain;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.RemoveDupsEntity;
+import hydrograph.engine.assembly.entity.elements.KeyField;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.RemoveDupsHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.RemoveDupsOutLinkFilter;
 import hydrograph.engine.cascading.filters.RemoveDupsUnusedLinkFilter;
-import hydrograph.engine.core.component.entity.RemoveDupsEntity;
-import hydrograph.engine.core.component.entity.elements.KeyField;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class RemoveDupsAssembly extends BaseComponent<RemoveDupsEntity> {

@@ -12,7 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.functions;
 
-import hydrograph.engine.cascading.assembly.context.CascadingReusableRow;
 import hydrograph.engine.cascading.assembly.context.CustomPartitionContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
@@ -65,7 +64,7 @@ public class CustomTuplesPartitioner extends
 		operationCall.getContext()
 				.setNumOfPartitions(this.getNumOfPartitions());
 		operationCall.getContext().setCurrentPartitionId(currentPartitionId);
-		rrow = new CascadingReusableRow(operationCall.getContext().getKeyFields());
+		rrow = new ReusableRow(operationCall.getContext().getKeyFields());
 		operationCall.getContext().getPartitionLogic().prepare(props);
 	}
 

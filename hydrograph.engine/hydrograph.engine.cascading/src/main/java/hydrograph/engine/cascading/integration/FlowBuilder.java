@@ -15,9 +15,11 @@ package hydrograph.engine.cascading.integration;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapred.JobConf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,18 +29,18 @@ import cascading.flow.FlowConnector;
 import cascading.flow.FlowDef;
 import cascading.flow.process.ProcessFlow;
 import cascading.flow.tez.Hadoop2TezFlowConnector;
+import cascading.tap.hadoop.Hfs;
 import cascading.tuple.hadoop.BigDecimalSerialization;
 import cascading.tuple.hadoop.TupleSerializationProps;
-import hydrograph.engine.adapters.base.ComponentAdapterBase;
-import hydrograph.engine.adapters.base.BaseAdapter;
-import hydrograph.engine.adapters.base.CommandAdapterBase;
-import hydrograph.engine.adapters.base.InputAdapterBase;
-import hydrograph.engine.adapters.base.OperationAdapterBase;
-import hydrograph.engine.adapters.base.OutputAdapterBase;
-import hydrograph.engine.adapters.base.StraightPullAdapterBase;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.generator.base.AssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.CommandComponentGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.InputAssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.OperationAssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.OutputAssemblyGeneratorBase;
+import hydrograph.engine.cascading.assembly.generator.base.StraightPullAssemblyGeneratorBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.commandtype.component.BaseCommandComponent;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.utilities.ComponentParameterBuilder;
@@ -102,42 +104,38 @@ public class FlowBuilder {
 			LOG.info("Building parameters for " + componentId);
 
 			ComponentParameters cp = null;
-			BaseAdapter adapterBase = runtimeContext
+			GeneratorBase assemblyGeneratorBase = runtimeContext
 					.getAssemblyGeneratorMap().get(componentId);
-			if (adapterBase instanceof InputAdapterBase) {
+			if (assemblyGeneratorBase instanceof InputAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
 						.setFlowdef().setJobConf().setSchemaFields().build();
-			} else if (adapterBase instanceof OutputAdapterBase) {
+			} else if (assemblyGeneratorBase instanceof OutputAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
 						.setFlowdef().setInputPipes().setInputFields().setSchemaFields().build();
-			} else if (adapterBase instanceof StraightPullAdapterBase) {
+			} else if (assemblyGeneratorBase instanceof StraightPullAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
 						.setFlowdef().setJobConf().setInputPipes().setSchemaFields()
 						.setInputFields().build();
-			} else if (adapterBase instanceof OperationAdapterBase) {
+			} else if (assemblyGeneratorBase instanceof OperationAssemblyGeneratorBase) {
 				cp = new ComponentParameterBuilder.Builder(componentId,
 						new ComponentParameters(), flowContext, runtimeContext)
 						.setFlowdef().setJobConf().setInputPipes().setUDFPath()
 						.setInputFields().setSchemaFields().build();
-			} else if (adapterBase instanceof CommandAdapterBase) {
-				BaseCommandComponent commandComponent = ((CommandAdapterBase) adapterBase)
-						.getComponent();
+			} else if (assemblyGeneratorBase instanceof CommandComponentGeneratorBase) {
+				CommandComponentGeneratorBase command = ((CommandComponentGeneratorBase) assemblyGeneratorBase)
+						.getCommandComponent();
 				flowContext.getCascadeDef().addFlow(
-						new ProcessFlow(componentId, commandComponent));
+						new ProcessFlow(componentId, command));
 				continue;
 			}
 
-//			((ComponentGeneratorBase) assemblyGeneratorBase).createAssembly(cp);
-//			BaseComponent component = ((ComponentGeneratorBase) assemblyGeneratorBase)
-//					.getAssembly();
+			((AssemblyGeneratorBase) assemblyGeneratorBase).createAssembly(cp);
+			BaseComponent component = ((AssemblyGeneratorBase) assemblyGeneratorBase)
+					.getAssembly();
 
-//			flowContext.getAssemblies().put(componentId, component);
-			
-			((ComponentAdapterBase) adapterBase).createAssembly(cp);
-			BaseComponent component = ((ComponentAdapterBase) adapterBase).getAssembly();
 			flowContext.getAssemblies().put(componentId, component);
 
 			LOG.info("Assembly creation completed for " + componentId);

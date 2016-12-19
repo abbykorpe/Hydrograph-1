@@ -21,7 +21,7 @@ public enum ClassToDataTypeConversion {
 	String {
 		@Override
 		public String getValue(String fieldName) {
-			return "String " + fieldName + "=null;";
+			return "String " + fieldName + "=\"\";";
 		}
 
 	},

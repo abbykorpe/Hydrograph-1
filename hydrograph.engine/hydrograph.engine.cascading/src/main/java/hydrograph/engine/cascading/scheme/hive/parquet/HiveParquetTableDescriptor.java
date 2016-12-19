@@ -215,6 +215,8 @@ public class HiveParquetTableDescriptor extends HiveTableDescriptor {
 	 * Converts the instance to a Hive Table object, which can be used with the
 	 * MetaStore API.
 	 * 
+	 * @param serializationLib
+	 *
 	 * @return a new Table instance.
 	 */
 	@Override
@@ -372,7 +374,7 @@ public class HiveParquetTableDescriptor extends HiveTableDescriptor {
 		private static final Map<TypeInfo, Class<?>> PRIMITIVES;
 
 		static {
-			Map<TypeInfo, Class<?>> primitives = new HashMap<TypeInfo, Class<?>>();
+			Map<TypeInfo, Class<?>> primitives = new HashMap<>();
 			primitives.put(TypeInfoFactory.stringTypeInfo, String.class);
 			primitives.put(TypeInfoFactory.booleanTypeInfo, Boolean.class);
 			primitives.put(TypeInfoFactory.byteTypeInfo, Byte.class);
@@ -393,7 +395,7 @@ public class HiveParquetTableDescriptor extends HiveTableDescriptor {
 		static Fields newFields(StructTypeInfo structTypeInfo) {
 			List<String> existingNames = structTypeInfo
 					.getAllStructFieldNames();
-			List<String> namesList = new ArrayList<String>(existingNames.size());
+			List<String> namesList = new ArrayList<>(existingNames.size());
 
 			namesList.addAll(existingNames);
 			String[] names = namesList.toArray(new String[namesList.size()]);

@@ -3,10 +3,12 @@ package hydrograph.engine.spark.components
 import java.util
 
 import hydrograph.engine.core.component.entity.FilterEntity
+import hydrograph.engine.expression.api.ValidationAPI
+import hydrograph.engine.expression.userfunctions.{FilterForExpression, TransformForExpression}
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
-import hydrograph.engine.transformation.userfunctions.base.FilterBase
+import hydrograph.engine.transformation.userfunctions.base.{FilterBase, TransformBase}
 import org.apache.spark.sql.DataFrame
 import org.slf4j.LoggerFactory
 
@@ -33,10 +35,21 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
     var map: Map[String, DataFrame] = Map()
 
     LOG.info("Filter Operation Input Fields: {}",filterEntity.getOperation.getOperationInputFields)
-    val filterClass=classLoader[FilterBase](filterEntity.getOperation.getOperationClass)
+    val filterClass: FilterBase = filterEntity.getOperation match {
+      case x if x.getOperationClass == null => {
+        var filter = new FilterForExpression()
+        filter.setValidationAPI(new ValidationAPI(x.getExpression,""))
+        filter
+      }
+      case y => classLoader[FilterBase](y.getOperationClass)
+    }
+
     val fieldPosition=ReusableRowHelper(filterEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
 
-    val inputReusableRow=new SparkReusableRow(fieldNameSet)
+    var inputReusableRow=new SparkReusableRow(fieldNameSet)
+    val fields = new util.LinkedHashSet[String]()
+    filterEntity.getOperation.getOperationInputFields.foreach(e => fields.add(e))
+    if (filterClass.isInstanceOf[FilterBase]) inputReusableRow = new SparkReusableRow(fields)
 
     filterEntity.getOutSocketList.asScala.foreach{outSocket=>
      LOG.info("Creating filter assembly for '" + filterEntity.getComponentId + "' for socket: '"

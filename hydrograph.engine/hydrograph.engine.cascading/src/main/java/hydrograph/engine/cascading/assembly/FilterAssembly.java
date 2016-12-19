@@ -12,6 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import hydrograph.engine.assembly.entity.FilterEntity;
+import hydrograph.engine.assembly.entity.elements.OutSocket;
+import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.filters.RecordFilter;
+import hydrograph.engine.expression.api.ValidationAPI;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,15 +33,6 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.filters.RecordFilter;
-import hydrograph.engine.core.component.entity.FilterEntity;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
-import hydrograph.engine.expression.api.ValidationAPI;
-import hydrograph.engine.utilities.ComponentHelper;
 
 public class FilterAssembly extends BaseComponent<FilterEntity> {
 
@@ -47,13 +47,24 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 	public FilterAssembly(FilterEntity baseComponentEntity, ComponentParameters parameters) {
 		super(baseComponentEntity, parameters);
 	}
-
+	
+	private void setOperationClassInCaseExpression() {
+		for (int i = 0; i < filterEntity.getOperationsList().size(); i++) {
+			if (filterEntity.getOperationsList().get(i).getOperationClass() == null) {
+				filterEntity.getOperationsList().get(i)
+						.setOperationClass(
+								"hydrograph.engine.expression.userfunctions.FilterForExpression");
+			}
+		}
+	}
+	
 	@Override
 	protected void createAssembly() {
 		try {
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(filterEntity.toString());
 			}
+			setOperationClassInCaseExpression();
 			for (OutSocket outSocket : filterEntity.getOutSocketList()) {
 				LOG.trace("Creating filter assembly for '" + filterEntity.getComponentId() + "' for socket: '"
 						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
@@ -77,7 +88,7 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 				componentParameters.getInputPipe());
 		// validate expression
 		ValidationAPI validationAPI = null;
-		if (filterEntity.getOperation().getOperationClass() == null) {
+		if (filterEntity.getOperation().getOperationClass().equals("hydrograph.engine.expression.userfunctions.FilterForExpression")) {
 			validationAPI = new ValidationAPI(filterEntity.getOperation().getExpression(),
 					componentParameters.getUDFPath());
 			expressionValidate(validationAPI);
@@ -88,7 +99,7 @@ public class FilterAssembly extends BaseComponent<FilterEntity> {
 				isUnused, validationAPI);
 
 		RecordFilter selectCustomFilter = new RecordFilter(filterCustomHandler,
-				componentParameters.getInputPipe().getName());
+				componentParameters.getInputPipe().getName(),validationAPI);
 
 		setHadoopProperties(filterPipe.getStepConfigDef());
 

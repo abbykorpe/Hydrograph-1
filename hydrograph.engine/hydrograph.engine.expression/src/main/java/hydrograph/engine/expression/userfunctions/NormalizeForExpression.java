@@ -26,7 +26,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	private String[] fieldNames;
 	private Object[] tuples;
 	private String countExpression;
-	private ArrayList<NormalizeTransformBase> transformInstances;
+	private int transformInstancesSize;
 	private ArrayList<ArrayList<String>> operationOutputFields;
 	private ArrayList<String> listOfExpressions;
 
@@ -48,13 +48,12 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 			OutputDispatcher outputDispatcher) {
 		
 		try {
-			Object obj1 = new ValidationAPI(countExpression,
+			int exprCount =(int) new ValidationAPI(countExpression,
 					"").execute(fieldNames, tuples);
-			int exprCount = Integer.valueOf((String)obj1);
 			int i=0,j=0;
 			for (j = 0; j < exprCount; j++) {
 				try {
-					for (int counter = 0; counter < transformInstances.size(); counter++) {
+					for (int counter = 0; counter < transformInstancesSize; counter++) {
 						fieldNames = new String[inputRow.getFields().size() + 1];
 						tuples = new Object[inputRow.getFields().size() + 1];
 						for (i = 0; i < inputRow.getFieldNames().size(); i++) {
@@ -72,7 +71,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 					outputDispatcher.sendOutput();
 				} catch (Exception e) {
 					throw new RuntimeException(
-							"Exception in tranform expression: "
+							"Exception in normalize expression: "
 									+ listOfExpressions
 											.get(i)
 									+ ".\nRow being processed: "
@@ -80,7 +79,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in tranform expression: "
+			throw new RuntimeException("Exception in normalize expression: "
 					+ countExpression + ".", e);
 		}
 		
@@ -98,9 +97,8 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 		this.countExpression = countExpression;
 	}
 	
-	public void setTransformInstances(
-			ArrayList<NormalizeTransformBase> transformInstances) {
-		this.transformInstances = transformInstances;
+	public void setTransformInstancesSize(int transformInstancesSize) {
+		this.transformInstancesSize = transformInstancesSize;
 	}
 
 	public void setOperationOutputFields(

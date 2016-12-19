@@ -22,11 +22,11 @@ import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.assembly.entity.OutputFileMixedSchemeEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
-import hydrograph.engine.core.component.entity.OutputFileMixedSchemeEntity;
 import hydrograph.engine.utilities.ComponentHelper;
 
 public class OutputFileMixedSchemeAssembly extends BaseComponent<OutputFileMixedSchemeEntity> {

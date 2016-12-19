@@ -1,5 +1,7 @@
 package hydrograph.engine.spark.components
 
+import java.util
+
 import hydrograph.engine.core.component.entity.CumulateEntity
 import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
 import hydrograph.engine.spark.components.base.OperationComponentBase
@@ -10,6 +12,7 @@ import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{Column, Row, _}
 import org.slf4j.LoggerFactory
+
 import scala.collection.JavaConverters._
 
 /**
@@ -20,12 +23,15 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
   val key = cumulateEntity.getOutSocketList.get(0).getSocketId
   val LOG = LoggerFactory.getLogger(classOf[FilterComponent])
 
-  def extractInitialValues(getOperationsList: List[Operation]): List[String] = {
-    def extract(operationList: List[Operation], stringList: List[String]): List[String] = (operationList, stringList) match {
-      case (List(), _) => stringList
-      case (x :: xs, str) => extract(xs, str ++ List(x.getAccumulatorInitialValue))
+  def extractInitialValues(getOperationsList: util.List[Operation]):List[String] = {
+    def extract(operationList:List[Operation],stringList:List[String]): List[String] = (operationList,stringList) match {
+      case (List(),_) => stringList
+      case (x::xs,str) => extract(xs,str ++ List(x.getAccumulatorInitialValue))
     }
-    extract(getOperationsList, List[String]())
+    if(getOperationsList != null)
+      extract(getOperationsList.asScala.toList,List[String]())
+    else
+      List[String]()
   }
 
   override def createComponent(): Map[String, DataFrame] = {
@@ -62,7 +68,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
     val outputDf = sortedDf.mapPartitions(itr => {
 
       //Initialize Cumulate to call prepare Method
-      val cumulateList = initializeCumulate(cumulateEntity.getOperationsList, primaryKeys, fm)
+      val cumulateList = initializeCumulate(cumulateEntity.getOperationsList, primaryKeys, fm,op.getExpressionObject,extractInitialValues(cumulateEntity.getOperationsList))
       var prevKeysArray: Array[Any] = null
 
 
