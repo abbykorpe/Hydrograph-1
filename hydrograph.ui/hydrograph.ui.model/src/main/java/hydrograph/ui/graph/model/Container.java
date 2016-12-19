@@ -65,6 +65,8 @@ public class Container extends Model {
 	
 	private List<ParameterFile> jobLevelParameterFiles;
 	
+	private List<ParameterFile> parameterFiles;
+	
 	@XStreamOmitField
 	private boolean isOpenedForTracking;
 
@@ -72,7 +74,28 @@ public class Container extends Model {
 		comments = new ArrayList<CommentBox>();
 	}
 	
+	/*private boolean isParameterSequenceChanges(List<ParameterFile> newParameterList){
+		
+		//if(newParameterList.size() != )
+		
+	}*/
 	
+	public void saveParamterFileSequence(List<ParameterFile> parameterFiles) {
+		if(this.parameterFiles == null){
+			this.parameterFiles = new ArrayList<>();
+		}
+		this.parameterFiles.clear();
+		this.parameterFiles.addAll(parameterFiles);
+	}
+
+	public List<ParameterFile> getParamterFileSequence() {
+		List<ParameterFile> parameterFiles  = new ArrayList<>();
+		if(this.parameterFiles!=null){
+			parameterFiles.addAll(this.parameterFiles);
+		}
+			
+		return parameterFiles;
+	}
 	
 	/**
 	 * Adds the job level parameter files.

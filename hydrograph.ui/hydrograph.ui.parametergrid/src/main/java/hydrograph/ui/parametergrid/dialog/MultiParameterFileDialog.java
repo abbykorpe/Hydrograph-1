@@ -153,6 +153,9 @@ public class MultiParameterFileDialog extends Dialog {
 	private Table table_2;
 	private static final String TABLE_TYPE_KEY="TABLE_TYPE";
 	private IStructuredSelection previousSelection = null;
+	
+	private Button applyButton;
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -598,6 +601,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addNewRow(parameterTableViewer);
+				applyButton.setEnabled(true);
 			}
 		});
 		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
@@ -612,6 +616,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {				
 				deleteRow(parameterTableViewer);
+				applyButton.setEnabled(true);
 			}
 		});
 		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
@@ -626,6 +631,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				moveRowUp(parameterTableViewer);
+				applyButton.setEnabled(true);
 			}
 		});
 		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
@@ -640,6 +646,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				moveRowDown(parameterTableViewer);
+				applyButton.setEnabled(true);
 			}
 		});
 		Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
@@ -653,6 +660,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				saveParameters();
+				applyButton.setEnabled(true);
 			}
 		});
 		Image saveButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SAVE_BUTTON);
@@ -831,7 +839,7 @@ public class MultiParameterFileDialog extends Dialog {
 						}
 						
 						parameterTableViewer.refresh();
-						
+						applyButton.setEnabled(true);
 					}
 				});
 				
@@ -856,6 +864,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				addNewRow(parameterTableViewer);
+				applyButton.setEnabled(true);
 			}
 
 			@Override
@@ -1099,8 +1108,7 @@ public class MultiParameterFileDialog extends Dialog {
 		gl_composite_1_1.horizontalSpacing = 10;
 		composite_1_1.setLayout(gl_composite_1_1);
 		composite_1_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
-		GridData gd_composite_1_1 = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		composite_1_1.setLayoutData(gd_composite_1_1);
+		composite_1_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
 		Label lblDrop1 = new Label(composite_1_1, SWT.NONE);
 		lblDrop1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
@@ -1115,8 +1123,7 @@ public class MultiParameterFileDialog extends Dialog {
 		gl_composite.horizontalSpacing = 10;
 		composite_1_2.setLayout(gl_composite);
 		composite_1_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
-		GridData gd_composite = new GridData(SWT.RIGHT, SWT.TOP, true, false, 1, 1);
-		composite_1_2.setLayoutData(gd_composite);
+		composite_1_2.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false, 1, 1));
 
 		Label lblForImage = new Label(composite_1_2, SWT.NONE);
 		Image image = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
@@ -1167,6 +1174,7 @@ public class MultiParameterFileDialog extends Dialog {
 				filePathTableViewer.refresh();
 				populateParameterSearchBox();
 				populateViewParameterFileBox(jobSpecificFile);
+				applyButton.setEnabled(true);
 			}
 		});
 	}
@@ -1439,6 +1447,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addFilesToParamterGrid(btnAddProjectParam.getShell(),MultiParameterFileDialogConstants.GLOBAL_PARAMETER_DIRECTORY_NAME,ParamterFileTypes.PROJECT_LEVEL);
+				applyButton.setEnabled(true);
 			}			
 		});
 				
@@ -1448,6 +1457,7 @@ public class MultiParameterFileDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addFilesToParamterGrid(btnAddProjectParam.getShell(),MultiParameterFileDialogConstants.JOB_PARAMETER_DIRECTORY_NAME,ParamterFileTypes.JOB_LEVEL);
+				applyButton.setEnabled(true);
 			}
 		});
 		
@@ -1465,6 +1475,7 @@ public class MultiParameterFileDialog extends Dialog {
 						filePathTableViewer.refresh();
 					}
 				}
+				applyButton.setEnabled(true);
 			}
 		});
 		Image upImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
@@ -1483,10 +1494,12 @@ public class MultiParameterFileDialog extends Dialog {
 						filePathTableViewer.refresh();
 					}
 				}
+				applyButton.setEnabled(true);
 			}
 		});
 		Image downImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
 		btnDown_1.setImage(downImage);
+		new Label(composite, SWT.NONE);
 		
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
 		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,false, 1, 1));
@@ -1517,6 +1530,8 @@ public class MultiParameterFileDialog extends Dialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		 Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
 		okButton.setFocus();
+		applyButton = createButton(parent, IDialogConstants.NO_ID, "Apply", false);
+		applyButton.setEnabled(false);
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 	}
 
@@ -1531,16 +1546,42 @@ public class MultiParameterFileDialog extends Dialog {
 		this.parameterFiles = parameterFiles;
 	}
 
+	private void updateParamterFileSequence(){
+		if(!getComponentCanvas().getParamterFileSequence().isEmpty()){
+			parameterFiles.clear();
+			parameterFiles.addAll(getComponentCanvas().getParamterFileSequence());
+		}
+		
+	}
+	
 	private void populateFilePathTableViewer() {
+		
+		updateParamterFileSequence();
+		
 		filePathTableViewer.setInput(parameterFiles);
 		filePathTableViewer.refresh();
 	}
-
+	
 	@Override
 	protected void okPressed() {
+		saveParamterDialogChanges();
+		super.okPressed();
+	}
+	
+	@Override
+	protected void buttonPressed(int buttonId) {
+		if(buttonId == IDialogConstants.NO_ID){
+			saveParamterDialogChanges();
+			applyButton.setEnabled(false);
+		}
+		super.buttonPressed(buttonId);
+	}
+
+	private void saveParamterDialogChanges() {
 		List<ParameterFile> tempParameterFiles = new LinkedList<>();
 		tempParameterFiles.addAll(parameterFiles);
 
+		getComponentCanvas().saveParamterFileSequence(parameterFiles);
 		
 		tempParameterFiles.removeAll(jobLevelParamterFiles);
 		
@@ -1588,7 +1629,6 @@ public class MultiParameterFileDialog extends Dialog {
 		}
 		runGraph = true;
 		okPressed = true;
-		super.okPressed();
 	}
 
 	/**

@@ -128,4 +128,8 @@ public interface DefaultGEFCanvas {
 	 * @return unique job id
 	 */
 	public String getUniqueJobId();
+	
+	public void saveParamterFileSequence(List<ParameterFile> parameterFiles);
+	
+	public List<ParameterFile> getParamterFileSequence();
 }
