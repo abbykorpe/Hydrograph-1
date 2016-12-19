@@ -589,7 +589,7 @@ public class ELTOperationClassDialog extends Dialog implements IOperationClassDi
 					else
 					{	
 						emptyDecorator.hide();	
-					 if(!(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(textBoxValue.replace('.', '/'))))
+					 if(!(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(textBoxValue)))
 					{
                      classNotPresentDecorator.show(); 						
 					}

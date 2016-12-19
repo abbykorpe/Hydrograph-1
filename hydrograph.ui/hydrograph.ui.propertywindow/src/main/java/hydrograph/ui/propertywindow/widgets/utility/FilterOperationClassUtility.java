@@ -109,7 +109,7 @@ public class FilterOperationClassUtility  {
 	public void createNewClassWizard(Text fileNameTextBox, WidgetConfig widgetConfig) {
 		OpenNewClassWizardAction wizard = new OpenNewClassWizardAction();
 		wizard.setOpenEditorOnFinish(false);
-		final NewClassWizardPage page = new NewClassWizardPage();
+		final CustomizeNewClassWizardPage page = new CustomizeNewClassWizardPage();
 		page.setSuperClass("java.lang.Object", true);
 		page.setMethodStubSelection(false, false, true, true);
 		List<String> interfaceList = new ArrayList<String>();
@@ -204,7 +204,7 @@ public class FilterOperationClassUtility  {
 	 * @param filterExtension
 	 * @param fileName
 	 */
-	private void browseJavaSelectionDialog(String filterExtension, Text fileName) {
+	public static void browseJavaSelectionDialog(String filterExtension, Text fileName) {
 		ResourceFileSelectionDialog dialog = new ResourceFileSelectionDialog(
 				"Project", "Select Java Class (.java)", new String[] { filterExtension });
 		if (dialog.open() == IDialogConstants.OK_ID) {

@@ -14,10 +14,13 @@
  
 package hydrograph.ui.validators.impl;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -37,9 +40,8 @@ public class BooleanOrParameterValidationRule implements IValidator {
 	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap,boolean isJobImported){
 		String value = (String) object;
 		if(StringUtils.isNotBlank(value)){
-			if((Boolean.TRUE.toString().equalsIgnoreCase(value) || Boolean.FALSE.toString().equalsIgnoreCase(value))|| 
-				((StringUtils.startsWith(value, "@{") && StringUtils.endsWith(value, "}")) &&
-						!StringUtils.contains(value, "@{}"))){
+			Matcher matcher=Pattern.compile(Constants.REGEX).matcher(value);
+			if((matcher.matches()||Boolean.TRUE.toString().equalsIgnoreCase(value) || Boolean.FALSE.toString().equalsIgnoreCase(value))){
 				return true;
 			}
 			errorMessage = propertyName + " is mandatory";

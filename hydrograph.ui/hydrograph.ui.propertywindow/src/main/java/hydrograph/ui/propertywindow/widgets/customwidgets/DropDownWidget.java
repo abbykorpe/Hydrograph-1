@@ -43,6 +43,8 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -65,6 +67,7 @@ public class DropDownWidget extends AbstractWidget{
 	private ComboBoxParameter comboBoxParameter=new ComboBoxParameter();
 	private ControlDecoration txtDecorator;
 	private DropDownConfig dropDownConfig;
+	private List<AbstractWidget> widgetList;
 	
 	/**
 	 * Instantiates a new ELT safe widget.
@@ -126,7 +129,21 @@ public class DropDownWidget extends AbstractWidget{
 			logger.error("Failed in attaching listeners to {}, {}", dropDownConfig.getName(), exception);
 		}
 		
+		addComboSelectionListner();
 		 populateWidget();
+	}
+	
+	private boolean addComboSelectionListner() {
+		
+		combo.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				showHideErrorSymbol(widgetList);
+			}
+			
+		});
+		return true;
 	}
 
 	private void populateWidget(){	
@@ -197,6 +214,7 @@ public class DropDownWidget extends AbstractWidget{
 	
    @Override
 	public void addModifyListener(Property property, final ArrayList<AbstractWidget> widgetList) {
+	   this.widgetList = widgetList;
 	   text.addModifyListener(new ModifyListener() {
 			
 			@Override
