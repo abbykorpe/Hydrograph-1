@@ -13,20 +13,22 @@
 
 package hydrograph.ui.communication.debugservice.method;
 
-import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
-import hydrograph.ui.common.util.PreferenceConstants;
-import hydrograph.ui.communication.debugservice.constants.DebugServiceMethods;
-import hydrograph.ui.communication.debugservice.constants.DebugServicePostParameters;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
 import org.slf4j.Logger;
+
+import com.google.gson.Gson;
+
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.common.util.PreferenceConstants;
+import hydrograph.ui.communication.debugservice.constants.DebugServiceMethods;
+import hydrograph.ui.communication.debugservice.constants.DebugServicePostParameters;
+import hydrograph.ui.datastructures.metadata.MetaDataDetails;
+import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The class Provider
@@ -181,16 +183,14 @@ public class Provider {
 	 * @throws NumberFormatException
 	 * @throws MalformedURLException
 	 */
-	public PostMethod readMetaStoreforHiveMethod(String jsonString,String host,String port, List<String> userCredentials) throws NumberFormatException, MalformedURLException {
+	public PostMethod readMetaDataMethod(MetaDataDetails metaDataDetails) throws NumberFormatException, MalformedURLException {
 		
-		URL url = new URL(POST_PROTOCOL,host,Integer.valueOf(port),DebugServiceMethods.READ_METASTORE);
+		URL url = new URL(POST_PROTOCOL,metaDataDetails.getHost(),Integer.valueOf(metaDataDetails.getPort()),DebugServiceMethods.READ_METASTORE);
 		PostMethod postMethod = new PostMethod(url.toString());
-        postMethod.addParameter(DebugServicePostParameters.METASTORE_DB_NAME, jsonString.split("\\|")[0]);
-        postMethod.addParameter(DebugServicePostParameters.METASTORE_TABLE_NAME, jsonString.split("\\|")[1]);
-        postMethod.addParameter(DebugServicePostParameters.USERNAME, userCredentials.get(0));
-        postMethod.addParameter(DebugServicePostParameters.PASSWORD,userCredentials.get(1));
-        
-        LOGGER.debug("Calling debug service to get hive table details through url :: "+url);
+		Gson gson = new Gson();
+        postMethod.addParameter(DebugServicePostParameters.REQUEST_PARAMETERS, gson.toJson(metaDataDetails) );
+      
+        LOGGER.debug("Calling Metadata service to get Metadata details through url :: "+url);
         
 		return postMethod;
 	}

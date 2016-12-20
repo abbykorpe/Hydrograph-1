@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui,
  hydrograph.ui.logging;bundle-version="0.0.1",
  org.apache.commons.httpclient,
  org.apache.commons.lang;bundle-version="2.4.0",
- hydrograph.ui.common.datastructures;bundle-version="0.0.1"
+ hydrograph.ui.common.datastructures;bundle-version="0.0.1",
+ com.google.gson;bundle-version="2.2.4"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: hydrograph.ui.communication.debugservice,

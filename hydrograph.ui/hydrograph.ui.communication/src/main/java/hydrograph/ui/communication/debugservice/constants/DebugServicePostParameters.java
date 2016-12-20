@@ -33,4 +33,5 @@ public class DebugServicePostParameters {
 	public static final String METASTORE_DB_NAME="database";
 	public static final String METASTORE_TABLE_NAME="table";
 	public static final String USERNAME="userName";
+	public static final String REQUEST_PARAMETERS="request_parameters";
 }

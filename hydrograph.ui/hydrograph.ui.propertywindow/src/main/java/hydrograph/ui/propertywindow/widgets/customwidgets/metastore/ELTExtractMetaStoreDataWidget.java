@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
@@ -41,6 +42,7 @@ import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructures.metadata.MetaDataDetails;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -62,6 +64,7 @@ import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
  */
 public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 
+	private static final String DBTYPE = "hive";
 	private static final String ERROR = "ERR";
 	private static final String INFO = "INF";
 	private static final String PORT_NO = "portNo";
@@ -157,14 +160,12 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 	private void extractMetaStoreDetails(List<String> userCredentials, String host, String port_no) {
 		HiveTableSchema hiveTableSchema = null;
 		String jsonResponse = "";
-
-		
+       
 		
 		try {
 
 			ObjectMapper mapper = new ObjectMapper();
-			String input = dbName + SEPARATOR + dbTableName;
-			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input,host,port_no,userCredentials);
+			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(getMetaDataDetails(userCredentials, host, port_no));
 			hiveTableSchema = mapper.readValue(jsonResponse,
 					HiveTableSchema.class);
 
@@ -222,6 +223,18 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 					createMessageDialog("Invalid Host Name:" +host,ERROR).open();
 				}
 		}
+	}
+
+	private MetaDataDetails getMetaDataDetails(List<String> userCredentials, String host, String port_no) {
+		MetaDataDetails connectionDetails = new MetaDataDetails();
+        connectionDetails.setDbType(DBTYPE);
+        connectionDetails.setHost(host);
+        connectionDetails.setPort(port_no);
+        connectionDetails.setUserId(userCredentials.get(0));
+        connectionDetails.setPassword(userCredentials.get(1));
+        connectionDetails.setDatabase(dbName);
+        connectionDetails.setTableName(dbTableName);
+		return connectionDetails;
 	}
 
 	/**
