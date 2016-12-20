@@ -181,12 +181,12 @@ public class SubJobUtility {
 			edComponentEditPart.refresh();
 			Integer returnedValue = inputSubjobCompCache.put(oldTarget, sourceTerminal);
 			if (returnedValue != null) {
-				PortDetails portDetails=oldTarget.getPortDetails(PortAlignmentEnum.LEFT) ;
-				if(portDetails!=null && portDetails.isAllowMultipleLinks())
-				{
+				PortDetails portDetails = oldTarget.getPortDetails(PortAlignmentEnum.LEFT);
+				if (portDetails != null && portDetails.isAllowMultipleLinks()) {
 					inputSubjobCompCache.put(oldTarget, ++returnedValue);
-				}else
+				} else {
 					inputSubjobCompCache.put(oldTarget, returnedValue);
+				}
 			}
 
 		}
