@@ -18,6 +18,7 @@ Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 6. <519> [Ashika Holkar] -  Error symbol present on General tab is not getting removed when user change the field property from parameter to true/false/any valid value
 7. <527> [Ashika Holkar] - All created projects are getting displayed under Operation class
 8. <549> [Sonia Raheja] - Tool does not allow rename the property files other than the param folder.
+9. <517> [Nitin Gupta]	-	Subjob connected link is getting removed when input socket for subjob component is connected with Union All component.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
