@@ -237,9 +237,9 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
 					if (Pattern.matches(fileName + Constants.EXTENSION, resource.getName())) {
-						if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension())
+						if ((StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension())
 								|| StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, resource.getFileExtension())
-								|| StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension()) 
+								|| StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension()))
 								&& !(StringUtils.equalsIgnoreCase(modifiedResource.getName(), resource.getName()))) {
 							getDeleteChanges(changes, resource);
 						}
@@ -253,8 +253,8 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
 					if (Pattern.matches(fileName + Constants.EXTENSION, resource.getName())) {
-						if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension()) || 
-							StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension())
+						if ((StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension()) || 
+							StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension()))
 							&& !(StringUtils.equalsIgnoreCase(modifiedResource.getName(), resource.getName()))) {
 							getDeleteChanges(changes, resource);
 						}
