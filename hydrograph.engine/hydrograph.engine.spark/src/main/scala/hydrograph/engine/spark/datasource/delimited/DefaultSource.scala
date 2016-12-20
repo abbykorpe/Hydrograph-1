@@ -1,5 +1,5 @@
 
-package hydrograph.engine.spark.delimited.datasource
+package hydrograph.engine.spark.datasource.delimited
 
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.hadoop.fs.{FileSystem, Path}

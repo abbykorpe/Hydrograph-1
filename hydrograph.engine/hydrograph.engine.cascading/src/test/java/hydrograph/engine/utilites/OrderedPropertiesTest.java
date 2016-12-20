@@ -22,7 +22,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import hydrograph.engine.core.component.utils.OrderedProperties;
+import hydrograph.engine.core.props.OrderedProperties;
 
 /**
  * Unit tests for OrderedProperties class

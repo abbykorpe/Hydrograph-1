@@ -15,7 +15,7 @@ import java.io.FileReader
 /**
   * Created by gurdits on 10/26/2016.
   */
-class AdapterFactroy(graph: Graph) {
+class AdapterFactory(graph: Graph) {
 
   val props = new Properties()
   val componentMap=new mutable.HashMap[String,AdapterBase]()
@@ -58,10 +58,10 @@ class AdapterFactroy(graph: Graph) {
    adapterBase
   }
 }
-object AdapterFactroy{
+object AdapterFactory{
 
-  def apply(graph: Graph): AdapterFactroy ={
-    val af=new AdapterFactroy(graph)
+  def apply(graph: Graph): AdapterFactory ={
+    val af=new AdapterFactory(graph)
     af.loadProps()
     af.generatedAdapterMap(graph.getInputsOrOutputsOrStraightPulls.toList)
     af

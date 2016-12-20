@@ -33,7 +33,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
     for (compID <- runtimeContext.traversal.getOrderedComponentsList(batch).asScala) {
 
       var baseComponentParams: BaseComponentParams = null;
-      val adapterBase:AdapterBase = runtimeContext.adapterFactroy.getAdapterMap().get(compID).get
+      val adapterBase:AdapterBase = runtimeContext.adapterFactory.getAdapterMap().get(compID).get
 
 
 

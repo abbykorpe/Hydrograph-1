@@ -18,8 +18,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-import hydrograph.engine.core.component.utils.OrderedProperties;
-import hydrograph.engine.core.component.utils.OrderedPropertiesHelper;
+import hydrograph.engine.core.props.OrderedProperties;
+import hydrograph.engine.core.props.OrderedPropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import hydrograph.engine.core.core.HydrographJob;

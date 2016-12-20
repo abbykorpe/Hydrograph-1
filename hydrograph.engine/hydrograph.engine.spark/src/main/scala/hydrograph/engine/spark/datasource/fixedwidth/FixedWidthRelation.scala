@@ -1,4 +1,4 @@
-package hydrograph.engine.spark.fixedwidth.datasource
+package hydrograph.engine.spark.datasource.fixedwidth
 
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.spark.rdd.RDD

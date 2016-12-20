@@ -1,4 +1,4 @@
-package hydrograph.engine.spark.fixedwidth.datasource
+package hydrograph.engine.spark.datasource.fixedwidth
 
 import hydrograph.engine.spark.datasource.utils.TypeCast
 import org.apache.hadoop.fs.Path
