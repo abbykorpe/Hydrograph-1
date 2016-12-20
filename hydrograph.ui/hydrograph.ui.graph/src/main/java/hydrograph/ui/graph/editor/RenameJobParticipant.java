@@ -14,10 +14,6 @@
  
 package hydrograph.ui.graph.editor;
 
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.utility.ResourceChangeUtil;
-import hydrograph.ui.project.structure.CustomMessages;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -38,6 +33,11 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
 import org.eclipse.ltk.core.refactoring.resource.RenameResourceChange;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.utility.ResourceChangeUtil;
+import hydrograph.ui.project.structure.CustomMessages;
 
 
 public class RenameJobParticipant extends RenameParticipant {
@@ -113,7 +113,7 @@ public class RenameJobParticipant extends RenameParticipant {
 				ResourceChangeUtil.addMembersToList(memberList,modifiedResource.getProject().getFolder(modifiedResource.getParent().getName()));
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
-					if (Pattern.matches(fileName + ".*", resource.getName())) {
+					if (Pattern.matches(fileName + Constants.EXTENSION, resource.getName())) {
 						if(StringUtils.equalsIgnoreCase(Messages.XML_EXT,resource.getFileExtension())
 								||StringUtils.equalsIgnoreCase(Messages.JOB_EXT,resource.getFileExtension())
 								&&!(StringUtils.equalsIgnoreCase(modifiedResource.getName(),resource.getName())))
@@ -133,7 +133,7 @@ public class RenameJobParticipant extends RenameParticipant {
 				ResourceChangeUtil.addMembersToList(memberList,modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM));
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
-					if (Pattern.matches(fileName + ".*", resource.getName())) {
+					if (Pattern.matches(fileName + Constants.EXTENSION, resource.getName())) {
 						if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension())
 								|| StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, resource.getFileExtension())
 								|| StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension())
