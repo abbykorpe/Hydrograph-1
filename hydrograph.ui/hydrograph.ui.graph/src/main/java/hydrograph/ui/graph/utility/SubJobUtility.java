@@ -58,6 +58,8 @@ import hydrograph.ui.graph.handler.JobCreationPage;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.PortAlignmentEnum;
+import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
@@ -179,7 +181,12 @@ public class SubJobUtility {
 			edComponentEditPart.refresh();
 			Integer returnedValue = inputSubjobCompCache.put(oldTarget, sourceTerminal);
 			if (returnedValue != null) {
-				inputSubjobCompCache.put(oldTarget, returnedValue);
+				PortDetails portDetails=oldTarget.getPortDetails(PortAlignmentEnum.LEFT) ;
+				if(portDetails!=null && portDetails.isAllowMultipleLinks())
+				{
+					inputSubjobCompCache.put(oldTarget, ++returnedValue);
+				}else
+					inputSubjobCompCache.put(oldTarget, returnedValue);
 			}
 
 		}

@@ -518,6 +518,21 @@ public abstract class Component extends Model {
 		return portDetails;
 	}
 	
+	
+	/**
+	 * Get port details based on its alignment.
+	 *
+	 * @return - list of {@link PortDetails}
+	 */
+	public PortDetails getPortDetails(PortAlignmentEnum alignmentEnum) {
+		for(PortDetails portDetails :this.portDetails){
+			if(alignmentEnum.equals(portDetails.getPortAlignment())){
+				return portDetails;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Set ports.
 	 *
