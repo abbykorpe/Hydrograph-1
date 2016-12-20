@@ -53,7 +53,6 @@ import hydrograph.ui.project.structure.CustomMessages;
 
 public class JobDeleteParticipant extends DeleteParticipant{
 	private IFile modifiedResource;
-	private static final String JOBS="jobs";
 	private boolean flag;
 	
 	@Override
@@ -79,10 +78,10 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	}
 
 	private boolean deleteCorrospondingJobAndPropertyFileifUserDeleteXmlFile(IProject iProject) {
-		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),CustomMessages.ProjectSupport_JOBS)) {
 			IFile jobFileName = null;
 			IFile propertyFileName = null;
-			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFolder jobsFolder = iProject.getFolder(CustomMessages.ProjectSupport_JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
 			
 			if (jobsFolder != null) {
@@ -104,10 +103,10 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	}
 
 	private boolean deleteCorrospondingXmlAndPropertyFileifUserDeleteJobFile(IProject iProject) {
-		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),JOBS)) {
+		if (StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),CustomMessages.ProjectSupport_JOBS)) {
 			IFile xmlFileName = null;
 			IFile propertyFileName = null;
-			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFolder jobsFolder = iProject.getFolder(CustomMessages.ProjectSupport_JOBS);
 			IFolder propertiesFolder = iProject.getFolder(Messages.PARAM);
 			if (jobsFolder != null) {
 				xmlFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
@@ -132,7 +131,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				Messages.PARAM)) {
 			IFile jobFileName = null;
 			IFile xmlFileName = null;
-			IFolder jobsFolder = iProject.getFolder(JOBS);
+			IFolder jobsFolder = iProject.getFolder(CustomMessages.ProjectSupport_JOBS);
 			if (jobsFolder != null) {
 				jobFileName = jobsFolder.getFile(modifiedResource.getFullPath().removeFileExtension()
 						.addFileExtension(Constants.JOB_EXTENSION_FOR_IPATH).toFile().getName());
@@ -238,10 +237,10 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
 					if (Pattern.matches(fileName + ".*", resource.getName())) {
-						if ((Messages.XML_EXT.equals(resource.getFileExtension())
-								|| Messages.PROPERTIES_EXT.equals(resource.getFileExtension())
-								|| Messages.JOB_EXT.equals(resource.getFileExtension()))
-								&& !(modifiedResource.getName().equals(resource.getName()))) {
+						if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension())
+								|| StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, resource.getFileExtension())
+								|| StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension()) 
+								&& !(StringUtils.equalsIgnoreCase(modifiedResource.getName(), resource.getName()))) {
 							getDeleteChanges(changes, resource);
 						}
 					}
@@ -254,9 +253,9 @@ public class JobDeleteParticipant extends DeleteParticipant{
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
 					if (Pattern.matches(fileName + ".*", resource.getName())) {
-						if ((Messages.XML_EXT.equals(resource.getFileExtension())
-								|| Messages.JOB_EXT.equals(resource.getFileExtension()))
-								&& !(modifiedResource.getName().equals(resource.getName()))) {
+						if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension()) || 
+							StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension())
+							&& !(StringUtils.equalsIgnoreCase(modifiedResource.getName(), resource.getName()))) {
 							getDeleteChanges(changes, resource);
 						}
 					}

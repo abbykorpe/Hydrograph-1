@@ -114,9 +114,10 @@ public class RenameJobParticipant extends RenameParticipant {
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
 					if (Pattern.matches(fileName + ".*", resource.getName())) {
-						if ((Messages.XML_EXT.equals(resource.getFileExtension())
-								|| Messages.JOB_EXT.equals(resource.getFileExtension()))
-								&& !(modifiedResource.getName().equals(resource.getName()))) {
+						if(StringUtils.equalsIgnoreCase(Messages.XML_EXT,resource.getFileExtension())
+								||StringUtils.equalsIgnoreCase(Messages.JOB_EXT,resource.getFileExtension())
+								&&!(StringUtils.equalsIgnoreCase(modifiedResource.getName(),resource.getName())))
+						{
 							getRenameChanges(changes, newName, resource);
 						}
 					}
@@ -133,12 +134,12 @@ public class RenameJobParticipant extends RenameParticipant {
 				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
 				for (IResource resource : memberList) {
 					if (Pattern.matches(fileName + ".*", resource.getName())) {
-						if ((Messages.XML_EXT.equals(resource.getFileExtension())
-								|| Messages.PROPERTIES_EXT.equals(resource.getFileExtension())
-								|| Messages.JOB_EXT.equals(resource.getFileExtension()))
-								&& !(modifiedResource.getName().equals(resource.getName()))) {
+						if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension())
+								|| StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, resource.getFileExtension())
+								|| StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension())
+								&& !(StringUtils.equalsIgnoreCase(modifiedResource.getName(),resource.getName()))) {
 							getRenameChanges(changes, newName, resource);
-						}
+						};
 					}
 				}
 			}
