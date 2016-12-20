@@ -12,26 +12,23 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.InputRDBMSEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
+import hydrograph.engine.core.constants.Constants;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.Oracle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class InputOracleEntityGenerator extends
 InputComponentGeneratorBase {
 
-	private Oracle inputOracleJaxb;
-	private InputRDBMSEntity inputRDBMSEntity;
 	private static Logger LOG = LoggerFactory
 			.getLogger(InputOracleEntityGenerator.class);
+    private Oracle inputOracleJaxb;
+    private InputRDBMSEntity inputRDBMSEntity;
 
 	public InputOracleEntityGenerator(TypeBaseComponent baseComponent) {
 		super(baseComponent);
@@ -52,33 +49,40 @@ InputComponentGeneratorBase {
 	@Override
 	public void initializeEntity() {
 
-		LOG.trace("Initializing input file Oracle component: "
-				+ inputOracleJaxb.getId());
+        LOG.trace("Initializing input file Oracle component: " + inputOracleJaxb.getId());
 
 		inputRDBMSEntity.setComponentId(inputOracleJaxb.getId());
-
-		inputRDBMSEntity
-		.setFieldsList(InputEntityUtils
-				.extractInputFields(inputOracleJaxb.getOutSocket()
-						.get(0).getSchema()
-						.getFieldOrRecordOrIncludeExternalSchema()));
-		inputRDBMSEntity.setOutSocketList(InputEntityUtils
-				.extractOutSocket(inputOracleJaxb.getOutSocket()));
-//		inputRDBMSEntity.setDatabaseName(inputOracleJaxb.getDatabaseName()==null?null:inputOracleJaxb.getDatabaseName().getValue());
-		inputRDBMSEntity.setTableName(inputOracleJaxb.getTableName().getValue());
-		inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
-				.extractRuntimeProperties(inputOracleJaxb
-						.getRuntimeProperties()));
-		inputRDBMSEntity.setBatch(inputOracleJaxb.getBatch());
-	//	inputRDBMSEntity.setQuery(inputOracleJaxb.getQuery() ==null?null:inputOracleJaxb.getQuery().getValue());
-		inputRDBMSEntity.setUsername(inputOracleJaxb.getUsername().getValue());
-		inputRDBMSEntity.setPassword(inputOracleJaxb.getPassword().getValue());
-//		inputRDBMSEntity.setJdbcurl(inputOracleJaxb.getJdbcurl().getValue());
-//		inputRDBMSEntity.setBatchSize(inputOracleJaxb.getBatchSize().getValue().intValue());
-//		inputRDBMSEntity.setCondition(inputOracleJaxb.getCondition()==null?null:inputOracleJaxb.getCondition().getValue());
-	
-		//inputRDBMSEntity.setColumnDefs(inputRDBMS.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema().get== null?null:inputRDBMS.getPrimaryKeys().getField());
-	}
+        inputRDBMSEntity.setFieldsList(InputEntityUtils.extractInputFields(
+                inputOracleJaxb.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
+        inputRDBMSEntity.setOutSocketList(InputEntityUtils.extractOutSocket(inputOracleJaxb.getOutSocket()));
+        inputRDBMSEntity.setSid(inputOracleJaxb.getSid().getValue());
+        inputRDBMSEntity.setHostName(inputOracleJaxb.getHostName().getValue());
+        inputRDBMSEntity.setPort(inputOracleJaxb.getPort() == null ? Constants.ORACLE_PORT_NUMBER
+                : inputOracleJaxb.getPort().getValue().intValue());
+        inputRDBMSEntity.setRuntimeProperties(
+                InputEntityUtils.extractRuntimeProperties(inputOracleJaxb.getRuntimeProperties()));
+        inputRDBMSEntity.setBatch(inputOracleJaxb.getBatch());
+        if (inputOracleJaxb.getSelectQuery() != null) {
+            inputRDBMSEntity.setTableName("Dual");
+            inputRDBMSEntity.setSelectQuery(inputOracleJaxb.getSelectQuery().getValue());
+        } else {
+            inputRDBMSEntity.setSelectQuery(null);
+            inputRDBMSEntity.setTableName(inputOracleJaxb.getTableName().getValue());
+        }
+        inputRDBMSEntity.setCountQuery(inputOracleJaxb.getCountQuery() == null
+                ? "select count(*) from  (" + inputRDBMSEntity.getSelectQuery() + ")"
+                : inputOracleJaxb.getCountQuery().getValue());
+        inputRDBMSEntity.setUsername(inputOracleJaxb.getUserName().getValue());
+        inputRDBMSEntity.setPassword(inputOracleJaxb.getPassword().getValue());
+        inputRDBMSEntity.setDriverType(inputOracleJaxb.getDriverType().getValue());
+        if (inputOracleJaxb.getSchemaName() != null) {
+            inputRDBMSEntity.setSchemaName(inputOracleJaxb.getSchemaName().getValue());
+            inputRDBMSEntity.setTableName(
+                    inputOracleJaxb.getSchemaName().getValue() + "." + inputOracleJaxb.getTableName().getValue());
+        } else {
+            inputRDBMSEntity.setSchemaName(null);
+        }
+    }
 
 
 	

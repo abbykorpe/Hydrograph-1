@@ -13,17 +13,18 @@
 
 package hydrograph.engine.jaxb.ooracle;
 
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 
 
 /**
  * <p>Java class for type-oracle-field complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="type-oracle-field">
  *   &lt;complexContent>
@@ -34,13 +35,13 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-oracle-field", namespace = "hydrograph/engine/jaxb/ooracle")
 public class TypeOracleField
-    extends TypeBaseField
+        extends TypeBaseField
 {
 
 

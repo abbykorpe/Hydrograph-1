@@ -15,11 +15,11 @@
  */
 package hydrograph.engine.core.component.entity;
 
-import java.util.List;
-
 import hydrograph.engine.core.component.entity.base.InputOutputEntityBase;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
+
+import java.util.List;
 
 /**
  * @author bitwise1
@@ -39,12 +39,58 @@ public class InputRDBMSEntity extends InputOutputEntityBase {
 	private Integer port;
 	private String jdbcDriver;
 	private String selectQuery;
-
 	private String countQuery;
+    private String sid;
+    private String driverType;
+    private String schemaName;
 
-	/**
-	 * @return the countQuery
-	 */
+    /**
+     * @return schemaName - of type String
+     */
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    /**
+     * @param schemaName - of type String
+     */
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
+    }
+
+    /**
+     * @return drivertype - of type String
+     */
+    public String getDriverType() {
+        return driverType;
+    }
+
+    /**
+     * @param driverType - of type String
+     */
+    public void setDriverType(String driverType) {
+        this.driverType = driverType;
+    }
+
+    /**
+     * @return sid - of type String
+     */
+
+    public String getSid() {
+        return sid;
+    }
+
+    /**
+     * @param sid - of type String
+     */
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
+
+    /**
+     * @return the countQuery
+     */
 	public String getCountQuery() {
 		return countQuery;
 	}

@@ -21,20 +21,24 @@ import org.slf4j.LoggerFactory;
 public class InputOracleAssembly extends InputRDBMSAssembly {
 
 
-	private static final long serialVersionUID = 1L;
-	private static Logger LOG = LoggerFactory
-			.getLogger(InputOracleAssembly.class);
+    private static final long serialVersionUID = 1L;
+    private static Logger LOG = LoggerFactory
+            .getLogger(InputOracleAssembly.class);
 
+    public InputOracleAssembly(InputRDBMSEntity baseComponentEntity,
+                               ComponentParameters componentParameters) {
+        super(baseComponentEntity, componentParameters);
+    }
 
-	public InputOracleAssembly(InputRDBMSEntity baseComponentEntity,
-			ComponentParameters componentParameters) {
-		super(baseComponentEntity, componentParameters);
-	}
+    @Override
+    public void intializeRdbmsSpecificDrivers() {
+        inputFormatClass = OracleDBInputFormat.class;
+        if (inputRDBMSEntity.getDriverType().equalsIgnoreCase("thin")) {
+            driverName = "oracle.jdbc.OracleDriver";
+        }
 
-	@Override
-	public void intializeRdbmsSpecificDrivers() {
-				inputFormatClass = OracleDBInputFormat.class;
-			driverName = "oracle.jdbc.OracleDriver";
-		}
+        jdbcURL = "jdbc:oracle:" + inputRDBMSEntity.getDriverType() + "://@" + inputRDBMSEntity.getHostName() + ":"
+                + inputRDBMSEntity.getPort() + ":" + inputRDBMSEntity.getSid();
+    }
 
 }
