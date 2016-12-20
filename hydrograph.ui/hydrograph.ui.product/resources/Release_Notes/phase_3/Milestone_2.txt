@@ -19,6 +19,8 @@ Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 7. <527> [Ashika Holkar] - All created projects are getting displayed under Operation class
 8. <549> [Sonia Raheja] - Tool does not allow rename the property files other than the param folder.
 9. <517> [Nitin Gupta]	-	Subjob connected link is getting removed when input socket for subjob component is connected with Union All component.
+10. <523> [Ashika Holkar] - Error bubble is getting removed even if there is error inside the subjob component
+11. <541> [Ashika Holkar] -  Error bubble is not getting displayed on filter component if Operation field is not specified
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

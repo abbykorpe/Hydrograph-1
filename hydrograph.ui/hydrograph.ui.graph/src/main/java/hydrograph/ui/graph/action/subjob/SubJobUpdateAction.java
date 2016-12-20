@@ -134,7 +134,7 @@ public class SubJobUpdateAction extends SelectionAction {
 			if (StringUtils.equals(Constants.SUBJOB_COMPONENT, selectedSubjobComponent.getComponentName()) && selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME)!=null) {
 				filePath=(String) selectedSubjobComponent.getProperties().get(Constants.PATH_PROPERTY_NAME);
 				SubJobUtility subJobUtility=new SubJobUtility();
-				Container container=subJobUtility.updateSubjobPropertyAndGetSubjobContainer(null,filePath, selectedSubjobComponent);
+				Container container=subJobUtility.updateSubjobPropertyAndGetSubjobContainer(null,filePath, selectedSubjobComponent,false);
 				SubjobUtility.INSTANCE.showOrHideErrorSymbolOnComponent(container,selectedSubjobComponent);
 				
 				//Hide the tooltip message on subjob component

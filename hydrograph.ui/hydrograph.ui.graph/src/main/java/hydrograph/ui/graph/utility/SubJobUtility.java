@@ -363,7 +363,7 @@ public class SubJobUtility {
 	 *            the component edit part
 	 */
 	public Container updateSubjobPropertyAndGetSubjobContainer(ComponentEditPart componentEditPart, String filePath,
-			Component selectedSubjobComponent) {
+			Component selectedSubjobComponent,boolean updateOnlyErrorSymbol) {
 		IPath jobFileIPath = null;
 		Container container = null;
 		InputStream inputStream =null;
@@ -388,7 +388,11 @@ public class SubJobUtility {
 					container = (Container) CanvasUtils.INSTANCE.fromXMLToObject(fileInputStream);
 				}
 
-				updateContainerAndSubjob(container, selectedSubjobComponent, jobFileIPath);
+				if(updateOnlyErrorSymbol){
+					SubjobUtility.INSTANCE.showOrHideErrorSymbolOnComponent(container,selectedSubjobComponent);
+				}else{
+					updateContainerAndSubjob(container, selectedSubjobComponent, jobFileIPath);
+				}
 
 			} catch (CoreException | IOException e) {
 				logger.error("Cannot update subgrap-component's property..", e);
