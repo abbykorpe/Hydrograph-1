@@ -21,14 +21,14 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 public class MetaDataDetails implements IDataStructure {
 
 	private String dbtype;
-	private String userid;
+	private String username;
 	private String password;
-	private String host;
+	private String hostname;
 	private String port;
 	private String sid;
 	private String drivertype;
 	private String query;
-	private String tablename;
+	private String table;
 	private String database;
 
 	public String getDbType() {
@@ -40,11 +40,11 @@ public class MetaDataDetails implements IDataStructure {
 	}
 
 	public String getUserId() {
-		return userid;
+		return username;
 	}
 
 	public void setUserId(String userId) {
-		this.userid = userId;
+		this.username = userId;
 	}
 
 	public String getPassword() {
@@ -56,11 +56,11 @@ public class MetaDataDetails implements IDataStructure {
 	}
 
 	public String getHost() {
-		return host;
+		return hostname;
 	}
 
 	public void setHost(String host) {
-		this.host = host;
+		this.hostname = host;
 	}
 
 	public String getPort() {
@@ -96,11 +96,11 @@ public class MetaDataDetails implements IDataStructure {
 	}
 
 	public String getTableName() {
-		return tablename;
+		return table;
 	}
 
 	public void setTableName(String tableName) {
-		this.tablename = tableName;
+		this.table = tableName;
 	}
 
 	public String getDatabase() {
@@ -116,13 +116,13 @@ public class MetaDataDetails implements IDataStructure {
 		dataDetails.setDatabase(this.database);
 		dataDetails.setDbType(this.dbtype);
 		dataDetails.setDriverType(this.drivertype);
-		dataDetails.setHost(this.host);
+		dataDetails.setHost(this.hostname);
 		dataDetails.setPassword(this.password);
 		dataDetails.setPort(this.port);
 		dataDetails.setQuery(this.query);
 		dataDetails.setSid(this.sid);
-		dataDetails.setTableName(this.tablename);
-		dataDetails.setUserId(this.userid);
+		dataDetails.setTableName(this.table);
+		dataDetails.setUserId(this.username);
 		
 		return dataDetails;
 	}
