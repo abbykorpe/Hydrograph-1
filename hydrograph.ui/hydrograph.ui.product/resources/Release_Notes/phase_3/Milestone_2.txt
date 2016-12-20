@@ -17,6 +17,7 @@ Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 5. <532> [Sonia Raheja]	- Tool should show proper message when we delete any file.
 6. <519> [Ashika Holkar] -  Error symbol present on General tab is not getting removed when user change the field property from parameter to true/false/any valid value
 7. <527> [Ashika Holkar] - All created projects are getting displayed under Operation class
+8. <549> [Sonia Raheja] - Tool does not allow rename the property files other than the param folder.
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

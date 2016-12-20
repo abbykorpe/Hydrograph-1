@@ -14,17 +14,15 @@
  
 package hydrograph.ui.graph.editor;
 
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.utility.ResourceChangeUtil;
-import hydrograph.ui.project.structure.CustomMessages;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,13 +34,25 @@ import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
 import org.eclipse.ltk.core.refactoring.resource.RenameResourceChange;
 
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.utility.ResourceChangeUtil;
+import hydrograph.ui.project.structure.CustomMessages;
+
 
 public class RenameJobParticipant extends RenameParticipant {
 	private IFile modifiedResource;
 	
 	@Override
 	protected boolean initialize(Object element) {
-		this.modifiedResource = (IFile)element;
+		this.modifiedResource = (IFile) element;
+		if (modifiedResource.getParent() != null && modifiedResource.getParent().getParent() instanceof IProject) {
+			if (StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, modifiedResource.getFileExtension())) {
+				if (!StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(), Messages.PARAM)) {
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 
@@ -96,23 +106,40 @@ public class RenameJobParticipant extends RenameParticipant {
 			OperationCanceledException {
 		final HashMap<IFile,RenameResourceChange> changes= new HashMap<IFile,RenameResourceChange>();
 		final String newName = ResourceChangeUtil.removeExtension(getArguments().getNewName());
-	
-		List<IResource> memberList = 
-				new ArrayList<IResource>(modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM).members().length
-										+modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS).members().length);
-		ResourceChangeUtil.addMembersToList(memberList, modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS));
-		ResourceChangeUtil.addMembersToList(memberList, modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM));
-		final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
-		for(IResource resource:memberList) {
-			if(Pattern.matches(fileName+".*", resource.getName())) {
-				if((Messages.XML_EXT.equals(resource.getFileExtension())
-						|| Messages.PROPERTIES_EXT.equals(resource.getFileExtension())
-						|| Messages.JOB_EXT.equals(resource.getFileExtension()))
-						&&!(modifiedResource.getName().equals(resource.getName()))) {
-					RenameResourceChange change= (RenameResourceChange) changes.get((IFile)resource);
-					if (change == null) {
-						change= new RenameResourceChange(resource.getFullPath(), newName+"."+resource.getFileExtension());
-						changes.put((IFile)resource, change);
+		if (modifiedResource.getParent() != null) {
+			if (!StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),CustomMessages.ProjectSupport_JOBS)) {
+				List<IResource> memberList = new ArrayList<IResource>(modifiedResource.getProject()
+						.getFolder(modifiedResource.getParent().getName()).members().length);
+				ResourceChangeUtil.addMembersToList(memberList,modifiedResource.getProject().getFolder(modifiedResource.getParent().getName()));
+				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
+				for (IResource resource : memberList) {
+					if (Pattern.matches(fileName + Constants.EXTENSION, resource.getName())) {
+						if(StringUtils.equalsIgnoreCase(Messages.XML_EXT,resource.getFileExtension())
+								||StringUtils.equalsIgnoreCase(Messages.JOB_EXT,resource.getFileExtension())
+								&&!(StringUtils.equalsIgnoreCase(modifiedResource.getName(),resource.getName())))
+						{
+							getRenameChanges(changes, newName, resource);
+						}
+					}
+				}
+			}
+			else if(StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),CustomMessages.ProjectSupport_JOBS)||
+					StringUtils.equalsIgnoreCase(modifiedResource.getParent().getName(),CustomMessages.ProjectSupport_PARAM))
+			{
+				List<IResource> memberList = new ArrayList<IResource>(modifiedResource.getProject()
+						.getFolder(CustomMessages.ProjectSupport_PARAM).members().length
+						+ modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS).members().length);
+				ResourceChangeUtil.addMembersToList(memberList,modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_JOBS));
+				ResourceChangeUtil.addMembersToList(memberList,modifiedResource.getProject().getFolder(CustomMessages.ProjectSupport_PARAM));
+				final String fileName = ResourceChangeUtil.removeExtension(modifiedResource.getName());
+				for (IResource resource : memberList) {
+					if (Pattern.matches(fileName + Constants.EXTENSION, resource.getName())) {
+						if (StringUtils.equalsIgnoreCase(Messages.XML_EXT, resource.getFileExtension())
+								|| StringUtils.equalsIgnoreCase(Messages.PROPERTIES_EXT, resource.getFileExtension())
+								|| StringUtils.equalsIgnoreCase(Messages.JOB_EXT, resource.getFileExtension())
+								&& !(StringUtils.equalsIgnoreCase(modifiedResource.getName(),resource.getName()))) {
+							getRenameChanges(changes, newName, resource);
+						};
 					}
 				}
 			}
@@ -127,6 +154,16 @@ public class RenameJobParticipant extends RenameParticipant {
 	        result.add((Change) iter.next());
 	    }
 		return result;
+	}
+
+	private void getRenameChanges(final HashMap<IFile, RenameResourceChange> changes, final String newName,
+			IResource resource) {
+		RenameResourceChange change = (RenameResourceChange) changes.get((IFile) resource);
+		if (change == null) {
+			change = new RenameResourceChange(resource.getFullPath(),
+					newName + "." + resource.getFileExtension());
+			changes.put((IFile) resource, change);
+		}
 	}
 
 }
