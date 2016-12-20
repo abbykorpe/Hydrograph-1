@@ -83,10 +83,6 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		if (StringUtils.isNotBlank(redshift.getTableName().getValue())) {
 			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), redshift.getTableName().getValue());
 		}
-		/*if (StringUtils.isNotBlank(redshift.getChunkSize().getValue().toString()) ) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value(),redshift.getChunkSize().getValue().toString());
-		}*/
-		
 		
 		if(redshift.getLoadType() !=null){
 			if(redshift.getLoadType().getInsert() !=null){

@@ -85,10 +85,10 @@ public class OutputMysqlConverter extends OutputConverter{
 		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
 		mysqlOutput.setJdbcDriver(jdbcDriver);
 		
-		ElementValueStringType oracleSchema = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
-			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
-			//mysqlOutput.setsetSchemaname(oracleSchema);
+		ElementValueStringType mysqlDatabase = new ElementValueStringType();
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.DATABASE_NAME.value()))){
+			mysqlDatabase.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
+			mysqlOutput.setDatabaseName(mysqlDatabase);
 		}
 		
 		ElementValueStringType userName = new ElementValueStringType();
@@ -103,13 +103,6 @@ public class OutputMysqlConverter extends OutputConverter{
 			mysqlOutput.setPassword(password);
 		}
 		
-		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		if(PropertyNameConstants.CHUNK_SIZE.value() !=null){
-			BigInteger chunkValue = getBigInteger(PropertyNameConstants.CHUNK_SIZE.value());
-			chunkSize.setValue(chunkValue);
-			mysqlOutput.setChunkSize(chunkSize);
-		}
-		
 		TypeLoadChoice loadValue = addTypeLoadChoice();
 		mysqlOutput.setLoadType(loadValue);
 	}
@@ -118,14 +111,17 @@ public class OutputMysqlConverter extends OutputConverter{
 	private TypeLoadChoice addTypeLoadChoice() {
 		TypeLoadChoice loadValue = new TypeLoadChoice();
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
-		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
-			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-			loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
-			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
-			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+		if(uiValue != null){
+			if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
+				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
+				loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
+				loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
+				loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+			}
+			
 		}
 		return loadValue;
 	}

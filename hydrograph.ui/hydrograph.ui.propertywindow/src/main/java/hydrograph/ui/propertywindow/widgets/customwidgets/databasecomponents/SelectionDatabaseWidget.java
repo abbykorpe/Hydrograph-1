@@ -103,6 +103,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
 		this.databaseSelectionConfig = (DatabaseSelectionConfig) componentConfigProp.getPropertyValue();
+		if(databaseSelectionConfig==null){
+			databaseSelectionConfig=new DatabaseSelectionConfig();
+		}
 	}
 
 	@Override
@@ -177,7 +180,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 					layout.topControl = sqlQueryComposite.getContainerControl();
 					selectionComposite.getContainerControl().layout();
 					if (databaseSelectionConfig != null) {
-						databaseSelectionConfig.setTableName(false);
+						databaseSelectionConfig.setTableNameSelection(false);
 						databaseSelectionConfig.setSqlQuery(sqlQueryTextBox.getText());
 						databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
 						populateWidget();
@@ -188,7 +191,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			}
 		});
 	}
-
+	
 	/**
 	 * 
 	 * @param selectionComposite
@@ -205,7 +208,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 					layout.topControl = tableComposite.getContainerControl();
 					selectionComposite.getContainerControl().layout();
 					if (databaseSelectionConfig != null) {
-						databaseSelectionConfig.setTableName(true);
+						databaseSelectionConfig.setTableNameSelection(true);
 						databaseSelectionConfig.setTableName(textBoxTableName.getText());
 						populateWidget();
 					}
@@ -274,8 +277,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				String text = sqlQueryCountertextbox.getText();
 				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
-						Display.getCurrent().getActiveShell());
+						Display.getCurrent().getActiveShell(), text);
 				sqlQueryStatementDialog.open();
 				sqlQueryCounterStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
 				sqlQueryCountertextbox.setText(sqlQueryCounterStatement);
@@ -294,8 +298,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				String text = sqlQueryTextBox.getText();
 				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
-						Display.getCurrent().getActiveShell());
+						Display.getCurrent().getActiveShell(), text);
 				sqlQueryStatementDialog.open();
 				sqlQueryStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
 				sqlQueryTextBox.setText(sqlQueryStatement);
@@ -307,18 +312,18 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 
+		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-			databaseSelectionConfig.setTableName(true);
+			databaseSelectionConfig.setTableNameSelection(true);
 			databaseSelectionConfig.setTableName(textBoxTableName.getText());
 
 		} else {
-			databaseSelectionConfig.setTableName(false);
+			databaseSelectionConfig.setTableNameSelection(false);
 			databaseSelectionConfig.setSqlQuery(sqlQueryTextBox.getText());
 			databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
 		}
 
-		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 		property.put(propertyName, databaseSelectionConfig);
 
 		setToolTipErrorMessage();
@@ -394,14 +399,14 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	public void addModifyListener(Property property, ArrayList<AbstractWidget> widgetList) {
 		widgets = widgetList;
 
-		textboxSQLQueryModifyListner = attachTextModifyListner(widgetList);
 		textboxTableNameModifyListner = attachTextModifyListner(widgetList);
+		textboxSQLQueryModifyListner = attachTextModifyListner(widgetList);
 		sqlQueryCounterModifyListner = attachTextModifyListner(widgetList);
 
 		sqlQueryTextBox.addModifyListener(textboxSQLQueryModifyListner);
 		textBoxTableName.addModifyListener(textboxTableNameModifyListner);
 		sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
-
+		
 	}
 	
 	/**
@@ -413,7 +418,13 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		return new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(ModifyEvent event) {
+				Text text = (Text)event.getSource();
+				if(((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()){
+					databaseSelectionConfig.setTableName(text.getText());
+				}else{
+					databaseSelectionConfig.setSqlQuery(text.getText());
+				}
 				showHideErrorSymbol(widgetList);
 			}
 		};

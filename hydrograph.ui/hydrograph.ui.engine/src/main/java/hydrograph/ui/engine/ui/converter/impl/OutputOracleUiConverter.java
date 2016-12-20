@@ -94,10 +94,6 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), (String)(outputOracle.getTableName().getValue()));
 		}
 		
-		if(outputOracle.getChunkSize() != null){
-			propertyMap.put(PropertyNameConstants.CHUNK_SIZE.value(), (String)(outputOracle.getChunkSize().getValue().toString()));
-		}
-		
 		if(outputOracle.getLoadType() !=null){
 			if(outputOracle.getLoadType().getInsert() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_INSERT_KEY, outputOracle.getLoadType().getInsert().toString());

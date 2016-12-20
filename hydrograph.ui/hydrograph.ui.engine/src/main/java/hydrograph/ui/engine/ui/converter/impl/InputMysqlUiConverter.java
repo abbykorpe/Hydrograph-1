@@ -72,7 +72,7 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		
 		if(StringUtils.isNotBlank(inputMysql.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputMysql.getTableName().getValue());
-			databaseSelectionConfig.setTableName(true);
+			databaseSelectionConfig.setTableNameSelection(true);
 		}
 		
 		if(StringUtils.isNotBlank(inputMysql.getSelectQuery().getValue())){

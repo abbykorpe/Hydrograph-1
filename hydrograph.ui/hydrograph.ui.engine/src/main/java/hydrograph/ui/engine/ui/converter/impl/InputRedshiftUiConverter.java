@@ -81,9 +81,9 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		}
 		if ((redshift.getTableName()!= null)&& StringUtils.isNotBlank(redshift.getTableName().toString())){
 			databaseSelectionConfig.setTableName(redshift.getTableName().getValue());
-			databaseSelectionConfig.setTableName(true);
+			databaseSelectionConfig.setTableNameSelection(true);
 		}else{
-			databaseSelectionConfig.setTableName(false);
+			databaseSelectionConfig.setTableNameSelection(false);
 			/*if ((redshift.getSelectQuery()!= null)&& StringUtils.isNotBlank(redshift.getSelectQuery().toString())) {
 				databaseSelectionConfig.setSqlQuery(redshift.getSelectQuery().getValue());
 			}

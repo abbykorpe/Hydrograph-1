@@ -89,7 +89,7 @@ public class InputOracleUiConverter extends InputUiConverter {
 		
 		if(StringUtils.isNotBlank(inputOracle.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputOracle.getTableName().getValue());
-			databaseSelectionConfig.setTableName(true);
+			databaseSelectionConfig.setTableNameSelection(true);
 		}
 		
 		if(StringUtils.isNotBlank(inputOracle.getSelectQuery().getValue())){

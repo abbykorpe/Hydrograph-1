@@ -36,13 +36,16 @@ public class SQLQueryStatementDialog extends Dialog {
 
 	private StyledText styledText;
 	private  String styleTextValue;
+	private String textValue;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public SQLQueryStatementDialog(Shell parentShell) {
+	public SQLQueryStatementDialog(Shell parentShell, String textValue) {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
+		this.textValue = textValue;
 	}
 
 	/**
@@ -63,6 +66,7 @@ public class SQLQueryStatementDialog extends Dialog {
 		styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL);
 		styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		styledText.setFont(new Font(Display.getCurrent(),"Courier New",9,SWT.NORMAL));
+		styledText.setText(textValue);
 		styledText.addListener(SWT.Verify, new Listener() {
 			
 			@Override

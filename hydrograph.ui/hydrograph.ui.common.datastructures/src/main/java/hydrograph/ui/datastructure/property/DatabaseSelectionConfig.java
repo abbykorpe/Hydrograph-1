@@ -40,7 +40,7 @@ public class DatabaseSelectionConfig implements IDataStructure {
 		return isTableName;
 	}
 
-	public void setTableName(boolean isTableName) {
+	public void setTableNameSelection(boolean isTableName) {
 		this.isTableName = isTableName;
 	}
 
@@ -63,7 +63,7 @@ public class DatabaseSelectionConfig implements IDataStructure {
 	@Override
 	public Object clone() {
 		DatabaseSelectionConfig oracleSelectionConfig = new DatabaseSelectionConfig();
-		oracleSelectionConfig.setTableName(isTableName());
+		oracleSelectionConfig.setTableNameSelection(isTableName());
 		oracleSelectionConfig.setTableName(getTableName());
 		oracleSelectionConfig.setSqlQuery(getSqlQuery());
 		oracleSelectionConfig.setSqlQueryCounter(getSqlQueryCounter());

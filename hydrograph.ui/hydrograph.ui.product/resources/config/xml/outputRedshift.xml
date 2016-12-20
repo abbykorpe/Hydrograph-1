@@ -84,12 +84,6 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="chunkSize" value="1000" renderer="CHUNK_SIZE_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Displays the Chunk Size provided by the user">
-			<tns:validator>INTEGER_VALIDATOR</tns:validator>
-		</tns:property>
-		
 		<tns:property dataType="string" name="load_type_configuration" renderer="LOAD_TYPE_CONFIGURATION_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Provides user to select the Load Type i.e. records are to be inserted,updated or to create a new table.">

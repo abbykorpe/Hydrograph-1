@@ -79,10 +79,6 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), (String)(outputMysql.getTableName().getValue()));
 		}
 		
-		if(outputMysql.getChunkSize() != null){
-			propertyMap.put(PropertyNameConstants.CHUNK_SIZE.value(), (String)(outputMysql.getChunkSize().getValue().toString()));
-		}
-		
 		if(outputMysql.getLoadType() !=null){
 			if(outputMysql.getLoadType().getInsert() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_INSERT_KEY, outputMysql.getLoadType().getInsert().toString());

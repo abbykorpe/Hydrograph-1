@@ -107,13 +107,6 @@ public class OutputOracleConverter extends OutputConverter {
 			oracleOutput.setPassword(password);
 		}
 		
-		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		if(PropertyNameConstants.CHUNK_SIZE.value() !=null){
-			BigInteger chunkValue = getBigInteger(PropertyNameConstants.CHUNK_SIZE.value());
-			chunkSize.setValue(chunkValue);
-			oracleOutput.setChunkSize(chunkSize);
-		}
-		
 		TypeLoadChoice loadValue = addTypeLoadChoice();
 		oracleOutput.setLoadType(loadValue);
 	}
@@ -121,14 +114,16 @@ public class OutputOracleConverter extends OutputConverter {
 	private TypeLoadChoice addTypeLoadChoice() {
 		TypeLoadChoice loadValue = new TypeLoadChoice();
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
-		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
-			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-			loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
-			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
-			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+		if(uiValue != null){
+			if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
+				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
+				loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
+				loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
+				loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+			}
 		}
 		return loadValue;
 	}
