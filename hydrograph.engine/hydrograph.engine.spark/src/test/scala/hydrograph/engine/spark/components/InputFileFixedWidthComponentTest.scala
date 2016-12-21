@@ -27,15 +27,15 @@ class InputFileFixedWidthComponentTest {
 
 
   /**
- * Test case for correct schema
- */
+    * Test case for correct schema
+    */
   @Test
   def itShouldCheckStrictAndSafeForCorrectInputFormatAndCorrectLength(): Unit = {
 
     //when
 
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.fixedwidth.datasource")
+      .format("hydrograph.engine.spark.datasource.fixedwidth")
       .option("dateFormats", dateFormats)
       .option("charset", "UTF-8")
       .option("length", Array(3,3).mkString(","))
@@ -57,7 +57,7 @@ class InputFileFixedWidthComponentTest {
 
     //when
     val df = spark.read.schema(incorrectSchema)
-      .format("hydrograph.engine.spark.fixedwidth.datasource")
+      .format("hydrograph.engine.spark.datasource.fixedwidth")
       .option("dateFormats", dateFormats)
       .option("charset", "UTF-8")
       .option("length", Array(3,3).mkString(","))
@@ -67,7 +67,7 @@ class InputFileFixedWidthComponentTest {
 
     //Then
     Assert.assertEquals(2, df.first().size)
-//    Assert.assertEquals("[123,null]", df.first().toString())
+    //    Assert.assertEquals("[123,null]", df.first().toString())
 
   }
 
@@ -79,18 +79,18 @@ class InputFileFixedWidthComponentTest {
 
     //when
 
-   val df = spark.read.schema(schema)
-     .format("hydrograph.engine.spark.fixedwidth.datasource")
-     .option("dateFormats", dateFormats)
-     .option("charset", "UTF-8")
-     .option("length", Array(3,4).mkString(","))
-     .option("strict", "true")
-     .option("safe", "false")
-     .load(inputPathCase)
+    val df = spark.read.schema(schema)
+      .format("hydrograph.engine.spark.datasource.fixedwidth")
+      .option("dateFormats", dateFormats)
+      .option("charset", "UTF-8")
+      .option("length", Array(3,4).mkString(","))
+      .option("strict", "true")
+      .option("safe", "false")
+      .load(inputPathCase)
 
     //Then
     Assert.assertEquals(2, df.first().size)
-//    Assert.assertEquals("[123,null]", df.first().toString())
+    //    Assert.assertEquals("[123,null]", df.first().toString())
 
   }
 
@@ -103,7 +103,7 @@ class InputFileFixedWidthComponentTest {
     //when
 
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.fixedwidth.datasource")
+      .format("hydrograph.engine.spark.datasource.fixedwidth")
       .option("dateFormats", dateFormats)
       .option("charset", "UTF-8")
       .option("length", Array(3, 2).mkString(","))

@@ -55,13 +55,13 @@ public class ComponentInfo {
 	 * Method setStatusPerSocketMap sets the status of outSocket of a
 	 * component.
 	 * 
-	 * @param scoketId
+	 * @param socketId
 	 *            - outSocketId of component.
 	 * @param status
 	 *            - Status of the pipe connected to the outSocket.
 	 */
-	public void setStatusPerSocketMap(String scoketId, String status) {
-		statusPerSocketMap.put(scoketId, status);
+	public void setStatusPerSocketMap(String socketId, String status) {
+		statusPerSocketMap.put(socketId, status);
 	}
 
 	/**
