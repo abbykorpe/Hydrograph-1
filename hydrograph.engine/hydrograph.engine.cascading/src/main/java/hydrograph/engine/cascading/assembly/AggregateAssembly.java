@@ -12,27 +12,25 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.AggregateEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
+import cascading.pipe.Every;
+import cascading.pipe.GroupBy;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.AggregateCustomHandler;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.core.component.entity.AggregateEntity;
+import hydrograph.engine.core.component.entity.elements.KeyField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Every;
-import cascading.pipe.GroupBy;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
 
 public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 

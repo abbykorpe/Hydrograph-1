@@ -15,24 +15,23 @@
  */
 package hydrograph.engine.cascading.assembly;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.OutputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
 import hydrograph.engine.cascading.utilities.DataTypeCoerce;
+import hydrograph.engine.core.component.entity.OutputFileHiveTextEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Type;
+import java.util.Arrays;
 
 /**
  * Hive Output File Component - records written as output into Hive Table

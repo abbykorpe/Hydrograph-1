@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
-import hydrograph.engine.cascading.assembly.constants.Keep;
-import hydrograph.engine.cascading.assembly.context.RemoveDupsHandlerContext;
-import hydrograph.engine.cascading.assembly.infra.AssemblyCreationException;
 
 import java.util.Iterator;
 
+import hydrograph.engine.cascading.assembly.context.RemoveDupsHandlerContext;
+import hydrograph.engine.cascading.assembly.infra.AssemblyCreationException;
+import hydrograph.engine.core.constants.Keep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

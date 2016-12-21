@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.apache.hadoop.mapred.JobConf;
 
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.integration.FlowContext;

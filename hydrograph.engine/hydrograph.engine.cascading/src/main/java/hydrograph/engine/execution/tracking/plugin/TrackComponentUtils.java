@@ -19,11 +19,11 @@ import java.util.Set;
 
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
-import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
-import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
+import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
+import hydrograph.engine.core.component.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;

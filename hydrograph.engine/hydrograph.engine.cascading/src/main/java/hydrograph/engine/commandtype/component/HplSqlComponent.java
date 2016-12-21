@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.commandtype.component;
 
-import hydrograph.engine.assembly.entity.HplSqlEntity;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import hydrograph.engine.core.component.entity.HplSqlEntity;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

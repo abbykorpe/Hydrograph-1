@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
-import hydrograph.engine.assembly.entity.base.InputOutputEntityBase;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
 import cascading.tuple.Fields;
+import hydrograph.engine.cascading.utilities.DataTypeCoerce;
+import hydrograph.engine.core.component.entity.base.InputOutputEntityBase;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 
 public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 
@@ -47,7 +47,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * This method creates object of Fields by fetching data from Input and
 	 * Output Entities.
 	 * 
-	 * @param entity
 	 * @return Fields
 	 */
 	public Fields makeFields() {
@@ -58,7 +57,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * This method creates object of Fields with applying types by fetching data
 	 * from Input and Output Entities and applies type on fields.
 	 * 
-	 * @param entity
 	 * @return Fields
 	 */
 	public Fields makeFieldsWithTypes() {
@@ -219,10 +217,6 @@ public class InputOutputFieldsAndTypesCreator<T extends InputOutputEntityBase> {
 	 * This method return types which is used to associate a Type with a field
 	 * name or position.
 	 * 
-	 * @param type
-	 * @param fieldFormat
-	 * @param fieldScale
-	 * @param fieldScaleType
 	 * @return Type[]
 	 */
 	public Type[] getTypes() {

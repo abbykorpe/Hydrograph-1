@@ -16,7 +16,6 @@ import cascading.operation.Insert;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
 
 public class ComponentHelper {
 
@@ -26,7 +25,6 @@ public class ComponentHelper {
 	 * @param <T>
 	 * 
 	 * @param inputFile
-	 * @param fileName
 	 * @param constantValue
 	 * @return pipe array with appended field
 	 */

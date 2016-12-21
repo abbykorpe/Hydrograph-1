@@ -29,8 +29,6 @@ public class JoinKeyFields implements Serializable{
 	private String[] fields;
 
 	/**
-	 * @param sourceName
-	 * @param name
 	 * @param inSocketId
 	 */
 	public JoinKeyFields(String inSocketId, boolean recordRequired, String[] fields) {

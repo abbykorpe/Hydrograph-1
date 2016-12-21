@@ -12,24 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.TransformEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
+import cascading.pipe.Each;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
-
-import java.util.Arrays;
-import java.util.Map;
-
+import hydrograph.engine.core.component.entity.TransformEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.pipe.Each;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
+import java.util.Arrays;
+import java.util.Map;
 
 public class TransformAssembly extends BaseComponent<TransformEntity> {
 

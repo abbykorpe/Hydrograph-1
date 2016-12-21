@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
-import java.util.Arrays;
-
-import org.apache.hadoop.fs.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Rename;
@@ -25,14 +19,19 @@ import cascading.pipe.assembly.Retain;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.core.component.entity.InputFileHiveParquetEntity;
+import hydrograph.engine.core.component.entity.InputFileHiveTextEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilities.ComponentHelper;
+import org.apache.hadoop.fs.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public abstract class InputFileHiveBase extends BaseComponent<HiveEntityBase> {
 

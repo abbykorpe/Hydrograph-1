@@ -12,24 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.GenerateRecordEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.tap.MemorySourceTap;
 import hydrograph.engine.cascading.tuplegenerator.GenerateDataEntity;
 import hydrograph.engine.cascading.tuplegenerator.RandomTupleGenerator;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.GenerateRecordEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 public class GenerateRecordAssembly extends BaseComponent<GenerateRecordEntity> {
 

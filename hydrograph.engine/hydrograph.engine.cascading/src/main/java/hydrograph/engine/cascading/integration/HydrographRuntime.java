@@ -15,15 +15,8 @@ package hydrograph.engine.cascading.integration;
 import java.io.IOException;
 import java.util.Properties;
 
+import hydrograph.engine.flow.utils.DefaultPluginManipulation;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hive.conf.HiveConf;
-import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
-import org.apache.hadoop.hive.metastore.api.MetaException;
-import org.apache.hadoop.hive.thrift.DelegationTokenIdentifier;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.hadoop.security.token.Token;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -32,20 +25,20 @@ import org.slf4j.LoggerFactory;
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
 import cascading.property.AppProps;
-import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
+import hydrograph.engine.component.mapping.ComponentAdapterFactory;
 import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.props.PropertiesLoader;
+import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.flow.utils.ExecutionTrackingListener;
-import hydrograph.engine.flow.utils.FlowManipulationContext;
-import hydrograph.engine.flow.utils.FlowManipulationHandler;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.utilities.GeneralUtilities;
-import hydrograph.engine.utilities.HiveConfigurationMapping;
+import hydrograph.engine.utilities.HiveMetastoreTokenProvider;
 import hydrograph.engine.utilities.UserClassLoader;
 
 @SuppressWarnings({ "rawtypes" })
@@ -77,21 +70,23 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	}
 
 	public void initialize(Properties config, String[] args, HydrographJob hydrographJob,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath,String UDFPath) {
+						   HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath,String UDFPath) {
 
 		AppProps.setApplicationName(hadoopProperties, hydrographJob.getJAXBObject().getName());
 
 		hadoopProperties.putAll(config);
-		
+
 		Configuration conf = new HadoopConfigProvider(hadoopProperties).getJobConf();
-		
+
 		SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(
 				hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
 		flowManipulationContext = new FlowManipulationContext(hydrographJob, hydrographDebugInfo, schemaFieldHandler,
-				jobId, basePath,conf);
+				jobId, basePath);
 
-		hydrographJob = FlowManipulationHandler.execute(flowManipulationContext);
+		FlowManipulationHandler flowManipulationHandler=new DefaultPluginManipulation();
+
+		hydrographJob = flowManipulationHandler.execute(flowManipulationContext);
 
 		if (hydrographJob.getJAXBObject().getRuntimeProperties() != null
 				&& hydrographJob.getJAXBObject().getRuntimeProperties().getProperty() != null) {
@@ -100,14 +95,15 @@ public class HydrographRuntime implements HydrographRuntimeService {
 			}
 		}
 
-		
 
 		JAXBTraversal traversal = new JAXBTraversal(hydrographJob.getJAXBObject());
 
 		if (traversal.isHiveComponentPresentInFlow()) {
 			try {
-				obtainTokenForHiveMetastore(conf);
-			} catch (TException | IOException e) {
+				HiveMetastoreTokenProvider.obtainTokenForHiveMetastore(conf);
+			} catch (TException e) {
+				throw new HydrographRuntimeException(e);
+			} catch (IOException e) {
 				throw new HydrographRuntimeException(e);
 			}
 		}
@@ -129,11 +125,11 @@ public class HydrographRuntime implements HydrographRuntimeService {
 
 		hadoopProperties.putAll(conf.getValByRegex(".*"));
 
-		AssemblyGeneratorFactory assemblyGeneratorFactory = new AssemblyGeneratorFactory(hydrographJob.getJAXBObject());
+		ComponentAdapterFactory componentAdapterFactory = new ComponentAdapterFactory(hydrographJob.getJAXBObject());
 
 		flowBuilder = new FlowBuilder();
 
-		runtimeContext = new RuntimeContext(hydrographJob, traversal, hadoopProperties, assemblyGeneratorFactory,
+		runtimeContext = new RuntimeContext(hydrographJob, traversal, hadoopProperties, componentAdapterFactory,
 				flowManipulationContext.getSchemaFieldHandler(),UDFPath);
 
 		LOG.info(
@@ -211,70 +207,12 @@ public class HydrographRuntime implements HydrographRuntimeService {
 		}
 	}
 
-	private static void obtainTokenForHiveMetastore(Configuration conf) throws TException, IOException {
-		conf.addResource(new Path(HiveConfigurationMapping.getHiveConf("path_to_hive_site_xml")));
-		HiveConf hiveConf = new HiveConf();
-		hiveConf.addResource(conf);
-		try {
-			UserGroupInformation ugi = UserGroupInformation.getCurrentUser();
-			HiveMetaStoreClient hiveMetaStoreClient = new HiveMetaStoreClient(hiveConf);
 
-			if (UserGroupInformation.isSecurityEnabled()) {
-				String metastore_uri = conf.get("hive.metastore.uris");
-
-				LOG.trace("Metastore URI:" + metastore_uri);
-
-				// Check for local metastore
-				if (metastore_uri != null && metastore_uri.length() > 0) {
-					String principal = conf.get("hive.metastore.kerberos.principal");
-					String username = ugi.getUserName();
-
-					if (principal != null && username != null) {
-						LOG.debug("username: " + username);
-						LOG.debug("principal: " + principal);
-
-						String tokenStr;
-						try {
-							// Get a delegation token from the Metastore.
-							tokenStr = hiveMetaStoreClient.getDelegationToken(username, principal);
-							// LOG.debug("Token String: " + tokenStr);
-						} catch (TException e) {
-							LOG.error(e.getMessage(), e);
-							throw new RuntimeException(e);
-						}
-
-						// Create the token from the token string.
-						Token<DelegationTokenIdentifier> hmsToken = new Token<>();
-						hmsToken.decodeFromUrlString(tokenStr);
-						// LOG.debug("Hive Token: " + hmsToken);
-
-						// Add the token to the credentials.
-						ugi.addToken(new Text("hive.metastore.delegation.token"), hmsToken);
-						LOG.trace("Added hive.metastore.delegation.token to conf.");
-					} else {
-						LOG.debug("Username or principal == NULL");
-						LOG.debug("username= " + username);
-						LOG.debug("principal= " + principal);
-						throw new IllegalArgumentException("username and/or principal is equal to null!");
-					}
-
-				} else {
-					LOG.info("HiveMetaStore configured in local mode");
-				}
-			}
-		} catch (IOException e) {
-			LOG.error(e.getMessage(), e);
-			throw new RuntimeException(e);
-		} catch (MetaException e) {
-			LOG.error(e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
-	}
 
 	public class HydrographRuntimeException extends RuntimeException {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = -7891832980227676974L;
 
@@ -294,12 +232,12 @@ public class HydrographRuntime implements HydrographRuntimeService {
 	public void kill() {
 		LOG.info("Kill signal received");
 		if (runtimeContext.getCascade() != null) {
-			for (Cascade cascade : runtimeContext.getCascade()) {				
+			for (Cascade cascade : runtimeContext.getCascade()) {
 				LOG.info("Killing Cascading jobs: "+cascade.getID());
 				cascade.stop();
 			}
 		} else
 			LOG.info("No cascading jobs present to kill. Exiting code.");
-			System.exit(0);
+		System.exit(0);
 	}
 }

@@ -12,14 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.jdbc.db.MySqlDBInputFormat;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.InputRDBMSEntity;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InputMysqlAssembly extends InputRDBMSAssembly {
 

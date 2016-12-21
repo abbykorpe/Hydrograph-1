@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.debug;
 
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.StandardCharsets;

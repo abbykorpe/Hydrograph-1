@@ -12,9 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
-import hydrograph.engine.assembly.entity.elements.MapField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
 import java.util.LinkedHashMap;
@@ -24,6 +21,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import cascading.tuple.Fields;
+import hydrograph.engine.core.component.entity.elements.MapField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.PassThroughField;
 
 public class JoinHelper {
 	ComponentParameters componentParameters = new ComponentParameters();

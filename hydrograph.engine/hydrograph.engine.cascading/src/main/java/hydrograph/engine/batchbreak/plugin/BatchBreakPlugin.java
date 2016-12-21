@@ -22,11 +22,11 @@ import java.util.UUID;
 import org.apache.hadoop.conf.Configuration;
 
 import cascading.tap.hadoop.Hfs;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.entity.LinkInfo;
 import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.flow.utils.FlowManipulationContext;
-import hydrograph.engine.flow.utils.ManipulatorListener;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
+import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
@@ -53,7 +53,7 @@ public class BatchBreakPlugin implements ManipulatorListener {
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
 		tempPathList=new ArrayList<String>();
-		conf = manipulationContext.getConf();
+		conf = new Configuration();
 		jaxbGraph = manipulationContext.getJaxbMainGraph();
 		schemaFieldsMap = manipulationContext.getSchemaFieldMap();
 		this.batchChangeOriginalLinks = new ArrayList<LinkInfo>();

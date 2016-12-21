@@ -12,8 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilities.Constants;
 
 public enum HiveParquetDatatypeMapping {
@@ -34,7 +34,7 @@ public enum HiveParquetDatatypeMapping {
 		COMMON {
 			@Override
 			public String getMapping(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+									 AssemblyEntityBase assemblyEntityBase) {
 				return getTypeNameFromDataType(schemaField.getFieldDataType())
 						.toLowerCase();
 			}
@@ -47,11 +47,11 @@ public enum HiveParquetDatatypeMapping {
 
 			@Override
 			String getMapping(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+							  AssemblyEntityBase assemblyEntityBase) {
 				return getTypeNameFromDataType(
 						schemaField.getFieldDataType().contains(DATE_STRING)
 								&& schemaField.getFieldFormat().toLowerCase()
-										.contains(TIME_STAMP) ? SQL_TIMESTAMP
+								.contains(TIME_STAMP) ? SQL_TIMESTAMP
 								: schemaField.getFieldDataType()).toLowerCase();
 			}
 
@@ -60,35 +60,35 @@ public enum HiveParquetDatatypeMapping {
 		SHORT {
 			@Override
 			public String getMapping(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+									 AssemblyEntityBase assemblyEntityBase) {
 				return "smallint";
 			}
 		},
 		INTEGER {
 			@Override
 			public String getMapping(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+									 AssemblyEntityBase assemblyEntityBase) {
 				return "int";
 			}
 		},
 		LONG {
 			@Override
 			public String getMapping(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+									 AssemblyEntityBase assemblyEntityBase) {
 				return "bigint";
 			}
 		},
 		TIMESTAMP {
 			@Override
 			public String getMapping(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+									 AssemblyEntityBase assemblyEntityBase) {
 				return "timestamp";
 			}
 		},
 		BIGDECIMAL {
 			@Override
 			public String getMapping(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+									 AssemblyEntityBase assemblyEntityBase) {
 				if (isScalePrecisionValid(schemaField))
 					return "decimal(" + schemaField.getFieldPrecision() + ","
 							+ schemaField.getFieldScale() + ")";
@@ -97,7 +97,7 @@ public enum HiveParquetDatatypeMapping {
 			}
 
 			private String precisionScaleMsg(SchemaField schemaField,
-					AssemblyEntityBase assemblyEntityBase) {
+											 AssemblyEntityBase assemblyEntityBase) {
 				return "Component: '"
 						+ assemblyEntityBase.getComponentId()
 						+ "', precision or scale not defined for BigDecimal field: '"
@@ -120,12 +120,12 @@ public enum HiveParquetDatatypeMapping {
 		}
 
 		abstract String getMapping(SchemaField schemaField,
-				AssemblyEntityBase assemblyEntityBase);
+								   AssemblyEntityBase assemblyEntityBase);
 
 	}
 
 	public String getMappingType(SchemaField schemaField,
-			AssemblyEntityBase assemblyEntityBase) {
+								 AssemblyEntityBase assemblyEntityBase) {
 		return hiveType.getMapping(schemaField, assemblyEntityBase);
 
 	}

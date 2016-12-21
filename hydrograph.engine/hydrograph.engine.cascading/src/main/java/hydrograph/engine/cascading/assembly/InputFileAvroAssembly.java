@@ -12,25 +12,23 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileAvroEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
-import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
-import hydrograph.engine.utilities.ComponentHelper;
-
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
+import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
+import hydrograph.engine.core.component.entity.InputFileAvroEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
 
 public class InputFileAvroAssembly extends BaseComponent<InputFileAvroEntity> {
 
