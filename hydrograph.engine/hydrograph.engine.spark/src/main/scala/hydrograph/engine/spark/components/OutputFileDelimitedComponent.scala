@@ -39,7 +39,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
        .option("safe", outputFileDelimitedEntity.getSafe)
        .option("dateFormats", dateFormats)
        .mode(SaveMode.Overwrite)
-       .format("hydrograph.engine.spark.delimited.datasource")
+       .format("hydrograph.engine.spark.datasource.delimited")
        .save(outputFileDelimitedEntity.getPath)
    } catch {
      case e: AnalysisException if (e.getMessage().matches("(.*)cannot resolve(.*)given input columns(.*)"))=>
