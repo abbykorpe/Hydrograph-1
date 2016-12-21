@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package hydrograph.server.execution.tracking.server.status.datastructures;
+package hydrograph.server.execution.datastructure;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ExecutionStatus {
 	/** The type. */
 	private String type;
 	
-	/** The client id**/
+	/** The client id */
 	private String clientId;
 	
 	/**
@@ -95,18 +95,13 @@ public class ExecutionStatus {
 	public void setJobId(String jobId) {
 		this.jobId = jobId;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	/**
-	 * Gets the client id 
-	 * @return the client id
+	 * Gets the client id
+	 * @return 
 	 */
 	public String getClientId() {
 		return clientId;
 	}
-    
 	/**
 	 * Sets the client id
 	 * @param clientId
@@ -114,7 +109,10 @@ public class ExecutionStatus {
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "ExecutionStatus [componentStatus=" + componentStatus + ", jobId=" + jobId + ", type=" + type;
@@ -161,10 +159,10 @@ public class ExecutionStatus {
 				return false;
 		} else if (!clientId.equals(other.clientId))
 			return false;
+		
 		return true;
 	}
 
-	
 
 	
 

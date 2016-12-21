@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+l * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,8 +13,6 @@
 
 package hydrograph.server.execution.tracking.utils;
 
-import hydrograph.server.execution.tracking.server.websocket.StartServer;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,6 +25,8 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+
+import hydrograph.server.execution.tracking.client.main.HydrographMain;
 
 /**
  * The Class ExecutionTrackingUtils.
@@ -50,13 +50,13 @@ public class ExecutionTrackingUtils {
 	private static final long defaultStatusFrequency = 2000;
 
 	/** The route. */
-	private String route = "/executionTracking/engine-client";
+	private String route = "/executionTracking";
 	
 	/** The host. */
 	private String host = "ws://localhost:";
 	
 	/** The port no. */
-	private String portNo = "8877";
+	private String portNo = "8004";
 	
 	private long statusFrequency = defaultStatusFrequency;
 	
@@ -140,7 +140,7 @@ public class ExecutionTrackingUtils {
 		String dirPath = "";
 		FileInputStream fileInputStream = null;
 		try {
-			Path path = Paths.get(StartServer.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+			Path path = Paths.get(HydrographMain.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			String filePath = path.toString();
 			if (OSValidator.isWindows()) {
 				index = filePath.lastIndexOf("\\");

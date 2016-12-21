@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.server.debug.service;
 
+import static spark.Spark.webSocket;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,6 +60,7 @@ import hydrograph.server.debug.lingual.json.RemoteFilterJson;
 import hydrograph.server.debug.lingual.querygenerator.LingualQueryCreator;
 import hydrograph.server.debug.utilities.Constants;
 import hydrograph.server.debug.utilities.ServiceUtilities;
+import hydrograph.server.execution.websocket.ExecutionTrackingWebsocketHandler;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 import hydrograph.server.metadata.exception.TableOrQueryParamNotFound;
 import hydrograph.server.metadata.strategy.HiveMetadataStrategy;
@@ -86,11 +89,21 @@ public class DebugService implements PrivilegedAction<Object> {
 		} catch (Exception e) {
 			LOG.error("Error fetching port number. Defaulting to " + Constants.DEFAULT_PORT_NUMBER, e);
 		}
-		Spark.setPort(portNumber);
 
-		Spark.post("readFromMetastore", new Route() {
+		/**
+		 * Setting Port number to the server
+		 */
+		Spark.port(portNumber);
+		
+		/**
+		 * Creating Websocket on Server for Execution tracking service.
+		 */
+		webSocket("/executionTracking",ExecutionTrackingWebsocketHandler.class);
+		
+		
+		 
+		Spark.post("readFromMetastore",new Route() {			
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public Object handle(Request request, Response response)
 					throws ParamsCannotBeNullOrEmpty, ClassNotFoundException, IllegalAccessException, JSONException,
@@ -444,6 +457,7 @@ public class DebugService implements PrivilegedAction<Object> {
 
 			@Override
 			public Object handle(Request request, Response response) {
+				LOG.info("****TEST SPARK POST STARTED**********");
 				response.type("text/json");
 				return "calling post...";
 			}
@@ -454,6 +468,7 @@ public class DebugService implements PrivilegedAction<Object> {
 
 			@Override
 			public Object handle(Request request, Response response) {
+				LOG.info("****TEST SPARK GET STARTED**********");
 				response.type("text/json");
 				response.status(200);
 				response.body("Test successful!");
