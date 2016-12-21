@@ -21,6 +21,7 @@ Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 9. <517> [Nitin Gupta]	-	Subjob connected link is getting removed when input socket for subjob component is connected with Union All component.
 10. <523> [Ashika Holkar] - Error bubble is getting removed even if there is error inside the subjob component
 11. <541> [Ashika Holkar] -  Error bubble is not getting displayed on filter component if Operation field is not specified
+12. <539> [Ashika Holkar] - Multiple Run Configuration Window are getting opened when User click on Run button
 =====================================================================================================
 Notes for QA:
 =====================================================================================================
