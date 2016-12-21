@@ -13,17 +13,18 @@
 
 package hydrograph.engine.jaxb.ooracle;
 
+import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 
 
 /**
  * <p>Java class for type-priamry-keys complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="type-priamry-keys">
  *   &lt;complexContent>
@@ -35,12 +36,12 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-priamry-keys", namespace = "hydrograph/engine/jaxb/ooracle", propOrder = {
-    "primaryKeys"
+        "primaryKeys"
 })
 public class TypePriamryKeys {
 
@@ -48,11 +49,11 @@ public class TypePriamryKeys {
 
     /**
      * Gets the value of the primaryKeys property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link TypeKeyFields }
-     *     
+     *
      */
     public TypeKeyFields getPrimaryKeys() {
         return primaryKeys;
@@ -60,11 +61,11 @@ public class TypePriamryKeys {
 
     /**
      * Sets the value of the primaryKeys property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link TypeKeyFields }
-     *     
+     *
      */
     public void setPrimaryKeys(TypeKeyFields value) {
         this.primaryKeys = value;

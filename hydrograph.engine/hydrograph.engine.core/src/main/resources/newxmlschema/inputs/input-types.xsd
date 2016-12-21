@@ -7,18 +7,18 @@
 	is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
 	KIND, either express or implied. See the License for the specific language 
 	governing permissions and limitations under the License. -->
-<xs:schema xmlns="hydrograph/engine/jaxb/inputtypes"
-	xmlns:cmn="hydrograph/engine/jaxb/commontypes" xmlns:itffw="hydrograph/engine/jaxb/itffw"
-	xmlns:itfd="hydrograph/engine/jaxb/itfd" xmlns:itfs="hydrograph/engine/jaxb/itfs"
-	xmlns:igr="hydrograph/engine/jaxb/igr" xmlns:ifparquet="hydrograph/engine/jaxb/ifparquet"
-	xmlns:ihiveparquet="hydrograph/engine/jaxb/ihiveparquet"
-	xmlns:ihivetextfile="hydrograph/engine/jaxb/ihivetextfile"
-	xmlns:ifMixedScheme="hydrograph/engine/jaxb/ifmixedscheme"
-	xmlns:ifsubjob="hydrograph/engine/jaxb/ifsubjob" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:imysql="hydrograph/engine/jaxb/imysql"
-    xmlns:iredshift="hydrograph/engine/jaxb/iredshift"
-    xmlns:ioracle="hydrograph/engine/jaxb/ioracle"
-	targetNamespace="hydrograph/engine/jaxb/inputtypes" elementFormDefault="unqualified">
+<xs:schema xmlns:cmn="hydrograph/engine/jaxb/commontypes"
+           xmlns:itffw="hydrograph/engine/jaxb/itffw" xmlns:itfd="hydrograph/engine/jaxb/itfd"
+           xmlns:itfs="hydrograph/engine/jaxb/itfs" xmlns:igr="hydrograph/engine/jaxb/igr"
+           xmlns:ifparquet="hydrograph/engine/jaxb/ifparquet" xmlns:ihiveparquet="hydrograph/engine/jaxb/ihiveparquet"
+           xmlns:ihivetextfile="hydrograph/engine/jaxb/ihivetextfile"
+           xmlns:ifMixedScheme="hydrograph/engine/jaxb/ifmixedscheme"
+           xmlns:ifsubjob="hydrograph/engine/jaxb/ifsubjob"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:imysql="hydrograph/engine/jaxb/imysql"
+           xmlns:iredshift="hydrograph/engine/jaxb/iredshift"
+           xmlns:ioracle="hydrograph/engine/jaxb/ioracle"
+           xmlns="hydrograph/engine/jaxb/inputtypes"
+           targetNamespace="hydrograph/engine/jaxb/inputtypes" elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
 		namespace="hydrograph/engine/jaxb/commontypes" />
 	<xs:import schemaLocation="./text-file-fixed-width/text-file-fixed-types.xsd"
@@ -366,22 +366,32 @@
         <xs:complexContent>
             <xs:extension base="ioracle:type-input-oracle-base">
                 <xs:sequence>
-                    <xs:element name="tableName" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
-                    <xs:element name="username" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="sid" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="hostName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="port" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="driverType" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="userName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
                     <xs:element name="password" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
-                    <xs:element name="jdbcurl" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
-                    <xs:element name="query" type="cmn:element-value-string-type"
-                                minOccurs="0" maxOccurs="1" />
-                    <xs:element name="condition" type="cmn:element-value-string-type"
-                                minOccurs="0" maxOccurs="1" />
-                    <xs:element name="batchSize" type="cmn:element-value-integer-type"
-                                minOccurs="1" maxOccurs="1" />
+                                minOccurs="1" maxOccurs="1"/>
                     <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0" />
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="schemaName" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:choice>
+                        <xs:element name="tableName" type="cmn:element-value-string-type"
+                                    minOccurs="0" maxOccurs="1"/>
+                        <xs:sequence minOccurs="1" maxOccurs="1">
+                            <xs:element name="selectQuery" type="cmn:element-value-string-type"
+                                        minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="countQuery" type="cmn:element-value-string-type"
+                                        minOccurs="0" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:choice>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

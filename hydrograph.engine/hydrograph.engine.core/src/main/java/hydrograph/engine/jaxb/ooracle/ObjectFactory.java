@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRegistry;
  * type definitions, element declarations and model 
  * groups.  Factory methods for each of these are 
  * provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -36,30 +36,30 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: hydrograph.engine.jaxb.ooracle
-     * 
+     *
      */
     public ObjectFactory() {
     }
 
     /**
+     * Create an instance of {@link TypeOutputOracleInSocket }
+     *
+     */
+    public TypeOutputOracleInSocket createTypeOutputOracleInSocket() {
+        return new TypeOutputOracleInSocket();
+    }
+
+    /**
      * Create an instance of {@link DatabaseType }
-     * 
+     *
      */
     public DatabaseType createDatabaseType() {
         return new DatabaseType();
     }
 
     /**
-     * Create an instance of {@link TypeOutputOracleOutSocket }
-     * 
-     */
-    public TypeOutputOracleOutSocket createTypeOutputOracleOutSocket() {
-        return new TypeOutputOracleOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypePriamryKeys }
-     * 
+     *
      */
     public TypePriamryKeys createTypePriamryKeys() {
         return new TypePriamryKeys();
@@ -67,7 +67,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeOracleField }
-     * 
+     *
      */
     public TypeOracleField createTypeOracleField() {
         return new TypeOracleField();
@@ -75,7 +75,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeLoadChoice }
-     * 
+     *
      */
     public TypeLoadChoice createTypeLoadChoice() {
         return new TypeLoadChoice();
@@ -83,7 +83,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeUpdateKeys }
-     * 
+     *
      */
     public TypeUpdateKeys createTypeUpdateKeys() {
         return new TypeUpdateKeys();
@@ -91,7 +91,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeOracleRecord }
-     * 
+     *
      */
     public TypeOracleRecord createTypeOracleRecord() {
         return new TypeOracleRecord();
@@ -99,7 +99,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeOutputOracleBase }
-     * 
+     *
      */
     public TypeOutputOracleBase createTypeOutputOracleBase() {
         return new TypeOutputOracleBase();

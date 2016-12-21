@@ -21,12 +21,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for type-output-oracle-out-socket complex type.
- *
+ * <p>Java class for type-output-oracle-in-socket complex type.
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * <p>
  * <pre>
- * &lt;complexType name="type-output-oracle-out-socket">
+ * &lt;complexType name="type-output-oracle-in-socket">
  *   &lt;complexContent>
  *     &lt;restriction base="{hydrograph/engine/jaxb/commontypes}type-output-inSocket">
  *       &lt;sequence>
@@ -38,14 +38,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-oracle-out-socket", namespace = "hydrograph/engine/jaxb/ooracle")
-public class TypeOutputOracleOutSocket
-        extends TypeOutputInSocket
-{
+@XmlType(name = "type-output-oracle-in-socket", namespace = "hydrograph/engine/jaxb/ooracle")
+public class TypeOutputOracleInSocket
+        extends TypeOutputInSocket {
 
 
 }

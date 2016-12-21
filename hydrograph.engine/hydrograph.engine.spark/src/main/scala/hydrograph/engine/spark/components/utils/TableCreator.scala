@@ -1,11 +1,7 @@
 package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
-import hydrograph.engine.core.component.utils.JavaToSQLTypeMapping
-import hydrograph.engine.jaxb.commontypes.{TypeBaseField, TypeFieldName}
 import org.slf4j.{Logger, LoggerFactory}
-
-import scala.collection.JavaConverters._
 
 /**
   * Created by santlalg on 12/12/2016.
@@ -26,7 +22,7 @@ case class TableCreator() {
       + " database for table '" + outputRDBMSEntity.getTableName
       + "' with column name [" + fieldsCreator.getFieldNames.toList.mkString + "] "
       + " data type [ " + fieldsDataType.toList.mkString + "] "
-      + " with column defination [" + columnDefs.toList.mkString +"] " )
+      + " with column defination [" + columnDefs.toList.mkString + "] ")
 
     if (outputRDBMSEntity.getPrimaryKeys() != null) {
       LOG.debug("Generating create query for " + outputRDBMSEntity.getDatabaseName

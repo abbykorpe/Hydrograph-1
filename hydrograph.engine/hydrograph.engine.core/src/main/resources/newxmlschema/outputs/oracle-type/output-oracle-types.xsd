@@ -11,10 +11,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  -->
-<xs:schema xmlns="hydrograph/engine/jaxb/ooracle"
-	xmlns:cmn="hydrograph/engine/jaxb/commontypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="hydrograph/engine/jaxb/ooracle"
-	elementFormDefault="unqualified">
+<xs:schema xmlns:cmn="hydrograph/engine/jaxb/commontypes"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="hydrograph/engine/jaxb/ooracle"
+           targetNamespace="hydrograph/engine/jaxb/ooracle"
+           elementFormDefault="unqualified">
 	<xs:import schemaLocation="../../common/common-types.xsd"
 		namespace="hydrograph/engine/jaxb/commontypes" />
 
@@ -82,8 +82,7 @@
   </xs:complexType>
 
 
-
-	<xs:complexType name="type-output-oracle-out-socket">
+    <xs:complexType name="type-output-oracle-in-socket">
 		<xs:complexContent>
 			<xs:restriction base="cmn:type-output-inSocket">
 				<xs:sequence>
@@ -101,8 +100,8 @@
 		<xs:complexContent>
 			<xs:restriction base="cmn:type-output-component">
 				<xs:sequence>
-					<xs:element name="inSocket" type="type-output-oracle-out-socket"
-						minOccurs="1" maxOccurs="1" />
+                    <xs:element name="inSocket" type="type-output-oracle-in-socket"
+                                minOccurs="1" maxOccurs="1"/>
 					<xs:element name="overWrite" type="cmn:type-true-false"
 						minOccurs="0" maxOccurs="1" />
 				</xs:sequence>

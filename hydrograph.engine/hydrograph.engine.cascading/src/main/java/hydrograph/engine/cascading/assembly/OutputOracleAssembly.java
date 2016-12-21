@@ -18,24 +18,30 @@ import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
 
 public class OutputOracleAssembly extends OutputRDBMSAssembly {
 
-	/**
-	 * Oracle Output Component - Output records to oracle database.
-	 * 
-	 */	
-	private static final long serialVersionUID = -1134562892898437343L;
+    /**
+     * Oracle Output Component - Output records to oracle database.
+     */
+    private static final long serialVersionUID = -1134562892898437343L;
 
 
-	
-	public OutputOracleAssembly(OutputRDBMSEntity baseComponentEntity,
-			ComponentParameters componentParameters) {
-		super(baseComponentEntity, componentParameters);
-	}
+    public OutputOracleAssembly(OutputRDBMSEntity baseComponentEntity,
+                                ComponentParameters componentParameters) {
+        super(baseComponentEntity, componentParameters);
+    }
 
-@Override
-	public void intializeRdbmsSpecificDrivers() {
-		inputFormatClass = OracleDBInputFormat.class;
-		driverName = "oracle.jdbc.OracleDriver";
-		}
+    @Override
+    public void intializeRdbmsSpecificDrivers() {
+        inputFormatClass = OracleDBInputFormat.class;
+
+        if (outputRDBMSEntity.getDriverType().equalsIgnoreCase("thin")) {
+            driverName = "oracle.jdbc.OracleDriver";
+        }
+
+        jdbcURL = "jdbc:oracle:" + outputRDBMSEntity.getDriverType() + "://@" + outputRDBMSEntity.getHostName() + ":"
+                + outputRDBMSEntity.getPort() + ":" + outputRDBMSEntity.getSid();
+
+    }
+
 }
 
 	

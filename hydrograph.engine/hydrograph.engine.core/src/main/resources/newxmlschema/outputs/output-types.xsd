@@ -11,21 +11,21 @@
     See the License for the specific language governing permissions and
     limitations under the License.
  -->
-<xs:schema xmlns="hydrograph/engine/jaxb/outputtypes"
-	xmlns:cmn="hydrograph/engine/jaxb/commontypes" xmlns:otffw="hydrograph/engine/jaxb/otffw"
-	xmlns:otfd="hydrograph/engine/jaxb/otfd" xmlns:otfs="hydrograph/engine/jaxb/otfs"
-	xmlns:otdiscard="hydrograph/engine/jaxb/otdiscard"
-	xmlns:ofparquet="hydrograph/engine/jaxb/ofparquet"
-	xmlns:ohiveparquet="hydrograph/engine/jaxb/ohiveparquet"
-	xmlns:ohivetextfile="hydrograph/engine/jaxb/ohivetextfile"
-	xmlns:ofMixedScheme="hydrograph/engine/jaxb/ofmixedscheme"
-	xmlns:ofsubjob="hydrograph/engine/jaxb/ofsubjob"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:omysql="hydrograph/engine/jaxb/omysql"
-    xmlns:oredshift="hydrograph/engine/jaxb/oredshift"
-    xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
-    targetNamespace="hydrograph/engine/jaxb/outputtypes"
-	elementFormDefault="unqualified">
+<xs:schema xmlns:cmn="hydrograph/engine/jaxb/commontypes"
+           xmlns:otffw="hydrograph/engine/jaxb/otffw" xmlns:otfd="hydrograph/engine/jaxb/otfd"
+           xmlns:otfs="hydrograph/engine/jaxb/otfs" xmlns:otdiscard="hydrograph/engine/jaxb/otdiscard"
+           xmlns:ofparquet="hydrograph/engine/jaxb/ofparquet"
+           xmlns:ohiveparquet="hydrograph/engine/jaxb/ohiveparquet"
+           xmlns:ohivetextfile="hydrograph/engine/jaxb/ohivetextfile"
+           xmlns:ofMixedScheme="hydrograph/engine/jaxb/ofmixedscheme"
+           xmlns:ofsubjob="hydrograph/engine/jaxb/ofsubjob"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:omysql="hydrograph/engine/jaxb/omysql"
+           xmlns:oredshift="hydrograph/engine/jaxb/oredshift"
+           xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
+           xmlns="hydrograph/engine/jaxb/outputtypes"
+           targetNamespace="hydrograph/engine/jaxb/outputtypes"
+           elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
 		namespace="hydrograph/engine/jaxb/commontypes" />
 	<xs:import schemaLocation="./text-file-fixed-width/output-text-file-fixed-types.xsd"
@@ -358,20 +358,28 @@
         <xs:complexContent>
             <xs:extension base="ooracle:type-output-oracle-base">
                 <xs:sequence>
+                    <xs:element name="sid" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="hostName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="port" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="driverType" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
                     <xs:element name="tableName" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
-                    <xs:element name="username" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
+                                minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="userName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
                     <xs:element name="password" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
-                    <xs:element name="jdbcurl" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
+                                minOccurs="1" maxOccurs="1"/>
                     <xs:element name="loadType" type="ooracle:type-load-choice"
-                                minOccurs="0" />
-                    <xs:element name="batchSize" type="cmn:element-value-integer-type"
-                                minOccurs="1" maxOccurs="1" />
+                                minOccurs="1"/>
+                    <xs:element name="schemaName" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="chunkSize" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1"/>
                     <xs:element name="runtimeProperties" type="cmn:type-properties"
-                                minOccurs="0" />
+                                minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

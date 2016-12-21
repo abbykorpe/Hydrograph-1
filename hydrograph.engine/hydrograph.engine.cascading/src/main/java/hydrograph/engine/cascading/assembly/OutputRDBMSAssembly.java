@@ -11,6 +11,7 @@
  * limitations under the License.
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
+
 import cascading.flow.FlowDef;
 import cascading.jdbc.JDBCScheme;
 import cascading.jdbc.JDBCTap;
@@ -18,23 +19,15 @@ import cascading.jdbc.JDBCUtil;
 import cascading.jdbc.TableDesc;
 import cascading.jdbc.db.DBInputFormat;
 import cascading.jdbc.db.DBOutputFormat;
-import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tap.SinkMode;
 import cascading.tap.TapException;
 import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
-import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
-import hydrograph.engine.core.component.entity.TransformEntity;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
-import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
-import hydrograph.engine.core.component.utils.JavaToSQLTypeMapping;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,225 +37,235 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
 
 public abstract class OutputRDBMSAssembly extends BaseComponent<OutputRDBMSEntity> {
 
-	/**
-	 * RDBMS Input Component - read records as input from RDBMS Table.
-	 *
-	 */
-	private static final long serialVersionUID = -2946197683137950707L;
-	protected FlowDef flowDef;
-	protected Pipe tailPipe;
-	protected List<SchemaField> schemaFieldList;
-	protected OutputRDBMSEntity outputRDBMSEntity;
-	@SuppressWarnings("rawtypes")
-	Class<? extends DBInputFormat> inputFormatClass;
-	protected JDBCScheme scheme;
-	protected TableDesc tableDesc;
-	protected String driverName;
-	protected String jdbcURL;
-	protected String[] outputFields;
-	protected String[] columnDefs = {};
-	protected String[] primaryKeys = null;
-	protected String[] fieldsDataType;
-	protected int[] fieldsScale;
-	protected int[] fieldsPrecision;
-	protected Fields fields;
-	protected String[] columnNames;
-	private Connection connection;
+    protected final static String TIME_STAMP = "HH:mm:ss";
+    /**
+     * RDBMS Input Component - read records as input from RDBMS Table.
+     */
+    private static final long serialVersionUID = -2946197683137950707L;
+    protected static Logger LOG = LoggerFactory.getLogger(OutputRDBMSAssembly.class);
+    private final String DATABASE_TYPE = "Oracle";
+    protected FlowDef flowDef;
+    protected Pipe tailPipe;
+    protected List<SchemaField> schemaFieldList;
+    protected OutputRDBMSEntity outputRDBMSEntity;
+    protected JDBCScheme scheme;
+    protected TableDesc tableDesc;
+    protected String driverName;
+    protected String jdbcURL;
+    protected String[] outputFields;
+    protected String[] columnDefs = {};
+    protected String[] primaryKeys = null;
+    protected String[] fieldsDataType;
+    protected int[] fieldsScale;
+    protected int[] fieldsPrecision;
+    protected Fields fields;
+    protected String[] columnNames;
+    protected JDBCTap rdbmsTap;
+    protected InputOutputFieldsAndTypesCreator<OutputRDBMSEntity> fieldsCreator;
+    @SuppressWarnings("rawtypes")
+    Class<? extends DBInputFormat> inputFormatClass;
+    private Connection connection;
 
-	protected JDBCTap rdbmsTap;
+    public OutputRDBMSAssembly(OutputRDBMSEntity baseComponentEntity, ComponentParameters componentParameters) {
+        super(baseComponentEntity, componentParameters);
+    }
 
-	protected final static String TIME_STAMP = "HH:mm:ss";
+    @Override
+    public void initializeEntity(OutputRDBMSEntity assemblyEntityBase) {
+        outputRDBMSEntity = assemblyEntityBase;
+    }
 
-	protected InputOutputFieldsAndTypesCreator<OutputRDBMSEntity> fieldsCreator;
+    public abstract void intializeRdbmsSpecificDrivers();
 
-	protected static Logger LOG = LoggerFactory.getLogger(OutputRDBMSAssembly.class);
+    protected void prepareScheme() {
 
-	public OutputRDBMSAssembly(OutputRDBMSEntity baseComponentEntity, ComponentParameters componentParameters) {
-		super(baseComponentEntity, componentParameters);
-	}
+        fieldsDataType = fieldsCreator.getFieldDataTypes();
+        fieldsScale = fieldsCreator.getFieldScale();
+        fieldsPrecision = fieldsCreator.getFieldPrecision();
 
-	@Override
-	public void initializeEntity(OutputRDBMSEntity assemblyEntityBase) {
-		outputRDBMSEntity = assemblyEntityBase;
-	}
+       /* if (fieldsCreator.getColDef()[0] == null)
+            columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision);
+        else
+            columnDefs = fieldsCreator.getColDef();*/
 
-	public abstract void intializeRdbmsSpecificDrivers();
+        if (outputRDBMSEntity.getPrimaryKeys() != null) {
+            primaryKeys = new String[outputRDBMSEntity.getPrimaryKeys().size()];
+            int i = 0;
+            for (TypeFieldName typeFieldName : outputRDBMSEntity.getPrimaryKeys()) {
+                primaryKeys[i] = typeFieldName.getName();
+                i++;
+            }
+        }
+        fields = fieldsCreator.makeFieldsWithTypes();
+        columnNames = fieldsCreator.getFieldNames();
+        LOG.debug("Applying RDBMS schema to read data from RDBMS");
 
-	protected void prepareScheme() {
+        createTableDescAndScheme();
+    }
 
-		fieldsDataType = fieldsCreator.getFieldDataTypes();
-		fieldsScale = fieldsCreator.getFieldScale();
-		fieldsPrecision = fieldsCreator.getFieldPrecision();
+    protected void createTableDescAndScheme() {
+        tableDesc = new TableDesc(outputRDBMSEntity.getTableName(), columnNames, columnDefs, primaryKeys);
+        if (!outputRDBMSEntity.getLoadType().equals("update"))
+            scheme = new JDBCScheme(inputFormatClass, fields, columnNames);
+        else {
+            String[] updateByColumns = new String[outputRDBMSEntity.getUpdateByKeys().size()];
+            int i = 0;
+            for (TypeFieldName typeFieldName : outputRDBMSEntity.getUpdateByKeys()) {
+                updateByColumns[i] = typeFieldName.getName();
+                i++;
+            }
+            scheme = new JDBCScheme(inputFormatClass, DBOutputFormat.class, fields, columnNames, null,
+                    new Fields(updateByColumns), updateByColumns);
+        }
+    }
 
-//		if (fieldsCreator.getColDef()[0] == null)
-//			columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType,fieldsScale,fieldsPrecision);
-//		else
-//			columnDefs = fieldsCreator.getColDef();
 
-		if (outputRDBMSEntity.getPrimaryKeys() != null) {
-			primaryKeys = new String[outputRDBMSEntity.getPrimaryKeys().size()];
-			int i = 0;
-			for (TypeFieldName typeFieldName : outputRDBMSEntity.getPrimaryKeys()) {
-				primaryKeys[i] = typeFieldName.getName();
-				i++;
-			}
-		}
-		fields = fieldsCreator.makeFieldsWithTypes();
-		columnNames = fieldsCreator.getFieldNames();
-		LOG.debug("Applying RDBMS schema to read data from RDBMS");
+    protected void initializeRDBMSTap() throws IOException, SQLException, Exception {
+        LOG.debug("Initializing RDBMS Tap");
+        SinkMode sinkMode = null;
+        connection = createConnection(jdbcURL, driverName, outputRDBMSEntity.getUsername(),
+                outputRDBMSEntity.getPassword());
+        sinkMode = getSinkMode(connection);
 
-		createTableDescAndScheme();
-	}
+        rdbmsTap = new JDBCTap(jdbcURL, outputRDBMSEntity.getUsername(), outputRDBMSEntity.getPassword(), driverName,
+                tableDesc, scheme, sinkMode);
+        ((JDBCTap) rdbmsTap).setBatchSize(outputRDBMSEntity.getChunkSize());
+    }
 
-	protected void createTableDescAndScheme() {
-		tableDesc = new TableDesc(outputRDBMSEntity.getTableName(), columnNames, columnDefs, primaryKeys);
-		if (!outputRDBMSEntity.getLoadType().equals("update"))
-			scheme = new JDBCScheme(inputFormatClass, fields, columnNames);
-		else {
-			String[] updateByColumns = new String[outputRDBMSEntity.getUpdateByKeys().size()];
-			int i = 0;
-			for (TypeFieldName typeFieldName : outputRDBMSEntity.getUpdateByKeys()) {
-				updateByColumns[i] = typeFieldName.getName();
-				i++;
-			}
-			scheme = new JDBCScheme(inputFormatClass, DBOutputFormat.class, fields, columnNames, null,
-					new Fields(updateByColumns), updateByColumns);
-		}
-	}
+    protected SinkMode getSinkMode(Connection connection) throws SQLException, IOException {
+        if (outputRDBMSEntity.getLoadType().equals("truncateLoad")) {
+            if (!JDBCUtil.tableExists(connection, tableDesc)) {
+                if (outputRDBMSEntity.getDatabaseType().equalsIgnoreCase(DATABASE_TYPE))
+                    throw new SQLException("Table '" + outputRDBMSEntity.getTableName() + "' already exist");
+                else
+                    throw new SQLException("Table '" + outputRDBMSEntity.getDatabaseName() + "."
+                            + outputRDBMSEntity.getTableName() + "' already exist");
+            } else {
+                JDBCUtil.executeUpdate(connection, "truncate table " + outputRDBMSEntity.getTableName());
+                return SinkMode.UPDATE;
+            }
+        } else if (outputRDBMSEntity.getLoadType().equals("newTable")) {
+            if (JDBCUtil.tableExists(connection, tableDesc)) {
+                if (outputRDBMSEntity.getDatabaseType().equalsIgnoreCase(DATABASE_TYPE))
+                    throw new SQLException("Table '" + outputRDBMSEntity.getTableName() + "' already exist");
+                else
+                    throw new SQLException("Table '" + outputRDBMSEntity.getDatabaseName() + "."
+                            + outputRDBMSEntity.getTableName() + "' already exist");
+            } else
+                return SinkMode.REPLACE;
+        } else { // for update and insert
+            if (!JDBCUtil.tableExists(connection, tableDesc)) {
 
-	protected void initializeRDBMSTap() throws IOException, SQLException, Exception {
-		LOG.debug("Initializing RDBMS Tap");
-		SinkMode sinkMode = null;
-		connection = createConnection(jdbcURL, driverName, outputRDBMSEntity.getUsername(),
-				outputRDBMSEntity.getPassword());
-		sinkMode = getSinkMode(connection);
+                if (outputRDBMSEntity.getDatabaseType().equalsIgnoreCase(DATABASE_TYPE))
+                    throw new IOException("Table '"
+                            + outputRDBMSEntity.getTableName() + "' doesn't exist for " + outputRDBMSEntity.getLoadType());
+                else
+                    throw new IOException("Table '"
+                            + outputRDBMSEntity.getTableName() + "' doesn't exist for " + outputRDBMSEntity.getLoadType());
+            } else
+                return SinkMode.UPDATE;
 
-		rdbmsTap = new JDBCTap(jdbcURL, outputRDBMSEntity.getUsername(), outputRDBMSEntity.getPassword(), driverName,
-				tableDesc, scheme, sinkMode);
-		((JDBCTap) rdbmsTap).setBatchSize(outputRDBMSEntity.getChunkSize());
-	}
+        }
+    }
 
-	protected SinkMode getSinkMode(Connection connection) throws SQLException, IOException {
-		if (outputRDBMSEntity.getLoadType().equals("truncateLoad")) {
-			if (!JDBCUtil.tableExists(connection, tableDesc)) {
-				throw new IOException("Table '" + outputRDBMSEntity.getDatabaseName() + "."
-						+ outputRDBMSEntity.getTableName() + "' doesn't exist for truncate");
-			} else {
-				JDBCUtil.executeUpdate(connection, "truncate table " + outputRDBMSEntity.getTableName());
-				return SinkMode.UPDATE;
-			}
-		} else if (outputRDBMSEntity.getLoadType().equals("newTable")) {
-			if (JDBCUtil.tableExists(connection, tableDesc)) {
-				throw new SQLException("Table '" + outputRDBMSEntity.getDatabaseName() + "."
-						+ outputRDBMSEntity.getTableName() + "' already exist");
-			} else
-				return SinkMode.REPLACE;
-		} else { // for update and insert
-			if (!JDBCUtil.tableExists(connection, tableDesc)) {
-				throw new IOException("Table '" + outputRDBMSEntity.getDatabaseName() + "."
-						+ outputRDBMSEntity.getTableName() + "' doesn't exist for " + outputRDBMSEntity.getLoadType());
-			} else
-				return SinkMode.UPDATE;
+    private Connection createConnection(String connectionUrl, String driverClassName, String username,
+                                        String password) {
+        try {
+            LOG.info("creating connection: {}", connectionUrl);
+            Class.forName(driverClassName);
 
-		}
-	}
+            Connection connection = null;
 
-	private Connection createConnection(String connectionUrl, String driverClassName, String username,
-										String password) {
-		try {
-			LOG.info("creating connection: {}", connectionUrl);
-			Class.forName(driverClassName);
+            if (username == null)
+                connection = DriverManager.getConnection(connectionUrl);
+            else
+                connection = DriverManager.getConnection(connectionUrl, username, password);
 
-			Connection connection = null;
+            connection.setAutoCommit(false);
 
-			if (username == null)
-				connection = DriverManager.getConnection(connectionUrl);
-			else
-				connection = DriverManager.getConnection(connectionUrl, username, password);
+            return connection;
+        } catch (SQLException exception) {
+            if (exception.getMessage().startsWith("No suitable driver found for")) {
+                List<String> availableDrivers = new ArrayList<String>();
+                Enumeration<Driver> drivers = DriverManager.getDrivers();
 
-			connection.setAutoCommit(false);
+                while (drivers.hasMoreElements())
+                    availableDrivers.add(drivers.nextElement().getClass().getName());
 
-			return connection;
-		} catch (SQLException exception) {
-			if (exception.getMessage().startsWith("No suitable driver found for")) {
-				List<String> availableDrivers = new ArrayList<String>();
-				Enumeration<Driver> drivers = DriverManager.getDrivers();
+                LOG.error("Driver not found: {} because {}. Available drivers are: {}", driverClassName,
+                        exception.getMessage(), availableDrivers);
+            }
+            throw new TapException(exception.getMessage() + " (SQL error code: " + exception.getErrorCode()
+                    + ") opening connection: " + connectionUrl, exception);
+        } catch (Exception exception) {
+            LOG.error("unable to load driver class: " + driverClassName + " because: " + exception.getMessage() + " not found");
+            throw new TapException(
+                    "unable to load driver class: " + driverClassName + " because: " + exception.getMessage(),
+                    exception);
+        }
+    }
 
-				while (drivers.hasMoreElements())
-					availableDrivers.add(drivers.nextElement().getClass().getName());
+    protected void prepareAssembly() throws SQLException, IOException {
+        outputFields = fieldsCreator.getFieldNames();
+        LOG.debug(outputRDBMSEntity.getDatabaseType() + " Output Component: [ Database Name: "
+                + outputRDBMSEntity.getDatabaseName() + ", Table Name: " + outputRDBMSEntity.getTableName()
+                + ", Column Names: " + Arrays.toString(outputFields) + "]");
 
-				LOG.error("Driver not found: {} because {}. Available drivers are: {}", driverClassName,
-						exception.getMessage(), availableDrivers);
-			}
-			throw new TapException(exception.getMessage() + " (SQL error code: " + exception.getErrorCode()
-					+ ") opening connection: " + connectionUrl, exception);
-		} catch (Exception exception) {
-			LOG.error("unable to load driver class: " + driverClassName + " because: " + exception.getMessage() + " not found");
-			throw new TapException(
-					"unable to load driver class: " + driverClassName + " because: " + exception.getMessage(),
-					exception);
-		}
-	}
+        if (LOG.isTraceEnabled()) {
+            LOG.trace(outputRDBMSEntity.toString());
+        }
+        LOG.trace("Creating output assembly for " + outputRDBMSEntity.getDatabaseType() + "'"
+                + outputRDBMSEntity.getComponentId() + "'");
+        flowDef = componentParameters.getFlowDef();
+        tailPipe = componentParameters.getInputPipe();
 
-	protected void prepareAssembly() throws SQLException, IOException {
-		outputFields = fieldsCreator.getFieldNames();
-		LOG.debug(outputRDBMSEntity.getDatabaseType() + " Output Component: [ Database Name: "
-				+ outputRDBMSEntity.getDatabaseName() + ", Table Name: " + outputRDBMSEntity.getTableName()
-				+ ", Column Names: " + Arrays.toString(outputFields) + "]");
+        try {
+            prepareScheme();
+        } catch (Exception e) {
+            LOG.error("Error in preparing scheme for component '" + outputRDBMSEntity.getComponentId() + "': "
+                    + e.getMessage());
+            throw new RuntimeException(e);
+        }
 
-		if (LOG.isTraceEnabled()) {
-			LOG.trace(outputRDBMSEntity.toString());
-		}
-		LOG.trace("Creating output assembly for " + outputRDBMSEntity.getDatabaseType() + "'"
-				+ outputRDBMSEntity.getComponentId() + "'");
-		flowDef = componentParameters.getFlowDef();
-		tailPipe = componentParameters.getInputPipe();
+        try {
+            initializeRDBMSTap();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            connection.close();
+        }
+    }
 
-		try {
-			prepareScheme();
-		} catch (Exception e) {
-			LOG.error("Error in preparing scheme for component '" + outputRDBMSEntity.getComponentId() + "': "
-					+ e.getMessage());
-			throw new RuntimeException(e);
-		}
+    @Override
+    protected void createAssembly() {
 
-		try {
-			initializeRDBMSTap();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			connection.close();
-		}
-	}
+        fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputRDBMSEntity>(outputRDBMSEntity);
+        intializeRdbmsSpecificDrivers();
 
-	@Override
-	protected void createAssembly() {
+        try {
+            prepareAssembly();
 
-		fieldsCreator = new InputOutputFieldsAndTypesCreator<OutputRDBMSEntity>(outputRDBMSEntity);
-		intializeRdbmsSpecificDrivers();
-
-		try {
-			prepareAssembly();
-
-			Pipe sinkPipe = new Pipe(outputRDBMSEntity.getComponentId(), tailPipe);
-			setHadoopProperties(rdbmsTap.getStepConfigDef());
-			setHadoopProperties(sinkPipe.getStepConfigDef());
-			flowDef = flowDef.addTailSink(sinkPipe, rdbmsTap);
-			setOutLink("output", "NoSocketId", outputRDBMSEntity.getComponentId(), sinkPipe,
-					componentParameters.getInputFieldsList().get(0));
-		} catch (Exception e) {
-			LOG.error("Error in creating assembly for component '" + outputRDBMSEntity.getComponentId() + "', Error: "
-					+ e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
-	}
+            Pipe sinkPipe = new Pipe(outputRDBMSEntity.getComponentId(), tailPipe);
+            setHadoopProperties(rdbmsTap.getStepConfigDef());
+            setHadoopProperties(sinkPipe.getStepConfigDef());
+            flowDef = flowDef.addTailSink(sinkPipe, rdbmsTap);
+            setOutLink("output", "NoSocketId", outputRDBMSEntity.getComponentId(), sinkPipe,
+                    componentParameters.getInputFieldsList().get(0));
+        } catch (Exception e) {
+            LOG.error("Error in creating assembly for component '" + outputRDBMSEntity.getComponentId() + "', Error: "
+                    + e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
 }
