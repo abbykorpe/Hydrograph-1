@@ -50,7 +50,7 @@
         <hostName value="DBDEVSRV"/>
         <port value="1521"/>
         <driverType value="thin"/>
-        <tableName value="testingTable422"/>
+        <tableName value="testingTable423"/>
         <userName value="htcd"/>
         <password value="htcd"/>
         <loadType>

@@ -1,4 +1,4 @@
-package hydrograph.engine.core.component.utils;
+package hydrograph.engine.spark.components.utils;
 
 /**
  * Created by santlalg on 12/12/2016.

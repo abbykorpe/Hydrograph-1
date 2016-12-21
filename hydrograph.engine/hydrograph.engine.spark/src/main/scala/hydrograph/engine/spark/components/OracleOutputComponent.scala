@@ -38,7 +38,7 @@ class OracleOutputComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsPar
 
     outputRDBMSEntity.getLoadType match {
       case "newTable" =>
-        executeQuery(connectionURL, prop, TableCreator.getCreateTableQuery(outputRDBMSEntity))
+        executeQuery(connectionURL, prop, TableCreator().getCreateTableQuery(outputRDBMSEntity))
         oComponentsParams.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
       case "insert" => oComponentsParams.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
       case "truncateLoad" =>
