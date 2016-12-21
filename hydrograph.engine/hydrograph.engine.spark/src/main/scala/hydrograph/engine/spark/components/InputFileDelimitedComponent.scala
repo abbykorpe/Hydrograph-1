@@ -25,7 +25,7 @@ class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity
         .option("strict", iFileDelimitedEntity.isStrict)
         .option("dateFormats", dateFormats)
         .schema(schemaField)
-        .format("hydrograph.engine.spark.delimited.datasource")
+        .format("hydrograph.engine.spark.datasource.delimited")
         .load(iFileDelimitedEntity.getPath)
 
       val key = iFileDelimitedEntity.getOutSocketList.get(0).getSocketId

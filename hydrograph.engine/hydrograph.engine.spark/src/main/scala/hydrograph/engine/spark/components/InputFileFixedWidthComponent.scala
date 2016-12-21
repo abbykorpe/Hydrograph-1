@@ -31,7 +31,7 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
       .option("safe", fileFixedWidthEntity.isSafe)
       .option("dateFormats", dateFormats)
       .schema(schemaField)
-      .format("hydrograph.engine.spark.fixedwidth.datasource")
+      .format("hydrograph.engine.spark.datasource.fixedwidth")
       .load(fileFixedWidthEntity.getPath)
 
     val key=fileFixedWidthEntity.getOutSocketList.get(0).getSocketId
