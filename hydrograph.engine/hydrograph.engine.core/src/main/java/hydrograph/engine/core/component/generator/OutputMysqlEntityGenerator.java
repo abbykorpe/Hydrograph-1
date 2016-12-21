@@ -28,9 +28,6 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 
 	private Mysql jaxbOutputMysql;
 	private OutputRDBMSEntity outputRDBMSEntity;
-	private final String databaseType="Mysql";
-	private final String jdbcDriver="Connector/J";
-	private final String driverName = "com.mysql.jdbc.Driver";
 	private static Logger LOG = LoggerFactory
 			.getLogger(OutputMysqlEntityGenerator.class);
 
@@ -76,9 +73,9 @@ public class OutputMysqlEntityGenerator extends OutputComponentGeneratorBase {
 					+ " port is not provided, using default port " + Constants.DEFAULT_MYSQL_PORT);
 
 		outputRDBMSEntity.setPort(jaxbOutputMysql.getPort()==null? Constants.DEFAULT_MYSQL_PORT:jaxbOutputMysql.getPort().getValue().intValue());
-		outputRDBMSEntity.setJdbcDriver(jaxbOutputMysql.getJdbcDriver().getValue().equals(jdbcDriver)?driverName:null);
+		outputRDBMSEntity.setJdbcDriver(jaxbOutputMysql.getJdbcDriver()==null ?null: jaxbOutputMysql.getJdbcDriver().getValue());
 		outputRDBMSEntity.setChunkSize(jaxbOutputMysql.getChunkSize()==null?Constants.DEFAULT_CHUNKSIZE:jaxbOutputMysql.getChunkSize().getValue().intValue());
-		outputRDBMSEntity.setDatabaseType(databaseType);
+		outputRDBMSEntity.setDatabaseType("Mysql");
 
 		if (jaxbOutputMysql.getLoadType().getNewTable() != null)
 			outputRDBMSEntity.setLoadType("newTable");

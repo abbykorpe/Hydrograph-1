@@ -33,7 +33,7 @@ public class Constants {
 	 * The default port for mysql
 	 */
 	public static final int DEFAULT_MYSQL_PORT=3306;
-	/**
+	/*
 	 * The default port for mysql
 	 */
 	public static final int ORACLE_PORT_NUMBER = 1521;

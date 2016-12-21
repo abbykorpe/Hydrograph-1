@@ -16,31 +16,36 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
   InputComponentBase {
 
   val LOG: Logger = LoggerFactory.getLogger(classOf[InputMysqlComponent])
+  val driverName = null
 
-  override def createComponent(): Map[String,DataFrame] = {
+  override def createComponent(): Map[String, DataFrame] = {
 
     val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
 
     val sparkSession = iComponentsParams.getSparkSession()
+
     val prop = new java.util.Properties
     prop.setProperty("user", inputRDBMSEntity.getUsername)
     prop.setProperty("password", inputRDBMSEntity.getPassword)
-    prop.setProperty("driver", inputRDBMSEntity.getJdbcDriver)
+    val driverName = "com.mysql.jdbc.Driver"
 
+    if (inputRDBMSEntity.getJdbcDriver().equals("Connector/J")) {
+      prop.setProperty("driver", driverName)
+    }
 
-    LOG.info("Created Input Mysql Component '"+ inputRDBMSEntity.getComponentId
-      + "' in Batch "+ inputRDBMSEntity.getBatch
-      +" with output socket " + inputRDBMSEntity.getOutSocketList.get(0).getSocketId)
+    LOG.info("Created Input Mysql Component '" + inputRDBMSEntity.getComponentId
+      + "' in Batch " + inputRDBMSEntity.getBatch
+      + " with output socket " + inputRDBMSEntity.getOutSocketList.get(0).getSocketId)
 
     val tableorQuery = if (inputRDBMSEntity.getTableName == null) ("(" + inputRDBMSEntity.getSelectQuery + ") as alias") else inputRDBMSEntity.getTableName
 
     if (inputRDBMSEntity.getTableName != null)
-      LOG.debug("Component Id '"  + inputRDBMSEntity.getComponentId
+      LOG.debug("Component Id '" + inputRDBMSEntity.getComponentId
         + "' in Batch " + inputRDBMSEntity.getBatch
         + " having schema: [ " + inputRDBMSEntity.getFieldsList.asScala.mkString(",") + " ]"
         + " reading data from '" + tableorQuery + "' table")
     else
-      LOG.debug("Component Id '"  + inputRDBMSEntity.getComponentId
+      LOG.debug("Component Id '" + inputRDBMSEntity.getComponentId
         + "' in Batch " + inputRDBMSEntity.getBatch
         + " having schema: [ " + inputRDBMSEntity.getFieldsList.asScala.mkString(",") + " ]"
         + " reading data from '" + tableorQuery + "' query")
@@ -57,8 +62,8 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
       Map(key -> df)
     } catch {
       case e: Exception =>
-        LOG.error("Error in Input  Mysql input component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage , e )
-        throw new RuntimeException("Error in Input Mysql Component "+ inputRDBMSEntity.getComponentId,e )
+        LOG.error("Error in Input  Mysql input component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
+        throw new RuntimeException("Error in Input Mysql Component " + inputRDBMSEntity.getComponentId, e)
     }
   }
 }
