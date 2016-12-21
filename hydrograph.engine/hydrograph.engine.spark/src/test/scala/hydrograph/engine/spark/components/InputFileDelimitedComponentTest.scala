@@ -18,7 +18,7 @@ class InputFileDelimitedComponentTest {
     StructField("DOR", TimestampType, nullable = true),
     StructField("Sal", DecimalType(13, 3), nullable = true),
     StructField("Rating", IntegerType, nullable = true)))
-    
+
   val inputPathCase0: String = "testData/inputFiles/employees.txt"
   val inputPathCase1: String = "testData/inputFiles/employees1.txt"
   val inputPathCase2: String = "testData/inputFiles/employees2.txt"
@@ -26,17 +26,17 @@ class InputFileDelimitedComponentTest {
   val inputPathCase4: String = "testData/inputFiles/employees4.txt"
   val dateFormats: String = "null" + "\t" + "null" + "\t" + "null" + "\t" + "null" + "\t" + "yyyy-MM-dd" + "\t" + "yyyy/MM/dd HH:mm:ss.SSS" + "\t" + "null" + "\t" + "null"
 
-  
+
   /**
- * Test case for correct schema
- */
+    * Test case for correct schema
+    */
   @Test
   def itShouldCheckStrictAndSafeForCorrectInputFormatAndCorrectLength(): Unit = {
 
     //when
 
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -51,13 +51,13 @@ class InputFileDelimitedComponentTest {
     Assert.assertEquals("[3,Hemant,Programmer,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,50.300,3]", df.first().toString())
 
   }
-  
+
   @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionForIncorrectDataTypeWhenSafeFalse(): Unit = {
 
     //when
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -72,16 +72,16 @@ class InputFileDelimitedComponentTest {
     Assert.assertEquals("[3,Hemant,68.36,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]", df.first().toString())
 
   }
- 
- 
- 
- @Test
+
+
+
+  @Test
   def itShouldReadFieldAsNullForIncorrectDataTypeWhenSafeTrue(): Unit = {
 
     //when
 
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -96,18 +96,18 @@ class InputFileDelimitedComponentTest {
     Assert.assertEquals("[3,Hemant,68.36,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]", df.first().toString())
 
   }
- 
- 
- 
- /*Test Cases For Blank Fields Input Starts Here*/
- 
+
+
+
+  /*Test Cases For Blank Fields Input Starts Here*/
+
   @Test
   def itShouldReadNullWhenFieldIsNullAndSafeTrue(): Unit = {
 
     //when
 
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -122,12 +122,12 @@ class InputFileDelimitedComponentTest {
     Assert.assertEquals("[3,Hemant,null,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]", df.first().toString())
 
   }
-  
+
   @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionWhenFieldIsNullAndSafeFalse(): Unit = {
     //when
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -142,16 +142,16 @@ class InputFileDelimitedComponentTest {
     Assert.assertEquals("[3,Hemant,null,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]", df.first().toString())
 
   }
-  
-  
-  
+
+
+
   /*Test Cases For Missing Fields Input Starts Here*/
-  
-    @Test(expected = classOf[SparkException])
+
+  @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionWhenFieldMissingAndStrictTrue(): Unit = {
     //when
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -166,13 +166,13 @@ class InputFileDelimitedComponentTest {
     Assert.assertEquals("[3,Hemant,null,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,null,null]", df.first().toString())
 
   }
-    
-    
+
+
   @Test
   def itShouldReadNullForMissingFieldWhenStrictFalseAndSafeTrue(): Unit = {
     //when
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -188,11 +188,11 @@ class InputFileDelimitedComponentTest {
 
   }
 
-   @Test(expected = classOf[SparkException])
+  @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionForMissingFieldWhenStrictFalseAndSafeFalse(): Unit = {
     //when
     val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.delimited.datasource")
+      .format("hydrograph.engine.spark.datasource.delimited")
       .option("header", "false")
       .option("dateFormats", dateFormats)
       .option("quote", "\"")
@@ -204,8 +204,6 @@ class InputFileDelimitedComponentTest {
 
     //Then
     Assert.assertEquals(8, df.first().size)
-  Assert.assertEquals("[3,Hemant,null,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,null,null]", df.first().toString())
+    Assert.assertEquals("[3,Hemant,null,BBSRÇÇOD,2015-06-25,2016-06-25 02:02:02.325,null,null]", df.first().toString())
   }
-
- 
 }

@@ -168,14 +168,14 @@ public class JobInfo {
 			if (componentInfoMap.containsKey(currentComponentId)) {
 				componentInfo = componentInfoMap.get(currentComponentId);
 				componentInfo.setStatusPerSocketMap(getSocketIdFromComponentSocketID(component_SocketId),
-						cascadingStats.getStatus());
+						cascadingStats.getStatus().name());
 			} else {
 				componentInfo = new ComponentInfo();
 				componentInfo.setComponentId(currentComponentId);
 				componentInfo.setBatch(batchNumber);
 				componentInfo.setComponentName(componentName);
 				for (String socketId : componentSocketMap.get(currentComponentId)) {
-					componentInfo.setStatusPerSocketMap(socketId, cascadingStats.getStatus());
+					componentInfo.setStatusPerSocketMap(socketId, cascadingStats.getStatus().name());
 					componentInfo.setProcessedRecordCount(socketId, 0);
 				}
 				componentInfo.setCurrentStatus(CascadingStats.Status.PENDING.name());

@@ -41,7 +41,7 @@ public class TransformAssembly extends BaseComponent<TransformEntity> {
 	}
 	
 	private void setOperationClassInCaseExpression() {
-		for (int i = 0; i < transformEntity.getOperationsList().size(); i++) {
+		for (int i = 0; i < transformEntity.getNumOperations(); i++) {
 			if (transformEntity.getOperationsList().get(i).getOperationClass() == null) {
 				transformEntity.getOperationsList().get(i)
 						.setOperationClass(

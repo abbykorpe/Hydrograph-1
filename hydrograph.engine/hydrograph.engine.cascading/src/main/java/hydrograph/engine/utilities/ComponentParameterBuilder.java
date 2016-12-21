@@ -12,22 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.utilities;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.hadoop.mapred.JobConf;
-
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.integration.FlowContext;
 import hydrograph.engine.cascading.integration.RuntimeContext;
 import hydrograph.engine.core.helper.LinkGenerator;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
-import hydrograph.engine.schemapropagation.SchemaFieldHandler;
+import org.apache.hadoop.mapred.JobConf;
 
-//import hydrograph.engine.assembly.entity.elements.CopyOfInSocket;
+import java.util.List;
 
 public class ComponentParameterBuilder {
 
