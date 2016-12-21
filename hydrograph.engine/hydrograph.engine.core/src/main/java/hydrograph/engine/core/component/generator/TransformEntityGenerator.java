@@ -86,6 +86,7 @@ public class TransformEntityGenerator extends OperationComponentGeneratorBase {
 		transformEntity.setRuntimeProperties(
 				OperationEntityUtils.extractRuntimeProperties(jaxbTransform.getRuntimeProperties()));
 		transformEntity.setOutSocketList(OperationEntityUtils.extractOutSocketList(jaxbTransform.getOutSocket()));
+		transformEntity.setInSocketList(OperationEntityUtils.extractInSocketList(jaxbTransform.getInSocket()));
 
 	}
 

@@ -6,6 +6,11 @@ import hydrograph.engine.spark.components.SparkTransformComponent
 import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.UpdatedTransformComponent
+import hydrograph.engine.spark.components.SparkTransformComponent
+import hydrograph.engine.spark.components.UpdatedTransformComponent
+import hydrograph.engine.spark.components.SparkTransformComponent
+import hydrograph.engine.spark.components.UpdatedTransformComponent
 
 /**
   * Created by gurdits on 10/27/2016.
@@ -13,14 +18,14 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 class TransformAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase{
 
   var transform:TransformEntityGenerator=null;
-var sparkTransformComponent:SparkTransformComponent=null;
+var sparkTransformComponent:UpdatedTransformComponent=null;
 
   override def createGenerator(): Unit = {
     transform=  new TransformEntityGenerator(typeBaseComponent)
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    sparkTransformComponent= new SparkTransformComponent(transform.getEntity,baseComponentParams)
+    sparkTransformComponent= new UpdatedTransformComponent(transform.getEntity,baseComponentParams)
   }
 
   override def getComponent(): OperationComponentBase = sparkTransformComponent

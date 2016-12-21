@@ -4,9 +4,10 @@ import org.apache.spark.sql.Row
 import java.util.LinkedHashSet
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 
-class InputReusableRow(inputRow: Row, fieldsIndexMap: Map[String, Int], fieldsIndexList: Array[Int], fields: LinkedHashSet[String])
-    extends ReusableRow(fields) with Serializable{
+class InputReusableRow(var inputRow: Row, fieldsIndexMap: Map[String, Int], fieldsIndexList: Array[Int], fields: LinkedHashSet[String])
+    extends ReusableRow(fields) with Serializable {
 
+  def setRow(row: Row): InputReusableRow = { inputRow = row; this }
   def getFieldInternal(index: Int) = inputRow.get(fieldsIndexList(index)).asInstanceOf[Comparable[_]]
   def getFieldInternal(field: String) = inputRow.get(fieldsIndexMap(field)).asInstanceOf[Comparable[_]]
   def setFieldInternal(index: Int, value: Comparable[_]) = throw new UnsupportedOperationException("Set methods are not supported on spark input reusable row")

@@ -13,6 +13,7 @@
 package hydrograph.engine.core.component.entity.elements;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,14 +28,14 @@ import java.util.List;
  * @author gurdits
  *
  */
-public class OutSocket implements Serializable{
+public class OutSocket implements Serializable {
 
 	private String socketId;
 	private String socketType = "out";
-	private List<MapField> mapFieldsList;
-	private List<OperationField> operationFieldsList;
+	private List<MapField> mapFieldsList = new ArrayList<MapField>();
+	private List<OperationField> operationFieldsList = new ArrayList<OperationField>();
 	private String copyOfInSocketId;
-	private List<PassThroughField> passThroughFieldsList;
+	private List<PassThroughField> passThroughFieldsList = new ArrayList<PassThroughField>();
 
 	/**
 	 * @param socketId
@@ -115,7 +116,6 @@ public class OutSocket implements Serializable{
 	 * @return the operationField
 	 */
 	public List<OperationField> getOperationFieldList() {
-		// TODO Auto-generated method stub
 		return operationFieldsList;
 	}
 
@@ -124,8 +124,26 @@ public class OutSocket implements Serializable{
 	 *            the operationField to set
 	 */
 	public void setOperationFieldList(List<OperationField> operationFieldsList) {
-		// TODO Auto-generated method stub
 		this.operationFieldsList = operationFieldsList;
+	}
+
+	public List<String> getAllOutputFields() {
+		List<String> outFields = new ArrayList<String>();
+
+		for (PassThroughField passThrough : getPassThroughFieldsList()) {
+			outFields.add(passThrough.getName());
+		}
+
+		for (MapField mapfield : getMapFieldsList()) {
+			outFields.add(mapfield.getName());
+		}
+
+		for (OperationField operation : getOperationFieldList()) {
+			outFields.add(operation.getName());
+		}
+
+		return outFields;
+
 	}
 
 	/*

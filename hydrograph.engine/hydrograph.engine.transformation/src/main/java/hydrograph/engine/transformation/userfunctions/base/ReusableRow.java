@@ -103,7 +103,7 @@ public abstract class ReusableRow implements Comparable<ReusableRow>, Serializab
 	 *            The value to set
 	 */
 	public void setField(String fieldName, Comparable value) {
-		verifyFieldExists(fieldName);
+		//verifyFieldExists(fieldName);
 		setFieldInternal(fieldName, value);
 	}
 
@@ -128,7 +128,7 @@ public abstract class ReusableRow implements Comparable<ReusableRow>, Serializab
 	 * @return The value of the field
 	 */
 	public Comparable getField(String fieldName) {
-		verifyFieldExists(fieldName);
+		//verifyFieldExists(fieldName);
 		return getFieldInternal(fieldName);
 	}
 
