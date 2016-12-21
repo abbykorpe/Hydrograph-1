@@ -237,6 +237,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {/*Do-Nothing*/}
 		});
+		
 	}
 	
 	
@@ -262,7 +263,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			@Override
 			public void controlResized(ControlEvent e) {
 				Button exprRadioButton=(Button) expressionRadioButton;
-				enableOpertaionFieldButton(exprRadioButton,operationClassProperty.isExpression());
+				enableOpertaionFieldButton(exprRadioButton,((Button) operationRadioButton).getSelection());
 			}
 			
 			@Override

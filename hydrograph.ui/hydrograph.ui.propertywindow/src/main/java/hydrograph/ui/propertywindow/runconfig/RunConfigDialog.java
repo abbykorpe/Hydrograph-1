@@ -111,7 +111,7 @@ public class RunConfigDialog extends Dialog {
 	 */
 	public RunConfigDialog(Shell parentShell) {
 		super(parentShell);
-		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE);
+		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		this.runGraph = false;
 		buildProps = new Properties();
 	}
