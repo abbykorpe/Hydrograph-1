@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
+import hydrograph.engine.cascading.assembly.context.CascadingReusableRow;
 import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.cascading.utilities.TupleHelper;
@@ -21,11 +22,7 @@ import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBas
 import hydrograph.engine.transformation.userfunctions.base.OutputDispatcher;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +109,7 @@ public class NormalizeCustomHandler extends
 			for (Fields fields : fieldManupulatingHandler.getOperationOutputFields()) {
 				outputFields = outputFields.append(fields);
 			}
-			context.setOutputRow(new ReusableRow(ReusableRowHelper.getListFromFields(outputFields)));
+			context.setOutputRow(new CascadingReusableRow(ReusableRowHelper.getLinkedSetFromFields(outputFields)));
 		}
 
 		context.setUserObject(new NormalizeOutputDispatcher(operationCall));
@@ -229,14 +226,14 @@ public class NormalizeCustomHandler extends
 	}
 
 	private ReusableRow extractInputRows(ArrayList<ReusableRow> allInputRow) {
-		ArrayList<String> fieldNames = new ArrayList<String>();
+		LinkedHashSet<String> fieldNames = new LinkedHashSet<String>();
 		for (ReusableRow reusableRow : allInputRow) {
 			for (int i = 0; i < reusableRow.getFieldNames().size(); i++) {
 				if (!fieldNames.contains(reusableRow.getFieldName(i)))
 					fieldNames.add(reusableRow.getFieldName(i));
 			}
 		}
-		return new ReusableRow(fieldNames);
+		return new CascadingReusableRow(fieldNames);
 	}
 
 	private int[] extractInputPositions(ArrayList<int[]> allInputPositions) {

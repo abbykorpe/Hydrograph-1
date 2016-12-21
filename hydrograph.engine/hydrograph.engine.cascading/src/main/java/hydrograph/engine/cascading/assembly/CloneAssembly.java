@@ -12,16 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.CloneEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+import cascading.pipe.Pipe;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.utilities.ComponentHelper;
-
+import hydrograph.engine.core.component.entity.CloneEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.pipe.Pipe;
 
 public class CloneAssembly extends BaseComponent<CloneEntity> {
 

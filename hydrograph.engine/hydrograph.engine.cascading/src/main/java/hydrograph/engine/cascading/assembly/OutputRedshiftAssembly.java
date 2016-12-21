@@ -12,19 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-
-import java.util.Properties;
-
 import cascading.jdbc.RedshiftScheme;
 import cascading.jdbc.RedshiftTableDesc;
-import cascading.jdbc.RedshiftTap;
 import cascading.jdbc.db.DBInputFormat;
 import cascading.tap.SinkMode;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import java.sql.*;
 
+import java.util.Properties;
 
 
 public class OutputRedshiftAssembly extends OutputRDBMSAssembly {

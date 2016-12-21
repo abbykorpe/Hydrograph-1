@@ -15,30 +15,28 @@
  */
 package hydrograph.engine.cascading.assembly;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.SinkMode;
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTableDescriptor;
-import cascading.tap.hive.HiveTableDescriptor.Factory;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.HiveTypeToCoercibleTypeMapping;
 import hydrograph.engine.cascading.filters.PartitionFilter;
 import hydrograph.engine.cascading.scheme.HydrographDelimitedParser;
 import hydrograph.engine.cascading.scheme.hive.text.HiveTextTableDescriptor;
+import hydrograph.engine.core.component.entity.InputFileHiveTextEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Type;
+import java.util.Arrays;
 
 public class InputFileHiveTextAssembly extends InputFileHiveBase {
 
@@ -83,7 +81,7 @@ public class InputFileHiveTextAssembly extends InputFileHiveBase {
 		conf.addResource(new Path(HiveConfigurationMapping
 				.getHiveConf("path_to_hive_site_xml")));
 
-		Factory factory = new Factory(conf);
+		HiveTableDescriptor.Factory factory = new HiveTableDescriptor.Factory(conf);
 		HiveTableDescriptor tb = factory.newInstance(
 				inputHiveFileEntity.getDatabaseName(),
 				inputHiveFileEntity.getTableName());

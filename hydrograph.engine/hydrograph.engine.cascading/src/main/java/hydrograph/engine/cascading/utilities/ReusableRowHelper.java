@@ -13,6 +13,7 @@
 package hydrograph.engine.cascading.utilities;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import cascading.tuple.Fields;
@@ -62,6 +63,14 @@ public class ReusableRowHelper {
 
 	public static ArrayList<String> getListFromFields(Fields fields) {
 		ArrayList<String> result = new ArrayList<String>();
+		for (int i = 0; i < fields.size(); i++) {
+			result.add(fields.get(i).toString());
+		}
+		return result;
+	}
+
+	public static LinkedHashSet<String> getLinkedSetFromFields(Fields fields) {
+		LinkedHashSet<String> result = new LinkedHashSet<String>();
 		for (int i = 0; i < fields.size(); i++) {
 			result.add(fields.get(i).toString());
 		}

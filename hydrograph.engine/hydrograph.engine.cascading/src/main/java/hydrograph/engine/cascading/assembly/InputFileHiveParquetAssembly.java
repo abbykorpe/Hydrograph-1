@@ -11,14 +11,13 @@
  * limitations under the License.
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
-
-import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.PartitionFilter;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
+import hydrograph.engine.core.component.entity.InputFileHiveParquetEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
 
 import org.apache.hadoop.conf.Configuration;

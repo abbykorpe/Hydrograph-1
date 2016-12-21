@@ -12,10 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import cascading.jdbc.db.OracleDBInputFormat;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
-import cascading.jdbc.db.OracleDBInputFormat;
-
 
 public class OutputOracleAssembly extends OutputRDBMSAssembly {
 

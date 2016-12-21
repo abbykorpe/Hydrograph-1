@@ -12,23 +12,22 @@
  */
 package hydrograph.engine.cascading.assembly;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.pipe.Each;
 import cascading.pipe.Merge;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.UnionAllEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.functions.CopyFields;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.UnionAllEntity;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
 
 public class UnionAllAssembly extends BaseComponent<UnionAllEntity> {
 

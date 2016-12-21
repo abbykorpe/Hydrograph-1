@@ -12,23 +12,21 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.SinkMode;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.OutputFileParquetEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.OutputFileParquetEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public class OutputFileParquetAssembly extends BaseComponent<OutputFileParquetEntity> {
 

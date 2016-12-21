@@ -16,6 +16,7 @@ import cascading.jdbc.db.MySqlDBInputFormat;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
 
+
 public class OutputMysqlAssembly extends OutputRDBMSAssembly {
 
 	/**

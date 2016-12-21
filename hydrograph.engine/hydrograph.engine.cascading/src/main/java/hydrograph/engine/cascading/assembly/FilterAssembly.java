@@ -12,27 +12,24 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.FilterEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import cascading.pipe.Each;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.RecordFilter;
+import hydrograph.engine.core.component.entity.FilterEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.expression.api.ValidationAPI;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaFileObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.pipe.Each;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FilterAssembly extends BaseComponent<FilterEntity> {
 

@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.jdbc.JDBCScheme;
 import cascading.jdbc.JDBCTap;
@@ -32,6 +26,11 @@ import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreat
 import hydrograph.engine.core.component.entity.InputRDBMSEntity;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class InputRDBMSAssembly extends BaseComponent<InputRDBMSEntity> {
 

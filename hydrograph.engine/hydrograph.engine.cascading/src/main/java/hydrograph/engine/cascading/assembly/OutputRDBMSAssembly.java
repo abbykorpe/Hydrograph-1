@@ -11,38 +11,40 @@
  * limitations under the License.
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
+import cascading.flow.FlowDef;
+import cascading.jdbc.JDBCScheme;
+import cascading.jdbc.JDBCTap;
+import cascading.jdbc.JDBCUtil;
+import cascading.jdbc.TableDesc;
+import cascading.jdbc.db.DBInputFormat;
+import cascading.jdbc.db.DBOutputFormat;
+import cascading.pipe.Each;
+import cascading.pipe.Pipe;
+import cascading.tap.SinkMode;
+import cascading.tap.TapException;
+import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
+import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
+import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
+import hydrograph.engine.core.component.entity.TransformEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
+import hydrograph.engine.core.component.utils.JavaToSQLTypeMapping;
+import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-
-import cascading.jdbc.JDBCUtil;
-import cascading.tap.TapException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.flow.FlowDef;
-import cascading.jdbc.JDBCScheme;
-import cascading.jdbc.JDBCTap;
-import cascading.jdbc.TableDesc;
-import cascading.jdbc.db.DBInputFormat;
-import cascading.jdbc.db.DBOutputFormat;
-import cascading.pipe.Pipe;
-import cascading.tap.SinkMode;
-import cascading.tuple.Fields;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.cascading.assembly.utils.JavaToSQLTypeMapping;
-import hydrograph.engine.core.component.entity.OutputRDBMSEntity;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
-import hydrograph.engine.jaxb.commontypes.TypeFieldName;
+import java.util.*;
 
 
 public abstract class OutputRDBMSAssembly extends BaseComponent<OutputRDBMSEntity> {
@@ -97,10 +99,10 @@ public abstract class OutputRDBMSAssembly extends BaseComponent<OutputRDBMSEntit
 		fieldsScale = fieldsCreator.getFieldScale();
 		fieldsPrecision = fieldsCreator.getFieldPrecision();
 
-		if (fieldsCreator.getColDef()[0] == null)
-			columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType,fieldsScale,fieldsPrecision);
-		else
-			columnDefs = fieldsCreator.getColDef();
+//		if (fieldsCreator.getColDef()[0] == null)
+//			columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType,fieldsScale,fieldsPrecision);
+//		else
+//			columnDefs = fieldsCreator.getColDef();
 
 		if (outputRDBMSEntity.getPrimaryKeys() != null) {
 			primaryKeys = new String[outputRDBMSEntity.getPrimaryKeys().size()];
