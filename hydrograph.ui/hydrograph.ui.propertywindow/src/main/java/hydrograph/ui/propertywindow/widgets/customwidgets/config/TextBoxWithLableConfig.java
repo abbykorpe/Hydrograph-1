@@ -29,7 +29,7 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	private boolean grabExcessSpace = false;
 	private int widgetWidth=100;
 	private Map<String, String> otherAttributes = new HashMap<String, String>();
-	private boolean enabled;
+	private boolean enabled = true;
     
     public boolean isEnabled() {
                     return enabled;

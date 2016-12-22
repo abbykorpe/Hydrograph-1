@@ -332,6 +332,7 @@ public class WidgetHelper {
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.DRIVER_NAME);
 		textBoxConfig.setGrabExcessSpace(true);
+		textBoxConfig.setEnabled(false);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}

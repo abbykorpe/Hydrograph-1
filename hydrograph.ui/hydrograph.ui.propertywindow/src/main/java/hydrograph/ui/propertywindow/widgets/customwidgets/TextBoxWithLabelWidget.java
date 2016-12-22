@@ -124,6 +124,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		lableAndTextBox.attachWidget(textBoxWidget);
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();
+		textBox.setEnabled(textBoxConfig.isEnabled());
 		
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
@@ -184,13 +185,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			txtDecorator.show();
 		}
 	}
-	
-	/*private void disableTextBoxWidget(TextBoxWithLableConfig textBoxConfig){
-		if(StringUtils.equalsIgnoreCase(textBoxConfig.getName(), Messages.LABEL_JDBC_DRIVER) 
-				|| StringUtils.equalsIgnoreCase(textBoxConfig.getName(), Messages.DRIVER_NAME)){
-			textBox.setEnabled(false);
-		}
-	}*/
 	
 	protected boolean isParameter(String input) {
 		if (input != null) {
