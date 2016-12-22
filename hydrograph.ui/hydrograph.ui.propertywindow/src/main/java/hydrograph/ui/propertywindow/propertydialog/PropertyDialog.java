@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.components.SubjobComponent;
@@ -342,7 +343,12 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.APP_ICON;
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
-			newShell.setMinimumSize(new Point(500,525));
+			if(OSValidator.isMac()){
+				newShell.setMinimumSize(new Point(500, 500));
+			}else{
+				newShell.setMinimumSize(new Point(500, 525));
+			}
+
 		}catch(SWTError e){
 			logger.debug("Unable to access image" , e);
 		}
