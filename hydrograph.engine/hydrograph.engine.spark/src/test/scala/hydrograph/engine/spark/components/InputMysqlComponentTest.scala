@@ -6,8 +6,7 @@ import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql._
-import org.junit.Test
-import org.scalatest.Matchers._
+import org.junit.{Assert, Test}
 
 /**
   * Created by santlalg on 12/8/2016.
@@ -23,8 +22,8 @@ class InputMysqlComponentTest {
     inputRDBMSEntity setDatabaseName("test")
     inputRDBMSEntity setHostName("10.130.248.53")
     inputRDBMSEntity setPort(3306)
-    inputRDBMSEntity setJdbcDriver("com.mysql.jdbc.Driver")
-    inputRDBMSEntity setTableName("ideaJDBC")
+    inputRDBMSEntity setJdbcDriver("Connector/J")
+    inputRDBMSEntity setTableName("tableTest")
     inputRDBMSEntity setUsername("root")
     inputRDBMSEntity setPassword("root")
 
@@ -36,9 +35,9 @@ class InputMysqlComponentTest {
     inputRDBMSEntity.setFieldsList(fieldList)
 
     val outSockets = new util.ArrayList[OutSocket]();
-    outSockets.add(new OutSocket("outSocket"));
+    outSockets add(new OutSocket("outSocket"));
 
-    inputRDBMSEntity.setOutSocketList(outSockets)
+    inputRDBMSEntity setOutSocketList(outSockets)
 
     val sparkSession = SparkSession.builder()
       .master("local")
@@ -57,7 +56,8 @@ class InputMysqlComponentTest {
 
     println(rows)
     //then
-    rows should have size 5
+    val expected = 5
+    Assert.assertEquals(rows.length , expected)
   }
 
   @Test
@@ -69,8 +69,8 @@ class InputMysqlComponentTest {
     inputRDBMSEntity setDatabaseName("test")
     inputRDBMSEntity setHostName("10.130.248.53")
     inputRDBMSEntity setPort(3306)
-    inputRDBMSEntity setJdbcDriver("com.mysql.jdbc.Driver")
-    inputRDBMSEntity setSelectQuery("select * from ideaJDBC where id=40")
+    inputRDBMSEntity setJdbcDriver("Connector/J")
+    inputRDBMSEntity setSelectQuery("select * from tableTest where id=40")
     inputRDBMSEntity setUsername("root")
     inputRDBMSEntity setPassword("root")
 
@@ -103,6 +103,7 @@ class InputMysqlComponentTest {
 
 
     //then
-    rows should have size 1
+    val expected = 1
+    Assert.assertEquals(rows.length , expected)
   }
 }

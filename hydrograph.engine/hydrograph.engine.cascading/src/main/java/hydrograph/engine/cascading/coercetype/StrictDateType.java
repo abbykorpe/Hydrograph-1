@@ -99,8 +99,7 @@ public class StrictDateType extends DateType {
 
     /**
      * this convert Object value into Long
-     * <p>
-     * //@param Object value
+     * @param Object value
      */
     @Override
     public Long canonical(Object value) {
@@ -119,10 +118,10 @@ public class StrictDateType extends DateType {
             return (Long) value;
 
         if (value instanceof java.sql.Date)
-            return ((java.sql.Date) value).getTime();
+            return (Long) ((java.sql.Date) value).getTime();
 
-        if (value instanceof java.sql.Timestamp)
-            return ((java.sql.Timestamp) value).getTime();
+        if(value instanceof java.sql.Timestamp )
+            return (Long) ((java.sql.Timestamp) value).getTime();
 
         throw new CascadingException("unknown type coercion requested from: " + Util.getTypeName(from));
     }
@@ -134,6 +133,4 @@ public class StrictDateType extends DateType {
             throw new CascadingException("unable to parse value: " + value + " with format: " + dateFormatString);
         }
     }
-
-
 }

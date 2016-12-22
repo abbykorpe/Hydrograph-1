@@ -23,7 +23,11 @@ BaseComponentParams) extends SparkFlow {
     val prop = new java.util.Properties
     prop.setProperty("user", outputRDBMSEntity.getUsername)
     prop.setProperty("password", outputRDBMSEntity.getPassword)
-    prop.setProperty("driver", outputRDBMSEntity.getJdbcDriver)
+    val driverName = "com.mysql.jdbc.Driver"
+
+    if (outputRDBMSEntity.getJdbcDriver().equals("Connector/J")) {
+      prop.setProperty("driver", driverName)
+    }
 
     val connectionURL = "jdbc:mysql://" + outputRDBMSEntity.getHostName() + ":" + outputRDBMSEntity.getPort() + "/" +
       outputRDBMSEntity.getDatabaseName()
