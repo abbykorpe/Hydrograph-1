@@ -48,8 +48,9 @@ object Sample extends App {
   adapterBase.createComponent(cp)
   val opDataFrame = adapterBase.asInstanceOf[OperationAdatperBase].getComponent().createComponent()("out0")
 
-  opDataFrame.write
-    .option("delimiter", ",")
+  //opDataFrame.explain(true);
+
+  opDataFrame.write.option("delimiter", ",")
     .option("header", false)
     .option("charset", "")
     .mode(SaveMode.Overwrite)

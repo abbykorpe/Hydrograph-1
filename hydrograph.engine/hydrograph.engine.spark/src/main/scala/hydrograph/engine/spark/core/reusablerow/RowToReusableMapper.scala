@@ -12,9 +12,9 @@ class RowToReusableMapper(allFields: StructType, requiredFields: Array[String]) 
     arr
   }
 
-  val fieldIndexList: Array[Int] = requiredFields.map { x => allFields.fieldIndex(x) }
+  val fieldIndexList: Array[Int] = requiredFields.map { x => val index = allFields.fieldIndex(x); index }
 
-  val fieldIndexMap: Map[String, Int] = requiredFields.map { x => (x, allFields.fieldIndex(x)) }.toMap
+  val fieldIndexMap: Map[String, Int] = requiredFields.map { x => val index = allFields.fieldIndex(x); (x, index) }.toMap
 
   val anythingToMap: Boolean = requiredFields.size > 0
 }
