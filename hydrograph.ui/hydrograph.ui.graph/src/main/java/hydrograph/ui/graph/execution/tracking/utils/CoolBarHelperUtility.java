@@ -13,12 +13,12 @@
 package hydrograph.ui.graph.execution.tracking.utils;
 
 import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.WorkbenchWindow;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.WorkbenchWidgetsUtils;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
@@ -71,10 +71,10 @@ public class CoolBarHelperUtility {
 	/**
 	 * @param enable Edit option for tracking sub job is removed.
 	 */
+	@SuppressWarnings("restriction")
 	public void enableSaveAs(boolean enable) {
-		MenuManager manager = (MenuManager) ((WorkbenchWindow) PlatformUI.getWorkbench().getActiveWorkbenchWindow())
-				.getMenuBarManager().getItems()[2];
-		manager.setVisible(enable);
+		 IContributionItem contributionItem  = (IContributionItem) ((WorkbenchWindow) PlatformUI.getWorkbench().getActiveWorkbenchWindow()).getMenuBarManager().getItems()[2];
+		 contributionItem.setVisible(enable);
 	}
 
 }
