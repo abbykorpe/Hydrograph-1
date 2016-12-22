@@ -65,7 +65,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
       }
       else if (adapterBase.isInstanceOf[OutputAdatperBase]) {
         baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap,new BaseComponentParams())
-          .setInputDataFrame().build()
+            .setSparkSession(runtimeContext.sparkSession) .setInputDataFrame().build()
 
         adapterBase.createComponent(baseComponentParams)
       flow += adapterBase.asInstanceOf[OutputAdatperBase].getComponent()
