@@ -14,29 +14,31 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
-
-import org.eclipse.swt.widgets.Button;
 /**
  * LoadTypeConfigurationDialog class creates the dialog for different load types in DB components
  * @author Bitwise
@@ -48,14 +50,13 @@ public class LoadTypeConfigurationDialog extends Dialog {
 	private PropertyDialogButtonBar propertyDialogButtonBar;
 	private String windowLabel;
 	private boolean okPressed;
-	private String valueForUpdateTextBox;
 	private List<String> schemaFields;
 	private Button updateRadioButton;
 	public Map<String, String> loadTypeConfigurationSelectedValue;
 	private Button newTableRadioButton;
 	private Button insertRadioButton;
 	private Button replaceRadioButton;
-	private String valueForNewTableTextBox;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -92,109 +93,147 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		
 		Composite loadConfigurationComposite = new Composite(grpLoadType, SWT.NONE);
 		loadConfigurationComposite.setLayout(new GridLayout(3, false));
-		loadConfigurationComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_loadConfigurationComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_loadConfigurationComposite.heightHint = 82;
+		loadConfigurationComposite.setLayoutData(gd_loadConfigurationComposite);
 		
-		updateRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
+		//TODO
+		/*
+		 * Currently, we are not showing update widget. So, below code will be comment out.
+		 * Engine team is currently working on this. So, we can use this code in future.
+		 */
+		/*updateRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
 		updateRadioButton.setText(Constants.LOAD_TYPE_UPDATE_KEY);
 		
 		updateTextBox = new Text(loadConfigurationComposite, SWT.BORDER);
 		updateTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		updateTextBox.setEnabled(false);*/
 		
-		Button updateKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
+		/*Button updateKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
 		
 		updateKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		updateKeysButton.setText(Messages.UPDATE_BY_KEYS);
-		updateKeysButton.setEnabled(false);
+		updateKeysButton.setEnabled(false);*/
 		
 		newTableRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
 		newTableRadioButton.setText(Constants.LOAD_TYPE_NEW_TABLE_KEY);
 		
 		newTableTextBox = new Text(loadConfigurationComposite, SWT.BORDER);
 		newTableTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		newTableTextBox.setEnabled(false);
 		
 		Button primaryKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
 		primaryKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		primaryKeysButton.setText(Messages.PRIMARY_KEYS_WINDOW_LABEL);
 		primaryKeysButton.setEnabled(false);
 		
-	updateRadioButton.addSelectionListener(new SelectionAdapter() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-					updateKeysButton.setEnabled(true);
-					updateKeysButton.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
-							fieldDialog.setComponentName(Messages.UPDATE_KEYS_WINDOW_LABEL);
-							fieldDialog.setSourceFieldsFromPropagatedSchema(schemaFields);
-							fieldDialog.open();
-							valueForUpdateTextBox=fieldDialog.getResultAsCommaSeprated();
-							if(valueForUpdateTextBox !=null && StringUtils.isNotBlank(valueForUpdateTextBox)){
-								updateTextBox.setText(valueForUpdateTextBox);
-								}
-						}
-					}) ;
-					
-					primaryKeysButton.setEnabled(false);
-					newTableTextBox.setText("");
-				}
-		});
-		
-		newTableRadioButton.addSelectionListener(new SelectionAdapter() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-					primaryKeysButton.setEnabled(true);
-					primaryKeysButton.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
-							fieldDialog.setComponentName(Messages.PRIMARY_KEYS_WINDOW_LABEL);
-							fieldDialog.setSourceFieldsFromPropagatedSchema(schemaFields);
-							fieldDialog.open();
-							valueForNewTableTextBox = fieldDialog.getResultAsCommaSeprated();
-							if(valueForNewTableTextBox !=null && StringUtils.isNotBlank(valueForNewTableTextBox)){
-								newTableTextBox.setText(valueForNewTableTextBox);
-								}
-						}
-					});
-					updateKeysButton.setEnabled(false);
-					updateTextBox.setText("");
-			}
-		});
-		
 		insertRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
 		insertRadioButton.setText(Constants.LOAD_TYPE_INSERT_KEY);
 		new Label(loadConfigurationComposite, SWT.NONE);
 		new Label(loadConfigurationComposite, SWT.NONE);
 		
-		 replaceRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
-		 replaceRadioButton.setText(Constants.LOAD_TYPE_REPLACE_KEY);
-		 new Label(loadConfigurationComposite, SWT.NONE);
-		 new Label(loadConfigurationComposite, SWT.NONE);
+		replaceRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
+		replaceRadioButton.setText(Constants.LOAD_TYPE_REPLACE_KEY);
+		new Label(loadConfigurationComposite, SWT.NONE);
+		new Label(loadConfigurationComposite, SWT.NONE);
+		insertRadioButton.addSelectionListener(buttonSelectionListener(updateTextBox, newTableTextBox, /*updateKeysButton*/ primaryKeysButton));
+		replaceRadioButton.addSelectionListener(buttonSelectionListener(updateTextBox, newTableTextBox, /*updateKeysButton*/ primaryKeysButton));
+		
+		/*updateRadioButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+					//updateKeysButton.setEnabled(true);
+					updateTextBox.setEnabled(true);
+					primaryKeysButton.setEnabled(false);
+					newTableTextBox.setEnabled(false);
+				}
+		});*/
+		
+		newTableRadioButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+					primaryKeysButton.setEnabled(true);
+					newTableTextBox.setEnabled(true);
+					//updateKeysButton.setEnabled(false);
+					//updateTextBox.setEnabled(false);
+			}
+		});
+		
+		//updateKeysButton.addSelectionListener(updateAndPrimaryWidgetSelection(updateKeysButton, updateTextBox));
+		
+		primaryKeysButton.addSelectionListener(updateAndPrimaryWidgetSelection(primaryKeysButton, newTableTextBox));
 		
 		if(loadTypeConfigurationSelectedValue!=null && !loadTypeConfigurationSelectedValue.isEmpty() ){
 			if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY) != null){
 				newTableRadioButton.setSelection(true);
 				primaryKeysButton.setEnabled(true);
+				newTableTextBox.setEnabled(true);
 				newTableTextBox.setText(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY));
 			}else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_INSERT_KEY) != null){
 				insertRadioButton.setSelection(true);
 			}else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_REPLACE_KEY) != null){
 				replaceRadioButton.setSelection(true);
-			}else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY) != null){
+			}/*else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY) != null){
 				updateRadioButton.setSelection(true);
 				updateTextBox.setText(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY));
-				updateKeysButton.setEnabled(true);
-			}
+				//updateKeysButton.setEnabled(true);
+				updateTextBox.setEnabled(true);
+			}*/
 		}else{
-			updateRadioButton.setEnabled(true);
+			//updateRadioButton.setEnabled(true);
 		}
 		
 		return container;
 	}
 
+	/**
+	 * The Function will call to disable the widgets
+	 * @param textbox1
+	 * @param textbox2
+	 * @param buttonWidgets
+	 * @return Selection Adapter
+	 */
+	private SelectionAdapter buttonSelectionListener(Text textbox1, Text textbox2,Widget... buttonWidgets){
+		Supplier<Stream<Widget>> streamSupplier = () -> Stream.of(buttonWidgets);
+		SelectionAdapter adapter = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				textbox1.setEnabled(false);
+				textbox2.setEnabled(false);
+				streamSupplier.get().forEach((Widget widgets) ->{((Button)widgets).setEnabled(false);});
+			}
+		};
+		return adapter;
+	}
+	
+	/**
+	 * The Function will cal on update and primary key button selection listener
+	 * @param butoon
+	 * @param textBox
+	 * @return Selection Adapter
+	 */
+	private SelectionAdapter updateAndPrimaryWidgetSelection(Button butoon, Text textBox){
+		SelectionAdapter adapter = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String buttonText;
+				/*if(StringUtils.equalsIgnoreCase(butoon.getText(), Messages.UPDATE_BY_KEYS)){
+					buttonText = Messages.UPDATE_KEYS_WINDOW_LABEL;
+				}else{*/
+				buttonText = Messages.PRIMARY_KEYS_WINDOW_LABEL;
+				FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
+				fieldDialog.setComponentName(buttonText);
+				fieldDialog.setSourceFieldsFromPropagatedSchema(schemaFields);
+				fieldDialog.open();
+				String valueForNewTableTextBox = fieldDialog.getResultAsCommaSeprated();
+				if(valueForNewTableTextBox !=null && StringUtils.isNotBlank(valueForNewTableTextBox)){
+					textBox.setText(valueForNewTableTextBox);
+				}
+			}
+		};
+		return adapter;	
+	}
+	
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -218,15 +257,15 @@ public class LoadTypeConfigurationDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(686, 247);
+		return new Point(682, 211);
 	}
 	
 	@Override
 	protected void okPressed() {
 		loadTypeConfigurationSelectedValue.clear();
-		if(updateRadioButton.getSelection()){
+		/*if(updateRadioButton.getSelection()){
 				loadTypeConfigurationSelectedValue.put(updateRadioButton.getText() ,updateTextBox.getText() );
-		}
+		}*/
 		
 		if(newTableRadioButton.getSelection()){
 			loadTypeConfigurationSelectedValue.put(newTableRadioButton.getText(), newTableTextBox.getText());

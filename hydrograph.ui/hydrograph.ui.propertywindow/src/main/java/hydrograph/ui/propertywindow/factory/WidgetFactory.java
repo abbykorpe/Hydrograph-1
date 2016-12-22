@@ -99,7 +99,6 @@ public class WidgetFactory {
 		CHARACTER_SET_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getCharacterSetWidgetConfig()),
 		HAS_HEADER_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getHasHeaderWidgetConfig()),
 		OVERWRITE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getOverWriteWidgetConfig()),
-		//JDBC_DRIVER_WIDGET(TextBoxWithLabelDriverNameWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
 		JDBC_DRIVER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
 
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
@@ -149,8 +148,7 @@ public class WidgetFactory {
 		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class),
 		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class),
 		LOAD_TYPE_CONFIGURATION_WIDGET(LoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Messages.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
-		PROPOGATE_WIDGET(PropogateWidget.class),
-		MYSQL_DRIVER_NAME(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getMysqlDriverName());
+		PROPOGATE_WIDGET(PropogateWidget.class);
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
 		

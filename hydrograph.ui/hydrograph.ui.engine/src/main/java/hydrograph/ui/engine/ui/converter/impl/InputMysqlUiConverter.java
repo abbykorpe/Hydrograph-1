@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
 import java.util.ArrayList;
@@ -15,7 +27,6 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.Mysql;
-import hydrograph.engine.jaxb.inputtypes.Oracle;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -27,6 +38,11 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.IMysql;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * The Class InputMysqlUiConverter
+ * @author Bitwise
+ *
+ */
 public class InputMysqlUiConverter extends InputUiConverter{
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputMysqlUiConverter.class);
@@ -45,11 +61,11 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		Mysql inputMysql = (Mysql) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 
-		if(StringUtils.isNotBlank(inputMysql.getJdbcDriver().getValue())){
+		if(inputMysql.getJdbcDriver() != null && StringUtils.isNotBlank(inputMysql.getJdbcDriver().getValue())){
 			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(inputMysql.getJdbcDriver().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(inputMysql.getHostName().getValue())){
+		if(inputMysql.getHostName() != null &&  StringUtils.isNotBlank(inputMysql.getHostName().getValue())){
 			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), (String)(inputMysql.getHostName().getValue()));
 		}
 		
@@ -57,29 +73,29 @@ public class InputMysqlUiConverter extends InputUiConverter{
 			propertyMap.put(PropertyNameConstants.PORT_NO.value(), inputMysql.getPort().getValue().toString());
 		}
 		
-		if(StringUtils.isNotBlank(inputMysql.getDatabaseName().getValue())){
+		if(inputMysql.getDatabaseName() != null && StringUtils.isNotBlank(inputMysql.getDatabaseName().getValue())){
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), (String)(inputMysql.getDatabaseName().getValue()));
 		}
 		
 		
-		if(StringUtils.isNotBlank(inputMysql.getUsername().getValue())){
+		if(inputMysql.getUsername() != null && StringUtils.isNotBlank(inputMysql.getUsername().getValue())){
 			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(inputMysql.getUsername().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(inputMysql.getPassword().getValue())){
+		if(inputMysql.getPassword() != null && StringUtils.isNotBlank(inputMysql.getPassword().getValue())){
 			propertyMap.put(PropertyNameConstants.PASSWORD.value(), (String)(inputMysql.getPassword().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(inputMysql.getTableName().getValue())){
+		if(inputMysql.getTableName() != null && StringUtils.isNotBlank(inputMysql.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputMysql.getTableName().getValue());
 			databaseSelectionConfig.setTableNameSelection(true);
 		}
 		
-		if(StringUtils.isNotBlank(inputMysql.getSelectQuery().getValue())){
+		if(inputMysql.getSelectQuery() != null && StringUtils.isNotBlank(inputMysql.getSelectQuery().getValue())){
 			databaseSelectionConfig.setSqlQuery(inputMysql.getSelectQuery().getValue());
 		}
 		
-		if(StringUtils.isNotBlank(inputMysql.getCountQuery().getValue())){
+		if(inputMysql.getCountQuery() != null && StringUtils.isNotBlank(inputMysql.getCountQuery().getValue())){
 			databaseSelectionConfig.setSqlQueryCounter(inputMysql.getCountQuery().getValue());
 		}
 		
@@ -87,7 +103,7 @@ public class InputMysqlUiConverter extends InputUiConverter{
 			propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
 		}
 		
-		uiComponent.setType(UIComponentsConstants.ORACLE.value());
+		uiComponent.setType(UIComponentsConstants.MYSQL.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
@@ -124,7 +140,7 @@ public class InputMysqlUiConverter extends InputUiConverter{
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
 		TreeMap<String, String> runtimeMap = null;
-		TypeProperties typeProperties = ((Oracle) typeBaseComponent).getRuntimeProperties();
+		TypeProperties typeProperties = ((Mysql) typeBaseComponent).getRuntimeProperties();
 		if (typeProperties != null) {
 			runtimeMap = new TreeMap<>();
 			for (Property runtimeProperty : typeProperties.getProperty()) {

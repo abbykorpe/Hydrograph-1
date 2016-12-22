@@ -330,7 +330,7 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getJdbcDriverWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Messages.LABEL_JDBC_DRIVER);
+		textBoxConfig.setName(Messages.DRIVER_NAME);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
@@ -459,16 +459,5 @@ public class WidgetHelper {
 		textBoxWithLableConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxWithLableConfig);
 		return textBoxWithLableConfig;
-	}
-
-	/**
-	 * Configuration to customize text box as Driver name property 
-	 */
-	public WidgetConfig getMysqlDriverName(){
-		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Messages.MYSQL_DRIVER_NAME);
-		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
-		return textBoxConfig;
 	}
 }

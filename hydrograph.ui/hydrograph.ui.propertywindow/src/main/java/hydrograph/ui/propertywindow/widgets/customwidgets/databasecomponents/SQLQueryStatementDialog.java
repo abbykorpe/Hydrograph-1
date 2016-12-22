@@ -15,23 +15,27 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import hydrograph.ui.propertywindow.messages.Messages;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.custom.StyledText;
-
+/**
+ * The Class SQLQueryStatementDialog
+ * @author Bitwise
+ *
+ */
 public class SQLQueryStatementDialog extends Dialog {
 
 	private StyledText styledText;
@@ -63,7 +67,7 @@ public class SQLQueryStatementDialog extends Dialog {
 		Label sqlQueryLabel = new Label(composite, SWT.NONE);
 		sqlQueryLabel.setText(Messages.SQL_QUERY_STATEMENT);
 		
-		styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL);
+		styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		styledText.setFont(new Font(Display.getCurrent(),"Courier New",9,SWT.NORMAL));
 		styledText.setText(textValue);
@@ -72,13 +76,10 @@ public class SQLQueryStatementDialog extends Dialog {
 			@Override
 			public void handleEvent(Event event) {
 				int position = styledText.getCaretOffset();
-				String contents = styledText.getText(); 
-				if(styledText.getCaretOffset()>= 80){
-					container.getShell().setMinimumSize(1132, 254);
-				}
+				String contents = styledText.getText();
 				if ((position - contents.lastIndexOf('\n')) >= 140) { 
 					event.text += '\n'; 
-					} 
+				} 
 			}
 		});
 
@@ -98,11 +99,9 @@ public class SQLQueryStatementDialog extends Dialog {
 	protected void okPressed() {
 		 if(styledText !=null){
 			  styleTextValue = styledText.getText();
-			 
 			 if(StringUtils.isNotBlank(styleTextValue)){
 				 setStyleTextSqlQuery(styleTextValue);
 			 }
-			 
 		 }
 		 
 		super.okPressed();

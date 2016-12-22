@@ -63,11 +63,11 @@ public class InputOracleUiConverter extends InputUiConverter {
 		 Oracle inputOracle = (Oracle) typeBaseComponent;
 		 DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 		
-		if(StringUtils.isNotBlank(inputOracle.getDriverType().getValue())){
+		if(inputOracle.getDriverType() !=null && StringUtils.isNotBlank(inputOracle.getDriverType().getValue())){
 			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(inputOracle.getDriverType().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(inputOracle.getHostName().getValue())){
+		if(inputOracle.getHostName() !=null && StringUtils.isNotBlank(inputOracle.getHostName().getValue())){
 			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), (String)(inputOracle.getHostName().getValue()));
 		}
 		
@@ -75,7 +75,7 @@ public class InputOracleUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.PORT_NO.value(), inputOracle.getPort().getValue().toString());
 		}
 		
-		if(StringUtils.isNotBlank(inputOracle.getSchemaName().getValue())){
+		if(inputOracle.getSchemaName() !=null && StringUtils.isNotBlank(inputOracle.getSchemaName().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(inputOracle.getSchemaName().getValue()));
 		}
 		
@@ -83,20 +83,20 @@ public class InputOracleUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(inputOracle.getUserName().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(inputOracle.getPassword().getValue())){
+		if(inputOracle.getPassword() !=null && StringUtils.isNotBlank(inputOracle.getPassword().getValue())){
 			propertyMap.put(PropertyNameConstants.PASSWORD.value(), (String)(inputOracle.getPassword().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(inputOracle.getTableName().getValue())){
+		if(inputOracle.getTableName() !=null &&  StringUtils.isNotBlank(inputOracle.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputOracle.getTableName().getValue());
 			databaseSelectionConfig.setTableNameSelection(true);
 		}
 		
-		if(StringUtils.isNotBlank(inputOracle.getSelectQuery().getValue())){
+		if(inputOracle.getSelectQuery() !=null && StringUtils.isNotBlank(inputOracle.getSelectQuery().getValue())){
 			databaseSelectionConfig.setSqlQuery(inputOracle.getSelectQuery().getValue());
 		}
 		
-		if(StringUtils.isNotBlank(inputOracle.getCountQuery().getValue())){
+		if(inputOracle.getCountQuery()!=null && StringUtils.isNotBlank(inputOracle.getCountQuery().getValue())){
 			databaseSelectionConfig.setSqlQueryCounter(inputOracle.getCountQuery().getValue());
 		}
 		

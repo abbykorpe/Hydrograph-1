@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
+import hydrograph.engine.jaxb.inputtypes.Mysql;
 import hydrograph.engine.jaxb.inputtypes.Oracle;
 import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 import hydrograph.engine.jaxb.inputtypes.Redshift;
@@ -51,6 +52,7 @@ import hydrograph.ui.engine.ui.converter.impl.InputFixedWidthUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputHiveParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputHiveTextFileUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputMixedSchemeUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputMysqlUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputRedshiftUiConverter;
@@ -66,6 +68,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputHiveParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputHiveTextFileUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputMixedSchemeUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputMysqlUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputRedshiftUiConverter;
@@ -180,6 +183,13 @@ public class UiConverterFactory {
 		if((hydrograph.engine.jaxb.outputtypes.Oracle.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputOracleUiConverter(typeBaseComponent, container);
 		}
+		if((Mysql.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new InputMysqlUiConverter(typeBaseComponent, container);
+		}
+		if((hydrograph.engine.jaxb.outputtypes.Mysql.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new OutputMysqlUiConverter(typeBaseComponent, container);
+		}
+	
 		if((Normalize.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new NormalizeUiConverter(typeBaseComponent, container);
 		}

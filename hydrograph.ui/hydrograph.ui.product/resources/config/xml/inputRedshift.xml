@@ -67,7 +67,7 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Password provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>

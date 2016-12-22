@@ -13,7 +13,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
@@ -39,8 +38,6 @@ public class DataBaseUtility {
 	private static DataBaseUtility INSTANCE = new DataBaseUtility();
 
 	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
-	//private Map<String, DatabaseParameterType> databaseConnector;
-	private List<DatabaseParameterType> databaseConnector;
 	private static final String SEPARATOR = "|";
 	
 	
@@ -48,7 +45,6 @@ public class DataBaseUtility {
 	 * 
 	 */
 	private DataBaseUtility() {
-		databaseConnector = new ArrayList<>();
 	}
 	
 	/**
@@ -59,20 +55,7 @@ public class DataBaseUtility {
       return INSTANCE;
 	}
 	
-	/**
-	 * The Function will to add parameters in the list
-	 * @param parameterType
-	 */
-	public void addDatabaseParams(DatabaseParameterType parameterType){
-		databaseConnector.add(parameterType);
-	}
 	
-	/**
-	 * @return list of DatabaseParameter Type
-	 */
-	public List<DatabaseParameterType> getDatabaseParams(){
-		return databaseConnector;
-	}
 	
 	/**
 	 * @param dataBaseTables

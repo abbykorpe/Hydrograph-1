@@ -72,7 +72,8 @@ public class OutputRedshiftConverter extends OutputConverter {
 			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.TABLE_NAME.value())));
 			redshiftOutput.setTableName(tableName);
 		}
-		
+		//TODO
+		//Jaxb classes are not update. Below commented code will be use to generate xml.
 		ElementValueStringType hostName = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
 			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
@@ -122,6 +123,8 @@ public class OutputRedshiftConverter extends OutputConverter {
 		return loadValue;
 	}
 	
+	//TODO
+	//Below code will be use to generate xml after Jaxb classes generation.
 	/*private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
 		String[] primaryKeyColumnsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);

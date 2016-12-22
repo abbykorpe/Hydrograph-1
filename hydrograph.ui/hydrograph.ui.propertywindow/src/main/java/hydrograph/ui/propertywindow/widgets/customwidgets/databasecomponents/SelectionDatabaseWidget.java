@@ -466,7 +466,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	/**
 	 * Provides all the DB details
 	 */
-	private void getDatabaseConnectionDetails() {
+	private DatabaseParameterType getDatabaseConnectionDetails() {
+		DatabaseParameterType parameterType = null;
 		String oracleDatabaseName = "";
 		String oracleHostName = "";
 		String oraclePortNo= "";
@@ -474,10 +475,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		String oracleSchemaName= "";
 		String oracleUserName= "";
 		String oraclePassword= "";
-		String databaseType= "";
 		
 		for (AbstractWidget textAbtractWgt : widgets) {
-
 			if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_DATABASE_WIDGET_NAME)) {
 				oracleDatabaseName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_DATABASE_WIDGET_NAME);
@@ -501,14 +500,12 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 				oraclePassword = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PASSWORD_WIDGET_NAME);
 			}
 			
-			databaseType = getComponentType();
-			DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(databaseType, oracleHostName, 
+			parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), oracleHostName, 
 					oraclePortNo, oracleUserName, oraclePassword).jdbcName(oracleJdbcName).schemaName(oracleSchemaName)
 					.databaseName(oracleDatabaseName).build();
 			
-			DataBaseUtility.getInstance().getDatabaseParams().clear();
-			DataBaseUtility.getInstance().addDatabaseParams(parameterType);
 		}
+		return parameterType;
 
 	}
 	
@@ -521,7 +518,6 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
 			databaseType = MYSQL;
 		}
-		
 		return databaseType;
 	}
 	
@@ -529,17 +525,17 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		List<String> oracleDatabaseValues = new ArrayList<String>();
 		getDatabaseConnectionDetails();
 		
-			LinkedHashMap<String, Object> property = getProperties();
-			databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
-			
-			if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-				oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
-			}else{
-				createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
-			}
-			if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
-				extractOracleMetaStoreDetails(oracleDatabaseValues);
-			}
+		LinkedHashMap<String, Object> property = getProperties();
+		databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
+		
+		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
+			oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
+		}else{
+			createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
+		}
+		if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
+			extractOracleMetaStoreDetails(oracleDatabaseValues);
+		}
 	}
 
 	private void validateDatabaseFields(DatabaseParameterType parameterType){
@@ -576,7 +572,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 */
 	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues) {
 
-		DatabaseParameterType parameterType =  DataBaseUtility.getInstance().getDatabaseParams().get(0);
+		DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
 		validateDatabaseFields(parameterType);
 		
 		DatabaseTableSchema databaseTableSchema = DataBaseUtility.getInstance()
@@ -584,6 +580,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		/*try {
 			
 			//TODO
+			 * Below code will to extract data from metastore
 			ObjectMapper mapper = new ObjectMapper();
 			String input = oracleDatabaseName + SEPARATOR + oracleHostName + SEPARATOR + oracleJdbcName + SEPARATOR
 					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR+ oracleSchemaName;

@@ -47,7 +47,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="jdbcDriver" value="Connector/J" renderer="MYSQL_DRIVER_NAME" type="USER"
+		<tns:property dataType="string" name="jdbcDriver" value="Connector/J" renderer="JDBC_DRIVER_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="Database name to connect.">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
@@ -66,7 +66,7 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Password provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
@@ -76,7 +76,7 @@
 			usage="REQUIRED" propertyHelpText="Used to test the connection for connecting Oracle DB">
 		</tns:property>
 		
-		<tns:property dataType="string" name="oracleTableName" value="" renderer="TABLE_NAME_WIDGET"
+		<tns:property dataType="string" name="tableName" value="" renderer="TABLE_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>

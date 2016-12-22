@@ -41,6 +41,11 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.ORedshift;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ *The Class OutputRedshiftUiConverter to convert jaxb Redshift object into Redshift component
+ * @author Bitwise
+ *
+ */
 public class OutputRedshiftUiConverter extends OutputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputRedshiftUiConverter.class);
@@ -81,7 +86,7 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 			propertyMap.put(PropertyNameConstants.PASSWORD.value(), redshift.getPassword().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getTableName().getValue())) {
-			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), redshift.getTableName().getValue());
+			propertyMap.put(PropertyNameConstants.TABLE_NAME.value(), redshift.getTableName().getValue());
 		}
 		
 		if(redshift.getLoadType() !=null){

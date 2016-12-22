@@ -78,6 +78,8 @@ public class InputRedshiftConverter extends InputConverter {
 			redshiftInput.setDatabaseName(dataBaseName);
 		}
 		
+		//TODO
+		//Below code will be use to generate xml after Jaxb updation.
 		ElementValueStringType hostName = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
 			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));

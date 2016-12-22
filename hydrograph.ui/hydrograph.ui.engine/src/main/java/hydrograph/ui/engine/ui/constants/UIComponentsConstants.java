@@ -29,6 +29,7 @@ public enum UIComponentsConstants {
 	STRAIGHTPULL_CATEGORY("STRAIGHTPULL"),
 	CLONE("Clone"),
 	ORACLE("Oracle"),
+	MYSQL("Mysql"),
 	REDSHIFT("RedShift"),
 	UNION_ALL("Union All"), 
 	REMOVE_DUPS("Remove Dups"),

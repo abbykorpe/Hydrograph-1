@@ -69,8 +69,8 @@ public class OutputOracleConverter extends OutputConverter {
 		}
 		
 		ElementValueStringType tableName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value()))){
-			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.TABLE_NAME.value()))){
+			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.TABLE_NAME.value())));
 			oracleOutput.setTableName(tableName);
 		}
 		

@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.engine.converter.impl;
 
 import java.math.BigInteger;
@@ -22,10 +34,14 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * The Class InputMysql Converter implementation for Input Mysql Component
+ * @author Bitwise
+ *
+ */
 public class InputMysqlConverter extends InputConverter{
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputMysqlConverter.class);
-	private Mysql mysqlInput;
 	
 	public InputMysqlConverter(Component component) {
 		super(component);
@@ -52,20 +68,26 @@ public class InputMysqlConverter extends InputConverter{
 	@Override
 	public void prepareForXML() {
 		super.prepareForXML();
-		mysqlInput = (Mysql) baseComponent;
+		Mysql mysqlInput = (Mysql) baseComponent;
 		mysqlInput.setRuntimeProperties(getRuntimeProperties());
 
 		ElementValueStringType dataBaseName = new ElementValueStringType();
-		dataBaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
-		mysqlInput.setDatabaseName(dataBaseName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.DATABASE_NAME.value()))){
+			dataBaseName.setValue(String.valueOf(properties.get(PropertyNameConstants.DATABASE_NAME.value())));
+			mysqlInput.setDatabaseName(dataBaseName);
+		}
 		
 		ElementValueStringType hostName = new ElementValueStringType();
-		hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
-		mysqlInput.setHostName(hostName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
+			mysqlInput.setHostName(hostName);
+		}
 		
 		ElementValueStringType driverName = new ElementValueStringType();
-		driverName.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
-		mysqlInput.setJdbcDriver(driverName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.JDBC_DRIVER.value()))){
+			driverName.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
+			mysqlInput.setJdbcDriver(driverName);
+		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
 		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
@@ -73,12 +95,16 @@ public class InputMysqlConverter extends InputConverter{
 		mysqlInput.setPort(portNo);
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
-		mysqlInput.setUsername(userName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
+			mysqlInput.setUsername(userName);
+		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		password.setValue(String.valueOf(properties.get(PropertyNameConstants.PASSWORD.value())));
-		mysqlInput.setPassword(password);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.PASSWORD.value())));
+			mysqlInput.setPassword(password);
+		}
 		
 		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) properties
 				.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
@@ -93,8 +119,10 @@ public class InputMysqlConverter extends InputConverter{
 			} else {
 				ElementValueStringType sqlQuery = new ElementValueStringType();
 				if(databaseSelectionConfig.getSqlQuery() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
-				sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
-				mysqlInput.setSelectQuery(sqlQuery);
+					String queryText = databaseSelectionConfig.getSqlQuery();
+					queryText = queryText.replace("\n", "").replace("\r", "");
+					sqlQuery.setValue(queryText);
+					mysqlInput.setSelectQuery(sqlQuery);
 				}
 
 				ElementValueStringType sqlQueryCounter = new ElementValueStringType();

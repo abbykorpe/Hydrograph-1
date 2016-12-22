@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
 import java.util.ArrayList;
@@ -19,7 +31,6 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.omysql.TypePriamryKeys;
 import hydrograph.engine.jaxb.omysql.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Mysql;
-import hydrograph.engine.jaxb.outputtypes.Oracle;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -31,11 +42,14 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.OMysql;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * The Class OutputMysqlUiConverter to convert jaxb Mysql object into Mysql component
+ * @author Bitwise
+ *
+ */
 public class OutputMysqlUiConverter extends OutputUiConverter{
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputMysqlUiConverter.class);
-	private Mysql outputMysql;
-	private LinkedHashMap<String, String> loadSelectedDetails;
 	
 	public OutputMysqlUiConverter(TypeBaseComponent typeBaseComponent, Container container){
 		this.container = container;
@@ -48,8 +62,8 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 	public void prepareUIXML() {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Output-MySql-Properties for {}", componentName);
-		outputMysql = (Mysql) typeBaseComponent;
-		loadSelectedDetails = new LinkedHashMap<String, String>();
+		Mysql outputMysql = (Mysql) typeBaseComponent;
+		LinkedHashMap<String, String> loadSelectedDetails = new LinkedHashMap<String, String>();
 		
 		if(StringUtils.isNotBlank(outputMysql.getJdbcDriver().getValue())){
 			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(outputMysql.getJdbcDriver().getValue()));
@@ -76,7 +90,7 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 		}
 		
 		if(StringUtils.isNotBlank(outputMysql.getTableName().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_TABLE_NAME.value(), (String)(outputMysql.getTableName().getValue()));
+			propertyMap.put(PropertyNameConstants.TABLE_NAME.value(), (String)(outputMysql.getTableName().getValue()));
 		}
 		
 		if(outputMysql.getLoadType() !=null){
@@ -93,7 +107,7 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 		}
 		propertyMap.put(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value(), loadSelectedDetails);
 		
-		uiComponent.setType(UIComponentsConstants.ORACLE.value());
+		uiComponent.setType(UIComponentsConstants.MYSQL.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
@@ -161,7 +175,7 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
 		TreeMap<String, String> runtimeMap = null;
-		TypeProperties typeProperties = ((Oracle) typeBaseComponent).getRuntimeProperties();
+		TypeProperties typeProperties = ((Mysql) typeBaseComponent).getRuntimeProperties();
 		if (typeProperties != null) {
 			runtimeMap = new TreeMap<>();
 			for (Property runtimeProperty : typeProperties.getProperty()) {

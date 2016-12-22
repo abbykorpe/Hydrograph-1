@@ -183,17 +183,14 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			textBox.setText("");
 			txtDecorator.show();
 		}
-		diableTextBoxWidget(textBoxConfig);
-
-	
 	}
 	
-	private void diableTextBoxWidget(TextBoxWithLableConfig textBoxConfig){
+	/*private void disableTextBoxWidget(TextBoxWithLableConfig textBoxConfig){
 		if(StringUtils.equalsIgnoreCase(textBoxConfig.getName(), Messages.LABEL_JDBC_DRIVER) 
-				|| StringUtils.equalsIgnoreCase(textBoxConfig.getName(), Messages.MYSQL_DRIVER_NAME)){
+				|| StringUtils.equalsIgnoreCase(textBoxConfig.getName(), Messages.DRIVER_NAME)){
 			textBox.setEnabled(false);
 		}
-	}
+	}*/
 	
 	protected boolean isParameter(String input) {
 		if (input != null) {

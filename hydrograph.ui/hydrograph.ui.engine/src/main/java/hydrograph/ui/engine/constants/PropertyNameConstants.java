@@ -35,7 +35,6 @@ public enum PropertyNameConstants {
 		HOST_NAME("hostName"),
 		PORT_NO("port"),
 		JDBC_DRIVER("jdbcDriver"),
-		ORACLE_TABLE_NAME("oracleTableName"),
 		USER_NAME("userName"),
 		PASSWORD("password"),
 		CHUNK_SIZE("chunkSize"),
