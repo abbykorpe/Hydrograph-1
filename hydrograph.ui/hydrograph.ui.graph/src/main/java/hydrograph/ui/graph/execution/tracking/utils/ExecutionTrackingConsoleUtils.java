@@ -77,7 +77,7 @@ public class ExecutionTrackingConsoleUtils {
 	private static final String JOB_ID = "Job ID: ";
 	private static final String CONSOLE_HEADER="Time Stamp | Component Id | Socket | Status | Batch | Count";
 	
-	private boolean checkComponentStatus = false;
+	private boolean isJobUpdated = false;
 	
 	/**
 	 * Instantiates a new execution tracking console utils.
@@ -164,7 +164,7 @@ public class ExecutionTrackingConsoleUtils {
 			console.getShell().setBounds(originalBoundsClone);		
 			console.getShell().setActive();	
 		}
-		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole && checkComponentStatus){
+		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole && isJobUpdated){
 			ExecutionStatus[] executionStatus = readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode());
 			console.setStatus(getHeader(getUniqueJobId()));
 			for(int i =0; i<executionStatus.length; i++){
@@ -325,8 +325,9 @@ public class ExecutionTrackingConsoleUtils {
  				Component component = ((ComponentEditPart) editPart)
  						.getCastedModel();
  				if(component.getStatus()!= ComponentExecutionStatus.BLANK){
- 					checkComponentStatus = true;
- 				}else{checkComponentStatus =false;}
+ 					isJobUpdated = true;
+ 					break;
+ 				}else{isJobUpdated =false;}
  			}
  		}
 		
