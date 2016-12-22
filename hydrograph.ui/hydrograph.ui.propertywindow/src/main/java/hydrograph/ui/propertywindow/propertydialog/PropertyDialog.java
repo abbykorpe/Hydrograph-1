@@ -344,9 +344,9 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 			Image shellImage = new Image(newShell.getDisplay(), imagePath);
 			newShell.setImage(shellImage);
 			if(OSValidator.isMac()){
-				getShell().setMinimumSize(new Point(500, 500));
+				newShell.setMinimumSize(new Point(500, 500));
 			}else{
-				getShell().setMinimumSize(new Point(500, 525));
+				newShell.setMinimumSize(new Point(500, 525));
 			}
 
 		}catch(SWTError e){
