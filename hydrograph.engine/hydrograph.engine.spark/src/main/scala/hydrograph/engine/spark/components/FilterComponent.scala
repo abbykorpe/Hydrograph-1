@@ -31,7 +31,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
     LOG.info("Filter Component Called with input Dataframe having Schema in the form of(Column_name,DataType,IsNullable): {}", componentsParams.getDataFrame.schema)
 
     val fieldNameSet = new util.LinkedHashSet[String]()
-    scheme.foreach(e => fieldNameSet.add(e))
+    filterEntity.getOperation.getOperationInputFields.foreach(e => fieldNameSet.add(e))
     var map: Map[String, DataFrame] = Map()
 
     LOG.info("Filter Operation Input Fields: {}",filterEntity.getOperation.getOperationInputFields)
