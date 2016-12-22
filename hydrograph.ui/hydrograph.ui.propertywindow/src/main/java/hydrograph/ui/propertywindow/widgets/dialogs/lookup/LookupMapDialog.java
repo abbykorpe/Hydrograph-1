@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -67,6 +68,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -81,6 +84,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * 
@@ -321,6 +325,7 @@ public class LookupMapDialog extends Dialog {
 		tblclmnPropertyValue.setWidth(148);
 		tblclmnPropertyValue.setText(JoinMapDialogConstants.OUTPUT_FIELD);
 		outputEditingSupport = new JoinMappingEditingSupport(mappingTableViewer, JoinMapDialogConstants.OUTPUT_FIELD);
+		WidgetUtility.addVerifyListnerToOutputEditingSupport(outputEditingSupport);
 		tableViewerColumn_1.setEditingSupport(outputEditingSupport);
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
 
@@ -384,6 +389,9 @@ public class LookupMapDialog extends Dialog {
 			}
 		});
 	}
+	
+	
+
 
 	private void createInputFieldColumnInMappingTable() {
 		tableViewerColumn = new TableViewerColumn(

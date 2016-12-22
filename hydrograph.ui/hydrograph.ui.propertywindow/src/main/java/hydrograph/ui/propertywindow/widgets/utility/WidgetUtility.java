@@ -14,10 +14,14 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -30,6 +34,8 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -37,6 +43,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * The Class WidgetUtility.
@@ -223,5 +230,22 @@ public class WidgetUtility {
 			}
 		}
 	  }
+	}
+
+	public static void addVerifyListnerToOutputEditingSupport(JoinMappingEditingSupport outputEditingSupport) {
+		((Text)outputEditingSupport.getEditor().getControl()).addVerifyListener(new VerifyListener() {
+			
+			@Override
+			public void verifyText(VerifyEvent e) {
+				String text=e.text;
+				Matcher matcher=Pattern.compile(Constants.REGEX).matcher(text);
+				
+				if(matcher.matches()){
+					e.doit=true;
+				}else{
+					e.doit=false;
+				}
+			}
+		});
 	}
 }

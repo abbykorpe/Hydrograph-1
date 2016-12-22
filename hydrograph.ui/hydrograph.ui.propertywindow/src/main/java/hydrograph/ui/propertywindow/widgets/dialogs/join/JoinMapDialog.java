@@ -496,7 +496,7 @@ public class JoinMapDialog extends Dialog {
 		tblclmnPropertyValue.setWidth(148);
 		tblclmnPropertyValue.setText(JoinMapDialogConstants.OUTPUT_FIELD);
 		outputEditingSupport = new JoinMappingEditingSupport(mappingTableViewer, JoinMapDialogConstants.OUTPUT_FIELD);
-		addVerifyListnerToOutputEditingSupport(outputEditingSupport);	
+		WidgetUtility.addVerifyListnerToOutputEditingSupport(outputEditingSupport);	
 		tableViewerColumn_1.setEditingSupport(outputEditingSupport);
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
 
@@ -573,22 +573,7 @@ public class JoinMapDialog extends Dialog {
 		});
 	}
 
-	private void addVerifyListnerToOutputEditingSupport(JoinMappingEditingSupport outputEditingSupport) {
-		((Text)outputEditingSupport.getEditor().getControl()).addVerifyListener(new VerifyListener() {
-			
-			@Override
-			public void verifyText(VerifyEvent e) {
-				String text=e.text;
-				Matcher matcher=Pattern.compile(Constants.REGEX).matcher(text);
-				
-				if(matcher.matches()){
-					e.doit=true;
-				}else{
-					e.doit=false;
-				}
-			}
-		});
-	}
+	
 
 	private void createInputFieldColumnInMappingTable() {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(
