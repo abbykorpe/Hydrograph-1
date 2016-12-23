@@ -1,14 +1,19 @@
 package hydrograph.engine.spark.components
 
 import java.sql.SQLException
+import java.util
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
+import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.TableCreator
+import org.apache.spark.sql.Column
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
+import org.apache.spark.sql.functions._
 import org.slf4j.{Logger, LoggerFactory}
 
+import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 
 /**
@@ -39,13 +44,12 @@ class OracleOutputComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsPar
     outputRDBMSEntity.getLoadType match {
       case "newTable" =>
         executeQuery(connectionURL, prop, TableCreator().getCreateTableQuery(outputRDBMSEntity))
-        oComponentsParams.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
-      case "insert" => oComponentsParams.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+      case "insert" => oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
       case "truncateLoad" =>
         executeQuery(connectionURL, prop, getTruncateQuery)
-        oComponentsParams.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
     }
-
   }
 
   def executeQuery(connectionURL: String, properties: java.util.Properties, query: String): Unit = {
@@ -64,6 +68,14 @@ class OracleOutputComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsPar
         LOG.error("Error while executing '" + query + "' query in executeQuery()")
         throw new RuntimeException("Error message " + e.getMessage, e)
     }
+  }
+
+  def createSchema(fields: util.List[SchemaField]): Array[Column] = {
+    LOG.trace("In method createSchema()")
+    val schema = new Array[Column](fields.size())
+    fields.zipWithIndex.foreach { case (f, i) => schema(i) = col(f.getFieldName.toUpperCase()) }
+    LOG.debug("Schema created for Output Oracle Component : " + schema.mkString)
+    schema
   }
 
   def getTruncateQuery(): String = "truncate table " + outputRDBMSEntity.getTableName

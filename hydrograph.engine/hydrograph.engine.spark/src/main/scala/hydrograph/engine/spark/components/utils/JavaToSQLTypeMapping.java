@@ -82,6 +82,7 @@ public enum JavaToSQLTypeMapping {
                     put("java.lang.Integer", "NUMBER(10)");
                     put("java.lang.Long", "NUMBER(19)");
                     put("java.lang.Short", "NUMBER(5)");
+                    put("java.lang.Double", "NUMBER(19,4)");
                     put("java.lang.Boolean", "CHAR(1)");
                     put("java.util.Date", "DATE");
                     put("java.sql.Timestamp", "TIMESTAMP");

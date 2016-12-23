@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;choice>
- *         &lt;element name="newTable" type="{hydrograph/engine/jaxb/ooracle}type-priamry-keys"/>
+ *         &lt;element name="newTable" type="{hydrograph/engine/jaxb/ooracle}type-primary-keys"/>
  *         &lt;element name="truncateLoad" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
  *         &lt;element name="Insert" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
  *         &lt;element name="update" type="{hydrograph/engine/jaxb/ooracle}type-update-keys"/>
@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class TypeLoadChoice {
 
-    protected TypePriamryKeys newTable;
+    protected TypePrimaryKeys newTable;
     protected Object truncateLoad;
     @XmlElement(name = "Insert")
     protected Object insert;
@@ -61,10 +61,10 @@ public class TypeLoadChoice {
      *
      * @return
      *     possible object is
-     *     {@link TypePriamryKeys }
+     *     {@link TypePrimaryKeys }
      *
      */
-    public TypePriamryKeys getNewTable() {
+    public TypePrimaryKeys getNewTable() {
         return newTable;
     }
 
@@ -73,10 +73,10 @@ public class TypeLoadChoice {
      *
      * @param value
      *     allowed object is
-     *     {@link TypePriamryKeys }
+     *     {@link TypePrimaryKeys }
      *
      */
-    public void setNewTable(TypePriamryKeys value) {
+    public void setNewTable(TypePrimaryKeys value) {
         this.newTable = value;
     }
 

@@ -20,13 +20,13 @@
     <inputs id="oracle" batch="0" xsi:type="it:oracle">
         <outSocket id="out0">
             <schema name="schema1">
-                <field name="NUM" type="java.lang.Integer"/>
-                <field name="LWR" type="java.lang.Integer"/>
-                <field name="UPR" type="java.lang.String"/>
-                <field name="DECI" type="java.math.BigDecimal" precision="38" scale="20"/>
-                <field name="LON" type="java.lang.Long"/>
-                <field name="BUL" type="java.lang.Boolean"/>
-                <field name="DATEVALUE" type="java.util.Date" format="dd/MM/yyyy"/>
+                <field name="ID" type="java.lang.String"/>
+                <!--<field name="city" type="java.lang.String"/>-->
+                <field name="name" type="java.lang.String"/>
+                <!--   <field format="MM/dd/yyyy" name="DOB" type="java.util.Date"/>
+                   <field name="Salary" type="java.lang.Double"/>
+                   <field name="Long_no" type="java.lang.Long"/>
+                   <field name="Depart_name" type="java.lang.String"/>-->
             </schema>
         </outSocket>
         <sid value="PRACTICE"/>
@@ -50,21 +50,21 @@
             t.NUM = t2.NUM" /> -->
         <!-- <query value="SELECT * FROM testingTable4 t JOIN testingTable2 t2
             ON t.NUM = t2.NUM" /> -->
-        <selectQuery value="SELECT * FROM testingTable422"/>
-        <!--<tableName value="testingTable400" />-->
+        <!--  <selectQuery value="SELECT * FROM Hydrograph_UI_test46"/>-->
+        <tableName value="Hydrograph_UI_test46"/>
     </inputs>
 
     <outputs id="OFDelimited_01" batch="0" xsi:type="ot:textFileDelimited">
         <inSocket fromComponentId="oracle" fromSocketId="out0" id="in0"
                   type="in">
             <schema name="schema2">
-                <field name="NUM" type="java.lang.Integer"/>
-                <field name="LWR" type="java.lang.String"/>
-                <field name="UPR" type="java.lang.String"/>
-                <field name="DECI" type="java.math.BigDecimal" precision="38" scale="12"/>
-                <field name="LON" type="java.lang.Long"/>
-                <field name="BUL" type="java.lang.Boolean"/>
-                <field name="DATEVALUE" type="java.util.Date" format="dd/MM/yyyy"/>
+                <field name="ID" type="java.lang.String"/>
+                <!--<field name="city" type="java.lang.String"/>-->
+                <field name="name" type="java.lang.String"/>
+                <!--   <field format="MM/dd/yyyy" name="DOB" type="java.util.Date"/>
+                   <field name="Salary" type="java.lang.Double"/>
+                   <field name="Long_no" type="java.lang.Long"/>
+                   <field name="Depart_name" type="java.lang.String"/>-->
             </schema>
         </inSocket>
         <path uri="hydrograph.engine.spark/testData/output/oracleOutput1"/>
