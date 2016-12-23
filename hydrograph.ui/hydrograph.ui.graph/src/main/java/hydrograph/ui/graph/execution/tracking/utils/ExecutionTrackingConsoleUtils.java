@@ -317,7 +317,7 @@ public class ExecutionTrackingConsoleUtils {
 		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		String uniqueJobId = editor.getJobId();
-		
+		isJobUpdated =false;
 		GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
  		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator();ite.hasNext();){ 
  			EditPart editPart = (EditPart) ite.next();
@@ -327,7 +327,7 @@ public class ExecutionTrackingConsoleUtils {
  				if(component.getStatus()!= ComponentExecutionStatus.BLANK){
  					isJobUpdated = true;
  					break;
- 				}else{isJobUpdated =false;}
+ 				}
  			}
  		}
 		
