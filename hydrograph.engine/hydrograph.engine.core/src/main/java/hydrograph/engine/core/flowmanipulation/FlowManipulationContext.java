@@ -13,7 +13,6 @@
 package hydrograph.engine.core.flowmanipulation;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
-import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -23,27 +22,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 public class FlowManipulationContext {
 
-	private HydrographDebugInfo jaxbDebugGraph;
 	private SchemaFieldHandler schemaFieldMap;
 	private List<TypeBaseComponent> jaxbMainGraph;
 	private String jobId;
-	private String basePath;
 	private TypeProperties jaxbJobLevelRuntimeProperties;
 	private String graphName;
 	private List<String> tmpPath;
+	String[] args;
 
-	public FlowManipulationContext(HydrographJob hydrographJob, HydrographDebugInfo bhsDebug,
-			SchemaFieldHandler schemaFieldHandler, String jobId, String basePath) {
+	public FlowManipulationContext(HydrographJob hydrographJob, String[] args,
+			SchemaFieldHandler schemaFieldHandler, String jobId) {
 		this.jaxbMainGraph = hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls();
 		this.jaxbJobLevelRuntimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties();
 		this.graphName = hydrographJob.getJAXBObject().getName();
 		this.jobId = jobId;
-		this.jaxbDebugGraph = bhsDebug;
+		this.args = args;
 		this.schemaFieldMap = schemaFieldHandler;
-		this.basePath = basePath;
 	}
 
 	public List<String> getTmpPath() {
@@ -74,10 +70,6 @@ public class FlowManipulationContext {
 		return jobId;
 	}
 
-	public String getBasePath() {
-		return basePath;
-	}
-
 	public Map<String, Set<SchemaField>> getSchemaFieldMap() {
 		return schemaFieldMap.getSchemaFieldMap();
 	}
@@ -98,8 +90,11 @@ public class FlowManipulationContext {
 		this.jaxbMainGraph = jaxbMainGraph;
 	}
 
-	public HydrographDebugInfo getJaxbDebugGraph() {
-		return jaxbDebugGraph;
+	public String[] getArgs() {
+		return args;
 	}
 
+	public void setArgs(String[] args) {
+		this.args = args;
+	}
 }

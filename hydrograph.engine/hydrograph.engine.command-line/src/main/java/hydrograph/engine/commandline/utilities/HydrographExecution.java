@@ -20,7 +20,6 @@ import hydrograph.engine.execution.tracking.ComponentInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.props.PropertiesLoader;
@@ -31,94 +30,86 @@ import hydrograph.engine.utilities.GeneralUtilities;
 
 public class HydrographExecution {
 
-	private GeneralCommandLineUtilities generalUtilities;
-	private PropertiesLoader propertiesLoader;
-	private HydrographRuntimeService runtimeService;
-	private HydrographXMLInputService hydrographXmlInputService;
-	private HydrographJob hydrographJob;
-	
-	private static Logger LOG = LoggerFactory.getLogger(HydrographExecution.class);
+    private GeneralCommandLineUtilities generalUtilities;
+    private PropertiesLoader propertiesLoader;
+    private HydrographRuntimeService runtimeService;
+    private HydrographXMLInputService hydrographXmlInputService;
+    private HydrographJob hydrographJob;
 
-	public HydrographExecution() {
-		this.propertiesLoader = PropertiesLoader.getInstance();
-		this.generalUtilities = new GeneralCommandLineUtilities();
-		this.hydrographXmlInputService = new HydrographXMLInputService();
-		loadService();
-	}
+    private static Logger LOG = LoggerFactory.getLogger(HydrographExecution.class);
 
-	public static void main(String args[]) throws Exception {
-		
-		
-		if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)) {
+    public HydrographExecution() {
+        this.propertiesLoader = PropertiesLoader.getInstance();
+        this.generalUtilities = new GeneralCommandLineUtilities();
+        this.hydrographXmlInputService = new HydrographXMLInputService();
+        loadService();
+    }
 
-			CommandLineOptionsProcessor.printUsage();
-		} else {
-			HydrographExecution execution = new HydrographExecution();
-			execution.run(args);
-		}
-		
-	}
+    public static void main(String args[]) throws Exception {
 
-	public void run(String[] args) throws Exception {
-		hydrographJob = createHydrographJob(args);
-		HydrographDebugInfo hydrographDebug = createHydrographDebugInfo(args);
-		initialization(args, hydrographJob, hydrographDebug,
-				XmlParsingUtils.getJobId(args),
-				XmlParsingUtils.getBasePath(args),XmlParsingUtils.getUDFPath(args));
-		prepareToExecute();
-		finalExecute();
-	}
-	
-	public List<ComponentInfo> getExecutionStatus(){
-		return (List<ComponentInfo>) runtimeService.getExecutionStatus();
-	}
 
-	private HydrographJob createHydrographJob(String[] args) throws JAXBException {
-		LOG.info("Invoking input service");
-		return hydrographXmlInputService.parseHydrographJob(
-				propertiesLoader.getInputServiceProperties(), args);
-	}
+        if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)) {
 
-	private HydrographDebugInfo createHydrographDebugInfo(String[] args) throws JAXBException {
-		LOG.info("Invoking input service");
-		return hydrographXmlInputService.parseHydrographDebugInfo(
-				propertiesLoader.getInputServiceProperties(), args);
-	}
+            CommandLineOptionsProcessor.printUsage();
+        } else {
+            HydrographExecution execution = new HydrographExecution();
+            execution.run(args);
+        }
 
-	private void initialization(String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo bhsDebug, String jobId, String basePath, String udfPath) {
-		LOG.info("Invoking initialize on runtime service");
-		runtimeService.initialize(
-				propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
-				bhsDebug, jobId,basePath,udfPath);
-	}
+    }
 
-	private void prepareToExecute()  {
-		runtimeService.prepareToExecute();
-		LOG.info("Preparation completed. Now starting execution");
-	}
+    public void run(String[] args) throws Exception {
+        hydrographJob = createHydrographJob(args);
+        initialization(args, hydrographJob,
+                XmlParsingUtils.getJobId(args), XmlParsingUtils.getUDFPath(args));
+        prepareToExecute();
+        finalExecute();
+    }
 
-	private void finalExecute()  {
-		try {
-			runtimeService.execute();
-			LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
-					+ "' executed successfully!");
-		} finally {
-			LOG.info("Invoking on complete for cleanup");
-			runtimeService.oncomplete();
-		}
-	}
+    public List<ComponentInfo> getExecutionStatus() {
+        return (List<ComponentInfo>) runtimeService.getExecutionStatus();
+    }
 
-	private void loadService() {
-		runtimeService = (HydrographRuntimeService) generalUtilities
-				.loadAndInitClass(propertiesLoader.getRuntimeServiceClassName());
-	}
-	
-	/**
-	 * Method to kill the job
-	 */
-	public void kill() {
-		runtimeService.kill();
-	}
+    private HydrographJob createHydrographJob(String[] args) throws JAXBException {
+        LOG.info("Invoking input service");
+        return hydrographXmlInputService.parseHydrographJob(
+                propertiesLoader.getInputServiceProperties(), args);
+    }
+
+    private void initialization(String[] args, HydrographJob bhsGraph,
+                                String jobId, String udfPath) {
+        LOG.info("Invoking initialize on runtime service");
+        runtimeService.initialize(
+                propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
+                jobId, udfPath);
+    }
+
+    private void prepareToExecute() {
+        runtimeService.prepareToExecute();
+        LOG.info("Preparation completed. Now starting execution");
+    }
+
+    private void finalExecute() {
+        try {
+            runtimeService.execute();
+            LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
+                    + "' executed successfully!");
+        } finally {
+            LOG.info("Invoking on complete for cleanup");
+            runtimeService.oncomplete();
+        }
+    }
+
+    private void loadService() {
+        runtimeService = (HydrographRuntimeService) generalUtilities
+                .loadAndInitClass(propertiesLoader.getRuntimeServiceClassName());
+    }
+
+    /**
+     * Method to kill the job
+     */
+    public void kill() {
+        runtimeService.kill();
+    }
 
 }

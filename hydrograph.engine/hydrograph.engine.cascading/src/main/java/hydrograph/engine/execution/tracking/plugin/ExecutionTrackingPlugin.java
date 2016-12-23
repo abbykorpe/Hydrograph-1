@@ -47,11 +47,11 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
 		TrackContext trackContext;
-		List<TypeBaseComponent> orginalComponentList = manipulationContext.getJaxbMainGraph();
-		jaxbObjectList.addAll(orginalComponentList);
+		List<TypeBaseComponent> originalComponentList = manipulationContext.getJaxbMainGraph();
+		jaxbObjectList.addAll(originalComponentList);
 		schemaFieldsMap = manipulationContext.getSchemaFieldMap();
 
-		for (Iterator<TypeBaseComponent> iterator = orginalComponentList.iterator(); iterator.hasNext();) {
+		for (Iterator<TypeBaseComponent> iterator = originalComponentList.iterator(); iterator.hasNext();) {
 			TypeBaseComponent typeBaseComponent = (TypeBaseComponent) iterator.next();
 			List<OutSocket> outSocketList = TrackComponentUtils.getOutSocketListofComponent(typeBaseComponent);
 			for (OutSocket outSocket : outSocketList) {

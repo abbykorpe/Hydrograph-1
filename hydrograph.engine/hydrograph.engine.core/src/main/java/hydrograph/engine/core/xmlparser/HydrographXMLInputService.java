@@ -12,31 +12,27 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-
-import javax.xml.bind.JAXBException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import hydrograph.engine.core.core.HydrographDebugInfo;
-import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographInputService;
+import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.utilities.XmlUtilities;
 import hydrograph.engine.core.xmlparser.externalschema.ParseExternalSchema;
 import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
 import hydrograph.engine.core.xmlparser.parametersubstitution.UserParameters;
 import hydrograph.engine.core.xmlparser.subjob.ReadSubjob;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 public class HydrographXMLInputService implements HydrographInputService {
 
 	HydrographJobGenerator hydrographJobGenerator;
-	PropertiesLoader propertiesLoader;
 	Properties config;
 	private static Logger LOG = LoggerFactory
 			.getLogger(HydrographXMLInputService.class);
@@ -82,42 +78,6 @@ public class HydrographXMLInputService implements HydrographInputService {
 		return hydrographJob;
 	}
 
-	@Override
-	public HydrographDebugInfo parseHydrographDebugInfo(Properties config,
-			String[] args) throws JAXBException {
-		HydrographDebugInfo hydrographDebugInfo = null;
-		this.config = config;
-		String path = XmlParsingUtils.getDebugXMLPath(args, config);
-		if (path != null) {
-
-			if (XmlParsingUtils.getJobId(args) == null)
-				throw new HydrographXMLInputServiceException(
-						"job id is required for Debugging");
-			if (XmlParsingUtils.getBasePath(args) == null)
-				throw new HydrographXMLInputServiceException(
-						"base path is required for Debugging");
-			LOG.info("Parsing for Debug graph file: " + path + " started");
-			ParameterSubstitutor parameterSubstitutor = new ParameterSubstitutor(
-					getUserParameters(args));
-			Document debugXmlDoc = XmlUtilities
-					.getXMLDocument(parameterSubstitutor
-							.substitute(XmlParsingUtils
-									.getXMLStringFromPath(path)));
-			try {
-				hydrographDebugInfo = hydrographJobGenerator
-						.createHydrographDebugInfo(debugXmlDoc,
-								config.getProperty("debugXSDLocation"));
-			} catch (SAXException e) {
-				LOG.error("Error while parsing debug XSD.", e);
-				throw new RuntimeException("Error while parsing debug XSD.", e);
-			}
-			LOG.info("Debug graph parsed successfully");
-			return hydrographDebugInfo;
-		} else {
-			return null;
-		}
-	}
-
 	private String checkSubjobAndExpandXml(
 			ParameterSubstitutor parameterSubstitutor, String xmlContents)
 			throws FileNotFoundException {
@@ -140,10 +100,6 @@ public class HydrographXMLInputService implements HydrographInputService {
 
 	public class HydrographXMLInputServiceException extends RuntimeException {
 		private static final long serialVersionUID = -7709930763943833311L;
-
-		public HydrographXMLInputServiceException(String msg) {
-			super(msg);
-		}
 
 		public HydrographXMLInputServiceException(Throwable e) {
 			super(e);

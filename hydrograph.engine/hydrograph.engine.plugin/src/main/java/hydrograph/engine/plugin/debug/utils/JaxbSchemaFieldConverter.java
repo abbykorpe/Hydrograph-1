@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.debug;
+package hydrograph.engine.plugin.debug.utils;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
@@ -23,11 +23,19 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
+/**
+ *
+ */
 public class JaxbSchemaFieldConverter {
 
 	private JaxbSchemaFieldConverter() {
 	}
 
+	/**
+	 *
+	 * @param schemaFieldList
+	 * @return
+	 */
 	public static TypeOutputInSocket convertToJaxb(Set<SchemaField> schemaFieldList) {
 		TypeOutputInSocket typeOutputInSocket = new TypeOutputInSocket();
 		TypeBaseRecord record = new TypeBaseRecord();

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.core.core;
+package hydrograph.engine.plugin.debug.entity;
 
 import hydrograph.engine.jaxb.debug.Debug;
 import hydrograph.engine.jaxb.debug.ViewData;
@@ -46,15 +46,15 @@ public class HydrographDebugInfo {
 	public static class DebugChecker {
 
 		/**
-		 * @param bhsDebug
+		 * @param hydrographDebugInfo
 		 * @return ArrayList<ViewData>
 		 */
-		public static List<ViewData> getViewData(HydrographDebugInfo bhsDebug) {
+		public static List<ViewData> getViewData(HydrographDebugInfo hydrographDebugInfo) {
 
 			List<ViewData> viewDataList = new ArrayList<ViewData>();
 
-			if (bhsDebug != null) {
-				for (hydrograph.engine.jaxb.debug.ViewData obj : bhsDebug
+			if (hydrographDebugInfo != null) {
+				for (hydrograph.engine.jaxb.debug.ViewData obj : hydrographDebugInfo
 						.getJAXBObject().getViewData())
 					viewDataList.add(obj);
 
