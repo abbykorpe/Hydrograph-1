@@ -23,7 +23,8 @@ Sr.No. <GitHub/Bugzilla Issue #> - [fixed by] - description
 11. <541> [Ashika Holkar] -  Error bubble is not getting displayed on filter component if Operation field is not specified
 12. <539> [Ashika Holkar] - Multiple Run Configuration Window are getting opened when User click on Run button
 13. <529> [Pooja Yadav] - Default size of below window should be small.
-
+14. <540> [Ashika Holkar] - Union All component: On tool tip info, 'propagate' is getting displayed as '0' instead of Batch
+15. <550> [Ashika Holkar] - Error popup is getting displayed when user update java class file
 =====================================================================================================
 Notes for QA:
 =====================================================================================================

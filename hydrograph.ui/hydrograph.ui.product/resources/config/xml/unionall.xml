@@ -45,13 +45,13 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="batch" value="0" renderer="BATCH_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="Specifies the execution sequence of \nthis component in the job flow.">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="Propogate" value="0" renderer="PROPOGATE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+		<tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Propogate data from left.">
 		</tns:property>
 		
