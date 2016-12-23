@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.Oracle;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-oracle-base")
+@XmlType(name = "type-input-oracle-base", namespace = "hydrograph/engine/jaxb/ioracle")
 @XmlSeeAlso({
     Oracle.class
 })

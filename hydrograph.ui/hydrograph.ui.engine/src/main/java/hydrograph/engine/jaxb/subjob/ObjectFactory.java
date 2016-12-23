@@ -42,14 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInSocket }
-     * 
-     */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeOutSocket }
      * 
      */
@@ -63,6 +55,14 @@ public class ObjectFactory {
      */
     public SubjobBase createSubjobBase() {
         return new SubjobBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeInSocket }
+     * 
+     */
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
     }
 
 }

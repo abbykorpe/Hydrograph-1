@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.Redshift;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-redshift-base")
+@XmlType(name = "type-input-redshift-base", namespace = "hydrograph/engine/jaxb/iredshift")
 @XmlSeeAlso({
     Redshift.class
 })

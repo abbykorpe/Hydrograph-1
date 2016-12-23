@@ -28,7 +28,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.ooracle.TypeLoadChoice;
 import hydrograph.engine.jaxb.ooracle.TypeOutputOracleInSocket;
-import hydrograph.engine.jaxb.ooracle.TypePriamryKeys;
+import hydrograph.engine.jaxb.ooracle.TypePrimaryKeys;
 import hydrograph.engine.jaxb.ooracle.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Oracle;
 import hydrograph.ui.common.util.Constants;
@@ -69,49 +69,42 @@ public class OutputOracleConverter extends OutputConverter {
 		}
 		
 		ElementValueStringType tableName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value()))){
-			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_TABLE_NAME.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.TABLE_NAME.value()))){
+			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.TABLE_NAME.value())));
 			oracleOutput.setTableName(tableName);
 		}
 		
 		ElementValueStringType hostName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value()))){
-			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value())));
-			oracleOutput.setHostname(hostName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
+			oracleOutput.setHostName(hostName);
 		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = getBigInteger(PropertyNameConstants.ORACLE_PORT_NO.value());
+		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
 		portNo.setValue(portValue);
 		oracleOutput.setPort(portNo);
 		
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
-		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_JDBC_DRIVER.value())));
-		oracleOutput.setDrivertype(jdbcDriver);
+		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
+		oracleOutput.setDriverType(jdbcDriver);
 		
 		ElementValueStringType oracleSchema = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
 			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
-			oracleOutput.setSchemaname(oracleSchema);
+			oracleOutput.setSchemaName(oracleSchema);
 		}
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_USER_NAME.value()))){
-			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_USER_NAME.value())));
-			oracleOutput.setUsername(userName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
+			oracleOutput.setUserName(userName);
 		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_PASSWORD.value()))){
-			password.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PASSWORD.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.PASSWORD.value())));
 			oracleOutput.setPassword(password);
-		}
-		
-		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		if(PropertyNameConstants.ORACLE_CHUNK_SIZE.value() !=null){
-			BigInteger chunkValue = getBigInteger(PropertyNameConstants.ORACLE_CHUNK_SIZE.value());
-			chunkSize.setValue(chunkValue);
-			oracleOutput.setChunkSize(chunkSize);
 		}
 		
 		TypeLoadChoice loadValue = addTypeLoadChoice();
@@ -121,14 +114,16 @@ public class OutputOracleConverter extends OutputConverter {
 	private TypeLoadChoice addTypeLoadChoice() {
 		TypeLoadChoice loadValue = new TypeLoadChoice();
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
-		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
-			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-			loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
-			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
-			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+		if(uiValue != null){
+			if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
+				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
+				loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
+				loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
+				loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+			}
 		}
 		return loadValue;
 	}
@@ -138,8 +133,8 @@ public class OutputOracleConverter extends OutputConverter {
 	 * @param primaryKeyFeilds
 	 * @return
 	 */
-	private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
-		TypePriamryKeys primaryKeys = new TypePriamryKeys();
+	private TypePrimaryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
+		TypePrimaryKeys primaryKeys = new TypePrimaryKeys();
 		String[] primaryKeyColumnsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 		if(primaryKeyColumnsFeilds !=null && primaryKeyColumnsFeilds.length>0){
 			TypeKeyFields primaryTypeKeyFields = new TypeKeyFields();

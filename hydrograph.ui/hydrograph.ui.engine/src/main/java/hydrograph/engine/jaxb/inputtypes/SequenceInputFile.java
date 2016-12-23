@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.itfs.TypeInputFileSequenceBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "sequenceInputFile", propOrder = {
+@XmlType(name = "sequenceInputFile", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "path",
     "runtimeProperties"
 })

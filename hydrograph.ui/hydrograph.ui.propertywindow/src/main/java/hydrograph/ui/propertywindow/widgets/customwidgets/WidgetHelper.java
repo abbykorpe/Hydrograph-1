@@ -330,8 +330,9 @@ public class WidgetHelper {
 	 */
 	public WidgetConfig getJdbcDriverWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Messages.LABEL_JDBC_DRIVER);
+		textBoxConfig.setName(Messages.DRIVER_NAME);
 		textBoxConfig.setGrabExcessSpace(true);
+		textBoxConfig.setEnabled(false);
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
@@ -460,5 +461,4 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxWithLableConfig);
 		return textBoxWithLableConfig;
 	}
-
 }

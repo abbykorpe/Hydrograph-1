@@ -78,35 +78,35 @@ public class InputOracleConverter extends InputConverter {
 		}
 		
 		ElementValueStringType hostName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value()))){
-			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_HOST_NAME.value())));
-			oracleInput.setHostname(hostName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
+			oracleInput.setHostName(hostName);
 		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = getBigInteger(PropertyNameConstants.ORACLE_PORT_NO.value());
+		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
 		portNo.setValue(portValue);
 		oracleInput.setPort(portNo);
 
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
-		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_JDBC_DRIVER.value())));
-		oracleInput.setDrivertype(jdbcDriver);
+		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
+		oracleInput.setDriverType(jdbcDriver);
 		
 		ElementValueStringType oracleSchema = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
 			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
-			oracleInput.setSchemaname(oracleSchema);
+			oracleInput.setSchemaName(oracleSchema);
 		}
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_USER_NAME.value()))){
-			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_USER_NAME.value())));
-			oracleInput.setUsername(userName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
+			oracleInput.setUserName(userName);
 		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_PASSWORD.value()))){
-			password.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_PASSWORD.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.PASSWORD.value())));
 			oracleInput.setPassword(password);
 		}
 
@@ -131,7 +131,7 @@ public class InputOracleConverter extends InputConverter {
 
 				ElementValueStringType sqlQueryCounter = new ElementValueStringType();
 				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
-					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
+					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQuery());
 					oracleInput.setCountQuery(sqlQueryCounter);
 				}
 			}

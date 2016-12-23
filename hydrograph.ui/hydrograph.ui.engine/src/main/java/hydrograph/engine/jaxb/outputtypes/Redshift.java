@@ -35,15 +35,15 @@ import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/oredshift}type-output-redshift-base">
  *       &lt;sequence>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="hostname" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
- *         &lt;element name="drivertype" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="jdbcDriver" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/oredshift}type-load-choice" minOccurs="0"/>
- *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
+ *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
+ *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/oredshift}type-load-choice" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -53,17 +53,17 @@ import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "redshift", propOrder = {
+@XmlType(name = "redshift", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
     "databaseName",
-    "hostname",
+    "hostName",
     "port",
-    "drivertype",
+    "jdbcDriver",
     "tableName",
     "username",
     "password",
-    "loadType",
     "chunkSize",
-    "runtimeProperties"
+    "runtimeProperties",
+    "loadType"
 })
 public class Redshift
     extends TypeOutputRedshiftBase
@@ -72,20 +72,19 @@ public class Redshift
     @XmlElement(required = true)
     protected ElementValueStringType databaseName;
     @XmlElement(required = true)
-    protected ElementValueStringType hostname;
+    protected ElementValueStringType hostName;
     protected ElementValueIntegerType port;
     @XmlElement(required = true)
-    protected ElementValueStringType drivertype;
+    protected ElementValueStringType jdbcDriver;
     @XmlElement(required = true)
     protected ElementValueStringType tableName;
     @XmlElement(required = true)
     protected ElementValueStringType username;
     @XmlElement(required = true)
     protected ElementValueStringType password;
-    protected TypeLoadChoice loadType;
-    @XmlElement(required = true)
     protected ElementValueIntegerType chunkSize;
     protected TypeProperties runtimeProperties;
+    protected TypeLoadChoice loadType;
 
     /**
      * Gets the value of the databaseName property.
@@ -112,27 +111,27 @@ public class Redshift
     }
 
     /**
-     * Gets the value of the hostname property.
+     * Gets the value of the hostName property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getHostname() {
-        return hostname;
+    public ElementValueStringType getHostName() {
+        return hostName;
     }
 
     /**
-     * Sets the value of the hostname property.
+     * Sets the value of the hostName property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setHostname(ElementValueStringType value) {
-        this.hostname = value;
+    public void setHostName(ElementValueStringType value) {
+        this.hostName = value;
     }
 
     /**
@@ -160,27 +159,27 @@ public class Redshift
     }
 
     /**
-     * Gets the value of the drivertype property.
+     * Gets the value of the jdbcDriver property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getDrivertype() {
-        return drivertype;
+    public ElementValueStringType getJdbcDriver() {
+        return jdbcDriver;
     }
 
     /**
-     * Sets the value of the drivertype property.
+     * Sets the value of the jdbcDriver property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setDrivertype(ElementValueStringType value) {
-        this.drivertype = value;
+    public void setJdbcDriver(ElementValueStringType value) {
+        this.jdbcDriver = value;
     }
 
     /**
@@ -256,30 +255,6 @@ public class Redshift
     }
 
     /**
-     * Gets the value of the loadType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeLoadChoice }
-     *     
-     */
-    public TypeLoadChoice getLoadType() {
-        return loadType;
-    }
-
-    /**
-     * Sets the value of the loadType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeLoadChoice }
-     *     
-     */
-    public void setLoadType(TypeLoadChoice value) {
-        this.loadType = value;
-    }
-
-    /**
      * Gets the value of the chunkSize property.
      * 
      * @return
@@ -325,6 +300,30 @@ public class Redshift
      */
     public void setRuntimeProperties(TypeProperties value) {
         this.runtimeProperties = value;
+    }
+
+    /**
+     * Gets the value of the loadType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TypeLoadChoice }
+     *     
+     */
+    public TypeLoadChoice getLoadType() {
+        return loadType;
+    }
+
+    /**
+     * Sets the value of the loadType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TypeLoadChoice }
+     *     
+     */
+    public void setLoadType(TypeLoadChoice value) {
+        this.loadType = value;
     }
 
 }

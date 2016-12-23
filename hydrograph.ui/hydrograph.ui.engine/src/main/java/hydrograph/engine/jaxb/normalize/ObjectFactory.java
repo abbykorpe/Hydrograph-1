@@ -42,27 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInSocket }
+     * Create an instance of {@link TypeOperation }
      * 
      */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperationInputField }
-     * 
-     */
-    public TypeOperationInputField createTypeOperationInputField() {
-        return new TypeOperationInputField();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperationInputFields }
-     * 
-     */
-    public TypeOperationInputFields createTypeOperationInputFields() {
-        return new TypeOperationInputFields();
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
     }
 
     /**
@@ -74,11 +58,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperation }
+     * Create an instance of {@link TypeOperationInputFields }
      * 
      */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
+    public TypeOperationInputFields createTypeOperationInputFields() {
+        return new TypeOperationInputFields();
+    }
+
+    /**
+     * Create an instance of {@link TypeInSocket }
+     * 
+     */
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformExpression }
+     * 
+     */
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
+    }
+
+    /**
+     * Create an instance of {@link TypeOperationInputField }
+     * 
+     */
+    public TypeOperationInputField createTypeOperationInputField() {
+        return new TypeOperationInputField();
     }
 
 }

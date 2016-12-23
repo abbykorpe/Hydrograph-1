@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -55,10 +54,6 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	protected ControlDecoration buttonDecorator;
 	private Button testConnectionButton;
 	private ArrayList<AbstractWidget> widgets;
-	private static final String DEFAULT_PORTNO = "8004";
-	private static final String PORT_NO = "portNo";
-	private static final String HOST = "host";
-	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	
 	public DatabaseTestConnectionWidget(
 			ComponentConfigrationProperty componentConfigProp,
@@ -110,21 +105,13 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	 * @param testConnectionButton
 	 */
 	private void attachButtonListner(Button testConnectionButton) {
-		
 		testConnectionButton.addSelectionListener(new SelectionAdapter() {
-			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//TODO
-				String host = Platform.getPreferencesService().getString(PLUGIN_ID, HOST, "", null);
-				String port_no = Platform.getPreferencesService().getString(PLUGIN_ID, PORT_NO, DEFAULT_PORTNO, null);
-				
-				if (null != host && StringUtils.isNotBlank(host)) {
-					
-					if (getDatabaseConnectionDetails()) {
-					
-					}
-				}
+				/*Below code will use to test connection with database.
+				 * */
+				DatabaseParameterType databaseParameterType = getDatabaseConnectionDetails();
 			}
 		});
 		
@@ -134,10 +121,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	 * Provides the value for all the DB details
 	 * @return 
 	 */
-	private boolean getDatabaseConnectionDetails() {
-		
-		//TODO
-		
+	private DatabaseParameterType getDatabaseConnectionDetails() {
 		String oracleDatabaseName = "";
 		String oracleHostName = "";
 		String oraclePortNo = "";
@@ -145,6 +129,8 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		String oracleSchemaName = "";
 		String oracleUserName = "";
 		String oraclePassword = "";
+		String dataBaseType = "";
+		
 		for (AbstractWidget textAbtractWgt : widgets) {
 
 			if (textAbtractWgt.getProperty().getPropertyName()
@@ -171,15 +157,13 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 			}
 
 		}
+		
+		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(dataBaseType, oracleHostName, 
+				oraclePortNo, oracleUserName, oraclePassword).jdbcName(oracleJdbcName).schemaName(oracleSchemaName)
+				.databaseName(oracleDatabaseName).build();
 
-		if (StringUtils.isNotEmpty(oracleDatabaseName) && StringUtils.isNotEmpty(oracleHostName)
-				&& StringUtils.isNotEmpty(oracleJdbcName) && StringUtils.isNotEmpty(oraclePortNo) && StringUtils.isNotEmpty(oracleSchemaName)
-						&& StringUtils.isNotEmpty(oracleUserName) && StringUtils.isNotEmpty(oraclePassword)) {
 
-			return true;
-		}
-
-		return false;
+		return parameterType;
 	}
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {

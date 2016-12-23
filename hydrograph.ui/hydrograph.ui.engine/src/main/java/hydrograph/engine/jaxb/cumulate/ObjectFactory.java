@@ -42,35 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInSocket }
+     * Create an instance of {@link TypeSecondaryKeyFields }
      * 
      */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperationInputField }
-     * 
-     */
-    public TypeOperationInputField createTypeOperationInputField() {
-        return new TypeOperationInputField();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperationInputFields }
-     * 
-     */
-    public TypeOperationInputFields createTypeOperationInputFields() {
-        return new TypeOperationInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
     }
 
     /**
@@ -82,6 +58,46 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOperationInputFields }
+     * 
+     */
+    public TypeOperationInputFields createTypeOperationInputFields() {
+        return new TypeOperationInputFields();
+    }
+
+    /**
+     * Create an instance of {@link TypeInSocket }
+     * 
+     */
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformExpression }
+     * 
+     */
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
+    }
+
+    /**
+     * Create an instance of {@link TypeOperationInputField }
+     * 
+     */
+    public TypeOperationInputField createTypeOperationInputField() {
+        return new TypeOperationInputField();
+    }
+
+    /**
      * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
      * 
      */
@@ -90,11 +106,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
+     * Create an instance of {@link TypePrimaryKeyFields }
      * 
      */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
     }
 
     /**
@@ -103,14 +119,6 @@ public class ObjectFactory {
      */
     public CumulateBase createCumulateBase() {
         return new CumulateBase();
-    }
-
-    /**
-     * Create an instance of {@link TypePrimaryKeyFields }
-     * 
-     */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
     }
 
 }

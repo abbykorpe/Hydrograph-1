@@ -307,6 +307,7 @@ public class Messages extends NLS {
 	public static String UPDATE_BY_KEYS;
 	public static String LOAD_TYPE;
 	public static String SQL_QUERY_STATEMENT;
+	public static String DRIVER_NAME;
 	
 	
 	static {

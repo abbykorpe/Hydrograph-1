@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-mysql-field")
+@XmlType(name = "type-mysql-field", namespace = "hydrograph/engine/jaxb/omysql")
 public class TypeMysqlField
     extends TypeBaseField
 {

@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "viewData")
+@XmlType(name = "viewData", namespace = "hydrograph/engine/jaxb/debug")
 public class ViewData {
 
     @XmlAttribute(name = "fromComponentId", required = true)

@@ -34,19 +34,14 @@ import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/iredshift}type-input-redshift-base">
  *       &lt;sequence>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="hostname" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
- *         &lt;element name="drivertype" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="jdbcurl" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="query" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
+ *         &lt;element name="condition" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
+ *         &lt;element name="batchSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
- *         &lt;choice>
- *           &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *           &lt;sequence>
- *             &lt;element name="selectQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *             &lt;element name="countQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
- *           &lt;/sequence>
- *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -56,17 +51,16 @@ import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "redshift", propOrder = {
+@XmlType(name = "redshift", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "databaseName",
-    "hostname",
-    "port",
-    "drivertype",
+    "tableName",
     "username",
     "password",
-    "runtimeProperties",
-    "tableName",
-    "selectQuery",
-    "countQuery"
+    "jdbcurl",
+    "query",
+    "condition",
+    "batchSize",
+    "runtimeProperties"
 })
 public class Redshift
     extends TypeInputRedshiftBase
@@ -75,18 +69,18 @@ public class Redshift
     @XmlElement(required = true)
     protected ElementValueStringType databaseName;
     @XmlElement(required = true)
-    protected ElementValueStringType hostname;
-    protected ElementValueIntegerType port;
-    @XmlElement(required = true)
-    protected ElementValueStringType drivertype;
+    protected ElementValueStringType tableName;
     @XmlElement(required = true)
     protected ElementValueStringType username;
     @XmlElement(required = true)
     protected ElementValueStringType password;
+    @XmlElement(required = true)
+    protected ElementValueStringType jdbcurl;
+    protected ElementValueStringType query;
+    protected ElementValueStringType condition;
+    @XmlElement(required = true)
+    protected ElementValueIntegerType batchSize;
     protected TypeProperties runtimeProperties;
-    protected ElementValueStringType tableName;
-    protected ElementValueStringType selectQuery;
-    protected ElementValueStringType countQuery;
 
     /**
      * Gets the value of the databaseName property.
@@ -113,75 +107,27 @@ public class Redshift
     }
 
     /**
-     * Gets the value of the hostname property.
+     * Gets the value of the tableName property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getHostname() {
-        return hostname;
+    public ElementValueStringType getTableName() {
+        return tableName;
     }
 
     /**
-     * Sets the value of the hostname property.
+     * Sets the value of the tableName property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setHostname(ElementValueStringType value) {
-        this.hostname = value;
-    }
-
-    /**
-     * Gets the value of the port property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public ElementValueIntegerType getPort() {
-        return port;
-    }
-
-    /**
-     * Sets the value of the port property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public void setPort(ElementValueIntegerType value) {
-        this.port = value;
-    }
-
-    /**
-     * Gets the value of the drivertype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getDrivertype() {
-        return drivertype;
-    }
-
-    /**
-     * Sets the value of the drivertype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setDrivertype(ElementValueStringType value) {
-        this.drivertype = value;
+    public void setTableName(ElementValueStringType value) {
+        this.tableName = value;
     }
 
     /**
@@ -233,6 +179,102 @@ public class Redshift
     }
 
     /**
+     * Gets the value of the jdbcurl property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getJdbcurl() {
+        return jdbcurl;
+    }
+
+    /**
+     * Sets the value of the jdbcurl property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setJdbcurl(ElementValueStringType value) {
+        this.jdbcurl = value;
+    }
+
+    /**
+     * Gets the value of the query property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getQuery() {
+        return query;
+    }
+
+    /**
+     * Sets the value of the query property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setQuery(ElementValueStringType value) {
+        this.query = value;
+    }
+
+    /**
+     * Gets the value of the condition property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getCondition() {
+        return condition;
+    }
+
+    /**
+     * Sets the value of the condition property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setCondition(ElementValueStringType value) {
+        this.condition = value;
+    }
+
+    /**
+     * Gets the value of the batchSize property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public ElementValueIntegerType getBatchSize() {
+        return batchSize;
+    }
+
+    /**
+     * Sets the value of the batchSize property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public void setBatchSize(ElementValueIntegerType value) {
+        this.batchSize = value;
+    }
+
+    /**
      * Gets the value of the runtimeProperties property.
      * 
      * @return
@@ -254,78 +296,6 @@ public class Redshift
      */
     public void setRuntimeProperties(TypeProperties value) {
         this.runtimeProperties = value;
-    }
-
-    /**
-     * Gets the value of the tableName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getTableName() {
-        return tableName;
-    }
-
-    /**
-     * Sets the value of the tableName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setTableName(ElementValueStringType value) {
-        this.tableName = value;
-    }
-
-    /**
-     * Gets the value of the selectQuery property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getSelectQuery() {
-        return selectQuery;
-    }
-
-    /**
-     * Sets the value of the selectQuery property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setSelectQuery(ElementValueStringType value) {
-        this.selectQuery = value;
-    }
-
-    /**
-     * Gets the value of the countQuery property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getCountQuery() {
-        return countQuery;
-    }
-
-    /**
-     * Sets the value of the countQuery property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setCountQuery(ElementValueStringType value) {
-        this.countQuery = value;
     }
 
 }

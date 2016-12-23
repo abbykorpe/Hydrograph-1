@@ -55,6 +55,15 @@ import hydrograph.engine.jaxb.ifmixedscheme.TypeMixedBase;
  *           &lt;/complexType>
  *         &lt;/element>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
+ *         &lt;element name="quote" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -64,12 +73,13 @@ import hydrograph.engine.jaxb.ifmixedscheme.TypeMixedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "textFileMixedScheme", propOrder = {
+@XmlType(name = "textFileMixedScheme", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "path",
     "safe",
     "strict",
     "charset",
-    "runtimeProperties"
+    "runtimeProperties",
+    "quote"
 })
 public class TextFileMixedScheme
     extends TypeMixedBase
@@ -81,6 +91,7 @@ public class TextFileMixedScheme
     protected BooleanValueType strict;
     protected TextFileMixedScheme.Charset charset;
     protected TypeProperties runtimeProperties;
+    protected TextFileMixedScheme.Quote quote;
 
     /**
      * Gets the value of the path property.
@@ -202,6 +213,30 @@ public class TextFileMixedScheme
         this.runtimeProperties = value;
     }
 
+    /**
+     * Gets the value of the quote property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TextFileMixedScheme.Quote }
+     *     
+     */
+    public TextFileMixedScheme.Quote getQuote() {
+        return quote;
+    }
+
+    /**
+     * Sets the value of the quote property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TextFileMixedScheme.Quote }
+     *     
+     */
+    public void setQuote(TextFileMixedScheme.Quote value) {
+        this.quote = value;
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -300,6 +335,57 @@ public class TextFileMixedScheme
          */
         public void setUri(String value) {
             this.uri = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class Quote {
+
+        @XmlAttribute(name = "value")
+        protected String value;
+
+        /**
+         * Gets the value of the value property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getValue() {
+            return value;
+        }
+
+        /**
+         * Sets the value of the value property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setValue(String value) {
+            this.value = value;
         }
 
     }

@@ -12,15 +12,11 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -39,11 +35,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
 import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.PreferenceConstants;
-import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
@@ -95,22 +88,14 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	private ModifyListener textboxTableNameModifyListner;
 	private static final String ERROR = "ERR";
 	private static final String INFO = "INF";
-	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	private Cursor cursor;
 	private String sqlQueryStatement;
-	private static final String SEPARATOR = "|";
 	private Text sqlQueryCountertextbox;
 	private ModifyListener sqlQueryCounterModifyListner;
-	private String oracleDatabaseName;
-	private String oracleHostName;
-	private String oraclePortNo;
-	private String oracleJdbcName;
-	private String oracleSchemaName;
-	private String oracleUserName;
-	private String oraclePassword;
-	private String databaseType;
 	private static final String ORACLE = "Oracle";
 	private static final String REDSHIFT = "RedShift";
+	private static final String MYSQL = "Mysql";
+	
 
 	public SelectionDatabaseWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -118,6 +103,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		super(componentConfigProp, componentMiscProps, propertyDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
 		this.databaseSelectionConfig = (DatabaseSelectionConfig) componentConfigProp.getPropertyValue();
+		if(databaseSelectionConfig==null){
+			databaseSelectionConfig=new DatabaseSelectionConfig();
+		}
 	}
 
 	@Override
@@ -192,7 +180,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 					layout.topControl = sqlQueryComposite.getContainerControl();
 					selectionComposite.getContainerControl().layout();
 					if (databaseSelectionConfig != null) {
-						databaseSelectionConfig.setTableName(false);
+						databaseSelectionConfig.setTableNameSelection(false);
 						databaseSelectionConfig.setSqlQuery(sqlQueryTextBox.getText());
 						databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
 						populateWidget();
@@ -203,7 +191,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			}
 		});
 	}
-
+	
 	/**
 	 * 
 	 * @param selectionComposite
@@ -220,7 +208,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 					layout.topControl = tableComposite.getContainerControl();
 					selectionComposite.getContainerControl().layout();
 					if (databaseSelectionConfig != null) {
-						databaseSelectionConfig.setTableName(true);
+						databaseSelectionConfig.setTableNameSelection(true);
 						databaseSelectionConfig.setTableName(textBoxTableName.getText());
 						populateWidget();
 					}
@@ -258,7 +246,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		Button buttonAlignment = ((Button) sqlQueryButtonWgt.getSWTWidgetControl());
 		GridData data = (GridData) buttonAlignment.getLayoutData();
 		data.verticalIndent = 5;
-		sqlQuerySelectionListner(sqlQueryButtonWgt);
+		buttonAlignment.addSelectionListener(buttonWidgetSelectionListener(sqlQueryTextBox));
+		buttonWidgetSelectionListener(sqlQueryTextBox);
 
 		createWidgetlabel(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
 		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
@@ -273,67 +262,43 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		Button sqlQueryCounterButton = ((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl());
 		GridData sqlQueryCounterData = (GridData) sqlQueryCounterButton.getLayoutData();
 		sqlQueryCounterData.verticalIndent = 5;
-		sqlQueryCounterSelectionListner(sqlQueryCounterButtonWgt);
+		sqlQueryCounterButton.addSelectionListener(buttonWidgetSelectionListener(sqlQueryCountertextbox));
 
 	}
 
-	/**
-	 * Opens the SQL Query Counter Dialog
-	 * @param sqlQueryCounterButtonWgt
-	 */
-	private void sqlQueryCounterSelectionListner(ELTDefaultButton sqlQueryCounterButtonWgt) {
-		
-		((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-
-			private String sqlQueryCounterStatement;
-
+	private SelectionAdapter buttonWidgetSelectionListener(Text textWidget){
+		SelectionAdapter adapter = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				String text = textWidget.getText();
 				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
-						Display.getCurrent().getActiveShell());
+						Display.getCurrent().getActiveShell(), text);
 				sqlQueryStatementDialog.open();
-				sqlQueryCounterStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
-				sqlQueryCountertextbox.setText(sqlQueryCounterStatement);
+				textWidget.setText(sqlQueryStatementDialog.getStyleTextSqlQuery());
+				if(sqlQueryStatementDialog.isTextValueChanged()){
+					propertyDialogButtonBar.enableApplyButton(true);
+				}
 			}
-
-		});
+		};
+		return adapter;
 	}
-
-	/**
-	 * Opens the SQL Query Statement Dialog
-	 * @param sqlQueryButtonWgt
-	 */
-	private void sqlQuerySelectionListner(ELTDefaultButton sqlQueryButtonWgt) {
-
-		((Button) sqlQueryButtonWgt.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
-						Display.getCurrent().getActiveShell());
-				sqlQueryStatementDialog.open();
-				sqlQueryStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
-				sqlQueryTextBox.setText(sqlQueryStatement);
-			}
-
-		});
-	}
+	
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 
+		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-			databaseSelectionConfig.setTableName(true);
+			databaseSelectionConfig.setTableNameSelection(true);
 			databaseSelectionConfig.setTableName(textBoxTableName.getText());
 
 		} else {
-			databaseSelectionConfig.setTableName(false);
+			databaseSelectionConfig.setTableNameSelection(false);
 			databaseSelectionConfig.setSqlQuery(sqlQueryTextBox.getText());
 			databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
 		}
 
-		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 		property.put(propertyName, databaseSelectionConfig);
 
 		setToolTipErrorMessage();
@@ -409,14 +374,14 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	public void addModifyListener(Property property, ArrayList<AbstractWidget> widgetList) {
 		widgets = widgetList;
 
-		textboxSQLQueryModifyListner = attachTextModifyListner(widgetList);
 		textboxTableNameModifyListner = attachTextModifyListner(widgetList);
+		textboxSQLQueryModifyListner = attachTextModifyListner(widgetList);
 		sqlQueryCounterModifyListner = attachTextModifyListner(widgetList);
 
 		sqlQueryTextBox.addModifyListener(textboxSQLQueryModifyListner);
 		textBoxTableName.addModifyListener(textboxTableNameModifyListner);
 		sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
-
+		
 	}
 	
 	/**
@@ -428,7 +393,13 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		return new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(ModifyEvent event) {
+				Text text = (Text)event.getSource();
+				if(((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()){
+					databaseSelectionConfig.setTableName(text.getText());
+				}else{
+					databaseSelectionConfig.setSqlQuery(text.getText());
+				}
 				showHideErrorSymbol(widgetList);
 			}
 		};
@@ -470,10 +441,17 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	/**
 	 * Provides all the DB details
 	 */
-	private void getDatabaseConnectionDetails() {
-		//TODO
+	private DatabaseParameterType getDatabaseConnectionDetails() {
+		DatabaseParameterType parameterType = null;
+		String oracleDatabaseName = "";
+		String oracleHostName = "";
+		String oraclePortNo= "";
+		String oracleJdbcName= "";
+		String oracleSchemaName= "";
+		String oracleUserName= "";
+		String oraclePassword= "";
+		
 		for (AbstractWidget textAbtractWgt : widgets) {
-
 			if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_DATABASE_WIDGET_NAME)) {
 				oracleDatabaseName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_DATABASE_WIDGET_NAME);
@@ -497,52 +475,52 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 				oraclePassword = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PASSWORD_WIDGET_NAME);
 			}
 			
-			if(ORACLE.equalsIgnoreCase(getComponent().getType())){
-				databaseType=ORACLE;
-			}else{
-				databaseType=REDSHIFT;
-			}
+			parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), oracleHostName, 
+					oraclePortNo, oracleUserName, oraclePassword).jdbcName(oracleJdbcName).schemaName(oracleSchemaName)
+					.databaseName(oracleDatabaseName).build();
+			
 		}
+		return parameterType;
 
 	}
 	
-	private void validateDatabaseParams(){
-		
-		String host = Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST, "",
-				null);
-		//TODO
-		String port_no = Platform.getPreferencesService().getString(PLUGIN_ID,
-				PreferenceConstants.REMOTE_PORT_NO, PreferenceConstants.DEFAULT_PORT_NO, null);
-		List<String> oracleDatabaseValues = new ArrayList<String>();
-		if (null != host && StringUtils.isNotBlank(host)) {
-			return;
+	private String getComponentType(){
+		if(StringUtils.equalsIgnoreCase(getComponent().getType(), ORACLE)){
+			return ORACLE;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), REDSHIFT)){
+			return REDSHIFT;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
+			return MYSQL;
 		}
+		return "";
+	}
+	
+	private void validateDatabaseParams(){
+		List<String> oracleDatabaseValues = new ArrayList<String>();
 		getDatabaseConnectionDetails();
 		
-		if (StringUtils.isNotEmpty(oracleDatabaseName) && StringUtils.isNotEmpty(oracleHostName)
-			&& StringUtils.isNotEmpty(oracleJdbcName) && StringUtils.isNotEmpty(oraclePortNo)
-			&& StringUtils.isNotEmpty(oracleSchemaName) && StringUtils.isNotEmpty(oracleUserName)
-			&& StringUtils.isNotEmpty(oraclePassword)) {
-
-			LinkedHashMap<String, Object> property = getProperties();
-			databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
-			
-			if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-				oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
-			}else{
-				createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
-			}
-			if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
-				extractOracleMetaStoreDetails(oracleDatabaseValues, host, port_no);
-			}
-		} else {
-			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
-		}
-
-
+		LinkedHashMap<String, Object> property = getProperties();
+		databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
 		
+		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
+			oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
+		}else{
+			createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
+		}
+		if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
+			extractOracleMetaStoreDetails(oracleDatabaseValues);
+		}
 	}
 
+	private void validateDatabaseFields(DatabaseParameterType parameterType){
+		if (StringUtils.isEmpty(parameterType.getDatabaseName()) && StringUtils.isEmpty(parameterType.getHostName())
+				&& StringUtils.isEmpty(parameterType.getJdbcName()) && StringUtils.isEmpty(parameterType.getPortNo())
+				&& StringUtils.isEmpty(parameterType.getSchemaName()) && StringUtils.isEmpty(parameterType.getUserName())
+				&& StringUtils.isEmpty(parameterType.getPassword())) {
+			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+		}
+	}
+	
 	/**
 	 * Selection listener on Extract MetaStore button
 	 * @return
@@ -566,17 +544,22 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 * @param host
 	 * @param port_no
 	 */
-	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues, String host, String port_no) {
+	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues) {
 
-		String jsonResponse = "";
-
-		try {
+		DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
+		validateDatabaseFields(parameterType);
+		
+		DatabaseTableSchema databaseTableSchema = DataBaseUtility.getInstance()
+				.extractDatabaseDetails(oracleDatabaseValues, parameterType);
+		/*try {
 			
 			//TODO
+			 * Below code will to extract data from metastore
 			ObjectMapper mapper = new ObjectMapper();
 			String input = oracleDatabaseName + SEPARATOR + oracleHostName + SEPARATOR + oracleJdbcName + SEPARATOR
-					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR
-					+ oracleSchemaName;
+					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR+ oracleSchemaName;
+			
+			
 			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input, host, port_no, oracleDatabaseValues);
 			DatabaseTableSchema databaseTableSchema = mapper.readValue(jsonResponse,
 					DatabaseTableSchema.class);
@@ -585,7 +568,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			logger.error("Json to object Mapping issue ", exp);
 		} catch (IOException ex) {
 			logger.error("Json to object Mapping issue ", ex.getMessage());
-		}
+		}*/
 		
 		//TODO This functionality will used in the future for fetching the json response for RedShift,Oracle and SQL Component
 		/*if(null != oracleTableSchema){

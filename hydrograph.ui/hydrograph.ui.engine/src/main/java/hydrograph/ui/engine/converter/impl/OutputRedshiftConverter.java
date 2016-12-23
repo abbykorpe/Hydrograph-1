@@ -26,10 +26,9 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
-import hydrograph.engine.jaxb.oredshift.TypePriamryKeys;
+import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -69,43 +68,37 @@ public class OutputRedshiftConverter extends OutputConverter {
 		}
 		
 		ElementValueStringType tableName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_TABLE_NAME.value()))){
-			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_TABLE_NAME.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.TABLE_NAME.value()))){
+			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.TABLE_NAME.value())));
 			redshiftOutput.setTableName(tableName);
 		}
-		
+		//TODO
+		//Jaxb classes are not update. Below commented code will be use to generate xml.
 		ElementValueStringType hostName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value()))){
-			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value())));
-			redshiftOutput.setHostname(hostName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
+			//redshiftOutput.setHostname(hostName);
 		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = getBigInteger(PropertyNameConstants.REDSHIFT_PORT_NAME.value());
+		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
 		portNo.setValue(portValue);
-		redshiftOutput.setPort(portNo);
+		//redshiftOutput.setPort(portNo);
 		
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
-		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value())));
-		redshiftOutput.setDrivertype(jdbcDriver);
+		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
+		//redshiftOutput.setDrivertype(jdbcDriver);
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value()))){
-			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
 			redshiftOutput.setUsername(userName);
 		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value()))){
-			password.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.PASSWORD.value())));
 			redshiftOutput.setPassword(password);
-		}
-		
-		ElementValueIntegerType chunkSize =  new ElementValueIntegerType();
-		if(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value() !=null){
-			BigInteger chunkValue = getBigInteger(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value());
-			chunkSize.setValue(chunkValue);
-			redshiftOutput.setChunkSize(chunkSize);
 		}
 		
 		TypeLoadChoice loadValue = addTypeLoadChoice();
@@ -115,27 +108,30 @@ public class OutputRedshiftConverter extends OutputConverter {
 	private TypeLoadChoice addTypeLoadChoice() {
 		TypeLoadChoice loadValue = new TypeLoadChoice();
 		Map<String, String> uiValue = (Map<String, String>) properties.get(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value());
-		if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
-			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
-			loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-			loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
-			loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
-		} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
-			loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
-			
+		if(uiValue != null){
+			if (uiValue.containsKey(Constants.LOAD_TYPE_UPDATE_KEY)) {
+				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
+				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
+				//loadValue.setNewTable(getPrimaryKeyColumnFieds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
+				loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
+			} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
+				loadValue.setTruncateLoad(uiValue.get(Constants.LOAD_TYPE_REPLACE_KEY));
+			}
 		}
 		return loadValue;
 	}
 	
-	private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
+	//TODO
+	//Below code will be use to generate xml after Jaxb classes generation.
+	/*private TypePriamryKeys getPrimaryKeyColumnFields(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
-		String[] primaryKeyColumnsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
-		if(primaryKeyColumnsFeilds !=null && primaryKeyColumnsFeilds.length>0){
+		String[] primaryKeyColumnsFields = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
+		if(primaryKeyColumnsFieds !=null && primaryKeyColumnsFieds.length>0){
 			TypeKeyFields primaryTypeKeyFields = new TypeKeyFields();
 			primaryKeys.setPrimaryKeys(primaryTypeKeyFields);
-			for(String fieldValue : primaryKeyColumnsFeilds){
+			for(String fieldValue : primaryKeyColumnsFields){
 				TypeFieldName primaryTypeFieldName = new TypeFieldName();
 				primaryTypeFieldName.setName(fieldValue);
 				primaryTypeKeyFields.getField().add(primaryTypeFieldName);
@@ -143,7 +139,7 @@ public class OutputRedshiftConverter extends OutputConverter {
 		}
 				
 		return primaryKeys;
-	}
+	}*/
 
 	private hydrograph.engine.jaxb.oredshift.TypeUpdateKeys getUpdateKeys(String fields) {
 		TypeUpdateKeys updateKeys = null;

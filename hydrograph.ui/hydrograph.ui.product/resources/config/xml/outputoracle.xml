@@ -37,7 +37,7 @@
 		
 		<tns:property dataType="string" name="jdbcDriver" value="Oracle Thin" renderer="JDBC_DRIVER_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="Denotes the JDBC Driver selected by user">
+			usage="REQUIRED" propertyHelpText="JDBC Driver use to connect with Oracle database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -71,8 +71,8 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Database Password provided by the user">
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Password requires for connection with oracle database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -81,16 +81,10 @@
 			usage="REQUIRED" propertyHelpText="Used to test the connection for connecting Oracle DB">
 		</tns:property>
 		
-		<tns:property dataType="string" name="oracleTableName" value="" renderer="TABLE_NAME_WIDGET"
+		<tns:property dataType="string" name="tableName" value="" renderer="TABLE_NAME_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
-		</tns:property>
-		
-		<tns:property dataType="string" name="chunkSize" value="1000" renderer="CHUNK_SIZE_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Displays the Chunk Size provided by the user">
-			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="load_type_configuration" renderer="LOAD_TYPE_CONFIGURATION_WIDGET"

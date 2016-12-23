@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeFieldName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-primary-key-fields", propOrder = {
+@XmlType(name = "type-primary-key-fields", namespace = "hydrograph/engine/jaxb/aggregate", propOrder = {
     "field",
     "none"
 })

@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-redshift-field")
+@XmlType(name = "type-redshift-field", namespace = "hydrograph/engine/jaxb/oredshift")
 public class TypeRedshiftField
     extends TypeBaseField
 {

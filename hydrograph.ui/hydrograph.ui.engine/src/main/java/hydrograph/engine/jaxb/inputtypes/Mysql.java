@@ -34,13 +34,18 @@ import hydrograph.engine.jaxb.imysql.TypeInputMysqlBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/imysql}type-input-mysql-base">
  *       &lt;sequence>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
+ *         &lt;element name="jdbcDriver" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;choice>
+ *           &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *           &lt;sequence>
+ *             &lt;element name="selectQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *             &lt;element name="countQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
+ *           &lt;/sequence>
+ *         &lt;/choice>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="jdbcurl" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="query" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
- *         &lt;element name="condition" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
- *         &lt;element name="batchSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -51,15 +56,16 @@ import hydrograph.engine.jaxb.imysql.TypeInputMysqlBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "mysql", propOrder = {
+@XmlType(name = "mysql", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "databaseName",
+    "hostName",
+    "port",
+    "jdbcDriver",
     "tableName",
+    "selectQuery",
+    "countQuery",
     "username",
     "password",
-    "jdbcurl",
-    "query",
-    "condition",
-    "batchSize",
     "runtimeProperties"
 })
 public class Mysql
@@ -69,17 +75,17 @@ public class Mysql
     @XmlElement(required = true)
     protected ElementValueStringType databaseName;
     @XmlElement(required = true)
+    protected ElementValueStringType hostName;
+    protected ElementValueIntegerType port;
+    @XmlElement(required = true)
+    protected ElementValueStringType jdbcDriver;
     protected ElementValueStringType tableName;
+    protected ElementValueStringType selectQuery;
+    protected ElementValueStringType countQuery;
     @XmlElement(required = true)
     protected ElementValueStringType username;
     @XmlElement(required = true)
     protected ElementValueStringType password;
-    @XmlElement(required = true)
-    protected ElementValueStringType jdbcurl;
-    protected ElementValueStringType query;
-    protected ElementValueStringType condition;
-    @XmlElement(required = true)
-    protected ElementValueIntegerType batchSize;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -107,6 +113,78 @@ public class Mysql
     }
 
     /**
+     * Gets the value of the hostName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getHostName() {
+        return hostName;
+    }
+
+    /**
+     * Sets the value of the hostName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setHostName(ElementValueStringType value) {
+        this.hostName = value;
+    }
+
+    /**
+     * Gets the value of the port property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public ElementValueIntegerType getPort() {
+        return port;
+    }
+
+    /**
+     * Sets the value of the port property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public void setPort(ElementValueIntegerType value) {
+        this.port = value;
+    }
+
+    /**
+     * Gets the value of the jdbcDriver property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getJdbcDriver() {
+        return jdbcDriver;
+    }
+
+    /**
+     * Sets the value of the jdbcDriver property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setJdbcDriver(ElementValueStringType value) {
+        this.jdbcDriver = value;
+    }
+
+    /**
      * Gets the value of the tableName property.
      * 
      * @return
@@ -128,6 +206,54 @@ public class Mysql
      */
     public void setTableName(ElementValueStringType value) {
         this.tableName = value;
+    }
+
+    /**
+     * Gets the value of the selectQuery property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getSelectQuery() {
+        return selectQuery;
+    }
+
+    /**
+     * Sets the value of the selectQuery property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setSelectQuery(ElementValueStringType value) {
+        this.selectQuery = value;
+    }
+
+    /**
+     * Gets the value of the countQuery property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getCountQuery() {
+        return countQuery;
+    }
+
+    /**
+     * Sets the value of the countQuery property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setCountQuery(ElementValueStringType value) {
+        this.countQuery = value;
     }
 
     /**
@@ -176,102 +302,6 @@ public class Mysql
      */
     public void setPassword(ElementValueStringType value) {
         this.password = value;
-    }
-
-    /**
-     * Gets the value of the jdbcurl property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getJdbcurl() {
-        return jdbcurl;
-    }
-
-    /**
-     * Sets the value of the jdbcurl property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setJdbcurl(ElementValueStringType value) {
-        this.jdbcurl = value;
-    }
-
-    /**
-     * Gets the value of the query property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getQuery() {
-        return query;
-    }
-
-    /**
-     * Sets the value of the query property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setQuery(ElementValueStringType value) {
-        this.query = value;
-    }
-
-    /**
-     * Gets the value of the condition property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getCondition() {
-        return condition;
-    }
-
-    /**
-     * Sets the value of the condition property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setCondition(ElementValueStringType value) {
-        this.condition = value;
-    }
-
-    /**
-     * Gets the value of the batchSize property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public ElementValueIntegerType getBatchSize() {
-        return batchSize;
-    }
-
-    /**
-     * Sets the value of the batchSize property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public void setBatchSize(ElementValueIntegerType value) {
-        this.batchSize = value;
     }
 
     /**

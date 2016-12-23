@@ -64,7 +64,7 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
+		/*if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value(), redshift.getDrivertype().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getHostname().getValue())) {
@@ -72,24 +72,24 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		}
 		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_PORT_NAME.value(), redshift.getPort().getValue().toString());
-		}
+		}*/
 		if (StringUtils.isNotBlank(redshift.getUsername().getValue()) ) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_USER_NAME.value(), redshift.getUsername().getValue());
+			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUsername().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getPassword().getValue())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_PASSWORD.value(), redshift.getPassword().getValue());
+			propertyMap.put(PropertyNameConstants.PASSWORD.value(), redshift.getPassword().getValue());
 		}
 		if ((redshift.getTableName()!= null)&& StringUtils.isNotBlank(redshift.getTableName().toString())){
 			databaseSelectionConfig.setTableName(redshift.getTableName().getValue());
-			databaseSelectionConfig.setTableName(true);
+			databaseSelectionConfig.setTableNameSelection(true);
 		}else{
-			databaseSelectionConfig.setTableName(false);
-			if ((redshift.getSelectQuery()!= null)&& StringUtils.isNotBlank(redshift.getSelectQuery().toString())) {
+			databaseSelectionConfig.setTableNameSelection(false);
+			/*if ((redshift.getSelectQuery()!= null)&& StringUtils.isNotBlank(redshift.getSelectQuery().toString())) {
 				databaseSelectionConfig.setSqlQuery(redshift.getSelectQuery().getValue());
 			}
 			if ((redshift.getCountQuery().getValue() != null)&& StringUtils.isNotBlank(redshift.getCountQuery().toString())) {
 				databaseSelectionConfig.setSqlQueryCounter(redshift.getCountQuery().getValue());
-			}
+			}*/
 		}
 		propertyMap.put(PropertyNameConstants.SELECT_OPTION.value(), databaseSelectionConfig);
 		uiComponent.setType(UIComponentsConstants.REDSHIFT.value());

@@ -43,7 +43,7 @@ import hydrograph.engine.jaxb.generatesequence.TypeOperationOutputField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operation-output-fields", propOrder = {
+@XmlType(name = "type-operation-output-fields", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "field"
 })
 @XmlSeeAlso({

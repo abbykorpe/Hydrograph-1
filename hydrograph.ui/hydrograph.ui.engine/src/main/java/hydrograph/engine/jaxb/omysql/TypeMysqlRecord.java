@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-mysql-record")
+@XmlType(name = "type-mysql-record", namespace = "hydrograph/engine/jaxb/omysql")
 public class TypeMysqlRecord
     extends TypeBaseRecord
 {

@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-mysql-out-socket")
+@XmlType(name = "type-output-mysql-out-socket", namespace = "hydrograph/engine/jaxb/omysql")
 public class TypeOutputMysqlOutSocket
     extends TypeOutputInSocket
 {

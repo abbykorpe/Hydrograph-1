@@ -42,6 +42,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeSecondaryKeyFields }
+     * 
+     */
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeRemovedupsBase }
      * 
      */
@@ -58,27 +74,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
      * 
      */
     public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
         return new TypeSecondayKeyFieldsAttributes();
-    }
-
-    /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
-     * 
-     */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
     }
 
     /**

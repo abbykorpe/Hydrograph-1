@@ -42,11 +42,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link HivePartitionFieldsType }
+     * 
+     */
+    public HivePartitionFieldsType createHivePartitionFieldsType() {
+        return new HivePartitionFieldsType();
+    }
+
+    /**
      * Create an instance of {@link HivePathType }
      * 
      */
     public HivePathType createHivePathType() {
         return new HivePathType();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputHiveTextFileDelimitedInSocket }
+     * 
+     */
+    public TypeOutputHiveTextFileDelimitedInSocket createTypeOutputHiveTextFileDelimitedInSocket() {
+        return new TypeOutputHiveTextFileDelimitedInSocket();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
     }
 
     /**
@@ -71,30 +95,6 @@ public class ObjectFactory {
      */
     public TypeOutputHiveTextFileDelimitedBase createTypeOutputHiveTextFileDelimitedBase() {
         return new TypeOutputHiveTextFileDelimitedBase();
-    }
-
-    /**
-     * Create an instance of {@link HivePartitionFieldsType }
-     * 
-     */
-    public HivePartitionFieldsType createHivePartitionFieldsType() {
-        return new HivePartitionFieldsType();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputHiveTextFileDelimitedInSocket }
-     * 
-     */
-    public TypeOutputHiveTextFileDelimitedInSocket createTypeOutputHiveTextFileDelimitedInSocket() {
-        return new TypeOutputHiveTextFileDelimitedInSocket();
     }
 
 }

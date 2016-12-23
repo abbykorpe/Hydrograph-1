@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-key-fields", propOrder = {
+@XmlType(name = "type-key-fields", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "field"
 })
 public class TypeKeyFields {

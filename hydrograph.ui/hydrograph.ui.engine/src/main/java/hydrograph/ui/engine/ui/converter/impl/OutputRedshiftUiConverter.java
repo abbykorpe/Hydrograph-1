@@ -28,7 +28,6 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.oredshift.TypePriamryKeys;
 import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
@@ -42,6 +41,11 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.ORedshift;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ *The Class OutputRedshiftUiConverter to convert jaxb Redshift object into Redshift component
+ * @author Bitwise
+ *
+ */
 public class OutputRedshiftUiConverter extends OutputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputRedshiftUiConverter.class);
@@ -66,7 +70,7 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
+		/*if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value(), redshift.getDrivertype().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getHostname().getValue())) {
@@ -74,20 +78,16 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		}
 		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_PORT_NAME.value(),redshift.getPort().getValue().toString());
-		}
+		}*/
 		if (StringUtils.isNotBlank(redshift.getUsername().getValue())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_USER_NAME.value(), redshift.getUsername().getValue());
+			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUsername().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getPassword().getValue())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_PASSWORD.value(), redshift.getPassword().getValue());
+			propertyMap.put(PropertyNameConstants.PASSWORD.value(), redshift.getPassword().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getTableName().getValue())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_TABLE_NAME.value(), redshift.getTableName().getValue());
+			propertyMap.put(PropertyNameConstants.TABLE_NAME.value(), redshift.getTableName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getChunkSize().getValue().toString()) ) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_CHUNK_SIZE.value(),redshift.getChunkSize().getValue().toString());
-		}
-		
 		
 		if(redshift.getLoadType() !=null){
 			if(redshift.getLoadType().getInsert() !=null){
@@ -97,7 +97,7 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 			} else if(redshift.getLoadType().getUpdate() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_UPDATE_KEY,getLoadTypeUpdateKeyUIValue(redshift.getLoadType().getUpdate()));
 			}else if(redshift.getLoadType().getNewTable() !=null){
-				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue((TypePriamryKeys) redshift.getLoadType().getNewTable()));
+				//loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue((TypePriamryKeys) redshift.getLoadType().getNewTable()));
 			}
 				
 		}
@@ -115,7 +115,7 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 	 * @param newTable
 	 * @return
 	 */
-	private String getLoadTypePrimaryKeyUIValue(TypePriamryKeys newTable) {
+	/*private String getLoadTypePrimaryKeyUIValue(TypePriamryKeys newTable) {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(newTable !=null && newTable.getPrimaryKeys() !=null){
 			TypeKeyFields typeKeyFields = newTable.getPrimaryKeys();
@@ -125,7 +125,7 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 			}
 		}
 		return StringUtils.removeEnd(stringBuffer.toString(), ",");
-	}
+	}*/
 	
 	/**
 	 *  Appends update keys using a comma

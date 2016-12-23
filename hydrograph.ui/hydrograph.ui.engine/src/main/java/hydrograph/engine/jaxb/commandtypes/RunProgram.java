@@ -49,7 +49,7 @@ import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "runProgram", propOrder = {
+@XmlType(name = "runProgram", namespace = "hydrograph/engine/jaxb/commandtypes", propOrder = {
     "command"
 })
 public class RunProgram

@@ -35,13 +35,15 @@ import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
  *     &lt;extension base="{hydrograph/engine/jaxb/omysql}type-output-mysql-base">
  *       &lt;sequence>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
+ *         &lt;element name="jdbcDriver" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="jdbcurl" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/omysql}type-load-choice" minOccurs="0"/>
- *         &lt;element name="batchSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
+ *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
+ *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/omysql}type-load-choice"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -51,15 +53,17 @@ import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "mysql", propOrder = {
+@XmlType(name = "mysql", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
     "databaseName",
+    "hostName",
+    "port",
+    "jdbcDriver",
     "tableName",
     "username",
     "password",
-    "jdbcurl",
-    "loadType",
-    "batchSize",
-    "runtimeProperties"
+    "chunkSize",
+    "runtimeProperties",
+    "loadType"
 })
 public class Mysql
     extends TypeOutputMysqlBase
@@ -68,17 +72,20 @@ public class Mysql
     @XmlElement(required = true)
     protected ElementValueStringType databaseName;
     @XmlElement(required = true)
+    protected ElementValueStringType hostName;
+    protected ElementValueIntegerType port;
+    @XmlElement(required = true)
+    protected ElementValueStringType jdbcDriver;
+    @XmlElement(required = true)
     protected ElementValueStringType tableName;
     @XmlElement(required = true)
     protected ElementValueStringType username;
     @XmlElement(required = true)
     protected ElementValueStringType password;
-    @XmlElement(required = true)
-    protected ElementValueStringType jdbcurl;
-    protected TypeLoadChoice loadType;
-    @XmlElement(required = true)
-    protected ElementValueIntegerType batchSize;
+    protected ElementValueIntegerType chunkSize;
     protected TypeProperties runtimeProperties;
+    @XmlElement(required = true)
+    protected TypeLoadChoice loadType;
 
     /**
      * Gets the value of the databaseName property.
@@ -102,6 +109,78 @@ public class Mysql
      */
     public void setDatabaseName(ElementValueStringType value) {
         this.databaseName = value;
+    }
+
+    /**
+     * Gets the value of the hostName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getHostName() {
+        return hostName;
+    }
+
+    /**
+     * Sets the value of the hostName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setHostName(ElementValueStringType value) {
+        this.hostName = value;
+    }
+
+    /**
+     * Gets the value of the port property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public ElementValueIntegerType getPort() {
+        return port;
+    }
+
+    /**
+     * Sets the value of the port property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public void setPort(ElementValueIntegerType value) {
+        this.port = value;
+    }
+
+    /**
+     * Gets the value of the jdbcDriver property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getJdbcDriver() {
+        return jdbcDriver;
+    }
+
+    /**
+     * Sets the value of the jdbcDriver property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setJdbcDriver(ElementValueStringType value) {
+        this.jdbcDriver = value;
     }
 
     /**
@@ -177,75 +256,27 @@ public class Mysql
     }
 
     /**
-     * Gets the value of the jdbcurl property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getJdbcurl() {
-        return jdbcurl;
-    }
-
-    /**
-     * Sets the value of the jdbcurl property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setJdbcurl(ElementValueStringType value) {
-        this.jdbcurl = value;
-    }
-
-    /**
-     * Gets the value of the loadType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeLoadChoice }
-     *     
-     */
-    public TypeLoadChoice getLoadType() {
-        return loadType;
-    }
-
-    /**
-     * Sets the value of the loadType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeLoadChoice }
-     *     
-     */
-    public void setLoadType(TypeLoadChoice value) {
-        this.loadType = value;
-    }
-
-    /**
-     * Gets the value of the batchSize property.
+     * Gets the value of the chunkSize property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueIntegerType }
      *     
      */
-    public ElementValueIntegerType getBatchSize() {
-        return batchSize;
+    public ElementValueIntegerType getChunkSize() {
+        return chunkSize;
     }
 
     /**
-     * Sets the value of the batchSize property.
+     * Sets the value of the chunkSize property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueIntegerType }
      *     
      */
-    public void setBatchSize(ElementValueIntegerType value) {
-        this.batchSize = value;
+    public void setChunkSize(ElementValueIntegerType value) {
+        this.chunkSize = value;
     }
 
     /**
@@ -270,6 +301,30 @@ public class Mysql
      */
     public void setRuntimeProperties(TypeProperties value) {
         this.runtimeProperties = value;
+    }
+
+    /**
+     * Gets the value of the loadType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TypeLoadChoice }
+     *     
+     */
+    public TypeLoadChoice getLoadType() {
+        return loadType;
+    }
+
+    /**
+     * Sets the value of the loadType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TypeLoadChoice }
+     *     
+     */
+    public void setLoadType(TypeLoadChoice value) {
+        this.loadType = value;
     }
 
 }

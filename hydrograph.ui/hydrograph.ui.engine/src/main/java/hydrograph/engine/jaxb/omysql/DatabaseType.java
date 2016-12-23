@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "database-type")
+@XmlType(name = "database-type", namespace = "hydrograph/engine/jaxb/omysql")
 public class DatabaseType {
 
     @XmlAttribute(name = "value", required = true)

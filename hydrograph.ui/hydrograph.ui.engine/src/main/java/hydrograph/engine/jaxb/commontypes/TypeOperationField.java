@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operation-field")
+@XmlType(name = "type-operation-field", namespace = "hydrograph/engine/jaxb/commontypes")
 public class TypeOperationField {
 
     @XmlAttribute(name = "name", required = true)

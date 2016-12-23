@@ -124,6 +124,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		lableAndTextBox.attachWidget(textBoxWidget);
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();
+		textBox.setEnabled(textBoxConfig.isEnabled());
 		
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
@@ -183,7 +184,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 			textBox.setText("");
 			txtDecorator.show();
 		}
-		
 	}
 	
 	protected boolean isParameter(String input) {

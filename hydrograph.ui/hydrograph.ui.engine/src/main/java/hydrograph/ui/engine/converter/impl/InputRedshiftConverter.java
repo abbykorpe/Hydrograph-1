@@ -78,30 +78,32 @@ public class InputRedshiftConverter extends InputConverter {
 			redshiftInput.setDatabaseName(dataBaseName);
 		}
 		
+		//TODO
+		//Below code will be use to generate xml after Jaxb updation.
 		ElementValueStringType hostName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value()))){
-			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_HOST_NAME.value())));
-			redshiftInput.setHostname(hostName);
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
+			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
+			//redshiftInput.setHostname(hostName);
 		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = getBigInteger(PropertyNameConstants.REDSHIFT_PORT_NAME.value());
+		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
 		portNo.setValue(portValue);
-		redshiftInput.setPort(portNo);
+		//redshiftInput.setPort(portNo);
 
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
-		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value())));
-		redshiftInput.setDrivertype(jdbcDriver);
+		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
+		//redshiftInput.setDrivertype(jdbcDriver);
 		
 		ElementValueStringType userName = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value()))){
-			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_USER_NAME.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.USER_NAME.value()))){
+			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
 			redshiftInput.setUsername(userName);
 		}
 		
 		ElementValueStringType password = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value()))){
-			password.setValue(String.valueOf(properties.get(PropertyNameConstants.REDSHIFT_PASSWORD.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.PASSWORD.value()))){
+			password.setValue(String.valueOf(properties.get(PropertyNameConstants.PASSWORD.value())));
 			redshiftInput.setPassword(password);
 		}
 		
@@ -116,11 +118,11 @@ public class InputRedshiftConverter extends InputConverter {
 			} else {
 				ElementValueStringType sqlQuery = new ElementValueStringType();
 				sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
-				redshiftInput.setSelectQuery(sqlQuery);
+				//redshiftInput.setSelectQuery(sqlQuery);
 
 				ElementValueStringType sqlQueryCounter = new ElementValueStringType();
 				sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
-				redshiftInput.setCountQuery(sqlQueryCounter);
+				//redshiftInput.setCountQuery(sqlQueryCounter);
 			}
 		}
 

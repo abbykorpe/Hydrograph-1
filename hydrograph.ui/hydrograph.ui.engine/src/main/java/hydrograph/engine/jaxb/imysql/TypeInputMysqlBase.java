@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.Mysql;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-mysql-base")
+@XmlType(name = "type-input-mysql-base", namespace = "hydrograph/engine/jaxb/imysql")
 @XmlSeeAlso({
     Mysql.class
 })

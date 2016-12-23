@@ -42,35 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformOperationInputField }
+     * Create an instance of {@link TypeTransformOutSocket }
      * 
      */
-    public TypeTransformOperationInputField createTypeTransformOperationInputField() {
-        return new TypeTransformOperationInputField();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
-     * 
-     */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformOperationInputFields }
-     * 
-     */
-    public TypeTransformOperationInputFields createTypeTransformOperationInputFields() {
-        return new TypeTransformOperationInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformInSocket }
-     * 
-     */
-    public TypeTransformInSocket createTypeTransformInSocket() {
-        return new TypeTransformInSocket();
+    public TypeTransformOutSocket createTypeTransformOutSocket() {
+        return new TypeTransformOutSocket();
     }
 
     /**
@@ -82,11 +58,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformOutSocket }
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
-    public TypeTransformOutSocket createTypeTransformOutSocket() {
-        return new TypeTransformOutSocket();
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformInSocket }
+     * 
+     */
+    public TypeTransformInSocket createTypeTransformInSocket() {
+        return new TypeTransformInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformOperationInputField }
+     * 
+     */
+    public TypeTransformOperationInputField createTypeTransformOperationInputField() {
+        return new TypeTransformOperationInputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformOperationInputFields }
+     * 
+     */
+    public TypeTransformOperationInputFields createTypeTransformOperationInputFields() {
+        return new TypeTransformOperationInputFields();
     }
 
 }

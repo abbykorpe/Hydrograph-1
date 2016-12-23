@@ -42,11 +42,59 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link HivePartitionFieldsType }
+     * 
+     */
+    public HivePartitionFieldsType createHivePartitionFieldsType() {
+        return new HivePartitionFieldsType();
+    }
+
+    /**
      * Create an instance of {@link HivePathType }
      * 
      */
     public HivePathType createHivePathType() {
         return new HivePathType();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputDelimitedOutSocket }
+     * 
+     */
+    public TypeInputDelimitedOutSocket createTypeInputDelimitedOutSocket() {
+        return new TypeInputDelimitedOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputFileDelimitedBase }
+     * 
+     */
+    public TypeInputFileDelimitedBase createTypeInputFileDelimitedBase() {
+        return new TypeInputFileDelimitedBase();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link HivePartitionFilterType }
+     * 
+     */
+    public HivePartitionFilterType createHivePartitionFilterType() {
+        return new HivePartitionFilterType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionColumn }
+     * 
+     */
+    public PartitionColumn createPartitionColumn() {
+        return new PartitionColumn();
     }
 
     /**
@@ -63,54 +111,6 @@ public class ObjectFactory {
      */
     public PartitionFieldBasicType createPartitionFieldBasicType() {
         return new PartitionFieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link PartitionColumn }
-     * 
-     */
-    public PartitionColumn createPartitionColumn() {
-        return new PartitionColumn();
-    }
-
-    /**
-     * Create an instance of {@link HivePartitionFieldsType }
-     * 
-     */
-    public HivePartitionFieldsType createHivePartitionFieldsType() {
-        return new HivePartitionFieldsType();
-    }
-
-    /**
-     * Create an instance of {@link TypeInputDelimitedOutSocket }
-     * 
-     */
-    public TypeInputDelimitedOutSocket createTypeInputDelimitedOutSocket() {
-        return new TypeInputDelimitedOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeInputFileDelimitedBase }
-     * 
-     */
-    public TypeInputFileDelimitedBase createTypeInputFileDelimitedBase() {
-        return new TypeInputFileDelimitedBase();
-    }
-
-    /**
-     * Create an instance of {@link HivePartitionFilterType }
-     * 
-     */
-    public HivePartitionFilterType createHivePartitionFilterType() {
-        return new HivePartitionFilterType();
     }
 
 }

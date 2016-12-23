@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-redshift-out-socket")
+@XmlType(name = "type-input-redshift-out-socket", namespace = "hydrograph/engine/jaxb/iredshift")
 public class TypeInputRedshiftOutSocket
     extends TypeInputOutSocket
 {

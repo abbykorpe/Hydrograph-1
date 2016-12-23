@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-redshift-record")
+@XmlType(name = "type-redshift-record", namespace = "hydrograph/engine/jaxb/oredshift")
 public class TypeRedshiftRecord
     extends TypeBaseRecord
 {
