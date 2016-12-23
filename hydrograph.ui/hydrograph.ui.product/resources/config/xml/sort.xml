@@ -57,7 +57,7 @@
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="Propogate" value="0" renderer="PROPOGATE_WIDGET" type="USER"
+		<tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="Propogate data from left.">
 		</tns:property>
