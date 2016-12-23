@@ -190,6 +190,10 @@ public class Constants {
 	 */
 	public static final String redshift = "hydrograph.server.metadata.strategy.RedshiftMetadataStrategy";
 	/**
+	 * Used to get the class name for mysql
+	 */
+	public static final String mysql = "hydrograph.server.metadata.strategy.MysqlMetadataStrategy";
+	/**
 	 * checking the ORACLE type
 	 */
 	public static final String ORACLE = "oracle";
@@ -201,4 +205,9 @@ public class Constants {
 	 * checking the REDSHIFT type
 	 */
 	public static final String REDSHIFT = "redshift";
+
+	/**
+	 * checking the MYSQL type
+	 */
+	public static final String MYSQL = "mysql";
 }
