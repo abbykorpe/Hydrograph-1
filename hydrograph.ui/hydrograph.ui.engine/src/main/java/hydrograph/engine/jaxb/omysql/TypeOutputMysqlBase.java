@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.outputtypes.Mysql;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-mysql-base")
+@XmlType(name = "type-output-mysql-base", namespace = "hydrograph/engine/jaxb/omysql")
 @XmlSeeAlso({
     Mysql.class
 })

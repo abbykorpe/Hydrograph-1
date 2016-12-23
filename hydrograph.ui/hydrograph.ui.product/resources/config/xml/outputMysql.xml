@@ -15,7 +15,7 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
 		name="OMysql" nameInPalette="Mysql" defaultNamePrefix="OMysql" 
-		description="Output MYSQL description"
+		description="Used to write data from Mysql tables"
 		helpFilePath=""
 		acronym="OMysql">
 		<tns:category>OUTPUT</tns:category>
@@ -49,7 +49,7 @@
 		
 		<tns:property dataType="string" name="jdbcDriver" value="Connector/J" renderer="JDBC_DRIVER_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
-			usage="REQUIRED" propertyHelpText="Database name to connect.">
+			usage="REQUIRED" propertyHelpText="JDBC DRIVER use to connect with Mysql database.">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -67,7 +67,7 @@
 		
 		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Database Password provided by the user">
+			usage="REQUIRED" propertyHelpText="Password requires for connection with Mysql database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		

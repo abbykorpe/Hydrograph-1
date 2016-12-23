@@ -42,11 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * Create an instance of {@link TypeSecondaryKeyFields }
      * 
      */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
     }
 
     /**
@@ -58,11 +58,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
-    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
-        return new TypePrimaryKeyFieldsAttributes();
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
+     * Create an instance of {@link TypeSortBase }
+     * 
+     */
+    public TypeSortBase createTypeSortBase() {
+        return new TypeSortBase();
     }
 
     /**
@@ -74,19 +82,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
+     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
      * 
      */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeSortBase }
-     * 
-     */
-    public TypeSortBase createTypeSortBase() {
-        return new TypeSortBase();
+    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
+        return new TypePrimaryKeyFieldsAttributes();
     }
 
     /**

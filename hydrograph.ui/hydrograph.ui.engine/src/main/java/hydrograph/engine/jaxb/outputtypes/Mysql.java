@@ -53,7 +53,7 @@ import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "mysql", propOrder = {
+@XmlType(name = "mysql", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
     "databaseName",
     "hostName",
     "port",

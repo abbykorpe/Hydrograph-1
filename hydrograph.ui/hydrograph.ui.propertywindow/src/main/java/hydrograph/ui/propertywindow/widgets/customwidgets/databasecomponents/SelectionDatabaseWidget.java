@@ -246,7 +246,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		Button buttonAlignment = ((Button) sqlQueryButtonWgt.getSWTWidgetControl());
 		GridData data = (GridData) buttonAlignment.getLayoutData();
 		data.verticalIndent = 5;
-		sqlQuerySelectionListner(sqlQueryButtonWgt);
+		buttonAlignment.addSelectionListener(buttonWidgetSelectionListener(sqlQueryTextBox));
+		buttonWidgetSelectionListener(sqlQueryTextBox);
 
 		createWidgetlabel(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
 		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
@@ -261,53 +262,27 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		Button sqlQueryCounterButton = ((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl());
 		GridData sqlQueryCounterData = (GridData) sqlQueryCounterButton.getLayoutData();
 		sqlQueryCounterData.verticalIndent = 5;
-		sqlQueryCounterSelectionListner(sqlQueryCounterButtonWgt);
+		sqlQueryCounterButton.addSelectionListener(buttonWidgetSelectionListener(sqlQueryCountertextbox));
 
 	}
 
-	/**
-	 * Opens the SQL Query Counter Dialog
-	 * @param sqlQueryCounterButtonWgt
-	 */
-	private void sqlQueryCounterSelectionListner(ELTDefaultButton sqlQueryCounterButtonWgt) {
-		
-		((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-
-			private String sqlQueryCounterStatement;
-
+	private SelectionAdapter buttonWidgetSelectionListener(Text textWidget){
+		SelectionAdapter adapter = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String text = sqlQueryCountertextbox.getText();
+				String text = textWidget.getText();
 				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
 						Display.getCurrent().getActiveShell(), text);
 				sqlQueryStatementDialog.open();
-				sqlQueryCounterStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
-				sqlQueryCountertextbox.setText(sqlQueryCounterStatement);
+				textWidget.setText(sqlQueryStatementDialog.getStyleTextSqlQuery());
+				if(sqlQueryStatementDialog.isTextValueChanged()){
+					propertyDialogButtonBar.enableApplyButton(true);
+				}
 			}
-
-		});
+		};
+		return adapter;
 	}
-
-	/**
-	 * Opens the SQL Query Statement Dialog
-	 * @param sqlQueryButtonWgt
-	 */
-	private void sqlQuerySelectionListner(ELTDefaultButton sqlQueryButtonWgt) {
-
-		((Button) sqlQueryButtonWgt.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String text = sqlQueryTextBox.getText();
-				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
-						Display.getCurrent().getActiveShell(), text);
-				sqlQueryStatementDialog.open();
-				sqlQueryStatement = sqlQueryStatementDialog.getStyleTextSqlQuery();
-				sqlQueryTextBox.setText(sqlQueryStatement);
-			}
-
-		});
-	}
+	
 
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
@@ -510,15 +485,14 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	}
 	
 	private String getComponentType(){
-		String databaseType= "";
 		if(StringUtils.equalsIgnoreCase(getComponent().getType(), ORACLE)){
-			databaseType=ORACLE;
+			return ORACLE;
 		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), REDSHIFT)){
-			databaseType=REDSHIFT;
+			return REDSHIFT;
 		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
-			databaseType = MYSQL;
+			return MYSQL;
 		}
-		return databaseType;
+		return "";
 	}
 	
 	private void validateDatabaseParams(){

@@ -33,6 +33,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
  *         &lt;choice maxOccurs="unbounded">
  *           &lt;element name="passThroughField" type="{hydrograph/engine/jaxb/cumulate}type-operation-input-field"/>
  *           &lt;element name="operationField" type="{hydrograph/engine/jaxb/commontypes}type-operation-field"/>
+ *           &lt;element name="expressionField" type="{hydrograph/engine/jaxb/commontypes}type-expression-field"/>
  *           &lt;element name="mapField" type="{hydrograph/engine/jaxb/commontypes}type-map-field"/>
  *         &lt;/choice>
  *       &lt;/choice>
@@ -46,7 +47,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-out-socket")
+@XmlType(name = "type-out-socket", namespace = "hydrograph/engine/jaxb/cumulate")
 public class TypeOutSocket
     extends TypeOperationsOutSocket
 {

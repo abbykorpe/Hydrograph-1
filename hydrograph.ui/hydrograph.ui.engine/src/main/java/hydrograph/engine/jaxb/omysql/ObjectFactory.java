@@ -42,51 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DatabaseType }
+     * Create an instance of {@link TypePrimaryKeys }
      * 
      */
-    public DatabaseType createDatabaseType() {
-        return new DatabaseType();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputMysqlOutSocket }
-     * 
-     */
-    public TypeOutputMysqlOutSocket createTypeOutputMysqlOutSocket() {
-        return new TypeOutputMysqlOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputMysqlBase }
-     * 
-     */
-    public TypeOutputMysqlBase createTypeOutputMysqlBase() {
-        return new TypeOutputMysqlBase();
-    }
-
-    /**
-     * Create an instance of {@link TypePriamryKeys }
-     * 
-     */
-    public TypePriamryKeys createTypePriamryKeys() {
-        return new TypePriamryKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeLoadChoice }
-     * 
-     */
-    public TypeLoadChoice createTypeLoadChoice() {
-        return new TypeLoadChoice();
-    }
-
-    /**
-     * Create an instance of {@link TypeMysqlField }
-     * 
-     */
-    public TypeMysqlField createTypeMysqlField() {
-        return new TypeMysqlField();
+    public TypePrimaryKeys createTypePrimaryKeys() {
+        return new TypePrimaryKeys();
     }
 
     /**
@@ -98,11 +58,51 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DatabaseType }
+     * 
+     */
+    public DatabaseType createDatabaseType() {
+        return new DatabaseType();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputMysqlBase }
+     * 
+     */
+    public TypeOutputMysqlBase createTypeOutputMysqlBase() {
+        return new TypeOutputMysqlBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeMysqlField }
+     * 
+     */
+    public TypeMysqlField createTypeMysqlField() {
+        return new TypeMysqlField();
+    }
+
+    /**
+     * Create an instance of {@link TypeLoadChoice }
+     * 
+     */
+    public TypeLoadChoice createTypeLoadChoice() {
+        return new TypeLoadChoice();
+    }
+
+    /**
      * Create an instance of {@link TypeUpdateKeys }
      * 
      */
     public TypeUpdateKeys createTypeUpdateKeys() {
         return new TypeUpdateKeys();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputMysqlOutSocket }
+     * 
+     */
+    public TypeOutputMysqlOutSocket createTypeOutputMysqlOutSocket() {
+        return new TypeOutputMysqlOutSocket();
     }
 
 }

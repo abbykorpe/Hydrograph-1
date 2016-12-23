@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-fixedwidth-field")
+@XmlType(name = "type-fixedwidth-field", namespace = "hydrograph/engine/jaxb/otffw")
 public class TypeFixedwidthField
     extends TypeBaseField
 {

@@ -28,7 +28,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.ooracle.TypeLoadChoice;
 import hydrograph.engine.jaxb.ooracle.TypeOutputOracleInSocket;
-import hydrograph.engine.jaxb.ooracle.TypePriamryKeys;
+import hydrograph.engine.jaxb.ooracle.TypePrimaryKeys;
 import hydrograph.engine.jaxb.ooracle.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Oracle;
 import hydrograph.ui.common.util.Constants;
@@ -133,8 +133,8 @@ public class OutputOracleConverter extends OutputConverter {
 	 * @param primaryKeyFeilds
 	 * @return
 	 */
-	private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
-		TypePriamryKeys primaryKeys = new TypePriamryKeys();
+	private TypePrimaryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
+		TypePrimaryKeys primaryKeys = new TypePrimaryKeys();
 		String[] primaryKeyColumnsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 		if(primaryKeyColumnsFeilds !=null && primaryKeyColumnsFeilds.length>0){
 			TypeKeyFields primaryTypeKeyFields = new TypeKeyFields();

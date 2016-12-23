@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-load-choice", propOrder = {
+@XmlType(name = "type-load-choice", namespace = "hydrograph/engine/jaxb/oredshift", propOrder = {
     "newTable",
     "truncateLoad",
     "insert",

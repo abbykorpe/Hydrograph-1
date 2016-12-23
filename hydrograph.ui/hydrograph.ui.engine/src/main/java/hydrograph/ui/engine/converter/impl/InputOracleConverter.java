@@ -131,7 +131,7 @@ public class InputOracleConverter extends InputConverter {
 
 				ElementValueStringType sqlQueryCounter = new ElementValueStringType();
 				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
-					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
+					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQuery());
 					oracleInput.setCountQuery(sqlQueryCounter);
 				}
 			}

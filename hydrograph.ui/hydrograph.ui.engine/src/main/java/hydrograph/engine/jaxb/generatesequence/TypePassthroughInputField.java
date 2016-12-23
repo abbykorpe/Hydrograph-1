@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeInputField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-passthrough-input-field")
+@XmlType(name = "type-passthrough-input-field", namespace = "hydrograph/engine/jaxb/generatesequence")
 public class TypePassthroughInputField
     extends TypeInputField
 {

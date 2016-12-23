@@ -79,7 +79,7 @@ public class InputOracleUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(inputOracle.getSchemaName().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(inputOracle.getUserName().getValue())){
+		if(inputOracle.getUserName() != null && StringUtils.isNotBlank(inputOracle.getUserName().getValue())){
 			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(inputOracle.getUserName().getValue()));
 		}
 		

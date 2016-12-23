@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-limit-in-socket")
+@XmlType(name = "type-limit-in-socket", namespace = "hydrograph/engine/jaxb/limit")
 public class TypeLimitInSocket
     extends TypeBaseInSocket
 {

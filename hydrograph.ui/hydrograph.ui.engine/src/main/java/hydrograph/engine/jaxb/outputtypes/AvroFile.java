@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.otfd.TypeOutputFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "avroFile", propOrder = {
+@XmlType(name = "avroFile", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
     "path",
     "runtimeProperties"
 })

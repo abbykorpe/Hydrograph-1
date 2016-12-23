@@ -119,9 +119,7 @@ public class InputMysqlConverter extends InputConverter{
 			} else {
 				ElementValueStringType sqlQuery = new ElementValueStringType();
 				if(databaseSelectionConfig.getSqlQuery() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
-					String queryText = databaseSelectionConfig.getSqlQuery();
-					queryText = queryText.replace("\n", "").replace("\r", "");
-					sqlQuery.setValue(queryText);
+					sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
 					mysqlInput.setSelectQuery(sqlQuery);
 				}
 

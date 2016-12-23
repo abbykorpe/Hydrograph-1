@@ -42,19 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LookupBase }
+     * Create an instance of {@link TypeKeyFields }
      * 
      */
-    public LookupBase createLookupBase() {
-        return new LookupBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeInSocket }
-     * 
-     */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
+    public TypeKeyFields createTypeKeyFields() {
+        return new TypeKeyFields();
     }
 
     /**
@@ -66,11 +58,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeKeyFields }
+     * Create an instance of {@link TypeInSocket }
      * 
      */
-    public TypeKeyFields createTypeKeyFields() {
-        return new TypeKeyFields();
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
+    }
+
+    /**
+     * Create an instance of {@link LookupBase }
+     * 
+     */
+    public LookupBase createLookupBase() {
+        return new LookupBase();
     }
 
 }

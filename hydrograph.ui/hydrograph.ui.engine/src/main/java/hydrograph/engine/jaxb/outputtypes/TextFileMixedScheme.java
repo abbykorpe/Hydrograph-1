@@ -73,7 +73,7 @@ import hydrograph.engine.jaxb.ofmixedscheme.TypeMixedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "textFileMixedScheme", propOrder = {
+@XmlType(name = "textFileMixedScheme", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
     "path",
     "safe",
     "strict",

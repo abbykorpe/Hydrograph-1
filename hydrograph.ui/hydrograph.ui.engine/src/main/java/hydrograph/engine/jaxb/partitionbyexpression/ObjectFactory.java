@@ -42,11 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePbeOperation }
+     * Create an instance of {@link TypePbeInputFields }
      * 
      */
-    public TypePbeOperation createTypePbeOperation() {
-        return new TypePbeOperation();
+    public TypePbeInputFields createTypePbeInputFields() {
+        return new TypePbeInputFields();
+    }
+
+    /**
+     * Create an instance of {@link TypePbeOperationInputField }
+     * 
+     */
+    public TypePbeOperationInputField createTypePbeOperationInputField() {
+        return new TypePbeOperationInputField();
     }
 
     /**
@@ -58,22 +66,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionByExpressionBase }
-     * 
-     */
-    public PartitionByExpressionBase createPartitionByExpressionBase() {
-        return new PartitionByExpressionBase();
-    }
-
-    /**
-     * Create an instance of {@link TypePbeInputFields }
-     * 
-     */
-    public TypePbeInputFields createTypePbeInputFields() {
-        return new TypePbeInputFields();
-    }
-
-    /**
      * Create an instance of {@link TypePbeOutSocket }
      * 
      */
@@ -82,11 +74,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePbeOperationInputField }
+     * Create an instance of {@link PartitionByExpressionBase }
      * 
      */
-    public TypePbeOperationInputField createTypePbeOperationInputField() {
-        return new TypePbeOperationInputField();
+    public PartitionByExpressionBase createPartitionByExpressionBase() {
+        return new PartitionByExpressionBase();
+    }
+
+    /**
+     * Create an instance of {@link TypePbeOperation }
+     * 
+     */
+    public TypePbeOperation createTypePbeOperation() {
+        return new TypePbeOperation();
     }
 
 }

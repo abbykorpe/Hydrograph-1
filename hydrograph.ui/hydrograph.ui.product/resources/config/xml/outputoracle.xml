@@ -37,7 +37,7 @@
 		
 		<tns:property dataType="string" name="jdbcDriver" value="Oracle Thin" renderer="JDBC_DRIVER_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="Denotes the JDBC Driver selected by user">
+			usage="REQUIRED" propertyHelpText="JDBC Driver use to connect with Oracle database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -72,7 +72,7 @@
 		
 		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Database Password provided by the user">
+			usage="REQUIRED" propertyHelpText="Password requires for connection with oracle database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		

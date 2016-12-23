@@ -43,7 +43,7 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-outSocket-as-inSocket")
+@XmlType(name = "type-outSocket-as-inSocket", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlSeeAlso({
     hydrograph.engine.jaxb.limit.TypeOutSocketAsInSocketIn0 .class,
     hydrograph.engine.jaxb.clone.TypeOutSocketAsInSocketIn0 .class,

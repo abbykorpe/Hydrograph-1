@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "element-value-integer-type")
+@XmlType(name = "element-value-integer-type", namespace = "hydrograph/engine/jaxb/commontypes")
 public class ElementValueIntegerType {
 
     @XmlAttribute(name = "value", required = true)

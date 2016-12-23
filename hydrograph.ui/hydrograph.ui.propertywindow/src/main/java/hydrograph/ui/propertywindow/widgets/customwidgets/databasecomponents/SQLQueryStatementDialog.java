@@ -24,9 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -41,6 +39,8 @@ public class SQLQueryStatementDialog extends Dialog {
 	private StyledText styledText;
 	private  String styleTextValue;
 	private String textValue;
+	private String styleTextOldValue;
+	private boolean isTextChanged = false;
 	
 	/**
 	 * Create the dialog.
@@ -67,25 +67,31 @@ public class SQLQueryStatementDialog extends Dialog {
 		Label sqlQueryLabel = new Label(composite, SWT.NONE);
 		sqlQueryLabel.setText(Messages.SQL_QUERY_STATEMENT);
 		
-		styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL|SWT.MULTI|SWT.WRAP);
 		styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		styledText.setFont(new Font(Display.getCurrent(),"Courier New",9,SWT.NORMAL));
 		styledText.setText(textValue);
-		styledText.addListener(SWT.Verify, new Listener() {
-			
-			@Override
-			public void handleEvent(Event event) {
-				int position = styledText.getCaretOffset();
-				String contents = styledText.getText();
-				if ((position - contents.lastIndexOf('\n')) >= 140) { 
-					event.text += '\n'; 
-				} 
-			}
-		});
+		styleTextOldValue = styledText.getText();
 
 		return container;
 	}
 
+	private void compareTextValue(String newTextValue){
+		if(styleTextOldValue != newTextValue){
+			isTextChanged = true;
+		}else{
+			isTextChanged = false;
+		}
+	}
+	
+	/**
+	 * The Function will return boolean if text value will be changed
+	 * @return boolean
+	 */
+	public boolean isTextValueChanged(){
+		return isTextChanged;
+	}
+	
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -100,6 +106,7 @@ public class SQLQueryStatementDialog extends Dialog {
 		 if(styledText !=null){
 			  styleTextValue = styledText.getText();
 			 if(StringUtils.isNotBlank(styleTextValue)){
+				 compareTextValue(styleTextValue);
 				 setStyleTextSqlQuery(styleTextValue);
 			 }
 		 }

@@ -50,11 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFixedwidthRecord }
+     * Create an instance of {@link TypeFixedWidthBase }
      * 
      */
-    public TypeFixedwidthRecord createTypeFixedwidthRecord() {
-        return new TypeFixedwidthRecord();
+    public TypeFixedWidthBase createTypeFixedWidthBase() {
+        return new TypeFixedWidthBase();
     }
 
     /**
@@ -66,11 +66,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFixedWidthBase }
+     * Create an instance of {@link TypeFixedwidthRecord }
      * 
      */
-    public TypeFixedWidthBase createTypeFixedWidthBase() {
-        return new TypeFixedWidthBase();
+    public TypeFixedwidthRecord createTypeFixedwidthRecord() {
+        return new TypeFixedwidthRecord();
     }
 
 }

@@ -44,7 +44,7 @@ import hydrograph.engine.jaxb.operationstypes.PartitionByExpression;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "partitionByExpression-base")
+@XmlType(name = "partitionByExpression-base", namespace = "hydrograph/engine/jaxb/partitionByExpression")
 @XmlSeeAlso({
     PartitionByExpression.class
 })

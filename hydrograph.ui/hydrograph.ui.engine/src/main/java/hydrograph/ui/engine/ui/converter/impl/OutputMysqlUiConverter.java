@@ -28,7 +28,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.omysql.TypePriamryKeys;
+import hydrograph.engine.jaxb.omysql.TypePrimaryKeys;
 import hydrograph.engine.jaxb.omysql.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Mysql;
 import hydrograph.ui.common.util.Constants;
@@ -65,11 +65,11 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 		Mysql outputMysql = (Mysql) typeBaseComponent;
 		LinkedHashMap<String, String> loadSelectedDetails = new LinkedHashMap<String, String>();
 		
-		if(StringUtils.isNotBlank(outputMysql.getJdbcDriver().getValue())){
+		if(outputMysql.getJdbcDriver() != null && StringUtils.isNotBlank(outputMysql.getJdbcDriver().getValue())){
 			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(outputMysql.getJdbcDriver().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputMysql.getHostName().getValue())){
+		if(outputMysql.getHostName()!= null && StringUtils.isNotBlank(outputMysql.getHostName().getValue())){
 			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), (String)(outputMysql.getHostName().getValue()));
 		}
 		
@@ -77,19 +77,19 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 			propertyMap.put(PropertyNameConstants.PORT_NO.value(), outputMysql.getPort().getValue().toString());
 		}
 		
-		if(StringUtils.isNotBlank(outputMysql.getDatabaseName().getValue())){
+		if(outputMysql.getDatabaseName() != null && StringUtils.isNotBlank(outputMysql.getDatabaseName().getValue())){
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), (String)(outputMysql.getDatabaseName().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputMysql.getUsername().getValue())){
+		if(outputMysql.getUsername() != null && StringUtils.isNotBlank(outputMysql.getUsername().getValue())){
 			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(outputMysql.getUsername().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputMysql.getPassword().getValue())){
+		if(outputMysql.getPassword() != null && StringUtils.isNotBlank(outputMysql.getPassword().getValue())){
 			propertyMap.put(PropertyNameConstants.PASSWORD.value(), (String)(outputMysql.getPassword().getValue()));
 		}
 		
-		if(StringUtils.isNotBlank(outputMysql.getTableName().getValue())){
+		if(outputMysql.getTableName() != null && StringUtils.isNotBlank(outputMysql.getTableName().getValue())){
 			propertyMap.put(PropertyNameConstants.TABLE_NAME.value(), (String)(outputMysql.getTableName().getValue()));
 		}
 		
@@ -119,7 +119,7 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 	 * Appends primary keys using a comma
 	 * @param newTable
 	 */
-	private String getLoadTypePrimaryKeyUIValue(TypePriamryKeys newTable) {
+	private String getLoadTypePrimaryKeyUIValue(TypePrimaryKeys newTable) {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(newTable !=null && newTable.getPrimaryKeys() !=null){
 			TypeKeyFields typeKeyFields = newTable.getPrimaryKeys();

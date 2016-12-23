@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-pbe-in-socket")
+@XmlType(name = "type-pbe-in-socket", namespace = "hydrograph/engine/jaxb/partitionByExpression")
 public class TypePbeInSocket
     extends TypeBaseInSocket
 {

@@ -48,6 +48,7 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
  *           &lt;element name="operation" type="{hydrograph/engine/jaxb/commontypes}type-transform-operation" maxOccurs="unbounded" minOccurs="0"/>
  *           &lt;element name="expression" type="{hydrograph/engine/jaxb/commontypes}type-transform-expression" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;/choice>
+ *         &lt;element name="outputRecordCount" type="{hydrograph/engine/jaxb/commontypes}type-output-record-count" minOccurs="0"/>
  *         &lt;element name="outSocket" type="{hydrograph/engine/jaxb/commontypes}type-operations-out-socket" maxOccurs="unbounded"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
@@ -59,17 +60,18 @@ import hydrograph.engine.jaxb.subjob.SubjobBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-operations-component", propOrder = {
+@XmlType(name = "type-operations-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inSocket",
     "operationOrExpression",
+    "outputRecordCount",
     "outSocket",
     "runtimeProperties"
 })
 @XmlSeeAlso({
-    Normalize.class,
-    GenerateSequence.class,
-    Transform.class,
     Filter.class,
+    Transform.class,
+    GenerateSequence.class,
+    Normalize.class,
     AggregateBase.class,
     JoinBase.class,
     CumulateBase.class,
@@ -88,6 +90,7 @@ public abstract class TypeOperationsComponent
         @XmlElement(name = "expression", type = TypeTransformExpression.class)
     })
     protected List<Object> operationOrExpression;
+    protected TypeOutputRecordCount outputRecordCount;
     @XmlElement(required = true)
     protected List<TypeOperationsOutSocket> outSocket;
     protected TypeProperties runtimeProperties;
@@ -149,6 +152,30 @@ public abstract class TypeOperationsComponent
             operationOrExpression = new ArrayList<Object>();
         }
         return this.operationOrExpression;
+    }
+
+    /**
+     * Gets the value of the outputRecordCount property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TypeOutputRecordCount }
+     *     
+     */
+    public TypeOutputRecordCount getOutputRecordCount() {
+        return outputRecordCount;
+    }
+
+    /**
+     * Sets the value of the outputRecordCount property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TypeOutputRecordCount }
+     *     
+     */
+    public void setOutputRecordCount(TypeOutputRecordCount value) {
+        this.outputRecordCount = value;
     }
 
     /**

@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.outputtypes.Redshift;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-redshift-base")
+@XmlType(name = "type-output-redshift-base", namespace = "hydrograph/engine/jaxb/oredshift")
 @XmlSeeAlso({
     Redshift.class
 })

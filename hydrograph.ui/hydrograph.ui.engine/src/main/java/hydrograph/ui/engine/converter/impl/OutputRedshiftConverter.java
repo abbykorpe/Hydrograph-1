@@ -125,13 +125,13 @@ public class OutputRedshiftConverter extends OutputConverter {
 	
 	//TODO
 	//Below code will be use to generate xml after Jaxb classes generation.
-	/*private TypePriamryKeys getPrimaryKeyColumnFeilds(String primaryKeyFeilds) {
+	/*private TypePriamryKeys getPrimaryKeyColumnFields(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
 		String[] primaryKeyColumnsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 		if(primaryKeyColumnsFeilds !=null && primaryKeyColumnsFeilds.length>0){
 			TypeKeyFields primaryTypeKeyFields = new TypeKeyFields();
 			primaryKeys.setPrimaryKeys(primaryTypeKeyFields);
-			for(String fieldValue : primaryKeyColumnsFeilds){
+			for(String fieldValue : primaryKeyColumnsFields){
 				TypeFieldName primaryTypeFieldName = new TypeFieldName();
 				primaryTypeFieldName.setName(fieldValue);
 				primaryTypeKeyFields.getField().add(primaryTypeFieldName);

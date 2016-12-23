@@ -56,7 +56,7 @@ import hydrograph.engine.jaxb.imysql.TypeInputMysqlBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "mysql", propOrder = {
+@XmlType(name = "mysql", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "databaseName",
     "hostName",
     "port",

@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "redshift", propOrder = {
+@XmlType(name = "redshift", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "databaseName",
     "tableName",
     "username",

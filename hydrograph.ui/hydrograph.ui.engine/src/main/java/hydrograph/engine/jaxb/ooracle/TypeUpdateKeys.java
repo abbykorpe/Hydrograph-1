@@ -13,18 +13,19 @@
 
 package hydrograph.engine.jaxb.ooracle;
 
+import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 
 
 /**
  * <p>Java class for type-update-keys complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="type-update-keys">
  *   &lt;complexContent>
@@ -36,12 +37,12 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-update-keys", propOrder = {
-    "updateByKeys"
+@XmlType(name = "type-update-keys", namespace = "hydrograph/engine/jaxb/ooracle", propOrder = {
+        "updateByKeys"
 })
 public class TypeUpdateKeys {
 
@@ -50,11 +51,11 @@ public class TypeUpdateKeys {
 
     /**
      * Gets the value of the updateByKeys property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link TypeKeyFields }
-     *     
+     *
      */
     public TypeKeyFields getUpdateByKeys() {
         return updateByKeys;
@@ -62,11 +63,11 @@ public class TypeUpdateKeys {
 
     /**
      * Sets the value of the updateByKeys property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link TypeKeyFields }
-     *     
+     *
      */
     public void setUpdateByKeys(TypeKeyFields value) {
         this.updateByKeys = value;

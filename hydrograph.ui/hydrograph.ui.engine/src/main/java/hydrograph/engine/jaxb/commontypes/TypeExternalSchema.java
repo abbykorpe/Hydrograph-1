@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-external-schema")
+@XmlType(name = "type-external-schema", namespace = "hydrograph/engine/jaxb/commontypes")
 public class TypeExternalSchema {
 
     @XmlAttribute(name = "uri", required = true)

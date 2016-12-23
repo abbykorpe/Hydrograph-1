@@ -28,7 +28,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.omysql.TypeLoadChoice;
 import hydrograph.engine.jaxb.omysql.TypeOutputMysqlOutSocket;
-import hydrograph.engine.jaxb.omysql.TypePriamryKeys;
+import hydrograph.engine.jaxb.omysql.TypePrimaryKeys;
 import hydrograph.engine.jaxb.omysql.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Mysql;
 import hydrograph.ui.common.util.Constants;
@@ -147,8 +147,8 @@ public class OutputMysqlConverter extends OutputConverter{
 	 * @param primaryKeyFeilds
 	 * @return
 	 */
-	private TypePriamryKeys getPrimaryKeyColumnFields(String primaryKeyFeilds) {
-		TypePriamryKeys primaryKeys = new TypePriamryKeys();
+	private TypePrimaryKeys getPrimaryKeyColumnFields(String primaryKeyFeilds) {
+		TypePrimaryKeys primaryKeys = new TypePrimaryKeys();
 		String[] primaryKeyColumnsFields = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 		if(primaryKeyColumnsFields !=null && primaryKeyColumnsFields.length>0){
 			TypeKeyFields primaryTypeKeyFields = new TypeKeyFields();

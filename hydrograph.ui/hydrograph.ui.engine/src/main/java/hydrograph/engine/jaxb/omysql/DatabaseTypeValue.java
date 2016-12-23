@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "database-type-value")
+@XmlType(name = "database-type-value", namespace = "hydrograph/engine/jaxb/omysql")
 @XmlEnum
 public enum DatabaseTypeValue {
 

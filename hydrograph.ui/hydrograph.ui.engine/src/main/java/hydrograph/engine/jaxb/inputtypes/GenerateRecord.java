@@ -51,7 +51,7 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "generateRecord", propOrder = {
+@XmlType(name = "generateRecord", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "runtimeProperties",
     "recordCount"
 })

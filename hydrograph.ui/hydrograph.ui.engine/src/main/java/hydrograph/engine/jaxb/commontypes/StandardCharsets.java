@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "standard-charsets")
+@XmlType(name = "standard-charsets", namespace = "hydrograph/engine/jaxb/commontypes")
 @XmlEnum
 public enum StandardCharsets {
 

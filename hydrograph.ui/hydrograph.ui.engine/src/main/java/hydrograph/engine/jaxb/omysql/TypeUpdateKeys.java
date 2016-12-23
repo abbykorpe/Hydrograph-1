@@ -40,7 +40,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-update-keys", propOrder = {
+@XmlType(name = "type-update-keys", namespace = "hydrograph/engine/jaxb/omysql", propOrder = {
     "updateByKeys"
 })
 public class TypeUpdateKeys {

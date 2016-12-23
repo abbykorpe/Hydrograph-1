@@ -15,7 +15,7 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
 		name="IMysql" nameInPalette="Mysql" defaultNamePrefix="IMysql" 
-		description="Input MYSQL description"
+		description="Used to read and fetch data from Mysql tables"
 		helpFilePath=""
 		acronym="IMysql">
 		<tns:category>INPUT</tns:category>
@@ -49,7 +49,7 @@
 		
 		<tns:property dataType="string" name="jdbcDriver" value="Connector/J" renderer="JDBC_DRIVER_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
-			usage="REQUIRED" propertyHelpText="Database name to connect.">
+			usage="REQUIRED" propertyHelpText="JDBC Driver use to connect with Mysql Database.">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -67,7 +67,7 @@
 		
 		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Database Password provided by the user">
+			usage="REQUIRED" propertyHelpText="Password requires to connect with database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -78,7 +78,7 @@
 		
 		<tns:property dataType="string" name="selectOption" renderer="SELECT_JDBC_VALUES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="">
+			usage="REQUIRED" propertyHelpText=" Widget use to select Jdbc options">
 			<tns:validator>TOGGLE_SELECTION_VALIDATOR</tns:validator>
 		</tns:property>
 		
