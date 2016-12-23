@@ -51,7 +51,7 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="Propogate data from left.">
 		</tns:property>
 		
