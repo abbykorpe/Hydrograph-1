@@ -113,7 +113,7 @@ public class OutputRedshiftConverter extends OutputConverter {
 				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 			} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-				//loadValue.setNewTable(getPrimaryKeyColumnFeilds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+				//loadValue.setNewTable(getPrimaryKeyColumnFieds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
 			} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
 				loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
 			} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
@@ -127,8 +127,8 @@ public class OutputRedshiftConverter extends OutputConverter {
 	//Below code will be use to generate xml after Jaxb classes generation.
 	/*private TypePriamryKeys getPrimaryKeyColumnFields(String primaryKeyFeilds) {
 		TypePriamryKeys primaryKeys = new TypePriamryKeys();
-		String[] primaryKeyColumnsFeilds = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
-		if(primaryKeyColumnsFeilds !=null && primaryKeyColumnsFeilds.length>0){
+		String[] primaryKeyColumnsFields = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
+		if(primaryKeyColumnsFieds !=null && primaryKeyColumnsFieds.length>0){
 			TypeKeyFields primaryTypeKeyFields = new TypeKeyFields();
 			primaryKeys.setPrimaryKeys(primaryTypeKeyFields);
 			for(String fieldValue : primaryKeyColumnsFields){
