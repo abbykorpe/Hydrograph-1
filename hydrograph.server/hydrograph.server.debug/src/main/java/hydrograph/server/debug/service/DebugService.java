@@ -122,8 +122,8 @@ public class DebugService implements PrivilegedAction<Object> {
                         .getOrDefault(Constants.dbType,
                                 new ParamsCannotBeNullOrEmpty(Constants.dbType + " Cannot be null or empty"))
                         .toString();
+                LOG.info("Retrieving schema for " + dbType + " database.");
                 try {
-                    Object dbClass;
                     switch (dbType.toLowerCase()) {
                         case Constants.ORACLE:
                             dbClassName = Constants.oracle;
@@ -163,11 +163,13 @@ public class DebugService implements PrivilegedAction<Object> {
                             break;
                     }
                 } catch (Exception e) {
-                    LOG.error("Metadata read for database : " + dbType + " Not supported." + e);
+                    LOG.error("Metadata read for database : " + dbType + " not completed.");
+                    LOG.error("Exception : " + e);
                     response.status(400);
-                    return "Metadata read for database : " + dbType + " Not supported.";
+                    return "Metadata read for database : " + dbType + " not completed.";
                 }
                 LOG.info("Class Name used for " + dbType + " Is : " + dbClassName);
+                LOG.debug("Json for " + dbType + " : " + objectAsString);
                 return objectAsString;
             }
 
@@ -196,6 +198,12 @@ public class DebugService implements PrivilegedAction<Object> {
                 if (!requestParameterValues.isNull(Constants.PORT_NUMBER)) {
                     port = requestParameterValues.getString(Constants.PORT_NUMBER);
                     metadataProperties.put(Constants.PORT_NUMBER, port);
+                } else {
+                    if (metadataProperties.get(Constants.dbType).toString().equalsIgnoreCase("mysql")) {
+                        port = Constants.MYSQL_DEFAULT_PORT ;
+                        metadataProperties.put(Constants.PORT_NUMBER, port);
+                        LOG.info("Connecting "+  dbType + " port is not provided using default port : " + Constants.MYSQL_DEFAULT_PORT);
+                    }
                 }
                 if (!requestParameterValues.isNull(Constants.SID)) {
                     sid = requestParameterValues.getString(Constants.SID);

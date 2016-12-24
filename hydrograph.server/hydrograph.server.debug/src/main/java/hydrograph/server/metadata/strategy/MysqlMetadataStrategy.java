@@ -21,6 +21,7 @@ public class MysqlMetadataStrategy  extends MetadataStrategyTemplate {
     Logger LOG = LoggerFactory.getLogger(MysqlMetadataStrategy.class);
     final static String MYSQL_JDBC_CLASSNAME = "com.mysql.jdbc.Driver";
     Connection connection = null;
+    private String query=null, tableName=null;
 
     /**
      * Used to set the connection for Mysql
@@ -54,7 +55,7 @@ public class MysqlMetadataStrategy  extends MetadataStrategyTemplate {
                         new ParamsCannotBeNullOrEmpty(Constants.DATABASE_NAME + " not found in request parameter"))
                 .toString();
         String jdbcurl = "jdbc:mysql://" + host + ":" + port + "/" + database;
-
+        LOG.debug("Connection url for mysql = '" + jdbcurl + "'");
         Class.forName(MYSQL_JDBC_CLASSNAME);
         connection = DriverManager.getConnection(jdbcurl, userId, password);
     }
@@ -68,16 +69,24 @@ public class MysqlMetadataStrategy  extends MetadataStrategyTemplate {
     @SuppressWarnings("unchecked")
     @Override
     public TableEntity fillComponentSchema(Map componentSchemaProperties) throws SQLException, ParamsCannotBeNullOrEmpty {
-        String query = componentSchemaProperties.getOrDefault(Constants.QUERY,
+        if(componentSchemaProperties.get(Constants.TABLENAME) != null)
+            tableName = componentSchemaProperties.get(Constants.TABLENAME).toString().trim();
+        else
+            query = componentSchemaProperties.get(Constants.QUERY).toString().trim();
+
+         LOG.info("Generating schema for mysql using " + ((tableName!=null)?"table : " + tableName : "query : " + query));
+
+       /* String query = componentSchemaProperties.getOrDefault(Constants.QUERY,
                 new ParamsCannotBeNullOrEmpty(Constants.QUERY + " not found in request parameter")).toString();
         String tableName = componentSchemaProperties
                 .getOrDefault(Constants.TABLENAME,
                         new ParamsCannotBeNullOrEmpty(Constants.TABLENAME + " not found in request parameter"))
-                .toString();  // can be goes to debug
-        ResultSet res = null;
+                .toString();*/  // can be goes to debug
+       // ResultSet res = null;
         TableEntity tableEntity = new TableEntity();
         List<TableSchemaFieldEntity> tableSchemaFieldEntities = new ArrayList<TableSchemaFieldEntity>();
         try {
+            ResultSet res = null;
             Statement stmt = connection.createStatement();
             if (query != null && !query.isEmpty())
                 res = stmt.executeQuery("Select * from (" + query + ") as alias WHERE 1<0");
@@ -85,9 +94,9 @@ public class MysqlMetadataStrategy  extends MetadataStrategyTemplate {
                 res = stmt.executeQuery("Select * from " + tableName + " where 1<0");
             else {
                 LOG.error("Table or query in request parameter cannot be null or empty " + Constants.QUERY + " => "
-                        + query + " " + Constants.TABLENAME + " => " + tableName + " ");
+                        + query + " " + Constants.TABLENAME + " => " + tableName );
                 throw new ParamsCannotBeNullOrEmpty("Table and query cannot be null or empty in request parameters: "
-                        + Constants.QUERY + " => " + query + " " + Constants.TABLENAME + " => " + tableName + " ");
+                        + Constants.QUERY + " => " + query + " " + Constants.TABLENAME + " => " + tableName);
             }
             ResultSetMetaData rsmd = res.getMetaData();
             for (int count = 1; count <= rsmd.getColumnCount(); count++) {
@@ -103,9 +112,14 @@ public class MysqlMetadataStrategy  extends MetadataStrategyTemplate {
                 tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
                 tableSchemaFieldEntities.add(tableSchemaFieldEntity);
             }
+            if(componentSchemaProperties.get(Constants.TABLENAME) == null)
+                tableEntity.setQuery(componentSchemaProperties.get(Constants.QUERY).toString()) ;
+            else
+                tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
+            tableEntity.setDatabaseName(componentSchemaProperties.get(Constants.dbType).toString());
             tableEntity.setSchemaFields(tableSchemaFieldEntities);
-        } finally {
             res.close();
+        } finally {
             connection.close();
         }
         return tableEntity;

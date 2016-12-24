@@ -210,4 +210,9 @@ public class Constants {
 	 * checking the MYSQL type
 	 */
 	public static final String MYSQL = "mysql";
+
+	/**
+	 * checking the MYSQL type
+	 */
+	public static final String MYSQL_DEFAULT_PORT = "3306";
 }
