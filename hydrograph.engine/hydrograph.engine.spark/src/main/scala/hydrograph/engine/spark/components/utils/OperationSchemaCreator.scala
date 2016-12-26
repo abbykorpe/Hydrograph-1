@@ -59,9 +59,9 @@ import javax.tools.{DiagnosticCollector, JavaFileObject}
 //      for (schemaField:SchemaField <- baseComponentParams.getSchemaFieldList().flatten) {
 //        schemaMap.put(schemaField.getFieldName(),Class.forName(checkIfFieldIsBigDecimal(schemaField.getFieldDataType())))
 //      }
-//      schemaMap.put("index", Class.forName("java.lang.Integer"));
+//      schemaMap.put("_index", Class.forName("java.lang.Integer"));
 //      if (getAccumulatorInitialValue != null)
-//        schemaMap.put("accumulator",
+//        schemaMap.put("_accumulator",
 //          Class.forName(inferType(getAccumulatorInitialValue)));
 //      var diagnostic:DiagnosticCollector[JavaFileObject] = validationAPI
 //        .transformCompiler(schemaMap);
