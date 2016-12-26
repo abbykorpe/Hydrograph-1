@@ -43,9 +43,11 @@ public class Constants {
 	public static final int DEFAULT_CHUNKSIZE=1000;
 
 	/**
+<<<<<<< HEAD
 	 * The default number of record to be read per roundtrip
 	 */
 	//public static final int DEFAULT_DB_FETCHSIZE=1000;
 	private Constants() {
 	}
+	public static final String LENGTHS_AND_DELIMITERS_SEPARATOR="~!@#@!~";
 }
