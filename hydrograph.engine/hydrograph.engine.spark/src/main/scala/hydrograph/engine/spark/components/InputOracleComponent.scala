@@ -1,5 +1,7 @@
 package hydrograph.engine.spark.components
 
+import java.util.Properties
+
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -9,17 +11,18 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 
-class OracleInputComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams: BaseComponentParams) extends
+class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams: BaseComponentParams) extends
   InputComponentBase {
-  val LOG: Logger = LoggerFactory.getLogger(classOf[OracleInputComponent])
+  val LOG: Logger = LoggerFactory.getLogger(classOf[InputOracleComponent])
 
   override def createComponent(): Map[String, DataFrame] = {
     val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
 
     val sparkSession = iComponentsParams.getSparkSession()
-    val prop = new java.util.Properties
-    prop.setProperty("user", inputRDBMSEntity.getUsername)
-    prop.setProperty("password", inputRDBMSEntity.getPassword)
+
+    val properties = inputRDBMSEntity.getRuntimeProperties;
+    properties.setProperty("user", inputRDBMSEntity.getUsername)
+    properties.setProperty("password", inputRDBMSEntity.getPassword)
 
     LOG.info("Created Input Oracle Component '" + inputRDBMSEntity.getComponentId
       + "' in Batch " + inputRDBMSEntity.getBatch
@@ -44,7 +47,7 @@ class OracleInputComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
     LOG.info("Connection  url for Oracle input component: " + connectionURL)
 
     try {
-      val df = sparkSession.read.schema(schemaField).jdbc(connectionURL, tableorQuery, prop)
+      val df = sparkSession.read.schema(schemaField).jdbc(connectionURL, tableorQuery, properties)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {

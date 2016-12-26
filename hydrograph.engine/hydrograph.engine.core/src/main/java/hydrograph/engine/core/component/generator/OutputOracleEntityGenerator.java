@@ -20,6 +20,8 @@ import hydrograph.engine.jaxb.outputtypes.Oracle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Properties;
+
 public class OutputOracleEntityGenerator extends OutputComponentGeneratorBase {
 
     private static Logger LOG = LoggerFactory.getLogger(OutputOracleEntityGenerator.class);
@@ -55,7 +57,7 @@ public class OutputOracleEntityGenerator extends OutputComponentGeneratorBase {
         outputRDBMSEntity.setHostName(jaxbOutputOracle.getHostName().getValue());
         outputRDBMSEntity.setTableName(jaxbOutputOracle.getTableName().getValue());
         outputRDBMSEntity.setDatabaseType(DATABASE_TYPE);
-        outputRDBMSEntity.setRuntimeProperties(
+        outputRDBMSEntity.setRuntimeProperties(jaxbOutputOracle.getRuntimeProperties() == null? new Properties():
                 OutputEntityUtils.extractRuntimeProperties(jaxbOutputOracle.getRuntimeProperties()));
         outputRDBMSEntity.setBatch(jaxbOutputOracle.getBatch());
         outputRDBMSEntity.setUsername(jaxbOutputOracle.getUserName().getValue());

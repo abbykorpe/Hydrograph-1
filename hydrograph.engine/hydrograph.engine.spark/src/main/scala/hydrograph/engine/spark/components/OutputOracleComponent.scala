@@ -2,6 +2,7 @@ package hydrograph.engine.spark.components
 
 import java.sql.SQLException
 import java.util
+import java.util.Properties
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
@@ -19,14 +20,15 @@ import scala.collection.JavaConverters._
 /**
   * Created by amiyam on 16-12-2016.
   */
-class OracleOutputComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsParams: BaseComponentParams) extends
+class OutputOracleComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsParams: BaseComponentParams) extends
   SparkFlow {
-  val LOG: Logger = LoggerFactory.getLogger(classOf[OracleOutputComponent])
+  val LOG: Logger = LoggerFactory.getLogger(classOf[OutputOracleComponent])
 
   override def execute(): Unit = {
-    val prop = new java.util.Properties
-    prop.setProperty("user", outputRDBMSEntity.getUsername)
-    prop.setProperty("password", outputRDBMSEntity.getPassword)
+
+    val  properties = outputRDBMSEntity.getRuntimeProperties ;
+    properties.setProperty("user", outputRDBMSEntity.getUsername)
+    properties.setProperty("password", outputRDBMSEntity.getPassword)
 
     val connectionURL = "jdbc:oracle:" + outputRDBMSEntity.getDriverType + "://@" + outputRDBMSEntity.getHostName + ":" + outputRDBMSEntity.getPort() + "/" +
       outputRDBMSEntity.getSid;
@@ -43,12 +45,12 @@ class OracleOutputComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsPar
 
     outputRDBMSEntity.getLoadType match {
       case "newTable" =>
-        executeQuery(connectionURL, prop, TableCreator().getCreateTableQuery(outputRDBMSEntity))
-        oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
-      case "insert" => oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        executeQuery(connectionURL, properties, TableCreator().getCreateTableQuery(outputRDBMSEntity))
+        oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+      case "insert" => oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
       case "truncateLoad" =>
-        executeQuery(connectionURL, prop, getTruncateQuery)
-        oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        executeQuery(connectionURL, properties, getTruncateQuery)
+        oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
     }
   }
 
