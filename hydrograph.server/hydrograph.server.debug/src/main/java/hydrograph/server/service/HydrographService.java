@@ -129,6 +129,7 @@ public class HydrographService {
                             hiveMetadataHelper.setConnection(metadataProperties);
                             objectAsString = objectMapper
                                     .writeValueAsString(hiveMetadataHelper.fillComponentSchema(metadataProperties));
+                            LOG.trace("Schema json for hive : " + objectAsString);
                             LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
                             break;
                         case Constants.REDSHIFT:
