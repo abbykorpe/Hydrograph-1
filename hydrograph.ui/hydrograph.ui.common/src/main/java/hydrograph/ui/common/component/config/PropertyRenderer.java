@@ -94,6 +94,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="DATABASE_NAME_WIDGET"/>
  *     &lt;enumeration value="PROPOGATE_WIDGET"/>
  *     &lt;enumeration value="MYSQL_DRIVER_NAME"/>
+ *     &lt;enumeration value="RUNPROGRAM_TEXT_WIDGET"/>
  *     
  *   &lt;/restriction>
  * &lt;/simpleType>
@@ -165,7 +166,8 @@ public enum PropertyRenderer {
     TEST_CONNECTION_WIDGET,
     DATABASE_NAME_WIDGET,
     PROPOGATE_WIDGET,
-    MYSQL_DRIVER_NAME;
+    MYSQL_DRIVER_NAME,
+    RUNPROGRAM_TEXT_WIDGET;
 
     public String value() {
         return name();
