@@ -25,7 +25,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.server.debug.utilities.Constants;
+import hydrograph.server.utilities.Constants;
 import hydrograph.server.metadata.entity.TableEntity;
 import hydrograph.server.metadata.entity.TableSchemaFieldEntity;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
@@ -78,7 +78,8 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 				.toString();
 		String jdbcUrl = "jdbc:oracle:" + driverType + "://@" + host + ":" + port + ":" + sid;
 		Class.forName(ORACLE_JDBC_CLASSNAME);
-        LOG.debug("Connection url for oracle = '" + jdbcUrl + "'");
+		LOG.info("Connection url for oracle = '" + jdbcUrl + "'");
+		LOG.info("Connecting with '" + userId + "' user id.");
 		connection = DriverManager.getConnection(jdbcUrl, userId, password);
 	}
 

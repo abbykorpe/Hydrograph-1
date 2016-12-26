@@ -1,6 +1,6 @@
 package hydrograph.server.metadata.strategy;
 
-import hydrograph.server.debug.utilities.Constants;
+import hydrograph.server.utilities.Constants;
 import hydrograph.server.metadata.entity.TableEntity;
 import hydrograph.server.metadata.entity.TableSchemaFieldEntity;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
@@ -55,7 +55,8 @@ public class MysqlMetadataStrategy  extends MetadataStrategyTemplate {
                         new ParamsCannotBeNullOrEmpty(Constants.DATABASE_NAME + " not found in request parameter"))
                 .toString();
         String jdbcurl = "jdbc:mysql://" + host + ":" + port + "/" + database;
-        LOG.debug("Connection url for mysql = '" + jdbcurl + "'");
+        LOG.info("Connection url for mysql = '" + jdbcurl + "'");
+        LOG.info("Connecting with '" + userId + "' user id.");
         Class.forName(MYSQL_JDBC_CLASSNAME);
         connection = DriverManager.getConnection(jdbcurl, userId, password);
     }

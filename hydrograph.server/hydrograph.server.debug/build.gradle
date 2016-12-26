@@ -78,7 +78,7 @@ dependencies {
 jar {
   manifest {
   	attributes(
-  		'Main-Class': 'hydrograph.server.debug.service.DebugService'
+  		'Main-Class': 'hydrograph.server.service.DebugService'
   	)
     attributes(
       "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
