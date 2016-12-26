@@ -119,6 +119,7 @@ public class HydrographService {
                             oracleMetadataHelper.setConnection(metadataProperties);
                             objectAsString = objectMapper
                                     .writeValueAsString(oracleMetadataHelper.fillComponentSchema(metadataProperties));
+                            LOG.trace("Schema json for oracle : " + objectAsString);
                             LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
                             break;
                         case Constants.HIVE:
@@ -137,6 +138,7 @@ public class HydrographService {
                             redShiftMetadataHelper.setConnection(metadataProperties);
                             objectAsString = objectMapper
                                     .writeValueAsString(redShiftMetadataHelper.fillComponentSchema(metadataProperties));
+                            LOG.trace("Schema json for redshift : " + objectAsString);
                             LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
                             break;
                         case Constants.MYSQL:
@@ -146,6 +148,7 @@ public class HydrographService {
                             mysqlMetadataHelper.setConnection(metadataProperties);
                             objectAsString = objectMapper
                                     .writeValueAsString(mysqlMetadataHelper.fillComponentSchema(metadataProperties));
+                            LOG.trace("Schema json for mysql : " + objectAsString);
                             LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
                             break;
                     }
