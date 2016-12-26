@@ -229,7 +229,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 		MetaDataDetails connectionDetails = new MetaDataDetails();
         connectionDetails.setDbType(DBTYPE);
         connectionDetails.setHost(host);
-        connectionDetails.setPort(port_no);
+        connectionDetails.setPort("8006");
         connectionDetails.setUserId(userCredentials.get(0));
         connectionDetails.setPassword(userCredentials.get(1));
         connectionDetails.setDatabase(dbName);
