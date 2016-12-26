@@ -1,13 +1,17 @@
 package hydrograph.engine.spark.components
 
 import java.sql.SQLException
+import java.util
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
+import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.TableCreator
+import org.apache.spark.sql.Column
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 
 /**
@@ -20,7 +24,8 @@ BaseComponentParams) extends SparkFlow {
 
   override def execute(): Unit = {
 
-    val prop = new java.util.Properties
+    val prop = outputRDBMSEntity.getRuntimeProperties
+    //val prop = new java.util.Properties
     prop.setProperty("user", outputRDBMSEntity.getUsername)
     prop.setProperty("password", outputRDBMSEntity.getPassword)
     val driverName = "com.mysql.jdbc.Driver"
@@ -30,7 +35,7 @@ BaseComponentParams) extends SparkFlow {
     }
 
     val connectionURL = "jdbc:mysql://" + outputRDBMSEntity.getHostName() + ":" + outputRDBMSEntity.getPort() + "/" +
-      outputRDBMSEntity.getDatabaseName()
+      outputRDBMSEntity.getDatabaseName() +"?rewriteBatchedStatements=true"
 
     LOG.info("Created Output Mysql Component '"+ outputRDBMSEntity.getComponentId
       + "' in Batch "+ outputRDBMSEntity.getBatch
@@ -45,12 +50,12 @@ BaseComponentParams) extends SparkFlow {
     outputRDBMSEntity.getLoadType match {
       case "newTable" =>
         executeQuery(connectionURL, prop, TableCreator().getCreateTableQuery(outputRDBMSEntity))
-        cp.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
 
-      case "insert" => cp.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+      case "insert" => cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
       case "truncateLoad" =>
         executeQuery(connectionURL, prop, getTruncateQuery)
-        cp.getDataFrame().write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
     }
   }
 
@@ -77,4 +82,21 @@ BaseComponentParams) extends SparkFlow {
   }
 
   def getTruncateQuery(): String = "truncate " + outputRDBMSEntity.getTableName
+  //var col:Column
+  def createSchema(getFieldsList: util.List[SchemaField]): Array[Column] =  {
+    LOG.trace("In method createSchema()")
+    val schema = new Array[Column](getFieldsList.size())
+
+    getFieldsList.asScala.zipWithIndex.foreach { case (f, i) => schema(i) =  new Column(f.getFieldName) }
+    LOG.debug("Schema created for Output Oracle Component : " + schema.mkString)
+    schema
+  }
+ /* def createSchema(fields: util.List[SchemaField]): Array[Column] = {
+    LOG.trace("In method createSchema()")
+    val schema = new Array[Column](fields.size())
+    fields.zipWithIndex.foreach { case (f, i) => schema(i) = col(f.getFieldName.toUpperCase()) }
+    LOG.debug("Schema created for Output Oracle Component : " + schema.mkString)
+    schema
+  }*/
+
 }
