@@ -13,6 +13,7 @@
 package hydrograph.engine.core.component.generator;
 
 import java.util.Map;
+import java.util.Properties;
 
 import hydrograph.engine.core.constants.Constants;
 import org.slf4j.Logger;
@@ -72,8 +73,9 @@ public class InputMysqlEntityGenerator extends
         inputRDBMSEntity.setUsername(inputMysqlJaxb.getUsername().getValue());
         inputRDBMSEntity.setPassword(inputMysqlJaxb.getPassword().getValue());
 //		inputRDBMSEntity.setFetchSize(inputMysqlJaxb.getFetchSize()==null?Constants.DEFAULT_DB_FETCHSIZE:inputMysqlJaxb.getFetchSize().getValue().intValue());
-        inputRDBMSEntity.setRuntimeProperties(InputEntityUtils
-                .extractRuntimeProperties(inputMysqlJaxb.getRuntimeProperties()));
+        inputRDBMSEntity.setRuntimeProperties(inputMysqlJaxb.getRuntimeProperties() == null ? new Properties():InputEntityUtils
+                        .extractRuntimeProperties(inputMysqlJaxb.getRuntimeProperties()));
+
         inputRDBMSEntity.setDatabaseType("Mysql");
     }
 

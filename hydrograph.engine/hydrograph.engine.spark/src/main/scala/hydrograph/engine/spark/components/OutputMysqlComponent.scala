@@ -25,10 +25,8 @@ BaseComponentParams) extends SparkFlow {
   val LOG: Logger = LoggerFactory.getLogger(classOf[OutputMysqlComponent])
 
   override def execute(): Unit = {
-    var properties = new Properties();
-    if(outputRDBMSEntity.getRuntimeProperties != null)
-      properties = outputRDBMSEntity.getRuntimeProperties ;
 
+    val properties = outputRDBMSEntity.getRuntimeProperties
     properties.setProperty("user", outputRDBMSEntity.getUsername)
     properties.setProperty("password", outputRDBMSEntity.getPassword)
     val driverName = "com.mysql.jdbc.Driver"

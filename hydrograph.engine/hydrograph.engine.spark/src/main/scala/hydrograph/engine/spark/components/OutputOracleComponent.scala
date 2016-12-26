@@ -25,9 +25,8 @@ class OutputOracleComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsPar
   val LOG: Logger = LoggerFactory.getLogger(classOf[OutputOracleComponent])
 
   override def execute(): Unit = {
-    var properties = new Properties();
-    if(outputRDBMSEntity.getRuntimeProperties != null)
-      properties = outputRDBMSEntity.getRuntimeProperties ;
+
+    val  properties = outputRDBMSEntity.getRuntimeProperties ;
     properties.setProperty("user", outputRDBMSEntity.getUsername)
     properties.setProperty("password", outputRDBMSEntity.getPassword)
 

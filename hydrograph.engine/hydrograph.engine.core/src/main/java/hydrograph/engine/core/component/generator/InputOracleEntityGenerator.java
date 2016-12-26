@@ -21,6 +21,8 @@ import hydrograph.engine.jaxb.inputtypes.Oracle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Properties;
+
 
 public class InputOracleEntityGenerator extends
 InputComponentGeneratorBase {
@@ -59,8 +61,8 @@ InputComponentGeneratorBase {
         inputRDBMSEntity.setHostName(inputOracleJaxb.getHostName().getValue());
         inputRDBMSEntity.setPort(inputOracleJaxb.getPort() == null ? Constants.ORACLE_PORT_NUMBER
                 : inputOracleJaxb.getPort().getValue().intValue());
-        inputRDBMSEntity.setRuntimeProperties(
-                InputEntityUtils.extractRuntimeProperties(inputOracleJaxb.getRuntimeProperties()));
+        inputRDBMSEntity.setRuntimeProperties(inputOracleJaxb.getRuntimeProperties() == null ? new Properties():InputEntityUtils
+                .extractRuntimeProperties(inputOracleJaxb.getRuntimeProperties()));
         inputRDBMSEntity.setBatch(inputOracleJaxb.getBatch());
         if (inputOracleJaxb.getSelectQuery() != null) {
             inputRDBMSEntity.setTableName("Dual");

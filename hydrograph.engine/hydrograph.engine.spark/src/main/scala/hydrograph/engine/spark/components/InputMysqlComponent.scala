@@ -27,9 +27,7 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
 
     val sparkSession = iComponentsParams.getSparkSession()
 
-    var properties = new Properties();
-    if (inputRDBMSEntity.getRuntimeProperties != null)
-      properties = inputRDBMSEntity.getRuntimeProperties;
+    val properties = inputRDBMSEntity.getRuntimeProperties
     properties.setProperty("user", inputRDBMSEntity.getUsername)
     properties.setProperty("password", inputRDBMSEntity.getPassword)
     val driverName = "com.mysql.jdbc.Driver"
