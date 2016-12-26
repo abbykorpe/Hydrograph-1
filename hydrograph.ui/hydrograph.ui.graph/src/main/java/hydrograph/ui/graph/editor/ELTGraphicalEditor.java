@@ -949,7 +949,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		}
 			closeAllSubJobLinkedEditors();
 			clearTrackingStatusForEditor();
-
 		try {
 			if(container!=null)
 				ConverterUtil.INSTANCE.convertToXML(container, false, null, null);
@@ -1868,5 +1867,4 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 		
 	}
-	
 }

@@ -18,10 +18,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -32,12 +36,15 @@ import com.google.gson.JsonParser;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ComponentStatus;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.job.JobManager;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.ComponentExecutionStatus;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -69,6 +76,8 @@ public class ExecutionTrackingConsoleUtils {
 	private static final String SUBMISSION_TIME = "Submission time: ";
 	private static final String JOB_ID = "Job ID: ";
 	private static final String CONSOLE_HEADER="Time Stamp | Component Id | Socket | Status | Batch | Count";
+	
+	private boolean isJobUpdated = false;
 	
 	/**
 	 * Instantiates a new execution tracking console utils.
@@ -145,6 +154,9 @@ public class ExecutionTrackingConsoleUtils {
 		if(console.getShell()==null){
 			console.clearConsole();
 			console.open();
+			if(!JobManager.INSTANCE.isJobRunning(console.consoleName)){
+				console.statusLineManager.setMessage("");
+			}
 		}else{
 			Rectangle originalBounds = console.getShell().getBounds();
 			console.getShell().setMaximized(true);
@@ -152,7 +164,7 @@ public class ExecutionTrackingConsoleUtils {
 			console.getShell().setBounds(originalBoundsClone);		
 			console.getShell().setActive();	
 		}
-		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole){
+		if(StringUtils.isNotEmpty(getUniqueJobId()) && newConsole && isJobUpdated){
 			ExecutionStatus[] executionStatus = readFile(null, getUniqueJobId(), JobManager.INSTANCE.isLocalMode());
 			console.setStatus(getHeader(getUniqueJobId()));
 			for(int i =0; i<executionStatus.length; i++){
@@ -305,6 +317,19 @@ public class ExecutionTrackingConsoleUtils {
 		ELTGraphicalEditor editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		String uniqueJobId = editor.getJobId();
+		isJobUpdated =false;
+		GraphicalViewer graphicalViewer = (GraphicalViewer) ((GraphicalEditor) editor).getAdapter(GraphicalViewer.class);
+ 		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry().values().iterator();ite.hasNext();){ 
+ 			EditPart editPart = (EditPart) ite.next();
+ 			if (editPart instanceof ComponentEditPart){
+ 				Component component = ((ComponentEditPart) editPart)
+ 						.getCastedModel();
+ 				if(component.getStatus()!= ComponentExecutionStatus.BLANK){
+ 					isJobUpdated = true;
+ 					break;
+ 				}
+ 			}
+ 		}
 		
 		return uniqueJobId;
 	}
