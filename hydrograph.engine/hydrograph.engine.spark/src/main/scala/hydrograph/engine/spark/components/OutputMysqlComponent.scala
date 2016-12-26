@@ -2,6 +2,7 @@ package hydrograph.engine.spark.components
 
 import java.sql.SQLException
 import java.util
+import java.util.Properties
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
@@ -10,6 +11,7 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.TableCreator
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
+import org.apache.spark.sql.functions._
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -23,15 +25,16 @@ BaseComponentParams) extends SparkFlow {
   val LOG: Logger = LoggerFactory.getLogger(classOf[OutputMysqlComponent])
 
   override def execute(): Unit = {
+    var properties = new Properties();
+    if(outputRDBMSEntity.getRuntimeProperties != null)
+      properties = outputRDBMSEntity.getRuntimeProperties ;
 
-    val prop = outputRDBMSEntity.getRuntimeProperties
-    //val prop = new java.util.Properties
-    prop.setProperty("user", outputRDBMSEntity.getUsername)
-    prop.setProperty("password", outputRDBMSEntity.getPassword)
+    properties.setProperty("user", outputRDBMSEntity.getUsername)
+    properties.setProperty("password", outputRDBMSEntity.getPassword)
     val driverName = "com.mysql.jdbc.Driver"
 
     if (outputRDBMSEntity.getJdbcDriver().equals("Connector/J")) {
-      prop.setProperty("driver", driverName)
+      properties.setProperty("driver", driverName)
     }
 
     val connectionURL = "jdbc:mysql://" + outputRDBMSEntity.getHostName() + ":" + outputRDBMSEntity.getPort() + "/" +
@@ -49,13 +52,13 @@ BaseComponentParams) extends SparkFlow {
 
     outputRDBMSEntity.getLoadType match {
       case "newTable" =>
-        executeQuery(connectionURL, prop, TableCreator().getCreateTableQuery(outputRDBMSEntity))
-        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        executeQuery(connectionURL, properties, TableCreator().getCreateTableQuery(outputRDBMSEntity))
+        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
 
-      case "insert" => cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+      case "insert" => cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
       case "truncateLoad" =>
-        executeQuery(connectionURL, prop, getTruncateQuery)
-        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, prop)
+        executeQuery(connectionURL, properties, getTruncateQuery)
+        cp.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
     }
   }
 
@@ -82,21 +85,13 @@ BaseComponentParams) extends SparkFlow {
   }
 
   def getTruncateQuery(): String = "truncate " + outputRDBMSEntity.getTableName
-  //var col:Column
+
   def createSchema(getFieldsList: util.List[SchemaField]): Array[Column] =  {
     LOG.trace("In method createSchema()")
     val schema = new Array[Column](getFieldsList.size())
 
-    getFieldsList.asScala.zipWithIndex.foreach { case (f, i) => schema(i) =  new Column(f.getFieldName) }
+    getFieldsList.asScala.zipWithIndex.foreach { case (f, i) => schema(i) =  col(f.getFieldName) }
     LOG.debug("Schema created for Output Oracle Component : " + schema.mkString)
     schema
   }
- /* def createSchema(fields: util.List[SchemaField]): Array[Column] = {
-    LOG.trace("In method createSchema()")
-    val schema = new Array[Column](fields.size())
-    fields.zipWithIndex.foreach { case (f, i) => schema(i) = col(f.getFieldName.toUpperCase()) }
-    LOG.debug("Schema created for Output Oracle Component : " + schema.mkString)
-    schema
-  }*/
-
 }

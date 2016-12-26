@@ -2,7 +2,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.OutputOracleEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.OracleOutputComponent
+import hydrograph.engine.spark.components.OutputOracleComponent
 import hydrograph.engine.spark.components.adapter.base.OutputAdatperBase
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -12,7 +12,7 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
   */
 class OutputOracleAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase {
   var outputOracleEntityGenerator: OutputOracleEntityGenerator = null
-  var outputOracleComponent: OracleOutputComponent = null;
+  var outputOracleComponent: OutputOracleComponent = null;
 
   override def getComponent(): SparkFlow = outputOracleComponent
 
@@ -21,6 +21,6 @@ class OutputOracleAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAd
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    outputOracleComponent = new OracleOutputComponent(outputOracleEntityGenerator.getEntity, baseComponentParams)
+    outputOracleComponent = new OutputOracleComponent(outputOracleEntityGenerator.getEntity, baseComponentParams)
   }
 }
