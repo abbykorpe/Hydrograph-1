@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.plugin.debug.utils;
+package hydrograph.engine.plugin.debug;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
@@ -32,7 +32,7 @@ import hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Quote;
 import hydrograph.engine.jaxb.straightpulltypes.Clone;
 import hydrograph.engine.jaxb.straightpulltypes.Limit;
 import hydrograph.engine.jaxb.straightpulltypes.Limit.MaxRecords;
-import hydrograph.engine.plugin.debug.DebugContext;
+import hydrograph.engine.plugin.debug.utils.JaxbSchemaFieldConverter;
 
 import java.util.List;
 import java.util.Set;

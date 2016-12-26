@@ -12,31 +12,29 @@ import scala.collection.mutable
 import java.io.IOException
 import java.io.FileReader
 
+import hydrograph.engine.core.utilities.PropertiesHelper
+import org.slf4j.{Logger, LoggerFactory}
+
 /**
   * Created by gurdits on 10/26/2016.
   */
 class AdapterFactory(graph: Graph) {
 
-  val props = new Properties()
+  val LOG : Logger = LoggerFactory.getLogger(classOf[AdapterFactory])
+  val COMPONENT_ASSEMBLY_MAP_PROPERTIES: String = "componentMapping.properties"
   val componentMap=new mutable.HashMap[String,AdapterBase]()
+  var props = null
 
  private def loadProps(): Unit = {
-    val fileName="componentMapping.properties"
-		var propFileName = System.getProperty(fileName);
-		if (propFileName == null) {
-			propFileName = fileName;
-				props.load(ClassLoader
-						.getSystemResourceAsStream(propFileName));
-		} else {
-			
-				val reader = new FileReader(propFileName);
-				props.load(reader);
-				if (reader != null) {
-						reader.close();
-			}
-		}
-    
-  }
+   try {
+     props = PropertiesHelper.getProperties(COMPONENT_ASSEMBLY_MAP_PROPERTIES)
+   }
+   catch {
+     case e: IOException =>
+       LOG.error("Error reading properties file: " + COMPONENT_ASSEMBLY_MAP_PROPERTIES, e)
+       throw new RuntimeException(e)
+   }
+ }
 
 
   def generatedAdapterMap(typeBaseComponentList: List[TypeBaseComponent]): Unit= {

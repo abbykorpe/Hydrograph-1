@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.plugin.debug.utils;
+package hydrograph.engine.core.utilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

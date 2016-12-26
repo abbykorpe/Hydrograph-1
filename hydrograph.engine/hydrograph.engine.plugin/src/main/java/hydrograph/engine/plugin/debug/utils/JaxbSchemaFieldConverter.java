@@ -24,7 +24,7 @@ import java.util.Set;
 import javax.xml.namespace.QName;
 
 /**
- *
+ * This class helps in converting the
  */
 public class JaxbSchemaFieldConverter {
 
@@ -32,9 +32,9 @@ public class JaxbSchemaFieldConverter {
 	}
 
 	/**
-	 *
-	 * @param schemaFieldList
-	 * @return
+	 * Converts the {@link SchemaField} objects to jaxb object {@link TypeOutputInSocket}
+	 * @param schemaFieldList the set of {@link SchemaField} objects to convert to jaxb object {@link TypeOutputInSocket}
+	 * @return jaxb object {@link TypeOutputInSocket}
 	 */
 	public static TypeOutputInSocket convertToJaxb(Set<SchemaField> schemaFieldList) {
 		TypeOutputInSocket typeOutputInSocket = new TypeOutputInSocket();
@@ -54,14 +54,29 @@ public class JaxbSchemaFieldConverter {
 		return typeOutputInSocket;
 	}
 
+	/**
+	 * Sets the field scale in the jaxb object of {@link TypeBaseField} from {@link SchemaField}
+	 * @param schemaField the {@link SchemaField} object containing the field scale information
+	 * @param typeBaseField he jaxb object to set the field scale to
+	 */
 	public static void setFieldScale(SchemaField schemaField, TypeBaseField typeBaseField) {
 		typeBaseField.setScale(schemaField.getFieldScale());
 	}
 
+	/**
+	 * Sets the field precision in the jaxb object of {@link TypeBaseField} from {@link SchemaField}
+	 * @param schemaField the {@link SchemaField} object containing the field precision information
+	 * @param typeBaseField he jaxb object to set the field precision to
+	 */
 	public static void setFieldPrecision(SchemaField schemaField, TypeBaseField typeBaseField) {
 		typeBaseField.setPrecision(schemaField.getFieldPrecision());
 	}
 
+	/**
+	 * Sets the field scale type in the jaxb object of {@link TypeBaseField} from {@link SchemaField}
+	 * @param schemaField the {@link SchemaField} object containing the field scale type information
+	 * @param typeBaseField he jaxb object to set the field scale type to
+	 */
 	public static void setFieldScaleType(SchemaField schemaField, TypeBaseField typeBaseField) {
 		if (schemaField.getFieldScaleType().equals(ScaleTypeList.EXPLICIT))
 			typeBaseField.setScaleType(ScaleTypeList.EXPLICIT);
@@ -69,6 +84,11 @@ public class JaxbSchemaFieldConverter {
 			typeBaseField.setScaleType(ScaleTypeList.IMPLICIT);
 	}
 
+	/**
+	 * Sets the field format in the jaxb object of {@link TypeBaseField} from {@link SchemaField}
+	 * @param schemaField the {@link SchemaField} object containing the field format information
+	 * @param typeBaseField he jaxb object to set the field format to
+	 */
 	public static void setFieldFormat(SchemaField schemaField, TypeBaseField typeBaseField) {
 		if (schemaField.getFieldFormat() != null) {
 			if (schemaField.getFieldDataType().toLowerCase().contains("date")) {
@@ -79,12 +99,16 @@ public class JaxbSchemaFieldConverter {
 		}
 	}
 
+	/**
+	 * Sets the field length in the jaxb object of {@link TypeBaseField} from {@link SchemaField}
+	 * @param schemaField the {@link SchemaField} object containing the field length information
+	 * @param typeBaseField he jaxb object to set the field length to
+	 */
 	public static void setFieldLength(SchemaField schemaField, TypeBaseField typeBaseField) {
 		QName qname = new QName("length");
 		if (schemaField.getFieldLength() != 0)
 			typeBaseField.getOtherAttributes().put(qname, String.valueOf(schemaField.getFieldLength()));
 		else
 			typeBaseField.getOtherAttributes().put(qname, String.valueOf(0));
-
 	}
 }
