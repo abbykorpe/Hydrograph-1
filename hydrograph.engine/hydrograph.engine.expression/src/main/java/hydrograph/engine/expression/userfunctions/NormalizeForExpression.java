@@ -60,7 +60,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 							fieldNames[i] = inputRow.getFieldName(i);
 							tuples[i] = inputRow.getField(i);
 						}
-						fieldNames[i] = "index";
+						fieldNames[i] = "_index";
 						tuples[i] = j;
 						Object obj = validationAPI.execute(fieldNames,
 								tuples, listOfExpressions.get(counter));

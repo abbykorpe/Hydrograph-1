@@ -68,7 +68,7 @@ public class CumulateForExpression implements CumulateTransformBase {
 			fieldNames[i] = input.getFieldNames().get(i);
 			tuples[i] = input.getField(i);
 		}
-		fieldNames[i] = "accumulator";
+		fieldNames[i] = "_accumulator";
 		tuples[i] = accumulatorValue;
 		try {
 			accumulatorValue = validationAPIs[counter].execute(fieldNames,

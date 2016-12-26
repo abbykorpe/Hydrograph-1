@@ -19,10 +19,6 @@ import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
 
-
-
-
-
 public class OutputFileMixedSchemeEntityGenerator extends OutputComponentGeneratorBase {
 
 	private OutputFileMixedSchemeEntity outputFileMixedSchemeEntity;
