@@ -76,17 +76,10 @@ public class MysqlMetadataStrategy  extends MetadataStrategyTemplate {
 
          LOG.info("Generating schema for mysql using " + ((tableName!=null)?"table : " + tableName : "query : " + query));
 
-       /* String query = componentSchemaProperties.getOrDefault(Constants.QUERY,
-                new ParamsCannotBeNullOrEmpty(Constants.QUERY + " not found in request parameter")).toString();
-        String tableName = componentSchemaProperties
-                .getOrDefault(Constants.TABLENAME,
-                        new ParamsCannotBeNullOrEmpty(Constants.TABLENAME + " not found in request parameter"))
-                .toString();*/  // can be goes to debug
-       // ResultSet res = null;
+        ResultSet res = null;
         TableEntity tableEntity = new TableEntity();
         List<TableSchemaFieldEntity> tableSchemaFieldEntities = new ArrayList<TableSchemaFieldEntity>();
         try {
-            ResultSet res = null;
             Statement stmt = connection.createStatement();
             if (query != null && !query.isEmpty())
                 res = stmt.executeQuery("Select * from (" + query + ") as alias WHERE 1<0");

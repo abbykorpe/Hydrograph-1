@@ -163,10 +163,10 @@ public class DebugService implements PrivilegedAction<Object> {
                             break;
                     }
                 } catch (Exception e) {
-                    LOG.error("Metadata read for database : " + dbType + " not completed.");
+                    LOG.error("Metadata read for database  '" + dbType + "' not completed.");
                     LOG.error("Exception : " + e);
                     response.status(400);
-                    return "Metadata read for database : " + dbType + " not completed.";
+                    return "Metadata read for database '" + dbType + "' not completed.";
                 }
                 LOG.info("Class Name used for " + dbType + " Is : " + dbClassName);
                 LOG.debug("Json for " + dbType + " : " + objectAsString);
@@ -202,8 +202,12 @@ public class DebugService implements PrivilegedAction<Object> {
                     if (metadataProperties.get(Constants.dbType).toString().equalsIgnoreCase("mysql")) {
                         port = Constants.MYSQL_DEFAULT_PORT ;
                         metadataProperties.put(Constants.PORT_NUMBER, port);
-                        LOG.info("Connecting "+  dbType + " port is not provided using default port : " + Constants.MYSQL_DEFAULT_PORT);
+
+                    } else if (metadataProperties.get(Constants.dbType).toString().equalsIgnoreCase("oracle")) {
+                        port = Constants.ORACLE_DEFAULT_PORT ;
+                        metadataProperties.put(Constants.PORT_NUMBER, port);
                     }
+                    LOG.info("Connecting "+  dbType + " port is not provided using default port : " + port);
                 }
                 if (!requestParameterValues.isNull(Constants.SID)) {
                     sid = requestParameterValues.getString(Constants.SID);

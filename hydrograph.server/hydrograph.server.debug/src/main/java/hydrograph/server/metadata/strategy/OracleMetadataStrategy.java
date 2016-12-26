@@ -41,6 +41,7 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 	Logger LOG = LoggerFactory.getLogger(OracleMetadataStrategy.class);
 	final static String ORACLE_JDBC_CLASSNAME = "oracle.jdbc.OracleDriver";
 	Connection connection = null;
+    private String query=null, tableName=null;
 
 	/**
 	 * Used to set the connection for RedShift
@@ -77,6 +78,7 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 				.toString();
 		String jdbcUrl = "jdbc:oracle:" + driverType + "://@" + host + ":" + port + ":" + sid;
 		Class.forName(ORACLE_JDBC_CLASSNAME);
+        LOG.debug("Connection url for oracle = '" + jdbcUrl + "'");
 		connection = DriverManager.getConnection(jdbcUrl, userId, password);
 	}
 
@@ -90,12 +92,13 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 	@Override
 	public TableEntity fillComponentSchema(Map componentSchemaProperties)
 			throws SQLException, ParamsCannotBeNullOrEmpty {
-		String query = componentSchemaProperties.getOrDefault(Constants.QUERY,
-				new ParamsCannotBeNullOrEmpty(Constants.QUERY + " not found in request parameter")).toString();
-		String tableName = componentSchemaProperties
-				.getOrDefault(Constants.QUERY,
-						new ParamsCannotBeNullOrEmpty(Constants.TABLENAME + " not found in request parameter"))
-				.toString();
+        if(componentSchemaProperties.get(Constants.TABLENAME) != null)
+            tableName = componentSchemaProperties.get(Constants.TABLENAME).toString().trim();
+        else
+            query = componentSchemaProperties.get(Constants.QUERY).toString().trim();
+
+        LOG.info("Generating schema for mysql using " + ((tableName!=null)?"table : " + tableName : "query : " + query));
+
 		ResultSet res = null;
 		TableEntity tableEntity = new TableEntity();
 		List<TableSchemaFieldEntity> tableSchemaFieldEntities = new ArrayList<TableSchemaFieldEntity>();
@@ -129,9 +132,14 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 				tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 				tableSchemaFieldEntities.add(tableSchemaFieldEntity);
 			}
+            if(componentSchemaProperties.get(Constants.TABLENAME) == null)
+                tableEntity.setQuery(componentSchemaProperties.get(Constants.QUERY).toString()) ;
+            else
+                tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
+            tableEntity.setDatabaseName(componentSchemaProperties.get(Constants.dbType).toString());
 			tableEntity.setSchemaFields(tableSchemaFieldEntities);
-		} finally {
 			res.close();
+		} finally {
 			connection.close();
 		}
 		return tableEntity;
