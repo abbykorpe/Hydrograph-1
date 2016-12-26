@@ -17,7 +17,7 @@ case class TableCreator() {
     val fieldsScale = fieldsCreator.getFieldScale();
     val fieldsPrecision = fieldsCreator.getFieldPrecision();
     val columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision);
-
+    val DB_TYPE_ORACLE = "oracle"
     LOG.trace("Generating create query for " + outputRDBMSEntity.getDatabaseName
       + " database for table '" + outputRDBMSEntity.getTableName
       + "' with column name [" + fieldsCreator.getFieldNames.toList.mkString + "] "
@@ -33,10 +33,16 @@ case class TableCreator() {
       val primaryKeys = new Array[String](outputRDBMSEntity.getPrimaryKeys.size())
       val iterator = outputRDBMSEntity.getPrimaryKeys.iterator()
       var index: Int = 0
+      if (outputRDBMSEntity.getDatabaseType.equalsIgnoreCase(DB_TYPE_ORACLE))
       while (iterator.hasNext) {
-        primaryKeys(index) = iterator.next().getName
+        primaryKeys(index) = iterator.next().getName.toUpperCase
         index += 1
       }
+      else
+        while (iterator.hasNext) {
+          primaryKeys(index) = iterator.next().getName
+          index += 1
+        }
       new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, primaryKeys, outputRDBMSEntity.getDatabaseType).getCreateTableStatement()
     }
     else {
@@ -47,5 +53,4 @@ case class TableCreator() {
       new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, null, outputRDBMSEntity.getDatabaseType).getCreateTableStatement()
     }
   }
-
 }

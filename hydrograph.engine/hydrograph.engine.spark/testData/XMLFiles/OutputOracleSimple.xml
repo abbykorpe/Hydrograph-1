@@ -35,7 +35,7 @@
     </inputs>
 
     <outputs id="out oracle" batch="0" xsi:type="ot:oracle">
-        <inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
+        <inSocket fromComponentId="input1" fromSocketId="out0" id="in0" type="in">
             <schema name="schema1">
                 <field name="NUM" type="java.lang.Integer"/>
                 <field name="LWR" type="java.lang.String"/>
@@ -50,7 +50,7 @@
         <hostName value="DBDEVSRV"/>
         <port value="1521"/>
         <driverType value="thin"/>
-        <tableName value="testingTable423"/>
+        <tableName value="testingTable424"/>
         <userName value="htcd"/>
         <password value="htcd"/>
         <loadType>

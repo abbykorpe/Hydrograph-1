@@ -20,15 +20,15 @@
 
 <xs:complexType name="type-load-choice">
 		<xs:choice >
-			<xs:element name="newTable" type="type-priamry-keys" />
+            <xs:element name="newTable" type="type-primary-keys"/>
 			<xs:element name="truncateLoad" />
 			<xs:element name="Insert" />
 			<xs:element name="update" type="type-update-keys" />
 		</xs:choice>
 	</xs:complexType>
-	
-	
-	 <xs:complexType name="type-priamry-keys">
+
+
+    <xs:complexType name="type-primary-keys">
 	    <xs:sequence>
 					<xs:element name="primaryKeys" type="cmn:type-key-fields" minOccurs="0"/>
 		</xs:sequence>
