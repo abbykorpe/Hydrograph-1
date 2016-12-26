@@ -22,6 +22,7 @@ import java.util.List;
 public class TableEntity {
 
 	String databaseName = "";
+	String query="";
 	String tableName = "";
 	String owner = "";
 	List<TableSchemaFieldEntity> schemaFields = new ArrayList<TableSchemaFieldEntity>();
@@ -30,6 +31,25 @@ public class TableEntity {
 	String location = "";
 	String externalTableLocation = "";
 	String inputOutputFormat = "";
+
+	/**
+	 * Sets the query.
+	 *
+	 * @param query
+	 *            - of type String
+	 */
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+	/**
+	 *
+	 * @return query - of type String
+	 */
+	public String getQuery() {
+		return query;
+	}
+
 
 	/**
 	 * Sets the database name.

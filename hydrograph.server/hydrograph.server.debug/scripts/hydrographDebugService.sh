@@ -155,7 +155,7 @@ start_service () {
 
         if [ $SERVICE_START_IND -eq 0 ]; then
                 echo "Starting Debug Service"
-                java -cp config:${LIB_PATH}/*:"$MAINJAR" hydrograph.server.debug.service.DebugService > $LOG_PATH/$FILE_NAME &
+                java -cp config:${LIB_PATH}/*:"$MAINJAR" hydrograph.server.service.HydrographService > $LOG_PATH/$FILE_NAME &
                 SERVICE_ID=$!
                 echo $SERVICE_ID > ${LOG_PATH}/${PID_FILE}
                 echo "Service $SERVICE_ID started successfully!"
