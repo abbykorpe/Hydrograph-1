@@ -75,6 +75,10 @@ public class InputOracleUiConverter extends InputUiConverter {
 			propertyMap.put(PropertyNameConstants.PORT_NO.value(), inputOracle.getPort().getValue().toString());
 		}
 		
+		if(inputOracle.getSid() != null && StringUtils.isNotBlank(inputOracle.getSid().getValue())){
+			propertyMap.put(PropertyNameConstants.ORACLE_SID.value(), (String)(inputOracle.getSid().getValue()));
+		}
+		
 		if(inputOracle.getSchemaName() !=null && StringUtils.isNotBlank(inputOracle.getSchemaName().getValue())){
 			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(inputOracle.getSchemaName().getValue()));
 		}

@@ -36,7 +36,7 @@
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="jdbcDriver" value="Oracle Thin" renderer="JDBC_DRIVER_WIDGET"
+		<tns:property dataType="string" name="jdbcDriver" value="thin" renderer="JDBC_DRIVER_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="JDBC Driver use to connect with Oracle Database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
