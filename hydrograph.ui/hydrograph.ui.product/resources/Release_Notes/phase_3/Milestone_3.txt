@@ -1,0 +1,12 @@
+=====================================================================================================
+Features Added:
+=====================================================================================================
+Sr.No. <date> - [developer names] - description
+1.<23-Dec-16> - [Vibhor Tyagi] - Mysql
+2.<27-Dec-16> - [Vibhor Tyagi] - RunProgram
+
+=====================================================================================================
+Issues/Defects fixed:
+=====================================================================================================
+1.#562 [Vibhor Tyagi] Import XML: Error icon is getting displayed on oracle component
+2.#561 [Vibhor Tyagi] Import job XML: For the Oracle component, the value 'Null' is getting displayed in the 'SID' and 'Oracle Schema' text fields
