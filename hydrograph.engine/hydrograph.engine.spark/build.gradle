@@ -17,7 +17,7 @@ apply plugin: 'eclipse'
 
 sourceCompatibility = 1.8
 group = 'hydrograph'
-archivesBaseName = 'hydrograph.engine.expression'
+archivesBaseName = 'hydrograph.engine.spark'
 
 uploadArchives {
     repositories {

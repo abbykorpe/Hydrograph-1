@@ -57,14 +57,14 @@ case class DelimitedRelation(
 
         val fields = delimitedParser.parseLine(line)
         if (fields.isEmpty) {
-          LOG.warn(s"Ignoring empty line: $line")
+          LOG.warn("Ignoring empty line: $line")
           None
         } else {
           Some(fields.toList)
         }
       } catch {
-        case e =>
-          LOG.error(s"Exception while parsing line: $line. ", e)
+        case e : Exception =>
+          LOG.error("Exception while parsing line: $line. ", e)
           throw e
         }
     }

@@ -23,7 +23,7 @@ class AdapterFactory(graph: Graph) {
   val LOG : Logger = LoggerFactory.getLogger(classOf[AdapterFactory])
   val COMPONENT_ASSEMBLY_MAP_PROPERTIES: String = "componentMapping.properties"
   val componentMap=new mutable.HashMap[String,AdapterBase]()
-  var props = null
+  var props : Properties = null
 
  private def loadProps(): Unit = {
    try {
@@ -31,7 +31,7 @@ class AdapterFactory(graph: Graph) {
    }
    catch {
      case e: IOException =>
-       LOG.error("Error reading properties file: " + COMPONENT_ASSEMBLY_MAP_PROPERTIES, e)
+       LOG.error("Error reading properties file: " + COMPONENT_ASSEMBLY_MAP_PROPERTIES)
        throw new RuntimeException(e)
    }
  }

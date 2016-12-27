@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,12 +9,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 /**
- * 
+ *
  */
 package hydrograph.engine.commandline.utilities;
-
 
 /**
  * @author Alpeshk
@@ -22,36 +21,34 @@ package hydrograph.engine.commandline.utilities;
  */
 public class GeneralCommandLineUtilities {
 
+    private GeneralCommandLineUtilities() {
 
-	public Object loadAndInitClass(String className) {
+    }
 
-		@SuppressWarnings("rawtypes")
-		Class loadedClass;
+    public static Object loadAndInitClass(String className) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
 
-		try {
-			loadedClass = Class.forName(className);
-		} catch (Exception e) {
+        @SuppressWarnings("rawtypes")
+        Class loadedClass;
+        loadedClass = Class.forName(className);
+        return loadedClass.newInstance();
+    }
 
-			throw new LoadClassException("Given class " + className
-					+ " could not be loaded.", e);
-		}
+    /**
+     * To check if a option is provided in commandline arguments Please check
+     * tests for usage.
+     *
+     * @param args
+     * @param option
+     * @return an string array containing all values found for given option
+     */
+    public static boolean IsArgOptionPresent(String[] args, String option) {
+        String optionChar = "-";
+        String optionString = optionChar + option;
 
-		try {
-			return loadedClass.newInstance();
-		} catch (Exception e) {
-
-			throw new LoadClassException("Given class " + className
-					+ " could not be instantiated.", e);
-
-		}
-
-	}
-
-	private class LoadClassException extends RuntimeException {
-		private static final long serialVersionUID = 4982305737525826906L;
-
-		public LoadClassException(String msg, Throwable e) {
-			super(msg, e);
-		}
-	}
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase(optionString))
+                return true;
+        }
+        return false;
+    }
 }

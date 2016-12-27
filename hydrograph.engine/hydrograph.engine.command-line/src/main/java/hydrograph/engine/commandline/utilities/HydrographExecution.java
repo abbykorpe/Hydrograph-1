@@ -26,11 +26,9 @@ import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
-import hydrograph.engine.utilities.GeneralUtilities;
 
 public class HydrographExecution {
 
-    private GeneralCommandLineUtilities generalUtilities;
     private PropertiesLoader propertiesLoader;
     private HydrographRuntimeService runtimeService;
     private HydrographXMLInputService hydrographXmlInputService;
@@ -40,22 +38,17 @@ public class HydrographExecution {
 
     public HydrographExecution() {
         this.propertiesLoader = PropertiesLoader.getInstance();
-        this.generalUtilities = new GeneralCommandLineUtilities();
         this.hydrographXmlInputService = new HydrographXMLInputService();
         loadService();
     }
 
     public static void main(String args[]) throws Exception {
-
-
-        if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)) {
-
+        if (GeneralCommandLineUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)) {
             CommandLineOptionsProcessor.printUsage();
         } else {
             HydrographExecution execution = new HydrographExecution();
             execution.run(args);
         }
-
     }
 
     public void run(String[] args) throws Exception {
@@ -101,8 +94,16 @@ public class HydrographExecution {
     }
 
     private void loadService() {
-        runtimeService = (HydrographRuntimeService) generalUtilities
-                .loadAndInitClass(propertiesLoader.getRuntimeServiceClassName());
+        try {
+            runtimeService = (HydrographRuntimeService) GeneralCommandLineUtilities
+                    .loadAndInitClass(propertiesLoader.getRuntimeServiceClassName());
+        } catch (IllegalAccessException | InstantiationException e) {
+            LOG.error("Error in instantiating runtime service class.", e);
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            LOG.error("Error in loading runtime service class.", e);
+            throw new RuntimeException(e);
+        }
     }
 
     /**
