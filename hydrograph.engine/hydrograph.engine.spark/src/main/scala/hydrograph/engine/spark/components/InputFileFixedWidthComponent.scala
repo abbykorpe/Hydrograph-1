@@ -44,7 +44,7 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
       + " ] at Path: " + fileFixedWidthEntity.getPath)
     Map(key->df)
     } catch {
-      case e =>
+      case e : Exception =>
         LOG.error("Error in Input File Fixed Width Component "+ fileFixedWidthEntity.getComponentId, e)
         throw new RuntimeException("Error in Input File Fixed Width Component " + fileFixedWidthEntity.getComponentId, e)
     }

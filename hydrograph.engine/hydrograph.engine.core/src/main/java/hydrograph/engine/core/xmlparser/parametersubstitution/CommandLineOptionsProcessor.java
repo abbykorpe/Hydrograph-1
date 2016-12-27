@@ -22,7 +22,6 @@ import hydrograph.engine.core.utilities.GeneralUtilities;
 public class CommandLineOptionsProcessor {
 
 	public static final String OPTION_XML_PATH = "xmlpath";
-	public static final String OPTION_DEBUG_XML_PATH = "debugxmlpath";
 	public static final String OPTION_JOB_ID = "jobid";
 	public static final String OPTION_BASE_PATH = "basepath";
 	public static final String OPTION_PARAMETER_FILES = "paramfiles";
@@ -36,19 +35,6 @@ public class CommandLineOptionsProcessor {
 		String[] paths = null;
 
 		paths = GeneralUtilities.getArgsOption(args, OPTION_XML_PATH);
-
-		if (paths != null) {
-			// only the first path
-			return paths[0];
-		} else {
-			return null;
-		}
-	}
-
-	public String getDebugXMLPath(String[] args) {
-		String[] paths = null;
-
-		paths = GeneralUtilities.getArgsOption(args, OPTION_DEBUG_XML_PATH);
 
 		if (paths != null) {
 			// only the first path

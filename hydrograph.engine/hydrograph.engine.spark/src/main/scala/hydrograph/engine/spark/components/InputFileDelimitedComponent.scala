@@ -42,7 +42,7 @@ class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity
       Map(key -> df)
     } catch {
 
-      case e =>
+      case e : Exception =>
         LOG.error("Error in Input File Delimited Component "+ iFileDelimitedEntity.getComponentId, e)
         throw new RuntimeException("Error in Input File Delimited Component "+ iFileDelimitedEntity.getComponentId, e)
     }

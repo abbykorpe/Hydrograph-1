@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import hydrograph.engine.core.props.OrderedProperties;
-import hydrograph.engine.core.props.OrderedPropertiesHelper;
+import hydrograph.engine.core.utilities.OrderedPropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import hydrograph.engine.core.core.HydrographJob;
@@ -32,7 +32,7 @@ import hydrograph.engine.jaxb.main.Graph;
  * @author gurdits
  *
  */
-public abstract class FlowManipulationHandler {
+public class FlowManipulationHandler {
 
 	private static Logger LOG = LoggerFactory.getLogger(FlowManipulationHandler.class);
 	private static List<TypeBaseComponent> jaxbComponents;
@@ -48,7 +48,7 @@ public abstract class FlowManipulationHandler {
 		jaxbComponents = flowManipulationContext.getJaxbMainGraph();
 		jaxbJobLevelRuntimeProperties = flowManipulationContext.getJaxbJobLevelRuntimeProperties();
 		jobName = flowManipulationContext.getGraphName();
-		OrderedProperties properties = new OrderedProperties();
+		OrderedProperties properties;
 		try {
 			properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties");
 		} catch (IOException e) {
@@ -65,15 +65,11 @@ public abstract class FlowManipulationHandler {
 
 	private List<String> addPluginFromFile(OrderedProperties properties) {
 		List<String> registerdPlugins = new LinkedList<String>();
-		// added batchbreak plugin.
-		registerdPlugins.addAll(addDefaultPlugins());
-		for (Object plugin : properties.values()) {
-			registerdPlugins.add(plugin.toString());
+		for (Object key : properties.keySet()) {
+			registerdPlugins.add(properties.get(key).toString());
 		}
 		return registerdPlugins;
 	}
-
-	public abstract List<String> addDefaultPlugins() ;
 
 	private static HydrographJob getJaxbObject() {
 		Graph graph = new Graph();
@@ -86,11 +82,10 @@ public abstract class FlowManipulationHandler {
 	private static List<TypeBaseComponent> executePlugin(String clazz,
 			FlowManipulationContext flowManipulationContext) {
 		try {
-			Class assemblyClass = Class.forName(clazz);
-			Constructor constructor = assemblyClass.getDeclaredConstructor();
+			Class pluginClass = Class.forName(clazz);
+			Constructor constructor = pluginClass.getDeclaredConstructor();
 			ManipulatorListener inst = (ManipulatorListener) constructor.newInstance();
 			return inst.execute(flowManipulationContext);
-
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new RuntimeException(e);
 		}

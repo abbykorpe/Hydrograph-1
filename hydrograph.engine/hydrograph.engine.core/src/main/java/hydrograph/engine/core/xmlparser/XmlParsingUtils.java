@@ -97,21 +97,6 @@ public class XmlParsingUtils {
 
 	}
 
-	public static String getDebugXMLPath(String[] args, Properties config) {
-
-		String path = optionsProcessor.getDebugXMLPath(args);
-
-		if (path != null) {
-			return path;
-		}
-
-		// if path is not found from command line then check from config
-		path = config.getProperty(CommandLineOptionsProcessor.OPTION_XML_PATH);
-
-		return path;
-
-	}
-
 	public static String getUDFPath(String[] args) {
 
 		String path = optionsProcessor.getUDFPath(args);
@@ -139,20 +124,7 @@ public class XmlParsingUtils {
 
 	}
 
-	public static String getBasePath(String[] args) {
 
-		String basePath = optionsProcessor.getBasePath(args);
-
-		if (basePath != null) {
-			return basePath;
-		}
-
-		/*if (basePath == null) {
-			// optional param
-		}*/
-		return basePath;
-
-	}
 
 	public static class HydrographXMLInputServiceException extends RuntimeException {
 		private static final long serialVersionUID = -7709930763943833311L;

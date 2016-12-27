@@ -2,11 +2,10 @@ package hydrograph.engine.spark.flow
 
 import java.util.Properties
 
-import hydrograph.engine.core.core.{HydrographDebugInfo, HydrographJob, HydrographRuntimeService}
-import hydrograph.engine.core.flowmanipulation.FlowManipulationContext
+import hydrograph.engine.core.core.{HydrographJob, HydrographRuntimeService}
+import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, FlowManipulationHandler}
 import hydrograph.engine.core.helper.JAXBTraversal
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler
-import hydrograph.engine.spark.batchbreak.plugin.DefaultPluginManipulation
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
@@ -38,8 +37,8 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   override def execute(): Unit = {}
 
-  override def initialize(properties: Properties, strings: Array[String], hydrographJob: HydrographJob,
-                          hydrographDebugInfo: HydrographDebugInfo, jobId: String, basePath: String, s2: String): Unit
+  override def initialize(properties: Properties, args: Array[String], hydrographJob: HydrographJob,
+                          jobId: String, s2: String): Unit
   = {
 
     val sparkSession = SparkSession.builder()
@@ -52,10 +51,9 @@ class HydrographRuntime extends HydrographRuntimeService {
     val schemaFieldHandler = new SchemaFieldHandler(
       hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
-    val flowManipulationContext = new FlowManipulationContext(hydrographJob, hydrographDebugInfo, schemaFieldHandler,
-      jobId, basePath)
+    val flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
 
-    val flowManipulationHandler = new DefaultPluginManipulation
+    val flowManipulationHandler = new FlowManipulationHandler
 
     val updatedHydrographJob = flowManipulationHandler.execute(flowManipulationContext);
 
@@ -63,7 +61,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
     val traversal = new JAXBTraversal(updatedHydrographJob.getJAXBObject());
 
-    val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob, schemaFieldHandler, sparkSession)
+    val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob, flowManipulationContext.getSchemaFieldHandler, sparkSession)
     val flows = FlowBuilder(runtimeContext)
       .buildFlow()
 

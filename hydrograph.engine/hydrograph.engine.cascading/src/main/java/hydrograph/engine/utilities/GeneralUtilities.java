@@ -13,7 +13,7 @@
 package hydrograph.engine.utilities;
 
 import hydrograph.engine.core.props.OrderedProperties;
-import hydrograph.engine.core.props.OrderedPropertiesHelper;
+import hydrograph.engine.core.utilities.OrderedPropertiesHelper;
 import java.io.IOException;
 import java.util.ArrayList;
 
