@@ -28,6 +28,7 @@ import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.runprogram.RunComponentWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.DelimiterWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.DropDownWidget;
@@ -148,7 +149,9 @@ public class WidgetFactory {
 		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class),
 		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class),
 		LOAD_TYPE_CONFIGURATION_WIDGET(LoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Messages.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
-		PROPOGATE_WIDGET(PropogateWidget.class);
+		PROPOGATE_WIDGET(PropogateWidget.class),
+		RUNPROGRAM_TEXT_WIDGET (RunComponentWidget.class);
+		
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
 		

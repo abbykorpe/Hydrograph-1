@@ -46,7 +46,10 @@ public enum UIComponentsConstants {
 	NORMALIZE("Normalize"),
 	WARN("WARN"),
 	ERROR("ERROR"),
-	VALID("VALID");
+	VALID("VALID"),
+	COMMAND_CATEGORY("COMMAND"),
+	RUN_PROGRAM("RunProgram"),
+	BATCH("batch");
 	
 	private final String value;
 

@@ -74,6 +74,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.RunProgramUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.TransformComponentUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.UnionAllUiConverter;
@@ -231,6 +232,9 @@ public class UiConverterFactory {
 		if((hydrograph.engine.jaxb.commandtypes.Subjob.class).isAssignableFrom(typeBaseComponent.getClass()))
 		{
 			return new CommandSubjobUiConverter(typeBaseComponent, container);
+		}
+		if((hydrograph.engine.jaxb.commandtypes.RunProgram.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new RunProgramUiConverter(typeBaseComponent, container);
 		}
 		
 
