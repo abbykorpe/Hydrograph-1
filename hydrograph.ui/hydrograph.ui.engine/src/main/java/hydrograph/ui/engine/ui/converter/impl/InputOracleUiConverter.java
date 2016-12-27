@@ -63,33 +63,26 @@ public class InputOracleUiConverter extends InputUiConverter {
 		 Oracle inputOracle = (Oracle) typeBaseComponent;
 		 DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 		
-		if(inputOracle.getDriverType() !=null && StringUtils.isNotBlank(inputOracle.getDriverType().getValue())){
-			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(inputOracle.getDriverType().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(), 
+				inputOracle.getDriverType() == null ? "" : inputOracle.getDriverType().getValue());
 		
-		if(inputOracle.getHostName() !=null && StringUtils.isNotBlank(inputOracle.getHostName().getValue())){
-			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), (String)(inputOracle.getHostName().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(), 
+				inputOracle.getHostName() == null ? "" : inputOracle.getHostName().getValue());
 		
-		if(inputOracle.getPort() != null){
-			propertyMap.put(PropertyNameConstants.PORT_NO.value(), inputOracle.getPort().getValue().toString());
-		}
+		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
+				inputOracle.getPort() == null ? "" : inputOracle.getPort().getValue().toString());
 		
-		if(inputOracle.getSid() != null && StringUtils.isNotBlank(inputOracle.getSid().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_SID.value(), (String)(inputOracle.getSid().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.ORACLE_SID.value(), 
+				inputOracle.getSid() == null ? "" : inputOracle.getSid().getValue());
 		
-		if(inputOracle.getSchemaName() !=null && StringUtils.isNotBlank(inputOracle.getSchemaName().getValue())){
-			propertyMap.put(PropertyNameConstants.ORACLE_SCHEMA.value(), (String)(inputOracle.getSchemaName().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.ORACLE_SCHEMA.value(), 
+				inputOracle.getSchemaName() == null ? "" : inputOracle.getSchemaName().getValue());
 		
-		if(inputOracle.getUserName() != null && StringUtils.isNotBlank(inputOracle.getUserName().getValue())){
-			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(inputOracle.getUserName().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), 
+				inputOracle.getUserName()==null ? "" : inputOracle.getUserName().getValue());
 		
-		if(inputOracle.getPassword() !=null && StringUtils.isNotBlank(inputOracle.getPassword().getValue())){
-			propertyMap.put(PropertyNameConstants.PASSWORD.value(), (String)(inputOracle.getPassword().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(), 
+				inputOracle.getPassword()==null ? "" : inputOracle.getPassword().getValue());
 		
 		if(inputOracle.getTableName() !=null &&  StringUtils.isNotBlank(inputOracle.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputOracle.getTableName().getValue());
@@ -159,5 +152,8 @@ public class InputOracleUiConverter extends InputUiConverter {
 		return runtimeMap;
 	}
 	
+	private void setValueInPropertyMap(String propertyName,String value){
+		propertyMap.put(propertyName, StringUtils.isNotBlank(value) ? value : "");
+	}
 	
 }
