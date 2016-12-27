@@ -71,7 +71,7 @@ public class OutputFileHiveTextAssembly extends OutputFileHiveBase<OutputFileHiv
 		if (outputFileHiveTextEntity.getOverWrite()) {
 			hiveTap = new HiveTap(tableDesc, scheme, SinkMode.REPLACE, true);
 		} else {
-			hiveTap = new HiveTap(tableDesc, scheme, SinkMode.KEEP, true);
+			hiveTap = new HiveTap(tableDesc, scheme, SinkMode.UPDATE, true);
 		}
 
 		if (outputFileHiveTextEntity.getPartitionKeys() != null
