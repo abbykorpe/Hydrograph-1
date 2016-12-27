@@ -20,7 +20,7 @@
 	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
 	<commands id="runprog" batch="0" xsi:type="ct:runProgram">
-		<command value="mkdir directoryBaneliHaiBhai"></command>
+		<command value="mkdir testDirectory"></command>
 	</commands>
 
 
