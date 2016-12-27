@@ -4,26 +4,25 @@ import java.util
 
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.helper.LinkGenerator
-import hydrograph.engine.jaxb.commontypes.{TypeBaseInSocket, TypeBaseOutSocket}
+import hydrograph.engine.jaxb.commontypes.{ TypeBaseInSocket, TypeBaseOutSocket }
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.flow.RuntimeContext
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{ DataFrame, SparkSession }
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 /**
-  * Created by gurdits on 10/21/2016.
-  */
+ * Created by gurdits on 10/21/2016.
+ */
 object ComponentParameterBuilder {
 
-  def apply(componentID: String, runtimeContext: RuntimeContext, outLinkMap: mutable.HashMap[String, Map[String,DataFrame]],
-            baseComponent:
-  BaseComponentParams): Builder = {
+  def apply(componentID: String, runtimeContext: RuntimeContext, outLinkMap: mutable.HashMap[String, Map[String, DataFrame]],
+            baseComponent: BaseComponentParams): Builder = {
     new Builder(componentID, runtimeContext, outLinkMap, baseComponent)
   }
 
-  class Builder(componentID: String, runtimeContext: RuntimeContext, outLinkMap: mutable.HashMap[String, Map[String,DataFrame]], baseComponent: BaseComponentParams) {
+  class Builder(componentID: String, runtimeContext: RuntimeContext, outLinkMap: mutable.HashMap[String, Map[String, DataFrame]], baseComponent: BaseComponentParams) {
 
     def setInputDataFrame(): Builder = {
       val linkGenerator = new LinkGenerator(runtimeContext.hydrographJob.getJAXBObject)
@@ -32,12 +31,10 @@ object ComponentParameterBuilder {
 
       for (inSocket: TypeBaseInSocket <- inSocketList.asScala) {
         val fromCompID = inSocket.getFromComponentId
-        baseComponent.addinputDataFrame(outLinkMap.get(fromCompID).get.get(inSocket.getFromSocketId
-          ).get)
+        baseComponent.addinputDataFrame(outLinkMap.get(fromCompID).get.get(inSocket.getFromSocketId).get)
       }
       this
     }
-
 
     def setInputDataFrameWithCompID(): Builder = {
       val linkGenerator = new LinkGenerator(runtimeContext.hydrographJob.getJAXBObject)
@@ -46,8 +43,20 @@ object ComponentParameterBuilder {
 
       for (inSocket: TypeBaseInSocket <- inSocketList.asScala) {
         val fromCompID = inSocket.getFromComponentId
-        baseComponent.addCompIDAndInputDataFrame(fromCompID,outLinkMap.get(fromCompID).get.get(inSocket.getFromSocketId
-        ).get)
+        baseComponent.addCompIDAndInputDataFrame(fromCompID, outLinkMap.get(fromCompID).get.get(inSocket.getFromSocketId).get)
+      }
+      this
+    }
+
+    def setInputSchemaFieldsWithCompID(): Builder = {
+      val linkGenerator = new LinkGenerator(runtimeContext.hydrographJob.getJAXBObject)
+
+      val inSocketList: util.List[_ <: TypeBaseInSocket] = linkGenerator.getLink().get(componentID).getInSocket
+
+      for (inSocket: TypeBaseInSocket <- inSocketList.asScala) {
+        val fromCompID = inSocket.getFromComponentId
+        val schemaFieldList = runtimeContext.schemaFieldHandler.getSchemaFieldMap.get(inSocket.getFromComponentId + "_" + inSocket.getFromSocketId)
+        baseComponent.addCompIDAndInputSchema(fromCompID, schemaFieldList)
       }
       this
     }
@@ -77,17 +86,14 @@ object ComponentParameterBuilder {
       this
     }
 
-
     def setSparkSession(sparkSession: SparkSession): Builder = {
       baseComponent.setSparkSession(sparkSession)
       this
     }
 
-
     def build(): BaseComponentParams = {
       baseComponent
     }
   }
-
 
 }

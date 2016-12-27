@@ -20,7 +20,7 @@ import scala.collection.mutable
  *
  */
 
-class SparkJoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
+class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
 
   override def createComponent(): Map[String, DataFrame] = {
 
@@ -29,13 +29,14 @@ class SparkJoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponent
 
     val passthroughFields = joinUtils.getPassthroughFields()
     val mapFields = joinUtils.getMapFields()
+    val copyOfInSocketFields = joinUtils.getCopyOfInSocketFields()
 
     val joinOperationsSorted = joinOperations.sortBy(j => (j.recordRequired, !j.unused)).reverse
 
-    join(joinOperationsSorted, passthroughFields, mapFields)
+    join(joinOperationsSorted, passthroughFields, mapFields, copyOfInSocketFields)
   }
 
-  def join(joinOperations: Array[JoinOperation], passthroughFields: List[(String, String)], mapFields: List[(String, String)]): Map[String, DataFrame] = {
+  def join(joinOperations: Array[JoinOperation], passthroughFields: List[(String, String)], mapFields: List[(String, String)], copyOfInSocketFields: List[(String, String)]): Map[String, DataFrame] = {
     var outMap = Map[String, DataFrame]()
 
     def dfJoin(headJoin: JoinOperation, tailJoins: Array[JoinOperation]): JoinOperation = {
@@ -154,7 +155,7 @@ class SparkJoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponent
 
     def getDFWithRequiredFields(df: DataFrame): DataFrame = {
 
-      val mergedFields = (passthroughFields ++ mapFields).distinct
+      val mergedFields = (passthroughFields ++ mapFields ++ copyOfInSocketFields).distinct
       df.select(mergedFields.map(field => col(field._1).as(field._2)): _*)
 
     }

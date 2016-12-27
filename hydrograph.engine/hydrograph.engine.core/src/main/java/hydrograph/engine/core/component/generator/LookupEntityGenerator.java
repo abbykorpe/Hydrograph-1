@@ -57,6 +57,7 @@ public class LookupEntityGenerator extends OperationComponentGeneratorBase {
 		lookupEntity.setKeyFields(
 				OperationEntityUtils.extractKeyFieldsListFromOutSocketsForLookup(jaxbLookup.getKeys()));
 		lookupEntity.setOutSocketList(OperationEntityUtils.extractOutSocketList(jaxbLookup.getOutSocket()));
+		lookupEntity.setInSocketList(OperationEntityUtils.extractInSocketList(jaxbLookup.getInSocket()));
 //		hashJoinEntity.setInSocketMap(OperationEntityUtils.extractInSocketMap(jaxbHashJoin.getInSocket()));
 		lookupEntity.setRuntimeProperties(
 				OperationEntityUtils.extractRuntimeProperties(jaxbLookup.getRuntimeProperties()));
