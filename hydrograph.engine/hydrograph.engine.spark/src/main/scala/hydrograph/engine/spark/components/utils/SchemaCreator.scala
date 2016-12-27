@@ -7,6 +7,8 @@ import org.slf4j.{Logger, LoggerFactory}
 
 case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
+  private val precision:Int=38 
+  
   private val LOG:Logger = LoggerFactory.getLogger(classOf[SchemaCreator[T]])
   def makeSchema(): StructType = {
     StructType(createStructFields())
@@ -27,7 +29,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
       case "Double" => DataTypes.DoubleType
       case "Date" if (schemaField.getFieldFormat.matches(".*[H|m|s|S].*")) => DataTypes.TimestampType
       case "Date" => DataTypes.DateType
-      case "BigDecimal" => DataTypes.createDecimalType(schemaField.getFieldPrecision, schemaField.getFieldScale)
+      case "BigDecimal" => DataTypes.createDecimalType(returnScalePrecision(schemaField.getFieldPrecision), returnScalePrecision(schemaField.getFieldScale))
     }
   }
 
@@ -42,5 +44,10 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
     LOG.debug("Array of StructField created from schema is : " + structFields.mkString)
     structFields
   }
+  
+  
+  def returnScalePrecision(data:Int):Int={
+    if(data== -999) 38 else precision
+  } 
 }
 

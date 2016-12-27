@@ -50,4 +50,6 @@ public class Constants {
 	private Constants() {
 	}
 	public static final String LENGTHS_AND_DELIMITERS_SEPARATOR="~!@#@!~";
+	
+	public static final String DEFAULT_FORMAT = "yyyy-MM-dd";
 }

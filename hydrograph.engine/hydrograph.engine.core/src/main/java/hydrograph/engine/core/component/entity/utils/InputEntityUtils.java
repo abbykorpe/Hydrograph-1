@@ -209,6 +209,9 @@ public class InputEntityUtils implements Serializable{
 		if (((TypeBaseField) list.get(i)).getFormat() != null) {
 			fields.setFieldFormat(((TypeBaseField) list.get(i)).getFormat());
 		}
+		else{
+			fields.setFieldFormat(Constants.DEFAULT_FORMAT);
+		}
 	}
 
 	/**
