@@ -61,30 +61,23 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		Mysql inputMysql = (Mysql) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 
-		if(inputMysql.getJdbcDriver() != null && StringUtils.isNotBlank(inputMysql.getJdbcDriver().getValue())){
-			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), (String)(inputMysql.getJdbcDriver().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(), 
+				inputMysql.getJdbcDriver() == null ? "" : inputMysql.getJdbcDriver().getValue());
 		
-		if(inputMysql.getHostName() != null &&  StringUtils.isNotBlank(inputMysql.getHostName().getValue())){
-			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), (String)(inputMysql.getHostName().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(), 
+				inputMysql.getHostName() == null ? "" : inputMysql.getHostName().getValue());
 		
-		if(inputMysql.getPort() != null){
-			propertyMap.put(PropertyNameConstants.PORT_NO.value(), inputMysql.getPort().getValue().toString());
-		}
+		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
+				inputMysql.getPort() == null ? "" : inputMysql.getPort().getValue().toString());
 		
-		if(inputMysql.getDatabaseName() != null && StringUtils.isNotBlank(inputMysql.getDatabaseName().getValue())){
-			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), (String)(inputMysql.getDatabaseName().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), 
+				inputMysql.getDatabaseName() == null ? "" : inputMysql.getDatabaseName().getValue());
 		
+		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), 
+				inputMysql.getUsername() == null ? "" : inputMysql.getUsername().getValue());
 		
-		if(inputMysql.getUsername() != null && StringUtils.isNotBlank(inputMysql.getUsername().getValue())){
-			propertyMap.put(PropertyNameConstants.USER_NAME.value(), (String)(inputMysql.getUsername().getValue()));
-		}
-		
-		if(inputMysql.getPassword() != null && StringUtils.isNotBlank(inputMysql.getPassword().getValue())){
-			propertyMap.put(PropertyNameConstants.PASSWORD.value(), (String)(inputMysql.getPassword().getValue()));
-		}
+		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(), 
+				inputMysql.getPassword()==null ? "" : inputMysql.getPassword().getValue());
 		
 		if(inputMysql.getTableName() != null && StringUtils.isNotBlank(inputMysql.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputMysql.getTableName().getValue());
@@ -100,7 +93,7 @@ public class InputMysqlUiConverter extends InputUiConverter{
 			databaseSelectionConfig.setSqlQueryCounter(inputMysql.getCountQuery().getValue());
 		}
 		
-			propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
+		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
 		
 		uiComponent.setType(UIComponentsConstants.MYSQL.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
@@ -149,4 +142,8 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		return runtimeMap;
 	}
 
+	private void setValueInPropertyMap(String propertyName,String value){
+		propertyMap.put(propertyName, StringUtils.isNotBlank(value) ? value : "");
+	}
+	
 }

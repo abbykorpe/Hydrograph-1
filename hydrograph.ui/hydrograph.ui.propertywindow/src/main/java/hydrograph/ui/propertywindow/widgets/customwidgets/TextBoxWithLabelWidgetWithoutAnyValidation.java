@@ -45,7 +45,7 @@ public class TextBoxWithLabelWidgetWithoutAnyValidation extends TextBoxWithLabel
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
-		this.propertyValue =  String.valueOf(componentConfigProp.getPropertyValue());
+		this.propertyValue = String.valueOf(componentConfigProp.getPropertyValue());
 	}
 
 	protected void setToolTipErrorMessage(){

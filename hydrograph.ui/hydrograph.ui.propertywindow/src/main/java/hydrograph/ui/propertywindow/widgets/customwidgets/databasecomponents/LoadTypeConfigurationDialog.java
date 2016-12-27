@@ -136,9 +136,10 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		replaceRadioButton.setText(Constants.LOAD_TYPE_REPLACE_KEY);
 		new Label(loadConfigurationComposite, SWT.NONE);
 		new Label(loadConfigurationComposite, SWT.NONE);
-		insertRadioButton.addSelectionListener(buttonSelectionListener(updateTextBox, newTableTextBox, /*updateKeysButton*/ primaryKeysButton));
-		replaceRadioButton.addSelectionListener(buttonSelectionListener(updateTextBox, newTableTextBox, /*updateKeysButton*/ primaryKeysButton));
+		insertRadioButton.addSelectionListener(buttonSelectionListener(/*updateTextBox*/ newTableTextBox, /*updateKeysButton*/ primaryKeysButton));
+		replaceRadioButton.addSelectionListener(buttonSelectionListener(/*updateTextBox*/ newTableTextBox, /*updateKeysButton*/ primaryKeysButton));
 		
+		//TODO as above
 		/*updateRadioButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -154,6 +155,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 					primaryKeysButton.setEnabled(true);
 					newTableTextBox.setEnabled(true);
+					//TODO as above
 					//updateKeysButton.setEnabled(false);
 					//updateTextBox.setEnabled(false);
 			}
@@ -173,7 +175,9 @@ public class LoadTypeConfigurationDialog extends Dialog {
 				insertRadioButton.setSelection(true);
 			}else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_REPLACE_KEY) != null){
 				replaceRadioButton.setSelection(true);
-			}/*else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY) != null){
+			}
+			//TODO as above
+			/*else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY) != null){
 				updateRadioButton.setSelection(true);
 				updateTextBox.setText(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY));
 				//updateKeysButton.setEnabled(true);
@@ -193,12 +197,13 @@ public class LoadTypeConfigurationDialog extends Dialog {
 	 * @param buttonWidgets
 	 * @return Selection Adapter
 	 */
-	private SelectionAdapter buttonSelectionListener(Text textbox1, Text textbox2,Widget... buttonWidgets){
+	private SelectionAdapter buttonSelectionListener( Text textbox2,Widget... buttonWidgets){
 		Supplier<Stream<Widget>> streamSupplier = () -> Stream.of(buttonWidgets);
 		SelectionAdapter adapter = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				textbox1.setEnabled(false);
+				//TODO as above
+				//textbox1.setEnabled(false);
 				textbox2.setEnabled(false);
 				streamSupplier.get().forEach((Widget widgets) ->{((Button)widgets).setEnabled(false);});
 			}
@@ -217,6 +222,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String buttonText;
+				//TODO as above
 				/*if(StringUtils.equalsIgnoreCase(butoon.getText(), Messages.UPDATE_BY_KEYS)){
 					buttonText = Messages.UPDATE_KEYS_WINDOW_LABEL;
 				}else{*/
@@ -263,6 +269,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		loadTypeConfigurationSelectedValue.clear();
+		//TODO as above
 		/*if(updateRadioButton.getSelection()){
 				loadTypeConfigurationSelectedValue.put(updateRadioButton.getText() ,updateTextBox.getText() );
 		}*/
