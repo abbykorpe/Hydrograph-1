@@ -48,7 +48,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
       else if (adapterBase.isInstanceOf[OperationAdatperBase]) {
         baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap,new BaseComponentParams())
-          .setInputDataFrame().setSparkSession(runtimeContext.sparkSession).setInputDataFrameWithCompID()
+          .setInputDataFrame().setSparkSession(runtimeContext.sparkSession).setInputDataFrameWithCompID().setInputSchemaFieldsWithCompID()
           .setOutputSchemaFields().setInputSchemaFields().build()
 
         adapterBase.createComponent(baseComponentParams)

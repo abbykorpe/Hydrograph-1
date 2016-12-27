@@ -19,6 +19,8 @@ class BaseComponentParams() extends Serializable {
   val schemaFieldList = new ListBuffer[Set[SchemaField]]()
 
   val dataFameMap=new mutable.HashMap[String,DataFrame]()
+  
+  val schemaFieldMap = new mutable.HashMap[String,Set[SchemaField]]()
 
   var sparkSession: SparkSession = null
 
@@ -47,11 +49,11 @@ class BaseComponentParams() extends Serializable {
   def addCompIDAndInputDataFrame(compID:String,dataFrame: DataFrame): Unit ={
     dataFameMap += (compID->dataFrame)
   }
+  
+    def addCompIDAndInputSchema(compID:String,schema: Set[SchemaField]): Unit ={
+    schemaFieldMap += (compID->schema)
+  }
 
-/*
-  def addinputStructType(structType: StructType): Unit = {
-    schemaFieldList += structType
-  }*/
 
   def getDataFrame(): DataFrame = {
     dataFrameList.head
@@ -63,6 +65,10 @@ class BaseComponentParams() extends Serializable {
 
   def getDataFrameMap(): mutable.HashMap[String,DataFrame] ={
     dataFameMap
+  }
+  
+    def getSchemaFieldMap(): mutable.HashMap[String,Set[SchemaField]] ={
+    schemaFieldMap
   }
 
   def addInputSchema(schema: Set[SchemaField]): Unit = {
