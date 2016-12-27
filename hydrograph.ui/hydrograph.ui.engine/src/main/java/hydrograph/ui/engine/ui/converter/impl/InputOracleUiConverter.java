@@ -97,9 +97,7 @@ public class InputOracleUiConverter extends InputUiConverter {
 			databaseSelectionConfig.setSqlQueryCounter(inputOracle.getCountQuery().getValue());
 		}
 		
-		if(databaseSelectionConfig !=null){
-			propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
-		}
+		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
 		
 		uiComponent.setType(UIComponentsConstants.ORACLE.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
