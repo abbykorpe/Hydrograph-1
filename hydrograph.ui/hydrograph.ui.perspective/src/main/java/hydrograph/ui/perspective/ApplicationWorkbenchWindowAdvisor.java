@@ -24,13 +24,11 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -64,11 +62,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private static final String WARNING_MESSAGE="Current DPI setting is other than 100%. Recommended 100%.\nUpdate it from Control Panel -> Display settings.\n\nNote: DPI setting other than 100% may cause alignment issues."; //$NON-NLS-1$
 	private static final int DPI_COORDINATE=96;
    
-   //Execution tracking config properties	
-	private static final String EXECUTION_TRACKING_PORT = "EXECUTION_TRACKING_PORT";
-	private static final String HYDROGRAPH_EXECUTION_TRACKING_SERVER_JAR = "HYDROGRAPH_EXECUTION_TRACKING_SERVER_JAR";
-	private static final String EXECUTION_TRACKING_SERVER_MAIN_CLASS = "EXECUTION_TRACKING_SERVER_MAIN_CLASS";
-	
 	// View Data config properties
 	private static final String DRIVER_CLASS = "DRIVER_CLASS";
 	public static final String SERVICE_JAR = "SERVICE_JAR";
@@ -99,28 +92,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     	super.createWindowContents(shell);
     }
 
-
-    // Code to execute launch new process to start execution-tracking service
-    private void startExecutionTrackingServer(Properties properties) {
-    	String path = Platform.getInstallLocation().getURL().getPath();
-		if(StringUtils.isNotBlank(path) && StringUtils.startsWith(path, "/") && OSValidator.isWindows()){
-			path = StringUtils.substring(path, 1);
-		}
-		
-    	String command = "java -cp " + path + properties.getProperty(HYDROGRAPH_EXECUTION_TRACKING_SERVER_JAR)	+ " " + properties.getProperty(EXECUTION_TRACKING_SERVER_MAIN_CLASS);
-    	Runtime runtime = Runtime.getRuntime();
-    	try {
-			if (OSValidator.isWindows()) {
-				String commandArray[] = new String[] { "cmd.exe", "/c", command };
-				runtime.exec(commandArray);
-			} 
-			else{
-				runtime.exec(command);
-			}
-		} catch (IOException ioException) {
-			logger.error("Exception occurred while starting execution tracking server" + ioException);
-		}
-	}
     
 	@Override
 	public void postWindowOpen() {
@@ -149,7 +120,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			logger.error("Failure in IO", exception);
 		}
 		
-		//startExecutionTrackingServer(properties);
 	}
 	
 	private void serviceInitiator(Properties properties) throws IOException{
@@ -205,7 +175,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		Properties properties = ConfigFileReader.INSTANCE.getCommonConfigurations();
 		try {
 			killPortProcess(properties);
-			//killTrackingPortProcess(properties);
 		} catch (IOException e) {
 			logger.debug("Socket is not closed.");
 		}
@@ -276,19 +245,5 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		return path + "config/service/config" ;
 	}
 	
-	public void killTrackingPortProcess(Properties properties) throws IOException{
-		if(OSValidator.isWindows()){
-			String pid =getServicePortPID(properties.getProperty(EXECUTION_TRACKING_PORT));
-			if(StringUtils.isNotBlank(pid)){
-				int portPID = Integer.parseInt(pid);
-				ProcessBuilder builder = new ProcessBuilder(new String[]{"cmd", "/c", "taskkill /F /PID " + portPID});
-				builder.start();
-			}
-		}
-		else if(OSValidator.isMac()){
-			int portNumber = Integer.parseInt(properties.getProperty(EXECUTION_TRACKING_PORT));
-			ProcessBuilder builder = new ProcessBuilder(new String[]{"bash", "-c", "lsof -P | grep :" + portNumber + " | awk '{print $2}' | xargs kill -9"});
-			builder.start();
-		}
-	}
+	
 }
