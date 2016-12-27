@@ -35,10 +35,14 @@ import hydrograph.engine.core.constants.Constants;
  */
 public class SchemaField implements Cloneable,Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6772494118851529659L;
 	private String fieldName;
 	private String fieldDataType;
 	private int fieldLength;
-	private String fieldFormat;
+	private String fieldFormat=Constants.DEFAULT_FORMAT;
 	private int fieldScale = Constants.DEFAULT_SCALE;
 	private String fieldScaleType;
 	private int fieldPrecision = Constants.DEFAULT_PRECISION;
