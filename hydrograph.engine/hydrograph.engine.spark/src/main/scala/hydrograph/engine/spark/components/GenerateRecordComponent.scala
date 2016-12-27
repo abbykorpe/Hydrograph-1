@@ -124,7 +124,6 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
       for (fieldIndex <- 0 until fieldsSize) {
 
         val dataType: String = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldDataType.split("\\.").last
-        /*rowFieldsList += FieldsGenerator.generateFields(dataType, fieldIndex, fieldEntityLists, simpleDateFormats)*/
         rowFieldsList += generateFields(dataType, fieldIndex, fieldEntityLists, simpleDateFormats)
       }
       return rowFieldsList
@@ -183,14 +182,7 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
         val fieldProperties = generateRecordEntity.getFieldsList.get(fieldIndex)
 
-       /* val fieldEntity: FieldEntity = new FieldEntity
-        fieldEntity.setDefaultValue(fieldProperties.getFieldDefaultValue)
-        fieldEntity.setFieldFormat(fieldProperties.getFieldFormat)
-        fieldEntity.setFieldLength(fieldProperties.getFieldLength)
-        fieldEntity.setFieldScale(fieldProperties.getFieldScale)
-        fieldEntity.setRangeFromValue(fieldProperties.getFieldFromRangeValue)
-        fieldEntity.setRangeToValue(fieldProperties.getFieldToRangeValue)*/
-
+      
         
          val fieldEntity: FieldEntity = FieldEntity(
             fieldProperties.getFieldDefaultValue,
