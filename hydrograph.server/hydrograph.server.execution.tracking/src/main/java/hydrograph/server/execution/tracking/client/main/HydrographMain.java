@@ -68,7 +68,7 @@ public class HydrographMain {
 		String 	trackingClientSocketPort = null;
 		boolean isExecutionTracking = false;
 		String[] argsList = args;
-		List<String> argumentList = Arrays.asList(args);
+		List<String> argumentList = new ArrayList<String>( Arrays.asList(args));
 		final String jobId = hydrographMain.getJobId(argumentList);
 		
 		
@@ -80,9 +80,15 @@ public class HydrographMain {
 		if (argumentList.contains(Constants.IS_TRACKING_ENABLE)) {
 			int index = argumentList.indexOf(Constants.IS_TRACKING_ENABLE);
 			isExecutionTracking = Boolean.valueOf(argsList[index + 1]);
-			argumentList = argumentList.subList(0, index);
-			argsList = argumentList.toArray(new String[argumentList.size()]);
+			argumentList = removeItemFromIndex(index,argumentList);
 		}
+		
+		if(argumentList.contains(Constants.TRACKING_CLIENT_SOCKET_PORT)){
+			int index = argumentList.indexOf(Constants.TRACKING_CLIENT_SOCKET_PORT);
+			argumentList = removeItemFromIndex(index,argumentList);
+		}
+		
+		argsList = argumentList.toArray(new String[argumentList.size()]);
 
 
 
@@ -123,14 +129,13 @@ public class HydrographMain {
 					}
 				
 				} catch (Exception e) {
-					logger.error("job fail :",e);
-					logger.info("JOB FAILED");
+					logger.error("JOB FAILED :",e);
 					if(isExecutionTracking){
 						try {
 							latch.await();
 						} catch (InterruptedException e1) {
 							
-							e1.printStackTrace();
+							logger.error("job fail :",e1);
 						}
 					}
 					
@@ -248,5 +253,14 @@ public class HydrographMain {
 		executionStatus.setType(Constants.POST);
 		Gson gson = new Gson();
 		return gson.toJson(executionStatus);
+	}
+	
+	private static List<String> removeItemFromIndex(int index,List<String> argList){
+		
+		argList.remove(index); /* removing parameter name */
+		argList.remove(index); /* removing parameter value */
+		
+		return argList;
+		
 	}
 }
