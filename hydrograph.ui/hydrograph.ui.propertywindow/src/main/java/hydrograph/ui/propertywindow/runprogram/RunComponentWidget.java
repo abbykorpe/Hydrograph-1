@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.propertywindow.runprogram;
 
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -26,6 +38,11 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 
+/**
+ * The Class RunComponentWidget
+ * @author Bitwise
+ *
+ */
 public class RunComponentWidget extends AbstractWidget{
 	private String propertyName;
 	protected String propertyValue;
@@ -45,14 +62,14 @@ public class RunComponentWidget extends AbstractWidget{
 	
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
+		ELTDefaultSubgroupComposite defaultSubgroupComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
-		eltSuDefaultSubgroupComposite.createContainerWidget();
+		defaultSubgroupComposite.createContainerWidget();
 		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Messages.EXECUTION_COMMAND);
-		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+		defaultSubgroupComposite.attachWidget(eltDefaultLable);
 
-		styledText=new StyledText(eltSuDefaultSubgroupComposite.getContainerControl(), SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		styledText=new StyledText(defaultSubgroupComposite.getContainerControl(), SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		GridData gridData=new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint=80;
 		styledText.setLayoutData(gridData);
@@ -97,9 +114,8 @@ public class RunComponentWidget extends AbstractWidget{
 
 	
 	private void populateWidget(){
-		String property = propertyValue;
-		if(StringUtils.isNotBlank(property) ){
-			styledText.setText(property);
+		if(StringUtils.isNotBlank(propertyValue) ){
+			styledText.setText(propertyValue);
 			txtDecorator.hide();
 		}
 		else{

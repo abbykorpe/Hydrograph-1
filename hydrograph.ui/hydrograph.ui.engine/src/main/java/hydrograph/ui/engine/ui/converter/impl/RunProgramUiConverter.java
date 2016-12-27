@@ -58,7 +58,7 @@ public class RunProgramUiConverter extends CommandUiConverter {
 		propertyMap.put(Constants.BATCH, runProgram.getBatch());
 		uiComponent.setProperties(propertyMap);
 		
-		uiComponent.setType(UIComponentsConstants.RUNPROGRAM.value());
+		uiComponent.setType(UIComponentsConstants.RUN_PROGRAM.value());
 		
 	}
 

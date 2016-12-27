@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.engine.converter.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commandtypes.RunProgram;
@@ -49,7 +50,9 @@ public class RunProgramConverter extends CommandConverter {
 
 		Command command = new Command();
 		String cmdValue = (String) properties.get(Constants.RUN_COMMAND_PROPERTY_NAME);
-		command.setValue(cmdValue);
-		runProgram.setCommand(command);
+		if(StringUtils.isNotBlank(cmdValue)){
+			command.setValue(cmdValue);
+			runProgram.setCommand(command);
+		}
 	}
 }

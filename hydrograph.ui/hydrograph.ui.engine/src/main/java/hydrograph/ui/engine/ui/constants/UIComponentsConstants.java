@@ -48,7 +48,7 @@ public enum UIComponentsConstants {
 	ERROR("ERROR"),
 	VALID("VALID"),
 	COMMAND_CATEGORY("COMMAND"),
-	RUNPROGRAM("RunProgram"),
+	RUN_PROGRAM("RunProgram"),
 	BATCH("batch");
 	
 	private final String value;

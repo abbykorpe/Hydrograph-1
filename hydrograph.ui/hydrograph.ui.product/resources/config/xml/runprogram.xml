@@ -19,11 +19,8 @@
 		acronym="Run">
 		<tns:category>COMMAND</tns:category>
 			<tns:port>
-			<tns:portSpecification numberOfPorts="0" portAlignment="left" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
-			</tns:portSpecification>
-			<tns:portSpecification  numberOfPorts="0" portAlignment="right" changePortCountDynamically="true" allowMultipleLinks="false" linkMandatory="true">
-			</tns:portSpecification>
-			<tns:portSpecification numberOfPorts="0" portAlignment="bottom" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
+			
+			<tns:portSpecification numberOfPorts="0" portAlignment="bottom" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="false">
 			</tns:portSpecification>
 		</tns:port>
 		
