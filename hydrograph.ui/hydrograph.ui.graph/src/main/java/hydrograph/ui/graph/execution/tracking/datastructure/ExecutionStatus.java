@@ -24,6 +24,7 @@ public class ExecutionStatus {
 	private List<ComponentStatus> componentStatus;
 	private String jobId;
 	private String type;
+	private String clientId;
 	
 
 	public ExecutionStatus(List<ComponentStatus> componentStatus) {
@@ -78,6 +79,21 @@ public class ExecutionStatus {
 	public void setJobId(String jobId) {
 		this.jobId = jobId;
 	}
+	
+	/**
+	 * Gets the client id
+	 * @return 
+	 */
+	public String getClientId() {
+		return clientId;
+	}
+	/**
+	 * Sets the client id
+	 * @param clientId
+	 */
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
 
 	@Override
 	public String toString() {
@@ -91,6 +107,7 @@ public class ExecutionStatus {
 		result = prime * result + ((componentStatus == null) ? 0 : componentStatus.hashCode());
 		result = prime * result + ((jobId == null) ? 0 : jobId.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
 		return result;
 	}
 	
@@ -117,6 +134,11 @@ public class ExecutionStatus {
 			if (other.type != null)
 				return false;
 		} else if (!type.equals(other.type))
+			return false;
+		if(clientId==null){
+			if(other.clientId!=null)
+				return false;
+		} else if (!clientId.equals(other.clientId))
 			return false;
 		return true;
 	}

@@ -13,17 +13,17 @@
 
 package hydrograph.ui.communication.debugservice;
 
-import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
-import hydrograph.ui.communication.debugservice.method.Provider;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
+
+import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
+import hydrograph.ui.communication.debugservice.method.Provider;
+import hydrograph.ui.datastructures.metadata.MetaDataDetails;
 
 /**
  * The Class DebugServiceClient.
@@ -132,8 +132,8 @@ public class DebugServiceClient {
 	 * @throws HttpException
 	 * @throws IOException
 	 */
-	public String readMetaStoreDb(String jsonString,String host,String port, List<String> userCredentials) throws NumberFormatException, HttpException, IOException {
-		PostMethod method=Provider.INSTANCE.readMetaStoreforHiveMethod(jsonString,host,port,userCredentials);
+	public String readMetaStoreDb(MetaDataDetails metaDataDetails) throws NumberFormatException, HttpException, IOException {
+		PostMethod method=Provider.INSTANCE.readMetaDataMethod(metaDataDetails);
 		executePostMethod(method);
 		return method.getResponseBodyAsString();
 	}

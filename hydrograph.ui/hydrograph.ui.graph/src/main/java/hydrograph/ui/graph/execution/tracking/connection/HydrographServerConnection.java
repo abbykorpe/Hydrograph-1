@@ -13,36 +13,30 @@
 
 package hydrograph.ui.graph.execution.tracking.connection;
 
-import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
-import hydrograph.ui.graph.job.Job;
-import hydrograph.ui.logging.factory.LogFactory;
-
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Collections;
 
 import javax.websocket.Session;
 
-import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.glassfish.tyrus.client.ClientManager;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
+import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.job.Job;
+import hydrograph.ui.logging.factory.LogFactory;
+
 /**
  * Class HydrographServerConnection. use to connect web-socket server for execution tracking status.
  * @author Bitwise
  */
 public class HydrographServerConnection {
-
-	private static final String HTTPS_PROTOCOL = "https://";
 
 	/** The logger. */
 	private static Logger logger = LogFactory.INSTANCE
@@ -64,7 +58,7 @@ public class HydrographServerConnection {
 	 * @param url the url
 	 * @return Session
 	 */
-	public Session connectToServer(final Job job, String jobID, final String url) {
+	public Session connectToServer(final Job job, String jobID, String url) {
 		Session session = null;
 		counter++;
 		try {
@@ -80,7 +74,7 @@ public class HydrographServerConnection {
 						@Override
 						public void run() {
 							messageDialogForExecutionTracking(job, Display
-									.getDefault().getActiveShell(),url);
+									.getDefault().getActiveShell());
 
 						}
 					});
@@ -131,6 +125,7 @@ public class HydrographServerConnection {
 				Collections.EMPTY_LIST);
 		executionStatus.setJobId(jobID);
 		executionStatus.setType("get");
+		executionStatus.setClientId("ui-client");
 		Gson gson = new Gson();
 		return gson.toJson(executionStatus);
 	}
@@ -146,6 +141,7 @@ public class HydrographServerConnection {
 				Collections.EMPTY_LIST);
 		executionStatus.setJobId(jobID);
 		executionStatus.setType("kill");
+		executionStatus.setClientId("ui-client");
 		Gson gson = new Gson();
 		return gson.toJson(executionStatus);
 	}
@@ -156,37 +152,14 @@ public class HydrographServerConnection {
 	 *
 	 * @param job the job
 	 * @param shell the shell
-	 * @param url 
 	 */
-	public void messageDialogForExecutionTracking(Job job, Shell shell, String url) {
+	public void messageDialogForExecutionTracking(Job job, Shell shell) {
+		String portNo = TrackingDisplayUtils.INSTANCE.getPortFromPreference();
 		String msg = "Execution tracking can't be displayed as connection refused on host: "
-				+ getHostFromURL(url) + " with port no: " + getPortNoFromURL(url);
-		MessageBox messageBox =new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING);
-		messageBox.setText("Warning");
-		messageBox.setMessage(msg);
-		messageBox.open();
-	}
-
-	private String getPortNoFromURL(String url) {
-		url=StringUtils.replaceOnce(url, TrackingDisplayUtils.WEB_SOCKET, HTTPS_PROTOCOL);
-		try {
-			URL uri=new URL(url);
-			return String.valueOf(uri.getPort());
-		} catch ( MalformedURLException e) {
-			logger.warn("Exception occurred while fetching port from URL:{}",url);
-		}
-		return "";
-	}
-
-	private String getHostFromURL(String url) {
-		url=StringUtils.replaceOnce(url, TrackingDisplayUtils.WEB_SOCKET, HTTPS_PROTOCOL);
-		try {
-			URL uri=new URL(url);
-			return uri.getHost();
-		} catch (MalformedURLException e) {
-			logger.warn("Exception occurred while fetching host from URL:{}",url);
-		}
-		return "";
+				+ job.getHost() + " with port no: " + portNo;
+		MessageDialog dialog = new MessageDialog(shell, "Warning", null, msg,
+				SWT.ICON_WARNING, new String[] { "OK" }, 0);
+		dialog.open();
 	}
 
 	/**

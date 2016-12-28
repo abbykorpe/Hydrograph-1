@@ -72,7 +72,7 @@ public class DataBaseUtility {
 							+ parameterType.getPassword()+ SEPARATOR + parameterType.getJdbcName() +SEPARATOR+parameterType.getDatabaseName();
 		
 		try {
-			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(connection_param, host, port_no, dataBaseTables);
+			//jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(connection_param, host, port_no, dataBaseTables);
 			ObjectMapper mapper = new ObjectMapper();
 			databaseTableSchema = mapper.readValue(jsonResponse, DatabaseTableSchema.class);
 		} catch (NumberFormatException | HttpException exception) {
