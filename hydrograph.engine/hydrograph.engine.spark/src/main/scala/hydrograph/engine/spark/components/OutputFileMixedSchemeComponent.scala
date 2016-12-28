@@ -52,6 +52,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
        .option("safe", outputFileMixedSchemeEntity.getSafe)
        .option("strict", outputFileMixedSchemeEntity.getStrict)
        .option("dateFormats", dateFormats)
+       .option("filler", ' ')
        .option("lengthsAndDelimiters", extractLengthsAndDelimiters(outputFileMixedSchemeEntity.getFieldsList))
        .option("lengthsAndDelimitersType", extractLengthsAndDelimitersType(outputFileMixedSchemeEntity.getFieldsList))
        .mode(SaveMode.Overwrite)

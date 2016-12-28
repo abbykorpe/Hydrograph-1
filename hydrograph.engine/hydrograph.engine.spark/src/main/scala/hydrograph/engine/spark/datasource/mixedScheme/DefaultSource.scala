@@ -1,12 +1,18 @@
 
 package hydrograph.engine.spark.datasource.mixedScheme
 
+import hydrograph.engine.core.constants.Constants
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
+import hydrograph.engine.spark.helper.DelimitedAndFixedWidthHelper
 import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.hadoop.io.Text
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
+import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
+import scala.collection.mutable.ListBuffer
 
 
 class DefaultSource extends RelationProvider
@@ -101,75 +107,65 @@ class DefaultSource extends RelationProvider
 
   def saveAsDelimitedFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
     LOG.trace("In method saveAsFW for creating MixedScheme Output File")
-    val delimiter: String = parameters.getOrElse("delimiter", ",")
     val outDateFormats: String = parameters.getOrElse("dateFormats", "null")
     val strict: Boolean = parameters.getOrElse("strict", "true").toBoolean
     val quote: String = if (parameters.getOrElse("quote", "\"") == null) "\"" else parameters.getOrElse("quote", "\"")
-    val generateHeader: Boolean = parameters.getOrElse("header", "true").toBoolean
     val schema: StructType = dataFrame.schema
+    val lengthsAndDelimiters = parameters.getOrElse("lengthsAndDelimiters", "")
+    val lengthsAndDelimitersType = parameters.getOrElse("lengthsAndDelimitersType", "")
+    val hasaNewLineField: Boolean = DelimitedAndFixedWidthHelper.hasaNewLineField(lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR))
 
-    val header: String = if (generateHeader) {
-      dataFrame.columns.mkString(delimiter)
-    } else {
-      "" // There is no need to generate header in this case
-    }
+    var outputRow: String = ""
+    var recordToBeSpilled: String = ""
 
     val strRDD = dataFrame.rdd.mapPartitionsWithIndex {
 
       case (index, iter) =>
         new Iterator[String] {
-          var firstRow: Boolean = generateHeader
-
-          override def hasNext: Boolean = iter.hasNext || firstRow
+          override def hasNext: Boolean = iter.hasNext
 
           override def next: String = {
-            if (iter.nonEmpty) {
-              val tuple = iter.next()
-              if (strict && tuple.length != schema.fields.length) {
-                LOG.error("Output row does not have enough length to parse all fields. Output length is "
-                  + tuple.length
-                  + ". Number of fields in output schema are "
-                  + schema.fields.length
-                  + "\nRow being parsed: " + tuple)
-                throw new RuntimeException("Output row does not have enough length to parse all fields. Output length is "
-                  + tuple.length
-                  + ". Number of fields in output schema are "
-                  + schema.fields.length
-                  + "\nRow being parsed: " + tuple)
-
-              }
-
-              val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({
-                case (value, i) =>
-                  val castedValue = TypeCast.castingOutputData(value, schema.fields(i).dataType, outDateFormats.split("\t")(i))
-                  var string: String = ""
-                  if (castedValue != null) {
-                    string = castedValue.toString
-                    if (string.contains(quote))
-                      string = string.replaceAll(quote, quote + quote)
-                    if (string.contains(delimiter))
-                      string = quote + string + quote
-                  }
-                  string
-
-
-              })
-
-              val row: String = values.mkString(delimiter)
-              if (firstRow) {
-                firstRow = false
-                header + System.getProperty("line.separator") + row
-              } else {
-                row
-              }
-            } else {
-              firstRow = false
-              header
+            val tuple = iter.next()
+            if (strict && tuple.length != schema.fields.length) {
+              LOG.error("Output row does not have enough length to parse all fields. Output length is "
+                + tuple.length
+                + ". Number of fields in output schema are "
+                + schema.fields.length
+                + "\nRow being parsed: " + tuple)
+              throw new RuntimeException("Output row does not have enough length to parse all fields. Output length is "
+                + tuple.length
+                + ". Number of fields in output schema are "
+                + schema.fields.length
+                + "\nRow being parsed: " + tuple)
             }
+
+            val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({
+              case (value, i) =>
+                val castedValue = TypeCast.castingOutputData(value, schema.fields(i).dataType, outDateFormats.split("\t")(i))
+                var string: String = ""
+                if (castedValue != null) {
+                  string = castedValue.toString
+                }
+                string
+            })
+
+            outputRow = outputRow + DelimitedAndFixedWidthHelper.createLine(values.mkString(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
+              lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
+              lengthsAndDelimitersType.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
+              strict, ' ', quote)
+            if ((hasaNewLineField || DelimitedAndFixedWidthHelper.containsNewLine(outputRow)) && hasNext) {
+              recordToBeSpilled = DelimitedAndFixedWidthHelper.spillOneLineToOutput(outputRow, lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR))
+              outputRow = outputRow.replace(recordToBeSpilled, "").trim
+            } else if (hasNext){
+              recordToBeSpilled = ""
+            } else {
+              recordToBeSpilled = outputRow
+            }
+            recordToBeSpilled
           }
         }
     }
-    strRDD.saveAsTextFile(path)
+    strRDD.filter(e => !e.equals("")).saveAsTextFile(path)
     LOG.info("MixedScheme Output File is successfully created at path : " + path)
   }
 
