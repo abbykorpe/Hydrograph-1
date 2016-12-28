@@ -22,6 +22,7 @@ import java.util.List;
 public class HiveTableSchema {
 
 	private String databaseName = "";
+	private String query="";
 	private String tableName = "";
 	private String owner = "";
 	private List<HiveTableSchemaField> schemaFields = new ArrayList<HiveTableSchemaField>();
@@ -100,5 +101,15 @@ public class HiveTableSchema {
 	public void setExternalTableLocation(String externalTableLocation) {
 		this.externalTableLocation = externalTableLocation;
 	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+	
+	
 
 }
