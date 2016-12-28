@@ -513,10 +513,11 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	}
 
 	private void validateDatabaseFields(DatabaseParameterType parameterType){
-		if (StringUtils.isEmpty(parameterType.getDatabaseName()) && StringUtils.isEmpty(parameterType.getHostName())
-				&& StringUtils.isEmpty(parameterType.getJdbcName()) && StringUtils.isEmpty(parameterType.getPortNo())
-				&& StringUtils.isEmpty(parameterType.getSchemaName()) && StringUtils.isEmpty(parameterType.getUserName())
-				&& StringUtils.isEmpty(parameterType.getPassword())) {
+		
+		if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
+				|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
+				|| StringUtils.isEmpty(parameterType.getSchemaName()) || StringUtils.isEmpty(parameterType.getUserName())
+				|| StringUtils.isEmpty(parameterType.getPassword())) {
 			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
 		}
 	}
@@ -545,12 +546,16 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 * @param port_no
 	 */
 	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues) {
-
-		DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
-		validateDatabaseFields(parameterType);
 		
-		DatabaseTableSchema databaseTableSchema = DataBaseUtility.getInstance()
-				.extractDatabaseDetails(oracleDatabaseValues, parameterType);
+		String host = DataBaseUtility.getInstance().getServiceHost();
+		
+		if(null!=host&& StringUtils.isNotBlank(host)){
+			
+			DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
+			validateDatabaseFields(parameterType);
+		
+			DatabaseTableSchema databaseTableSchema = DataBaseUtility.getInstance()
+					.extractDatabaseDetails(oracleDatabaseValues, parameterType,host);
 		/*try {
 			
 			//TODO
@@ -617,7 +622,12 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		}else{
 			createMessageDialog("Invalid Host Name:" +host,ERROR).open();
 		}
+		
 }*/
+		}
+		else{
+			createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
+		}
 		}
 	
 
