@@ -15,3 +15,4 @@ Issues/Defects fixed:
 4.#562 [Vibhor Tyagi] Import XML: Error icon is getting displayed on oracle component
 5.#561 [Vibhor Tyagi] Import job XML: For the Oracle component, the value 'Null' is getting displayed in the 'SID' and 'Oracle Schema' text fields
 6.#564 [Ashika Holkar] - Oracle component : New Table -> Primary keys textbox is not getting disabled when user switches from New Table option to Insert
+7.#559 [Ashika Holkar] - Oracle input component: Error message is not getting displayed

@@ -62,10 +62,10 @@ public class DataBaseUtility {
 	 * @param parameterType
 	 * @return
 	 */
-	public DatabaseTableSchema extractDatabaseDetails(List<String> dataBaseTables, DatabaseParameterType parameterType){
+	
+	public DatabaseTableSchema extractDatabaseDetails(List<String> dataBaseTables, DatabaseParameterType parameterType, String host){
 		String jsonResponse = "";
 		DatabaseTableSchema databaseTableSchema = null;
-		String host = getServiceHost();
 		String port_no = getServicePort();
 		
 		String connection_param = parameterType.getHostName() + SEPARATOR+parameterType.getPortNo() + SEPARATOR+parameterType.getUserName()
