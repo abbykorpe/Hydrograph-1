@@ -70,6 +70,7 @@ public class InputMysqlEntityGenerator extends
         inputRDBMSEntity.setJdbcDriver(inputMysqlJaxb.getJdbcDriver()==null ?null: inputMysqlJaxb.getJdbcDriver().getValue());
         inputRDBMSEntity.setTableName(inputMysqlJaxb.getTableName() == null ? null : inputMysqlJaxb.getTableName().getValue());
         inputRDBMSEntity.setSelectQuery(inputMysqlJaxb.getSelectQuery() == null ? null : inputMysqlJaxb.getSelectQuery().getValue());
+        inputRDBMSEntity.setCountQuery(inputMysqlJaxb.getCountQuery()==null?("select count(*) from  (" +inputRDBMSEntity.getSelectQuery()+ ") as alias;"):inputMysqlJaxb.getCountQuery().getValue());
         inputRDBMSEntity.setUsername(inputMysqlJaxb.getUsername().getValue());
         inputRDBMSEntity.setPassword(inputMysqlJaxb.getPassword().getValue());
 //		inputRDBMSEntity.setFetchSize(inputMysqlJaxb.getFetchSize()==null?Constants.DEFAULT_DB_FETCHSIZE:inputMysqlJaxb.getFetchSize().getValue().intValue());
