@@ -10,6 +10,7 @@ import hydrograph.engine.core.schemapropagation.SchemaFieldHandler
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
+import hydrograph.engine.spark.executiontracking.plugin.{ExecutionTrackingListener, ExecutionTrackingPlugin}
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
 import org.apache.spark.SparkConf
