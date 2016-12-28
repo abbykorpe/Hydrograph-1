@@ -47,9 +47,9 @@ class GenerateRecordComponentTest {
 		
 		
 		val sf10 = new SchemaField("f10", "java.util.Date");
-		sf3.setFieldFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		sf3.setFieldFromRangeValue("2015-02-02 02:02:02.222");
-		sf3.setFieldToRangeValue("2015-05-05 02:02:02.222");
+		sf10.setFieldFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		sf10.setFieldFromRangeValue("2015-02-02 02:02:02.222");
+		sf10.setFieldToRangeValue("2015-05-05 02:02:02.222");
 		
     val fieldList:util.ArrayList[SchemaField] = new util.ArrayList[SchemaField]();
     generateRecordEntity.setFieldsList(fieldList)

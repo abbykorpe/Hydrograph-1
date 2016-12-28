@@ -27,7 +27,7 @@
 				<field name="f3" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="C:\Users\anshulsh\TestingDataOfSpark\Input\Duplicate_Data.txt" />
+		<path uri="testData/inputFiles/Duplicate_Data.txt" />
 		<delimiter value="," />
 		<strict value="false" />
 		<charset value="ISO-8859-1" />
@@ -60,7 +60,7 @@
 				<field name="f3" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="C:\Users\anshulsh\Desktop\RemoveDups\Out" />
+		<path uri="hydrograph.engine.spark/testData/output/RemoveDupsOut" />
 		<delimiter value="," />
 		<charset value="ISO-8859-1" />
 	</outputs>
@@ -74,7 +74,7 @@
 				
 			</schema>
 		</inSocket>
-		<path uri="C:\Users\anshulsh\Desktop\RemoveDups\unused" />
+		<path uri="hydrograph.engine.spark/testData/output/RemoveDupsUnused" />
 		<delimiter value="," />
 		<charset value="ISO-8859-1" />
 	</outputs> 
