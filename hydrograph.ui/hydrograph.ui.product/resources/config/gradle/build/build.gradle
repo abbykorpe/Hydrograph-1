@@ -68,6 +68,8 @@ dependencies {
 
 	sshAntTask (group: 'org.apache.ant', name: 'ant-jsch',version:'1.9.4')
 	
+  		compile(group: 'hydrograph', name: 'hydrograph.engine.plugin', version: '0.1.spark-SNAPSHOT')
+  		
   		compile(group: 'hydrograph', name: 'hydrograph.engine.command-line', version: '0.1.spark-SNAPSHOT')
 
     	compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
@@ -335,7 +337,9 @@ task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
 			resourcesFiles.each {
             File file ->
                 resourcesFile = file.absolutePath
-               	scpToRemoteServer(resourcesFile, project.name+"/resources",username,host,password,properties.remoteDirectory)
+                if(!file.isDirectory()){
+               		scpToRemoteServer(resourcesFile, project.name+"/resources",username,host,password,properties.remoteDirectory)
+               	}
         	}
       			
     	    } catch (Exception gradleException) {
