@@ -61,6 +61,9 @@ test {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
+    }
 }
 
 sourceSets{
@@ -80,4 +83,5 @@ dependencies {
     compile project(':hydrograph.engine.core')
     compile project(':hydrograph.engine.transformation')
     compile project(':hydrograph.engine.expression')
+    compileOnly(group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
 }
