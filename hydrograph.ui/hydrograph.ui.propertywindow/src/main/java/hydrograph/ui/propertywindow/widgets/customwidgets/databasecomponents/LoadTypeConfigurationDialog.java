@@ -206,6 +206,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 				//textbox1.setEnabled(false);
 				textbox2.setEnabled(false);
 				streamSupplier.get().forEach((Widget widgets) ->{((Button)widgets).setEnabled(false);});
+				propertyDialogButtonBar.enableApplyButton(true);
 			}
 		};
 		return adapter;
