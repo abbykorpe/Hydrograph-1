@@ -2,6 +2,9 @@ package hydrograph.engine.spark.components
 
 import java.util
 
+import org.apache.spark.util.LongAccumulator
+
+
 import hydrograph.engine.core.component.entity.FilterEntity
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.{FilterForExpression, TransformForExpression}
@@ -9,7 +12,7 @@ import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import hydrograph.engine.transformation.userfunctions.base.{FilterBase, TransformBase}
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
@@ -41,7 +44,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
         filter.setValidationAPI(new ValidationAPI(x.getExpression,""))
         filter
       }
-      case y => classLoader[FilterBase](y.getOperationClass)
+      case y => classLoader[FilterBase](y.getOperationClass,componentsParams.getSparkSession(),filterEntity.getComponentId)
     }
 
     val fieldPosition=ReusableRowHelper(filterEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
@@ -70,9 +73,9 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
     map
   }
 
-  def classLoader[T](className: String): T = {
-    val clazz = Class.forName(className).getDeclaredConstructors
-    clazz(0).setAccessible(true)
-    clazz(0).newInstance().asInstanceOf[T]
+  def classLoader[T](className: String,sparkSession: SparkSession,compId:String): T = {
+    val clazz = Class.forName(className).getDeclaredConstructor(classOf[LongAccumulator])
+    clazz.setAccessible(true)
+    clazz.newInstance(sparkSession.sparkContext.longAccumulator(compId)).asInstanceOf[T]
   }
 }

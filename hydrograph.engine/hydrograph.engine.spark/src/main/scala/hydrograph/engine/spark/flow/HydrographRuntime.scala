@@ -121,7 +121,9 @@ class HydrographRuntime extends HydrographRuntimeService {
   }
 
   override def getExecutionStatus: AnyRef = {
-    null
+    /*if (executionTrackingListener != null)
+    return executionTrackingListener.getStatus()*/
+    return null
   }
 
   override def oncomplete(): Unit = {

@@ -12,6 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.spark.executiontracking.plugin;
 
+import java.util.*;
+
+import hydrograph.engine.core.component.entity.elements.InSocket;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
@@ -19,18 +22,11 @@ import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.*;
-import hydrograph.engine.jaxb.generatesequence.TypeOperationOutputField;
 import hydrograph.engine.jaxb.operationstypes.Filter;
-import hydrograph.engine.jaxb.operationstypes.Transform;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 class TrackComponentUtils {
-	
-	 /**
+
+	/**
 	 * Creates an object of type {@link TypeBaseInSocket} from component's fromComponentId,
 	 *   outSocketId and outSocketType
 	 * @param fromComponentId
@@ -42,7 +38,7 @@ class TrackComponentUtils {
 	 * @return an object of type {@link TypeBaseInSocket}
 	 */
 	static TypeBaseInSocket getStraightPullInSocket(String fromComponentId, String outSocketId,
-			String outSocketType) {
+													String outSocketType) {
 		TypeBaseInSocket baseInSocket = new TypeBaseInSocket();
 		baseInSocket.setFromComponentId(fromComponentId);
 		baseInSocket.setFromSocketId(outSocketId);
@@ -51,7 +47,7 @@ class TrackComponentUtils {
 		return baseInSocket;
 	}
 
-	 /**
+	/**
 	 * Creates an object of type {@link TypeOperationsOutSocket} from id and inSocketId
 	 * @param id
 	 * 			id to set in in {@link TypeOperationsOutSocket} object
@@ -64,15 +60,11 @@ class TrackComponentUtils {
 		operationOutSocket.setId(id);
 		TypeOutSocketAsInSocket typeOutSocketAsInSocket = new TypeOutSocketAsInSocket();
 		typeOutSocketAsInSocket.setInSocketId(inSocketId);
-		TypeInputField inputField=new TypeInputField();
-		inputField.setInSocketId(inSocketId);
-		inputField.setName("*");
-		operationOutSocket.getPassThroughFieldOrOperationFieldOrExpressionField().add(inputField);
-//		operationOutSocket.setCopyOfInsocket(typeOutSocketAsInSocket);
+		operationOutSocket.setCopyOfInsocket(typeOutSocketAsInSocket);
 		return operationOutSocket;
 	}
 
-	 /**
+	/**
 	 * Generate UniqueComponentId for generated filter components
 	 * @param compId
 	 * 				compId to set
@@ -80,10 +72,10 @@ class TrackComponentUtils {
 	 * 				socketId to set
 	 * @param typeBaseComponents
 	 * 				- {@link TypeBaseComponent} to set
-	 * @return the UniqueComponentId 
+	 * @return the UniqueComponentId
 	 */
 	static String generateUniqueComponentId(String compId, String socketId,
-			List<TypeBaseComponent> typeBaseComponents) {
+											List<TypeBaseComponent> typeBaseComponents) {
 		String newComponentID = compId + "_" + socketId;
 		for (int i = 0; i < typeBaseComponents.size(); i++) {
 			if (newComponentID.equalsIgnoreCase(typeBaseComponents.get(i).getId())) {
@@ -93,7 +85,7 @@ class TrackComponentUtils {
 		return newComponentID;
 	}
 
-	 /**
+	/**
 	 * Creates an object of type {@link TypeBaseComponent}
 	 * @param jaxbGraph
 	 * 				List of {@link TypeBaseComponent} object to set
@@ -104,7 +96,7 @@ class TrackComponentUtils {
 	 * @return the {@link TypeBaseComponent} object
 	 */
 	static TypeBaseComponent getComponent(List<TypeBaseComponent> jaxbGraph, String compId,
-			String socketId) {
+										  String socketId) {
 		for (TypeBaseComponent component : jaxbGraph) {
 			for (TypeBaseInSocket inSocket : SocketUtilities.getInSocketList(component)) {
 				if (inSocket.getFromComponentId().equalsIgnoreCase(compId)
@@ -116,8 +108,8 @@ class TrackComponentUtils {
 		throw new RuntimeException("debug FromComponent id: " + compId + " or Socket id: " + socketId
 				+ " are not properly configured");
 	}
-	
-	 /**
+
+	/**
 	 * Creates an object of type {@link Filter}
 	 * @param trackContext
 	 * 					- {@link TrackContext} to set
@@ -128,9 +120,8 @@ class TrackComponentUtils {
 	 * @return the object of type {@link Filter}
 	 */
 	static Filter generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
-			Map<String, Set<SchemaField>> schemaFieldsMap) {
+													Map<String, Set<SchemaField>> schemaFieldsMap) {
 		Filter filter = new Filter();
-//		Transform filter=new Transform();
 		TypeTransformOperation filterOperation = new TypeTransformOperation();
 
 		Set<SchemaField> schemaFields = schemaFieldsMap
@@ -142,15 +133,7 @@ class TrackComponentUtils {
 		typeInputField.setName(schemaFields.iterator().next().getFieldName());
 		typeOperationInputFields.getField().add(typeInputField);
 
-		TypeOperationOutputField operationOutputField=new TypeOperationOutputField();
-		TypeBaseField typeBaseField=new TypeBaseField();
-		typeBaseField.setName("dummy");
-		typeBaseField.setType(FieldDataTypes.JAVA_LANG_STRING);
-		operationOutputField.getField().add(typeBaseField);
-
-
 		filterOperation.setInputFields(typeOperationInputFields);
-		filterOperation.setOutputFields(operationOutputField);
 		filterOperation.setClazz(ExecutionCounter.class.getCanonicalName());
 		filter.setId(TrackComponentUtils.generateUniqueComponentId(trackContext.getFromComponentId(),
 				"generatedHydrographFilter", jaxbObjectList));
@@ -164,7 +147,7 @@ class TrackComponentUtils {
 		return filter;
 	}
 
-	 /**
+	/**
 	 * Creates a List of OutSocket object
 	 * @param typeBaseComponent
 	 * 					- {@link TypeBaseComponent} to set
@@ -186,6 +169,66 @@ class TrackComponentUtils {
 			return Collections.emptyList();
 		}
 		return Collections.emptyList();
+	}
+
+	public static List<InSocket> extractInSocketList(List<TypeOutputInSocket> inSocket) {
+
+		if (inSocket == null) {
+			throw new NullPointerException("In socket cannot be null");
+		}
+
+		List<InSocket> inSocketList = new ArrayList<InSocket>();
+
+		for (TypeBaseInSocket socket : inSocket) {
+
+			InSocket inSock = new InSocket(socket.getFromComponentId(), socket.getFromSocketId(), socket.getId());
+
+			inSock.setInSocketType(socket.getType() != null ? socket.getType() : "");
+			inSock.setFromSocketType(socket.getFromSocketType() != null ? socket.getFromSocketType() : "");
+
+			inSocketList.add(inSock);
+
+		}
+
+		return inSocketList;
+
+	}
+
+	public static List<InSocket> extractInSocketListOfComponents(TypeBaseComponent typeBaseComponent) {
+
+		if (typeBaseComponent instanceof TypeStraightPullComponent) {
+			TypeStraightPullComponent typeStraightPullComponent = (TypeStraightPullComponent) typeBaseComponent;
+			return extractInSocketListOfTypeBaseInSocket(typeStraightPullComponent.getInSocket());
+		}
+		else if(typeBaseComponent instanceof TypeOperationsComponent) {
+            TypeOperationsComponent typeOperationsComponent = (TypeOperationsComponent) typeBaseComponent;
+			return extractInSocketListOfTypeBaseInSocket(typeOperationsComponent.getInSocket());
+		}
+
+		return Collections.emptyList();
+	}
+
+	public static List<InSocket> extractInSocketListOfTypeBaseInSocket(List<TypeBaseInSocket> inSocket) {
+
+		if (inSocket == null) {
+			throw new NullPointerException("In socket cannot be null");
+		}
+
+		List<InSocket> inSocketList = new ArrayList<InSocket>();
+
+		for (TypeBaseInSocket socket : inSocket) {
+
+			InSocket inSock = new InSocket(socket.getFromComponentId(), socket.getFromSocketId(), socket.getId());
+
+			inSock.setInSocketType(socket.getType() != null ? socket.getType() : "");
+			inSock.setFromSocketType(socket.getFromSocketType() != null ? socket.getFromSocketType() : "");
+
+			inSocketList.add(inSock);
+
+		}
+
+		return inSocketList;
+
 	}
 
 

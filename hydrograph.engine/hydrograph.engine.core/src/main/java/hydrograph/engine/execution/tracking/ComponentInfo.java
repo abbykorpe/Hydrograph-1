@@ -32,6 +32,7 @@ public class ComponentInfo {
 	private String currentStatus;
 	private String batch;
 	private String componentName;
+    private int stageId;
 
 	private Map<String, String> statusPerSocketMap = new HashMap<String, String>();
 	private Map<String, Long> mapofStats = new LinkedHashMap<String, Long>();
@@ -113,6 +114,14 @@ public class ComponentInfo {
 		this.componentId = componentId;
 	}
 
+    public int getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(int stageId) {
+        this.stageId = stageId;
+    }
+
 	@Override
 	public String toString() {
 		String message = "";
@@ -136,4 +145,19 @@ public class ComponentInfo {
 		this.componentName = componentName;
 	}
 
+
+	/*public boolean equals(Object o){
+		ComponentInfo employee = (ComponentInfo)o;
+		if(employee.getComponentId().equals(this.componentId)){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 7 * hash + this.componentId.hashCode();
+		return hash;
+	}*/
 }

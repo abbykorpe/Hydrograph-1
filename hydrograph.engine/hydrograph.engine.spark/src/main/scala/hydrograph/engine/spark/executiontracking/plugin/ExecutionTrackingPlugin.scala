@@ -2,15 +2,41 @@ package hydrograph.engine.spark.executiontracking.plugin
 
 import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, ManipulatorListener}
 import hydrograph.engine.core.utilities.SocketUtilities
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.jaxb.operationstypes.{Transform, Filter}
+import hydrograph.engine.execution.tracking.ComponentInfo
+import hydrograph.engine.jaxb.commontypes.{TypeBaseComponent, TypeOutputComponent}
+import hydrograph.engine.jaxb.operationstypes.{Filter, Transform}
+import hydrograph.engine.spark.execution.tracking.{ComponentMapping, JobInfo}
+import hydrograph.engine.spark.flow.RuntimeContext
 import org.apache.spark.scheduler._
+import org.apache.spark.sql.SparkSession
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
+
+class Component(val compId:String,val compName:String,val batch:String,val outSocket:String,val newComponentId:String,val multipleInSockets:Boolean){
+
+  override def equals(obj: scala.Any): Boolean = {
+    var flag = false;
+    val emp = obj.asInstanceOf[Component]
+    if( emp.compId.equals(compId))
+      flag = true;
+    return flag;
+  }
+
+  override def hashCode():Int = compId.hashCode
+}
+
+object Component{
+  def apply(compId: String, compName: String, batch: String, outSocket: String, newComponentId: String,multipleInSockets: Boolean): Component
+  = new Component(compId, compName, batch, outSocket, newComponentId,multipleInSockets)
+}
+
 class ExecutionTrackingPlugin extends ExecutionTrackingListener with ManipulatorListener {
+
+  var jobInfo:JobInfo=null
 
   val LOG = LoggerFactory.getLogger(classOf[ExecutionTrackingPlugin])
 
@@ -30,19 +56,50 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
         trackContext.setFromOutSocketId(outSocket.getSocketId)
         trackContext.setFromOutSocketType(outSocket.getSocketType)
         val newFilter: Filter = TrackComponentUtils.generateFilterAfterEveryComponent(trackContext,
-          manipulationContext.getJaxbMainGraph, manipulationContext.getSchemaFieldMap)
+          jaxbObjectList.asJava, manipulationContext.getSchemaFieldMap)
 
-        val component: TypeBaseComponent = TrackComponentUtils.getComponent(manipulationContext.getJaxbMainGraph,
+        val component: TypeBaseComponent = TrackComponentUtils.getComponent(jaxbObjectList.asJava,
           trackContext.getFromComponentId, trackContext.getFromOutSocketId)
         SocketUtilities.updateComponentInSocket(component, trackContext.getFromComponentId, trackContext
           .getFromOutSocketId, newFilter.getId, "out0")
 
+        val inSocketList= TrackComponentUtils
+          .extractInSocketListOfComponents(typeBaseComponent)
+        val multipleInsockets = inSocketList.size()>0
+        ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,outSocket.getSocketId,newFilter.getId,multipleInsockets))
+
         jaxbObjectList += newFilter
       })
     })
+
+    jaxbObjectList.foreach(typeBaseComponent=>{
+      if(typeBaseComponent.isInstanceOf[TypeOutputComponent]){
+       val inSocketList= TrackComponentUtils
+         .extractInSocketList(typeBaseComponent.asInstanceOf[TypeOutputComponent].getInSocket)
+        inSocketList.asScala.foreach(inSocket=>{
+          ComponentMapping.
+            addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,"NoSocketId",inSocket.getFromComponentId,false))
+        })
+      }
+
+    })
+
     jaxbObjectList.asJava
   }
 
+//  override def addListener(runtimeContext: RuntimeContext): Unit = {
+//    runtimeContext.sparkSession.sparkContext.addSparkListener(this)
+//
+//    ComponentMapping.generateComponentAndPreviousrMap(runtimeContext)
+//  }
+
+
+//  override def addListener(sparkSession: SparkSession): Unit = super.addListener(sparkSession)
+override def addListener(runtimeContext: RuntimeContext): Unit = {
+  runtimeContext.sparkSession.sparkContext.addSparkListener(this)
+   jobInfo = new JobInfo(ComponentMapping.getComponentInfoMap())
+
+}
 
   override def onApplicationStart(applicationStart: SparkListenerApplicationStart) {
     //    println("+++++++++++++++++++++Application Start+++++++++++++++++++++")
@@ -97,27 +154,35 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
 
 
   override def onStageCompleted(stageCompleted: SparkListenerStageCompleted) {
-    //    LOG.info("+++++++++++++++++++++Stage Complete Start+++++++++++++++++++++")
-    //    stageCompleted.stageInfo.accumulables.foreach(f =>{
-    //
-    //      if(f._2.name.get.startsWith("filter")){
-    //        LOG.info("Acc long Value= "+f._1)
-    //      LOG.info("Acc iD : " + f._2.id + " Acc name : " + f._2.name.get + " Acc value : " + f._2.value.get + " Acc update : "
-    //        + f
-    //        ._2.update)}
-    //    })
-    //    /*println(s"Stage ${stageCompleted.stageInfo.stageId} completed with ${stageCompleted.stageInfo.numTasks} tasks.")*/
+//        LOG.info("+++++++++++++++++++++Stage Complete Start+++++++++++++++++++++")
+//        println("attemptId :"+stageCompleted.stageInfo.attemptId)
+
+    jobInfo.updateStatusOfComponents(stageCompleted)
+
+        println("stageId :"+stageCompleted.stageInfo.stageId)
+
+    println("failureReason :"+stageCompleted.stageInfo.failureReason)
+//        stageCompleted.stageInfo.accumulables.foreach(f =>{
+
+//          if(f._2.name.get.startsWith("filter")){
+//            LOG.info("Acc long Value= "+f._1)
+//          LOG.info("Acc iD : " + f._2.id + " Acc name : " + f._2.name.get + " Acc value : " + f._2.value.get + " Acc update : "
+//            + f
+//            ._2.update)
+//        })
+//    LOG.info("+++++++++++++++++++++Stage Complete end+++++++++++++++++++++")
+        /*println(s"Stage ${stageCompleted.stageInfo.stageId} completed with ${stageCompleted.stageInfo.numTasks} tasks.")*/
     //    println("+++++++++++++++++++++Stage Complete Start+++++++++++++++++++++")
     //    println("attemptId :"+stageCompleted.stageInfo.attemptId)
     //    println("stageId :"+stageCompleted.stageInfo.stageId)
     //    println("Stage Name :"+stageCompleted.stageInfo.name)
-    //    //        println("Stage Details:"+stageCompleted.stageInfo.details)
+                println("Stage Details:"+stageCompleted.stageInfo.details)
     //    println("Stage Rdd Info Name: "+stageCompleted.stageInfo.rddInfos.foreach(f=>f.name))
     //    println("Stage Rdd Info Scope: "+stageCompleted.stageInfo.rddInfos.foreach(f=>f.scope))
     //    println("submissionTime :"+stageCompleted.stageInfo.submissionTime+" ms")
     //    println("Completion Time :"+stageCompleted.stageInfo.completionTime+" ms")
     //    println("numTasks :"+stageCompleted.stageInfo.numTasks)
-    //    println("recordsWritten :"+stageCompleted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
+        println("recordsWritten :"+stageCompleted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
     //    println("recordsRead :"+stageCompleted.stageInfo.taskMetrics.inputMetrics.recordsRead)
     //    println("Input Size :"+(stageCompleted.stageInfo.taskMetrics.inputMetrics.bytesRead).toInt/(1024*1024)+" MB")
 
@@ -137,7 +202,8 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
 
 
       })*/
-
+//    stageCompleted
+    println("------------------------- STAGE COMPLELTED---------------------------")
   }
 
 
@@ -151,18 +217,21 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
 
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
     LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
+
+    println("Task id: " + taskEnd.taskInfo.taskId)
     taskEnd.taskInfo.accumulables.foreach(f => {
         LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
           + f
           .update)
     })
-
+    jobInfo.storeComponentStats(taskEnd)
+    getStatus().foreach(println)
     //    println("Task id: " + taskEnd.taskInfo.taskId)
     ////    println("Task Accumulables Info: " + taskEnd.taskInfo.accumulables.mkString)
     //    println("Task attemptNo: " + taskEnd.taskInfo.attemptNumber)
     //    println("Task duration: " + taskEnd.taskInfo.duration)
     //    println("Task launchTime: " + taskEnd.taskInfo.launchTime)
-    //    println("Task Status: " + taskEnd.taskInfo.status)
+//        println("Task Status: " + taskEnd.taskInfo.status)
     //    println("Task executorId: " + taskEnd.taskInfo.executorId)
     //    println("Task host: " + taskEnd.taskInfo.host)
     //    println("Task host: " + taskEnd.taskInfo.taskLocality)
@@ -196,4 +265,7 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     //    println("+++++++++++++++++++++Task Start End+++++++++++++++++++++")
   }
 
+  override def getStatus(): mutable.HashSet[ComponentInfo] = {
+    return jobInfo.getStatus()
+  }
 }
