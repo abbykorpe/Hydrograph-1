@@ -12,10 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,6 +96,28 @@ public class InputFileHiveTextEntityGenerator extends
 		inputHiveFileEntity
 				.setPartitionFilterList(populatePartitionFilterList(jaxbHiveTextFile
 						.getPartitionFilter()));
+		inputHiveFileEntity.setPartitionKeyValueMap(populatePartitionKeyValueMap(jaxbHiveTextFile.getPartitionFilter()));
+	}
+
+
+
+
+	private HashMap<String,String> populatePartitionKeyValueMap(HivePartitionFilterType partitionFilter) {
+		HashMap<String,String> partitionKeyValue=new HashMap<>();
+		if(partitionFilter!=null && partitionFilter.getPartitionColumn()!=null){
+			PartitionColumn column=partitionFilter.getPartitionColumn().get(0);
+			partitionKeyValue.put(column.getName(),column.getValue());
+			if(column.getPartitionColumn()!=null)
+				fillPartitionKeyValueMap(partitionKeyValue,column.getPartitionColumn());
+		}
+
+		return partitionKeyValue;
+	}
+
+	private void fillPartitionKeyValueMap(HashMap<String, String> partitionKeyValue, PartitionColumn partitionColumn) {
+		partitionKeyValue.put(partitionColumn.getName(),partitionColumn.getValue());
+		if(partitionColumn.getPartitionColumn()!=null)
+			fillPartitionKeyValueMap(partitionKeyValue,partitionColumn.getPartitionColumn());
 	}
 
 	private ArrayList<ArrayList<String>> populatePartitionFilterList(HivePartitionFilterType hivePartitionFilterType) {

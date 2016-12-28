@@ -45,7 +45,8 @@ class HydrographRuntime extends HydrographRuntimeService {
       .master(properties.getProperty("spark_master"))
       .appName(hydrographJob.getJAXBObject.getName)
       .config("spark.sql.shuffle.partitions", "1")
-      .config("spark.sql.warehouse.dir", "file:///tmp")
+      .config("spark.sql.warehouse.dir", "/user/hive/warehouse")
+      .enableHiveSupport()
       .getOrCreate()
 
     val schemaFieldHandler = new SchemaFieldHandler(

@@ -16,6 +16,7 @@
 package hydrograph.engine.core.component.entity.base;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author bitwise1
@@ -28,6 +29,16 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	private String externalTablePathUri;
 	private boolean overWrite;
 	private ArrayList<ArrayList<String>> partitionFilterList;
+
+	public HashMap<String, String> getPartitionKeyValueMap() {
+		return partitionKeyValueMap;
+	}
+
+	public void setPartitionKeyValueMap(HashMap<String, String> partitionKeyValueMap) {
+		this.partitionKeyValueMap = partitionKeyValueMap;
+	}
+
+	private HashMap<String,String> partitionKeyValueMap;
 
 	/**
 	 * @return the partitionKeys
