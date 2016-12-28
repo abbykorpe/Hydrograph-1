@@ -14,7 +14,7 @@ package hydrograph.ui.datastructures.metadata;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
 /**
- * 
+ * This class used for holding data for metadata/debug service communication
  * @author Bitwise
  *
  */
@@ -110,7 +110,7 @@ public class MetaDataDetails implements IDataStructure {
 	public void setDatabase(String database) {
 		this.database = database;
 	}
-
+    @Override
 	public Object clone() {
 		MetaDataDetails dataDetails = new MetaDataDetails();
 		dataDetails.setDatabase(this.database);
