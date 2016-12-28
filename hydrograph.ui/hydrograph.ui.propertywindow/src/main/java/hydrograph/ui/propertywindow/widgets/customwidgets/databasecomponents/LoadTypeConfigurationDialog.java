@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
@@ -56,6 +57,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 	private Button newTableRadioButton;
 	private Button insertRadioButton;
 	private Button replaceRadioButton;
+	private Button[] radioButtons = new Button[]{newTableRadioButton, insertRadioButton, replaceRadioButton};
 	
 	/**
 	 * Create the dialog.
@@ -117,15 +119,16 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		
 		newTableRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
 		newTableRadioButton.setText(Constants.LOAD_TYPE_NEW_TABLE_KEY);
+		newTableRadioButton.setSelection(true);
 		
 		newTableTextBox = new Text(loadConfigurationComposite, SWT.BORDER);
 		newTableTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		newTableTextBox.setEnabled(false);
+		newTableTextBox.setEnabled(true);
 		
 		Button primaryKeysButton = new Button(loadConfigurationComposite, SWT.NONE);
 		primaryKeysButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		primaryKeysButton.setText(Messages.PRIMARY_KEYS_WINDOW_LABEL);
-		primaryKeysButton.setEnabled(false);
+		primaryKeysButton.setEnabled(true);
 		
 		insertRadioButton = new Button(loadConfigurationComposite, SWT.RADIO);
 		insertRadioButton.setText(Constants.LOAD_TYPE_INSERT_KEY);
@@ -153,11 +156,16 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		newTableRadioButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-					primaryKeysButton.setEnabled(true);
-					newTableTextBox.setEnabled(true);
-					//TODO as above
-					//updateKeysButton.setEnabled(false);
-					//updateTextBox.setEnabled(false);
+				newTableRadioButton.setSelection(true);
+				primaryKeysButton.setEnabled(true);
+				newTableTextBox.setEnabled(true);
+				if(OSValidator.isMac()){
+					newTableRadioButton.setFocus();
+				}
+				//checkButtonSelection(radioButtons, newTableRadioButton);
+				//TODO as above
+				//updateKeysButton.setEnabled(false);
+				//updateTextBox.setEnabled(false);
 			}
 		});
 		
@@ -168,13 +176,17 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		if(loadTypeConfigurationSelectedValue!=null && !loadTypeConfigurationSelectedValue.isEmpty() ){
 			if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY) != null){
 				newTableRadioButton.setSelection(true);
-				primaryKeysButton.setEnabled(true);
-				newTableTextBox.setEnabled(true);
 				newTableTextBox.setText(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY));
 			}else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_INSERT_KEY) != null){
 				insertRadioButton.setSelection(true);
+				newTableRadioButton.setSelection(false);
+				primaryKeysButton.setEnabled(false);
+				newTableTextBox.setEnabled(false);
 			}else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_REPLACE_KEY) != null){
 				replaceRadioButton.setSelection(true);
+				newTableRadioButton.setSelection(false);
+				primaryKeysButton.setEnabled(false);
+				newTableTextBox.setEnabled(false);
 			}
 			//TODO as above
 			/*else if(loadTypeConfigurationSelectedValue.get(Constants.LOAD_TYPE_UPDATE_KEY) != null){
@@ -201,11 +213,13 @@ public class LoadTypeConfigurationDialog extends Dialog {
 		Supplier<Stream<Widget>> streamSupplier = () -> Stream.of(buttonWidgets);
 		SelectionAdapter adapter = new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				//TODO as above
-				//textbox1.setEnabled(false);
+			public void widgetSelected(SelectionEvent event) {
+				newTableRadioButton.setSelection(false);
 				textbox2.setEnabled(false);
 				streamSupplier.get().forEach((Widget widgets) ->{((Button)widgets).setEnabled(false);});
+				if(OSValidator.isMac()){
+					((Button)event.getSource()).setFocus();
+				}
 				propertyDialogButtonBar.enableApplyButton(true);
 			}
 		};
@@ -264,7 +278,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(682, 211);
+		return new Point(686, 226);
 	}
 	
 	@Override
