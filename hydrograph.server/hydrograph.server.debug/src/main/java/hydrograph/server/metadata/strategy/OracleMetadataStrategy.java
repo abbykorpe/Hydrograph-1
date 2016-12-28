@@ -38,13 +38,13 @@ import hydrograph.server.metadata.strategy.base.MetadataStrategyTemplate;
  * @author amiyam
  */
 public class OracleMetadataStrategy extends MetadataStrategyTemplate {
-	Logger LOG = LoggerFactory.getLogger(OracleMetadataStrategy.class);
-	final static String ORACLE_JDBC_CLASSNAME = "oracle.jdbc.OracleDriver";
+	private static final Logger LOG = LoggerFactory.getLogger(OracleMetadataStrategy.class);
+
 	Connection connection = null;
-    private String query=null, tableName=null;
+	private String query = null, tableName = null;
 
 	/**
-	 * Used to set the connection for RedShift
+	 * Used to set the connection for Oracle
 	 * 
 	 * @param connectionProperties
 	 *            - contain request params details
@@ -77,7 +77,7 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 						new ParamsCannotBeNullOrEmpty(Constants.PASSWORD + " not found in request parameter"))
 				.toString();
 		String jdbcUrl = "jdbc:oracle:" + driverType + "://@" + host + ":" + port + ":" + sid;
-		Class.forName(ORACLE_JDBC_CLASSNAME);
+		Class.forName(Constants.ORACLE_JDBC_CLASSNAME);
 		LOG.info("Connection url for oracle = '" + jdbcUrl + "'");
 		LOG.info("Connecting with '" + userId + "' user id.");
 		connection = DriverManager.getConnection(jdbcUrl, userId, password);
@@ -93,12 +93,13 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 	@Override
 	public TableEntity fillComponentSchema(Map componentSchemaProperties)
 			throws SQLException, ParamsCannotBeNullOrEmpty {
-        if(componentSchemaProperties.get(Constants.TABLENAME) != null)
-            tableName = componentSchemaProperties.get(Constants.TABLENAME).toString().trim();
-        else
-            query = componentSchemaProperties.get(Constants.QUERY).toString().trim();
+		if (componentSchemaProperties.get(Constants.TABLENAME) != null)
+			tableName = componentSchemaProperties.get(Constants.TABLENAME).toString().trim();
+		else
+			query = componentSchemaProperties.get(Constants.QUERY).toString().trim();
 
-        LOG.info("Generating schema for mysql using " + ((tableName!=null)?"table : " + tableName : "query : " + query));
+		LOG.info("Generating schema for mysql using "
+				+ ((tableName != null) ? "table : " + tableName : "query : " + query));
 
 		ResultSet res = null;
 		TableEntity tableEntity = new TableEntity();
@@ -133,11 +134,11 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 				tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 				tableSchemaFieldEntities.add(tableSchemaFieldEntity);
 			}
-            if(componentSchemaProperties.get(Constants.TABLENAME) == null)
-                tableEntity.setQuery(componentSchemaProperties.get(Constants.QUERY).toString()) ;
-            else
-                tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
-            tableEntity.setDatabaseName(componentSchemaProperties.get(Constants.dbType).toString());
+			if (componentSchemaProperties.get(Constants.TABLENAME) == null)
+				tableEntity.setQuery(componentSchemaProperties.get(Constants.QUERY).toString());
+			else
+				tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
+			tableEntity.setDatabaseName(componentSchemaProperties.get(Constants.dbType).toString());
 			tableEntity.setSchemaFields(tableSchemaFieldEntities);
 			res.close();
 		} finally {
@@ -145,5 +146,4 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 		}
 		return tableEntity;
 	}
-
 }

@@ -37,18 +37,45 @@ public class HydrographServiceClient {
 	// String HOST_NAME = "10.130.248.53";
 	String PORT = "8004";
 
+	public void chcekConnectionStatus() throws ClientProtocolException, IOException {
+
+		HttpClient httpClient = new HttpClient();
+		
+		String oraclejson = "{\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+	//	String mysqljson = "{\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test1\",\"dbtype\":\"mysql\"}";
+		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/getConnectionStatus");
+
+		postMethod.addParameter("request_parameters", oraclejson);
+
+		int response = httpClient.executeMethod(postMethod);
+		InputStream inputStream = postMethod.getResponseBodyAsStream();
+
+		byte[] buffer = new byte[1024 * 1024 * 5];
+		String path = null;
+		int length;
+		while ((length = inputStream.read(buffer)) > 0) {
+			path = new String(buffer);
+		}
+		System.out.println("Response of service: " + path);
+		System.out.println("==================");
+	}
+
 	public void calltoReadMetastore() throws ClientProtocolException, IOException {
 
 		HttpClient httpClient = new HttpClient();
 
 		// String json =
 		// "{\"condition\":\"abc\",\"schema\":[{\"fieldName\":\"f1\",\"dateFormat\":\"\",\"dataType\":\"1\",\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.String\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f2\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f3\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f4\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.math.BigDecimal\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"}],\"fileSize\":1,\"jobDetails\":{\"host\":\"127.0.0.1\",\"port\":\"8005\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"basepath\":\"C:/Users/santlalg/git/Hydrograph/hydrograph.engine/hydrograph.engine.command-line\",\"uniqueJobID\":\"debug_job\",\"componentID\":\"input\",\"componentSocketID\":\"out0\",\"isRemote\":false}}";
-		//String oraclejson = "{\"query\":\"Select * from testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-		//String oraclejson = "{\"table\":\"testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-        String oraclejson = "{\"table\":\" \",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		// String oraclejson = "{\"query\":\"Select * from
+		// testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		// String oraclejson =
+		// "{\"table\":\"testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		String oraclejson = "{\"table\":\" \",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
 		//String mysqljson = "{\"query\":\"Select * from ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
-        //String mysqljson = "{\"query\":\"Select * from ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
-		//String mysqljson = "{\"table\":\"ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
+		// String mysqljson = "{\"query\":\"Select * from
+		// ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
+		// String mysqljson =
+		// "{\"table\":\"ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
 		// String hivejson =
 		// "{\"database\":\"textdata\",\"table\":\"personal\",\"username\":\"username\",\"password\":\"yourpassword\",\"dbtype\":\"hive\"}";
 
@@ -144,7 +171,8 @@ public class HydrographServiceClient {
 			System.out.println("+++ Start: " + new Timestamp((new Date()).getTime()));
 			// client.calltoReadService();
 			// client.calltoFilterService();
-			client.calltoReadMetastore();
+			//client.calltoReadMetastore();
+			client.chcekConnectionStatus();
 			// client.calltoDeleteLocalDebugService();
 			System.out.println("done:");
 			System.out.println("+++ End: " + new Timestamp((new Date()).getTime()));
