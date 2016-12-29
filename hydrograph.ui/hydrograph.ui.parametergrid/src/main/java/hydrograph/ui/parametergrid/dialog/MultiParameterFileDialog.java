@@ -130,6 +130,8 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
  * 
  */
 public class MultiParameterFileDialog extends Dialog {
+	private static final String FILE_NAME_VALIDATION_EXPRESSION = "^[a-zA-Z0-9]*$";
+
 	private static final int PROPERTY_VALUE_COLUMN_INDEX = 1;
 
 	private static final Logger logger = LogFactory.INSTANCE
@@ -239,9 +241,9 @@ public class MultiParameterFileDialog extends Dialog {
 
 	private ParameterFile getJobSpecificFile() {
 		ParameterFile jobSpecificFile = null;
-		for (ParameterFile paramterFile : parameterFiles) {
-			if (paramterFile.getFileType().equals(ParamterFileTypes.JOB_SPECIFIC)) {
-				jobSpecificFile = paramterFile;
+		for (ParameterFile parameterFile : parameterFiles) {
+			if (parameterFile.getFileType().equals(ParamterFileTypes.JOB_SPECIFIC)) {
+				jobSpecificFile = parameterFile;
 				break;
 			}
 		}
@@ -1440,8 +1442,7 @@ public class MultiParameterFileDialog extends Dialog {
 
 	    	@Override
 	        public String isValid(final String string) {
-	    		String pattern= "^[a-zA-Z0-9]*$";
-	            if (StringUtils.isEmpty(string) || !string.matches(pattern)) {
+	            if (StringUtils.isEmpty(string) || !string.matches(FILE_NAME_VALIDATION_EXPRESSION)) {
 	                return "Invalid file name. Name should contain only alphanumberics";
 	            }
 	            

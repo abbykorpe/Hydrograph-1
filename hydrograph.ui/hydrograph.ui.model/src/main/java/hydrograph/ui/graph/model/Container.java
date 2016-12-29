@@ -74,17 +74,12 @@ public class Container extends Model {
 		comments = new ArrayList<CommentBox>();
 	}
 	
-	/*private boolean isParameterSequenceChanges(List<ParameterFile> newParameterList){
-		
-		//if(newParameterList.size() != )
-		
-	}*/
-	
 	public void saveParamterFileSequence(List<ParameterFile> parameterFiles) {
 		if(this.parameterFiles == null){
 			this.parameterFiles = new ArrayList<>();
+		}else{
+			this.parameterFiles.clear();
 		}
-		this.parameterFiles.clear();
 		this.parameterFiles.addAll(parameterFiles);
 	}
 
