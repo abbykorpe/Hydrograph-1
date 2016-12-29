@@ -226,8 +226,6 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	private String uniqueJobId;
 
 	private static final Color palatteTextColor=new Color(null,51,51,51);
-
-	private static final String JOB_ID_STRING_SEPARATOR = "_";
 	
 	private CustomPaletteEditPartFactory paletteEditPartFactory;
 	public Point location;
@@ -1867,4 +1865,20 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 		
 	}
+
+
+	@Override
+	public void saveParamterFileSequence(List<ParameterFile> parameterFiles) {
+		if(!getParamterFileSequence().equals(parameterFiles)){
+			setDirty(true);
+		}
+		
+		container.saveParamterFileSequence(parameterFiles);
+	}
+
+	@Override
+	public List<ParameterFile> getParamterFileSequence() {		
+		return container.getParamterFileSequence();
+	}
+	
 }
