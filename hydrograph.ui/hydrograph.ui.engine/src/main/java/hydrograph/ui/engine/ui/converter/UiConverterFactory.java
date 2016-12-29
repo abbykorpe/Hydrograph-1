@@ -57,6 +57,7 @@ import hydrograph.ui.engine.ui.converter.impl.InputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputSubjobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputTeradataUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.JoinComponentUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LimitUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LookupUiConverter;
@@ -73,6 +74,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputOracleUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputSubjobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputTeradataUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RunProgramUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
@@ -190,7 +192,12 @@ public class UiConverterFactory {
 		if((hydrograph.engine.jaxb.outputtypes.Mysql.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new OutputMysqlUiConverter(typeBaseComponent, container);
 		}
-	
+		if((Teradata.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new InputTeradataUiConverter(typeBaseComponent, container);
+		}
+		if((hydrograph.engine.jaxb.outputtypes.Teradata.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new OutputTeradataUiConverter(typeBaseComponent, container);
+		}
 		if((Normalize.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new NormalizeUiConverter(typeBaseComponent, container);
 		}

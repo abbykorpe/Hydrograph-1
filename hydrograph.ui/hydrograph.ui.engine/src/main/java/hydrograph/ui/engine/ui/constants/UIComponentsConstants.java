@@ -30,6 +30,7 @@ public enum UIComponentsConstants {
 	CLONE("Clone"),
 	ORACLE("Oracle"),
 	MYSQL("Mysql"),
+	TERADATA("Teradata"),
 	REDSHIFT("RedShift"),
 	UNION_ALL("Union All"), 
 	REMOVE_DUPS("Remove Dups"),
