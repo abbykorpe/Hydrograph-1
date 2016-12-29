@@ -212,7 +212,8 @@ public class Utils {
 	 public String getParamValue(String value){
 			if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
 			String param = null;
-			value = value.substring(value.indexOf("{") + 1).substring(0, value.substring(value.indexOf("{") + 1).indexOf("}"));
+			value = StringUtils.replaceOnce(value, "@{", "");
+			value= StringUtils.replaceOnce(value, "}", "");
 			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
 				param = entry.getKey();
 			 if(StringUtils.equals(param, value)){

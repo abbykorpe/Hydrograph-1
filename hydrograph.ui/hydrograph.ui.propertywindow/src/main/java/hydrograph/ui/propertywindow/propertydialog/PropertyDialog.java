@@ -89,6 +89,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	private SchemaData schemaData;
 	
 	private boolean isCancelPressed;
+	private Button okButton;
 	
 	/**
 	 * Create the dialog.
@@ -169,6 +170,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	protected void buttonPressed(int buttonId) {
 		// If Apply Button pressed(3 is index of apply button);
 		if(buttonId == 3){
+			applyButton.setFocus();
 			applyButtonAction();
 		}
 		updateComponentValidityStatus();
@@ -233,7 +235,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	}
 
 	private Button createOKButton(Composite parent) {
-		Button okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+		okButton=createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		return okButton;
 	}
@@ -255,6 +257,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	
 	@Override
 	protected void okPressed() {
+		okButton.setFocus();
 		boolean windowValidityStaus = Boolean.TRUE;
 		boolean verifiedSchema = Boolean.TRUE;
 		for (AbstractWidget customWidget : propertyDialogBuilder.getELTWidgetList()) {
