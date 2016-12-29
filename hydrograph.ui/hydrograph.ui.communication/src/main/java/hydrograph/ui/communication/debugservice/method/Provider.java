@@ -183,9 +183,9 @@ public class Provider {
 	 * @throws NumberFormatException
 	 * @throws MalformedURLException
 	 */
-	public PostMethod readMetaDataMethod(MetaDataDetails metaDataDetails) throws NumberFormatException, MalformedURLException {
+	public PostMethod readMetaDataMethod(MetaDataDetails metaDataDetails, String host, String port) throws NumberFormatException, MalformedURLException {
 		
-		URL url = new URL(POST_PROTOCOL,metaDataDetails.getHost(),Integer.valueOf(metaDataDetails.getPort()),DebugServiceMethods.READ_METASTORE);
+		URL url = new URL(POST_PROTOCOL,host,Integer.valueOf(port),DebugServiceMethods.READ_METASTORE);
 		PostMethod postMethod = new PostMethod(url.toString());
 		Gson gson = new Gson();
         postMethod.addParameter(DebugServicePostParameters.REQUEST_PARAMETERS, gson.toJson(metaDataDetails) );

@@ -24,8 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
 import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
+import hydrograph.ui.datastructures.metadata.MetaDataDetails;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.DatabaseTableSchema;
+import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.HiveTableSchema;
 
 /**
  * The Class DataBase Utility
@@ -38,7 +39,6 @@ public class DataBaseUtility {
 	private static DataBaseUtility INSTANCE = new DataBaseUtility();
 
 	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
-	private static final String SEPARATOR = "|";
 	
 	
 	/**
@@ -63,18 +63,15 @@ public class DataBaseUtility {
 	 * @return
 	 */
 	
-	public DatabaseTableSchema extractDatabaseDetails(List<String> dataBaseTables, DatabaseParameterType parameterType, String host){
+	public HiveTableSchema extractDatabaseDetails(List<String> dataBaseTables, DatabaseParameterType parameterType, String host){
 		String jsonResponse = "";
-		DatabaseTableSchema databaseTableSchema = null;
+		HiveTableSchema databaseTableSchema = null;
 		String port_no = getServicePort();
 		
-		String connection_param = parameterType.getHostName() + SEPARATOR+parameterType.getPortNo() + SEPARATOR+parameterType.getUserName()
-							+ parameterType.getPassword()+ SEPARATOR + parameterType.getJdbcName() +SEPARATOR+parameterType.getDatabaseName();
-		
 		try {
-			//jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(connection_param, host, port_no, dataBaseTables);
+			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(getMetaDataDetails(dataBaseTables,parameterType),host,port_no);
 			ObjectMapper mapper = new ObjectMapper();
-			databaseTableSchema = mapper.readValue(jsonResponse, DatabaseTableSchema.class);
+			databaseTableSchema = mapper.readValue(jsonResponse, HiveTableSchema.class);
 		} catch (NumberFormatException | HttpException exception) {
 			logger.error("Json to object Mapping issue ", exception);
 		} catch (IOException exception) {
@@ -96,6 +93,20 @@ public class DataBaseUtility {
 	public String getServicePort(){
 		return Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_PORT_NO, 
 				PreferenceConstants.DEFAULT_PORT_NO, null);
+	}
+	
+	private MetaDataDetails getMetaDataDetails(List<String> dataBaseTables,DatabaseParameterType parameterType) {
+		MetaDataDetails connectionDetails = new MetaDataDetails();
+        connectionDetails.setDbType(parameterType.getDataBaseType());
+        connectionDetails.setHost(parameterType.getHostName());
+        connectionDetails.setPort(parameterType.getPortNo());
+        connectionDetails.setUserId(parameterType.getUserName());
+        connectionDetails.setPassword(parameterType.getPassword());
+        connectionDetails.setDatabase(parameterType.getDatabaseName());
+        connectionDetails.setTableName(dataBaseTables.get(0));
+        connectionDetails.setDriverType(parameterType.getJdbcName());
+        connectionDetails.setSid(parameterType.getSid());
+		return connectionDetails;
 	}
 	
 }

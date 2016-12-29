@@ -122,45 +122,49 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	 * @return 
 	 */
 	private DatabaseParameterType getDatabaseConnectionDetails() {
-		String oracleDatabaseName = "";
-		String oracleHostName = "";
-		String oraclePortNo = "";
-		String oracleJdbcName = "";
-		String oracleSchemaName = "";
-		String oracleUserName = "";
-		String oraclePassword = "";
+		String databaseName = "";
+		String hostName = "";
+		String portNo = "";
+		String jdbcName = "";
+		String schemaName = "";
+		String userName = "";
+		String password = "";
 		String dataBaseType = "";
+		String sid ="";
 		
 		for (AbstractWidget textAbtractWgt : widgets) {
 
 			if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_DATABASE_WIDGET_NAME)) {
-				oracleDatabaseName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_DATABASE_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.DATABASE_WIDGET_NAME)) {
+				databaseName = (String) textAbtractWgt.getProperties().get(Constants.DATABASE_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_HOST_WIDGET_NAME)) {
-				oracleHostName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_HOST_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.HOST_WIDGET_NAME)) {
+				hostName = (String) textAbtractWgt.getProperties().get(Constants.HOST_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_PORT_WIDGET_NAME)) {
-				oraclePortNo = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PORT_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.PORT_WIDGET_NAME)) {
+				portNo = (String) textAbtractWgt.getProperties().get(Constants.PORT_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_JDBC_DRIVER_WIDGET_NAME)) {
-				oracleJdbcName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_JDBC_DRIVER_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.JDBC_DRIVER_WIDGET_NAME)) {
+				jdbcName = (String) textAbtractWgt.getProperties().get(Constants.JDBC_DRIVER_WIDGET_NAME);
 			}else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_SCHEMA_WIDGET_NAME)) {
-				oracleSchemaName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_SCHEMA_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.SCHEMA_WIDGET_NAME)) {
+				schemaName = (String) textAbtractWgt.getProperties().get(Constants.SCHEMA_WIDGET_NAME);
 			}else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_USER_NAME_WIDGET_NAME)) {
-				oracleUserName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_USER_NAME_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.USER_NAME_WIDGET_NAME)) {
+				userName = (String) textAbtractWgt.getProperties().get(Constants.USER_NAME_WIDGET_NAME);
 			}else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_PASSWORD_WIDGET_NAME)) {
-				oraclePassword = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PASSWORD_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.PASSWORD_WIDGET_NAME)) {
+				password = (String) textAbtractWgt.getProperties().get(Constants.PASSWORD_WIDGET_NAME);
+			}else if (textAbtractWgt.getProperty().getPropertyName()
+					.equalsIgnoreCase(Constants.ORACLE_SID_WIDGET_NAME)) {
+				sid = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_SID_WIDGET_NAME);
 			}
 
 		}
 		
-		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(dataBaseType, oracleHostName, 
-				oraclePortNo, oracleUserName, oraclePassword).jdbcName(oracleJdbcName).schemaName(oracleSchemaName)
-				.databaseName(oracleDatabaseName).build();
+		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(dataBaseType, hostName, 
+				portNo, userName, password).jdbcName(jdbcName).schemaName(schemaName)
+				.databaseName(databaseName).sid(sid).build();
 
 
 		return parameterType;

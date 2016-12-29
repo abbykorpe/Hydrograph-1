@@ -27,6 +27,7 @@ public class DatabaseParameterType {
 	private String jdbcName = "";
 	private String schemaName = "";
 	private String dataBaseType;
+	private String sid;
 	
 	
 	private DatabaseParameterType(DatabaseBuilder builder){
@@ -38,6 +39,7 @@ public class DatabaseParameterType {
 		this.databaseName = builder.databaseName;
 		this.jdbcName = builder.jdbcName;
 		this.schemaName = builder.schemaName;
+		this.sid = builder.sid;
 	}
 	public static class DatabaseBuilder{
 		//required fields
@@ -51,6 +53,7 @@ public class DatabaseParameterType {
 		private String jdbcName = "";
 		private String schemaName = "";
 		private String databaseName = "";
+		private String sid="";
 		
 		/**
 		 * Instantiates a new DatabaseParameterType required fields
@@ -66,6 +69,7 @@ public class DatabaseParameterType {
 			this.portNo = portNo;
 			this.userName = userName;
 			this.password = password;
+			
 		}
 		
 		public DatabaseParameterType build(){
@@ -89,6 +93,11 @@ public class DatabaseParameterType {
 		
 		public DatabaseBuilder copy(DatabaseParameterType parameterType){
 			this.hostName = parameterType.hostName;
+			return this;
+		}
+		
+		public DatabaseBuilder sid(String sid){
+			this.sid = sid;
 			return this;
 		}
 	}
@@ -125,4 +134,7 @@ public class DatabaseParameterType {
 		return password;
 	}
 	
+	public String getSid(){
+		return sid;
+	}
 }

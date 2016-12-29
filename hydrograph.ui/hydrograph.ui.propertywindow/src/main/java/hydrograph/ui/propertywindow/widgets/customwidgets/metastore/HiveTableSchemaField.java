@@ -16,7 +16,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.metastore;
  * @author Bitwise
  *
  */
-class HiveTableSchemaField {
+public class HiveTableSchemaField {
 	private String fieldName = "";
 	private String fieldType = "";
 	private String precision = "";
