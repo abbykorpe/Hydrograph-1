@@ -313,13 +313,6 @@ public class Messages extends NLS {
 	public static String EXECUTION_COMMAND;
 	public static String PRIMARY_KEY_VALIDATION;
 	
-	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
-	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;
-	public static String EMPTY_FIELDS_MESSAGE_BOX_TITLE;
-	public static String EMPTY_PASSWORD_FIELD_MESSAGE;
-	public static String EMPTY_USERNAME_FIELD_MESSAGE;
-	public static String EMPTY_HOST_FIELD_MESSAGE;
-	public static String CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE;
 	
 	static {
 		// initialize resource bundle
@@ -328,5 +321,22 @@ public class Messages extends NLS {
 
 	private Messages() {
 	}
+	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
+	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;
+	public static String EMPTY_FIELDS_MESSAGE_BOX_TITLE;
+	public static String EMPTY_PASSWORD_FIELD_MESSAGE;
+	public static String EMPTY_USERNAME_FIELD_MESSAGE;
+	public static String EMPTY_HOST_FIELD_MESSAGE;
+	public static String CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE;
+	public static String DATATYPE_STRING;
+	public static String DATATYPE_INTEGER;
+	public static String DATATYPE_DOUBLE;
+	public static String DATATYPE_FLOAT;
+	public static String DATATYPE_SHORT;
+	public static String DATATYPE_BOOLEAN;
+	public static String DATATYPE_DATE;
+	public static String DATATYPE_BIGDECIMAL;
+	public static String DATATYPE_LONG;
+
 	
 }

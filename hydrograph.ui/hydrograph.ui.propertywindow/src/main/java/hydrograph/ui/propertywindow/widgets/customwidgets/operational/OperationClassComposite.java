@@ -1,12 +1,20 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
+
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.propertywindow.messages.Messages;
-
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -21,6 +29,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 
 public class OperationClassComposite extends Composite {
 
@@ -46,15 +63,32 @@ public class OperationClassComposite extends Composite {
 	private Label lblSwitchTo;
 	private Composite composite_1;
 	private Composite composite_2;
+	private OperationClassConfig configurationForTransformWidget;
+	private boolean isAggregateOrCumulate;
+	private boolean isTransForm;
 	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public OperationClassComposite(Composite parent, int style,final MappingSheetRow mappingSheetRow,Component component) {
+	public OperationClassComposite(Composite parent, int style,final MappingSheetRow mappingSheetRow,Component component,WidgetConfig widgetConfig) {
 		super(parent, style);
 		setLayout(new GridLayout(3, false));
+		configurationForTransformWidget = (OperationClassConfig) widgetConfig;
+		if (StringUtils.equalsIgnoreCase(Constants.AGGREGATE, configurationForTransformWidget.getComponentName())
+				|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,
+						configurationForTransformWidget.getComponentName())) {
+			isAggregateOrCumulate = true;
+		} else {
+			isAggregateOrCumulate = false;
+		}
+		
+		if (StringUtils.equalsIgnoreCase(Constants.TRANSFORM, configurationForTransformWidget.getComponentName())){
+			isTransForm = true;
+		}else{
+			isTransForm = false;
+		}
 		
 		createOperationInputTable();
 		Composite composite = new Composite(this, SWT.NONE);
@@ -65,46 +99,40 @@ public class OperationClassComposite extends Composite {
 		composite.setLayoutData(gd_composite);
 		new Label(composite, SWT.NONE);
 		
-		if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
-		{
+		
 		lblSwitchTo = new Label(composite, SWT.NONE);
 		lblSwitchTo.setText("Switch to");
-		switchToExpressionButton = new Button(composite, SWT.RADIO);
+		
+		Composite radioButtonComposite = new Composite(composite,SWT.NONE);
+		GridLayout radioButtonCompositeLayout = new GridLayout(2,false);
+		radioButtonCompositeLayout.marginWidth = 0;
+		radioButtonComposite.setLayout(radioButtonCompositeLayout);
+		radioButtonComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		switchToExpressionButton = new Button(radioButtonComposite, SWT.RADIO);
 		switchToExpressionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Button toggleButton=(Button)e.widget;	
-				toggleButton.getParent().getParent().setVisible(false);
 			}
 		});
 		switchToExpressionButton.setText("Expression");
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
 		
-		switchToClassButton = new Button(composite, SWT.RADIO);
+		switchToClassButton = new Button(radioButtonComposite, SWT.RADIO);
 		switchToClassButton.setText("Class");
 		switchToClassButton.setSelection(true);
-		
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
+		if(!isAggregateOrCumulate && !isTransForm ){
+			radioButtonComposite.setVisible(false);
+			lblSwitchTo.setVisible(false);
+		}else{
+			radioButtonComposite.setVisible(true);
+			lblSwitchTo.setVisible(true);
 		}
-		else
-		{
-			new Label(composite, SWT.NONE);
-			new Label(composite, SWT.NONE);
-			new Label(composite, SWT.NONE);
-			new Label(composite, SWT.NONE);
-			new Label(composite, SWT.NONE);
-			new Label(composite, SWT.NONE);
-			new Label(composite, SWT.NONE);
-			new Label(composite, SWT.NONE);
-			
-		}
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+	
 		Label lblExpression = new Label(composite, SWT.NONE);
 		GridData gd_lblExpression = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_lblExpression.minimumWidth = 70;
@@ -136,6 +164,7 @@ public class OperationClassComposite extends Composite {
 		browseButton.setToolTipText(Messages.OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP);
 		GridData gd_browseButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		if(OSValidator.isMac()){
+			gd_browseButton.horizontalIndent = -5;
 			gd_browseButton.widthHint = 40;
 		}else{
 			gd_browseButton.widthHint = 28;
@@ -196,9 +225,6 @@ public class OperationClassComposite extends Composite {
 		if (mappingSheetRow.getOperationClassPath() != null){
 			operationTextBox.setText(mappingSheetRow.getOperationClassPath());
 			}
-		
-		
-         
 	}
     
 	

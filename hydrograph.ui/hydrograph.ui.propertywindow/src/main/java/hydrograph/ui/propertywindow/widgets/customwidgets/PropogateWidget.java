@@ -209,15 +209,7 @@ public class PropogateWidget extends AbstractWidget{
 				    		||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.NORMALIZE)
 				    		||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.TRANSFORM))
 					{
-						TransformWidget transformWidget=null;
-						for(AbstractWidget abstractWidget:widgets)
-						{
-							if(abstractWidget instanceof TransformWidget)
-							{
-							   transformWidget=(TransformWidget)abstractWidget;
-								break;
-							}
-						}	
+						AbstractWidget transformWidget = getWidget();	
 						TransformMapping transformMapping=(TransformMapping)transformWidget.getProperties().get(Constants.OPERATION);
 						InputField inputField = null;
 						transformMapping.getInputFields().clear();
@@ -277,6 +269,20 @@ public class PropogateWidget extends AbstractWidget{
            });
 	}
     
+	private AbstractWidget getWidget() {
+		for(AbstractWidget abstractWidget:widgets)
+		{
+			if(abstractWidget instanceof TransformWidget )
+			{
+			   return abstractWidget;
+			}
+			else if(abstractWidget instanceof OutputRecordCountWidget)
+			{
+				return abstractWidget;	
+			}
+		}
+		return null;
+	}
 	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {

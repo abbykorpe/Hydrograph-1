@@ -311,7 +311,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 List<GridRow> schemaGridRowListClone = new ArrayList<>();
 		 Map<String, ComponentsOutputSchema> schemaMap = new LinkedHashMap<String, ComponentsOutputSchema>();
 		 ComponentsOutputSchema componentsOutputSchema = new ComponentsOutputSchema();
-
+		 propagateInternalSchema();
+		
 		if (getWidgetConfig() != null && ((SchemaConfig) getWidgetConfig()).doPropagateONOK()) {
 			propagateSchemaToNextComponenet(currentSchemaProperty, schemaGridRowListClone, schemaMap,
 					componentsOutputSchema);
@@ -322,7 +323,6 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				}
 			}
 		}
-		 //propagateInternalSchema();
 
 		 Schema schema = new Schema();
 		 schema.setGridRow(schemaGridRowListClone);
@@ -337,12 +337,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		 }
 
-
 		 currentSchemaProperty.put(propertyName, schema);
-
-		 propagateInternalSchema();
-
-		 return currentSchemaProperty;
+         return currentSchemaProperty;
 	 }
 
 	 private void propagateInternalSchema() {
@@ -355,8 +351,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 					 MessageDialog dialog = new MessageDialog(new Shell(), Constants.SYNC_WARNING, null, Constants.SCHEMA_NOT_SYNC_MESSAGE, MessageDialog.CONFIRM, new String[] { Messages.SYNC_NOW, Messages.MANUAL_SYNC }, 0);
 					 if (dialog.open() == 0) {
+						 if(isSchemaUpdated)
 						 SchemaSyncUtility.INSTANCE.pushSchemaToMapping(
 								 getComponent(), schemaGridRowList);
+						 else
+						 updateSchemaWithPropogatedSchema();	 
 					 }
 				 }
 			 }
@@ -910,7 +909,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 }
 
 	 public void updateSchemaWithPropogatedSchema(){
-		 if(!getComponent().getComponentName().equals(Constants.TRANSFORM_DISPLAYNAME)){
+		 if(!getComponent().getCategory().equalsIgnoreCase(Constants.TRANSFORM_DISPLAYNAME)){
 			 schemaGridRowList.clear();
 		 }
 		 tableViewer.refresh();
@@ -1773,7 +1772,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	 private void syncInternallyPropagatedSchema() {
 		 Schema schema = getSchemaForInternalPropagation();
-		 if(getComponent().getComponentName().equals(Constants.TRANSFORM_DISPLAYNAME)){
+		 if(getComponent().getCategory().equalsIgnoreCase(Constants.TRANSFORM_DISPLAYNAME)){
 			 List<GridRow> tempList = new ArrayList<>();
 			 schemaGridRowList =(List<GridRow>) tableViewer.getInput();
 			 tempList.addAll(propogateInternalSchemaForTransform(schemaGridRowList, schema.getGridRow()));

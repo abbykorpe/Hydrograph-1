@@ -83,7 +83,7 @@ public class ExpressionEditorDialog extends Dialog {
 		
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
-		this.fieldMap = expressionEditorData.getSelectedInputFieldsForExpression();
+		this.fieldMap = expressionEditorData.getCombinedFieldDatatypeMap();
 		this.selectedInputFields = new ArrayList<>(fieldMap.keySet());
 		javaLineStyler = new JavaLineStyler(selectedInputFields);
 		this.oldExpressionText = expressionEditorData.getExpression();

@@ -22,10 +22,12 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutputRecordCount;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.operationstypes.Normalize;
 import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.util.Constants;
@@ -46,6 +48,7 @@ import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -184,6 +187,8 @@ public abstract class TransformUiConverter extends UiConverter {
 		{
 			if(item instanceof TypeTransformOperation)
 			{
+				if(Constants.NORMALIZE.equalsIgnoreCase(uiComponent.getComponentName()))
+				atMapping.setExpression(false);	
 				TypeTransformOperation transformOperation=(TypeTransformOperation)item;
 				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformOperation),
 					getOutputFieldList(transformOperation),
@@ -193,15 +198,54 @@ public abstract class TransformUiConverter extends UiConverter {
              }
 			else if(item instanceof TypeTransformExpression)
 			{
+				if(Constants.NORMALIZE.equalsIgnoreCase(uiComponent.getComponentName()))
+				atMapping.setExpression(true);	
 				TypeTransformExpression transformExpression=(TypeTransformExpression)item;
-				mappingSheetRows.add(new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
-						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,getExpressionEditorData(transformExpression),
-						true)
-					   );
+				MappingSheetRow mappingSheetRow=
+						new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
+						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,
+						getExpressionEditorData(transformExpression),
+						true);
+				if(Constants.AGGREGATE.equalsIgnoreCase(uiComponent.getComponentName())
+				  ||Constants.CUMULATE.equalsIgnoreCase(uiComponent.getComponentName()))
+				{	
+				mappingSheetRow.setAccumulator(transformExpression.getAccumulatorInitalValue());
+				if(StringUtils.isBlank(transformExpression.getAccumulatorInitalValue())){
+					mappingSheetRow.setComboDataType(Messages.DATATYPE_INTEGER);
+			     }
+				else if(transformExpression.getAccumulatorInitalValue().startsWith("@{") && transformExpression.getAccumulatorInitalValue().
+				endsWith("}")){
+					mappingSheetRow.setAccumulatorParameter(true);
+					mappingSheetRow.setComboDataType(Messages.DATATYPE_INTEGER);
+				}else if(validateInteger(transformExpression.getAccumulatorInitalValue())){
+					mappingSheetRow.setComboDataType(Messages.DATATYPE_INTEGER);
+				}else if(validateBigDecimal(transformExpression.getAccumulatorInitalValue())){
+					mappingSheetRow.setComboDataType(Messages.DATATYPE_BIGDECIMAL);
+				}else{
+					mappingSheetRow.setComboDataType(Messages.DATATYPE_STRING);
+				}
+				}
+				mappingSheetRows.add(mappingSheetRow);
 			}	
 		}
 	}
 
+	private boolean validateBigDecimal(String value){
+		try{
+			new BigDecimal(value);
+			return true;
+		}catch(Exception exception){
+			return false;
+		}
+	}
+	private boolean validateInteger(String value){
+		try{
+			Integer.valueOf(value);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+	}
 	protected ExpressionEditorData getExpressionEditorData(TypeTransformExpression typeTransformExpression) {
 		ExpressionEditorData editorData=new ExpressionEditorData(typeTransformExpression.getExpr(),uiComponent.getComponentName());
 		if(typeTransformExpression.getInputFields()!=null){
@@ -380,7 +424,16 @@ public abstract class TransformUiConverter extends UiConverter {
 		TransformMapping atMapping = new TransformMapping();
         getOperationData(atMapping);
 		atMapping.setMapAndPassthroughField(getMapAndPassThroughField());
+		if(Constants.NORMALIZE.equalsIgnoreCase(uiComponent.getComponentName()))
+		intializeOutputRecordCount(atMapping);
 		return atMapping;
+	}
+
+	private void intializeOutputRecordCount(TransformMapping atMapping) {
+		Normalize normalize=(Normalize)typeBaseComponent;
+		ExpressionEditorData expressionEditorData=new ExpressionEditorData(normalize.getOutputRecordCount().getValue(),
+				uiComponent.getComponentName());
+		atMapping.setExpressionEditorData(expressionEditorData);
 	}
 
 	/**

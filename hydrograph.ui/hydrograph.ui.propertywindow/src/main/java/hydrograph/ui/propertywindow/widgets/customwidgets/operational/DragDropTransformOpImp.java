@@ -40,7 +40,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	private TransformDialog transformDialogNew;
 	private List<FilterProperties> outerOutputList;
 	private boolean isExpression;
-	private ExpressionComposite expressionComposite;
+	private AbstractExpressionComposite expressionComposite;
 	/**
 	 * @param transformDialogNew
 	 * @param mappingSheetRows
@@ -90,7 +90,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	
 	public DragDropTransformOpImp(TransformDialog transformDialog, TransformMapping transformMapping,
 			List<FilterProperties> inputFields, boolean b, boolean c, TableViewer operationalInputFieldTableViewer,
-			ExpressionComposite expressionComposite) {
+			AbstractExpressionComposite expressionComposite) {
 		this(transformDialog,transformMapping,inputFields,b,c,operationalInputFieldTableViewer);
 		this.expressionComposite=expressionComposite;
 	}
@@ -109,7 +109,7 @@ public class DragDropTransformOpImp implements DragDropOperation {
 	        if(expressionComposite!=null && StringUtils.isNotBlank(expressionComposite.getExressionTextBox().getText())){
 	        	ExpressionEditorData expressionEditorData=expressionComposite.createExpressionEditorData();
 	        	ExpressionEditorUtil.validateExpression(expressionEditorData.getExpression(),
-						expressionEditorData.getSelectedInputFieldsForExpression(), expressionEditorData);
+						expressionEditorData.getExtraFieldDatatypeMap(), expressionEditorData);
 	        	transformDialogNew.showHideValidationMessage();
 	        }
 		}

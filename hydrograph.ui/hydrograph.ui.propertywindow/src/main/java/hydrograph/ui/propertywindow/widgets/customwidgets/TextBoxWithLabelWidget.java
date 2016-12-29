@@ -91,8 +91,8 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		if(txtDecorator.isVisible()){
 			toolTipErrorMessage = txtDecorator.getDescriptionText();
 		}
-			
-			setToolTipMessage(toolTipErrorMessage);
+		
+		setToolTipMessage(toolTipErrorMessage);
 	}
 	
 	@Override
@@ -100,6 +100,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		LinkedHashMap<String, Object> property=new LinkedHashMap<>();
 		property.put(propertyName, textBox.getText());
 		setToolTipErrorMessage();
+		 showHideErrorSymbol(widgets);
 		return property;
 	}
 	
@@ -120,17 +121,13 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		
 		AbstractELTWidget textBoxWidget = new ELTDefaultTextBox().
 				grabExcessHorizontalSpace(textBoxConfig.getGrabExcessSpace());//.textBoxWidth(textBoxConfig.getwidgetWidth());
-		
 		lableAndTextBox.attachWidget(textBoxWidget);
 		
 		textBox = (Text) textBoxWidget.getSWTWidgetControl();
 		textBox.setEnabled(textBoxConfig.isEnabled());
-		
 		txtDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, textBoxConfig.getName()));
 		txtDecorator.setMarginWidth(3);
-
 		GridData gridData = (GridData)textBox.getLayoutData();
-		
 		if(OSValidator.isMac()){
 			gridData.widthHint = 106;
 		}else{
@@ -139,8 +136,6 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		attachListeners(textBoxWidget);
 		String property = propertyValue;
 		textBox.setText(property);
-	
-		
 		
 		 /**
 		 *parameter resolution at dev phase 
@@ -195,6 +190,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		}
 		return false;
 	}
+
 	@Override
 	public boolean isWidgetValid() {
 	  return validateAgainstValidationRule(textBox.getText());

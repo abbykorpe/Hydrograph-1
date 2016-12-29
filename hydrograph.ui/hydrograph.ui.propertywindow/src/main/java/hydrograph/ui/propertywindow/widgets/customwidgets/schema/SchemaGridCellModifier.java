@@ -33,14 +33,14 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class SchemaGridCellModifier implements ICellModifier {
 	private Viewer viewer;
-   private ELTGenericSchemaGridWidget eltGenericSchemaGridWidget;
+    private ELTSchemaGridWidget eltGenericSchemaGridWidget;
 	/**
 	 * Instantiates a new schema grid cell modifier.
 	 * 
 	 * @param viewer
 	 *            the viewer
 	 */
-	public SchemaGridCellModifier(ELTGenericSchemaGridWidget eltGenericSchemaGridWidget,Viewer viewer) {
+	public SchemaGridCellModifier(ELTSchemaGridWidget eltGenericSchemaGridWidget,Viewer viewer) {
 		this.viewer = viewer;
 		this.eltGenericSchemaGridWidget=eltGenericSchemaGridWidget;
 	}
@@ -162,6 +162,7 @@ public class SchemaGridCellModifier implements ICellModifier {
 		viewer.refresh();
 		SchemaRowValidation.INSTANCE.highlightInvalidRowWithRedColor(basicSchemaGridRow, (TableItem)element,eltGenericSchemaGridWidget.getTable(), eltGenericSchemaGridWidget.getComponentType());
 		eltGenericSchemaGridWidget.showHideErrorSymbol(eltGenericSchemaGridWidget.isWidgetValid());
+		eltGenericSchemaGridWidget.setSchemaUpdated(true);
 	}
 
 

@@ -96,12 +96,20 @@ public class SchemaSyncUtility {
 	 * @param outSchema the out schema
 	 * @param mappingSheetRow the mapping sheet row
 	 */
-	public void removeOpFields(List<FilterProperties> outSchema, List<MappingSheetRow> mappingSheetRow){
+	public void removeOpFields(List<FilterProperties> outSchema, TransformMapping transformMapping,
+			List<MappingSheetRow> mappingSheetRow,String componentName){
 		for (MappingSheetRow mapSheetRow : mappingSheetRow) {
-					mapSheetRow.getOutputList().retainAll(outSchema);
+			if((Constants.NORMALIZE.equalsIgnoreCase(componentName))&&
+					((transformMapping.isExpression()&&!mapSheetRow.isExpression())
+					||(!transformMapping.isExpression()&&mapSheetRow.isExpression())
+					)
+			   )
+			{
+				continue;
+			}	
+		    mapSheetRow.getOutputList().retainAll(outSchema);
 		}
 	}
-	
 	/**
 	 * Union filter.
 	 *
@@ -205,16 +213,17 @@ public class SchemaSyncUtility {
 	public void pushSchemaToMapping( Component component, List<GridRow> schemaGridRowList) {
 		if(StringUtils.equalsIgnoreCase(Constants.TRANSFORM, component.getComponentName()) ||
 				   StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName()) ||
-				   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName()) ||
+				   StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName())||
 				   StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())){
 			pushSchemaToTransformMapping(component, schemaGridRowList);
-		}else if(StringUtils.equalsIgnoreCase(Constants.LOOKUP, component.getComponentName())){
+		}
+		else if(StringUtils.equalsIgnoreCase(Constants.LOOKUP, component.getComponentName())){
 			pushSchemaToLookupMapping( component, schemaGridRowList);
 		}else if(StringUtils.equalsIgnoreCase(Constants.JOIN, component.getComponentName())){
 			pushSchemaToJoinMapping( component, schemaGridRowList);
 		}
 	}
-	
+   
 	public boolean isAutoSyncRequiredInMappingWidget(Component component, List<GridRow> schemaGridRowList) {
 		List<String> outputFieldList = getOutputFieldList(component);
 		
@@ -426,7 +435,7 @@ public class SchemaSyncUtility {
 			Component component, List<GridRow> schemaGridRowList) {
 		TransformMapping transformMapping = (TransformMapping) component.getProperties().get(OPERATION);
 		List<FilterProperties> filterProperties=convertSchemaToFilterProperty(schemaGridRowList);
-		removeOpFields(filterProperties, transformMapping.getMappingSheetRows());
+		removeOpFields(filterProperties,transformMapping,transformMapping.getMappingSheetRows(),component.getComponentName());
 		List<NameValueProperty> outputFileds= getComponentSchemaAsProperty(schemaGridRowList);
 		filterCommonMapFields(outputFileds, transformMapping);
 		Map<Integer,FilterProperties> indexValueParameterMap=retainIndexAndValueOfParameterFields
@@ -594,4 +603,42 @@ public class SchemaSyncUtility {
 		}
 		return schemaGrid;
 	}
+	
+	/**
+	 * 
+	 * Convert GridRow object to BasicSchemaGridRow object.
+	 * 
+	 * @param list of GridRow object.
+	 * @return list of BasicSchemaGridRow object.
+	 */
+	public List<FixedWidthGridRow> convertGridRowsSchemaToFixedSchemaGridRows(List<GridRow> gridRows) {
+		List<FixedWidthGridRow> basicSchemaGridRows = null;
+		if (gridRows != null) {
+			basicSchemaGridRows = new ArrayList<>();
+			for (GridRow gridRow1 : gridRows) {
+				basicSchemaGridRows.add(convertGridRowSchemaToFixedSchemaGridRow(gridRow1));
+			}
+		}
+		return basicSchemaGridRows;
+	}
+
+	private FixedWidthGridRow convertGridRowSchemaToFixedSchemaGridRow(GridRow gridRow) {
+		FixedWidthGridRow schemaGrid = null;
+		if (gridRow != null) {
+			schemaGrid = new FixedWidthGridRow();
+			schemaGrid.setDataType(gridRow.getDataType());
+			schemaGrid.setDataTypeValue(gridRow.getDataTypeValue());
+			schemaGrid.setDateFormat(gridRow.getDateFormat());
+			schemaGrid.setPrecision(gridRow.getPrecision());
+			schemaGrid.setFieldName(gridRow.getFieldName());
+			schemaGrid.setScale(gridRow.getScale());
+			schemaGrid.setScaleType(gridRow.getScaleType());
+			schemaGrid.setScaleTypeValue(gridRow.getScaleTypeValue());
+			schemaGrid.setDescription(gridRow.getDescription());
+		}
+		return schemaGrid;
+	}
+	
+	
+	
 }

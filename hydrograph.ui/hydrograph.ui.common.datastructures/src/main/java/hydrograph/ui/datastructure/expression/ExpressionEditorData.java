@@ -13,19 +13,27 @@ public class ExpressionEditorData implements IDataStructure {
 	private String expression;
 	private List<String> fieldsUsedInExpression;
 	private Map<String,Class<?>> selectedInputFieldsForExpression;
-	private String componentName;
+	private Map<String,Class<?>> extraFieldDatatypeMap;
+ 	private String componentName;
 	public ExpressionEditorData(String expression,String componentName) {
 		this.expression = expression;
 		fieldsUsedInExpression = new ArrayList<>();
 		selectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
+		extraFieldDatatypeMap=new LinkedHashMap<String,Class<?>>();
 		this.componentName=componentName;
 	}
 
-	public ExpressionEditorData(String expression, List<String> clonedListUsedFieldsInExpression,
-			Map<String,Class<?>> clonedSelectedFieldsForExpression) {
+	public Map<String, Class<?>> getExtraFieldDatatypeMap() {
+		return extraFieldDatatypeMap;
+	}
+
+    public ExpressionEditorData(String expression, List<String> clonedListUsedFieldsInExpression,
+			Map<String,Class<?>> clonedSelectedFieldsForExpression,
+			Map<String,Class<?>> clonedExtraInputFieldsDatatypeMap) {
 		this.expression=expression;
 		this.fieldsUsedInExpression=clonedListUsedFieldsInExpression;
 		this.selectedInputFieldsForExpression=clonedSelectedFieldsForExpression;
+		this.extraFieldDatatypeMap=clonedExtraInputFieldsDatatypeMap;
 		
 	}
 
@@ -95,13 +103,18 @@ public class ExpressionEditorData implements IDataStructure {
 		List<String> clonedFieldsUsedInExpression = new ArrayList<>();
 		clonedFieldsUsedInExpression.addAll(this.fieldsUsedInExpression);
 		Map<String,Class<?>> clonedSelectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
-		
+		Map<String,Class<?>> clonedExtraInputFieldsDatatypeMap = new LinkedHashMap<String,Class<?>>();
 		for(Map.Entry<String, Class<?>> entry:selectedInputFieldsForExpression.entrySet())
 		{
 			clonedSelectedInputFieldsForExpression.put(entry.getKey(), entry.getValue());
-		}	
+		}
+		for(Map.Entry<String, Class<?>> entry:extraFieldDatatypeMap.entrySet())
+		{
+			clonedExtraInputFieldsDatatypeMap.put(entry.getKey(), entry.getValue());
+		}
 		ExpressionEditorData expressionEditorData=
-				new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression);
+				new ExpressionEditorData(clonedExpression, clonedFieldsUsedInExpression, clonedSelectedInputFieldsForExpression
+						,clonedExtraInputFieldsDatatypeMap);
 		expressionEditorData.setValid(isValid);
 		expressionEditorData.setComponentName(componentName);
 		return expressionEditorData;
@@ -110,7 +123,20 @@ public class ExpressionEditorData implements IDataStructure {
 	public String getComponentName() {
 		return componentName;
 	}
-
+    
+	/**
+	 * 
+	 * merge the two maps into  single map
+	 * @return map 
+	 */
+	public Map<String,Class<?>> getCombinedFieldDatatypeMap()
+	{
+        Map<String,Class<?>> fieldDatatypeMap=new LinkedHashMap<>();
+        fieldDatatypeMap.putAll(extraFieldDatatypeMap);
+        fieldDatatypeMap.putAll(selectedInputFieldsForExpression);
+		return fieldDatatypeMap;
+	}
+	
 	public void setComponentName(String componentName) {
 		this.componentName = componentName;
 	}

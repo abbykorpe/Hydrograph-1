@@ -15,6 +15,7 @@ package hydrograph.ui.engine.converter.impl;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOutputRecordCount;
 import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.operationstypes.Normalize;
 import hydrograph.ui.common.util.Constants;
@@ -72,10 +73,18 @@ public class NormalizeConverter extends TransformConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
-
-		Normalize normalize = (Normalize) baseComponent;
+        Normalize normalize = (Normalize) baseComponent;
 		normalize.getOperationOrExpression().addAll(getOperations());
+		if(atMapping.isExpression())
+		normalize.setOutputRecordCount(getOutputRecordCountValue());
 	}
+
+	private TypeOutputRecordCount getOutputRecordCountValue() {
+		TypeOutputRecordCount typeOutputRecordCount=new TypeOutputRecordCount();
+		typeOutputRecordCount.setValue(atMapping.getExpressionEditorData().getExpression());
+		return typeOutputRecordCount;
+	}
+
 
 	@Override
 	protected List<Object> getOperations() {

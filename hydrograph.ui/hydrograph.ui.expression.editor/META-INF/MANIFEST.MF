@@ -30,5 +30,6 @@ Import-Package: hydrograph.ui.logging.factory,
  org.eclipse.jface.text,
  org.eclipse.ui.editors.text
 Export-Package: hydrograph.ui.expression.editor.dialogs,
+ hydrograph.ui.expression.editor.enums,
  hydrograph.ui.expression.editor.launcher,
  hydrograph.ui.expression.editor.util

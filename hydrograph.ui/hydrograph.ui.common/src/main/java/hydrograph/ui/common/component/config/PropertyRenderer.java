@@ -167,7 +167,8 @@ public enum PropertyRenderer {
     DATABASE_NAME_WIDGET,
     PROPOGATE_WIDGET,
     MYSQL_DRIVER_NAME,
-    RUNPROGRAM_TEXT_WIDGET;
+    RUNPROGRAM_TEXT_WIDGET,
+    OUTPUT_RECORD_COUNT_WIDGET;
 
     public String value() {
         return name();

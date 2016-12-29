@@ -15,6 +15,7 @@
 package hydrograph.ui.datastructure.property.mapping;
 
 import hydrograph.ui.common.cloneableinterface.IDataStructure;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 
@@ -37,7 +38,17 @@ public class TransformMapping implements IDataStructure{
 	private List<NameValueProperty> mapAndPassthroughField;
 	private List<FilterProperties> outputFieldList;
 	private boolean addPassThroughFields;
+	private boolean isExpression;
+	private ExpressionEditorData expressionEditorData;
 	
+	public boolean isExpression() {
+		return isExpression;
+	}
+
+	public void setExpression(boolean isExpression) {
+		this.isExpression = isExpression;
+	}
+
 	/**
 	 * Instantiates a new transform mapping.
 	 */
@@ -150,12 +161,23 @@ public class TransformMapping implements IDataStructure{
 		this.mappingSheetRows = mappingSheetRows;
 	}
 
+	public ExpressionEditorData getExpressionEditorData() {
+		return expressionEditorData;
+	}
+
+	public void setExpressionEditorData(ExpressionEditorData expressionEditorData) {
+		this.expressionEditorData = expressionEditorData;
+	}
+
 	@Override
 	public Object clone() {
 		TransformMapping atMapping = new TransformMapping();
 		atMapping.getInputFields().addAll(this.inputFields);
 		atMapping.getMapAndPassthroughField().addAll(this.mapAndPassthroughField);
 		atMapping.getOutputFieldList().addAll(this.outputFieldList);
+		atMapping.setExpression(this.isExpression);
+		if(this.expressionEditorData!=null)
+		atMapping.setExpressionEditorData(this.expressionEditorData.clone());
 		for (MappingSheetRow mappingSheetRow : this.mappingSheetRows) {
 			if (this.mappingSheetRows != null)
 				atMapping.getMappingSheetRows().add((MappingSheetRow) mappingSheetRow.clone());

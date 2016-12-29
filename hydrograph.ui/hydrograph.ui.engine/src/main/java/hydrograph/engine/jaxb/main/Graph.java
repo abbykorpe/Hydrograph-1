@@ -76,6 +76,7 @@ public class Graph {
         @XmlElement(name = "operations", type = TypeOperationsComponent.class),
         @XmlElement(name = "commands", type = TypeCommandComponent.class),
         @XmlElement(name = "unknown", type = TypeUnknownComponent.class)
+
     })
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
     @XmlAttribute(name = "name", required = true)

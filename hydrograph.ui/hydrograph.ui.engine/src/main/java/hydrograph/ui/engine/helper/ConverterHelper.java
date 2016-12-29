@@ -13,6 +13,19 @@
 
 package hydrograph.ui.engine.helper;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
+
+import javax.xml.namespace.QName;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
 import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
@@ -53,20 +66,6 @@ import hydrograph.ui.graph.model.Port;
 import hydrograph.ui.graph.model.PortDetails;
 import hydrograph.ui.logging.factory.LogFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-
-import javax.xml.namespace.QName;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-
 /**
  * This is a helper class for converter implementation. Contains the helper methods for conversion.
  * @author Bitwise 
@@ -90,6 +89,8 @@ public class ConverterHelper {
 		if (transformPropertyGrid != null) {
 			List<MappingSheetRow> mappingsheetRowList = TransformMappingFeatureUtility.INSTANCE.
 					getActiveMappingSheetRow(transformPropertyGrid.getMappingSheetRows());
+			if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName()))
+				mappingsheetRowList=filterMappigSheetRowList(mappingsheetRowList,transformPropertyGrid);
 			if (mappingsheetRowList != null) {
 				int OperationID = 0;
 				for (MappingSheetRow mappingsheetRow : mappingsheetRowList) {
@@ -106,6 +107,18 @@ public class ConverterHelper {
 			}			
 		}
 		return operationList;
+	}
+
+	private List<MappingSheetRow> filterMappigSheetRowList(List<MappingSheetRow> mappingSheetRows,TransformMapping transformMapping) {
+		List<MappingSheetRow> filterSheetRowList=new ArrayList<>();
+ 		for(MappingSheetRow mappingSheetRow:mappingSheetRows)
+		{
+			if(transformMapping.isExpression()&&mappingSheetRow.isExpression())
+            filterSheetRowList.add(mappingSheetRow);
+			else if(!transformMapping.isExpression()&&!mappingSheetRow.isExpression())
+			filterSheetRowList.add(mappingSheetRow);	
+		}	
+ 		return filterSheetRowList;
 	}
 
 	private Object getOperationOrExpression(MappingSheetRow mappingSheetRow, int operationID, List<BasicSchemaGridRow> schemaGridRows) {
@@ -130,6 +143,11 @@ public class ConverterHelper {
             expression.setInputFields(getExpressionInputFields(mappingSheetRow));
             expression.setProperties(getOperationProperties(mappingSheetRow.getNameValueProperty()));
             expression.setOutputFields(getExpressionOutputField(mappingSheetRow,schemaGridRows));
+            if(Constants.AGGREGATE.equalsIgnoreCase(component.getComponentName())
+              ||Constants.CUMULATE.equalsIgnoreCase(component.getComponentName()))
+            {	
+            expression.setAccumulatorInitalValue(mappingSheetRow.getAccumulator());
+            }
             if(StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
             {
             	expression.setExpr(mappingSheetRow.getExpressionEditorData().getExpression());
@@ -173,11 +191,13 @@ public class ConverterHelper {
     
 	private TypeOperationInputFields getExpressionInputFields(MappingSheetRow mappingSheetRow) {
 		TypeOperationInputFields inputFields = null;
-		if (mappingSheetRow != null && !mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression().isEmpty()) {
+		List<String> expressionInputFields=new ArrayList<>
+		(mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().keySet());
+		if (mappingSheetRow != null && !expressionInputFields.isEmpty()) {
 			inputFields = new TypeOperationInputFields();
 
-			if (!hasAllStringsInListAsParams(mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression())) {	
-				for (String field : mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression()){
+			if (!hasAllStringsInListAsParams(expressionInputFields)) {	
+				for (String field : expressionInputFields){
 					if(!ParameterUtil.isParameter(field)){
 						TypeInputField typeInputField = new TypeInputField();
 						typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
@@ -195,7 +215,7 @@ public class ConverterHelper {
 				typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 				typeInputField.setName("");
 				inputFields.getField().add(typeInputField);
-				for (String field : mappingSheetRow.getExpressionEditorData().getfieldsUsedInExpression()){
+				for (String field : expressionInputFields){
 					parameterFieldNames.append(field.trim() + " ");
 				}
 				addParamTag(ID, parameterFieldNames.toString(),

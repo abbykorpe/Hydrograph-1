@@ -51,6 +51,8 @@ public class ExpressionEditorStyledText extends StyledText{
     
     @Override
     public void setText(String text) {
+    	if(StringUtils.isBlank(text))
+    	text="";	
         super.setText(text);
         if (viewer.getUndoManager() != null) {
             viewer.getUndoManager().reset();

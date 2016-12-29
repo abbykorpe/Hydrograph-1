@@ -278,6 +278,7 @@ public class Constants {
 	public static String INPUT_SUBJOB_TYPE="Input Socket for subjob";
 	public static String OUTPUT_SUBJOB_TYPE="Output Socket for subjob";
 
+	public  static final String OUTPUT_RECORD_COUNT = "Output\nRecordCount";
 	public static final String PROPERTY_TABLE = "PROPERTY_TABLE";
 	public static final String PROPERTY_NAME = "PROPERTY_NAME";
 	public static final String PROPERTY_VALUE = "PROPERTY_VALUE";
@@ -299,6 +300,7 @@ public class Constants {
 	public static final String STOP_BUITTON_TOOLITEM_ID="hydrograph.ui.graph.stopjob";
 	public static final String FIRST_TOOLBAR_ID = "hydrograph.ui.graph.toolbar1";
 	public static final String REMOVE_WATCH_POINTS_TOOLITEM_ID = "hydrograph.ui.graph.command.removedebug";
+	public static final String ACCUMULATOR_VARIABLE = "_accumulator";
 	
 
 	// Oracle Component
