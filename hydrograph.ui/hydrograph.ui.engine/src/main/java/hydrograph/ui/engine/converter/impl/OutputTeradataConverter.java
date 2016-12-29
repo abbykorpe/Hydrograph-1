@@ -30,6 +30,7 @@ import hydrograph.engine.jaxb.oteradata.TypeLoadChoice;
 import hydrograph.engine.jaxb.oteradata.TypeOutputTeradataOutSocket;
 import hydrograph.engine.jaxb.oteradata.TypePrimaryKeys;
 import hydrograph.engine.jaxb.oteradata.TypeUpdateKeys;
+import hydrograph.engine.jaxb.outputtypes.Teradata;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;

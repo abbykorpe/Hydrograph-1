@@ -28,8 +28,9 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.omysql.TypePrimaryKeys;
-import hydrograph.engine.jaxb.omysql.TypeUpdateKeys;
+import hydrograph.engine.jaxb.oteradata.TypePrimaryKeys;
+import hydrograph.engine.jaxb.oteradata.TypeUpdateKeys;
+import hydrograph.engine.jaxb.outputtypes.Teradata;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
@@ -38,6 +39,7 @@ import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.OutputUiConverter;
 import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.OTeradata;
 import hydrograph.ui.logging.factory.LogFactory;
 
 /**

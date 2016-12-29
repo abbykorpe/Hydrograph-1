@@ -23,6 +23,7 @@ import hydrograph.engine.jaxb.inputtypes.Mysql;
 import hydrograph.engine.jaxb.inputtypes.Oracle;
 import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
 import hydrograph.engine.jaxb.inputtypes.Redshift;
+import hydrograph.engine.jaxb.inputtypes.Teradata;
 import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 import hydrograph.engine.jaxb.inputtypes.TextFileFixedWidth;
 import hydrograph.engine.jaxb.operationstypes.Aggregate;
