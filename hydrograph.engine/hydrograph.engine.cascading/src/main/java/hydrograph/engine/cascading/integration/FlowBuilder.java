@@ -146,7 +146,7 @@ public class FlowBuilder {
 
 
     public void cleanup(List<String> tmpPathList, RuntimeContext runtimeContext) {
-        if (tmpPathList != null)
+        if (tmpPathList != null) {
             for (String tmpPath : tmpPathList) {
 
                 Path fullPath = new Path(tmpPath);
@@ -169,6 +169,7 @@ public class FlowBuilder {
                 }
 
             }
+        }
     }
 
 }
