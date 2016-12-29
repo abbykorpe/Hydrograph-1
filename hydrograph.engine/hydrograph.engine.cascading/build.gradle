@@ -108,7 +108,6 @@ dependencies {
  	compile group: 'cascading', name: 'cascading-jdbc-mysql', version: '3.0.0'
   	compile group: 'cascading', name: 'cascading-jdbc-redshift', version: '3.0.0'
     compile (group: 'cascading', name: 'cascading-jdbc-oracle', version: '0.1')
-    compile (group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
 
 
 	compile (group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'){
@@ -152,8 +151,7 @@ dependencies {
     compile 'org.hamcrest:hamcrest-core:1.3' //required by plunger
     testCompile 'org.mockito:mockito-core:1.9.5' //required by plunger
     testCompile 'commons-io:commons-io:2.4' //required by plunger
-    compile(group: 'cascading', name: 'cascading-jdbc-oracle', version: '0.1')
-    compile(group: 'cascading', name: 'ojdbc6', version: '11.2.0.4')
+    compile(group: 'oracle', name: 'ojdbc6', version: '11.2.0.4')
 }
 
 task writePom {
