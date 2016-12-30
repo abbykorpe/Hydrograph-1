@@ -201,7 +201,7 @@ public class GridRow implements IDataStructure {
 			if (fieldName == null) {
 				if (otherGridRow.fieldName != null)
 					return false;
-			} else if (!fieldName.equals(otherGridRow.fieldName))
+			} else if (!fieldName.equalsIgnoreCase(otherGridRow.fieldName))
 				return false;
 			if (dataTypeValue == null) {
 				if (otherGridRow.dataTypeValue != null)
