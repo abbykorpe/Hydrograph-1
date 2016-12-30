@@ -2,8 +2,8 @@ package hydrograph.engine.spark.flow
 
 import com.google.inject.Guice
 import hydrograph.engine.spark.components.adapter.OutputFileDelimitedAdapter
-import hydrograph.engine.spark.components.adapter.base._
-import hydrograph.engine.spark.components.base.{SparkFlow, ComponentParameterBuilder}
+import hydrograph.engine.spark.components.adapter.base.{RunProgramAdapterBase, _}
+import hydrograph.engine.spark.components.base.{ComponentParameterBuilder, SparkFlow}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
@@ -71,6 +71,13 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
       flow += adapterBase.asInstanceOf[OutputAdatperBase].getComponent()
 
       }
+      else if (adapterBase.isInstanceOf[RunProgramAdapterBase]) {
+        baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap, new BaseComponentParams())
+          .build()
+        adapterBase.createComponent(baseComponentParams)
+        flow += adapterBase.asInstanceOf[RunProgramAdapterBase].getComponent()
+      }
+
     }
 
 flow
