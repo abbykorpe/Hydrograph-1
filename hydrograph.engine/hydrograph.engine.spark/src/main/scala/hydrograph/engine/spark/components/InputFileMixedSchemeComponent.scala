@@ -18,6 +18,7 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
   private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileMixedSchemeComponent])
 
   def extractLengthsAndDelimiters(getFieldsList: util.List[SchemaField]):String = {
+    LOG.trace("In method extractLengthsAndDelimiters()")
     def extract(schemafields:List[SchemaField],lengthsAndDelimiters:List[String]):List[String] = (schemafields,lengthsAndDelimiters) match {
       case (List(),y) => y
       case (x::xs,y) => extract(xs,(y ++ List(x.getFieldLengthDelimiter)))
@@ -26,6 +27,7 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
   }
 
   def extractLengthsAndDelimitersType(getFieldsList: util.List[SchemaField]):String = {
+    LOG.trace("In method extractLengthsAndDelimitersType()")
     def extract(schemafields:List[SchemaField],lengthsAndDelimiters:List[String]):List[String] = (schemafields,lengthsAndDelimiters) match {
       case (List(),y) => y
       case (x::xs,y) => extract(xs,(y ++ List(x.getTypeFieldLengthDelimiter.toString)))
@@ -63,7 +65,7 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
       Map(key -> df)
     } catch {
 
-      case e =>
+      case e: RuntimeException =>
         LOG.error("Error in Input File MixedScheme Component "+ iFileMixedSchemeEntity.getComponentId, e)
         throw new RuntimeException("Error in Input File MixedScheme Component "+ iFileMixedSchemeEntity.getComponentId, e)
     }

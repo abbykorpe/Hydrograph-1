@@ -157,7 +157,7 @@ class DefaultSource extends RelationProvider
               recordToBeSpilled = DelimitedAndFixedWidthHelper.spillOneLineToOutput(outputRow, lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR))
               outputRow = outputRow.replace(recordToBeSpilled, "").trim
             } else if (hasNext){
-              recordToBeSpilled = ""
+              recordToBeSpilled = Constants.LENGTHS_AND_DELIMITERS_SEPARATOR
             } else {
               recordToBeSpilled = outputRow
             }
@@ -165,7 +165,7 @@ class DefaultSource extends RelationProvider
           }
         }
     }
-    strRDD.filter(e => !e.equals("")).saveAsTextFile(path)
+    strRDD.filter(e => !e.equals(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR)).saveAsTextFile(path)
     LOG.info("MixedScheme Output File is successfully created at path : " + path)
   }
 

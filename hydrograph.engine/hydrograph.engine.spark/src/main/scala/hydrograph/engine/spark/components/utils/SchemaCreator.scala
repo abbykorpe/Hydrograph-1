@@ -47,7 +47,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
   
   
   def returnScalePrecision(data:Int):Int={
-    if(data== -999) 38 else precision
+    if(data== -999) precision else data
   } 
 }
 
