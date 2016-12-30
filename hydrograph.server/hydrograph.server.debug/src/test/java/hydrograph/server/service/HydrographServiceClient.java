@@ -71,7 +71,7 @@ public class HydrographServiceClient {
 		// testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
 		// String oraclejson =
 		// "{\"table\":\"testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-		String oraclejson = "{\"table\":\"testingfinal2\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		String oraclejson = "{\"table\":\"testingTable1111\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
 		// String mysqljson = "{\"query\":\"Select * from
 		// ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
 		// String mysqljson = "{\"query\":\"Select * from

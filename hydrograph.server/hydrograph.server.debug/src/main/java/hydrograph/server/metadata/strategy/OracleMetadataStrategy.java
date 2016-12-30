@@ -124,8 +124,11 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 			for (int count = 1; count < rsmd.getColumnCount() + 1; count++) {
 				TableSchemaFieldEntity tableSchemaFieldEntity = new TableSchemaFieldEntity();
 				tableSchemaFieldEntity.setFieldName(rsmd.getColumnLabel(count));
-				if (rsmd.getColumnClassName(count).equalsIgnoreCase("java.sql.Timestamp")) {
-					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss");
+				if (rsmd.getColumnTypeName(count).equalsIgnoreCase("timestamp")) {
+					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss:SSS");
+					tableSchemaFieldEntity.setFieldType("java.util.Date");
+				} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("date")) {
+					tableSchemaFieldEntity.setFormat("yyyy-MM-dd");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
 				} else {
 					tableSchemaFieldEntity.setFieldType(getColumnType(rsmd, count, tableSchemaFieldEntity));
@@ -137,7 +140,7 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 			if (componentSchemaProperties.get(Constants.TABLENAME) == null)
 				tableEntity.setQuery(componentSchemaProperties.get(Constants.QUERY).toString());
 			else
-			tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
+				tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
 			tableEntity.setDatabaseName(componentSchemaProperties.get(Constants.dbType).toString());
 			tableEntity.setSchemaFields(tableSchemaFieldEntities);
 			res.close();
@@ -160,10 +163,9 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 		} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19
 				&& rsmd.getPrecision(count) > 10)) {
 			return "java.lang.Long";
-		} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) > 19
-				&& rsmd.getScale(count) > 4) {
+		} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) > 19) {
 			tableSchemaFieldEntity.setScaleType("explicit");
-			return "java.lang.BigDecimal";
+			return "java.math.BigDecimal";
 		} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("char") && rsmd.getPrecision(count) == 1) {
 			return "java.lang.Boolean";
 		} else
