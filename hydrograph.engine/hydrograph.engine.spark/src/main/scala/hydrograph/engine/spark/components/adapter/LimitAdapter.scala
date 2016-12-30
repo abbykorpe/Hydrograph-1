@@ -3,7 +3,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.LimitEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.SparkAggregateComponent
+import hydrograph.engine.spark.components.AggregateComponent
 import hydrograph.engine.spark.components.SparkLimitComponent
 
 import hydrograph.engine.spark.components.platform.BaseComponentParams

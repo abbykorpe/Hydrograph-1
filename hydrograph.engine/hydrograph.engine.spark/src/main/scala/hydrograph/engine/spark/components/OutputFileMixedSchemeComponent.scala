@@ -19,6 +19,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
 
   def extractLengthsAndDelimiters(getFieldsList: util.List[SchemaField]):String = {
+    LOG.trace("In method extractLengthsAndDelimiters()")
     def extract(schemafields:List[SchemaField],lengthsAndDelimiters:List[String]):List[String] = (schemafields,lengthsAndDelimiters) match {
       case (List(),y) => y
       case (x::xs,y) => extract(xs,(y ++ List(x.getFieldLengthDelimiter)))
@@ -27,6 +28,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
   }
 
   def extractLengthsAndDelimitersType(getFieldsList: util.List[SchemaField]):String = {
+    LOG.trace("In method extractLengthsAndDelimitersType()")
     def extract(schemafields:List[SchemaField],lengthsAndDelimiters:List[String]):List[String] = (schemafields,lengthsAndDelimiters) match {
       case (List(),y) => y
       case (x::xs,y) => extract(xs,(y ++ List(x.getTypeFieldLengthDelimiter.toString)))
@@ -52,6 +54,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
        .option("safe", outputFileMixedSchemeEntity.getSafe)
        .option("strict", outputFileMixedSchemeEntity.getStrict)
        .option("dateFormats", dateFormats)
+       .option("filler", ' ')
        .option("lengthsAndDelimiters", extractLengthsAndDelimiters(outputFileMixedSchemeEntity.getFieldsList))
        .option("lengthsAndDelimitersType", extractLengthsAndDelimitersType(outputFileMixedSchemeEntity.getFieldsList))
        .mode(SaveMode.Overwrite)

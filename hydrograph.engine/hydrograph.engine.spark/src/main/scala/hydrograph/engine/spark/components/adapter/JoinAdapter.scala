@@ -2,7 +2,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.{JoinEntityGenerator, TransformEntityGenerator}
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.{JoinComponent, SparkTransformComponent}
+import hydrograph.engine.spark.components.{JoinComponent, TransformComponent}
 import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams

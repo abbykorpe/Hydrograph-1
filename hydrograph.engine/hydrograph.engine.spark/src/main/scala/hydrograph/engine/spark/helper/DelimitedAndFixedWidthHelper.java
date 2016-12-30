@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.spark.helper;
 
+import hydrograph.engine.core.constants.Constants;
 import hydrograph.engine.spark.datasource.utils.TypeCast;
 import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
@@ -42,16 +43,6 @@ public class DelimitedAndFixedWidthHelper {
             try {
                 String[] tokens = generateTokensFromRawData(line,
                         lengthsAndDelimiters, lengthsAndDelimitersType, quote);
-//                Type[] fieldDataTypes = types;
-//                if (fieldDataTypes == null) {
-//                    fieldDataTypes = new Type[sourceFields.size()];
-//                    for (int i = 0; i < sourceFields.size(); i++) {
-//                        fieldDataTypes[i] = String.class;
-//                    }
-//                }
-//                private Object[] coerceParsedTokens(
-//                        String line, Object[] tokens, boolean safe,
-//                StructType schema, String[] dateFormats) {
                 return coerceParsedTokens(line, (Object[]) tokens, safe,schema, dateFormats);
             } catch (Exception e) {
                 LOG.error(
@@ -122,33 +113,6 @@ public class DelimitedAndFixedWidthHelper {
         return tokens;
     }
 
-//    private static Object[] coerceParsedTokens(
-//            String line, boolean safe, String[] tokens,
-//            StructType schema) {
-//        Object[] coercedTokens = new Object[tokens.length];
-//        for (int i = 0; i < tokens.length; i++) {
-//            try {
-//                if (coercions[i] instanceof StringCoerce) {
-//                    coercedTokens[i] = coercions[i].canonical(tokens[i]);
-//                } else if (coercions[i] instanceof DateType
-//                        && tokens[i] != null && !"".equals(tokens[i])) {
-//                    coercedTokens[i] = coercions[i].canonical(tokens[i]);
-//                } else
-//                    coercedTokens[i] = coercions[i].canonical(tokens[i].trim()
-//                            .length() > 0 ? tokens[i].trim() : null);
-//            } catch (Exception exception) {
-//                String message = "field " + sourceFields.get(i)
-//                        + " cannot be coerced from : " + tokens[i] + " to: "
-//                        + fieldDataTypes[i];
-//                coercedTokens[i] = null;
-//                if (!safe) {
-//                    throw new RuntimeException(message, exception, new Tuple(line));
-//                }
-//            }
-//        }
-//        return coercedTokens;
-//    }
-
     private static Object[] coerceParsedTokens(
             String line, Object[] tokens, boolean safe,
             StructType schema, String[] dateFormats) {
@@ -180,99 +144,91 @@ public class DelimitedAndFixedWidthHelper {
         }
     }
 
-//	public static StringBuilder createLine(Tuple tuple,
-//			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-//			boolean strict, char filler, Type[] types, String quote) {
-//		counter = 0;
-//		StringBuilder buffer = new StringBuilder();
-//		for (Object value : tuple) {
-//			isFixedWidthField = false;
-//			isFixedWidthField = isFixedWidthField(lengthsAndDelimitersType,
-//					counter);
-//
-//			// to apply datatype while writing the file
-//			if (types != null) {
-//				if (types[counter] instanceof DateType) {
-//					value = Coercions.coercibleTypeFor(types[counter]).coerce(
-//							value, String.class);
-//				} else {
-//					value = Coercions.coercibleTypeFor(types[counter])
-//							.canonical(value);
-//				}
-//			}
-//
-//			if (value == null) {
-//				value = "";
-//			}
-//
-//			if (isFixedWidthField) {
-//				int lengthDifference = value.toString().length()
-//						- Integer.parseInt(lengthsAndDelimiters[counter]);
-//				if (lengthDifference == 0) {
-//					buffer.append(value);
-//					counter++;
-//					continue;
-//				} else if (lengthDifference > 0) {
-//					if (strict) {
-//						throw new RuntimeException(
-//								"Fixed width field write error. Field "
-//										+ value
-//										+ " has length "
-//										+ value.toString().length()
-//										+ " whereas provided is "
-//										+ lengthsAndDelimiters[counter]
-//										+ ". Set strict to false and provide filler to overide such errors if this is expected behaviour.",
-//								new Tuple(tuple));
-//					}
-//
-//					buffer.append(value.toString().substring(0,
-//							Integer.parseInt(lengthsAndDelimiters[counter])));
-//					counter++;
-//					continue;
-//				} else if (lengthDifference < 0) {
-//					if (strict) {
-//						throw new RuntimeException(
-//								"Fixed width field write error. Field "
-//										+ value
-//										+ " has length "
-//										+ value.toString().length()
-//										+ " whereas provided is "
-//										+ lengthsAndDelimiters[counter]
-//										+ ". Set strict to false and provide filler to overide such errors if this is expected behaviour.",
-//								tuple.toString());
-//					}
-//					try {
-//						if (isNumeric(value)) {
-//							appendZero(buffer, lengthDifference * -1);
-//							buffer.append(value);
-//						} else {
-//							buffer.append(value);
-//							appendFiller(buffer, filler, lengthDifference * -1);
-//						}
-//					} catch (IOException e) {
-//						LOG.error("", e);
-//						throw new RuntimeException(e);
-//					}
-//					counter++;
-//					continue;
-//				}
-//			}
-//			if (quoteCharPresent(quote)) {
-//				value = appendQuoteChars(value, quote,
-//						lengthsAndDelimiters[counter]);
-//			}
-//			buffer.append(value);
-//			if (lengthsAndDelimiters[counter].contentEquals("\\n"))
-//				lengthsAndDelimiters[counter] = "\n";
-//			if (lengthsAndDelimiters[counter].contentEquals("\\t"))
-//				lengthsAndDelimiters[counter] = "\t";
-//			if (lengthsAndDelimiters[counter].contentEquals("\\r"))
-//				lengthsAndDelimiters[counter] = "\r";
-//			buffer.append(parseHex(lengthsAndDelimiters[counter]));
-//			counter++;
-//		}
-//		return buffer;
-//	}
+	public static String createLine(String strTuple,
+			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
+			boolean strict, char filler, String quote) {
+		counter = 0;
+		Object[] tuple = (Object[])strTuple.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR);
+		StringBuilder buffer = new StringBuilder();
+		for (Object value : tuple) {
+			isFixedWidthField = false;
+			isFixedWidthField = isFixedWidthField(lengthsAndDelimitersType,
+					counter);
+
+			if (value == null) {
+				value = "";
+			}
+
+			if (isFixedWidthField) {
+				int lengthDifference = value.toString().length()
+						- Integer.parseInt(lengthsAndDelimiters[counter]);
+				if (lengthDifference == 0) {
+					buffer.append(value);
+					counter++;
+					continue;
+				} else if (lengthDifference > 0) {
+					if (strict) {
+						throw new RuntimeException(
+								"Fixed width field write error. Field "
+										+ value
+										+ " has length "
+										+ value.toString().length()
+										+ " whereas provided is "
+										+ lengthsAndDelimiters[counter]
+										+ ". Set strict to false and provide filler to overide such errors if this is expected behaviour. " +
+                                        "The prospect tuple is : " +
+                                Arrays.toString(tuple));
+					}
+
+					buffer.append(value.toString().substring(0,
+							Integer.parseInt(lengthsAndDelimiters[counter])));
+					counter++;
+					continue;
+				} else if (lengthDifference < 0) {
+					if (strict) {
+						throw new RuntimeException(
+								"Fixed width field write error. Field "
+										+ value
+										+ " has length "
+										+ value.toString().length()
+										+ " whereas provided is "
+										+ lengthsAndDelimiters[counter]
+										+ ". Set strict to false and provide filler to overide such errors if this is expected behaviour." +
+                                        " The prospect tuple is : "+
+                                        Arrays.toString(tuple));
+					}
+					try {
+						if (isNumeric(value)) {
+							appendZero(buffer, lengthDifference * -1);
+							buffer.append(value);
+						} else {
+							buffer.append(value);
+							appendFiller(buffer, filler, lengthDifference * -1);
+						}
+					} catch (IOException e) {
+						LOG.error("", e);
+						throw new RuntimeException(e);
+					}
+					counter++;
+					continue;
+				}
+			}
+			if (quoteCharPresent(quote)) {
+				value = appendQuoteChars(value, quote,
+						lengthsAndDelimiters[counter]);
+			}
+			buffer.append(value);
+			if (lengthsAndDelimiters[counter].contentEquals("\\n"))
+				lengthsAndDelimiters[counter] = "\n";
+			if (lengthsAndDelimiters[counter].contentEquals("\\t"))
+				lengthsAndDelimiters[counter] = "\t";
+			if (lengthsAndDelimiters[counter].contentEquals("\\r"))
+				lengthsAndDelimiters[counter] = "\r";
+			buffer.append(parseHex(lengthsAndDelimiters[counter]));
+			counter++;
+		}
+		return buffer.toString();
+	}
 
     private static boolean quoteCharPresent(String quote) {
         return !quote.equals("");
@@ -325,6 +281,13 @@ public class DelimitedAndFixedWidthHelper {
         return false;
     }
 
+    public static boolean containsNewLine(String outputLine) {
+        if (outputLine.contains("\n") || outputLine.contains("\\n")
+                || outputLine.contains("\r\n") || outputLine.contains("\\r\\n"))
+            return true;
+        return false;
+    }
+
     public static String modifyIdentifier(String identifier) {
         String string = identifier;
         if (identifier.contains("\\r\\n")) {
@@ -348,12 +311,12 @@ public class DelimitedAndFixedWidthHelper {
         return identifiers;
     }
 
-    public static String spillOneLineToOutput(StringBuilder sb,
+    public static String spillOneLineToOutput(String sb,
                                               String[] lengthsAndDelimiters) {
         String line = "";
         if (!isLastFieldNewLine(lengthsAndDelimiters)
                 && !isLastFixedWidthFieldNewLineField(lengthsAndDelimiters)) {
-            if (hasaNewLineField(lengthsAndDelimiters)) {
+            if (hasaNewLineField(lengthsAndDelimiters) || containsNewLine(sb)) {
                 String[] splits = sb.toString().split("\n");
                 for (int i = 0; i < splits.length; i++) {
                     if (i != splits.length - 1) {
@@ -365,8 +328,8 @@ public class DelimitedAndFixedWidthHelper {
                 return line.substring(0, line.length() - 1);
             }
         } else {
-            sb.replace(sb.length() - 1, sb.length(), "");
-            return sb.toString();
+            sb = sb.substring(0,sb.length()-1);
+            return sb;
         }
         return line;
     }

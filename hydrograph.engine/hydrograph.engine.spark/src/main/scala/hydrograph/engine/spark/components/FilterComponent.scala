@@ -48,7 +48,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
 
     var inputReusableRow=new SparkReusableRow(fieldNameSet)
     val fields = new util.LinkedHashSet[String]()
-    filterEntity.getOperation.getOperationInputFields.foreach(e => fields.add(e))
+    scheme.foreach(e => fields.add(e))
     if (filterClass.isInstanceOf[FilterBase]) inputReusableRow = new SparkReusableRow(fields)
 
     filterEntity.getOutSocketList.asScala.foreach{outSocket=>
@@ -66,6 +66,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
          })
       map += (outSocket.getSocketId -> df)
     }
+
     map
   }
 
