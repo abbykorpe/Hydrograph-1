@@ -273,9 +273,10 @@ public class Messages extends NLS {
 	public static String MOVE_DOWN_KEY_SHORTCUT_TOOLTIP;
 	public static String EXTRACT_FROM_METASTORE;
 	public static String EXTRACT;
-	public static String HOST_NAME_BLANK_ERROR ;
+
 	public static String CONNECTION_NOT_ESTABLISHED;
-	public static String METASTORE_FORMAT_ERROR;
+	public static  String HOST_NAME_BLANK_ERROR ;
+	public static  String METASTORE_FORMAT_ERROR;
 	public static String  METASTORE_FORMAT_ERROR_FOR_SQL_QUERY;
 	public static  String INVALID_DB_ERROR;
 
@@ -310,6 +311,7 @@ public class Messages extends NLS {
 	public static String SQL_QUERY_STATEMENT;
 	public static String DRIVER_NAME;
 	public static String EXECUTION_COMMAND;
+	public static String PRIMARY_KEY_VALIDATION;
 	
 	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
 	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;

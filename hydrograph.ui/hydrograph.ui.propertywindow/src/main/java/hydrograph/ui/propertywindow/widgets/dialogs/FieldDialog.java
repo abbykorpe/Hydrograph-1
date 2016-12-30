@@ -127,6 +127,7 @@ public class FieldDialog extends Dialog {
 	private SashForm mainSashForm;
 	private Composite tableComposite;
 	private Composite container_1;
+	private boolean isPrimaryKeyDialog = false;
 
 	public FieldDialog(Shell parentShell, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(parentShell);
@@ -255,6 +256,7 @@ public class FieldDialog extends Dialog {
 		}
 		if(Messages.PRIMARY_KEYS_WINDOW_LABEL.equalsIgnoreCase(componentName)){
 			getShell().setText(Messages.PRIMARY_KEYS_WINDOW_LABEL);
+			isPrimaryKeyDialog  =true;
 		}
 		
 		if(OSValidator.isMac()){
@@ -496,6 +498,9 @@ public class FieldDialog extends Dialog {
 
 		CellEditor[] editors = new CellEditor[] { propertyNameEditor };
 		propertyNameEditor.setValidator(createNameEditorValidator(PROPERTY_NAME_BLANK_ERROR));
+		if(isPrimaryKeyDialog){
+			propertyNameEditor.setValidator(validateTargetFieldCells(Messages.PRIMARY_KEY_VALIDATION));
+		}
 
 		targetTableViewer.setColumnProperties(PROPS);
 		targetTableViewer.setCellModifier(new ELTCellModifier(targetTableViewer));
@@ -516,6 +521,9 @@ public class FieldDialog extends Dialog {
 		dropTarget.addDropListener(new DropTargetAdapter() {
 			public void drop(DropTargetEvent event) {
 				operationOnDrop(event);
+				if(isPrimaryKeyDialog){
+					validateTargetFieldOnDrop();
+				}
 			}
 
 		});
@@ -523,10 +531,12 @@ public class FieldDialog extends Dialog {
 		attachShortcutListner(Constants.PROPERTY_NAME);
 		
 		targetTable.addMouseListener(new SingleClickEvent(new Runnable() {
-			
 			@Override
 			public void run() {
 				validate();
+				if(isPrimaryKeyDialog){
+					validateTargetFieldOnDrop();
+				}
 			}
 		}));
 		
@@ -823,6 +833,53 @@ public class FieldDialog extends Dialog {
 		}
 	}
 
+	/**
+	 * The Function will match Target Field Values with available fields
+	 */
+	private void validateTargetFieldOnDrop(){
+		boolean result = propertyList.stream().anyMatch(item -> !sourceFieldsList.contains(item.getPropertyname()));
+			if(result){
+				lblPropertyError.setVisible(true);
+				lblPropertyError.setText(Messages.PRIMARY_KEY_VALIDATION);
+				okButton.setEnabled(false);
+				return;
+			}else{
+				okButton.setEnabled(true);
+				lblPropertyError.setVisible(false);
+				lblPropertyError.setText("");
+			}
+	} 
+	
+	/**
+	 * The Function will validate Target table values
+	 * @param text
+	 */
+	private ICellEditorValidator validateTargetFieldCells(String message){
+		ICellEditorValidator propertyValidator = new ICellEditorValidator() {
+			@Override
+			public String isValid(Object value) {
+				isAnyUpdatePerformed = true;
+				String valueToValidate = String.valueOf(value).trim();
+				if(!sourceFieldsList.isEmpty()){
+					if(!sourceFieldsList.contains(valueToValidate)){
+						lblPropertyError.setVisible(true);
+						lblPropertyError.setText(message);
+						targetTable.getItem(targetTable.getSelectionIndex()).setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+						okButton.setEnabled(false);
+					}else{
+						okButton.setEnabled(true);
+						lblPropertyError.setVisible(false);
+						lblPropertyError.setText("");
+						targetTable.getItem(targetTable.getSelectionIndex()).setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+					}
+				}
+				validateTargetFieldOnDrop();
+				return null;
+			}
+		};
+		return propertyValidator;
+	} 
+	
 	@Override
 	protected void okPressed() {
 		

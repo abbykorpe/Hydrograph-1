@@ -24,3 +24,4 @@ Issues/Defects fixed:
 13.#555 [Ashika Holkar] - Need to remove 'Validate' option 
 12.#569 [Nitin Gupta]	-	Union All component: Error icon is not getting removed from schema tab
 13.#547 [Shrirang Kumbhar] - Remote Run: Tool lock user ID if user enter incorrect password single time
+14.#563 [Vibhor Tyagi] -  Error Message is not getting displayed when User gives primary key other than the available fields
