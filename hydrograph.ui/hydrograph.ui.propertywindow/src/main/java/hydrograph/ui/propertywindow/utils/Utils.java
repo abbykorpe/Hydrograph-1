@@ -13,17 +13,6 @@
 
 package hydrograph.ui.propertywindow.utils;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.JoinMappingGrid;
-import hydrograph.ui.datastructure.property.LookupMapProperty;
-import hydrograph.ui.datastructure.property.LookupMappingGrid;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.datastructure.property.mapping.TransformMapping;
-import hydrograph.ui.propertywindow.messages.Messages;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,18 +34,26 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.FileStoreEditorInput;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.JoinMappingGrid;
+import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.datastructure.property.LookupMappingGrid;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * 
@@ -212,7 +209,8 @@ public class Utils {
 	 public String getParamValue(String value){
 			if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
 			String param = null;
-			value = value.substring(value.indexOf("{") + 1).substring(0, value.substring(value.indexOf("{") + 1).indexOf("}"));
+			value = StringUtils.replaceOnce(value, "@{", "");
+			value= StringUtils.replaceOnce(value, "}", "");
 			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
 				param = entry.getKey();
 			 if(StringUtils.equals(param, value)){
