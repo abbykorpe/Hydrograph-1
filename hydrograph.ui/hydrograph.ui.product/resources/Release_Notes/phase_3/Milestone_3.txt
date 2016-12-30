@@ -2,9 +2,9 @@
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
-1.<23-Dec-16> - [Vibhor Tyagi] - Mysql
-2.<27-Dec-16> - [Vibhor Tyagi] - RunProgram
-3.<20-Dec-16> - [Ashika Holkar] - Oracle
+1.<23-Dec-16> - [Vibhor Tyagi] - Created Mysql Component
+2.<27-Dec-16> - [Vibhor Tyagi] - Created RunProgram Component
+3.<20-Dec-16> - [Ashika Holkar] - Created Oracle Component
 
 =====================================================================================================
 Issues/Defects fixed:
@@ -16,3 +16,5 @@ Issues/Defects fixed:
 5.#561 [Vibhor Tyagi] Import job XML: For the Oracle component, the value 'Null' is getting displayed in the 'SID' and 'Oracle Schema' text fields
 6.#564 [Ashika Holkar] - Oracle component : New Table -> Primary keys textbox is not getting disabled when user switches from New Table option to Insert
 7.#559 [Ashika Holkar] - Oracle input component: Error message is not getting displayed
+8.#570 [Vibhor Tyagi] - Oracle and Mysql components: Password field shouldn't be get disabled
+9.#565 [Vibhor Tyagi] -  Issues with Oracle and Mysql component 

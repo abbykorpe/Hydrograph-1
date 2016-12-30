@@ -10,8 +10,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
- 
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import java.util.ArrayList;
@@ -53,6 +51,11 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 
 
+/**
+ * The Class TextBoxWithIsParameterCheckBoxWidget For DatabaseComponents
+ * @author Bitwise
+ *
+ */
 public class TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents extends TextBoxWithLabelWidget {
 
 	private PropertyDialogButtonBar propDialogButtonBar;
@@ -144,9 +147,7 @@ public class TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents extends T
 				if(StringUtils.isNotBlank(textBox.getText())){
 					String parameterText = Constants.PARAMETER_PREFIX + textBox.getText() + Constants.PARAMETER_SUFFIX;
 					if (((Button) isParameterCheckbox.getSWTWidgetControl()).getSelection()) {
-						if(((Button) isParameterCheckbox.getSWTWidgetControl()).getSelection()){
 							textBox.setText(parameterText);
-						}
 					}
 				}
 			}
