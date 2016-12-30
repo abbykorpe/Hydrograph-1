@@ -132,8 +132,8 @@ public class DebugServiceClient {
 	 * @throws HttpException
 	 * @throws IOException
 	 */
-	public String readMetaStoreDb(MetaDataDetails metaDataDetails) throws NumberFormatException, HttpException, IOException {
-		PostMethod method=Provider.INSTANCE.readMetaDataMethod(metaDataDetails);
+	public String readMetaStoreDb(MetaDataDetails metaDataDetails, String host, String port) throws NumberFormatException, HttpException, IOException {
+		PostMethod method=Provider.INSTANCE.readMetaDataMethod(metaDataDetails,host,port);
 		executePostMethod(method);
 		return method.getResponseBodyAsString();
 	}

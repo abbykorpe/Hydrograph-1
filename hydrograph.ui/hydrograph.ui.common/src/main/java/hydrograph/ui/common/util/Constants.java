@@ -302,14 +302,14 @@ public class Constants {
 	
 
 	// Oracle Component
-	public static final String ORACLE_DATABASE_WIDGET_NAME="sid";
-	public static final String ORACLE_CHUNKSIZE_WIDGET_NAME="chunkSize";
-	public static final String ORACLE_HOST_WIDGET_NAME="hostName";
-	public static final String ORACLE_PORT_WIDGET_NAME="port";
-	public static final String ORACLE_JDBC_DRIVER_WIDGET_NAME="jdbcDriver";
-	public static final String ORACLE_SCHEMA_WIDGET_NAME="oracleSchema";
-	public static final String ORACLE_USER_NAME_WIDGET_NAME="userName";
-	public static final String ORACLE_PASSWORD_WIDGET_NAME="password";
+	public static final String ORACLE_SID_WIDGET_NAME="sid";
+	public static final String CHUNKSIZE_WIDGET_NAME="chunkSize";
+	public static final String HOST_WIDGET_NAME="hostName";
+	public static final String PORT_WIDGET_NAME="port";
+	public static final String JDBC_DRIVER_WIDGET_NAME="jdbcDriver";
+	public static final String SCHEMA_WIDGET_NAME="oracleSchema";
+	public static final String USER_NAME_WIDGET_NAME="userName";
+	public static final String PASSWORD_WIDGET_NAME="password";
 	public static final String LOAD_TYPE_UPDATE_KEY = "Update";
 	public static final String LOAD_TYPE_NEW_TABLE_KEY = "New Table";
 	public static final String LOAD_TYPE_INSERT_KEY = "Insert";

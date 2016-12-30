@@ -161,7 +161,7 @@ public class ELTExtractMetaStoreDataWidget extends AbstractWidget {
 		try {
 
 			ObjectMapper mapper = new ObjectMapper();
-			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(getMetaDataDetails(userCredentials, host, port_no));
+			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(getMetaDataDetails(userCredentials, host, port_no),host,port_no);
 			hiveTableSchema = mapper.readValue(jsonResponse,
 					HiveTableSchema.class);
 

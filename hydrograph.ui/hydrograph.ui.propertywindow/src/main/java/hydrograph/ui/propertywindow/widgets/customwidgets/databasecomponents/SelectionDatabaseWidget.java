@@ -37,7 +37,10 @@ import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -49,7 +52,8 @@ import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.DatabaseTableSchema;
+import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.HiveTableSchema;
+import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.HiveTableSchemaField;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -61,6 +65,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTSubGroupCom
 import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
@@ -92,9 +97,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	private String sqlQueryStatement;
 	private Text sqlQueryCountertextbox;
 	private ModifyListener sqlQueryCounterModifyListner;
-	private static final String ORACLE = "Oracle";
-	private static final String REDSHIFT = "RedShift";
-	private static final String MYSQL = "Mysql";
+	private static final String ORACLE = "oracle";
+	private static final String REDSHIFT = "redshift";
+	private static final String MYSQL = "mysql";
 	
 
 	public SelectionDatabaseWidget(ComponentConfigrationProperty componentConfigProp,
@@ -443,41 +448,45 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 */
 	private DatabaseParameterType getDatabaseConnectionDetails() {
 		DatabaseParameterType parameterType = null;
-		String oracleDatabaseName = "";
-		String oracleHostName = "";
-		String oraclePortNo= "";
-		String oracleJdbcName= "";
-		String oracleSchemaName= "";
-		String oracleUserName= "";
-		String oraclePassword= "";
+		String databaseName = "";
+		String hostName = "";
+		String portNo= "";
+		String jdbcName= "";
+		String schemaName= "";
+		String userName= "";
+		String password= "";
+		String sid= "";
 		
 		for (AbstractWidget textAbtractWgt : widgets) {
 			if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_DATABASE_WIDGET_NAME)) {
-				oracleDatabaseName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_DATABASE_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.DATABASE_WIDGET_NAME)) {
+				databaseName = (String) textAbtractWgt.getProperties().get(Constants.DATABASE_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_HOST_WIDGET_NAME)) {
-				oracleHostName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_HOST_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.HOST_WIDGET_NAME)) {
+				hostName = (String) textAbtractWgt.getProperties().get(Constants.HOST_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_PORT_WIDGET_NAME)) {
-				oraclePortNo = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PORT_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.PORT_WIDGET_NAME)) {
+				portNo = (String) textAbtractWgt.getProperties().get(Constants.PORT_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_JDBC_DRIVER_WIDGET_NAME)) {
-				oracleJdbcName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_JDBC_DRIVER_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.JDBC_DRIVER_WIDGET_NAME)) {
+				jdbcName = (String) textAbtractWgt.getProperties().get(Constants.JDBC_DRIVER_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_SCHEMA_WIDGET_NAME)) {
-				oracleSchemaName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_SCHEMA_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.SCHEMA_WIDGET_NAME)) {
+				schemaName = (String) textAbtractWgt.getProperties().get(Constants.SCHEMA_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_USER_NAME_WIDGET_NAME)) {
-				oracleUserName = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_USER_NAME_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.USER_NAME_WIDGET_NAME)) {
+				userName = (String) textAbtractWgt.getProperties().get(Constants.USER_NAME_WIDGET_NAME);
 			} else if (textAbtractWgt.getProperty().getPropertyName()
-					.equalsIgnoreCase(Constants.ORACLE_PASSWORD_WIDGET_NAME)) {
-				oraclePassword = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_PASSWORD_WIDGET_NAME);
+					.equalsIgnoreCase(Constants.PASSWORD_WIDGET_NAME)) {
+				password = (String) textAbtractWgt.getProperties().get(Constants.PASSWORD_WIDGET_NAME);
+			}else if (textAbtractWgt.getProperty().getPropertyName()
+					.equalsIgnoreCase(Constants.ORACLE_SID_WIDGET_NAME)) {
+				sid = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_SID_WIDGET_NAME);
 			}
 			
-			parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), oracleHostName, 
-					oraclePortNo, oracleUserName, oraclePassword).jdbcName(oracleJdbcName).schemaName(oracleSchemaName)
-					.databaseName(oracleDatabaseName).build();
+			parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), hostName, 
+					portNo, userName, password).jdbcName(jdbcName).schemaName(schemaName)
+					.databaseName(databaseName).sid(sid).build();
 			
 		}
 		return parameterType;
@@ -514,11 +523,18 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 	private void validateDatabaseFields(DatabaseParameterType parameterType){
 		
-		if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
-				|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
-				|| StringUtils.isEmpty(parameterType.getSchemaName()) || StringUtils.isEmpty(parameterType.getUserName())
-				|| StringUtils.isEmpty(parameterType.getPassword())) {
+		if(parameterType.getDataBaseType().equalsIgnoreCase(ORACLE)){
+			if ( StringUtils.isEmpty(parameterType.getHostName())|| StringUtils.isEmpty(parameterType.getJdbcName())
+				|| StringUtils.isEmpty(parameterType.getPortNo())|| StringUtils.isEmpty(parameterType.getUserName())
+				|| StringUtils.isEmpty(parameterType.getSid())|| StringUtils.isEmpty(parameterType.getPassword())) {
 			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+			}
+		}else{
+			if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
+					|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
+					|| StringUtils.isEmpty(parameterType.getUserName()) || StringUtils.isEmpty(parameterType.getPassword())) {
+				createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+			}
 		}
 	}
 	
@@ -554,60 +570,16 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
 			validateDatabaseFields(parameterType);
 		
-			DatabaseTableSchema databaseTableSchema = DataBaseUtility.getInstance()
+			HiveTableSchema databaseTableSchema = DataBaseUtility.getInstance()
 					.extractDatabaseDetails(oracleDatabaseValues, parameterType,host);
-		/*try {
 			
-			//TODO
-			 * Below code will to extract data from metastore
-			ObjectMapper mapper = new ObjectMapper();
-			String input = oracleDatabaseName + SEPARATOR + oracleHostName + SEPARATOR + oracleJdbcName + SEPARATOR
-					+ oraclePassword + SEPARATOR + oraclePortNo + SEPARATOR + oracleUserName + SEPARATOR+ oracleSchemaName;
-			
-			
-			jsonResponse = DebugServiceClient.INSTANCE.readMetaStoreDb(input, host, port_no, oracleDatabaseValues);
-			DatabaseTableSchema databaseTableSchema = mapper.readValue(jsonResponse,
-					DatabaseTableSchema.class);
+			if (null != databaseTableSchema) {
 
-		} catch (NumberFormatException | HttpException | MalformedURLException exp) {
-			logger.error("Json to object Mapping issue ", exp);
-		} catch (IOException ex) {
-			logger.error("Json to object Mapping issue ", ex.getMessage());
-		}*/
-		
-		//TODO This functionality will used in the future for fetching the json response for RedShift,Oracle and SQL Component
-		/*if(null != oracleTableSchema){
-			if(databaseType.equalsIgnoreCase(oracleTableSchema.getDatabaseType())){
-				
 				for (AbstractWidget abstractWgt : widgets) {
 	
-					if (abstractWgt.getProperty().getPropertyName()
-							.equalsIgnoreCase(Constants.ORACLE_DATABASE_WIDGET_NAME)&& null != oracleTableSchema.getSid()) {
-						
-						abstractWgt.refresh(oracleTableSchema.getSid());
-				
-					}else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
-						
-						abstractWgt.refresh(getComponentSchema(oracleTableSchema));
-						
-					}else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.PARTITION_KEYS_WIDGET_NAME)
-							&& null != oracleTableSchema.getPartitionKeys()) {
-	
-						List<String> keys = new ArrayList<>(Arrays.asList(oracleTableSchema.getPartitionKeys().split(",")));
-						
-						List<Object> temp = new ArrayList<>();
-						temp.add(keys);
-						temp.add(getComponentSchema(oracleTableSchema));
-						
-						abstractWgt.refresh(temp);
-						
-					} else if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.EXTERNAL_TABLE_PATH_WIDGET_NAME)
-							&& null != oracleTableSchema.getExternalTableLocation()) {
-						
-						abstractWgt.refresh(oracleTableSchema.getExternalTableLocation());
+					if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
+						abstractWgt.refresh(getComponentSchema(databaseTableSchema));
 					}
-					
-					
 				}
 	
 			createMessageDialog(Messages.METASTORE_IMPORT_SUCCESS,INFO).open();
@@ -616,20 +588,38 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		}else{
 			createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
 		 }
-	} else {
-		if(StringUtils.isNotBlank(jsonResponse)){
-			createMessageDialog(jsonResponse,ERROR).open();
-		}else{
-			createMessageDialog("Invalid Host Name:" +host,ERROR).open();
-		}
-		
-}*/
 		}
 		else{
 			createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
 		}
-		}
 	
+	}
+	/**
+	 * @param hiveTableSchema
+	 * @return
+	 */
+	private Schema getComponentSchema(HiveTableSchema hiveTableSchema) {
+		Schema schema = new Schema();
+		List<GridRow> rows = new ArrayList<>();
+
+		for (HiveTableSchemaField hsf : hiveTableSchema
+				.getSchemaFields()) {
+			BasicSchemaGridRow gridRow = new BasicSchemaGridRow();
+
+			gridRow.setFieldName(hsf.getFieldName());
+			gridRow.setDataTypeValue(hsf.getFieldType());
+			gridRow.setPrecision(hsf.getPrecision());
+			gridRow.setScale(hsf.getScale());
+			gridRow.setDateFormat(hsf.getFormat());
+			gridRow.setDataType(GridWidgetCommonBuilder
+					.getDataTypeByValue(hsf.getFieldType()));
+
+			rows.add(gridRow);
+		}
+
+		schema.setGridRow(rows);
+		return schema;
+	}
 
 	/**
 	 * Create the message dialog
