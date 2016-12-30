@@ -14,7 +14,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_file_palette.png" canvasIconPath="/icons/input_file_canvas.png"
-		name="IFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="IFixedWidth" 
+		name="IFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="IFFixedWidth" 
 		description="Used to read any Fixed Width text file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_File_Fixed_Width.html"
 		acronym="IFxd">

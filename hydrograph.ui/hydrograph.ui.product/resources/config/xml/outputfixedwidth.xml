@@ -14,7 +14,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/output_file_palette.png" canvasIconPath="/icons/output_file_canvas.png"
-		name="OFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="OFixedWidth" 
+		name="OFixedWidth" nameInPalette="File Fixed Width" defaultNamePrefix="OFFixedWidth" 
 		description="Used to write output in fixed width text format."
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_File_Fixed_Width.html"
 		acronym="OFxd">
