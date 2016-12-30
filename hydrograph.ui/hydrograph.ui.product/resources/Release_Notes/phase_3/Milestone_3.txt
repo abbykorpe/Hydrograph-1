@@ -18,3 +18,4 @@ Issues/Defects fixed:
 7.#559 [Ashika Holkar] - Oracle input component: Error message is not getting displayed
 8.#570 [Vibhor Tyagi] - Oracle and Mysql components: Password field shouldn't be get disabled
 9.#565 [Vibhor Tyagi] -  Issues with Oracle and Mysql component 
+10.#568 [Shrirang Kumbhar] - RemoveDups :- Change in component size after closing and reopening graph
