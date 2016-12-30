@@ -14,7 +14,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/removedups_palette.png" canvasIconPath="/icons/removedups_canvas.png"
-		name="RemovedupsComponent" nameInPalette="Remove Dups" defaultNamePrefix="Removedups" 
+		name="RemovedupsComponent" nameInPalette="Remove Dups" defaultNamePrefix="RmDups" 
 		description="Removes duplicates in the input data."
 		helpFilePath="/hydrograph.ui.help/html/Components/Remove_Dups.html"
 		acronym="RmDup">
