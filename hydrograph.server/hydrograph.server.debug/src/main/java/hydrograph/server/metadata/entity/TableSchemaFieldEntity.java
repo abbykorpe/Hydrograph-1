@@ -24,6 +24,26 @@ public class TableSchemaFieldEntity {
 	String precision = "";
 	String scale = "";
 	String format = "";
+	String scaleType = "";
+
+	/**
+	 * It may be implicit or explicit
+	 * 
+	 * @return String scale type to get
+	 */
+	public String getScaleType() {
+		return scaleType;
+	}
+
+	/**
+	 * It may be implicit or explicit
+	 * 
+	 * @param String
+	 *            scale type to set
+	 */
+	public void setScaleType(String scaleType) {
+		this.scaleType = scaleType;
+	}
 
 	/**
 	 * 

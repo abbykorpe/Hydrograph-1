@@ -40,9 +40,10 @@ public class HydrographServiceClient {
 	public void chcekConnectionStatus() throws ClientProtocolException, IOException {
 
 		HttpClient httpClient = new HttpClient();
-		
+
 		String oraclejson = "{\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-	//	String mysqljson = "{\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test1\",\"dbtype\":\"mysql\"}";
+		// String mysqljson =
+		// "{\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test1\",\"dbtype\":\"mysql\"}";
 		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/getConnectionStatus");
 
 		postMethod.addParameter("request_parameters", oraclejson);
@@ -70,8 +71,9 @@ public class HydrographServiceClient {
 		// testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
 		// String oraclejson =
 		// "{\"table\":\"testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-		String oraclejson = "{\"table\":\" \",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-		//String mysqljson = "{\"query\":\"Select * from ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
+		String oraclejson = "{\"table\":\"testingfinal2\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		// String mysqljson = "{\"query\":\"Select * from
+		// ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
 		// String mysqljson = "{\"query\":\"Select * from
 		// ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
 		// String mysqljson =
@@ -171,8 +173,8 @@ public class HydrographServiceClient {
 			System.out.println("+++ Start: " + new Timestamp((new Date()).getTime()));
 			// client.calltoReadService();
 			// client.calltoFilterService();
-			//client.calltoReadMetastore();
-			client.chcekConnectionStatus();
+			client.calltoReadMetastore();
+			// client.chcekConnectionStatus();
 			// client.calltoDeleteLocalDebugService();
 			System.out.println("done:");
 			System.out.println("+++ End: " + new Timestamp((new Date()).getTime()));
