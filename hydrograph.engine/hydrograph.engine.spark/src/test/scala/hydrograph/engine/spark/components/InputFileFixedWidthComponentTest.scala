@@ -1,119 +1,232 @@
 package hydrograph.engine.spark.components
 
+import java.util
+import hydrograph.engine.spark.components.platform.BaseComponentParams
+import org.junit.{ Test, Assert, Before }
+import org.junit.Assert
 import org.apache.spark.SparkException
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.types._
-import org.junit.{Assert, Test}
+import org.apache.spark.sql._
+import hydrograph.engine.core.component.entity.elements.OutSocket
+import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.component.entity.InputFileFixedWidthEntity
 
 class InputFileFixedWidthComponentTest {
-  //given
-  val spark = SparkSession.builder()
-    .appName("Spark Test Class")
-    .master("local")
-    .config("spark.sql.warehouse.dir", "file:///c:/tmp/spark-warehouse")
-    .getOrCreate()
-
-  val schema: StructType = StructType(List(
-    StructField("ID", IntegerType, nullable = true),
-    StructField("Name", StringType, nullable = true)))
-
-  val incorrectSchema: StructType = StructType(List(
-    StructField("ID", IntegerType, nullable = true),
-    StructField("Name", IntegerType, nullable = true)))
-
-  val inputPathCase: String = "testData/inputFiles/fixed.txt"
-
-  val dateFormats: String = "null" + "\t" + "null"
-
 
   /**
-    * Test case for correct schema
-    */
+   * Test case for correct schema
+   */
+  
   @Test
   def itShouldCheckStrictAndSafeForCorrectInputFormatAndCorrectLength(): Unit = {
 
+    //given
+
+    val inputPathCase: String = "testData/inputFiles/fixed.txt"
+
+    val sf1 = new SchemaField("ID", "java.lang.Integer");
+    val sf2 = new SchemaField("Name", "java.lang.String");
+    sf1.setFieldLength(3)
+    sf2.setFieldLength(3)
+    val fieldList: util.List[SchemaField] = new util.ArrayList[SchemaField]();
+    fieldList.add(sf1)
+    fieldList.add(sf2)
+
+    val cp: BaseComponentParams = new BaseComponentParams
+
+    val inputFileFixedWidthEntity: InputFileFixedWidthEntity = new InputFileFixedWidthEntity
+    inputFileFixedWidthEntity.setComponentId("inpuFileFixedWidth");
+    inputFileFixedWidthEntity.setPath(inputPathCase)
+    inputFileFixedWidthEntity.setStrict(true)
+    inputFileFixedWidthEntity.setSafe(false)
+    inputFileFixedWidthEntity.setCharset("UTF-8")
+    inputFileFixedWidthEntity.setFieldsList(fieldList)
+
+    val outSockets = new util.ArrayList[OutSocket]();
+    outSockets.add(new OutSocket("outSocket"));
+
+    inputFileFixedWidthEntity.setOutSocketList(outSockets)
+
+    val sparkSession = SparkSession.builder()
+      .master("local")
+      .appName("testing")
+      .config("spark.sql.shuffle.partitions", "1")
+      .config("spark.sql.warehouse.dir", "file:///tmp")
+      .getOrCreate()
+
+    cp.setSparkSession(sparkSession)
+
     //when
 
-    val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.datasource.fixedwidth")
-      .option("dateFormats", dateFormats)
-      .option("charset", "UTF-8")
-      .option("length", Array(3,3).mkString(","))
-      .option("strict", "true")
-      .option("safe", "false")
-      .load(inputPathCase)
+    val df: Map[String, DataFrame] = new InputFileFixedWidthComponent(inputFileFixedWidthEntity, cp).createComponent()
 
     //Then
-    Assert.assertEquals(2, df.first().size)
-    Assert.assertEquals("[123,abc]", df.first().toString())
+
+    val expectedSize: Int = 2
+    val expectedResult: String = "[123,abc]"
+    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
 
   }
 
   /**
-    * Test case for incorrect data type
-    */
+   * Test case for incorrect data type
+   */
   @Test(expected = classOf[SparkException])
   def itShouldThrowExceptionForIncorrectDataTypeWhenSafeFalse(): Unit = {
 
+    //given
+    val inputPathCase: String = "testData/inputFiles/fixed.txt"
+
+    val sf1 = new SchemaField("ID", "java.lang.Integer");
+    val sf2 = new SchemaField("Name", "java.lang.Integer");
+    sf1.setFieldLength(3)
+    sf2.setFieldLength(3)
+
+    val fieldList: util.List[SchemaField] = new util.ArrayList[SchemaField]();
+    fieldList.add(sf1)
+    fieldList.add(sf2)
+
+    val cp: BaseComponentParams = new BaseComponentParams
+    val inputFileFixedWidthEntity: InputFileFixedWidthEntity = new InputFileFixedWidthEntity
+    inputFileFixedWidthEntity.setComponentId("inpuFileFixedWidth");
+    inputFileFixedWidthEntity.setPath(inputPathCase)
+    inputFileFixedWidthEntity.setStrict(true)
+    inputFileFixedWidthEntity.setSafe(false)
+    inputFileFixedWidthEntity.setCharset("UTF-8")
+    inputFileFixedWidthEntity.setFieldsList(fieldList)
+
+    val outSockets = new util.ArrayList[OutSocket]();
+    outSockets.add(new OutSocket("outSocket"));
+
+    inputFileFixedWidthEntity.setOutSocketList(outSockets)
+
+    val sparkSession = SparkSession.builder()
+      .master("local")
+      .appName("testing")
+      .config("spark.sql.shuffle.partitions", "1")
+      .config("spark.sql.warehouse.dir", "file:///tmp")
+      .getOrCreate()
+
+    cp.setSparkSession(sparkSession)
+
     //when
-    val df = spark.read.schema(incorrectSchema)
-      .format("hydrograph.engine.spark.datasource.fixedwidth")
-      .option("dateFormats", dateFormats)
-      .option("charset", "UTF-8")
-      .option("length", Array(3,3).mkString(","))
-      .option("strict", "true")
-      .option("safe", "false")
-      .load(inputPathCase)
+
+    val df: Map[String, DataFrame] = new InputFileFixedWidthComponent(inputFileFixedWidthEntity, cp).createComponent()
 
     //Then
-    Assert.assertEquals(2, df.first().size)
-    //    Assert.assertEquals("[123,null]", df.first().toString())
+
+    val expectedSize: Int = 2
+    val expectedResult: String = "[123,null]"
+    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
 
   }
 
   /**
-    * Test case for malformed row
-    */
+   * Test case for malformed row
+   */
   @Test(expected = classOf[SparkException])
-  def itShouldTrowExceptionForMalformedRowWhenStrictTrue(): Unit = {
+  def itShouldThrowExceptionForMalformedRowWhenStrictTrue(): Unit = {
+
+    //given
+    val inputPathCase: String = "testData/inputFiles/fixed.txt"
+
+    val sf1 = new SchemaField("ID", "java.lang.Integer");
+    val sf2 = new SchemaField("Name", "java.lang.String");
+    sf1.setFieldLength(3)
+    sf2.setFieldLength(4)
+
+    val fieldList: util.List[SchemaField] = new util.ArrayList[SchemaField]();
+    fieldList.add(sf1)
+    fieldList.add(sf2)
+
+    val cp: BaseComponentParams = new BaseComponentParams
+    val inputFileFixedWidthEntity: InputFileFixedWidthEntity = new InputFileFixedWidthEntity
+    inputFileFixedWidthEntity.setComponentId("inpuFileFixedWidth");
+
+    inputFileFixedWidthEntity.setPath(inputPathCase)
+    inputFileFixedWidthEntity.setStrict(true)
+    inputFileFixedWidthEntity.setSafe(false)
+    inputFileFixedWidthEntity.setCharset("UTF-8")
+    inputFileFixedWidthEntity.setFieldsList(fieldList)
+    val outSockets = new util.ArrayList[OutSocket]();
+    outSockets.add(new OutSocket("outSocket"));
+
+    inputFileFixedWidthEntity.setOutSocketList(outSockets)
+
+    val sparkSession = SparkSession.builder()
+      .master("local")
+      .appName("testing")
+      .config("spark.sql.shuffle.partitions", "1")
+      .config("spark.sql.warehouse.dir", "file:///tmp")
+      .getOrCreate()
+
+    cp.setSparkSession(sparkSession)
 
     //when
 
-    val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.datasource.fixedwidth")
-      .option("dateFormats", dateFormats)
-      .option("charset", "UTF-8")
-      .option("length", Array(3,4).mkString(","))
-      .option("strict", "true")
-      .option("safe", "false")
-      .load(inputPathCase)
+    val df: Map[String, DataFrame] = new InputFileFixedWidthComponent(inputFileFixedWidthEntity, cp).createComponent()
 
     //Then
-    Assert.assertEquals(2, df.first().size)
-    //    Assert.assertEquals("[123,null]", df.first().toString())
+
+    val expectedSize: Int = 2
+    val expectedResult: String = "[123,abc]"
+    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
 
   }
 
   /**
-    * Test case for malformed row
-    */
+   * Test case for malformed row
+   */
+
   @Test
-  def itShouldNotTrowExceptionForMalformedRowWhenStrictFalse(): Unit = {
+  def itShouldNotThrowExceptionForMalformedRowWhenStrictFalse(): Unit = {
+
+    //given
+    val inputPathCase: String = "testData/inputFiles/fixed.txt"
+
+    val sf1 = new SchemaField("ID", "java.lang.Integer");
+    val sf2 = new SchemaField("Name", "java.lang.String");
+    sf1.setFieldLength(3)
+    sf2.setFieldLength(2)
+    val fieldList: util.List[SchemaField] = new util.ArrayList[SchemaField]();
+    fieldList.add(sf1)
+    fieldList.add(sf2)
+
+    val cp: BaseComponentParams = new BaseComponentParams
+    val inputFileFixedWidthEntity: InputFileFixedWidthEntity = new InputFileFixedWidthEntity
+    inputFileFixedWidthEntity.setComponentId("inpuFileFixedWidth");
+
+    inputFileFixedWidthEntity.setPath(inputPathCase)
+    inputFileFixedWidthEntity.setStrict(false)
+    inputFileFixedWidthEntity.setSafe(false)
+    inputFileFixedWidthEntity.setCharset("UTF-8")
+    inputFileFixedWidthEntity.setFieldsList(fieldList)
+    val outSockets = new util.ArrayList[OutSocket]();
+    outSockets.add(new OutSocket("outSocket"));
+
+    inputFileFixedWidthEntity.setOutSocketList(outSockets)
+
+    val sparkSession = SparkSession.builder()
+      .master("local")
+      .appName("testing")
+      .config("spark.sql.shuffle.partitions", "1")
+      .config("spark.sql.warehouse.dir", "file:///tmp")
+      .getOrCreate()
+
+    cp.setSparkSession(sparkSession)
 
     //when
 
-    val df = spark.read.schema(schema)
-      .format("hydrograph.engine.spark.datasource.fixedwidth")
-      .option("dateFormats", dateFormats)
-      .option("charset", "UTF-8")
-      .option("length", Array(3, 2).mkString(","))
-      .option("strict", "false")
-      .option("safe", "false")
-      .load(inputPathCase)
+    val df: Map[String, DataFrame] = new InputFileFixedWidthComponent(inputFileFixedWidthEntity, cp).createComponent()
 
     //Then
-    Assert.assertEquals(2, df.first().size)
-    //    Assert.assertEquals("[123,null]", df.first().toString())
+
+    val expectedSize: Int = 2
+    //val expectedResult: String = "[123,ab]"
+    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+   // Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
 
   }
 }
