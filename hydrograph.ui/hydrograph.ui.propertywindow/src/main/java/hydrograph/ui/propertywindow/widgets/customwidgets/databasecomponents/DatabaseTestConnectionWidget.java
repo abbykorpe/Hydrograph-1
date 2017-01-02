@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,6 +24,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
@@ -54,6 +57,10 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	protected ControlDecoration buttonDecorator;
 	private Button testConnectionButton;
 	private ArrayList<AbstractWidget> widgets;
+	private static final String ERROR = "ERR";
+	private static final String ORACLE = "oracle";
+	private static final String REDSHIFT = "redshift";
+	private static final String MYSQL = "mysql";
 	
 	public DatabaseTestConnectionWidget(
 			ComponentConfigrationProperty componentConfigProp,
@@ -99,6 +106,19 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		setDecoratorsVisibility();
 		
 	}
+	
+	private String getComponentType(){
+		if(StringUtils.equalsIgnoreCase(getComponent().getType(), ORACLE)){
+			return ORACLE;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), REDSHIFT)){
+			return REDSHIFT;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
+			return MYSQL;
+		}
+		return "";
+	}
+	
+	
 
 	/**
 	 * Attaches selection listener on TestConnection button
@@ -111,12 +131,63 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 				//TODO
 				/*Below code will use to test connection with database.
 				 * */
-				DatabaseParameterType databaseParameterType = getDatabaseConnectionDetails();
+				String host = DataBaseUtility.getInstance().getServiceHost();
+				
+				if(null!=host&& StringUtils.isNotBlank(host)){
+					
+					DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
+					validateDatabaseFields(parameterType);
+				
+					DataBaseUtility.getInstance().testDBConnection(parameterType,host);
+				
+				}else{
+					createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
+				}
 			}
+				
 		});
 		
 	}
 	
+	
+	private void validateDatabaseFields(DatabaseParameterType parameterType){
+		
+		if(parameterType.getDataBaseType().equalsIgnoreCase(ORACLE)){
+			if ( StringUtils.isEmpty(parameterType.getHostName())|| StringUtils.isEmpty(parameterType.getJdbcName())
+				|| StringUtils.isEmpty(parameterType.getPortNo())|| StringUtils.isEmpty(parameterType.getUserName())
+				|| StringUtils.isEmpty(parameterType.getSid())|| StringUtils.isEmpty(parameterType.getPassword())) {
+			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+			}
+		}else{
+			if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
+					|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
+					|| StringUtils.isEmpty(parameterType.getUserName()) || StringUtils.isEmpty(parameterType.getPassword())) {
+				createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+			}
+		}
+	}
+	
+	/**
+	 * Create the message dialog
+	 * @param errorMessage
+	 * @return
+	 */
+	public MessageBox createMessageDialog(String errorMessage, String messageType) {
+
+		MessageBox messageBox = null;
+		if ("INF".equalsIgnoreCase(messageType)) {
+			messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
+			messageBox.setText("Information");
+
+		} else {
+			messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);
+			messageBox.setText("Error");
+		}
+
+		messageBox.setMessage(errorMessage);
+		return messageBox;
+	}
+
 	/**
 	 * Provides the value for all the DB details
 	 * @return 
@@ -162,7 +233,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 
 		}
 		
-		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(dataBaseType, hostName, 
+		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), hostName, 
 				portNo, userName, password).jdbcName(jdbcName).schemaName(schemaName)
 				.databaseName(databaseName).sid(sid).build();
 

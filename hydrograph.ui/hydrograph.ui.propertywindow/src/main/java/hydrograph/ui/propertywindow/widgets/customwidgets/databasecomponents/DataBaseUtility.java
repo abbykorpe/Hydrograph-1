@@ -39,6 +39,7 @@ public class DataBaseUtility {
 	private static DataBaseUtility INSTANCE = new DataBaseUtility();
 
 	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
+	private String  connection_response;
 	
 	
 	/**
@@ -81,6 +82,28 @@ public class DataBaseUtility {
 	}
 	
 	/**
+	 * @param dataBaseTables
+	 * @param parameterType
+	 * @return
+	 */
+	
+	public String testDBConnection(DatabaseParameterType parameterType, String host){
+		String jsonResponse = "";
+		String port_no = getServicePort();
+		
+		try {
+			jsonResponse = DebugServiceClient.INSTANCE.connectToDatabase(getTestConnectionDetails(parameterType),host,port_no);
+			ObjectMapper mapper = new ObjectMapper();
+		  connection_response ="" ;/*= mapper.readValue(jsonResponse);*/
+		} catch (NumberFormatException | HttpException exception) {
+			logger.error("Json to object Mapping issue ", exception);
+		} catch (IOException exception) {
+			logger.error("Json to object Mapping issue ", exception);
+		}
+		return connection_response;
+	}
+	
+	/**
 	 * @return host value
 	 */
 	public String getServiceHost(){
@@ -95,6 +118,12 @@ public class DataBaseUtility {
 				PreferenceConstants.DEFAULT_PORT_NO, null);
 	}
 	
+	/***
+	 * 
+	 * @param dataBaseTables
+	 * @param parameterType
+	 * @return connectionDetails
+	 */
 	private MetaDataDetails getMetaDataDetails(List<String> dataBaseTables,DatabaseParameterType parameterType) {
 		MetaDataDetails connectionDetails = new MetaDataDetails();
         connectionDetails.setDbType(parameterType.getDataBaseType());
@@ -107,6 +136,24 @@ public class DataBaseUtility {
         connectionDetails.setDriverType(parameterType.getJdbcName());
         connectionDetails.setSid(parameterType.getSid());
 		return connectionDetails;
+	}
+	
+	/**
+	 * 
+	 * @param parameterType
+	 * @return connectionDetails
+	 */
+	private MetaDataDetails getTestConnectionDetails(DatabaseParameterType parameterType) {
+		MetaDataDetails testConnectionDetails = new MetaDataDetails();
+        testConnectionDetails.setDbType(parameterType.getDataBaseType());
+        testConnectionDetails.setHost(parameterType.getHostName());
+        testConnectionDetails.setPort(parameterType.getPortNo());
+        testConnectionDetails.setUserId(parameterType.getUserName());
+        testConnectionDetails.setPassword(parameterType.getPassword());
+        testConnectionDetails.setDatabase(parameterType.getDatabaseName());
+        testConnectionDetails.setDriverType(parameterType.getJdbcName());
+        testConnectionDetails.setSid(parameterType.getSid());
+		return testConnectionDetails;
 	}
 	
 }

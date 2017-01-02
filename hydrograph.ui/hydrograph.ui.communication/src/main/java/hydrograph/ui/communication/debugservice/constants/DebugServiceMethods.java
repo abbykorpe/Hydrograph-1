@@ -26,4 +26,5 @@ public class DebugServiceMethods {
 	public static final String DELETE_BASEPATH_FILES="/delete";
 	public static final String GET_FILTERED_FILE_PATH = "/filter";
 	public static final String READ_METASTORE="/readFromMetastore";
+	public static final String TEST_CONNECTION="/getConnectionStatus";
 }
