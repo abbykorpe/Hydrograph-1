@@ -20,3 +20,4 @@ Issues/Defects fixed:
 9.#565 [Vibhor Tyagi] -  Issues with Oracle and Mysql component 
 10.#568 [Shrirang Kumbhar] - RemoveDups :- Change in component size after closing and reopening graph
 11.#548 [Nitin Gupta] - Output component: - Tool shows incorrect scheme on UI
+12.#569 [Nitin Gupta]	-	Union All component: Error icon is not getting removed from schema tab
