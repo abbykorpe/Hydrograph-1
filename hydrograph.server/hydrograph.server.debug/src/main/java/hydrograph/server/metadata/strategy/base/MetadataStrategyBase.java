@@ -27,5 +27,5 @@ import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
  */
 public interface MetadataStrategyBase {
 	public void metadataOperation(Map metadataOperationProperties)
-			throws SQLException, ParamsCannotBeNullOrEmpty, ClassNotFoundException;
+			throws SQLException, ParamsCannotBeNullOrEmpty, ClassNotFoundException, Exception;
 }

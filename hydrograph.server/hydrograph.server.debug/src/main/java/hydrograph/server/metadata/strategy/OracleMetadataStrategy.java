@@ -38,13 +38,13 @@ import hydrograph.server.metadata.strategy.base.MetadataStrategyTemplate;
  * @author amiyam
  */
 public class OracleMetadataStrategy extends MetadataStrategyTemplate {
-	Logger LOG = LoggerFactory.getLogger(OracleMetadataStrategy.class);
-	final static String ORACLE_JDBC_CLASSNAME = "oracle.jdbc.OracleDriver";
+	private static final Logger LOG = LoggerFactory.getLogger(OracleMetadataStrategy.class);
+
 	Connection connection = null;
-    private String query=null, tableName=null;
+	private String query = null, tableName = null;
 
 	/**
-	 * Used to set the connection for RedShift
+	 * Used to set the connection for Oracle
 	 * 
 	 * @param connectionProperties
 	 *            - contain request params details
@@ -77,7 +77,7 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 						new ParamsCannotBeNullOrEmpty(Constants.PASSWORD + " not found in request parameter"))
 				.toString();
 		String jdbcUrl = "jdbc:oracle:" + driverType + "://@" + host + ":" + port + ":" + sid;
-		Class.forName(ORACLE_JDBC_CLASSNAME);
+		Class.forName(Constants.ORACLE_JDBC_CLASSNAME);
 		LOG.info("Connection url for oracle = '" + jdbcUrl + "'");
 		LOG.info("Connecting with '" + userId + "' user id.");
 		connection = DriverManager.getConnection(jdbcUrl, userId, password);
@@ -93,12 +93,13 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 	@Override
 	public TableEntity fillComponentSchema(Map componentSchemaProperties)
 			throws SQLException, ParamsCannotBeNullOrEmpty {
-        if(componentSchemaProperties.get(Constants.TABLENAME) != null)
-            tableName = componentSchemaProperties.get(Constants.TABLENAME).toString().trim();
-        else
-            query = componentSchemaProperties.get(Constants.QUERY).toString().trim();
+		if (componentSchemaProperties.get(Constants.TABLENAME) != null)
+			tableName = componentSchemaProperties.get(Constants.TABLENAME).toString().trim();
+		else
+			query = componentSchemaProperties.get(Constants.QUERY).toString().trim();
 
-        LOG.info("Generating schema for mysql using " + ((tableName!=null)?"table : " + tableName : "query : " + query));
+		LOG.info("Generating schema for mysql using "
+				+ ((tableName != null) ? "table : " + tableName : "query : " + query));
 
 		ResultSet res = null;
 		TableEntity tableEntity = new TableEntity();
@@ -123,21 +124,24 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 			for (int count = 1; count < rsmd.getColumnCount() + 1; count++) {
 				TableSchemaFieldEntity tableSchemaFieldEntity = new TableSchemaFieldEntity();
 				tableSchemaFieldEntity.setFieldName(rsmd.getColumnLabel(count));
-				if (rsmd.getColumnClassName(count).equalsIgnoreCase("java.sql.Timestamp")) {
-					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss");
+				if (rsmd.getColumnTypeName(count).equalsIgnoreCase("timestamp")) {
+					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss:SSS");
+					tableSchemaFieldEntity.setFieldType("java.util.Date");
+				} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("date")) {
+					tableSchemaFieldEntity.setFormat("yyyy-MM-dd");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
 				} else {
-					tableSchemaFieldEntity.setFieldType(rsmd.getColumnClassName(count));
+					tableSchemaFieldEntity.setFieldType(getColumnType(rsmd, count, tableSchemaFieldEntity));
 				}
 				tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
 				tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 				tableSchemaFieldEntities.add(tableSchemaFieldEntity);
 			}
-            if(componentSchemaProperties.get(Constants.TABLENAME) == null)
-                tableEntity.setQuery(componentSchemaProperties.get(Constants.QUERY).toString()) ;
-            else
-                tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
-            tableEntity.setDatabaseName(componentSchemaProperties.get(Constants.dbType).toString());
+			if (componentSchemaProperties.get(Constants.TABLENAME) == null)
+				tableEntity.setQuery(componentSchemaProperties.get(Constants.QUERY).toString());
+			else
+				tableEntity.setTableName(componentSchemaProperties.get(Constants.TABLENAME).toString());
+			tableEntity.setDatabaseName(componentSchemaProperties.get(Constants.dbType).toString());
 			tableEntity.setSchemaFields(tableSchemaFieldEntities);
 			res.close();
 		} finally {
@@ -146,4 +150,25 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 		return tableEntity;
 	}
 
+	private String getColumnType(ResultSetMetaData rsmd, int count, TableSchemaFieldEntity tableSchemaFieldEntity)
+			throws SQLException {
+		if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 10
+				&& rsmd.getPrecision(count) > 5)) {
+			return "java.lang.Integer";
+		} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 5)) {
+			return "java.lang.Short";
+		} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19
+				&& rsmd.getScale(count) != 0)) {
+			return "java.lang.Double";
+		} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19
+				&& rsmd.getPrecision(count) > 10)) {
+			return "java.lang.Long";
+		} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) > 19) {
+			tableSchemaFieldEntity.setScaleType("explicit");
+			return "java.math.BigDecimal";
+		} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("char") && rsmd.getPrecision(count) == 1) {
+			return "java.lang.Boolean";
+		} else
+			return rsmd.getColumnClassName(count);
+	}
 }
