@@ -11,52 +11,35 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
-package hydrograph.ui.propertywindow.runconfig;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
+package hydrograph.ui.communication.messages;
 
 /**
  * 
- * This class is specially designed to handle notifications in RunConfigDialog
+ * A data structure to store message type and message text
  * 
  * @author Bitwise
  *
  */
-public class Notification {
-	private List<String> errors = new ArrayList<>();
-
-	public void addError(String message) {
-		errors.add(message);
+public class Message {
+	private MessageType messageType;
+	private String message;
+	
+	public Message(MessageType messageType, String message) {
+		super();
+		this.messageType = messageType;
+		this.message = message;
 	}
 
-	/**
-	 * 
-	 * Returns true if there are notifications added to the object
-	 * 
-	 * @return boolean
-	 */
-	public boolean hasErrors() {
-		return !errors.isEmpty();
+	public MessageType getMessageType() {
+		return messageType;
 	}
 
-	/**
-	 * 
-	 * Returns combined message for all added notifications
-	 * 
-	 * @return String - error message
-	 */
-	public String errorMessage() {
-		return StringUtils.join(errors, ",\n");
+	public String getMessage() {
+		return message;
 	}
 
 	@Override
 	public String toString() {
-		return "Notification [errors=" + errors + "]";
+		return "Message [messageType=" + messageType + ", message=" + message + "]";
 	}
-	
-	
 }

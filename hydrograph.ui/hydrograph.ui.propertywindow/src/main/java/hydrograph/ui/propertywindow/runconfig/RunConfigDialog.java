@@ -50,6 +50,9 @@ import org.eclipse.ui.PlatformUI;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.communication.messages.Message;
+import hydrograph.ui.communication.messages.MessageType;
+import hydrograph.ui.communication.utilities.SCPUtility;
 
 /**
  * 
@@ -60,6 +63,13 @@ import hydrograph.ui.common.util.Constants;
  *
  */
 public class RunConfigDialog extends Dialog {
+	private static final String BASE_PATH_FIELD_VALIDATION_MESSAGE = "Base Path should not be relative";
+	private static final String EMPTY_BASE_PATH_FIELD_MESSAGE = "Base Path not specified";
+	private static final String EMPTY_FIELDS_MESSAGE_BOX_TITLE = "Empty fields";
+	private static final String EMPTY_PASSWORD_FIELD_MESSAGE = "Password not specified";
+	private static final String EMPTY_USERNAME_FIELD_MESSAGE = "Username not specified";
+	private static final String EMPTY_HOST_FIELD_MESSAGE = "Edge Node value not specified";
+	private static final String CREDENTAIAL_VALIDATION_MESSAGEBOX_TITLE = "Invalid Credentaials";
 	private Text txtBasePath;
 	private Text txtEdgeNode;
 	private Text txtUserName;
@@ -466,6 +476,60 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		saveRunConfigurations();
+		
+		if(validateCredentials() && runGraph){
+			super.okPressed();
+		}
+		
+	}
+
+	private boolean validateCredentials() {
+		if (remoteMode) {
+			return validateHostUsernameAndPassword();
+		}else{
+			return true;
+		}	
+	}
+
+	private boolean validateHostUsernameAndPassword() {
+		if (isUsernamePasswordOrHostEmpty()) {
+			return false;
+		} else {
+			return isValidUserNamePasswordOrHost();
+		}
+	}
+
+	private boolean isValidUserNamePasswordOrHost() {
+		Message message = SCPUtility.INSTANCE.validateCredentials(host, username, password);
+		if (message.getMessageType() != MessageType.SUCCESS) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), CREDENTAIAL_VALIDATION_MESSAGEBOX_TITLE,
+					message.getMessage());
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	private boolean isUsernamePasswordOrHostEmpty() {
+		Notification notification = new Notification();
+		if (remoteMode) {
+			if (StringUtils.isEmpty(txtEdgeNode.getText()))
+				notification.addError(EMPTY_HOST_FIELD_MESSAGE);
+
+			if (StringUtils.isEmpty(txtUserName.getText()))
+				notification.addError(EMPTY_USERNAME_FIELD_MESSAGE);
+
+			if (StringUtils.isEmpty(txtPassword.getText()))
+				notification.addError(EMPTY_PASSWORD_FIELD_MESSAGE);
+		}
+		
+		if(notification.hasErrors()){
+			MessageDialog.openError(Display.getDefault().getActiveShell(), EMPTY_FIELDS_MESSAGE_BOX_TITLE,
+					notification.errorMessage());	
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	private void saveRunConfigurations() {
@@ -503,7 +567,6 @@ public class RunConfigDialog extends Dialog {
 		try {
 			checkBuildProperties(btnRemoteMode.getSelection());
 			this.runGraph = true;
-			super.okPressed();
 		} catch (IllegalArgumentException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", e.getMessage());
 			this.runGraph = false;
@@ -533,22 +596,12 @@ public class RunConfigDialog extends Dialog {
 
 	private Notification validate(boolean remote) {
 		Notification note = new Notification();
-		if (remote) {
-			if (StringUtils.isEmpty(txtEdgeNode.getText()))
-				note.addError("Edge Node value not specified");
-
-			if (StringUtils.isEmpty(txtUserName.getText()))
-				note.addError("Username not specified");
-
-			if (StringUtils.isEmpty(txtPassword.getText()))
-				note.addError("Password not specified");
-		}
 		if (isDebug && StringUtils.isEmpty(txtBasePath.getText()))
-			note.addError("Base Path not specified");
+			note.addError(EMPTY_BASE_PATH_FIELD_MESSAGE);
 
 		IPath path = new Path(txtBasePath.getText());
 		if (isDebug && !path.isAbsolute()) {
-			note.addError("Base Path should not be relative");
+			note.addError(BASE_PATH_FIELD_VALIDATION_MESSAGE);
 		}
 
 		return note;

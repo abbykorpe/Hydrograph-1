@@ -13,8 +13,6 @@
 
 package hydrograph.ui.communication.utilities;
 
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import com.jcraft.jsch.Channel;
@@ -31,6 +30,10 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
+import hydrograph.ui.communication.messages.Message;
+import hydrograph.ui.communication.messages.MessageType;
+import hydrograph.ui.logging.factory.LogFactory;
+
 /**
  * The class SCPUtility
  * Provides utility methods to copy files using scp
@@ -39,11 +42,57 @@ import com.jcraft.jsch.UserInfo;
  * 
  */
 public class SCPUtility {
+	private static final String STRICT_HOST_KEY_CHECKING_DEFAULT_VALUE = "no";
+	private static final String STRICT_HOST_KEY_CHECKING = "StrictHostKeyChecking";
+	private static final String PREFERRED_AUTHENTICATIONS_DEFAULT_VALUES = "publickey,keyboard-interactive,password";
+	private static final String PREFERRED_AUTHENTICATIONS = "PreferredAuthentications";
+	private static final int SSH_PORT = 22;
+	private static final String GENERAL_SUCCESS_MESSAGE = "SUCCESS";
+	private static final String GENERAL_ERROR_MESSAGE = "ERROR";
+	private static final String AUTHENTICATION_FAILED_MESSAGE = "Invalid username or password";
+	private static final String AUTH_FAIL_EXCEPTION = "Auth fail";
+	private static final String UNKNOWN_HOST_MESSAGE = "Unknown host";
+	private static final String UNKNOWN_HOST_EXCEPTION = "UnknownHostException";
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SCPUtility.class);
 	public static SCPUtility INSTANCE = new SCPUtility();
 	
 	private SCPUtility(){
 		
+	}
+	
+	public Message validateCredentials(String host, String user, String password) {
+
+		JSch jsch = new JSch();
+
+		Session session;
+		try {
+			session = jsch.getSession(user, host, SSH_PORT);
+
+			session.setPassword(password);
+
+			java.util.Properties config = new java.util.Properties();
+			config.put(STRICT_HOST_KEY_CHECKING, STRICT_HOST_KEY_CHECKING_DEFAULT_VALUE);
+			session.setConfig(config);
+
+			session.setConfig(PREFERRED_AUTHENTICATIONS, PREFERRED_AUTHENTICATIONS_DEFAULT_VALUES);
+
+			session.connect();
+			session.disconnect();
+		} catch (Exception e) {
+			return getErrorMessage(e);
+		}
+
+		return new Message(MessageType.SUCCESS, GENERAL_SUCCESS_MESSAGE);
+	}
+
+	private Message getErrorMessage(Exception e) {
+		if(StringUtils.contains(e.getMessage(), UNKNOWN_HOST_EXCEPTION)){
+			return new Message(MessageType.UNKNOWN_HOST, UNKNOWN_HOST_MESSAGE); 
+		}else if(StringUtils.contains(e.getMessage(), AUTH_FAIL_EXCEPTION)){
+			return new Message(MessageType.INVALID_USERNAME_PASSWORD, AUTHENTICATION_FAILED_MESSAGE); 
+		}else{
+			return new Message(MessageType.ERROR, GENERAL_ERROR_MESSAGE);
+		}
 	}
 	
 	/**
