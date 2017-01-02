@@ -62,7 +62,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
     val updatedHydrographJob = flowManipulationHandler.execute(flowManipulationContext);
 
-    flowManipulationContext.getTmpPath.asScala.foreach(println)
+
 
     val adapterFactory = AdapterFactory(updatedHydrographJob.getJAXBObject)
 
@@ -100,7 +100,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   override def oncomplete(): Unit = {
     //Deleting TempPath For Debug
-    if(flowManipulationContext!=null){
+    if(flowManipulationContext!=null&&flowManipulationContext.getTmpPath!=null){
       flowManipulationContext.getTmpPath.asScala.foreach(tmpPath=>{
         val fullPath: Path = new Path(tmpPath)
         // do not delete the root directory
