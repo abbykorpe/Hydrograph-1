@@ -38,7 +38,7 @@ class InputFileDelimitedComponentTest {
     sf5.setFieldFormat("yyyy-MM-dd")
 
     val sf6 = new SchemaField("DOR", "java.util.Date");
-    sf6.setFieldFormat("yyyy-MM-dd HH:mm:ss.SSS")
+    sf6.setFieldFormat("yyyy/MM/dd HH:mm:ss.SSS")
 
     val sf7 = new SchemaField("Sal", "java.math.BigDecimal");
     sf7.setFieldPrecision(13)
@@ -68,7 +68,7 @@ class InputFileDelimitedComponentTest {
     inputFileDelimitedEntity.setQuote("\"")
     inputFileDelimitedEntity.setHasHeader(false)
   }
-  
+
   /**
    * Test case for correct schema
    */
@@ -89,8 +89,6 @@ class InputFileDelimitedComponentTest {
     val df: Map[String, DataFrame] = new InputFileDelimitedComponent(inputFileDelimitedEntity, cp).createComponent()
 
     //Then
-
-    println(df.get("outSocket").get.first().toString())
 
     val expectedSize: Int = 8
     val expectedResult: String = "[3,Hemant,Programmer,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,3]"
@@ -166,7 +164,7 @@ class InputFileDelimitedComponentTest {
     //Then
 
     val expectedSize: Int = 8
-    val expectedResult: String = "[3,Hemant,68.36,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]"
+    val expectedResult: String = "[3,Hemant,null,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
     Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
 
