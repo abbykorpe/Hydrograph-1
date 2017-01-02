@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hydrograph.engine.core.component.entity.InputFileHiveTextEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
 import hydrograph.engine.core.utilities.GeneralUtilities;
@@ -96,22 +95,24 @@ public class InputFileHiveTextEntityGenerator extends
 		inputHiveFileEntity
 				.setPartitionFilterList(populatePartitionFilterList(jaxbHiveTextFile
 						.getPartitionFilter()));
-		inputHiveFileEntity.setPartitionKeyValueMap(populatePartitionKeyValueMap(jaxbHiveTextFile.getPartitionFilter()));
+		inputHiveFileEntity.setListOfPartitionKeyValueMap(populatePartitionKeyValueMap(jaxbHiveTextFile.getPartitionFilter()));
+
 	}
 
+	private ArrayList<HashMap<String, String>> populatePartitionKeyValueMap(HivePartitionFilterType partitionFilter) {
+		ArrayList<HashMap<String, String>> keyVal = new ArrayList<>();
+		if (partitionFilter != null && partitionFilter.getPartitionColumn() != null) {
 
-
-
-	private HashMap<String,String> populatePartitionKeyValueMap(HivePartitionFilterType partitionFilter) {
-		HashMap<String,String> partitionKeyValue=new HashMap<>();
-		if(partitionFilter!=null && partitionFilter.getPartitionColumn()!=null){
-			PartitionColumn column=partitionFilter.getPartitionColumn().get(0);
-			partitionKeyValue.put(column.getName(),column.getValue());
-			if(column.getPartitionColumn()!=null)
-				fillPartitionKeyValueMap(partitionKeyValue,column.getPartitionColumn());
+			for (PartitionColumn column : partitionFilter.getPartitionColumn()) {
+				HashMap<String, String> map = new HashMap<>();
+				map.put(column.getName(), column.getValue());
+				if (column.getPartitionColumn() != null)
+					fillPartitionKeyValueMap(map, column.getPartitionColumn());
+				keyVal.add(map);
+			}
 		}
 
-		return partitionKeyValue;
+		return keyVal;
 	}
 
 	private void fillPartitionKeyValueMap(HashMap<String, String> partitionKeyValue, PartitionColumn partitionColumn) {
