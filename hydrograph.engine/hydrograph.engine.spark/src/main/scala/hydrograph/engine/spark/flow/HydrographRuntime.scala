@@ -1,5 +1,6 @@
 package hydrograph.engine.spark.flow
 
+import java.io.IOException
 import java.util.Properties
 
 import hydrograph.engine.core.core.{HydrographJob, HydrographRuntimeService}
@@ -7,9 +8,10 @@ import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, FlowMan
 import hydrograph.engine.core.helper.JAXBTraversal
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
-
+import scala.collection.JavaConverters._
 /**
   * Created by gurdits on 10/17/2016.
   */
@@ -18,6 +20,8 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   private val EXECUTION_TRACKING: String = "hydrograph.execution.tracking"
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
+  private var flowManipulationContext:FlowManipulationContext=null;
+  private var sparkSession:SparkSession=null;
 
   override def prepareToExecute(): Unit = {
 
@@ -41,7 +45,7 @@ class HydrographRuntime extends HydrographRuntimeService {
                           jobId: String, s2: String): Unit
   = {
 
-    val sparkSession = SparkSession.builder()
+     sparkSession = SparkSession.builder()
       .master(properties.getProperty("spark_master"))
       .appName(hydrographJob.getJAXBObject.getName)
       .config("spark.sql.shuffle.partitions", "1")
@@ -52,11 +56,13 @@ class HydrographRuntime extends HydrographRuntimeService {
     val schemaFieldHandler = new SchemaFieldHandler(
       hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
-    val flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
+     flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
 
     val flowManipulationHandler = new FlowManipulationHandler
 
     val updatedHydrographJob = flowManipulationHandler.execute(flowManipulationContext);
+
+    flowManipulationContext.getTmpPath.asScala.foreach(println)
 
     val adapterFactory = AdapterFactory(updatedHydrographJob.getJAXBObject)
 
@@ -92,7 +98,32 @@ class HydrographRuntime extends HydrographRuntimeService {
     null
   }
 
-  override def oncomplete(): Unit = {}
+  override def oncomplete(): Unit = {
+    //Deleting TempPath For Debug
+    if(flowManipulationContext!=null){
+      flowManipulationContext.getTmpPath.asScala.foreach(tmpPath=>{
+        val fullPath: Path = new Path(tmpPath)
+        // do not delete the root directory
+        if (fullPath.depth != 0) {
+          var fileSystem: FileSystem = null
+          LOG.info("Deleting temp path:" + tmpPath)
+          try {
+            fileSystem = FileSystem.get(sparkSession.sparkContext.hadoopConfiguration)
+            fileSystem.delete(fullPath, true)
+          }
+          catch {
+            case exception: NullPointerException => {
+              throw new RuntimeException(exception)
+            }
+            case e: IOException => {
+              throw new RuntimeException(e)
+            }
+          }
+        }
+      })
+    }
+
+  }
 
   def classLoader[T](className: String): T = {
     val clazz = Class.forName(className).getDeclaredConstructors
