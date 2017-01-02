@@ -155,31 +155,9 @@ public class SchemaPropagation {
 				newComponentsOutputSchemaMap.put(Constants.FIXED_OUTSOCKET_ID, componentsOutputSchema.copy());
 			}
 			component.getProperties().put(Constants.SCHEMA_TO_PROPAGATE, newComponentsOutputSchemaMap);
-			if(StringUtils.equalsIgnoreCase(component.getCategory(), Constants.OUTPUT)){
-				updateSchema(component,componentsOutputSchema);
-				component.validateComponentProperties(false);}
 		}
 	}
 
-
-	private void updateSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		if (component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME) != null) {
-			setSchemaGridAsSchema(component, componentsOutputSchema);
-		}
-	}
-	
-
-	private void setSchemaGridAsSchema(Component component, ComponentsOutputSchema componentsOutputSchema) {
-		Schema schema = (Schema) component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-		if(schema!=null && !schema.getIsExternal() && schema.getGridRow()!=null && !schema.getGridRow().isEmpty()){
-		if(componentsOutputSchema==null)
-			return;
-		for (GridRow gridRow : schema.getGridRow())
-			gridRow.updateBasicGridRow(componentsOutputSchema.getSchemaGridRow(gridRow));
-		}
-	}
-
-	
 	private void propagateSchemaFromSubJob(Component subJobComponent, String targetTerminal,
 			ComponentsOutputSchema componentsOutputSchema) {
 		if (componentsOutputSchema == null)

@@ -170,8 +170,6 @@ public class PropogateWidget extends AbstractWidget{
 						    }
 						 }		 
 						 getComponent().getProperties().put(Constants.SCHEMA_PROPERTY_NAME,getSchemaForInternalPropagation() );
-						 if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
-						 break;	
 				    
 				    ELTSchemaGridWidget eltSchemaGridWidget=null;
 				    for(AbstractWidget abstractWidget:widgets)

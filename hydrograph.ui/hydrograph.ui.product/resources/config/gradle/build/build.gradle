@@ -156,8 +156,11 @@ task createDirectories() {
 	 doLast{
          	println "createDirectories: Creating directories on remote server"
  			def  command="mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+","+moveSubJobFiles+","+moveResourceFile+"}"
- 			sshToRemoteServer(host,username,password,command)
-		}
+ 			println "Command to create directories on remote server:" + command
+			sshToRemoteServer(host,username,password,command)
+			
+			createResourceDirectory(moveResourceFile, properties.remoteDirectory)
+		} 
 }
 createDirectories.onlyIf {
     project.hasProperty('host')
@@ -192,7 +195,8 @@ task scpJarFiles(dependsOn: ['build']) {
         try {
 				scpToRemoteServer(jarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
     	    } catch (Exception gradleException) {
-        	    println 'scpJarFiles: #Gradle failed to execute task#'
+    	     	println 'scpJarFiles: #Gradle failed to execute task#'
+        	    println 'Cause: Failed to transfer lib folder data on remote server'
         	    gradleException.printStackTrace();
         	}
     }
@@ -248,7 +252,8 @@ task scpParameterFile() {
 		                  }
 		            }
 		        } catch (Exception gradleException) {
-		            println 'scpParameterFile: #Gradle failed to execute task#'
+		        	println 'scpParameterFile: #Gradle failed to execute task#'
+		            println 'Cause: Failed to transfer paramerter files on remote server'
 		            gradleException.printStackTrace();
 		        }
 		    }
@@ -324,27 +329,23 @@ task scpSubJobFiles() {
 */
 task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
 	doLast {
-	println 'scpUserFunctionsPropertyFile: Transfer user-functions properties file from project resources folder to remote server'
+	println 'scpUserFunctionsPropertyFile: Transferring resources folder to remote server'
 
-        def resourcesFile
-        def resourcesName
-        def resourcesFiles = files {
-			def path1 =project.projectDir.path+'/resources'
-            file(path1).listFiles()
-        }
-		
-	try {
-			resourcesFiles.each {
-            File file ->
-                resourcesFile = file.absolutePath
-                if(!file.isDirectory()){
-               		scpToRemoteServer(resourcesFile, project.name+"/resources",username,host,password,properties.remoteDirectory)
-               	}
-        	}
-      			
-    	    } catch (Exception gradleException) {
-        	   println 'scpUserFunctionsPropertyFile: #Gradle failed to execute task#'
-        	    gradleException.printStackTrace();
+		FileTree resourcesFiles = fileTree (dir: project.projectDir.path+'/resources')
+			try {
+					resourcesFiles.visit { element ->
+						if(!element.file.isDirectory()){
+							def targetDirectory=element.file.getParentFile().getPath().replace( project.projectDir.path , project.name )
+							targetDirectory = targetDirectory.replace("\\","/")
+							println "scpUserFunctionsPropertyFile: Transferring "+ element.file +" to "+ targetDirectory +" directory"
+							scpToRemoteServer( element.file, targetDirectory,username,host,password,properties.remoteDirectory )
+						}
+					}
+															
+				} catch (Exception gradleException) {
+					println 'scpUserFunctionsPropertyFile: #Gradle failed to execute task#'
+					println 'Cause: Failed to transfer resources folder on remote server'
+					gradleException.printStackTrace();
         	}
     }
 }
@@ -381,6 +382,7 @@ doLast {
       			
     	    } catch (Exception gradleException) {
         	    println 'scpUserFunctionsPropertyFile: #Gradle failed to execute task#'
+        	    println 'Cause: Failed to copy lib folder on remote server'
         	    gradleException.printStackTrace();
         	}
 }

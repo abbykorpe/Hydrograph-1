@@ -126,7 +126,8 @@ def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,
             	)
           } 
           catch (Exception gradleException) {
-           	println '#Gradle failed to execute task#'
+          	println 'common.scpToRemoteServer: #Gradle failed to execute task#'
+           	println 'Cause : Failed to move file ' + fileToMove + ' on remote server '
            	gradleException.printStackTrace();
           }
 }
@@ -148,7 +149,8 @@ def sshToRemoteServer(def host, def username, def password,def executeCommand ){
             )
         } 
         catch (Exception gradleException) {
-            println '#Gradle failed to execute task#'
+        	println 'common.sshToRemoteServer: #Gradle failed to execute task#'
+            println 'Cause : Failed to execute below command on remote server \n'+executeCommand
             gradleException.printStackTrace();
         }
 
@@ -158,4 +160,29 @@ ext{
     getFilePath = this.&getFilePath
     scpToRemoteServer = this.&scpToRemoteServer
     sshToRemoteServer = this.&sshToRemoteServer
+	createResourceDirectory = this.&createResourceDirectory
+}
+
+def createResourceDirectory(def resourceDirectoryRelativePath, def remoteDirectory){
+			def directoryPath=""
+			def subDirectoryPath=""
+					
+			FileTree resourcesFiles = fileTree (dir: project.projectDir.path+'/resources')
+			try {
+					resourcesFiles.visit {element ->
+						if(element.file.isDirectory()){
+							subDirectoryPath= resourceDirectoryRelativePath+"/"+element.relativePath
+							directoryPath = directoryPath.isEmpty() ? "" + subDirectoryPath : directoryPath + "," + subDirectoryPath
+						}
+					}
+				
+				def command="mkdir -p " +remoteDirectory+"/{" + directoryPath + "}"
+				println "Executing commoand to create resource folder directory structure on remote server : "+command
+				sshToRemoteServer(host,username,password,command)
+								
+			} catch (Exception gradleException) {
+					println 'common.createResourceDirectory: #Gradle failed to execute task#'
+					println 'Cause : Failed to create resource folder directory structure on remote server'
+					gradleException.printStackTrace();
+        	}
 }
