@@ -29,16 +29,17 @@ public class HiveEntityBase extends InputOutputEntityBase {
 	private String externalTablePathUri;
 	private boolean overWrite;
 	private ArrayList<ArrayList<String>> partitionFilterList;
+    private ArrayList<HashMap<String,String>> listOfPartitionKeyValueMap;
 
-	public HashMap<String, String> getPartitionKeyValueMap() {
-		return partitionKeyValueMap;
+	public ArrayList<HashMap<String,String>> getListOfPartitionKeyValueMap() {
+		return listOfPartitionKeyValueMap;
 	}
 
-	public void setPartitionKeyValueMap(HashMap<String, String> partitionKeyValueMap) {
-		this.partitionKeyValueMap = partitionKeyValueMap;
+	public void setListOfPartitionKeyValueMap(ArrayList<HashMap<String,String>> listOfPartitionKeyValueMap) {
+		this.listOfPartitionKeyValueMap = listOfPartitionKeyValueMap;
 	}
 
-	private HashMap<String,String> partitionKeyValueMap;
+	
 
 	/**
 	 * @return the partitionKeys
