@@ -563,35 +563,40 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 */
 	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues) {
 		
-		String host = DataBaseUtility.getInstance().getServiceHost();
+String host = DataBaseUtility.getInstance().getServiceHost();
 		
 		if(null!=host&& StringUtils.isNotBlank(host)){
 			
-			DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
-			validateDatabaseFields(parameterType);
+			if(host.equalsIgnoreCase(Constants.SERVICE_HOST_NAME)){
+				
+				DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
+				validateDatabaseFields(parameterType);
 		
-			HiveTableSchema databaseTableSchema = DataBaseUtility.getInstance()
+				HiveTableSchema databaseTableSchema = DataBaseUtility.getInstance()
 					.extractDatabaseDetails(oracleDatabaseValues, parameterType,host);
 			
-			if (null != databaseTableSchema) {
+				if (null != databaseTableSchema) {
 
-				for (AbstractWidget abstractWgt : widgets) {
-	
-					if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
-						abstractWgt.refresh(getComponentSchema(databaseTableSchema));
+					for (AbstractWidget abstractWgt : widgets) {
+					
+						if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
+							abstractWgt.refresh(getComponentSchema(databaseTableSchema));
+						}
 					}
-				}
 	
-			createMessageDialog(Messages.METASTORE_IMPORT_SUCCESS,INFO).open();
-			propertyDialogButtonBar.enableApplyButton(true);
-		
-		}else{
-			createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
-		 }
+					createMessageDialog(Messages.METASTORE_IMPORT_SUCCESS,INFO).open();
+					propertyDialogButtonBar.enableApplyButton(true);
+				}else{
+					createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
+				}
+				
+			}else{
+				createMessageDialog(Messages.HOST_NAME_ERROR,ERROR).open();
+			}
 		}
 		else{
 			createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
-		}
+			}
 	
 	}
 	/**
