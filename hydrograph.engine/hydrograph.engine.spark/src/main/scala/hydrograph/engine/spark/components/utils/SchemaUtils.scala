@@ -10,6 +10,12 @@ case class SchemaUtils() {
 
   val LOG: Logger = LoggerFactory.getLogger(classOf[SchemaUtils])
 
+  /*
+   * This will compare two schema and check whether @readSchema is exist in @mdSchema
+   * @param readSchema schema from input
+   * @param mdSchema MetaData schema from metadata
+   * @return Boolean true or false(Exception)
+   */
   def compareSchema(readSchema: StructType, mdSchema: StructType): Boolean = {
     val metaDataSchema = mdSchema.toList
     val inputReadSchema = readSchema.toList

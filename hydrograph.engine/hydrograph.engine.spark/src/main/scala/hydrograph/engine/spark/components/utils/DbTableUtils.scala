@@ -1,12 +1,11 @@
 package hydrograph.engine.spark.components.utils
 
-import java.util
 import java.util.Properties
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD
-import org.apache.spark.sql.types.{DataType, StructType}
+import org.apache.spark.sql.types.StructType
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
@@ -16,6 +15,11 @@ case class DbTableUtils() {
 
   val LOG: Logger = LoggerFactory.getLogger(classOf[DbTableUtils])
 
+  /*
+   * This will generate crate table query
+   * @param outputRDBMSEntity
+   * @return String create query
+   */
   def getCreateTableQuery(outputRDBMSEntity: OutputRDBMSEntity): String = {
 
     val fieldsCreator = new InputOutputFieldsAndTypesCreator[OutputRDBMSEntity](outputRDBMSEntity);
@@ -59,10 +63,24 @@ case class DbTableUtils() {
       new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, null, outputRDBMSEntity.getDatabaseType).getCreateTableStatement()
     }
   }
+
+  /*
+   * This will return metadata schema
+   * @param connectionURL database connection
+   * @param tableName
+   * @param properties
+   * @return structType schema from metadata
+   */
   def getTableSchema(connectionURL: String, tableName: String, properties: Properties): StructType = {
     JDBCRDD.resolveTable(connectionURL, tableName, properties)
   }
 
+  /*
+   * This will generate select query
+   * @param fieldList
+   * @param tableName
+   * @return String select query
+   */
   def getSelectQuery(fieldList: List[SchemaField], tableName: String) : String = {
     val query = "select " + fieldList.map(f=>f.getFieldName).reverse.mkString(", ") + " from " + tableName
     LOG.debug("Select query :  " + query)
