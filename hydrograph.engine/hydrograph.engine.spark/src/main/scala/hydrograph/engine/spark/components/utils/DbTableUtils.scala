@@ -1,20 +1,20 @@
 package hydrograph.engine.spark.components.utils
 
+import java.util
 import java.util.Properties
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
+import hydrograph.engine.core.component.entity.elements.SchemaField
 import org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD
 import org.apache.spark.sql.types.{DataType, StructType}
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.collection.JavaConverters._
-
 /**
   * Created by santlalg on 12/12/2016.
   */
-case class TableCreator() {
+case class DbTableUtils() {
 
-  val LOG: Logger = LoggerFactory.getLogger(classOf[TableCreator])
+  val LOG: Logger = LoggerFactory.getLogger(classOf[DbTableUtils])
 
   def getCreateTableQuery(outputRDBMSEntity: OutputRDBMSEntity): String = {
 
@@ -59,39 +59,17 @@ case class TableCreator() {
       new DbTableDescriptor(outputRDBMSEntity.getTableName, fieldsCreator.getFieldNames, columnDefs, null, outputRDBMSEntity.getDatabaseType).getCreateTableStatement()
     }
   }
-
   def getTableSchema(connectionURL: String, tableName: String, properties: Properties): StructType = {
     JDBCRDD.resolveTable(connectionURL, tableName, properties)
   }
 
-  def compareSchema(dbSchema: StructType, readSchema: StructType): Boolean = {
-
-      val databaseSchema = dbSchema.toList
-      val inputReadSchema = readSchema.toList
-
-      var dataType: DataType = null
-
-      inputReadSchema.foreach(inSchema=>{
-        var fieldExist = databaseSchema.exists(ds => {
-          dataType = ds.dataType
-          ds.name.equals(inSchema.name)
-        })
-        if (fieldExist) {
-          println(dataType + "   " + dataType.typeName )
-          if(!(dataType.typeName.equals(inSchema.dataType.typeName))){
-            LOG.error("Field '"+inSchema.name + "', data type does not match expected:"
-              + dataType + ", got:" + inSchema.dataType)
-            throw SchemaMismatchException("Field  '"+inSchema.name + "', data type does not match expected:"
-              + dataType + ", got:" + inSchema.dataType)
-          }
-        } else {
-          LOG.error("Field '" + inSchema.name + "' does not exist in database")
-          throw SchemaMismatchException("Input schema does not match with database schema, "
-            + "Field '" + inSchema.name + "' does not exist in database")
-        }
-      })
-    true
+  def getSelectQuery(fieldList: List[SchemaField], tableName: String) : String = {
+    val query = "select " + fieldList.map(f=>f.getFieldName).reverse.mkString(", ") + " from " + tableName
+    LOG.debug("Select query :  " + query)
+    query
   }
 }
 
-case class SchemaMismatchException(message: String = "", cause: Throwable = null) extends Exception(message, cause)
+
+
+
