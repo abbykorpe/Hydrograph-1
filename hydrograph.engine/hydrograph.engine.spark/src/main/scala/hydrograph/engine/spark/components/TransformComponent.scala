@@ -8,15 +8,18 @@ import hydrograph.engine.spark.components.utils._
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{Column, DataFrame, Row}
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by gurdits on 10/18/2016.
+  * Created by bitwise on 10/18/2016.
   */
-class SparkTransformComponent(transformEntity: TransformEntity, componentsParams: BaseComponentParams) extends
+class TransformComponent(transformEntity: TransformEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with TransformOperation with Serializable  {
 
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[TransformComponent])
   override def createComponent(): Map[String, DataFrame] = {
 
+    LOG.trace("In method createComponent()")
     val op = OperationSchemaCreator[TransformEntity](transformEntity, componentsParams, transformEntity.getOutSocketList().get(0))
     val fm = FieldManupulating(op.getOperationInputFields(), op.getOperationOutputFields(), op.getPassThroughFields()
       , op.getMapFields(), op.getOperationFields(), null)
@@ -37,12 +40,13 @@ class SparkTransformComponent(transformEntity: TransformEntity, componentsParams
         //Passthrough Fields
         RowHelper.setTupleFromRow(outRow, fm.determineInputPassThroughFieldsPos(), row, fm.determineOutputPassThroughFieldsPos())
         transformsList.foreach { tr =>
-          //Calling Transform Method
+          LOG.info("Calling transform() method of " + tr.baseClassInstance.getClass.toString +" class.")
           tr.baseClassInstance.transform(RowHelper.convertToReusebleRow(tr.inputFieldPositions, row, tr.inputReusableRow), tr
             .outputReusableRow)
           RowHelper.setTupleFromReusableRow(outRow, tr.outputReusableRow, tr.outputFieldPositions)
           //Calling Cleanup Method
           if (itr.isEmpty)
+            LOG.info("Calling cleanup() method of " + tr.baseClassInstance.getClass.toString +" class.")
             tr.baseClassInstance.cleanup()
         }
         Row.fromSeq(outRow)

@@ -1,5 +1,7 @@
 package hydrograph.engine.spark.components
 
+import java.util
+
 import hydrograph.engine.core.component.entity.base.HiveEntityBase
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.InputComponentBase
@@ -36,7 +38,8 @@ class HiveInputComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     val tableName = entity.getTableName
 
     val fieldList = entity.getFieldsList.asScala.toList
-    val partitionKeyValueMap = entity.getPartitionKeyValueMap.asScala.toMap
+    val partitionKeyValueMap = entity.getListOfPartitionKeyValueMap.asScala.toList
+
 
     query = query + "SELECT " + getFieldsForSelectHiveQuery(fieldList) + " FROM " + entity.getDatabaseName + "." + entity.getTableName
 
@@ -51,7 +54,13 @@ class HiveInputComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     listOfFields.map(field => field.getFieldName).mkString(",")
   }
 
-  def getpartitionKeysClause(pmap: Map[String, String]): String = {
+  def getpartitionKeysClause(pmap: List[java.util.HashMap[String,String]]): String = {
+
+    pmap.map(m=> getKeyValuesForWhereClause(m.asScala.toMap)).mkString(" OR ")
+
+  }
+
+  def getKeyValuesForWhereClause(pmap: Map[String, String]): String = {
 
     pmap.map(e => e._1 + "='" + e._2 + "'").mkString(" AND ")
 

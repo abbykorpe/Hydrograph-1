@@ -31,12 +31,25 @@
 		<path uri="testData\Input\mixedSchemeInputFile" />
 	</inputs>
 
-	<outputs id="output1" xsi:type="ot:textFileDelimited">
+	<outputs id="mixed_schema" xsi:type="ot:textFileMixedScheme">
+		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
+			<schema name="kj">
+				<field name="id1" type="java.lang.String" delimiter="!" />
+				<field name="name1" type="java.lang.String" delimiter="@" />
+				<field name="city1" type="java.lang.String"  delimiter="\n" />
+			</schema>
+		</inSocket>
+		<overWrite value="true"/>
+		<path uri="testData\output\MixedDelimitedComponentsOp"/>
+		<charset value="ISO-8859-1" />
+	</outputs>
+
+	<!--<outputs id="output1" xsi:type="ot:textFileDelimited">
 		<inSocket  fromComponentId="input1" fromSocketId="out0" id="in0">
 			<schema name="outSchema">
 				<field name="id1" type="java.lang.String" />
-				<field name="name1" type="java.lang.String" />
-				<field name="city1" type="java.lang.String" />
+				<field name="name1" type="java.lang.String"/>
+				<field name="city1" type="java.lang.String"/>
 			</schema>
 		</inSocket>
 		<overWrite value="true"/>
@@ -44,7 +57,6 @@
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
-	</outputs>
-
+	</outputs>-->
 
 </p:graph>

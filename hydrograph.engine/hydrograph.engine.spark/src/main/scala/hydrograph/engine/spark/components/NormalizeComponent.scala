@@ -20,23 +20,28 @@ import hydrograph.engine.transformation.userfunctions.base.{NormalizeTransformBa
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{Column, DataFrame, Row}
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Created by gurdits on 10/18/2016.
+  * Created by bitwise on 10/18/2016.
   */
-class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with NormalizeOperation with Serializable {
+class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with NormalizeOperation with Serializable {
 
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
   def getAllInputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
+    LOG.trace("In method getAllInputFieldsForExpr()")
     var list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationInputFields)
     list1
   }
 
   def getAllOutputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
+    LOG.trace("In method getAllOutputFieldsForExpr()")
     var list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationOutputFields)
     list1
   }
 
   def unique[A](ls: List[A]) = {
+    LOG.trace("In method unique()")
     def loop(set: Set[A], ls: List[A]): List[A] = ls match {
       case hd :: tail if set contains hd => loop(set, tail)
       case hd :: tail => hd :: loop(set + hd, tail)
@@ -47,6 +52,7 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
   }
 
   def convertToList(listBuffer: ListBuffer[String]): util.ArrayList[String] = {
+    LOG.trace("In method convertToList()")
     def convert(list: List[String], arrayList: util.ArrayList[String]): util.ArrayList[String] = list match {
       case List() => arrayList
       case x :: xs => {
@@ -59,6 +65,7 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
   }
 
   def getOperationOutputFields(strings: ListBuffer[ListBuffer[String]]): util.ArrayList[util.ArrayList[String]] = {
+    LOG.trace("In method getOperationOutputFields()")
 
     def flattenBufferList(strings: ListBuffer[ListBuffer[String]]): ListBuffer[ListBuffer[String]] = {
       def flattenList(strings: ListBuffer[ListBuffer[String]], finalList: ListBuffer[ListBuffer[String]], count: Int): ListBuffer[ListBuffer[String]] = (finalList, count) match {
@@ -70,6 +77,8 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
     }
 
     def listBufferToArrayList(listBuffer: ListBuffer[java.util.ArrayList[String]]): util.ArrayList[util.ArrayList[String]] = {
+      LOG.trace("In method listBufferToArrayList()")
+
       def convert(list: List[util.ArrayList[String]], arrayList: util.ArrayList[util.ArrayList[String]]): util.ArrayList[util.ArrayList[String]] = list match {
         case List() => arrayList
         case x :: xs => {
@@ -90,6 +99,7 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
   def extractAllOutputPositions(outputFields: List[String]): List[Int] = Seq(0 to (outputFields.length - 1)).toList.flatten
 
   override def createComponent(): Map[String, DataFrame] = {
+    LOG.trace("In method createComponent()")
 
     val op = OperationSchemaCreator[NormalizeEntity](normalizeEntity, componentsParams, normalizeEntity.getOutSocketList().get(0))
 
@@ -119,7 +129,7 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
         outputDispatcher = new NormalizeOutputCollector(outputReusableRow, outRow, fm.determineOutputFieldPositions()(0))
 
         if (nr.baseClassInstance.isInstanceOf[NormalizeForExpression]) {
-
+          LOG.info("Normalize Operation contains Expressions, so NormalizeForExpression class will be used for processing.")
           var fieldNames: ListBuffer[String] = fm.getinputFields()
           var tuples: Array[Object] = (0 to (fieldNames.length - 1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
           var inputFields: List[String] = unique(getAllInputFieldsForExpr(normalizeEntity.getOperationsList, List[String]()))
@@ -132,7 +142,9 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
           nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setValidationAPI(op.getExpressionObject().get(0).asInstanceOf[ValidationAPI])
           nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setTransformInstancesSize(normalizeList.length)
           val x: java.util.List[String] = op.getExpressionObject().map(e => e.asInstanceOf[ValidationAPI].getExpr)
+          LOG.info("List of Expressions: ["+x.toString+"].")
           nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setListOfExpressions(new java.util.ArrayList[String](x))
+          LOG.info("outputRecordCount Expression: "+normalizeEntity.getOutputRecordCount+".")
           nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setCountExpression(normalizeEntity.getOutputRecordCount)
           nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setOperationOutputFields(getOperationOutputFields(op.getOperationOutputFields()))
           nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setFieldNames(convertToList(fieldNames).toArray(new Array[String](fieldNames.size)))
@@ -141,8 +153,10 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
           outputDispatcher = new NormalizeOutputCollector(outputReusableRow, outRow, outputPositions)
         }
         outputDispatcher.initialize
+        LOG.info("Calling Normalize() method of " + nr.baseClassInstance.getClass.toString +" class.")
         nr.baseClassInstance.Normalize(inputReusableRow, outputReusableRow, outputDispatcher)
         if (itr.isEmpty)
+          LOG.info("Calling cleanup() method of " + nr.baseClassInstance.getClass.toString +" class.")
           nr.baseClassInstance.cleanup()
 
         outputDispatcher.getOutRows
@@ -160,23 +174,22 @@ class SparkNormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams
 class NormalizeOutputCollector(outputReusableRow: ReusableRow, outRow: Array[Any], outputFieldPositions: ListBuffer[Int]) extends OutputDispatcher {
 
   private val list = new ListBuffer[Row]()
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
 
   override def sendOutput(): Unit = {
-
+    LOG.trace("In method sendOutput()")
     RowHelper.setTupleFromReusableRow(outRow, outputReusableRow, outputFieldPositions)
-
     val clonedRow = outRow.clone()
     list += Row.fromSeq(clonedRow)
-
   }
 
   def initialize: Unit = {
-
+    LOG.trace("In method initialize()")
     list.clear()
   }
 
   def getOutRows: ListBuffer[Row] = {
-
+    LOG.trace("In method getOutRows()")
     list
   }
 }
