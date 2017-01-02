@@ -95,7 +95,12 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="PROPOGATE_WIDGET"/>
  *     &lt;enumeration value="MYSQL_DRIVER_NAME"/>
  *     &lt;enumeration value="RUNPROGRAM_TEXT_WIDGET"/>
+<<<<<<< HEAD
  *     &lt;enumeration value="OUTPUT_RECORD_COUNT_WIDGET"/>
+=======
+ *     &lt;enumeration value="SELECT_INTERFACE_WITH_EXPORT_WIDGET/>
+ *     &lt;enumeration value="SELECT_INTERFACE_WITH_LOAD_WIDGET/>
+>>>>>>> Converter RadioButtonWidget changes
  *     
  *   &lt;/restriction>
  * &lt;/simpleType>
@@ -169,7 +174,9 @@ public enum PropertyRenderer {
     PROPOGATE_WIDGET,
     MYSQL_DRIVER_NAME,
     RUNPROGRAM_TEXT_WIDGET,
-    OUTPUT_RECORD_COUNT_WIDGET;
+    OUTPUT_RECORD_COUNT_WIDGET,
+    SELECT_INTERFACE_WITH_EXPORT_WIDGET,
+    SELECT_INTERFACE_WITH_LOAD_WIDGET;
 
     public String value() {
         return name();

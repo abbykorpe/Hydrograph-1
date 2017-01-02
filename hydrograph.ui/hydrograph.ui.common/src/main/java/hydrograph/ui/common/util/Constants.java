@@ -70,6 +70,10 @@ public class Constants {
 	public static final String LAST = "Last";
 	public static final String ALL = "All";
 	
+	public static final String STANDARD = "Standard";
+	public static final String FAST_EXPORT = "FastExport";
+	public static final String FAST_LOAD = "FastLoad";
+	
 	public static final String OFIXED_WIDTH = "OFixedWidth";
 	public static final String FILTER = "FILTER";
 	public static final String NORMALIZE = "NORMALIZE";

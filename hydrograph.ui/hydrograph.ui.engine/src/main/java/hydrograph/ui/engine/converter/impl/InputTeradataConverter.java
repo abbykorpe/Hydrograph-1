@@ -21,13 +21,16 @@ import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
 import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
+import hydrograph.engine.jaxb.commontypes.MatchValue;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.inputtypes.Teradata;
 import hydrograph.engine.jaxb.iteradata.TypeInputTeradataOutSocket;
+import hydrograph.engine.jaxb.operationstypes.Lookup.Match;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.InputConverter;
 import hydrograph.ui.graph.model.Component;
@@ -65,6 +68,25 @@ public class InputTeradataConverter extends InputConverter{
 		return inputOutSockets;
 	}
 
+	private Match getSelectInterfaceFromUi() {
+		Match match = new Match();
+		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(Constants.MATCH_PROPERTY_WIDGET);
+
+		if(matchValueProperty != null){
+			if(Constants.LAST.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				match.setValue(MatchValue.LAST);
+				return match;
+			}else if(Constants.ALL.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				match.setValue(MatchValue.ALL);
+				return match;
+			}else{
+				match.setValue(MatchValue.FIRST);
+				return match;
+			}
+		}
+		return match;
+	}
+	
 	@Override
 	public void prepareForXML() {
 		super.prepareForXML();

@@ -61,7 +61,7 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 	@Override
 	public void prepareUIXML() {
 		super.prepareUIXML();
-		LOGGER.debug("Fetching Output-MySql-Properties for {}", componentName);
+		LOGGER.debug("Fetching Output-teradata-Properties for {}", componentName);
 		Teradata outputTeradata = (Teradata) typeBaseComponent;
 		LinkedHashMap<String, String> loadSelectedDetails = new LinkedHashMap<String, String>();
 		
@@ -96,8 +96,8 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 			}else if(outputTeradata.getLoadType().getNewTable() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue(outputTeradata.getLoadType().getNewTable()));
 			}
-				
 		}
+		
 		propertyMap.put(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value(), loadSelectedDetails);
 		
 		uiComponent.setType(UIComponentsConstants.TERADATA.value());
@@ -137,7 +137,6 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 					buffer.append(",");
 					}
 			}
-		
 		return StringUtils.removeEnd(buffer.toString(), ",");
 	}
 	

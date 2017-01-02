@@ -57,7 +57,7 @@ public class InputTeradataUiConverter extends InputUiConverter{
 	@Override
 	public void prepareUIXML() {
 		super.prepareUIXML();
-		LOGGER.debug("Fetching Input-Mysql-Properties for {}", componentName);
+		LOGGER.debug("Fetching Input-Teradata-Properties for {}", componentName);
 		Teradata inputTeradata = (Teradata) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 

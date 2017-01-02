@@ -20,6 +20,9 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.RadioButtonConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
@@ -39,17 +42,17 @@ import org.eclipse.swt.widgets.Control;
  * @author Bitwise
  *
  */
-public class ELTMatchValueWidget extends AbstractWidget {
+public class RadioButtonsWidget extends AbstractWidget {
 
 	private final String propertyName;
 	private final LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 	private Object properties;
-	private String[] buttonText = new String[] { Constants.FIRST,
-			Constants.LAST, Constants.ALL };
-	private Button[] buttons = new Button[buttonText.length];
+	private String[] buttonText;
+	private Button[] buttons;
 	private MatchValueProperty matchValue;
-
-	public ELTMatchValueWidget(
+	private RadioButtonConfig radioButtonConfig;
+	
+	public RadioButtonsWidget(
 			ComponentConfigrationProperty componentConfigrationProp,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties,
 			PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -65,18 +68,23 @@ public class ELTMatchValueWidget extends AbstractWidget {
 		}
 	}
 
+	public void setWidgetConfig(WidgetConfig widgetConfig) {
+		radioButtonConfig = (RadioButtonConfig) widgetConfig;
+	}
+	
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
-		ELTDefaultSubgroupComposite eltSuDefaultSubgroupComposite = new ELTDefaultSubgroupComposite(
+		ELTDefaultSubgroupComposite defaultSubgroupComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
-		eltSuDefaultSubgroupComposite.createContainerWidget();
-		eltSuDefaultSubgroupComposite
-		.numberOfBasicWidgets(buttonText.length + 1);
+		buttonText = radioButtonConfig.getWidgetDisplayNames();
+		buttons = new Button[buttonText.length];
+		defaultSubgroupComposite.createContainerWidget();
+		defaultSubgroupComposite.numberOfBasicWidgets(buttonText.length + 1);
 
-		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Constants.MATCH);
-		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
+		AbstractELTWidget defaultLabel = new ELTDefaultLable(Constants.MATCH);
+		defaultSubgroupComposite.attachWidget(defaultLabel);
 
-		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
+		setPropertyHelpWidget((Control) defaultLabel.getSWTWidgetControl());
 		
 		SelectionListener selectionListener = new SelectionAdapter() {
 			@Override
@@ -91,7 +99,7 @@ public class ELTMatchValueWidget extends AbstractWidget {
 
 		for (int i = 0; i < buttonText.length; i++) {
 			ELTRadioButton eltRadioButton = new ELTRadioButton(buttonText[i]);
-			eltSuDefaultSubgroupComposite.attachWidget(eltRadioButton);
+			defaultSubgroupComposite.attachWidget(eltRadioButton);
 			buttons[i] = ((Button) eltRadioButton.getSWTWidgetControl());
 			((Button) eltRadioButton.getSWTWidgetControl())
 			.addSelectionListener(selectionListener);
