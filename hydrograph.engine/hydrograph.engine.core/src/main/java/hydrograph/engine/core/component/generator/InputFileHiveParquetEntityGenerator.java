@@ -93,7 +93,7 @@ public class InputFileHiveParquetEntityGenerator extends
 
 
 	private ArrayList<HashMap<String, String>> populatePartitionKeyValueMap(HivePartitionFilterType partitionFilter) {
-		ArrayList<HashMap<String, String>> keyVal = new ArrayList<>();
+		ArrayList<HashMap<String, String>> partitionKeyValueMap = new ArrayList<>();
 		if (partitionFilter != null && partitionFilter.getPartitionColumn() != null) {
 
 			for (PartitionColumn column : partitionFilter.getPartitionColumn()) {
@@ -101,11 +101,11 @@ public class InputFileHiveParquetEntityGenerator extends
 				map.put(column.getName(), column.getValue());
 				if (column.getPartitionColumn() != null)
 					fillPartitionKeyValueMap(map, column.getPartitionColumn());
-				keyVal.add(map);
+				partitionKeyValueMap.add(map);
 			}
 		}
 
-		return keyVal;
+		return partitionKeyValueMap;
 	}
 
 
