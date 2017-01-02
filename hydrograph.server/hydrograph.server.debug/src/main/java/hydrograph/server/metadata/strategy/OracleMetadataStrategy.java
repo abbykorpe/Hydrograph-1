@@ -124,14 +124,39 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 			for (int count = 1; count < rsmd.getColumnCount() + 1; count++) {
 				TableSchemaFieldEntity tableSchemaFieldEntity = new TableSchemaFieldEntity();
 				tableSchemaFieldEntity.setFieldName(rsmd.getColumnLabel(count));
+				// Retrieving schema type for converting oracle type to java
+				// specific type
+				System.out.println(rsmd.getColumnTypeName(count));
 				if (rsmd.getColumnTypeName(count).equalsIgnoreCase("timestamp")) {
 					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss:SSS");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
 				} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("date")) {
 					tableSchemaFieldEntity.setFormat("yyyy-MM-dd");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
+				} else if (rsmd.getScale(count) != 0) {
+					if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19)) {
+						tableSchemaFieldEntity.setFieldType("java.lang.Double");
+					} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number")
+							&& rsmd.getPrecision(count) > 19) {
+						tableSchemaFieldEntity.setScaleType("explicit");
+						tableSchemaFieldEntity.setFieldType("java.math.BigDecimal");
+					}
+				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 10
+						&& rsmd.getPrecision(count) > 5)) {
+					tableSchemaFieldEntity.setFieldType("java.lang.Integer");
+				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number")
+						&& rsmd.getPrecision(count) <= 5)) {
+					tableSchemaFieldEntity.setFieldType("java.lang.Short");
+				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19
+						&& rsmd.getPrecision(count) > 10)) {
+					tableSchemaFieldEntity.setFieldType("java.lang.Long");
+				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("char") && rsmd.getPrecision(count) == 1)) {
+					tableSchemaFieldEntity.setFieldType("java.lang.Boolean");
+				} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) > 19) {
+					tableSchemaFieldEntity.setScaleType("explicit");
+					tableSchemaFieldEntity.setFieldType("java.math.BigDecimal");
 				} else {
-					tableSchemaFieldEntity.setFieldType(getColumnType(rsmd, count, tableSchemaFieldEntity));
+					tableSchemaFieldEntity.setFieldType(rsmd.getColumnClassName(count));
 				}
 				tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
 				tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
@@ -148,27 +173,5 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 			connection.close();
 		}
 		return tableEntity;
-	}
-
-	private String getColumnType(ResultSetMetaData rsmd, int count, TableSchemaFieldEntity tableSchemaFieldEntity)
-			throws SQLException {
-		if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 10
-				&& rsmd.getPrecision(count) > 5)) {
-			return "java.lang.Integer";
-		} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 5)) {
-			return "java.lang.Short";
-		} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19
-				&& rsmd.getScale(count) != 0)) {
-			return "java.lang.Double";
-		} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19
-				&& rsmd.getPrecision(count) > 10)) {
-			return "java.lang.Long";
-		} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) > 19) {
-			tableSchemaFieldEntity.setScaleType("explicit");
-			return "java.math.BigDecimal";
-		} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("char") && rsmd.getPrecision(count) == 1) {
-			return "java.lang.Boolean";
-		} else
-			return rsmd.getColumnClassName(count);
 	}
 }
