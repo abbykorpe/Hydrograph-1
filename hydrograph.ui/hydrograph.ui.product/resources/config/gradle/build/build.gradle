@@ -195,7 +195,8 @@ task scpJarFiles(dependsOn: ['build']) {
         try {
 				scpToRemoteServer(jarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
     	    } catch (Exception gradleException) {
-        	    println 'scpJarFiles: Failed to transfer lib folder data on remote server'
+    	     	println 'scpJarFiles: #Gradle failed to execute task#'
+        	    println 'Cause: Failed to transfer lib folder data on remote server'
         	    gradleException.printStackTrace();
         	}
     }
@@ -251,7 +252,8 @@ task scpParameterFile() {
 		                  }
 		            }
 		        } catch (Exception gradleException) {
-		            println 'scpParameterFile: Failed to transfer paramerter files on remote server'
+		        	println 'scpParameterFile: #Gradle failed to execute task#'
+		            println 'Cause: Failed to transfer paramerter files on remote server'
 		            gradleException.printStackTrace();
 		        }
 		    }
@@ -341,7 +343,8 @@ task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
 					}
 															
 				} catch (Exception gradleException) {
-					println 'scpUserFunctionsPropertyFile: Failed to transfer resources folder on remote server'
+					println 'scpUserFunctionsPropertyFile: #Gradle failed to execute task#'
+					println 'Cause: Failed to transfer resources folder on remote server'
 					gradleException.printStackTrace();
         	}
     }
@@ -379,6 +382,7 @@ doLast {
       			
     	    } catch (Exception gradleException) {
         	    println 'scpUserFunctionsPropertyFile: #Gradle failed to execute task#'
+        	    println 'Cause: Failed to copy lib folder on remote server'
         	    gradleException.printStackTrace();
         	}
 }

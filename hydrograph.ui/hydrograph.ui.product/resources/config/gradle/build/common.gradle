@@ -126,7 +126,8 @@ def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,
             	)
           } 
           catch (Exception gradleException) {
-           	println 'common.scpToRemoteServer : Failed to move file ' + fileToMove + ' on remote server '
+          	println 'common.scpToRemoteServer: #Gradle failed to execute task#'
+           	println 'Cause : Failed to move file ' + fileToMove + ' on remote server '
            	gradleException.printStackTrace();
           }
 }
@@ -148,7 +149,8 @@ def sshToRemoteServer(def host, def username, def password,def executeCommand ){
             )
         } 
         catch (Exception gradleException) {
-            println 'common.sshToRemoteServer : Failed to execute below command on remote server \n'+executeCommand
+        	println 'common.sshToRemoteServer: #Gradle failed to execute task#'
+            println 'Cause : Failed to execute below command on remote server \n'+executeCommand
             gradleException.printStackTrace();
         }
 
@@ -179,7 +181,8 @@ def createResourceDirectory(def resourceDirectoryRelativePath, def remoteDirecto
 				sshToRemoteServer(host,username,password,command)
 								
 			} catch (Exception gradleException) {
-					println 'common.createResourceDirectory : Failed to create resource folder directory structure on remote server'
+					println 'common.createResourceDirectory: #Gradle failed to execute task#'
+					println 'Cause : Failed to create resource folder directory structure on remote server'
 					gradleException.printStackTrace();
         	}
 }
