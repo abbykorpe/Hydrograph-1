@@ -116,7 +116,7 @@ class HydrographRuntime extends HydrographRuntimeService {
           var fileSystem: FileSystem = null
           LOG.info("Deleting temp path:" + tmpPath)
           try {
-            fileSystem = FileSystem.get(sparkSession.sparkContext.hadoopConfiguration)
+            fileSystem = FileSystem.get(RuntimeContext.instance.sparkSession.sparkContext.hadoopConfiguration)
             fileSystem.delete(fullPath, true)
           }
           catch {
