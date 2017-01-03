@@ -97,12 +97,21 @@ public class MysqlMetadataStrategy extends MetadataStrategyTemplate {
 			for (int count = 1; count <= rsmd.getColumnCount(); count++) {
 				TableSchemaFieldEntity tableSchemaFieldEntity = new TableSchemaFieldEntity();
 				tableSchemaFieldEntity.setFieldName(rsmd.getColumnLabel(count));
-				if (rsmd.getColumnClassName(count).equalsIgnoreCase("java.sql.Timestamp")) {
+                if (rsmd.getColumnClassName(count).equalsIgnoreCase("java.sql.Timestamp")) {
 					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
-				} else {
-					tableSchemaFieldEntity.setFieldType(rsmd.getColumnClassName(count));
-				}
+				} else if(rsmd.getColumnTypeName(count).equalsIgnoreCase("TINYINT")) {
+                    tableSchemaFieldEntity.setFieldType("java.lang.Boolean");
+				} else if(rsmd.getColumnTypeName(count).equalsIgnoreCase("SMALLINT"))  {
+                    tableSchemaFieldEntity.setFieldType("java.lang.Short");
+                } else if(rsmd.getColumnTypeName(count).equalsIgnoreCase("DECIMAL")){
+                    tableSchemaFieldEntity.setFieldType("java.math.BigDecimal");
+                    tableSchemaFieldEntity.setScaleType("explicit");
+                }else{
+                    tableSchemaFieldEntity.setFieldType(rsmd.getColumnClassName(count));
+                }
+
+
 				tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
 				tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 				tableSchemaFieldEntities.add(tableSchemaFieldEntity);
