@@ -48,7 +48,7 @@ class HydrographRuntime extends HydrographRuntimeService {
      sparkSession = SparkSession.builder()
       .master(properties.getProperty("spark_master"))
       .appName(hydrographJob.getJAXBObject.getName)
-      .config("spark.sql.shuffle.partitions", "1")
+      .config("spark.sql.shuffle.partitions", properties.getProperty("spark_partitions"))
       .config("spark.sql.warehouse.dir",properties.getProperty("hive_warehouse") )
       .enableHiveSupport()
       .getOrCreate()
