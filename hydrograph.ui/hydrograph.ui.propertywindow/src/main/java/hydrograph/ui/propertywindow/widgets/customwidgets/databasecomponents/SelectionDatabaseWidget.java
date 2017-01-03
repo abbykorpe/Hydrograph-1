@@ -567,8 +567,6 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 		
 		if(null!=host&& StringUtils.isNotBlank(host)){
 			
-			if(host.equalsIgnoreCase(Constants.SERVICE_HOST_NAME)){
-				
 				DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
 				validateDatabaseFields(parameterType);
 		
@@ -589,10 +587,6 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 				}else{
 					createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
 				}
-				
-			}else{
-				createMessageDialog(Messages.HOST_NAME_ERROR,ERROR).open();
-			}
 		}
 		else{
 			createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
@@ -616,6 +610,7 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 			gridRow.setPrecision(hsf.getPrecision());
 			gridRow.setScale(hsf.getScale());
 			gridRow.setDateFormat(hsf.getFormat());
+			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(hsf.getScaleType()));
 			gridRow.setDataType(GridWidgetCommonBuilder
 					.getDataTypeByValue(hsf.getFieldType()));
 
@@ -631,7 +626,7 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 	 * @param errorMessage
 	 * @return
 	 */
-	public MessageBox createMessageDialog(String errorMessage, String messageType) {
+	public static MessageBox createMessageDialog(String errorMessage, String messageType) {
 
 		MessageBox messageBox = null;
 		if ("INF".equalsIgnoreCase(messageType)) {

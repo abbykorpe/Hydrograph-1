@@ -318,6 +318,4 @@ public class Constants {
 	public static String LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR=",";
 	public static final String EXTENSION=".*";
 	public static final String RUN_COMMAND_PROPERTY_NAME = "runcommand";
-	public static final String SERVICE_HOST_NAME = "bhsnode4";
-
 }

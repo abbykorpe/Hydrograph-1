@@ -22,7 +22,9 @@ public class HiveTableSchemaField {
 	private String precision = "";
 	private String scale = "";
 	private String format = "";
-
+	private String scaleType="";
+	
+	
 	public String getFieldName() {
 		return fieldName;
 	}
@@ -61,6 +63,14 @@ public class HiveTableSchemaField {
 
 	public void setFormat(String format) {
 		this.format = format;
+	}
+
+	public String getScaleType() {
+		return scaleType;
+	}
+
+	public void setScaleType(String scaleType) {
+		this.scaleType = scaleType;
 	}
 
 }
