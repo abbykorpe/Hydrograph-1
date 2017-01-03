@@ -29,6 +29,14 @@ class EncoderHelper extends Serializable {
     }
   }
 
+  def getStructFields(schemaFields: Array[SchemaField]): StructType ={
+    val structFields = new Array[StructField](schemaFields.size)
+    schemaFields.zipWithIndex.foreach(s=>{
+      structFields(s._2)= new StructField(s._1.getFieldName,getDataType(s._1))
+    })
+    StructType(structFields)
+  }
+
   def getStructFieldType(fieldName: String, schemaFields: Array[SchemaField]): DataType = {
     getDataType(schemaFields.filter(s => s.getFieldName.equals(fieldName))(0))
   }

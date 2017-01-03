@@ -83,7 +83,14 @@ public class UniqueSequenceEntityGenerator extends
 		uniqueSequenceEntity.setRuntimeProperties(OperationEntityUtils
 				.extractRuntimeProperties(jaxbGenerateSequence
 						.getRuntimeProperties()));
+
+		uniqueSequenceEntity.setInSocketList(OperationEntityUtils
+				.extractInSocketList(jaxbGenerateSequence.getInSocket()));
+		uniqueSequenceEntity.setRuntimeProperties(OperationEntityUtils
+				.extractRuntimeProperties(jaxbGenerateSequence.getRuntimeProperties()));
+
 	}
+
 
 	@Override
 	public UniqueSequenceEntity getEntity() {
