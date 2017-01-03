@@ -26,7 +26,8 @@ case class DbTableUtils() {
     val fieldsDataType = fieldsCreator.getFieldDataTypes();
     val fieldsScale = fieldsCreator.getFieldScale();
     val fieldsPrecision = fieldsCreator.getFieldPrecision();
-    val columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision);
+    val fieldFormat = fieldsCreator.getFieldFormat();
+    val columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision, fieldFormat);
     val DB_TYPE_ORACLE = "oracle"
     LOG.trace("Generating create query for " + outputRDBMSEntity.getDatabaseName
       + " database for table '" + outputRDBMSEntity.getTableName
@@ -81,8 +82,8 @@ case class DbTableUtils() {
    * @param tableName
    * @return String select query
    */
-  def getSelectQuery(fieldList: List[SchemaField], tableName: String) : String = {
-    val query = "select " + fieldList.map(f=>f.getFieldName).reverse.mkString(", ") + " from " + tableName
+  def getSelectQuery(fieldList: List[SchemaField], tableName: String): String = {
+    val query = "select " + fieldList.map(f => f.getFieldName).reverse.mkString(", ") + " from " + tableName
     LOG.debug("Select query :  " + query)
     query
   }
