@@ -13,7 +13,7 @@
  
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
-	<tns:component paletteIconPath="/icons/oracle_palette.png" canvasIconPath="/icons/oracle_canvas.png"
+	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
 		name="OOracle" nameInPalette="Oracle" defaultNamePrefix="OOracle" 
 		description="Used to write data from Oracle tables"
 		helpFilePath=""

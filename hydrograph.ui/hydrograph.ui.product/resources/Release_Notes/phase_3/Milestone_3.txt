@@ -21,3 +21,4 @@ Issues/Defects fixed:
 10.#568 [Shrirang Kumbhar] - RemoveDups :- Change in component size after closing and reopening graph
 11.#548 [Nitin Gupta] - Output component: - Tool shows incorrect scheme on UI
 12.#569 [Nitin Gupta]	-	Union All component: Error icon is not getting removed from schema tab
+13.#555 [Ashika Holkar] - Need to remove 'Validate' option 

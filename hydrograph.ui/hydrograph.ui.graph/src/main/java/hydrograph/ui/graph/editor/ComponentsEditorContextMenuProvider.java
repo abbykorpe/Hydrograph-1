@@ -46,6 +46,7 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	private static final String runAs = "org.eclipse.debug.ui.contextualLaunch.debug.submenu";
 	private static final String debugAs = "org.eclipse.debug.ui.contextualLaunch.run.submenu";
 	private static final String compareWith = "compareWithMenu";
+	private static final String validate = "ValidationAction";
 	
 	/**
 	 * Instantiate a new menu context provider for the specified EditPartViewer
@@ -144,7 +145,8 @@ public class ComponentsEditorContextMenuProvider extends ContextMenuProvider {
 	
 			if((StringUtils.equalsIgnoreCase(ci.getId(),runAs)||
 				StringUtils.equalsIgnoreCase(ci.getId(),debugAs)||
-				StringUtils.equalsIgnoreCase(ci.getId(),compareWith))){
+				StringUtils.equalsIgnoreCase(ci.getId(),compareWith)||
+				StringUtils.equalsIgnoreCase(ci.getId(),validate))){
 					return ;
 			}	
 		super.doItemFill(ci, index);

@@ -74,7 +74,7 @@ public class DataBaseUtility {
 			databaseTableSchema = mapper.readValue(jsonResponse, HiveTableSchema.class);
 		} catch (NumberFormatException | HttpException exception) {
 			logger.error("Json to object Mapping issue ", exception);
-		} catch (IOException exception) {
+		}catch (IOException exception) {
 			logger.error("Json to object Mapping issue ", exception);
 		}
 		return databaseTableSchema;

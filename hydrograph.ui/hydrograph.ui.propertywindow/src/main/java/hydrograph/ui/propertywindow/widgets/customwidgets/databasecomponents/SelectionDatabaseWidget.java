@@ -514,7 +514,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
 			oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
 		}else{
-			createMessageDialog(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY, INFO).open();
+			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY,Messages.ERROR , SWT.ICON_INFORMATION);
 		}
 		if (oracleDatabaseValues != null && oracleDatabaseValues.size() > 0) {
 			extractOracleMetaStoreDetails(oracleDatabaseValues);
@@ -527,13 +527,13 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			if ( StringUtils.isEmpty(parameterType.getHostName())|| StringUtils.isEmpty(parameterType.getJdbcName())
 				|| StringUtils.isEmpty(parameterType.getPortNo())|| StringUtils.isEmpty(parameterType.getUserName())
 				|| StringUtils.isEmpty(parameterType.getSid())|| StringUtils.isEmpty(parameterType.getPassword())) {
-			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}else{
 			if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
 					|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
 					|| StringUtils.isEmpty(parameterType.getUserName()) || StringUtils.isEmpty(parameterType.getPassword())) {
-				createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+				WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}
 	}
@@ -563,35 +563,34 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	 */
 	private void extractOracleMetaStoreDetails(List<String> oracleDatabaseValues) {
 		
-		String host = DataBaseUtility.getInstance().getServiceHost();
+String host = DataBaseUtility.getInstance().getServiceHost();
 		
 		if(null!=host&& StringUtils.isNotBlank(host)){
 			
-			DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
-			validateDatabaseFields(parameterType);
+				DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
+				validateDatabaseFields(parameterType);
 		
-			HiveTableSchema databaseTableSchema = DataBaseUtility.getInstance()
+				HiveTableSchema databaseTableSchema = DataBaseUtility.getInstance()
 					.extractDatabaseDetails(oracleDatabaseValues, parameterType,host);
 			
-			if (null != databaseTableSchema) {
+				if (null != databaseTableSchema) {
 
-				for (AbstractWidget abstractWgt : widgets) {
-	
-					if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
-						abstractWgt.refresh(getComponentSchema(databaseTableSchema));
+					for (AbstractWidget abstractWgt : widgets) {
+					
+						if (abstractWgt.getProperty().getPropertyName().equalsIgnoreCase(Constants.SCHEMA_PROPERTY_NAME)) {
+							abstractWgt.refresh(getComponentSchema(databaseTableSchema));
+						}
 					}
-				}
 	
-			createMessageDialog(Messages.METASTORE_IMPORT_SUCCESS,INFO).open();
-			propertyDialogButtonBar.enableApplyButton(true);
-		
-		}else{
-			createMessageDialog(Messages.INVALID_DB_ERROR,ERROR).open();
-		 }
+					WidgetUtility.createMessageBox(Messages.METASTORE_IMPORT_SUCCESS,Messages.INFORMATION , SWT.ICON_INFORMATION);
+					propertyDialogButtonBar.enableApplyButton(true);
+				}else{
+					WidgetUtility.createMessageBox(Messages.INVALID_DB_ERROR,Messages.ERROR , SWT.ICON_ERROR);
+				}
 		}
 		else{
-			createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
-		}
+			WidgetUtility.createMessageBox(Messages.HOST_NAME_BLANK_ERROR,Messages.ERROR , SWT.ICON_ERROR);
+			}
 	
 	}
 	/**
@@ -611,6 +610,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			gridRow.setPrecision(hsf.getPrecision());
 			gridRow.setScale(hsf.getScale());
 			gridRow.setDateFormat(hsf.getFormat());
+			gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(hsf.getScaleType()));
 			gridRow.setDataType(GridWidgetCommonBuilder
 					.getDataTypeByValue(hsf.getFieldType()));
 
@@ -619,27 +619,6 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		schema.setGridRow(rows);
 		return schema;
-	}
-
-	/**
-	 * Create the message dialog
-	 * @param errorMessage
-	 * @return
-	 */
-	public MessageBox createMessageDialog(String errorMessage, String messageType) {
-
-		MessageBox messageBox = null;
-		if ("INF".equalsIgnoreCase(messageType)) {
-			messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
-			messageBox.setText("Information");
-
-		} else {
-			messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);
-			messageBox.setText("Error");
-		}
-
-		messageBox.setMessage(errorMessage);
-		return messageBox;
 	}
 
 	/**
