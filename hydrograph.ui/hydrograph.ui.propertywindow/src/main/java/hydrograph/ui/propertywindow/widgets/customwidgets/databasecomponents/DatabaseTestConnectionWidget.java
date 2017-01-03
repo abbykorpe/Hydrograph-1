@@ -57,7 +57,6 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	protected ControlDecoration buttonDecorator;
 	private Button testConnectionButton;
 	private ArrayList<AbstractWidget> widgets;
-	private static final String ERROR = "ERR";
 	private static final String ORACLE = "oracle";
 	private static final String REDSHIFT = "redshift";
 	private static final String MYSQL = "mysql";
@@ -125,12 +124,10 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	 * @param testConnectionButton
 	 */
 	private void attachButtonListner(Button testConnectionButton) {
+		
 		testConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//TODO
-				/*Below code will use to test connection with database.
-				 * */
 				String host = DataBaseUtility.getInstance().getServiceHost();
 				
 				if(null!=host&& StringUtils.isNotBlank(host)){
@@ -138,13 +135,21 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 					DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
 					validateDatabaseFields(parameterType);
 				
-					DataBaseUtility.getInstance().testDBConnection(parameterType,host);
-				
+				String	connectionResponse=	DataBaseUtility.getInstance().testDBConnection(parameterType,host);
+				if(null != connectionResponse){
+					if(connectionResponse.startsWith("\"Connection")){
+						WidgetUtility.createMessageBox(connectionResponse,Messages.INFORMATION , SWT.ICON_INFORMATION);
+					}else{
+						WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
+					}
+				}
+				else{
+					WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
+				}
 				}else{
-					createMessageDialog(Messages.HOST_NAME_BLANK_ERROR,ERROR).open();
+					WidgetUtility.createMessageBox(Messages.HOST_NAME_BLANK_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 				}
 			}
-				
 		});
 		
 	}
@@ -156,38 +161,17 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 			if ( StringUtils.isEmpty(parameterType.getHostName())|| StringUtils.isEmpty(parameterType.getJdbcName())
 				|| StringUtils.isEmpty(parameterType.getPortNo())|| StringUtils.isEmpty(parameterType.getUserName())
 				|| StringUtils.isEmpty(parameterType.getSid())|| StringUtils.isEmpty(parameterType.getPassword())) {
-			createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}else{
 			if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
 					|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
 					|| StringUtils.isEmpty(parameterType.getUserName()) || StringUtils.isEmpty(parameterType.getPassword())) {
-				createMessageDialog(Messages.METASTORE_FORMAT_ERROR, ERROR).open();
+				WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}
 	}
 	
-	/**
-	 * Create the message dialog
-	 * @param errorMessage
-	 * @return
-	 */
-	public MessageBox createMessageDialog(String errorMessage, String messageType) {
-
-		MessageBox messageBox = null;
-		if ("INF".equalsIgnoreCase(messageType)) {
-			messageBox = new MessageBox(new Shell(), SWT.ICON_INFORMATION | SWT.OK);
-			messageBox.setText("Information");
-
-		} else {
-			messageBox = new MessageBox(new Shell(), SWT.ERROR | SWT.OK);
-			messageBox.setText("Error");
-		}
-
-		messageBox.setMessage(errorMessage);
-		return messageBox;
-	}
-
 	/**
 	 * Provides the value for all the DB details
 	 * @return 
@@ -200,7 +184,6 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		String schemaName = "";
 		String userName = "";
 		String password = "";
-		String dataBaseType = "";
 		String sid ="";
 		
 		for (AbstractWidget textAbtractWgt : widgets) {

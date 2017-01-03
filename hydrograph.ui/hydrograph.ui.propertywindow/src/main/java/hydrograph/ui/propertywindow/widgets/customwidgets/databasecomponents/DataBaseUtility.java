@@ -39,7 +39,6 @@ public class DataBaseUtility {
 	private static DataBaseUtility INSTANCE = new DataBaseUtility();
 
 	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
-	private String  connection_response;
 	
 	
 	/**
@@ -91,14 +90,16 @@ public class DataBaseUtility {
 		String jsonResponse = "";
 		String port_no = getServicePort();
 		
+		String connection_response = "";
 		try {
 			jsonResponse = DebugServiceClient.INSTANCE.connectToDatabase(getTestConnectionDetails(parameterType),host,port_no);
 			ObjectMapper mapper = new ObjectMapper();
-		  connection_response ="" ;/*= mapper.readValue(jsonResponse);*/
+			connection_response=new String(jsonResponse.getBytes());
 		} catch (NumberFormatException | HttpException exception) {
 			logger.error("Json to object Mapping issue ", exception);
 		} catch (IOException exception) {
 			logger.error("Json to object Mapping issue ", exception);
+			
 		}
 		return connection_response;
 	}
