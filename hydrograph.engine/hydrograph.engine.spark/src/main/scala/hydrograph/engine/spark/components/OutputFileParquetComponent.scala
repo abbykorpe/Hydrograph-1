@@ -20,28 +20,22 @@ class OutputFileParquetComponent(oFileParquetEntity: OutputFileParquetEntity, co
   def createSchema(fields: util.List[SchemaField]): Array[Column] = {
     val schema = new Array[Column](fields.size())
     fields.zipWithIndex.foreach { case (f, i) => schema(i) = col(f.getFieldName) }
-    LOG.info("Schema created for Output File Delimited Component : " + schema.mkString)
+    LOG.debug("Schema created for Output File Parquet Component : " + schema.mkString)
     schema
   }
 
   override def execute() = {
     try {
-      LOG.info("Created Output File Parquet Component '" + oFileParquetEntity.getComponentId + "' in Batch" + oFileParquetEntity.getBatch
-        + ", file path '" + oFileParquetEntity.getPath + "'")
-
       val filePathToWrite = oFileParquetEntity.getPath()
-
       val fieldList = oFileParquetEntity.getFieldsList.asScala
-
+      fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + oFileParquetEntity.getComponentId) }
+      componentsParams.getDataFrame().select(createSchema(oFileParquetEntity.getFieldsList): _*).write.mode(SaveMode.Overwrite).parquet(filePathToWrite)
       LOG.debug("Created Output File Parquet Component '" + oFileParquetEntity.getComponentId + "' in Batch" + oFileParquetEntity.getBatch
         + ", file path " + oFileParquetEntity.getPath)
-      fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "' Field type '" + field.getFieldDataType + "'") }
-
-      componentsParams.getDataFrame().select(createSchema(oFileParquetEntity.getFieldsList): _*).write.mode(SaveMode.Overwrite).parquet(filePathToWrite)
     }
     catch {
       case ex: RuntimeException =>
-        LOG.error("Error in Input  File Parquet component '" + oFileParquetEntity.getComponentId + "', Error" + ex.getMessage, ex)
+        LOG.error("Error in Output  File Parquet component '" + oFileParquetEntity.getComponentId + "', Error" + ex.getMessage, ex)
         throw ex
     }
   }

@@ -21,19 +21,14 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
   override def createComponent(): Map[String, DataFrame] = {
     val schemaField = SchemaCreator(iFileParquetEntity).makeSchema()
     try {
-      LOG.info("Created Input File Parquet Component '" + iFileParquetEntity.getComponentId + "' in Batch" + iFileParquetEntity.getBatch
-        + ", file path '" + iFileParquetEntity.getPath + "'")
-
       val fieldList = iFileParquetEntity.getFieldsList.asScala
-
-      LOG.debug("Created Input File Parquet Component '" + iFileParquetEntity.getComponentId + "' in Batch" + iFileParquetEntity.getBatch
-        + ", file path " + iFileParquetEntity.getPath)
-      fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName) }
-
+      fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + iFileParquetEntity.getComponentId) }
       val schemaFromMetadata: StructType = new ParquetMetadataReader().getParquetFileSchema(iFileParquetEntity.getPath, iComponentsParams.getSparkSession())
       SchemaUtils().compareSchema(schemaField, schemaFromMetadata)
       val df = iComponentsParams.getSparkSession().read.schema(schemaField).parquet(iFileParquetEntity.getPath)
       val key = iFileParquetEntity.getOutSocketList.get(0).getSocketId
+      LOG.debug("Created Input File Parquet Component '" + iFileParquetEntity.getComponentId + "' in Batch" + iFileParquetEntity.getBatch
+        + ", file path " + iFileParquetEntity.getPath)
       Map(key -> df)
     }
     catch {
