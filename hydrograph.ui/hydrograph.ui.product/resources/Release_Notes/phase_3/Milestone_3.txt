@@ -22,3 +22,5 @@ Issues/Defects fixed:
 11.#548 [Nitin Gupta] - Output component: - Tool shows incorrect scheme on UI
 12.#569 [Nitin Gupta]	-	Union All component: Error icon is not getting removed from schema tab
 13.#555 [Ashika Holkar] - Need to remove 'Validate' option 
+12.#569 [Nitin Gupta]	-	Union All component: Error icon is not getting removed from schema tab
+13.#547 [Shrirang Kumbhar] - Remote Run: Tool lock user ID if user enter incorrect password single time

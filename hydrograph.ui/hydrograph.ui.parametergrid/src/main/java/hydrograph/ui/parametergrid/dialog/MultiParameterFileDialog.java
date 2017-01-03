@@ -1122,7 +1122,7 @@ public class MultiParameterFileDialog extends Dialog {
 		composite_1_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
 		Label lblForImage = new Label(composite_1_2, SWT.NONE);
-		Image image = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
+		Image image = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MULTI_PARAMETERGRID_DROP_BOX);
 		lblForImage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
 		lblForImage.setImage(image);
 	   

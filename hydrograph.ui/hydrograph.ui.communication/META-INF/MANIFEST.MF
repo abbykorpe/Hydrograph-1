@@ -15,6 +15,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: hydrograph.ui.communication.debugservice,
+ hydrograph.ui.communication.messages,
  hydrograph.ui.communication.utilities
 Import-Package: com.jcraft.jsch,
  hydrograph.ui.common.util

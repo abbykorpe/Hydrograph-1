@@ -31,6 +31,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -50,6 +52,10 @@ import org.eclipse.ui.PlatformUI;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.communication.messages.Message;
+import hydrograph.ui.communication.messages.MessageType;
+import hydrograph.ui.communication.utilities.SCPUtility;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * 
@@ -60,6 +66,7 @@ import hydrograph.ui.common.util.Constants;
  *
  */
 public class RunConfigDialog extends Dialog {
+	
 	private Text txtBasePath;
 	private Text txtEdgeNode;
 	private Text txtUserName;
@@ -89,7 +96,7 @@ public class RunConfigDialog extends Dialog {
 	private final String BASE_PATH = "basePath";
 	private final String VIEW_DATA_CHECK = "viewDataCheck";
 	public static final String SELECTION_BUTTON_KEY = "REMOTE_BUTTON_KEY";
-
+	
 	private String password;
 	private String userId;
 	private String edgeNodeText;
@@ -102,7 +109,9 @@ public class RunConfigDialog extends Dialog {
 
 	private static String LOCAL_HOST = "localhost";
 
-	Composite container;
+	private Composite container;
+	
+	private Button okButton;
 
 	/**
 	 * Create the dialog.
@@ -261,9 +270,14 @@ public class RunConfigDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
-
+		
+		applyServerDetailsCrossTextEmptyValidationListener(txtEdgeNode);
+		applyServerDetailsCrossTextEmptyValidationListener(txtPassword);
+		applyServerDetailsCrossTextEmptyValidationListener(txtUserName);
+		applyServerDetailsCrossTextEmptyValidationListener(txtBasePath);
+		
 		loadBuildProperties();
 	}
 
@@ -466,6 +480,63 @@ public class RunConfigDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		saveRunConfigurations();
+		
+		if(validateCredentials() && runGraph){
+			super.okPressed();
+		}
+		
+	}
+
+	private boolean validateCredentials() {
+		if (remoteMode) {
+			return validateHostUsernameAndPassword();
+		}else{
+			return true;
+		}	
+	}
+
+	private boolean validateHostUsernameAndPassword() {
+		if (isUsernamePasswordOrHostEmpty()) {
+			return false;
+		} else {
+			return isValidUserNamePasswordOrHost();
+		}
+	}
+
+	private boolean isValidUserNamePasswordOrHost() {
+		Message message = SCPUtility.INSTANCE.validateCredentials(host, username, password);
+		if (message.getMessageType() != MessageType.SUCCESS) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE,
+					message.getMessage());
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	private boolean isUsernamePasswordOrHostEmpty() {
+		Notification notification = new Notification();
+		if (remoteMode) {
+			if (StringUtils.isEmpty(txtEdgeNode.getText())){
+				notification.addError(Messages.EMPTY_HOST_FIELD_MESSAGE);
+			}
+				
+			if (StringUtils.isEmpty(txtUserName.getText())){
+				notification.addError(Messages.EMPTY_USERNAME_FIELD_MESSAGE);
+			}
+				
+			if (StringUtils.isEmpty(txtPassword.getText())){
+				notification.addError(Messages.EMPTY_PASSWORD_FIELD_MESSAGE);
+			}
+		}
+		
+		if(notification.hasErrors()){
+			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.EMPTY_FIELDS_MESSAGE_BOX_TITLE,
+					notification.errorMessage());	
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	private void saveRunConfigurations() {
@@ -503,7 +574,6 @@ public class RunConfigDialog extends Dialog {
 		try {
 			checkBuildProperties(btnRemoteMode.getSelection());
 			this.runGraph = true;
-			super.okPressed();
 		} catch (IllegalArgumentException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", e.getMessage());
 			this.runGraph = false;
@@ -513,9 +583,9 @@ public class RunConfigDialog extends Dialog {
 	}
 
 	private void setPreferences() {
-		if (StringUtils.isBlank(PlatformUI.getPreferenceStore().getString(Constants.HOST)))
+		if (StringUtils.isBlank(PlatformUI.getPreferenceStore().getString(Constants.HOST))){
 			PlatformUI.getPreferenceStore().setValue(Constants.HOST, this.host);
-
+		}
 	}
 
 	@Override
@@ -533,22 +603,13 @@ public class RunConfigDialog extends Dialog {
 
 	private Notification validate(boolean remote) {
 		Notification note = new Notification();
-		if (remote) {
-			if (StringUtils.isEmpty(txtEdgeNode.getText()))
-				note.addError("Edge Node value not specified");
-
-			if (StringUtils.isEmpty(txtUserName.getText()))
-				note.addError("Username not specified");
-
-			if (StringUtils.isEmpty(txtPassword.getText()))
-				note.addError("Password not specified");
+		if (isDebug && StringUtils.isEmpty(txtBasePath.getText())){
+			note.addError(Messages.EMPTY_BASE_PATH_FIELD_MESSAGE);
 		}
-		if (isDebug && StringUtils.isEmpty(txtBasePath.getText()))
-			note.addError("Base Path not specified");
 
 		IPath path = new Path(txtBasePath.getText());
 		if (isDebug && !path.isAbsolute()) {
-			note.addError("Base Path should not be relative");
+			note.addError(Messages.BASE_PATH_FIELD_VALIDATION_MESSAGE);
 		}
 
 		return note;
@@ -556,6 +617,37 @@ public class RunConfigDialog extends Dialog {
 
 	public boolean proceedToRunGraph() {
 		return runGraph;
+	}
+	
+	private void applyServerDetailsCrossTextEmptyValidationListener(Text text) {
+		text.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				if (okButton == null) {
+					return;
+				}
+
+				if (btnRemoteMode.getSelection()) {
+					if (StringUtils.isEmpty(txtEdgeNode.getText()) || StringUtils.isEmpty(txtUserName.getText())
+							|| StringUtils.isEmpty(txtPassword.getText())) {
+						
+						okButton.setEnabled(false);
+					} else {
+						okButton.setEnabled(true);
+					}
+				} else {
+					okButton.setEnabled(true);
+				}
+				
+				if(viewDataCheckBox.getSelection()){
+					if (StringUtils.isEmpty(txtBasePath.getText())) {
+						okButton.setEnabled(false);
+					} 
+				}
+			}
+		});
 	}
 
 }
