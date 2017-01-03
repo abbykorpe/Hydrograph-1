@@ -20,26 +20,30 @@
          xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd">
 
 
-    <inputs id="inputMysql" batch="0" xsi:type="it:mysql">
-        <outSocket id="out0">
-            <schema name="schema1">
-                <field name="id" type="java.lang.Integer" />
-                <field name="name" type="java.lang.String" />
-                <field name="city" type="java.lang.String" />
-                <field name="creditPoint" type="java.lang.Double" />
+   <inputs id="inputMysql" batch="0" xsi:type="it:mysql">
+    <outSocket id="out0">
+        <schema name="schema1">
+            <field name="id" type="java.lang.Integer" />
+            <field name="name" type="java.lang.String" />
+            <field name="city" type="java.lang.String" />
+            <field name="creditPoint" type="java.lang.Double" />
+            <field name="Deptno" type="java.lang.Integer" />
+            <field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+            <field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+            <field name="extra" type="java.math.BigDecimal" scale="2"
+                   precision="10" scaleType="explicit" />
+        </schema>
+    </outSocket>
+    <databaseName value="test" />
+    <hostName value="10.130.248.53" />
+    <!-- <port value="3306" /> -->
+    <jdbcDriver value="Connector/J" />
+    <!--<tableName value="ideaJDBC" />-->
+    <selectQuery value="select * from ideaJDBC where id=10" />
 
-            </schema>
-        </outSocket>
-        <databaseName value="test" />
-        <hostName value="10.130.248.53" />
-        <!-- <port value="3306" /> -->
-        <jdbcDriver value="Connector/J" />
-        <tableName value="ideaJDBC" />
-       <!-- <selectQuery value="select * from ideaJDBC where id=10" />-->
-
-        <username value="root" />
-        <password value="root" />
-    </inputs>
+    <username value="root" />
+    <password value="root" />
+   </inputs>
 
     <outputs id="output1" xsi:type="ot:textFileDelimited">
         <inSocket  fromComponentId="inputMysql" fromSocketId="out0" id="in0">
@@ -48,11 +52,15 @@
                 <field name="name" type="java.lang.String" />
                 <field name="city" type="java.lang.String" />
                 <field name="creditPoint" type="java.lang.Double" />
-
+                <field name="Deptno" type="java.lang.Integer" />
+                <field name="dob" type="java.util.Date" format="yyyy-MM-dd"/>
+                <field name="dobj" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="extra" type="java.math.BigDecimal" scale="2"
+                       precision="10" scaleType="explicit" />
             </schema>
         </inSocket>
         <overWrite value="true"/>
-        <path uri="hydrograph.engine.spark/testData/output/MysqlSelectiveOutput" />
+        <path uri="hydrograph.engine.spark/testData/output/mysql" />
         <delimiter value="," />
         <hasHeader value="false" />
         <charset value="ISO-8859-1" />
