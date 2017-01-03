@@ -50,7 +50,7 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
           .filter { str => !lookupJoinOp.keyFields.contains(str) }
           .map { str => if (matchType == "first") (first(str).as(str)) else (last(str).as(str)) }
 
-        lookupJoinOp.dataFrame.groupBy(lookupKeyFields: _*).agg(lookupOtherFields.head, lookupOtherFields.tail: _*)
+        lookupJoinOp.dataFrame.groupBy(lookupKeyFields: _*).agg(lit(null), lookupOtherFields: _*)
       }
     })
 
