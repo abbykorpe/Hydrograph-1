@@ -310,7 +310,15 @@ public class Messages extends NLS {
 	public static String DRIVER_NAME;
 	public static String EXECUTION_COMMAND;
 	
+	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
+	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;
+	public static String EMPTY_FIELDS_MESSAGE_BOX_TITLE;
+	public static String EMPTY_PASSWORD_FIELD_MESSAGE;
+	public static String EMPTY_USERNAME_FIELD_MESSAGE;
+	public static String EMPTY_HOST_FIELD_MESSAGE;
+	public static String CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE;
 	
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
