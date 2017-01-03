@@ -97,10 +97,13 @@ public class MysqlMetadataStrategy extends MetadataStrategyTemplate {
 			for (int count = 1; count <= rsmd.getColumnCount(); count++) {
 				TableSchemaFieldEntity tableSchemaFieldEntity = new TableSchemaFieldEntity();
 				tableSchemaFieldEntity.setFieldName(rsmd.getColumnLabel(count));
-                if (rsmd.getColumnClassName(count).equalsIgnoreCase("java.sql.Timestamp")) {
+                if (rsmd.getColumnTypeName(count).equalsIgnoreCase("TIMESTAMP")) {
 					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
-				} else if(rsmd.getColumnTypeName(count).equalsIgnoreCase("TINYINT")) {
+				} else if(rsmd.getColumnTypeName(count).equalsIgnoreCase("DATE")) {
+                    tableSchemaFieldEntity.setFormat("yyyy-MM-dd");
+                    tableSchemaFieldEntity.setFieldType("java.util.Date");
+                } else if(rsmd.getColumnTypeName(count).equalsIgnoreCase("TINYINT")) {
                     tableSchemaFieldEntity.setFieldType("java.lang.Boolean");
 				} else if(rsmd.getColumnTypeName(count).equalsIgnoreCase("SMALLINT"))  {
                     tableSchemaFieldEntity.setFieldType("java.lang.Short");

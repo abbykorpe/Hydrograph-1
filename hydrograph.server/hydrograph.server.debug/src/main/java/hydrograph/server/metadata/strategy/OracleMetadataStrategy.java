@@ -126,7 +126,6 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 				tableSchemaFieldEntity.setFieldName(rsmd.getColumnLabel(count));
 				// Retrieving schema type for converting oracle type to java
 				// specific type
-				System.out.println(rsmd.getColumnTypeName(count));
 				if (rsmd.getColumnTypeName(count).equalsIgnoreCase("timestamp")) {
 					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss:SSS");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
