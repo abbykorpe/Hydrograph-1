@@ -26,10 +26,14 @@ class OutputFileParquetComponent(oFileParquetEntity: OutputFileParquetEntity, co
 
   override def execute() = {
     try {
+
       val filePathToWrite = oFileParquetEntity.getPath()
       val fieldList = oFileParquetEntity.getFieldsList.asScala
+
       fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + oFileParquetEntity.getComponentId) }
+
       componentsParams.getDataFrame().select(createSchema(oFileParquetEntity.getFieldsList): _*).write.mode(SaveMode.Overwrite).parquet(filePathToWrite)
+      
       LOG.debug("Created Output File Parquet Component '" + oFileParquetEntity.getComponentId + "' in Batch" + oFileParquetEntity.getBatch
         + ", file path " + oFileParquetEntity.getPath)
     }
