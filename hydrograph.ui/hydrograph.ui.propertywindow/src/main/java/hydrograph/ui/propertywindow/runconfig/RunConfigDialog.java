@@ -275,7 +275,7 @@ public class RunConfigDialog extends Dialog {
 		
 		applyServerDetailsCrossTextEmptyValidationListener(txtEdgeNode);
 		applyServerDetailsCrossTextEmptyValidationListener(txtPassword);
-		applyServerDetailsCrossTextEmptyValidationListener(txtPassword);
+		applyServerDetailsCrossTextEmptyValidationListener(txtUserName);
 		applyServerDetailsCrossTextEmptyValidationListener(txtBasePath);
 		
 		loadBuildProperties();

@@ -42,7 +42,6 @@ public class RunConfigHandler extends AbstractHandler implements IHandler {
 				MessageDialog.openWarning(Display.getDefault().getActiveShell(), "Warning", e.getMessage());
 			}
 			catch(Exception e){
-				e.printStackTrace();
 				MessageDialog.openWarning(Display.getDefault().getActiveShell(), "Warning", "Please save the graph before setting the run configuration.");
 			}
 		return null;

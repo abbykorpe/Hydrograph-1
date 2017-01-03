@@ -318,7 +318,6 @@ public class Messages extends NLS {
 	public static String EMPTY_HOST_FIELD_MESSAGE;
 	public static String CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE;
 	
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
