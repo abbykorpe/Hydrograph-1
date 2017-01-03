@@ -13,10 +13,15 @@
 
 package hydrograph.ui.engine.converter.impl;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeOutputRecordCount;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.operationstypes.Normalize;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
@@ -27,20 +32,14 @@ import hydrograph.ui.engine.converter.TransformConverter;
 import hydrograph.ui.engine.helper.ConverterHelper;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
 /**
  * Normalize converter
  * 
- * @author Solomon Shockley
+ * @author Bitwise
  */
 public class NormalizeConverter extends TransformConverter {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(NormalizeConverter.class);
-	private TransformMapping atMapping;
+	private TransformMapping transformMapping;
 	private List<BasicSchemaGridRow> schemaGridRows;
 	ConverterHelper converterHelper;
 
@@ -49,7 +48,7 @@ public class NormalizeConverter extends TransformConverter {
 		this.baseComponent = new Normalize();
 		this.component = component;
 		this.properties = component.getProperties();
-		atMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
+		transformMapping = (TransformMapping) properties.get(Constants.PARAM_OPERATION);
 		converterHelper = new ConverterHelper(component);
 		initSchemaGridRows();
 	}
@@ -75,25 +74,25 @@ public class NormalizeConverter extends TransformConverter {
 		super.prepareForXML();
         Normalize normalize = (Normalize) baseComponent;
 		normalize.getOperationOrExpression().addAll(getOperations());
-		if(atMapping.isExpression())
+		if(transformMapping!=null && transformMapping.isExpression())
 		normalize.setOutputRecordCount(getOutputRecordCountValue());
 	}
 
 	private TypeOutputRecordCount getOutputRecordCountValue() {
 		TypeOutputRecordCount typeOutputRecordCount=new TypeOutputRecordCount();
-		typeOutputRecordCount.setValue(atMapping.getExpressionEditorData().getExpression());
+		typeOutputRecordCount.setValue(transformMapping.getExpressionEditorData().getExpression());
 		return typeOutputRecordCount;
 	}
 
 
 	@Override
 	protected List<Object> getOperations() {
-		return converterHelper.getOperationsOrExpression(atMapping,schemaGridRows);
+		return converterHelper.getOperationsOrExpression(transformMapping,schemaGridRows);
 	}
 
 	@Override
 	protected List<TypeOperationsOutSocket> getOutSocket() {
-		return converterHelper.getOutSocket(atMapping,schemaGridRows);
+		return converterHelper.getOutSocket(transformMapping,schemaGridRows);
 	}
 
 	@Override

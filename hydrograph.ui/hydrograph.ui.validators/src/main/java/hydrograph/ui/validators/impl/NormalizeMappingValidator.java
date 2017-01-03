@@ -40,7 +40,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class NormalizeMappingValidator implements IValidator{
 	private String errorMessage;
-	boolean isExpressionSelected;
+	private boolean isExpressionSelected;
+	
 	@Override
 	public boolean validateMap(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap) {
 		Map<String, Object> propertyMap = (Map<String, Object>) object;
@@ -54,6 +55,7 @@ public class NormalizeMappingValidator implements IValidator{
 	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
 			,boolean isJobImported){
 		TransformMapping transformMapping=(TransformMapping) object;
+		Set<FilterProperties>set=null;
 		if(transformMapping==null)
 		{
 			errorMessage = propertyName + " is mandatory";
@@ -76,17 +78,17 @@ public class NormalizeMappingValidator implements IValidator{
 		List<MappingSheetRow> mappingSheetRows=TransformMappingFeatureUtility.INSTANCE.getActiveMappingSheetRow
 				(transformMapping.getMappingSheetRows());
 		List<NameValueProperty>  mapOrPassthroughfields = transformMapping.getMapAndPassthroughField();
-		if(isJobImported)
-		{	
-		List<InputField> inputFieldsList = new ArrayList<InputField>();
-		for(Entry< String,List<FixedWidthGridRow>> inputList :inputSchemaMap.entrySet()){
-			for(FixedWidthGridRow row : inputList.getValue()){
+		if(isJobImported){	
+			List<InputField> inputFieldsList = new ArrayList<InputField>();
+			for(Entry< String,List<FixedWidthGridRow>> inputList :inputSchemaMap.entrySet()) {
+				for(FixedWidthGridRow row : inputList.getValue())
+			{
 				inputFieldsList.add(new InputField(row.getFieldName(), new ErrorObject(false, "")));
 			}
 			
-		}
-		transformMapping.setInputFields(inputFieldsList);
-		isJobImported=false;
+		 }
+		 transformMapping.setInputFields(inputFieldsList);
+		 isJobImported=false;
 		}
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
 		{
@@ -94,17 +96,17 @@ public class NormalizeMappingValidator implements IValidator{
 		return false;
 		}
 		
-		Set<FilterProperties>set=null;
+		
 		if(mappingSheetRows!=null && !mappingSheetRows.isEmpty())
 		{
 			validateAllExpressions(mappingSheetRows, inputSchemaMap);
 			
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
-				if(isExpressionSelected&&!mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
-				continue;
-				else if(!isExpressionSelected &&mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
-				continue;	
+				if(isSkipTheCurrentMappingSheetRow(mappingSheetRow))
+				{	
+					continue;
+				}	
 				if(!mappingSheetRow.isExpression())
 				{	
 				if(StringUtils.isBlank(mappingSheetRow.getOperationClassPath()))
@@ -115,7 +117,6 @@ public class NormalizeMappingValidator implements IValidator{
 				else if(
 						!mappingSheetRow.isClassParameter()
 						&&!mappingSheetRow.isWholeOperationParameter()
-						//&&StringUtils.equalsIgnoreCase(mappingSheetRow.getComboBoxValue(),"Custom")
 						&&!(ValidatorUtility.INSTANCE.isClassFilePresentOnBuildPath(mappingSheetRow.getOperationClassPath()))
 						)
 				   {
@@ -127,19 +128,16 @@ public class NormalizeMappingValidator implements IValidator{
 				{
 					String expressionText=mappingSheetRow.getExpressionEditorData().getExpression();
 					ExpressionEditorData expressionEditorData=mappingSheetRow.getExpressionEditorData();
-
-					if(StringUtils.isBlank(expressionText))
+                	if(StringUtils.isBlank(expressionText))
 					{
 						 errorMessage = propertyName + "Expression is blank in"+" "+mappingSheetRow.getOperationID();		
 						 return false;
 					}
-					
 					if(!expressionEditorData.isValid())
 					{
 						errorMessage = expressionEditorData.getErrorMessage();
 						return false;
 					}
-					
 				}	
 				if(mappingSheetRow.getOutputList().isEmpty())
 				{
@@ -159,28 +157,27 @@ public class NormalizeMappingValidator implements IValidator{
 			Set<String> duplicateOperationIdSet=new HashSet<String>();
 			for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 			{
-				 if(isExpressionSelected&&!mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
+				if(isSkipTheCurrentMappingSheetRow(mappingSheetRow)){
 					continue;
-					else if(!isExpressionSelected &&mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
-					continue;
-				   set = new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
-				   if(set.size() < mappingSheetRow.getInputFields().size())
-				   {
+					}
+				 set = new HashSet<FilterProperties>(mappingSheetRow.getInputFields());
+				 if(set.size() < mappingSheetRow.getInputFields().size())
+				 {
 					 errorMessage = propertyName + "Duplicate field(s) exists in" +" "+mappingSheetRow.getOperationID();
 					 return false;
-				   }
-				   
-				   if(!(duplicateOperationIdSet.add(mappingSheetRow.getOperationID())))
-				   {
-					   errorMessage = propertyName + "Duplicate operation Id"+" "+mappingSheetRow.getOperationID();
-					   return false;
-				   }  
+				 }
+				 if(!(duplicateOperationIdSet.add(mappingSheetRow.getOperationID())))
+				 {
+					 errorMessage = propertyName + "Duplicate operation Id"+" "+mappingSheetRow.getOperationID();
+					 return false;
+				 }  
 			}
-			
 		}
 		
-		for (NameValueProperty nameValueProperty : mapOrPassthroughfields) {
-			if(!transformMapping.getInputFields().contains(new InputField(nameValueProperty.getPropertyName(), new ErrorObject(false, "")))){
+		for (NameValueProperty nameValueProperty : mapOrPassthroughfields) 
+		{
+			if(!transformMapping.getInputFields().contains(new InputField(nameValueProperty.getPropertyName(), new ErrorObject(false, ""))))
+			{
 				 errorMessage = propertyName + " Input field not present.";		
 				 return false;
 			}
@@ -188,7 +185,8 @@ public class NormalizeMappingValidator implements IValidator{
 		
 		List<FilterProperties> filterProperties = new ArrayList<>();
 
-		for (NameValueProperty nameValue : transformMapping.getMapAndPassthroughField()) {
+		for (NameValueProperty nameValue : transformMapping.getMapAndPassthroughField()) 
+		{
 			FilterProperties filterProperty = new FilterProperties();
 			filterProperty.setPropertyname(nameValue.getPropertyValue());
 			filterProperties.add(filterProperty);
@@ -197,10 +195,9 @@ public class NormalizeMappingValidator implements IValidator{
 		List<FilterProperties> operationOutputFieldList=new ArrayList<>();
 		for( MappingSheetRow mappingSheetRow : mappingSheetRows)
 		{
-			if(isExpressionSelected&&!mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
-				continue;
-				else if(!isExpressionSelected &&mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
-				continue;
+			if(isSkipTheCurrentMappingSheetRow(mappingSheetRow)){
+			continue;
+			}
 			operationOutputFieldList.addAll(mappingSheetRow.getOutputList());
 		}
 		 set = new HashSet<FilterProperties>(filterProperties);
@@ -210,19 +207,17 @@ public class NormalizeMappingValidator implements IValidator{
 		{
 			 errorMessage = propertyName + "Duplicate field(s) exists in OutputFields";		
 			 return false;
-			
 		}
-		
 		return true;
 	}
 
 	private void validateAllExpressions(List<MappingSheetRow> mappingSheetRows,
-			Map<String, List<FixedWidthGridRow>> inputSchemaMap) {
+			Map<String, List<FixedWidthGridRow>> inputSchemaMap) 
+	{
 		for (MappingSheetRow mappingSheetRow : mappingSheetRows) {
-			if(isExpressionSelected&&!mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
-				continue;
-				else if(!isExpressionSelected &&mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
-				continue;
+			if(isSkipTheCurrentMappingSheetRow(mappingSheetRow)){
+			continue;
+			}	
 			if (mappingSheetRow.isExpression()) {
 				String expressionText = mappingSheetRow.getExpressionEditorData().getExpression();
 				ExpressionEditorData expressionEditorData = mappingSheetRow.getExpressionEditorData();
@@ -235,10 +230,21 @@ public class NormalizeMappingValidator implements IValidator{
 			}
 		}
 	}
+	
+	private boolean isSkipTheCurrentMappingSheetRow(MappingSheetRow mappingSheetRow)
+	{
+		if((isExpressionSelected&&!mappingSheetRow.isExpression()&&mappingSheetRow.isActive())
+				  ||(!isExpressionSelected &&mappingSheetRow.isExpression()&&mappingSheetRow.isActive()))
+				{	
+           			return true;
+				}
+		return false;
+	}
 
 	@Override
 	public String getErrorMessage() {
 		return errorMessage;
 	}
+	
 }
 

@@ -1090,7 +1090,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	private AbstractExpressionComposite createExpressionComposite(
 			final ExpandItem expandItem,
 			final OperationClassComposite operationClassComposite) {
-		final AbstractExpressionComposite expressionComposite=Factory.INSTANCE.
+		final AbstractExpressionComposite expressionComposite=ExpressionCompositeFactory.INSTANCE.
 				getComposite(expandBar,mappingSheetRowForExpression,getComponent(),widgetConfig);
 		
      	expressionComposite.getExpressionIdTextBox().setText(mappingSheetRowForExpression.getOperationID());

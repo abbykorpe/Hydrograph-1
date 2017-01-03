@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -110,12 +112,12 @@ public abstract class AbstractExpressionComposite extends Composite {
     
 	protected void disabledWidgetsifWholeExpressionIsParameter(Button isParam, boolean isWholeOperationParameter) {
 		if (isWholeOperationParameter) {
-			TableViewer tableViewer = (TableViewer) isParam.getData("inputFieldTable");
-			Button addButton = (Button) isParam.getData("addButton");
-			Button deleteButton = (Button) isParam.getData("deleteButton");
-			Text expressionIdTextBox = (Text) isParam.getData("expressionIdTextBox");
-			Button browseButton = (Button) isParam.getData("expressionEditorButton");
-			Text outputFieldTextBox = (Text) isParam.getData("outputFieldTextBox");
+			TableViewer tableViewer = (TableViewer) isParam.getData(Constants.INPUT_FIELD_TABLE);
+			Button addButton = (Button) isParam.getData(Constants.ADD_BUTTON);
+			Button deleteButton = (Button) isParam.getData(Constants.DELETE_BUTTON);
+			Text expressionIdTextBox = (Text) isParam.getData(Constants.EXPRESSION_ID_TEXT_BOX);
+			Button browseButton = (Button) isParam.getData(Constants.EXPRESSION_EDITOR_BUTTON);
+			Text outputFieldTextBox = (Text) isParam.getData(Constants.OUTPUT_FIELD_TEXT_BOX);
 			tableViewer.getTable().setEnabled(false);
 			addButton.setEnabled(false);
 			deleteButton.setEnabled(false);
@@ -126,14 +128,14 @@ public abstract class AbstractExpressionComposite extends Composite {
 	}
 	
 	 protected void setAllWidgetsOnIsParamButton(Button isParam) {
-			isParam.setData("inputFieldTable", tableViewer);
-			isParam.setData("addButton", addButton);
-			isParam.setData("deleteButton", deletButton);
-			isParam.setData("expressionIdTextBox", expressionIdTextBox);
-			isParam.setData("expressionEditorButton", browseButton);
-			isParam.setData("outputFieldTextBox", outputFieldTextBox);
-			isParam.setData("parameterTextBox", parameterTextBox);
-			isParam.setData("expressionTextBox", expressionTextBox);
+			isParam.setData(Constants.INPUT_FIELD_TABLE, tableViewer);
+			isParam.setData(Constants.ADD_BUTTON, addButton);
+			isParam.setData(Constants.DELETE_BUTTON, deletButton);
+			isParam.setData(Constants.EXPRESSION_ID_TEXT_BOX, expressionIdTextBox);
+			isParam.setData(Constants.EXPRESSION_EDITOR_BUTTON, browseButton);
+			isParam.setData(Constants.OUTPUT_FIELD_TEXT_BOX, outputFieldTextBox);
+			isParam.setData(Constants.PARAMETER_TEXT_BOX, parameterTextBox);
+			isParam.setData(Constants.EXPRESSION_TEXT_BOX, expressionTextBox);
 		}
 	
 	private List<FixedWidthGridRow> getInputSchema(Component component) {

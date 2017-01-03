@@ -337,16 +337,6 @@ public enum DataTypes {
 		return reflectionValue;
 	}
 
-	public static String getDefaulltValuefromReflectionDataTypeString(String value,FixedWidthGridRow inputFieldSchema) {
-		for (DataTypes dataType : DataTypes.values()) {
-			if (StringUtils.equalsIgnoreCase(dataType.reflectionValue, value)) {
-				return dataType.getDefaultValue(inputFieldSchema);
-			}
-		}
-		
-		return value;
-	}
-	
 	public static String getDefaulltValuefromDataTypesSimpleName(String value,FixedWidthGridRow inputFieldSchema) {
 		for (DataTypes dataType : DataTypes.values()) {
 			if (StringUtils.equalsIgnoreCase(dataType.dataType, value)) {

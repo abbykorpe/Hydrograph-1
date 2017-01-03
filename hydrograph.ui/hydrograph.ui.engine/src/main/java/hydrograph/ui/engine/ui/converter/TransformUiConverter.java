@@ -13,6 +13,17 @@
 
 package hydrograph.ui.engine.ui.converter;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeExpressionField;
@@ -22,7 +33,6 @@ import hydrograph.engine.jaxb.commontypes.TypeOperationField;
 import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputRecordCount;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
@@ -47,17 +57,6 @@ import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 
 /**
  * The class TransformUiConverter
@@ -247,7 +246,14 @@ public abstract class TransformUiConverter extends UiConverter {
 		}
 	}
 	protected ExpressionEditorData getExpressionEditorData(TypeTransformExpression typeTransformExpression) {
-		ExpressionEditorData editorData=new ExpressionEditorData(typeTransformExpression.getExpr(),uiComponent.getComponentName());
+		String expression;
+		if(StringUtils.isBlank(typeTransformExpression.getExpr())){
+			expression="";
+		}
+		else{
+			expression=typeTransformExpression.getExpr();
+		}
+		ExpressionEditorData editorData=new ExpressionEditorData(expression,uiComponent.getComponentName());
 		if(typeTransformExpression.getInputFields()!=null){
 		for(TypeInputField inputField:typeTransformExpression.getInputFields().getField()){
 			editorData.getfieldsUsedInExpression().add(inputField.getName());

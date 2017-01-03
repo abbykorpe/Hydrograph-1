@@ -113,10 +113,9 @@ public class ConverterHelper {
 		List<MappingSheetRow> filterSheetRowList=new ArrayList<>();
  		for(MappingSheetRow mappingSheetRow:mappingSheetRows)
 		{
-			if(transformMapping.isExpression()&&mappingSheetRow.isExpression())
+			if((transformMapping.isExpression()&&mappingSheetRow.isExpression())
+				||(!transformMapping.isExpression()&&!mappingSheetRow.isExpression()))
             filterSheetRowList.add(mappingSheetRow);
-			else if(!transformMapping.isExpression()&&!mappingSheetRow.isExpression())
-			filterSheetRowList.add(mappingSheetRow);	
 		}	
  		return filterSheetRowList;
 	}
@@ -150,7 +149,7 @@ public class ConverterHelper {
             }
             if(StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression()))
             {
-            	expression.setExpr(mappingSheetRow.getExpressionEditorData().getExpression());
+            expression.setExpr(mappingSheetRow.getExpressionEditorData().getExpression());
             }
             return expression;
             }	
@@ -189,11 +188,15 @@ public class ConverterHelper {
 		return properties;
 	}
     
-	private TypeOperationInputFields getExpressionInputFields(MappingSheetRow mappingSheetRow) {
+	private TypeOperationInputFields getExpressionInputFields(MappingSheetRow mappingSheetRow) 
+	{
 		TypeOperationInputFields inputFields = null;
+		if (mappingSheetRow != null)
+		{		
 		List<String> expressionInputFields=new ArrayList<>
 		(mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().keySet());
-		if (mappingSheetRow != null && !expressionInputFields.isEmpty()) {
+		if (!expressionInputFields.isEmpty()) 
+		{
 			inputFields = new TypeOperationInputFields();
 
 			if (!hasAllStringsInListAsParams(expressionInputFields)) {	
@@ -221,6 +224,7 @@ public class ConverterHelper {
 				addParamTag(ID, parameterFieldNames.toString(),
 						ComponentXpathConstants.TRANSFORM_INPUT_FIELDS.value().replace("$operationId", mappingSheetRow.getOperationID()), true);
 			}
+		}
 		}
 		return inputFields;
 	}

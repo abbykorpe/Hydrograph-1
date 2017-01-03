@@ -322,4 +322,15 @@ public class Constants {
 	public static final String RUN_COMMAND_PROPERTY_NAME = "runcommand";
 	public static final String XML_CONTENT_PROPERTY_NAME = "xml_properties_content";
 
+	
+	//key fields name for expression or operation widget
+	public static final String EXPRESSION_TEXT_BOX = "expressionTextBox";
+	public static final String PARAMETER_TEXT_BOX = "parameterTextBox";
+	public static final String OUTPUT_FIELD_TEXT_BOX = "outputFieldTextBox";
+	public static final String EXPRESSION_EDITOR_BUTTON = "expressionEditorButton";
+	public static final String EXPRESSION_ID_TEXT_BOX = "expressionIdTextBox";
+	public static final String DELETE_BUTTON = "deleteButton";
+	public static final String ADD_BUTTON = "addButton";
+	public static final String INPUT_FIELD_TABLE = "inputFieldTable";
+
 }

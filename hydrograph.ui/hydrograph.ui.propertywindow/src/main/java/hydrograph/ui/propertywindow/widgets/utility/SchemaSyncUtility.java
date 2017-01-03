@@ -106,8 +106,11 @@ public class SchemaSyncUtility {
 			   )
 			{
 				continue;
-			}	
+			}
+			else
+			{	
 		    mapSheetRow.getOutputList().retainAll(outSchema);
+			}
 		}
 	}
 	/**
