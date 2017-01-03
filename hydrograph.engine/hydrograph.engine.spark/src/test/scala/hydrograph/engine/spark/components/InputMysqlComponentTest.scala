@@ -1,12 +1,13 @@
 package hydrograph.engine.spark.components
 
 import java.util
+import java.util.Properties
 
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
-import hydrograph.engine.core.component.entity.elements.{ OutSocket, SchemaField }
+import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql._
-import org.junit.{ Assert, Test }
+import org.junit.{Assert, Test}
 
 /**
  * Created by santlalg on 12/8/2016.
@@ -37,6 +38,7 @@ class InputMysqlComponentTest {
     fieldList.add(sf3);
     fieldList.add(sf4);
     inputRDBMSEntity.setFieldsList(fieldList)
+    inputRDBMSEntity.setRuntimeProperties(new Properties)
 
     val outSockets = new util.ArrayList[OutSocket]();
     outSockets add (new OutSocket("outSocket"));
@@ -93,6 +95,7 @@ class InputMysqlComponentTest {
     outSockets.add(new OutSocket("outSocket"));
 
     inputRDBMSEntity.setOutSocketList(outSockets)
+    inputRDBMSEntity.setRuntimeProperties(new Properties)
 
     val sparkSession = SparkSession.builder()
       .master("local")

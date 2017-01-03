@@ -8,7 +8,7 @@ import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.TableCreator
+import hydrograph.engine.spark.components.utils.DbTableUtils
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.functions._
@@ -45,7 +45,7 @@ class OutputOracleComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsPar
 
     outputRDBMSEntity.getLoadType match {
       case "newTable" =>
-        executeQuery(connectionURL, properties, TableCreator().getCreateTableQuery(outputRDBMSEntity))
+        executeQuery(connectionURL, properties, DbTableUtils().getCreateTableQuery(outputRDBMSEntity))
         oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
       case "insert" => oComponentsParams.getDataFrame().select(createSchema(outputRDBMSEntity.getFieldsList): _*).write.mode("append").jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
       case "truncateLoad" =>
