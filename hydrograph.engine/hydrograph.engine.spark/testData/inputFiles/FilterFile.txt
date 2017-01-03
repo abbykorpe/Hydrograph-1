@@ -1,4 +1,0 @@
-XYZ,Apple,1987-06-05,AAA
-pqr,Mango,1988-03-19,BBB
-pqr,Mango,1986-03-19,AAA
-XYZ,Guava,1990-03-19,CCC

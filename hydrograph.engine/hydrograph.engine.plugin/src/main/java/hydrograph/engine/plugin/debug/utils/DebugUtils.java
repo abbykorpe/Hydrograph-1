@@ -14,7 +14,7 @@ package hydrograph.engine.plugin.debug.utils;
 
 import hydrograph.engine.core.utilities.GeneralUtilities;
 import hydrograph.engine.core.xmlparser.ComponentValidationEventHandler;
-import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 import hydrograph.engine.jaxb.debug.Debug;
 import hydrograph.engine.jaxb.debug.ViewData;
 import hydrograph.engine.plugin.debug.entity.DebugPoint;
@@ -38,16 +38,16 @@ import java.util.List;
  */
 public class DebugUtils {
 
+    public static final String OPTION_BASE_PATH = "basepath";
+    public static Logger LOG = LoggerFactory.getLogger(DebugUtils.class);
+    private static final String OPTION_DEBUG_XML_PATH = "debugxmlpath";
+
     /**
      * Constructor marked private to disable instantiation
      */
     private DebugUtils(){
 
     }
-
-    public static Logger LOG = LoggerFactory.getLogger(DebugUtils.class);
-    private static CommandLineOptionsProcessor optionsProcessor = new CommandLineOptionsProcessor();
-    private static final String OPTION_DEBUG_XML_PATH = "debugxmlpath";
 
     /**
      * @param listOfViewData
@@ -73,11 +73,15 @@ public class DebugUtils {
      * @return the basepath argument's value
      */
     public static String getBasePath(String[] args) {
-        String basePath = optionsProcessor.getBasePath(args);
+        String[] basePath = null;
+        basePath = GeneralUtilities.getArgsOption(args, OPTION_BASE_PATH);
+
         if (basePath != null) {
-            return basePath;
+            // only the first path
+            return basePath[0];
+        } else {
+            return null;
         }
-        return basePath;
     }
 
     /**

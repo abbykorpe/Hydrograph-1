@@ -23,10 +23,12 @@ import hydrograph.engine.core.flowmanipulation.FlowManipulationHandler;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
+import hydrograph.engine.core.utilities.GeneralUtilities;
 import hydrograph.engine.flow.utils.ExecutionTrackingListener;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.utilities.GeneralUtilities;
+import hydrograph.engine.utilities.ExecutionTrackingUtilities;
 import hydrograph.engine.utilities.HiveMetastoreTokenProvider;
 import hydrograph.engine.utilities.UserClassLoader;
 import org.apache.hadoop.conf.Configuration;
@@ -42,6 +44,7 @@ import java.util.Properties;
 public class HydrographRuntime implements HydrographRuntimeService {
 
     final String EXECUTION_TRACKING = "hydrograph.execution.tracking";
+    private static final String OPTION_DOT_PATH = "dotpath";
     private Properties hadoopProperties = new Properties();
     private ExecutionTrackingListener executionTrackingListener;
     private FlowBuilder flowBuilder;
@@ -135,7 +138,7 @@ public class HydrographRuntime implements HydrographRuntimeService {
     public void prepareToExecute() {
         flowBuilder.buildFlow(runtimeContext);
 
-        if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_DOT_PATH)) {
+        if (GeneralUtilities.IsArgOptionPresent(args, OPTION_DOT_PATH)) {
             writeDotFiles();
         }
 
@@ -147,9 +150,9 @@ public class HydrographRuntime implements HydrographRuntimeService {
             LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION + " option is provided so skipping execution");
             return;
         }
-        if (GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
+        if (ExecutionTrackingUtilities.getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
             executionTrackingListener = (ExecutionTrackingListener) UserClassLoader.loadAndInitClass(
-                    GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING), "execution tracking");
+                    ExecutionTrackingUtilities.getExecutionTrackingClass(EXECUTION_TRACKING), "execution tracking");
             executionTrackingListener.addListener(runtimeContext);
         }
         for (Cascade cascade : runtimeContext.getCascade()) {
@@ -180,12 +183,13 @@ public class HydrographRuntime implements HydrographRuntimeService {
 
     private void writeDotFiles() {
 
-        String basePath = CommandLineOptionsProcessor.getDotPath(args);
+        String[] paths = GeneralUtilities.getArgsOption(args, OPTION_DOT_PATH);
 
-        if (basePath == null) {
+        if (paths == null) {
             throw new HydrographRuntimeException(
-                    CommandLineOptionsProcessor.OPTION_DOT_PATH + " option is provided but is not followed by path");
+                    OPTION_DOT_PATH + " option is provided but is not followed by path");
         }
+        String basePath = paths[0];
         LOG.info("Dot files will be written under " + basePath);
 
         String flowDotPath = basePath + "/" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "/"

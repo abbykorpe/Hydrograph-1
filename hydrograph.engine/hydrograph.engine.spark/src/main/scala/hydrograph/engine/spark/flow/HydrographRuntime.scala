@@ -8,10 +8,14 @@ import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, FlowMan
 import hydrograph.engine.core.helper.JAXBTraversal
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
+import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
+import scala.collection.mutable.ListBuffer
+
 /**
   * Created by gurdits on 10/17/2016.
   */
@@ -20,12 +24,8 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   private val EXECUTION_TRACKING: String = "hydrograph.execution.tracking"
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
-  private var flowManipulationContext:FlowManipulationContext=null;
-  private var sparkSession:SparkSession=null;
-
-  override def prepareToExecute(): Unit = {
-
-  }
+  private var flowManipulationContext: FlowManipulationContext = null;
+  private var flows: ListBuffer[SparkFlow] = null
 
   override def kill(): Unit = {
     LOG.info("Kill signal received")
@@ -39,38 +39,34 @@ class HydrographRuntime extends HydrographRuntimeService {
     }
   }
 
-  override def execute(): Unit = {}
-
   override def initialize(properties: Properties, args: Array[String], hydrographJob: HydrographJob,
-                          jobId: String, s2: String): Unit
-  = {
+                          jobId: String, udfPath: String): Unit = {
 
-     sparkSession = SparkSession.builder()
+    val sparkSession: SparkSession = SparkSession.builder()
       .master(properties.getProperty("spark_master"))
       .appName(hydrographJob.getJAXBObject.getName)
       .config("spark.sql.shuffle.partitions", properties.getProperty("spark_partitions"))
-      .config("spark.sql.warehouse.dir",properties.getProperty("hive_warehouse") )
+      .config("spark.sql.warehouse.dir", properties.getProperty("hive_warehouse"))
       .enableHiveSupport()
       .getOrCreate()
+
 
     val schemaFieldHandler = new SchemaFieldHandler(
       hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
-     flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
+    flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
 
     val flowManipulationHandler = new FlowManipulationHandler
 
     val updatedHydrographJob = flowManipulationHandler.execute(flowManipulationContext);
 
-
-
     val adapterFactory = AdapterFactory(updatedHydrographJob.getJAXBObject)
 
     val traversal = new JAXBTraversal(updatedHydrographJob.getJAXBObject());
 
-    val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob, flowManipulationContext.getSchemaFieldHandler, sparkSession)
-    val flows = FlowBuilder(runtimeContext)
-      .buildFlow()
+    val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob,
+      flowManipulationContext.getSchemaFieldHandler, sparkSession)
+
 
 
     //    val EXECUTION_TRACKING = "hydrograph.execution.tracking";
@@ -87,11 +83,23 @@ class HydrographRuntime extends HydrographRuntimeService {
     //      executionTrackingListener.addListener(sparkSession)
     //    }
 
+  }
 
-    for (sparkFLow <- flows) {
-      sparkFLow.execute()
+  override def prepareToExecute(): Unit = {
+    LOG.info("Building spark flows")
+    flows = FlowBuilder(RuntimeContext.instance).buildFlow()
+    LOG.info("Spark flows built successfully")
+  }
+
+  override def execute(): Unit = {
+    /*if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_NO_EXECUTION)) {
+      LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION + " option is provided so skipping execution")
+      return
+    }*/
+    for (sparkFlow <- flows) {
+      sparkFlow.execute()
     }
-    sparkSession.stop()
+    RuntimeContext.instance.sparkSession.stop()
   }
 
   override def getExecutionStatus: AnyRef = {
@@ -100,8 +108,8 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   override def oncomplete(): Unit = {
     //Deleting TempPath For Debug
-    if(flowManipulationContext!=null&&flowManipulationContext.getTmpPath!=null){
-      flowManipulationContext.getTmpPath.asScala.foreach(tmpPath=>{
+    if (flowManipulationContext != null && flowManipulationContext.getTmpPath != null) {
+      flowManipulationContext.getTmpPath.asScala.foreach(tmpPath => {
         val fullPath: Path = new Path(tmpPath)
         // do not delete the root directory
         if (fullPath.depth != 0) {
@@ -122,7 +130,6 @@ class HydrographRuntime extends HydrographRuntimeService {
         }
       })
     }
-
   }
 
   def classLoader[T](className: String): T = {

@@ -10,32 +10,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.userfunctions;
+package hydrograph.engine.utilities;
 
-import java.util.ArrayList;
-import java.util.Properties;
+import hydrograph.engine.core.props.OrderedProperties;
+import hydrograph.engine.core.utilities.OrderedPropertiesHelper;
+import java.io.IOException;
 
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-import hydrograph.engine.transformation.userfunctions.base.TransformBase;
+public class ExecutionTrackingUtilities {
+	/**
+	 * To check execution tracking is enable.
+	 *
+	 * @param executionTrackingKey
+	 * @return an string containing execution tracking class
+	 */
+	public static String getExecutionTrackingClass(String executionTrackingKey) {
+		OrderedProperties properties;
+		try {
+			properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties");
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e);
+		}
 
-public class TransformTest implements TransformBase {
-
-	@Override
-	public void prepare(Properties props, ArrayList<String> inputFields,
-			ArrayList<String> outputFields) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void transform(ReusableRow inputRow, ReusableRow outputRow) {
-		outputRow.setField(0, inputRow.getString(0).length());
-	}
-
-	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
-
+		return properties.getProperty(executionTrackingKey);
 	}
 
 }

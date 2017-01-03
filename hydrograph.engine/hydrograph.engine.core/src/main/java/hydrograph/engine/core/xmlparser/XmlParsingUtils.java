@@ -18,7 +18,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import hydrograph.engine.core.utilities.FileEncodingEnum;
-import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 
 public class XmlParsingUtils {
 

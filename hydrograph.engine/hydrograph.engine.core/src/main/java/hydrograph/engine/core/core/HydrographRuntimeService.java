@@ -16,7 +16,15 @@ import java.util.Properties;
 
 public interface HydrographRuntimeService {
 
-    public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
+    /**
+     *
+     * @param config
+     * @param args
+     * @param hydrographJob
+     * @param jobId
+     * @param UDFPath
+     */
+    public void initialize(Properties config, String[] args, HydrographJob hydrographJob,
                            String jobId, String UDFPath);
 
     /**

@@ -26,8 +26,17 @@ buildscript {
 //artifactoryPublish.skip = true
 
 subprojects{
-apply from: '../version.gradle'
+    apply from: '../version.gradle'
+
+    idea {
+        module{
+            downloadSources=true
+            downloadJavadoc=true
+            jdkName='1.8'
+        }
+    }
 }
+
 allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'

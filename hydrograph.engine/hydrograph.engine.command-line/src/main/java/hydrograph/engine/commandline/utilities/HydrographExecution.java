@@ -25,7 +25,7 @@ import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.props.PropertiesLoader;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
-import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 
 public class HydrographExecution {
 
@@ -44,7 +44,7 @@ public class HydrographExecution {
 
     public static void main(String args[]) throws Exception {
         if (GeneralCommandLineUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)) {
-            CommandLineOptionsProcessor.printUsage();
+            GeneralCommandLineUtilities.printUsage();
         } else {
             HydrographExecution execution = new HydrographExecution();
             execution.run(args);
