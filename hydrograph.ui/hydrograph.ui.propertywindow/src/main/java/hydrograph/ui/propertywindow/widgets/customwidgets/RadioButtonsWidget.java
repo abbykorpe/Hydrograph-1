@@ -52,19 +52,16 @@ public class RadioButtonsWidget extends AbstractWidget {
 	private MatchValueProperty matchValue;
 	private RadioButtonConfig radioButtonConfig;
 	
-	public RadioButtonsWidget(
-			ComponentConfigrationProperty componentConfigrationProp,
-			ComponentMiscellaneousProperties componentMiscellaneousProperties,
-			PropertyDialogButtonBar propertyDialogButtonBar) {
-		super(componentConfigrationProp, componentMiscellaneousProperties,
-				propertyDialogButtonBar);
+	public RadioButtonsWidget(ComponentConfigrationProperty componentConfigProp,
+			ComponentMiscellaneousProperties componentMiscProps,PropertyDialogButtonBar propertyDialogButtonBar) {
+		
+		super(componentConfigProp, componentMiscProps,	propertyDialogButtonBar);
 		this.propertyName = componentConfigrationProperty.getPropertyName();
-		//this.properties = componentConfigrationProperty.getPropertyValue();
+		
 		if (componentConfigrationProperty.getPropertyValue() == null) {
 			matchValue = new MatchValueProperty();
 		} else {
-			matchValue = (MatchValueProperty) componentConfigrationProperty
-					.getPropertyValue();
+			matchValue = (MatchValueProperty) componentConfigrationProperty.getPropertyValue();
 		}
 	}
 
@@ -81,7 +78,7 @@ public class RadioButtonsWidget extends AbstractWidget {
 		defaultSubgroupComposite.createContainerWidget();
 		defaultSubgroupComposite.numberOfBasicWidgets(buttonText.length + 1);
 
-		AbstractELTWidget defaultLabel = new ELTDefaultLable(Constants.MATCH);
+		AbstractELTWidget defaultLabel = new ELTDefaultLable(radioButtonConfig.getPropertyName());
 		defaultSubgroupComposite.attachWidget(defaultLabel);
 
 		setPropertyHelpWidget((Control) defaultLabel.getSWTWidgetControl());

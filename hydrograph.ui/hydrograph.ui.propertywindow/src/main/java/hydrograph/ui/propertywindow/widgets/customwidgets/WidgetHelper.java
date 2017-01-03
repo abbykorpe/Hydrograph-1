@@ -466,18 +466,21 @@ public class WidgetHelper {
 	public WidgetConfig getMatchValueWidgetConfig() {
 		RadioButtonConfig radioConfig = new RadioButtonConfig();
 		radioConfig.setWidgetDisplayNames(new String []{Constants.FIRST,Constants.LAST, Constants.ALL});
+		radioConfig.setPropertyName(Messages.MATCH);
 		return radioConfig;
 	}
 
 	public WidgetConfig getSelectInterfaceWithExportWidgetConfig() {
 		RadioButtonConfig radioConfig = new RadioButtonConfig();
-		radioConfig.setWidgetDisplayNames(new String []{Constants.STANDARD, Constants.FAST_EXPORT});
+		radioConfig.setWidgetDisplayNames(new String []{Messages.STANDARD, Messages.FAST_EXPORT});
+		radioConfig.setPropertyName(Messages.EXPORT_OPTIONS);
 		return radioConfig;
 	}
 	
 	public WidgetConfig getSelectInterfaceWithLoadWidgetConfig() {
 		RadioButtonConfig radioConfig = new RadioButtonConfig();
-		radioConfig.setWidgetDisplayNames(new String []{Constants.STANDARD, Constants.FAST_LOAD});
+		radioConfig.setWidgetDisplayNames(new String []{Messages.STANDARD, Messages.FAST_LOAD});
+		radioConfig.setPropertyName(Messages.LOAD_UTILITY_TYPE);
 		return radioConfig;
 	}
 }

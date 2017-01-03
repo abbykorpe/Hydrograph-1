@@ -1,8 +1,9 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.config;
 
 public class RadioButtonConfig implements WidgetConfig {
-	String widgetDisplayNames[];
-
+	private String widgetDisplayNames[];
+	private String propertyName;
+	
 	/**
 	 * @return the widgetDisplayNames
 	 */
@@ -16,4 +17,19 @@ public class RadioButtonConfig implements WidgetConfig {
 	public void setWidgetDisplayNames(String[] widgetDisplayNames) {
 		this.widgetDisplayNames = widgetDisplayNames;
 	}
+
+	/**
+	 * @return the propertyName
+	 */
+	public String getPropertyName() {
+		return propertyName;
+	}
+
+	/**
+	 * @param propertyName the propertyName to set
+	 */
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
+	}
+
 }

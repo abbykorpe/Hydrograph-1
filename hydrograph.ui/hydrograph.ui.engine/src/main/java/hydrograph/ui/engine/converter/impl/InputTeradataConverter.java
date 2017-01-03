@@ -36,6 +36,7 @@ import hydrograph.ui.engine.converter.InputConverter;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The Class InputTeradata Converter implementation for Input Teradata Component
@@ -68,25 +69,6 @@ public class InputTeradataConverter extends InputConverter{
 		return inputOutSockets;
 	}
 
-	private Match getSelectInterfaceFromUi() {
-		Match match = new Match();
-		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(Constants.MATCH_PROPERTY_WIDGET);
-
-		if(matchValueProperty != null){
-			if(Constants.LAST.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				match.setValue(MatchValue.LAST);
-				return match;
-			}else if(Constants.ALL.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				match.setValue(MatchValue.ALL);
-				return match;
-			}else{
-				match.setValue(MatchValue.FIRST);
-				return match;
-			}
-		}
-		return match;
-	}
-	
 	@Override
 	public void prepareForXML() {
 		super.prepareForXML();
@@ -128,8 +110,10 @@ public class InputTeradataConverter extends InputConverter{
 			teradataInput.setPassword(password);
 		}
 		
-		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) properties
-				.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
+		teradataInput.setInterface(getSelectInterfaceValue());
+		
+		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) 
+				properties.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
 		
 		if (databaseSelectionConfig != null) {
 
@@ -168,5 +152,19 @@ public class InputTeradataConverter extends InputConverter{
 		}
 		return typeBaseFields;
 	}
-
+	
+	private ElementValueStringType getSelectInterfaceValue() {
+		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(PropertyNameConstants.SELECT_INTERFACE.value());
+		
+		if(matchValueProperty != null){
+			ElementValueStringType type = new ElementValueStringType();
+			if(Messages.STANDARD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				type.setValue("DEFAULT");
+			}else if(Messages.FAST_EXPORT.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				type.setValue("FASTEXPORT");
+			}
+			return type;
+		}
+		return null;
+	}
 }

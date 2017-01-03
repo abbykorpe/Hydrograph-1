@@ -48,7 +48,8 @@ public enum PropertyNameConstants {
 		SELECT_OPTION("selectOption"),
 		REDSHIFT_SQL_QUERY("selectQuery"),
 		REDSHIFT_COUNT_QUERY("countQuery"), 
-		OVER_WRITE("overWrite");
+		OVER_WRITE("overWrite"),
+		SELECT_INTERFACE("selectInterface");
 	
 		private final String value;
 

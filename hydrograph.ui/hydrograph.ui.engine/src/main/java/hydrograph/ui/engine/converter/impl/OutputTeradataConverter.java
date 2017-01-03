@@ -33,11 +33,13 @@ import hydrograph.engine.jaxb.oteradata.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Teradata;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The Class OutputTeradata Converter implementation for Output Teradata Component
@@ -119,6 +121,8 @@ public class OutputTeradataConverter extends OutputConverter{
 			teradataOutput.setPassword(password);
 		}
 		
+		teradataOutput.setInterface(getSelectInterfaceValue());
+		
 		TypeLoadChoice loadValue = addTypeLoadChoice();
 		teradataOutput.setLoadType(loadValue);
 	}
@@ -140,6 +144,21 @@ public class OutputTeradataConverter extends OutputConverter{
 			
 		}
 		return loadValue;
+	}
+	
+	private ElementValueStringType getSelectInterfaceValue() {
+		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(Constants.MATCH_PROPERTY_WIDGET);
+		
+		if(matchValueProperty != null){
+			ElementValueStringType type = new ElementValueStringType();
+			if(Messages.STANDARD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				type.setValue("DEFAULT");
+			}else if(Messages.FAST_LOAD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+				type.setValue("FASTLOAD");
+			}
+			return type;
+		}
+		return null;
 	}
 	
 	/**
