@@ -17,6 +17,8 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
@@ -243,6 +245,22 @@ public class OutputRecordCountWidget extends AbstractWidget{
     		
 	}
 	
+	private List<FixedWidthGridRow> getInputSchema(Component component) {
+		
+		List<FixedWidthGridRow> fixedWidthGridRows = new ArrayList<>();
+		Map<String,Schema> schemaMap=(TreeMap<String,Schema>)component.getProperties().get(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA);
+		for (Link link : component.getTargetConnections()) {
+			if(schemaMap!=null)
+			{
+			Schema schema=schemaMap.get(link.getTargetTerminal());
+			List<GridRow> gridRowList=null;
+			if(schema!=null)
+			gridRowList=schemaMap.get(link.getTargetTerminal()).getGridRow();
+			fixedWidthGridRows.addAll(SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToFixedSchemaGridRows(gridRowList));
+			}
+		}
+		return fixedWidthGridRows;
+	}
 	
 	
 	private void intializeExpresionEditorData() 

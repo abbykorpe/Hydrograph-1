@@ -112,7 +112,7 @@ public class ExpressionEditorDialog extends Dialog {
 		upperSashForm = new SashForm(upperComposite, SWT.NONE);
 		upperSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, selectedInputFields);
+		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, fieldMap);
 
 		expressionEditorComposite = new ExpressionEditorComposite(upperSashForm, SWT.NONE, javaLineStyler);
 		this.expressionEditorTextBox = expressionEditorComposite.getExpressionEditor();

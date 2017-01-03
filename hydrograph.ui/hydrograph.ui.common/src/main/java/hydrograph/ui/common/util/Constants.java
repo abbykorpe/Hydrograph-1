@@ -324,6 +324,7 @@ public class Constants {
 	public static String LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR=",";
 	public static final String EXTENSION=".*";
 	public static final String RUN_COMMAND_PROPERTY_NAME = "runcommand";
+<<<<<<< HEAD
 	public static final String XML_CONTENT_PROPERTY_NAME = "xml_properties_content";
 
 	
@@ -336,5 +337,8 @@ public class Constants {
 	public static final String DELETE_BUTTON = "deleteButton";
 	public static final String ADD_BUTTON = "addButton";
 	public static final String INPUT_FIELD_TABLE = "inputFieldTable";
+=======
+	public static final String PREVIOUS_COMPONENT_OLD_SCHEMA = "previous_component_old_schema";
+>>>>>>> 2a0c2b2... Added data type column in expression editor available field section.
 
 }

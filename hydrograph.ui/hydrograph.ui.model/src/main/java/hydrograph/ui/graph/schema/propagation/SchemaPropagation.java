@@ -336,6 +336,39 @@ public class SchemaPropagation {
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * Convert GridRow object to BasicSchemaGridRow object.
+	 * 
+	 * @param list of GridRow object.
+	 * @return list of BasicSchemaGridRow object.
+	 */
+	public List<FixedWidthGridRow> convertGridRowsSchemaToFixedSchemaGridRows(List<GridRow> gridRows) {
+		List<FixedWidthGridRow> basicSchemaGridRows = null;
+		if (gridRows != null) {
+			basicSchemaGridRows = new ArrayList<>();
+			for (GridRow gridRow1 : gridRows) {
+				basicSchemaGridRows.add(convertGridRowSchemaToFixedSchemaGridRow(gridRow1));
+			}
+		}
+		return basicSchemaGridRows;
+	}
+
+	private FixedWidthGridRow convertGridRowSchemaToFixedSchemaGridRow(GridRow gridRow) {
+		FixedWidthGridRow schemaGrid = null;
+		if (gridRow != null) {
+			schemaGrid = new FixedWidthGridRow();
+			schemaGrid.setDataType(gridRow.getDataType());
+			schemaGrid.setDataTypeValue(gridRow.getDataTypeValue());
+			schemaGrid.setDateFormat(gridRow.getDateFormat());
+			schemaGrid.setPrecision(gridRow.getPrecision());
+			schemaGrid.setFieldName(gridRow.getFieldName());
+			schemaGrid.setScale(gridRow.getScale());
+			schemaGrid.setScaleType(gridRow.getScaleType());
+			schemaGrid.setScaleTypeValue(gridRow.getScaleTypeValue());
+			schemaGrid.setDescription(gridRow.getDescription());
+		}
+		return schemaGrid;
+	}
 	
 }

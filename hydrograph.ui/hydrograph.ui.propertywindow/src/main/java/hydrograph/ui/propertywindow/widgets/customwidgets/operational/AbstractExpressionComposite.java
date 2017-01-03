@@ -14,6 +14,9 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -24,16 +27,21 @@ import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
+<<<<<<< HEAD
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
+=======
+>>>>>>> 2a0c2b2... Added data type column in expression editor available field section.
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 /**
  * @author Bitwise parent composite for all expression composite
@@ -171,12 +179,16 @@ public abstract class AbstractExpressionComposite extends Composite {
 	 */
 	private List<FixedWidthGridRow> getInputSchema(Component component) {
 		List<FixedWidthGridRow> fixedWidthGridRows = new ArrayList<>();
+		Map<String,Schema> schemaMap=(TreeMap<String,Schema>)component.getProperties().get(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA);
 		for (Link link : component.getTargetConnections()) {
-			ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-			if (componentsOutputSchema != null && componentsOutputSchema.getFixedWidthGridRowsOutputFields() != null) {
-				fixedWidthGridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+			if(schemaMap!=null)
+			{
+			Schema schema=schemaMap.get(link.getTargetTerminal());
+			List<GridRow> gridRowList=null;
+			if(schema!=null)
+			gridRowList=schemaMap.get(link.getTargetTerminal()).getGridRow();
+			fixedWidthGridRows.addAll(SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToFixedSchemaGridRows(gridRowList));
 			}
-			break;
 		}
 		return fixedWidthGridRows;
 	}

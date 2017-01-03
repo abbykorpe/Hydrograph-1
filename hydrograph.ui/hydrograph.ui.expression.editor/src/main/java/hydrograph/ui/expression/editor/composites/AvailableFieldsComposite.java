@@ -18,7 +18,9 @@ import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
@@ -32,6 +34,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -44,45 +47,48 @@ import org.eclipse.swt.widgets.Text;
 public class AvailableFieldsComposite extends Composite {
 	private static final String AVAILABLE_INPUT_FIELDS = "Input Fields";
 	private Table table;
-	private TableColumn availableFieldsColumn ;
+	private TableColumn availableFieldsNameColumn ;
 	private List<String> inputFields;
 	private TableViewer tableViewer;
 	private DragSource dragSource;
 	private StyledText expressionEditor;
 	private Text searchTextBox;
+	private Composite headerComposite_1;
+	private TableColumn availableFieldsDataTypeColumn;
+	private Map<String,Class<?>> fieldMap;
 	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public AvailableFieldsComposite(Composite parent, int style , List<String> fieldNameList) {
+	public AvailableFieldsComposite(Composite parent, int style , Map<String,Class<?>> fieldMap) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
-		this.inputFields=fieldNameList;
-		Composite headerComposite = new Composite(this, SWT.NONE);
-		headerComposite.setLayout(new GridLayout(2, false));
-		GridData gd_headerComposite = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
-		gd_headerComposite.widthHint = 437;
-		gd_headerComposite.heightHint = 39;
-		headerComposite.setLayoutData(gd_headerComposite);
+		this.inputFields=new ArrayList<>(fieldMap.keySet());
+		this.fieldMap=fieldMap;
+		headerComposite_1 = new Composite(this, SWT.NONE);
+		headerComposite_1.setLayout(new GridLayout(2, false));
+		GridData gd_headerComposite_1 = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_headerComposite_1.widthHint = 437;
+		gd_headerComposite_1.heightHint = 39;
+		headerComposite_1.setLayoutData(gd_headerComposite_1);
 		
-		Label lblAvailableFields = new Label(headerComposite, SWT.NONE);
+		Label lblAvailableFields = new Label(headerComposite_1, SWT.NONE);
 		lblAvailableFields.setText(AVAILABLE_INPUT_FIELDS);
 		
-		createSearchTextBox(headerComposite);
+		createSearchTextBox(headerComposite_1);
 		
 		tableViewer = new TableViewer(this, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
-		availableFieldsColumn = new TableColumn(table, SWT.NONE);
-		availableFieldsColumn.setWidth(100);
-		
-		
+		table.setHeaderVisible(true);
+		availableFieldsNameColumn = new TableColumn(table, SWT.NONE);
+		availableFieldsNameColumn.setText("Field Name");
+		availableFieldsDataTypeColumn = new TableColumn(table, SWT.NONE);
+		availableFieldsDataTypeColumn.setText("Data Type");
 		ExpressionEditorUtil.INSTANCE.addDragSupport(table);
-
 		loadData();
 		addControlListener();
 		addDoubleClickListener();
@@ -136,12 +142,22 @@ public class AvailableFieldsComposite extends Composite {
 		table.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				if(OSValidator.isMac()){
-					availableFieldsColumn.setWidth(table.getSize().x-2);
-				}else{
-					availableFieldsColumn.setWidth(table.getSize().x-4);
+				Table table = (Table) e.widget;
+				int columnCount = table.getColumnCount();
+
+				Rectangle area = table.getClientArea();
+				int totalAreaWidth = area.width;
+				table.getColumn(0).setWidth(area.width / 2);
+				int lineWidth = table.getGridLineWidth();
+				int totalGridLineWidth = (2 - 1) * lineWidth;
+				int totalColumnWidth = 0;
+				for (TableColumn column : table.getColumns()) {
+					totalColumnWidth = totalColumnWidth + column.getWidth();
 				}
-				
+				int diff = totalAreaWidth - (totalColumnWidth + totalGridLineWidth);
+
+				TableColumn lastCol = table.getColumns()[columnCount - 1];
+				lastCol.setWidth(diff + lastCol.getWidth());
 			}
 		});
 	}
@@ -149,7 +165,9 @@ public class AvailableFieldsComposite extends Composite {
 	private void loadData() {
 		if (inputFields != null) {
 			for (String field : inputFields) {
-				new TableItem(table, SWT.NONE).setText(field);
+				TableItem tableItem=new TableItem(table, SWT.NONE);
+				tableItem.setText(0,field);
+				tableItem.setText(1,fieldMap.get(field).getSimpleName());
 			}
 		}
 		if(table.getItemCount()==0){

@@ -29,10 +29,11 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 	 * @param component through which continuous propagation starts. 
 	 */
 	public void setFlagForContinuousSchemaPropogation(Component component) {
+		
 		for(Link link:component.getSourceConnections())
 		{
 			Component nextComponent=link.getTarget();
-			
+			Schema schema=(Schema)nextComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 			while(StringUtils.equalsIgnoreCase(nextComponent.getCategory(), Constants.STRAIGHTPULL)
 					||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.FILTER)	
 					 ||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.UNIQUE_SEQUENCE)
@@ -54,7 +55,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 					((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 					}
 				}
-				Schema schema=(Schema)nextComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
+				
 				if(schema==null)
 				schema=new Schema();	
 				ComponentsOutputSchema outputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
@@ -136,6 +137,8 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 				nextComponent.setContinuousSchemaPropogationAllow(true);
 				((AbstractGraphicalEditPart)nextComponent.getComponentEditPart()).getFigure().repaint();
 			}
+			nextComponent.getProperties().put(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA,
+					component.getProperties().get(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA));
 		}
 	}
 	
