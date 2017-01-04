@@ -20,6 +20,7 @@ package hydrograph.ui.engine.xpath;
  * 
  */
 public enum ComponentXpathConstants {
+	GRAPH_XPATH("/graph"),
 	COMPONENT_CHARSET_XPATH("/graph/*[@id='$id']/charset"),
 	COMPONENT_JOIN_TYPE_XPATH("/graph/operations[@id='$id']/keys[@inSocketId='$inSocketId'] [not(@joinType)]"),
 	COMPONENT_XPATH_BOOLEAN("/graph/*[@id='$id']/propertyName"),

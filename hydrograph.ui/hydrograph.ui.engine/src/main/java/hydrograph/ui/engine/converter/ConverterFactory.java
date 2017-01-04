@@ -45,8 +45,10 @@ public class ConverterFactory {
 		} catch (ClassNotFoundException exception) {
 			logger.error("Exception Occured getting Converter for {}, {}:", new Object[] {
 					component.getProperties().get(Constants.PARAM_NAME), exception });
-			if (component.getComponentName().equalsIgnoreCase(Constants.UNKNOWN_COMPONENT))
-				throw new UnknownComponentException(component.getComponentName(), exception);
+			if (component.getComponentName().equalsIgnoreCase(Constants.UNKNOWN_COMPONENT)){
+				return null;
+//				throw new UnknownComponentException(component.getComponentName(), exception);
+			}
 			else
 				throw new ConverterNotFoundException(component.getPrefix(), exception);
 		}

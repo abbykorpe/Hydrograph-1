@@ -183,6 +183,8 @@ public class PropogateWidget extends AbstractWidget{
 				    if(eltSchemaGridWidget!=null &&!getSchemaForInternalPropagation().getGridRow().isEmpty())
 				    eltSchemaGridWidget.refresh();
 				    eltSchemaGridWidget.showHideErrorSymbol(!getSchemaForInternalPropagation().getGridRow().isEmpty());
+				    if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,getComponent().getComponentName()))
+						 break;	
 					}
 					else if(getComponent() instanceof SubjobComponent)
 					{

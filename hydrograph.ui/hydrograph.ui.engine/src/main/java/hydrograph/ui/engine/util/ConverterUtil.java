@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,9 +40,12 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.main.Graph;
 import hydrograph.engine.jaxb.main.ObjectFactory;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.engine.converter.Converter;
 import hydrograph.ui.engine.converter.ConverterFactory;
 import hydrograph.ui.engine.xpath.ComponentXpath;
+import hydrograph.ui.engine.xpath.ComponentXpathConstants;
+import hydrograph.ui.engine.xpath.ComponentsAttributeAndValue;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -57,12 +61,14 @@ import hydrograph.ui.logging.factory.LogFactory;
  */
 public class ConverterUtil {
 	
+	private static final String UNKNOWN_COMPONENTS_SEPERATOR = "=====Unknown-Components-Converted-Data-Seperator======";
+
 	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(ConverterUtil.class);
 	
 	/** The Constant INSTANCE. */
 	public static final ConverterUtil INSTANCE = new ConverterUtil();
-	
+	private List<Component> unknownComponentLists;
 	/**
 	 * Instantiates a new converter util.
 	 */
@@ -85,14 +91,20 @@ public class ConverterUtil {
 			graph.setUniqueJobId(container.getUniqueJobId());
 			graph.setName(getGraphName(outPutFile,externalOutputFile));
 			List<Component> children = container.getUIComponentList();
+			unknownComponentLists = new ArrayList<>();
 			if(children != null && !children.isEmpty()){
 				for (Component component : children) {
-					Converter converter = ConverterFactory.INSTANCE.getConverter(component); 
+					Converter converter = ConverterFactory.INSTANCE.getConverter(component);
+					if(converter ==null){
+						unknownComponentLists.add(component);
+						continue;
+					}
 					converter.prepareForXML();
 					TypeBaseComponent typeBaseComponent = converter.getComponent();
 					graph.getInputsOrOutputsOrStraightPulls().add(typeBaseComponent);
 				}
 			}
+			processUnknownComponents();
 			graph.setRuntimeProperties(getRuntimeProperties(container));
 			marshall(graph, validate, outPutFile,externalOutputFile);
 	}
@@ -198,12 +210,31 @@ public class ConverterUtil {
 	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    marshaller.marshal(graph, out);
 	    out = ComponentXpath.INSTANCE.addParameters(out);
-	    
+	    String updatedXML=escapeXml(out.toString());
+	    out.reset();
+	    try {
+	    	if(!unknownComponentLists.isEmpty())
+			out.write(updatedXML.getBytes());
+		} catch (IOException ioException) {
+			LOGGER.error("Unable to update escape sequene in xml file",ioException);
+		}
 	    if (outPutFile.exists()){
 	    	outPutFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,false, null);
 	    }else{
 	    	outPutFile.create(new ByteArrayInputStream(out.toByteArray()),true, null);
 		}		
+	}
+
+	private void processUnknownComponents() {
+		StringBuffer buffer=new StringBuffer();
+		buffer.append(UNKNOWN_COMPONENTS_SEPERATOR);
+		for(Component component:unknownComponentLists){
+			String xmlText=(String)component.getProperties().get(Constants.XML_CONTENT_PROPERTY_NAME);
+			xmlText = xmlText.substring(xmlText.indexOf('\n') + 1);
+			xmlText = xmlText.substring(xmlText.indexOf('\n') + 1, xmlText.lastIndexOf('\n') - 13);
+			buffer.append(xmlText+"\n\n");
+		}
+		ComponentXpath.INSTANCE.getXpathMap().put(ComponentXpathConstants.GRAPH_XPATH.value(),new ComponentsAttributeAndValue(true,buffer.toString(),false));
 	}
 
 	/**
@@ -226,6 +257,17 @@ public class ConverterUtil {
 			}
 		}
 		return typeProperties;
+	}
+	
+	private String escapeXml(String xmlText) {
+		String[] arr=xmlText.split(UNKNOWN_COMPONENTS_SEPERATOR);
+		StringBuffer buffer=new StringBuffer();
+		if(arr.length==1){
+			buffer.append(arr[0]);
+			buffer.append(arr[1].replaceAll("&amp;","&").replaceAll( "&gt;",">").replaceAll("&lt;","<").replaceAll("&quot;","\"").replaceAll( "&apos;","'"));
+		}
+		return buffer.toString();
+	    
 	}
 	
 }
