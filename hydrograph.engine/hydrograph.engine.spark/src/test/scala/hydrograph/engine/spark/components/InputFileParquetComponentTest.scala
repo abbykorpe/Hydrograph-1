@@ -28,7 +28,7 @@ class InputFileParquetComponentTest {
       .addData(List("3", "C2R3", "C3Rx", "C4R3"))
       .build()
 
-    val path: String = "testData\\inputFiles\\input.parquet"
+    val path: String = "testData/inputFiles/input.parquet"
     val inputFileParquetEntity = new InputFileParquetEntity
     inputFileParquetEntity.setPath(path)
 
