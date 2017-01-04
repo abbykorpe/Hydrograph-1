@@ -36,7 +36,7 @@ import cascading.tuple.Fields;
 @SuppressWarnings("rawtypes")
 public class UniqueSequenceSubAssemblyTest {
 	@Test
-	public void itShouldCheckAggregate() {
+	public void itShouldCheckComponentExecution() {
 
 		String outPath = "testData/component/uniqSeq/output";
 
