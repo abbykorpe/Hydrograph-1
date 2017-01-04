@@ -524,13 +524,11 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			if ( StringUtils.isEmpty(parameterType.getHostName())|| StringUtils.isEmpty(parameterType.getJdbcName())
 				|| StringUtils.isEmpty(parameterType.getPortNo())|| StringUtils.isEmpty(parameterType.getUserName())
 				|| StringUtils.isEmpty(parameterType.getSid())|| StringUtils.isEmpty(parameterType.getPassword())) {
-			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}else{
 			if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
 					|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
 					|| StringUtils.isEmpty(parameterType.getUserName()) || StringUtils.isEmpty(parameterType.getPassword())) {
-				WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}
 	}
@@ -581,8 +579,6 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 	
 					WidgetUtility.createMessageBox(Messages.METASTORE_IMPORT_SUCCESS,Messages.INFORMATION , SWT.ICON_INFORMATION);
 					propertyDialogButtonBar.enableApplyButton(true);
-				}else{
-					WidgetUtility.createMessageBox(Messages.INVALID_DB_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 				}
 		}
 		else{

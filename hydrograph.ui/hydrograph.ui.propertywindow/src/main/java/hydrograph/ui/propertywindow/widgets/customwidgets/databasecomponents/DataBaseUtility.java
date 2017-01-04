@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.SWT;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,9 @@ import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructures.metadata.MetaDataDetails;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.HiveTableSchema;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * The Class DataBase Utility
@@ -74,8 +77,11 @@ public class DataBaseUtility {
 			databaseTableSchema = mapper.readValue(jsonResponse, HiveTableSchema.class);
 		} catch (NumberFormatException | HttpException exception) {
 			logger.error("Json to object Mapping issue ", exception);
+			WidgetUtility.createMessageBox(jsonResponse.toString(),Messages.ERROR , SWT.ICON_ERROR);
 		}catch (IOException exception) {
 			logger.error("Json to object Mapping issue ", exception);
+			WidgetUtility.createMessageBox(jsonResponse.toString(),Messages.ERROR , SWT.ICON_ERROR);
+			
 		}
 		return databaseTableSchema;
 	}
