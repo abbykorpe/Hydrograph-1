@@ -116,10 +116,7 @@ public enum JavaToSQLTypeMapping {
                                              int[] fieldsPrecision, String[] fieldFormat) {
         Map<String, String> map = selectMapping(databaseType).mapping();
         String[] arr = new String[fieldsDataType.length];
-        int counter = 0;
-
         for (int i = 0; i < fieldsDataType.length; i++) {
-            System.out.println(fieldsDataType[i] +  " " + fieldFormat[i]);
             if (fieldsDataType[i].equals("java.math.BigDecimal"))
                 arr[i] = map.get(fieldsDataType[i]) + "(" + fieldsPrecision[i] + "," + fieldsScale[i] + ")";
             else if(fieldsDataType[i].equals("java.util.Date") && fieldFormat[i].contains("HH:mm:ss"))
