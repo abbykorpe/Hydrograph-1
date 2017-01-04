@@ -23,7 +23,7 @@ import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 public class DatabaseSelectionConfig implements IDataStructure {
 
-	private boolean isTableName;
+	private boolean isTableName = true;
 	private String tableName;
 	private String sqlQuery;
 	private String sqlQueryCounter;

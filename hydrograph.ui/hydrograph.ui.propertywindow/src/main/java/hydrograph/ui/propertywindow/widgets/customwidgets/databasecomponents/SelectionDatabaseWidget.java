@@ -30,8 +30,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
@@ -125,7 +123,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		tableNameRadioButton = new ELTRadioButton(Messages.DATABASE_TABLE_NAME);
 		eltSuDefaultSubgroupComposite.attachWidget(tableNameRadioButton);
 		propertyDialogButtonBar.enableApplyButton(true);
-
+		((Button) tableNameRadioButton.getSWTWidgetControl()).setSelection(true);
+		
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable("");
 		eltSuDefaultSubgroupComposite.attachWidget(eltDefaultLable);
 
@@ -150,6 +149,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			} else {
 
 				layout.topControl = sqlQueryComposite.getContainerControl();
+				((Button) tableNameRadioButton.getSWTWidgetControl()).setSelection(false);
 				((Button) sqlQueryRadioButton.getSWTWidgetControl()).setSelection(true);
 			}
 			eltSuDefaultSubgroupComposite.getContainerControl().layout();
@@ -293,7 +293,6 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-			databaseSelectionConfig.setTableNameSelection(true);
 			databaseSelectionConfig.setTableName(textBoxTableName.getText());
 
 		} else {
