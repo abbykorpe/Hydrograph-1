@@ -17,6 +17,6 @@ trait ExecutionTrackingListener extends SparkListener{
 //    sparkSession.sparkContext.addSparkListener(this)
   }
 
-  def getStatus():mutable.HashSet[ComponentInfo]
+  def getStatus():java.util.List[ComponentInfo]
 
 }

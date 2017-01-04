@@ -23,7 +23,7 @@
 			</schema>
 		</outSocket>
 
-		<path uri="C:\Users\sanketc\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\delimitedInputFile.txt" />
+		<path uri="../hydrograph.engine.spark/testData/inputFiles/delimitedInputFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
@@ -69,7 +69,7 @@
 				<field name="sum2" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData\output\AggregateOutput1" />
+		<path uri="../hydrograph.engine.spark/testData/output/AggregateOutput1" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />

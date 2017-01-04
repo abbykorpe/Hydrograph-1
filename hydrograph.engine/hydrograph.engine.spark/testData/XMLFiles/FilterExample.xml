@@ -29,7 +29,7 @@
 				<field name="Choice" type="java.lang.String"  />
 			</schema>
 		</outSocket>
-		<path uri="testData\inputFiles\FilterFile.txt" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\FilterFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 	</inputs>
@@ -63,7 +63,7 @@
 				<field name="Choice" type="java.lang.String"/>
 			</schema>
 		</inSocket>
-		<path uri="testData/output/FilterOutput" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\output/FilterOutput" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
@@ -79,7 +79,7 @@
 				<field name="Choice" type="java.lang.String"  />
 			</schema>
 		</inSocket>
-		<path uri="testData/output/FilterUnusedOutput" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData/output/FilterUnusedOutput" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />

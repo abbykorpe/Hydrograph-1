@@ -6,7 +6,9 @@ import java.util.Properties
 import hydrograph.engine.core.core.{HydrographJob, HydrographRuntimeService}
 import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, FlowManipulationHandler}
 import hydrograph.engine.core.helper.JAXBTraversal
+import hydrograph.engine.core.props.OrderedProperties
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler
+import hydrograph.engine.core.utilities.OrderedPropertiesHelper
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
@@ -53,15 +55,14 @@ class HydrographRuntime extends HydrographRuntimeService {
       .config(configProperties)
 
 
-
     val schemaFieldHandler = new SchemaFieldHandler(
-      hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
+      hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls())
 
-    flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
+    val flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
 
     val flowManipulationHandler = new FlowManipulationHandler
 
-    val updatedHydrographJob = flowManipulationHandler.execute(flowManipulationContext);
+   val  updatedHydrographJob=flowManipulationHandler.execute(flowManipulationContext)
 
     val adapterFactory = AdapterFactory(updatedHydrographJob.getJAXBObject)
 

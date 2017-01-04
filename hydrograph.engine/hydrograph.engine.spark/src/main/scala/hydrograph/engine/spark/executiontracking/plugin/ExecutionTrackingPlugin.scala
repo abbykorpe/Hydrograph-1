@@ -16,7 +16,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 
-class Component(val compId:String,val compName:String,val batch:String,val outSocket:String,val newComponentId:String,val multipleInSockets:Boolean){
+class Component(val compId:String,val compName:String,val batch:String,val outSocket:String,val newComponentId:String,val inSocketsPresent:Boolean){
 
   override def equals(obj: scala.Any): Boolean = {
     var flag = false;
@@ -30,8 +30,8 @@ class Component(val compId:String,val compName:String,val batch:String,val outSo
 }
 
 object Component{
-  def apply(compId: String, compName: String, batch: String, outSocket: String, newComponentId: String,multipleInSockets: Boolean): Component
-  = new Component(compId, compName, batch, outSocket, newComponentId,multipleInSockets)
+  def apply(compId: String, compName: String, batch: String, outSocket: String, newComponentId: String,inSocketsPresent: Boolean): Component
+  = new Component(compId, compName, batch, outSocket, newComponentId,inSocketsPresent)
 }
 
 class ExecutionTrackingPlugin extends ExecutionTrackingListener with ManipulatorListener {
@@ -65,8 +65,9 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
 
         val inSocketList= TrackComponentUtils
           .extractInSocketListOfComponents(typeBaseComponent)
-        val multipleInsockets = inSocketList.size()>0
-        ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,outSocket.getSocketId,newFilter.getId,multipleInsockets))
+        val inSocketsPresent = inSocketList.size()>0
+
+        ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,outSocket.getSocketId,newFilter.getId,inSocketsPresent))
 
         jaxbObjectList += newFilter
       })
@@ -159,9 +160,9 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
     jobInfo.updateStatusOfComponents(stageCompleted)
 
-        println("stageId :"+stageCompleted.stageInfo.stageId)
+//        println("stageId :"+stageCompleted.stageInfo.stageId)
 
-    println("failureReason :"+stageCompleted.stageInfo.failureReason)
+//    println("failureReason :"+stageCompleted.stageInfo.failureReason)
 //        stageCompleted.stageInfo.accumulables.foreach(f =>{
 
 //          if(f._2.name.get.startsWith("filter")){
@@ -176,13 +177,13 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     //    println("attemptId :"+stageCompleted.stageInfo.attemptId)
     //    println("stageId :"+stageCompleted.stageInfo.stageId)
     //    println("Stage Name :"+stageCompleted.stageInfo.name)
-                println("Stage Details:"+stageCompleted.stageInfo.details)
+//                println("Stage Details:"+stageCompleted.stageInfo.details)
     //    println("Stage Rdd Info Name: "+stageCompleted.stageInfo.rddInfos.foreach(f=>f.name))
     //    println("Stage Rdd Info Scope: "+stageCompleted.stageInfo.rddInfos.foreach(f=>f.scope))
     //    println("submissionTime :"+stageCompleted.stageInfo.submissionTime+" ms")
     //    println("Completion Time :"+stageCompleted.stageInfo.completionTime+" ms")
     //    println("numTasks :"+stageCompleted.stageInfo.numTasks)
-        println("recordsWritten :"+stageCompleted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
+//        println("recordsWritten :"+stageCompleted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
     //    println("recordsRead :"+stageCompleted.stageInfo.taskMetrics.inputMetrics.recordsRead)
     //    println("Input Size :"+(stageCompleted.stageInfo.taskMetrics.inputMetrics.bytesRead).toInt/(1024*1024)+" MB")
 
@@ -203,7 +204,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
       })*/
 //    stageCompleted
-    println("------------------------- STAGE COMPLELTED---------------------------")
+//    println("------------------------- STAGE COMPLELTED---------------------------")
   }
 
 
@@ -216,7 +217,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
 
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
-    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
+//    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
 
     println("Task id: " + taskEnd.taskInfo.taskId)
     taskEnd.taskInfo.accumulables.foreach(f => {
@@ -225,7 +226,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
           .update)
     })
     jobInfo.storeComponentStats(taskEnd)
-    getStatus().foreach(println)
+//    getStatus().asScala.foreach(println)
     //    println("Task id: " + taskEnd.taskInfo.taskId)
     ////    println("Task Accumulables Info: " + taskEnd.taskInfo.accumulables.mkString)
     //    println("Task attemptNo: " + taskEnd.taskInfo.attemptNumber)
@@ -241,7 +242,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     //    println("Task records written: " + taskEnd.taskMetrics.outputMetrics.recordsWritten)
     //    println("Task stage Id : " + taskEnd.stageId)
     //    println("Task records read: " + taskEnd.taskMetrics.inputMetrics.recordsRead)
-    LOG.info("+++++++++++++++++++++Task End End+++++++++++++++++++++")
+//    LOG.info("+++++++++++++++++++++Task End End+++++++++++++++++++++")
 
   }
 
@@ -265,7 +266,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     //    println("+++++++++++++++++++++Task Start End+++++++++++++++++++++")
   }
 
-  override def getStatus(): mutable.HashSet[ComponentInfo] = {
+  override def getStatus(): java.util.List[ComponentInfo] = {
     return jobInfo.getStatus()
   }
 }
