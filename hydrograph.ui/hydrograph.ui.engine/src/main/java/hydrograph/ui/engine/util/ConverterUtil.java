@@ -262,7 +262,7 @@ public class ConverterUtil {
 	private String escapeXml(String xmlText) {
 		String[] arr=xmlText.split(UNKNOWN_COMPONENTS_SEPERATOR);
 		StringBuffer buffer=new StringBuffer();
-		if(arr.length==1){
+		if(arr.length==2){
 			buffer.append(arr[0]);
 			buffer.append(arr[1].replaceAll("&amp;","&").replaceAll( "&gt;",">").replaceAll("&lt;","<").replaceAll("&quot;","\"").replaceAll( "&apos;","'"));
 		}
