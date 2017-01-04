@@ -236,6 +236,9 @@ public class UiConverterFactory {
 		if((hydrograph.engine.jaxb.commandtypes.RunProgram.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new RunProgramUiConverter(typeBaseComponent, container);
 		}
+		if((hydrograph.engine.jaxb.commontypes.TypeUnknownComponent.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new UnknownUiConverter(typeBaseComponent, container);
+		}
 		
 
 		return new UnknownUiConverter(typeBaseComponent,container);

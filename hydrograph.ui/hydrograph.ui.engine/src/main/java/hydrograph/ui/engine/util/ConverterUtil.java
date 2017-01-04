@@ -95,16 +95,17 @@ public class ConverterUtil {
 			if(children != null && !children.isEmpty()){
 				for (Component component : children) {
 					Converter converter = ConverterFactory.INSTANCE.getConverter(component);
-					if(converter ==null){
-						unknownComponentLists.add(component);
-						continue;
-					}
+//					if(converter ==null){
+//						unknownComponentLists.add(component);
+//						continue;
+//					}
 					converter.prepareForXML();
 					TypeBaseComponent typeBaseComponent = converter.getComponent();
 					graph.getInputsOrOutputsOrStraightPulls().add(typeBaseComponent);
 				}
 			}
-			processUnknownComponents();
+//			To-do will be removed in future
+//			processUnknownComponents();
 			graph.setRuntimeProperties(getRuntimeProperties(container));
 			marshall(graph, validate, outPutFile,externalOutputFile);
 	}
@@ -210,21 +211,25 @@ public class ConverterUtil {
 	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    marshaller.marshal(graph, out);
 	    out = ComponentXpath.INSTANCE.addParameters(out);
-	    String updatedXML=escapeXml(out.toString());
+
+	    /*
+	     * To-do will be removed in future
+	     * String updatedXML=escapeXml(out.toString());
 	    out.reset();
 	    try {
 	    	if(!unknownComponentLists.isEmpty())
 			out.write(updatedXML.getBytes());
 		} catch (IOException ioException) {
 			LOGGER.error("Unable to update escape sequene in xml file",ioException);
-		}
+		}*/
 	    if (outPutFile.exists()){
 	    	outPutFile.setContents(new ByteArrayInputStream(out.toByteArray()), true,false, null);
 	    }else{
 	    	outPutFile.create(new ByteArrayInputStream(out.toByteArray()),true, null);
 		}		
 	}
-
+	
+	@Deprecated
 	private void processUnknownComponents() {
 		StringBuffer buffer=new StringBuffer();
 		buffer.append(UNKNOWN_COMPONENTS_SEPERATOR);
@@ -259,6 +264,7 @@ public class ConverterUtil {
 		return typeProperties;
 	}
 	
+	@Deprecated
 	private String escapeXml(String xmlText) {
 		String[] arr=xmlText.split(UNKNOWN_COMPONENTS_SEPERATOR);
 		StringBuffer buffer=new StringBuffer();
