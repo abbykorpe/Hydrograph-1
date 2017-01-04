@@ -60,6 +60,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	private static final String ORACLE = "oracle";
 	private static final String REDSHIFT = "redshift";
 	private static final String MYSQL = "mysql";
+	private static final String TEST_CONNECTION="\"Connection";
 	
 	public DatabaseTestConnectionWidget(
 			ComponentConfigrationProperty componentConfigProp,
@@ -137,7 +138,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 				
 				String	connectionResponse=	DataBaseUtility.getInstance().testDBConnection(parameterType,host);
 				if(null != connectionResponse){
-					if(connectionResponse.startsWith("\"Connection")){
+					if(connectionResponse.startsWith(TEST_CONNECTION)){
 						WidgetUtility.createMessageBox(connectionResponse,Messages.INFORMATION , SWT.ICON_INFORMATION);
 					}else{
 						WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
