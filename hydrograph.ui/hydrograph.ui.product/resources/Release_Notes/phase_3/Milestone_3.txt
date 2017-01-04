@@ -25,4 +25,5 @@ Issues/Defects fixed:
 12.#569 [Nitin Gupta]	-	Union All component: Error icon is not getting removed from schema tab
 13.#547 [Shrirang Kumbhar] - Remote Run: Tool lock user ID if user enter incorrect password single time
 14.#563 [Vibhor Tyagi] -  Error Message is not getting displayed when User gives primary key other than the available fields
-14.#577 [Ashika Holkar] - Oracle Input Component:By default Table Name should be selected on properties window
+15.#577 [Ashika Holkar] - Oracle Input Component:By default Table Name should be selected on properties window
+16.#576 [Ashika Holkar] -  Database input component: Incorrect error popup is getting displayed 

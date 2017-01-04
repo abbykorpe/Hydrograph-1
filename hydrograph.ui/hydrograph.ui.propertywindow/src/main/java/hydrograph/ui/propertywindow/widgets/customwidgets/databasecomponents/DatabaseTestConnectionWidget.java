@@ -162,13 +162,11 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 			if ( StringUtils.isEmpty(parameterType.getHostName())|| StringUtils.isEmpty(parameterType.getJdbcName())
 				|| StringUtils.isEmpty(parameterType.getPortNo())|| StringUtils.isEmpty(parameterType.getUserName())
 				|| StringUtils.isEmpty(parameterType.getSid())|| StringUtils.isEmpty(parameterType.getPassword())) {
-			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}else{
 			if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
 					|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
 					|| StringUtils.isEmpty(parameterType.getUserName()) || StringUtils.isEmpty(parameterType.getPassword())) {
-				WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
 			}
 		}
 	}
