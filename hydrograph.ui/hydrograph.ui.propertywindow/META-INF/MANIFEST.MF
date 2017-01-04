@@ -33,6 +33,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: hydrograph.ui.common.util,
+ hydrograph.ui.expression.editor.enums,
  hydrograph.ui.expression.editor.launcher,
  hydrograph.ui.expression.editor.util,
  org.eclipse.core.databinding,

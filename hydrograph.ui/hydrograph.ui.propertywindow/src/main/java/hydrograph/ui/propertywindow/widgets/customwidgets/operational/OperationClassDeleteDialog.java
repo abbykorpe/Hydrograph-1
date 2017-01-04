@@ -14,29 +14,31 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.ExpandBar;
+import org.eclipse.swt.widgets.ExpandItem;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable.TableContentProvider;
-import java.util.ArrayList;
-import java.util.List;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.ExpandBar;
-import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.swt.widgets.Button;
 
 /**
  * @author Bitwise
@@ -106,9 +108,13 @@ public class OperationClassDeleteDialog extends Dialog {
 		table.setBounds(0, 0, 227, 204);
 		checkboxTableViewer.setContentProvider(new TableContentProvider());
 		
-		for (MappingSheetRow m : mappingSheetRowList) {
-			if(m.isActive())
-			operationIdList.add(m.getOperationID());
+		for (MappingSheetRow mappingsheetRow : mappingSheetRowList) {
+			if(mappingsheetRow.isActive())
+			{
+			if(Constants.NORMALIZE.equalsIgnoreCase(component.getComponentName())&&!mappingsheetRow.isExpression())
+			continue;	
+			operationIdList.add(mappingsheetRow.getOperationID());
+			}
 		}
 		checkboxTableViewer.setInput(operationIdList);
 
@@ -159,8 +165,7 @@ public class OperationClassDeleteDialog extends Dialog {
 							if(index!=-1)
 							outerOutputList.remove(index);
 							}
-						if(Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
-						{	
+							
 							if(mappingSheetRowList.get(i).isExpression())
 							{
 								mappingSheetRowList.remove(i);
@@ -172,15 +177,12 @@ public class OperationClassDeleteDialog extends Dialog {
 								mappingSheetRowList.remove(i+1);
 								mappingSheetRowList.remove(i);
 							}
-						}
-						else
-						mappingSheetRowList.remove(i);	
+						
 						break;
 						}
 					}
 					expandItem.dispose();
-
-					break;
+                    break;
 				}
 			}
 		}

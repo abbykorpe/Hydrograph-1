@@ -13,22 +13,8 @@
 
 package hydrograph.ui.expression.editor.launcher;
 
-import hydrograph.ui.common.util.ConfigFileReader;
-import hydrograph.ui.datastructure.expression.ExpressionEditorData;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.PathConstant;
-import hydrograph.ui.expression.editor.buttons.ValidateExpressionToolButton;
-import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
-import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
-import hydrograph.ui.expression.editor.message.CustomMessageBox;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -41,6 +27,16 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
+import hydrograph.ui.common.util.ConfigFileReader;
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.PathConstant;
+import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
+import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
+import hydrograph.ui.expression.editor.message.CustomMessageBox;
+import hydrograph.ui.logging.factory.LogFactory;
 
 public class LaunchExpressionEditor {
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(LaunchExpressionEditor.class);
@@ -96,7 +92,7 @@ public class LaunchExpressionEditor {
 	private void saveProperty(ExpressionEditorData expressionEditorData, String expressionText) {
 		expressionEditorData.setExpression(expressionText);
 		expressionEditorData.getfieldsUsedInExpression().clear();
-		expressionEditorData.getfieldsUsedInExpression().addAll(new ArrayList<>(expressionEditorData.getSelectedInputFieldsForExpression().keySet()));
+		expressionEditorData.getfieldsUsedInExpression().addAll(new ArrayList<>(expressionEditorData.getCombinedFieldDatatypeMap().keySet()));
 	}
 	
 	private IPath createTemprarySourceFolder(){

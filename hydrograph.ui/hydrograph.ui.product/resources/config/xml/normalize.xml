@@ -42,9 +42,9 @@
 			
 		</tns:property>
 		
-		<tns:property dataType="string" name="operation" renderer="NORMALIZE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
+		<tns:property dataType="string" name="operation" renderer="OUTPUT_RECORD_COUNT_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
 			showAsTooltip="TRUE" tooltipDataType="LINK" usage="OPTIONAL" >
-			<tns:validator>TRANSFORM_MAPPING_VALIDATOR</tns:validator>
+			<tns:validator>NORMALIZE_MAPPING_VALIDATOR</tns:validator>
 			</tns:property>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"

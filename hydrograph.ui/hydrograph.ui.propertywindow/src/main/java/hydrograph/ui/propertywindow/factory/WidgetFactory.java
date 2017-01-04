@@ -47,6 +47,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidge
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveInputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveOutputSingleColumnWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.OutputRecordCountWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.PropogateWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
@@ -86,7 +87,6 @@ public class WidgetFactory {
 		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getFilePathWidgetConfig(Messages.FILE_PATH_LABEL)),
 		EXTERNAL_TABLE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getExternalTablePathWidgetConfig(Messages.EXTERNAL_TABLE_PATH_LABEL)),
-		
 		BROWSE_WORKSPACE_WIDGET(ELTBrowseWorkspaceWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),
 		
@@ -112,7 +112,7 @@ public class WidgetFactory {
 		HOST_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getHostNameWidgetConfig()),
 		PORT_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPortWidgetConfig()),
 		TABLE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getTableNameWidgetConfig()),
-		USER_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getUserNameWidgetConfig()),
+        	USER_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getUserNameWidgetConfig()),
 		PASSWORD_WIDGET(TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents.class, WidgetHelper.INSTANCE.getPasswordWidgetConfig()),
 		CHUNK_SIZE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getChunkSizeWidgetConfig()),
 		
@@ -150,8 +150,9 @@ public class WidgetFactory {
 		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class),
 		LOAD_TYPE_CONFIGURATION_WIDGET(LoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Messages.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
 		PROPOGATE_WIDGET(PropogateWidget.class),
-		RUNPROGRAM_TEXT_WIDGET (RunComponentWidget.class);
-		
+		RUNPROGRAM_TEXT_WIDGET (RunComponentWidget.class),
+		OUTPUT_RECORD_COUNT_WIDGET(OutputRecordCountWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.NORMALIZE,Constants.NORMALIZE_DISPLAYNAME, Constants.NORMALIZE_WINDOW_TITLE));
+              
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
 		

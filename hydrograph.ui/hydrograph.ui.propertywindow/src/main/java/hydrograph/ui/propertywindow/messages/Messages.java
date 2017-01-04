@@ -320,7 +320,35 @@ public class Messages extends NLS {
 	public static String EMPTY_USERNAME_FIELD_MESSAGE;
 	public static String EMPTY_HOST_FIELD_MESSAGE;
 	public static String CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE;
-	
+	public static String DATATYPE_STRING;
+	public static String DATATYPE_INTEGER;
+	public static String DATATYPE_DOUBLE;
+	public static String DATATYPE_FLOAT;
+	public static String DATATYPE_SHORT;
+	public static String DATATYPE_BOOLEAN;
+	public static String DATATYPE_DATE;
+	public static String DATATYPE_BIGDECIMAL;
+	public static String DATATYPE_LONG;
+
+	public static String SWITCH_TO;
+	public static String EXPRESSION;
+	public static String PARAMETER;
+	public static String TEXT_ACCUMULATOR;
+	public static String ISPARAM_ACCUMULATOR;
+	public static String COMBODATATYPES;
+	public static String EXPRESSION_ID;
+	public static String OUTPUT_FIELDS;
+	public static String CLASS;
+	public static String ACCUMULATOR;
+	public static String INPUTFIELDTABLE;
+	public static String ADDBUTTON;
+	public static String DELETEBUTTON;
+	public static String EXPRESSIONIDTEXTBOX;
+	public static String EXPRESSIONEDITORBUTTON;
+	public static String OUTPUTFIELDTEXTBOX;
+	public static String PARAMETERTEXTBOX;
+	public static String EXPRESSIONTEXTBOX;
+	public static String EXPRESSION_COMPOSITE;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

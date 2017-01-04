@@ -68,8 +68,18 @@ public abstract class AbstractWidget {
 	private CTabFolder tabFolder; 
 	private Property property; 
 	private SchemaData schemaData;
+	protected static boolean isSchemaUpdated;
+	
 	public CTabFolder getTabFolder() {
 		return tabFolder;
+	}
+
+	public boolean isSchemaUpdated() {
+		return isSchemaUpdated;
+	}
+
+	public void setSchemaUpdated(boolean isSchemaUpdated1) {
+		isSchemaUpdated = isSchemaUpdated1;
 	}
 
 	public Property getProperty() {

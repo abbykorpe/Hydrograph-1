@@ -17,6 +17,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.OperationClassProperty;
 import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
@@ -28,10 +29,12 @@ import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.dialogs.ELTOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -184,18 +187,21 @@ public class ELTOperationClassWidget extends AbstractWidget {
 				super.widgetSelected(e);
 			}
 
-			private List<FixedWidthGridRow> getInputSchema() {
-				List<FixedWidthGridRow> fixedWidthGridRows=new ArrayList<>();
-				for(Link link:getComponent().getTargetConnections()){
-					ComponentsOutputSchema componentsOutputSchema=SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-					if(componentsOutputSchema!=null && componentsOutputSchema.getFixedWidthGridRowsOutputFields()!=null){
-						fixedWidthGridRows = componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+			private List<FixedWidthGridRow> getInputSchema() 
+			{
+				ELTSchemaGridWidget  schemaWidget = null;
+				for(AbstractWidget abstractWidget:widgets)
+				{
+					if(abstractWidget instanceof ELTSchemaGridWidget)
+					{
+						schemaWidget=(ELTSchemaGridWidget)abstractWidget;
+						break;
 					}
-					break;
-				}
-				return fixedWidthGridRows;
+				}	
+				schemaWidget.refresh();
+				List<GridRow> gridRowList=(List<GridRow>)schemaWidget.getTableViewer().getInput();
+				return SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToFixedSchemaGridRows(gridRowList);
 			}
-			
 		});
 	
 } 
