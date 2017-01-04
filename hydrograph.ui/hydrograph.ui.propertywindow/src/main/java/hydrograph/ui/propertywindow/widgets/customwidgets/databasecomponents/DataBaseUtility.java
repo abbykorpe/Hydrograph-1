@@ -93,7 +93,6 @@ public class DataBaseUtility {
 		String connection_response = "";
 		try {
 			jsonResponse = DebugServiceClient.INSTANCE.connectToDatabase(getTestConnectionDetails(parameterType),host,port_no);
-			ObjectMapper mapper = new ObjectMapper();
 			connection_response=new String(jsonResponse.getBytes());
 		} catch (NumberFormatException | HttpException exception) {
 			logger.error("Json to object Mapping issue ", exception);
