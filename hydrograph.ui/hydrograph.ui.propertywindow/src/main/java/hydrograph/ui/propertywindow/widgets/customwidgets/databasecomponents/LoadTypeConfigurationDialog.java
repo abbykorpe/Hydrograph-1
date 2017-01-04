@@ -245,6 +245,9 @@ public class LoadTypeConfigurationDialog extends Dialog {
 				FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 				fieldDialog.setComponentName(buttonText);
 				fieldDialog.setSourceFieldsFromPropagatedSchema(schemaFields);
+				if(textBox.getText() != null){
+					fieldDialog.setPropertyFromCommaSepratedString(textBox.getText());
+				}
 				fieldDialog.open();
 				String valueForNewTableTextBox = fieldDialog.getResultAsCommaSeprated();
 				if(valueForNewTableTextBox !=null && StringUtils.isNotBlank(valueForNewTableTextBox)){
