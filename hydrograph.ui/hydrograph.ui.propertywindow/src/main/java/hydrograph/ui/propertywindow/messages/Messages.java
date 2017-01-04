@@ -220,7 +220,7 @@ public class Messages extends NLS {
 	public static String LOOKUP_PORT_LABEL;
 	public static String DRIVER_PORT_LABEL;
 	public static String LOOKUP_PORT_CHANGE;
-
+	public static String INVALID_HOST_NAME;
     
 	
 	public static String LABEL_DELIMITER;
@@ -313,6 +313,7 @@ public class Messages extends NLS {
 	public static String EXECUTION_COMMAND;
 	public static String PRIMARY_KEY_VALIDATION;
 	
+
 	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
 	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;
 	public static String EMPTY_FIELDS_MESSAGE_BOX_TITLE;
@@ -349,12 +350,5 @@ public class Messages extends NLS {
 	public static String PARAMETERTEXTBOX;
 	public static String EXPRESSIONTEXTBOX;
 	public static String EXPRESSION_COMPOSITE;
-	static {
-		// initialize resource bundle
-		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
-	}
 
-	private Messages() {
-	}
-	
 }

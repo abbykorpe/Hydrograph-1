@@ -13,6 +13,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
@@ -78,10 +79,15 @@ public class DataBaseUtility {
 		} catch (NumberFormatException | HttpException exception) {
 			logger.error("Json to object Mapping issue ", exception);
 			WidgetUtility.createMessageBox(jsonResponse.toString(),Messages.ERROR , SWT.ICON_ERROR);
-		}catch (IOException exception) {
+		}catch (UnknownHostException exception) {
 			logger.error("Json to object Mapping issue ", exception);
+			WidgetUtility.createMessageBox(Messages.INVALID_HOST_NAME+" : "+ host,Messages.ERROR , SWT.ICON_ERROR);
+		}catch (IOException e) {
+			logger.error("Json to object Mapping issue ", e);
 			WidgetUtility.createMessageBox(jsonResponse.toString(),Messages.ERROR , SWT.ICON_ERROR);
-			
+		}catch (Exception e) {
+			logger.error("Json to object Mapping issue ", e);
+			WidgetUtility.createMessageBox(e.toString(),Messages.ERROR , SWT.ICON_ERROR);
 		}
 		return databaseTableSchema;
 	}
@@ -102,9 +108,12 @@ public class DataBaseUtility {
 			connection_response=new String(jsonResponse.getBytes());
 		} catch (NumberFormatException | HttpException exception) {
 			logger.error("Json to object Mapping issue ", exception);
-		} catch (IOException exception) {
-			logger.error("Json to object Mapping issue ", exception);
-			
+		} catch (UnknownHostException exception) {
+			logger.error("Json to object Mapping issue ", exception.toString());
+		}catch (IOException e) {
+			logger.error("Json to object Mapping issue ", e);
+		}catch (Exception e) {
+			logger.error("Json to object Mapping issue ", e);
 		}
 		return connection_response;
 	}

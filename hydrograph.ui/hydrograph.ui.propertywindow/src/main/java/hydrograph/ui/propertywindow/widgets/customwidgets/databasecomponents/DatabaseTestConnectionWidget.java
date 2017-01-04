@@ -129,6 +129,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		testConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				String	connectionResponse="";
 				String host = DataBaseUtility.getInstance().getServiceHost();
 				
 				if(null!=host&& StringUtils.isNotBlank(host)){
@@ -136,16 +137,18 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 					DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
 					validateDatabaseFields(parameterType);
 				
-				String	connectionResponse=	DataBaseUtility.getInstance().testDBConnection(parameterType,host);
+					connectionResponse=	DataBaseUtility.getInstance().testDBConnection(parameterType,host);
 				if(null != connectionResponse){
 					if(connectionResponse.startsWith(TEST_CONNECTION)){
-						WidgetUtility.createMessageBox(connectionResponse,Messages.INFORMATION , SWT.ICON_INFORMATION);
+						String response=connectionResponse.replaceAll("\"", "");
+						WidgetUtility.createMessageBox(response,Messages.INFORMATION , SWT.ICON_INFORMATION);
 					}else{
-						WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
+						if(StringUtils.isNotBlank(connectionResponse)){
+							WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
+						}else{
+							WidgetUtility.createMessageBox(Messages.INVALID_HOST_NAME+" : "+host,Messages.ERROR , SWT.ICON_ERROR);
+						}
 					}
-				}
-				else{
-					WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
 				}
 				}else{
 					WidgetUtility.createMessageBox(Messages.HOST_NAME_BLANK_ERROR,Messages.ERROR , SWT.ICON_ERROR);
