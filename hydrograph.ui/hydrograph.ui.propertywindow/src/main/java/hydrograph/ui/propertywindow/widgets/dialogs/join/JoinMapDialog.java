@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -55,8 +54,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -76,7 +73,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
@@ -444,13 +440,14 @@ public class JoinMapDialog extends Dialog {
 					}
 				}else{
 					for (String data : dropData) {
-						if(!tempOutputFieldList.contains(StringUtils.lowerCase(data.split("\\.")[1]))){
 							dropItem(data);
+						//Currently, we allowed duplicate values
+						/*if(!tempOutputFieldList.contains(StringUtils.lowerCase(data.split("\\.")[1]))){
 						}
 						else{
 							WidgetUtility.errorMessage(Messages.MAPPING_WINDOW_DUPLICATE_FIELD);
 							break;
-						}
+						}*/
 					}
 				}
 				refreshButtonStatus();
