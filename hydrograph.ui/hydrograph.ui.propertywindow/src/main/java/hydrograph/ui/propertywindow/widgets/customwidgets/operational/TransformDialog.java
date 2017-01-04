@@ -1044,6 +1044,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
   		    	     	   Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
   		    	     	{
   		    	     		expandItem.setHeight(289);
+  		    	     		middleSashForm.setWeights(new int[] {65, 54, 23});
+  		    	     		scrolledComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
   		    	     	}
  				}	
  			}
@@ -1081,6 +1083,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
  		    	     	   Constants.TRANSFORM.equalsIgnoreCase(component.getComponentName()))
  		    	     	{
  		    	     		expandItem.setHeight(220);
+ 		    	     		middleSashForm.setWeights(new int[] {54, 59, 25});
+ 		    	     		scrolledComposite.setMinSize(expandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
  		    	     	}
     				}	
  			}

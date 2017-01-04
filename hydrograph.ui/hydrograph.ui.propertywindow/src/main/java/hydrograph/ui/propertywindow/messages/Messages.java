@@ -313,14 +313,6 @@ public class Messages extends NLS {
 	public static String EXECUTION_COMMAND;
 	public static String PRIMARY_KEY_VALIDATION;
 	
-	
-	static {
-		// initialize resource bundle
-		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
-	}
-
-	private Messages() {
-	}
 	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
 	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;
 	public static String EMPTY_FIELDS_MESSAGE_BOX_TITLE;
@@ -338,5 +330,31 @@ public class Messages extends NLS {
 	public static String DATATYPE_BIGDECIMAL;
 	public static String DATATYPE_LONG;
 
+	public static String SWITCH_TO;
+	public static String EXPRESSION;
+	public static String PARAMETER;
+	public static String TEXT_ACCUMULATOR;
+	public static String ISPARAM_ACCUMULATOR;
+	public static String COMBODATATYPES;
+	public static String EXPRESSION_ID;
+	public static String OUTPUT_FIELDS;
+	public static String CLASS;
+	public static String ACCUMULATOR;
+	public static String INPUTFIELDTABLE;
+	public static String ADDBUTTON;
+	public static String DELETEBUTTON;
+	public static String EXPRESSIONIDTEXTBOX;
+	public static String EXPRESSIONEDITORBUTTON;
+	public static String OUTPUTFIELDTEXTBOX;
+	public static String PARAMETERTEXTBOX;
+	public static String EXPRESSIONTEXTBOX;
+	public static String EXPRESSION_COMPOSITE;
+	static {
+		// initialize resource bundle
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+	}
+
+	private Messages() {
+	}
 	
 }

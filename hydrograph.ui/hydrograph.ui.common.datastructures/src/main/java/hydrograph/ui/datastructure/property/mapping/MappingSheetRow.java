@@ -53,20 +53,40 @@ public class MappingSheetRow implements IDataStructure {
     private String comboDataType = "Integer";
     private String accumulator;
     private boolean isAccumulatorParameter;
+    
+	/**
+	 * @return If accumulator is a parameter
+	 */
 	public boolean isAccumulatorParameter() {
 		return isAccumulatorParameter;
 	}
+	
+	/**
+	 * @param isAccumulatorParameter set if accumulator will be a parameter
+	 */
 	public void setAccumulatorParameter(boolean isAccumulatorParameter) {
 		this.isAccumulatorParameter = isAccumulatorParameter;
 	}
+	
+	/**
+	 * @return Get accumulator data type
+	 */
 	public String getComboDataType() {
 		return comboDataType;
 	}
+	
+	/**
+	 * @param comboDataType set accmulator datatype
+	 */
+	
 	public void setComboDataType(String comboDataType) {
 		this.comboDataType = comboDataType;
 	}
 	
-    public boolean isExpression() {
+	 /**
+     * @return 
+     */
+	 public boolean isExpression() {
 		return isExpression;
 	}
 	/**
@@ -74,6 +94,7 @@ public class MappingSheetRow implements IDataStructure {
 	 * 
 	 * @return the operation class full path
 	 */
+    
 	public String getOperationClassFullPath() {
 		return operationClassFullPath;
 	}
@@ -320,57 +341,101 @@ public class MappingSheetRow implements IDataStructure {
 	}
 	
 	
+	/**
+	 * @param isParameter
+	 */
 	public void setParameter(boolean isParameter) {
 		this.isWholeOperationParameter = isParameter;
 	}
     
+	/** 
+	 * @return Input Fields
+	 */
 	public List<FilterProperties> getInputFields() {
 		if(this.inputFieldList==null)
 			return new ArrayList<FilterProperties>();
 		return inputFieldList;
 	}
     
+	/**
+	 * @param inputFields se Input Fields
+	 */
 	public void setInputFields(List<FilterProperties> inputFields) {
 		this.inputFieldList = inputFields;
 	}
 	
+	/**
+	 * @return output list
+	 */
 	public List<FilterProperties> getOutputList() {
 		return outputList;
 	}
 
+	/**
+	 * @param outputList set output list
+	 */
 	public void setOutputList(List<FilterProperties> outputList) {
 		this.outputList = outputList;
 	}
 	
+	/**
+	 * @return 
+	 */
 	public boolean isClassParameter() {
 		return isClassParameter;
 	}
 
+	/**
+	 * @return get expression editor data
+	 */
 	public ExpressionEditorData getExpressionEditorData() {
 		return expressionEditorData;
 	}
 
+	/**
+	 * @param expressionEditorData set expression editor data
+	 */
 	public void setExpressionEditorData(ExpressionEditorData expressionEditorData) {
 		this.expressionEditorData = expressionEditorData;
 	}
 	
+	/**
+	 * @param isClassParameter
+	 */
 	public void setClassParameter(boolean isClassParameter) {
 		this.isClassParameter = isClassParameter;
 	}
 	
+	/**
+	 * @return 
+	 */
 	public boolean isActive() {
 		return isActive;
 	}
+	/**
+	 * @param isActive
+	 */
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
 	
+	/**
+	 * @return get accmulator value
+	 */
 	public String getAccumulator() {
 		return accumulator;
 	}
+	
+	/**
+	 * @param accumulator value
+	 */
 	public void setAccumulator(String accumulator) {
 		this.accumulator = accumulator;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	@Override
 	public Object clone(){
 		List<FilterProperties> inputFieldList = new LinkedList<>();
@@ -420,6 +485,9 @@ public class MappingSheetRow implements IDataStructure {
 		return mappingSheetRow;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "MappingSheetRow [inputFields=" + inputFieldList + ", comboBoxValue=" + comboBoxValue

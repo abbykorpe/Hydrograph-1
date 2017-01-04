@@ -1,3 +1,15 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import java.util.ArrayList;
@@ -20,8 +32,13 @@ import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 
+/**
+ * @author Bitwise parent composite for all expression composite
+ *
+ */
 public abstract class AbstractExpressionComposite extends Composite {
     
 	public static final String EXPRESSION_COMPOSITE_KEY = "expression-composite";
@@ -106,10 +123,17 @@ public abstract class AbstractExpressionComposite extends Composite {
 		return comboDataTypes;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.widgets.Composite#checkSubclass()
+	 */
 	@Override
 	protected void checkSubclass() {
 	}
     
+	/**
+	 * @param isParam
+	 * @param isWholeOperationParameter
+	 */
 	protected void disabledWidgetsifWholeExpressionIsParameter(Button isParam, boolean isWholeOperationParameter) {
 		if (isWholeOperationParameter) {
 			TableViewer tableViewer = (TableViewer) isParam.getData(Constants.INPUT_FIELD_TABLE);
@@ -127,6 +151,9 @@ public abstract class AbstractExpressionComposite extends Composite {
 		}
 	}
 	
+	 /**
+	 * @param isParam
+	 */
 	 protected void setAllWidgetsOnIsParamButton(Button isParam) {
 			isParam.setData(Constants.INPUT_FIELD_TABLE, tableViewer);
 			isParam.setData(Constants.ADD_BUTTON, addButton);
@@ -138,6 +165,10 @@ public abstract class AbstractExpressionComposite extends Composite {
 			isParam.setData(Constants.EXPRESSION_TEXT_BOX, expressionTextBox);
 		}
 	
+	/**
+	 * @param component
+	 * @return
+	 */
 	private List<FixedWidthGridRow> getInputSchema(Component component) {
 		List<FixedWidthGridRow> fixedWidthGridRows = new ArrayList<>();
 		for (Link link : component.getTargetConnections()) {
