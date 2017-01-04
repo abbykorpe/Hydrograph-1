@@ -71,19 +71,17 @@ public class HydrographServiceClient {
 		// testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
 		// String oraclejson =
 		// "{\"table\":\"testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-		String oraclejson = "{\"table\":\"testingTable1113\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-		// String mysqljson = "{\"query\":\"Select * from
-		// ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
+		//String oraclejson = "{\"table\":\"testingTable1113\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
+		 //String mysqljson = "{\"query\":\"Select * from ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
 		// String mysqljson = "{\"query\":\"Select * from
 		// ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
-		// String mysqljson =
-		// "{\"table\":\"ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
+		 String mysqljson = "{\"table\":\"allType\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
 		// String hivejson =
 		// "{\"database\":\"textdata\",\"table\":\"personal\",\"username\":\"username\",\"password\":\"yourpassword\",\"dbtype\":\"hive\"}";
 
 		PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/readFromMetastore");
 
-		postMethod.addParameter("request_parameters", oraclejson);
+		postMethod.addParameter("request_parameters", mysqljson);
 
 		int response = httpClient.executeMethod(postMethod);
 		InputStream inputStream = postMethod.getResponseBodyAsStream();
