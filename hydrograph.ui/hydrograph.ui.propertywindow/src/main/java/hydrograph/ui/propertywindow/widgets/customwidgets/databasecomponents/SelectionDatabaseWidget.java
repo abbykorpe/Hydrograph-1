@@ -91,8 +91,6 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	private ELTDefaultLable selectLable;
 	private ModifyListener textboxSQLQueryModifyListner;
 	private ModifyListener textboxTableNameModifyListner;
-	private static final String ERROR = "ERR";
-	private static final String INFO = "INF";
 	private Cursor cursor;
 	private String sqlQueryStatement;
 	private Text sqlQueryCountertextbox;

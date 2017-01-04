@@ -194,5 +194,17 @@ public class Provider {
         
 		return postMethod;
 	}
+
+	public PostMethod getConnectionStatus(MetaDataDetails metaDataDetails, String host, String port) throws NumberFormatException, MalformedURLException {
+		
+		URL url = new URL(POST_PROTOCOL,host,Integer.valueOf(port),DebugServiceMethods.TEST_CONNECTION);
+		PostMethod postMethod = new PostMethod(url.toString());
+		Gson gson = new Gson();
+        postMethod.addParameter(DebugServicePostParameters.REQUEST_PARAMETERS, gson.toJson(metaDataDetails) );
+      
+        LOGGER.debug("Calling service to test connection for database components through url :: "+url);
+        
+		return postMethod;
+	}
 	
 }

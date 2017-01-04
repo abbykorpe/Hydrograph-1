@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,6 +24,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
@@ -54,6 +57,10 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	protected ControlDecoration buttonDecorator;
 	private Button testConnectionButton;
 	private ArrayList<AbstractWidget> widgets;
+	private static final String ORACLE = "oracle";
+	private static final String REDSHIFT = "redshift";
+	private static final String MYSQL = "mysql";
+	private static final String TEST_CONNECTION="\"Connection";
 	
 	public DatabaseTestConnectionWidget(
 			ComponentConfigrationProperty componentConfigProp,
@@ -99,22 +106,71 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		setDecoratorsVisibility();
 		
 	}
+	
+	private String getComponentType(){
+		if(StringUtils.equalsIgnoreCase(getComponent().getType(), ORACLE)){
+			return ORACLE;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), REDSHIFT)){
+			return REDSHIFT;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
+			return MYSQL;
+		}
+		return "";
+	}
+	
+	
 
 	/**
 	 * Attaches selection listener on TestConnection button
 	 * @param testConnectionButton
 	 */
 	private void attachButtonListner(Button testConnectionButton) {
+		
 		testConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//TODO
-				/*Below code will use to test connection with database.
-				 * */
-				DatabaseParameterType databaseParameterType = getDatabaseConnectionDetails();
+				String host = DataBaseUtility.getInstance().getServiceHost();
+				
+				if(null!=host&& StringUtils.isNotBlank(host)){
+					
+					DatabaseParameterType parameterType =  getDatabaseConnectionDetails();
+					validateDatabaseFields(parameterType);
+				
+				String	connectionResponse=	DataBaseUtility.getInstance().testDBConnection(parameterType,host);
+				if(null != connectionResponse){
+					if(connectionResponse.startsWith(TEST_CONNECTION)){
+						WidgetUtility.createMessageBox(connectionResponse,Messages.INFORMATION , SWT.ICON_INFORMATION);
+					}else{
+						WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
+					}
+				}
+				else{
+					WidgetUtility.createMessageBox(connectionResponse,Messages.ERROR , SWT.ICON_ERROR);
+				}
+				}else{
+					WidgetUtility.createMessageBox(Messages.HOST_NAME_BLANK_ERROR,Messages.ERROR , SWT.ICON_ERROR);
+				}
 			}
 		});
 		
+	}
+	
+	
+	private void validateDatabaseFields(DatabaseParameterType parameterType){
+		
+		if(parameterType.getDataBaseType().equalsIgnoreCase(ORACLE)){
+			if ( StringUtils.isEmpty(parameterType.getHostName())|| StringUtils.isEmpty(parameterType.getJdbcName())
+				|| StringUtils.isEmpty(parameterType.getPortNo())|| StringUtils.isEmpty(parameterType.getUserName())
+				|| StringUtils.isEmpty(parameterType.getSid())|| StringUtils.isEmpty(parameterType.getPassword())) {
+			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
+			}
+		}else{
+			if (StringUtils.isEmpty(parameterType.getDatabaseName()) || StringUtils.isEmpty(parameterType.getHostName())
+					|| StringUtils.isEmpty(parameterType.getJdbcName()) || StringUtils.isEmpty(parameterType.getPortNo())
+					|| StringUtils.isEmpty(parameterType.getUserName()) || StringUtils.isEmpty(parameterType.getPassword())) {
+				WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR,Messages.ERROR , SWT.ICON_ERROR);
+			}
+		}
 	}
 	
 	/**
@@ -129,7 +185,6 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		String schemaName = "";
 		String userName = "";
 		String password = "";
-		String dataBaseType = "";
 		String sid ="";
 		
 		for (AbstractWidget textAbtractWgt : widgets) {
@@ -162,7 +217,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 
 		}
 		
-		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(dataBaseType, hostName, 
+		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), hostName, 
 				portNo, userName, password).jdbcName(jdbcName).schemaName(schemaName)
 				.databaseName(databaseName).sid(sid).build();
 

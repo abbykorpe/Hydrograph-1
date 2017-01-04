@@ -138,5 +138,19 @@ public class DebugServiceClient {
 		return method.getResponseBodyAsString();
 	}
 	
+	/**
+	 * Method to test database connection for db components
+	 * @param jsonString db name,table name
+	 * @param metaDataDetails 
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	public String connectToDatabase(MetaDataDetails metaDataDetails, String host, String port) throws NumberFormatException, HttpException, IOException {
+		PostMethod method=Provider.INSTANCE.getConnectionStatus(metaDataDetails,host,port);
+		executePostMethod(method);
+		return method.getResponseBodyAsString();
+	}
 	
 }
