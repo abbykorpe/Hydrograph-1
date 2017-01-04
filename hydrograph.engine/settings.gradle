@@ -13,7 +13,7 @@
 rootProject.name = 'hydrograph.engine'
 
 include 'hydrograph.engine.core'
-include 'hydrograph.engine.cascading'
+//include 'hydrograph.engine.cascading'
 include 'hydrograph.engine.command-line'
 include 'hydrograph.engine.transformation'
 include 'hydrograph.engine.expression'

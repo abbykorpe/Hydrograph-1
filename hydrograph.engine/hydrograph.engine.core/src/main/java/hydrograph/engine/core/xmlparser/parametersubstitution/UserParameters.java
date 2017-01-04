@@ -14,10 +14,9 @@ package hydrograph.engine.core.xmlparser.parametersubstitution;
 
 import java.io.IOException;
 
-import org.apache.commons.cli.ParseException;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 
 import hydrograph.engine.core.utilities.GeneralUtilities;
-import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 
 public class UserParameters implements IParameterBank {
 

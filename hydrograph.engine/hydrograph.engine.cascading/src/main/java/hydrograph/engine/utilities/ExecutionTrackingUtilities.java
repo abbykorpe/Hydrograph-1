@@ -10,26 +10,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.engine.cascading.integration;
+package hydrograph.engine.utilities;
 
-import hydrograph.engine.utilities.GeneralUtilities;
+import hydrograph.engine.core.props.OrderedProperties;
+import hydrograph.engine.core.utilities.OrderedPropertiesHelper;
+import java.io.IOException;
 
-public class CommandLineOptionsProcessor {
-
-	public static final String OPTION_DOT_PATH = "dotpath";
-	public static final String OPTION_NO_EXECUTION = "noexecution";
-
-	public static String getDotPath(String[] args) {
-		String[] paths;
-
-		paths = GeneralUtilities.getArgsOption(args, OPTION_DOT_PATH);
-
-		if (paths != null) {
-			// only the first path
-			return paths[0];
-		} else {
-			return null;
+public class ExecutionTrackingUtilities {
+	/**
+	 * To check execution tracking is enable.
+	 *
+	 * @param executionTrackingKey
+	 * @return an string containing execution tracking class
+	 */
+	public static String getExecutionTrackingClass(String executionTrackingKey) {
+		OrderedProperties properties;
+		try {
+			properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties");
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e);
 		}
+
+		return properties.getProperty(executionTrackingKey);
 	}
 
 }

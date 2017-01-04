@@ -13,11 +13,11 @@ import org.slf4j.{Logger, LoggerFactory}
   * Created by prabodhm on 12/19/2016.
   * </p>
   */
-class RuntimeContext private(val adapterFactory: AdapterFactory, val traversal: JAXBTraversal, val hydrographJob: HydrographJob, val schemaFieldHandler:
-SchemaFieldHandler, val sparkSession: SparkSession)
+class RuntimeContext private(val adapterFactory: AdapterFactory, var traversal: JAXBTraversal,
+                             var hydrographJob: HydrographJob, var schemaFieldHandler: SchemaFieldHandler, var sparkSession: SparkSession)
 
 /**
-  * The companion object for [[hydrograph.engine.spark.flow.RuntimeContext RuntimeContext]] class
+  * The companion object for {@link hydrograph.engine.spark.flow.RuntimeContext RuntimeContext} class
   */
 object RuntimeContext {
 

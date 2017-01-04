@@ -39,7 +39,7 @@ class PartitionByExpressionComponentTest {
     operationProperties.put("ABC", "xyz")
 
     val operationInputFields: Array[String] = Array("accountType")
-    val operationClass: String = "hydrograph.engine.userclass.PartitionByExpressionTest"
+    val operationClass: String = "hydrograph.engine.userfunctions.PartitionByExpressionTest"
     partitionByExpressionEntity.setNumPartitions(3)
     partitionByExpressionEntity.setRuntimeProperties(operationProperties)
 

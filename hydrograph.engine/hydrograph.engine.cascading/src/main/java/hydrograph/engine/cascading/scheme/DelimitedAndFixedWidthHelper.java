@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme;
 
-import hydrograph.engine.utilities.GeneralUtilities;
+import hydrograph.engine.core.utilities.GeneralUtilities;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

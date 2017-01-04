@@ -1,4 +1,4 @@
-package hydrograph.engine.userclass;
+package hydrograph.engine.userfunctions;
 
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;

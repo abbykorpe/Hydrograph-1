@@ -24,7 +24,7 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 import hydrograph.engine.core.xmlparser.parametersubstitution.IParameterBank;
 import hydrograph.engine.core.xmlparser.parametersubstitution.PropertyBank;
 
