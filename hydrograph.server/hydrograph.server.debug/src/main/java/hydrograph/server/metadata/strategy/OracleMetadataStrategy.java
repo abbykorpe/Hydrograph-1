@@ -127,38 +127,61 @@ public class OracleMetadataStrategy extends MetadataStrategyTemplate {
 				// Retrieving schema type for converting oracle type to java
 				// specific type
 				if (rsmd.getColumnTypeName(count).equalsIgnoreCase("timestamp")) {
+					// setting scale to none for timestamp
+					tableSchemaFieldEntity.setPrecision("");
+					tableSchemaFieldEntity.setScale("");
 					tableSchemaFieldEntity.setFormat("yyyy-MM-dd HH:mm:ss:SSS");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
 				} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("date")) {
+					// setting scale to none for date
+					tableSchemaFieldEntity.setPrecision("");
+					tableSchemaFieldEntity.setScale("");
 					tableSchemaFieldEntity.setFormat("yyyy-MM-dd");
 					tableSchemaFieldEntity.setFieldType("java.util.Date");
 				} else if (rsmd.getScale(count) != 0) {
 					if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19)) {
+						tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
+						tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 						tableSchemaFieldEntity.setFieldType("java.lang.Double");
 					} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number")
 							&& rsmd.getPrecision(count) > 19) {
+						tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
+						tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 						tableSchemaFieldEntity.setScaleType("explicit");
 						tableSchemaFieldEntity.setFieldType("java.math.BigDecimal");
 					}
 				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 10
 						&& rsmd.getPrecision(count) > 5)) {
+					tableSchemaFieldEntity.setPrecision("");
+					tableSchemaFieldEntity.setScale("");
 					tableSchemaFieldEntity.setFieldType("java.lang.Integer");
 				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number")
 						&& rsmd.getPrecision(count) <= 5)) {
+					tableSchemaFieldEntity.setPrecision("");
+					tableSchemaFieldEntity.setScale("");
 					tableSchemaFieldEntity.setFieldType("java.lang.Short");
 				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) <= 19
 						&& rsmd.getPrecision(count) > 10)) {
+					tableSchemaFieldEntity.setPrecision("");
+					tableSchemaFieldEntity.setScale("");
 					tableSchemaFieldEntity.setFieldType("java.lang.Long");
 				} else if ((rsmd.getColumnTypeName(count).equalsIgnoreCase("char") && rsmd.getPrecision(count) == 1)) {
+					tableSchemaFieldEntity.setPrecision("");
+					tableSchemaFieldEntity.setScale("");
 					tableSchemaFieldEntity.setFieldType("java.lang.Boolean");
 				} else if (rsmd.getColumnTypeName(count).equalsIgnoreCase("number") && rsmd.getPrecision(count) > 19) {
 					tableSchemaFieldEntity.setScaleType("explicit");
+					tableSchemaFieldEntity.setScale("1");
 					tableSchemaFieldEntity.setFieldType("java.math.BigDecimal");
+				} else if (rsmd.getColumnTypeName(count).contains("VARCHAR")) {
+					tableSchemaFieldEntity.setScale("");
+					tableSchemaFieldEntity.setPrecision("");
+					tableSchemaFieldEntity.setFieldType("java.lang.String");
 				} else {
+					tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
+					tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 					tableSchemaFieldEntity.setFieldType(rsmd.getColumnClassName(count));
 				}
-				tableSchemaFieldEntity.setPrecision(String.valueOf(rsmd.getPrecision(count)));
-				tableSchemaFieldEntity.setScale(String.valueOf(rsmd.getScale(count)));
 				tableSchemaFieldEntities.add(tableSchemaFieldEntity);
 			}
 			if (componentSchemaProperties.get(Constants.TABLENAME) == null)
