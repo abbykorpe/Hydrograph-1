@@ -27,6 +27,8 @@ class HydrographRuntime extends HydrographRuntimeService {
   private var flowManipulationContext: FlowManipulationContext = null;
   private var flows: ListBuffer[SparkFlow] = null
 
+
+
   override def kill(): Unit = {
     LOG.info("Kill signal received")
     if (RuntimeContext.instance.sparkSession != null) {
@@ -42,13 +44,11 @@ class HydrographRuntime extends HydrographRuntimeService {
   override def initialize(properties: Properties, args: Array[String], hydrographJob: HydrographJob,
                           jobId: String, udfPath: String): Unit = {
 
-    val sparkSession: SparkSession = SparkSession.builder()
-      .master(properties.getProperty("spark_master"))
+    val sparkSessionBuilder: SparkSession.Builder = SparkSession.builder()
+      .master(properties.getProperty("hydrograph.spark.master"))
       .appName(hydrographJob.getJAXBObject.getName)
-      .config("spark.sql.shuffle.partitions", properties.getProperty("spark_partitions"))
-      .config("spark.sql.warehouse.dir", properties.getProperty("hive_warehouse"))
-      .enableHiveSupport()
-      .getOrCreate()
+      .config("spark.sql.shuffle.partitions", properties.getProperty("hydrograph.spark.partitions"))
+
 
 
     val schemaFieldHandler = new SchemaFieldHandler(
@@ -63,6 +63,8 @@ class HydrographRuntime extends HydrographRuntimeService {
     val adapterFactory = AdapterFactory(updatedHydrographJob.getJAXBObject)
 
     val traversal = new JAXBTraversal(updatedHydrographJob.getJAXBObject());
+
+    val sparkSession: SparkSession = checkAndEnableHiveSupport(sparkSessionBuilder, traversal, properties).getOrCreate()
 
     val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob,
       flowManipulationContext.getSchemaFieldHandler, sparkSession)
@@ -83,6 +85,20 @@ class HydrographRuntime extends HydrographRuntimeService {
     //      executionTrackingListener.addListener(sparkSession)
     //    }
 
+  }
+
+  def checkAndEnableHiveSupport(sessionBuilder: SparkSession.Builder, traversal: JAXBTraversal, properties: Properties): SparkSession.Builder = {
+    LOG.trace("In method buildSparkSession()")
+    if (traversal.isHiveComponentPresentInFlow) {
+      LOG.debug("Hive components are present in flow. Enabling Hive support in SparkSession with warehouse location "+properties.getProperty("hydrograph.hive.warehouse"))
+      sessionBuilder
+        .config("spark.sql.warehouse.dir", properties.getProperty("hydrograph.hive.warehouse"))
+        .enableHiveSupport()
+    } else {
+      sessionBuilder
+        .config("spark.sql.warehouse.dir", properties.getProperty("hydrograph.tmp.warehouse"))
+    }
+    sessionBuilder
   }
 
   override def prepareToExecute(): Unit = {
