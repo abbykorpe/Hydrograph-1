@@ -224,6 +224,7 @@ public class PropogateWidget extends AbstractWidget{
 						 }
 						 shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
 						 getComponent().setContinuousSchemaPropogationAllow(true);
+						
 					}
 				    else if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.JOIN))
 				    {
@@ -268,6 +269,7 @@ public class PropogateWidget extends AbstractWidget{
 				getComponent().getProperties().put(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA, oldSchemaMap);
 				if(shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents)
 				SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent());
+				showHideErrorSymbol(widgets);
 			}
            });
 	}
