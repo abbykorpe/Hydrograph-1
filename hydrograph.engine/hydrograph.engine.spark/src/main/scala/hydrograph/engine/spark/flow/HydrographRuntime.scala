@@ -64,7 +64,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
     val traversal = new JAXBTraversal(updatedHydrographJob.getJAXBObject());
 
-    val sparkSession: SparkSession = buildSparkSession(sparkSessionBuilder, traversal, properties).getOrCreate()
+    val sparkSession: SparkSession = checkAndEnableHiveSupport(sparkSessionBuilder, traversal, properties).getOrCreate()
 
     val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob,
       flowManipulationContext.getSchemaFieldHandler, sparkSession)
@@ -87,7 +87,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   }
 
-  def buildSparkSession(sessionBuilder: SparkSession.Builder, traversal: JAXBTraversal, properties: Properties): SparkSession.Builder = {
+  def checkAndEnableHiveSupport(sessionBuilder: SparkSession.Builder, traversal: JAXBTraversal, properties: Properties): SparkSession.Builder = {
     LOG.trace("In method buildSparkSession()")
     if (traversal.isHiveComponentPresentInFlow) {
       LOG.debug("Hive components are present in flow. Enabling Hive support in SparkSession with warehouse location "+properties.getProperty("hydrograph.hive.warehouse"))
