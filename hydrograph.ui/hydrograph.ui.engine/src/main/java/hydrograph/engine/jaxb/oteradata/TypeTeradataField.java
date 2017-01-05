@@ -38,7 +38,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-teradata-field")
+@XmlType(name = "type-teradata-field", namespace = "hydrograph/engine/jaxb/oteradata")
 public class TypeTeradataField
     extends TypeBaseField
 {

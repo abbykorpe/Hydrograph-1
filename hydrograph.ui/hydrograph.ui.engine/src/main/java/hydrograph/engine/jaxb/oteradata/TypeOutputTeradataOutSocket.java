@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-teradata-out-socket")
+@XmlType(name = "type-output-teradata-out-socket", namespace = "hydrograph/engine/jaxb/oteradata")
 public class TypeOutputTeradataOutSocket
     extends TypeOutputInSocket
 {

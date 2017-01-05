@@ -42,7 +42,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-teradata-record")
+@XmlType(name = "type-teradata-record", namespace = "hydrograph/engine/jaxb/oteradata")
 public class TypeTeradataRecord
     extends TypeBaseRecord
 {

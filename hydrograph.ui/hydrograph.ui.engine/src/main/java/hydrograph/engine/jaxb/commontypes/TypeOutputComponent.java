@@ -26,6 +26,7 @@ import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedBase;
 import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
 import hydrograph.engine.jaxb.ooracle.TypeOutputOracleBase;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
+import hydrograph.engine.jaxb.oteradata.TypeOutputTeradataBase;
 import hydrograph.engine.jaxb.otffw.TypeFixedWidthBase;
 import hydrograph.engine.jaxb.otfs.TypeOutputFileSequenceBase;
 import hydrograph.engine.jaxb.outputtypes.Discard;
@@ -69,7 +70,8 @@ import hydrograph.engine.jaxb.outputtypes.Discard;
     hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase.class,
     TypeOutputMysqlBase.class,
     TypeOutputRedshiftBase.class,
-    TypeOutputOracleBase.class
+    TypeOutputOracleBase.class,
+    TypeOutputTeradataBase.class
 })
 public abstract class TypeOutputComponent
     extends TypeBaseComponent

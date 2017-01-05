@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package hydrograph.engine.jaxb.oteradata;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -38,7 +39,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-primary-keys", propOrder = {
+@XmlType(name = "type-primary-keys", namespace = "hydrograph/engine/jaxb/oteradata", propOrder = {
     "primaryKeys"
 })
 public class TypePrimaryKeys {

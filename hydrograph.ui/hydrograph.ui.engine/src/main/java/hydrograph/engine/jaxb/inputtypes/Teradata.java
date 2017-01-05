@@ -11,8 +11,6 @@
  * limitations under the License.
  *******************************************************************************/
 
-
-
 package hydrograph.engine.jaxb.inputtypes;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -37,15 +35,16 @@ import hydrograph.engine.jaxb.iteradata.TypeInputTeradataBase;
  *       &lt;sequence>
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
+ *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type"/>
  *         &lt;element name="jdbcDriver" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;choice>
- *           &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *           &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *           &lt;sequence>
- *             &lt;element name="selectQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *             &lt;element name="selectQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *             &lt;element name="countQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *           &lt;/sequence>
  *         &lt;/choice>
+ *         &lt;element name="interface" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
@@ -58,7 +57,7 @@ import hydrograph.engine.jaxb.iteradata.TypeInputTeradataBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "teradata", propOrder = {
+@XmlType(name = "teradata", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "databaseName",
     "hostName",
     "port",
@@ -66,6 +65,7 @@ import hydrograph.engine.jaxb.iteradata.TypeInputTeradataBase;
     "tableName",
     "selectQuery",
     "countQuery",
+    "_interface",
     "username",
     "password",
     "runtimeProperties"
@@ -78,12 +78,15 @@ public class Teradata
     protected ElementValueStringType databaseName;
     @XmlElement(required = true)
     protected ElementValueStringType hostName;
+    @XmlElement(required = true)
     protected ElementValueIntegerType port;
     @XmlElement(required = true)
     protected ElementValueStringType jdbcDriver;
     protected ElementValueStringType tableName;
     protected ElementValueStringType selectQuery;
     protected ElementValueStringType countQuery;
+    @XmlElement(name = "interface", required = true)
+    protected ElementValueStringType _interface;
     @XmlElement(required = true)
     protected ElementValueStringType username;
     @XmlElement(required = true)
@@ -256,6 +259,30 @@ public class Teradata
      */
     public void setCountQuery(ElementValueStringType value) {
         this.countQuery = value;
+    }
+
+    /**
+     * Gets the value of the interface property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getInterface() {
+        return _interface;
+    }
+
+    /**
+     * Sets the value of the interface property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setInterface(ElementValueStringType value) {
+        this._interface = value;
     }
 
     /**

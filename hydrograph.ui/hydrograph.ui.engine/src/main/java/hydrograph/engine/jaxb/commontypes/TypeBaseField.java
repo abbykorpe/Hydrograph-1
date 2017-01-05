@@ -27,6 +27,7 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordField;
 import hydrograph.engine.jaxb.omysql.TypeMysqlField;
 import hydrograph.engine.jaxb.ooracle.TypeOracleField;
 import hydrograph.engine.jaxb.oredshift.TypeRedshiftField;
+import hydrograph.engine.jaxb.oteradata.TypeTeradataField;
 
 
 /**
@@ -58,6 +59,7 @@ import hydrograph.engine.jaxb.oredshift.TypeRedshiftField;
     TypeMysqlField.class,
     TypeRedshiftField.class,
     TypeOracleField.class,
+    TypeTeradataField.class,
     TypeNameField.class
 })
 public class TypeBaseField {

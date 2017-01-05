@@ -13,18 +13,17 @@
 
 package hydrograph.engine.jaxb.ooracle;
 
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 
 
 /**
  * <p>Java class for type-output-oracle-in-socket complex type.
- * <p>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * 
  * <pre>
  * &lt;complexType name="type-output-oracle-in-socket">
  *   &lt;complexContent>
@@ -38,11 +37,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-output-oracle-in-socket", namespace = "hydrograph/engine/jaxb/ooracle")
 public class TypeOutputOracleInSocket
-        extends TypeOutputInSocket {
+    extends TypeOutputInSocket
+{
 
 
 }

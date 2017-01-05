@@ -11,7 +11,6 @@
  * limitations under the License.
  *******************************************************************************/
 
-
 package hydrograph.engine.jaxb.oteradata;
 
 import javax.xml.bind.annotation.XmlEnum;
@@ -39,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "database-type-value")
+@XmlType(name = "database-type-value", namespace = "hydrograph/engine/jaxb/oteradata")
 @XmlEnum
 public enum DatabaseTypeValue {
 

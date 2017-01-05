@@ -11,7 +11,6 @@
  * limitations under the License.
  *******************************************************************************/
 
-
 package hydrograph.engine.jaxb.iteradata;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -42,7 +41,7 @@ import hydrograph.engine.jaxb.inputtypes.Teradata;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-teradata-base")
+@XmlType(name = "type-input-teradata-base", namespace = "hydrograph/engine/jaxb/iteradata")
 @XmlSeeAlso({
     Teradata.class
 })

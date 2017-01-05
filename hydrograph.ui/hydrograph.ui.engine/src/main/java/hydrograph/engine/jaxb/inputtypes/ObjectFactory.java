@@ -122,6 +122,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Teradata }
+     * 
+     */
+    public Teradata createTeradata() {
+        return new Teradata();
+    }
+
+    /**
      * Create an instance of {@link SubjobInput }
      * 
      */

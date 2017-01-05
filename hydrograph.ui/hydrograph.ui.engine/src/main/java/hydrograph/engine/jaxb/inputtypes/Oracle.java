@@ -11,25 +11,23 @@
  * limitations under the License.
  *******************************************************************************/
 
-
 package hydrograph.engine.jaxb.inputtypes;
-
-import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
-import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.ioracle.TypeInputOracleBase;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
+import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.ioracle.TypeInputOracleBase;
 
 
 /**
  * <p>Java class for oracle complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="oracle">
  *   &lt;complexContent>
@@ -55,25 +53,25 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "oracle", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
-        "sid",
-        "hostName",
-        "port",
-        "driverType",
-        "userName",
-        "password",
-        "runtimeProperties",
-        "schemaName",
-        "tableName",
-        "selectQuery",
-        "countQuery"
+    "sid",
+    "hostName",
+    "port",
+    "driverType",
+    "userName",
+    "password",
+    "runtimeProperties",
+    "schemaName",
+    "tableName",
+    "selectQuery",
+    "countQuery"
 })
 public class Oracle
-        extends TypeInputOracleBase
+    extends TypeInputOracleBase
 {
 
     @XmlElement(required = true)
@@ -95,11 +93,11 @@ public class Oracle
 
     /**
      * Gets the value of the sid property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public ElementValueStringType getSid() {
         return sid;
@@ -107,11 +105,11 @@ public class Oracle
 
     /**
      * Sets the value of the sid property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public void setSid(ElementValueStringType value) {
         this.sid = value;
@@ -119,11 +117,11 @@ public class Oracle
 
     /**
      * Gets the value of the hostName property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public ElementValueStringType getHostName() {
         return hostName;
@@ -131,11 +129,11 @@ public class Oracle
 
     /**
      * Sets the value of the hostName property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public void setHostName(ElementValueStringType value) {
         this.hostName = value;
@@ -143,11 +141,11 @@ public class Oracle
 
     /**
      * Gets the value of the port property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueIntegerType }
-     *
+     *     
      */
     public ElementValueIntegerType getPort() {
         return port;
@@ -155,9 +153,11 @@ public class Oracle
 
     /**
      * Sets the value of the port property.
-     *
-     * @param value allowed object is
-     *              {@link ElementValueIntegerType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueIntegerType }
+     *     
      */
     public void setPort(ElementValueIntegerType value) {
         this.port = value;
@@ -165,9 +165,11 @@ public class Oracle
 
     /**
      * Gets the value of the driverType property.
-     *
-     * @return possible object is
-     * {@link ElementValueStringType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
      */
     public ElementValueStringType getDriverType() {
         return driverType;
@@ -175,9 +177,11 @@ public class Oracle
 
     /**
      * Sets the value of the driverType property.
-     *
-     * @param value allowed object is
-     *              {@link ElementValueStringType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
      */
     public void setDriverType(ElementValueStringType value) {
         this.driverType = value;
@@ -185,9 +189,11 @@ public class Oracle
 
     /**
      * Gets the value of the userName property.
-     *
-     * @return possible object is
-     * {@link ElementValueStringType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
      */
     public ElementValueStringType getUserName() {
         return userName;
@@ -195,9 +201,11 @@ public class Oracle
 
     /**
      * Sets the value of the userName property.
-     *
-     * @param value allowed object is
-     *              {@link ElementValueStringType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
      */
     public void setUserName(ElementValueStringType value) {
         this.userName = value;
@@ -205,11 +213,11 @@ public class Oracle
 
     /**
      * Gets the value of the password property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public ElementValueStringType getPassword() {
         return password;
@@ -217,11 +225,11 @@ public class Oracle
 
     /**
      * Sets the value of the password property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public void setPassword(ElementValueStringType value) {
         this.password = value;
@@ -229,11 +237,11 @@ public class Oracle
 
     /**
      * Gets the value of the runtimeProperties property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link TypeProperties }
-     *
+     *     
      */
     public TypeProperties getRuntimeProperties() {
         return runtimeProperties;
@@ -241,11 +249,11 @@ public class Oracle
 
     /**
      * Sets the value of the runtimeProperties property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link TypeProperties }
-     *
+     *     
      */
     public void setRuntimeProperties(TypeProperties value) {
         this.runtimeProperties = value;
@@ -253,11 +261,11 @@ public class Oracle
 
     /**
      * Gets the value of the schemaName property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public ElementValueStringType getSchemaName() {
         return schemaName;
@@ -265,11 +273,11 @@ public class Oracle
 
     /**
      * Sets the value of the schemaName property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public void setSchemaName(ElementValueStringType value) {
         this.schemaName = value;
@@ -277,11 +285,11 @@ public class Oracle
 
     /**
      * Gets the value of the tableName property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public ElementValueStringType getTableName() {
         return tableName;
@@ -289,11 +297,11 @@ public class Oracle
 
     /**
      * Sets the value of the tableName property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public void setTableName(ElementValueStringType value) {
         this.tableName = value;
@@ -301,11 +309,11 @@ public class Oracle
 
     /**
      * Gets the value of the selectQuery property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public ElementValueStringType getSelectQuery() {
         return selectQuery;
@@ -313,11 +321,11 @@ public class Oracle
 
     /**
      * Sets the value of the selectQuery property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public void setSelectQuery(ElementValueStringType value) {
         this.selectQuery = value;
@@ -325,11 +333,11 @@ public class Oracle
 
     /**
      * Gets the value of the countQuery property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public ElementValueStringType getCountQuery() {
         return countQuery;
@@ -337,11 +345,11 @@ public class Oracle
 
     /**
      * Sets the value of the countQuery property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *
+     *     
      */
     public void setCountQuery(ElementValueStringType value) {
         this.countQuery = value;

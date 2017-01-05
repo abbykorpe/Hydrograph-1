@@ -11,7 +11,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package hydrograph.engine.jaxb.ooracle;
+package hydrograph.engine.jaxb.oteradata;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the hydrograph.engine.jaxb.ooracle package. 
+ * generated in the hydrograph.engine.jaxb.oteradata package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -35,18 +35,10 @@ public class ObjectFactory {
 
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: hydrograph.engine.jaxb.ooracle
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: hydrograph.engine.jaxb.oteradata
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputOracleInSocket }
-     * 
-     */
-    public TypeOutputOracleInSocket createTypeOutputOracleInSocket() {
-        return new TypeOutputOracleInSocket();
     }
 
     /**
@@ -66,11 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOracleField }
+     * Create an instance of {@link TypeOutputTeradataOutSocket }
      * 
      */
-    public TypeOracleField createTypeOracleField() {
-        return new TypeOracleField();
+    public TypeOutputTeradataOutSocket createTypeOutputTeradataOutSocket() {
+        return new TypeOutputTeradataOutSocket();
     }
 
     /**
@@ -90,19 +82,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOracleRecord }
+     * Create an instance of {@link TypeTeradataRecord }
      * 
      */
-    public TypeOracleRecord createTypeOracleRecord() {
-        return new TypeOracleRecord();
+    public TypeTeradataRecord createTypeTeradataRecord() {
+        return new TypeTeradataRecord();
     }
 
     /**
-     * Create an instance of {@link TypeOutputOracleBase }
+     * Create an instance of {@link TypeOutputTeradataBase }
      * 
      */
-    public TypeOutputOracleBase createTypeOutputOracleBase() {
-        return new TypeOutputOracleBase();
+    public TypeOutputTeradataBase createTypeOutputTeradataBase() {
+        return new TypeOutputTeradataBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeTeradataField }
+     * 
+     */
+    public TypeTeradataField createTypeTeradataField() {
+        return new TypeTeradataField();
     }
 
 }

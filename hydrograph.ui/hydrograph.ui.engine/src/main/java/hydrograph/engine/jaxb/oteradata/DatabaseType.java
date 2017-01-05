@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package hydrograph.engine.jaxb.oteradata;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -36,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "database-type")
+@XmlType(name = "database-type", namespace = "hydrograph/engine/jaxb/oteradata")
 public class DatabaseType {
 
     @XmlAttribute(name = "value", required = true)
