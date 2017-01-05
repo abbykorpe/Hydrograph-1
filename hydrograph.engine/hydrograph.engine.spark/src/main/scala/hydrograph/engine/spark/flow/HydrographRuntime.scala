@@ -29,6 +29,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
   private var flowManipulationContext: FlowManipulationContext = null;
   private var flows: ListBuffer[SparkFlow] = null
+  var executionTrackingListener : ExecutionTrackingListener = null
 
 
 
@@ -75,13 +76,13 @@ class HydrographRuntime extends HydrographRuntimeService {
 
 
 
-    //    val EXECUTION_TRACKING = "hydrograph.execution.tracking";
+        val EXECUTION_TRACKING = "hydrograph.execution.tracking";
 
-    //    val oproperties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
-    //    val executionTrackingPluginName = oproperties.getProperty(EXECUTION_TRACKING)
-    //    val trackingInstance = Class.forName(executionTrackingPluginName).newInstance()
-    //    val executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
-    //    executionTrackingListener.addListener(runtimeContext.sparkSession)
+        val oproperties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
+        val executionTrackingPluginName = oproperties.getProperty(EXECUTION_TRACKING)
+        val trackingInstance = Class.forName(executionTrackingPluginName).newInstance()
+        executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
+        executionTrackingListener.addListener(runtimeContext)
 
 
     //    if (getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
@@ -120,11 +121,12 @@ class HydrographRuntime extends HydrographRuntimeService {
       sparkFlow.execute()
     }
     RuntimeContext.instance.sparkSession.stop()
+//    executionTrackingListener.getStatus().asScala.foreach(println)
   }
 
   override def getExecutionStatus: AnyRef = {
-    /*if (executionTrackingListener != null)
-    return executionTrackingListener.getStatus()*/
+    if (executionTrackingListener != null)
+    return executionTrackingListener.getStatus()
     return null
   }
 

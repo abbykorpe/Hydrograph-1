@@ -219,12 +219,12 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
 //    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
 
-    println("Task id: " + taskEnd.taskInfo.taskId)
+    /*println("Task id: " + taskEnd.taskInfo.taskId)
     taskEnd.taskInfo.accumulables.foreach(f => {
         LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
           + f
           .update)
-    })
+    })*/
     jobInfo.storeComponentStats(taskEnd)
 //    getStatus().asScala.foreach(println)
     //    println("Task id: " + taskEnd.taskInfo.taskId)
