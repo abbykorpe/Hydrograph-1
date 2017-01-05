@@ -75,6 +75,10 @@ dependencies {
     	compile(group: 'org.jgrapht', name: 'jgrapht-ext', version: '0.9.1')
     
     	compile(group: 'hydrograph', name: 'hydrograph.server.execution.tracking.server', version: '1.0.13')
+    	
+    	compile(group: 'oracle', name: 'ojdbc6', version: '11.2.0.4')
+    	
+    	compile(group: 'mysql', name: 'mysql-connector-java', version: '5.1.34')
 }
 
 
