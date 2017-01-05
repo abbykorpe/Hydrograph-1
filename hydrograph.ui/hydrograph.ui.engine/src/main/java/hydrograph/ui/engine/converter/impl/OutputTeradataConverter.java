@@ -147,14 +147,14 @@ public class OutputTeradataConverter extends OutputConverter{
 	}
 	
 	private ElementValueStringType getSelectInterfaceValue() {
-		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(Constants.MATCH_PROPERTY_WIDGET);
+		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(PropertyNameConstants.SELECT_INTERFACE.value());
 		
 		if(matchValueProperty != null){
 			ElementValueStringType type = new ElementValueStringType();
 			if(Messages.STANDARD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				type.setValue("DEFAULT");
+				type.setValue(Constants.DEFAULT);
 			}else if(Messages.FAST_LOAD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				type.setValue("FASTLOAD");
+				type.setValue(Constants.FASTLOAD);
 			}
 			return type;
 		}

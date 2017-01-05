@@ -33,6 +33,7 @@ import hydrograph.engine.jaxb.oteradata.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Teradata;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
@@ -41,6 +42,7 @@ import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.OTeradata;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The Class OutputTeradata Converter implementation for Output Teradata Component
@@ -98,6 +100,8 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 			}
 		}
 		
+		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getInterface());
+			
 		propertyMap.put(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value(), loadSelectedDetails);
 		
 		uiComponent.setType(UIComponentsConstants.TERADATA.value());
@@ -106,6 +110,19 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(outputTeradata.getId());
 		uiComponent.setProperties(propertyMap);
+	}
+	
+	private MatchValueProperty getInterface() {
+		LOGGER.debug("Generating Match for -{}", componentName);
+		MatchValueProperty matchValue =  new MatchValueProperty();
+		Teradata outputTeradata = (Teradata) typeBaseComponent;
+		if(Constants.DEFAULT.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+			matchValue.setMatchValue(Messages.STANDARD);
+		}else if(Constants.FASTLOAD.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+			matchValue.setMatchValue(Messages.FAST_LOAD);
+		}
+		matchValue.setRadioButtonSelected(true);
+		return matchValue;
 	}
 	
 	/**

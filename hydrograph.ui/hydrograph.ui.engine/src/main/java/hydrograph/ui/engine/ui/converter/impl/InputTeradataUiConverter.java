@@ -27,8 +27,10 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.Teradata;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
@@ -37,6 +39,7 @@ import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.components.ITeradata;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
  * The Class InputTeradata Converter implementation for Input Teradata Component
@@ -95,6 +98,8 @@ public class InputTeradataUiConverter extends InputUiConverter{
 		
 		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
 		
+		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getInterface());
+			
 		uiComponent.setType(UIComponentsConstants.TERADATA.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		
@@ -128,6 +133,19 @@ public class InputTeradataUiConverter extends InputUiConverter{
 		return schema;
 	}
 
+	private MatchValueProperty getInterface() {
+		LOGGER.debug("Generating Match for -{}", componentName);
+		MatchValueProperty matchValue =  new MatchValueProperty();
+		Teradata outputTeradata = (Teradata) typeBaseComponent;
+		if(Constants.DEFAULT.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+			matchValue.setMatchValue(Messages.STANDARD);
+		}else if(Constants.FASTEXPORT.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+			matchValue.setMatchValue(Messages.FAST_EXPORT);
+		}
+		matchValue.setRadioButtonSelected(true);
+		return matchValue;
+	}
+	
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);

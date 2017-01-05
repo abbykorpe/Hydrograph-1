@@ -159,9 +159,9 @@ public class InputTeradataConverter extends InputConverter{
 		if(matchValueProperty != null){
 			ElementValueStringType type = new ElementValueStringType();
 			if(Messages.STANDARD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				type.setValue("DEFAULT");
+				type.setValue(Constants.DEFAULT);
 			}else if(Messages.FAST_EXPORT.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				type.setValue("FASTEXPORT");
+				type.setValue(Constants.FASTEXPORT);
 			}
 			return type;
 		}
