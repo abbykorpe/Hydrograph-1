@@ -26,8 +26,8 @@ class HydrographRuntime extends HydrographRuntimeService {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
   private var flowManipulationContext: FlowManipulationContext = null;
   private var flows: ListBuffer[SparkFlow] = null
-  private var sparkSession:SparkSession=null;
-  private var sessionBuilder:SparkSession.Builder=null;
+
+
 
   override def kill(): Unit = {
     LOG.info("Kill signal received")
@@ -44,13 +44,11 @@ class HydrographRuntime extends HydrographRuntimeService {
   override def initialize(properties: Properties, args: Array[String], hydrographJob: HydrographJob,
                           jobId: String, udfPath: String): Unit = {
 
-    val sparkSession: SparkSession = SparkSession.builder()
+    val sparkSessionBuilder: SparkSession.Builder = SparkSession.builder()
       .master(properties.getProperty("spark_master"))
       .appName(hydrographJob.getJAXBObject.getName)
       .config("spark.sql.shuffle.partitions", properties.getProperty("spark_partitions"))
-      .config("spark.sql.warehouse.dir", properties.getProperty("hive_warehouse"))
-      .enableHiveSupport()
-      .getOrCreate()
+
 
 
     val schemaFieldHandler = new SchemaFieldHandler(
@@ -65,6 +63,8 @@ class HydrographRuntime extends HydrographRuntimeService {
     val adapterFactory = AdapterFactory(updatedHydrographJob.getJAXBObject)
 
     val traversal = new JAXBTraversal(updatedHydrographJob.getJAXBObject());
+
+    val sparkSession: SparkSession = buildSparkSession(sparkSessionBuilder, traversal, properties.getProperty("hive_warehouse")).getOrCreate()
 
     val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob,
       flowManipulationContext.getSchemaFieldHandler, sparkSession)
@@ -85,6 +85,20 @@ class HydrographRuntime extends HydrographRuntimeService {
     //      executionTrackingListener.addListener(sparkSession)
     //    }
 
+  }
+
+  def buildSparkSession(sessionBuilder: SparkSession.Builder, traversal: JAXBTraversal, warehouseLocation: String): SparkSession.Builder = {
+    LOG.trace("In method buildSparkSession()")
+    if (traversal.isHiveComponentPresentInFlow) {
+      LOG.debug("Hive components are present in flow. Enabling Hive support in SparkSession with warehouse location "+warehouseLocation)
+      sessionBuilder
+        .config("spark.sql.warehouse.dir", warehouseLocation)
+        .enableHiveSupport()
+    } else {
+      sessionBuilder
+        .config("spark.sql.warehouse.dir", "file:///tmp")
+    }
+    sessionBuilder
   }
 
   override def prepareToExecute(): Unit = {
