@@ -26,6 +26,8 @@ class HydrographRuntime extends HydrographRuntimeService {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
   private var flowManipulationContext: FlowManipulationContext = null;
   private var flows: ListBuffer[SparkFlow] = null
+  private var sparkSession:SparkSession=null;
+  private var sessionBuilder:SparkSession.Builder=null;
 
   override def kill(): Unit = {
     LOG.info("Kill signal received")
