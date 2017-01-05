@@ -45,9 +45,9 @@ class HydrographRuntime extends HydrographRuntimeService {
                           jobId: String, udfPath: String): Unit = {
 
     val sparkSessionBuilder: SparkSession.Builder = SparkSession.builder()
-      .master(properties.getProperty("spark_master"))
+      .master(properties.getProperty("hydrograph.spark.master"))
       .appName(hydrographJob.getJAXBObject.getName)
-      .config("spark.sql.shuffle.partitions", properties.getProperty("spark_partitions"))
+      .config("spark.sql.shuffle.partitions", properties.getProperty("hydrograph.spark.partitions"))
 
 
 
@@ -64,7 +64,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
     val traversal = new JAXBTraversal(updatedHydrographJob.getJAXBObject());
 
-    val sparkSession: SparkSession = buildSparkSession(sparkSessionBuilder, traversal, properties.getProperty("hive_warehouse")).getOrCreate()
+    val sparkSession: SparkSession = buildSparkSession(sparkSessionBuilder, traversal, properties).getOrCreate()
 
     val runtimeContext = RuntimeContext(adapterFactory, traversal, updatedHydrographJob,
       flowManipulationContext.getSchemaFieldHandler, sparkSession)
@@ -87,16 +87,16 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   }
 
-  def buildSparkSession(sessionBuilder: SparkSession.Builder, traversal: JAXBTraversal, warehouseLocation: String): SparkSession.Builder = {
+  def buildSparkSession(sessionBuilder: SparkSession.Builder, traversal: JAXBTraversal, properties: Properties): SparkSession.Builder = {
     LOG.trace("In method buildSparkSession()")
     if (traversal.isHiveComponentPresentInFlow) {
-      LOG.debug("Hive components are present in flow. Enabling Hive support in SparkSession with warehouse location "+warehouseLocation)
+      LOG.debug("Hive components are present in flow. Enabling Hive support in SparkSession with warehouse location "+properties.getProperty("hydrograph.hive.warehouse"))
       sessionBuilder
-        .config("spark.sql.warehouse.dir", warehouseLocation)
+        .config("spark.sql.warehouse.dir", properties.getProperty("hydrograph.hive.warehouse"))
         .enableHiveSupport()
     } else {
       sessionBuilder
-        .config("spark.sql.warehouse.dir", "file:///tmp")
+        .config("spark.sql.warehouse.dir", properties.getProperty("hydrograph.tmp.warehouse"))
     }
     sessionBuilder
   }
