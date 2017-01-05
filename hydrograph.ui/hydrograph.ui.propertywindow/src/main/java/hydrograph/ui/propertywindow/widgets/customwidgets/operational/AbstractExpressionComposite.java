@@ -35,11 +35,6 @@ import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
-<<<<<<< HEAD
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.propertywindow.messages.Messages;
-=======
->>>>>>> 2a0c2b2... Added data type column in expression editor available field section.
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
