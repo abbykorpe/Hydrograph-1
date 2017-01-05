@@ -27,4 +27,5 @@ Issues/Defects fixed:
 14.#563 [Vibhor Tyagi] -  Error Message is not getting displayed when User gives primary key other than the available fields
 15.#577 [Ashika Holkar] - Oracle Input Component:By default Table Name should be selected on properties window
 16.#576 [Ashika Holkar] -  Database input component: Incorrect error popup is getting displayed 
-17.#520 [Vibhor Tyagi] - Behavior of adding Output fields in Join Mapping window is not same for all type of join i.e for inner,right,left and full outer join
+18.#520 [Vibhor Tyagi] - Behavior of adding Output fields in Join Mapping window is not same for all type of join i.e for inner,right,left and full outer join
+19.#582 [Ashika Holkar] -  Database Component: Issues related to Test Connection
