@@ -554,14 +554,16 @@ executeDebugRemoteJob.onlyIf {
                               Kill Remote Job  
 -------------------------------------------------------------------------------------------------
 */
-task killRemoteJob() << {
-    if(jobprocessid !=null){
-    
-		println "scpSubJobFiles: Killing $jobprocessid"
-	
-		def command="sh "+properties.runUtility+" -k " + jobprocessid
-        sshToRemoteServer(host,username,password,command)
-     }
+task killRemoteJob() {
+	doLast {
+	    if(jobprocessid !=null){
+	    
+			println "scpSubJobFiles: Killing $jobprocessid"
+		
+			def command="sh "+properties.runUtility+" -k " + jobprocessid
+	        sshToRemoteServer(host,username,password,command)
+	     }
+	}
 }
 killRemoteJob.onlyIf {
     project.hasProperty('host')
