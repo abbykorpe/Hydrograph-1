@@ -18,15 +18,10 @@ class InputFileParquetComponentTest {
     val runTimeServiceProp = PropertiesLoader.getInstance.getRuntimeServiceProperties
     val spark = SparkSession.builder()
       .appName("Test Class")
-      .master(runTimeServiceProp.getProperty("spark_master"))
-      .config(runTimeServiceProp.getProperty("hive_warehouse"), "file:///c:/tmp")
+      .master(runTimeServiceProp.getProperty("hydrograph.spark.master"))
+      .config("spark.sql.warehouse.dir", runTimeServiceProp.getProperty("hydrograph.tmp.warehouse"))
       .getOrCreate()
 
-    val df = new DataBuilder(Fields(List("col1", "col2", "col3", "col4")).applyTypes(List(classOf[String],
-      classOf[String], classOf[String], classOf[String]))).addData(List("1", "C2R1", "C3Rx", "C4R1"))
-      .addData(List("2", "C2R2", "C3Rx", "C4R2"))
-      .addData(List("3", "C2R3", "C3Rx", "C4R3"))
-      .build()
 
     val path: String = "testData/inputFiles/input.parquet"
     val inputFileParquetEntity = new InputFileParquetEntity
@@ -47,7 +42,6 @@ class InputFileParquetComponentTest {
 
     val baseComponentParams = new BaseComponentParams
     baseComponentParams.setSparkSession(spark)
-    baseComponentParams.addinputDataFrame(df)
 
     val pdf = new InputFileParquetComponent(inputFileParquetEntity, baseComponentParams).createComponent()
 

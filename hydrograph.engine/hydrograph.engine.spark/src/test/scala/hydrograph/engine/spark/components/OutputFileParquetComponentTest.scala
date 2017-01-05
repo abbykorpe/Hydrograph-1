@@ -7,6 +7,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.testing.wrapper.DataBuilder
 import hydrograph.engine.testing.wrapper.Fields
 import scala.collection.JavaConverters._
+import org.apache.spark.sql.SparkSession
+import hydrograph.engine.core.props.PropertiesLoader
+import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.types.StructField
+import org.apache.spark.sql.types.StringType
+import org.junit.Assert
 
 class OutputFileParquetComponentTest {
 
@@ -20,18 +26,32 @@ class OutputFileParquetComponentTest {
       .build()
 
     val outputFileParquetEntity = new OutputFileParquetEntity()
-    outputFileParquetEntity.setPath("testData/inputFiles/delimitedInputFile.txt")
-    val sf0: SchemaField = new SchemaField("col1", "java.lang.Integer")
+    outputFileParquetEntity.setPath("testData/inputFiles/parquetOutput")
+    val sf0: SchemaField = new SchemaField("col1", "java.lang.String")
     val sf1: SchemaField = new SchemaField("col2", "java.lang.String")
 
     val list: List[SchemaField] = List(sf0, sf1)
     val javaList = list.asJava
     outputFileParquetEntity.setFieldsList(javaList)
+    outputFileParquetEntity.setOverWrite(true);
 
     val baseComponentParams = new BaseComponentParams
     baseComponentParams.addinputDataFrame(df)
 
-    new OutputFileParquetComponent(outputFileParquetEntity, baseComponentParams).execute()
+    val comp = new OutputFileParquetComponent(outputFileParquetEntity, baseComponentParams)
+    comp.execute()
+
+    val runTimeServiceProp = PropertiesLoader.getInstance.getRuntimeServiceProperties
+    val spark = SparkSession.builder()
+      .appName("Test Class")
+      .master(runTimeServiceProp.getProperty("hydrograph.spark.master"))
+      .config("spark.sql.warehouse.dir", runTimeServiceProp.getProperty("hydrograph.tmp.warehouse"))
+      .getOrCreate()
+
+    val sch = StructType(List(StructField("col1", StringType, true), StructField("col2", StringType, true)))
+    val outDF = spark.read.schema(sch).parquet("testData/inputFiles/parquetOutput")
+
+    Assert.assertEquals(outDF.count(), 3)
 
   }
 }

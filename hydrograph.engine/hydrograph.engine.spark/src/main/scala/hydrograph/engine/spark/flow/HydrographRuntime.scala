@@ -88,7 +88,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   }
 
   def checkAndEnableHiveSupport(sessionBuilder: SparkSession.Builder, traversal: JAXBTraversal, properties: Properties): SparkSession.Builder = {
-    LOG.trace("In method buildSparkSession()")
+    LOG.trace("In method checkAndEnableHiveSupport()")
     if (traversal.isHiveComponentPresentInFlow) {
       LOG.debug("Hive components are present in flow. Enabling Hive support in SparkSession with warehouse location "+properties.getProperty("hydrograph.hive.warehouse"))
       sessionBuilder
