@@ -12,16 +12,16 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
   */
 class ExecutionTrackingAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase {
 
-  var filter: ExecutionTrackingEntityGenerator = null;
-  var sparkFilterComponent: ExecutionTrackingComponent = null;
+  var executionTracking: ExecutionTrackingEntityGenerator = null;
+  var sparkEexecutionTrackingComponent: ExecutionTrackingComponent = null;
 
   override def createGenerator(): Unit = {
-    filter = new ExecutionTrackingEntityGenerator(typeBaseComponent)
+    executionTracking = new ExecutionTrackingEntityGenerator(typeBaseComponent)
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    sparkFilterComponent = new ExecutionTrackingComponent(filter.getEntity, baseComponentParams)
+    sparkEexecutionTrackingComponent = new ExecutionTrackingComponent(executionTracking.getEntity, baseComponentParams)
   }
 
-  override def getComponent(): OperationComponentBase = sparkFilterComponent
+  override def getComponent(): OperationComponentBase = sparkEexecutionTrackingComponent
 }
