@@ -21,12 +21,10 @@ import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
 import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
-import hydrograph.engine.jaxb.commontypes.MatchValue;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.inputtypes.Teradata;
 import hydrograph.engine.jaxb.iteradata.TypeInputTeradataOutSocket;
-import hydrograph.engine.jaxb.operationstypes.Lookup.Match;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.datastructure.property.GridRow;

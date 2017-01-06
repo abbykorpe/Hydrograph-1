@@ -14,22 +14,9 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.MatchValueProperty;
-import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
-import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
-import hydrograph.ui.propertywindow.property.Property;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.RadioButtonConfig;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.TextBoxWithLableConfig;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,8 +24,22 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 
+import hydrograph.ui.datastructure.property.MatchValueProperty;
+import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
+import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.RadioButtonConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+
 
 /**
+ * Class for displaying radio button on property window
  * @author Bitwise
  *
  */
