@@ -29,3 +29,4 @@ Issues/Defects fixed:
 16.#576 [Ashika Holkar] -  Database input component: Incorrect error popup is getting displayed 
 18.#520 [Vibhor Tyagi] - Behavior of adding Output fields in Join Mapping window is not same for all type of join i.e for inner,right,left and full outer join
 19.#582 [Ashika Holkar] -  Database Component: Issues related to Test Connection
+20. [Rakesh Kanchalwar] - Updated gradle and pom files for oracle and mysql dependencies
