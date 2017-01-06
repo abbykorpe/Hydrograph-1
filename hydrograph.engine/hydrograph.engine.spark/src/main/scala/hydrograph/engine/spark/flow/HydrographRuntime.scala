@@ -108,7 +108,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   override def prepareToExecute(): Unit = {
     LOG.info("Building spark flows")
-    flows = FlowBuilder(RuntimeContext.instance).buildFlow()
+      flows = FlowBuilder(RuntimeContext.instance).buildFlow()
     LOG.info("Spark flows built successfully")
   }
 
@@ -119,9 +119,15 @@ class HydrographRuntime extends HydrographRuntimeService {
     }*/
     for (sparkFlow <- flows) {
       sparkFlow.execute()
+
+      for(accumulator <- sparkFlow.getAccumulatorOnFlow()){
+        accumulator.reset()
+      }
+
     }
+//    RuntimeContext.instance.sparkSession.sparkContext.longAccumulator
     RuntimeContext.instance.sparkSession.stop()
-//    executionTrackingListener.getStatus().asScala.foreach(println)
+    executionTrackingListener.getStatus().asScala.foreach(println)
   }
 
   override def getExecutionStatus: AnyRef = {

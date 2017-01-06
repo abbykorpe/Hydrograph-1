@@ -4,10 +4,11 @@ import java.util
 
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.helper.LinkGenerator
-import hydrograph.engine.jaxb.commontypes.{ TypeBaseInSocket, TypeBaseOutSocket }
+import hydrograph.engine.jaxb.commontypes.{TypeBaseInSocket, TypeBaseOutSocket}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.flow.RuntimeContext
-import org.apache.spark.sql.{ DataFrame, SparkSession }
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.util.LongAccumulator
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -88,6 +89,11 @@ object ComponentParameterBuilder {
 
     def setSparkSession(sparkSession: SparkSession): Builder = {
       baseComponent.setSparkSession(sparkSession)
+      this
+    }
+
+    def setAccumulator(longAccumulator: LongAccumulator): Builder = {
+      baseComponent.setAccumulaor(longAccumulator)
       this
     }
 

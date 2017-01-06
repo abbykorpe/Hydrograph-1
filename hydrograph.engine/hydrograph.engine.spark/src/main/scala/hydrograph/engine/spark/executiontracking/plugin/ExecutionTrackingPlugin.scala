@@ -138,11 +138,13 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   }
 
   override def onStageSubmitted(stageSubmitted: SparkListenerStageSubmitted) {
-    //    println("+++++++++++++++++++++Stage Submit Start+++++++++++++++++++++")
+//        println("+++++++++++++++++++++Stage Submit Start+++++++++++++++++++++")
     //
     //    println("Stage Id : "+stageSubmitted.stageInfo.stageId)
-    //    //        println("Stage details: "+stageSubmitted.stageInfo.details)
-    //    println("Stage name: "+stageSubmitted.stageInfo.name)
+//    println("Stage details: "+stageSubmitted.stageInfo.details)
+//        println("Stage name: "+stageSubmitted.stageInfo.name)
+
+    jobInfo.updateStatusOfComponentsOnStageSubmitted(stageSubmitted)
     //    println("Stage no of Tasks : "+stageSubmitted.stageInfo.numTasks)
     //    println("Stage Rdd Info : " + stageSubmitted.stageInfo.rddInfos.mkString)
     //    println("Stage Rdd Info Name: "+stageSubmitted.stageInfo.rddInfos.foreach(f=>f.name))
@@ -150,7 +152,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     //    println("Records Read "+stageSubmitted.stageInfo.taskMetrics.inputMetrics.recordsRead)
     //    println("Records Written "+stageSubmitted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
     //    println("Stage Submit Properties "+stageSubmitted.properties)
-    //    println("+++++++++++++++++++++Stage Submit End+++++++++++++++++++++")
+//        println("+++++++++++++++++++++Stage Submit End+++++++++++++++++++++")
   }
 
 
@@ -209,24 +211,27 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
 
   override def onTaskGettingResult(taskGettingResult: SparkListenerTaskGettingResult) {
-    //    println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
-    //    println("Task geeting result status : " + taskGettingResult.taskInfo.status)
+//        println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
+//        println("Task geeting result status : " + taskGettingResult.taskInfo.status)
+
+//    jobInfo.storeComponentStatsForTaskGettingResult(taskGettingResult)
+//    getStatus().asScala.foreach(println)
     //    println("Task geeting result id : " + taskGettingResult.taskInfo.taskId)
-    //    println("+++++++++++++++++++++Task Getting Result End+++++++++++++++++++++")
+//        println("+++++++++++++++++++++Task Getting Result End+++++++++++++++++++++")
   }
 
 
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
 //    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
 
-    /*println("Task id: " + taskEnd.taskInfo.taskId)
+    println("Task id: " + taskEnd.taskInfo.taskId)
     taskEnd.taskInfo.accumulables.foreach(f => {
         LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
           + f
           .update)
-    })*/
-    jobInfo.storeComponentStats(taskEnd)
-//    getStatus().asScala.foreach(println)
+    })
+    jobInfo.storeComponentStatsForTaskEnd(taskEnd)
+    getStatus().asScala.foreach(println)
     //    println("Task id: " + taskEnd.taskInfo.taskId)
     ////    println("Task Accumulables Info: " + taskEnd.taskInfo.accumulables.mkString)
     //    println("Task attemptNo: " + taskEnd.taskInfo.attemptNumber)
@@ -254,16 +259,19 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   }
 
   override def onTaskStart(taskStart: SparkListenerTaskStart) {
-    //    println("+++++++++++++++++++++Task Start Start+++++++++++++++++++++")
+//        println("+++++++++++++++++++++Task Start Start+++++++++++++++++++++")
     //    println("Task id: " + taskStart.taskInfo.taskId)
     //    println("id: " + taskStart.taskInfo.id)
+
+    jobInfo.storeComponentStatsForTaskStart(taskStart)
+    getStatus().asScala.foreach(println)
     //    println("Task attemptNo: " + taskStart.taskInfo.attemptNumber)
     //    //        println("Task duration: " + taskStart.taskInfo.duration)
     //    println("Task launchTime: " + taskStart.taskInfo.launchTime)
-    //    println("Task Status: " + taskStart.taskInfo.status)
+        println("Task Status: " + taskStart.taskInfo.status)
     //    println("Task executorId: " + taskStart.taskInfo.executorId)
     //    println("Task stage Id : " + taskStart.stageId)
-    //    println("+++++++++++++++++++++Task Start End+++++++++++++++++++++")
+//        println("+++++++++++++++++++++Task Start End+++++++++++++++++++++")
   }
 
   override def getStatus(): java.util.List[ComponentInfo] = {

@@ -8,6 +8,8 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import java.util.Set
 
+import org.apache.spark.util.LongAccumulator
+
 /**
   * Created by gurdits on 10/17/2016.
   */
@@ -26,12 +28,22 @@ class BaseComponentParams() extends Serializable {
 
   var schemaField:Array[SchemaField] = null
 
+  var accumulator:LongAccumulator = null
+
   def addSchemaFields(fields: Array[SchemaField]) = {
     schemaField = fields
   }
 
   def getSchemaFields(): Array[SchemaField] ={
     schemaField
+  }
+
+  def getAccumulator(): LongAccumulator = {
+    accumulator
+  }
+
+  def setAccumulaor(acc: LongAccumulator): Unit = {
+    accumulator = acc
   }
 
   def getSparkSession(): SparkSession = {
