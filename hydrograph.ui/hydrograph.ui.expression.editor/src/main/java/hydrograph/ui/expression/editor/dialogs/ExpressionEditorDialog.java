@@ -218,30 +218,60 @@ public class ExpressionEditorDialog extends Dialog {
 	}
 
 	/**
-	 * @return string
+	 * @return the expressionEditorTextBox
 	 */
-	public String getExpressionText() {
+	public StyledText getExpressionEditorTextBox() {
+		return expressionEditorTextBox;
+	}
+
+	/**
+	 * @param expressionEditorTextBox the expressionEditorTextBox to set
+	 */
+	public void setExpressionEditorTextBox(StyledText expressionEditorTextBox) {
+		this.expressionEditorTextBox = expressionEditorTextBox;
+	}
+
+	/**
+	 * @return the newExpressionText
+	 */
+	public String getNewExpressionText() {
 		return newExpressionText;
 	}
 
 	/**
-	 * @return sash form
+	 * @param newExpressionText the newExpressionText to set
 	 */
-	public SashForm getUpperSashForm() {
-		return upperSashForm;
+	public void setNewExpressionText(String newExpressionText) {
+		this.newExpressionText = newExpressionText;
 	}
 
 	/**
-	 * @return container sash form
+	 * @return the containerSashForm
 	 */
 	public SashForm getContainerSashForm() {
 		return containerSashForm;
 	}
 
 	/**
-	 * @return styled text object
+	 * @param containerSashForm the containerSashForm to set
 	 */
-	public StyledText getExpressionEditorTextBox() {
-		return expressionEditorTextBox;
+	public void setContainerSashForm(SashForm containerSashForm) {
+		this.containerSashForm = containerSashForm;
 	}
+
+	/**
+	 * @return the upperSashForm
+	 */
+	public SashForm getUpperSashForm() {
+		return upperSashForm;
+	}
+
+	/**
+	 * @param upperSashForm the upperSashForm to set
+	 */
+	public void setUpperSashForm(SashForm upperSashForm) {
+		this.upperSashForm = upperSashForm;
+	}
+
+	
 }

@@ -28,7 +28,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -71,7 +70,7 @@ public class AvailableFieldsComposite extends Composite {
 		headerComposite_1.setLayoutData(gd_headerComposite_1);
 		
 		Label lblAvailableFields = new Label(headerComposite_1, SWT.NONE);
-		lblAvailableFields.setText(Constants.AVAILABLE_INPUT_FIELDS);
+		lblAvailableFields.setText(Messages.AVAILABLE_INPUT_FIELDS);
 		
 		createSearchTextBox(headerComposite_1);
 		
@@ -81,9 +80,9 @@ public class AvailableFieldsComposite extends Composite {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		table.setHeaderVisible(true);
 		availableFieldsNameColumn = new TableColumn(table, SWT.NONE);
-		availableFieldsNameColumn.setText("Field Name");
+		availableFieldsNameColumn.setText(Messages.FIELD_NAME);
 		availableFieldsDataTypeColumn = new TableColumn(table, SWT.NONE);
-		availableFieldsDataTypeColumn.setText("Data Type");
+		availableFieldsDataTypeColumn.setText(Messages.DATA_TYPE);
 		ExpressionEditorUtil.INSTANCE.addDragSupport(table);
 		loadData();
 		addControlListener();

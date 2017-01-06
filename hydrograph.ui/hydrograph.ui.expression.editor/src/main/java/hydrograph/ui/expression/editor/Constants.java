@@ -50,6 +50,5 @@ public class Constants {
 	public static final String JAR_FILE_NAME_HEADER = "\n\t<b>Jar File Name ::</b> ";
 	public static final String HTML_NEW_LINE_TAG="</br>";
 	public static final String ALPHANUMERIC_REGEX="[\\w]*";
-	public static final String AVAILABLE_INPUT_FIELDS = "Input Fields";
 	
 }

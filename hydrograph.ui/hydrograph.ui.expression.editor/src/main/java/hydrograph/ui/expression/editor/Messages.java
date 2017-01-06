@@ -43,6 +43,9 @@ public class Messages extends NLS {
 	public static String EVALUATE_EXPRESSION_EDITOR_GROUP_HEADER;
 	public static String EVALUATE_FIELD_NAMES_GROUP_HEADER;
 	public static String EVALUATE_OUTPUT_CONSOLE_GROUP_HEADER;
+	public static String AVAILABLE_INPUT_FIELDS;
+	public static String DATA_TYPE;
+	public static String FIELD_NAME;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
