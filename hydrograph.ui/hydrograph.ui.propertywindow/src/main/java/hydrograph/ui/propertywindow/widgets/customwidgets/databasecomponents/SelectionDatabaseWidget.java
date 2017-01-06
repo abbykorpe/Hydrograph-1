@@ -185,7 +185,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 					if (databaseSelectionConfig != null) {
 						databaseSelectionConfig.setTableNameSelection(false);
 						databaseSelectionConfig.setSqlQuery(sqlQueryTextBox.getText());
-						databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
+						//databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
 						populateWidget();
 					}
 					showHideErrorSymbol(widgets);
@@ -252,7 +252,19 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		buttonAlignment.addSelectionListener(buttonWidgetSelectionListener(sqlQueryTextBox));
 		buttonWidgetSelectionListener(sqlQueryTextBox);
 
-		createWidgetlabel(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
+		createWidgetlabel(Messages.EXTRACT_FROM_METASTORE, sqlQueryComposite);
+		ELTDefaultButton editButton = new ELTDefaultButton(Messages.EXTRACT);
+		sqlQueryComposite.attachWidget(editButton);
+
+		Button button = (Button) editButton.getSWTWidgetControl();
+		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 0, 0);
+		gridData.widthHint = 92;
+		gridData.horizontalIndent = 15;
+		button.setLayoutData(gridData);
+
+		button.addSelectionListener(attachExtractButtonSelectionListner());
+		
+		/*createWidgetlabel(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
 		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
 		sqlQueryCountertextbox = (Text) sqlQueryCounterWgt.getSWTWidgetControl();
 		attachListeners(sqlQueryCounterWgt);
@@ -265,7 +277,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		Button sqlQueryCounterButton = ((Button) sqlQueryCounterButtonWgt.getSWTWidgetControl());
 		GridData sqlQueryCounterData = (GridData) sqlQueryCounterButton.getLayoutData();
 		sqlQueryCounterData.verticalIndent = 5;
-		sqlQueryCounterButton.addSelectionListener(buttonWidgetSelectionListener(sqlQueryCountertextbox));
+		sqlQueryCounterButton.addSelectionListener(buttonWidgetSelectionListener(sqlQueryCountertextbox));*/
 
 	}
 
@@ -298,7 +310,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		} else {
 			databaseSelectionConfig.setTableNameSelection(false);
 			databaseSelectionConfig.setSqlQuery(sqlQueryTextBox.getText());
-			databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
+			//databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
 		}
 
 		property.put(propertyName, databaseSelectionConfig);
@@ -314,7 +326,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
 
 			sqlQueryTextBox.removeModifyListener(textboxSQLQueryModifyListner);
-			sqlQueryCountertextbox.removeModifyListener(sqlQueryCounterModifyListner);
+			//sqlQueryCountertextbox.removeModifyListener(sqlQueryCounterModifyListner);
 			registerTextBoxListner(true);
 
 		} else {
@@ -336,7 +348,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			textBoxTableName.addModifyListener(textboxTableNameModifyListner);
 		} else {
 			sqlQueryTextBox.addModifyListener(textboxSQLQueryModifyListner);
-			sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
+			//sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
 		}
 
 	}
@@ -382,7 +394,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		sqlQueryTextBox.addModifyListener(textboxSQLQueryModifyListner);
 		textBoxTableName.addModifyListener(textboxTableNameModifyListner);
-		sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
+		//sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
 		
 	}
 	
@@ -654,10 +666,10 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 					sqlQueryDecorator.show();
 				}
 
-				if (validateField(databaseSelectionConfig.getSqlQueryCounter())) {
+				/*if (validateField(databaseSelectionConfig.getSqlQueryCounter())) {
 					sqlQueryCountertextbox.setText(databaseSelectionConfig.getSqlQueryCounter());
 
-				} 
+				} */
 					 
 			}
 
