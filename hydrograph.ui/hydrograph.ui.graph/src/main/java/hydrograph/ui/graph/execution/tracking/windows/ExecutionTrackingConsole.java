@@ -14,13 +14,6 @@
 package hydrograph.ui.graph.execution.tracking.windows;
 
 
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.graph.execution.tracking.constants.MenuConstants;
-import hydrograph.ui.graph.execution.tracking.handlers.ActionFactory;
-import hydrograph.ui.graph.execution.tracking.handlers.ClearConsoleAction;
-import hydrograph.ui.graph.job.JobManager;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.CoolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -37,6 +30,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.graph.execution.tracking.constants.MenuConstants;
+import hydrograph.ui.graph.execution.tracking.handlers.ActionFactory;
+import hydrograph.ui.graph.execution.tracking.handlers.ClearConsoleAction;
+import hydrograph.ui.graph.execution.tracking.handlers.ScrollLockAction;
+import hydrograph.ui.graph.job.JobManager;
 
 /**
  * The Class ExecutionTrackingConsole use to display execution tracking log.
@@ -57,7 +58,10 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	public StatusLineManager statusLineManager;
 	
 	private String jobID;
+	
+	private boolean isScrollEnabled = false;
 	/**
+	
 	 * Create the application window,.
 	 *
 	 * @param consoleName the console name
@@ -123,6 +127,7 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		}
 		
 		windowMenu.add(actionFactory.getAction(ClearConsoleAction.class.getName()));
+		windowMenu.add(actionFactory.getAction(ScrollLockAction.class.getName()));
 	}
 
 	/**
@@ -156,6 +161,9 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		coolBarManager.add(toolBarManager);
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CLEAR_EXEC_TRACKING_CONSOLE),
 				actionFactory.getAction(ClearConsoleAction.class.getName()));
+		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CONSOLE_SCROLL_LOCK), 
+				actionFactory.getAction(ScrollLockAction.class.getName()));
+		
 		return coolBarManager;
 	}
 	
@@ -222,7 +230,11 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		
 		if(styledText!=null && !styledText.isDisposed()){
 			styledText.append(executionStatus);
-			styledText.setTopIndex(styledText.getLineCount() - 1);
+			if(isScrollEnabled){
+				styledText.setTopIndex(0);
+			}else{
+				styledText.setTopIndex(styledText.getLineCount() - 1);
+			}
 		}
 	}
 	
@@ -235,6 +247,13 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		}
 	}
 
+	/**
+	 * Lock the scroll bar
+	 */
+	public void lockScrollBar(boolean isChecked){
+		isScrollEnabled = isChecked;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.window.ApplicationWindow#close()
 	 */

@@ -39,8 +39,10 @@ public class ActionFactory {
 	
 	private void createAllActions(){
 		ClearConsoleAction clearConsoleAction=new ClearConsoleAction(executionTrackingConsole);
+		ScrollLockAction scrolLockAction = new ScrollLockAction(executionTrackingConsole);
 		
 		actionMap.put(ClearConsoleAction.class.getName(), clearConsoleAction);
+		actionMap.put(ScrollLockAction.class.getName(), scrolLockAction);
 	}
 	
 	/**
