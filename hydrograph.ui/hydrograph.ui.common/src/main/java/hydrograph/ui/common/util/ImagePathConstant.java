@@ -67,7 +67,7 @@ public class ImagePathConstant {
 	public static final String PASTE_IMAGE_PATH="icons/paste_o.png";
 	
 
-	public static final String CLEAR_EXEC_TRACKING_CONSOLE =  "/icons/exectracking/clear_console.png";
-	public static final String CONSOLE_SCROLL_LOCK = "/icons/exectracking/console_scroll_lock.png";
+	public static final String CLEAR_EXEC_TRACKING_CONSOLE =  "/icons/clear_console.png";
+	public static final String CONSOLE_SCROLL_LOCK = "/icons/console_scroll_lock.png";
 	
 }

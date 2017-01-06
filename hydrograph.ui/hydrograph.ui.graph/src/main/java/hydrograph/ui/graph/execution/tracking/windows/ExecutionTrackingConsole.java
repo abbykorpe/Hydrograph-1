@@ -36,7 +36,7 @@ import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.execution.tracking.constants.MenuConstants;
 import hydrograph.ui.graph.execution.tracking.handlers.ActionFactory;
 import hydrograph.ui.graph.execution.tracking.handlers.ClearConsoleAction;
-import hydrograph.ui.graph.execution.tracking.handlers.ScrolLockAction;
+import hydrograph.ui.graph.execution.tracking.handlers.ScrollLockAction;
 import hydrograph.ui.graph.job.JobManager;
 
 /**
@@ -127,7 +127,7 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		}
 		
 		windowMenu.add(actionFactory.getAction(ClearConsoleAction.class.getName()));
-		windowMenu.add(actionFactory.getAction(ScrolLockAction.class.getName()));
+		windowMenu.add(actionFactory.getAction(ScrollLockAction.class.getName()));
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CLEAR_EXEC_TRACKING_CONSOLE),
 				actionFactory.getAction(ClearConsoleAction.class.getName()));
 		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CONSOLE_SCROLL_LOCK), 
-				actionFactory.getAction(ScrolLockAction.class.getName()));
+				actionFactory.getAction(ScrollLockAction.class.getName()));
 		
 		return coolBarManager;
 	}
@@ -250,12 +250,8 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	/**
 	 * Lock the scroll bar
 	 */
-	public void lockScrollBar(boolean ischecked){
-		if(ischecked){
-			isScrollEnabled = true;
-		}else{
-			isScrollEnabled = false;
-		}
+	public void lockScrollBar(boolean isChecked){
+		isScrollEnabled = isChecked;
 	}
 	
 	/* (non-Javadoc)
