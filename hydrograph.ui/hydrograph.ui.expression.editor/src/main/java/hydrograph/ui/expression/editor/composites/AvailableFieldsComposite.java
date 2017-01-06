@@ -13,11 +13,6 @@
 
 package hydrograph.ui.expression.editor.composites;
 
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +21,6 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -44,13 +38,15 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
+
 public class AvailableFieldsComposite extends Composite {
-	private static final String AVAILABLE_INPUT_FIELDS = "Input Fields";
 	private Table table;
 	private TableColumn availableFieldsNameColumn ;
 	private List<String> inputFields;
 	private TableViewer tableViewer;
-	private DragSource dragSource;
 	private StyledText expressionEditor;
 	private Text searchTextBox;
 	private Composite headerComposite_1;
@@ -75,7 +71,7 @@ public class AvailableFieldsComposite extends Composite {
 		headerComposite_1.setLayoutData(gd_headerComposite_1);
 		
 		Label lblAvailableFields = new Label(headerComposite_1, SWT.NONE);
-		lblAvailableFields.setText(AVAILABLE_INPUT_FIELDS);
+		lblAvailableFields.setText(Constants.AVAILABLE_INPUT_FIELDS);
 		
 		createSearchTextBox(headerComposite_1);
 		
@@ -142,23 +138,10 @@ public class AvailableFieldsComposite extends Composite {
 		table.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				Table table = (Table) e.widget;
-				int columnCount = table.getColumnCount();
-
-				Rectangle area = table.getClientArea();
-				int totalAreaWidth = area.width;
-				table.getColumn(0).setWidth(area.width / 2);
-				int lineWidth = table.getGridLineWidth();
-				int totalGridLineWidth = (2 - 1) * lineWidth;
-				int totalColumnWidth = 0;
-				for (TableColumn column : table.getColumns()) {
-					totalColumnWidth = totalColumnWidth + column.getWidth();
-				}
-				int diff = totalAreaWidth - (totalColumnWidth + totalGridLineWidth);
-
-				TableColumn lastCol = table.getColumns()[columnCount - 1];
-				lastCol.setWidth(diff + lastCol.getWidth());
-			}
+                Table table = (Table) e.widget;
+                table.getColumn(0).setWidth(table.getClientArea().width / 2);
+                table.getColumn(1).setWidth((table.getClientArea().width / 2)-1);
+            }
 		});
 	}
 	

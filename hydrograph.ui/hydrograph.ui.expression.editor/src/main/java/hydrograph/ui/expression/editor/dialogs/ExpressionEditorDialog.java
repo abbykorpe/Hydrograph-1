@@ -181,6 +181,9 @@ public class ExpressionEditorDialog extends Dialog {
 		return newSize;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#close()
+	 */
 	public boolean close() {
 		if (preCloseActivity()) {
 			ExpressionEditorUtil.validateExpression(expressionEditorTextBox.getText(),(Map<String, Class<?>>) expressionEditorTextBox
@@ -214,18 +217,30 @@ public class ExpressionEditorDialog extends Dialog {
 		return MessageDialog.openQuestion(Display.getCurrent().getActiveShell(), "Exiting expression editor",Messages.MESSAGE_TO_EXIT_WITHOUT_SAVE);
 	}
 
+	/**
+	 * @return string
+	 */
 	public String getExpressionText() {
 		return newExpressionText;
 	}
 
+	/**
+	 * @return sash form
+	 */
 	public SashForm getUpperSashForm() {
 		return upperSashForm;
 	}
 
+	/**
+	 * @return container sash form
+	 */
 	public SashForm getContainerSashForm() {
 		return containerSashForm;
 	}
 
+	/**
+	 * @return styled text object
+	 */
 	public StyledText getExpressionEditorTextBox() {
 		return expressionEditorTextBox;
 	}
