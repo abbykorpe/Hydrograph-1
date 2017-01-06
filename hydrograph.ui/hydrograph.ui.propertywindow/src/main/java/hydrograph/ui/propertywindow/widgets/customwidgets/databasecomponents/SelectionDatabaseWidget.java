@@ -263,7 +263,10 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		button.setLayoutData(gridData);
 
 		button.addSelectionListener(attachExtractButtonSelectionListner());
-		
+		//TODO Below code commented for future use
+		/*
+		 * Currently, we are not showing SQL_QUERY_COUNTER widget. So, below code will be comment out.
+		 */
 		/*createWidgetlabel(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
 		AbstractELTWidget sqlQueryCounterWgt = createWidgetTextbox(Messages.SQL_QUERY_COUNTER, sqlQueryComposite);
 		sqlQueryCountertextbox = (Text) sqlQueryCounterWgt.getSWTWidgetControl();
@@ -310,6 +313,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		} else {
 			databaseSelectionConfig.setTableNameSelection(false);
 			databaseSelectionConfig.setSqlQuery(sqlQueryTextBox.getText());
+			//TODO as above
 			//databaseSelectionConfig.setSqlQueryCounter(sqlQueryCountertextbox.getText());
 		}
 
@@ -326,6 +330,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
 
 			sqlQueryTextBox.removeModifyListener(textboxSQLQueryModifyListner);
+			//TODO as above
 			//sqlQueryCountertextbox.removeModifyListener(sqlQueryCounterModifyListner);
 			registerTextBoxListner(true);
 
@@ -348,6 +353,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			textBoxTableName.addModifyListener(textboxTableNameModifyListner);
 		} else {
 			sqlQueryTextBox.addModifyListener(textboxSQLQueryModifyListner);
+			//TODO as above
 			//sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
 		}
 
@@ -394,6 +400,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		sqlQueryTextBox.addModifyListener(textboxSQLQueryModifyListner);
 		textBoxTableName.addModifyListener(textboxTableNameModifyListner);
+		//TODO as above
 		//sqlQueryCountertextbox.addModifyListener(sqlQueryCounterModifyListner);
 		
 	}
@@ -665,7 +672,7 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 				} else {
 					sqlQueryDecorator.show();
 				}
-
+				//TODO as above
 				/*if (validateField(databaseSelectionConfig.getSqlQueryCounter())) {
 					sqlQueryCountertextbox.setText(databaseSelectionConfig.getSqlQueryCounter());
 
