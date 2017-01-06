@@ -23,7 +23,7 @@ class AdapterFactory(graph: Graph) {
   val LOG : Logger = LoggerFactory.getLogger(classOf[AdapterFactory])
   val COMPONENT_ASSEMBLY_MAP_PROPERTIES: String = "componentMapping.properties"
   val componentMap=new mutable.HashMap[String,AdapterBase]()
-  var props : Properties = null
+  var props : Properties = _
 
  private def loadProps(): Unit = {
    try {
@@ -47,13 +47,22 @@ class AdapterFactory(graph: Graph) {
     componentMap
   }
 
- private def getAdapterObject(typeBaseComponent: TypeBaseComponent): AdapterBase = {
-    val clazz = props.get(typeBaseComponent.getClass.getName).toString
-    val adapterClass = Class.forName(clazz)
-    val constructor=adapterClass.getDeclaredConstructor(classOf[TypeBaseComponent])
-    val adapterBase=constructor.newInstance(typeBaseComponent).asInstanceOf[AdapterBase]
-   adapterBase.createGenerator()
-   adapterBase
+  /**
+    *
+    * @param typeBaseComponent The component whose adapter object is to be returned
+    * @return
+    * @throws NullPointerException if component mapping for the <code>typeBaseComponent<code> is not present in the properties file
+    */
+  private def getAdapterObject(typeBaseComponent: TypeBaseComponent): AdapterBase = {
+    val clazz = props.get(typeBaseComponent.getClass.getName)
+    if(clazz == null){
+      throw new NullPointerException("Component mapping not found for: " + typeBaseComponent.getClass.getName)
+    }
+    val adapterClass = Class.forName(clazz.toString)
+    val constructor = adapterClass.getDeclaredConstructor(classOf[TypeBaseComponent])
+    val adapterBase = constructor.newInstance(typeBaseComponent).asInstanceOf[AdapterBase]
+    adapterBase.createGenerator()
+    adapterBase
   }
 }
 object AdapterFactory{
