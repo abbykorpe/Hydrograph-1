@@ -15,6 +15,8 @@ package hydrograph.ui.graph.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -83,14 +85,16 @@ public class PropagateDataAction extends SelectionAction {
 	@Override
 	public void run() {
 		boolean shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=true;
+		Map<String,Schema> oldSchemaMap=new TreeMap<>();
 		for(Link link:component.getTargetConnections())
 		{
-			
+			Schema previousComponentSchema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(component, link);
 			if(StringUtils.equalsIgnoreCase(component.getCategory(),Constants.STRAIGHTPULL)
 					  ||StringUtils.equalsIgnoreCase(component.getComponentName(),Constants.FILTER)	
 					  ||StringUtils.equalsIgnoreCase(component.getComponentName(),Constants.UNIQUE_SEQUENCE)
 					)
 			{	
+				
 				if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName()))
 				{
 					if(!SubjobUtility.INSTANCE.isUnionAllInputSchemaInSync(component))
@@ -109,7 +113,7 @@ public class PropagateDataAction extends SelectionAction {
 				Schema schema=(Schema)component.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
 				if(schema==null)
 				schema=new Schema();	
-				Schema previousComponentSchema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(component, link);
+				
 				if(schema.getGridRow()==null)
 				{
 					List<GridRow> gridRows=new ArrayList<>();
@@ -153,8 +157,10 @@ public class PropagateDataAction extends SelectionAction {
 			{
 			 shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;	
 			((ComponentEditPart)component.getComponentEditPart()).getFigure().repaint();
-			}	
-		}	
+			}
+			oldSchemaMap.put(link.getTargetTerminal(), previousComponentSchema);	
+		}
+		component.getProperties().put(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA, oldSchemaMap);
 		component.setContinuousSchemaPropogationAllow(true);
 		if(shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents)
 		{

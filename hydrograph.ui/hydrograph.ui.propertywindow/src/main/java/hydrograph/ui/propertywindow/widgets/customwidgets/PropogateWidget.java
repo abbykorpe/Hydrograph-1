@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
@@ -128,7 +129,7 @@ public class PropogateWidget extends AbstractWidget{
 		((Button) eltDefaultButton.getSWTWidgetControl()).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				Map<String,Schema> oldSchemaMap=new TreeMap<>();
 				boolean shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=true;
 				for (Link link : getComponent().getTargetConnections()) {
 					Schema previousComponentSchema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(getComponent(),link);
@@ -222,6 +223,8 @@ public class PropogateWidget extends AbstractWidget{
 							}
 						 }
 						 shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
+						 getComponent().setContinuousSchemaPropogationAllow(true);
+						
 					}
 				    else if(StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.JOIN))
 				    {
@@ -261,10 +264,12 @@ public class PropogateWidget extends AbstractWidget{
 						shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents=false;
 				    }	
 				}
-					
+					oldSchemaMap.put(link.getTargetTerminal(), previousComponentSchema);	
 				}
+				getComponent().getProperties().put(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA, oldSchemaMap);
 				if(shouldsetContinuousSchemaPropagationFlagForNextConnectedComponents)
 				SubjobUtility.INSTANCE.setFlagForContinuousSchemaPropogation(getComponent());
+				showHideErrorSymbol(widgets);
 			}
            });
 	}

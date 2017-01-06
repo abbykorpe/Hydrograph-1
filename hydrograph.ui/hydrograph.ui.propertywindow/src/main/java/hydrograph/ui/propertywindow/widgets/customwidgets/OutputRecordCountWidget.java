@@ -17,6 +17,8 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
@@ -38,11 +40,16 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.datastructure.property.mapping.InputField;
 import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -243,6 +250,22 @@ public class OutputRecordCountWidget extends AbstractWidget{
     		
 	}
 	
+	private List<FixedWidthGridRow> getInputSchema(Component component) {
+		
+		List<FixedWidthGridRow> fixedWidthGridRows = new ArrayList<>();
+		Map<String,Schema> schemaMap=(TreeMap<String,Schema>)component.getProperties().get(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA);
+		for (Link link : component.getTargetConnections()) {
+			if(schemaMap!=null)
+			{
+			Schema schema=schemaMap.get(link.getTargetTerminal());
+			List<GridRow> gridRowList=null;
+			if(schema!=null)
+			gridRowList=schemaMap.get(link.getTargetTerminal()).getGridRow();
+			fixedWidthGridRows.addAll(SchemaSyncUtility.INSTANCE.convertGridRowsSchemaToFixedSchemaGridRows(gridRowList));
+			}
+		}
+		return fixedWidthGridRows;
+	}
 	
 	
 	private void intializeExpresionEditorData() 

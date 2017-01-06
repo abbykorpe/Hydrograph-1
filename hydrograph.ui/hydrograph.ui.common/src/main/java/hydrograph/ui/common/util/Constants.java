@@ -336,5 +336,6 @@ public class Constants {
 	public static final String DELETE_BUTTON = "deleteButton";
 	public static final String ADD_BUTTON = "addButton";
 	public static final String INPUT_FIELD_TABLE = "inputFieldTable";
+	public static final String PREVIOUS_COMPONENT_OLD_SCHEMA = "previous_component_old_schema";
 
 }

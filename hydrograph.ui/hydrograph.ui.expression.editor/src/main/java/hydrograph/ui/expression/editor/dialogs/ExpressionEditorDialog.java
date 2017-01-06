@@ -112,7 +112,7 @@ public class ExpressionEditorDialog extends Dialog {
 		upperSashForm = new SashForm(upperComposite, SWT.NONE);
 		upperSashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, selectedInputFields);
+		availableFieldsComposite = new AvailableFieldsComposite(upperSashForm, SWT.NONE, fieldMap);
 
 		expressionEditorComposite = new ExpressionEditorComposite(upperSashForm, SWT.NONE, javaLineStyler);
 		this.expressionEditorTextBox = expressionEditorComposite.getExpressionEditor();
@@ -181,6 +181,9 @@ public class ExpressionEditorDialog extends Dialog {
 		return newSize;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#close()
+	 */
 	public boolean close() {
 		if (preCloseActivity()) {
 			ExpressionEditorUtil.validateExpression(expressionEditorTextBox.getText(),(Map<String, Class<?>>) expressionEditorTextBox
@@ -214,19 +217,38 @@ public class ExpressionEditorDialog extends Dialog {
 		return MessageDialog.openQuestion(Display.getCurrent().getActiveShell(), "Exiting expression editor",Messages.MESSAGE_TO_EXIT_WITHOUT_SAVE);
 	}
 
-	public String getExpressionText() {
+	/**
+	 * @return the expressionEditorTextBox
+	 */
+	public StyledText getExpressionEditorTextBox() {
+		return expressionEditorTextBox;
+	}
+
+	/**
+	 * @return the newExpressionText
+	 */
+	public String getNewExpressionText() {
 		return newExpressionText;
 	}
 
-	public SashForm getUpperSashForm() {
-		return upperSashForm;
-	}
-
+	
+	/**
+	 * @return the containerSashForm
+	 */
 	public SashForm getContainerSashForm() {
 		return containerSashForm;
 	}
 
-	public StyledText getExpressionEditorTextBox() {
-		return expressionEditorTextBox;
+	
+
+	/**
+	 * @return the upperSashForm
+	 */
+	public SashForm getUpperSashForm() {
+		return upperSashForm;
 	}
+
+	
+
+	
 }
