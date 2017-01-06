@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Shell;
  *
  */
 public class Utils {
+	private static final String TEMP_DEBUG_FILES_DIRECTORY_NAME = "debugfiles";
 	public static Utils INSTANCE= new Utils();
 		
 	private Utils(){
@@ -82,7 +83,7 @@ public class Utils {
 	 */
 	public String getDataViewerDebugFilePath() {
 		String debugPath = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
-				PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, getInstallationPath(), null);
+				PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, getInstallationPath() + TEMP_DEBUG_FILES_DIRECTORY_NAME, null);
 		return debugPath;
 	}
 
