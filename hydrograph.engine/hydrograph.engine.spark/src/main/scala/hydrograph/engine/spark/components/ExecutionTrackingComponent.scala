@@ -19,9 +19,9 @@ class ExecutionTrackingComponent(executionTrackingEntity: ExecutionTrackingEntit
     executionTrackingEntity.getOperation.getOperationInputFields.foreach(e => fieldNameSet.add(e))
     val df = componentsParams.getDataFrame()
     val longAccumulator: LongAccumulator = componentsParams.getSparkSession().sparkContext.longAccumulator(executionTrackingEntity.getComponentId)
-    df.filter(row => {longAccumulator.add(1)
+    val dataFrame=df.filter(row => {longAccumulator.add(1)
       true})
-    Map(key -> df)
+    Map(key -> dataFrame)
   }
 
 
