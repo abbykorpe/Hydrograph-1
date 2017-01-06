@@ -24,19 +24,19 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.utils.Utils;
 import hydrograph.ui.propertywindow.widgets.customwidgets.AbstractWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
@@ -104,7 +104,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		
 		attachButtonListner(testConnectionButton);
 		setDecoratorsVisibility();
-		
+		Utils.INSTANCE.loadProperties();
 	}
 	
 	private String getComponentType(){
@@ -129,6 +129,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		testConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 				String	connectionResponse="";
 				String host = DataBaseUtility.getInstance().getServiceHost();
 				
@@ -189,33 +190,31 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 		String sid ="";
 		
 		for (AbstractWidget textAbtractWgt : widgets) {
-
 			if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.DATABASE_WIDGET_NAME)) {
-				databaseName = (String) textAbtractWgt.getProperties().get(Constants.DATABASE_WIDGET_NAME);
+				databaseName = getValue((String) textAbtractWgt.getProperties().get(Constants.DATABASE_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.HOST_WIDGET_NAME)) {
-				hostName = (String) textAbtractWgt.getProperties().get(Constants.HOST_WIDGET_NAME);
+				hostName = getValue((String)textAbtractWgt.getProperties().get(Constants.HOST_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.PORT_WIDGET_NAME)) {
-				portNo = (String) textAbtractWgt.getProperties().get(Constants.PORT_WIDGET_NAME);
+				portNo = getValue((String) textAbtractWgt.getProperties().get(Constants.PORT_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.JDBC_DRIVER_WIDGET_NAME)) {
-				jdbcName = (String) textAbtractWgt.getProperties().get(Constants.JDBC_DRIVER_WIDGET_NAME);
-			}else if (textAbtractWgt.getProperty().getPropertyName()
+				jdbcName = getValue((String) textAbtractWgt.getProperties().get(Constants.JDBC_DRIVER_WIDGET_NAME));
+			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.SCHEMA_WIDGET_NAME)) {
-				schemaName = (String) textAbtractWgt.getProperties().get(Constants.SCHEMA_WIDGET_NAME);
-			}else if (textAbtractWgt.getProperty().getPropertyName()
+				schemaName = getValue((String) textAbtractWgt.getProperties().get(Constants.SCHEMA_WIDGET_NAME));
+			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.USER_NAME_WIDGET_NAME)) {
-				userName = (String) textAbtractWgt.getProperties().get(Constants.USER_NAME_WIDGET_NAME);
-			}else if (textAbtractWgt.getProperty().getPropertyName()
+				userName = getValue((String) textAbtractWgt.getProperties().get(Constants.USER_NAME_WIDGET_NAME));
+			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.PASSWORD_WIDGET_NAME)) {
-				password = (String) textAbtractWgt.getProperties().get(Constants.PASSWORD_WIDGET_NAME);
+				password = getValue((String) textAbtractWgt.getProperties().get(Constants.PASSWORD_WIDGET_NAME));
 			}else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_SID_WIDGET_NAME)) {
-				sid = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_SID_WIDGET_NAME);
+				sid = getValue((String) textAbtractWgt.getProperties().get(Constants.ORACLE_SID_WIDGET_NAME));
 			}
-
 		}
 		
 		DatabaseParameterType parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), hostName, 
@@ -225,6 +224,14 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 
 		return parameterType;
 	}
+
+	private String getValue(String input) {
+		if(ParameterUtil.isParameter(input)){
+			return Utils.INSTANCE.getParamValue(input);
+		}
+		return input;
+	}
+	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		LinkedHashMap<String, Object> property = new LinkedHashMap<>();

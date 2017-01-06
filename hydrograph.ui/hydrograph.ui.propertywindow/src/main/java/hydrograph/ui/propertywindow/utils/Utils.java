@@ -217,7 +217,7 @@ public class Utils {
 				 if(entry.getValue().endsWith("/")){
 					 return entry.getValue();
 				 }
-				return entry.getValue()+"/";
+				return entry.getValue();
 	    			}
 				} 
 			}
