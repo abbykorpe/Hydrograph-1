@@ -86,10 +86,10 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		
 		if(inputMysql.getSelectQuery() != null && StringUtils.isNotBlank(inputMysql.getSelectQuery().getValue())){
 			databaseSelectionConfig.setSqlQuery(inputMysql.getSelectQuery().getValue());
+			databaseSelectionConfig.setTableNameSelection(false);
 		}
 		
 		if(inputMysql.getCountQuery() != null && StringUtils.isNotBlank(inputMysql.getCountQuery().getValue())){
-			
 			databaseSelectionConfig.setSqlQueryCounter(inputMysql.getCountQuery().getValue());
 		}
 		

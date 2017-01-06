@@ -122,19 +122,12 @@ public class InputTeradataConverter extends InputConverter{
 				
 			} else {
 				ElementValueStringType sqlQuery = new ElementValueStringType();
-				if(databaseSelectionConfig.getSqlQuery() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
+				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
 					sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
 					teradataInput.setSelectQuery(sqlQuery);
 				}
-
-				ElementValueStringType sqlQueryCounter = new ElementValueStringType();
-				if(databaseSelectionConfig.getSqlQueryCounter() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
-				sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
-				teradataInput.setCountQuery(sqlQueryCounter);
-				}
 			}
 		}
-		
 	}
 	
 	@Override
@@ -156,10 +149,11 @@ public class InputTeradataConverter extends InputConverter{
 		
 		if(matchValueProperty != null){
 			ElementValueStringType type = new ElementValueStringType();
-			if(Messages.STANDARD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				type.setValue(Constants.DEFAULT);
-			}else if(Messages.FAST_EXPORT.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+			if(Messages.FAST_EXPORT.equalsIgnoreCase(matchValueProperty.getMatchValue())){
 				type.setValue(Constants.FASTEXPORT);
+			}
+			else{
+				type.setValue(Constants.DEFAULT);
 			}
 			return type;
 		}

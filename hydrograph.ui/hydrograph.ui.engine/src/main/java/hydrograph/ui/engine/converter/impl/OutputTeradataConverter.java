@@ -151,10 +151,10 @@ public class OutputTeradataConverter extends OutputConverter{
 		
 		if(matchValueProperty != null){
 			ElementValueStringType type = new ElementValueStringType();
-			if(Messages.STANDARD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
-				type.setValue(Constants.DEFAULT);
-			}else if(Messages.FAST_LOAD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
+			if(Messages.FAST_LOAD.equalsIgnoreCase(matchValueProperty.getMatchValue())){
 				type.setValue(Constants.FASTLOAD);
+			}else{
+				type.setValue(Constants.DEFAULT);
 			}
 			return type;
 		}

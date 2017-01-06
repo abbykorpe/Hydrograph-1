@@ -89,11 +89,7 @@ public class InputTeradataUiConverter extends InputUiConverter{
 		
 		if(inputTeradata.getSelectQuery() != null && StringUtils.isNotBlank(inputTeradata.getSelectQuery().getValue())){
 			databaseSelectionConfig.setSqlQuery(inputTeradata.getSelectQuery().getValue());
-		}
-		
-		if(inputTeradata.getCountQuery() != null && StringUtils.isNotBlank(inputTeradata.getCountQuery().getValue())){
-			
-			databaseSelectionConfig.setSqlQueryCounter(inputTeradata.getCountQuery().getValue());
+			databaseSelectionConfig.setTableNameSelection(false);
 		}
 		
 		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
