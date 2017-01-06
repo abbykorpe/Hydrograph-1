@@ -225,26 +225,13 @@ public class ExpressionEditorDialog extends Dialog {
 	}
 
 	/**
-	 * @param expressionEditorTextBox the expressionEditorTextBox to set
-	 */
-	public void setExpressionEditorTextBox(StyledText expressionEditorTextBox) {
-		this.expressionEditorTextBox = expressionEditorTextBox;
-	}
-
-	/**
 	 * @return the newExpressionText
 	 */
 	public String getNewExpressionText() {
 		return newExpressionText;
 	}
 
-	/**
-	 * @param newExpressionText the newExpressionText to set
-	 */
-	public void setNewExpressionText(String newExpressionText) {
-		this.newExpressionText = newExpressionText;
-	}
-
+	
 	/**
 	 * @return the containerSashForm
 	 */
@@ -252,12 +239,7 @@ public class ExpressionEditorDialog extends Dialog {
 		return containerSashForm;
 	}
 
-	/**
-	 * @param containerSashForm the containerSashForm to set
-	 */
-	public void setContainerSashForm(SashForm containerSashForm) {
-		this.containerSashForm = containerSashForm;
-	}
+	
 
 	/**
 	 * @return the upperSashForm
@@ -266,12 +248,7 @@ public class ExpressionEditorDialog extends Dialog {
 		return upperSashForm;
 	}
 
-	/**
-	 * @param upperSashForm the upperSashForm to set
-	 */
-	public void setUpperSashForm(SashForm upperSashForm) {
-		this.upperSashForm = upperSashForm;
-	}
+	
 
 	
 }

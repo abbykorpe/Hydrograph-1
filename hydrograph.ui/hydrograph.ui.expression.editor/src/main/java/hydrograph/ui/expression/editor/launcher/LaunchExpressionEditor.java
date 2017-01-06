@@ -52,7 +52,7 @@ public class LaunchExpressionEditor {
 					.getActiveShell(), expressionEditorData,inputFieldSchema,windowTitleSuffix);
 			int returnCode = expressionEditorDialog.open();
 			if (returnCode == 0) {
-				saveProperty(expressionEditorData, expressionEditorDialog.getExpressionText());
+				saveProperty(expressionEditorData, expressionEditorDialog.getNewExpressionText());
 			}
 		}
 		try {
