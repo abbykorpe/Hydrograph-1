@@ -117,16 +117,15 @@ public class InputMysqlConverter extends InputConverter{
 				mysqlInput.setTableName(tableName);
 				
 			} else {
-				ElementValueStringType sqlQuery = new ElementValueStringType();
-				if(databaseSelectionConfig.getSqlQuery() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
+				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
+					ElementValueStringType sqlQuery = new ElementValueStringType();
 					sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
 					mysqlInput.setSelectQuery(sqlQuery);
 				}
-
-				ElementValueStringType sqlQueryCounter = new ElementValueStringType();
-				if(databaseSelectionConfig.getSqlQueryCounter() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
-				sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
-				mysqlInput.setCountQuery(sqlQueryCounter);
+				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
+					ElementValueStringType sqlQueryCounter = new ElementValueStringType();
+					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
+					mysqlInput.setCountQuery(sqlQueryCounter);
 				}
 			}
 		}

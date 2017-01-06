@@ -15,6 +15,10 @@
 package hydrograph.ui.engine.constants;
 
 
+/**
+ * Name constants used in component config xml files.  
+ * @author Bitwise
+ */
 public enum PropertyNameConstants {
 	
 		PATH("Path"),
@@ -48,7 +52,8 @@ public enum PropertyNameConstants {
 		SELECT_OPTION("selectOption"),
 		REDSHIFT_SQL_QUERY("selectQuery"),
 		REDSHIFT_COUNT_QUERY("countQuery"), 
-		OVER_WRITE("overWrite");
+		OVER_WRITE("overWrite"),
+		SELECT_INTERFACE("selectInterface");
 	
 		private final String value;
 
@@ -60,6 +65,11 @@ public enum PropertyNameConstants {
 		return value;
 	}
 
+	/**
+	 * Provides enum value of constant based on its string value
+	 * @param value
+	 * @return
+	 */
 	public static PropertyNameConstants fromValue(String value) {
 		for (PropertyNameConstants propertyNameConstant : PropertyNameConstants.values()) {
 			if (propertyNameConstant.value.equals(value)) {
@@ -68,6 +78,4 @@ public enum PropertyNameConstants {
 		}
 		return null;
 	}
-	
-	
 }

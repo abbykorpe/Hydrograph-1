@@ -49,6 +49,7 @@ import hydrograph.engine.jaxb.commontypes.TypeUnknownComponent;
  *           &lt;element name="straightPulls" type="{hydrograph/engine/jaxb/commontypes}type-straight-pull-component"/>
  *           &lt;element name="operations" type="{hydrograph/engine/jaxb/commontypes}type-operations-component"/>
  *           &lt;element name="commands" type="{hydrograph/engine/jaxb/commontypes}type-command-component"/>
+ *           &lt;element name="unknown" type="{hydrograph/engine/jaxb/commontypes}type-unknown-component"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -76,7 +77,6 @@ public class Graph {
         @XmlElement(name = "operations", type = TypeOperationsComponent.class),
         @XmlElement(name = "commands", type = TypeCommandComponent.class),
         @XmlElement(name = "unknown", type = TypeUnknownComponent.class)
-
     })
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
     @XmlAttribute(name = "name", required = true)
@@ -131,6 +131,7 @@ public class Graph {
      * {@link TypeStraightPullComponent }
      * {@link TypeOperationsComponent }
      * {@link TypeCommandComponent }
+     * {@link TypeUnknownComponent }
      * 
      * 
      */

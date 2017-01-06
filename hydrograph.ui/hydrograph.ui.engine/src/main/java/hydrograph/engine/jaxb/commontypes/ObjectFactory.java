@@ -58,6 +58,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeUnknownComponent }
+     * 
+     */
+    public TypeUnknownComponent createTypeUnknownComponent() {
+        return new TypeUnknownComponent();
+    }
+
+    /**
      * Create an instance of {@link TypeProperties }
      * 
      */
@@ -295,6 +303,14 @@ public class ObjectFactory {
      */
     public KeyfieldDescriptionType.KeyFields.Field createKeyfieldDescriptionTypeKeyFieldsField() {
         return new KeyfieldDescriptionType.KeyFields.Field();
+    }
+
+    /**
+     * Create an instance of {@link TypeUnknownComponent.Properties }
+     * 
+     */
+    public TypeUnknownComponent.Properties createTypeUnknownComponentProperties() {
+        return new TypeUnknownComponent.Properties();
     }
 
     /**

@@ -116,21 +116,21 @@ public class InputOracleConverter extends InputConverter {
 		if (databaseSelectionConfig != null) {
 
 			if (databaseSelectionConfig.isTableName()) {
-				ElementValueStringType tableName = new ElementValueStringType();
 				if(StringUtils.isNotBlank(databaseSelectionConfig.getTableName())){
+					ElementValueStringType tableName = new ElementValueStringType();
 					tableName.setValue(databaseSelectionConfig.getTableName());
 					oracleInput.setTableName(tableName);
 				}
 				
 			} else {
-				ElementValueStringType sqlQuery = new ElementValueStringType();
 				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
+					ElementValueStringType sqlQuery = new ElementValueStringType();
 					sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
 					oracleInput.setSelectQuery(sqlQuery);
 				}
 
-				ElementValueStringType sqlQueryCounter = new ElementValueStringType();
 				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
+					ElementValueStringType sqlQueryCounter = new ElementValueStringType();
 					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQuery());
 					oracleInput.setCountQuery(sqlQueryCounter);
 				}

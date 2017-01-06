@@ -109,6 +109,8 @@
 			<enumeration value="DATABASE_NAME_WIDGET"/>
 			<enumeration value="RUNPROGRAM_TEXT_WIDGET"/>
 			<enumeration value="OUTPUT_RECORD_COUNT_WIDGET"/>
+			<enumeration value="SELECT_INTERFACE_WITH_LOAD_WIDGET"/>
+			<enumeration value="SELECT_INTERFACE_WITH_EXPORT_WIDGET"/>
 		</restriction>
 	</simpleType>
 

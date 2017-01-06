@@ -23,6 +23,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.config.DropDownConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.FilePathConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.RadioButtonConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.RuntimeConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.SchemaConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.SingleColumnGridConfig;
@@ -460,5 +461,26 @@ public class WidgetHelper {
 		textBoxWithLableConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxWithLableConfig);
 		return textBoxWithLableConfig;
+	}
+
+	public WidgetConfig getMatchValueWidgetConfig() {
+		RadioButtonConfig radioConfig = new RadioButtonConfig();
+		radioConfig.setWidgetDisplayNames(new String []{Constants.FIRST,Constants.LAST, Constants.ALL});
+		radioConfig.setPropertyName(Messages.MATCH);
+		return radioConfig;
+	}
+
+	public WidgetConfig getSelectInterfaceWithExportWidgetConfig() {
+		RadioButtonConfig radioConfig = new RadioButtonConfig();
+		radioConfig.setWidgetDisplayNames(new String []{Messages.STANDARD, Messages.FAST_EXPORT});
+		radioConfig.setPropertyName(Messages.EXPORT_OPTIONS);
+		return radioConfig;
+	}
+	
+	public WidgetConfig getSelectInterfaceWithLoadWidgetConfig() {
+		RadioButtonConfig radioConfig = new RadioButtonConfig();
+		radioConfig.setWidgetDisplayNames(new String []{Messages.STANDARD, Messages.FAST_LOAD});
+		radioConfig.setPropertyName(Messages.LOAD_UTILITY_TYPE);
+		return radioConfig;
 	}
 }

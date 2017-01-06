@@ -41,7 +41,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinMapWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTLookupConfigWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTLookupMapWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.ELTMatchValueWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.RadioButtonsWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
@@ -146,7 +146,11 @@ public class WidgetFactory {
 		JOIN_MAPPING_WIDGET(ELTJoinMapWidget.class),
 		HASH_JOIN_WIDGET(ELTLookupConfigWidget.class),
 		HASH_JOIN_MAPPING_WIDGET(ELTLookupMapWidget.class),
-		MATCH_PROPERTY_WIDGET(ELTMatchValueWidget.class),
+		
+		MATCH_PROPERTY_WIDGET(RadioButtonsWidget.class, WidgetHelper.INSTANCE.getMatchValueWidgetConfig()),
+		SELECT_INTERFACE_WITH_EXPORT_WIDGET(RadioButtonsWidget.class, WidgetHelper.INSTANCE.getSelectInterfaceWithExportWidgetConfig()),
+		SELECT_INTERFACE_WITH_LOAD_WIDGET(RadioButtonsWidget.class, WidgetHelper.INSTANCE.getSelectInterfaceWithLoadWidgetConfig()),
+		
 		EXTRACT_METASTORE_DATA_WIDGET(ELTExtractMetaStoreDataWidget.class),
 		LOAD_TYPE_CONFIGURATION_WIDGET(LoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Messages.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
 		PROPOGATE_WIDGET(PropogateWidget.class),

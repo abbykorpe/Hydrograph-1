@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for type-load-choice complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="type-load-choice">
  *   &lt;complexContent>
@@ -38,15 +38,15 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-load-choice", namespace = "hydrograph/engine/jaxb/ooracle", propOrder = {
-        "newTable",
-        "truncateLoad",
-        "insert",
-        "update"
+    "newTable",
+    "truncateLoad",
+    "insert",
+    "update"
 })
 public class TypeLoadChoice {
 
@@ -58,11 +58,11 @@ public class TypeLoadChoice {
 
     /**
      * Gets the value of the newTable property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link TypePrimaryKeys }
-     *
+     *     
      */
     public TypePrimaryKeys getNewTable() {
         return newTable;
@@ -70,11 +70,11 @@ public class TypeLoadChoice {
 
     /**
      * Sets the value of the newTable property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link TypePrimaryKeys }
-     *
+     *     
      */
     public void setNewTable(TypePrimaryKeys value) {
         this.newTable = value;
@@ -82,11 +82,11 @@ public class TypeLoadChoice {
 
     /**
      * Gets the value of the truncateLoad property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link Object }
-     *
+     *     
      */
     public Object getTruncateLoad() {
         return truncateLoad;
@@ -94,11 +94,11 @@ public class TypeLoadChoice {
 
     /**
      * Sets the value of the truncateLoad property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link Object }
-     *
+     *     
      */
     public void setTruncateLoad(Object value) {
         this.truncateLoad = value;
@@ -106,11 +106,11 @@ public class TypeLoadChoice {
 
     /**
      * Gets the value of the insert property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link Object }
-     *
+     *     
      */
     public Object getInsert() {
         return insert;
@@ -118,11 +118,11 @@ public class TypeLoadChoice {
 
     /**
      * Sets the value of the insert property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link Object }
-     *
+     *     
      */
     public void setInsert(Object value) {
         this.insert = value;
@@ -130,11 +130,11 @@ public class TypeLoadChoice {
 
     /**
      * Gets the value of the update property.
-     *
+     * 
      * @return
      *     possible object is
      *     {@link TypeUpdateKeys }
-     *
+     *     
      */
     public TypeUpdateKeys getUpdate() {
         return update;
@@ -142,11 +142,11 @@ public class TypeLoadChoice {
 
     /**
      * Sets the value of the update property.
-     *
+     * 
      * @param value
      *     allowed object is
      *     {@link TypeUpdateKeys }
-     *
+     *     
      */
     public void setUpdate(TypeUpdateKeys value) {
         this.update = value;

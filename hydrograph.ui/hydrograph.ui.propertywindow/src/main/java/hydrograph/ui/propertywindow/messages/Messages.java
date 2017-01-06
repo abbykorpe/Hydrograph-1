@@ -312,6 +312,12 @@ public class Messages extends NLS {
 	public static String DRIVER_NAME;
 	public static String EXECUTION_COMMAND;
 	public static String PRIMARY_KEY_VALIDATION;
+	public static String MATCH;
+	public static String STANDARD;
+	public static String FAST_EXPORT;
+	public static String FAST_LOAD;
+	public static String EXPORT_OPTIONS;
+	public static String LOAD_UTILITY_TYPE;
 	
 
 	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
