@@ -57,7 +57,7 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
 
     } catch {
       case e: Exception =>
-        LOG.error("Error in Input  Mysql input component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
+        LOG.error("Error in Input  Mysql component '" + inputRDBMSEntity.getComponentId + "', " + e.getMessage, e)
         throw new RuntimeException("Error in Input Mysql Component " + inputRDBMSEntity.getComponentId, e)
     }
   }

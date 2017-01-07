@@ -33,7 +33,7 @@ case class SchemaUtils() {
       if (fieldExist) {
         if (!(getDataType(inSchema.dataType).getOrElse(inSchema.dataType).typeName.equalsIgnoreCase(dbDataType.typeName))) {
           LOG.error("Field '" + inSchema.name + "', data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
-          throw SchemaMismatchException("Field '" + inSchema.name + "', data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
+          throw SchemaMismatchException("Field '" + inSchema.name + "' data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
         }
       } else {
         LOG.error("Field '" + inSchema.name + "' does not exist in metadata")
