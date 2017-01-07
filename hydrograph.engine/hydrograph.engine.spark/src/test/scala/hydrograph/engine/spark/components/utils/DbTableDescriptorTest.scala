@@ -18,7 +18,8 @@ class DbTableDescriptorTest {
     val fieldDataType:Array[String] = Array("java.lang.String","java.lang.Integer","java.lang.Double","java.math.BigDecimal","java.util.Date","java.lang.Boolean","java.util.Date");
     val fieldScale:Array[Int]=Array(-999,-999,-999,2,-999,-999,-999)
     val fieldPrecision:Array[Int]=Array(-999,-999,-999,10,-999,-999,-999)
-    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision)
+    val fieldFormat:Array[String]= Array("","","","","yyyy-MM-dd","","yyyy-MM-dd HH:mm:ss")
+    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision,fieldFormat)
     val primaryKeys=null
 
     //when
@@ -26,7 +27,7 @@ class DbTableDescriptorTest {
 
 
     //then
-    val expectedQuery:String="CREATE TABLE abc ( f1 VARCHAR(256),f2 INT,f3 DOUBLE,f4 DECIMAL(10,2),f5 TIMESTAMP,f6 TINYINT,f7 TIMESTAMP )";
+    val expectedQuery:String="CREATE TABLE abc ( f1 VARCHAR(256),f2 INT,f3 DOUBLE,f4 DECIMAL(10,2),f5 DATE,f6 BOOLEAN,f7 TIMESTAMP )";
 
     Assert.assertTrue(expectedQuery.equals(createQuery))
   }
@@ -41,14 +42,15 @@ class DbTableDescriptorTest {
     val fieldDataType:Array[String] = Array("java.lang.String","java.lang.Integer","java.lang.Double","java.math.BigDecimal","java.util.Date","java.lang.Boolean","java.util.Date");
     val fieldScale:Array[Int]=Array(-999,-999,-999,2,-999,-999,-999)
     val fieldPrecision:Array[Int]=Array(-999,-999,-999,10,-999,-999,-999)
-    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision)
+    val fieldFormat:Array[String]= Array("","","","","yyyy-MM-dd","","yyyy-MM-dd HH:mm:ss")
+    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision,fieldFormat)
     val primaryKeys:Array[String]= Array("f1","f2")
 
     //when
     val createQuery= new DbTableDescriptor(tableName, fieldNames, colDefs, primaryKeys,databaseType).getCreateTableStatement()
 
     //then
-    val expectedQuery:String="CREATE TABLE abc ( f1 VARCHAR(256),f2 INT,f3 DOUBLE,f4 DECIMAL(10,2),f5 TIMESTAMP,f6 TINYINT,f7 TIMESTAMP,PRIMARY KEY( f1,f2 ) )";
+    val expectedQuery:String="CREATE TABLE abc ( f1 VARCHAR(256),f2 INT,f3 DOUBLE,f4 DECIMAL(10,2),f5 DATE,f6 BOOLEAN,f7 TIMESTAMP,PRIMARY KEY( f1,f2 ) )";
 
     Assert.assertTrue(expectedQuery.equals(createQuery))
   }

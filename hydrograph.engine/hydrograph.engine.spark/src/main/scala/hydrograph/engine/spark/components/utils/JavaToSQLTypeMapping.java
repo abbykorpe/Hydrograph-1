@@ -21,7 +21,7 @@ public enum JavaToSQLTypeMapping {
                     put("java.lang.Double", "DOUBLE");
                     put("java.lang.Float", "FLOAT");
                     put("java.lang.Short", "SMALLINT");
-                    put("java.lang.Boolean", "TINYINT");
+                    put("java.lang.Boolean", "BOOLEAN");
                     put("java.util.Date", "DATE");
                     put("java.sql.Timestamp", "TIMESTAMP");
                     put("java.math.BigDecimal", "DECIMAL");

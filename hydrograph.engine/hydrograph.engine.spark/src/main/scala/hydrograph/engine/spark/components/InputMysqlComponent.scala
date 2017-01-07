@@ -50,8 +50,8 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
     LOG.info("Connection url for Mysql input component: " + connectionURL)
 
     try {
-      SchemaUtils().compareSchema(schemaField, DbTableUtils().getTableSchema(connectionURL, selectQuery, properties))
       val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
+      SchemaUtils().compareSchema(schemaField,df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
 
