@@ -354,29 +354,26 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 		if (req.getType().equals(RequestConstants.REQ_OPEN)) {
 			ComponentFigure componentFigure=((ComponentEditPart)this).getComponentFigure();
 			componentFigure.terminateToolTipTimer();
-			ELTPropertyWindow eltPropertyWindow = new ELTPropertyWindow(getModel());
-			eltPropertyWindow.open();
+			ELTPropertyWindow propertyWindow = new ELTPropertyWindow(getModel());
+			propertyWindow.open();
 			
-			logger.debug("Updated dimentions: " + getCastedModel().getSize().height + ":"
-							+ getCastedModel().getSize().width);
 			if(Constants.SUBJOB_COMPONENT.equalsIgnoreCase(getCastedModel().getComponentName())){
 				SubJobUtility subJobUtility=new SubJobUtility();
 				subJobUtility.updateSubjobPropertyAndGetSubjobContainer((ComponentEditPart)this,null,null,true);
 			} 
-			if(eltPropertyWindow.isPropertyChanged())
-			{updateSubjobVersion();}
-			
-			updateComponentView(eltPropertyWindow);
-			
+			if(propertyWindow.isPropertyChanged()){
+				updateSubjobVersion();
+			}
+			updateComponentView(propertyWindow);
 			super.performRequest(req);
 		}
 	}
 
 	private void refreshComponentStatusOfAllComponent() {
 		for(Component component:getCastedModel().getParent().getUIComponentList()){
-				if(component != null){
+			if(component != null){
 			((ComponentEditPart)component.getComponentEditPart()).updateComponentStatus();
-			  }
+			}
 		}
 	}
 

@@ -457,7 +457,7 @@ public class ComponentFigure extends Figure implements Validator {
 				statusImage.dispose();
 			}
 		}
-		logger.debug("Component has {} property status.", getPropertyStatus());
+		logger.trace("Component has {} property status.", getPropertyStatus());
 		if (statusImage != null && !statusImage.isDisposed()) {
 			graphics.drawImage(statusImage, new Point(rectangle.width - 25, 8 + componentLabelMargin));
 		}
