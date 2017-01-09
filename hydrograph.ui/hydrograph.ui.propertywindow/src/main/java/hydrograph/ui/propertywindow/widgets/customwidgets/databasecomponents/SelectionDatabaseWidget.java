@@ -537,7 +537,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
 		
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-			oracleDatabaseValues.add(Utils.INSTANCE.getParamValue(databaseSelectionConfig.getTableName()));
+			oracleDatabaseValues.add(getValue(databaseSelectionConfig.getTableName()));
 		}else{
 			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY,Messages.ERROR , SWT.ICON_INFORMATION);
 		}

@@ -12,6 +12,11 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
+
 /**
  * Class for specifying Radio button widget configuration 
  * @author Bitwise
@@ -19,6 +24,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.config;
 public class RadioButtonConfig implements WidgetConfig {
 	private String widgetDisplayNames[];
 	private String propertyName;
+	private List<Listners> radioButtonListners = new ArrayList<>();
 	
 	/**
 	 * @return the widgetDisplayNames
@@ -46,6 +52,14 @@ public class RadioButtonConfig implements WidgetConfig {
 	 */
 	public void setPropertyName(String propertyName) {
 		this.propertyName = propertyName;
+	}
+
+	public List<Listners> getRadioButtonListners() {
+		return radioButtonListners;
+	}
+
+	public void setRadioButtonListners(List<Listners> radioButtonListners) {
+		this.radioButtonListners = radioButtonListners;
 	}
 
 }
