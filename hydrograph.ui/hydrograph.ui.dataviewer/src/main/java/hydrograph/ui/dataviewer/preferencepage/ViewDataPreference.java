@@ -61,6 +61,17 @@ import org.eclipse.ui.PlatformUI;
  *
  */
 public class ViewDataPreference extends PreferencePage implements IWorkbenchPreferencePage{
+	private static final String DEFAULT_LOCAL_PORT = "8004";
+	private static final String DEFAULT_REMOTE_PORT = "8004";
+	private static final String DEFAULT_QUOTE_CHARACTOR = "\"";
+	private static final String DEFAULT_DELIMITER = ",";
+	private static final String DEFAULT_VIEW_DATA_FILE_SIZE = "100";
+	private static final String DEFAULT_VIEW_DATA_PAGE_SIZE = "100";
+	private static final boolean DEFAULT_PURGE_DATA_FILES_CHECK = true;
+	private static final boolean DEFAULT_USE_REMOTE_CONFIGURATION_CHECK = false;
+	private static final boolean DEFAULT_INCLUDE_HEADER_CHECK = true;
+	private static final String DEFAULTPATH_VALUE = "";
+	
 	private BooleanFieldEditor booleanFieldEditor;
 	private IntegerFieldEditor pageSizeEditor;
 	private StringFieldEditor delimiterEditor;
@@ -529,17 +540,17 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	public void init(IWorkbench workbench) {
 		
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, Utils.INSTANCE.getInstallationPath());
-		preferenceStore.setDefault(PreferenceConstants.DEFAULTPATH, "");
-		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_FILE_SIZE, "100");
-		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_PAGE_SIZE, "100");
-		preferenceStore.setDefault(PreferenceConstants.DELIMITER, ",");
-		preferenceStore.setDefault(PreferenceConstants.QUOTE_CHARACTOR, "\"");
-		preferenceStore.setDefault(PreferenceConstants.INCLUDE_HEADER, true);
-		preferenceStore.setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
-		preferenceStore.setDefault(PreferenceConstants.LOCAL_PORT_NO, "8004");
-		preferenceStore.setDefault(PreferenceConstants.REMOTE_PORT_NO, "8004");
-		preferenceStore.setDefault(PreferenceConstants.USE_REMOTE_CONFIGURATION, false);
+		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_TEMP_FILEPATH, Utils.INSTANCE.getDataViewerDebugFilePath());
+		preferenceStore.setDefault(PreferenceConstants.DEFAULTPATH, DEFAULTPATH_VALUE);
+		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_FILE_SIZE, DEFAULT_VIEW_DATA_FILE_SIZE);
+		preferenceStore.setDefault(PreferenceConstants.VIEW_DATA_PAGE_SIZE, DEFAULT_VIEW_DATA_PAGE_SIZE);
+		preferenceStore.setDefault(PreferenceConstants.DELIMITER, DEFAULT_DELIMITER);
+		preferenceStore.setDefault(PreferenceConstants.QUOTE_CHARACTOR, DEFAULT_QUOTE_CHARACTOR);
+		preferenceStore.setDefault(PreferenceConstants.INCLUDE_HEADER, DEFAULT_INCLUDE_HEADER_CHECK);
+		preferenceStore.setDefault(PreferenceConstants.PURGE_DATA_FILES, DEFAULT_PURGE_DATA_FILES_CHECK);
+		preferenceStore.setDefault(PreferenceConstants.LOCAL_PORT_NO, DEFAULT_LOCAL_PORT);
+		preferenceStore.setDefault(PreferenceConstants.REMOTE_PORT_NO, DEFAULT_REMOTE_PORT);
+		preferenceStore.setDefault(PreferenceConstants.USE_REMOTE_CONFIGURATION, DEFAULT_USE_REMOTE_CONFIGURATION_CHECK);
 		setPreferenceStore(preferenceStore);
 	}
 	
