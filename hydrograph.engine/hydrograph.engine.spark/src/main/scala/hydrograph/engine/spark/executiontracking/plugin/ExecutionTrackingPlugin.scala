@@ -4,15 +4,13 @@ import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, Manipul
 import hydrograph.engine.core.utilities.SocketUtilities
 import hydrograph.engine.execution.tracking.ComponentInfo
 import hydrograph.engine.jaxb.commontypes.{TypeBaseComponent, TypeOutputComponent}
-import hydrograph.engine.jaxb.operationstypes.{Filter, Transform}
+import hydrograph.engine.jaxb.operationstypes.Executiontracking
 import hydrograph.engine.spark.execution.tracking.{ComponentMapping, JobInfo}
 import hydrograph.engine.spark.flow.RuntimeContext
 import org.apache.spark.scheduler._
-import org.apache.spark.sql.SparkSession
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 
@@ -55,21 +53,21 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
         trackContext.setComponentName(typeBaseComponent.getName)
         trackContext.setFromOutSocketId(outSocket.getSocketId)
         trackContext.setFromOutSocketType(outSocket.getSocketType)
-        val newFilter: Filter = TrackComponentUtils.generateFilterAfterEveryComponent(trackContext,
+        val executiontracking: Executiontracking = TrackComponentUtils.generateFilterAfterEveryComponent(trackContext,
           jaxbObjectList.asJava, manipulationContext.getSchemaFieldMap)
 
         val component: TypeBaseComponent = TrackComponentUtils.getComponent(jaxbObjectList.asJava,
           trackContext.getFromComponentId, trackContext.getFromOutSocketId)
         SocketUtilities.updateComponentInSocket(component, trackContext.getFromComponentId, trackContext
-          .getFromOutSocketId, newFilter.getId, "out0")
+          .getFromOutSocketId, executiontracking.getId, "out0")
 
         val inSocketList= TrackComponentUtils
           .extractInSocketListOfComponents(typeBaseComponent)
         val inSocketsPresent = inSocketList.size()>0
 
-        ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,outSocket.getSocketId,newFilter.getId,inSocketsPresent))
+        ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,outSocket.getSocketId,executiontracking.getId,inSocketsPresent))
 
-        jaxbObjectList += newFilter
+        jaxbObjectList += executiontracking
       })
     })
 
@@ -224,14 +222,14 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
 //    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
 
-    println("Task id: " + taskEnd.taskInfo.taskId)
+    /*println("Task id: " + taskEnd.taskInfo.taskId)
     taskEnd.taskInfo.accumulables.foreach(f => {
         LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
           + f
           .update)
-    })
+    })*/
     jobInfo.storeComponentStatsForTaskEnd(taskEnd)
-    getStatus().asScala.foreach(println)
+//    getStatus().asScala.foreach(println)
     //    println("Task id: " + taskEnd.taskInfo.taskId)
     ////    println("Task Accumulables Info: " + taskEnd.taskInfo.accumulables.mkString)
     //    println("Task attemptNo: " + taskEnd.taskInfo.attemptNumber)
@@ -264,11 +262,11 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     //    println("id: " + taskStart.taskInfo.id)
 
     jobInfo.storeComponentStatsForTaskStart(taskStart)
-    getStatus().asScala.foreach(println)
+//    getStatus().asScala.foreach(println)
     //    println("Task attemptNo: " + taskStart.taskInfo.attemptNumber)
     //    //        println("Task duration: " + taskStart.taskInfo.duration)
     //    println("Task launchTime: " + taskStart.taskInfo.launchTime)
-        println("Task Status: " + taskStart.taskInfo.status)
+//        println("Task Status: " + taskStart.taskInfo.status)
     //    println("Task executorId: " + taskStart.taskInfo.executorId)
     //    println("Task stage Id : " + taskStart.stageId)
 //        println("+++++++++++++++++++++Task Start End+++++++++++++++++++++")

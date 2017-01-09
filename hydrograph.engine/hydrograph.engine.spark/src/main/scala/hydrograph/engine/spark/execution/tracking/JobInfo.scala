@@ -90,17 +90,17 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
     //    ElementGraph elementGraph = extractElementGraphFromCascadeStats(cascadingStats);
     val Status = if(taskEnd.taskInfo.status.equals("SUCCESS"))"SUCCESSFUL"
     else taskEnd.taskInfo.status
-    println("Status in TaskEnd : "+Status)
+//    println("Status in TaskEnd : "+Status)
     taskEnd.taskInfo.accumulables.foreach(f => {
 
-      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
+//      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
       componentInfoMap.filter(c => c.newComponentId.equals(f.name.get)).foreach(component => {
 
 
         val alreadyPresentCompInfo  = componentInfoList.asScala
           .filter(compInfo=> compInfo.getComponentId.equals(component.compId))
 
-        println("Reached after alreadyPresentCompInfo checking of taskEnd")
+//        println("Reached after alreadyPresentCompInfo checking of taskEnd")
         if (alreadyPresentCompInfo.size > 0) {
           /*componentInfoHashSet
             .filter(compInfo => {
@@ -127,7 +127,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
             componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
             componentInfo.setStatusPerSocketMap(component.outSocket, Status)
             componentInfo.setCurrentStatus("RUNNING")
-            println("mark status as running of taskEnd")
+//            println("mark status as running of taskEnd")
             //           componentInfoHashSet.add(componentInfo)
           })
         }
@@ -140,7 +140,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
           componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
           componentInfo.setStatusPerSocketMap(component.outSocket, Status)
           componentInfo.setCurrentStatus("PENDING")
-          println("mark status as PENDING of taskEnd")
+//          println("mark status as PENDING of taskEnd")
 //          componentInfoHashSet.add(componentInfo)
           componentInfoList.add(componentInfo)
         }
@@ -153,18 +153,18 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
   private def generateStatsForTaskStart(taskStart: SparkListenerTaskStart): Unit = {
     //    ElementGraph elementGraph = extractElementGraphFromCascadeStats(cascadingStats);
     val Status = taskStart.taskInfo.status
-    println("Status in TaskStart : "+Status)
+//    println("Status in TaskStart : "+Status)
     /*if(taskGettingResult.taskInfo.status.equals("SUCCESS"))"SUCCESSFUL"
     else taskStart.taskInfo.status*/
     taskStart.taskInfo.accumulables.foreach(f => {
-      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
+//      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
       componentInfoMap.filter(c => c.newComponentId.equals(f.name.get)).foreach(component => {
 
 
         val alreadyPresentCompInfo  = componentInfoList.asScala
           .filter(compInfo=> compInfo.getComponentId.equals(component.compId))
 
-        println("Reached after alreadyPresentCompInfo checking of taskStart")
+//        println("Reached after alreadyPresentCompInfo checking of taskStart")
         if (alreadyPresentCompInfo.size > 0) {
 
           componentInfoList.asScala
@@ -178,7 +178,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
             componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
             componentInfo.setStatusPerSocketMap(component.outSocket, Status)
             componentInfo.setCurrentStatus("RUNNING")
-            println("mark status as running of taskStart")
+//            println("mark status as running of taskStart")
             //           componentInfoHashSet.add(componentInfo)
           })
         }
@@ -191,7 +191,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
           componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
           componentInfo.setStatusPerSocketMap(component.outSocket, Status)
           componentInfo.setCurrentStatus("PENDING")
-          println("mark status as PENDING of taskStart")
+//          println("mark status as PENDING of taskStart")
           //          componentInfoHashSet.add(componentInfo)
           componentInfoList.add(componentInfo)
         }

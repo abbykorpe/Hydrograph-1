@@ -22,7 +22,9 @@ import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.*;
+import hydrograph.engine.jaxb.operationstypes.Executiontracking;
 import hydrograph.engine.jaxb.operationstypes.Filter;
+import hydrograph.engine.spark.components.ExecutionTrackingComponent;
 
 class TrackComponentUtils {
 
@@ -119,9 +121,9 @@ class TrackComponentUtils {
 	 * 					 - Set of {@link SchemaField} object to set
 	 * @return the object of type {@link Filter}
 	 */
-	static Filter generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
-													Map<String, Set<SchemaField>> schemaFieldsMap) {
-		Filter filter = new Filter();
+	static Executiontracking generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
+																		Map<String, Set<SchemaField>> schemaFieldsMap) {
+		Executiontracking executiontracking = new Executiontracking();
 		TypeTransformOperation filterOperation = new TypeTransformOperation();
 
 		Set<SchemaField> schemaFields = schemaFieldsMap
@@ -134,17 +136,17 @@ class TrackComponentUtils {
 		typeOperationInputFields.getField().add(typeInputField);
 
 		filterOperation.setInputFields(typeOperationInputFields);
-		filterOperation.setClazz(ExecutionCounter.class.getCanonicalName());
-		filter.setId(TrackComponentUtils.generateUniqueComponentId(trackContext.getFromComponentId(),
+//		filterOperation.setClazz(ExecutionCounter.class.getCanonicalName());
+		executiontracking.setId(TrackComponentUtils.generateUniqueComponentId(trackContext.getFromComponentId(),
 				"generatedHydrographFilter", jaxbObjectList));
-		filter.setBatch(trackContext.getBatch());
-		filter.setName(trackContext.getComponentName());
-		filter.getInSocket().add(TrackComponentUtils.getStraightPullInSocket(trackContext.getFromComponentId(),
+		executiontracking.setBatch(trackContext.getBatch());
+		executiontracking.setName(trackContext.getComponentName());
+		executiontracking.getInSocket().add(TrackComponentUtils.getStraightPullInSocket(trackContext.getFromComponentId(),
 				trackContext.getFromOutSocketId(), trackContext.getFromOutSocketType()));
 
-		filter.getOutSocket().add(TrackComponentUtils.getStraightPullOutSocket("out0", "in0"));
-		filter.getOperationOrExpression().add(filterOperation);
-		return filter;
+		executiontracking.getOutSocket().add(TrackComponentUtils.getStraightPullOutSocket("out0", "in0"));
+		executiontracking.getOperationOrExpression().add(filterOperation);
+		return executiontracking;
 	}
 
 	/**

@@ -127,7 +127,7 @@ class HydrographRuntime extends HydrographRuntimeService {
     }
 //    RuntimeContext.instance.sparkSession.sparkContext.longAccumulator
     RuntimeContext.instance.sparkSession.stop()
-    executionTrackingListener.getStatus().asScala.foreach(println)
+//    executionTrackingListener.getStatus().asScala.foreach(println)
   }
 
   override def getExecutionStatus: AnyRef = {
