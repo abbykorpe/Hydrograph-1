@@ -2364,6 +2364,16 @@ private void operationInputTableAddButton(
 		int n = activeMappingSheetRows.size()+1;
 		String operationID;
 		operationID= Messages.OPERATION_ID_PREFIX + n;	
+		
+		for(int i=0;i<transformMapping.getMappingSheetRows().size();i++)
+		{
+			if(StringUtils.equalsIgnoreCase(operationID, transformMapping.getMappingSheetRows().get(i).getOperationID()))
+			{
+				 n++;
+				 operationID = Messages.OPERATION_ID_PREFIX + n;
+				 i=-1;
+			}
+		}	
 		List<FilterProperties> inputFieldListOperationClass = new ArrayList<>();
 		List<FilterProperties> outputListOperationClass = new ArrayList<>();
 		List<NameValueProperty> nameValuePropertyOperationClass = new ArrayList<>();
@@ -2375,8 +2385,16 @@ private void operationInputTableAddButton(
 		List<FilterProperties> inputFieldList = new ArrayList<>();
 		List<FilterProperties> outputList = new ArrayList<>();
 		List<NameValueProperty> nameValueProperty = new ArrayList<>();
-		operationID="Expression:"+n;
-		
+		operationID=Messages.EXPRESSION_ID_PREFIX + n;
+		for(int i=0;i<transformMapping.getMappingSheetRows().size();i++)
+		{
+			if(StringUtils.equalsIgnoreCase(operationID, transformMapping.getMappingSheetRows().get(i).getOperationID()))
+			{
+				 n++;
+				 operationID=Messages.EXPRESSION_ID_PREFIX + n;
+				 i=-1;
+			}
+		}	
 		ExpressionEditorData expressionEditorData=new ExpressionEditorData("",component.getComponentName());
     	mappingSheetRowForExpression = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",
 				nameValueProperty, false, "", false, "",true,expressionEditorData,setActiveMappingSheetForExpression());
