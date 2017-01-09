@@ -115,14 +115,14 @@ class HiveOutputComponent(entity: HiveEntityBase, oComponentParameters: BaseComp
 
   def mapDataType(str: String,schemaField:SchemaField): String = (str,schemaField) match {
     case ("java.lang.Integer",_) => "INT"
-    case ("java.lang.String",_) => "VARCHAR(64)"
+    case ("java.lang.String",_) => "STRING"
     case ("java.lang.Float",_)  => "FLOAT"
-    case ("java.lang.Double",_)  => "Double"
+    case ("java.lang.Double",_)  => "DOUBLE"
     case ("java.lang.Short",_)  => "SMALLINT"
     case ("java.lang.Long",_)  => "BIGINT"
     case ("java.lang.Boolean",_)  => "BOOLEAN"
     case ("java.math.BigDecimal",sf) => "DECIMAL("+sf.getFieldPrecision+","+sf.getFieldScale+")"
-    case ("java.util.Date",_) => "DATE"
+    case ("java.util.Date",sf) => if(sf.getFieldFormat.matches(".*[H|m|s|S].*")) "TIMESTAMP" else "DATE"
 
   }
 
