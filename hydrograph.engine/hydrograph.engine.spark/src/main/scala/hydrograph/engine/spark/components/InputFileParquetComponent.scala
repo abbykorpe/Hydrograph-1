@@ -25,24 +25,8 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
       val fieldList = iFileParquetEntity.getFieldsList.asScala
       fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + iFileParquetEntity.getComponentId) }
 
-      val listofFiles = getListOfFiles(path)
-
-      var df: DataFrame = null
-
-      if (!listofFiles.isEmpty) {
-        df = iComponentsParams.getSparkSession().read.parquet(listofFiles(0).toString)
-        SchemaUtils().compareSchema(schemaField, df.schema)
-        df = iComponentsParams.getSparkSession().read.parquet(path)
-      }
-      else {
-        if (path.endsWith(".parquet")) {
-          df = iComponentsParams.getSparkSession().read.parquet(path)
-          SchemaUtils().compareSchema(schemaField, df.schema)
-        }
-        else {
-          throw new EmptyFolderException("There is no Parquet files in given specified Path: '" + path + "'")
-        }
-      }
+      val df = iComponentsParams.getSparkSession().read.parquet(path)
+      SchemaUtils().compareSchema(schemaField, df.schema)
 
       val key = iFileParquetEntity.getOutSocketList.get(0).getSocketId
 
