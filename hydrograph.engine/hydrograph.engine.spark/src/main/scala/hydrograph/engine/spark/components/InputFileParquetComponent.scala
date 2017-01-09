@@ -30,10 +30,9 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
       var df: DataFrame = null
 
       if (!listofFiles.isEmpty) {
-        for (i <- listofFiles.indices) {
-          df = iComponentsParams.getSparkSession().read.parquet(listofFiles(i).toString)
-          SchemaUtils().compareSchema(schemaField, df.schema)
-        }
+        df = iComponentsParams.getSparkSession().read.parquet(listofFiles(0).toString)
+        SchemaUtils().compareSchema(schemaField, df.schema)
+        df = iComponentsParams.getSparkSession().read.parquet(path)
       }
       else {
         if (path.endsWith(".parquet")) {
