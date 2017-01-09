@@ -1733,12 +1733,10 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     
     private void setErrorMessageForAccumulator(){
     	OperationClassConfig configurationForTransformWidget;
-    	boolean isAggregateOrCumulate=false;
     	configurationForTransformWidget = (OperationClassConfig) widgetConfig;
     	transformMapping.getMappingSheetRows().forEach(mappingSheetRow ->{
     		if(mappingSheetRow.isActive() && mappingSheetRow.isExpression() &&(StringUtils.equalsIgnoreCase(Constants.AGGREGATE, configurationForTransformWidget.getComponentName())
     				|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,configurationForTransformWidget.getComponentName()))){
-//    			if(!StringUtils.isBlank(mappingSheetRow.getAccumulator())){
     				boolean logError = true;
     				boolean isValidValue = validate(mappingSheetRow.getAccumulator(), mappingSheetRow.getComboDataType());
     				if(!isValidValue){
@@ -1753,17 +1751,16 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     				}else
     					errorLabel = null;
     				for(Label tempErrorLabel:errorLabelList) {
-    					   if(StringUtils.equalsIgnoreCase(errorLabel.getText(),tempErrorLabel.getText()))
+    					   if(errorLabel==null || StringUtils.equalsIgnoreCase(errorLabel.getText(),tempErrorLabel.getText()))
     					   logError=false;
     				}
     					if(logError && errorLabel!=null && (!mappingSheetRow.isAccumulatorParameter()||
     							StringUtils.isBlank(mappingSheetRow.getAccumulator()))){
     						errorLabelList.add(errorLabel); 
     				}
-//    			}
     		}
     	}
-    );
+     );
     }
 	private boolean validate(String value, String dataType){
 		if(StringUtils.isNotBlank(value)){
@@ -1789,8 +1786,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				return true;
 			}
 			else if(dataType.equals(Messages.DATATYPE_BOOLEAN)){
-				Boolean.valueOf(value);
+				Boolean  convertedBoolean = Boolean.valueOf(value);
+				if(!StringUtils.equalsIgnoreCase(convertedBoolean.toString(), value)){
+					return false;
+				}else{
 				return true;
+				}
 			}
 			else if(dataType.equals(Messages.DATATYPE_BIGDECIMAL)){
 				new BigDecimal(value);
@@ -1810,7 +1811,6 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 				return false;
 			}
 			}catch(Exception exception){
-//				System.out.println("******************Invalid value********************");
 				return false;
 			}
 		}else{

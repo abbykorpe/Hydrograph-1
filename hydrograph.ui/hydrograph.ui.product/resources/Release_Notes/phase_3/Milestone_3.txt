@@ -35,3 +35,5 @@ Issues/Defects fixed:
 21.#586 [Shashank karnik] -   Aggregate Component: Error under error log is not getting displayed correctly when invalid expression is provided.
 22.#594 [Shashank karnik] - Unique sequence component: Schema is not getting update.
 23 #510 [Shrirang Kumbhar] - View Data xml files are getting generated under main tool folder
+24.#592	[Akhilesh Joshi] - 	Aggregate Component: java null pointer error popup is getting displayed
+25.#597	[Akhilesh Joshi] -	Aggregate Component : Validation is not appropriate for Boolean Datatype
