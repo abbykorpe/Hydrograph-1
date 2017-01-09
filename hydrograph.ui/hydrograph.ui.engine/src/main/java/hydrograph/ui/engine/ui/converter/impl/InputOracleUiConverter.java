@@ -93,10 +93,10 @@ public class InputOracleUiConverter extends InputUiConverter {
 			databaseSelectionConfig.setSqlQuery(inputOracle.getSelectQuery().getValue());
 			databaseSelectionConfig.setTableNameSelection(false);
 		}
-		
-		if(inputOracle.getCountQuery()!=null && StringUtils.isNotBlank(inputOracle.getCountQuery().getValue())){
+		//TODO Below code available for  future use
+		/*if(inputOracle.getCountQuery()!=null && StringUtils.isNotBlank(inputOracle.getCountQuery().getValue())){
 			databaseSelectionConfig.setSqlQueryCounter(inputOracle.getCountQuery().getValue());
-		}
+		}*/
 		
 		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
 		

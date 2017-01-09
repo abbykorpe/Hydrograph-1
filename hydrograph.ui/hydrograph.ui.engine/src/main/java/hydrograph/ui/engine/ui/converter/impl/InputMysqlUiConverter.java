@@ -88,10 +88,10 @@ public class InputMysqlUiConverter extends InputUiConverter{
 			databaseSelectionConfig.setSqlQuery(inputMysql.getSelectQuery().getValue());
 			databaseSelectionConfig.setTableNameSelection(false);
 		}
-		
-		if(inputMysql.getCountQuery() != null && StringUtils.isNotBlank(inputMysql.getCountQuery().getValue())){
+		//TODO Below code will be use in future
+		/*if(inputMysql.getCountQuery() != null && StringUtils.isNotBlank(inputMysql.getCountQuery().getValue())){
 			databaseSelectionConfig.setSqlQueryCounter(inputMysql.getCountQuery().getValue());
-		}
+		}*/
 		
 		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
 		

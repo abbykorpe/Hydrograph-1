@@ -122,11 +122,13 @@ public class InputMysqlConverter extends InputConverter{
 					sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
 					mysqlInput.setSelectQuery(sqlQuery);
 				}
-				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
-					ElementValueStringType sqlQueryCounter = new ElementValueStringType();
-					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
-					mysqlInput.setCountQuery(sqlQueryCounter);
-				}
+
+				//TODO Below code will use in future
+				/*ElementValueStringType sqlQueryCounter = new ElementValueStringType();
+				if(databaseSelectionConfig.getSqlQueryCounter() !=null && StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
+				sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQueryCounter());
+				mysqlInput.setCountQuery(sqlQueryCounter);
+				}*/
 			}
 		}
 		
