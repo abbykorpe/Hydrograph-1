@@ -50,14 +50,14 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
     LOG.info("Connection url for Mysql input component: " + connectionURL)
 
     try {
-      SchemaUtils().compareSchema(schemaField, DbTableUtils().getTableSchema(connectionURL, selectQuery, properties))
       val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
+      SchemaUtils().compareSchema(schemaField,df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
 
     } catch {
       case e: Exception =>
-        LOG.error("Error in Input  Mysql input component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
+        LOG.error("Error in Input  Mysql component '" + inputRDBMSEntity.getComponentId + "', " + e.getMessage, e)
         throw new RuntimeException("Error in Input Mysql Component " + inputRDBMSEntity.getComponentId, e)
     }
   }

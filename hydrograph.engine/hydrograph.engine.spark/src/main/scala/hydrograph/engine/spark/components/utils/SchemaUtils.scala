@@ -1,6 +1,6 @@
 package hydrograph.engine.spark.components.utils
 
-import org.apache.spark.sql.types.{DataType, StructType}
+import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
@@ -17,11 +17,12 @@ case class SchemaUtils() {
    * @return Boolean true or false(Exception)
    */
   def compareSchema(readSchema: StructType, mdSchema: StructType): Boolean = {
+
     val metaDataSchema = mdSchema.toList
     val inputReadSchema = readSchema.toList
 
     var dbDataType: DataType = null
-    var dbFieldName : String= null
+    var dbFieldName: String = null
 
     inputReadSchema.foreach(f = inSchema => {
       var fieldExist = metaDataSchema.exists(ds => {
@@ -30,9 +31,9 @@ case class SchemaUtils() {
         ds.name.equals(inSchema.name)
       })
       if (fieldExist) {
-        if (!(dbDataType.typeName.equals(inSchema.dataType.typeName))) {
+        if (!(getDataType(inSchema.dataType).getOrElse(inSchema.dataType).typeName.equalsIgnoreCase(dbDataType.typeName))) {
           LOG.error("Field '" + inSchema.name + "', data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
-          throw SchemaMismatchException("Field '" + inSchema.name + "', data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
+          throw SchemaMismatchException("Field '" + inSchema.name + "' data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
         }
       } else {
         LOG.error("Field '" + inSchema.name + "' does not exist in metadata")
@@ -43,5 +44,20 @@ case class SchemaUtils() {
     true
   }
 
+  // mapped datatype as in mysql float is mapped to real and in org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD real is mapped to DoubleType
+  // In Mysql Short data type is not there, instead of Short SMALLINT is used and in org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD SMALLINT is mapped to IntegerType
+  // for comparing purpose here float -> DoubleType AND short -> IntegerType
+  private def getDataType(dataType: DataType): Option[DataType] = {
+    val answer = dataType.typeName.toUpperCase match {
+      case "FLOAT" => DoubleType
+      case "SHORT" => IntegerType
+      case _ => null
+    }
+    if (answer != null) Option(answer) else None
+
+  }
 }
+
 case class SchemaMismatchException(message: String = "", cause: Throwable = null) extends Exception(message, cause)
+
+

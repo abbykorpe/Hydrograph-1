@@ -1,12 +1,17 @@
 package hydrograph.engine.spark.components.utils
 
+import java.sql.{Connection, ResultSetMetaData, SQLException}
 import java.util.Properties
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
-import org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD
-import org.apache.spark.sql.types.StructType
+import org.apache.derby.impl.sql.compile.BooleanTypeCompiler
+import org.apache.spark.sql.execution.datasources.jdbc.{JDBCRDD, JdbcUtils}
+import org.apache.spark.sql.jdbc.JdbcDialects
+import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
+
+import scala.math._
 
 /**
   * Created by santlalg on 12/12/2016.
@@ -26,7 +31,8 @@ case class DbTableUtils() {
     val fieldsDataType = fieldsCreator.getFieldDataTypes();
     val fieldsScale = fieldsCreator.getFieldScale();
     val fieldsPrecision = fieldsCreator.getFieldPrecision();
-    val columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision);
+    val fieldFormat = fieldsCreator.getFieldFormat();
+    val columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision, fieldFormat);
     val DB_TYPE_ORACLE = "oracle"
     LOG.trace("Generating create query for " + outputRDBMSEntity.getDatabaseName
       + " database for table '" + outputRDBMSEntity.getTableName
@@ -65,24 +71,13 @@ case class DbTableUtils() {
   }
 
   /*
-   * This will return metadata schema
-   * @param connectionURL database connection
-   * @param tableName
-   * @param properties
-   * @return structType schema from metadata
-   */
-  def getTableSchema(connectionURL: String, tableName: String, properties: Properties): StructType = {
-    JDBCRDD.resolveTable(connectionURL, tableName, properties)
-  }
-
-  /*
    * This will generate select query
    * @param fieldList
    * @param tableName
    * @return String select query
    */
-  def getSelectQuery(fieldList: List[SchemaField], tableName: String) : String = {
-    val query = "select " + fieldList.map(f=>f.getFieldName).reverse.mkString(", ") + " from " + tableName
+  def getSelectQuery(fieldList: List[SchemaField], tableName: String): String = {
+    val query = "select " + fieldList.map(f => f.getFieldName).mkString(", ") + " from " + tableName
     LOG.debug("Select query :  " + query)
     query
   }
