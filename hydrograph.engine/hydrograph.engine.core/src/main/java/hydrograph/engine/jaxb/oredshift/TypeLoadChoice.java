@@ -9,15 +9,15 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for type-load-choice complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="type-load-choice">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;choice>
- *         &lt;element name="newTable" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
+ *         &lt;element name="newTable" type="{hydrograph/engine/jaxb/oredshift}type-primary-keys"/>
  *         &lt;element name="truncateLoad" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
  *         &lt;element name="Insert" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
  *         &lt;element name="update" type="{hydrograph/engine/jaxb/oredshift}type-update-keys"/>
@@ -26,19 +26,19 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-load-choice", namespace = "hydrograph/engine/jaxb/oredshift", propOrder = {
-    "newTable",
-    "truncateLoad",
-    "insert",
-    "update"
+        "newTable",
+        "truncateLoad",
+        "insert",
+        "update"
 })
 public class TypeLoadChoice {
 
-    protected Object newTable;
+    protected TypePrimaryKeys newTable;
     protected Object truncateLoad;
     @XmlElement(name = "Insert")
     protected Object insert;
@@ -46,35 +46,35 @@ public class TypeLoadChoice {
 
     /**
      * Gets the value of the newTable property.
-     * 
+     *
      * @return
      *     possible object is
-     *     {@link Object }
-     *     
+     *     {@link TypePrimaryKeys }
+     *
      */
-    public Object getNewTable() {
+    public TypePrimaryKeys getNewTable() {
         return newTable;
     }
 
     /**
      * Sets the value of the newTable property.
-     * 
+     *
      * @param value
      *     allowed object is
-     *     {@link Object }
-     *     
+     *     {@link TypePrimaryKeys }
+     *
      */
-    public void setNewTable(Object value) {
+    public void setNewTable(TypePrimaryKeys value) {
         this.newTable = value;
     }
 
     /**
      * Gets the value of the truncateLoad property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Object }
-     *     
+     *
      */
     public Object getTruncateLoad() {
         return truncateLoad;
@@ -82,11 +82,11 @@ public class TypeLoadChoice {
 
     /**
      * Sets the value of the truncateLoad property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Object }
-     *     
+     *
      */
     public void setTruncateLoad(Object value) {
         this.truncateLoad = value;
@@ -94,11 +94,11 @@ public class TypeLoadChoice {
 
     /**
      * Gets the value of the insert property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Object }
-     *     
+     *
      */
     public Object getInsert() {
         return insert;
@@ -106,11 +106,11 @@ public class TypeLoadChoice {
 
     /**
      * Sets the value of the insert property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Object }
-     *     
+     *
      */
     public void setInsert(Object value) {
         this.insert = value;
@@ -118,11 +118,11 @@ public class TypeLoadChoice {
 
     /**
      * Gets the value of the update property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link TypeUpdateKeys }
-     *     
+     *
      */
     public TypeUpdateKeys getUpdate() {
         return update;
@@ -130,11 +130,11 @@ public class TypeLoadChoice {
 
     /**
      * Sets the value of the update property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link TypeUpdateKeys }
-     *     
+     *
      */
     public void setUpdate(TypeUpdateKeys value) {
         this.update = value;

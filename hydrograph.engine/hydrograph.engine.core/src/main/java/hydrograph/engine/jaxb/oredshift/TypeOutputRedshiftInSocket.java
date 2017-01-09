@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for type-output-redshift-in-socket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="type-output-redshift-in-socket">
  *   &lt;complexContent>
@@ -26,13 +26,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-output-redshift-in-socket", namespace = "hydrograph/engine/jaxb/oredshift")
 public class TypeOutputRedshiftInSocket
-    extends TypeOutputInSocket
+        extends TypeOutputInSocket
 {
 
 

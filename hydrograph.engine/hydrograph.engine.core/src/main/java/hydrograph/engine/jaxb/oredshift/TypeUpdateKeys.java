@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for type-update-keys complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="type-update-keys">
  *   &lt;complexContent>
@@ -25,12 +25,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-update-keys", namespace = "hydrograph/engine/jaxb/oredshift", propOrder = {
-    "updateByKeys"
+        "updateByKeys"
 })
 public class TypeUpdateKeys {
 
@@ -39,11 +39,11 @@ public class TypeUpdateKeys {
 
     /**
      * Gets the value of the updateByKeys property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link TypeKeyFields }
-     *     
+     *
      */
     public TypeKeyFields getUpdateByKeys() {
         return updateByKeys;
@@ -51,11 +51,11 @@ public class TypeUpdateKeys {
 
     /**
      * Sets the value of the updateByKeys property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link TypeKeyFields }
-     *     
+     *
      */
     public void setUpdateByKeys(TypeKeyFields value) {
         this.updateByKeys = value;

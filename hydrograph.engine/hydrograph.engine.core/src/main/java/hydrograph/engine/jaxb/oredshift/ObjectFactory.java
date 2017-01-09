@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRegistry;
  * type definitions, element declarations and model 
  * groups.  Factory methods for each of these are 
  * provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -24,14 +24,22 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: hydrograph.engine.jaxb.oredshift
-     * 
+     *
      */
     public ObjectFactory() {
     }
 
     /**
+     * Create an instance of {@link TypePrimaryKeys }
+     *
+     */
+    public TypePrimaryKeys createTypePrimaryKeys() {
+        return new TypePrimaryKeys();
+    }
+
+    /**
      * Create an instance of {@link TypeOutputRedshiftInSocket }
-     * 
+     *
      */
     public TypeOutputRedshiftInSocket createTypeOutputRedshiftInSocket() {
         return new TypeOutputRedshiftInSocket();
@@ -39,7 +47,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeOutputRedshiftBase }
-     * 
+     *
      */
     public TypeOutputRedshiftBase createTypeOutputRedshiftBase() {
         return new TypeOutputRedshiftBase();
@@ -47,7 +55,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeRedshiftRecord }
-     * 
+     *
      */
     public TypeRedshiftRecord createTypeRedshiftRecord() {
         return new TypeRedshiftRecord();
@@ -63,7 +71,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeRedshiftField }
-     * 
+     *
      */
     public TypeRedshiftField createTypeRedshiftField() {
         return new TypeRedshiftField();
@@ -71,7 +79,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TypeLoadChoice }
-     * 
+     *
      */
     public TypeLoadChoice createTypeLoadChoice() {
         return new TypeLoadChoice();

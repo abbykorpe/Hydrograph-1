@@ -38,13 +38,14 @@ public enum JavaToSQLTypeMapping {
 
                 {
                     put("java.lang.String", "VARCHAR(256)");
+                    put("java.lang.Short", "SMALLINT");
                     put("java.lang.Integer", "INTEGER");
                     put("java.lang.Long", "BIGINT");
-                    put("java.lang.Double", "DOUBLE PRECISION");
                     put("java.lang.Float", "FLOAT");
-                    put("java.lang.Short", "SMALLINT");
+                    put("java.lang.Double", "DOUBLE PRECISION");
                     put("java.lang.Boolean", "BOOLEAN");
-                    put("java.util.Date", "TIMESTAMP");
+                    put("java.util.Date", "DATE");
+                    put("java.sql.Timestamp", "TIMESTAMP");
                     put("java.math.BigDecimal", "DECIMAL");
                 }
             };
@@ -84,6 +85,7 @@ public enum JavaToSQLTypeMapping {
                     put("java.lang.Integer", "NUMBER(10)");
                     put("java.lang.Long", "NUMBER(19)");
                     put("java.lang.Short", "NUMBER(5)");
+                    put("java.lang.Float", "NUMBER(19,4)");
                     put("java.lang.Double", "NUMBER(19,4)");
                     put("java.lang.Boolean", "CHAR(1)");
                     put("java.util.Date", "DATE");
@@ -120,8 +122,8 @@ public enum JavaToSQLTypeMapping {
         for (int i = 0; i < fieldsDataType.length; i++) {
             if (fieldsDataType[i].equals("java.math.BigDecimal"))
                 arr[i] = map.get(fieldsDataType[i]) + "(" + fieldsPrecision[i] + "," + fieldsScale[i] + ")";
-            else if(fieldsDataType[i].equals("java.util.Date") && fieldFormat[i].contains("HH:mm:ss"))
-                arr[i]=map.get("java.sql.Timestamp");
+            else if (fieldsDataType[i].equals("java.util.Date") && fieldFormat[i].contains("HH:mm:ss"))
+                arr[i] = map.get("java.sql.Timestamp");
             else
                 arr[i] = map.get(fieldsDataType[i]);
         }

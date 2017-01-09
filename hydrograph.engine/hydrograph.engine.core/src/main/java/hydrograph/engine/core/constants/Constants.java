@@ -16,44 +16,46 @@ package hydrograph.engine.core.constants;
  * This class contains the constants to be used across the project. These
  * constants are stored as static final variables of the class. This class
  * should not be instantiated and hence, the constructor is marked private
- * 
+ *
  * @author Prabodh
  */
 public class Constants {
 
-	/**
-	 * The default value of 'scale' attribute of big decimal fields used on input / output schema
-	 */
-	public static final int DEFAULT_SCALE = -999;
-	/**
-	 * The default value of 'precision' attribute of big decimal fields used on input / output schema
-	 */
-	public static final int DEFAULT_PRECISION = -999;
-	/**
-	 * The default port for mysql
-	 */
-	public static final int DEFAULT_MYSQL_PORT=3306;
-	/*
-	 * The default port for mysql
-	 */
-	public static final int ORACLE_PORT_NUMBER = 1521;
-	/**
+    /**
+     * The default value of 'scale' attribute of big decimal fields used on input / output schema
+     */
+    public static final int DEFAULT_SCALE = -999;
+    /**
+     * The default value of 'precision' attribute of big decimal fields used on input / output schema
+     */
+    public static final int DEFAULT_PRECISION = -999;
+    /**
+     * The default port for mysql
+     */
+    public static final int DEFAULT_MYSQL_PORT = 3306;
+    /*
+     * The default port for mysql
+     */
+    public static final int ORACLE_PORT_NUMBER = 1521;
+    /*
+    * The default port for Redshift
+    */
+    public static final int REDSHIFT_PORT_NUMBER = 5439;
+    /**
      * The default Teradata port
-     * */
-    public static final int DEFAULT_TERADATA_PORT=1025;
-	/**
-	 * The default chunk size
-	 */
-	public static final int DEFAULT_CHUNKSIZE=1000;
+     */
+    public static final int DEFAULT_TERADATA_PORT = 1025;
+    /**
+     * The default chunk size
+     */
+    public static final int DEFAULT_CHUNKSIZE = 1000;
+    public static final String LENGTHS_AND_DELIMITERS_SEPARATOR = "~!@#@!~";
+    public static final String DEFAULT_FORMAT = "yyyy-MM-dd";
 
-	/**
-<<<<<<< HEAD
-	 * The default number of record to be read per roundtrip
-	 */
-	//public static final int DEFAULT_DB_FETCHSIZE=1000;
-	private Constants() {
-	}
-	public static final String LENGTHS_AND_DELIMITERS_SEPARATOR="~!@#@!~";
-	
-	public static final String DEFAULT_FORMAT = "yyyy-MM-dd";
+    /**
+     * The default number of record to be read per roundtrip
+     */
+    //public static final int DEFAULT_DB_FETCHSIZE=1000;
+    private Constants() {
+    }
 }

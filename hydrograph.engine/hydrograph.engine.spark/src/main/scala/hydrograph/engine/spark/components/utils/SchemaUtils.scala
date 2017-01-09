@@ -1,6 +1,6 @@
 package hydrograph.engine.spark.components.utils
 
-import org.apache.spark.sql.types._
+import org.apache.spark.sql.types.{DataType, StructType}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**

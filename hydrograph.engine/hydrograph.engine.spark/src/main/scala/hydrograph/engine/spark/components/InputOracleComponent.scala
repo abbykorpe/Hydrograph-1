@@ -3,7 +3,7 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.SchemaCreator
+import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaUtils}
 import org.apache.spark.sql.DataFrame
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -45,7 +45,8 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
     LOG.info("Connection  url for Oracle input component: " + connectionURL)
 
     try {
-      val df = sparkSession.read.schema(schemaField).jdbc(connectionURL, tableorQuery, properties)
+      val df = sparkSession.read.jdbc(connectionURL, tableorQuery, properties)
+      SchemaUtils().compareSchema(schemaField, df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
