@@ -85,10 +85,8 @@ public class MysqlMetadataStrategy extends MetadataStrategyTemplate {
             else if (tableName != null && !tableName.isEmpty())
                 res = stmt.executeQuery("Select * from " + tableName + " where 1<0");
             else {
-                LOG.error("Table or query in request parameter cannot be null or empty " + Constants.QUERY + " => "
-                        + query + " " + Constants.TABLENAME + " => " + tableName);
-                throw new ParamsCannotBeNullOrEmpty("Table and query cannot be null or empty in request parameters: "
-                        + Constants.QUERY + " => " + query + " " + Constants.TABLENAME + " => " + tableName);
+                LOG.error("Table or query cannot be null in requested parameters");
+                throw new ParamsCannotBeNullOrEmpty("Table or query cannot be null in requested parameters");
             }
             ResultSetMetaData rsmd = res.getMetaData();
             for (int count = 1; count <= rsmd.getColumnCount(); count++) {
