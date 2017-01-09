@@ -33,7 +33,7 @@
 		
 		<tns:property dataType="string" name="name" 
 			renderer="COMPONENT_NAME_WIDGET" type="USER" group="GENERAL" 
-			subGroup="DETAILS" showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED"/>
+			subGroup="DETAILS" showAsTooltip="TRUE" propertyHelpText="Displays name provided by user" tooltipDataType="TEXT" usage="REQUIRED"/>
 		
 		<tns:property dataType="string" name="schema" renderer="TRANSFORM_SCHEMA_WIDGET" type="USER"
 			group="SCHEMA" subGroup="RECORD_STRUCTURE_DETAILS" showAsTooltip="TRUE" tooltipDataType="LIST"
@@ -43,24 +43,24 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="operation" renderer="OUTPUT_RECORD_COUNT_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
-			showAsTooltip="TRUE" tooltipDataType="LINK" usage="OPTIONAL" >
+			showAsTooltip="TRUE" propertyHelpText="Expression#Operation Class#Ouput Record Count#Fields mapping view." tooltipDataType="LINK" usage="OPTIONAL" >
 			<tns:validator>NORMALIZE_MAPPING_VALIDATOR</tns:validator>
 			</tns:property>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
-			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE"  propertyHelpText="Used to override runtime Hadoop configurations \nspecific to this component at run time." tooltipDataType="NONE"
 			usage="OPTIONAL" >
 		<tns:validator>RUNTIME_PROPERTY_VALIDATOR</tns:validator>
 		</tns:property>
 			
 		<tns:property dataType="string" name="batch" value="0" renderer="BATCH_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" propertyHelpText="Specifies the execution sequence \nof this component in the job flow." tooltipDataType="TEXT"
 			usage="REQUIRED">
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>	
 		 <tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="Propogate data from left.">
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE"  propertyHelpText="Propogate data from left." tooltipDataType="TEXT"
+			usage="REQUIRED">
 		</tns:property>
 
 			

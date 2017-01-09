@@ -32,7 +32,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
@@ -85,15 +84,16 @@ public class OutputRecordCountWidget extends AbstractWidget{
 	private TransformMapping transformMapping;
 	private List<AbstractWidget> widgets;
 	private ControlDecoration expressionValidateDecorator;
+	  
 	
-	private void createTransformEditButtonAndLabel(Composite compositeForNormalizeEditButtton) 
+	private void createTransformEditButtonAndLabel(Composite compositeForNormalizeEditButtton, int data_key) 
 	{
 		OperationClassConfig operationClassConfig = (OperationClassConfig) widgetConfig;
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable(operationClassConfig.getComponentDisplayName()+" \n ");
-		defaultLable1.attachWidget(compositeForNormalizeEditButtton);
-		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
+		ELTDefaultLable	label_normalize = new ELTDefaultLable(operationClassConfig.getComponentDisplayName()+" \n ");
+		label_normalize.attachWidget(compositeForNormalizeEditButtton);
+		expressionRadioButton.setData(String.valueOf(data_key), label_normalize.getSWTWidgetControl());
 		
-		 TransformMapping transformMappingPopulatedFromTooTipAction=
+		TransformMapping transformMappingPopulatedFromTooTipAction=
        		 (TransformMapping) getComponent().getTooltipInformation().get(Constants.OPERATION).getPropertyValue();
 		 if(transformMappingPopulatedFromTooTipAction!=null)
 		 {	 
@@ -193,7 +193,7 @@ public class OutputRecordCountWidget extends AbstractWidget{
 		composite.setLayoutData(radioButtonCompositeGridData);
 	}
 
-	private void createLabelTextBoxAndButton(Composite textBobLabelButtonComposite) 
+	private void createLabelTextBoxAndButton(Composite textBobLabelButtonComposite, int data_key)
 	{
 		AbstractELTWidget outputRecordCountLabel1=new ELTDefaultLable(Constants.OUTPUT_RECORD_COUNT);
 		outputRecordCountLabel1.attachWidget(textBobLabelButtonComposite);
@@ -215,6 +215,8 @@ public class OutputRecordCountWidget extends AbstractWidget{
 		editButton=(Button)outputRecordCountButton.getSWTWidgetControl();
 	    intializeEnableOrDisableStateOfWidgetsBasedOnExpressionOrOperationSelected();
 	    addListenerOnEditButtonToOpenExpressionEditor();
+	    
+		expressionRadioButton.setData(String.valueOf(data_key), outputRecordCountLabel1.getSWTWidgetControl());
 	}
 
 	private void addModifyListenerToRecordCountTextBox() 
@@ -234,6 +236,7 @@ public class OutputRecordCountWidget extends AbstractWidget{
 	private void addListenerOnEditButtonToOpenExpressionEditor() 
 	{
 			editButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
 				intializeExpresionEditorData();
@@ -304,8 +307,10 @@ public class OutputRecordCountWidget extends AbstractWidget{
       {
 	    expressionRadioButton.setText(Messages.WINDOWS_EXPRESSION_EDITIOR_LABEL);
 	  }
+      
       operationRadioButton = new Button(radioButtonsComposite, SWT.RADIO);
 	  operationRadioButton.setText(Messages.OPERATION_CALSS_LABEL);
+	  
 	  addSelectionListenerToExpressionRadioButton(expressionRadioButton);
 	  addSelectionListenerToOperationRadioButton(operationRadioButton);
 	  if(transformMapping.isExpression())
@@ -322,6 +327,7 @@ public class OutputRecordCountWidget extends AbstractWidget{
 	{
 		expressionRadioButton.addMouseListener(new MouseAdapter() {
 
+			@Override
 			public void mouseUp(MouseEvent e) {
 				outputRecordCoundText.setEnabled(true);
 				editButton.setEnabled(true);
@@ -348,6 +354,7 @@ public class OutputRecordCountWidget extends AbstractWidget{
 	{
 		operationRadioButton.addMouseListener(new MouseAdapter() 
 		{
+			@Override
 			public void mouseUp(MouseEvent e) {
 				outputRecordCoundText.setEnabled(false);
 				editButton.setEnabled(false);
@@ -394,15 +401,24 @@ public class OutputRecordCountWidget extends AbstractWidget{
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) 
 	{
+		int data_key = 0;
 		ELTDefaultSubgroupComposite eltDefaultSubgroupComposite=new ELTDefaultSubgroupComposite(container.getContainerControl());
         eltDefaultSubgroupComposite.createContainerWidget();
 		eltDefaultSubgroupComposite.numberOfBasicWidgets(1);
 		Composite radioButtonsComposite= createRadioButtonComposite(eltDefaultSubgroupComposite);
 		attachRadioButtonToComposite(radioButtonsComposite);
+		// for adding help tooltip on widget's labels
+		expressionRadioButton.setData(String.valueOf(data_key++), expressionRadioButton);
+		expressionRadioButton.setData(String.valueOf(data_key++), operationRadioButton);
+
 		Composite labelTexBoxAndButtonComposite=createLabelTextBoxAndButtonComposite(eltDefaultSubgroupComposite);
-		createLabelTextBoxAndButton(labelTexBoxAndButtonComposite);
+		createLabelTextBoxAndButton(labelTexBoxAndButtonComposite, data_key++);
 		Composite compositeForNormalizeEditButtton=createcompositeForNormalizeEditButtton(eltDefaultSubgroupComposite);
-		createTransformEditButtonAndLabel(compositeForNormalizeEditButtton);
+		createTransformEditButtonAndLabel(compositeForNormalizeEditButtton, data_key);
+		
+		
+
+		setPropertyHelpWidget(expressionRadioButton);
 	}
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {

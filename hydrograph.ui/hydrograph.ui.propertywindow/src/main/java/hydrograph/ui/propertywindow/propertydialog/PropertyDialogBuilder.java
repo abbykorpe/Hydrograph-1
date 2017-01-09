@@ -80,6 +80,8 @@ public class PropertyDialogBuilder {
 	private final String BASE_TYPE = "Base Type";
 	private final String TYPE_PROPERTY_HELP="Basic Category";
 	private final String BASE_TYPE_PROPERTY_HELP="Abstraction";
+	private final String ID="ID";
+	private final String COMP_ID_PROPERTY_HELP="Component Id";
 	
     private CTabFolder tabFolder;
 	/**
@@ -267,6 +269,8 @@ public class PropertyDialogBuilder {
 		widget.setTabFolder(tabFolder);
 		if(TYPE.equals(componentConfigProp.getPropertyName())){
 			widget.setPropertyHelpText(BASE_TYPE_PROPERTY_HELP);
+		}else if(ID.equals(componentConfigProp.getPropertyName())){
+			widget.setPropertyHelpText(COMP_ID_PROPERTY_HELP);
 		}else if(BASE_TYPE.equals(componentConfigProp.getPropertyName())){
 			widget.setPropertyHelpText(TYPE_PROPERTY_HELP);
 		}else{

@@ -14,28 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.OperationClassProperty;
-import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
-import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
-import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
-import hydrograph.ui.propertywindow.property.Property;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
-import hydrograph.ui.propertywindow.widgets.dialogs.ELTOperationClassDialog;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,7 +29,25 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.OperationClassProperty;
+import hydrograph.ui.expression.editor.launcher.LaunchExpressionEditor;
+import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
+import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTSchemaGridWidget;
+import hydrograph.ui.propertywindow.widgets.dialogs.ELTOperationClassDialog;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 
 /**
@@ -101,8 +97,10 @@ public class ELTOperationClassWidget extends AbstractWidget {
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
+		int data_key = 0;
 		final ELTDefaultSubgroupComposite runtimeComposite = new ELTDefaultSubgroupComposite(
 				container.getContainerControl());
+
 		runtimeComposite.createContainerWidget();
 		runtimeComposite.numberOfBasicWidgets(3);
 		Composite radioButtonComposite = new Composite(runtimeComposite.getContainerControl(),SWT.NONE);
@@ -123,8 +121,8 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		}else {
 		    expressionRadioButton.setText(Messages.WINDOWS_EXPRESSION_EDITIOR_LABEL);
 		}
-		
-		setPropertyHelpWidget((Control) expressionRadioButton);
+		expressionRadioButton.setData(String.valueOf(data_key++), expressionRadioButton);
+		setPropertyHelpWidget(expressionRadioButton);
 		addSelectionListenerOnExpression();
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
 				Messages.EDIT_BUTTON_LABEL).grabExcessHorizontalSpace(false);
@@ -135,7 +133,8 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		
 		operationRadioButton = new Button(radioButtonComposite, SWT.RADIO);
 		operationRadioButton.setText(Messages.OPERATION_CALSS_LABEL);
-		setPropertyHelpWidget((Control) operationRadioButton);
+		expressionRadioButton.setData(String.valueOf(data_key), operationRadioButton);
+		setPropertyHelpWidget(expressionRadioButton);
 		addSelectionListenerOnOperation();
 		
 		initialize();
@@ -145,7 +144,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(((Button) expressionRadioButton).getSelection()){
+				if(expressionRadioButton.getSelection()){
 					List<FixedWidthGridRow> inputFieldSchema=getInputSchema();
 					operationClassProperty.setExpression(true);
 					operationClassProperty.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
@@ -221,19 +220,19 @@ public class ELTOperationClassWidget extends AbstractWidget {
 	{
 		if(operationClassProperty.isExpression() || isOpenedFirstTime)
 		{
-			((Button) expressionRadioButton).setSelection(true);
+			expressionRadioButton.setSelection(true);
 		}else{
-			((Button) operationRadioButton).setSelection(true);
+			operationRadioButton.setSelection(true);
 		}
 	}
 	
 	public void addSelectionListenerOnOperation(){
-		((Button) operationRadioButton).addSelectionListener(new SelectionListener() {
+		operationRadioButton.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(((Button) operationRadioButton).getSelection()){
+				if(operationRadioButton.getSelection()){
 					operationClassProperty.setExpression(false);
 					enableOpertaionFieldButton((Button)e.widget, true);
 				}else
@@ -249,11 +248,11 @@ public class ELTOperationClassWidget extends AbstractWidget {
 	
 	public void addSelectionListenerOnExpression(){
 		
-		((Button) expressionRadioButton).addSelectionListener(new SelectionListener() {
+		expressionRadioButton.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(((Button) expressionRadioButton).getSelection()){
+				if(expressionRadioButton.getSelection()){
 					operationClassProperty.setExpression(true);
 					enableOpertaionFieldButton((Button)e.widget, false);
 				}else
@@ -264,12 +263,12 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			public void widgetDefaultSelected(SelectionEvent e) {/*Do-Nothing*/}
 		} );
 
-		((Button) expressionRadioButton).addControlListener(new ControlListener() {
+		expressionRadioButton.addControlListener(new ControlListener() {
 			
 			@Override
 			public void controlResized(ControlEvent e) {
-				Button exprRadioButton=(Button) expressionRadioButton;
-				enableOpertaionFieldButton(exprRadioButton,((Button) operationRadioButton).getSelection());
+				Button exprRadioButton=expressionRadioButton;
+				enableOpertaionFieldButton(exprRadioButton,operationRadioButton.getSelection());
 			}
 			
 			@Override

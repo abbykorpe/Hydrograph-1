@@ -286,7 +286,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 List<String> schemaFields = new LinkedList<>();
 		 if (schemaGridRowList2 != null) {
 			 for (GridRow gridRow : schemaGridRowList2) {
-				 GridRow fixedWidthGridRow = (GridRow) gridRow;
+				 GridRow fixedWidthGridRow = gridRow;
 				 if (fixedWidthGridRow != null) {
 					 schemaFields.add(fixedWidthGridRow.getFieldName());
 				 }
@@ -318,7 +318,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			propagateSchemaToNextComponenet(currentSchemaProperty, schemaGridRowListClone, schemaMap,
 					componentsOutputSchema);
 		} else if (!schemaGridRowList.isEmpty()) {
-			for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
+			for (GridRow gridRow : schemaGridRowList) {
 				if (gridRow != null) {
 					schemaGridRowListClone.add(gridRow.copy());
 				}
@@ -387,7 +387,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 
 		 if (!schemaGridRowList.isEmpty()) {
-			 for (GridRow gridRow : (List<GridRow>) schemaGridRowList) {
+			 for (GridRow gridRow : schemaGridRowList) {
 				 if (gridRow != null) {
 					 schemaGridRowListClone.add(gridRow.copy());
 					 componentsOutputSchema.addSchemaFields(gridRow);
@@ -862,11 +862,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 if (isAnyUpdateAvailableOnPropagatedSchema(schema)) {
 						 this.properties = getPropagatedSchema(fixedWidthGridRows);
 					 } else {
-						 MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
-								 SWT.ICON_INFORMATION);
-						 messageBox.setMessage(Messages.SCHEMA_IS_UPTO_DATE_MESSAGE);
-						 messageBox.setText(Messages.PULL_SCHEMA_MESSAGE_TITLE);
-						 messageBox.open();
+							showMessage();
 					 }
 				 } else {
 					 this.properties = getPropagatedSchema(fixedWidthGridRows);
@@ -896,6 +892,23 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 return true;
 	 }
 
+	 private boolean isAnyUpdateAvailableformPulledSchema(Schema schema) {
+		
+		 if (this.schemaGridRowList.size() == schema.getGridRow().size()) {
+			 List<GridRow> list=schema.getGridRow();
+			 Iterator <GridRow> itr=this.schemaGridRowList.iterator();
+			 Iterator <GridRow> itr1=list.iterator();
+			 while(itr.hasNext() && itr1.hasNext())
+			 {
+				 if (!SchemaPropagationHelper.INSTANCE.isGridRowEqual(itr.next(),itr1.next())){
+					 return true;
+				 }
+			 }
+			 return false;
+		 }
+
+		 return true;
+	 }
 	 /**
 	  * Adds the pull schema button
 	  */
@@ -919,11 +932,16 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 schemaGridRowList.clear();
 		 }
 		 tableViewer.refresh();
-		 syncInternallyPropagatedSchema();
-		 showHideErrorSymbol(applySchemaValidationRule());
-		 getComponent().setLatestChangesInSchema(true);
-		 enableDisableButtons(schemaGridRowList.size());
-		 propertyDialogButtonBar.enableApplyButton(true);
+		if (!isAnyUpdateAvailableformPulledSchema(getSchemaForInternalPropagation())) {
+			showMessage();
+		} else {
+			syncInternallyPropagatedSchema();
+			showHideErrorSymbol(applySchemaValidationRule());
+			getComponent().setLatestChangesInSchema(true);
+			enableDisableButtons(schemaGridRowList.size());
+
+			propertyDialogButtonBar.enableApplyButton(true);
+		}
 	 }
 
 	 // Adds the browse button
@@ -1030,7 +1048,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		private File getPath(){
 			 File schemaFile=null;
 			 String schemaPath =null;
-			 IEditorInput input = (IEditorInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
+			 IEditorInput input = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
 
 			 if(input instanceof IFileEditorInput){
 				 
@@ -1165,7 +1183,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 return;
 		 }
 		 GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
-		 gridRowLoader.exportXMLfromGridRows((ArrayList<GridRow>) schemaGridRowList);
+		 gridRowLoader.exportXMLfromGridRows(schemaGridRowList);
 	 }
 
 	 // Adds the Radio buttons
@@ -1661,7 +1679,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 {
 
 			 if (index > 0) {
-				 Collections.swap((List)schemaGridRowList,index ,index-1);
+				 Collections.swap(schemaGridRowList,index ,index-1);
 				 tableViewer.refresh();
 
 			 }
@@ -1694,7 +1712,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 for (int i = indexes.length - 1; i > -1; i--) {
 
 			 if (indexes[i] < schemaGridRowList.size() - 1) {
-				 Collections.swap((List)schemaGridRowList,indexes[i] ,indexes[i]+1);
+				 Collections.swap(schemaGridRowList,indexes[i] ,indexes[i]+1);
 				 tableViewer.refresh();
 
 			 }
@@ -1778,7 +1796,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	 private void syncInternallyPropagatedSchema() {
 		 Schema schema = getSchemaForInternalPropagation();
-		 if(getComponent().getCategory().equalsIgnoreCase(Constants.TRANSFORM_DISPLAYNAME)){
+		if (getComponent().getCategory().equalsIgnoreCase(Constants.TRANSFORM_DISPLAYNAME)) {
 			 List<GridRow> tempList = new ArrayList<>();
 			 schemaGridRowList =(List<GridRow>) tableViewer.getInput();
 			 tempList.addAll(propogateInternalSchemaForTransform(schemaGridRowList, schema.getGridRow()));
@@ -1800,6 +1818,13 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		 tableViewer.refresh();
 	 }
+
+	private void showMessage() {
+		 MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),SWT.ICON_INFORMATION);
+		 messageBox.setMessage(Messages.SCHEMA_IS_UPTO_DATE_MESSAGE);
+		 messageBox.setText(Messages.PULL_SCHEMA_MESSAGE_TITLE);
+		 messageBox.open();
+	}
 
 	 protected void attachListener() {
 		 if (extSchemaPathText != null) {
