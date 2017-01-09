@@ -32,3 +32,4 @@ Issues/Defects fixed:
 19.     [Rakesh Kanchalwar] - Updated gradle and pom files for oracle and mysql dependencies
 20.#528 [Vibhor Tyagi] - Scroll Lock button should be present in Execution Tracking console window
 21.#586 [Shashank karnik] -   Aggregate Component: Error under error log is not getting displayed correctly when invalid expression is provided.
+22.#594 [Shashank karnik] - Unique sequence component: Schema is not getting update.

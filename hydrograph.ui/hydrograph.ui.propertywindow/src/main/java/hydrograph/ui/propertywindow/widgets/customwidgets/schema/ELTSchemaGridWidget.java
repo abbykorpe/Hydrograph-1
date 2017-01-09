@@ -147,6 +147,7 @@ import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaRowValidation;
 import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SubjobUtility;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
@@ -769,26 +770,26 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	  * @param {@link Link}
 	  * @return {@link Schema}
 	  */
-	 private Schema getPropagatedSchema(ComponentsOutputSchema componentsOutputSchema) {
+	 private Schema getPropagatedSchema(List<FixedWidthGridRow> fixedWidthGridRows) {
 		 Schema schema = new Schema();
 		 schema.setExternalSchemaPath("");
 		 schema.setIsExternal(false);
 		 schema.setGridRow(new ArrayList<GridRow>());
-		 if (componentsOutputSchema != null) {
+		 if (fixedWidthGridRows != null) {
 			 if( this.getClass().isAssignableFrom(ELTMixedSchemeWidget.class))
-				 for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
-					 schema.getGridRow().add(componentsOutputSchema.convertFixedWidthSchemaToMixedSchemaGridRow(gridRow));
+				 for (FixedWidthGridRow gridRow : fixedWidthGridRows) {
+					 schema.getGridRow().add(SchemaPropagation.INSTANCE.convertFixedWidthSchemaToMixedSchemaGridRow(gridRow));
 				 }
 			 else if (this.getClass().isAssignableFrom(ELTFixedWidget.class)) {
-				 for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
+				 for (FixedWidthGridRow gridRow : fixedWidthGridRows) {
 					 schema.getGridRow().add(gridRow);
 				 }
 			 } else if (this.getClass().equals(ELTGenericSchemaGridWidget.class)) {
-				 for (FixedWidthGridRow gridRow : componentsOutputSchema.getFixedWidthGridRowsOutputFields()) {
-					 schema.getGridRow().add(componentsOutputSchema.convertFixedWidthSchemaToSchemaGridRow(gridRow));
+				 for (FixedWidthGridRow gridRow : fixedWidthGridRows) {
+					 schema.getGridRow().add(SchemaPropagation.INSTANCE.convertFixedWidthSchemaToSchemaGridRow(gridRow));
 				 }
 			 }
-			 applySchemaFromPropagatedSchemaOnPull(schema,componentsOutputSchema);
+			 applySchemaFromPropagatedSchemaOnPull(schema,fixedWidthGridRows);
 		 }
 		 if (schemaGridRowList != null)
 			 enableDisableButtons(schemaGridRowList.size());
@@ -796,7 +797,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 return schema;
 	 }
 
-	 private void applySchemaFromPropagatedSchemaOnPull(Schema schema, ComponentsOutputSchema componentsOutputSchema) {
+	 private void applySchemaFromPropagatedSchemaOnPull(Schema schema, List<FixedWidthGridRow> fixedWidthGridRows) {
 		 List<GridRow> copiedList=new ArrayList<>(schemaGridRowList);
 		 int returnCode =0;
 		 MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES| SWT.CANCEL |SWT.NO);
@@ -810,7 +811,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 Iterator <GridRow> itr1= schema.getGridRow().iterator();
 					 schemaGridRowList.removeAll(schemaGridRowList);
 					 while (itr.hasNext() && itr1.hasNext()){
-						 GridRow schemaGridRow = componentsOutputSchema.getSchemaGridRow(itr1.next());
+						 GridRow schemaGridRow = SchemaPropagation.INSTANCE.getSchemaGridRow(itr1.next(),fixedWidthGridRows);
 						 if (schemaGridRow == null){
 							 schemaGridRowList.remove(itr.next());
 						 }
@@ -849,13 +850,17 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 }
 
 	 private void schemaFromConnectedLinks() {
-		 ComponentsOutputSchema componentsOutputSchema = null;
+		 Schema schema=null;
 		 if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
 			 for (Link link : getComponent().getTargetConnections()) {
-				 componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
-				 if (this.properties != null && this.schemaGridRowList != null && !this.schemaGridRowList.isEmpty()) {
-					 if (isAnyUpdateAvailableOnPropagatedSchema(componentsOutputSchema)) {
-						 this.properties = getPropagatedSchema(componentsOutputSchema);
+				 schema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(getComponent(), link);
+				 if(schema!=null)
+				 {	 
+					List<FixedWidthGridRow> fixedWidthGridRows=
+							SchemaPropagation.INSTANCE.convertGridRowsSchemaToFixedSchemaGridRows(schema.getGridRow());
+					 if (this.properties != null && this.schemaGridRowList != null && !this.schemaGridRowList.isEmpty()) {
+					 if (isAnyUpdateAvailableOnPropagatedSchema(schema)) {
+						 this.properties = getPropagatedSchema(fixedWidthGridRows);
 					 } else {
 						 MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
 								 SWT.ICON_INFORMATION);
@@ -864,21 +869,22 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						 messageBox.open();
 					 }
 				 } else {
-					 this.properties = getPropagatedSchema(componentsOutputSchema);
+					 this.properties = getPropagatedSchema(fixedWidthGridRows);
+				 }
 				 }
 			 }
 	 }
 
-	 private boolean isAnyUpdateAvailableOnPropagatedSchema(ComponentsOutputSchema componentsOutputSchema) {
+	 private boolean isAnyUpdateAvailableOnPropagatedSchema(Schema schema) {
 		 GridRow propagatedGridRow = null;
-		 if (this.schemaGridRowList.size() == componentsOutputSchema.getFixedWidthGridRowsOutputFields().size()) {
-			 List<FixedWidthGridRow> list=componentsOutputSchema.getFixedWidthGridRowsOutputFields();
+		 if (this.schemaGridRowList.size() == schema.getGridRow().size()) {
+			 List<GridRow> list=schema.getGridRow();
 
 			 Iterator <GridRow> itr=this.schemaGridRowList.iterator();
-			 Iterator <FixedWidthGridRow> itr1=list.iterator();
+			 Iterator <GridRow> itr1=list.iterator();
 			 while(itr.hasNext() && itr1.hasNext())
 			 {
-				 propagatedGridRow = componentsOutputSchema.getSchemaGridRow(itr1.next());
+				 propagatedGridRow = itr1.next();
 				 if (propagatedGridRow == null || ( propagatedGridRow != null
 						 && !SchemaPropagationHelper.INSTANCE.isGridRowEqual(itr.next(), propagatedGridRow)) ){
 					 return true;

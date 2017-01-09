@@ -12,18 +12,16 @@
  ******************************************************************************/
 package hydrograph.ui.graph.schema.propagation;
 
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
-
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -38,7 +36,7 @@ public class SchemaData {
 	 * @return Map of input schema.
 	 */
 	public  Map<String, List<FixedWidthGridRow>> getInputSchema(Component component){
-		if(component!=null){
+	    if(component!=null){
 			Map<String, List<FixedWidthGridRow>>  inputSchemaMap =new TreeMap<>();
 			Map<String, Schema> previousSchemaMap=(TreeMap<String, Schema>)component.getProperties()
 					.get(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA);

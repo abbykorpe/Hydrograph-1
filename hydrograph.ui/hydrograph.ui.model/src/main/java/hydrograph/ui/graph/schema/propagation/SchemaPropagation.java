@@ -14,15 +14,6 @@
  
 package hydrograph.ui.graph.schema.propagation;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +21,16 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
@@ -370,5 +371,83 @@ public class SchemaPropagation {
 		}
 		return schemaGrid;
 	}
+	
+	/**
+	 * This method converts current fixed width object into schema grid.
+	 * 
+	 * @param fixedWidthGridRow
+	 * @return SchemaGrid
+	 */
+	public BasicSchemaGridRow convertFixedWidthSchemaToSchemaGridRow(FixedWidthGridRow fixedWidthGridRow) {
+		BasicSchemaGridRow schemaGrid = null;
+		if (fixedWidthGridRow != null) {
+			schemaGrid = new BasicSchemaGridRow();
+			schemaGrid.setDataType(fixedWidthGridRow.getDataType());
+			schemaGrid.setDataTypeValue(fixedWidthGridRow.getDataTypeValue());
+			schemaGrid.setDateFormat(fixedWidthGridRow.getDateFormat());
+			schemaGrid.setPrecision(fixedWidthGridRow.getPrecision());
+			schemaGrid.setFieldName(fixedWidthGridRow.getFieldName());
+			schemaGrid.setScale(fixedWidthGridRow.getScale());
+			schemaGrid.setScaleType(fixedWidthGridRow.getScaleType());
+			schemaGrid.setScaleTypeValue(fixedWidthGridRow.getScaleTypeValue());
+			schemaGrid.setDescription(fixedWidthGridRow.getDescription());
+		}
+		return schemaGrid;
+	}
+	
+	public MixedSchemeGridRow convertFixedWidthSchemaToMixedSchemaGridRow(
+			FixedWidthGridRow fixedWidthGridRow) {
+		MixedSchemeGridRow mixedSchemeGridRow=new MixedSchemeGridRow();
+		mixedSchemeGridRow.setDataType(fixedWidthGridRow.getDataType());
+		mixedSchemeGridRow.setDataTypeValue(fixedWidthGridRow.getDataTypeValue());
+		mixedSchemeGridRow.setDateFormat(fixedWidthGridRow.getDateFormat());
+		mixedSchemeGridRow.setDescription(fixedWidthGridRow.getDescription());
+		mixedSchemeGridRow.setFieldName(fixedWidthGridRow.getFieldName());
+		mixedSchemeGridRow.setLength(fixedWidthGridRow.getLength());
+		mixedSchemeGridRow.setPrecision(fixedWidthGridRow.getPrecision());
+		mixedSchemeGridRow.setScale(fixedWidthGridRow.getScale());
+		mixedSchemeGridRow.setScaleType(fixedWidthGridRow.getScaleType());
+		mixedSchemeGridRow.setScaleTypeValue(fixedWidthGridRow.getScaleTypeValue());
+		mixedSchemeGridRow.setDelimiter("");
+	return mixedSchemeGridRow;
+	}
+	
+	public List<GridRow> getSchemaGridOutputFields(GridRow gridRow,List<FixedWidthGridRow> fixedWidthGridRowsOutputFields) {
+		List<GridRow> schemaGrid = new ArrayList<>();
+		
+		if (gridRow instanceof MixedSchemeGridRow) {
+			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				schemaGrid.add(convertFixedWidthSchemaToMixedSchemaGridRow(fixedWidthGridRow));
+			}
+		} else if(gridRow instanceof FixedWidthGridRow){
+			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				schemaGrid.add(fixedWidthGridRow);
+			}
+		}else {
+			for (FixedWidthGridRow fixedWidthGridRow : fixedWidthGridRowsOutputFields) {
+				schemaGrid.add(convertFixedWidthSchemaToSchemaGridRow(fixedWidthGridRow));
+			}
+		}
+			
+		
+		return schemaGrid;
+	}
+    
+	/**
+	 * This methods returns schema-grid row of given field-name.
+	 * 
+	 * @param fieldName
+	 * @return
+	 */
+	public GridRow getSchemaGridRow(GridRow gridRow,List<FixedWidthGridRow> fixedWidthGridRowsOutputFields) {
+		GridRow schemaGridRow = null;
+		if (StringUtils.isNotEmpty(gridRow.getFieldName())) {
+		for (GridRow row : this.getSchemaGridOutputFields(gridRow,fixedWidthGridRowsOutputFields))
+			if (StringUtils.equals(gridRow.getFieldName(), row.getFieldName()))
+				schemaGridRow = row;
+		}
+		return schemaGridRow;
+	}
+
 	
 }

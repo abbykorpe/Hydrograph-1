@@ -13,19 +13,6 @@
 
 package hydrograph.ui.expression.editor.dialogs;
 
-import hydrograph.ui.datastructure.expression.ExpressionEditorData;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.color.manager.JavaLineStyler;
-import hydrograph.ui.expression.editor.composites.AvailableFieldsComposite;
-import hydrograph.ui.expression.editor.composites.CategoriesComposite;
-import hydrograph.ui.expression.editor.composites.DescriptionComposite;
-import hydrograph.ui.expression.editor.composites.ExpressionEditorComposite;
-import hydrograph.ui.expression.editor.composites.FunctionsComposite;
-import hydrograph.ui.expression.editor.repo.ClassRepo;
-import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -47,6 +34,24 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import hydrograph.ui.datastructure.expression.ExpressionEditorData;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.color.manager.JavaLineStyler;
+import hydrograph.ui.expression.editor.composites.AvailableFieldsComposite;
+import hydrograph.ui.expression.editor.composites.CategoriesComposite;
+import hydrograph.ui.expression.editor.composites.DescriptionComposite;
+import hydrograph.ui.expression.editor.composites.ExpressionEditorComposite;
+import hydrograph.ui.expression.editor.composites.FunctionsComposite;
+import hydrograph.ui.expression.editor.repo.ClassRepo;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
+
+/**
+ * @author Bitwise
+ *
+ *This class creates window for expression editor. 
+ */
 public class ExpressionEditorDialog extends Dialog {
 
 	public static final String FIELD_DATA_TYPE_MAP = "fieldMap";
