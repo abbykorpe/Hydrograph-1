@@ -1,7 +1,5 @@
 package hydrograph.engine.spark.components
 
-import java.io.File
-
 import hydrograph.engine.core.component.entity.InputFileParquetEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -40,21 +38,4 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
         LOG.error("Error in Input  File Parquet component '" + iFileParquetEntity.getComponentId + "', Error" + ex.getMessage, ex); throw ex
     }
   }
-
-  /*
-   * get the list of files in folder
-   * @param dir String
-   * @return List[] of files
-   */
-  def getListOfFiles(dir: String): List[File] = {
-    val d = new File(dir)
-    if (d.exists && d.isDirectory) {
-      d.listFiles.filter(_.isFile).toList
-    } else {
-      List[File]()
-    }
-  }
-
 }
-
-case class EmptyFolderException(message: String = "", cause: Throwable = null) extends Exception(message, cause)
