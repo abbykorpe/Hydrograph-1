@@ -30,7 +30,33 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link TypeBaseInSocket }
+=======
+     * Create an instance of {@link TypeUnknownComponent }
+     * 
+     */
+    public TypeUnknownComponent createTypeUnknownComponent() {
+        return new TypeUnknownComponent();
+    }
+
+    /**
+     * Create an instance of {@link KeyfieldDescriptionType }
+     * 
+     */
+
+
+    /**
+     * Create an instance of {@link KeyfieldDescriptionType.KeyFields }
+     * 
+     */
+    public KeyfieldDescriptionType.KeyFields createKeyfieldDescriptionTypeKeyFields() {
+        return new KeyfieldDescriptionType.KeyFields();
+    }
+
+    /**
+     * Create an instance of {@link TypeProperties }
+
      * 
      */
     public TypeBaseInSocket createTypeBaseInSocket() {
@@ -245,13 +271,7 @@ public class ObjectFactory {
         return new TypeBaseComponent();
     }
 
-    /**
-     * Create an instance of {@link KeyfieldDescriptionType.KeyFields }
-     * 
-     */
-    public KeyfieldDescriptionType.KeyFields createKeyfieldDescriptionTypeKeyFields() {
-        return new KeyfieldDescriptionType.KeyFields();
-    }
+
 
     /**
      * Create an instance of {@link TypeOperationField }
@@ -262,7 +282,19 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link ElementValueIntegerType }
+=======
+     * Create an instance of {@link TypeUnknownComponent.Properties }
+     * 
+     */
+    public TypeUnknownComponent.Properties createTypeUnknownComponentProperties() {
+        return new TypeUnknownComponent.Properties();
+    }
+
+    /**
+     * Create an instance of {@link KeyfieldDescriptionType.KeyFields.Field }
+>>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
      * 
      */
     public ElementValueIntegerType createElementValueIntegerType() {

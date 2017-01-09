@@ -17,6 +17,7 @@
            xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:imysql="hydrograph/engine/jaxb/imysql"
            xmlns:iredshift="hydrograph/engine/jaxb/iredshift"
            xmlns:ioracle="hydrograph/engine/jaxb/ioracle"
+		   xmlns:iteradata="hydrograph/engine/jaxb/iteradata"
            xmlns="hydrograph/engine/jaxb/inputtypes"
            targetNamespace="hydrograph/engine/jaxb/inputtypes" elementFormDefault="unqualified">
 	<xs:import schemaLocation="../common/common-types.xsd"
@@ -46,6 +47,8 @@
         namespace="hydrograph/engine/jaxb/iredshift" />
     <xs:import schemaLocation="./oracle-type/input-oracle-types.xsd"
         namespace="hydrograph/engine/jaxb/ioracle" />
+	<xs:import schemaLocation="./teradata-type/input-teradata-types.xsd"
+			   namespace="hydrograph/engine/jaxb/iteradata" />
 
 
 
@@ -396,5 +399,39 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+	<xs:complexType name="teradata">
+		<xs:complexContent>
+			<xs:extension base="iteradata:type-input-teradata-base">
+				<xs:sequence>
+					<xs:element name="databaseName" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="hostName" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="port" type="cmn:element-value-integer-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="jdbcDriver" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
 
+					<xs:choice maxOccurs="1" minOccurs="1">
+						<xs:element name="tableName" type="cmn:element-value-string-type"
+									minOccurs="0" maxOccurs="1" />
+						<xs:sequence minOccurs="1" maxOccurs="1">
+							<xs:element name="selectQuery" type="cmn:element-value-string-type"
+										minOccurs="0" maxOccurs="1" />
+							<xs:element name="countQuery" type="cmn:element-value-string-type"
+										minOccurs="0" maxOccurs="1" />
+						</xs:sequence>
+					</xs:choice>
+					<xs:element name="exportOptions" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="username" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="password" type="cmn:element-value-string-type"
+								minOccurs="1" maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+								minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 </xs:schema>

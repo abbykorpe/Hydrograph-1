@@ -48,7 +48,7 @@ public class RemoveDups
     extends TypeRemovedupsBase
 {
 
-    protected RemoveDups.Keep keep;
+    protected Keep keep;
     @XmlElement(required = true)
     protected TypePrimaryKeyFields primaryKeys;
     protected TypeSecondaryKeyFields secondaryKeys;
@@ -58,10 +58,10 @@ public class RemoveDups
      * 
      * @return
      *     possible object is
-     *     {@link RemoveDups.Keep }
+     *     {@link Keep }
      *     
      */
-    public RemoveDups.Keep getKeep() {
+    public Keep getKeep() {
         return keep;
     }
 
@@ -70,10 +70,10 @@ public class RemoveDups
      * 
      * @param value
      *     allowed object is
-     *     {@link RemoveDups.Keep }
+     *     {@link Keep }
      *     
      */
-    public void setKeep(RemoveDups.Keep value) {
+    public void setKeep(Keep value) {
         this.keep = value;
     }
 

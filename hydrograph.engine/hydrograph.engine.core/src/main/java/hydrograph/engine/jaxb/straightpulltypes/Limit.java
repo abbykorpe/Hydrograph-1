@@ -42,17 +42,17 @@ public class Limit
 {
 
     @XmlElement(required = true)
-    protected Limit.MaxRecords maxRecords;
+    protected MaxRecords maxRecords;
 
     /**
      * Gets the value of the maxRecords property.
      * 
      * @return
      *     possible object is
-     *     {@link Limit.MaxRecords }
+     *     {@link MaxRecords }
      *     
      */
-    public Limit.MaxRecords getMaxRecords() {
+    public MaxRecords getMaxRecords() {
         return maxRecords;
     }
 
@@ -61,10 +61,10 @@ public class Limit
      * 
      * @param value
      *     allowed object is
-     *     {@link Limit.MaxRecords }
+     *     {@link MaxRecords }
      *     
      */
-    public void setMaxRecords(Limit.MaxRecords value) {
+    public void setMaxRecords(MaxRecords value) {
         this.maxRecords = value;
     }
 

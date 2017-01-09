@@ -50,17 +50,17 @@ import java.util.List;
 public class KeyfieldDescriptionType {
 
     @XmlElement(required = true)
-    protected KeyfieldDescriptionType.KeyFields keyFields;
+    protected KeyFields keyFields;
 
     /**
      * Gets the value of the keyFields property.
      * 
      * @return
      *     possible object is
-     *     {@link KeyfieldDescriptionType.KeyFields }
+     *     {@link KeyFields }
      *     
      */
-    public KeyfieldDescriptionType.KeyFields getKeyFields() {
+    public KeyFields getKeyFields() {
         return keyFields;
     }
 
@@ -69,10 +69,10 @@ public class KeyfieldDescriptionType {
      * 
      * @param value
      *     allowed object is
-     *     {@link KeyfieldDescriptionType.KeyFields }
+     *     {@link KeyFields }
      *     
      */
-    public void setKeyFields(KeyfieldDescriptionType.KeyFields value) {
+    public void setKeyFields(KeyFields value) {
         this.keyFields = value;
     }
 
@@ -111,7 +111,7 @@ public class KeyfieldDescriptionType {
     public static class KeyFields {
 
         @XmlElement(required = true)
-        protected List<KeyfieldDescriptionType.KeyFields.Field> field;
+        protected List<Field> field;
 
         /**
          * Gets the value of the field property.
@@ -131,13 +131,13 @@ public class KeyfieldDescriptionType {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link KeyfieldDescriptionType.KeyFields.Field }
+         * {@link Field }
          * 
          * 
          */
-        public List<KeyfieldDescriptionType.KeyFields.Field> getField() {
+        public List<Field> getField() {
             if (field == null) {
-                field = new ArrayList<KeyfieldDescriptionType.KeyFields.Field>();
+                field = new ArrayList<Field>();
             }
             return this.field;
         }

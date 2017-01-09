@@ -42,17 +42,17 @@ public class PartitionByExpression
 {
 
     @XmlElement(required = true)
-    protected PartitionByExpression.NoOfPartitions noOfPartitions;
+    protected NoOfPartitions noOfPartitions;
 
     /**
      * Gets the value of the noOfPartitions property.
      * 
      * @return
      *     possible object is
-     *     {@link PartitionByExpression.NoOfPartitions }
+     *     {@link NoOfPartitions }
      *     
      */
-    public PartitionByExpression.NoOfPartitions getNoOfPartitions() {
+    public NoOfPartitions getNoOfPartitions() {
         return noOfPartitions;
     }
 
@@ -61,10 +61,10 @@ public class PartitionByExpression
      * 
      * @param value
      *     allowed object is
-     *     {@link PartitionByExpression.NoOfPartitions }
+     *     {@link NoOfPartitions }
      *     
      */
-    public void setNoOfPartitions(PartitionByExpression.NoOfPartitions value) {
+    public void setNoOfPartitions(NoOfPartitions value) {
         this.noOfPartitions = value;
     }
 

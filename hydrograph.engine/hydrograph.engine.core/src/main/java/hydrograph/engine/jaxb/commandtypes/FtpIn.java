@@ -42,17 +42,17 @@ public class FtpIn
 {
 
     @XmlElement(required = true)
-    protected FtpIn.Host host;
+    protected Host host;
 
     /**
      * Gets the value of the host property.
      * 
      * @return
      *     possible object is
-     *     {@link FtpIn.Host }
+     *     {@link Host }
      *     
      */
-    public FtpIn.Host getHost() {
+    public Host getHost() {
         return host;
     }
 
@@ -61,10 +61,10 @@ public class FtpIn
      * 
      * @param value
      *     allowed object is
-     *     {@link FtpIn.Host }
+     *     {@link Host }
      *     
      */
-    public void setHost(FtpIn.Host value) {
+    public void setHost(Host value) {
         this.host = value;
     }
 

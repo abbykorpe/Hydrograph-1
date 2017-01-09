@@ -43,8 +43,16 @@ public class InputRDBMSEntity extends InputOutputEntityBase {
     private String sid;
     private String driverType;
     private String schemaName;
+	private String _interface;
+	public String get_interface() {
+		return _interface;
+	}
 
-    /**
+	public void set_interface(String _interface) {
+		this._interface = _interface;
+	}
+
+	/**
      * @return schemaName - of type String
      */
     public String getSchemaName() {

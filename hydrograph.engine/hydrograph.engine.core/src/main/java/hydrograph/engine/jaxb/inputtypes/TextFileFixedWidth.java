@@ -61,10 +61,10 @@ public class TextFileFixedWidth
 {
 
     @XmlElement(required = true)
-    protected TextFileFixedWidth.Path path;
+    protected Path path;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
-    protected TextFileFixedWidth.Charset charset;
+    protected Charset charset;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -72,10 +72,10 @@ public class TextFileFixedWidth
      * 
      * @return
      *     possible object is
-     *     {@link TextFileFixedWidth.Path }
+     *     {@link Path }
      *     
      */
-    public TextFileFixedWidth.Path getPath() {
+    public Path getPath() {
         return path;
     }
 
@@ -84,10 +84,10 @@ public class TextFileFixedWidth
      * 
      * @param value
      *     allowed object is
-     *     {@link TextFileFixedWidth.Path }
+     *     {@link Path }
      *     
      */
-    public void setPath(TextFileFixedWidth.Path value) {
+    public void setPath(Path value) {
         this.path = value;
     }
 
@@ -144,10 +144,10 @@ public class TextFileFixedWidth
      * 
      * @return
      *     possible object is
-     *     {@link TextFileFixedWidth.Charset }
+     *     {@link Charset }
      *     
      */
-    public TextFileFixedWidth.Charset getCharset() {
+    public Charset getCharset() {
         return charset;
     }
 
@@ -156,10 +156,10 @@ public class TextFileFixedWidth
      * 
      * @param value
      *     allowed object is
-     *     {@link TextFileFixedWidth.Charset }
+     *     {@link Charset }
      *     
      */
-    public void setCharset(TextFileFixedWidth.Charset value) {
+    public void setCharset(Charset value) {
         this.charset = value;
     }
 

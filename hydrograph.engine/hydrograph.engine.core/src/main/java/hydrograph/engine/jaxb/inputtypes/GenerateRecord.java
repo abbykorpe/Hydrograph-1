@@ -46,7 +46,7 @@ public class GenerateRecord
 
     protected TypeProperties runtimeProperties;
     @XmlElement(required = true)
-    protected GenerateRecord.RecordCount recordCount;
+    protected RecordCount recordCount;
 
     /**
      * Gets the value of the runtimeProperties property.
@@ -77,10 +77,10 @@ public class GenerateRecord
      * 
      * @return
      *     possible object is
-     *     {@link GenerateRecord.RecordCount }
+     *     {@link RecordCount }
      *     
      */
-    public GenerateRecord.RecordCount getRecordCount() {
+    public RecordCount getRecordCount() {
         return recordCount;
     }
 
@@ -89,10 +89,10 @@ public class GenerateRecord
      * 
      * @param value
      *     allowed object is
-     *     {@link GenerateRecord.RecordCount }
+     *     {@link RecordCount }
      *     
      */
-    public void setRecordCount(GenerateRecord.RecordCount value) {
+    public void setRecordCount(RecordCount value) {
         this.recordCount = value;
     }
 

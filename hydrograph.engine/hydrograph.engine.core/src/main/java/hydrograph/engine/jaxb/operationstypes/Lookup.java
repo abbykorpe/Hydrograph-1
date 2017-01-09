@@ -50,7 +50,7 @@ public class Lookup
     @XmlElement(required = true)
     protected List<TypeKeyFields> keys;
     @XmlElement(required = true)
-    protected Lookup.Match match;
+    protected Match match;
 
     /**
      * Gets the value of the keys property.
@@ -86,10 +86,10 @@ public class Lookup
      * 
      * @return
      *     possible object is
-     *     {@link Lookup.Match }
+     *     {@link Match }
      *     
      */
-    public Lookup.Match getMatch() {
+    public Match getMatch() {
         return match;
     }
 
@@ -98,10 +98,10 @@ public class Lookup
      * 
      * @param value
      *     allowed object is
-     *     {@link Lookup.Match }
+     *     {@link Match }
      *     
      */
-    public void setMatch(Lookup.Match value) {
+    public void setMatch(Match value) {
         this.match = value;
     }
 
