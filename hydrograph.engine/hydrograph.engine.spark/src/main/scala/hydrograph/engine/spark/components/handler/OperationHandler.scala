@@ -5,6 +5,7 @@ import java.util.{ArrayList, Properties}
 import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.{AggregateForExpression, CumulateForExpression, NormalizeForExpression, TransformForExpression}
+import hydrograph.engine.expression.utils.ExpressionWrapper
 import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
 import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, CumulateTransformBase, NormalizeTransformBase, ReusableRow, TransformBase}
 
@@ -124,10 +125,9 @@ trait AggregateOperation{
 
         val aggregateBase: AggregateTransformBase = (x,y) match {
           case (_,_) if(x.getOperationClass == null) => {
+            val expressionWrapper=new ExpressionWrapper(y.asInstanceOf[ValidationAPI],z);
             var aggregate = new AggregateForExpression
-              aggregate.setValidationAPI(convertToListOfValidation(y :: ys))
-              aggregate.setCounter(counter)
-              aggregate.setInitialValueExpression((z::zs).toArray)
+              aggregate.setValidationAPI(expressionWrapper)
               aggregate.callPrepare
             aggregate
           }

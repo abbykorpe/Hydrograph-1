@@ -27,6 +27,7 @@ public class RegexSplitTransform implements TransformBase {
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields,
 			ArrayList<String> outputFields) {
+		System.out.println("--------->prepare<------------------");
 		if ( props != null ){
 			String regex = props.getProperty("regex");
 			if (regex == null) {
@@ -45,6 +46,7 @@ public class RegexSplitTransform implements TransformBase {
 
 	@Override
 	public void transform(ReusableRow inputRow, ReusableRow outputRow) {
+		System.out.println("--------->transform<------------------");
 		outputRow.reset();
 		String[] splits = regexSplitter.split(inputRow.getString(0));
 		if (splits == null) {
@@ -63,6 +65,7 @@ public class RegexSplitTransform implements TransformBase {
 
 	@Override
 	public void cleanup() {
+		System.out.println("--------->cleanup<------------------");
 		regexSplitter = null;
 
 	}

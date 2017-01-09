@@ -76,7 +76,7 @@ public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 		}
 
 		aggregateEntity.setOutSocketList(OperationEntityUtils.extractOutSocketList(jaxbAggregate.getOutSocket()));
-
+aggregateEntity.setInSocketList(OperationEntityUtils.extractInSocketList(jaxbAggregate.getInSocket()));
 		aggregateEntity.setKeyFields(OperationEntityUtils.extractKeyFields(jaxbAggregate.getPrimaryKeys()));
 		aggregateEntity.setSecondaryKeyFields(
 				OperationEntityUtils.extractSecondaryKeyFields(jaxbAggregate.getSecondaryKeys()));

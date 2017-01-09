@@ -158,7 +158,7 @@ public class OperationHandler implements Serializable {
 				if (passthroughFields.getName().equals("*"))
 					return schemaFields.get(inSocket.getFromComponentId() + "_" + inSocket.getFromSocketId());
 				else {
-					passThroughFieldsList.add(getSchemaField(
+					passThroughFieldsList.addAll(getSchemaFieldForPassThrough(
 							schemaFields.get(inSocket.getFromComponentId() + "_" + inSocket.getFromSocketId()),
 							passthroughFields.getName()));
 					return passThroughFieldsList;
@@ -167,6 +167,16 @@ public class OperationHandler implements Serializable {
 			}
 		}
 		throw new RuntimeException("wrong insocket id in passthrough fields");
+	}
+
+	private Set<SchemaField> getSchemaFieldForPassThrough(Set<SchemaField> schemaFieldList, String fieldName) {
+		Set<SchemaField> passThroughFieldsList = new LinkedHashSet<SchemaField>();
+		for (SchemaField schemaField : schemaFieldList) {
+			if (schemaField.getFieldName().matches(fieldName)) {
+				passThroughFieldsList.add(schemaField.clone());
+			}
+		}
+		return passThroughFieldsList;
 	}
 
 	private SchemaField getSchemaField(Set<SchemaField> schemaFieldList, String fieldName) {

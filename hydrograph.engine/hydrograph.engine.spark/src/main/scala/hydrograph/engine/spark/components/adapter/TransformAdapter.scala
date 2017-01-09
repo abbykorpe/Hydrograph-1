@@ -19,14 +19,14 @@ import hydrograph.engine.spark.components.ToBeTransformComponent
 class TransformAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase {
 
   var transform: TransformEntityGenerator = null;
-  var sparkTransformComponent: TransformComponent = null;
+  var sparkTransformComponent: UpdatedTransformComponent = null;
 
   override def createGenerator(): Unit = {
     transform = new TransformEntityGenerator(typeBaseComponent)
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    sparkTransformComponent = new TransformComponent(transform.getEntity, baseComponentParams)
+    sparkTransformComponent = new UpdatedTransformComponent(transform.getEntity, baseComponentParams)
   }
 
   override def getComponent(): OperationComponentBase = sparkTransformComponent

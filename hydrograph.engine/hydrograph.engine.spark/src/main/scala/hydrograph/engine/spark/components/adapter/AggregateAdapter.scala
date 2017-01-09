@@ -2,7 +2,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.AggregateEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.AggregateComponent
+import hydrograph.engine.spark.components.{UpdatedAggregateComponent, AggregateComponent}
 import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -13,14 +13,14 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 class AggregateAdapter(typeBaseComponent: TypeBaseComponent) extends OperationAdatperBase{
 
   var aggregate:AggregateEntityGenerator=null;
-var sparkAggregateComponent:AggregateComponent=null;
+var sparkAggregateComponent:UpdatedAggregateComponent=null;
 
   override def createGenerator(): Unit = {
     aggregate=  new AggregateEntityGenerator(typeBaseComponent)
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    sparkAggregateComponent= new AggregateComponent(aggregate.getEntity,baseComponentParams)
+    sparkAggregateComponent= new UpdatedAggregateComponent(aggregate.getEntity,baseComponentParams)
   }
 
   override def getComponent(): OperationComponentBase = sparkAggregateComponent
