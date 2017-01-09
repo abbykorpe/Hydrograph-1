@@ -41,6 +41,13 @@ import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
+/**
+ * @author Bitwise
+ * 
+ * This class creates available fields section
+ * in expression editor.
+ *
+ */
 public class AvailableFieldsComposite extends Composite {
 	private Table table;
 	private TableColumn availableFieldsNameColumn ;
@@ -159,10 +166,15 @@ public class AvailableFieldsComposite extends Composite {
 	
 	@Override
 	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
+		
 	}
 
-	public void setExpressionEditor(StyledText expressionEditorTextBox) {
-		this.expressionEditor=expressionEditorTextBox;
+	/**
+	 * @param expressionEditor the expressionEditor to set
+	 */
+	public void setExpressionEditor(StyledText expressionEditor) {
+		this.expressionEditor = expressionEditor;
 	}
+
+	
 }
