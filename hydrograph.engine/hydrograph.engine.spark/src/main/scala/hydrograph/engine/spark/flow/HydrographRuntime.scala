@@ -12,7 +12,7 @@ import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
-
+import org.apache.spark.SparkConf
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
@@ -44,10 +44,12 @@ class HydrographRuntime extends HydrographRuntimeService {
   override def initialize(properties: Properties, args: Array[String], hydrographJob: HydrographJob,
                           jobId: String, udfPath: String): Unit = {
 
+    val configProperties = getSparkProperties(hydrographJob)
+
     val sparkSessionBuilder: SparkSession.Builder = SparkSession.builder()
       .master(properties.getProperty("hydrograph.spark.master"))
       .appName(hydrographJob.getJAXBObject.getName)
-      .config("spark.sql.shuffle.partitions", properties.getProperty("hydrograph.spark.partitions"))
+      .config(configProperties)
 
 
 
@@ -153,6 +155,18 @@ class HydrographRuntime extends HydrographRuntimeService {
     clazz(0).setAccessible(true)
     clazz(0).newInstance().asInstanceOf[T]
   }
+
+  def getSparkProperties(hydrographJob: HydrographJob): SparkConf = {
+    val configProperties = new SparkConf()
+    val runttimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties
+    if (runttimeProperties != null) {
+      for (runtimeProperty <- runttimeProperties.getProperty.asScala) {
+        configProperties.set(runtimeProperty.getName, runtimeProperty.getValue)
+      }
+    }
+    configProperties
+  }
+
 
   //  def getExecutionTrackingClass(executionTrackingKey: String): String = {
   //    var properties: OrderedProperties = new OrderedProperties
