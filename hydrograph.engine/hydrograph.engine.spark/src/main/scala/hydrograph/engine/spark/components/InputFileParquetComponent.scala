@@ -4,10 +4,7 @@ import hydrograph.engine.core.component.entity.InputFileParquetEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaUtils}
-import hydrograph.engine.spark.components.utils.ParquetMetadataReader
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.types.{StructField, StructType}
-
 import scala.collection.JavaConverters._
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -17,19 +14,18 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
 
   override def finalize(): Unit = super.finalize()
 
-
   override def createComponent(): Map[String, DataFrame] = {
     val schemaField = SchemaCreator(iFileParquetEntity).makeSchema()
     try {
 
+      val path: String = iFileParquetEntity.getPath
+
       val fieldList = iFileParquetEntity.getFieldsList.asScala
       fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + iFileParquetEntity.getComponentId) }
 
-      val schemaFromMetadata: StructType = new ParquetMetadataReader().getParquetFileSchema(iFileParquetEntity.getPath, iComponentsParams.getSparkSession())
+      val df = iComponentsParams.getSparkSession().read.parquet(path)
+      SchemaUtils().compareSchema(schemaField, df.schema)
 
-      SchemaUtils().compareSchema(schemaField, schemaFromMetadata)
-
-      val df = iComponentsParams.getSparkSession().read.schema(schemaField).parquet(iFileParquetEntity.getPath)
       val key = iFileParquetEntity.getOutSocketList.get(0).getSocketId
 
       LOG.debug("Created Input File Parquet Component '" + iFileParquetEntity.getComponentId + "' in Batch" + iFileParquetEntity.getBatch
