@@ -47,7 +47,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="jdbcDriver" value="Connector/J" renderer="JDBC_DRIVER_WIDGET" type="USER"
+		<tns:property dataType="string" name="jdbcDriver" value="TeraJDBC4" renderer="JDBC_DRIVER_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="JDBC Driver use to connect with Teradata Database.">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
