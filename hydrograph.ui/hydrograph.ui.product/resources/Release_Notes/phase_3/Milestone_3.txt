@@ -4,7 +4,8 @@ Features Added:
 1.<23-Dec-16> - [Vibhor Tyagi] - Created Mysql Component
 2.<27-Dec-16> - [Vibhor Tyagi] - Created RunProgram Component
 3.<20-Dec-16> - [Ashika Holkar] - Created Oracle Component
-4.<06-Jan-16> - [Rakesh Kanchalwar] - Teradata Input and Output Component
+4.<06-Jan-16> - [Rakesh Kanchalwar] - Teradata Input and Output Component5. 
+5.<10-Jan-16> - [Rakesh Kanchalwar] - Restart button under File Menu option
 
 =====================================================================================================
 Issues/Defects fixed:

@@ -27,6 +27,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -233,6 +236,14 @@ public class RunConfigDialog extends Dialog {
 		txtPassword = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.PASSWORD | SWT.BORDER);
 		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtPassword.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
+		
+		ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
+		ISecurePreferences node = preferences.node(Constants.USER_CREDENTIALS);
+		try {
+			txtPassword.setText(node.get(Constants.PASSWORD, ""));
+		} catch (StorageException e) {
+			//Do nothing
+		}
 		EmptyTextListener textPasswordListener = new EmptyTextListener("Password");
 		txtPassword.addModifyListener(textPasswordListener);
 
@@ -571,6 +582,16 @@ public class RunConfigDialog extends Dialog {
 		this.host = txtEdgeNode.getText();
 		this.basePath = txtBasePath.getText();
 		this.isDebug = viewDataCheckBox.getSelection();
+		
+		 try {
+		        if(StringUtils.isNotBlank(password)){
+		        	ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
+		        	ISecurePreferences node = preferences.node(Constants.USER_CREDENTIALS);
+					node.put(Constants.PASSWORD, password, true);
+		        }
+	        } catch (StorageException e) {
+	        	//logger.info("Failed to retrive the encrypted password");
+	        }
 		try {
 			checkBuildProperties(btnRemoteMode.getSelection());
 			this.runGraph = true;

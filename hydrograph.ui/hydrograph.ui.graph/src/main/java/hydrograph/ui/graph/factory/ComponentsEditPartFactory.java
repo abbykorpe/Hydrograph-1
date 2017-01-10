@@ -68,7 +68,7 @@ public class ComponentsEditPartFactory implements EditPartFactory{
 			throw new RuntimeException("Can't create edit part for model element: "	+ 
 						((model != null) ? model.getClass().getName() : "null"));
 		}
-		logger.debug("Created edit part for : {}", model.getClass().getName()); 
+		logger.trace("Created edit part for : {}", model.getClass().getName()); 
 		// store model element in EditPart
 		part.setModel(model);
 		return part;

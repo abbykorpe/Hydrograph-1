@@ -407,7 +407,7 @@
             <separator
                   name="hydrograph.ui.graph.separator3"
                   visible="true">
-            </separator>
+            </separator>            <command                  commandId="org.eclipse.ui.file.restartWorkbench"                  label="Restart"                  style="push">            </command>            <separator                  name="hydrograph.ui.graph.separator4">            </separator>
             <command
                   commandId="org.eclipse.ui.file.import"
                   label="Import"
@@ -421,7 +421,7 @@
                   mnemonic ="o">
             </command>
             <separator
-                  name="hydrograph.ui.graph.separator4"
+                  name="hydrograph.ui.graph.separator5"
                   visible="true">
             </separator>
             <command
