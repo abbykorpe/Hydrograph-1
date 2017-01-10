@@ -86,7 +86,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
 
         if (getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
-          var executionTrackingListener = classLoader(getExecutionTrackingClass(EXECUTION_TRACKING)).asInstanceOf[ExecutionTrackingListener]
+          /*var */executionTrackingListener = classLoader(getExecutionTrackingClass(EXECUTION_TRACKING)).asInstanceOf[ExecutionTrackingListener]
           val trackingInstance = Class.forName(getExecutionTrackingClass(EXECUTION_TRACKING)).newInstance()
           executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
           executionTrackingListener.addListener(runtimeContext)
