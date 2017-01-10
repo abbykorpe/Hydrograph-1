@@ -9,12 +9,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Widget;
 
-import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 
 public class VerifyTeraDataFastLoadOption implements IELTListener{
 
 	private static final String INFORMATION = "Information";
+	private static final String FAST_LOAD = "Fast Load";
 	
 	@Override
 	public int getListenerType() {
@@ -29,11 +30,11 @@ public class VerifyTeraDataFastLoadOption implements IELTListener{
 		Listener listener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				if (StringUtils.equalsIgnoreCase(((Button) widgetList[0]).getText(), String.valueOf("Fast Load")) && ((Button) widgetList[0]).getSelection() ) {
+				if (StringUtils.equalsIgnoreCase(((Button) widgetList[0]).getText(), String.valueOf(FAST_LOAD)) && ((Button) widgetList[0]).getSelection() ) {
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
 							SWT.ICON_INFORMATION | SWT.OK);
 					messageBox.setText(INFORMATION);
-					messageBox.setMessage("This option works only on empty target tables.");
+					messageBox.setMessage(Messages.FAST_LOAD_ERROR_MESSAGE);
 					messageBox.open();
 				}
 			}

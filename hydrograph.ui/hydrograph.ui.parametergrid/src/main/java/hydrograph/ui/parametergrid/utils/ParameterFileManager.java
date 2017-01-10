@@ -36,6 +36,8 @@ import hydrograph.ui.logging.factory.LogFactory;
 public class ParameterFileManager {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterFileManager.class);
+	private static final char  ESCAPE_CHAR='\\';
+	private static final char  BACKWARD_SLASH='/';
 	
 	private ParameterFileManager(){}
 	
@@ -95,8 +97,8 @@ public class ParameterFileManager {
 	private Map<String, String> updatePropertyMap(Map<String, String> parameterMap){
 		Map<String,String> map=new  LinkedHashMap<>(parameterMap);
 		for(Entry<String, String> entry:parameterMap.entrySet()){
-			if(StringUtils.contains(entry.getValue(), '\\')){
-				map.put(entry.getKey(), StringUtils.replaceChars(entry.getValue(), '\\', '/'));
+			if(StringUtils.contains(entry.getValue(), ESCAPE_CHAR)){
+				map.put(entry.getKey(), StringUtils.replaceChars(entry.getValue(),ESCAPE_CHAR, BACKWARD_SLASH));
 			}
 		}
 		return map;

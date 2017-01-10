@@ -53,7 +53,6 @@ public class RadioButtonsWidget extends AbstractWidget {
 
 	private final String propertyName;
 	private final LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private Object properties;
 	private String[] buttonText;
 	private Button[] buttons;
 	private MatchValueProperty matchValue;
