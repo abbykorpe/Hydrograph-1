@@ -1,5 +1,7 @@
 package hydrograph.engine.spark.datasource.fixedwidth
 
+import java.text.SimpleDateFormat
+
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.sources.{BaseRelation, TableScan}
@@ -8,7 +10,7 @@ import org.apache.spark.sql.{Row, SQLContext}
 import org.slf4j.{Logger, LoggerFactory}
 
 class FixedWidthRelation(path: String, charset: String, fieldslength: String,
-                         strict:Boolean, safe:Boolean, dateFormats:Array[String], userSchema: StructType)
+                         strict:Boolean, safe:Boolean, dateFormats: List[SimpleDateFormat], userSchema: StructType)
                         (@transient val sqlContext: SQLContext)
   extends BaseRelation with TableScan with Serializable {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[FixedWidthRelation])
@@ -41,7 +43,7 @@ class FixedWidthRelation(path: String, charset: String, fieldslength: String,
           case x :: xs =>
             try {
               val fieldValue =
-                TypeCast.castingInputData(row.substring(acc, acc + x), schemafields(counter).dataType,
+                TypeCast.inputValue(row.substring(acc, acc + x), schemafields(counter).dataType,
                   schemafields(counter).nullable, "", true, dateFormats(counter))
 
               List(fieldValue) ++ getValue(xs, acc + x,counter+1)

@@ -12,8 +12,8 @@ import scala.collection.JavaConverters._
 /**
   * Created by arshadalis on 12/13/2016.
   */
-class HiveInputComponent(entity: HiveEntityBase, parameters: BaseComponentParams) extends InputComponentBase {
-  val LOG = LoggerFactory.getLogger(classOf[HiveInputComponent])
+class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams) extends InputComponentBase {
+  val LOG = LoggerFactory.getLogger(classOf[InputHiveComponent])
   override def createComponent(): Map[String, DataFrame] = {
     LOG.trace("In method createComponent()")
     val sparkSession = parameters.getSparkSession()

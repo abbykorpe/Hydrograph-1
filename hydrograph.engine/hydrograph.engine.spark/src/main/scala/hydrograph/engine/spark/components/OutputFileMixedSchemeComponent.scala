@@ -7,6 +7,7 @@ import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.constants.Constants
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.utils.SchemaCreator
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{AnalysisException, Column, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
@@ -36,41 +37,44 @@ BaseComponentParams) extends SparkFlow with Serializable {
     extract(getFieldsList.asScala.toList,List[String]()).mkString(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR)
   }
 
+/*
   def createSchema(fields:util.List[SchemaField]): Array[Column] ={
     LOG.trace("In method createSchema()")
     val schema=new Array[Column](fields.size())
     fields.zipWithIndex.foreach{ case(f,i)=> schema(i)=col(f.getFieldName)}
-    LOG.debug("Schema created for Output File Delimited Component : " + schema.mkString )
+    LOG.debug("Schema created for Output File MixedScheme Component : " + schema.mkString )
     schema
   }
+*/
 
   override def execute() = {
     LOG.trace("In method execute()")
-   val dateFormats=getDateFormats()
+   val schemaCreator = SchemaCreator(outputFileMixedSchemeEntity)
+//   val dateFormats=schemaCreator.getDateFormats()
    try {
-     cp.getDataFrame().select(createSchema(outputFileMixedSchemeEntity.getFieldsList): _*).write
+     cp.getDataFrame().select(schemaCreator.createSchema(): _*).write
        .option("quote", outputFileMixedSchemeEntity.getQuote)
        .option("charset", outputFileMixedSchemeEntity.getCharset)
        .option("safe", outputFileMixedSchemeEntity.getSafe)
        .option("strict", outputFileMixedSchemeEntity.getStrict)
-       .option("dateFormats", dateFormats)
+       .option("dateFormats", schemaCreator.getDateFormats())
        .option("filler", ' ')
        .option("lengthsAndDelimiters", extractLengthsAndDelimiters(outputFileMixedSchemeEntity.getFieldsList))
        .option("lengthsAndDelimitersType", extractLengthsAndDelimitersType(outputFileMixedSchemeEntity.getFieldsList))
-       .mode(SaveMode.Overwrite)
+       .mode( if (outputFileMixedSchemeEntity.isOverWrite) SaveMode.Overwrite else SaveMode.ErrorIfExists )
        .format("hydrograph.engine.spark.datasource.mixedScheme")
        .save(outputFileMixedSchemeEntity.getPath)
    } catch {
      case e: AnalysisException if (e.getMessage().matches("(.*)cannot resolve(.*)given input columns(.*)"))=>
-       LOG.error("Error in Output File Delimited Component "+ outputFileMixedSchemeEntity.getComponentId, e)
-       throw new RuntimeException("Error in Output File Delimited Component "
+       LOG.error("Error in Output File MixedScheme Component "+ outputFileMixedSchemeEntity.getComponentId, e)
+       throw new RuntimeException("Error in Output File MixedScheme Component "
          + outputFileMixedSchemeEntity.getComponentId, e )
      case e:Exception =>
-       LOG.error("Error in Output File Delimited Component "+ outputFileMixedSchemeEntity.getComponentId, e)
-       throw new RuntimeException("Error in Output File Delimited Component "
+       LOG.error("Error in Output File MixedScheme Component "+ outputFileMixedSchemeEntity.getComponentId, e)
+       throw new RuntimeException("Error in Output File MixedScheme Component "
          + outputFileMixedSchemeEntity.getComponentId, e)
    }
-    LOG.info("Created Output File Delimited Component "+ outputFileMixedSchemeEntity.getComponentId
+    LOG.info("Created Output File MixedScheme Component "+ outputFileMixedSchemeEntity.getComponentId
       + " in Batch "+ outputFileMixedSchemeEntity.getBatch +" with path " + outputFileMixedSchemeEntity.getPath)
     LOG.debug("Component Id: '"+ outputFileMixedSchemeEntity.getComponentId
       +"' in Batch: " + outputFileMixedSchemeEntity.getBatch
@@ -80,7 +84,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
       + " at Path: " + outputFileMixedSchemeEntity.getPath)
   }
 
-  def getDateFormats(): String = {
+  /*def getDateFormats(): String = {
       LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")
       var dateFormats: String = ""
       for (i <- 0 until outputFileMixedSchemeEntity.getFieldsList.size()) {
@@ -89,5 +93,5 @@ BaseComponentParams) extends SparkFlow with Serializable {
       LOG.debug("Date Formats for Date fields : " + dateFormats)
       dateFormats
   }
-
+*/
 }

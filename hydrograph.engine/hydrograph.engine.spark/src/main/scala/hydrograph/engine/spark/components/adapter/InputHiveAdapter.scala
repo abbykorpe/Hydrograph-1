@@ -5,17 +5,15 @@ import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBa
 import hydrograph.engine.core.component.generator.{InputFileHiveParquetEntityGenerator, InputFileHiveTextEntityGenerator}
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile
-import hydrograph.engine.spark.components.HiveInputComponent
+import hydrograph.engine.spark.components.InputHiveComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
-/**
-  * Created by arshadalis on 12/9/2016.
-  */
+
 class InputHiveAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatperBase{
 
-  private var inputHiveComponent:HiveInputComponent=null
+  private var inputHiveComponent:InputHiveComponent=null
   private var generator : InputComponentGeneratorBase=null
 
 
@@ -26,7 +24,7 @@ class InputHiveAdapter(typeBaseComponent: TypeBaseComponent) extends InputAdatpe
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    inputHiveComponent=new HiveInputComponent((generator.getEntity).asInstanceOf[HiveEntityBase],baseComponentParams)
+    inputHiveComponent=new InputHiveComponent((generator.getEntity).asInstanceOf[HiveEntityBase],baseComponentParams)
   }
 
   def mapComponent(typeBaseComponent: TypeBaseComponent): InputComponentGeneratorBase={

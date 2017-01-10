@@ -7,23 +7,18 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class HydrographDelimitedParser implements Serializable {
-    private static Logger LOG= LoggerFactory.getLogger(HydrographDelimitedParser.class);
-
-    private static final long serialVersionUID = 4546944494735373827L;
-
-
     static final String SPECIAL_REGEX_CHARS = "([\\]\\[|.*<>\\\\$^?()=!+])";
-
     static final String QUOTED_REGEX_FORMAT = "%2$s(?=(?:[^%1$s]*%1$s[^%1$s]*[^%1$s%2$s]*%1$s)*(?![^%1$s]*%1$s))";
-
     static final String CLEAN_REGEX_FORMAT = "^(?:%1$s)(.*)(?:%1$s)$";
-
     static final String ESCAPE_REGEX_FORMAT = "(%1$s%1$s)";
-
+    private static final long serialVersionUID = 4546944494735373827L;
+    private static Logger LOG= LoggerFactory.getLogger(HydrographDelimitedParser.class);
     protected Pattern splitPattern;
 
     protected Pattern cleanPattern;
@@ -46,17 +41,17 @@ public class HydrographDelimitedParser implements Serializable {
 
     protected StructType schema;
 
-    protected String[] dateFormats;
+    protected List<SimpleDateFormat> dateFormats;
 
-    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, String[] dateFormats,StructType schema) {
+    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, List<SimpleDateFormat> dateFormats,StructType schema) {
         reset(delimiter, quote, types, strict, safe, dateFormats, schema);
     }
 
-    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, boolean strict, boolean safe, String[] dateFormats, StructType schema) {
+    public HydrographDelimitedParser(String delimiter, String quote, Class[] types, boolean strict, boolean safe, List<SimpleDateFormat> dateFormats, StructType schema) {
         reset(delimiter, quote, types, strict, safe, dateFormats, schema/*, null, null*/);
     }
 
-    public void reset(String delimiter, String quote, Type[] types, boolean strict, boolean safe, String[] dateFormats, StructType schema) {
+    public void reset(String delimiter, String quote, Type[] types, boolean strict, boolean safe, List<SimpleDateFormat> dateFormats, StructType schema) {
         if (delimiter == null || delimiter.isEmpty())
             throw new IllegalArgumentException("delimiter may not be null or empty");
 
@@ -199,8 +194,8 @@ public class HydrographDelimitedParser implements Serializable {
         for (int i = 0; i < split.length; i++) {
             try {
                 split[i] = !schema.apply(i).dataType().simpleString().equalsIgnoreCase("String") ? split[i].toString().trim() : split[i];
-                result[i] = TypeCast.castingInputData(split[i], schema.apply(i).dataType(),
-                        schema.apply(i).nullable(), "null", true, dateFormats[i]);
+                result[i] = TypeCast.inputValue(split[i], schema.apply(i).dataType(),
+                        schema.apply(i).nullable(), "null", true, dateFormats.get(i));
             } catch (Exception exception) {
                 result[i] = null;
                 if (!safe) {

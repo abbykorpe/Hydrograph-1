@@ -1,5 +1,8 @@
 package hydrograph.engine.spark.datasource.fixedwidth
 
+import java.text.SimpleDateFormat
+import java.util.{TimeZone, Locale}
+
 import hydrograph.engine.spark.datasource.utils.TypeCast
 import org.apache.hadoop.fs.Path
 import org.apache.spark.sql.sources.{BaseRelation, CreatableRelationProvider, RelationProvider, SchemaRelationProvider}
@@ -14,6 +17,22 @@ class DefaultSource extends RelationProvider
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String]): BaseRelation =
     createRelation(sqlContext, parameters, null)
 
+
+  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
+    date.setLenient(false)
+    date.setTimeZone(TimeZone.getDefault)
+    date
+  } else null
+
+  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map{ e =>
+    if (e.equals("null")){
+      null
+    } else {
+      simpleDateFormat(e)
+    }
+  }
+
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): BaseRelation = {
     LOG.trace("In method createRelation for Fixed Width Input File Component")
     val path: String = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Input File Fixed Width Component"))
@@ -23,10 +42,11 @@ class DefaultSource extends RelationProvider
       LOG.error("Fixed Width Input File path cannot be null or empty")
       throw new RuntimeException("Delimited Input File path cannot be null or empty")
     }
+    val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
 
     new FixedWidthRelation(path, parameters.get("charset").get,
       fieldLengths, parameters.getOrElse("strict","true").toBoolean,
-      parameters.getOrElse("safe","false").toBoolean, inDateFormats.split("\t"), schema)(sqlContext)
+      parameters.getOrElse("safe","false").toBoolean, dateFormat, schema)(sqlContext)
   }
 
   private def toIntLength(fieldsLen: String): Array[Int] = {
@@ -36,11 +56,13 @@ class DefaultSource extends RelationProvider
 
   def saveAsFW(dataFrame: DataFrame, path: String, parameters: Map[String, String]) = {
     LOG.trace("In method saveAsFW for creating Fixed Width Output File")
-    val inDateFormats: Array[String] = parameters.getOrElse("dateFormats", "null").split("\t")
+    val outDateFormats: String = parameters.getOrElse("dateFormats", "null")
     val strict: Boolean = parameters.getOrElse("strict","true").toBoolean
     val safe: Boolean = parameters.getOrElse("safe","false").toBoolean
     val schema = dataFrame.schema
     val fieldlen: Array[Int] = toIntLength( parameters.get("length").get)
+
+    val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
 
     val valueRDD = dataFrame.rdd.mapPartitions(itr => {
       itr.map(row => {
@@ -83,7 +105,7 @@ class DefaultSource extends RelationProvider
             }
           } else {
 
-            val coercedVal = TypeCast.castingOutputData(data, schema.fields(acc).dataType, inDateFormats(acc))
+            val coercedVal = TypeCast.outputValue(data, schema.fields(acc).dataType, dateFormat(acc))
             val lengthDiff = coercedVal.toString.length - fieldlen(acc)
             val result = lengthDiff match {
               case _ if lengthDiff == 0 => coercedVal

@@ -37,18 +37,19 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
 
   override def createComponent(): Map[String, DataFrame] = {
     LOG.trace("In method createComponent()")
-    val dateFormats=getDateFormats()
-    val schemaField = SchemaCreator(iFileMixedSchemeEntity).makeSchema()
+    val schemaCreator = SchemaCreator(iFileMixedSchemeEntity)
+//    val dateFormats=getDateFormats()
+//    val schemaField = SchemaCreator(iFileMixedSchemeEntity).makeSchema()
     try {
       val df = iComponentsParams.getSparkSession().read
         .option("quote", iFileMixedSchemeEntity.getQuote)
         .option("charset", iFileMixedSchemeEntity.getCharset)
         .option("safe", iFileMixedSchemeEntity.getSafe)
         .option("strict", iFileMixedSchemeEntity.getStrict)
-        .option("dateFormats", dateFormats)
+        .option("dateFormats", schemaCreator.getDateFormats())
         .option("lengthsAndDelimiters", extractLengthsAndDelimiters(iFileMixedSchemeEntity.getFieldsList))
         .option("lengthsAndDelimitersType", extractLengthsAndDelimitersType(iFileMixedSchemeEntity.getFieldsList))
-        .schema(schemaField)
+        .schema(schemaCreator.makeSchema())
         .format("hydrograph.engine.spark.datasource.mixedScheme")
         .load(iFileMixedSchemeEntity.getPath)
 
@@ -72,7 +73,7 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
 
   }
 
-  def getDateFormats(): String = {
+  /*def getDateFormats(): String = {
       LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")
       var dateFormats: String = ""
       for (i <- 0 until iFileMixedSchemeEntity.getFieldsList.size()) {
@@ -80,7 +81,7 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
       }
       LOG.debug("Date Formats for Date fields : " + dateFormats)
       dateFormats
-  }
+  }*/
 
 }
 

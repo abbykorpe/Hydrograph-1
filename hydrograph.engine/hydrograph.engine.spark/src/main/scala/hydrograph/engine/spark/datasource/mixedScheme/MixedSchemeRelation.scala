@@ -1,5 +1,7 @@
 package hydrograph.engine.spark.datasource.mixedScheme
 
+import java.text.SimpleDateFormat
+
 import hydrograph.engine.core.constants.Constants
 import hydrograph.engine.spark.helper.DelimitedAndFixedWidthHelper
 import hydrograph.engine.spark.input.format.DelimitedAndFixedWidthInputFormat
@@ -12,27 +14,29 @@ import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.{Row, SQLContext}
 import org.slf4j.{Logger, LoggerFactory}
 
+import scala.collection.JavaConversions._
+
 case class MixedSchemeRelation(
-         location: Option[String],
-         charset: String,
-         quote: String,
-         safe: Boolean,
-         strict: Boolean,
-         inDateFormats: String,
-         lengthsAndDelimiters: String,
-         lengthsAndDelimitersType: String,
-         nullValue: String,
-         treatEmptyValuesAsNullsFlag: Boolean,
-         userSchema: StructType
-         )(@transient val sqlContext: SQLContext)
+                                location: Option[String],
+                                charset: String,
+                                quote: String,
+                                safe: Boolean,
+                                strict: Boolean,
+                                dateFormats:  List[SimpleDateFormat],
+                                lengthsAndDelimiters: String,
+                                lengthsAndDelimitersType: String,
+                                nullValue: String,
+                                treatEmptyValuesAsNullsFlag: Boolean,
+                                userSchema: StructType
+                              )(@transient val sqlContext: SQLContext)
   extends BaseRelation with TableScan {
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[MixedSchemeRelation])
   override val schema: StructType = userSchema
 
   override def buildScan: RDD[Row] = {
-    val schemaFields: Array[StructField] = schema.fields
-    val rowArray: Array[Any] = new Array[Any](schemaFields.length)
+//    val schemaFields: Array[StructField] = schema.fields
+    //    val rowArray: Array[Any] = new Array[Any](schemaFields.length)
     val sc = sqlContext.sparkContext
     implicit val conf: Configuration = sc.hadoopConfiguration
     conf.setBoolean("mapred.mapper.new-api", false)
@@ -44,11 +48,11 @@ case class MixedSchemeRelation(
 
     val input = sc.hadoopFile(location.get, classOf[DelimitedAndFixedWidthInputFormat], classOf[LongWritable], classOf[Text])
 
-    val tokens = input.values.map(iterator =>
+    val tokens = input.values.map( line =>
       DelimitedAndFixedWidthHelper.getFields(schema,
-        iterator.toString, lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
+        line.toString, lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
         lengthsAndDelimitersType.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
-        safe, quote, inDateFormats.split("\t")))
+        safe, quote, dateFormats))
 
     tokens.flatMap { t => {
       Some(Row.fromSeq(t))

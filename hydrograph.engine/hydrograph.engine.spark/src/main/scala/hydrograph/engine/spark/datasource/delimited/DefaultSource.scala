@@ -1,13 +1,16 @@
 
 package hydrograph.engine.spark.datasource.delimited
 
+import java.text.SimpleDateFormat
+import java.util.{TimeZone, Locale}
+
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
-
+import scala.collection.JavaConversions._
 
 class DefaultSource extends RelationProvider
   with SchemaRelationProvider with CreatableRelationProvider with Serializable {
@@ -19,6 +22,21 @@ class DefaultSource extends RelationProvider
 
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String]): BaseRelation = {
     createRelation(sqlContext, parameters, null)
+  }
+
+  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
+    date.setLenient(false)
+    date.setTimeZone(TimeZone.getDefault)
+    date
+  } else null
+
+  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map{ e =>
+    if (e.equals("null")){
+      null
+    } else {
+      simpleDateFormat(e)
+    }
   }
 
   /**
@@ -41,17 +59,20 @@ class DefaultSource extends RelationProvider
       LOG.error("Delimited Input File path cannot be null or empty")
       throw new RuntimeException("Delimited Input File path cannot be null or empty")
     }
+
+    val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
+
     val delimitedParser = new HydrographDelimitedParser(
       delimiter,
       quote, null, strict,
-      safe, inDateFormats.split("\t"), schema)
+      safe, dateFormat, schema)
 
     val treatEmptyValuesAsNulls: Boolean = parameters.getOrElse("treatEmptyValuesAsNulls", "false").toBoolean
 
     val charset: String = parameters.getOrElse("charset", TextFile.DEFAULT_CHARSET.name())
     DelimitedRelation(
-      () => TextFile.withCharset(sqlContext.sparkContext, path, charset),
-      Some(path),
+      charset,
+      path,
       useHeader,
       delimitedParser,
       nullValue,
@@ -92,14 +113,13 @@ class DefaultSource extends RelationProvider
     } else
       true
 
-
     if (isSave) {
       saveAsDelimitedFile(data, parameters, path)
     }
     createRelation(sqlContext, parameters, data.schema)
   }
 
-  def saveAsDelimitedFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
+  private def saveAsDelimitedFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
     LOG.trace("In method saveAsFW for creating Delimited Output File")
     val delimiter: String = parameters.getOrElse("delimiter", ",")
     val outDateFormats: String = parameters.getOrElse("dateFormats","null")
@@ -108,15 +128,17 @@ class DefaultSource extends RelationProvider
     val generateHeader: Boolean = parameters.getOrElse("header", "true").toBoolean
     val schema: StructType = dataFrame.schema
 
+    val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
+
     val header: String = if (generateHeader) {
       dataFrame.columns.mkString(delimiter)
     } else {
       "" // There is no need to generate header in this case
     }
 
-   val strRDD = dataFrame.rdd.mapPartitionsWithIndex {
+   val strRDD = dataFrame.rdd.mapPartitions {
 
-      case (index, iter) =>
+      case (iter) =>
         new Iterator[String] {
           var firstRow: Boolean = generateHeader
 
@@ -140,7 +162,7 @@ class DefaultSource extends RelationProvider
 
               val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({
                 case (value, i) =>
-                  val castedValue = TypeCast.castingOutputData(value, schema.fields(i).dataType, outDateFormats.split("\t")(i))
+                  val castedValue = TypeCast.outputValue(value, schema.fields(i).dataType, dateFormat(i))
                   var string:String = ""
                   if (castedValue != null ){
                     string = castedValue.toString
@@ -150,8 +172,6 @@ class DefaultSource extends RelationProvider
                       string = quote + string + quote
                   }
                   string
-
-
               })
 
               val row: String = values.mkString(delimiter)
