@@ -27,8 +27,8 @@ class SchemaUtilsTest {
     schema2(3) = StructField("dob", DateType)
 
     val structType2 = new StructType(schema2)
-    import hydrograph.engine.predef._
-    Assert.assertTrue(structType1.compareTo(structType2))
+
+    Assert.assertTrue(SchemaUtils().compareSchema(structType1, structType2))
   }
 
   @Test
@@ -49,8 +49,8 @@ class SchemaUtilsTest {
     schema2(3) = StructField("dob", DateType)
 
     val structType1 = new StructType(schema1)
-    import hydrograph.engine.predef._
-    Assert.assertTrue(structType1.compareTo(structType2))
+
+    Assert.assertTrue(SchemaUtils().compareSchema(structType1, structType2))
   }
 
   @Test (expected = classOf[hydrograph.engine.spark.components.utils.SchemaMismatchException])
@@ -71,8 +71,8 @@ class SchemaUtilsTest {
     schema2(3) = StructField("dob", DateType)
 
     val structType2 = new StructType(schema2)
-    import hydrograph.engine.predef._
-    structType1.compareTo(structType2)
+
+    SchemaUtils().compareSchema(structType1, structType2)
   }
 
   @Test (expected = classOf[hydrograph.engine.spark.components.utils.SchemaMismatchException])
@@ -94,7 +94,6 @@ class SchemaUtilsTest {
 
     val structType2 = new StructType(schema2)
 
-    import hydrograph.engine.predef._
-    structType1.compareTo(structType2)
+    SchemaUtils().compareSchema(structType1, structType2)
   }
 }
