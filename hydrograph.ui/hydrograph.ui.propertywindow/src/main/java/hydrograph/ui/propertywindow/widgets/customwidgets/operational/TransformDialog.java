@@ -1731,92 +1731,93 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}
 	}
     
-    private void setErrorMessageForAccumulator(){
-    	OperationClassConfig configurationForTransformWidget;
-    	boolean isAggregateOrCumulate=false;
-    	configurationForTransformWidget = (OperationClassConfig) widgetConfig;
-    	transformMapping.getMappingSheetRows().forEach(mappingSheetRow ->{
-    		if(mappingSheetRow.isActive() && mappingSheetRow.isExpression() &&(StringUtils.equalsIgnoreCase(Constants.AGGREGATE, configurationForTransformWidget.getComponentName())
-    				|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,configurationForTransformWidget.getComponentName()))){
-//    			if(!StringUtils.isBlank(mappingSheetRow.getAccumulator())){
-    				boolean logError = true;
-    				boolean isValidValue = validate(mappingSheetRow.getAccumulator(), mappingSheetRow.getComboDataType());
-    				if(!isValidValue){
-    					errorLabel=new Label( errorTableViewer.getTable(), SWT.NONE);
-    					errorLabel.setVisible(true);  
-    					if(StringUtils.isBlank(mappingSheetRow.getAccumulator())){
-    						errorLabel.setText("Accmulator value can not be blank for "+mappingSheetRow.getOperationID());
-    					}else{
-    						errorLabel.setText("Accmulator value \""+mappingSheetRow.getAccumulator()+"\" does not match with its data type for "
-    								+mappingSheetRow.getOperationID());
-    					}
-    				}else
-    					errorLabel = null;
-    				for(Label tempErrorLabel:errorLabelList) {
-    					   if(StringUtils.equalsIgnoreCase(errorLabel.getText(),tempErrorLabel.getText()))
-    					   logError=false;
-    				}
-    					if(logError && errorLabel!=null && (!mappingSheetRow.isAccumulatorParameter()||
-    							StringUtils.isBlank(mappingSheetRow.getAccumulator()))){
-    						errorLabelList.add(errorLabel); 
-    				}
-//    			}
-    		}
-    	}
-    );
-    }
-	private boolean validate(String value, String dataType){
+	private void setErrorMessageForAccumulator() {
+		OperationClassConfig configurationForTransformWidget;
+		configurationForTransformWidget = (OperationClassConfig) widgetConfig;
+		transformMapping.getMappingSheetRows().forEach(mappingSheetRow -> {
+			if (mappingSheetRow.isActive() && mappingSheetRow.isExpression()
+					&& (StringUtils.equalsIgnoreCase(Constants.AGGREGATE,
+							configurationForTransformWidget.getComponentName())
+							|| StringUtils.equalsIgnoreCase(Constants.CUMULATE,
+									configurationForTransformWidget.getComponentName()))) {
+				boolean logError = true;
+				boolean isValidValue = validate(mappingSheetRow.getAccumulator(), mappingSheetRow.getComboDataType());
+				if (!isValidValue) {
+					errorLabel = new Label(errorTableViewer.getTable(), SWT.NONE);
+					errorLabel.setVisible(true);
+					if (StringUtils.isBlank(mappingSheetRow.getAccumulator())) {
+						errorLabel.setText("Accmulator value can not be blank for " + mappingSheetRow.getOperationID());
+					} else {
+						errorLabel.setText("Accmulator value \"" + mappingSheetRow.getAccumulator()
+								+ "\" does not match with its data type for " + mappingSheetRow.getOperationID());
+					}
+				} else {
+					errorLabel = null;
+				}
+				for (Label tempErrorLabel : errorLabelList) {
+					if (errorLabel == null
+							|| StringUtils.equalsIgnoreCase(errorLabel.getText(), tempErrorLabel.getText())) {
+						logError = false;
+					}
+				}
+				if (logError && errorLabel != null && (!mappingSheetRow.isAccumulatorParameter()
+						|| StringUtils.isBlank(mappingSheetRow.getAccumulator()))) {
+					errorLabelList.add(errorLabel);
+				}
+			}
+		});
+	}
+	
+    private boolean validate(String value, String dataType){
 		if(StringUtils.isNotBlank(value)){
 			try{
-			if(dataType.equals(Messages.DATATYPE_INTEGER)){
-				Integer.valueOf(value);
-				return true;
-			}else if(dataType.equals(Messages.DATATYPE_STRING))
-			{
-				String.valueOf(value);
-				return true;
-			}
-			else if(dataType.equals(Messages.DATATYPE_DOUBLE)){
-				Double.valueOf(value);
-				return true;
-			}
-			else if(dataType.equals(Messages.DATATYPE_FLOAT)){
-				Float.valueOf(value);
-				return true;
-			}
-			else if(dataType.equals(Messages.DATATYPE_SHORT)){
-				Short.valueOf(value);
-				return true;
-			}
-			else if(dataType.equals(Messages.DATATYPE_BOOLEAN)){
-				Boolean.valueOf(value);
-				return true;
-			}
-			else if(dataType.equals(Messages.DATATYPE_BIGDECIMAL)){
-				new BigDecimal(value);
-				return true;
-			}
-			else if(dataType.equals(Messages.DATATYPE_LONG)){
-				Long.valueOf(value);
-				return true;
-			}
-			else if(dataType.equals(Messages.DATATYPE_DATE)){
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-				sdf.setLenient(false);
-				sdf.parse(value);
-				return true;
-			}
-			else {
-				return false;
-			}
+				if(dataType.equals(Messages.DATATYPE_INTEGER)){
+					Integer.valueOf(value);
+					return true;
+				}else if(dataType.equals(Messages.DATATYPE_STRING)){
+					String.valueOf(value);
+					return true;
+				}
+				else if(dataType.equals(Messages.DATATYPE_DOUBLE)){
+					Double.valueOf(value);
+					return true;
+				}
+				else if(dataType.equals(Messages.DATATYPE_FLOAT)){
+					Float.valueOf(value);
+					return true;
+				}
+				else if(dataType.equals(Messages.DATATYPE_SHORT)){
+					Short.valueOf(value);
+					return true;
+				}
+				else if(Boolean.FALSE.toString().equalsIgnoreCase(value) || Boolean.TRUE.toString().equalsIgnoreCase(value)){
+					return true;
+				}
+				else if(dataType.equals(Messages.DATATYPE_BIGDECIMAL)){
+					new BigDecimal(value);
+					return true;
+				}
+				else if(dataType.equals(Messages.DATATYPE_LONG)){
+					Long.valueOf(value);
+					return true;
+				}
+				else if(dataType.equals(Messages.DATATYPE_DATE)){
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+					sdf.setLenient(false);
+					sdf.parse(value);
+					return true;
+				}
+				else {
+					return false;
+				}
 			}catch(Exception exception){
-//				System.out.println("******************Invalid value********************");
 				return false;
 			}
 		}else{
-		return false;
+			return false;
 		}
 	}
+ 
     private void setErrorMessageIfExpressionIsNotValid() 
     {
     	for(MappingSheetRow mappingSheetRow:transformMapping.getMappingSheetRows())
@@ -2356,7 +2357,6 @@ private void operationInputTableAddButton(
 		if (expandBar.getItemCount()>0){
 			for (ExpandItem expandItem : expandBar.getItems()) {
 				expandItem.setExpanded(false);
-
 			}
 		}
 		List<MappingSheetRow> activeMappingSheetRows=
@@ -2364,6 +2364,18 @@ private void operationInputTableAddButton(
 		int n = activeMappingSheetRows.size()+1;
 		String operationID;
 		operationID= Messages.OPERATION_ID_PREFIX + n;	
+		
+		Set<String>	operationIds = new HashSet<String>();
+		
+		transformMapping.getMappingSheetRows().forEach(mappingSheetRow->{
+			operationIds.add(mappingSheetRow.getOperationID());
+			}
+		);
+		
+		//If duplicate Operation Id (for Operation)exists
+		while(operationIds.contains(operationID)){
+			operationID = Messages.OPERATION_ID_PREFIX + ++n;
+		}
 		List<FilterProperties> inputFieldListOperationClass = new ArrayList<>();
 		List<FilterProperties> outputListOperationClass = new ArrayList<>();
 		List<NameValueProperty> nameValuePropertyOperationClass = new ArrayList<>();
@@ -2375,7 +2387,12 @@ private void operationInputTableAddButton(
 		List<FilterProperties> inputFieldList = new ArrayList<>();
 		List<FilterProperties> outputList = new ArrayList<>();
 		List<NameValueProperty> nameValueProperty = new ArrayList<>();
-		operationID="Expression:"+n;
+		operationID=Messages.EXPRESSION_ID_PREFIX + n;
+		
+		//If duplicate Operation Id (for Expression)exists
+		while(operationIds.contains(operationID)){
+			operationID = Messages.EXPRESSION_ID_PREFIX + ++n;
+		}
 		
 		ExpressionEditorData expressionEditorData=new ExpressionEditorData("",component.getComponentName());
     	mappingSheetRowForExpression = new MappingSheetRow(inputFieldList, outputList, operationID, Messages.CUSTOM, "",

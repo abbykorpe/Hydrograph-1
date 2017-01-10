@@ -356,6 +356,7 @@ public class Messages extends NLS {
 	public static String PARAMETERTEXTBOX;
 	public static String EXPRESSIONTEXTBOX;
 	public static String EXPRESSION_COMPOSITE;
+	public static String EXPRESSION_ID_PREFIX;
 	
 	static {
 		// initialize resource bundle
