@@ -5,7 +5,9 @@ import java.util
 import hydrograph.engine.core.component.entity.ExecutionTrackingEntity
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.utils.EncoderHelper
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.util.LongAccumulator
 
 /**
@@ -19,8 +21,16 @@ class ExecutionTrackingComponent(executionTrackingEntity: ExecutionTrackingEntit
     executionTrackingEntity.getOperation.getOperationInputFields.foreach(e => fieldNameSet.add(e))
     val df = componentsParams.getDataFrame()
     val longAccumulator: LongAccumulator = componentsParams.getAccumulator()
-    val dataFrame=df.filter(row => {longAccumulator.add(1)
-      true})
+
+    val dataFrame=df.map(row=> {longAccumulator.add(1)
+      row
+  }) (RowEncoder(EncoderHelper().getEncoder(componentsParams.getDataFrame().schema.map(f=>f.name).toList, componentsParams.getSchemaFields())))
+//      dataFrame.foreach(row => {longAccumulator.add(1)})
+
+    /*val dataFrame=df.filter(row => {longAccumulator.add(1)
+      true})*/
+    //dataFrame.foreach(r => println("******" + r))
+
     Map(key -> dataFrame)
   }
 
