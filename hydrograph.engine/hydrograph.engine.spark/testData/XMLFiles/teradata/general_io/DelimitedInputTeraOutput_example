@@ -45,7 +45,7 @@
         <hostName value="10.130.250.235" />
         <port value="1025" />
         <jdbcDriver value="TeraJDBC4" />
-        <tableName value="tera_test_1" />
+        <tableName value="hydrograph_db_output_to_teradata_corrected_trial_28_with__pk_264" />
         <username value="hydrograph" />
         <password value="teradata" />
         <loadUtilityType value="DEFAULT"/>

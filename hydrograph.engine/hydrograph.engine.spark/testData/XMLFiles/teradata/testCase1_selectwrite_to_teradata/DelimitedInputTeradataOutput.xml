@@ -47,12 +47,12 @@
                 <field name="b" type="java.lang.Boolean" />
                 <field name="c" type="java.lang.Long" />
                 <field name="d" type="java.lang.Float" />
-                <field name="abc" type="java.lang.Integer" />
+                <field name="e" type="java.lang.Integer" />
                 <field name="f" type="java.lang.String" />
                 <field name="g" type="java.lang.Double" />
                 <field name="h" type="java.util.Date" format="yyyy-MM-dd"/>
                 <field name="i" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="z" type="java.math.BigDecimal"  scale="2"
+                <field name="j" type="java.math.BigDecimal"  scale="2"
                        precision="10" scaleType="explicit" />
             </schema>
         </inSocket>
@@ -61,7 +61,7 @@
         <hostName value="10.130.250.235" />
         <port value="1025" />
         <jdbcDriver value="TeraJDBC4" />
-        <tableName value="selective_write_test_5" />
+        <tableName value="selective_write_test_6" />
         <username value="hydrograph" />
         <password value="teradata" />
         <loadUtilityType value="DEFAULT"/>

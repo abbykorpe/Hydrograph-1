@@ -20,18 +20,24 @@
     <inputs id="teradata" batch="0" xsi:type="it:teradata">
         <outSocket id="out0">
             <schema name="schema1">
+                <field name="a" type="java.lang.Short" />
+                <field name="b" type="java.lang.Boolean" />
+                <field name="c" type="java.lang.Long" />
+                <field name="d" type="java.lang.Float" />
                 <field name="e" type="java.lang.Integer" />
-                <field name="i" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="b" type="java.lang.Integer" />
                 <field name="f" type="java.lang.String" />
+                <field name="g" type="java.lang.Double" />
                 <field name="h" type="java.util.Date" format="yyyy-MM-dd"/>
+                <field name="i" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="j" type="java.math.BigDecimal"  scale="2"
+                       precision="10" scaleType="explicit" />
             </schema>
         </outSocket>
         <databaseName value="hydrograph_db"/>
         <hostName value="10.130.250.235"/>
         <port value="1025"/>
         <jdbcDriver value="TeraJDBC4"/>
-        <tableName value="selective_write_test_3"/>
+        <tableName value="selective_write_test_6"/>
         <!--<interface value="DEFAULT"/>-->
         <exportOptions value="FASTEXPORT"/>
         <username value="hydrograph"/>
