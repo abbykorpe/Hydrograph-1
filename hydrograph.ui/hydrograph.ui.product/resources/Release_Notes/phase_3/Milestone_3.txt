@@ -38,3 +38,4 @@ Issues/Defects fixed:
 24.#592	[Akhilesh Joshi] - 	Aggregate Component: java null pointer error popup is getting displayed
 25.#597	[Akhilesh Joshi] -	Aggregate Component : Validation is not appropriate for Boolean Datatype
 26.#595 [Akhilesh Joshi] - 	Aggregate Component: Expression with same id/name is getting added when user clicks on Add Operation control button
+27.#583 [Ashika Holkar] - Oracle and Mysql component: Getting error message while connecting to Mysql server/oracle database

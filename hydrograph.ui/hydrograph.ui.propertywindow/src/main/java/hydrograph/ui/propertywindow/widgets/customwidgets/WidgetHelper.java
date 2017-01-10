@@ -480,6 +480,7 @@ public class WidgetHelper {
 	public WidgetConfig getSelectInterfaceWithLoadWidgetConfig() {
 		RadioButtonConfig radioConfig = new RadioButtonConfig();
 		radioConfig.setWidgetDisplayNames(new String []{Messages.STANDARD, Messages.FAST_LOAD});
+		radioConfig.getRadioButtonListners().add(Listners.VERIFY_FAST_LOAD_FOR_TERADATA);
 		radioConfig.setPropertyName(Messages.LOAD_UTILITY_TYPE);
 		return radioConfig;
 	}

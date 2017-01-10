@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.DatabaseSelectionConfig;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -421,6 +422,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 				}else{
 					databaseSelectionConfig.setSqlQuery(text.getText());
 				}
+				Utils.INSTANCE.addMouseMoveListener(sqlQueryTextBox, cursor);
+				Utils.INSTANCE.addMouseMoveListener(textBoxTableName, cursor);
 				showHideErrorSymbol(widgetList);
 			}
 		};
@@ -476,35 +479,34 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		for (AbstractWidget textAbtractWgt : widgets) {
 			if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.DATABASE_WIDGET_NAME)) {
-				databaseName = (String) textAbtractWgt.getProperties().get(Constants.DATABASE_WIDGET_NAME);
+				databaseName = getValue((String) textAbtractWgt.getProperties().get(Constants.DATABASE_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.HOST_WIDGET_NAME)) {
-				hostName = (String) textAbtractWgt.getProperties().get(Constants.HOST_WIDGET_NAME);
+				hostName = getValue((String) textAbtractWgt.getProperties().get(Constants.HOST_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.PORT_WIDGET_NAME)) {
-				portNo = (String) textAbtractWgt.getProperties().get(Constants.PORT_WIDGET_NAME);
+				portNo = getValue((String) textAbtractWgt.getProperties().get(Constants.PORT_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.JDBC_DRIVER_WIDGET_NAME)) {
-				jdbcName = (String) textAbtractWgt.getProperties().get(Constants.JDBC_DRIVER_WIDGET_NAME);
+				jdbcName = getValue((String) textAbtractWgt.getProperties().get(Constants.JDBC_DRIVER_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.SCHEMA_WIDGET_NAME)) {
-				schemaName = (String) textAbtractWgt.getProperties().get(Constants.SCHEMA_WIDGET_NAME);
+				schemaName = getValue((String) textAbtractWgt.getProperties().get(Constants.SCHEMA_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.USER_NAME_WIDGET_NAME)) {
-				userName = (String) textAbtractWgt.getProperties().get(Constants.USER_NAME_WIDGET_NAME);
+				userName = getValue((String) textAbtractWgt.getProperties().get(Constants.USER_NAME_WIDGET_NAME));
 			} else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.PASSWORD_WIDGET_NAME)) {
-				password = (String) textAbtractWgt.getProperties().get(Constants.PASSWORD_WIDGET_NAME);
+				password = getValue((String) textAbtractWgt.getProperties().get(Constants.PASSWORD_WIDGET_NAME));
 			}else if (textAbtractWgt.getProperty().getPropertyName()
 					.equalsIgnoreCase(Constants.ORACLE_SID_WIDGET_NAME)) {
-				sid = (String) textAbtractWgt.getProperties().get(Constants.ORACLE_SID_WIDGET_NAME);
+				sid = getValue((String) textAbtractWgt.getProperties().get(Constants.ORACLE_SID_WIDGET_NAME));
 			}
-			
-			parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), hostName, 
-					portNo, userName, password).jdbcName(jdbcName).schemaName(schemaName)
-					.databaseName(databaseName).sid(sid).build();
-			
 		}
+		
+		parameterType = new DatabaseParameterType.DatabaseBuilder(getComponentType(), hostName, 
+				portNo, userName, password).jdbcName(jdbcName).schemaName(schemaName)
+				.databaseName(databaseName).sid(sid).build();
 		return parameterType;
 
 	}
@@ -520,6 +522,13 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		return "";
 	}
 	
+	private String getValue(String input) {
+		if(ParameterUtil.isParameter(input)){
+			return Utils.INSTANCE.getParamValue(input);
+		}
+		return input;
+	}
+	
 	private void validateDatabaseParams(){
 		List<String> oracleDatabaseValues = new ArrayList<String>();
 		getDatabaseConnectionDetails();
@@ -528,7 +537,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		databaseSelectionConfig = (DatabaseSelectionConfig) property.get(propertyName);
 		
 		if (((Button) tableNameRadioButton.getSWTWidgetControl()).getSelection()) {
-			oracleDatabaseValues.add(databaseSelectionConfig.getTableName());
+			oracleDatabaseValues.add(getValue(databaseSelectionConfig.getTableName()));
 		}else{
 			WidgetUtility.createMessageBox(Messages.METASTORE_FORMAT_ERROR_FOR_SQL_QUERY,Messages.ERROR , SWT.ICON_INFORMATION);
 		}
@@ -658,6 +667,7 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 				if (validateField(databaseSelectionConfig.getTableName())) {
 					tableNameDecorator.hide();
 					textBoxTableName.setText(databaseSelectionConfig.getTableName());
+					Utils.INSTANCE.addMouseMoveListener(textBoxTableName, cursor);
 
 				} else {
 					tableNameDecorator.show();
@@ -669,6 +679,7 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 				if (validateField(databaseSelectionConfig.getSqlQuery())) {
 					sqlQueryDecorator.hide();
 					sqlQueryTextBox.setText(databaseSelectionConfig.getSqlQuery());
+					Utils.INSTANCE.addMouseMoveListener(sqlQueryTextBox, cursor);
 				} else {
 					sqlQueryDecorator.show();
 				}

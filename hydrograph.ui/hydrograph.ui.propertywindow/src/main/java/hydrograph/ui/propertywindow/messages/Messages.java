@@ -318,6 +318,7 @@ public class Messages extends NLS {
 	public static String FAST_LOAD;
 	public static String EXPORT_OPTIONS;
 	public static String LOAD_UTILITY_TYPE;
+	public static String FAST_LOAD_ERROR_MESSAGE;
 	
 
 	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;

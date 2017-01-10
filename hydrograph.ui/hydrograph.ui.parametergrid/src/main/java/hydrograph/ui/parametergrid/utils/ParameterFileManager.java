@@ -16,8 +16,11 @@ package hydrograph.ui.parametergrid.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.slf4j.Logger;
 
@@ -33,6 +36,8 @@ import hydrograph.ui.logging.factory.LogFactory;
 public class ParameterFileManager {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ParameterFileManager.class);
+	private static final char  ESCAPE_CHAR='\\';
+	private static final char  BACKWARD_SLASH='/';
 	
 	private ParameterFileManager(){}
 	
@@ -72,7 +77,7 @@ public class ParameterFileManager {
 	 */
 	public void storeParameters(Map<String, String> parameterMap,IFile filename, String parameterFilePath) throws IOException{
 		Properties properties = new Properties();
-		properties.setProperty(parameterMap);
+		properties.setProperty(updatePropertyMap(parameterMap));
 		
 		File file = new File(parameterFilePath);
 		
@@ -87,5 +92,15 @@ public class ParameterFileManager {
 				properties.store(file.getAbsolutePath());
 			}
 		}
+	}
+	
+	private Map<String, String> updatePropertyMap(Map<String, String> parameterMap){
+		Map<String,String> map=new  LinkedHashMap<>(parameterMap);
+		for(Entry<String, String> entry:parameterMap.entrySet()){
+			if(StringUtils.contains(entry.getValue(), ESCAPE_CHAR)){
+				map.put(entry.getKey(), StringUtils.replaceChars(entry.getValue(),ESCAPE_CHAR, BACKWARD_SLASH));
+			}
+		}
+		return map;
 	}
 }

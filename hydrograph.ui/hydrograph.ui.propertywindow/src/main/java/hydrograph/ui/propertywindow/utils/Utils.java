@@ -207,7 +207,7 @@ public class Utils {
 		 * @return value of Parameter if found in Map otherwise Parameter not found
 		 */
 	 public String getParamValue(String value){
-			if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
+		 if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
 			String param = null;
 			value = StringUtils.replaceOnce(value, "@{", "");
 			value= StringUtils.replaceOnce(value, "}", "");
@@ -217,11 +217,12 @@ public class Utils {
 				 if(entry.getValue().endsWith("/")){
 					 return entry.getValue();
 				 }
-				return entry.getValue()+"/";
+				return entry.getValue();
 	    			}
 				} 
 			}
-			return PARAMETER_NOT_FOUND;
+				return PARAMETER_NOT_FOUND;
+			
 		}		
 		
 	 	/**
@@ -234,15 +235,17 @@ public class Utils {
 		 */
 	 public String getParamFilePath(String extSchemaPath, String paramValue, Text extSchemaPathText){
 			String remainingString = "";
-		    if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND) || ParameterUtil.isParameter(extSchemaPath)){
+		    if( ParameterUtil.isParameter(extSchemaPath)){
 		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
-		    }
-		    else{
-		    remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+2, extSchemaPath.length());
-		    extSchemaPathText.setToolTipText(paramValue+remainingString);
-		       }
+		    }else if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND)){
+		    	extSchemaPathText.setToolTipText(remainingString);
+		    }else{
+		    	remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+2, extSchemaPath.length());
+		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
+		   		}
+		    	
 			return paramValue+remainingString;
-			}		
+		}		
 		
 	 	/**
 		 * 

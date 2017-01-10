@@ -15,16 +15,21 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Listener;
 
 import hydrograph.ui.datastructure.property.MatchValueProperty;
+import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -36,6 +41,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTRadioButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 
 
 /**
@@ -47,7 +53,6 @@ public class RadioButtonsWidget extends AbstractWidget {
 
 	private final String propertyName;
 	private final LinkedHashMap<String, Object> property = new LinkedHashMap<>();
-	private Object properties;
 	private String[] buttonText;
 	private Button[] buttons;
 	private MatchValueProperty matchValue;
@@ -95,16 +100,24 @@ public class RadioButtonsWidget extends AbstractWidget {
 			}
 		};
 
+		
 		for (int i = 0; i < buttonText.length; i++) {
 			ELTRadioButton eltRadioButton = new ELTRadioButton(buttonText[i]);
 			defaultSubgroupComposite.attachWidget(eltRadioButton);
 			buttons[i] = ((Button) eltRadioButton.getSWTWidgetControl());
-			((Button) eltRadioButton.getSWTWidgetControl())
-			.addSelectionListener(selectionListener);
+			((Button) eltRadioButton.getSWTWidgetControl()).addSelectionListener(selectionListener);
 		}
 		buttons[0].setSelection(true);
-
-		populateWidget();
+		
+		if(!radioButtonConfig.getRadioButtonListners().isEmpty()){
+			Stream<Button> stream = Arrays.stream(buttons);
+			stream.forEach(button -> {
+			Listners radioListners = radioButtonConfig.getRadioButtonListners().get(0);
+			IELTListener listener = radioListners.getListener();
+			Listener listnr = listener.getListener(propertyDialogButtonBar, null, button);
+			button.addListener(SWT.Selection, listnr);});
+		}
+		 populateWidget();
 	}
 
 
@@ -136,5 +149,5 @@ public class RadioButtonsWidget extends AbstractWidget {
     @Override
 	public void addModifyListener(Property property,  ArrayList<AbstractWidget> widgetList) {
 	}
-
+    
 }
