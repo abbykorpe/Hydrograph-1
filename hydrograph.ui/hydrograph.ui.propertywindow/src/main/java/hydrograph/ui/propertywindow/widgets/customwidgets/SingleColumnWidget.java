@@ -14,8 +14,23 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.mapping.InputField;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -31,21 +46,6 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.mapping.InputField;
-import hydrograph.ui.datastructure.property.mapping.TransformMapping;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Shell;
 
 
 public class SingleColumnWidget extends AbstractWidget {
@@ -135,6 +135,9 @@ public class SingleColumnWidget extends AbstractWidget {
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		LinkedHashMap<String, Object> property = new LinkedHashMap<>();
+		if(this.set==null){
+			this.set=new ArrayList<String>();
+		}	
 		property.put(propertyName, this.set);
 		return property;
 	}
