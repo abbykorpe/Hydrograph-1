@@ -13,12 +13,12 @@ import scala.collection.JavaConverters._
 /**
   * Created by arshadalis on 12/9/2016.
   */
-class HiveOutputComponent(entity: HiveEntityBase, oComponentParameters: BaseComponentParams) extends SparkFlow {
+class OutputHiveComponent(entity: HiveEntityBase, oComponentParameters: BaseComponentParams) extends SparkFlow {
 
   val TEMPTABLE = "tempTable"
   val HIVETEXTTABLE="TEXTFILE"
   val HIVEPARQUETTABLE="PARQUET"
-  val LOG = LoggerFactory.getLogger(classOf[HiveOutputComponent])
+  val LOG = LoggerFactory.getLogger(classOf[OutputHiveComponent])
 
   override def execute(): Unit = {
     LOG.trace("In method execute()")

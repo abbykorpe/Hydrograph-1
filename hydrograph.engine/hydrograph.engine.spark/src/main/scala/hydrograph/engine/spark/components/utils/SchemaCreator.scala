@@ -1,9 +1,14 @@
 package hydrograph.engine.spark.components.utils
 
+import java.util
+
 import hydrograph.engine.core.component.entity.base.InputOutputEntityBase
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import org.apache.spark.sql.Column
+import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
 import org.slf4j.{Logger, LoggerFactory}
+import scala.collection.JavaConversions._
 
 case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
@@ -48,6 +53,26 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
   
   def returnScalePrecision(data:Int):Int={
     if(data== -999) precision else data
-  } 
+  }
+
+  def createSchema(): Array[Column] ={
+    LOG.trace("In method createSchema()")
+    val fields = inputOutputEntityBase.getFieldsList
+    val schema=new Array[Column](fields.size())
+    fields.zipWithIndex.foreach{ case(f,i)=> schema(i)=col(f.getFieldName)}
+    LOG.debug("Schema created : " + schema.mkString )
+    schema
+  }
+
+  def getDateFormats(): String = {
+    LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")
+    var dateFormats: String = ""
+    for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
+      dateFormats += inputOutputEntityBase.getFieldsList.get(i).getFieldFormat + "\t"
+    }
+    LOG.debug("Date Formats for Date fields : " + dateFormats)
+    dateFormats
+  }
+
 }
 

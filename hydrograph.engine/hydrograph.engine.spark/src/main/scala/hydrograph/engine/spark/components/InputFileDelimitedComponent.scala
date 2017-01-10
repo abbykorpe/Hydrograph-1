@@ -14,8 +14,9 @@ class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity
   private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileDelimitedComponent])
   override def createComponent(): Map[String, DataFrame] = {
     LOG.trace("In method createComponent()")
-    val dateFormats=getDateFormats()
-    val schemaField = SchemaCreator(iFileDelimitedEntity).makeSchema()
+    val schemaCreator = SchemaCreator(iFileDelimitedEntity)
+    //    val dateFormats=getDateFormats()
+    //    val schemaField = SchemaCreator(iFileDelimitedEntity).makeSchema()
     try {
       val df = iComponentsParams.getSparkSession().read
         .option("delimiter", iFileDelimitedEntity.getDelimiter)
@@ -24,8 +25,8 @@ class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity
         .option("charset", iFileDelimitedEntity.getCharset)
         .option("safe", iFileDelimitedEntity.isSafe)
         .option("strict", iFileDelimitedEntity.isStrict)
-        .option("dateFormats", dateFormats)
-        .schema(schemaField)
+        .option("dateFormats", schemaCreator.getDateFormats)
+        .schema(schemaCreator.makeSchema)
         .format("hydrograph.engine.spark.datasource.delimited")
         .load(iFileDelimitedEntity.getPath)
 
@@ -50,7 +51,7 @@ class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity
 
   }
 
-  def getDateFormats(): String = {
+  /*def getDateFormats(): String = {
       LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")
       var dateFormats: String = ""
       for (i <- 0 until iFileDelimitedEntity.getFieldsList.size()) {
@@ -59,6 +60,6 @@ class InputFileDelimitedComponent(iFileDelimitedEntity: InputFileDelimitedEntity
       LOG.debug("Date Formats for Date fields : " + dateFormats)
       dateFormats
   }
-
+*/
 }
 

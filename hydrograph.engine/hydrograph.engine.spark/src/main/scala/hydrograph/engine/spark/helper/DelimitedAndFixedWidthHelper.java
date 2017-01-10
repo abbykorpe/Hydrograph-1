@@ -19,7 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class DelimitedAndFixedWidthHelper {
@@ -36,7 +38,7 @@ public class DelimitedAndFixedWidthHelper {
     public static Object[] getFields(
             StructType schema, String line,
             String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-            boolean safe, String quote, String[] dateFormats) {
+            boolean safe, String quote, List<SimpleDateFormat> dateFormats) {
 
         if (!line.equals("")) {
 
@@ -47,11 +49,11 @@ public class DelimitedAndFixedWidthHelper {
             } catch (Exception e) {
                 LOG.error(
                         "Exception while generating tokens.\nLine being parsed: "
-                                + line + "\nFields: " + getFieldsFromSchema(schema,dateFormats.length)
+                                + line + "\nFields: " + getFieldsFromSchema(schema,dateFormats.size())
                                 + "\nLengths and delimiters in scheme: "
                                 + Arrays.toString(lengthsAndDelimiters)
                                 + "\nDatatypes in scheme: "
-                                + getTypesFromSchema(schema,dateFormats.length)
+                                + getTypesFromSchema(schema,dateFormats.size())
                                 + "\nSafe was set to: " + safe, e);
                 throw new RuntimeException(e);
             }
@@ -115,14 +117,14 @@ public class DelimitedAndFixedWidthHelper {
 
     private static Object[] coerceParsedTokens(
             String line, Object[] tokens, boolean safe,
-            StructType schema, String[] dateFormats) {
+            StructType schema, List<SimpleDateFormat> dateFormats) {
 
         Object[] result = new Object[tokens.length];
         for (int i = 0; i < tokens.length; i++) {
             try {
                 tokens[i] = !schema.apply(i).dataType().simpleString().equalsIgnoreCase("String") ? tokens[i].toString().trim() : tokens[i];
-                result[i] = TypeCast.castingInputData(tokens[i], schema.apply(i).dataType(),
-                        schema.apply(i).nullable(), "null", true, dateFormats[i]);
+                result[i] = TypeCast.inputValue(tokens[i], schema.apply(i).dataType(),
+                        schema.apply(i).nullable(), "null", true, dateFormats.get(i));
             } catch (Exception exception) {
                 result[i] = null;
                 if (!safe) {

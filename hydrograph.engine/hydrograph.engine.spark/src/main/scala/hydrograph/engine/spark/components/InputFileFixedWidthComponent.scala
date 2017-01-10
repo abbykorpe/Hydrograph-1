@@ -15,34 +15,36 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
   private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileFixedWidthComponent])
   override def createComponent(): Map[String,DataFrame] = {
     LOG.trace("In method createComponent()")
-    val dateFormats=getDateFormats()
-    val schemaField = SchemaCreator(fileFixedWidthEntity).makeSchema()
+    val schemaCreator = SchemaCreator(fileFixedWidthEntity)
+    //    val dateFormats=getDateFormats()
+    //    val schemaField = SchemaCreator(fileFixedWidthEntity).makeSchema()
 
     val fieldsLen=new Array[Int](fileFixedWidthEntity.getFieldsList.size())
 
     fileFixedWidthEntity.getFieldsList().asScala.zipWithIndex.foreach{ case(s,i)=>
       fieldsLen(i)=s.getFieldLength
     }
-    try {
-    val df = iComponentsParams.getSparkSession().read
-      .option("charset", fileFixedWidthEntity.getCharset)
-      .option("length",fieldsLen.mkString(","))
-      .option("strict", fileFixedWidthEntity.isStrict)
-      .option("safe", fileFixedWidthEntity.isSafe)
-      .option("dateFormats", dateFormats)
-      .schema(schemaField)
-      .format("hydrograph.engine.spark.datasource.fixedwidth")
-      .load(fileFixedWidthEntity.getPath)
 
-    val key=fileFixedWidthEntity.getOutSocketList.get(0).getSocketId
-    LOG.info("Created Input File Fixed Width Component "+ fileFixedWidthEntity.getComponentId
-      + " in Batch "+ fileFixedWidthEntity.getBatch +" with output socket " + key
-      + " and path "  + fileFixedWidthEntity.getPath)
-    LOG.debug("Component Id: '"+ fileFixedWidthEntity.getComponentId
-      +"' in Batch: " + fileFixedWidthEntity.getBatch
-      + " having schema: [ " + fileFixedWidthEntity.getFieldsList.asScala.mkString(",")
-      + " ] at Path: " + fileFixedWidthEntity.getPath)
-    Map(key->df)
+    try {
+      val df = iComponentsParams.getSparkSession().read
+        .option("charset", fileFixedWidthEntity.getCharset)
+        .option("length",fieldsLen.mkString(","))
+        .option("strict", fileFixedWidthEntity.isStrict)
+        .option("safe", fileFixedWidthEntity.isSafe)
+        .option("dateFormats", schemaCreator.getDateFormats)
+        .schema(schemaCreator.makeSchema)
+        .format("hydrograph.engine.spark.datasource.fixedwidth")
+        .load(fileFixedWidthEntity.getPath)
+
+      val key=fileFixedWidthEntity.getOutSocketList.get(0).getSocketId
+      LOG.info("Created Input File Fixed Width Component "+ fileFixedWidthEntity.getComponentId
+        + " in Batch "+ fileFixedWidthEntity.getBatch +" with output socket " + key
+        + " and path "  + fileFixedWidthEntity.getPath)
+      LOG.debug("Component Id: '"+ fileFixedWidthEntity.getComponentId
+        +"' in Batch: " + fileFixedWidthEntity.getBatch
+        + " having schema: [ " + fileFixedWidthEntity.getFieldsList.asScala.mkString(",")
+        + " ] at Path: " + fileFixedWidthEntity.getPath)
+      Map(key->df)
     } catch {
       case e : Exception =>
         LOG.error("Error in Input File Fixed Width Component "+ fileFixedWidthEntity.getComponentId, e)
@@ -50,7 +52,7 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
     }
   }
 
-  def getDateFormats(): String = {
+  /*def getDateFormats(): String = {
     LOG.trace("In method getDateFormats() which returns \\t separated date formats for Date fields")
     var dateFormats: String = ""
     for (i <- 0 until fileFixedWidthEntity.getFieldsList.size()) {
@@ -59,6 +61,6 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
     LOG.debug("Date Formats for Date fields : " + dateFormats)
     dateFormats
   }
-
+*/
 }
 

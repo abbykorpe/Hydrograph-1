@@ -1,6 +1,9 @@
 
 package hydrograph.engine.spark.datasource.mixedScheme
 
+import java.text.SimpleDateFormat
+import java.util.{Locale, TimeZone}
+
 import hydrograph.engine.core.constants.Constants
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import hydrograph.engine.spark.helper.DelimitedAndFixedWidthHelper
@@ -47,19 +50,37 @@ class DefaultSource extends RelationProvider
       throw new RuntimeException("MixedScheme Input File path cannot be null or empty")
     }
 
+    val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
+
     MixedSchemeRelation(
       Some(path),
       charset,
       quote,
       safe,
       strict,
-      inDateFormats,
+      dateFormat,
       lengthsAndDelimiters,
       lengthsAndDelimitersType,
       nullValue,
       treatEmptyValuesAsNulls,
       schema
     )(sqlContext)
+  }
+
+
+  private def simpleDateFormat(dateFormat: String): SimpleDateFormat = if (!(dateFormat).equalsIgnoreCase("null")) {
+    val date = new SimpleDateFormat(dateFormat, Locale.getDefault)
+    date.setLenient(false)
+    date.setTimeZone(TimeZone.getDefault)
+    date
+  } else null
+
+  private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map{ e =>
+    if (e.equals("null")){
+      null
+    } else {
+      simpleDateFormat(e)
+    }
   }
 
   /*Saving Data in delimited format*/
@@ -110,7 +131,7 @@ class DefaultSource extends RelationProvider
     val lengthsAndDelimiters = parameters.getOrElse("lengthsAndDelimiters", "")
     val lengthsAndDelimitersType = parameters.getOrElse("lengthsAndDelimitersType", "")
     val hasaNewLineField: Boolean = DelimitedAndFixedWidthHelper.hasaNewLineField(lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR))
-
+    val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
     var outputRow: String = ""
     var recordToBeSpilled: String = ""
 
@@ -137,7 +158,7 @@ class DefaultSource extends RelationProvider
 
             val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({
               case (value, i) =>
-                val castedValue = TypeCast.castingOutputData(value, schema.fields(i).dataType, outDateFormats.split("\t")(i))
+                val castedValue = TypeCast.outputValue(value, schema.fields(i).dataType, dateFormat(i))
                 var string: String = ""
                 if (castedValue != null) {
                   string = castedValue.toString
