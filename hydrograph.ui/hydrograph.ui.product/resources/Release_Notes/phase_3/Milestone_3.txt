@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=====================================================================================================
+====================================================================================================
 Features Added:
 =====================================================================================================
 1.<23-Dec-16> - [Vibhor Tyagi] - Created Mysql Component
@@ -7,7 +6,7 @@ Features Added:
 3.<20-Dec-16> - [Ashika Holkar] - Created Oracle Component
 4.<06-Jan-16> - [Rakesh Kanchalwar] - Teradata Input and Output Component5. 
 5.<10-Jan-16> - [Rakesh Kanchalwar] - Restart button under File Menu option
-
+6.<02-Jan-16> -[Shashank karnik,Akhilesh Joshi]-Expression editor support for Aggregate,cumulate and normalize
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -42,5 +41,9 @@ Issues/Defects fixed:
 27.#583 [Ashika Holkar] - Oracle and Mysql component: Getting error message while connecting to Mysql server/oracle database
 28.#587 [Pooja Yadav} - Delimiter component: Garbage value in header while writing delimited file.
 29.#515 [Prateem Tadas]-  	Apply button is getting enabled when user clicks on Pull Schema button.
-30.#554	[Prateem Tadas]- 	Tooltip is not getting displayed.  
+30.#554	[Prateem Tadas]- 	Tooltip is not getting displayed. 
+31.#590 [Shashank Karnik]- Aggregate Component: Error bubble is getting displayed on aggregate component after importing job.
+32.#522 [Shashank Karnik]- Error is not getting displayed on tool tip when key field is missing.
+33.#609 [Shashank Karnik]-  Parameter Grid: Some options are getting hide on a mac.  
  
+

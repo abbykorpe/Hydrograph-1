@@ -15,6 +15,15 @@
 package hydrograph.ui.validators.impl;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
@@ -28,15 +37,6 @@ import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 import hydrograph.ui.validators.utils.ValidatorUtility;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
 
 public class NormalizeMappingValidator implements IValidator{
 	private String errorMessage;
@@ -58,26 +58,11 @@ public class NormalizeMappingValidator implements IValidator{
 		Set<FilterProperties>set=null;
 		if(transformMapping==null)
 		{
+			
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}
 		isExpressionSelected=transformMapping.isExpression();
-		
-		if(isExpressionSelected)
-		{
-		   ExpressionEditorData expressionEditorData=transformMapping.getExpressionEditorData();
-		   if(expressionEditorData!=null)
-		   {
-			   if(!expressionEditorData.isValid())
-			   {
-				   errorMessage = propertyName + "Invalid Expression";	
-				   return false;
-			   }
-		   }	   
-		}	
-		List<MappingSheetRow> mappingSheetRows=TransformMappingFeatureUtility.INSTANCE.getActiveMappingSheetRow
-				(transformMapping.getMappingSheetRows());
-		List<NameValueProperty>  mapOrPassthroughfields = transformMapping.getMapAndPassthroughField();
 		if(isJobImported){	
 			List<InputField> inputFieldsList = new ArrayList<InputField>();
 			for(Entry< String,List<FixedWidthGridRow>> inputList :inputSchemaMap.entrySet()) {
@@ -90,6 +75,26 @@ public class NormalizeMappingValidator implements IValidator{
 		 transformMapping.setInputFields(inputFieldsList);
 		 isJobImported=false;
 		}
+		if(isExpressionSelected)
+		{
+		   ExpressionEditorData expressionEditorData=transformMapping.getExpressionEditorData();
+		   ExpressionEditorUtil.validateExpression(
+				   expressionEditorData.getExpression(),
+					FieldDataTypeMap.INSTANCE.createFieldDataTypeMap(
+							expressionEditorData.getfieldsUsedInExpression(),
+							inputSchemaMap.get(Constants.FIXED_INSOCKET_ID)), expressionEditorData);
+		   if(expressionEditorData!=null)
+		   {
+			   if(!expressionEditorData.isValid())
+			   {
+				   errorMessage = propertyName + "Invalid Expression";	
+				   return false;
+			   }
+		   }	   
+		}	
+		List<MappingSheetRow> mappingSheetRows=TransformMappingFeatureUtility.INSTANCE.getActiveMappingSheetRow
+				(transformMapping.getMappingSheetRows());
+		List<NameValueProperty>  mapOrPassthroughfields = transformMapping.getMapAndPassthroughField();
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
 		{
 	    errorMessage = propertyName + "Output field(s) is mandatory";		 	

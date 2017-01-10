@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -66,7 +68,25 @@ public class SchemaPropagation {
 
 		flushLinkLists();
 	}
-
+    
+	
+	/**
+	 * @param component
+	 * 
+	 * This method adds previous component schema to current component property.
+	 * 
+	 */
+	public void addOldSchemaMapPropertyToEachComponent(Component component)
+	{
+		Map<String,Schema> oldSchemaMap=new TreeMap<String,Schema>();
+		for(Link link:component.getTargetConnections())
+		{
+			Schema schema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+			oldSchemaMap.put(link.getTargetTerminal(), schema);
+		}	
+		component.getProperties().put(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA, oldSchemaMap);
+	}
+	
 	private void flushLinkLists() {
 		mainLinkList.clear();
 		componentsLinkList.clear();
