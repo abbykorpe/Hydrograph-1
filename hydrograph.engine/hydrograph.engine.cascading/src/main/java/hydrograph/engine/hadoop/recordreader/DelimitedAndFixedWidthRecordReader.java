@@ -12,12 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.hadoop.recordreader;
 
+import cascading.tap.TapException;
 import hydrograph.engine.cascading.scheme.DelimitedAndFixedWidthHelper;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -27,7 +23,9 @@ import org.apache.hadoop.mapred.FileSplit;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.RecordReader;
 
-import cascading.tap.TapException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
 @SuppressWarnings("unused")
 public class DelimitedAndFixedWidthRecordReader implements

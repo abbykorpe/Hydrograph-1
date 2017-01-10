@@ -1,12 +1,10 @@
 package hydrograph.engine.spark.datasource.delimited
 
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Row, SQLContext}
 import org.apache.spark.sql.sources.{BaseRelation, TableScan}
 import org.apache.spark.sql.types.{StructField, StructType}
+import org.apache.spark.sql.{Row, SQLContext}
 import org.slf4j.{Logger, LoggerFactory}
-
-import scala.util.control.NonFatal
 
 case class DelimitedRelation(
                         baseRDD: () => RDD[String],

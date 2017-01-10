@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.utilities;
 
+import cascading.flow.FlowConnector;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import cascading.flow.tez.Hadoop2TezFlowConnector;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
-
-import cascading.flow.FlowConnector;
-import cascading.flow.FlowDef;
-import cascading.flow.tez.Hadoop2TezFlowConnector;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
 
 public class PlatformHelper {
 

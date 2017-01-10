@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.utilities;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Map;
-
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Map;
 
 /**
  * @author Ganesh

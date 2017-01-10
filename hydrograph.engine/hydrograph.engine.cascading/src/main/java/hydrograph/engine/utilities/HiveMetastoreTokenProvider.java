@@ -13,8 +13,6 @@
 
 package hydrograph.engine.utilities;
 
-import java.io.IOException;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -27,6 +25,8 @@ import org.apache.hadoop.security.token.Token;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 public class HiveMetastoreTokenProvider {
 

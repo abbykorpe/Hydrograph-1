@@ -12,12 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import java.text.ParseException;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import hydrograph.engine.transformation.standardfunctions.DateFunctions;
+import java.text.ParseException;
 
 public class DateFuncitonsTest {
 

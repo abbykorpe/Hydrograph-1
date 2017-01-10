@@ -1,10 +1,10 @@
 package hydrograph.engine.cascading.assembly.context;
 
+import hydrograph.engine.transformation.userfunctions.base.ListBasedReusableRow;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashSet;
-
-import hydrograph.engine.transformation.userfunctions.base.ListBasedReusableRow;
 
 public class CascadingReusableRow extends ListBasedReusableRow {
 

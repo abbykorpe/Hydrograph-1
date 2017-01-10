@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.filters;
 
-import java.util.ArrayList;
-
 import cascading.flow.FlowProcess;
 import cascading.operation.BaseOperation;
 import cascading.operation.Filter;
 import cascading.operation.FilterCall;
+
+import java.util.ArrayList;
 
 public class PartitionFilter extends BaseOperation implements Filter {
 	ArrayList<ArrayList<String>> listOfPartitionColumn;

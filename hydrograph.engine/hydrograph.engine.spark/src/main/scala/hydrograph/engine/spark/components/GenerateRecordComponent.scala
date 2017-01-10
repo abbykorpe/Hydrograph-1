@@ -1,29 +1,21 @@
 package hydrograph.engine.spark.components
 
-import java.sql.Date
-import java.sql.Timestamp
+import java.sql.{Date, Timestamp}
 import java.text.SimpleDateFormat
-
-import scala.collection.mutable.ListBuffer
-
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.types.StructType
 
 import hydrograph.engine.core.component.entity.GenerateRecordEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
 import hydrograph.engine.spark.generaterecord.utils.FieldsTypeEnum.FieldTypeEnum
-import hydrograph.engine.core.component.entity.GenerateRecordEntity
-import hydrograph.engine.core.component.entity.GenerateRecordEntity
-import hydrograph.engine.core.component.entity.GenerateRecordEntity
-import scala.collection.mutable.ArrayBuffer
-import hydrograph.engine.core.component.entity.GenerateRecordEntity
-import org.slf4j.{ Logger, LoggerFactory }
+import hydrograph.engine.spark.generaterecord.utils._
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{DataFrame, Row}
+import org.apache.spark.sql.types.StructType
+import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
-import  hydrograph.engine.spark.generaterecord.utils._
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 
 class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iComponentsParams: BaseComponentParams) extends InputComponentBase with Serializable {

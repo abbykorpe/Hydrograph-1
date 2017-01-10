@@ -1,11 +1,11 @@
 package hydrograph.engine.spark.components.adapter
 
+import hydrograph.engine.core.component.generator.LookupEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
+import hydrograph.engine.spark.components.LookupComponent
 import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.core.component.generator.LookupEntityGenerator
-import hydrograph.engine.spark.components.LookupComponent
 
 /**
   * Created by gurdits on 10/27/2016.

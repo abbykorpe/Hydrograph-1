@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser.parametersubstitution;
 
+import hydrograph.engine.core.utilities.GeneralUtilities;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import hydrograph.engine.core.utilities.GeneralUtilities;
 
 public class FileParameters implements IParameterBank {
 

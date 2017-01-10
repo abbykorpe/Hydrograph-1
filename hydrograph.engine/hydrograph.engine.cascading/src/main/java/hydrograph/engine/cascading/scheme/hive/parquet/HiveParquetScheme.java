@@ -12,10 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme.hive.parquet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import cascading.flow.FlowProcess;
+import cascading.scheme.Scheme;
+import cascading.scheme.SinkCall;
+import cascading.scheme.SourceCall;
+import cascading.tap.Tap;
+import cascading.tap.hive.HiveTableDescriptor;
+import cascading.tuple.Tuple;
+import cascading.tuple.TupleEntry;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.io.parquet.read.DataWritableReadSupport;
 import org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe;
@@ -30,20 +34,15 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.RecordReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import parquet.hadoop.ParquetInputFormat;
 import parquet.hadoop.ParquetOutputFormat;
 import parquet.hadoop.mapred.Container;
 import parquet.hadoop.mapred.DeprecatedParquetInputFormat;
 import parquet.hadoop.mapred.DeprecatedParquetOutputFormat;
-import cascading.flow.FlowProcess;
-import cascading.scheme.Scheme;
-import cascading.scheme.SinkCall;
-import cascading.scheme.SourceCall;
-import cascading.tap.Tap;
-import cascading.tap.hive.HiveTableDescriptor;
-import cascading.tuple.Tuple;
-import cascading.tuple.TupleEntry;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class HiveParquetScheme extends Scheme<JobConf, RecordReader, OutputCollector, Object[], Object[]> {

@@ -12,13 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
-import hydrograph.engine.cascading.assembly.context.CustomFunctionContext;
-
-import java.io.Serializable;
-
 import cascading.operation.FunctionCall;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.context.CustomFunctionContext;
+
+import java.io.Serializable;
 
 public interface CustomHandlerBase extends Serializable {
 

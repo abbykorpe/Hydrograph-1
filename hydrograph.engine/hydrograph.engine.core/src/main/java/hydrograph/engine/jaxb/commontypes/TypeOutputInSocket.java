@@ -1,10 +1,6 @@
 
 package hydrograph.engine.jaxb.commontypes;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.ofmixedscheme.TypeOutputMixedInSocket;
 import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedInSocket;
 import hydrograph.engine.jaxb.omysql.TypeOutputMysqlOutSocket;
@@ -13,6 +9,11 @@ import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
 import hydrograph.engine.jaxb.otdiscard.TypeOutputInSocketIno;
 import hydrograph.engine.jaxb.otffw.TypeOutputFixedwidthInSocket;
 import hydrograph.engine.jaxb.otfs.TypeOutputSequenceInSocket;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**

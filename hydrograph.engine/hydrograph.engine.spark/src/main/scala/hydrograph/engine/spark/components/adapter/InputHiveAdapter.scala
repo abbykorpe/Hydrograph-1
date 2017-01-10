@@ -1,13 +1,13 @@
 package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.entity.base.HiveEntityBase
-import hydrograph.engine.core.component.generator.base.{InputComponentGeneratorBase, OutputComponentGeneratorBase}
-import hydrograph.engine.core.component.generator.{InputFileHiveParquetEntityGenerator, InputFileHiveTextEntityGenerator, OutputFileHiveParquetEntityGenerator, OutputFileHiveTextEntityGenerator}
+import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase
+import hydrograph.engine.core.component.generator.{InputFileHiveParquetEntityGenerator, InputFileHiveTextEntityGenerator}
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile
-import hydrograph.engine.spark.components.{HiveInputComponent, HiveOutputComponent}
-import hydrograph.engine.spark.components.adapter.base.{InputAdatperBase, OutputAdatperBase}
-import hydrograph.engine.spark.components.base.{InputComponentBase, SparkFlow}
+import hydrograph.engine.spark.components.HiveInputComponent
+import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
+import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**

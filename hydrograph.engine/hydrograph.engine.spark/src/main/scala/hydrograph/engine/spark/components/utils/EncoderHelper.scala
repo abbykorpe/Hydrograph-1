@@ -1,7 +1,7 @@
 package hydrograph.engine.spark.components.utils
 
 import hydrograph.engine.core.component.entity.elements.SchemaField
-import org.apache.spark.sql.types.{ DataType, DataTypes, StructField, StructType }
+import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
 
 import scala.collection.mutable.ListBuffer
 

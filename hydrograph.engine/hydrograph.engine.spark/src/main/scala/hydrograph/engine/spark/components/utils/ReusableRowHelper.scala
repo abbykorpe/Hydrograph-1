@@ -2,10 +2,10 @@ package hydrograph.engine.spark.components.utils
 
 import java.util
 
+import hydrograph.engine.core.component.entity.elements.Operation
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 
 import scala.collection.mutable.ListBuffer
-import hydrograph.engine.core.component.entity.elements.Operation
 
 /**
  * Created by gurdits on 10/20/2016.

@@ -12,13 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
+import hydrograph.engine.cascading.utilities.DataTypeCoerce;
+
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import hydrograph.engine.cascading.utilities.DataTypeCoerce;
 
 public enum HiveTypeToCoercibleTypeMapping {
 

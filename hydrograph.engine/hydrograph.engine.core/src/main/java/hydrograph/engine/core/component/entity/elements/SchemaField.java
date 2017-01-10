@@ -13,13 +13,12 @@
 package hydrograph.engine.core.component.entity.elements;
 
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-
+import hydrograph.engine.core.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.engine.core.constants.Constants;
+import java.io.Serializable;
+import java.lang.reflect.Type;
 
 /**
  * This is a POJO which holds the information for one field of any Input and

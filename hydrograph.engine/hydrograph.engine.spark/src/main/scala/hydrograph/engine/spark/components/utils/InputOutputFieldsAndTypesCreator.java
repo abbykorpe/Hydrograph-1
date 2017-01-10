@@ -4,7 +4,6 @@ import hydrograph.engine.core.component.entity.base.InputOutputEntityBase;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * Created by santlalg on 12/12/2016.

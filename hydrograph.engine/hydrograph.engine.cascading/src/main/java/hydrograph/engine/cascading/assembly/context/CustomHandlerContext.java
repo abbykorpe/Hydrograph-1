@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.context;
 
+import cascading.tuple.Fields;
+import cascading.tuple.TupleEntry;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.cascading.utilities.TupleHelper;
@@ -20,9 +22,6 @@ import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import hydrograph.engine.utilities.UserClassLoader;
 
 import java.util.ArrayList;
-
-import cascading.tuple.Fields;
-import cascading.tuple.TupleEntry;
 
 public class CustomHandlerContext<T> {
 

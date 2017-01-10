@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.OutputFileHiveParquetEntity;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
@@ -26,6 +20,11 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ohiveparquet.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.ohiveparquet.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.outputtypes.ParquetHiveFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OutputFileHiveParquetEntityGenerator extends
 		OutputComponentGeneratorBase {

@@ -14,16 +14,13 @@
  */
 package hydrograph.engine.spark.components
 
-import org.apache.spark.sql.Column
-import org.apache.spark.sql.functions._
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import hydrograph.engine.core.component.entity.SortEntity
 import hydrograph.engine.core.component.entity.elements.KeyField
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.functions._
+import org.slf4j.LoggerFactory
 
 class SparkSortComponent(sortEntity: SortEntity, componentsParams: BaseComponentParams)
     extends StraightPullComponentBase {

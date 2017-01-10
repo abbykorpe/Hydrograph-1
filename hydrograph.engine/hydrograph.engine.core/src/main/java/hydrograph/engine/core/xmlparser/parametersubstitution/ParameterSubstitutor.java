@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser.parametersubstitution;
 
-import java.util.HashMap;
-import java.util.Stack;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Stack;
 
 public class ParameterSubstitutor {
 

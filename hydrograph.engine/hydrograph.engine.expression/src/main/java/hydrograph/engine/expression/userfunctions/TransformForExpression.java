@@ -16,7 +16,6 @@ import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import hydrograph.engine.transformation.userfunctions.base.TransformBase;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Properties;
 

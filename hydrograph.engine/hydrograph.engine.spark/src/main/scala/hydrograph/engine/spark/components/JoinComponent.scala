@@ -1,19 +1,12 @@
 package hydrograph.engine.spark.components
 
-import java.util
-
-import hydrograph.engine.core.component.entity.elements.JoinKeyFields
-import hydrograph.engine.core.component.entity.{ JoinEntity, TransformEntity }
+import hydrograph.engine.core.component.entity.JoinEntity
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
-import hydrograph.engine.transformation.userfunctions.base.{ ReusableRow, TransformBase }
-import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.{ Column, DataFrame, Row }
-
-import scala.collection.mutable
+import org.apache.spark.sql.{Column, DataFrame}
 
 /**
  * Created by gurdits on 10/18/2016.

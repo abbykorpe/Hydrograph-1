@@ -15,9 +15,9 @@
  */
 package hydrograph.engine.core.component.entity;
 
-import java.util.Arrays;
-
 import hydrograph.engine.core.component.entity.base.HiveEntityBase;
+
+import java.util.Arrays;
 
 /**
  * @author bitwise1

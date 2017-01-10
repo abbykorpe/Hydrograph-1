@@ -1,26 +1,24 @@
 package hydrograph.engine.spark.components
 
 import java.util
-import java.util.Properties
 
-import scala.collection.JavaConversions._
-import scala.collection.mutable.ListBuffer
-import hydrograph.engine.core.component.entity.elements.Operation
 import hydrograph.engine.core.component.entity.NormalizeEntity
+import hydrograph.engine.core.component.entity.elements.Operation
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.NormalizeForExpression
 import hydrograph.engine.spark.components.base.OperationComponentBase
-import hydrograph.engine.spark.components.handler.{NormalizeOperation, Operatioin}
+import hydrograph.engine.spark.components.handler.NormalizeOperation
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
-
-import scala.collection.JavaConversions._
-import scala.collection.JavaConverters._
-import hydrograph.engine.transformation.userfunctions.base.{NormalizeTransformBase, OutputDispatcher, ReusableRow}
+import hydrograph.engine.transformation.userfunctions.base.{OutputDispatcher, ReusableRow}
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.{Logger, LoggerFactory}
+
+import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
+import scala.collection.mutable.ListBuffer
 
 /**
   * Created by bitwise on 10/18/2016.

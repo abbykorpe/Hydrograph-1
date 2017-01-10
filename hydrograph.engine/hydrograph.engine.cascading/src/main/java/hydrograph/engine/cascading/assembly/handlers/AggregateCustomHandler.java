@@ -12,21 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
-import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
-import hydrograph.engine.cascading.utilities.ReusableRowHelper;
-import hydrograph.engine.cascading.utilities.TupleHelper;
-import hydrograph.engine.expression.api.ValidationAPI;
-import hydrograph.engine.expression.userfunctions.AggregateForExpression;
-import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowProcess;
 import cascading.management.annotation.Property;
 import cascading.management.annotation.PropertyDescription;
@@ -37,6 +22,19 @@ import cascading.operation.BaseOperation;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
+import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
+import hydrograph.engine.cascading.utilities.ReusableRowHelper;
+import hydrograph.engine.cascading.utilities.TupleHelper;
+import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.userfunctions.AggregateForExpression;
+import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Properties;
 
 public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<AggregateTransformBase>>
 		implements Aggregator<CustomHandlerContext<AggregateTransformBase>> {

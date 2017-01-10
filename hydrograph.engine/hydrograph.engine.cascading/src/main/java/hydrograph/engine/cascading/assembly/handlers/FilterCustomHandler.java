@@ -12,22 +12,20 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
+import cascading.operation.FilterCall;
+import cascading.operation.OperationCall;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
 import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.expression.userfunctions.FilterForExpression;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
-
-import java.util.Arrays;
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.operation.FilterCall;
-import cascading.operation.OperationCall;
-import cascading.tuple.Fields;
+import java.util.Arrays;
+import java.util.Properties;
 
 public class FilterCustomHandler implements RecordFilterHandlerBase {
 

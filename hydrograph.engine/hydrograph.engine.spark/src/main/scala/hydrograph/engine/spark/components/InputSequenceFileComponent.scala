@@ -1,12 +1,12 @@
 package hydrograph.engine.spark.components
 
-import hydrograph.engine.core.component.entity.{InputFileSequenceFormatEntity, InputFileDelimitedEntity}
+import hydrograph.engine.core.component.entity.InputFileSequenceFormatEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Row, DataFrame}
-import org.slf4j.{LoggerFactory, Logger}
+import org.apache.spark.sql.{DataFrame, Row}
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
   * Created by gurdits on 12/28/2016.

@@ -14,9 +14,6 @@ package hydrograph.engine.schemapropagation;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.jaxb.commontypes.*;
-
-import java.util.*;
 
 public class SchemaFieldHandler {
 

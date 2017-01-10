@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.OutputFileHiveTextEntity;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
@@ -27,6 +21,11 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.ohivetextfile.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.outputtypes.HiveTextFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OutputFileHiveTextEntityGenerator extends
 		OutputComponentGeneratorBase {

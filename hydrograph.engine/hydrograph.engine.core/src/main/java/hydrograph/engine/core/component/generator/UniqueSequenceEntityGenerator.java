@@ -12,14 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.UniqueSequenceEntity;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.generator.base.OperationComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.GenerateSequence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UniqueSequenceEntityGenerator extends
 		OperationComponentGeneratorBase {

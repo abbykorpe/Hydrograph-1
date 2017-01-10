@@ -12,19 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.component.mapping;
 
+import hydrograph.engine.adapters.base.BaseAdapter;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.main.Graph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import hydrograph.engine.adapters.base.BaseAdapter;
-import hydrograph.engine.core.component.generator.base.GeneratorBase;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.main.Graph;
 
 public class ComponentAdapterFactory {
 

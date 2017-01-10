@@ -12,10 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity;
 
-import java.util.List;
-
 import hydrograph.engine.core.component.entity.base.InputOutputEntityBase;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
+
+import java.util.List;
 
 public class DiscardEntity extends InputOutputEntityBase {
 

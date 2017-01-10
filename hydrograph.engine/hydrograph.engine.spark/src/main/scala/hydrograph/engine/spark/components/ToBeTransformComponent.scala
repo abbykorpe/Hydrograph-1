@@ -5,14 +5,11 @@ import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.handler.OperationHelper
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
-import org.apache.spark.sql.catalyst.encoders.RowEncoder
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{ Column, DataFrame, Row }
-import org.apache.spark.sql.types.StructType
 import hydrograph.engine.transformation.userfunctions.base.TransformBase
-import hydrograph.engine.spark.core.reusablerow.InputReusableRow
-import hydrograph.engine.spark.core.reusablerow.OutputReusableRow
-import hydrograph.engine.spark.core.reusablerow.RowToReusableMapper
+import org.apache.spark.sql.catalyst.encoders.RowEncoder
+import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.{DataFrame, Row}
+
 import scala.collection.JavaConverters._
 
 class ToBeTransformComponent(transformEntity: TransformEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with OperationHelper[TransformBase] with Serializable {
@@ -32,7 +29,7 @@ class ToBeTransformComponent(transformEntity: TransformEntity, componentsParams:
   val inDf = componentsParams.getDataFrame
 
   //-----
-  val transformsList = initializeTransformList(transformEntity.getOperationsList, inputSchema, outputSchema)
+  val transformsList = initializeOperationList(transformEntity.getOperationsList, inputSchema, outputSchema)
 
   //transformsList.foreach { sparkOperation => sparkOperation.baseClassInstance.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation.operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields) }
   val outVals = new Array[Any](numOutCols)

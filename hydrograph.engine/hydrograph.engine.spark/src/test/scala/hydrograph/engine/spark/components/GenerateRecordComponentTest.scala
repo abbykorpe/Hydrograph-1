@@ -1,12 +1,13 @@
 package hydrograph.engine.spark.components
 
+import java.util
+
 import hydrograph.engine.core.component.entity.GenerateRecordEntity
-import hydrograph.engine.core.component.entity.elements.{ OutSocket, SchemaField }
+import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import org.apache.spark.sql._
 import org.junit.Test
 import org.scalatest.Matchers._
-import java.util
 
 class GenerateRecordComponentTest {
 

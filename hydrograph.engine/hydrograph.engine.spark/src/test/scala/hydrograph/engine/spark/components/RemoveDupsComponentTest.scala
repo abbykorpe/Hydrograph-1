@@ -3,11 +3,11 @@ package hydrograph.engine.spark.components
 import java.util
 
 import hydrograph.engine.core.component.entity.RemoveDupsEntity
-import hydrograph.engine.core.component.entity.elements.{ KeyField, OutSocket, SchemaField }
+import hydrograph.engine.core.component.entity.elements.{KeyField, OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.testing.wrapper.{ Bucket, DataBuilder, Fields }
+import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
 import org.apache.spark.sql._
-import org.junit.{ Assert, Test }
+import org.junit.{Assert, Test}
 
 class RemoveDupsComponentTest {
 

@@ -1,16 +1,15 @@
 package hydrograph.engine.spark.components.utils
 
+import java.util.Properties
+
 import hydrograph.engine.core.component.entity.base.OperationEntityBase
-import hydrograph.engine.core.component.entity.elements.{Operation, OutSocket, SchemaField}
+import hydrograph.engine.core.component.entity.elements.{Operation, OutSocket}
 import hydrograph.engine.core.component.entity.utils.OutSocketUtils
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 import scala.collection.JavaConversions._
-import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import java.util.Properties
-import javax.tools.{DiagnosticCollector, JavaFileObject}
 
 /**
   * Created by gurdits on 10/18/2016.

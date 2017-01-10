@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.cascade.Cascade;
 import cascading.cascade.CascadeConnector;
 import cascading.flow.FlowConnector;
@@ -29,13 +20,7 @@ import cascading.flow.process.ProcessFlow;
 import cascading.flow.tez.Hadoop2TezFlowConnector;
 import cascading.tuple.hadoop.BigDecimalSerialization;
 import cascading.tuple.hadoop.TupleSerializationProps;
-import hydrograph.engine.adapters.base.ComponentAdapterBase;
-import hydrograph.engine.adapters.base.BaseAdapter;
-import hydrograph.engine.adapters.base.CommandAdapterBase;
-import hydrograph.engine.adapters.base.InputAdapterBase;
-import hydrograph.engine.adapters.base.OperationAdapterBase;
-import hydrograph.engine.adapters.base.OutputAdapterBase;
-import hydrograph.engine.adapters.base.StraightPullAdapterBase;
+import hydrograph.engine.adapters.base.*;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.commandtype.component.BaseCommandComponent;
@@ -43,6 +28,14 @@ import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.utilities.ComponentParameterBuilder;
 import hydrograph.engine.utilities.PlatformHelper;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
 
 @SuppressWarnings("rawtypes")
 public class FlowBuilder {

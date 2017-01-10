@@ -1,23 +1,20 @@
 
 package hydrograph.engine.spark.components
 
-import scala.collection.JavaConverters.asScalaBufferConverter
-
-import org.apache.spark.sql.Column
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.col
-import org.slf4j.LoggerFactory
+import hydrograph.engine.core.component.entity.RemoveDupsEntity
+import hydrograph.engine.core.component.entity.elements.KeyField
+import hydrograph.engine.core.constants.Keep
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.types.StructField
+import hydrograph.engine.spark.components.utils.{EncoderHelper, RowHelper}
+import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
-import org.apache.spark.sql.types.BooleanType
+import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.types.{BooleanType, StructField}
+import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.mutable.ListBuffer
-import hydrograph.engine.core.component.entity.elements.KeyField
-import hydrograph.engine.core.component.entity.RemoveDupsEntity
-import hydrograph.engine.spark.components.utils.{ EncoderHelper, RowHelper }
-import hydrograph.engine.core.constants.Keep
 
 class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: BaseComponentParams)
     extends StraightPullComponentBase {

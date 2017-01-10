@@ -12,15 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.OutputFileParquetEntity;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.ParquetFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputFileParquetEntityGenerator extends OutputComponentGeneratorBase {
 

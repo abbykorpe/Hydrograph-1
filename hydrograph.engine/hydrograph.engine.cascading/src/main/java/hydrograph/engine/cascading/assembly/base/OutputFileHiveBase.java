@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
-import java.util.Arrays;
-
-import hydrograph.engine.core.component.entity.OutputFileHiveParquetEntity;
-import hydrograph.engine.core.component.entity.OutputFileHiveTextEntity;
-import hydrograph.engine.core.component.entity.base.HiveEntityBase;
-import org.apache.hadoop.fs.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Rename;
@@ -29,7 +20,15 @@ import cascading.tap.Tap;
 import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.core.component.entity.OutputFileHiveParquetEntity;
+import hydrograph.engine.core.component.entity.OutputFileHiveTextEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
 import hydrograph.engine.utilities.ComponentHelper;
+import org.apache.hadoop.fs.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public abstract class OutputFileHiveBase<T extends HiveEntityBase> extends BaseComponent<HiveEntityBase> {
 

@@ -12,14 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.GenerateRecordEntity;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GenerateRecordEntityGenerator extends InputComponentGeneratorBase {
 	private hydrograph.engine.jaxb.inputtypes.GenerateRecord jaxbGenerateRecord;

@@ -12,7 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.functions;
 
-import hydrograph.engine.cascading.assembly.context.UniqueSequenceNumberContext;
 import cascading.flow.FlowProcess;
 import cascading.operation.BaseOperation;
 import cascading.operation.Function;
@@ -21,6 +20,7 @@ import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
+import hydrograph.engine.cascading.assembly.context.UniqueSequenceNumberContext;
 
 public class UniqueSequenceNumberOperation extends
 		BaseOperation<UniqueSequenceNumberContext> implements

@@ -12,18 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import hydrograph.engine.core.component.entity.elements.Operation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.AggregateEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.generator.base.OperationComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Aggregate;
-
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 
@@ -76,7 +71,7 @@ public class AggregateEntityGenerator extends OperationComponentGeneratorBase {
 		}
 
 		aggregateEntity.setOutSocketList(OperationEntityUtils.extractOutSocketList(jaxbAggregate.getOutSocket()));
-
+aggregateEntity.setInSocketList(OperationEntityUtils.extractInSocketList(jaxbAggregate.getInSocket()));
 		aggregateEntity.setKeyFields(OperationEntityUtils.extractKeyFields(jaxbAggregate.getPrimaryKeys()));
 		aggregateEntity.setSecondaryKeyFields(
 				OperationEntityUtils.extractSecondaryKeyFields(jaxbAggregate.getSecondaryKeys()));

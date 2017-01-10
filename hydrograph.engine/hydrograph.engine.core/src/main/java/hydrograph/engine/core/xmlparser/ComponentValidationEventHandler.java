@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser;
 
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
-
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
 
 public class ComponentValidationEventHandler implements ValidationEventHandler {
 

@@ -12,13 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.core.props;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-
 import hydrograph.engine.core.utilities.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class PropertiesLoader {
 

@@ -12,14 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.CumulateEntity;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.generator.base.OperationComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Cumulate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CumulateEntityGenerator extends OperationComponentGeneratorBase {
 
@@ -70,7 +69,7 @@ public class CumulateEntityGenerator extends OperationComponentGeneratorBase {
 		if (jaxbCumulate.getOutSocket() == null) {
 			throw new NullPointerException("No out socket defined for cumulate component: " + jaxbCumulate.getId());
 		}
-
+		cumulateEntity.setInSocketList(OperationEntityUtils.extractInSocketList(jaxbCumulate.getInSocket()));
 		cumulateEntity.setOutSocketList(OperationEntityUtils.extractOutSocketList(jaxbCumulate.getOutSocket()));
 		cumulateEntity.setKeyFields(OperationEntityUtils.extractKeyFields(jaxbCumulate.getPrimaryKeys()));
 		cumulateEntity

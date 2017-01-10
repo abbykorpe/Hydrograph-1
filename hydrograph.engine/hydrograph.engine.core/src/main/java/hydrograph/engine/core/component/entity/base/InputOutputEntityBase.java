@@ -12,10 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity.base;
 
-import java.util.List;
-
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
+
+import java.util.List;
 
 public abstract class InputOutputEntityBase extends AssemblyEntityBase {
 	private List<OutSocket> outSocketList;

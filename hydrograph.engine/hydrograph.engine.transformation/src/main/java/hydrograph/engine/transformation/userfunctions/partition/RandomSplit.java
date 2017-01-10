@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.partition;
 
+import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
-
-import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
 public class RandomSplit implements CustomPartitionExpression,Serializable{
 

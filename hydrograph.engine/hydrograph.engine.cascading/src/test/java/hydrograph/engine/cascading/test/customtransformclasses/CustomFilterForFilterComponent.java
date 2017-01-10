@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.test.customtransformclasses;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.util.ArrayList;
+import java.util.Properties;
 
 public class CustomFilterForFilterComponent implements FilterBase {
 

@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.functions;
 
-import hydrograph.engine.cascading.assembly.context.CustomFunctionContext;
-import hydrograph.engine.cascading.utilities.TupleHelper;
 import cascading.flow.FlowProcess;
 import cascading.operation.BaseOperation;
 import cascading.operation.Function;
 import cascading.operation.FunctionCall;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.context.CustomFunctionContext;
+import hydrograph.engine.cascading.utilities.TupleHelper;
 
 public class CopyFields extends BaseOperation<CustomFunctionContext> implements
 		Function<CustomFunctionContext> {

@@ -12,8 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.bhse.xmlparser.preprocessor;
 
-import java.io.IOException;
-
+import hydrograph.engine.core.utilities.XmlUtilities;
+import hydrograph.engine.core.xmlparser.XmlParsingUtils;
+import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
+import hydrograph.engine.core.xmlparser.parametersubstitution.UserParameters;
+import hydrograph.engine.core.xmlparser.subjob.ReadSubjob;
 import org.apache.commons.cli.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,11 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import hydrograph.engine.core.utilities.XmlUtilities;
-import hydrograph.engine.core.xmlparser.XmlParsingUtils;
-import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
-import hydrograph.engine.core.xmlparser.parametersubstitution.UserParameters;
-import hydrograph.engine.core.xmlparser.subjob.ReadSubjob;
+import java.io.IOException;
 
 public class ReadSubjobTest {
 

@@ -5,8 +5,9 @@ import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaUtils}
 import org.apache.spark.sql.DataFrame
-import scala.collection.JavaConverters._
 import org.slf4j.{Logger, LoggerFactory}
+
+import scala.collection.JavaConverters._
 
 class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iComponentsParams: BaseComponentParams)
   extends InputComponentBase {

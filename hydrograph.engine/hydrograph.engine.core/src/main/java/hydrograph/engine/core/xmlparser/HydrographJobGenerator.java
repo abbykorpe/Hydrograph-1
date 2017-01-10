@@ -14,8 +14,10 @@ package hydrograph.engine.core.xmlparser;
 
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.jaxb.main.Graph;
-
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -23,11 +25,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import java.io.IOException;
 
 public class HydrographJobGenerator {
 	JAXBContext context;

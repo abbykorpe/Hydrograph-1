@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.context;
 
-import hydrograph.engine.cascading.functions.patitioner.PartitionLogic;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
+import hydrograph.engine.cascading.functions.patitioner.PartitionLogic;
 
 public class PartitionContext {
 	private int currentPipeIndex;

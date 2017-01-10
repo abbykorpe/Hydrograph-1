@@ -13,11 +13,12 @@
  -->
 
 <p:graph xmlns:p="http://www.bitwiseglobal.com/graph/main"
-	xmlns:it="http://www.bitwiseglobal.com/graph/inputtypes" xmlns:ot="http://www.bitwiseglobal.com/graph/outputtypes"
-	xmlns:spt="http://www.bitwiseglobal.com/graph/straightpulltypes"
-	xmlns:tt="http://www.bitwiseglobal.com/graph/transformtypes" xmlns:ct="http://www.bitwiseglobal.com/graph/commandtypes"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
+		 xmlns:it="http://www.bitwiseglobal.com/graph/inputtypes"
+		 xmlns:ot="http://www.bitwiseglobal.com/graph/outputtypes"
+		 xmlns:spt="http://www.bitwiseglobal.com/graph/straightpulltypes"
+		 xmlns:tt="http://www.bitwiseglobal.com/graph/transformtypes"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
 
 	<input id="input1" batch="1" xsi:type="it:file-fixed-width">
 		<outSocket id="out0">

@@ -12,18 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.flow;
 
-import java.util.List;
-
-import org.apache.hadoop.mapred.RunningJob;
-import org.apache.hadoop.mapreduce.JobID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.Flow;
 import cascading.flow.FlowStep;
 import cascading.flow.FlowStepListener;
 import cascading.stats.FlowStepStats;
 import cascading.stats.hadoop.HadoopStepStats;
+import org.apache.hadoop.mapred.RunningJob;
+import org.apache.hadoop.mapreduce.JobID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class CustomFlowStepListener implements FlowStepListener {

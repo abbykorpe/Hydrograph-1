@@ -12,14 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.userfunctions;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
+import hydrograph.engine.transformation.userfunctions.base.FilterBase;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.engine.transformation.userfunctions.base.FilterBase;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+import java.util.ArrayList;
+import java.util.Properties;
 
 public class Filter implements FilterBase {
 

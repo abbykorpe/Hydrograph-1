@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.joiners;
 
-import java.util.Arrays;
-import java.util.Iterator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.pipe.joiner.Joiner;
 import cascading.pipe.joiner.JoinerClosure;
 import cascading.pipe.joiner.LeftJoin;
@@ -25,6 +19,11 @@ import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.Tuples;
 import cascading.tuple.util.TupleViews;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Iterator;
 
 public class HashJoinJoiner implements Joiner {
 	/**

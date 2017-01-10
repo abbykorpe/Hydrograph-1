@@ -12,18 +12,16 @@
  *******************************************************************************/
 package hydrograph.engine.bhse.xmlparser.preprocessor;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
 import hydrograph.engine.core.xmlparser.parametersubstitution.UserParameters;
-
-import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertTrue;
 
 public class ParameterSubstitutorTest {
 	private static Logger LOG = LoggerFactory

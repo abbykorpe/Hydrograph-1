@@ -2,7 +2,6 @@ package hydrograph.engine.spark.components
 
 import java.sql.SQLException
 import java.util
-import java.util.Properties
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField

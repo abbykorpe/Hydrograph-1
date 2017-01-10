@@ -1,16 +1,13 @@
 
 package hydrograph.engine.jaxb.inputtypes;
 
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.ihiveparquet.*;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFieldsType;
-import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFilterType;
-import hydrograph.engine.jaxb.ihiveparquet.HivePathType;
-import hydrograph.engine.jaxb.ihiveparquet.HiveType;
-import hydrograph.engine.jaxb.ihiveparquet.TypeInputFileDelimitedBase;
 
 
 /**

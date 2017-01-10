@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.utilites;
 
-import java.util.ArrayList;
-
-import junit.framework.TestCase;
 import cascading.tuple.Fields;
 import cascading.tuple.TupleEntryIterator;
+import junit.framework.TestCase;
+
+import java.util.ArrayList;
 
 public class CascadingTestCase extends TestCase {
 

@@ -12,12 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.execution.tracking.plugin;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
 import cascading.stats.CascadingStats;
@@ -27,16 +21,18 @@ import cascading.stats.FlowStepStats;
 import hydrograph.engine.cascading.integration.RuntimeContext;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
+import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.execution.tracking.ComponentInfo;
 import hydrograph.engine.execution.tracking.ComponentPipeMapping;
 import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.execution.tracking.JobInfo.ElementGraphNotFoundException;
 import hydrograph.engine.flow.utils.ExecutionTrackingListener;
-import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
-import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Filter;
+
+import java.util.*;
 
 public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTrackingListener {
 

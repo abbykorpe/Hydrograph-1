@@ -1,19 +1,15 @@
 package hydrograph.engine.spark.test.executionhack
 
-import hydrograph.engine.core.xmlparser.HydrographXMLInputService
+import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.core.core.HydrographJob
 import hydrograph.engine.core.props.PropertiesLoader
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler
-import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.types.StructField
-import org.apache.spark.sql.types.LongType
-import org.apache.spark.sql.types.StringType
-import org.apache.spark.sql.SaveMode
-import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.core.xmlparser.HydrographXMLInputService
 import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
+import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
+import hydrograph.engine.spark.components.platform.BaseComponentParams
+import org.apache.spark.sql.{SaveMode, SparkSession}
+import org.apache.spark.sql.types.{LongType, StringType, StructField, StructType}
 
 object Sample extends App {
 

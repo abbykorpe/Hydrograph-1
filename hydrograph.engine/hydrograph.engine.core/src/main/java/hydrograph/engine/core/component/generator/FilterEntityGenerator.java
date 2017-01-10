@@ -12,15 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.FilterEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.generator.base.OperationComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilterEntityGenerator extends OperationComponentGeneratorBase {
 

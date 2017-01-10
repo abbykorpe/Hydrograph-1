@@ -12,12 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity;
 
-import java.util.Arrays;
-import java.util.List;
-
 import hydrograph.engine.core.component.entity.base.InputOutputEntityBase;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
+
+import java.util.Arrays;
 
 public class InputFileParquetEntity extends InputOutputEntityBase {
 

@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.filter;
 
+import hydrograph.engine.transformation.userfunctions.base.FilterBase;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
-
-import hydrograph.engine.transformation.userfunctions.base.FilterBase;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
 public class RandomSampling implements FilterBase{
 	

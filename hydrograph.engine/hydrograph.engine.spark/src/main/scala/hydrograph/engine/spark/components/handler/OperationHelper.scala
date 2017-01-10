@@ -1,34 +1,48 @@
 package hydrograph.engine.spark.components.handler
 
-import scala.collection.JavaConverters.asScalaBufferConverter
-import org.apache.spark.sql.types.StructType
-import hydrograph.engine.core.component.entity.elements.Operation
-import hydrograph.engine.spark.core.reusablerow.RowToReusableMapper
 import java.util.ArrayList
-import hydrograph.engine.core.component.entity.elements.MapField
-import hydrograph.engine.core.component.entity.elements.PassThroughField
-import hydrograph.engine.spark.core.reusablerow.InputReusableRow
+
+import hydrograph.engine.core.component.entity.elements.{MapField, Operation, PassThroughField}
+import hydrograph.engine.expression.api.ValidationAPI
+import hydrograph.engine.spark.core.reusablerow.{InputReusableRow, OutputReusableRow, RowToReusableMapper}
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 import org.apache.spark.sql.Row
-import hydrograph.engine.spark.core.reusablerow.OutputReusableRow
+import org.apache.spark.sql.types.StructType
 
-case class SparkOperation[T](baseClassInstance: T, operationEntity: Operation, inputRow: InputReusableRow, outputRow: OutputReusableRow)
+import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.reflect.ClassTag
+
+case class SparkOperation[T](baseClassInstance: T, operationEntity: Operation, inputRow: InputReusableRow, outputRow:
+OutputReusableRow, validatioinAPI: ValidationAPI, initalValue: String)
 
 trait OperationHelper[T] {
 
-  def initializeTransformList(operationList: java.util.List[Operation], inputSchema: StructType, outputSchema: StructType): List[SparkOperation[T]] = {
+  def initializeOperationList[U](operationList: java.util.List[Operation], inputSchema: StructType,
+                                 outputSchema:
+  StructType)(implicit ct: ClassTag[U]): List[SparkOperation[T]] = {
 
-    def transform(operationList: List[Operation]): List[SparkOperation[T]] = (operationList) match {
-      case (List()) => List()
-      case (x :: xs) =>
+    def populateOperation(operationList: List[Operation]): List[SparkOperation[T]] =
+      (operationList) match {
+        case (List()) => List()
+        case (x :: xs) if x.isExpressionPresent => {
+          val tf = classLoader[T](ct.runtimeClass.getCanonicalName)
+          SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
+            .getOperationInputFields)), OutputReusableRow(null, new RowToReusableMapper(outputSchema, x
+            .getOperationOutputFields)), new ValidationAPI(x.getExpression, ""), x.getAccumulatorInitialValue) ::
+            populateOperation(xs)
+        }
+        case (x :: xs) => {
+          val tf = classLoader[T](x.getOperationClass)
+          SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
+            .getOperationInputFields)), OutputReusableRow(null, new RowToReusableMapper(outputSchema, x
+            .getOperationOutputFields)), null, null) ::
+            populateOperation(xs)
+        }
+      }
 
-        val transformBase: T = classLoader[T](x.getOperationClass)
-
-        SparkOperation[T](transformBase, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x.getOperationInputFields)), OutputReusableRow(null, new RowToReusableMapper(outputSchema, x.getOperationOutputFields))) ::
-          transform(xs)
+    if (operationList != null) {
+      populateOperation(operationList.asScala.toList)
     }
-    if (operationList != null)
-      transform(operationList.asScala.toList)
     else
       List()
   }
@@ -66,9 +80,10 @@ trait OperationHelper[T] {
     }
   }
 
-  def copyFields(input: Row, output: Array[Any], indexes: Array[(Int, Int)]): Unit = {
-    indexes.foreach(pair => output(pair._2) = input(pair._1))
-  }
+    def copyFields(input: Row, output: Array[Any], indexes: Array[(Int, Int)]): Unit = {
+      indexes.foreach(pair => output(pair._2) = input(pair._1))
+    }
+
 
 }
 

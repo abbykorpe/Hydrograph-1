@@ -5,10 +5,10 @@ import java.util.{ArrayList, Properties}
 import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.{AggregateForExpression, CumulateForExpression, NormalizeForExpression, TransformForExpression}
+import hydrograph.engine.expression.utils.ExpressionWrapper
 import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
 import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, CumulateTransformBase, NormalizeTransformBase, ReusableRow, TransformBase}
 
-import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
@@ -64,10 +64,10 @@ trait CumulateOperation{
               val cumulateBase: CumulateTransformBase = (x,y) match {
                 case (_,_) if(x.getOperationClass == null) => {
                   var cumulate = new CumulateForExpression
-                  cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
-                  cumulate.setCounter(counter)
-                  cumulate.setInitialValueExpression((z::zs).toArray)
-                  cumulate.callPrepare
+//                  cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
+//                  cumulate.setCounter(counter)
+//                  cumulate.setInitialValueExpression((z::zs).toArray)
+//                  cumulate.callPrepare
                   cumulate
                 }
                 case _ => {
@@ -124,10 +124,9 @@ trait AggregateOperation{
 
         val aggregateBase: AggregateTransformBase = (x,y) match {
           case (_,_) if(x.getOperationClass == null) => {
+            val expressionWrapper=new ExpressionWrapper(y.asInstanceOf[ValidationAPI],z);
             var aggregate = new AggregateForExpression
-              aggregate.setValidationAPI(convertToListOfValidation(y :: ys))
-              aggregate.setCounter(counter)
-              aggregate.setInitialValueExpression((z::zs).toArray)
+              aggregate.setValidationAPI(expressionWrapper)
               aggregate.callPrepare
             aggregate
           }

@@ -11,30 +11,24 @@
  * limitations under the License.
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
+
 import cascading.flow.FlowDef;
-import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
-import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
 import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
 import hydrograph.engine.core.component.entity.InputFileParquetEntity;
-import hydrograph.engine.core.component.entity.TransformEntity;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
 
 public class InputFileParquetAssembly extends BaseComponent<InputFileParquetEntity> {
 

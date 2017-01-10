@@ -12,16 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.execution.tracking;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.SortedSet;
-
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
 import cascading.flow.FlowStep;
@@ -40,6 +30,9 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
 import hydrograph.engine.jaxb.operationstypes.Filter;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ComponentPipeMapping {
 

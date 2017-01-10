@@ -2,8 +2,8 @@ package hydrograph.engine.spark.components
 
 import java.util
 
+import hydrograph.engine.core.component.entity.InputFileMixedSchemeEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
-import hydrograph.engine.core.component.entity.{InputFileDelimitedEntity, InputFileMixedSchemeEntity}
 import hydrograph.engine.core.constants.Constants
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams

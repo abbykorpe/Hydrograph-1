@@ -12,13 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser;
 
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
+import hydrograph.engine.core.utilities.FileEncodingEnum;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Properties;
 import java.util.Scanner;
-
-import hydrograph.engine.core.utilities.FileEncodingEnum;
-import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 
 public class XmlParsingUtils {
 

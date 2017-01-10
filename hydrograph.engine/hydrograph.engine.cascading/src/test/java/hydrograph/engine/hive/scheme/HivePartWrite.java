@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.hive.scheme;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Properties;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.util.GenericOptionsParser;
-
 import cascading.flow.FlowDef;
 import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
 import cascading.pipe.Pipe;
@@ -30,8 +23,12 @@ import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTableDescriptor;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
-import cascading.tuple.type.DateType;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.util.GenericOptionsParser;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class HivePartWrite {
 

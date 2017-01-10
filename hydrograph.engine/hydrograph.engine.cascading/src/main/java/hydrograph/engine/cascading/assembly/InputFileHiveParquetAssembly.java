@@ -11,6 +11,12 @@
  * limitations under the License.
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
+
+import cascading.tap.hive.HivePartitionTap;
+import cascading.tap.hive.HiveTableDescriptor;
+import cascading.tap.hive.HiveTableDescriptor.Factory;
+import cascading.tap.hive.HiveTap;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.filters.PartitionFilter;
@@ -19,18 +25,10 @@ import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescripto
 import hydrograph.engine.core.component.entity.InputFileHiveParquetEntity;
 import hydrograph.engine.core.component.entity.base.HiveEntityBase;
 import hydrograph.engine.utilities.HiveConfigurationMapping;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import cascading.operation.regex.RegexFilter;
-import cascading.tap.hive.HivePartitionTap;
-import cascading.tap.hive.HiveTableDescriptor;
-import cascading.tap.hive.HiveTableDescriptor.Factory;
-import cascading.tap.hive.HiveTap;
-import cascading.tuple.Fields;
 
 public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 

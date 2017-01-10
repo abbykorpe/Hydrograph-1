@@ -12,6 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.functions;
 
+import cascading.flow.FlowProcess;
+import cascading.operation.BaseOperation;
+import cascading.operation.Function;
+import cascading.operation.FunctionCall;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.context.CascadingReusableRow;
 import hydrograph.engine.cascading.assembly.context.CustomPartitionContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
@@ -20,12 +25,6 @@ import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
 import java.util.LinkedHashSet;
 import java.util.Properties;
-
-import cascading.flow.FlowProcess;
-import cascading.operation.BaseOperation;
-import cascading.operation.Function;
-import cascading.operation.FunctionCall;
-import cascading.tuple.Fields;
 
 public class CustomTuplesPartitioner extends
 		BaseOperation<CustomPartitionContext> implements

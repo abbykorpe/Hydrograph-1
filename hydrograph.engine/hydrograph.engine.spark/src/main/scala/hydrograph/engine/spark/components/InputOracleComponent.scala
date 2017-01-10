@@ -1,7 +1,5 @@
 package hydrograph.engine.spark.components
 
-import java.util.Properties
-
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
