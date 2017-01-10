@@ -45,7 +45,7 @@ public class AvroFile
 {
 
     @XmlElement(required = true)
-    protected AvroFile.Path path;
+    protected Path path;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -53,10 +53,10 @@ public class AvroFile
      * 
      * @return
      *     possible object is
-     *     {@link AvroFile.Path }
+     *     {@link Path }
      *     
      */
-    public AvroFile.Path getPath() {
+    public Path getPath() {
         return path;
     }
 
@@ -65,10 +65,10 @@ public class AvroFile
      * 
      * @param value
      *     allowed object is
-     *     {@link AvroFile.Path }
+     *     {@link Path }
      *     
      */
-    public void setPath(AvroFile.Path value) {
+    public void setPath(Path value) {
         this.path = value;
     }
 

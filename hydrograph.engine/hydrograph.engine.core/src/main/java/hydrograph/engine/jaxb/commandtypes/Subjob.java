@@ -47,7 +47,7 @@ public class Subjob
 {
 
     @XmlElement(required = true)
-    protected Subjob.Path path;
+    protected Path path;
     protected TypeProperties runtimeProperties;
     protected TypeProperties subjobParameter;
 
@@ -56,10 +56,10 @@ public class Subjob
      * 
      * @return
      *     possible object is
-     *     {@link Subjob.Path }
+     *     {@link Path }
      *     
      */
-    public Subjob.Path getPath() {
+    public Path getPath() {
         return path;
     }
 
@@ -68,10 +68,10 @@ public class Subjob
      * 
      * @param value
      *     allowed object is
-     *     {@link Subjob.Path }
+     *     {@link Path }
      *     
      */
-    public void setPath(Subjob.Path value) {
+    public void setPath(Path value) {
         this.path = value;
     }
 

@@ -110,7 +110,19 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link TextFileDelimited.Quote }
+=======
+     * Create an instance of {@link Teradata }
+     * 
+     */
+    public Teradata createTeradata() {
+        return new Teradata();
+    }
+
+    /**
+     * Create an instance of {@link Redshift }
+>>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
      * 
      */
     public TextFileDelimited.Quote createTextFileDelimitedQuote() {

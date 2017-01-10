@@ -71,19 +71,19 @@ public class Hplsql
 {
 
     @XmlElement(required = true)
-    protected Hplsql.Command command;
+    protected Command command;
     @XmlElement(required = true)
-    protected Hplsql.Execute execute;
+    protected Execute execute;
 
     /**
      * Gets the value of the command property.
      * 
      * @return
      *     possible object is
-     *     {@link Hplsql.Command }
+     *     {@link Command }
      *     
      */
-    public Hplsql.Command getCommand() {
+    public Command getCommand() {
         return command;
     }
 
@@ -92,10 +92,10 @@ public class Hplsql
      * 
      * @param value
      *     allowed object is
-     *     {@link Hplsql.Command }
+     *     {@link Command }
      *     
      */
-    public void setCommand(Hplsql.Command value) {
+    public void setCommand(Command value) {
         this.command = value;
     }
 
@@ -104,10 +104,10 @@ public class Hplsql
      * 
      * @return
      *     possible object is
-     *     {@link Hplsql.Execute }
+     *     {@link Execute }
      *     
      */
-    public Hplsql.Execute getExecute() {
+    public Execute getExecute() {
         return execute;
     }
 
@@ -116,10 +116,10 @@ public class Hplsql
      * 
      * @param value
      *     allowed object is
-     *     {@link Hplsql.Execute }
+     *     {@link Execute }
      *     
      */
-    public void setExecute(Hplsql.Execute value) {
+    public void setExecute(Execute value) {
         this.execute = value;
     }
 
@@ -218,18 +218,18 @@ public class Hplsql
     })
     public static class Execute {
 
-        protected Hplsql.Execute.Query query;
-        protected Hplsql.Execute.Uri uri;
+        protected Query query;
+        protected Uri uri;
 
         /**
          * Gets the value of the query property.
          * 
          * @return
          *     possible object is
-         *     {@link Hplsql.Execute.Query }
+         *     {@link Query }
          *     
          */
-        public Hplsql.Execute.Query getQuery() {
+        public Query getQuery() {
             return query;
         }
 
@@ -238,10 +238,10 @@ public class Hplsql
          * 
          * @param value
          *     allowed object is
-         *     {@link Hplsql.Execute.Query }
+         *     {@link Query }
          *     
          */
-        public void setQuery(Hplsql.Execute.Query value) {
+        public void setQuery(Query value) {
             this.query = value;
         }
 
@@ -250,10 +250,10 @@ public class Hplsql
          * 
          * @return
          *     possible object is
-         *     {@link Hplsql.Execute.Uri }
+         *     {@link Uri }
          *     
          */
-        public Hplsql.Execute.Uri getUri() {
+        public Uri getUri() {
             return uri;
         }
 
@@ -262,10 +262,10 @@ public class Hplsql
          * 
          * @param value
          *     allowed object is
-         *     {@link Hplsql.Execute.Uri }
+         *     {@link Uri }
          *     
          */
-        public void setUri(Hplsql.Execute.Uri value) {
+        public void setUri(Uri value) {
             this.uri = value;
         }
 

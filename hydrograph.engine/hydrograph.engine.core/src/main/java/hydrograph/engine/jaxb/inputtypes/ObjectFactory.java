@@ -110,7 +110,19 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link ParquetFile }
+=======
+     * Create an instance of {@link Teradata }
+     * 
+     */
+    public Teradata createTeradata() {
+        return new Teradata();
+    }
+
+    /**
+     * Create an instance of {@link SubjobInput }
+>>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
      * 
      */
     public ParquetFile createParquetFile() {

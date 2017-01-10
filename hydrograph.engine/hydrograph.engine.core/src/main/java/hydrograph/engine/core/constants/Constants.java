@@ -38,6 +38,10 @@ public class Constants {
 	 */
 	public static final int ORACLE_PORT_NUMBER = 1521;
 	/**
+     * The default Teradata port
+     * */
+    public static final int DEFAULT_TERADATA_PORT=1025;
+	/**
 	 * The default chunk size
 	 */
 	public static final int DEFAULT_CHUNKSIZE=1000;

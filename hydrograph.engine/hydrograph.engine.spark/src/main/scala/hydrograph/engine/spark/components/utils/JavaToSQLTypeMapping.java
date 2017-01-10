@@ -61,11 +61,12 @@ public enum JavaToSQLTypeMapping {
                     put("java.lang.String", "VARCHAR(256)");
                     put("java.lang.Integer", "INT");
                     put("java.lang.Long", "BIGINT");
-                    put("java.lang.Double", "DOUBLE");
+                    put("java.lang.Double", "DOUBLE PRECISION");
                     put("java.lang.Float", "FLOAT");
                     put("java.lang.Short", "SMALLINT");
-                    put("java.lang.Boolean", "TINYINT");
-                    put("java.util.Date", "TIMESTAMP");
+                    put("java.lang.Boolean", "BYTEINT");
+                    put("java.util.Date", "DATE");
+                    put("java.sql.Timestamp", "TIMESTAMP");
                     put("java.math.BigDecimal", "DECIMAL");
                 }
             };

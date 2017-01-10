@@ -75,9 +75,9 @@ public class HiveTextFile
     protected HiveType databaseName;
     @XmlElement(required = true)
     protected HiveType tableName;
-    protected HiveTextFile.Delimiter delimiter;
+    protected Delimiter delimiter;
     protected HivePathType externalTablePath;
-    protected HiveTextFile.Quote quote;
+    protected Quote quote;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
     protected TypeProperties runtimeProperties;
@@ -159,10 +159,10 @@ public class HiveTextFile
      * 
      * @return
      *     possible object is
-     *     {@link HiveTextFile.Delimiter }
+     *     {@link Delimiter }
      *     
      */
-    public HiveTextFile.Delimiter getDelimiter() {
+    public Delimiter getDelimiter() {
         return delimiter;
     }
 
@@ -171,10 +171,10 @@ public class HiveTextFile
      * 
      * @param value
      *     allowed object is
-     *     {@link HiveTextFile.Delimiter }
+     *     {@link Delimiter }
      *     
      */
-    public void setDelimiter(HiveTextFile.Delimiter value) {
+    public void setDelimiter(Delimiter value) {
         this.delimiter = value;
     }
 
@@ -207,10 +207,10 @@ public class HiveTextFile
      * 
      * @return
      *     possible object is
-     *     {@link HiveTextFile.Quote }
+     *     {@link Quote }
      *     
      */
-    public HiveTextFile.Quote getQuote() {
+    public Quote getQuote() {
         return quote;
     }
 
@@ -219,10 +219,10 @@ public class HiveTextFile
      * 
      * @param value
      *     allowed object is
-     *     {@link HiveTextFile.Quote }
+     *     {@link Quote }
      *     
      */
-    public void setQuote(HiveTextFile.Quote value) {
+    public void setQuote(Quote value) {
         this.quote = value;
     }
 

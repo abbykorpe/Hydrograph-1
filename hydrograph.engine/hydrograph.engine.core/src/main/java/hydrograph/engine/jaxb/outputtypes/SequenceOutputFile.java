@@ -45,7 +45,7 @@ public class SequenceOutputFile
 {
 
     @XmlElement(required = true)
-    protected SequenceOutputFile.Path path;
+    protected Path path;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -53,10 +53,10 @@ public class SequenceOutputFile
      * 
      * @return
      *     possible object is
-     *     {@link SequenceOutputFile.Path }
+     *     {@link Path }
      *     
      */
-    public SequenceOutputFile.Path getPath() {
+    public Path getPath() {
         return path;
     }
 
@@ -65,10 +65,10 @@ public class SequenceOutputFile
      * 
      * @param value
      *     allowed object is
-     *     {@link SequenceOutputFile.Path }
+     *     {@link Path }
      *     
      */
-    public void setPath(SequenceOutputFile.Path value) {
+    public void setPath(Path value) {
         this.path = value;
     }
 

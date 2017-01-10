@@ -42,17 +42,17 @@ public class RunProgram
 {
 
     @XmlElement(required = true)
-    protected RunProgram.Command command;
+    protected Command command;
 
     /**
      * Gets the value of the command property.
      * 
      * @return
      *     possible object is
-     *     {@link RunProgram.Command }
+     *     {@link Command }
      *     
      */
-    public RunProgram.Command getCommand() {
+    public Command getCommand() {
         return command;
     }
 
@@ -61,10 +61,10 @@ public class RunProgram
      * 
      * @param value
      *     allowed object is
-     *     {@link RunProgram.Command }
+     *     {@link Command }
      *     
      */
-    public void setCommand(RunProgram.Command value) {
+    public void setCommand(Command value) {
         this.command = value;
     }
 

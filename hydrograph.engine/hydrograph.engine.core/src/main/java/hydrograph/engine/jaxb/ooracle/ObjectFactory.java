@@ -62,7 +62,11 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link TypeOutputOracleBase }
+=======
+     * Create an instance of {@link TypeOracleField }
+>>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
      * 
      */
     public TypeOutputOracleBase createTypeOutputOracleBase() {
@@ -78,7 +82,19 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link TypeOracleField }
+=======
+     * Create an instance of {@link TypeUpdateKeys }
+     * 
+     */
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
+    }
+
+    /**
+     * Create an instance of {@link TypeOracleRecord }
+>>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
      * 
      */
     public TypeOracleField createTypeOracleField() {
@@ -86,11 +102,13 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
      * Create an instance of {@link TypeUpdateKeys }
+=======
+     * Create an instance of {@link TypeOutputOracleBase }
+>>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
      * 
      */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
-    }
+
 
 }

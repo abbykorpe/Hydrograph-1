@@ -23,6 +23,7 @@
            xmlns:omysql="hydrograph/engine/jaxb/omysql"
            xmlns:oredshift="hydrograph/engine/jaxb/oredshift"
            xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
+           xmlns:oteradata="hydrograph/engine/jaxb/oteradata"
            xmlns="hydrograph/engine/jaxb/outputtypes"
            targetNamespace="hydrograph/engine/jaxb/outputtypes"
            elementFormDefault="unqualified">
@@ -53,7 +54,8 @@
                namespace="hydrograph/engine/jaxb/oredshift" />
     <xs:import schemaLocation="./oracle-type/output-oracle-types.xsd"
                namespace="hydrograph/engine/jaxb/ooracle" />
-
+    <xs:import schemaLocation="./teradata-type/output-teradata-types.xsd"
+               namespace="hydrograph/engine/jaxb/oteradata" />
 
 	<xs:complexType name="avroFile">
 		<xs:complexContent>
@@ -384,4 +386,36 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
+    <xs:complexType name="teradata">
+        <xs:complexContent>
+            <xs:extension base="oteradata:type-output-teradata-base">
+                <xs:sequence>
+                    <xs:element name="databaseName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="hostName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="port" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="jdbcDriver" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="tableName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="username" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="password" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="loadUtilityType" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <!-- <xs:element name="chunkSize" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1" /> -->
+                    <xs:element name="runtimeProperties" type="cmn:type-properties"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="loadType" type="oteradata:type-load-choice"
+                                minOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
 </xs:schema>

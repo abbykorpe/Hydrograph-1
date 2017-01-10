@@ -45,7 +45,7 @@ public class ParquetFile
 {
 
     @XmlElement(required = true)
-    protected ParquetFile.Path path;
+    protected Path path;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -53,10 +53,10 @@ public class ParquetFile
      * 
      * @return
      *     possible object is
-     *     {@link ParquetFile.Path }
+     *     {@link Path }
      *     
      */
-    public ParquetFile.Path getPath() {
+    public Path getPath() {
         return path;
     }
 
@@ -65,10 +65,10 @@ public class ParquetFile
      * 
      * @param value
      *     allowed object is
-     *     {@link ParquetFile.Path }
+     *     {@link Path }
      *     
      */
-    public void setPath(ParquetFile.Path value) {
+    public void setPath(Path value) {
         this.path = value;
     }
 

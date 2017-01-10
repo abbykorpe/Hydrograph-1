@@ -7,6 +7,7 @@ import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextDelimitedOutSocket;
 import hydrograph.engine.jaxb.imysql.TypeInputMysqlOutSocket;
 import hydrograph.engine.jaxb.ioracle.TypeInputOracleOutSocket;
 import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftOutSocket;
+import hydrograph.engine.jaxb.iteradata.TypeInputTeradataOutSocket;
 import hydrograph.engine.jaxb.itffw.TypeInputFixedwidthOutSocket;
 import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
 
@@ -49,7 +50,8 @@ import javax.xml.bind.annotation.*;
     hydrograph.engine.jaxb.ifsubjob.TypeInputDelimitedOutSocket.class,
     TypeInputMysqlOutSocket.class,
     TypeInputRedshiftOutSocket.class,
-    TypeInputOracleOutSocket.class
+    TypeInputOracleOutSocket.class,
+    TypeInputTeradataOutSocket.class
 })
 public class TypeInputOutSocket
     extends TypeBaseOutSocket
