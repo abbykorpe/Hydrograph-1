@@ -34,7 +34,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/inputFiles/delimitedInputFile.txt" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\delimitedInputFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
@@ -47,7 +47,7 @@
 				<field name="status" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/inputFiles/delimitedInputFile1.txt" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\delimitedInputFile1_join.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 	</inputs>
@@ -60,7 +60,7 @@
 				<field name="date" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/inputFiles/delimitedInputFile2.txt" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\delimitedInputFile2.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 	</inputs>
@@ -117,7 +117,7 @@
 				<field name="date" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData/output/JoinDelimitedComponents/out" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\output\JoinDelimitedComponents\out" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
@@ -131,7 +131,7 @@
 				<field name="status" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData/output/JoinDelimitedComponents/unused1" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\output\JoinDelimitedComponents\unused1" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
@@ -146,7 +146,7 @@
 				<field name="date" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData/output/JoinDelimitedComponents/unused2" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\output\JoinDelimitedComponents\unused2" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
@@ -161,7 +161,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="testData/output/JoinDelimitedComponents/unused0" />
+		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\output\JoinDelimitedComponents\unused0" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />

@@ -22,7 +22,7 @@
 				<field name="city" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="C:\Users\sanketc\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\delimitedInputFile.txt" />
+		<path uri="hydrograph.engine.spark\testData\inputFiles\delimitedInputFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<safe value="false" />
@@ -40,7 +40,7 @@
 				<field name="new_field" type="java.lang.Boolean" />
 			</outputFields>
 		</expression>
-		<operation id="opt1" class="hydrograph.engine.transformation.userfunctions.transform.TransformTest">
+		<operation id="opt1" class="hydrograph.engine.userclass.TransformTest">
 			<inputFields>
 				<field name="name" inSocketId="in0" />
 			</inputFields>
@@ -76,7 +76,7 @@
 				<field name="new_field1" type="java.lang.Integer" />
 			</schema>
 		</inSocket>
-		<path uri="testData/Output/TransformOutput1" />
+		<path uri="hydrograph.engine.spark/testData/Output/TransformOutput1" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />

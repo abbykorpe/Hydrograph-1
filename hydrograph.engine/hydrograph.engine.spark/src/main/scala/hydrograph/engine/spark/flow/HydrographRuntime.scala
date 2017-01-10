@@ -6,10 +6,13 @@ import java.util.Properties
 import hydrograph.engine.core.core.{HydrographJob, HydrographRuntimeService}
 import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, FlowManipulationHandler}
 import hydrograph.engine.core.helper.JAXBTraversal
+import hydrograph.engine.core.props.OrderedProperties
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler
+import hydrograph.engine.core.utilities.OrderedPropertiesHelper
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
+import hydrograph.engine.spark.executiontracking.plugin.{ExecutionTrackingListener, ExecutionTrackingPlugin}
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
 import org.apache.spark.SparkConf
@@ -26,6 +29,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
   private var flowManipulationContext: FlowManipulationContext = null;
   private var flows: ListBuffer[SparkFlow] = null
+  var executionTrackingListener : ExecutionTrackingListener = null
 
 
 
@@ -52,15 +56,14 @@ class HydrographRuntime extends HydrographRuntimeService {
       .config(configProperties)
 
 
-
     val schemaFieldHandler = new SchemaFieldHandler(
-      hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
+      hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls())
 
-    flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
+    val flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler, jobId)
 
     val flowManipulationHandler = new FlowManipulationHandler
 
-    val updatedHydrographJob = flowManipulationHandler.execute(flowManipulationContext);
+   val  updatedHydrographJob=flowManipulationHandler.execute(flowManipulationContext)
 
     val adapterFactory = AdapterFactory(updatedHydrographJob.getJAXBObject)
 
@@ -73,13 +76,13 @@ class HydrographRuntime extends HydrographRuntimeService {
 
 
 
-    //    val EXECUTION_TRACKING = "hydrograph.execution.tracking";
+        val EXECUTION_TRACKING = "hydrograph.execution.tracking";
 
-    //    val oproperties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
-    //    val executionTrackingPluginName = oproperties.getProperty(EXECUTION_TRACKING)
-    //    val trackingInstance = Class.forName(executionTrackingPluginName).newInstance()
-    //    val executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
-    //    executionTrackingListener.addListener(runtimeContext.sparkSession)
+        val oproperties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
+        val executionTrackingPluginName = oproperties.getProperty(EXECUTION_TRACKING)
+        val trackingInstance = Class.forName(executionTrackingPluginName).newInstance()
+        executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
+        executionTrackingListener.addListener(runtimeContext)
 
 
     //    if (getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
@@ -105,7 +108,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
   override def prepareToExecute(): Unit = {
     LOG.info("Building spark flows")
-    flows = FlowBuilder(RuntimeContext.instance).buildFlow()
+      flows = FlowBuilder(RuntimeContext.instance).buildFlow()
     LOG.info("Spark flows built successfully")
   }
 
@@ -116,12 +119,21 @@ class HydrographRuntime extends HydrographRuntimeService {
     }*/
     for (sparkFlow <- flows) {
       sparkFlow.execute()
+
+      for(accumulator <- sparkFlow.getAccumulatorOnFlow()){
+        accumulator.reset()
+      }
+
     }
+//    RuntimeContext.instance.sparkSession.sparkContext.longAccumulator
     RuntimeContext.instance.sparkSession.stop()
+//    executionTrackingListener.getStatus().asScala.foreach(println)
   }
 
   override def getExecutionStatus: AnyRef = {
-    null
+    if (executionTrackingListener != null)
+    return executionTrackingListener.getStatus()
+    return null
   }
 
   override def oncomplete(): Unit = {

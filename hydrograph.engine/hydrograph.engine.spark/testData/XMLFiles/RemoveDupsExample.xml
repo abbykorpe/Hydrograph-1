@@ -31,7 +31,7 @@
 				<field name="f3" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="testData/inputFiles/Duplicate_Data.txt" />
+		<path uri="hydrograph.engine.spark/testData/inputFiles/Duplicate_Data.txt" />
 		<delimiter value="," />
 		<strict value="false" />
 		<charset value="ISO-8859-1" />

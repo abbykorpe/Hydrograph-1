@@ -26,7 +26,7 @@
 				<field name="f2" type="java.lang.String" length="3" />
 			</schema>
 		</outSocket>
-		<path uri="testData/inputFiles/fixed.txt" />
+		<path uri="hydrograph.engine.spark/testData/inputFiles/fixed.txt" />
 		<safe value="false" />
 		<strict value="true" />
 		<charset value="ISO-8859-1" />
@@ -40,7 +40,7 @@
 			</schema>
 		</inSocket>
 		<overWrite value="true"/>
-		<path uri="testData\Output\FixedWidthComponent" />
+		<path uri="hydrograph.engine.spark\testData\Output\FixedWidthComponent" />
 		<charset value="ISO-8859-1" />
 	</outputs>
 </p:graph>

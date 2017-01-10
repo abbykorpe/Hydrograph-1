@@ -52,18 +52,18 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
     if (filterClass.isInstanceOf[FilterBase]) inputReusableRow = new SparkReusableRow(fields)
 
     filterEntity.getOutSocketList.asScala.foreach{outSocket=>
-     LOG.info("Creating filter assembly for '" + filterEntity.getComponentId + "' for socket: '"
-       + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
+      LOG.info("Creating filter assembly for '" + filterEntity.getComponentId + "' for socket: '"
+        + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
 
-       val df = componentsParams.getDataFrame.filter(
-         row =>{
-           if(outSocket.getSocketType.equalsIgnoreCase("unused"))
-             filterClass
-               .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row,inputReusableRow))
-           else
-             !filterClass
-               .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
-         })
+      val df = componentsParams.getDataFrame.filter(
+        row =>{
+          if(outSocket.getSocketType.equalsIgnoreCase("unused"))
+            filterClass
+              .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row,inputReusableRow))
+          else
+            !filterClass
+              .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
+        })
       map += (outSocket.getSocketId -> df)
     }
 
