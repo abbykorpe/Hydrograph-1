@@ -14,8 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.mapping.tables.inputtable;
 
-import hydrograph.ui.datastructure.property.mapping.InputField;
-
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -23,6 +21,8 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.TableItem;
+
+import hydrograph.ui.datastructure.property.mapping.InputField;
 
 
 public class InputFieldColumnLabelProvider extends ColumnLabelProvider{
@@ -73,8 +73,6 @@ public class InputFieldColumnLabelProvider extends ColumnLabelProvider{
 		    		((InputField)cell.getElement()).getErrorObject().setErrorMessage("Input field should not be empty");
 					  ((InputField)cell.getElement()).getErrorObject().setHasError(true);
 		    	}else{
-		    		item.setBackground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-					  item.setForeground(cell.getControl().getDisplay().getSystemColor(SWT.COLOR_BLACK));
 					  ((InputField)cell.getElement()).getErrorObject().setHasError(false);
 		    	}
 		    	

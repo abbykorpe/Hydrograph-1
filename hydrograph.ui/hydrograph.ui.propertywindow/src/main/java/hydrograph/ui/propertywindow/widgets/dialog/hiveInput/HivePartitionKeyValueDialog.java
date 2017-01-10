@@ -471,7 +471,7 @@ public class HivePartitionKeyValueDialog extends Dialog {
 
 	private void createTargetTable(Composite srcTgtTableSashForm) {
 		targetTableViewer = new TableViewer(srcTgtTableSashForm, SWT.BORDER
-				| SWT.MULTI);
+				| SWT.MULTI|SWT.FULL_SELECTION);
 		targetTable = targetTableViewer.getTable();
 		targetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true,
 				1, 1));
