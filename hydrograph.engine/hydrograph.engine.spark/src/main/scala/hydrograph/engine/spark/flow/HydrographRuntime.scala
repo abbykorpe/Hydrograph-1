@@ -78,17 +78,19 @@ class HydrographRuntime extends HydrographRuntimeService {
 
         val EXECUTION_TRACKING = "hydrograph.execution.tracking";
 
-        val oproperties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
-        val executionTrackingPluginName = oproperties.getProperty(EXECUTION_TRACKING)
-        val trackingInstance = Class.forName(executionTrackingPluginName).newInstance()
-        executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
-        executionTrackingListener.addListener(runtimeContext)
+//        val oproperties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
+//        val executionTrackingPluginName = oproperties.getProperty(EXECUTION_TRACKING)
+//        val trackingInstance = Class.forName(executionTrackingPluginName).newInstance()
+//        executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
+//        executionTrackingListener.addListener(runtimeContext)
 
 
-    //    if (getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
-    //     val executionTrackingListener = classLoader(getExecutionTrackingClass(EXECUTION_TRACKING)).asInstanceOf[ExecutionTrackingListener]
-    //      executionTrackingListener.addListener(sparkSession)
-    //    }
+        if (getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
+          var executionTrackingListener = classLoader(getExecutionTrackingClass(EXECUTION_TRACKING)).asInstanceOf[ExecutionTrackingListener]
+          val trackingInstance = Class.forName(getExecutionTrackingClass(EXECUTION_TRACKING)).newInstance()
+          executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
+          executionTrackingListener.addListener(runtimeContext)
+        }
 
   }
 
@@ -180,16 +182,16 @@ class HydrographRuntime extends HydrographRuntimeService {
   }
 
 
-  //  def getExecutionTrackingClass(executionTrackingKey: String): String = {
-  //    var properties: OrderedProperties = new OrderedProperties
-  //    try {
-  //      properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
-  //    }
-  //    catch {
-  //      case e: IOException => {
-  //        throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e)
-  //      }
-  //    }
-  //     properties.getProperty(executionTrackingKey)
-  //  }
+    def getExecutionTrackingClass(executionTrackingKey: String): String = {
+      var properties: OrderedProperties = new OrderedProperties
+      try {
+        properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
+      }
+      catch {
+        case e: IOException => {
+          throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e)
+        }
+      }
+       properties.getProperty(executionTrackingKey)
+    }
 }
