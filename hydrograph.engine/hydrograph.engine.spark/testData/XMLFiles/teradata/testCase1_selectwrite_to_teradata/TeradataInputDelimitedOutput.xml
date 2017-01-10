@@ -20,24 +20,18 @@
     <inputs id="teradata" batch="0" xsi:type="it:teradata">
         <outSocket id="out0">
             <schema name="schema1">
-                <field name="aa" type="java.lang.Short" />
-                <field name="bb" type="java.lang.Boolean" />
-                <field name="cc" type="java.lang.Long" />
-                <field name="dd" type="java.lang.Float" />
-                <field name="ee" type="java.lang.Integer" />
-                <field name="gg" type="java.lang.String" />
-                <field name="ff" type="java.lang.Double" />
-                <field name="hh" type="java.util.Date" format="yyyy-MM-dd"/>
-                <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="jj" type="java.math.BigDecimal"/> <!--scale="2"
-                       precision="10" scaleType="explicit"-->
+                <field name="e" type="java.lang.Integer" />
+                <field name="i" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="b" type="java.lang.Integer" />
+                <field name="f" type="java.lang.String" />
+                <field name="h" type="java.util.Date" format="yyyy-MM-dd"/>
             </schema>
         </outSocket>
         <databaseName value="hydrograph_db"/>
         <hostName value="10.130.250.235"/>
         <port value="1025"/>
         <jdbcDriver value="TeraJDBC4"/>
-        <tableName value="hydrograph_db_output_to_teradata_corrected_trial_28_with__pk_115"/>
+        <tableName value="selective_write_test_3"/>
         <!--<interface value="DEFAULT"/>-->
         <exportOptions value="FASTEXPORT"/>
         <username value="hydrograph"/>
@@ -48,17 +42,11 @@
         <inSocket fromComponentId="teradata" fromSocketId="out0" id="in0"
                   type="in">
             <schema name="schema2">
-                <field name="eaa" type="java.lang.Short" />
-                <field name="ebb" type="java.lang.Boolean" />
-                <field name="ecc" type="java.lang.Long" />
-                <field name="edd" type="java.lang.Float" />
-                <field name="eee" type="java.lang.Integer" />
-                <field name="eegg" type="java.lang.String" />
-                <field name="ff" type="java.lang.Double" />
-                <field name="ehh" type="java.util.Date" format="yyyy-MM-dd"/>
-                <field name="eii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="ejj" type="java.math.BigDecimal" /> <!--scale="2"
-                       precision="10" scaleType="explicit" />-->
+                <field name="e" type="java.lang.Integer" />
+                <field name="i" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
+                <field name="b" type="java.lang.Integer" />
+                <field name="f" type="java.lang.String" />
+                <field name="h" type="java.util.Date" format="yyyy-MM-dd"/>
             </schema>
         </inSocket>
         <path uri="hydrograph.engine.spark/testData/output/teradataOutput1"/>

@@ -16,9 +16,10 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.SchemaCreator
+import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaUtils, TeradataTableUtils}
 import org.apache.spark.sql._
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 /**
   * Created by AniruddhaS on 12/27/2016.
@@ -30,7 +31,7 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
   override def createComponent(): Map[String, DataFrame] = {
 
-    //    val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
+     val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
 
     val sparkSession = iComponentsParams.getSparkSession()
 
@@ -47,20 +48,28 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
       + "' in Batch " + inputRDBMSEntity.getBatch
       + " with output socket " + inputRDBMSEntity.getOutSocketList.get(0).getSocketId)
 
-    val tableorQuery = if (inputRDBMSEntity.getTableName == null)
+   /* val tableorQuery = if (inputRDBMSEntity.getTableName == null)
       "(" + inputRDBMSEntity.getSelectQuery + ") as alias"
-      else inputRDBMSEntity.getTableName
+      else inputRDBMSEntity.getTableName*/
+
+    val selectQuery = if (inputRDBMSEntity.getTableName == null) {
+      LOG.debug("Select query :  " + inputRDBMSEntity.getSelectQuery)
+      "(" + inputRDBMSEntity.getSelectQuery + ") as aliass"
+    }
+    else "(" + TeradataTableUtils()
+      .getSelectQuery(inputRDBMSEntity.getFieldsList.asScala.toList,inputRDBMSEntity.getTableName) + ") as aliass"
 
     if (inputRDBMSEntity.getTableName != null)
       LOG.debug("Component Id '" + inputRDBMSEntity.getComponentId
         + "' in Batch " + inputRDBMSEntity.getBatch
         + " having schema: [ " + inputRDBMSEntity.getFieldsList.asScala.mkString(",") + " ]"
-        + " reading data from '" + tableorQuery + "' table")
+        + " reading data from '" + selectQuery + "' table")
     else
       LOG.debug("Component Id '" + inputRDBMSEntity.getComponentId
         + "' in Batch " + inputRDBMSEntity.getBatch
         + " having schema: [ " + inputRDBMSEntity.getFieldsList.asScala.mkString(",") + " ]"
-        + " reading data from '" + tableorQuery + "' query")
+        + " reading data from '" + selectQuery + "' query")
+
 
 
     val connectionURL = "jdbc:teradata://" + inputRDBMSEntity.getHostName() + "/DBS_PORT=" + inputRDBMSEntity.getPort() + ",DATABASE=" +
@@ -68,8 +77,10 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
     LOG.info("Connection  url for Teradata input component: " + connectionURL)
 
+
     try {
-      val df = sparkSession.read.jdbc(connectionURL, tableorQuery, properties)
+      val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
+      SchemaUtils().compareSchema(schemaField,df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
