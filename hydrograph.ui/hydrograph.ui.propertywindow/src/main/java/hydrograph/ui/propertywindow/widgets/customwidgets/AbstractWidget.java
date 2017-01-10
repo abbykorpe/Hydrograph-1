@@ -353,8 +353,10 @@ public abstract class AbstractWidget {
 			
 			for(int index=0;index<=array.length-1;index++){
 				Control propertyHelpWidget = (Control)this.propertyHelpWidget.getData(String.valueOf(index));
-				propertyHelpWidget.setToolTipText(array[index]);
-				propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));		
+			   if(null!=propertyHelpWidget){
+				   propertyHelpWidget.setToolTipText(array[index]);
+				   propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));		
+				}
 			}
 		}else if (ShowHidePropertyHelpHandler.getInstance() != null && propertyHelpText != null && propertyHelpWidget != null
 				&& ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()){

@@ -84,7 +84,7 @@
 		
 		<tns:property dataType="string" name="selectOption" renderer="SELECT_JDBC_VALUES_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="Select TableName or Query#Sql Query#Query counter#Table Name#Click to import schema from metastore">
+			usage="REQUIRED" propertyHelpText="Select TableName or Query#Sql Query#Click to import schema from metastore#Table Name#Click to import schema from metastore">
 			<tns:validator>TOGGLE_SELECTION_VALIDATOR</tns:validator>
 		</tns:property>
 		
