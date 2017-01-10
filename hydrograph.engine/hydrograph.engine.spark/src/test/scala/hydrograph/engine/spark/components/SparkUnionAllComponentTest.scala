@@ -3,10 +3,8 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.UnionAllEntity
 import hydrograph.engine.core.component.entity.elements.OutSocket
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.testing.wrapper.{Fields, Bucket, DataBuilder}
-import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
-import org.junit.{Assert, Test}
-import java.lang.reflect.Type
+import hydrograph.engine.testing.wrapper.{DataBuilder, Fields}
+import org.junit.Test
 
 /**
   * Created by gurdits on 12/7/2016.

@@ -1,22 +1,20 @@
 package hydrograph.engine.cascading.assembly;
 
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.InputRDBMSEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.utilites.AssemblyBuildHelper;
+import hydrograph.engine.utilites.CascadingTestCase;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import hydrograph.engine.core.component.entity.InputRDBMSEntity;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
-
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.utilites.AssemblyBuildHelper;
-import hydrograph.engine.utilites.CascadingTestCase;
 
 public class InputMysqlAssemblyTest {
 

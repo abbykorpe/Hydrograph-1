@@ -14,7 +14,6 @@ package hydrograph.engine.plugin.debug.utils;
 
 import hydrograph.engine.core.utilities.GeneralUtilities;
 import hydrograph.engine.core.xmlparser.ComponentValidationEventHandler;
-import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 import hydrograph.engine.jaxb.debug.Debug;
 import hydrograph.engine.jaxb.debug.ViewData;
 import hydrograph.engine.plugin.debug.entity.DebugPoint;

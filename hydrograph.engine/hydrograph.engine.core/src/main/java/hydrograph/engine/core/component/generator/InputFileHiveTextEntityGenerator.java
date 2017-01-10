@@ -12,11 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.InputFileHiveTextEntity;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
@@ -27,6 +22,12 @@ import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
 import hydrograph.engine.jaxb.ihivetextfile.PartitionColumn;
 import hydrograph.engine.jaxb.ihivetextfile.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.inputtypes.HiveTextFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class InputFileHiveTextEntityGenerator extends
 		InputComponentGeneratorBase {

@@ -1,10 +1,9 @@
 package hydrograph.engine.spark.components
 
-import hydrograph.engine.core.component.entity.{OutputFileSequenceFormatEntity, OutputFileDelimitedEntity}
+import hydrograph.engine.core.component.entity.OutputFileSequenceFormatEntity
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import org.apache.spark.storage.StorageLevel
-import org.slf4j.{LoggerFactory, Logger}
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
   * Created by gurdits on 12/28/2016.

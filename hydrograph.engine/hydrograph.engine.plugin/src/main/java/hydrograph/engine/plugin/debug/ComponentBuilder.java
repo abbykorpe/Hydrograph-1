@@ -14,15 +14,7 @@ package hydrograph.engine.plugin.debug;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.jaxb.commontypes.BooleanValueType;
-import hydrograph.engine.jaxb.commontypes.StandardCharsets;
-import hydrograph.engine.jaxb.commontypes.TrueFalse;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeTrueFalse;
+import hydrograph.engine.jaxb.commontypes.*;
 import hydrograph.engine.jaxb.outputtypes.AvroFile;
 import hydrograph.engine.jaxb.outputtypes.AvroFile.Path;
 import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;

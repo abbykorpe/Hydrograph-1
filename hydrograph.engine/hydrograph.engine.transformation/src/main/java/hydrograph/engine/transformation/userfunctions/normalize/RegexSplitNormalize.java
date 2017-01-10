@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.normalize;
 
-import java.util.Properties;
-
 import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.OutputDispatcher;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import hydrograph.engine.transformation.userfunctions.helpers.RegexSplitter;
+
+import java.util.Properties;
 
 public class RegexSplitNormalize implements NormalizeTransformBase {
 

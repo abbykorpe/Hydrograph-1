@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.tuplegenerator;
 
-import java.io.Serializable;
-
 import cascading.tuple.Tuple;
+
+import java.io.Serializable;
 
 public interface ITupleGenerator extends Serializable {
 

@@ -1,9 +1,8 @@
 package hydrograph.engine.spark.components.adapter
 
-import hydrograph.engine.core.component.entity.InputFileSequenceFormatEntity
-import hydrograph.engine.core.component.generator.{InputFileSequenceFormatEntityGenerator, InputFileDelimitedEntityGenerator}
+import hydrograph.engine.core.component.generator.InputFileSequenceFormatEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.{InputSequenceFileComponent, InputFileDelimitedComponent}
+import hydrograph.engine.spark.components.InputSequenceFileComponent
 import hydrograph.engine.spark.components.adapter.base.InputAdatperBase
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams

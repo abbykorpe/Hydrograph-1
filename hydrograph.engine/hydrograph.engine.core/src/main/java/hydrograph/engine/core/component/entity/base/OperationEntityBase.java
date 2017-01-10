@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import hydrograph.engine.core.component.entity.elements.InSocket;
 import hydrograph.engine.core.component.entity.elements.Operation;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OperationEntityBase extends AssemblyEntityBase {
 

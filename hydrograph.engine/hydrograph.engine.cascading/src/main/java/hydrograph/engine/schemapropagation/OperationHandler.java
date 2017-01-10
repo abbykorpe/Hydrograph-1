@@ -12,14 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.schemapropagation;
 
-import hydrograph.engine.core.component.entity.elements.*;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.jaxb.commontypes.*;
-
-import java.util.*;
 
 public class OperationHandler {
 

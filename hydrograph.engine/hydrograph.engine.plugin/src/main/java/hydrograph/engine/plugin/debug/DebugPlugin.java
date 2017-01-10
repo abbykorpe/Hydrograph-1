@@ -15,16 +15,16 @@ package hydrograph.engine.plugin.debug;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
 import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
+import hydrograph.engine.core.utilities.PropertiesHelper;
 import hydrograph.engine.core.utilities.XmlUtilities;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.plugin.debug.entity.DebugPoint;
 import hydrograph.engine.plugin.debug.entity.HydrographDebugInfo;
 import hydrograph.engine.plugin.debug.utils.DebugUtils;
-import hydrograph.engine.core.utilities.PropertiesHelper;
 import org.slf4j.Logger;
-import org.w3c.dom.Document;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;

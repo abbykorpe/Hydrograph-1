@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
     Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -11,7 +12,10 @@
     limitations under the License.
  -->
 
-<p:graph name="AggregateExample" xmlns:it="hydrograph/engine/jaxb/inputtypes"	xmlns:ot="hydrograph/engine/jaxb/outputtypes" xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"	xmlns:op="hydrograph/engine/jaxb/operationstypes" xmlns:ct="hydrograph/engine/jaxb/commandtypes"	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
+<p:graph name="AggregateExample" xmlns:it="hydrograph/engine/jaxb/inputtypes"
+		 xmlns:ot="hydrograph/engine/jaxb/outputtypes"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="hydrograph/engine/jaxb/main"
+		 xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
 	<inputs id="@{input}" batch="0" xsi:type="it:textFileDelimited">
 		<outSocket id="out0">
 			<schema name="outSchema">

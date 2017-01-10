@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.expression.api;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import hydrograph.engine.expression.antlr.ExpressionEditorBaseVisitor;
 import hydrograph.engine.expression.antlr.ExpressionEditorParser;
 import hydrograph.engine.expression.antlr.ExpressionEditorVisitor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author gurdits

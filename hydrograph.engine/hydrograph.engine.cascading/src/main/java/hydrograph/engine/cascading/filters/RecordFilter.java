@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.filters;
 
-import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
-import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
-import hydrograph.engine.cascading.assembly.handlers.RecordFilterHandlerBase;
-import hydrograph.engine.expression.api.ValidationAPI;
-import hydrograph.engine.expression.userfunctions.FilterForExpression;
-import hydrograph.engine.transformation.userfunctions.base.FilterBase;
-import hydrograph.engine.utilities.UserClassLoader;
 import cascading.flow.FlowProcess;
 import cascading.management.annotation.Property;
 import cascading.management.annotation.PropertyDescription;
@@ -27,6 +20,13 @@ import cascading.operation.BaseOperation;
 import cascading.operation.Filter;
 import cascading.operation.FilterCall;
 import cascading.operation.OperationCall;
+import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
+import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
+import hydrograph.engine.cascading.assembly.handlers.RecordFilterHandlerBase;
+import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.userfunctions.FilterForExpression;
+import hydrograph.engine.transformation.userfunctions.base.FilterBase;
+import hydrograph.engine.utilities.UserClassLoader;
 
 @SuppressWarnings("unchecked")
 public class RecordFilter extends BaseOperation<RecordFilterContext> implements

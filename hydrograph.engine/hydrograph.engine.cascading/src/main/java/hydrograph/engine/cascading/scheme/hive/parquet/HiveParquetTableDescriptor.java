@@ -12,16 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme.hive.parquet;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import cascading.tap.hive.HiveTableDescriptor;
+import cascading.tuple.Fields;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.metastore.TableType;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
@@ -33,8 +25,8 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
-import cascading.tap.hive.HiveTableDescriptor;
-import cascading.tuple.Fields;
+import java.sql.Timestamp;
+import java.util.*;
 
 public class HiveParquetTableDescriptor extends HiveTableDescriptor {
 

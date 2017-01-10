@@ -1,13 +1,6 @@
 
 package hydrograph.engine.jaxb.commontypes;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.ifmixedscheme.TypeMixedBase;
 import hydrograph.engine.jaxb.ifsubjob.TypeInputFileDelimitedSubjob;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
@@ -17,6 +10,10 @@ import hydrograph.engine.jaxb.ioracle.TypeInputOracleBase;
 import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftBase;
 import hydrograph.engine.jaxb.itffw.TypeFixedWidthBase;
 import hydrograph.engine.jaxb.itfs.TypeInputFileSequenceBase;
+
+import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

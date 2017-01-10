@@ -12,9 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.operation.filter.Limit;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
@@ -22,7 +19,8 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.LimitEntity;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.utilities.ComponentHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LimitAssembly extends BaseComponent<LimitEntity> {
 

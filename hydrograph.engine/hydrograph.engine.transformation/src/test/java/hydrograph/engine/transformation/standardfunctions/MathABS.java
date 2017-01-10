@@ -12,12 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import java.math.BigDecimal;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import hydrograph.engine.transformation.standardfunctions.NumericFunctions;
+import java.math.BigDecimal;
 
 public class MathABS {
 

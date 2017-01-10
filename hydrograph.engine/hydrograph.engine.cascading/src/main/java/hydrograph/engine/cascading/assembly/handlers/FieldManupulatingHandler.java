@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
+import cascading.tuple.Fields;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import cascading.tuple.Fields;
 
 public class FieldManupulatingHandler implements Serializable {
 

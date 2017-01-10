@@ -12,39 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity.utils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import hydrograph.engine.core.component.entity.elements.Expression;
-import hydrograph.engine.core.component.entity.elements.InSocket;
-import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
-import hydrograph.engine.core.component.entity.elements.KeyField;
-import hydrograph.engine.core.component.entity.elements.MapField;
-import hydrograph.engine.core.component.entity.elements.Operation;
-import hydrograph.engine.core.component.entity.elements.OperationField;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.elements.PassThroughField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeExpressionField;
-import hydrograph.engine.jaxb.commontypes.TypeExpressionOutputFields;
-import hydrograph.engine.jaxb.commontypes.TypeFieldName;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeMapField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationOutputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputRecordCount;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.core.component.entity.elements.*;
+import hydrograph.engine.jaxb.commontypes.*;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.join.TypeKeyFields;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * The utility class for entities of all operation type components. This class
@@ -92,6 +66,7 @@ public class OperationEntityUtils implements Serializable{
 				operation.setOperationClass(((TypeTransformOperation) typeTransformOperation).getClazz());
 				operation.setOperationProperties(
 						extractOperationProperties(((TypeTransformOperation) typeTransformOperation).getProperties()));
+				operation.setExpressionPresent(false);
 				operationList.add(operation);
 			}else {
 				operation.setOperationId(((TypeTransformExpression) typeTransformOperation).getId());
@@ -102,6 +77,7 @@ public class OperationEntityUtils implements Serializable{
 				operation.setExpression(addSemiColonIfNotPresent(((TypeTransformExpression) typeTransformOperation).getExpr()));
 				operation.setAccumulatorInitialValue(addQuotes(((TypeTransformExpression) typeTransformOperation).getAccumulatorInitalValue()));
 				operation.setOperationClass(null);
+				operation.setExpressionPresent(true);
 				operation.setOperationProperties(
 						extractOperationProperties(((TypeTransformExpression) typeTransformOperation).getProperties()));
 				operationList.add(operation);

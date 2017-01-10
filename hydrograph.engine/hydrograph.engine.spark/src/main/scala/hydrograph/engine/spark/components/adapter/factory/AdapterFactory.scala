@@ -1,19 +1,16 @@
 package hydrograph.engine.spark.components.adapter.factory
 
-import java.io.FileInputStream
+import java.io.IOException
 import java.util.Properties
 
+import hydrograph.engine.core.utilities.PropertiesHelper
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.jaxb.main.Graph
 import hydrograph.engine.spark.components.adapter.base.AdapterBase
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
-import java.io.IOException
-import java.io.FileReader
-
-import hydrograph.engine.core.utilities.PropertiesHelper
-import org.slf4j.{Logger, LoggerFactory}
 
 /**
   * Created by gurdits on 10/26/2016.

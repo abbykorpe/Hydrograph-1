@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity.utils;
 
+import hydrograph.engine.core.component.entity.elements.MapField;
+import hydrograph.engine.core.component.entity.elements.OperationField;
+import hydrograph.engine.core.component.entity.elements.PassThroughField;
+
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import hydrograph.engine.core.component.entity.elements.MapField;
-import hydrograph.engine.core.component.entity.elements.OperationField;
-import hydrograph.engine.core.component.entity.elements.PassThroughField;
 
 
 public class OutSocketUtils implements Serializable{

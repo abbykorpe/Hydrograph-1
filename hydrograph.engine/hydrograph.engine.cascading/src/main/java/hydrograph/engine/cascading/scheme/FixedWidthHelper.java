@@ -12,9 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-
 import cascading.tap.TapException;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
@@ -22,6 +19,9 @@ import cascading.tuple.coerce.Coercions;
 import cascading.tuple.coerce.StringCoerce;
 import cascading.tuple.type.CoercibleType;
 import cascading.tuple.type.DateType;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 
 public class FixedWidthHelper {
 

@@ -1,7 +1,7 @@
 package hydrograph.engine.spark.core.reusablerow
 
-import org.apache.spark.sql.Row
 import java.util.LinkedHashSet
+
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 
 class OutputReusableRow(var outputRow: Array[Any], fieldsIndexMap: Map[String, Int], fieldsIndexList: Array[Int], fields: LinkedHashSet[String])

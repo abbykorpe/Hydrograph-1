@@ -12,14 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.core.utilities;
 
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
+import hydrograph.engine.jaxb.commontypes.*;
 
 import java.util.ArrayList;
 import java.util.List;

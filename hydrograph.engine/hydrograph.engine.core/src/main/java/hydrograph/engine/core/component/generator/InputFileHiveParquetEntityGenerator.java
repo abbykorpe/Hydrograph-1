@@ -12,13 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.InputFileHiveParquetEntity;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
@@ -28,6 +21,12 @@ import hydrograph.engine.jaxb.ihiveparquet.HivePartitionFilterType;
 import hydrograph.engine.jaxb.ihiveparquet.PartitionColumn;
 import hydrograph.engine.jaxb.ihiveparquet.PartitionFieldBasicType;
 import hydrograph.engine.jaxb.inputtypes.ParquetHiveFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Ganesh

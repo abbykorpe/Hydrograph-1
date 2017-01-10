@@ -1,17 +1,18 @@
 package hydrograph.engine.spark.components.utils
 
-import scala.collection.JavaConverters._
 import org.apache.hadoop.conf.Configuration
-import org.apache.parquet.schema._
-import org.apache.parquet.schema.OriginalType._
-import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName._
-import org.apache.parquet.schema.Type.Repetition._
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.types._
 import org.apache.hadoop.fs.Path
 import org.apache.parquet.hadoop.ParquetFileReader
 import org.apache.parquet.hadoop.metadata.ParquetMetadata
+import org.apache.parquet.schema.OriginalType._
+import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName._
+import org.apache.parquet.schema.Type.Repetition._
+import org.apache.parquet.schema._
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.internal.SQLConf
+import org.apache.spark.sql.types._
+
+import scala.collection.JavaConverters._
 
 /**
   * This converter class is used to convert Parquet [[MessageType]] to Spark SQL [[StructType]] and

@@ -12,17 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.InputRDBMSEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.Redshift;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class InputRedshiftEntityGenerator extends

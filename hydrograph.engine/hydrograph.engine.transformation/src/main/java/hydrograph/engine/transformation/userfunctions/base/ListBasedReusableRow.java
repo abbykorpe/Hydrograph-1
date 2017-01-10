@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-
 public class ListBasedReusableRow extends ReusableRow {
 
 	private ArrayList<Comparable> values;

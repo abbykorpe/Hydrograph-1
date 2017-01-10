@@ -12,23 +12,21 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.functions;
 
-import static org.junit.Assert.assertEquals;
-import hydrograph.engine.cascading.functions.CopyFields;
-
-import java.util.List;
-
-import org.junit.Test;
-
 import cascading.operation.Function;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
-
 import com.hotels.plunger.Bucket;
 import com.hotels.plunger.Data;
 import com.hotels.plunger.DataBuilder;
 import com.hotels.plunger.Plunger;
+import hydrograph.engine.cascading.functions.CopyFields;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("rawtypes")
 public class CopyFieldsFunctionTest {

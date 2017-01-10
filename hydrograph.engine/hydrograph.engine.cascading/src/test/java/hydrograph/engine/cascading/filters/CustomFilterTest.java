@@ -12,27 +12,25 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.filters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
-import hydrograph.engine.cascading.assembly.handlers.RecordFilterHandlerBase;
-import hydrograph.engine.cascading.filters.RecordFilter;
-
-import java.util.List;
-import java.util.Properties;
-
-import org.junit.Test;
-
 import cascading.operation.Filter;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
-
 import com.hotels.plunger.Bucket;
 import com.hotels.plunger.Data;
 import com.hotels.plunger.DataBuilder;
 import com.hotels.plunger.Plunger;
+import hydrograph.engine.cascading.assembly.handlers.FilterCustomHandler;
+import hydrograph.engine.cascading.assembly.handlers.RecordFilterHandlerBase;
+import hydrograph.engine.cascading.filters.RecordFilter;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Properties;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class CustomFilterTest {
 

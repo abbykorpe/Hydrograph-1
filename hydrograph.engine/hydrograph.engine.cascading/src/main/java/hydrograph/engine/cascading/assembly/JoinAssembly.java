@@ -11,6 +11,7 @@
  * limitations under the License.
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
+
 import cascading.pipe.Checkpoint;
 import cascading.pipe.CoGroup;
 import cascading.pipe.Each;
@@ -23,28 +24,21 @@ import cascading.pipe.joiner.OuterJoin;
 import cascading.tuple.Fields;
 import com.google.common.primitives.Booleans;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
-import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.JoinHelper;
-import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
 import hydrograph.engine.cascading.filters.BlockAllFilter;
 import hydrograph.engine.cascading.filters.JoinGetUnmatchedRecordsFilter;
 import hydrograph.engine.cascading.filters.JoinOutLinkFilter;
 import hydrograph.engine.cascading.filters.JoinUnusedLinkFilter;
 import hydrograph.engine.core.component.entity.JoinEntity;
-import hydrograph.engine.core.component.entity.TransformEntity;
 import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
 import hydrograph.engine.utilities.ComponentHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 /**
  * Join Component for joining two or more files.
  * 

@@ -12,15 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.CloneEntity;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.component.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.core.component.generator.base.StraightPullComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.straightpulltypes.Clone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CloneEntityGenerator extends StraightPullComponentGeneratorBase {
 

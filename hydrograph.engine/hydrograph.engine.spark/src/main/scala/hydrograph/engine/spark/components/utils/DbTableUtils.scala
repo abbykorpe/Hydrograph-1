@@ -1,17 +1,8 @@
 package hydrograph.engine.spark.components.utils
 
-import java.sql.{Connection, ResultSetMetaData, SQLException}
-import java.util.Properties
-
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
-import org.apache.derby.impl.sql.compile.BooleanTypeCompiler
-import org.apache.spark.sql.execution.datasources.jdbc.{JDBCRDD, JdbcUtils}
-import org.apache.spark.sql.jdbc.JdbcDialects
-import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
-
-import scala.math._
 
 /**
   * Created by santlalg on 12/12/2016.

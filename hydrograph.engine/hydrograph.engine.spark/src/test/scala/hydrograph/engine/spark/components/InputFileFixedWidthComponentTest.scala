@@ -1,14 +1,13 @@
 package hydrograph.engine.spark.components
 
 import java.util
+
+import hydrograph.engine.core.component.entity.InputFileFixedWidthEntity
+import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import org.junit.{ Test, Assert, Before }
-import org.junit.Assert
 import org.apache.spark.SparkException
 import org.apache.spark.sql._
-import hydrograph.engine.core.component.entity.elements.OutSocket
-import hydrograph.engine.core.component.entity.elements.SchemaField
-import hydrograph.engine.core.component.entity.InputFileFixedWidthEntity
+import org.junit.{Assert, Test}
 
 class InputFileFixedWidthComponentTest {
 

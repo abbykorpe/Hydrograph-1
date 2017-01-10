@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser.parametersubstitution;
 
-import java.util.Properties;
-
 import hydrograph.engine.core.utilities.GeneralUtilities;
+
+import java.util.Properties;
 
 public class PropertyBank implements IParameterBank {
 

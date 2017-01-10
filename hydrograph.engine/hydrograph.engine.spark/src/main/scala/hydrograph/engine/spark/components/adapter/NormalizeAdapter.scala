@@ -1,8 +1,8 @@
 package hydrograph.engine.spark.components.adapter
 
-import hydrograph.engine.core.component.generator.{NormalizeEntityGenerator, TransformEntityGenerator}
+import hydrograph.engine.core.component.generator.NormalizeEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.{NormalizeComponent, TransformComponent}
+import hydrograph.engine.spark.components.NormalizeComponent
 import hydrograph.engine.spark.components.adapter.base.OperationAdatperBase
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams

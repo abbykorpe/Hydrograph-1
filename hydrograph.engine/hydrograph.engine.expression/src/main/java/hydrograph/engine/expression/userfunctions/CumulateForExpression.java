@@ -12,19 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Properties;
-
-import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.utils.ExpressionWrapper;
 import hydrograph.engine.transformation.userfunctions.base.CumulateTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.util.ArrayList;
+import java.util.Properties;
 
 @SuppressWarnings("rawtypes")
 public class CumulateForExpression implements CumulateTransformBase {
 
-	private ValidationAPI[] validationAPIs;
-	private String[] initialValueExpressions;
+	private ExpressionWrapper expressionWrapper;
 	private Object accumulatorValue;
 	private int counter;
 
@@ -32,25 +30,22 @@ public class CumulateForExpression implements CumulateTransformBase {
 		this.counter = counter;
 	}
 
-	public void setValidationAPI(ValidationAPI[] validationAPI) {
-		this.validationAPIs = validationAPI;
+	public void setValidationAPI(ExpressionWrapper expressionWrapper) {
+		this.expressionWrapper = expressionWrapper;
 	}
 
-	public void setInitialValueExpression(String[] initialValueExpression) {
-		this.initialValueExpressions = initialValueExpression;
-	}
 
 	public CumulateForExpression() {
 	}
 	
 	public void callPrepare(){
 		try {
-			accumulatorValue = validationAPIs[counter]
-					.execute(initialValueExpressions[counter]);
+			accumulatorValue = expressionWrapper.getValidationAPI()
+					.execute(expressionWrapper.getIntialValueExpression());
 		} catch (Exception e) {
 			throw new RuntimeException(
 					"Exception in aggregate initial value expression: "
-							+ initialValueExpressions + ".", e);
+							+ expressionWrapper.getIntialValueExpression() + ".", e);
 		}
 	}
 	
@@ -71,11 +66,11 @@ public class CumulateForExpression implements CumulateTransformBase {
 		fieldNames[i] = "_accumulator";
 		tuples[i] = accumulatorValue;
 		try {
-			accumulatorValue = validationAPIs[counter].execute(fieldNames,
-					tuples, validationAPIs[counter].getExpr());
+			accumulatorValue = expressionWrapper.getValidationAPI().execute(fieldNames,
+					tuples, expressionWrapper.getValidationAPI().getExpr());
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in aggregate expression: "
-					+ validationAPIs[counter].getExpr() + ".\nRow being processed: "
+					+ expressionWrapper.getValidationAPI().getExpr() + ".\nRow being processed: "
 					+ input.toString(), e);
 		}
 		output.setField(0, (Comparable) accumulatorValue);
@@ -84,12 +79,12 @@ public class CumulateForExpression implements CumulateTransformBase {
 	@Override
 	public void onCompleteGroup() {
 		try {
-			accumulatorValue = validationAPIs[counter]
-					.execute(initialValueExpressions[counter]);
+			accumulatorValue = expressionWrapper.getValidationAPI()
+					.execute(expressionWrapper.getIntialValueExpression());
 		} catch (Exception e) {
 			throw new RuntimeException(
 					"Exception in aggregate initial value expression: "
-							+ initialValueExpressions + ".", e);
+							+ expressionWrapper.getIntialValueExpression() + ".", e);
 		}
 	}
 

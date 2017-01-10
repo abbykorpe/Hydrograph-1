@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.tuplegenerator;
 
-import java.lang.reflect.Type;
-
 import cascading.tuple.Tuple;
+
+import java.lang.reflect.Type;
 
 public class RandomTupleGenerator implements ITupleGenerator {
 	/**

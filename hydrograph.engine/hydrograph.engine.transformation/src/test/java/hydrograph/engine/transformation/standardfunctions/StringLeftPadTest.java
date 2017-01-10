@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import static hydrograph.engine.transformation.standardfunctions.StringFunctions.stringLeftPad;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static hydrograph.engine.transformation.standardfunctions.StringFunctions.stringLeftPad;
 
 public class StringLeftPadTest {
 

@@ -12,6 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.OutputFileHiveParquetAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.coercetype.StrictDateType;
@@ -19,20 +24,13 @@ import hydrograph.engine.core.component.entity.OutputFileHiveParquetEntity;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
 
 @SuppressWarnings("rawtypes")
 public class OutputFileHiveParquetFileTest {

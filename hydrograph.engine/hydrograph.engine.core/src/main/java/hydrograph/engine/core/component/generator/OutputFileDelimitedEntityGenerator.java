@@ -12,9 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.OutputFileDelimitedEntity;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
@@ -22,6 +19,8 @@ import hydrograph.engine.core.utilities.GeneralUtilities;
 import hydrograph.engine.jaxb.commontypes.TrueFalse;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputFileDelimitedEntityGenerator extends OutputComponentGeneratorBase {
 

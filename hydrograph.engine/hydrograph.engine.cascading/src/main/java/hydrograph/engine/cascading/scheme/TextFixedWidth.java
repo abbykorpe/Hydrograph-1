@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.charset.Charset;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.RecordReader;
-
 import cascading.flow.FlowProcess;
 import cascading.scheme.SinkCall;
 import cascading.scheme.SourceCall;
@@ -28,6 +19,14 @@ import cascading.scheme.hadoop.TextLine;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.RecordReader;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 
 @SuppressWarnings("serial")
 public class TextFixedWidth extends TextLine {

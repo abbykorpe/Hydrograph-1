@@ -12,23 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme.parquet;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.hadoop.hive.ql.io.parquet.read.DataWritableReadSupport;
-import org.apache.hadoop.io.ArrayWritable;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.RecordReader;
-
-import parquet.cascading.SchemaIntersection;
-import parquet.hadoop.Footer;
-import parquet.hadoop.ParquetInputFormat;
-import parquet.hadoop.ParquetOutputFormat;
-import parquet.hadoop.mapred.Container;
-import parquet.hadoop.mapred.DeprecatedParquetInputFormat;
-import parquet.hadoop.mapred.DeprecatedParquetOutputFormat;
-import parquet.schema.MessageType;
 import cascading.flow.FlowProcess;
 import cascading.scheme.Scheme;
 import cascading.scheme.SinkCall;
@@ -42,6 +25,22 @@ import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetSchemeHelper;
 import hydrograph.engine.cascading.scheme.hive.parquet.WritableFactory;
+import org.apache.hadoop.hive.ql.io.parquet.read.DataWritableReadSupport;
+import org.apache.hadoop.io.ArrayWritable;
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.RecordReader;
+import parquet.cascading.SchemaIntersection;
+import parquet.hadoop.Footer;
+import parquet.hadoop.ParquetInputFormat;
+import parquet.hadoop.ParquetOutputFormat;
+import parquet.hadoop.mapred.Container;
+import parquet.hadoop.mapred.DeprecatedParquetInputFormat;
+import parquet.hadoop.mapred.DeprecatedParquetOutputFormat;
+import parquet.schema.MessageType;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * A Cascading Scheme that converts Parquet groups into Cascading tuples. If you

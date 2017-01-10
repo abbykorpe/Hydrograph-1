@@ -13,12 +13,8 @@
 package hydrograph.engine.core.component.entity;
 
 import hydrograph.engine.core.component.entity.base.StraightPullEntityBase;
-import hydrograph.engine.core.component.entity.elements.Operation;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class LimitEntity extends StraightPullEntityBase {
 

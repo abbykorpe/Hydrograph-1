@@ -2,9 +2,11 @@ package hydrograph.engine.spark.datasource.utils
 
 import java.math.BigDecimal
 import java.sql.{Date, Timestamp}
-import java.text.{SimpleDateFormat, NumberFormat}
-import java.util.{TimeZone, Locale}
+import java.text.{NumberFormat, SimpleDateFormat}
+import java.util.{Locale, TimeZone}
+
 import org.apache.spark.sql.types.{DateType, StringType, _}
+
 import scala.util.Try
 
 

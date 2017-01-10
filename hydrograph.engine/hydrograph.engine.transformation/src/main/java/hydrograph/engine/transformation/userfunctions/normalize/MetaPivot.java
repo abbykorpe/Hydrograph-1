@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.normalize;
 
-import java.util.Properties;
-
 import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.OutputDispatcher;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.util.Properties;
 
 public class MetaPivot implements NormalizeTransformBase {
 

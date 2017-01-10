@@ -12,8 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static data.InputData.inputFileDelimited;
-
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
 import hydrograph.engine.cascading.assembly.InputFileDelimitedAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.InputFileDelimitedEntity;
@@ -21,16 +22,13 @@ import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import static data.InputData.inputFileDelimited;
 
 public class InputFileDelimitedTest {
 

@@ -3,8 +3,8 @@ package hydrograph.engine.spark.components.adapter
 import hydrograph.engine.core.component.generator.DiscardEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.spark.components.SparkDiscardComponent
-import hydrograph.engine.spark.components.adapter.base.{ OutputAdatperBase}
-import hydrograph.engine.spark.components.base.{ SparkFlow}
+import hydrograph.engine.spark.components.adapter.base.OutputAdatperBase
+import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 /**

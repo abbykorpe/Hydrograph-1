@@ -17,8 +17,8 @@ import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
 
 import java.io.Serializable;
 import java.util.ArrayList;

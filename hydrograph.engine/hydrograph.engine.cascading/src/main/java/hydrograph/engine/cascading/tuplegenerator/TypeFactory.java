@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.tuplegenerator;
 
+import cascading.tuple.coerce.*;
+import cascading.tuple.type.DateType;
 import hydrograph.engine.cascading.coercetype.ImplicitBigDecimalType;
 
 import java.lang.reflect.Type;
@@ -19,15 +21,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import cascading.tuple.coerce.BooleanObjectCoerce;
-import cascading.tuple.coerce.DoubleObjectCoerce;
-import cascading.tuple.coerce.FloatObjectCoerce;
-import cascading.tuple.coerce.IntegerObjectCoerce;
-import cascading.tuple.coerce.LongObjectCoerce;
-import cascading.tuple.coerce.ShortObjectCoerce;
-import cascading.tuple.coerce.StringCoerce;
-import cascading.tuple.type.DateType;
 
 public class TypeFactory {
 

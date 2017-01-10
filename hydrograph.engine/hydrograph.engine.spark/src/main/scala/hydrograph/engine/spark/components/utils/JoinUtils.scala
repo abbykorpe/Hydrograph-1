@@ -1,17 +1,14 @@
 package hydrograph.engine.spark.components.utils
 
-import hydrograph.engine.core.component.entity.JoinEntity
-import hydrograph.engine.core.component.entity.elements.JoinKeyFields
-import hydrograph.engine.spark.components.platform.BaseComponentParams
-import org.apache.spark.sql.{ DataFrame, Column }
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{ StructField, StructType }
-import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
-import hydrograph.engine.core.component.entity.elements.PassThroughField
-import scala.collection.mutable.ListBuffer
+import hydrograph.engine.core.component.entity.{JoinEntity, LookupEntity}
 import hydrograph.engine.core.component.entity.base.OperationEntityBase
-import hydrograph.engine.core.component.entity.LookupEntity
+import hydrograph.engine.core.component.entity.elements.PassThroughField
+import hydrograph.engine.spark.components.platform.BaseComponentParams
+import org.apache.spark.sql.DataFrame
+
+import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
+import scala.collection.mutable.ListBuffer
 
 /**
  * Created by gurdits on 9/26/2016.

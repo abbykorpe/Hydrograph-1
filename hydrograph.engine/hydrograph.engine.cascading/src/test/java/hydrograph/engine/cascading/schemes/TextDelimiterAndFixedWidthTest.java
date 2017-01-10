@@ -12,37 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.schemes;
 
-import static data.InputData.itShouldProduceValidResultsForAllDataTypes;
-import static data.InputData.itShouldProduceValidResultsForAllRecordsInOneLine;
-import static data.InputData.itShouldProduceValidResultsForAllRecordsInOneLineWithDelimitedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForAllRecordsInOneLineWithFixedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForCedillaDelimitedRecords;
-import static data.InputData.itShouldProduceValidResultsForCedillaDelimitedRecordsWithDelimitedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForCedillaDelimitedRecordsWithFixedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForDelimiterPresentInFixedWidthData;
-import static data.InputData.itShouldProduceValidResultsForFixedWidthRecordsInOneLine;
-import static data.InputData.itShouldProduceValidResultsForRecordSpanningMultipleLines;
-import static data.InputData.itShouldProduceValidResultsForRecordSpanningMultipleLinesWithDelimitedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForRecordSpanningMultipleLinesWithFixedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForRecordWithLastFixedWidthField;
-import static data.InputData.itShouldProduceValidResultsForRecordWithLastFixedWidthFieldAndDelimitedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForRecordWithLastFixedWidthFieldAndFixedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForSimpleMixedScheme;
-import static data.InputData.itShouldProduceValidResultsForSimpleMixedSchemeWithQuoteChar;
-import static data.InputData.itShouldProduceValidResultsForSimpleMixedSchemeWithDelimitedNewlineField;
-import static data.InputData.itShouldProduceValidResultsForSimpleMixedSchemeWithFixedNewlineField;
-import static org.junit.Assert.assertEquals;
-import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Date;
-import java.util.Properties;
-
-import org.apache.hadoop.conf.Configuration;
-import org.junit.Before;
-import org.junit.Test;
-
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;
 import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
@@ -55,6 +24,18 @@ import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntryIterator;
+import hydrograph.engine.cascading.scheme.TextDelimitedAndFixedWidth;
+import org.apache.hadoop.conf.Configuration;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.Properties;
+
+import static data.InputData.*;
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class TextDelimiterAndFixedWidthTest {

@@ -3,7 +3,7 @@ package hydrograph.engine.spark.executiontracking.plugin
 import java.util
 import java.util.Properties
 
-import hydrograph.engine.transformation.userfunctions.base.{ReusableRow, FilterBase}
+import hydrograph.engine.transformation.userfunctions.base.{FilterBase, ReusableRow}
 import org.apache.spark.util.LongAccumulator
 
 /**

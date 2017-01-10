@@ -13,12 +13,10 @@
 
 package hydrograph.engine.cascading.scheme;
 
-import cascading.jdbc.JDBCScheme;
 import cascading.jdbc.RedshiftScheme;
 import cascading.jdbc.db.DBInputFormat;
 import cascading.jdbc.db.DBOutputFormat;
 import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
 
 public class RedshiftSchemeForUpdate extends RedshiftScheme{
 

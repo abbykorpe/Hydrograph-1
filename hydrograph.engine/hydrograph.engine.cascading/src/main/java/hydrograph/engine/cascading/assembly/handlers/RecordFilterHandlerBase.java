@@ -12,12 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
+import cascading.operation.FilterCall;
+import cascading.operation.OperationCall;
 import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 
 import java.io.Serializable;
-
-import cascading.operation.FilterCall;
-import cascading.operation.OperationCall;
 
 public interface RecordFilterHandlerBase extends Serializable {
 

@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import static hydrograph.engine.transformation.standardfunctions.ValidationFunctions.isNull;
-import static hydrograph.engine.transformation.standardfunctions.ValidationFunctions.isNullCheck;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import static hydrograph.engine.transformation.standardfunctions.ValidationFunctions.isNull;
+import static hydrograph.engine.transformation.standardfunctions.ValidationFunctions.isNullCheck;
 
 public class IsNullTest {
 

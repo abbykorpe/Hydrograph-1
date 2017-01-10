@@ -12,26 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme;
 
-import hydrograph.engine.hadoop.inputformat.DelimitedAndFixedWidthInputFormat;
-
-import java.beans.ConstructorProperties;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Calendar;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.FileInputFormat;
-import org.apache.hadoop.mapred.InputFormat;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.OutputFormat;
-import org.apache.hadoop.mapred.RecordReader;
-import org.apache.hadoop.mapred.TextOutputFormat;
-
 import cascading.flow.FlowProcess;
 import cascading.scheme.Scheme;
 import cascading.scheme.SinkCall;
@@ -40,6 +20,18 @@ import cascading.scheme.util.DelimitedParser;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
+import hydrograph.engine.hadoop.inputformat.DelimitedAndFixedWidthInputFormat;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.*;
+
+import java.beans.ConstructorProperties;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Calendar;
 
 @SuppressWarnings("rawtypes")
 public class TextDelimitedAndFixedWidth

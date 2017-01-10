@@ -15,14 +15,13 @@
  */
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.SortEntity;
 import hydrograph.engine.core.component.entity.utils.StraightPullEntityUtils;
 import hydrograph.engine.core.component.generator.base.StraightPullComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.straightpulltypes.Sort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Prabodh

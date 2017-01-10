@@ -1,19 +1,15 @@
 package hydrograph.engine.spark.generaterecord.utils
 
 
-import scala.util.Random
-
-import org.fluttercode.datafactory.impl.DataFactory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.util.Date
-import java.math.RoundingMode
-import java.math.BigDecimal
-import java.lang.Double
-import java.lang.Long
+import java.lang.{Double, Long}
+import java.math.{BigDecimal, RoundingMode}
 import java.text.SimpleDateFormat
+import java.util.{Calendar, Date}
+
 import bsh.ParseException
-import java.util.Calendar
+import org.fluttercode.datafactory.impl.DataFactory
+
+import scala.util.Random
 
 
 object DataGenerator {

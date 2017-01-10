@@ -42,11 +42,19 @@ public class Operation implements Serializable{
 	private Properties operationProperties;
 	private String expression;
 	private String accumulatorInitialValue;
-	
+	private boolean isExpressionPresent;
 	public Operation() {
 
 	}
 
+
+	public boolean isExpressionPresent() {
+		return isExpressionPresent;
+	}
+
+	public void setExpressionPresent(boolean expressionPresent) {
+		isExpressionPresent = expressionPresent;
+	}
 
 	/**
 	 * @return the Expression

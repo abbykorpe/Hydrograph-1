@@ -12,9 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+import com.hotels.plunger.Bucket;
+import com.hotels.plunger.Data;
+import com.hotels.plunger.DataBuilder;
+import com.hotels.plunger.Plunger;
 import hydrograph.engine.cascading.assembly.JoinAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.JoinEntity;
@@ -22,24 +26,17 @@ import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
 import hydrograph.engine.core.component.entity.elements.MapField;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.PassThroughField;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
-
-import com.hotels.plunger.Bucket;
-import com.hotels.plunger.Data;
-import com.hotels.plunger.DataBuilder;
-import com.hotels.plunger.Plunger;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Test join sub assembly. The tests are written using plunger framework

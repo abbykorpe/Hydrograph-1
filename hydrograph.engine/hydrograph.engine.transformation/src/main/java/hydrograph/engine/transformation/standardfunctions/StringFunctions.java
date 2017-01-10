@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
+import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
 /**
  * The class StringFunctions provides various string manipulation functions.

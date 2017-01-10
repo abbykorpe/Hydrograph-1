@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import static hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper.convertComparableObjectToString;
+import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
 
 import java.math.BigDecimal;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper;
+import static hydrograph.engine.transformation.standardfunctions.helper.StandardFunctionHelper.convertComparableObjectToString;
 
 /**
  * The class NumericFunctions provides various math and numeric functions.

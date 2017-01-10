@@ -13,15 +13,10 @@
 package hydrograph.engine.plugin.debug.utils;
 
 import hydrograph.engine.core.component.entity.elements.SchemaField;
-import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
-import hydrograph.engine.jaxb.commontypes.ScaleTypeList;
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
-
-import java.util.Set;
+import hydrograph.engine.jaxb.commontypes.*;
 
 import javax.xml.namespace.QName;
+import java.util.Set;
 
 /**
  * This class helps in converting the

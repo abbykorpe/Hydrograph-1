@@ -1,8 +1,8 @@
 package hydrograph.engine.spark.core.reusablerow
 
-import org.apache.spark.sql.types.StructType
 import java.util.LinkedHashSet
-import scala.collection.immutable.HashMap
+
+import org.apache.spark.sql.types.StructType
 
 class RowToReusableMapper(allFields: StructType, requiredFields: Array[String]) extends Serializable {
 

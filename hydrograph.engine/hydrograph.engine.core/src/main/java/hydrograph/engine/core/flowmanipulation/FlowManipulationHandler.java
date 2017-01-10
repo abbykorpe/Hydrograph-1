@@ -12,21 +12,21 @@
  *******************************************************************************/
 package hydrograph.engine.core.flowmanipulation;
 
+import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.props.OrderedProperties;
+import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
+import hydrograph.engine.core.utilities.OrderedPropertiesHelper;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.main.Graph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
-
-import hydrograph.engine.core.props.OrderedProperties;
-import hydrograph.engine.core.utilities.OrderedPropertiesHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.main.Graph;
 
 /**
  * @author gurdits

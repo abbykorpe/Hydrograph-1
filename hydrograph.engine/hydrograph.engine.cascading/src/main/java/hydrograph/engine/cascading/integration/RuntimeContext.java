@@ -12,24 +12,18 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.hadoop.mapred.JobConf;
-
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
 import hydrograph.engine.adapters.base.BaseAdapter;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.component.mapping.ComponentAdapterFactory;
-import hydrograph.engine.core.component.generator.base.GeneratorBase;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
+import org.apache.hadoop.mapred.JobConf;
+
+import java.util.*;
 
 @SuppressWarnings("rawtypes")
 public class RuntimeContext {

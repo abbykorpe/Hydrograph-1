@@ -12,23 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.schemes;
 
-import static data.InputData.fixedWidthIsoinputfilelinuxEOL;
-import static data.InputData.fixedWidthIsoinputfilewindowsEOL;
-import static data.InputData.fixedWidthUtf8inputfilelinuxEOL;
-import static data.InputData.fixedWidthUtf8inputfilewindowsEOL;
-import static org.junit.Assert.assertEquals;
-import hydrograph.engine.cascading.scheme.TextFixedWidth;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Properties;
-
-import org.apache.hadoop.conf.Configuration;
-import org.junit.Before;
-import org.junit.Test;
-
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;
 import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
@@ -41,6 +24,19 @@ import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntryIterator;
+import hydrograph.engine.cascading.scheme.TextFixedWidth;
+import org.apache.hadoop.conf.Configuration;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Properties;
+
+import static data.InputData.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class TextFixedWidthSchemeTestsWithEncoding {

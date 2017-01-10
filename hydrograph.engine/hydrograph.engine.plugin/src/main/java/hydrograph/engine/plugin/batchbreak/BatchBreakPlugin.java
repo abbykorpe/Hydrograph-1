@@ -16,31 +16,18 @@ package hydrograph.engine.plugin.batchbreak;
  * Created by prabodhm on 12/21/2016.
  */
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import org.apache.hadoop.conf.Configuration;
-
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.entity.LinkInfo;
-import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
 import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
-import hydrograph.engine.jaxb.commontypes.FieldDataTypes;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
+import hydrograph.engine.core.utilities.SocketUtilities;
+import hydrograph.engine.jaxb.commontypes.*;
 import hydrograph.engine.jaxb.inputtypes.SequenceInputFile;
 import hydrograph.engine.jaxb.inputtypes.SequenceInputFile.Path;
 import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
+import org.apache.hadoop.conf.Configuration;
+
+import java.util.*;
 
 public class BatchBreakPlugin implements ManipulatorListener {
 

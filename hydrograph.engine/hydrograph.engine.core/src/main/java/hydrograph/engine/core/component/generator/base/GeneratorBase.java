@@ -12,10 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator.base;
 
-import java.io.Serializable;
-
 import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+
+import java.io.Serializable;
 
 public interface GeneratorBase extends Serializable{
 

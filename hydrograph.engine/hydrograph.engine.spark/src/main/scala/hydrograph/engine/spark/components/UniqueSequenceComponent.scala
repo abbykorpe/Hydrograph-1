@@ -3,14 +3,12 @@ package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.UniqueSequenceEntity
 import hydrograph.engine.spark.components.base.OperationComponentBase
-import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.handler.OperationHelper
-import hydrograph.engine.spark.components.utils.{EncoderHelper,OperationSchemaCreator}
+import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.utils.{EncoderHelper, OperationSchemaCreator}
 import hydrograph.engine.transformation.userfunctions.base.TransformBase
-import org.apache.spark.sql.{Column, DataFrame, Row}
-import org.apache.spark.sql.catalyst.expressions.{LeafExpression, Nondeterministic}
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{StructField, _}
+import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.LoggerFactory
 
 /**

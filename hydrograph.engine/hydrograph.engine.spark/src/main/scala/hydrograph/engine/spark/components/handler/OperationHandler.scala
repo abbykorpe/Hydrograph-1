@@ -9,7 +9,6 @@ import hydrograph.engine.expression.utils.ExpressionWrapper
 import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
 import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, CumulateTransformBase, NormalizeTransformBase, ReusableRow, TransformBase}
 
-import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
@@ -65,10 +64,10 @@ trait CumulateOperation{
               val cumulateBase: CumulateTransformBase = (x,y) match {
                 case (_,_) if(x.getOperationClass == null) => {
                   var cumulate = new CumulateForExpression
-                  cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
-                  cumulate.setCounter(counter)
-                  cumulate.setInitialValueExpression((z::zs).toArray)
-                  cumulate.callPrepare
+//                  cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
+//                  cumulate.setCounter(counter)
+//                  cumulate.setInitialValueExpression((z::zs).toArray)
+//                  cumulate.callPrepare
                   cumulate
                 }
                 case _ => {

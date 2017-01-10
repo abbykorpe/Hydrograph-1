@@ -12,8 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static data.InputData.uniqueSequenceInput;
-
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.core.component.entity.UniqueSequenceEntity;
 import hydrograph.engine.core.component.entity.elements.Operation;
@@ -21,17 +24,12 @@ import hydrograph.engine.core.component.entity.elements.OperationField;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.core.component.entity.elements.PassThroughField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
+import static data.InputData.uniqueSequenceInput;
 
 @SuppressWarnings("rawtypes")
 public class UniqueSequenceSubAssemblyTest {

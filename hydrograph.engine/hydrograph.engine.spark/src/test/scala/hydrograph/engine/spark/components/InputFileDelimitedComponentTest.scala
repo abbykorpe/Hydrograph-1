@@ -1,13 +1,13 @@
 package hydrograph.engine.spark.components
 
 import java.util
+
+import hydrograph.engine.core.component.entity.InputFileDelimitedEntity
+import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.core.component.entity.elements.{ OutSocket, SchemaField }
-import org.junit.{ Test, Assert, Before }
-import org.junit.Assert
 import org.apache.spark.SparkException
 import org.apache.spark.sql._
-import hydrograph.engine.core.component.entity.InputFileDelimitedEntity
+import org.junit.{Assert, Before, Test}
 
 class InputFileDelimitedComponentTest {
 

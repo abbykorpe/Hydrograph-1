@@ -1,13 +1,12 @@
 package hydrograph.engine.spark.components
 
-import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.core.component.entity.InputFileParquetEntity
+import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.core.props.PropertiesLoader
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
+import hydrograph.engine.testing.wrapper.{Bucket, Fields}
 import org.apache.spark.sql.SparkSession
-import org.junit.Assert
-import org.junit.Test
+import org.junit.{Assert, Test}
 
 import scala.collection.JavaConverters._
 

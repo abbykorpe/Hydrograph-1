@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.execution.tracking;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import cascading.flow.FlowNode;
 import cascading.flow.FlowStep;
 import cascading.flow.planner.Scope;
@@ -29,6 +20,9 @@ import cascading.pipe.Pipe;
 import cascading.stats.CascadingStats;
 import cascading.stats.FlowNodeStats;
 import cascading.stats.FlowStepStats;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Class JobInfo processes @{link CascadingStats} to store the information of

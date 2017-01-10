@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
 import hydrograph.engine.expression.utils.ExpressionWrapper;
 import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.util.ArrayList;
+import java.util.Properties;
 
 @SuppressWarnings("rawtypes")
 public class AggregateForExpression implements AggregateTransformBase {

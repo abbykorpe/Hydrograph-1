@@ -22,12 +22,12 @@ import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.JoinHelper;
 import hydrograph.engine.cascading.joiners.HashJoinJoiner;
+import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
 import hydrograph.engine.core.component.entity.LookupEntity;
 import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
 import hydrograph.engine.core.component.entity.elements.OutSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
 
 /**
  * HashJoin Component for joining two or more files.

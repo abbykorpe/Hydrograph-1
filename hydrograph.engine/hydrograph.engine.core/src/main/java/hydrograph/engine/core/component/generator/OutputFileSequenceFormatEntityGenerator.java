@@ -12,14 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.OutputFileSequenceFormatEntity;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.outputtypes.SequenceOutputFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputFileSequenceFormatEntityGenerator extends OutputComponentGeneratorBase {
 

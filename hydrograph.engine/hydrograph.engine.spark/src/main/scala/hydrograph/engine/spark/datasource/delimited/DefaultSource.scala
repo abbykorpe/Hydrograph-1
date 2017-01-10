@@ -3,9 +3,9 @@ package hydrograph.engine.spark.datasource.delimited
 
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
 import org.apache.hadoop.fs.{FileSystem, Path}
-import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
 
 

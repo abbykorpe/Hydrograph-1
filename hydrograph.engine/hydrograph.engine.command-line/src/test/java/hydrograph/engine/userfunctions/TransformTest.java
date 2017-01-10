@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.userfunctions;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import hydrograph.engine.transformation.userfunctions.base.TransformBase;
+
+import java.util.ArrayList;
+import java.util.Properties;
 
 public class TransformTest implements TransformBase {
 

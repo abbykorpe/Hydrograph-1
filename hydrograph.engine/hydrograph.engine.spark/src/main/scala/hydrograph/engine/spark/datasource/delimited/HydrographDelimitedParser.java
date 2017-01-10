@@ -1,15 +1,14 @@
 package hydrograph.engine.spark.datasource.delimited;
 
 import hydrograph.engine.spark.datasource.utils.TypeCast;
+import org.apache.spark.sql.types.StructType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.regex.Pattern;
-
-import org.apache.spark.sql.types.StructType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HydrographDelimitedParser implements Serializable {
     private static Logger LOG= LoggerFactory.getLogger(HydrographDelimitedParser.class);

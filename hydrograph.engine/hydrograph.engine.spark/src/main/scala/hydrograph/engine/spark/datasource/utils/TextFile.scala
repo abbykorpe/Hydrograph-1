@@ -1,7 +1,8 @@
 package hydrograph.engine.spark.datasource.utils
 
 import java.nio.charset.Charset
-import org.apache.hadoop.io.{ LongWritable, Text }
+
+import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.hadoop.mapred.TextInputFormat
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD

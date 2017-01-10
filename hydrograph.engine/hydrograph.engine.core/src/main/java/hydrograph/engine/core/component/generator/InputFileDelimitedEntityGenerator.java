@@ -12,15 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.generator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.component.entity.InputFileDelimitedEntity;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.generator.base.InputComponentGeneratorBase;
 import hydrograph.engine.core.utilities.GeneralUtilities;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InputFileDelimitedEntityGenerator extends InputComponentGeneratorBase {
 

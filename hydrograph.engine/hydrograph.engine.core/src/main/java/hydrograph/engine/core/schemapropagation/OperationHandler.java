@@ -12,34 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.core.schemapropagation;
 
-import hydrograph.engine.core.component.entity.elements.MapField;
-import hydrograph.engine.core.component.entity.elements.OperationField;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.elements.PassThroughField;
-import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.*;
 import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
 import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeBaseRecord;
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeTransformExpression;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
+import hydrograph.engine.jaxb.commontypes.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class OperationHandler implements Serializable {
 

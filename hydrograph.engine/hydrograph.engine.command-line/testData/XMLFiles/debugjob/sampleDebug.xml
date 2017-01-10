@@ -13,7 +13,7 @@
  -->
 
 <debug xmlns="hydrograph/engine/jaxb/debug" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/debug/debug.xsd  ">
+	   xsi:schemaLocation="">
 
 	<viewData fromComponentId="input1" outSocketId="out0" />
 	

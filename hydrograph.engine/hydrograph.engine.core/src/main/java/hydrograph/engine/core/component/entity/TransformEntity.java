@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity;
 
-import java.util.Arrays;
-
 import hydrograph.engine.core.component.entity.base.OperationEntityBase;
+
+import java.util.Arrays;
 
 public class TransformEntity extends OperationEntityBase {
 

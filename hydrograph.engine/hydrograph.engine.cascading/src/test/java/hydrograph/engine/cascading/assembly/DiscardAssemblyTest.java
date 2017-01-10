@@ -12,26 +12,24 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static data.InputData.discardInput;
-
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.DiscardAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.coercetype.StrictDateType;
 import hydrograph.engine.core.component.entity.DiscardEntity;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Properties;
 
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
+import static data.InputData.discardInput;
 
 @SuppressWarnings({ "unused", "rawtypes" })
 public class DiscardAssemblyTest {
