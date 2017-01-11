@@ -14,19 +14,6 @@
  
 package hydrograph.ui.graph.job;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.Messages;
-import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
-import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
-import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
-import hydrograph.ui.graph.handler.JobHandler;
-import hydrograph.ui.graph.handler.StopJobHandler;
-import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
-import hydrograph.ui.graph.utility.ViewDataUtils;
-import hydrograph.ui.joblogger.JobLogger;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +27,19 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
+import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
+import hydrograph.ui.graph.handler.JobHandler;
+import hydrograph.ui.graph.handler.StopJobHandler;
+import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
+import hydrograph.ui.graph.utility.ViewDataUtils;
+import hydrograph.ui.joblogger.JobLogger;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
@@ -277,7 +277,7 @@ public class DebugRemoteJobLauncher extends AbstractJobLauncher{
 		refreshProject(gefCanvas);
 		joblogger.logJobEndInfo(job.getUniqueJobId(), "");
 		joblogger.close();
-		JobManager.INSTANCE.removeJob(job.getRemoteJobProcessID());
+		JobManager.INSTANCE.removeJob(job.getLocalJobID());
 		if (job.getCanvasName().equals(JobManager.INSTANCE.getActiveCanvas())) {
 			JobManager.INSTANCE.enableRunJob(true);
 		}

@@ -45,5 +45,6 @@ Issues/Defects fixed:
 31.#590 [Shashank Karnik]- Aggregate Component: Error bubble is getting displayed on aggregate component after importing job.
 32.#522 [Shashank Karnik]- Error is not getting displayed on tool tip when key field is missing.
 33.#609 [Shashank Karnik]-  Parameter Grid: Some options are getting hide on a mac.  
+34 #534 [Prateem Tadas] -  Incorrect confirmation popup is getting displayed on tool closer.
  
 
