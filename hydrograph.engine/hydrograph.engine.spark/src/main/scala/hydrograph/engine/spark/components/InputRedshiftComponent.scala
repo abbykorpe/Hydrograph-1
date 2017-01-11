@@ -18,6 +18,7 @@ import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaUtils}
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -59,7 +60,7 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, tableorQuery, properties)
-      SchemaUtils().compareSchema(schemaField, df.schema)
+      SchemaUtils().compareSchema(getMappedSchema(schemaField), df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
@@ -67,5 +68,17 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
         LOG.error("Error in Input  Redshift component '" + inputRDBMSEntity.getComponentId + "', Error" + e.getMessage, e)
         throw new RuntimeException("Error in Input Redshift Component " + inputRDBMSEntity.getComponentId, e)
     }
+  }
+
+  def getMappedSchema(schema: StructType): StructType = StructType(schema.toList.map(stuctField => new StructField(stuctField.name, getDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
+
+  private def getDataType(dataType: DataType): Option[DataType] = {
+    val answer = dataType.typeName.toUpperCase match {
+      case "FLOAT" => DoubleType
+      case "SHORT" => IntegerType
+      case _ => null
+    }
+    if (answer != null) Option(answer) else None
+
   }
 }

@@ -86,5 +86,5 @@ dependencies {
     compile project(':hydrograph.engine.transformation')
     compile project(':hydrograph.engine.expression')
     compileOnly(group: 'oracle', name: 'ojdbc6', version: '11.2.0.4')
-    compileOnly(group: 'redshift', name: 'redshiftJDBC42', version: '1.2.1.1001')
+    compile(group: 'redshift', name: 'redshiftJDBC42', version: '1.2.1.1001')
 }
