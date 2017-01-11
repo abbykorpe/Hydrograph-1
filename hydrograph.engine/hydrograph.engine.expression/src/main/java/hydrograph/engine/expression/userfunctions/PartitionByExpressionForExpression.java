@@ -35,7 +35,7 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 	}
 
 
-	public boolean isRemove(ReusableRow reusableRow) {
+	/*public boolean isRemove(ReusableRow reusableRow) {
 		fieldNames = new String[reusableRow.getFields().size()];
 		tuples = new Object[reusableRow.getFields().size()];
 		for(int i=0;i<reusableRow.getFields().size();i++){
@@ -53,7 +53,7 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 					+ validationAPI.getValidExpression()
 					+ ".\nRow being processed: " + reusableRow.toString(), e);
 		}
-	}
+	}*/
 
 
 	@Override	
@@ -63,6 +63,6 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 
 	@Override
 	public String getPartition(ReusableRow inputRow, int numOfPartitions) {
-		return null;
+		return "out_mix";
 	}
 }

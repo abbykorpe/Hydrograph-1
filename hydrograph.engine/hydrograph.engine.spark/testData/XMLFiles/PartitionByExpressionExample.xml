@@ -39,33 +39,27 @@
     <operations id="partitionByExpression" batch="0"
                 xsi:type="op:partitionByExpression">
         <inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-        <operation id="opt"
+       <!-- <operation id="opt"
                    class="hydrograph.engine.userclass.PartitionByExpressionTest">
             <inputFields>
                 <field name="transaction_type" inSocketId="in0" />
             </inputFields>
-        </operation>
+        </operation>-->
         <expression
-                expr="count > 13 ?true:false;"
+                expr="total_count > 13 ?true:false;"
                 id="sadf">
             <inputFields>
-                <field name="count" inSocketId="in0" />
+                <field name="total_count" inSocketId="in0" />
             </inputFields>
         </expression>
         <outSocket id="out_mix" type="out">
             <copyOfInsocket inSocketId="in0" />
         </outSocket>
-        <outSocket id="out_credit" type="out">
-            <copyOfInsocket inSocketId="in0" />
-        </outSocket>
-        <outSocket id="out_debit" type="out">
-            <copyOfInsocket inSocketId="in0" />
-        </outSocket>
-        <outSocket id="unused" type="unused">
-            <copyOfInsocket inSocketId="in0" />
-        </outSocket>
+        <outSocket id="out_mix1" type="out">
+        <copyOfInsocket inSocketId="in0" />
+    </outSocket>
 
-        <noOfPartitions value="3" />
+        <noOfPartitions value="2" />
     </operations>
 
 

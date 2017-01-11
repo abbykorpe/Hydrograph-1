@@ -7,9 +7,10 @@ import hydrograph.engine.core.component.entity.elements.OutSocket
 import hydrograph.engine.expression.api.ValidationAPI
 import hydrograph.engine.expression.userfunctions.PartitionByExpressionForExpression
 import hydrograph.engine.spark.components.base.OperationComponentBase
+import hydrograph.engine.spark.components.handler.OperationHelper
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{ReusableRowHelper, RowHelper, SparkReusableRow}
-import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression
+import hydrograph.engine.transformation.userfunctions.base.{CumulateTransformBase, CustomPartitionExpression}
 import org.apache.spark.sql.DataFrame
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -19,7 +20,7 @@ import scala.collection.JavaConverters._
   * Created by santlalg on 12/15/2016.
   */
 class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExpressionEntity, componentsParams: BaseComponentParams) extends
-  OperationComponentBase with Serializable {
+  OperationComponentBase with  OperationHelper[CumulateTransformBase] with Serializable {
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[PartitionByExpressionComponent])
 
@@ -89,7 +90,7 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
     outSocketId
   }
 
-  def classLoader[T](className: String): T = {
+  /*def classLoader[T](className: String): T = {
     try {
       val clazz = Class.forName(className).getDeclaredConstructors
       clazz(0).setAccessible(true)
@@ -100,6 +101,6 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
         LOG.error("Error in PartitionByExpression component error : " + e.getMessage, e)
         throw new RuntimeException("Error in PartitionByExpression Component ", e)
     }
-  }
+  }*/
 
 }
