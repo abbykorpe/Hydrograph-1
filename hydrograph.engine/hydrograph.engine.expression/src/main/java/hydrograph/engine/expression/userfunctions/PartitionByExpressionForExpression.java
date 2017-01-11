@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
+import bsh.EvalError;
 import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
@@ -27,15 +28,20 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 	String[] fieldNames;
 	Object[] tuples;
 
-	public void setValidationAPI(ValidationAPI validationAPI){
+	public void setValidationAPI(ValidationAPI validationAPI) {
 		this.validationAPI = validationAPI;
 	}
 
 	public PartitionByExpressionForExpression() {
 	}
 
+	@Override
+	public void prepare(Properties props) {
 
-	/*public boolean isRemove(ReusableRow reusableRow) {
+	}
+
+	@Override
+	public String getPartition(ReusableRow reusableRow, int numOfPartitions) {
 		fieldNames = new String[reusableRow.getFields().size()];
 		tuples = new Object[reusableRow.getFields().size()];
 		for(int i=0;i<reusableRow.getFields().size();i++){
@@ -43,26 +49,12 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 			tuples[i] = reusableRow.getField(i);
 		}
 		try {
-			if ((Boolean) validationAPI.execute(fieldNames, tuples)) {
-				return true;
-			} else {
-				return false;
-			}
+			return (String)validationAPI.execute(fieldNames, tuples);
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in tranform expression: "
 					+ validationAPI.getValidExpression()
 					+ ".\nRow being processed: " + reusableRow.toString(), e);
 		}
-	}*/
-
-
-	@Override	
-	public void prepare(Properties props) {
-
 	}
 
-	@Override
-	public String getPartition(ReusableRow inputRow, int numOfPartitions) {
-		return "out_mix";
-	}
 }
