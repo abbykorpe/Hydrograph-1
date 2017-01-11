@@ -44,7 +44,7 @@ import hydrograph.engine.jaxb.iteradata.TypeInputTeradataBase;
  *             &lt;element name="countQuery" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *           &lt;/sequence>
  *         &lt;/choice>
- *         &lt;element name="interface" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="exportOptions" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
@@ -65,7 +65,7 @@ import hydrograph.engine.jaxb.iteradata.TypeInputTeradataBase;
     "tableName",
     "selectQuery",
     "countQuery",
-    "_interface",
+    "exportOptions",
     "username",
     "password",
     "runtimeProperties"
@@ -85,8 +85,8 @@ public class Teradata
     protected ElementValueStringType tableName;
     protected ElementValueStringType selectQuery;
     protected ElementValueStringType countQuery;
-    @XmlElement(name = "interface", required = true)
-    protected ElementValueStringType _interface;
+    @XmlElement(required = true)
+    protected ElementValueStringType exportOptions;
     @XmlElement(required = true)
     protected ElementValueStringType username;
     @XmlElement(required = true)
@@ -262,27 +262,27 @@ public class Teradata
     }
 
     /**
-     * Gets the value of the interface property.
+     * Gets the value of the exportOptions property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getInterface() {
-        return _interface;
+    public ElementValueStringType getExportOptions() {
+        return exportOptions;
     }
 
     /**
-     * Sets the value of the interface property.
+     * Sets the value of the exportOptions property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setInterface(ElementValueStringType value) {
-        this._interface = value;
+    public void setExportOptions(ElementValueStringType value) {
+        this.exportOptions = value;
     }
 
     /**

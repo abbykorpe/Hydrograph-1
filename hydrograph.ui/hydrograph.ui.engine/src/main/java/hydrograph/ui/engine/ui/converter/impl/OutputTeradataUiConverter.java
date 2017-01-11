@@ -100,7 +100,7 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 			}
 		}
 		
-		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getInterface());
+		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getLoadUtilityInterfaceValue());
 			
 		propertyMap.put(PropertyNameConstants.LOAD_TYPE_CONFIGURATION.value(), loadSelectedDetails);
 		
@@ -112,13 +112,13 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 		uiComponent.setProperties(propertyMap);
 	}
 	
-	private MatchValueProperty getInterface() {
+	private MatchValueProperty getLoadUtilityInterfaceValue() {
 		LOGGER.debug("Generating Match for -{}", componentName);
 		MatchValueProperty matchValue =  new MatchValueProperty();
 		Teradata outputTeradata = (Teradata) typeBaseComponent;
-		if(Constants.DEFAULT.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+		if(Constants.DEFAULT.equalsIgnoreCase(outputTeradata.getLoadUtilityType().getValue())){
 			matchValue.setMatchValue(Messages.STANDARD);
-		}else if(Constants.FASTLOAD.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+		}else if(Constants.FASTLOAD.equalsIgnoreCase(outputTeradata.getLoadUtilityType().getValue())){
 			matchValue.setMatchValue(Messages.FAST_LOAD);
 		}
 		matchValue.setRadioButtonSelected(true);

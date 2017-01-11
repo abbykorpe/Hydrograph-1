@@ -121,7 +121,7 @@ public class OutputTeradataConverter extends OutputConverter{
 			teradataOutput.setPassword(password);
 		}
 		
-		teradataOutput.setInterface(getSelectInterfaceValue());
+		teradataOutput.setLoadUtilityType(getSelectedLoadUtilityValue());
 		
 		TypeLoadChoice loadValue = addTypeLoadChoice();
 		teradataOutput.setLoadType(loadValue);
@@ -146,7 +146,7 @@ public class OutputTeradataConverter extends OutputConverter{
 		return loadValue;
 	}
 	
-	private ElementValueStringType getSelectInterfaceValue() {
+	private ElementValueStringType getSelectedLoadUtilityValue() {
 		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(PropertyNameConstants.SELECT_INTERFACE.value());
 		
 		if(matchValueProperty != null){

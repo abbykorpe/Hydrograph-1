@@ -41,7 +41,7 @@ import hydrograph.engine.jaxb.oteradata.TypeOutputTeradataBase;
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="interface" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="loadUtilityType" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/oteradata}type-load-choice"/>
  *       &lt;/sequence>
@@ -61,7 +61,7 @@ import hydrograph.engine.jaxb.oteradata.TypeOutputTeradataBase;
     "tableName",
     "username",
     "password",
-    "_interface",
+    "loadUtilityType",
     "runtimeProperties",
     "loadType"
 })
@@ -82,8 +82,8 @@ public class Teradata
     protected ElementValueStringType username;
     @XmlElement(required = true)
     protected ElementValueStringType password;
-    @XmlElement(name = "interface", required = true)
-    protected ElementValueStringType _interface;
+    @XmlElement(required = true)
+    protected ElementValueStringType loadUtilityType;
     protected TypeProperties runtimeProperties;
     @XmlElement(required = true)
     protected TypeLoadChoice loadType;
@@ -257,27 +257,27 @@ public class Teradata
     }
 
     /**
-     * Gets the value of the interface property.
+     * Gets the value of the loadUtilityType property.
      * 
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
      *     
      */
-    public ElementValueStringType getInterface() {
-        return _interface;
+    public ElementValueStringType getLoadUtilityType() {
+        return loadUtilityType;
     }
 
     /**
-     * Sets the value of the interface property.
+     * Sets the value of the loadUtilityType property.
      * 
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
      *     
      */
-    public void setInterface(ElementValueStringType value) {
-        this._interface = value;
+    public void setLoadUtilityType(ElementValueStringType value) {
+        this.loadUtilityType = value;
     }
 
     /**
