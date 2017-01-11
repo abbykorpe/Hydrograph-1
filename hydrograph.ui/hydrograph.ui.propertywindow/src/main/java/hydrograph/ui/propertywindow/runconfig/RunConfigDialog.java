@@ -34,6 +34,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,12 +54,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.communication.messages.Message;
 import hydrograph.ui.communication.messages.MessageType;
 import hydrograph.ui.communication.utilities.SCPUtility;
+import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
 
 /**
@@ -70,12 +74,15 @@ import hydrograph.ui.propertywindow.messages.Messages;
  */
 public class RunConfigDialog extends Dialog {
 	
+	private static final Logger logger = LogFactory.INSTANCE.getLogger(RunConfigDialog.class);
+	
 	private Text txtBasePath;
 	private Text txtEdgeNode;
 	private Text txtUserName;
 	private Text txtPassword;
 	private Text txtRunUtility;
 	private Text txtProjectPath;
+	private Button chkbtnSavePassword;
 
 	private HydroGroup runModeGroup;
 	private HydroGroup serverDetailsGroup;
@@ -100,6 +107,9 @@ public class RunConfigDialog extends Dialog {
 	private final String VIEW_DATA_CHECK = "viewDataCheck";
 	public static final String SELECTION_BUTTON_KEY = "REMOTE_BUTTON_KEY";
 	
+	private static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_RUNCONFIG_DIALOG_NODE = "Run Dialog";
+	private static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_RUNCONFIG_DIALOG_HOST_NODE = "host";
+		
 	private String password;
 	private String userId;
 	private String edgeNodeText;
@@ -218,7 +228,8 @@ public class RunConfigDialog extends Dialog {
 		txtEdgeNode.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		EmptyTextListener textEdgeNodeListener = new EmptyTextListener("Edge Node");
 		txtEdgeNode.addModifyListener(textEdgeNodeListener);
-
+		addFocusListener(txtEdgeNode);
+		
 		Label lblUser = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblUser.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblUser.setText("User");
@@ -228,6 +239,7 @@ public class RunConfigDialog extends Dialog {
 		txtUserName.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		EmptyTextListener textUserListener = new EmptyTextListener("Host");
 		txtUserName.addModifyListener(textUserListener);
+		addFocusListener(txtUserName);
 
 		Label lblPassword = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -237,13 +249,11 @@ public class RunConfigDialog extends Dialog {
 		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtPassword.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		
-		ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
-		ISecurePreferences node = preferences.node(Constants.USER_CREDENTIALS);
-		try {
-			txtPassword.setText(node.get(Constants.PASSWORD, ""));
-		} catch (StorageException e) {
-			//Do nothing
-		}
+		new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);		
+		chkbtnSavePassword = new Button(serverDetailsGroup.getHydroGroupClientArea(), SWT.CHECK);
+		chkbtnSavePassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		chkbtnSavePassword.setText("Save password");
+		
 		EmptyTextListener textPasswordListener = new EmptyTextListener("Password");
 		txtPassword.addModifyListener(textPasswordListener);
 
@@ -272,6 +282,63 @@ public class RunConfigDialog extends Dialog {
 		remotePathConfigGroup.setVisible(false);
 
 		return container;
+	}
+
+	private void addFocusListener(Text txtBox) {
+		txtBox.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				populatePasswordField();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// DO Nothing
+			}
+		});
+	}
+	
+	private ISecurePreferences getHydrographSecureStorageRootNode(){
+		ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
+		ISecurePreferences hydrographSecureStorageRootNode = preferences.node(Constants.SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_ROOT_NODE);
+		return hydrographSecureStorageRootNode;
+	}
+	
+	private ISecurePreferences getHydrographSecureStorageRunDialogNode(ISecurePreferences hydrographSecureStorageRootNode){
+		ISecurePreferences hydrographSecureStorageRunDialogNode = hydrographSecureStorageRootNode.node(SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_RUNCONFIG_DIALOG_NODE);
+		return hydrographSecureStorageRunDialogNode;
+	}
+	
+	private ISecurePreferences getSecureStorageHostNode(String hostname,boolean createHostNode){
+		ISecurePreferences hydrographSecureStorageRootNode = getHydrographSecureStorageRootNode();
+		ISecurePreferences hydrographSecureStorageRunDialogNode=getHydrographSecureStorageRunDialogNode(hydrographSecureStorageRootNode);
+		
+		if(hydrographSecureStorageRunDialogNode.nodeExists(hostname) || createHostNode){
+			ISecurePreferences hydrographSecureStorageRunDialogHostNode = hydrographSecureStorageRunDialogNode.node(hostname);
+			return hydrographSecureStorageRunDialogHostNode;
+		}else{
+			return null;
+		}
+	}
+	
+	private void populatePasswordField() {
+		ISecurePreferences hydrographSecureStorageRunDialogHostNode = getSecureStorageHostNode(txtEdgeNode.getText().toLowerCase(),false);
+		try {
+			if(hydrographSecureStorageRunDialogHostNode!=null){
+				String password=hydrographSecureStorageRunDialogHostNode.get(txtUserName.getText(), "");
+				txtPassword.setText(password);
+				if(!StringUtils.isBlank(password)){
+					chkbtnSavePassword.setSelection(true);
+				}else{
+					chkbtnSavePassword.setSelection(false);
+				}
+			}else{
+				txtPassword.setText("");
+			}
+			
+		} catch (StorageException storageException) {
+			logger.debug("Unable to fetch password from eclipse secure storage " , storageException);;
+		}
 	}
 
 	/**
@@ -342,7 +409,7 @@ public class RunConfigDialog extends Dialog {
 			txtBasePath.setText(txtBasePath.getText());
 		}
 	};
-
+	
 	private void loadBuildProperties() {
 		String buildPropFilePath = buildPropFilePath();
 		IPath bldPropPath = new Path(buildPropFilePath);
@@ -392,6 +459,8 @@ public class RunConfigDialog extends Dialog {
 			txtBasePath.setEnabled(true);
 
 		}
+		
+		populatePasswordField();
 	}
 
 	private String getBuildProperty(String key) {
@@ -583,15 +652,7 @@ public class RunConfigDialog extends Dialog {
 		this.basePath = txtBasePath.getText();
 		this.isDebug = viewDataCheckBox.getSelection();
 		
-		 try {
-		        if(StringUtils.isNotBlank(password)){
-		        	ISecurePreferences preferences = SecurePreferencesFactory.getDefault();
-		        	ISecurePreferences node = preferences.node(Constants.USER_CREDENTIALS);
-					node.put(Constants.PASSWORD, password, true);
-		        }
-	        } catch (StorageException e) {
-	        	//logger.info("Failed to retrive the encrypted password");
-	        }
+		 savePassword();
 		try {
 			checkBuildProperties(btnRemoteMode.getSelection());
 			this.runGraph = true;
@@ -601,6 +662,22 @@ public class RunConfigDialog extends Dialog {
 		}
 
 		setPreferences();
+	}
+
+	private void savePassword() {
+
+		if (StringUtils.isNotBlank(password) && chkbtnSavePassword.getSelection()
+				&& StringUtils.isNotBlank(txtEdgeNode.getText()) && StringUtils.isNotBlank(txtUserName.getText())) {
+
+			ISecurePreferences hydrographSecureStorageRunDialogHostNode = getSecureStorageHostNode(
+					txtEdgeNode.getText().toLowerCase(), true);
+
+			try {
+				hydrographSecureStorageRunDialogHostNode.put(txtUserName.getText(), password, true);
+			} catch (StorageException storageException) {
+				logger.debug("Failed to save the password in secure storage", storageException);
+			}
+		}
 	}
 
 	private void setPreferences() {
