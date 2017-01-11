@@ -30,6 +30,7 @@ public class InputRedshiftEntityGenerator extends
     private static Logger LOG = LoggerFactory
             .getLogger(InputRedshiftEntityGenerator.class);
     private final String REDSHIFT_DRIVER_CLASS_NAME = "com.amazon.redshift.jdbc42.Driver";
+    private final String JDBC_DRIVER_NAME = "JDBC 4.2";
     private Redshift inputRedshiftJaxb;
     private InputRDBMSEntity inputRDBMSEntity;
 
@@ -58,7 +59,9 @@ public class InputRedshiftEntityGenerator extends
                 inputRedshiftJaxb.getOutSocket().get(0).getSchema().getFieldOrRecordOrIncludeExternalSchema()));
         inputRDBMSEntity.setOutSocketList(InputEntityUtils.extractOutSocket(inputRedshiftJaxb.getOutSocket()));
         inputRDBMSEntity.setDatabaseName(inputRedshiftJaxb.getDatabaseName().getValue());
-        inputRDBMSEntity.setJdbcDriver(REDSHIFT_DRIVER_CLASS_NAME);
+        if (inputRedshiftJaxb.getJdbcDriver().getValue().equalsIgnoreCase(JDBC_DRIVER_NAME)) {
+            inputRDBMSEntity.setJdbcDriver(REDSHIFT_DRIVER_CLASS_NAME);
+        }
         inputRDBMSEntity.setHostName(inputRedshiftJaxb.getHostName().getValue());
         inputRDBMSEntity.setPort(inputRedshiftJaxb.getPort() == null ? Constants.REDSHIFT_PORT_NUMBER
                 : inputRedshiftJaxb.getPort().getValue().intValue());

@@ -347,6 +347,8 @@
                                 minOccurs="1" maxOccurs="1"/>
                     <xs:element name="port" type="cmn:element-value-integer-type"
                                 minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="jdbcDriver" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1"/>
                     <xs:element name="userName" type="cmn:element-value-string-type"
                                 minOccurs="1" maxOccurs="1"/>
                     <xs:element name="password" type="cmn:element-value-string-type"

@@ -58,16 +58,17 @@
         <databaseName value="dev"/>
         <hostName value="redshift-demo.cnmrntvjuquk.us-east-1.redshift.amazonaws.com"/>
         <port value="5439"/>
+        <jdbcDriver value="JDBC 4.2"/>
         <tableName value="testingalltypesbatchsizee"/>
         <userName value="awsuser"/>
         <password value="1qaz2wsxA#5"/>
         <loadType>
-            <newTable>
-                <primaryKeys>
-                    <field name="aa"/>
-                </primaryKeys>
-            </newTable>
-            <!--<truncateLoad/>-->
+            <!--  <newTable>
+                  <primaryKeys>
+                      <field name="aa"/>
+                  </primaryKeys>
+              </newTable>-->
+            <truncateLoad/>
             <!-- <Insert/>-->
             <!-- 			<update> -->
             <!-- 				<updateByKeys> -->
