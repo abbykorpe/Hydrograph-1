@@ -23,8 +23,9 @@ class ExecutionTrackingComponent(executionTrackingEntity: ExecutionTrackingEntit
     val longAccumulator: LongAccumulator = componentsParams.getAccumulator()
 
     val dataFrame=df.map(row=> {longAccumulator.add(1)
-      row
-  }) (RowEncoder(EncoderHelper().getEncoder(componentsParams.getDataFrame().schema.map(f=>f.name).toList, componentsParams.getSchemaFields())))
+  row
+}) (RowEncoder(df.schema))
+
 //      dataFrame.foreach(row => {longAccumulator.add(1)})
 
     /*val dataFrame=df.filter(row => {longAccumulator.add(1)
