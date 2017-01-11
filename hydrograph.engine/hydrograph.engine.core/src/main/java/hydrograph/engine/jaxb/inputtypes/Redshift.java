@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
+ *         &lt;element name="jdbcDriver" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="userName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
@@ -49,6 +50,7 @@ import javax.xml.bind.annotation.XmlType;
         "databaseName",
         "hostName",
         "port",
+        "jdbcDriver",
         "userName",
         "password",
         "runtimeProperties",
@@ -66,6 +68,8 @@ public class Redshift
     @XmlElement(required = true)
     protected ElementValueStringType hostName;
     protected ElementValueIntegerType port;
+    @XmlElement(required = true)
+    protected ElementValueStringType jdbcDriver;
     @XmlElement(required = true)
     protected ElementValueStringType userName;
     @XmlElement(required = true)
@@ -146,6 +150,26 @@ public class Redshift
      */
     public void setPort(ElementValueIntegerType value) {
         this.port = value;
+    }
+
+    /**
+     * Gets the value of the jdbcDriver property.
+     *
+     * @return possible object is
+     * {@link ElementValueStringType }
+     */
+    public ElementValueStringType getJdbcDriver() {
+        return jdbcDriver;
+    }
+
+    /**
+     * Sets the value of the jdbcDriver property.
+     *
+     * @param value allowed object is
+     *              {@link ElementValueStringType }
+     */
+    public void setJdbcDriver(ElementValueStringType value) {
+        this.jdbcDriver = value;
     }
 
     /**

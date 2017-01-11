@@ -38,6 +38,7 @@
         <!-- 	<query value="select testingtable1.num as num,testingtable1.lwr as lwr,testingtable1.upr as upr from testingtable2 inner join testingtable1 on testingtable2.num!=testingtable1.num  " />  -->
         <hostName value="redshift-demo.cnmrntvjuquk.us-east-1.redshift.amazonaws.com"/>
         <port value="5439"/>
+        <jdbcDriver value="JDBC 4.2"/>
         <userName value="awsuser"/>
         <password value="1qaz2wsxA#5"/>
         <runtimeProperties>
