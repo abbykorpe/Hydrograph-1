@@ -40,7 +40,8 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
       (_.name).asJava).asScala.toArray[String]
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
-  val keyFields = aggregateEntity.getKeyFields.map(_.getName)
+  val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]() else  aggregateEntity.getKeyFields.map(_
+    .getName)
   val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
@@ -101,7 +102,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
       var prevKeysArray: Array[Any] = null
 
       itr.flatMap { row => {
-        val currKeysArray: Array[Any] = new Array[Any](aggregateEntity.getKeyFields.size)
+        val currKeysArray: Array[Any] = new Array[Any](primaryKeys.size)
         copyFields(row, currKeysArray, keyFieldsIndexes)
         val isPrevKeyDifferent: Boolean = {
           if (prevKeysArray == null)
