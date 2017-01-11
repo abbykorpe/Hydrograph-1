@@ -1,27 +1,12 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.inputtypes;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.StandardCharsets;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.itffw.TypeFixedWidthBase;
+
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -76,10 +61,10 @@ public class TextFileFixedWidth
 {
 
     @XmlElement(required = true)
-    protected TextFileFixedWidth.Path path;
+    protected Path path;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
-    protected TextFileFixedWidth.Charset charset;
+    protected Charset charset;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -87,10 +72,10 @@ public class TextFileFixedWidth
      * 
      * @return
      *     possible object is
-     *     {@link TextFileFixedWidth.Path }
+     *     {@link Path }
      *     
      */
-    public TextFileFixedWidth.Path getPath() {
+    public Path getPath() {
         return path;
     }
 
@@ -99,10 +84,10 @@ public class TextFileFixedWidth
      * 
      * @param value
      *     allowed object is
-     *     {@link TextFileFixedWidth.Path }
+     *     {@link Path }
      *     
      */
-    public void setPath(TextFileFixedWidth.Path value) {
+    public void setPath(Path value) {
         this.path = value;
     }
 
@@ -159,10 +144,10 @@ public class TextFileFixedWidth
      * 
      * @return
      *     possible object is
-     *     {@link TextFileFixedWidth.Charset }
+     *     {@link Charset }
      *     
      */
-    public TextFileFixedWidth.Charset getCharset() {
+    public Charset getCharset() {
         return charset;
     }
 
@@ -171,10 +156,10 @@ public class TextFileFixedWidth
      * 
      * @param value
      *     allowed object is
-     *     {@link TextFileFixedWidth.Charset }
+     *     {@link Charset }
      *     
      */
-    public void setCharset(TextFileFixedWidth.Charset value) {
+    public void setCharset(Charset value) {
         this.charset = value;
     }
 

@@ -1,30 +1,11 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.inputtypes;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFieldsType;
-import hydrograph.engine.jaxb.ihivetextfile.HivePartitionFilterType;
-import hydrograph.engine.jaxb.ihivetextfile.HivePathType;
-import hydrograph.engine.jaxb.ihivetextfile.HiveType;
-import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
+import hydrograph.engine.jaxb.ihivetextfile.*;
+
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -90,13 +71,13 @@ public class HiveTextFile
 
     protected HivePartitionFieldsType partitionKeys;
     protected HivePartitionFilterType partitionFilter;
-    protected HiveTextFile.Delimiter delimiter;
+    protected Delimiter delimiter;
     @XmlElement(required = true)
     protected HiveType databaseName;
     @XmlElement(required = true)
     protected HiveType tableName;
     protected HivePathType externalTablePath;
-    protected HiveTextFile.Quote quote;
+    protected Quote quote;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
     protected TypeProperties runtimeProperties;
@@ -154,10 +135,10 @@ public class HiveTextFile
      * 
      * @return
      *     possible object is
-     *     {@link HiveTextFile.Delimiter }
+     *     {@link Delimiter }
      *     
      */
-    public HiveTextFile.Delimiter getDelimiter() {
+    public Delimiter getDelimiter() {
         return delimiter;
     }
 
@@ -166,10 +147,10 @@ public class HiveTextFile
      * 
      * @param value
      *     allowed object is
-     *     {@link HiveTextFile.Delimiter }
+     *     {@link Delimiter }
      *     
      */
-    public void setDelimiter(HiveTextFile.Delimiter value) {
+    public void setDelimiter(Delimiter value) {
         this.delimiter = value;
     }
 
@@ -250,10 +231,10 @@ public class HiveTextFile
      * 
      * @return
      *     possible object is
-     *     {@link HiveTextFile.Quote }
+     *     {@link Quote }
      *     
      */
-    public HiveTextFile.Quote getQuote() {
+    public Quote getQuote() {
         return quote;
     }
 
@@ -262,10 +243,10 @@ public class HiveTextFile
      * 
      * @param value
      *     allowed object is
-     *     {@link HiveTextFile.Quote }
+     *     {@link Quote }
      *     
      */
-    public void setQuote(HiveTextFile.Quote value) {
+    public void setQuote(Quote value) {
         this.quote = value;
     }
 

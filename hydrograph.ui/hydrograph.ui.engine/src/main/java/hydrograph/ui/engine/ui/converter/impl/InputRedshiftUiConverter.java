@@ -73,8 +73,8 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
 			propertyMap.put(PropertyNameConstants.REDSHIFT_PORT_NAME.value(), redshift.getPort().getValue().toString());
 		}*/
-		if (StringUtils.isNotBlank(redshift.getUsername().getValue()) ) {
-			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUsername().getValue());
+		if (StringUtils.isNotBlank(redshift.getUserName().getValue()) ) {
+			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUserName().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getPassword().getValue())) {
 			propertyMap.put(PropertyNameConstants.PASSWORD.value(), redshift.getPassword().getValue());

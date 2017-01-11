@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.aggregate;
 
@@ -50,19 +38,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperation }
+     * Create an instance of {@link TypeOperationInputField }
      * 
      */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
+    public TypeOperationInputField createTypeOperationInputField() {
+        return new TypeOperationInputField();
     }
 
     /**
-     * Create an instance of {@link TypeOutSocket }
+     * Create an instance of {@link TypePrimaryKeyFields }
      * 
      */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * 
+     */
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
     }
 
     /**
@@ -82,11 +78,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AggregateBase }
+     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
      * 
      */
-    public AggregateBase createAggregateBase() {
-        return new AggregateBase();
+    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
+        return new TypeSecondayKeyFieldsAttributes();
     }
 
     /**
@@ -98,35 +94,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * Create an instance of {@link TypeOutSocket }
      * 
      */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
     }
 
     /**
-     * Create an instance of {@link TypeOperationInputField }
+     * Create an instance of {@link TypeOperation }
      * 
      */
-    public TypeOperationInputField createTypeOperationInputField() {
-        return new TypeOperationInputField();
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
     }
 
     /**
-     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
+     * Create an instance of {@link AggregateBase }
      * 
      */
-    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
-        return new TypeSecondayKeyFieldsAttributes();
-    }
-
-    /**
-     * Create an instance of {@link TypePrimaryKeyFields }
-     * 
-     */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
+    public AggregateBase createAggregateBase() {
+        return new AggregateBase();
     }
 
 }

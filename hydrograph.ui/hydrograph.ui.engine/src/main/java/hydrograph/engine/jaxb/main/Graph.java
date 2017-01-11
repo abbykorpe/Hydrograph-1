@@ -1,35 +1,11 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.main;
 
+import hydrograph.engine.jaxb.commontypes.*;
+
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeProperties;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
-import hydrograph.engine.jaxb.commontypes.TypeUnknownComponent;
 
 
 /**
@@ -49,7 +25,6 @@ import hydrograph.engine.jaxb.commontypes.TypeUnknownComponent;
  *           &lt;element name="straightPulls" type="{hydrograph/engine/jaxb/commontypes}type-straight-pull-component"/>
  *           &lt;element name="operations" type="{hydrograph/engine/jaxb/commontypes}type-operations-component"/>
  *           &lt;element name="commands" type="{hydrograph/engine/jaxb/commontypes}type-command-component"/>
- *           &lt;element name="unknown" type="{hydrograph/engine/jaxb/commontypes}type-unknown-component"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -71,12 +46,11 @@ public class Graph {
 
     protected TypeProperties runtimeProperties;
     @XmlElements({
-        @XmlElement(name = "inputs", type = TypeInputComponent.class),
         @XmlElement(name = "outputs", type = TypeOutputComponent.class),
-        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class),
-        @XmlElement(name = "operations", type = TypeOperationsComponent.class),
+        @XmlElement(name = "inputs", type = TypeInputComponent.class),
         @XmlElement(name = "commands", type = TypeCommandComponent.class),
-        @XmlElement(name = "unknown", type = TypeUnknownComponent.class)
+        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class),
+        @XmlElement(name = "operations", type = TypeOperationsComponent.class)
     })
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
     @XmlAttribute(name = "name", required = true)
@@ -126,12 +100,11 @@ public class Graph {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link TypeInputComponent }
      * {@link TypeOutputComponent }
+     * {@link TypeInputComponent }
+     * {@link TypeCommandComponent }
      * {@link TypeStraightPullComponent }
      * {@link TypeOperationsComponent }
-     * {@link TypeCommandComponent }
-     * {@link TypeUnknownComponent }
      * 
      * 
      */
