@@ -32,7 +32,7 @@
     </xs:complexType>
     
 
-<xs:simpleType name="types-outSocket-types">
+	<xs:simpleType name="types-outSocket-types">
         <xs:restriction base="xs:string">
             <xs:enumeration value="out" />
             <xs:enumeration value="unused" />
