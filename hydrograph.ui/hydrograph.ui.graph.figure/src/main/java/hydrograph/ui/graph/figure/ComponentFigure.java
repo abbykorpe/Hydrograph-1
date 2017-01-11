@@ -330,7 +330,7 @@ public class ComponentFigure extends Figure implements Validator {
 		Rectangle q = new Rectangle(4, 4 + componentLabelMargin, r.width - 8, r.height - 8 - componentLabelMargin);
 		graphics.fillRoundRectangle(q, 5, 5);
 
-		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
+		graphics.drawImage(canvasIcon, new Point((q.width - (acronym.length()*5))/2, q.height / 2 + componentLabelMargin - 11));
 		drawPropertyStatus(graphics);
 		if((StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM)
 			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.FILTER)
