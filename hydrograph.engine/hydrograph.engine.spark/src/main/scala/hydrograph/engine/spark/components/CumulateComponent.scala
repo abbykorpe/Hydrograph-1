@@ -93,6 +93,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
       itr.map {
         row => {
           val currKeysArray: Array[Any] = new Array[Any](cumulateEntity.getKeyFields.size)
+          copyFields(row, currKeysArray, keyFieldsIndexes)
           val isPrevKeyDifferent: Boolean = if (prevKeysArray == null)
             true
           else if (!((prevKeysArray.size == currKeysArray.size) && prevKeysArray.zip(currKeysArray).forall(p => p._1 == p._2)))
