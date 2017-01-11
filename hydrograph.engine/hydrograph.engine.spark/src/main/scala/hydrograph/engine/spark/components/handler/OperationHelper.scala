@@ -71,6 +71,9 @@ trait OperationHelper[T] {
   def getIndexes(firstSchema: StructType, secondSchema: StructType, fields: Array[String]): Array[(Int, Int)] =
     fields.map { field => (firstSchema.fieldIndex(field), secondSchema.fieldIndex(field)) }
 
+  def getIndexes(firstSchema: StructType, fields: Array[String]): Array[(Int, Int)] =
+    fields.zipWithIndex.map { field => (firstSchema.fieldIndex(field._1),field._2 ) }
+
   def getIndexes(firstSchema: StructType, secondSchema: StructType, firstFields: Array[String], secondFields: Array[String]): Array[(Int, Int)] =
     firstFields.zip(secondFields).map { pair => (firstSchema.fieldIndex(pair._1), secondSchema.fieldIndex(pair._2)) }
 
