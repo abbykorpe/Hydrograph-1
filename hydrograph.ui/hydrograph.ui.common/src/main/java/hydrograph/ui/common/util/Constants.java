@@ -22,8 +22,6 @@ public class Constants {
 	public static final String VALIDATOR_PACKAGE_PREFIX = "hydrograph.ui.validators.impl.";
 	public static final String COMPONENT_PACKAGE_PREFIX = "hydrograph.ui.graph.model.components.";
 	
-	public static final String USER_CREDENTIALS = "USER_CREDENTIALS";
-	public static final String PASSWORD = "PASSWORD";
 	public static final String ERROR = "ERROR";
 	public static final String BATCH = "Batch";
 	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
@@ -339,4 +337,7 @@ public class Constants {
 	public static final String INPUT_FIELD_TABLE = "inputFieldTable";
 	public static final String PREVIOUS_COMPONENT_OLD_SCHEMA = "previous_component_old_schema";
 
+	
+	public static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_ROOT_NODE = "Hydrograph";
+	
 }
