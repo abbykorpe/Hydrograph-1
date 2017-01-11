@@ -40,7 +40,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
   val keyFields = cumulateEntity.getKeyFields.map(_.getName)
-  val keyFieldsIndexes = getIndexes(inputSchema, outputSchema, keyFields)
+  val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
 
 
   override def createComponent(): Map[String, DataFrame] = {

@@ -41,7 +41,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
   val keyFields = aggregateEntity.getKeyFields.map(_.getName)
-  val keyFieldsIndexes = getIndexes(inputSchema, outputSchema, keyFields)
+  val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
 

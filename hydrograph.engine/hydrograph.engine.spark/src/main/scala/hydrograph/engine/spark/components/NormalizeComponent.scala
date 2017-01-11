@@ -153,10 +153,10 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
         outputDispatcher.initialize
         LOG.info("Calling Normalize() method of " + nr.baseClassInstance.getClass.toString +" class.")
         nr.baseClassInstance.Normalize(inputReusableRow, outputReusableRow, outputDispatcher)
-        if (itr.isEmpty)
-          LOG.info("Calling cleanup() method of " + nr.baseClassInstance.getClass.toString +" class.")
+        if (itr.isEmpty) {
+          LOG.info("Calling cleanup() method of " + nr.baseClassInstance.getClass.toString + " class.")
           nr.baseClassInstance.cleanup()
-
+        }
         outputDispatcher.getOutRows
       })
       it
