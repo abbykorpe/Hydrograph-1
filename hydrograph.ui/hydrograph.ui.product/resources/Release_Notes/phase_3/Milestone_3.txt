@@ -41,3 +41,6 @@ Issues/Defects fixed:
 26.#595 [Akhilesh Joshi] - 	Aggregate Component: Expression with same id/name is getting added when user clicks on Add Operation control button
 27.#583 [Ashika Holkar] - Oracle and Mysql component: Getting error message while connecting to Mysql server/oracle database
 28.#587 [Pooja Yadav} - Delimiter component: Garbage value in header while writing delimited file.
+29.#515 [Prateem Tadas]-  	Apply button is getting enabled when user clicks on Pull Schema button.
+30.#554	[Prateem Tadas]- 	Tooltip is not getting displayed.  
+ 

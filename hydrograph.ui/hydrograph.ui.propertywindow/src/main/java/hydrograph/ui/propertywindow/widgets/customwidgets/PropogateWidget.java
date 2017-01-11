@@ -15,7 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
@@ -85,7 +85,7 @@ public class PropogateWidget extends AbstractWidget{
 
 		AbstractELTWidget eltDefaultLable = new ELTDefaultLable(Constants.PROPAGATE_FIELD_FROM_LEFT);
 		eltDefaultSubgroupComposite.attachWidget(eltDefaultLable);
-		
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 		AbstractELTWidget eltDefaultButton;
 		if(OSValidator.isMac()){
 			eltDefaultButton = new ELTDefaultButton(Constants.PROPAGATE).buttonWidth(120);

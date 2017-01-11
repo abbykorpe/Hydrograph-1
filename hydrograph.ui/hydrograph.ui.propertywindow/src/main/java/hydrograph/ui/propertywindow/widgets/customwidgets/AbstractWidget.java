@@ -12,6 +12,19 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
+
 import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
@@ -29,19 +42,6 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.validators.impl.IValidator;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
 
 /**
@@ -69,6 +69,8 @@ public abstract class AbstractWidget {
 	private Property property; 
 	private SchemaData schemaData;
 	protected static boolean isSchemaUpdated;
+	private static final String DATA_KEY = "0";
+	private static final String SEPERATOR = "#";
 	
 	public CTabFolder getTabFolder() {
 		return tabFolder;
@@ -346,8 +348,18 @@ public abstract class AbstractWidget {
 	 */
 	public void setPropertyHelp() {
 
-		if (ShowHidePropertyHelpHandler.getInstance() != null && propertyHelpText != null && propertyHelpWidget != null
-				&& ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()) {
+		if (null != propertyHelpWidget && null != this.propertyHelpWidget.getData(DATA_KEY)) {
+			String array[] = propertyHelpText.split(SEPERATOR);
+			
+			for(int index=0;index<=array.length-1;index++){
+				Control propertyHelpWidget = (Control)this.propertyHelpWidget.getData(String.valueOf(index));
+			   if(null!=propertyHelpWidget){
+				   propertyHelpWidget.setToolTipText(array[index]);
+				   propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));		
+				}
+			}
+		}else if (ShowHidePropertyHelpHandler.getInstance() != null && propertyHelpText != null && propertyHelpWidget != null
+				&& ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()){
 			propertyHelpWidget.setToolTipText(propertyHelpText);
 			propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
 		}

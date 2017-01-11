@@ -98,6 +98,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	private static final String REDSHIFT = "redshift";
 	private static final String MYSQL = "mysql";
 	
+	private int key_value = 0;
 
 	public SelectionDatabaseWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propertyDialogButtonBar) {
@@ -120,6 +121,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		selectLable = new ELTDefaultLable(Messages.DATABASE_SELECT);
 		eltSuDefaultSubgroupComposite.attachWidget(selectLable);
+		(selectLable.getSWTWidgetControl()).setData(String.valueOf(key_value++), selectLable.getSWTWidgetControl());
 
 		tableNameRadioButton = new ELTRadioButton(Messages.DATABASE_TABLE_NAME);
 		eltSuDefaultSubgroupComposite.attachWidget(tableNameRadioButton);
@@ -137,9 +139,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		final StackLayout layout = new StackLayout();
 		selectionComposite.createStackContainerWidget(layout);
 
+		createSQLQueryComposite(selectionComposite);
 		createTableNameComposite(selectionComposite);
 
-		createSQLQueryComposite(selectionComposite);
 
 		if (null != databaseSelectionConfig) {
 			if (databaseSelectionConfig.isTableName()) {
@@ -166,6 +168,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		attachSQLQueryListner(selectionComposite, layout);
 		populateWidget();
+
+		setPropertyHelpWidget((Control) selectLable.getSWTWidgetControl());
 	}
 
 	/**
@@ -236,7 +240,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 
 		sqlQueryComposite.numberOfBasicWidgets(3);
 
-		createWidgetlabel(Messages.SQL_QUERY, sqlQueryComposite);
+		AbstractELTWidget createWidgetlabel = createWidgetlabel(Messages.SQL_QUERY, sqlQueryComposite);
+		selectLable.getSWTWidgetControl().setData(String.valueOf(key_value++), createWidgetlabel.getSWTWidgetControl());
+
 		AbstractELTWidget sqlQueryWgt = createWidgetTextbox(Messages.SQL_QUERY, sqlQueryComposite);
 		sqlQueryDecorator = attachDecoratorToTextbox(Messages.SQL_QUERY, sqlQueryWgt, sqlQueryDecorator);
 		sqlQueryTextBox = (Text) sqlQueryWgt.getSWTWidgetControl();
@@ -253,7 +259,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		buttonAlignment.addSelectionListener(buttonWidgetSelectionListener(sqlQueryTextBox));
 		buttonWidgetSelectionListener(sqlQueryTextBox);
 
-		createWidgetlabel(Messages.EXTRACT_FROM_METASTORE, sqlQueryComposite);
+		AbstractELTWidget createWidgetlabel2 = createWidgetlabel(Messages.EXTRACT_FROM_METASTORE, sqlQueryComposite);
+		selectLable.getSWTWidgetControl().setData(String.valueOf(key_value++), createWidgetlabel2.getSWTWidgetControl());
+
 		ELTDefaultButton editButton = new ELTDefaultButton(Messages.EXTRACT);
 		sqlQueryComposite.attachWidget(editButton);
 
@@ -363,6 +371,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	/**
 	 * Sets the data structure used for TextBoxes
 	 */
+	@Override
 	public void setWidgetConfig(WidgetConfig widgetConfig) {
 		textBoxConfig = (TextBoxWithLableConfig) widgetConfig;
 	}
@@ -441,14 +450,17 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 		tableComposite.createContainerWidget();
 
 		tableComposite.numberOfBasicWidgets(2);
-		createWidgetlabel(Messages.LABEL_TABLE_NAME, tableComposite);
+		AbstractELTWidget createWidgetlabel = createWidgetlabel(Messages.LABEL_TABLE_NAME, tableComposite);
+		selectLable.getSWTWidgetControl().setData(String.valueOf(key_value++), createWidgetlabel.getSWTWidgetControl());
+		
 		AbstractELTWidget tableNameWgt = createWidgetTextbox(Messages.LABEL_TABLE_NAME, tableComposite);
 		tableNameDecorator = attachDecoratorToTextbox(Messages.LABEL_TABLE_NAME, tableNameWgt, tableNameDecorator);
 		textBoxTableName = (Text) tableNameWgt.getSWTWidgetControl();
 
 		attachListeners(tableNameWgt);
 
-		createWidgetlabel(Messages.EXTRACT_FROM_METASTORE, tableComposite);
+		AbstractELTWidget createWidgetlabel2 = createWidgetlabel(Messages.EXTRACT_FROM_METASTORE, tableComposite);
+		selectLable.getSWTWidgetControl().setData(String.valueOf(key_value++), createWidgetlabel2.getSWTWidgetControl());
 		ELTDefaultButton editButton = new ELTDefaultButton(Messages.EXTRACT);
 		tableComposite.attachWidget(editButton);
 
@@ -755,7 +767,6 @@ String host = DataBaseUtility.getInstance().getServiceHost();
 		Label labelAlignment = ((Label) label.getSWTWidgetControl());
 		GridData data = (GridData) labelAlignment.getLayoutData();
 		data.verticalIndent = 5;
-		setPropertyHelpWidget((Control) label.getSWTWidgetControl());
 
 		return label;
 	}
