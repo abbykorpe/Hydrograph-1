@@ -31,7 +31,7 @@ case class SchemaUtils() {
         ds.name.equals(inSchema.name)
       })
       if (fieldExist) {
-        if (!(getDataType(inSchema.dataType).getOrElse(inSchema.dataType).typeName.equalsIgnoreCase(dbDataType.typeName))) {
+        if (!(inSchema.dataType.typeName.equalsIgnoreCase(dbDataType.typeName))) {
           LOG.error("Field '" + inSchema.name + "', data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
           throw SchemaMismatchException("Field '" + inSchema.name + "' data type does not match expected type:" + dbDataType + ", got type:" + inSchema.dataType)
         }
@@ -42,19 +42,6 @@ case class SchemaUtils() {
       }
     })
     true
-  }
-
-  // mapped datatype as in mysql float is mapped to real and in org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD real is mapped to DoubleType
-  // In Mysql Short data type is not there, instead of Short SMALLINT is used and in org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD SMALLINT is mapped to IntegerType
-  // for comparing purpose here float -> DoubleType AND short -> IntegerType
-  private def getDataType(dataType: DataType): Option[DataType] = {
-    val answer = dataType.typeName.toUpperCase match {
-      case "FLOAT" => DoubleType
-      case "SHORT" => IntegerType
-      case _ => null
-    }
-    if (answer != null) Option(answer) else None
-
   }
 }
 
