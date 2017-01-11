@@ -14,7 +14,7 @@
 
 <p:graph xmlns:p="hydrograph/engine/jaxb/main" xmlns:it="hydrograph/engine/jaxb/inputtypes"
          xmlns:ot="hydrograph/engine/jaxb/outputtypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         name="ORACLE OUTPUT EXAMPLE"
+         name="Redshift OUTPUT EXAMPLE"
          xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
 
     <inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
@@ -38,8 +38,8 @@
         <hasHeader value="false"/>
     </inputs>
 
-    <outputs id="out oracle" batch="0" xsi:type="ot:oracle">
-        <inSocket fromComponentId="input1" fromSocketId="out0" id="in0" type="in">
+    <outputs id="out Redshift" batch="0" xsi:type="ot:redshift">
+        <inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
             <schema name="schema1">
                 <field name="aa" type="java.lang.Short"/>
                 <field name="bb" type="java.lang.Boolean"/>
@@ -52,29 +52,31 @@
                 <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss"/>
                 <field name="jj" type="java.math.BigDecimal" scale="2"
                        precision="10" scaleType="explicit"/>
+
             </schema>
         </inSocket>
-        <sid value="PRACTICE"/>
-        <hostName value="DBDEVSRV"/>
-        <port value="1521"/>
-        <driverType value="thin"/>
-        <tableName value="testingTableAllTablesbatchSize"/>
-        <userName value="htcd"/>
-        <password value="htcd"/>
+        <databaseName value="dev"/>
+        <hostName value="redshift-demo.cnmrntvjuquk.us-east-1.redshift.amazonaws.com"/>
+        <port value="5439"/>
+        <tableName value="testingalltypesbatchsizee"/>
+        <userName value="awsuser"/>
+        <password value="1qaz2wsxA#5"/>
         <loadType>
             <newTable>
                 <primaryKeys>
                     <field name="aa"/>
                 </primaryKeys>
             </newTable>
-            <!--<truncateLoad />-->
-            <!--<Insert/>-->
-            <!-- <update> <updateByKeys> <field name="num" /> </updateByKeys> </update> -->
+            <!-- <truncateLoad/>-->
+            <!-- <Insert/>-->
+            <!-- 			<update> -->
+            <!-- 				<updateByKeys> -->
+            <!-- 					<field name="num" />	 -->
+            <!-- 				</updateByKeys> -->
+            <!--  			</update>  -->
         </loadType>
-        <!--<schemaName value="htcd"/>-->
-        <!--<chunkSize value="2"/>-->
         <runtimeProperties>
-            <property name="batchsize" value="9"/>
+            <property name="batchsize" value="10"/>
         </runtimeProperties>
     </outputs>
 </p:graph>

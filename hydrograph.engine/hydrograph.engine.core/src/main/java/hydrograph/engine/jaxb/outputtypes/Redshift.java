@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for redshift complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="redshift">
  *   &lt;complexContent>
@@ -26,36 +26,36 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="databaseName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
- *         &lt;element name="jdbcDriver" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="username" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="userName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/oredshift}type-load-choice"/>
  *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
+ *         &lt;element name="schemaName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
- *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/oredshift}type-load-choice" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "redshift", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
-    "databaseName",
-    "hostName",
-    "port",
-    "jdbcDriver",
-    "tableName",
-    "username",
-    "password",
-    "chunkSize",
-    "runtimeProperties",
-    "loadType"
+        "databaseName",
+        "hostName",
+        "port",
+        "tableName",
+        "userName",
+        "password",
+        "loadType",
+        "chunkSize",
+        "schemaName",
+        "runtimeProperties"
 })
 public class Redshift
-    extends TypeOutputRedshiftBase
+        extends TypeOutputRedshiftBase
 {
 
     @XmlElement(required = true)
@@ -64,24 +64,24 @@ public class Redshift
     protected ElementValueStringType hostName;
     protected ElementValueIntegerType port;
     @XmlElement(required = true)
-    protected ElementValueStringType jdbcDriver;
-    @XmlElement(required = true)
     protected ElementValueStringType tableName;
     @XmlElement(required = true)
-    protected ElementValueStringType username;
+    protected ElementValueStringType userName;
     @XmlElement(required = true)
     protected ElementValueStringType password;
-    protected ElementValueIntegerType chunkSize;
-    protected TypeProperties runtimeProperties;
+    @XmlElement(required = true)
     protected TypeLoadChoice loadType;
+    protected ElementValueIntegerType chunkSize;
+    protected ElementValueStringType schemaName;
+    protected TypeProperties runtimeProperties;
 
     /**
      * Gets the value of the databaseName property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public ElementValueStringType getDatabaseName() {
         return databaseName;
@@ -89,11 +89,11 @@ public class Redshift
 
     /**
      * Sets the value of the databaseName property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public void setDatabaseName(ElementValueStringType value) {
         this.databaseName = value;
@@ -101,11 +101,11 @@ public class Redshift
 
     /**
      * Gets the value of the hostName property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public ElementValueStringType getHostName() {
         return hostName;
@@ -113,11 +113,11 @@ public class Redshift
 
     /**
      * Sets the value of the hostName property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public void setHostName(ElementValueStringType value) {
         this.hostName = value;
@@ -125,11 +125,11 @@ public class Redshift
 
     /**
      * Gets the value of the port property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ElementValueIntegerType }
-     *     
+     *
      */
     public ElementValueIntegerType getPort() {
         return port;
@@ -137,47 +137,23 @@ public class Redshift
 
     /**
      * Sets the value of the port property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ElementValueIntegerType }
-     *     
+     *
      */
     public void setPort(ElementValueIntegerType value) {
         this.port = value;
     }
 
     /**
-     * Gets the value of the jdbcDriver property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public ElementValueStringType getJdbcDriver() {
-        return jdbcDriver;
-    }
-
-    /**
-     * Sets the value of the jdbcDriver property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueStringType }
-     *     
-     */
-    public void setJdbcDriver(ElementValueStringType value) {
-        this.jdbcDriver = value;
-    }
-
-    /**
      * Gets the value of the tableName property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public ElementValueStringType getTableName() {
         return tableName;
@@ -185,47 +161,47 @@ public class Redshift
 
     /**
      * Sets the value of the tableName property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public void setTableName(ElementValueStringType value) {
         this.tableName = value;
     }
 
     /**
-     * Gets the value of the username property.
-     * 
+     * Gets the value of the userName property.
+     *
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
-    public ElementValueStringType getUsername() {
-        return username;
+    public ElementValueStringType getUserName() {
+        return userName;
     }
 
     /**
-     * Sets the value of the username property.
-     * 
+     * Sets the value of the userName property.
+     *
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
-    public void setUsername(ElementValueStringType value) {
-        this.username = value;
+    public void setUserName(ElementValueStringType value) {
+        this.userName = value;
     }
 
     /**
      * Gets the value of the password property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public ElementValueStringType getPassword() {
         return password;
@@ -233,71 +209,23 @@ public class Redshift
 
     /**
      * Sets the value of the password property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link ElementValueStringType }
-     *     
+     *
      */
     public void setPassword(ElementValueStringType value) {
         this.password = value;
     }
 
     /**
-     * Gets the value of the chunkSize property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public ElementValueIntegerType getChunkSize() {
-        return chunkSize;
-    }
-
-    /**
-     * Sets the value of the chunkSize property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ElementValueIntegerType }
-     *     
-     */
-    public void setChunkSize(ElementValueIntegerType value) {
-        this.chunkSize = value;
-    }
-
-    /**
-     * Gets the value of the runtimeProperties property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public TypeProperties getRuntimeProperties() {
-        return runtimeProperties;
-    }
-
-    /**
-     * Sets the value of the runtimeProperties property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TypeProperties }
-     *     
-     */
-    public void setRuntimeProperties(TypeProperties value) {
-        this.runtimeProperties = value;
-    }
-
-    /**
      * Gets the value of the loadType property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link TypeLoadChoice }
-     *     
+     *
      */
     public TypeLoadChoice getLoadType() {
         return loadType;
@@ -305,14 +233,86 @@ public class Redshift
 
     /**
      * Sets the value of the loadType property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link TypeLoadChoice }
-     *     
+     *
      */
     public void setLoadType(TypeLoadChoice value) {
         this.loadType = value;
+    }
+
+    /**
+     * Gets the value of the chunkSize property.
+     *
+     * @return
+     *     possible object is
+     *     {@link ElementValueIntegerType }
+     *
+     */
+    public ElementValueIntegerType getChunkSize() {
+        return chunkSize;
+    }
+
+    /**
+     * Sets the value of the chunkSize property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueIntegerType }
+     *
+     */
+    public void setChunkSize(ElementValueIntegerType value) {
+        this.chunkSize = value;
+    }
+
+    /**
+     * Gets the value of the schemaName property.
+     *
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *
+     */
+    public ElementValueStringType getSchemaName() {
+        return schemaName;
+    }
+
+    /**
+     * Sets the value of the schemaName property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *
+     */
+    public void setSchemaName(ElementValueStringType value) {
+        this.schemaName = value;
+    }
+
+    /**
+     * Gets the value of the runtimeProperties property.
+     *
+     * @return
+     *     possible object is
+     *     {@link TypeProperties }
+     *
+     */
+    public TypeProperties getRuntimeProperties() {
+        return runtimeProperties;
+    }
+
+    /**
+     * Sets the value of the runtimeProperties property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link TypeProperties }
+     *
+     */
+    public void setRuntimeProperties(TypeProperties value) {
+        this.runtimeProperties = value;
     }
 
 }
