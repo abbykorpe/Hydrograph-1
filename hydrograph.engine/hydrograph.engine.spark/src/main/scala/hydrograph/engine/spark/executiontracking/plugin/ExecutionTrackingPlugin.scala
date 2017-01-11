@@ -209,11 +209,11 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
 
   override def onTaskGettingResult(taskGettingResult: SparkListenerTaskGettingResult) {
-//        println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
+        println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
 //        println("Task geeting result status : " + taskGettingResult.taskInfo.status)
 
-//    jobInfo.storeComponentStatsForTaskGettingResult(taskGettingResult)
-//    getStatus().asScala.foreach(println)
+    jobInfo.storeComponentStatsForTaskGettingResult(taskGettingResult)
+    getStatus().asScala.foreach(println)
     //    println("Task geeting result id : " + taskGettingResult.taskInfo.taskId)
 //        println("+++++++++++++++++++++Task Getting Result End+++++++++++++++++++++")
   }
