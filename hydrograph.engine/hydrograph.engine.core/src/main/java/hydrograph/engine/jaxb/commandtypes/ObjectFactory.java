@@ -30,46 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Subjob }
-     * 
-     */
-    public Subjob createSubjob() {
-        return new Subjob();
-    }
-
-    /**
-     * Create an instance of {@link Subjob.Path }
-     * 
-     */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
-    }
-
-    /**
-     * Create an instance of {@link Hplsql.Execute.Uri }
-     * 
-     */
-    public Hplsql.Execute.Uri createHplsqlExecuteUri() {
-        return new Hplsql.Execute.Uri();
-    }
-
-    /**
-     * Create an instance of {@link FtpIn.Host }
-     * 
-     */
-    public FtpIn.Host createFtpInHost() {
-        return new FtpIn.Host();
-    }
-
-    /**
-     * Create an instance of {@link Hplsql.Execute }
-     * 
-     */
-    public Hplsql.Execute createHplsqlExecute() {
-        return new Hplsql.Execute();
-    }
-
-    /**
      * Create an instance of {@link RunProgram.Command }
      * 
      */
@@ -86,11 +46,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FtpIn }
+     * Create an instance of {@link Subjob }
      * 
      */
-    public FtpIn createFtpIn() {
-        return new FtpIn();
+    public Subjob createSubjob() {
+        return new Subjob();
+    }
+
+    /**
+     * Create an instance of {@link RunProgram }
+     * 
+     */
+    public RunProgram createRunProgram() {
+        return new RunProgram();
+    }
+
+    /**
+     * Create an instance of {@link FtpIn.Host }
+     * 
+     */
+    public FtpIn.Host createFtpInHost() {
+        return new FtpIn.Host();
+    }
+
+    /**
+     * Create an instance of {@link Subjob.Path }
+     * 
+     */
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
     /**
@@ -110,11 +94,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RunProgram }
+     * Create an instance of {@link Hplsql.Execute }
      * 
      */
-    public RunProgram createRunProgram() {
-        return new RunProgram();
+    public Hplsql.Execute createHplsqlExecute() {
+        return new Hplsql.Execute();
+    }
+
+    /**
+     * Create an instance of {@link Hplsql.Execute.Uri }
+     * 
+     */
+    public Hplsql.Execute.Uri createHplsqlExecuteUri() {
+        return new Hplsql.Execute.Uri();
+    }
+
+    /**
+     * Create an instance of {@link FtpIn }
+     * 
+     */
+    public FtpIn createFtpIn() {
+        return new FtpIn();
     }
 
 }

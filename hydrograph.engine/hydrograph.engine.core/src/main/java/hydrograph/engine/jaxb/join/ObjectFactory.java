@@ -38,6 +38,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeKeyFields }
+     * 
+     */
+    public TypeKeyFields createTypeKeyFields() {
+        return new TypeKeyFields();
+    }
+
+    /**
      * Create an instance of {@link JoinBase }
      * 
      */
@@ -51,14 +59,6 @@ public class ObjectFactory {
      */
     public TypeInSocket createTypeInSocket() {
         return new TypeInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeKeyFields }
-     * 
-     */
-    public TypeKeyFields createTypeKeyFields() {
-        return new TypeKeyFields();
     }
 
 }

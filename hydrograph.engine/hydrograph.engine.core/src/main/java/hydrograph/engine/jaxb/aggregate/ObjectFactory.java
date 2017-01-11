@@ -30,11 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
+     * Create an instance of {@link AggregateBase }
      * 
      */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
+    public AggregateBase createAggregateBase() {
+        return new AggregateBase();
     }
 
     /**
@@ -46,14 +46,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFields }
-     * 
-     */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
-    }
-
-    /**
      * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
@@ -62,19 +54,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperationInputFields }
+     * Create an instance of {@link TypeOperation }
      * 
      */
-    public TypeOperationInputFields createTypeOperationInputFields() {
-        return new TypeOperationInputFields();
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
     }
 
     /**
-     * Create an instance of {@link TypeInSocket }
+     * Create an instance of {@link TypeSecondaryKeyFields }
      * 
      */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
     }
 
     /**
@@ -102,19 +94,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperation }
+     * Create an instance of {@link TypeOperationInputFields }
      * 
      */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
+    public TypeOperationInputFields createTypeOperationInputFields() {
+        return new TypeOperationInputFields();
     }
 
     /**
-     * Create an instance of {@link AggregateBase }
+     * Create an instance of {@link TypeInSocket }
      * 
      */
-    public AggregateBase createAggregateBase() {
-        return new AggregateBase();
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypePrimaryKeyFields }
+     * 
+     */
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
     }
 
 }

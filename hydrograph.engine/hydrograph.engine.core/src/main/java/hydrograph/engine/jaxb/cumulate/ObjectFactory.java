@@ -30,6 +30,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeSecondaryKeyFields }
+     * 
+     */
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
+    }
+
+    /**
+     * Create an instance of {@link CumulateBase }
+     * 
+     */
+    public CumulateBase createCumulateBase() {
+        return new CumulateBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeOperationInputFields }
+     * 
+     */
+    public TypeOperationInputFields createTypeOperationInputFields() {
+        return new TypeOperationInputFields();
+    }
+
+    /**
      * Create an instance of {@link TypeOutSocket }
      * 
      */
@@ -43,38 +67,6 @@ public class ObjectFactory {
      */
     public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
         return new TypeSecondayKeyFieldsAttributes();
-    }
-
-    /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
-     * 
-     */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypePrimaryKeyFields }
-     * 
-     */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperation }
-     * 
-     */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperationInputFields }
-     * 
-     */
-    public TypeOperationInputFields createTypeOperationInputFields() {
-        return new TypeOperationInputFields();
     }
 
     /**
@@ -94,11 +86,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CumulateBase }
+     * Create an instance of {@link TypeOperation }
      * 
      */
-    public CumulateBase createCumulateBase() {
-        return new CumulateBase();
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
+    }
+
+    /**
+     * Create an instance of {@link TypePrimaryKeyFields }
+     * 
+     */
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
     }
 
     /**

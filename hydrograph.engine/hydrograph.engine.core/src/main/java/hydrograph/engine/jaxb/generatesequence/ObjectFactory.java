@@ -30,14 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeNameField }
-     * 
-     */
-    public TypeNameField createTypeNameField() {
-        return new TypeNameField();
-    }
-
-    /**
      * Create an instance of {@link TypeOutSocket }
      * 
      */
@@ -51,6 +43,14 @@ public class ObjectFactory {
      */
     public TypePassthroughInputField createTypePassthroughInputField() {
         return new TypePassthroughInputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeNameField }
+     * 
+     */
+    public TypeNameField createTypeNameField() {
+        return new TypeNameField();
     }
 
     /**

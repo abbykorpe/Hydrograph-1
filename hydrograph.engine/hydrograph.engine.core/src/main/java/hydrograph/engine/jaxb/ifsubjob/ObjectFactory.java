@@ -30,6 +30,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeInputFileDelimitedBase }
+     * 
+     */
+    public TypeInputFileDelimitedBase createTypeInputFileDelimitedBase() {
+        return new TypeInputFileDelimitedBase();
+    }
+
+    /**
      * Create an instance of {@link TypeInputFileDelimitedSubjob }
      * 
      */
@@ -43,14 +51,6 @@ public class ObjectFactory {
      */
     public TypeInputDelimitedOutSocket createTypeInputDelimitedOutSocket() {
         return new TypeInputDelimitedOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeInputFileDelimitedBase }
-     * 
-     */
-    public TypeInputFileDelimitedBase createTypeInputFileDelimitedBase() {
-        return new TypeInputFileDelimitedBase();
     }
 
 }

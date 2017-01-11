@@ -30,14 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputOracleInSocket }
-     * 
-     */
-    public TypeOutputOracleInSocket createTypeOutputOracleInSocket() {
-        return new TypeOutputOracleInSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeOracleRecord }
      * 
      */
@@ -46,11 +38,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeys }
+     * Create an instance of {@link TypeUpdateKeys }
      * 
      */
-    public TypePrimaryKeys createTypePrimaryKeys() {
-        return new TypePrimaryKeys();
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
     }
 
     /**
@@ -63,14 +55,18 @@ public class ObjectFactory {
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Create an instance of {@link TypeOutputOracleBase }
 =======
      * Create an instance of {@link TypeOracleField }
 >>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
+=======
+     * Create an instance of {@link TypeOracleField }
+>>>>>>> partition by Expression component upgraded for expression support
      * 
      */
-    public TypeOutputOracleBase createTypeOutputOracleBase() {
-        return new TypeOutputOracleBase();
+    public TypeOracleField createTypeOracleField() {
+        return new TypeOracleField();
     }
 
     /**
@@ -82,6 +78,7 @@ public class ObjectFactory {
     }
 
     /**
+<<<<<<< HEAD
 <<<<<<< HEAD
      * Create an instance of {@link TypeOracleField }
 =======
@@ -95,13 +92,17 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link TypeOracleRecord }
 >>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
+=======
+     * Create an instance of {@link TypePrimaryKeys }
+>>>>>>> partition by Expression component upgraded for expression support
      * 
      */
-    public TypeOracleField createTypeOracleField() {
-        return new TypeOracleField();
+    public TypePrimaryKeys createTypePrimaryKeys() {
+        return new TypePrimaryKeys();
     }
 
     /**
+<<<<<<< HEAD
 <<<<<<< HEAD
      * Create an instance of {@link TypeUpdateKeys }
 =======
@@ -110,5 +111,21 @@ public class ObjectFactory {
      * 
      */
 
+=======
+     * Create an instance of {@link TypeOutputOracleBase }
+     * 
+     */
+    public TypeOutputOracleBase createTypeOutputOracleBase() {
+        return new TypeOutputOracleBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputOracleInSocket }
+     * 
+     */
+    public TypeOutputOracleInSocket createTypeOutputOracleInSocket() {
+        return new TypeOutputOracleInSocket();
+    }
+>>>>>>> partition by Expression component upgraded for expression support
 
 }

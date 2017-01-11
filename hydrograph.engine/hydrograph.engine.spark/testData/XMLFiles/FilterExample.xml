@@ -28,20 +28,19 @@
 				<field name="Choice" type="java.lang.String"  />
 			</schema>
 		</outSocket>
-		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\inputFiles\FilterFile.txt" />
+		<path uri="hydrograph.engine.spark\testData\inputFiles\FilterFile.txt" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 	</inputs>
 
 	<operations id="trans" batch="0" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<operation id="operation1" class="hydrograph.engine.userclass.Filter">
+		<operation id="operation1" class="userfunctions.Filter">
 			<inputFields>
-				<field name="name" inSocketId="in0" />
-				<field name="Choice" inSocketId="in0" />
+				<field name="Gift" inSocketId="in0" />
 			</inputFields>
 			<properties>
-				<property name="Filter" value="AAA" />
+				<property name="Filter" value="10" />
 			</properties>
 		</operation>
 		<outSocket id="out1" type="out">
@@ -62,7 +61,7 @@
 				<field name="Choice" type="java.lang.String"/>
 			</schema>
 		</inSocket>
-		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData\output/FilterOutput" />
+		<path uri="hydrograph.engine.spark\testData\output/FilterOutput" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />
@@ -78,7 +77,7 @@
 				<field name="Choice" type="java.lang.String"  />
 			</schema>
 		</inSocket>
-		<path uri="C:\Users\ANIKETMO\git\hydrograph\hydrograph.engine\hydrograph.engine.spark\testData/output/FilterUnusedOutput" />
+		<path uri="hydrograph.engine.spark\testData/output/FilterUnusedOutput" />
 		<delimiter value="," />
 		<hasHeader value="false" />
 		<charset value="ISO-8859-1" />

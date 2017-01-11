@@ -4,6 +4,8 @@ import java.util
 
 import hydrograph.engine.core.component.entity.PartitionByExpressionEntity
 import hydrograph.engine.core.component.entity.elements.OutSocket
+import hydrograph.engine.expression.api.ValidationAPI
+import hydrograph.engine.expression.userfunctions.PartitionByExpressionForExpression
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{ReusableRowHelper, RowHelper, SparkReusableRow}
@@ -50,17 +52,24 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
       + "' scheme " + fieldNameSet.asScala.toList.mkString(","))
 
     try {
-      val partitionClass = classLoader[CustomPartitionExpression](partitionByExpressionEntity.getOperation.getOperationClass)
       val fieldPosition = ReusableRowHelper(partitionByExpressionEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
       val inputReusableRow = new SparkReusableRow(fieldNameSet)
 
       LOG.trace("Operation input Field " + partitionByExpressionEntity.getOperationsList.get(0).getOperationInputFields.toList.mkString(",")
         + " having field position [" + fieldPosition.mkString(",") + "]")
 
+      val partitionByExpressionClass: CustomPartitionExpression = partitionByExpressionEntity.getOperation match {
+        case x if x.getOperationClass == null => {
+          val partitionByExpression = new PartitionByExpressionForExpression()
+          partitionByExpression.setValidationAPI(new ValidationAPI(x.getExpression,""))
+          partitionByExpression
+        }
+        case y => classLoader[CustomPartitionExpression](y.getOperationClass)
+      }
       partitionByExpressionEntity.getOutSocketList.asScala.foreach { outSocket =>
 
         val df = componentsParams.getDataFrame().filter(row =>
-          partitionClass.getPartition(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow), partitionByExpressionEntity.getNumPartitions.toInt).equals(outSocket.getSocketId)
+          partitionByExpressionClass.getPartition(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow), partitionByExpressionEntity.getNumPartitions.toInt).equals(outSocket.getSocketId)
         )
         map += (outSocket.getSocketId -> df)
       }

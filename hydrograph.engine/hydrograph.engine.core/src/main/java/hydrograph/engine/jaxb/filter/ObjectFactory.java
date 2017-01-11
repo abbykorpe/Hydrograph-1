@@ -30,14 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFilterOutSocket }
-     * 
-     */
-    public TypeFilterOutSocket createTypeFilterOutSocket() {
-        return new TypeFilterOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeFilterOperationInputField }
      * 
      */
@@ -59,6 +51,14 @@ public class ObjectFactory {
      */
     public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
         return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
+     * Create an instance of {@link TypeFilterOutSocket }
+     * 
+     */
+    public TypeFilterOutSocket createTypeFilterOutSocket() {
+        return new TypeFilterOutSocket();
     }
 
     /**

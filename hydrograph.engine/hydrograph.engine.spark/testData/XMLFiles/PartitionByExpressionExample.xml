@@ -45,6 +45,13 @@
                 <field name="transaction_type" inSocketId="in0" />
             </inputFields>
         </operation>
+        <expression
+                expr="count > 13 ?true:false;"
+                id="sadf">
+            <inputFields>
+                <field name="count" inSocketId="in0" />
+            </inputFields>
+        </expression>
         <outSocket id="out_mix" type="out">
             <copyOfInsocket inSocketId="in0" />
         </outSocket>
@@ -52,6 +59,9 @@
             <copyOfInsocket inSocketId="in0" />
         </outSocket>
         <outSocket id="out_debit" type="out">
+            <copyOfInsocket inSocketId="in0" />
+        </outSocket>
+        <outSocket id="unused" type="unused">
             <copyOfInsocket inSocketId="in0" />
         </outSocket>
 
