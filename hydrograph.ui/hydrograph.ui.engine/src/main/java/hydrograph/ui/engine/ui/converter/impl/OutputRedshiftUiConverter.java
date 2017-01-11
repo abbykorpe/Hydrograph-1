@@ -71,9 +71,9 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
 		}
-		/*if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value(), redshift.getDrivertype().getValue());
-		}*/
+		if (StringUtils.isNotBlank(redshift.getJdbcDriver().getValue())) {
+			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), redshift.getJdbcDriver().getValue());
+		}
 		if (StringUtils.isNotBlank(redshift.getHostName().getValue())) {
 			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), redshift.getHostName().getValue());
 		}
