@@ -5,6 +5,7 @@ import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.{DbTableUtils, SchemaCreator, SchemaUtils}
 import org.apache.spark.sql._
+import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -51,7 +52,7 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
-      SchemaUtils().compareSchema(schemaField,df.schema)
+      SchemaUtils().compareSchema(getMappedSchema(schemaField),df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
 
@@ -60,5 +61,19 @@ class InputMysqlComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams:
         LOG.error("Error in Input  Mysql component '" + inputRDBMSEntity.getComponentId + "', " + e.getMessage, e)
         throw new RuntimeException("Error in Input Mysql Component " + inputRDBMSEntity.getComponentId, e)
     }
+  }
+  def getMappedSchema(schema:StructType) : StructType = StructType(schema.toList.map(stuctField=> new StructField(stuctField.name,getDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
+
+  // mapped datatype as in mysql float is mapped to real and in org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD real is mapped to DoubleType
+  // In Mysql Short data type is not there, instead of Short SMALLINT is used and in org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD SMALLINT is mapped to IntegerType
+  // for comparing purpose here float -> DoubleType AND short -> IntegerType
+  private def getDataType(dataType: DataType): Option[DataType] = {
+    val answer = dataType.typeName.toUpperCase match {
+      case "FLOAT" => DoubleType
+      case "SHORT" => IntegerType
+      case _ => null
+    }
+    if (answer != null) Option(answer) else None
+
   }
 }
