@@ -194,7 +194,8 @@ public class TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents extends T
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		if (this.propertyValue.contains(Constants.PARAMETER_PREFIX)) {
+		
+		if (isParameter(this.propertyValue)) {
 			((Button) isParameterCheckbox.getSWTWidgetControl()).setSelection(true);
 		}
 

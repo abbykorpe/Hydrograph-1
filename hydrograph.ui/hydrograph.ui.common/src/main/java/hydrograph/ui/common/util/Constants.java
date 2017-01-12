@@ -60,8 +60,7 @@ public class Constants {
 	public static final String REGEX_NUMERIC_AND_PARAMETER = "[\\@]{1}[\\{]{1}[\\w]{1,}[\\}]{1}||[\\d]{1,4}";
 	
 	// Used for validating only Parameters E.g  @{Param_123}
-	public static final String PARAMETER_REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}"; 
-	
+	public static final String PARAMETER_REGEX ="^[\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1}";
 
 	public static final String MATCH_PROPERTY_WIDGET = "match_value";
 	public static final String MATCH = "Match";

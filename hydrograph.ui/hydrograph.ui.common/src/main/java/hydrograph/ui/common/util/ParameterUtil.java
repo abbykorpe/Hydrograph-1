@@ -44,8 +44,8 @@ public class ParameterUtil {
 	 */
 	public static boolean isParameter(String input) {
 		if (input != null) {
-			String regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
-			Matcher matchs = Pattern.compile(regex).matcher(input);
+			//String regex = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
+			Matcher matchs = Pattern.compile(Constants.PARAMETER_REGEX).matcher(input);
 			if (matchs.matches()) {
 				return true;
 			}
