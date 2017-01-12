@@ -28,6 +28,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.oredshift.TypePrimaryKeys;
 import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
@@ -70,17 +71,17 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
 		}
-		/*if (StringUtils.isNotBlank(redshift.getDrivertype().getValue())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_JDBC_DRIVER.value(), redshift.getDrivertype().getValue());
+		if (StringUtils.isNotBlank(redshift.getJdbcDriver().getValue())) {
+			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), redshift.getJdbcDriver().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getHostname().getValue())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_HOST_NAME.value(), redshift.getHostname().getValue());
+		if (StringUtils.isNotBlank(redshift.getHostName().getValue())) {
+			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), redshift.getHostName().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
-			propertyMap.put(PropertyNameConstants.REDSHIFT_PORT_NAME.value(),redshift.getPort().getValue().toString());
-		}*/
-		if (StringUtils.isNotBlank(redshift.getUsername().getValue())) {
-			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUsername().getValue());
+			propertyMap.put(PropertyNameConstants.PORT_NO.value(),redshift.getPort().getValue().toString());
+		}
+		if (StringUtils.isNotBlank(redshift.getUserName().getValue())) {
+			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUserName().getValue());
 		}
 		if (StringUtils.isNotBlank(redshift.getPassword().getValue())) {
 			propertyMap.put(PropertyNameConstants.PASSWORD.value(), redshift.getPassword().getValue());
@@ -94,10 +95,12 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 				loadSelectedDetails.put(Constants.LOAD_TYPE_INSERT_KEY, redshift.getLoadType().getInsert().toString());
 			}else if(redshift.getLoadType().getTruncateLoad() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_REPLACE_KEY,redshift.getLoadType().getTruncateLoad().toString());
-			} else if(redshift.getLoadType().getUpdate() !=null){
+			} 
+			//TODO Currently, below widget is not use for spark support
+			/*else if(redshift.getLoadType().getUpdate() !=null){
 				loadSelectedDetails.put(Constants.LOAD_TYPE_UPDATE_KEY,getLoadTypeUpdateKeyUIValue(redshift.getLoadType().getUpdate()));
-			}else if(redshift.getLoadType().getNewTable() !=null){
-				//loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue((TypePriamryKeys) redshift.getLoadType().getNewTable()));
+			}*/else if(redshift.getLoadType().getNewTable() !=null){
+				loadSelectedDetails.put(Constants.LOAD_TYPE_NEW_TABLE_KEY,getLoadTypePrimaryKeyUIValue(redshift.getLoadType().getNewTable()));
 			}
 				
 		}
@@ -115,7 +118,7 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 	 * @param newTable
 	 * @return
 	 */
-	/*private String getLoadTypePrimaryKeyUIValue(TypePriamryKeys newTable) {
+	private String getLoadTypePrimaryKeyUIValue(TypePrimaryKeys newTable) {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(newTable !=null && newTable.getPrimaryKeys() !=null){
 			TypeKeyFields typeKeyFields = newTable.getPrimaryKeys();
@@ -125,7 +128,7 @@ public class OutputRedshiftUiConverter extends OutputUiConverter {
 			}
 		}
 		return StringUtils.removeEnd(stringBuffer.toString(), ",");
-	}*/
+	}
 	
 	/**
 	 *  Appends update keys using a comma

@@ -41,7 +41,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 			
-		<tns:property dataType="string" name="jdbcDriver" value="JDBC4.2" renderer="JDBC_DRIVER_WIDGET"
+		<tns:property dataType="string" name="jdbcDriver" value="JDBC 4.2" renderer="JDBC_DRIVER_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="REQUIRED" propertyHelpText="JDBC Driver use to connect with database">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>

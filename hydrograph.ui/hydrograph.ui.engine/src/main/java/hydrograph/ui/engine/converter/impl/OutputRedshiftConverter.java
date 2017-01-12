@@ -28,6 +28,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.oredshift.TypeLoadChoice;
 import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftInSocket;
+import hydrograph.engine.jaxb.oredshift.TypePrimaryKeys;
 import hydrograph.engine.jaxb.oredshift.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.Redshift;
 import hydrograph.ui.common.util.Constants;
@@ -72,27 +73,26 @@ public class OutputRedshiftConverter extends OutputConverter {
 			tableName.setValue(String.valueOf(properties.get(PropertyNameConstants.TABLE_NAME.value())));
 			redshiftOutput.setTableName(tableName);
 		}
-		//TODO
-		//Jaxb classes are not update. Below commented code will be use to generate xml.
+		
 		ElementValueStringType hostName = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.HOST_NAME.value()))){
 			hostName.setValue(String.valueOf(properties.get(PropertyNameConstants.HOST_NAME.value())));
-			//redshiftOutput.setHostname(hostName);
+			redshiftOutput.setHostName(hostName);
 		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
 		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
 		portNo.setValue(portValue);
-		//redshiftOutput.setPort(portNo);
+		redshiftOutput.setPort(portNo);
 		
 		ElementValueStringType jdbcDriver = new ElementValueStringType();
 		jdbcDriver.setValue(String.valueOf(properties.get(PropertyNameConstants.JDBC_DRIVER.value())));
-		//redshiftOutput.setDrivertype(jdbcDriver);
+		redshiftOutput.setJdbcDriver(jdbcDriver);
 		
 		ElementValueStringType userName = new ElementValueStringType();
 		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.USER_NAME.value()))){
 			userName.setValue(String.valueOf(properties.get(PropertyNameConstants.USER_NAME.value())));
-			redshiftOutput.setUsername(userName);
+			redshiftOutput.setUserName(userName);
 		}
 		
 		ElementValueStringType password = new ElementValueStringType();
@@ -113,7 +113,7 @@ public class OutputRedshiftConverter extends OutputConverter {
 				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 				loadValue.setUpdate(getUpdateKeys((String) uiValue.get(Constants.LOAD_TYPE_UPDATE_KEY)));
 			} else if (uiValue.containsKey(Constants.LOAD_TYPE_NEW_TABLE_KEY)) {
-				//loadValue.setNewTable(getPrimaryKeyColumnFieds((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
+				loadValue.setNewTable(getPrimaryKeyColumnFields((String) uiValue.get(Constants.LOAD_TYPE_NEW_TABLE_KEY)));
 			} else if (uiValue.containsKey(Constants.LOAD_TYPE_INSERT_KEY)) {
 				loadValue.setInsert(uiValue.get(Constants.LOAD_TYPE_INSERT_KEY));
 			} else if (uiValue.containsKey(Constants.LOAD_TYPE_REPLACE_KEY)) {
@@ -123,12 +123,10 @@ public class OutputRedshiftConverter extends OutputConverter {
 		return loadValue;
 	}
 	
-	//TODO
-	//Below code will be use to generate xml after Jaxb classes generation.
-	/*private TypePriamryKeys getPrimaryKeyColumnFields(String primaryKeyFeilds) {
-		TypePriamryKeys primaryKeys = new TypePriamryKeys();
+	private TypePrimaryKeys getPrimaryKeyColumnFields(String primaryKeyFeilds) {
+		TypePrimaryKeys primaryKeys = new TypePrimaryKeys();
 		String[] primaryKeyColumnsFields = StringUtils.split(primaryKeyFeilds, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
-		if(primaryKeyColumnsFieds !=null && primaryKeyColumnsFieds.length>0){
+		if(primaryKeyColumnsFields !=null && primaryKeyColumnsFields.length>0){
 			TypeKeyFields primaryTypeKeyFields = new TypeKeyFields();
 			primaryKeys.setPrimaryKeys(primaryTypeKeyFields);
 			for(String fieldValue : primaryKeyColumnsFields){
@@ -139,7 +137,7 @@ public class OutputRedshiftConverter extends OutputConverter {
 		}
 				
 		return primaryKeys;
-	}*/
+	}
 
 	private hydrograph.engine.jaxb.oredshift.TypeUpdateKeys getUpdateKeys(String fields) {
 		TypeUpdateKeys updateKeys = null;

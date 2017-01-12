@@ -1,25 +1,9 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -66,17 +50,17 @@ import javax.xml.bind.annotation.XmlType;
 public class KeyfieldDescriptionType {
 
     @XmlElement(required = true)
-    protected KeyfieldDescriptionType.KeyFields keyFields;
+    protected KeyFields keyFields;
 
     /**
      * Gets the value of the keyFields property.
      * 
      * @return
      *     possible object is
-     *     {@link KeyfieldDescriptionType.KeyFields }
+     *     {@link KeyFields }
      *     
      */
-    public KeyfieldDescriptionType.KeyFields getKeyFields() {
+    public KeyFields getKeyFields() {
         return keyFields;
     }
 
@@ -85,10 +69,10 @@ public class KeyfieldDescriptionType {
      * 
      * @param value
      *     allowed object is
-     *     {@link KeyfieldDescriptionType.KeyFields }
+     *     {@link KeyFields }
      *     
      */
-    public void setKeyFields(KeyfieldDescriptionType.KeyFields value) {
+    public void setKeyFields(KeyFields value) {
         this.keyFields = value;
     }
 
@@ -127,7 +111,7 @@ public class KeyfieldDescriptionType {
     public static class KeyFields {
 
         @XmlElement(required = true)
-        protected List<KeyfieldDescriptionType.KeyFields.Field> field;
+        protected List<Field> field;
 
         /**
          * Gets the value of the field property.
@@ -147,13 +131,13 @@ public class KeyfieldDescriptionType {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link KeyfieldDescriptionType.KeyFields.Field }
+         * {@link Field }
          * 
          * 
          */
-        public List<KeyfieldDescriptionType.KeyFields.Field> getField() {
+        public List<Field> getField() {
             if (field == null) {
-                field = new ArrayList<KeyfieldDescriptionType.KeyFields.Field>();
+                field = new ArrayList<Field>();
             }
             return this.field;
         }

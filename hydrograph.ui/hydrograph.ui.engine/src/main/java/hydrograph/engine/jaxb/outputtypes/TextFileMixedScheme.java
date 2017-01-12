@@ -1,27 +1,12 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.outputtypes;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.StandardCharsets;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ofmixedscheme.TypeMixedBase;
+
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -86,22 +71,22 @@ public class TextFileMixedScheme
 {
 
     @XmlElement(required = true)
-    protected TextFileMixedScheme.Path path;
+    protected Path path;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
-    protected TextFileMixedScheme.Charset charset;
+    protected Charset charset;
     protected TypeProperties runtimeProperties;
-    protected TextFileMixedScheme.Quote quote;
+    protected Quote quote;
 
     /**
      * Gets the value of the path property.
      * 
      * @return
      *     possible object is
-     *     {@link TextFileMixedScheme.Path }
+     *     {@link Path }
      *     
      */
-    public TextFileMixedScheme.Path getPath() {
+    public Path getPath() {
         return path;
     }
 
@@ -110,10 +95,10 @@ public class TextFileMixedScheme
      * 
      * @param value
      *     allowed object is
-     *     {@link TextFileMixedScheme.Path }
+     *     {@link Path }
      *     
      */
-    public void setPath(TextFileMixedScheme.Path value) {
+    public void setPath(Path value) {
         this.path = value;
     }
 
@@ -170,10 +155,10 @@ public class TextFileMixedScheme
      * 
      * @return
      *     possible object is
-     *     {@link TextFileMixedScheme.Charset }
+     *     {@link Charset }
      *     
      */
-    public TextFileMixedScheme.Charset getCharset() {
+    public Charset getCharset() {
         return charset;
     }
 
@@ -182,10 +167,10 @@ public class TextFileMixedScheme
      * 
      * @param value
      *     allowed object is
-     *     {@link TextFileMixedScheme.Charset }
+     *     {@link Charset }
      *     
      */
-    public void setCharset(TextFileMixedScheme.Charset value) {
+    public void setCharset(Charset value) {
         this.charset = value;
     }
 
@@ -218,10 +203,10 @@ public class TextFileMixedScheme
      * 
      * @return
      *     possible object is
-     *     {@link TextFileMixedScheme.Quote }
+     *     {@link Quote }
      *     
      */
-    public TextFileMixedScheme.Quote getQuote() {
+    public Quote getQuote() {
         return quote;
     }
 
@@ -230,10 +215,10 @@ public class TextFileMixedScheme
      * 
      * @param value
      *     allowed object is
-     *     {@link TextFileMixedScheme.Quote }
+     *     {@link Quote }
      *     
      */
-    public void setQuote(TextFileMixedScheme.Quote value) {
+    public void setQuote(Quote value) {
         this.quote = value;
     }
 

@@ -1,24 +1,9 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.commandtypes;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
+
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -86,19 +71,19 @@ public class Hplsql
 {
 
     @XmlElement(required = true)
-    protected Hplsql.Command command;
+    protected Command command;
     @XmlElement(required = true)
-    protected Hplsql.Execute execute;
+    protected Execute execute;
 
     /**
      * Gets the value of the command property.
      * 
      * @return
      *     possible object is
-     *     {@link Hplsql.Command }
+     *     {@link Command }
      *     
      */
-    public Hplsql.Command getCommand() {
+    public Command getCommand() {
         return command;
     }
 
@@ -107,10 +92,10 @@ public class Hplsql
      * 
      * @param value
      *     allowed object is
-     *     {@link Hplsql.Command }
+     *     {@link Command }
      *     
      */
-    public void setCommand(Hplsql.Command value) {
+    public void setCommand(Command value) {
         this.command = value;
     }
 
@@ -119,10 +104,10 @@ public class Hplsql
      * 
      * @return
      *     possible object is
-     *     {@link Hplsql.Execute }
+     *     {@link Execute }
      *     
      */
-    public Hplsql.Execute getExecute() {
+    public Execute getExecute() {
         return execute;
     }
 
@@ -131,10 +116,10 @@ public class Hplsql
      * 
      * @param value
      *     allowed object is
-     *     {@link Hplsql.Execute }
+     *     {@link Execute }
      *     
      */
-    public void setExecute(Hplsql.Execute value) {
+    public void setExecute(Execute value) {
         this.execute = value;
     }
 
@@ -233,18 +218,18 @@ public class Hplsql
     })
     public static class Execute {
 
-        protected Hplsql.Execute.Query query;
-        protected Hplsql.Execute.Uri uri;
+        protected Query query;
+        protected Uri uri;
 
         /**
          * Gets the value of the query property.
          * 
          * @return
          *     possible object is
-         *     {@link Hplsql.Execute.Query }
+         *     {@link Query }
          *     
          */
-        public Hplsql.Execute.Query getQuery() {
+        public Query getQuery() {
             return query;
         }
 
@@ -253,10 +238,10 @@ public class Hplsql
          * 
          * @param value
          *     allowed object is
-         *     {@link Hplsql.Execute.Query }
+         *     {@link Query }
          *     
          */
-        public void setQuery(Hplsql.Execute.Query value) {
+        public void setQuery(Query value) {
             this.query = value;
         }
 
@@ -265,10 +250,10 @@ public class Hplsql
          * 
          * @return
          *     possible object is
-         *     {@link Hplsql.Execute.Uri }
+         *     {@link Uri }
          *     
          */
-        public Hplsql.Execute.Uri getUri() {
+        public Uri getUri() {
             return uri;
         }
 
@@ -277,10 +262,10 @@ public class Hplsql
          * 
          * @param value
          *     allowed object is
-         *     {@link Hplsql.Execute.Uri }
+         *     {@link Uri }
          *     
          */
-        public void setUri(Hplsql.Execute.Uri value) {
+        public void setUri(Uri value) {
             this.uri = value;
         }
 

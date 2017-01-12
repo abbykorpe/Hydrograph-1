@@ -1,24 +1,9 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.commandtypes;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
+
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -57,17 +42,17 @@ public class FtpIn
 {
 
     @XmlElement(required = true)
-    protected FtpIn.Host host;
+    protected Host host;
 
     /**
      * Gets the value of the host property.
      * 
      * @return
      *     possible object is
-     *     {@link FtpIn.Host }
+     *     {@link Host }
      *     
      */
-    public FtpIn.Host getHost() {
+    public Host getHost() {
         return host;
     }
 
@@ -76,10 +61,10 @@ public class FtpIn
      * 
      * @param value
      *     allowed object is
-     *     {@link FtpIn.Host }
+     *     {@link Host }
      *     
      */
-    public void setHost(FtpIn.Host value) {
+    public void setHost(Host value) {
         this.host = value;
     }
 

@@ -62,7 +62,7 @@ public class TypeUnknownComponent
 
     protected List<TypeBaseInSocket> inSocket;
     protected List<TypeBaseOutSocket> outSocket;
-    protected TypeUnknownComponent.Properties properties;
+    protected Properties properties;
 
     /**
      * Gets the value of the inSocket property.
@@ -127,10 +127,10 @@ public class TypeUnknownComponent
      * 
      * @return
      *     possible object is
-     *     {@link TypeUnknownComponent.Properties }
+     *     {@link Properties }
      *     
      */
-    public TypeUnknownComponent.Properties getProperties() {
+    public Properties getProperties() {
         return properties;
     }
 
@@ -139,10 +139,10 @@ public class TypeUnknownComponent
      * 
      * @param value
      *     allowed object is
-     *     {@link TypeUnknownComponent.Properties }
+     *     {@link Properties }
      *     
      */
-    public void setProperties(TypeUnknownComponent.Properties value) {
+    public void setProperties(Properties value) {
         this.properties = value;
     }
 
