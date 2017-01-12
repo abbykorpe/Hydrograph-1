@@ -27,24 +27,31 @@ trait OperationHelper[T] {
         case (x :: xs) if x.isExpressionPresent => {
           val tf = classLoader[T](ct.runtimeClass.getCanonicalName)
           SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
-            .getOperationInputFields)), OutputReusableRow(null, new RowToReusableMapper(outputSchema, x
-            .getOperationOutputFields)), new ValidationAPI(x.getExpression, ""), x.getAccumulatorInitialValue) ::
+            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), new ValidationAPI(x.getExpression, ""), x.getAccumulatorInitialValue) ::
             populateOperation(xs)
         }
         case (x :: xs) => {
           val tf = classLoader[T](x.getOperationClass)
           SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
-            .getOperationInputFields)), OutputReusableRow(null, new RowToReusableMapper(outputSchema, x
-            .getOperationOutputFields)), null, null) ::
+            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), null, null) ::
             populateOperation(xs)
         }
       }
+
+
 
     if (operationList != null) {
       populateOperation(operationList.asScala.toList)
     }
     else
       List()
+  }
+
+  def getOutputReusableRow[U](outputSchema: StructType, x: Operation): OutputReusableRow = {
+    if (x
+      .getOperationOutputFields != null) OutputReusableRow(null, new RowToReusableMapper(outputSchema, x
+      .getOperationOutputFields))
+    else null
   }
 
   def classLoader[T](className: String): T = {

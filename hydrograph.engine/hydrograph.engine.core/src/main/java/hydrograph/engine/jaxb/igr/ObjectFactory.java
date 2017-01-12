@@ -30,19 +30,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeGenerateRecordOutSocket }
-     * 
-     */
-    public TypeGenerateRecordOutSocket createTypeGenerateRecordOutSocket() {
-        return new TypeGenerateRecordOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeGenerateRecordBase }
      * 
      */
     public TypeGenerateRecordBase createTypeGenerateRecordBase() {
         return new TypeGenerateRecordBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeGenerateRecordRecord }
+     * 
+     */
+    public TypeGenerateRecordRecord createTypeGenerateRecordRecord() {
+        return new TypeGenerateRecordRecord();
     }
 
     /**
@@ -54,11 +54,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeGenerateRecordRecord }
+     * Create an instance of {@link TypeGenerateRecordOutSocket }
      * 
      */
-    public TypeGenerateRecordRecord createTypeGenerateRecordRecord() {
-        return new TypeGenerateRecordRecord();
+    public TypeGenerateRecordOutSocket createTypeGenerateRecordOutSocket() {
+        return new TypeGenerateRecordOutSocket();
     }
 
 }

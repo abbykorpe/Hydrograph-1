@@ -30,35 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFields }
-     * 
-     */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
-     * 
-     */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
-    }
-
-    /**
      * Create an instance of {@link TypeSortBase }
      * 
      */
     public TypeSortBase createTypeSortBase() {
         return new TypeSortBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
     }
 
     /**
@@ -70,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
-    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
-        return new TypePrimaryKeyFieldsAttributes();
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
     }
 
     /**
@@ -83,6 +59,30 @@ public class ObjectFactory {
      */
     public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
         return new TypeSecondayKeyFieldsAttributes();
+    }
+
+    /**
+     * Create an instance of {@link TypePrimaryKeyFields }
+     * 
+     */
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
+     * 
+     */
+    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
+        return new TypePrimaryKeyFieldsAttributes();
     }
 
 }

@@ -38,51 +38,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionColumn }
-     * 
-     */
-    public PartitionColumn createPartitionColumn() {
-        return new PartitionColumn();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link HivePartitionFieldsType }
-     * 
-     */
-    public HivePartitionFieldsType createHivePartitionFieldsType() {
-        return new HivePartitionFieldsType();
-    }
-
-    /**
-     * Create an instance of {@link TypeInputFileDelimitedBase }
-     * 
-     */
-    public TypeInputFileDelimitedBase createTypeInputFileDelimitedBase() {
-        return new TypeInputFileDelimitedBase();
-    }
-
-    /**
      * Create an instance of {@link HiveType }
      * 
      */
     public HiveType createHiveType() {
         return new HiveType();
-    }
-
-    /**
-     * Create an instance of {@link PartitionFieldBasicType }
-     * 
-     */
-    public PartitionFieldBasicType createPartitionFieldBasicType() {
-        return new PartitionFieldBasicType();
     }
 
     /**
@@ -94,11 +54,51 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeInputFileDelimitedBase }
+     * 
+     */
+    public TypeInputFileDelimitedBase createTypeInputFileDelimitedBase() {
+        return new TypeInputFileDelimitedBase();
+    }
+
+    /**
+     * Create an instance of {@link PartitionColumn }
+     * 
+     */
+    public PartitionColumn createPartitionColumn() {
+        return new PartitionColumn();
+    }
+
+    /**
+     * Create an instance of {@link HivePartitionFieldsType }
+     * 
+     */
+    public HivePartitionFieldsType createHivePartitionFieldsType() {
+        return new HivePartitionFieldsType();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
      * Create an instance of {@link HivePathType }
      * 
      */
     public HivePathType createHivePathType() {
         return new HivePathType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionFieldBasicType }
+     * 
+     */
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
     }
 
 }

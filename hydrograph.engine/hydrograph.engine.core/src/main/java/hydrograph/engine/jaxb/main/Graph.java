@@ -49,8 +49,8 @@ public class Graph {
         @XmlElement(name = "outputs", type = TypeOutputComponent.class),
         @XmlElement(name = "inputs", type = TypeInputComponent.class),
         @XmlElement(name = "commands", type = TypeCommandComponent.class),
-        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class),
-        @XmlElement(name = "operations", type = TypeOperationsComponent.class)
+        @XmlElement(name = "operations", type = TypeOperationsComponent.class),
+        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class)
     })
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
     @XmlAttribute(name = "name", required = true)
@@ -103,8 +103,8 @@ public class Graph {
      * {@link TypeOutputComponent }
      * {@link TypeInputComponent }
      * {@link TypeCommandComponent }
-     * {@link TypeStraightPullComponent }
      * {@link TypeOperationsComponent }
+     * {@link TypeStraightPullComponent }
      * 
      * 
      */

@@ -30,27 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
      * Create an instance of {@link PartitionFieldBasicType }
      * 
      */
     public PartitionFieldBasicType createPartitionFieldBasicType() {
         return new PartitionFieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link HivePathType }
-     * 
-     */
-    public HivePathType createHivePathType() {
-        return new HivePathType();
     }
 
     /**
@@ -62,6 +46,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
      * Create an instance of {@link TypeOutputHiveTextFileDelimitedBase }
      * 
      */
@@ -70,11 +62,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HivePartitionFieldsType }
+     * Create an instance of {@link HivePathType }
      * 
      */
-    public HivePartitionFieldsType createHivePartitionFieldsType() {
-        return new HivePartitionFieldsType();
+    public HivePathType createHivePathType() {
+        return new HivePathType();
     }
 
     /**
@@ -83,6 +75,14 @@ public class ObjectFactory {
      */
     public HiveType createHiveType() {
         return new HiveType();
+    }
+
+    /**
+     * Create an instance of {@link HivePartitionFieldsType }
+     * 
+     */
+    public HivePartitionFieldsType createHivePartitionFieldsType() {
+        return new HivePartitionFieldsType();
     }
 
 }

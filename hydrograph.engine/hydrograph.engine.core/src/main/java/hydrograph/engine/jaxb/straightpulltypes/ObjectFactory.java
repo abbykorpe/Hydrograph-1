@@ -38,27 +38,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Clone }
+     * Create an instance of {@link Limit.MaxRecords }
      * 
      */
-    public Clone createClone() {
-        return new Clone();
-    }
-
-    /**
-     * Create an instance of {@link RemoveDups }
-     * 
-     */
-    public RemoveDups createRemoveDups() {
-        return new RemoveDups();
-    }
-
-    /**
-     * Create an instance of {@link Sort }
-     * 
-     */
-    public Sort createSort() {
-        return new Sort();
+    public Limit.MaxRecords createLimitMaxRecords() {
+        return new Limit.MaxRecords();
     }
 
     /**
@@ -78,11 +62,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Limit.MaxRecords }
+     * Create an instance of {@link Clone }
      * 
      */
-    public Limit.MaxRecords createLimitMaxRecords() {
-        return new Limit.MaxRecords();
+    public Clone createClone() {
+        return new Clone();
+    }
+
+    /**
+     * Create an instance of {@link Sort }
+     * 
+     */
+    public Sort createSort() {
+        return new Sort();
+    }
+
+    /**
+     * Create an instance of {@link RemoveDups }
+     * 
+     */
+    public RemoveDups createRemoveDups() {
+        return new RemoveDups();
     }
 
 }

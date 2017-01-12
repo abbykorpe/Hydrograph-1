@@ -30,27 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperation }
-     * 
-     */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
-    }
-
-    /**
      * Create an instance of {@link TypeOutSocket }
      * 
      */
     public TypeOutSocket createTypeOutSocket() {
         return new TypeOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformExpression }
-     * 
-     */
-    public TypeTransformExpression createTypeTransformExpression() {
-        return new TypeTransformExpression();
     }
 
     /**
@@ -62,11 +46,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeTransformExpression }
+     * 
+     */
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
+    }
+
+    /**
      * Create an instance of {@link TypeInSocket }
      * 
      */
     public TypeInSocket createTypeInSocket() {
         return new TypeInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOperation }
+     * 
+     */
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
     }
 
     /**

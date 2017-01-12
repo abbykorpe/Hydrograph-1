@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="copyOfInsocket" type="{hydrograph/engine/jaxb/commontypes}type-outSocket-as-inSocket"/>
  *       &lt;/choice>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" fixed="out" />
+ *       &lt;attribute name="type" use="required" type="{hydrograph/engine/jaxb/partitionByExpression}types-outSocket-types" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

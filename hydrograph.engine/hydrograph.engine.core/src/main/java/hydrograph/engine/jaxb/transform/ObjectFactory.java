@@ -38,14 +38,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformInSocket }
-     * 
-     */
-    public TypeTransformInSocket createTypeTransformInSocket() {
-        return new TypeTransformInSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
@@ -54,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformOutSocket }
+     * Create an instance of {@link TypeTransformInSocket }
      * 
      */
-    public TypeTransformOutSocket createTypeTransformOutSocket() {
-        return new TypeTransformOutSocket();
+    public TypeTransformInSocket createTypeTransformInSocket() {
+        return new TypeTransformInSocket();
     }
 
     /**
@@ -75,6 +67,14 @@ public class ObjectFactory {
      */
     public TypeTransformOperation createTypeTransformOperation() {
         return new TypeTransformOperation();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformOutSocket }
+     * 
+     */
+    public TypeTransformOutSocket createTypeTransformOutSocket() {
+        return new TypeTransformOutSocket();
     }
 
 }

@@ -10,6 +10,7 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils._
 import hydrograph.engine.transformation.userfunctions.base.FilterBase
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
@@ -37,7 +38,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
     LOG.info("Filter Operation Input Fields: {}",filterEntity.getOperation.getOperationInputFields)
     val filterClass: FilterBase = filterEntity.getOperation match {
       case x if x.getOperationClass == null => {
-        var filter = new FilterForExpression()
+        val filter = new FilterForExpression()
         filter.setValidationAPI(new ValidationAPI(x.getExpression,""))
         filter
       }
@@ -46,16 +47,32 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
 
     val fieldPosition=ReusableRowHelper(filterEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
 
-    var inputReusableRow=new SparkReusableRow(fieldNameSet)
-    val fields = new util.LinkedHashSet[String]()
-    scheme.foreach(e => fields.add(e))
-    if (filterClass.isInstanceOf[FilterBase]) inputReusableRow = new SparkReusableRow(fields)
+    val inputReusableRow = new SparkReusableRow(fieldNameSet)
 
     filterEntity.getOutSocketList.asScala.foreach{outSocket=>
       LOG.info("Creating filter assembly for '" + filterEntity.getComponentId + "' for socket: '"
         + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
 
-      val df = componentsParams.getDataFrame.filter(
+
+      val df= componentsParams.getDataFrame.mapPartitions( itr =>{
+
+        filterClass.prepare(filterEntity.getOperation.getOperationProperties,null)
+        val rs= itr.filter( row =>{
+
+          if(itr.isEmpty)
+            filterClass.cleanup()
+
+          if(outSocket.getSocketType.equalsIgnoreCase("out"))
+            !filterClass
+              .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row,inputReusableRow))
+          else
+            filterClass
+              .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
+        })
+        rs
+      })(RowEncoder(EncoderHelper().getEncoder(scheme.toList, componentsParams.getSchemaFields())))
+
+     /* val df = componentsParams.getDataFrame.filter(
         row =>{
           if(outSocket.getSocketType.equalsIgnoreCase("unused"))
             filterClass
@@ -63,7 +80,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
           else
             !filterClass
               .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
-        })
+        })*/
       map += (outSocket.getSocketId -> df)
     }
 

@@ -4,9 +4,10 @@ import java.util
 import java.util.Properties
 
 import hydrograph.engine.core.component.entity.PartitionByExpressionEntity
-import hydrograph.engine.core.component.entity.elements.{Operation, OutSocket}
+import hydrograph.engine.core.component.entity.elements.{Operation, OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
+import junit.framework.Assert
 import org.junit.Test
 
 /**
@@ -39,7 +40,7 @@ class PartitionByExpressionComponentTest {
     operationProperties.put("ABC", "xyz")
 
     val operationInputFields: Array[String] = Array("accountType")
-    val operationClass: String = "hydrograph.engine.userfunctions.PartitionByExpressionTest"
+    val operationClass: String = "userfunctions.PartitionByExpressionTest"
     partitionByExpressionEntity.setNumPartitions(3)
     partitionByExpressionEntity.setRuntimeProperties(operationProperties)
 
@@ -52,6 +53,7 @@ class PartitionByExpressionComponentTest {
 
     val cp = new BaseComponentParams
     cp.addinputDataFrame(df1)
+    cp.addSchemaFields(Array(new SchemaField("name", "java.lang.String"), new SchemaField("accountType", "java.lang.String"), new SchemaField("address", "java.lang.String")))
 
     // when
     val partitionByExpressionDF = new PartitionByExpressionComponent(partitionByExpressionEntity, cp).createComponent()
@@ -65,9 +67,106 @@ class PartitionByExpressionComponentTest {
     val expectedDebit = "[AAA,debit,Malad]"
     val expectedMix = "[CCC,mix,Borivali]"
 
-    credit.toList.toString() == expectedCredit
-    debit.toList.toString() == expectedDebit
-    mix.toList.toString() == expectedMix
+    Assert.assertEquals(credit.toList.mkString,expectedCredit)
+    Assert.assertEquals(debit.toList.mkString,expectedDebit)
+    Assert.assertEquals(mix.toList.mkString,expectedMix)
+
+  }
+  @Test
+  def PartitionByExpressionForExpressionTest(): Unit = {
+
+    // given
+    val df1 = new DataBuilder(Fields(List("name", "accountType", "address"))
+      .applyTypes(List(classOf[String], classOf[Integer], classOf[String])))
+      .addData(List("AAA", 2, "Malad"))
+      .addData(List("CCC", 3, "Borivali"))
+      .build()
+
+
+    val partitionByExpressionEntity: PartitionByExpressionEntity = new PartitionByExpressionEntity
+    partitionByExpressionEntity.setComponentId("partitionByExpressionComponent")
+
+    val outSocketList: util.List[OutSocket] = new util.ArrayList[OutSocket]
+    outSocketList.add(new OutSocket("out_credit", "out"))
+
+    outSocketList.add(new OutSocket("out_mix", "unused"))
+    partitionByExpressionEntity.setOutSocketList(outSocketList)
+
+    val operationProperties: Properties = new Properties
+    operationProperties.put("ABC", "xyz")
+
+    val operationInputFields: Array[String] = Array("accountType")
+    partitionByExpressionEntity.setNumPartitions(3)
+    partitionByExpressionEntity.setRuntimeProperties(operationProperties)
+
+    val operationExpression = " accountType == 2 ? \"out_credit\" : \"out_mix\" "
+
+    val operation: Operation = new Operation
+   //operation.setOperationClass(operationClass)
+    operation.setExpressionPresent(true)
+    operation.setExpression(operationExpression)
+    operation.setOperationInputFields(operationInputFields)
+    operation.setOperationProperties(operationProperties)
+
+    partitionByExpressionEntity.setOperation(operation)
+
+    val cp = new BaseComponentParams
+    cp.addinputDataFrame(df1)
+    cp.addSchemaFields(Array(new SchemaField("name", "java.lang.String"), new SchemaField("accountType", "java.lang.Integer"), new SchemaField("address", "java.lang.String")))
+
+    val partitionByExpressionDF = new PartitionByExpressionComponent(partitionByExpressionEntity, cp).createComponent()
+
+    val unused = Bucket(Fields(List("name", "accountType", "address")), partitionByExpressionDF.get("out_mix").get).result()
+    val expectedunused = "[CCC,3,Borivali]"
+    Assert.assertEquals(unused.toList.mkString,expectedunused)
+
+  }
+
+  @Test
+  def PartitionByExpressionTestUnusedPort(): Unit = {
+
+    // given
+    val df1 = new DataBuilder(Fields(List("name", "accountType", "address"))
+      .applyTypes(List(classOf[String], classOf[String], classOf[String])))
+      .addData(List("AAA", "debit", "Malad"))
+      .addData(List("BBB", "credit", "Kandivali"))
+      .addData(List("CCC", "mix", "Borivali"))
+      .build()
+
+
+    val partitionByExpressionEntity: PartitionByExpressionEntity = new PartitionByExpressionEntity
+    partitionByExpressionEntity.setComponentId("partitionByExpressionComponent")
+
+    val outSocketList: util.List[OutSocket] = new util.ArrayList[OutSocket]
+    outSocketList.add(new OutSocket("out_credit", "out"))
+    outSocketList.add(new OutSocket("out_debit", "out"))
+    outSocketList.add(new OutSocket("out_mix", "unused"))
+    partitionByExpressionEntity.setOutSocketList(outSocketList)
+
+    val operationProperties: Properties = new Properties
+    operationProperties.put("ABC", "xyz")
+
+    val operationInputFields: Array[String] = Array("accountType")
+    val operationClass: String = "userfunctions.PartitionByExpressionTest"
+    partitionByExpressionEntity.setNumPartitions(3)
+    partitionByExpressionEntity.setRuntimeProperties(operationProperties)
+
+    val operation: Operation = new Operation
+    operation.setOperationClass(operationClass)
+    operation.setOperationInputFields(operationInputFields)
+    operation.setOperationProperties(operationProperties)
+
+    partitionByExpressionEntity.setOperation(operation)
+
+    val cp = new BaseComponentParams
+    cp.addinputDataFrame(df1)
+    cp.addSchemaFields(Array(new SchemaField("name", "java.lang.String"), new SchemaField("accountType", "java.lang.String"), new SchemaField("address", "java.lang.String")))
+
+    val partitionByExpressionDF = new PartitionByExpressionComponent(partitionByExpressionEntity, cp).createComponent()
+
+    val unused = Bucket(Fields(List("name", "accountType", "address")), partitionByExpressionDF.get("out_mix").get).result()
+    val expectedunused = "[CCC,mix,Borivali]"
+    Assert.assertEquals(unused.toList.mkString,expectedunused)
 
   }
 }
