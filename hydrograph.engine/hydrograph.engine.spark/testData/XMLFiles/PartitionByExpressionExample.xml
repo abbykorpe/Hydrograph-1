@@ -40,7 +40,7 @@
                 xsi:type="op:partitionByExpression">
         <inSocket fromComponentId="input1" fromSocketId="out0" id="in0"/>
         <!-- <operation id="opt"
-                    class="hydrograph.engine.userclass.PartitionByExpressionTest">
+                    class="userfunctions.PartitionByExpressionTest">
              <inputFields>
                  <field name="transaction_type" inSocketId="in0" />
              </inputFields>
@@ -49,6 +49,7 @@
             <inputFields>
                 <field name="total_count" inSocketId="in0"/>
             </inputFields>
+
         </expression>
         <outSocket id="out_mix1" type="unused">
             <copyOfInsocket inSocketId="in0"/>

@@ -72,8 +72,8 @@ public class OperationEntityUtils implements Serializable{
 				operation.setOperationId(((TypeTransformExpression) typeTransformOperation).getId());
 				operation.setOperationInputFields(extractOperationInputFields(
 						((TypeTransformExpression) typeTransformOperation).getInputFields()));
-				operation.setOperationOutputFields(new String[] { extractExpressionOutputFields(
-						((TypeTransformExpression) typeTransformOperation).getOutputFields()) });
+				operation.setOperationOutputFields( extractExpressionOutputFields(
+						((TypeTransformExpression) typeTransformOperation).getOutputFields()));
 				operation.setExpression(addSemiColonIfNotPresent(((TypeTransformExpression) typeTransformOperation).getExpr()));
 				operation.setAccumulatorInitialValue(addQuotes(((TypeTransformExpression) typeTransformOperation).getAccumulatorInitalValue()));
 				operation.setOperationClass(null);
@@ -114,26 +114,26 @@ public class OperationEntityUtils implements Serializable{
 	 *         contains information of operation class, input fields, output
 	 *         fields and properties for one operation
 	 */
-	public static List<Expression> extractExpression(List<Object> jaxbOperationList) {
-
-		List<Expression> operationList = new ArrayList<Expression>();
-
-		for (Object typeTransformOperation : jaxbOperationList) {
-			if (typeTransformOperation instanceof TypeTransformExpression) {
-				Expression operation = new Expression();
-				operation.setOperationId(((TypeTransformExpression) typeTransformOperation).getId());
-				operation.setOperationInputFields(extractOperationInputFields(
-						((TypeTransformExpression) typeTransformOperation).getInputFields()));
-				operation.setOperationOutputFields(extractExpressionOutputFields(
-						((TypeTransformExpression) typeTransformOperation).getOutputFields()));
-				operation.setExpression(((TypeTransformExpression) typeTransformOperation).getExpr());
-				operation.setOperationProperties(
-						extractOperationProperties(((TypeTransformExpression) typeTransformOperation).getProperties()));
-				operationList.add(operation);
-			}
-		}
-		return operationList;
-	}
+//	public static List<Expression> extractExpression(List<Object> jaxbOperationList) {
+//
+//		List<Expression> operationList = new ArrayList<Expression>();
+//
+//		for (Object typeTransformOperation : jaxbOperationList) {
+//			if (typeTransformOperation instanceof TypeTransformExpression) {
+//				Expression operation = new Expression();
+//				operation.setOperationId(((TypeTransformExpression) typeTransformOperation).getId());
+//				operation.setOperationInputFields(extractOperationInputFields(
+//						((TypeTransformExpression) typeTransformOperation).getInputFields()));
+//				operation.setOperationOutputFields(extractExpressionOutputFields(
+//						((TypeTransformExpression) typeTransformOperation).getOutputFields()));
+//				operation.setExpression(((TypeTransformExpression) typeTransformOperation).getExpr());
+//				operation.setOperationProperties(
+//						extractOperationProperties(((TypeTransformExpression) typeTransformOperation).getProperties()));
+//				operationList.add(operation);
+//			}
+//		}
+//		return operationList;
+//	}
 
 	/**
 	 * Extracts the {@link Properties} object from the {@link TypeProperties}
@@ -231,14 +231,14 @@ public class OperationEntityUtils implements Serializable{
 	 *            information of operation output fields for the component
 	 * @return a string array containing the output fields for an operation
 	 */
-	private static String extractExpressionOutputFields(TypeExpressionOutputFields typeOperationOutputFields) {
+	private static String[] extractExpressionOutputFields(TypeExpressionOutputFields typeOperationOutputFields) {
 
 		if (typeOperationOutputFields == null) {
 			return null;
 		} else if (typeOperationOutputFields.getField() == null) {
 			return null;
 		}
-		return typeOperationOutputFields.getField().getName();
+		return new String[] {typeOperationOutputFields.getField().getName()};
 
 	}
 

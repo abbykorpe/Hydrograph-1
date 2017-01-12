@@ -12,14 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
-import bsh.EvalError;
 import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
-import hydrograph.engine.transformation.userfunctions.base.FilterBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class PartitionByExpressionForExpression implements CustomPartitionExpression, Serializable {
