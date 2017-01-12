@@ -106,6 +106,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.common.util.XMLUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
@@ -1473,7 +1474,11 @@ public class MultiParameterFileDialog extends Dialog {
 		
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
 		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,false, 1, 1));
-		composite_3.setLayout(new GridLayout(8, false));
+		GridLayout gridLayout=new GridLayout(8, false);
+        if(OSValidator.isMac()){	
+        	gridLayout.horizontalSpacing=-10;
+        }
+		composite_3.setLayout(gridLayout);
 		Label lblFile = new Label(composite_3, SWT.NONE);
 		lblFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false,1, 1));
 		lblFile.setText("File");
@@ -1876,6 +1881,9 @@ public class MultiParameterFileDialog extends Dialog {
 	
 	@Override
 	protected Point getInitialSize() {
+		if(OSValidator.isMac()){
+			return new Point(900,476);
+		}
 		return new Point(800,476);
 	}
 }

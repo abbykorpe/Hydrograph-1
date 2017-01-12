@@ -55,17 +55,28 @@ public class ImportedSchemaPropagation {
 			if (schemaMap != null && !StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM))
 				SchemaPropagation.INSTANCE.continuousSchemaPropagation(component, schemaMap);
 	}
+		
+		
 		schemaPropagationForTransformCategory(container);
 		removeTempraryProperties(container);
 		addPropogatedSchemaToEachComponent(container);
+		addOldSchemaMapPropertyToEachComponent(container);
 		validateAllComponents(container);
 		
+	}
+
+	private void addOldSchemaMapPropertyToEachComponent(Container container) {
+         for(Component component:container.getUIComponentList())
+         {
+        	 SchemaPropagation.INSTANCE.addOldSchemaMapPropertyToEachComponent(component);
+         }	 
 	}
 
 	private void addPropogatedSchemaToEachComponent(Container container) {
 		for(Component component:container.getUIComponentList())
 		{
 			addSchemaForTransformComponents(component);
+			
 		}
 		
 	}

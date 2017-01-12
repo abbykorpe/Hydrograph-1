@@ -197,32 +197,44 @@ public abstract class TransformUiConverter extends UiConverter {
              }
 			else if(item instanceof TypeTransformExpression)
 			{
-				if(Constants.NORMALIZE.equalsIgnoreCase(uiComponent.getComponentName()))
-				atMapping.setExpression(true);	
+					
 				TypeTransformExpression transformExpression=(TypeTransformExpression)item;
 				MappingSheetRow mappingSheetRow=
 						new MappingSheetRow(getInputFieldList(transformExpression),getOutputFieldList(transformExpression),
 						null,null,false,transformExpression.getId(),getProperties(transformExpression),true,
 						getExpressionEditorData(transformExpression),
 						true);
-				if(Constants.AGGREGATE.equalsIgnoreCase(uiComponent.getComponentName())
+				if(Constants.NORMALIZE.equalsIgnoreCase(uiComponent.getComponentName())){	
+				 mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants._INDEX,java.lang.Integer.class);
+				 atMapping.setExpression(true);
+				}
+				else if(Constants.AGGREGATE.equalsIgnoreCase(uiComponent.getComponentName())
 				  ||Constants.CUMULATE.equalsIgnoreCase(uiComponent.getComponentName()))
 				{	
-				mappingSheetRow.setAccumulator(transformExpression.getAccumulatorInitalValue());
-				if(StringUtils.isBlank(transformExpression.getAccumulatorInitalValue())){
+					mappingSheetRow.setAccumulator(transformExpression.getAccumulatorInitalValue());
+					if(StringUtils.isBlank(transformExpression.getAccumulatorInitalValue()))
+					{
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_INTEGER);
-			     }
-				else if(transformExpression.getAccumulatorInitalValue().startsWith("@{") && transformExpression.getAccumulatorInitalValue().
-				endsWith("}")){
+					}
+					else if(transformExpression.getAccumulatorInitalValue().startsWith("@{") && 
+							transformExpression.getAccumulatorInitalValue().
+					endsWith("}")){
 					mappingSheetRow.setAccumulatorParameter(true);
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_INTEGER);
-				}else if(validateInteger(transformExpression.getAccumulatorInitalValue())){
+					
+					}else if(validateInteger(transformExpression.getAccumulatorInitalValue())){
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_INTEGER);
-				}else if(validateBigDecimal(transformExpression.getAccumulatorInitalValue())){
+					mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
+							java.lang.Integer.class);
+					}else if(validateBigDecimal(transformExpression.getAccumulatorInitalValue())){
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_BIGDECIMAL);
-				}else{
+					mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
+							java.math.BigDecimal.class);
+					}else{
 					mappingSheetRow.setComboDataType(Messages.DATATYPE_STRING);
-				}
+					mappingSheetRow.getExpressionEditorData().getExtraFieldDatatypeMap().put(Constants.ACCUMULATOR_VARIABLE,
+							java.lang.String.class);
+					}
 				}
 				mappingSheetRows.add(mappingSheetRow);
 			}	
