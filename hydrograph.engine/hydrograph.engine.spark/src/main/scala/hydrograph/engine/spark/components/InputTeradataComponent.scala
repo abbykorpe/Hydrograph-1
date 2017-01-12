@@ -81,8 +81,6 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
-      println("metaData : " + df.schema)
-      println("user : " + schemaField)
       SchemaUtils().compareSchema(getMappedSchema(schemaField),df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
