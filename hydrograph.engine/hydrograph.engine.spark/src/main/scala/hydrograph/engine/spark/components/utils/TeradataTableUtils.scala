@@ -100,7 +100,7 @@ case class TeradataTableUtils() {
    * @return String select query
    */
   def getSelectQuery(fieldList: List[SchemaField], tableName: String) : String = {
-    val query = "select " + fieldList.map(f=>f.getFieldName).reverse.mkString(", ") + " from " + tableName
+    val query = "select " + fieldList.map(f=>f.getFieldName).mkString(", ") + " from " + tableName
     LOG.debug("Select query :  " + query)
     query
   }
