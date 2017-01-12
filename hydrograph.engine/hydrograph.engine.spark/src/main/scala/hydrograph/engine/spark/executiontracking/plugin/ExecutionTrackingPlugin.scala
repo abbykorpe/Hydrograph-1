@@ -95,8 +95,9 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
 
 //  override def addListener(sparkSession: SparkSession): Unit = super.addListener(sparkSession)
 override def addListener(runtimeContext: RuntimeContext): Unit = {
-  runtimeContext.sparkSession.sparkContext.addSparkListener(this)
    jobInfo = new JobInfo(ComponentMapping.getComponentInfoMap())
+  jobInfo.createComponentInfos()
+  runtimeContext.sparkSession.sparkContext.addSparkListener(this)
 
 }
 
@@ -110,17 +111,28 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   }
 
   override def onApplicationEnd(applicationEnd: SparkListenerApplicationEnd) {
-    //    println("+++++++++++++++++++++Application End+++++++++++++++++++++")
-    //    println("Spark ApplicationEnd: " + applicationEnd.time+" msec");
+//        println("+++++++++++++++++++++Application End+++++++++++++++++++++")
+
+
+    jobInfo.componentInfoList.asScala.foreach(c=>{
+      if(!c.getCurrentStatus.equals("FAILED") && c.getStageId.equals(-1)){
+        c.setCurrentStatus("SUCCESSFUL")
+      }
+
+    })
+//        println("Spark ApplicationEnd: " + applicationEnd.time+" msec");
   }
 
 
   override def onJobStart(jobStart: SparkListenerJobStart) {
-    //    println("+++++++++++++++++++++Job Start+++++++++++++++++++++")
+//        println("+++++++++++++++++++++Job Start+++++++++++++++++++++")
     //    println(s"Job id : ${jobStart.jobId} ")
     //    println(s"Job stage ids : ${jobStart.stageIds.foreach(f => print(f + " , "))} ")
     //    print("Job stage Info : ")
-    //    jobStart.stageInfos.foreach(f => print("Stage details: "+f.details + " , Stage RddInfo" + f.rddInfos.mkString))
+        /*jobStart.stageInfos.foreach(f => {
+          print(" Stage id "+ f.stageId )
+        })*/
+
     //    println(s"Job properties : ${jobStart.properties} ")
     //    println("+++++++++++++++++++++Job Start End+++++++++++++++++++++")
 
@@ -209,11 +221,11 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
 
   override def onTaskGettingResult(taskGettingResult: SparkListenerTaskGettingResult) {
-        println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
+//        println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
 //        println("Task geeting result status : " + taskGettingResult.taskInfo.status)
 
     jobInfo.storeComponentStatsForTaskGettingResult(taskGettingResult)
-    getStatus().asScala.foreach(println)
+//    getStatus().asScala.foreach(println)
     //    println("Task geeting result id : " + taskGettingResult.taskInfo.taskId)
 //        println("+++++++++++++++++++++Task Getting Result End+++++++++++++++++++++")
   }
@@ -258,8 +270,14 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
   override def onTaskStart(taskStart: SparkListenerTaskStart) {
 //        println("+++++++++++++++++++++Task Start Start+++++++++++++++++++++")
-    //    println("Task id: " + taskStart.taskInfo.taskId)
+//        println("TaskStart id: " + taskStart.taskInfo.taskId)
     //    println("id: " + taskStart.taskInfo.id)
+
+    /*taskStart.taskInfo.accumulables.foreach(f => {
+      LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
+        + f
+        .update)
+    })*/
 
     jobInfo.storeComponentStatsForTaskStart(taskStart)
 //    getStatus().asScala.foreach(println)
