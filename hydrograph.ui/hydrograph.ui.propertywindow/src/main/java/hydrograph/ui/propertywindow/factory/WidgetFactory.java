@@ -114,6 +114,8 @@ public class WidgetFactory {
 		NO_OF_RECORDS_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getNoOfRecordsWidgetConfig()),
 		COUNT_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getCountWidgetConfig ()),
 		XPATH_QUERY_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getXPathQueryWidgetConfig()),
+		ROOT_TAG_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRootTagWidgetConfig()),
+	    ROW_TAG_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRowTagWidgetConfig()),
 
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
 		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),

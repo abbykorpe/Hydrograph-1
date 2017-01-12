@@ -362,7 +362,9 @@ public class Messages extends NLS {
 	public static String FAILED_TO_IMPORT_SCHEMA_FILE;
 	public static String LOOP_XPATH_QUERY;
 	public static String XPATH;
-	
+	public static String ROOT_TAG;
+	public static String ROW_TAG;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

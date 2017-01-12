@@ -115,6 +115,8 @@
 			<enumeration value="SELECT_INTERFACE_WITH_EXPORT_WIDGET"/>
 			<enumeration value="XPATH_SCHEMA_WIDGET"/>
 			<enumeration value="XPATH_QUERY_WIDGET"/>
+			<enumeration value="ROOT_TAG_WIDGET"/>
+			<enumeration value="ROW_TAG_WIDGET"/>
 		</restriction>
 	</simpleType>
 

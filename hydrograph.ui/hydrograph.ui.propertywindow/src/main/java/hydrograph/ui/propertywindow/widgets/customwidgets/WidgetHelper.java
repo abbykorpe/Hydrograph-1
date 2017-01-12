@@ -502,4 +502,22 @@ public class WidgetHelper {
 		textBoxConfig.setWidgetWidth(78);
 		return textBoxConfig;
 	}
+
+	public WidgetConfig getRootTagWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.ROOT_TAG);
+		textBoxConfig.getListeners().add(Listners.MODIFY);
+		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
+		textBoxConfig.setWidgetWidth(78);
+		return textBoxConfig;
+	}
+
+	public WidgetConfig getRowTagWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.ROW_TAG);
+		textBoxConfig.getListeners().add(Listners.MODIFY);
+		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
+		textBoxConfig.setWidgetWidth(78);
+		return textBoxConfig;
+	}
 }

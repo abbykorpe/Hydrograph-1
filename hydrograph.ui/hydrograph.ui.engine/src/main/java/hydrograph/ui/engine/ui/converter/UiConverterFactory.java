@@ -60,6 +60,7 @@ import hydrograph.ui.engine.ui.converter.impl.InputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.InputTeradataUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.InputXmlUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.JoinComponentUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LimitUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.LookupUiConverter;
@@ -77,6 +78,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputParquetUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputRedshiftUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputSubjobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputTeradataUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.PartitionByExpressionUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RunProgramUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
@@ -86,7 +88,6 @@ import hydrograph.ui.engine.ui.converter.impl.UniqueSequenceUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.UnknownUiConverter;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.engine.ui.converter.impl.PartitionByExpressionUiConverter;
 
 
 /**
@@ -246,14 +247,15 @@ public class UiConverterFactory {
 		if((hydrograph.engine.jaxb.commandtypes.RunProgram.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new RunProgramUiConverter(typeBaseComponent, container);
 		}
-		if((hydrograph.engine.jaxb.commontypes.TypeUnknownComponent.class).isAssignableFrom(typeBaseComponent.getClass())){
-			return new UnknownUiConverter(typeBaseComponent, container);
+		if((hydrograph.engine.jaxb.inputtypes.XmlFile.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new InputXmlUiConverter(typeBaseComponent, container);
 		}
 		if((PartitionByExpression.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new PartitionByExpressionUiConverter(typeBaseComponent,container);
 		}
-		
-
+		if((hydrograph.engine.jaxb.commontypes.TypeUnknownComponent.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new UnknownUiConverter(typeBaseComponent, container);
+		}
 		return new UnknownUiConverter(typeBaseComponent,container);
 	}
 }

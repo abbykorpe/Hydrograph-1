@@ -54,9 +54,12 @@ public enum PropertyNameConstants {
 		REDSHIFT_COUNT_QUERY("countQuery"), 
 		OVER_WRITE("overWrite"),
 		SELECT_INTERFACE("selectInterface"),
-		PROPERTY_TAG("property");
-	
-		private final String value;
+		PROPERTY_TAG("property"),
+		XPATH_QUERY("xpath_query"),
+		ROOT_TAG("root_tag"),
+		ROW_TAG("row_tag");
+		
+	private final String value;
 
 	PropertyNameConstants(String value) {
 		this.value = value;

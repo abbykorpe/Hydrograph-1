@@ -51,7 +51,8 @@ public enum UIComponentsConstants {
 	COMMAND_CATEGORY("COMMAND"),
 	RUN_PROGRAM("RunProgram"),
 	BATCH("batch"),
-	PARTITION_BY_EXPRESSION("PartitionByExpression");
+	PARTITION_BY_EXPRESSION("PartitionByExpression"),
+	XML("XML");
 	
 	private final String value;
 

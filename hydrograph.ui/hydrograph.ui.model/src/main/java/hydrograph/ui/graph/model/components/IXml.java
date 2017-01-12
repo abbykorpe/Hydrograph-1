@@ -15,7 +15,7 @@ public class IXml extends Component {
 
 	@Override
 	public String getConverter() {
-		return "hydrograph.ui.engine.converter.impl.InputXMLConverter";
+		return "hydrograph.ui.engine.converter.impl.InputXmlConverter";
 	}
 
 }

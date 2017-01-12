@@ -42,9 +42,21 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="query" value="" renderer="XPATH_QUERY_WIDGET"
+		<tns:property dataType="string" name="xpath_query" value="" renderer="XPATH_QUERY_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Xpath for the xml">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="root_tag" value="" renderer="ROOT_TAG_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Root tag for the xml">
+			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
+		</tns:property>
+		
+		<tns:property dataType="string" name="row_tag" value="" renderer="ROW_TAG_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Row tag for the xml">
 			<tns:validator>NON_EMPTY_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
