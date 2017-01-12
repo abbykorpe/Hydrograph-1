@@ -94,7 +94,7 @@ public class InputTeradataUiConverter extends InputUiConverter{
 		
 		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
 		
-		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getInterface());
+		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getExportInterfaceValue());
 			
 		uiComponent.setType(UIComponentsConstants.TERADATA.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
@@ -129,13 +129,13 @@ public class InputTeradataUiConverter extends InputUiConverter{
 		return schema;
 	}
 
-	private MatchValueProperty getInterface() {
+	private MatchValueProperty getExportInterfaceValue() {
 		LOGGER.debug("Generating Match for -{}", componentName);
 		MatchValueProperty matchValue =  new MatchValueProperty();
 		Teradata outputTeradata = (Teradata) typeBaseComponent;
-		if(Constants.DEFAULT.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+		if(Constants.DEFAULT.equalsIgnoreCase(outputTeradata.getExportOptions().getValue())){
 			matchValue.setMatchValue(Messages.STANDARD);
-		}else if(Constants.FASTEXPORT.equalsIgnoreCase(outputTeradata.getInterface().getValue())){
+		}else if(Constants.FASTEXPORT.equalsIgnoreCase(outputTeradata.getExportOptions().getValue())){
 			matchValue.setMatchValue(Messages.FAST_EXPORT);
 		}
 		matchValue.setRadioButtonSelected(true);

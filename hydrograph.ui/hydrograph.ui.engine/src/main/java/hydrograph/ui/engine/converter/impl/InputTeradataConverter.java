@@ -108,7 +108,7 @@ public class InputTeradataConverter extends InputConverter{
 			teradataInput.setPassword(password);
 		}
 		
-		teradataInput.setInterface(getSelectInterfaceValue());
+		teradataInput.setExportOptions(getSelectExportValue());
 		
 		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) 
 				properties.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
@@ -144,7 +144,7 @@ public class InputTeradataConverter extends InputConverter{
 		return typeBaseFields;
 	}
 	
-	private ElementValueStringType getSelectInterfaceValue() {
+	private ElementValueStringType getSelectExportValue() {
 		MatchValueProperty matchValueProperty =  (MatchValueProperty) properties.get(PropertyNameConstants.SELECT_INTERFACE.value());
 		
 		if(matchValueProperty != null){
