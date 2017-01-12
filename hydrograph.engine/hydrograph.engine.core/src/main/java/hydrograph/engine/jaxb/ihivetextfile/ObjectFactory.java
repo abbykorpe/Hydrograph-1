@@ -30,51 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputHiveTextDelimitedOutSocket }
-     * 
-     */
-    public TypeInputHiveTextDelimitedOutSocket createTypeInputHiveTextDelimitedOutSocket() {
-        return new TypeInputHiveTextDelimitedOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link PartitionColumn }
-     * 
-     */
-    public PartitionColumn createPartitionColumn() {
-        return new PartitionColumn();
-    }
-
-    /**
      * Create an instance of {@link PartitionFieldBasicType }
      * 
      */
     public PartitionFieldBasicType createPartitionFieldBasicType() {
         return new PartitionFieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link HivePartitionFilterType }
-     * 
-     */
-    public HivePartitionFilterType createHivePartitionFilterType() {
-        return new HivePartitionFilterType();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link HivePathType }
-     * 
-     */
-    public HivePathType createHivePathType() {
-        return new HivePathType();
     }
 
     /**
@@ -86,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HivePartitionFieldsType }
+     * Create an instance of {@link TypeInputHiveTextDelimitedOutSocket }
      * 
      */
-    public HivePartitionFieldsType createHivePartitionFieldsType() {
-        return new HivePartitionFieldsType();
+    public TypeInputHiveTextDelimitedOutSocket createTypeInputHiveTextDelimitedOutSocket() {
+        return new TypeInputHiveTextDelimitedOutSocket();
     }
 
     /**
@@ -99,6 +59,46 @@ public class ObjectFactory {
      */
     public HiveType createHiveType() {
         return new HiveType();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link HivePartitionFieldsType }
+     * 
+     */
+    public HivePartitionFieldsType createHivePartitionFieldsType() {
+        return new HivePartitionFieldsType();
+    }
+
+    /**
+     * Create an instance of {@link HivePartitionFilterType }
+     * 
+     */
+    public HivePartitionFilterType createHivePartitionFilterType() {
+        return new HivePartitionFilterType();
+    }
+
+    /**
+     * Create an instance of {@link HivePathType }
+     * 
+     */
+    public HivePathType createHivePathType() {
+        return new HivePathType();
+    }
+
+    /**
+     * Create an instance of {@link PartitionColumn }
+     * 
+     */
+    public PartitionColumn createPartitionColumn() {
+        return new PartitionColumn();
     }
 
 }

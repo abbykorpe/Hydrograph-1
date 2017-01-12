@@ -30,38 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionFieldBasicType }
-     * 
-     */
-    public PartitionFieldBasicType createPartitionFieldBasicType() {
-        return new PartitionFieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputHiveTextFileDelimitedInSocket }
-     * 
-     */
-    public TypeOutputHiveTextFileDelimitedInSocket createTypeOutputHiveTextFileDelimitedInSocket() {
-        return new TypeOutputHiveTextFileDelimitedInSocket();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputHiveTextFileDelimitedBase }
-     * 
-     */
-    public TypeOutputHiveTextFileDelimitedBase createTypeOutputHiveTextFileDelimitedBase() {
-        return new TypeOutputHiveTextFileDelimitedBase();
-    }
-
-    /**
      * Create an instance of {@link HivePathType }
      * 
      */
@@ -83,6 +51,38 @@ public class ObjectFactory {
      */
     public HivePartitionFieldsType createHivePartitionFieldsType() {
         return new HivePartitionFieldsType();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputHiveTextFileDelimitedInSocket }
+     * 
+     */
+    public TypeOutputHiveTextFileDelimitedInSocket createTypeOutputHiveTextFileDelimitedInSocket() {
+        return new TypeOutputHiveTextFileDelimitedInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputHiveTextFileDelimitedBase }
+     * 
+     */
+    public TypeOutputHiveTextFileDelimitedBase createTypeOutputHiveTextFileDelimitedBase() {
+        return new TypeOutputHiveTextFileDelimitedBase();
+    }
+
+    /**
+     * Create an instance of {@link PartitionFieldBasicType }
+     * 
+     */
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
     }
 
 }

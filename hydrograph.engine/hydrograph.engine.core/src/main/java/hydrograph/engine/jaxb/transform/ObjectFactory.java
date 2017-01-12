@@ -30,11 +30,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformOperationInputFields }
+     * Create an instance of {@link TypeTransformOperationInputField }
      * 
      */
-    public TypeTransformOperationInputFields createTypeTransformOperationInputFields() {
-        return new TypeTransformOperationInputFields();
+    public TypeTransformOperationInputField createTypeTransformOperationInputField() {
+        return new TypeTransformOperationInputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformOutSocket }
+     * 
+     */
+    public TypeTransformOutSocket createTypeTransformOutSocket() {
+        return new TypeTransformOutSocket();
     }
 
     /**
@@ -46,22 +54,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformInSocket }
-     * 
-     */
-    public TypeTransformInSocket createTypeTransformInSocket() {
-        return new TypeTransformInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformOperationInputField }
-     * 
-     */
-    public TypeTransformOperationInputField createTypeTransformOperationInputField() {
-        return new TypeTransformOperationInputField();
-    }
-
-    /**
      * Create an instance of {@link TypeTransformOperation }
      * 
      */
@@ -70,11 +62,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTransformOutSocket }
+     * Create an instance of {@link TypeTransformOperationInputFields }
      * 
      */
-    public TypeTransformOutSocket createTypeTransformOutSocket() {
-        return new TypeTransformOutSocket();
+    public TypeTransformOperationInputFields createTypeTransformOperationInputFields() {
+        return new TypeTransformOperationInputFields();
+    }
+
+    /**
+     * Create an instance of {@link TypeTransformInSocket }
+     * 
+     */
+    public TypeTransformInSocket createTypeTransformInSocket() {
+        return new TypeTransformInSocket();
     }
 
 }

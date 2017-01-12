@@ -1,10 +1,13 @@
 
 package hydrograph.engine.jaxb.outputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -47,7 +50,7 @@ public class Subjob
 {
 
     @XmlElement(required = true)
-    protected Path path;
+    protected Subjob.Path path;
     protected TypeProperties runtimeProperties;
     protected TypeProperties subjobParameter;
 
@@ -56,10 +59,10 @@ public class Subjob
      * 
      * @return
      *     possible object is
-     *     {@link Path }
+     *     {@link Subjob.Path }
      *     
      */
-    public Path getPath() {
+    public Subjob.Path getPath() {
         return path;
     }
 
@@ -68,10 +71,10 @@ public class Subjob
      * 
      * @param value
      *     allowed object is
-     *     {@link Path }
+     *     {@link Subjob.Path }
      *     
      */
-    public void setPath(Path value) {
+    public void setPath(Subjob.Path value) {
         this.path = value;
     }
 

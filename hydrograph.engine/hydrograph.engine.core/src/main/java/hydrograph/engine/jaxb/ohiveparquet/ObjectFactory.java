@@ -30,35 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputDelimitedInSocket }
+     * Create an instance of {@link HivePathType }
      * 
      */
-    public TypeOutputDelimitedInSocket createTypeOutputDelimitedInSocket() {
-        return new TypeOutputDelimitedInSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputFileDelimitedBase }
-     * 
-     */
-    public TypeOutputFileDelimitedBase createTypeOutputFileDelimitedBase() {
-        return new TypeOutputFileDelimitedBase();
-    }
-
-    /**
-     * Create an instance of {@link HiveType }
-     * 
-     */
-    public HiveType createHiveType() {
-        return new HiveType();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
+    public HivePathType createHivePathType() {
+        return new HivePathType();
     }
 
     /**
@@ -78,11 +54,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HivePathType }
+     * Create an instance of {@link HiveType }
      * 
      */
-    public HivePathType createHivePathType() {
-        return new HivePathType();
+    public HiveType createHiveType() {
+        return new HiveType();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputFileDelimitedBase }
+     * 
+     */
+    public TypeOutputFileDelimitedBase createTypeOutputFileDelimitedBase() {
+        return new TypeOutputFileDelimitedBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputDelimitedInSocket }
+     * 
+     */
+    public TypeOutputDelimitedInSocket createTypeOutputDelimitedInSocket() {
+        return new TypeOutputDelimitedInSocket();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
     }
 
 }

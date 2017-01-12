@@ -30,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeMixedBase }
+     * Create an instance of {@link TypeMixedField }
      * 
      */
-    public TypeMixedBase createTypeMixedBase() {
-        return new TypeMixedBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeInputMixedOutSocket }
-     * 
-     */
-    public TypeInputMixedOutSocket createTypeInputMixedOutSocket() {
-        return new TypeInputMixedOutSocket();
+    public TypeMixedField createTypeMixedField() {
+        return new TypeMixedField();
     }
 
     /**
@@ -54,11 +46,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeMixedField }
+     * Create an instance of {@link TypeInputMixedOutSocket }
      * 
      */
-    public TypeMixedField createTypeMixedField() {
-        return new TypeMixedField();
+    public TypeInputMixedOutSocket createTypeInputMixedOutSocket() {
+        return new TypeInputMixedOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeMixedBase }
+     * 
+     */
+    public TypeMixedBase createTypeMixedBase() {
+        return new TypeMixedBase();
     }
 
 }

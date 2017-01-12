@@ -1,10 +1,13 @@
 
 package hydrograph.engine.jaxb.inputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.itfs.TypeInputFileSequenceBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -45,7 +48,7 @@ public class SequenceInputFile
 {
 
     @XmlElement(required = true)
-    protected Path path;
+    protected SequenceInputFile.Path path;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -53,10 +56,10 @@ public class SequenceInputFile
      * 
      * @return
      *     possible object is
-     *     {@link Path }
+     *     {@link SequenceInputFile.Path }
      *     
      */
-    public Path getPath() {
+    public SequenceInputFile.Path getPath() {
         return path;
     }
 
@@ -65,10 +68,10 @@ public class SequenceInputFile
      * 
      * @param value
      *     allowed object is
-     *     {@link Path }
+     *     {@link SequenceInputFile.Path }
      *     
      */
-    public void setPath(Path value) {
+    public void setPath(SequenceInputFile.Path value) {
         this.path = value;
     }
 

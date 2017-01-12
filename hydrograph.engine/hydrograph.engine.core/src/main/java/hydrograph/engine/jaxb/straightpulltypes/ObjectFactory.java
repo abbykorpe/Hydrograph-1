@@ -30,30 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UnionAll }
-     * 
-     */
-    public UnionAll createUnionAll() {
-        return new UnionAll();
-    }
-
-    /**
-     * Create an instance of {@link Limit.MaxRecords }
-     * 
-     */
-    public Limit.MaxRecords createLimitMaxRecords() {
-        return new Limit.MaxRecords();
-    }
-
-    /**
-     * Create an instance of {@link RemoveDups.Keep }
-     * 
-     */
-    public RemoveDups.Keep createRemoveDupsKeep() {
-        return new RemoveDups.Keep();
-    }
-
-    /**
      * Create an instance of {@link Limit }
      * 
      */
@@ -70,6 +46,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Limit.MaxRecords }
+     * 
+     */
+    public Limit.MaxRecords createLimitMaxRecords() {
+        return new Limit.MaxRecords();
+    }
+
+    /**
      * Create an instance of {@link Sort }
      * 
      */
@@ -83,6 +67,22 @@ public class ObjectFactory {
      */
     public RemoveDups createRemoveDups() {
         return new RemoveDups();
+    }
+
+    /**
+     * Create an instance of {@link RemoveDups.Keep }
+     * 
+     */
+    public RemoveDups.Keep createRemoveDupsKeep() {
+        return new RemoveDups.Keep();
+    }
+
+    /**
+     * Create an instance of {@link UnionAll }
+     * 
+     */
+    public UnionAll createUnionAll() {
+        return new UnionAll();
     }
 
 }

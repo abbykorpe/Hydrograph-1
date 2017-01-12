@@ -46,19 +46,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFixedWidthBase }
-     * 
-     */
-    public TypeFixedWidthBase createTypeFixedWidthBase() {
-        return new TypeFixedWidthBase();
-    }
-
-    /**
      * Create an instance of {@link TypeInputFixedwidthOutSocket }
      * 
      */
     public TypeInputFixedwidthOutSocket createTypeInputFixedwidthOutSocket() {
         return new TypeInputFixedwidthOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeFixedWidthBase }
+     * 
+     */
+    public TypeFixedWidthBase createTypeFixedWidthBase() {
+        return new TypeFixedWidthBase();
     }
 
 }

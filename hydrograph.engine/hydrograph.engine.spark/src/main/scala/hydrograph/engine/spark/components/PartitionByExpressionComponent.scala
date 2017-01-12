@@ -1,7 +1,5 @@
 package hydrograph.engine.spark.components
 
-import java.util
-
 import hydrograph.engine.core.component.entity.PartitionByExpressionEntity
 import hydrograph.engine.core.component.entity.elements.OutSocket
 import hydrograph.engine.core.component.utils.OperationUtils
@@ -60,11 +58,10 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
             case t: PartitionByExpressionForExpression => t.setValidationAPI(partitionByExpressionClass.validatioinAPI)
             case t: CustomPartitionExpression => t.prepare(partitionByExpressionEntity.getOperation.getOperationProperties)
           }
-          val rs= itr.filter( row =>{
+         itr.filter( row =>{
             partitionByExpressionClass.baseClassInstance.getPartition(partitionByExpressionClass.inputRow.setRow(row),
               partitionByExpressionEntity.getNumPartitions.toInt).equals(outSocket.getSocketId)
           })
-          rs
         })(RowEncoder(EncoderHelper().getEncoder(scheme.toList, componentsParams.getSchemaFields())))
         map += (outSocket.getSocketId -> df)
       }

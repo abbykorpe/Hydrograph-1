@@ -30,14 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFilterOperationInputField }
-     * 
-     */
-    public TypeFilterOperationInputField createTypeFilterOperationInputField() {
-        return new TypeFilterOperationInputField();
-    }
-
-    /**
      * Create an instance of {@link TypeFilterInSocket }
      * 
      */
@@ -54,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeFilterOutSocket }
+     * Create an instance of {@link TypeFilterOperationInputField }
      * 
      */
-    public TypeFilterOutSocket createTypeFilterOutSocket() {
-        return new TypeFilterOutSocket();
+    public TypeFilterOperationInputField createTypeFilterOperationInputField() {
+        return new TypeFilterOperationInputField();
     }
 
     /**
@@ -67,6 +59,14 @@ public class ObjectFactory {
      */
     public TypeFilterOperation createTypeFilterOperation() {
         return new TypeFilterOperation();
+    }
+
+    /**
+     * Create an instance of {@link TypeFilterOutSocket }
+     * 
+     */
+    public TypeFilterOutSocket createTypeFilterOutSocket() {
+        return new TypeFilterOutSocket();
     }
 
     /**

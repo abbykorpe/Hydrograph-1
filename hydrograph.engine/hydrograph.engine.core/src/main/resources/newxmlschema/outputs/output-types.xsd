@@ -24,6 +24,7 @@
            xmlns:oredshift="hydrograph/engine/jaxb/oredshift"
            xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
            xmlns:oteradata="hydrograph/engine/jaxb/oteradata"
+           xmlns:ofxml="hydrograph/engine/jaxb/ofxml"
            xmlns="hydrograph/engine/jaxb/outputtypes"
            targetNamespace="hydrograph/engine/jaxb/outputtypes"
            elementFormDefault="unqualified">
@@ -56,6 +57,9 @@
                namespace="hydrograph/engine/jaxb/ooracle"/>
     <xs:import schemaLocation="./teradata-type/output-teradata-types.xsd"
                namespace="hydrograph/engine/jaxb/oteradata"/>
+    <xs:import
+            schemaLocation="./xml-file/output-file-xml-types.xsd"
+            namespace="hydrograph/engine/jaxb/ofxml" />
 
     <xs:complexType name="avroFile">
         <xs:complexContent>
@@ -415,6 +419,47 @@
                                 minOccurs="0" maxOccurs="1"/>
                     <xs:element name="loadType" type="oteradata:type-load-choice"
                                 minOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="xmlFile">
+        <xs:complexContent>
+            <xs:extension base="ofxml:type-output-file-xml-base">
+                <xs:sequence>
+                    <xs:element name="path">
+                        <xs:complexType>
+                            <xs:attribute name="uri" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="absoluteXPath">
+                        <xs:complexType>
+                            <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="rootTag">
+                        <xs:complexType>
+                            <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="rowTag">
+                        <xs:complexType>
+                            <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="safe" type="cmn:boolean-value-type"
+                                minOccurs="0" />
+                    <xs:element name="strict" type="cmn:boolean-value-type"
+                                minOccurs="0" />
+                    <xs:element name="charset" minOccurs="0">
+                        <xs:complexType>
+                            <xs:attribute name="value" type="cmn:standard-charsets"
+                                          use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="runtimeProperties" type="cmn:type-properties"
+                                minOccurs="0" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

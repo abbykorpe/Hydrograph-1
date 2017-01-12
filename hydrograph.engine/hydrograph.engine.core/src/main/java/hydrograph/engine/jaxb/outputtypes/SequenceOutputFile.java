@@ -1,10 +1,13 @@
 
 package hydrograph.engine.jaxb.outputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.otfs.TypeOutputFileSequenceBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -45,7 +48,7 @@ public class SequenceOutputFile
 {
 
     @XmlElement(required = true)
-    protected Path path;
+    protected SequenceOutputFile.Path path;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -53,10 +56,10 @@ public class SequenceOutputFile
      * 
      * @return
      *     possible object is
-     *     {@link Path }
+     *     {@link SequenceOutputFile.Path }
      *     
      */
-    public Path getPath() {
+    public SequenceOutputFile.Path getPath() {
         return path;
     }
 
@@ -65,10 +68,10 @@ public class SequenceOutputFile
      * 
      * @param value
      *     allowed object is
-     *     {@link Path }
+     *     {@link SequenceOutputFile.Path }
      *     
      */
-    public void setPath(Path value) {
+    public void setPath(SequenceOutputFile.Path value) {
         this.path = value;
     }
 

@@ -1,11 +1,22 @@
 
 package hydrograph.engine.jaxb.main;
 
-import hydrograph.engine.jaxb.commontypes.*;
-
-import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
+import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
 
 
 /**
@@ -46,11 +57,11 @@ public class Graph {
 
     protected TypeProperties runtimeProperties;
     @XmlElements({
+        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class),
         @XmlElement(name = "outputs", type = TypeOutputComponent.class),
-        @XmlElement(name = "inputs", type = TypeInputComponent.class),
-        @XmlElement(name = "commands", type = TypeCommandComponent.class),
         @XmlElement(name = "operations", type = TypeOperationsComponent.class),
-        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class)
+        @XmlElement(name = "inputs", type = TypeInputComponent.class),
+        @XmlElement(name = "commands", type = TypeCommandComponent.class)
     })
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
     @XmlAttribute(name = "name", required = true)
@@ -100,11 +111,11 @@ public class Graph {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link TypeStraightPullComponent }
      * {@link TypeOutputComponent }
+     * {@link TypeOperationsComponent }
      * {@link TypeInputComponent }
      * {@link TypeCommandComponent }
-     * {@link TypeOperationsComponent }
-     * {@link TypeStraightPullComponent }
      * 
      * 
      */

@@ -1,9 +1,12 @@
 
 package hydrograph.engine.jaxb.operationstypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.partitionbyexpression.PartitionByExpressionBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -42,17 +45,17 @@ public class PartitionByExpression
 {
 
     @XmlElement(required = true)
-    protected NoOfPartitions noOfPartitions;
+    protected PartitionByExpression.NoOfPartitions noOfPartitions;
 
     /**
      * Gets the value of the noOfPartitions property.
      * 
      * @return
      *     possible object is
-     *     {@link NoOfPartitions }
+     *     {@link PartitionByExpression.NoOfPartitions }
      *     
      */
-    public NoOfPartitions getNoOfPartitions() {
+    public PartitionByExpression.NoOfPartitions getNoOfPartitions() {
         return noOfPartitions;
     }
 
@@ -61,10 +64,10 @@ public class PartitionByExpression
      * 
      * @param value
      *     allowed object is
-     *     {@link NoOfPartitions }
+     *     {@link PartitionByExpression.NoOfPartitions }
      *     
      */
-    public void setNoOfPartitions(NoOfPartitions value) {
+    public void setNoOfPartitions(PartitionByExpression.NoOfPartitions value) {
         this.noOfPartitions = value;
     }
 
