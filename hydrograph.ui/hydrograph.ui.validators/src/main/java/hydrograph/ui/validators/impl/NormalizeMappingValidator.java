@@ -38,6 +38,12 @@ import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 import hydrograph.ui.validators.utils.ValidatorUtility;
 
+/**
+ * @author Bitwise
+ * 
+ * This class validate normalize's mapping window.
+ *
+ */
 public class NormalizeMappingValidator implements IValidator{
 	private String errorMessage;
 	private boolean isExpressionSelected;
@@ -73,7 +79,6 @@ public class NormalizeMappingValidator implements IValidator{
 			
 		 }
 		 transformMapping.setInputFields(inputFieldsList);
-		 isJobImported=false;
 		}
 		if(isExpressionSelected)
 		{
