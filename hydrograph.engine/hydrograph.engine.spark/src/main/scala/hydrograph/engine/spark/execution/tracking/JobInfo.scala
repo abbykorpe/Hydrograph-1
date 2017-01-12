@@ -17,12 +17,17 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
   val componentInfoList = new java.util.ArrayList[tracking.ComponentInfo]
   val componentInfoHashSet = new mutable.HashSet[tracking.ComponentInfo]
 
+
   def storeComponentStatsForTaskEnd(taskEnd: SparkListenerTaskEnd): Unit = {
     generateStatsForTaskEnd(taskEnd)
   }
 
   def storeComponentStatsForTaskStart(taskStart: SparkListenerTaskStart): Unit = {
     generateStatsForTaskStart(taskStart)
+  }
+
+  def storeComponentStatsForTaskGettingResult(taskGettingResult: SparkListenerTaskGettingResult): Unit = {
+    generateStatsForTaskGettingResult(taskGettingResult)
   }
 
   def updateStatusOfComponentsOnStageSubmitted(stageSubmitted: SparkListenerStageSubmitted): Unit = {
@@ -84,6 +89,14 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
 
       })
 
+    //logic for status of component whose compInfo is not generated
+    /*componentInfoList.asScala.filter(cI=>cI.getStageId.equals(-1)).foreach(co=>{
+      co.setCurrentStatus("SUCCESSFUL")
+      for(key : String <- co.getStatusPerSocketMap().keySet().asScala){
+        co.setStatusPerSocketMap(key,"SUCCESSFUL")
+      }
+    })*/
+
   }
 
   private def generateStatsForTaskEnd(taskEnd: SparkListenerTaskEnd): Unit = {
@@ -91,6 +104,10 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
     val Status = if(taskEnd.taskInfo.status.equals("SUCCESS"))"SUCCESSFUL"
     else taskEnd.taskInfo.status
 //    println("Status in TaskEnd : "+Status)
+
+    if(taskEnd.taskInfo.status.equals("FAILED"))
+    componentInfoList.asScala.forall(a=>{a.setCurrentStatus("FAILED"); true})
+
     taskEnd.taskInfo.accumulables.foreach(f => {
 
 //      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
@@ -102,23 +119,10 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
 
 //        println("Reached after alreadyPresentCompInfo checking of taskEnd")
         if (alreadyPresentCompInfo.size > 0) {
-          /*componentInfoHashSet
-            .filter(compInfo => {
-              compInfo.getComponentId.equals(component.compId)
-            }).foreach(componentInfo => {
-            componentInfo.setStageId(taskEnd.stageId)
-            componentInfo.setComponentId(component.compId)
-            componentInfo.setBatch(component.batch)
-            componentInfo.setComponentName(component.compName)
-            componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
-            componentInfo.setStatusPerSocketMap(component.outSocket, Status)
-            componentInfo.setCurrentStatus("PENDING")
-            //           componentInfoHashSet.add(componentInfo)
-          })*/
 
           componentInfoList.asScala
             .filter(compInfo => {
-              compInfo.getComponentId.equals(component.compId)
+              compInfo.getComponentId.equals(component.compId) && !compInfo.getCurrentStatus().equals("FAILED")
             }).foreach(componentInfo => {
             componentInfo.setStageId(taskEnd.stageId)
             componentInfo.setComponentId(component.compId)
@@ -126,12 +130,26 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
             componentInfo.setComponentName(component.compName)
             componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
             componentInfo.setStatusPerSocketMap(component.outSocket, Status)
-            componentInfo.setCurrentStatus("RUNNING")
-//            println("mark status as running of taskEnd")
+            if(Status.equals("FAILED")){
+              componentInfo.setCurrentStatus("FAILED")
+              componentInfo.setProcessedRecordCount(component.outSocket, -1)
+            }
+            else{componentInfo.setCurrentStatus("RUNNING")}
+
+//            println("**************mark status as running of taskEnd******************")
             //           componentInfoHashSet.add(componentInfo)
           })
+
+          //logic for status of component whose compInfo is not generated
+          /*componentInfoList.asScala
+            .filter(c=>c.getCurrentStatus.equals("PENDING")).foreach(ci=>
+            {ci.setCurrentStatus("RUNNING")
+              for(key : String <- ci.getStatusPerSocketMap().keySet().asScala){
+                       ci.setStatusPerSocketMap(key,"RUNNING")
+                   }
+            })*/
         }
-        else {
+        /*else {
           val componentInfo = new ComponentInfo()
           componentInfo.setStageId(taskEnd.stageId)
           componentInfo.setComponentId(component.compId)
@@ -143,7 +161,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
 //          println("mark status as PENDING of taskEnd")
 //          componentInfoHashSet.add(componentInfo)
           componentInfoList.add(componentInfo)
-        }
+        }*/
 
 
       })
@@ -156,6 +174,10 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
 //    println("Status in TaskStart : "+Status)
     /*if(taskGettingResult.taskInfo.status.equals("SUCCESS"))"SUCCESSFUL"
     else taskStart.taskInfo.status*/
+
+    if(taskStart.taskInfo.status.equals("FAILED"))
+      componentInfoList.asScala.forall(a=>{a.setCurrentStatus("FAILED"); true})
+
     taskStart.taskInfo.accumulables.foreach(f => {
 //      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
       componentInfoMap.filter(c => c.newComponentId.equals(f.name.get)).foreach(component => {
@@ -169,7 +191,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
 
           componentInfoList.asScala
             .filter(compInfo => {
-              compInfo.getComponentId.equals(component.compId)
+              compInfo.getComponentId.equals(component.compId) && !compInfo.getCurrentStatus().equals("FAILED")
             }).foreach(componentInfo => {
             componentInfo.setStageId(taskStart.stageId)
             componentInfo.setComponentId(component.compId)
@@ -182,7 +204,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
             //           componentInfoHashSet.add(componentInfo)
           })
         }
-        else {
+        /*else {
           val componentInfo = new ComponentInfo()
           componentInfo.setStageId(taskStart.stageId)
           componentInfo.setComponentId(component.compId)
@@ -194,16 +216,86 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
 //          println("mark status as PENDING of taskStart")
           //          componentInfoHashSet.add(componentInfo)
           componentInfoList.add(componentInfo)
-        }
+        }*/
 
 
       })
     })
   }
 
+  //
+
+  private def generateStatsForTaskGettingResult(taskStart: SparkListenerTaskGettingResult): Unit = {
+    //    ElementGraph elementGraph = extractElementGraphFromCascadeStats(cascadingStats);
+    /*val Status = taskStart.taskInfo.status
+    println("Status in TaskStart : "+Status)
+    /*if(taskGettingResult.taskInfo.status.equals("SUCCESS"))"SUCCESSFUL"
+    else taskStart.taskInfo.status*/
+    taskStart.taskInfo.accumulables.foreach(f => {
+      //      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
+      componentInfoMap.filter(c => c.newComponentId.equals(f.name.get)).foreach(component => {
+
+
+        val alreadyPresentCompInfo  = componentInfoList.asScala
+          .filter(compInfo=> compInfo.getComponentId.equals(component.compId))
+
+        //        println("Reached after alreadyPresentCompInfo checking of taskStart")
+        if (alreadyPresentCompInfo.size > 0) {
+
+          componentInfoList.asScala
+            .filter(compInfo => {
+              compInfo.getComponentId.equals(component.compId)
+            }).foreach(componentInfo => {
+//            componentInfo.setStageId(taskStart.stageId)
+            componentInfo.setComponentId(component.compId)
+            componentInfo.setBatch(component.batch)
+            componentInfo.setComponentName(component.compName)
+            componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
+            componentInfo.setStatusPerSocketMap(component.outSocket, Status)
+            componentInfo.setCurrentStatus("RUNNING")
+            //            println("mark status as running of taskStart")
+            //           componentInfoHashSet.add(componentInfo)
+          })
+        }
+       /* else {
+          val componentInfo = new ComponentInfo()
+//          componentInfo.setStageId(taskStart.stageId)
+          componentInfo.setComponentId(component.compId)
+          componentInfo.setBatch(component.batch)
+          componentInfo.setComponentName(component.compName)
+          componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
+          componentInfo.setStatusPerSocketMap(component.outSocket, Status)
+          componentInfo.setCurrentStatus("PENDING")
+          //          println("mark status as PENDING of taskStart")
+          //          componentInfoHashSet.add(componentInfo)
+          componentInfoList.add(componentInfo)
+        }*/
+
+
+      })
+    })*/
+  }
+
 
   def getStatus(): java.util.List[ComponentInfo] = {
     componentInfoList //componentInfoMap.values.toList
+  }
+
+  def createComponentInfos(): Unit ={
+
+      componentInfoMap.foreach({comp=>
+        val componentInfo = new ComponentInfo()
+        componentInfo.setStageId(-1)
+        componentInfo.setComponentId(comp.compId)
+        componentInfo.setBatch(comp.batch)
+        componentInfo.setComponentName(comp.compName)
+        componentInfo.setProcessedRecordCount(comp.outSocket,0)
+        componentInfo.setStatusPerSocketMap(comp.outSocket,"PENDING")
+        componentInfo.setCurrentStatus("PENDING")
+        //          println("mark status as PENDING of taskStart")
+        //          componentInfoHashSet.add(componentInfo)
+        componentInfoList.add(componentInfo)
+        })
   }
 
 
