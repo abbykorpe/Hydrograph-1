@@ -510,7 +510,7 @@ public class HiveOutputFieldDialog extends Dialog {
 	}
 
 	private void createTargetTable(Composite container) {
-		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
+		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI|SWT.FULL_SELECTION);
 		targetTable = targetTableViewer.getTable();
 		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_table_1.heightHint = 449;

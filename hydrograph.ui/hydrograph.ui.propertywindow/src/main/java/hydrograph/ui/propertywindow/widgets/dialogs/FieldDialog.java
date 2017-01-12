@@ -445,7 +445,7 @@ public class FieldDialog extends Dialog {
 	}
 
 	private void createTargetTable(Composite container) {
-		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
+		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI|SWT.FULL_SELECTION);
 		targetTable = targetTableViewer.getTable();
 		targetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
