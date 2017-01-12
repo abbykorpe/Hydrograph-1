@@ -61,7 +61,7 @@ public class ELTInputCountListener implements IELTListener{
 				if(StringUtils.isNotEmpty(string)){
 					if(event.type == SWT.Modify){
 						if(Integer.parseInt(string) < minimunPortCount || Integer.parseInt(string) > 25 ){
-							txtDecorator.setDescriptionText(Messages.bind(Messages.PORT_VALUE, minimunPortCount));
+							txtDecorator.setDescriptionText(Messages.bind(Messages.PORT_VALUE, minimunPortCount-1));
 							txtDecorator.show();
 							propertyDialogButtonBar.enableOKButton(false);
 							propertyDialogButtonBar.enableApplyButton(false);

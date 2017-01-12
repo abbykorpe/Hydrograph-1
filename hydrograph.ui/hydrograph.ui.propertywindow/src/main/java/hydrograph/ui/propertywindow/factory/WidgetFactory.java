@@ -140,6 +140,7 @@ public class WidgetFactory {
 		JOIN_INPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Messages.LABEL_INPUT_COUNT,2)),
 		INPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Messages.LABEL_INPUT_COUNT,1)),
 		OUTPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Messages.LABEL_OUTPUT_COUNT,1)),
+		PARTITION_COMPONENT_OUTPUT_COUNT_WIDGET(ELTJoinPortCount.class,WidgetHelper.INSTANCE.getInputCountWidgetConfig(Messages.LABEL_OUTPUT_PARTITIONS,2)),
 		
 		SELECT_JDBC_VALUES_WIDGET(SelectionDatabaseWidget.class, WidgetHelper.INSTANCE.getSelectWidgetConfig() ),
 		JOIN_TYPE_WIDGET(ELTJoinWidget.class),

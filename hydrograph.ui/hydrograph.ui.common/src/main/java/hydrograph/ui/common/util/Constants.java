@@ -90,6 +90,9 @@ public class Constants {
 	public static final String CUMULATE_WINDOW_TITLE= "Cumulate";
 	public static final String NORMALIZE_WINDOW_TITLE = "Normalize";
 	public static final String ISSUE_PROPERTY_NAME="Other Issues";
+	public static final String PARTITION_BY_EXPRESSION = "PartitionByExpression";
+	public static final String HASH = "#";
+	public static final String INNER_PROPERTY_HELP_WIDGET = "innerPropertyHelpWidget_";
 	
     public static final String SHOW_TOOLTIP="TRUE";
 	public static final String HIDE_TOOLTIP="FALSE";
@@ -158,6 +161,8 @@ public class Constants {
 	public static final String PROPAGATE_FIELD_FROM_LEFT_ACTION= "Propagate Field From Left";
 	public static final String PROPAGATE= "Propagate";
 	public static final String STRAIGHTPULL = "STRAIGHTPULL";
+	public static final String FILTER_COMPONENT = "filter";
+	public static final String UNIQUE_SEQUENCE_COMPONENT ="uniquesequence";
 	
 	public static final String PARAMETER_SUFFIX = "}";
 	public static final String UNIQUE_SEQUENCE_PROPERTY_NAME = "sequence_field";

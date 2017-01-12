@@ -50,7 +50,8 @@ public enum UIComponentsConstants {
 	VALID("VALID"),
 	COMMAND_CATEGORY("COMMAND"),
 	RUN_PROGRAM("RunProgram"),
-	BATCH("batch");
+	BATCH("batch"),
+	PARTITION_BY_EXPRESSION("PartitionByExpression");
 	
 	private final String value;
 

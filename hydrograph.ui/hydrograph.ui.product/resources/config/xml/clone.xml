@@ -52,8 +52,8 @@
 		</tns:property>
 		
 		<tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"
-			usage="OPTIONAL" propertyHelpText="Propogate data from left.">
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Specifies propagating attributes from previous component in the job flow.">
 		</tns:property>
 	</tns:component>
 </tns:Config>

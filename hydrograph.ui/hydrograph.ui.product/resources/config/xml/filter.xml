@@ -45,7 +45,7 @@
 		
 		<tns:property dataType="string" name="OPERATION_CLASS" renderer="OPERATIONAL_CLASS_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
-			usage="REQUIRED" propertyHelpText="Specify expression for performing the Filter operation#Specify java class for performing the Filter operation">
+			usage="REQUIRED" propertyHelpText="Specify java class for performing the Filter operation.#Specify expression for performing Filter operation.">
 			<tns:validator>CLASS_NAME_VALIDATOR</tns:validator>
 		</tns:property>
 		
@@ -69,9 +69,9 @@
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>
          
-         <tns:property dataType="string" name="Propogate"  renderer="PROPOGATE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="NONE"
-			usage="REQUIRED" propertyHelpText="Propogate data from left.">
+         <tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Specifies propagating attributes from previous component in the job flow.">
 		</tns:property>
 	
 	<tns:operations>

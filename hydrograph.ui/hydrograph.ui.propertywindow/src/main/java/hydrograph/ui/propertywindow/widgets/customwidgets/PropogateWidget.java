@@ -99,6 +99,7 @@ public class PropogateWidget extends AbstractWidget{
 		  if(StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.STRAIGHTPULL)
 				  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.FILTER)	
 				  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.UNIQUE_SEQUENCE)
+				  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.PARTITION_BY_EXPRESSION)
 						)	
 		  {	  
 		for (Link link : getComponent().getTargetConnections()) {
@@ -137,6 +138,7 @@ public class PropogateWidget extends AbstractWidget{
 					if(StringUtils.equalsIgnoreCase(getComponent().getCategory(),Constants.STRAIGHTPULL)
 							  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.FILTER)	
 							  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.UNIQUE_SEQUENCE)
+							  ||StringUtils.equalsIgnoreCase(getComponent().getComponentName(),Constants.PARTITION_BY_EXPRESSION)
 							)
 					{	
 						getSchemaForInternalPropagation().getGridRow().clear();
@@ -272,6 +274,9 @@ public class PropogateWidget extends AbstractWidget{
 				showHideErrorSymbol(widgets);
 			}
            });
+		
+		
+		setPropertyHelpWidget((Control) eltDefaultLable.getSWTWidgetControl());
 	}
     
 	private AbstractWidget getWidget() {

@@ -606,9 +606,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	 @Override
 	 public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 
-		 if((StringUtils.equalsIgnoreCase(getComponent().getCategory(), "STRAIGHTPULL"))
-				|| (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "filter")
-				|| (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "uniquesequence")))
+		 if((StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.STRAIGHTPULL))
+				|| (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.FILTER_COMPONENT)
+				|| (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.UNIQUE_SEQUENCE_COMPONENT))
+				|| (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.PARTITION_BY_EXPRESSION)))
 				 ){
 			 createSchemaGridSection(container.getContainerControl(),tableHeight, tableWidth);
 		 }
@@ -1433,9 +1434,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
 				 | ColumnViewerEditor.TABBING_VERTICAL);
 
-		 if(StringUtils.equalsIgnoreCase(getComponent().getCategory(), "STRAIGHTPULL")
-				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "filter")
-				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), "uniquesequence"))))
+		 if(StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.STRAIGHTPULL)
+				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.FILTER_COMPONENT)
+				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.UNIQUE_SEQUENCE_COMPONENT))))
 		 
 		 {	
 			 //table.setEnabled(false);

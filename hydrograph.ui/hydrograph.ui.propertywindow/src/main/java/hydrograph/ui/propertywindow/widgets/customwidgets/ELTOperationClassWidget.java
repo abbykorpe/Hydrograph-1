@@ -30,6 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -121,7 +122,6 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		}else {
 		    expressionRadioButton.setText(Messages.WINDOWS_EXPRESSION_EDITIOR_LABEL);
 		}
-		expressionRadioButton.setData(String.valueOf(data_key++), expressionRadioButton);
 		setPropertyHelpWidget(expressionRadioButton);
 		addSelectionListenerOnExpression();
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(
@@ -133,8 +133,9 @@ public class ELTOperationClassWidget extends AbstractWidget {
 		
 		operationRadioButton = new Button(radioButtonComposite, SWT.RADIO);
 		operationRadioButton.setText(Messages.OPERATION_CALSS_LABEL);
-		expressionRadioButton.setData(String.valueOf(data_key), operationRadioButton);
-		setPropertyHelpWidget(expressionRadioButton);
+		operationRadioButton.setData(Constants.INNER_PROPERTY_HELP_WIDGET+"0", operationRadioButton);
+		operationRadioButton.setData(Constants.INNER_PROPERTY_HELP_WIDGET+"1",expressionRadioButton );
+		setPropertyHelpWidget(operationRadioButton);
 		addSelectionListenerOnOperation();
 		
 		initialize();
@@ -144,7 +145,7 @@ public class ELTOperationClassWidget extends AbstractWidget {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(expressionRadioButton.getSelection()){
+				if(((Button) expressionRadioButton).getSelection()){
 					List<FixedWidthGridRow> inputFieldSchema=getInputSchema();
 					operationClassProperty.setExpression(true);
 					operationClassProperty.getExpressionEditorData().getSelectedInputFieldsForExpression().clear();
