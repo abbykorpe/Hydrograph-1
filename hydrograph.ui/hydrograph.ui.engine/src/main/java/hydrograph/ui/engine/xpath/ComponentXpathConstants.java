@@ -26,7 +26,7 @@ public enum ComponentXpathConstants {
 	COMPONENT_XPATH_BOOLEAN("/graph/*[@id='$id']/propertyName"),
 	COMPONENT_XPATH_COUNT("/graph/*[@id='$id']/maxRecords"),
 	
-	FILTER_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='filter_opt']/inputFields"),
+	OPERATION_INPUT_FIELDS("/graph/operations[@id='$id']/operation[@id='operation_1']/inputFields"),
 	
 	OPERATIONS_PRIMARY_KEYS("/graph/operations[@id='$id']/primaryKeys"),
 	OPERATIONS_SECONDARY_KEYS("/graph/operations[@id='$id']/secondaryKeys"),

@@ -37,6 +37,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 			while(StringUtils.equalsIgnoreCase(nextComponent.getCategory(), Constants.STRAIGHTPULL)
 					||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.FILTER)	
 					 ||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.UNIQUE_SEQUENCE)
+					 ||StringUtils.equalsIgnoreCase(nextComponent.getComponentName(),Constants.PARTITION_BY_EXPRESSION)
 					 ||nextComponent instanceof SubjobComponent
 					 ||nextComponent instanceof OutputSubjobComponent
 					)
@@ -201,7 +202,8 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 			Component component1=(Component)object;	
 			if((StringUtils.equalsIgnoreCase(component1.getCategory(), Constants.TRANSFORM)
 					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), Constants.FILTER)
-					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), Constants.UNIQUE_SEQUENCE))
+					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(), Constants.UNIQUE_SEQUENCE)
+					&&!StringUtils.equalsIgnoreCase(component1.getComponentName(),Constants.PARTITION_BY_EXPRESSION))
 					&& component1.isContinuousSchemaPropogationAllow()
 					 )
 			{

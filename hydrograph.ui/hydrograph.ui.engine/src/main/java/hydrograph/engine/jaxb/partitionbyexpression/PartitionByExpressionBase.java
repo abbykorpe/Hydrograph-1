@@ -1,13 +1,12 @@
 
 package hydrograph.engine.jaxb.partitionbyexpression;
 
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.operationstypes.PartitionByExpression;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
+import hydrograph.engine.jaxb.operationstypes.PartitionByExpression;
 
 
 /**
@@ -21,7 +20,10 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{hydrograph/engine/jaxb/commontypes}type-operations-component">
  *       &lt;sequence>
  *         &lt;element name="inSocket" type="{hydrograph/engine/jaxb/partitionByExpression}type-pbe-in-socket"/>
- *         &lt;element name="operation" type="{hydrograph/engine/jaxb/partitionByExpression}type-pbe-operation"/>
+ *         &lt;choice>
+ *           &lt;element name="operation" type="{hydrograph/engine/jaxb/partitionByExpression}type-pbe-operation"/>
+ *           &lt;element name="expression" type="{hydrograph/engine/jaxb/commontypes}type-transform-expression"/>
+ *         &lt;/choice>
  *         &lt;element name="outSocket" type="{hydrograph/engine/jaxb/partitionByExpression}type-pbe-out-socket" maxOccurs="unbounded" minOccurs="2"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>

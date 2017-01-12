@@ -30,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeNameField }
+     * Create an instance of {@link TypeOperation }
      * 
      */
-    public TypeNameField createTypeNameField() {
-        return new TypeNameField();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
     }
 
     /**
@@ -54,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperation }
+     * Create an instance of {@link TypeNameField }
      * 
      */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
+    public TypeNameField createTypeNameField() {
+        return new TypeNameField();
     }
 
     /**
@@ -67,6 +59,14 @@ public class ObjectFactory {
      */
     public TypeOperationOutputField createTypeOperationOutputField() {
         return new TypeOperationOutputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
     }
 
 }

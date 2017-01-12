@@ -1,12 +1,15 @@
 
 package hydrograph.engine.jaxb.straightpulltypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.KeepValue;
 import hydrograph.engine.jaxb.removedups.TypePrimaryKeyFields;
 import hydrograph.engine.jaxb.removedups.TypeRemovedupsBase;
 import hydrograph.engine.jaxb.removedups.TypeSecondaryKeyFields;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -48,7 +51,7 @@ public class RemoveDups
     extends TypeRemovedupsBase
 {
 
-    protected Keep keep;
+    protected RemoveDups.Keep keep;
     @XmlElement(required = true)
     protected TypePrimaryKeyFields primaryKeys;
     protected TypeSecondaryKeyFields secondaryKeys;
@@ -58,10 +61,10 @@ public class RemoveDups
      * 
      * @return
      *     possible object is
-     *     {@link Keep }
+     *     {@link RemoveDups.Keep }
      *     
      */
-    public Keep getKeep() {
+    public RemoveDups.Keep getKeep() {
         return keep;
     }
 
@@ -70,10 +73,10 @@ public class RemoveDups
      * 
      * @param value
      *     allowed object is
-     *     {@link Keep }
+     *     {@link RemoveDups.Keep }
      *     
      */
-    public void setKeep(Keep value) {
+    public void setKeep(RemoveDups.Keep value) {
         this.keep = value;
     }
 

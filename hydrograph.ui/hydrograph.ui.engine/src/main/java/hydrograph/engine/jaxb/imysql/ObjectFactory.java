@@ -30,19 +30,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputMysqlBase }
-     * 
-     */
-    public TypeInputMysqlBase createTypeInputMysqlBase() {
-        return new TypeInputMysqlBase();
-    }
-
-    /**
      * Create an instance of {@link TypeInputMysqlOutSocket }
      * 
      */
     public TypeInputMysqlOutSocket createTypeInputMysqlOutSocket() {
         return new TypeInputMysqlOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputMysqlBase }
+     * 
+     */
+    public TypeInputMysqlBase createTypeInputMysqlBase() {
+        return new TypeInputMysqlBase();
     }
 
 }

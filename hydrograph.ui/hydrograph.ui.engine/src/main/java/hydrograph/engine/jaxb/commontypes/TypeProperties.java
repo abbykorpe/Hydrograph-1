@@ -1,9 +1,13 @@
 
 package hydrograph.engine.jaxb.commontypes;
 
-import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -41,7 +45,7 @@ import java.util.List;
 public class TypeProperties {
 
     @XmlElement(required = true)
-    protected List<Property> property;
+    protected List<TypeProperties.Property> property;
 
     /**
      * Gets the value of the property property.
@@ -61,13 +65,13 @@ public class TypeProperties {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Property }
+     * {@link TypeProperties.Property }
      * 
      * 
      */
-    public List<Property> getProperty() {
+    public List<TypeProperties.Property> getProperty() {
         if (property == null) {
-            property = new ArrayList<Property>();
+            property = new ArrayList<TypeProperties.Property>();
         }
         return this.property;
     }

@@ -30,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FieldBasicType }
+     * Create an instance of {@link HivePathType }
      * 
      */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutputDelimitedInSocket }
-     * 
-     */
-    public TypeOutputDelimitedInSocket createTypeOutputDelimitedInSocket() {
-        return new TypeOutputDelimitedInSocket();
+    public HivePathType createHivePathType() {
+        return new HivePathType();
     }
 
     /**
@@ -54,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputFileDelimitedBase }
+     * Create an instance of {@link PartitionFieldBasicType }
      * 
      */
-    public TypeOutputFileDelimitedBase createTypeOutputFileDelimitedBase() {
-        return new TypeOutputFileDelimitedBase();
+    public PartitionFieldBasicType createPartitionFieldBasicType() {
+        return new PartitionFieldBasicType();
     }
 
     /**
@@ -70,19 +62,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionFieldBasicType }
+     * Create an instance of {@link TypeOutputFileDelimitedBase }
      * 
      */
-    public PartitionFieldBasicType createPartitionFieldBasicType() {
-        return new PartitionFieldBasicType();
+    public TypeOutputFileDelimitedBase createTypeOutputFileDelimitedBase() {
+        return new TypeOutputFileDelimitedBase();
     }
 
     /**
-     * Create an instance of {@link HivePathType }
+     * Create an instance of {@link TypeOutputDelimitedInSocket }
      * 
      */
-    public HivePathType createHivePathType() {
-        return new HivePathType();
+    public TypeOutputDelimitedInSocket createTypeOutputDelimitedInSocket() {
+        return new TypeOutputDelimitedInSocket();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
     }
 
 }

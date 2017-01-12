@@ -59,8 +59,8 @@
 			<tns:validator>INTEGER_VALIDATOR</tns:validator>
 		</tns:property>	
 		 <tns:property dataType="string" name="Propogate" renderer="PROPOGATE_WIDGET" type="USER"
-			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE"  propertyHelpText="Propogate data from left." tooltipDataType="TEXT"
-			usage="REQUIRED">
+			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="OPTIONAL" propertyHelpText="Specifies propagating attributes from previous component in the job flow.">
 		</tns:property>
 
 			

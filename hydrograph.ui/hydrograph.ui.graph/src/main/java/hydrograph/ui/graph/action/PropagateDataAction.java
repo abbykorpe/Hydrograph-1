@@ -91,6 +91,7 @@ public class PropagateDataAction extends SelectionAction {
 			if(StringUtils.equalsIgnoreCase(component.getCategory(),Constants.STRAIGHTPULL)
 					  ||StringUtils.equalsIgnoreCase(component.getComponentName(),Constants.FILTER)	
 					  ||StringUtils.equalsIgnoreCase(component.getComponentName(),Constants.UNIQUE_SEQUENCE)
+					  ||StringUtils.equalsIgnoreCase(component.getComponentName(),Constants.PARTITION_BY_EXPRESSION)
 					)
 			{	
 				

@@ -30,19 +30,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeMixedField }
-     * 
-     */
-    public TypeMixedField createTypeMixedField() {
-        return new TypeMixedField();
-    }
-
-    /**
      * Create an instance of {@link TypeMixedRecord }
      * 
      */
     public TypeMixedRecord createTypeMixedRecord() {
         return new TypeMixedRecord();
+    }
+
+    /**
+     * Create an instance of {@link TypeMixedField }
+     * 
+     */
+    public TypeMixedField createTypeMixedField() {
+        return new TypeMixedField();
     }
 
     /**

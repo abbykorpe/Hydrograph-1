@@ -46,19 +46,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeExecutiontrackingOperation }
-     * 
-     */
-    public TypeExecutiontrackingOperation createTypeExecutiontrackingOperation() {
-        return new TypeExecutiontrackingOperation();
-    }
-
-    /**
      * Create an instance of {@link TypeExecutiontrackingOperationInputField }
      * 
      */
     public TypeExecutiontrackingOperationInputField createTypeExecutiontrackingOperationInputField() {
         return new TypeExecutiontrackingOperationInputField();
+    }
+
+    /**
+     * Create an instance of {@link TypeExecutiontrackingInSocket }
+     * 
+     */
+    public TypeExecutiontrackingInSocket createTypeExecutiontrackingInSocket() {
+        return new TypeExecutiontrackingInSocket();
     }
 
     /**
@@ -70,11 +70,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeExecutiontrackingInSocket }
+     * Create an instance of {@link TypeExecutiontrackingOperation }
      * 
      */
-    public TypeExecutiontrackingInSocket createTypeExecutiontrackingInSocket() {
-        return new TypeExecutiontrackingInSocket();
+    public TypeExecutiontrackingOperation createTypeExecutiontrackingOperation() {
+        return new TypeExecutiontrackingOperation();
     }
 
 }

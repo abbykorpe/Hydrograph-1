@@ -30,11 +30,51 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutputOracleBase }
+     * 
+     */
+    public TypeOutputOracleBase createTypeOutputOracleBase() {
+        return new TypeOutputOracleBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeOracleField }
+     * 
+     */
+    public TypeOracleField createTypeOracleField() {
+        return new TypeOracleField();
+    }
+
+    /**
      * Create an instance of {@link TypeOutputOracleInSocket }
      * 
      */
     public TypeOutputOracleInSocket createTypeOutputOracleInSocket() {
         return new TypeOutputOracleInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeUpdateKeys }
+     * 
+     */
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
+    }
+
+    /**
+     * Create an instance of {@link TypeLoadChoice }
+     * 
+     */
+    public TypeLoadChoice createTypeLoadChoice() {
+        return new TypeLoadChoice();
+    }
+
+    /**
+     * Create an instance of {@link DatabaseType }
+     * 
+     */
+    public DatabaseType createDatabaseType() {
+        return new DatabaseType();
     }
 
     /**
@@ -52,63 +92,5 @@ public class ObjectFactory {
     public TypePrimaryKeys createTypePrimaryKeys() {
         return new TypePrimaryKeys();
     }
-
-    /**
-     * Create an instance of {@link DatabaseType }
-     * 
-     */
-    public DatabaseType createDatabaseType() {
-        return new DatabaseType();
-    }
-
-    /**
-<<<<<<< HEAD
-     * Create an instance of {@link TypeOutputOracleBase }
-=======
-     * Create an instance of {@link TypeOracleField }
->>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
-     * 
-     */
-    public TypeOutputOracleBase createTypeOutputOracleBase() {
-        return new TypeOutputOracleBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeLoadChoice }
-     * 
-     */
-    public TypeLoadChoice createTypeLoadChoice() {
-        return new TypeLoadChoice();
-    }
-
-    /**
-<<<<<<< HEAD
-     * Create an instance of {@link TypeOracleField }
-=======
-     * Create an instance of {@link TypeUpdateKeys }
-     * 
-     */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeOracleRecord }
->>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
-     * 
-     */
-    public TypeOracleField createTypeOracleField() {
-        return new TypeOracleField();
-    }
-
-    /**
-<<<<<<< HEAD
-     * Create an instance of {@link TypeUpdateKeys }
-=======
-     * Create an instance of {@link TypeOutputOracleBase }
->>>>>>> Added teradata component with changed loadTypeUtils and exportUtils
-     * 
-     */
-
 
 }

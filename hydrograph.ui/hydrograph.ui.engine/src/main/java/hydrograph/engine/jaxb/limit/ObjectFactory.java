@@ -30,22 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeLimitBase }
-     * 
-     */
-    public TypeLimitBase createTypeLimitBase() {
-        return new TypeLimitBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeLimitOutSocket }
      * 
      */
@@ -62,11 +46,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeLimitInSocket }
      * 
      */
     public TypeLimitInSocket createTypeLimitInSocket() {
         return new TypeLimitInSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeLimitBase }
+     * 
+     */
+    public TypeLimitBase createTypeLimitBase() {
+        return new TypeLimitBase();
     }
 
 }

@@ -30,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInSocket }
+     * Create an instance of {@link TypeOutSocket }
      * 
      */
-    public TypeInSocket createTypeInSocket() {
-        return new TypeInSocket();
-    }
-
-    /**
-     * Create an instance of {@link LookupBase }
-     * 
-     */
-    public LookupBase createLookupBase() {
-        return new LookupBase();
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
     }
 
     /**
@@ -54,11 +46,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocket }
+     * Create an instance of {@link LookupBase }
      * 
      */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
+    public LookupBase createLookupBase() {
+        return new LookupBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeInSocket }
+     * 
+     */
+    public TypeInSocket createTypeInSocket() {
+        return new TypeInSocket();
     }
 
 }

@@ -348,20 +348,25 @@ public abstract class AbstractWidget {
 	 */
 	public void setPropertyHelp() {
 
-		if (null != propertyHelpWidget && null != this.propertyHelpWidget.getData(DATA_KEY)) {
-			String array[] = propertyHelpText.split(SEPERATOR);
+		if (ShowHidePropertyHelpHandler.getInstance() != null && propertyHelpText != null && propertyHelpWidget != null
+				&& ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()) {
 			
-			for(int index=0;index<=array.length-1;index++){
-				Control propertyHelpWidget = (Control)this.propertyHelpWidget.getData(String.valueOf(index));
-			   if(null!=propertyHelpWidget){
-				   propertyHelpWidget.setToolTipText(array[index]);
-				   propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));		
+			if(propertyHelpText.contains(Constants.HASH)){
+				String array[] = propertyHelpText.split(Constants.HASH);
+				
+				for(int index=0;index<array.length;index++){
+					String valueToSearch = Constants.INNER_PROPERTY_HELP_WIDGET + index;
+					if(propertyHelpWidget.getData(valueToSearch) != null){
+						Control innerPropertyHelpWidget = (Control)propertyHelpWidget.getData(valueToSearch);
+						innerPropertyHelpWidget.setToolTipText(array[index]);
+						innerPropertyHelpWidget.setCursor(new Cursor(innerPropertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
+					}
 				}
+			}else{
+				propertyHelpWidget.setToolTipText(propertyHelpText);
+				propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
 			}
-		}else if (ShowHidePropertyHelpHandler.getInstance() != null && propertyHelpText != null && propertyHelpWidget != null
-				&& ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()){
-			propertyHelpWidget.setToolTipText(propertyHelpText);
-			propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));
+			
 		}
 	}
 	

@@ -30,6 +30,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeGenerateRecordField }
+     * 
+     */
+    public TypeGenerateRecordField createTypeGenerateRecordField() {
+        return new TypeGenerateRecordField();
+    }
+
+    /**
      * Create an instance of {@link TypeGenerateRecordOutSocket }
      * 
      */
@@ -43,14 +51,6 @@ public class ObjectFactory {
      */
     public TypeGenerateRecordBase createTypeGenerateRecordBase() {
         return new TypeGenerateRecordBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeGenerateRecordField }
-     * 
-     */
-    public TypeGenerateRecordField createTypeGenerateRecordField() {
-        return new TypeGenerateRecordField();
     }
 
     /**

@@ -1,10 +1,13 @@
 
 package hydrograph.engine.jaxb.inputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ifparquet.TypeInputFileDelimitedBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -45,7 +48,7 @@ public class ParquetFile
 {
 
     @XmlElement(required = true)
-    protected Path path;
+    protected ParquetFile.Path path;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -53,10 +56,10 @@ public class ParquetFile
      * 
      * @return
      *     possible object is
-     *     {@link Path }
+     *     {@link ParquetFile.Path }
      *     
      */
-    public Path getPath() {
+    public ParquetFile.Path getPath() {
         return path;
     }
 
@@ -65,10 +68,10 @@ public class ParquetFile
      * 
      * @param value
      *     allowed object is
-     *     {@link Path }
+     *     {@link ParquetFile.Path }
      *     
      */
-    public void setPath(Path value) {
+    public void setPath(ParquetFile.Path value) {
         this.path = value;
     }
 

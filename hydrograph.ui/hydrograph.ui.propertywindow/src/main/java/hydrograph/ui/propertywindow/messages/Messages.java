@@ -234,6 +234,7 @@ public class Messages extends NLS {
 	public static String LABEL_EXTERNAL_TABLE_PATH;
 	public static String LABEL_INPUT_COUNT;
 	public static String LABEL_OUTPUT_COUNT;
+	public static String LABEL_OUTPUT_PARTITIONS;
 	public static String LABEL_CHARACTER_SET;
 	public static String LABEL_JDBC_DRIVER;
 	public static String LABEL_USER_NAME;

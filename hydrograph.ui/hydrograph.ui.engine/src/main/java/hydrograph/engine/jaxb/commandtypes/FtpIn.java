@@ -1,9 +1,12 @@
 
 package hydrograph.engine.jaxb.commandtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -42,17 +45,17 @@ public class FtpIn
 {
 
     @XmlElement(required = true)
-    protected Host host;
+    protected FtpIn.Host host;
 
     /**
      * Gets the value of the host property.
      * 
      * @return
      *     possible object is
-     *     {@link Host }
+     *     {@link FtpIn.Host }
      *     
      */
-    public Host getHost() {
+    public FtpIn.Host getHost() {
         return host;
     }
 
@@ -61,10 +64,10 @@ public class FtpIn
      * 
      * @param value
      *     allowed object is
-     *     {@link Host }
+     *     {@link FtpIn.Host }
      *     
      */
-    public void setHost(Host value) {
+    public void setHost(FtpIn.Host value) {
         this.host = value;
     }
 

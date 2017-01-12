@@ -1,12 +1,15 @@
 
 package hydrograph.engine.jaxb.inputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.StandardCharsets;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.itffw.TypeFixedWidthBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -61,10 +64,10 @@ public class TextFileFixedWidth
 {
 
     @XmlElement(required = true)
-    protected Path path;
+    protected TextFileFixedWidth.Path path;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
-    protected Charset charset;
+    protected TextFileFixedWidth.Charset charset;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -72,10 +75,10 @@ public class TextFileFixedWidth
      * 
      * @return
      *     possible object is
-     *     {@link Path }
+     *     {@link TextFileFixedWidth.Path }
      *     
      */
-    public Path getPath() {
+    public TextFileFixedWidth.Path getPath() {
         return path;
     }
 
@@ -84,10 +87,10 @@ public class TextFileFixedWidth
      * 
      * @param value
      *     allowed object is
-     *     {@link Path }
+     *     {@link TextFileFixedWidth.Path }
      *     
      */
-    public void setPath(Path value) {
+    public void setPath(TextFileFixedWidth.Path value) {
         this.path = value;
     }
 
@@ -144,10 +147,10 @@ public class TextFileFixedWidth
      * 
      * @return
      *     possible object is
-     *     {@link Charset }
+     *     {@link TextFileFixedWidth.Charset }
      *     
      */
-    public Charset getCharset() {
+    public TextFileFixedWidth.Charset getCharset() {
         return charset;
     }
 
@@ -156,10 +159,10 @@ public class TextFileFixedWidth
      * 
      * @param value
      *     allowed object is
-     *     {@link Charset }
+     *     {@link TextFileFixedWidth.Charset }
      *     
      */
-    public void setCharset(Charset value) {
+    public void setCharset(TextFileFixedWidth.Charset value) {
         this.charset = value;
     }
 

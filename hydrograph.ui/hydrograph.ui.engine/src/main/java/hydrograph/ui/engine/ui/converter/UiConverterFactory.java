@@ -33,6 +33,7 @@ import hydrograph.engine.jaxb.operationstypes.GenerateSequence;
 import hydrograph.engine.jaxb.operationstypes.Join;
 import hydrograph.engine.jaxb.operationstypes.Lookup;
 import hydrograph.engine.jaxb.operationstypes.Normalize;
+import hydrograph.engine.jaxb.operationstypes.PartitionByExpression;
 import hydrograph.engine.jaxb.operationstypes.Transform;
 import hydrograph.engine.jaxb.outputtypes.Discard;
 import hydrograph.engine.jaxb.straightpulltypes.Clone;
@@ -85,6 +86,7 @@ import hydrograph.ui.engine.ui.converter.impl.UniqueSequenceUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.UnknownUiConverter;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.engine.ui.converter.impl.PartitionByExpressionUiConverter;
 
 
 /**
@@ -246,6 +248,9 @@ public class UiConverterFactory {
 		}
 		if((hydrograph.engine.jaxb.commontypes.TypeUnknownComponent.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new UnknownUiConverter(typeBaseComponent, container);
+		}
+		if((PartitionByExpression.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new PartitionByExpressionUiConverter(typeBaseComponent,container);
 		}
 		
 
