@@ -22,20 +22,16 @@
     <inputs id="input1" batch="0" xsi:type="it:textFileDelimited">
         <outSocket id="out0">
             <schema name="outSchema">
-                <field name="aa" type="java.lang.Short" />
-                <field name="bb" type="java.lang.Boolean" />
-                <field name="cc" type="java.lang.Long" />
-                <field name="dd" type="java.lang.Float" />
-                <field name="ee" type="java.lang.Integer" />
-                <field name="gg" type="java.lang.String" />
-                <field name="ff" type="java.lang.Double" />
-                <field name="hh" type="java.util.Date" format="yyyy-MM-dd"/>
-                <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="jj" type="java.math.BigDecimal"  scale="2"
-                       precision="10" scaleType="explicit" />
+                <field name="DefaultField0" type="java.lang.String"/>
+                <field name="DefaultField1" type="java.lang.Integer"/>
+                <field name="DefaultField2" type="java.lang.Double"/>
+                <field name="DefaultField3" type="java.lang.Float"/>
+                <field name="DefaultField4"  scale="2" scaleType="explicit" type="java.math.BigDecimal"/>
+                <field name="DefaultField5" type="java.util.Date" format="MM/dd/yyyy"  />
+                <field name="DefaultField7" type="java.lang.Long"/>
             </schema>
         </outSocket>
-        <path uri="hydrograph.engine.spark\testData\inputFiles\all.txt" />
+        <path uri="hydrograph.engine.spark\testData\inputFiles\all2.txt" />
         <delimiter value="," />
         <hasHeader value="false" />
     </inputs>
@@ -43,17 +39,13 @@
     <outputs id="outputTeradata" xsi:type="ot:teradata">
         <inSocket fromComponentId="input1" fromSocketId="out0" id="in0">
             <schema name="schema1">
-                <field name="aa" type="java.lang.Short" />
-                <field name="bb" type="java.lang.Boolean" />
-                <field name="cc" type="java.lang.Long" />
-                <field name="dd" type="java.lang.Float" />
-                <field name="ee" type="java.lang.Integer" />
-                <field name="gg" type="java.lang.String" />
-                <field name="ff" type="java.lang.Double" />
-                <field name="hh" type="java.util.Date" format="yyyy-MM-dd"/>
-                <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
-                <field name="jj" type="java.math.BigDecimal"  scale="2"
-                      scaleType="explicit" />
+                <field name="DefaultField0" type="java.lang.String"/>
+                <field name="DefaultField1" type="java.lang.Integer"/>
+                <field name="DefaultField2" type="java.lang.Double"/>
+                <field name="DefaultField3" type="java.lang.Float"/>
+                <field name="DefaultField4"  scale="2" scaleType="explicit" type="java.math.BigDecimal"/>
+                <field format="MM/dd/yyyy" name="DefaultField5" type="java.util.Date"/>
+                <field name="DefaultField7" type="java.lang.Long"/>
             </schema>
         </inSocket>
 
@@ -61,22 +53,19 @@
         <hostName value="10.130.250.235" />
         <port value="1025" />
         <jdbcDriver value="TeraJDBC4" />
-        <tableName value="hydrograph_db_output_to_teradata_corrected_trial_28_with__pk_263" />
+        <tableName value="emp1172" />
         <username value="hydrograph" />
         <password value="teradata" />
-        <loadUtilityType value="DEFAULT"/>
-        <loadType>
+        <loadUtilityType value="FASTLOAD"/>
 
-            <newTable>
-               <!-- <primaryKeys>
-                    <field name="aa"/>
-                    <field name="dd"/>
-                </primaryKeys>-->
-            </newTable>
+
+            <loadType>
+               <Insert></Insert>
+            </loadType>
 
             <!--<Insert/>-->
             <!-- <truncateLoad/>-->
 
-        </loadType>
+
     </outputs>
 </p:graph>
