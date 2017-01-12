@@ -128,6 +128,30 @@ import org.eclipse.core.resources.IFile;
 		}
 
 		/**
+		 * Returns parameter name of property tag
+		 * 
+		 * @param propertyNameAttribute
+		 * @return
+		 */
+		protected String getValueForPropertyTag(String propertyNameAttribute) {
+			LOGGER.debug("Getting Parameter for - {}", propertyNameAttribute);
+			List<ParameterData> parameterList = currentRepository.getParammeterFactory().get(componentName);
+			try {
+				if (parameterList != null) {
+					for (ParameterData param : parameterList) {
+						String[] arr = StringUtils.split(param.getParameterName(), "=");
+						if (StringUtils.equals(propertyNameAttribute, arr[0])) {
+							return arr[1];
+						}
+					}
+				}
+			} catch (Exception e) {
+				LOGGER.warn("Unable to generate ui property for property tag :" + propertyNameAttribute);
+			}
+			return "";
+		}
+		
+		/**
 		 * Generate runtime properties for component.
 		 * 
 		 * @return Map<String,String>

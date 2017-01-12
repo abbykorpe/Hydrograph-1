@@ -27,6 +27,7 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -135,6 +137,9 @@ public class ConverterUiHelper {
 				fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType()
 						.value()));
 				fixedWidthGrid.setScaleTypeValue(typeBaseField.getScaleType().value());
+			}else if(StringUtils.equals(fixedWidthGrid.getDataTypeValue(),BigDecimal.class.getName() )){
+				fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Constants.EXPLICIT_SCALE_TYPE_VALUE));
+				fixedWidthGrid.setScaleTypeValue(Constants.EXPLICIT_SCALE_TYPE_VALUE);
 			}
 		}
 	}
