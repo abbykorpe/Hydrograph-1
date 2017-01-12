@@ -120,9 +120,13 @@ public enum JavaToSQLTypeMapping {
         Map<String, String> map = selectMapping(databaseType).mapping();
         String[] arr = new String[fieldsDataType.length];
         for (int i = 0; i < fieldsDataType.length; i++) {
-            if (fieldsDataType[i].equals("java.math.BigDecimal"))
-                arr[i] = map.get(fieldsDataType[i]) + "(" + fieldsPrecision[i] + "," + fieldsScale[i] + ")";
-            else if (fieldsDataType[i].equals("java.util.Date") && fieldFormat[i].contains("HH:mm:ss"))
+            if (fieldsDataType[i].equals("java.math.BigDecimal")) {
+                if (fieldsPrecision[i] == -999) {
+                    fieldsPrecision[i] = 38;
+                    arr[i] = map.get(fieldsDataType[i]) + "(" + fieldsPrecision[i] + "," + fieldsScale[i] + ")";
+                } else
+                    arr[i] = map.get(fieldsDataType[i]) + "(" + fieldsPrecision[i] + "," + fieldsScale[i] + ")";
+            } else if (fieldsDataType[i].equals("java.util.Date") && fieldFormat[i].contains("HH:mm:ss"))
                 arr[i] = map.get("java.sql.Timestamp");
             else
                 arr[i] = map.get(fieldsDataType[i]);
