@@ -66,20 +66,14 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
 
       partitionByExpressionEntity.getOutSocketList.asScala.foreach { outSocket =>
 
-        val partitionByExpressionClassList =  initializeOperationList[PartitionByExpressionForExpression](partitionByExpressionEntity.getOperationsList,
-          inputSchema, outputSchema)
-        partitionByExpressionClassList.foreach {
-          sparkOperation =>
-            sparkOperation.baseClassInstance match {
-              //For Expression Editor call extra method setValidationAPI
-              case t: PartitionByExpressionForExpression => t.setValidationAPI(sparkOperation.validatioinAPI)
-              case t: CustomPartitionExpression => t.prepare(partitionByExpressionEntity.getOperation.getOperationProperties)
-            }
-        }
-        val partitionByExpressionClass= partitionByExpressionClassList.head
-
         val df= componentsParams.getDataFrame.mapPartitions( itr =>{
-          partitionByExpressionClass.baseClassInstance.prepare(partitionByExpressionEntity.getOperation.getOperationProperties)
+          val partitionByExpressionClass =  initializeOperationList[PartitionByExpressionForExpression](partitionByExpressionEntity.getOperationsList,
+            inputSchema, outputSchema).head
+          partitionByExpressionClass.baseClassInstance match {
+            //For Expression Editor call extra method setValidationAPI
+            case t: PartitionByExpressionForExpression => t.setValidationAPI(partitionByExpressionClass.validatioinAPI)
+            case t: CustomPartitionExpression => t.prepare(partitionByExpressionEntity.getOperation.getOperationProperties)
+          }
           val rs= itr.filter( row =>{
             partitionByExpressionClass.baseClassInstance.getPartition(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow),
               partitionByExpressionEntity.getNumPartitions.toInt).equals(outSocket.getSocketId)
