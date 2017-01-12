@@ -27,7 +27,9 @@ import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.cascading.utilities.TupleHelper;
 import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.expression.userfunctions.CumulateForExpression;
+import hydrograph.engine.expression.utils.ExpressionWrapper;
 import hydrograph.engine.transformation.userfunctions.base.CumulateTransformBase;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,17 +108,9 @@ public class CumulateCustomHandler extends
 						+ transformInstance.getClass().getName());
 				
 				if (transformInstance instanceof CumulateForExpression) {
+					ExpressionWrapper expressionWrapper=new ExpressionWrapper(context.getSingleExpressionInstances(), "");
 					((CumulateForExpression) transformInstance)
-							.setValidationAPI(context
-									.getExpressionInstancesList()
-									.toArray(
-											new ValidationAPI[context
-													.getExpressionInstancesList()
-													.size()]));
-					((CumulateForExpression) transformInstance)
-							.setInitialValueExpression(initialValues);
-					((CumulateForExpression) transformInstance)
-							.setCounter(counter);
+							.setValidationAPI(expressionWrapper);
 					((CumulateForExpression) transformInstance).callPrepare();
 				}
 				

@@ -39,7 +39,8 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
       (_.name).asJava).asScala.toArray[String]
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
-  val keyFields = cumulateEntity.getKeyFields.map(_.getName)
+  val keyFields = if (cumulateEntity.getKeyFields == null) Array[String]() else  cumulateEntity.getKeyFields.map(_
+    .getName)
   val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
 
 
@@ -92,7 +93,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
 
       itr.map {
         row => {
-          val currKeysArray: Array[Any] = new Array[Any](cumulateEntity.getKeyFields.size)
+          val currKeysArray: Array[Any] = new Array[Any](primaryKeys.size)
           copyFields(row, currKeysArray, keyFieldsIndexes)
           val isPrevKeyDifferent: Boolean = if (prevKeysArray == null)
             true

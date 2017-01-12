@@ -12,6 +12,26 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
+import hydrograph.engine.cascading.assembly.context.CascadingReusableRow;
+import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
+import hydrograph.engine.cascading.utilities.ReusableRowHelper;
+import hydrograph.engine.cascading.utilities.TupleHelper;
+import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.userfunctions.NormalizeForExpression;
+import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBase;
+import hydrograph.engine.transformation.userfunctions.base.OutputDispatcher;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Properties;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cascading.flow.FlowProcess;
 import cascading.management.annotation.Property;
 import cascading.management.annotation.PropertyDescription;
@@ -22,17 +42,6 @@ import cascading.operation.FunctionCall;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
 import cascading.tuple.TupleEntry;
-import hydrograph.engine.cascading.assembly.context.CascadingReusableRow;
-import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
-import hydrograph.engine.cascading.utilities.ReusableRowHelper;
-import hydrograph.engine.cascading.utilities.TupleHelper;
-import hydrograph.engine.expression.api.ValidationAPI;
-import hydrograph.engine.expression.userfunctions.NormalizeForExpression;
-import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBase;
-import hydrograph.engine.transformation.userfunctions.base.OutputDispatcher;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class NormalizeCustomHandler extends
 		BaseOperation<CustomHandlerContext<NormalizeTransformBase>> implements

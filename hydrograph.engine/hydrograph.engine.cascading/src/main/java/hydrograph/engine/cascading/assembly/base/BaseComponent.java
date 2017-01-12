@@ -13,15 +13,24 @@
 package hydrograph.engine.cascading.assembly.base;
 
 
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.constants.ComponentLinkType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cascading.pipe.Pipe;
 import cascading.pipe.SubAssembly;
 import cascading.property.ConfigDef;
 import cascading.tuple.Fields;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
-import hydrograph.engine.core.constants.ComponentLinkType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author gurdits
