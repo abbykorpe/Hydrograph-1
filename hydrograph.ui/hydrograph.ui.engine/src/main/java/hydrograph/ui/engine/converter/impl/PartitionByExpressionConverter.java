@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
+import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.operationstypes.PartitionByExpression;
 import hydrograph.engine.jaxb.operationstypes.PartitionByExpression.NoOfPartitions;
@@ -55,6 +56,7 @@ public class PartitionByExpressionConverter extends TransformConverter {
 	public void prepareForXML() {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PARAM_NAME));
 		super.prepareForXML();
+		
 		PartitionByExpression partByExp = (PartitionByExpression) baseComponent;
 
 		NoOfPartitions noOfPartitions = new NoOfPartitions();
@@ -64,6 +66,7 @@ public class PartitionByExpressionConverter extends TransformConverter {
 			noOfPartitions.setValue(partitionValueInt);
 			partByExp.setNoOfPartitions(noOfPartitions);
 		}
+		partByExp.getOperationOrExpression().addAll(getOperations());
 	}
 
 	@Override
