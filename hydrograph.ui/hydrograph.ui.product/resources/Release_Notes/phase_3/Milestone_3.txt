@@ -46,5 +46,6 @@ Issues/Defects fixed:
 32.#522 [Shashank Karnik]- Error is not getting displayed on tool tip when key field is missing.
 33.#609 [Shashank Karnik]-  Parameter Grid: Some options are getting hide on a mac.  
 34 #534 [Prateem Tadas] -  Incorrect confirmation popup is getting displayed on tool closer.
+35.#615 [Vibhor Tyagi] - Issues with MySQL component
  
 

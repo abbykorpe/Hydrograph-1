@@ -163,13 +163,16 @@ public class TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents extends T
 		((Button) isParameterCheckbox.getSWTWidgetControl()).addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
+				String parameterText;
 				((Button)event.getSource()).setFocus();
-				String parameterText = Constants.PARAMETER_PREFIX + textBox.getText() + Constants.PARAMETER_SUFFIX;
+				if(!textBox.getText().contains(Constants.PARAMETER_PREFIX)){
+					parameterText = Constants.PARAMETER_PREFIX + textBox.getText() + Constants.PARAMETER_SUFFIX;
+				}else{
+					parameterText = textBox.getText();
+				}
 				if (StringUtils.isNotBlank(textBox.getText()) && ((Button) event.getSource()).getSelection()) {
 					if (!isFieldNameExists(parameterText)) {
-						if(!StringUtils.contains(textBox.getText(), Constants.PARAMETER_PREFIX)){
-							textBox.setText(parameterText);
-						}
+						textBox.setText(parameterText);
 						propDialogButtonBar.enableApplyButton(true);
 					} else {
 						((Button) event.getSource()).setSelection(false);
@@ -191,7 +194,7 @@ public class TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents extends T
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		if (isParameter(this.propertyValue)) {
+		if (this.propertyValue.contains(Constants.PARAMETER_PREFIX)) {
 			((Button) isParameterCheckbox.getSWTWidgetControl()).setSelection(true);
 		}
 
