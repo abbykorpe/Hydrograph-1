@@ -96,6 +96,14 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
   private def getDataType(dataType: DataType): Option[DataType] = {
     val answer = dataType.typeName.toUpperCase match {
       case "DOUBLE" => FloatType
+
+       /** In teradata if we create a table with a field type as Double, it creates a schema and replaces the
+        * Double datatype with Float datatype which is Teradata specific. Contrary to that if we attempt to read the
+        * data from a Teradata table, we have created by using the output schema as Double, the execution gets stopped
+        * as the data gets exported from Teradata as Float. In order to get Double type data while reading from a Teradata
+        * datanase, we mapped FLoatType to java.lang.
+        * datanase, we mapped FLoatType to java.lang.Double*/
+
       case "SHORT" => IntegerType
       case "BOOLEAN" => IntegerType
 
