@@ -81,6 +81,8 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
+      println("metaData : " + df.schema)
+      println("user : " + schemaField)
       SchemaUtils().compareSchema(getMappedSchema(schemaField),df.schema)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
@@ -95,8 +97,10 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
   private def getDataType(dataType: DataType): Option[DataType] = {
     val answer = dataType.typeName.toUpperCase match {
-      case "FLOAT" => DoubleType
+      case "DOUBLE" => FloatType
       case "SHORT" => IntegerType
+      case "BOOLEAN" => IntegerType
+
       case _ => null
     }
     if (answer != null) Option(answer) else None

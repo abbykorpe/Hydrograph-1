@@ -53,7 +53,7 @@
                 <field name="hh" type="java.util.Date" format="yyyy-MM-dd"/>
                 <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" />
                 <field name="jj" type="java.math.BigDecimal"  scale="2"
-                       precision="10" scaleType="explicit" />
+                      scaleType="explicit" />
             </schema>
         </inSocket>
 
