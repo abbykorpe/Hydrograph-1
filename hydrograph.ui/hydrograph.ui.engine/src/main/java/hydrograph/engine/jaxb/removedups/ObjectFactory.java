@@ -30,19 +30,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeRemovedupsBase }
+     * 
+     */
+    public TypeRemovedupsBase createTypeRemovedupsBase() {
+        return new TypeRemovedupsBase();
+    }
+
+    /**
      * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
      * 
      */
     public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
         return new TypeSecondayKeyFieldsAttributes();
-    }
-
-    /**
-     * Create an instance of {@link TypePrimaryKeyFields }
-     * 
-     */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
     }
 
     /**
@@ -70,11 +70,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeRemovedupsBase }
+     * Create an instance of {@link TypePrimaryKeyFields }
      * 
      */
-    public TypeRemovedupsBase createTypeRemovedupsBase() {
-        return new TypeRemovedupsBase();
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
     }
 
 }

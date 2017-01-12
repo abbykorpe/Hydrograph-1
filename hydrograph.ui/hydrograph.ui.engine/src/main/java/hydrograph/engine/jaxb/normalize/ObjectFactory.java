@@ -30,35 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperation }
+     * Create an instance of {@link TypeOperationInputField }
      * 
      */
-    public TypeOperation createTypeOperation() {
-        return new TypeOperation();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformExpression }
-     * 
-     */
-    public TypeTransformExpression createTypeTransformExpression() {
-        return new TypeTransformExpression();
-    }
-
-    /**
-     * Create an instance of {@link TypeOperationInputFields }
-     * 
-     */
-    public TypeOperationInputFields createTypeOperationInputFields() {
-        return new TypeOperationInputFields();
+    public TypeOperationInputField createTypeOperationInputField() {
+        return new TypeOperationInputField();
     }
 
     /**
@@ -70,11 +46,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOperationInputField }
+     * Create an instance of {@link TypeTransformExpression }
      * 
      */
-    public TypeOperationInputField createTypeOperationInputField() {
-        return new TypeOperationInputField();
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link TypeOperation }
+     * 
+     */
+    public TypeOperation createTypeOperation() {
+        return new TypeOperation();
+    }
+
+    /**
+     * Create an instance of {@link TypeOperationInputFields }
+     * 
+     */
+    public TypeOperationInputFields createTypeOperationInputFields() {
+        return new TypeOperationInputFields();
     }
 
 }

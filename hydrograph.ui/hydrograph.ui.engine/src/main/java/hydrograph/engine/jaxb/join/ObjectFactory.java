@@ -30,22 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link JoinBase }
-     * 
-     */
-    public JoinBase createJoinBase() {
-        return new JoinBase();
-    }
-
-    /**
      * Create an instance of {@link TypeInSocket }
      * 
      */
@@ -59,6 +43,22 @@ public class ObjectFactory {
      */
     public TypeKeyFields createTypeKeyFields() {
         return new TypeKeyFields();
+    }
+
+    /**
+     * Create an instance of {@link JoinBase }
+     * 
+     */
+    public JoinBase createJoinBase() {
+        return new JoinBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
     }
 
 }

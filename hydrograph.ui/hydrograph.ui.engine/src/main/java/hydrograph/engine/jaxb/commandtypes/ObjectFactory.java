@@ -30,11 +30,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link FtpIn.Host }
+     * 
+     */
+    public FtpIn.Host createFtpInHost() {
+        return new FtpIn.Host();
+    }
+
+    /**
      * Create an instance of {@link Subjob }
      * 
      */
     public Subjob createSubjob() {
         return new Subjob();
+    }
+
+    /**
+     * Create an instance of {@link Hplsql }
+     * 
+     */
+    public Hplsql createHplsql() {
+        return new Hplsql();
+    }
+
+    /**
+     * Create an instance of {@link Hplsql.Execute.Query }
+     * 
+     */
+    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
+        return new Hplsql.Execute.Query();
     }
 
     /**
@@ -46,43 +70,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Hplsql.Execute.Uri }
+     * Create an instance of {@link RunProgram }
      * 
      */
-    public Hplsql.Execute.Uri createHplsqlExecuteUri() {
-        return new Hplsql.Execute.Uri();
-    }
-
-    /**
-     * Create an instance of {@link FtpIn.Host }
-     * 
-     */
-    public FtpIn.Host createFtpInHost() {
-        return new FtpIn.Host();
-    }
-
-    /**
-     * Create an instance of {@link Hplsql.Execute }
-     * 
-     */
-    public Hplsql.Execute createHplsqlExecute() {
-        return new Hplsql.Execute();
-    }
-
-    /**
-     * Create an instance of {@link RunProgram.Command }
-     * 
-     */
-    public RunProgram.Command createRunProgramCommand() {
-        return new RunProgram.Command();
-    }
-
-    /**
-     * Create an instance of {@link Hplsql.Execute.Query }
-     * 
-     */
-    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
-        return new Hplsql.Execute.Query();
+    public RunProgram createRunProgram() {
+        return new RunProgram();
     }
 
     /**
@@ -102,19 +94,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Hplsql }
+     * Create an instance of {@link Hplsql.Execute }
      * 
      */
-    public Hplsql createHplsql() {
-        return new Hplsql();
+    public Hplsql.Execute createHplsqlExecute() {
+        return new Hplsql.Execute();
     }
 
     /**
-     * Create an instance of {@link RunProgram }
+     * Create an instance of {@link Hplsql.Execute.Uri }
      * 
      */
-    public RunProgram createRunProgram() {
-        return new RunProgram();
+    public Hplsql.Execute.Uri createHplsqlExecuteUri() {
+        return new Hplsql.Execute.Uri();
+    }
+
+    /**
+     * Create an instance of {@link RunProgram.Command }
+     * 
+     */
+    public RunProgram.Command createRunProgramCommand() {
+        return new RunProgram.Command();
     }
 
 }

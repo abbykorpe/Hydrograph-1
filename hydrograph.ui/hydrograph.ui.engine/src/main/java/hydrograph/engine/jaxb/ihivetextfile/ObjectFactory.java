@@ -30,46 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputHiveTextDelimitedOutSocket }
-     * 
-     */
-    public TypeInputHiveTextDelimitedOutSocket createTypeInputHiveTextDelimitedOutSocket() {
-        return new TypeInputHiveTextDelimitedOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link HivePathType }
-     * 
-     */
-    public HivePathType createHivePathType() {
-        return new HivePathType();
-    }
-
-    /**
-     * Create an instance of {@link FieldBasicType }
-     * 
-     */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
-    }
-
-    /**
-     * Create an instance of {@link HiveType }
-     * 
-     */
-    public HiveType createHiveType() {
-        return new HiveType();
-    }
-
-    /**
-     * Create an instance of {@link HivePartitionFieldsType }
-     * 
-     */
-    public HivePartitionFieldsType createHivePartitionFieldsType() {
-        return new HivePartitionFieldsType();
-    }
-
-    /**
      * Create an instance of {@link PartitionFieldBasicType }
      * 
      */
@@ -86,11 +46,51 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeInputHiveTextDelimitedOutSocket }
+     * 
+     */
+    public TypeInputHiveTextDelimitedOutSocket createTypeInputHiveTextDelimitedOutSocket() {
+        return new TypeInputHiveTextDelimitedOutSocket();
+    }
+
+    /**
+     * Create an instance of {@link HiveType }
+     * 
+     */
+    public HiveType createHiveType() {
+        return new HiveType();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link HivePartitionFieldsType }
+     * 
+     */
+    public HivePartitionFieldsType createHivePartitionFieldsType() {
+        return new HivePartitionFieldsType();
+    }
+
+    /**
      * Create an instance of {@link HivePartitionFilterType }
      * 
      */
     public HivePartitionFilterType createHivePartitionFilterType() {
         return new HivePartitionFilterType();
+    }
+
+    /**
+     * Create an instance of {@link HivePathType }
+     * 
+     */
+    public HivePathType createHivePathType() {
+        return new HivePathType();
     }
 
     /**

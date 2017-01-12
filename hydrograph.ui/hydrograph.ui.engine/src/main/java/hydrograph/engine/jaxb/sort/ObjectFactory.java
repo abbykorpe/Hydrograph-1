@@ -38,6 +38,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutSocket }
+     * 
+     */
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
@@ -54,19 +62,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutSocket }
+     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
      * 
      */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
-     * 
-     */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
+    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
+        return new TypeSecondayKeyFieldsAttributes();
     }
 
     /**
@@ -78,11 +78,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
+     * Create an instance of {@link TypeSecondaryKeyFields }
      * 
      */
-    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
-        return new TypeSecondayKeyFieldsAttributes();
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
     }
 
 }
