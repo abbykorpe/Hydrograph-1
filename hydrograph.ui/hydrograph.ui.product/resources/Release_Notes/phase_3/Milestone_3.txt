@@ -50,4 +50,4 @@ Issues/Defects fixed:
 35.#615 [Vibhor Tyagi] - Issues with MySQL component
 36.#624 [Pooja Yadav] -  Partition By Expression : Schema is editable.
 37.#625 [Pooja Yadav] - Partition By Expression: Data type is getting Vanished from the Expression window.
-
+38 #599 [Akhilesh Joshi] -  Aggregate Component : Key field should be optional.
