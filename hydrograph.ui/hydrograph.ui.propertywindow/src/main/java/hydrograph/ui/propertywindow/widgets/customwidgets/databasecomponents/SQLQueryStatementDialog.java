@@ -12,11 +12,18 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ExtendedModifyEvent;
+import org.eclipse.swt.custom.ExtendedModifyListener;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -41,6 +48,9 @@ public class SQLQueryStatementDialog extends Dialog {
 	private String textValue;
 	private String styleTextOldValue;
 	private boolean isTextChanged = false;
+	private int MAX_STACK_SIZE;
+	private List<String> undoActionList;
+	private List<String> redoActionList;
 	
 	/**
 	 * Create the dialog.
@@ -50,6 +60,8 @@ public class SQLQueryStatementDialog extends Dialog {
 		super(parentShell);
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL | SWT.RESIZE);
 		this.textValue = textValue;
+		undoActionList = new LinkedList<>();
+		redoActionList = new LinkedList<>();
 	}
 
 	/**
@@ -71,11 +83,72 @@ public class SQLQueryStatementDialog extends Dialog {
 		styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		styledText.setFont(new Font(Display.getCurrent(),"Courier New",9,SWT.NORMAL));
 		styledText.setText(textValue);
+		
+		styledText.addExtendedModifyListener(new ExtendedModifyListener() {
+			@Override
+			public void modifyText(ExtendedModifyEvent event) {
+				MAX_STACK_SIZE = styledText.getText().length();
+				String currText = styledText.getText();
+		        String newText = currText.substring(event.start, event.start + event.length);
+		        if(newText != null && newText.length() > 0){
+			          if(undoActionList.size() == MAX_STACK_SIZE){
+			        	  undoActionList.remove(undoActionList.size() - 1);
+			          }
+			          undoActionList.add(0, newText);
+		        }
+			}
+		});
+		
+		styledText.addKeyListener(new KeyListener() {
+			@Override
+			public void keyReleased(KeyEvent event) {
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent event) {
+				 boolean isCtrl = (event.stateMask & SWT.CTRL) > 0; 
+                 boolean isAlt = (event.stateMask & SWT.ALT) > 0; 
+                 if(isCtrl && !isAlt) { 
+                     boolean isShift = (event.stateMask & SWT.SHIFT) > 0; 
+                     if(!isShift && event.keyCode == 'z') { 
+                         undo();
+                     } else if(!isShift && event.keyCode == 'y' || isShift && event.keyCode == 'z') { 
+                         redo(); 
+                     }  
+                 } 
+			}
+		});
+		
 		styleTextOldValue = styledText.getText();
 
 		return container;
 	}
 
+	private void undo() {
+	    if (undoActionList.size() > 0) {
+	      String lastEdit = (String) undoActionList.remove(0);
+	      int editLength = lastEdit.length();
+	      String currText = styledText.getText();
+	      int startReplaceIndex = currText.length() - editLength;
+	      styledText.replaceTextRange(startReplaceIndex, editLength, "");
+	      redoActionList.add(0, lastEdit);
+	    }
+	}
+	
+	
+	private void redo() {
+	    if (redoActionList.size() > 0) {
+	      String text = (String) redoActionList.remove(0);
+	      moveCursorToEnd();
+	      styledText.append(text);
+	      moveCursorToEnd();
+	    }
+	}
+	
+	private void moveCursorToEnd() {
+	    styledText.setCaretOffset(styledText.getText().length());
+	}
+	
 	private void compareTextValue(String newTextValue){
 		if(styleTextOldValue != newTextValue){
 			isTextChanged = true;
