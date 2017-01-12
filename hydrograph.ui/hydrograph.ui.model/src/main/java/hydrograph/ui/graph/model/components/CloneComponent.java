@@ -16,20 +16,17 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.StraightPullCategory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Replicate.
+ * Model class for Clone Component.
  * 
  * @author Bitwise
  */
 public class CloneComponent extends StraightPullCategory {
 
 	/**
-	 * Instantiates a new replicate.
+	 * 
 	 */
-	public CloneComponent() {
-		super();
-	}
+	private static final long serialVersionUID = 1921205701804948461L;
 
 	public String getConverter() {
 		return "hydrograph.ui.engine.converter.impl.CloneConverter";

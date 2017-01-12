@@ -16,22 +16,18 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.StraightPullCategory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Gather.
+ * Model class for Union All Component.
  * 
  * @author Bitwise
  */
 public class UnionallComponent extends StraightPullCategory {
-
 		
 	/**
-	 * Instantiates a new gather.
+	 * 
 	 */
-	public UnionallComponent() {
-		super();
-	}
-	
+	private static final long serialVersionUID = 4753947809637443814L;
+
 	public String getConverter()
 	{
 		return "hydrograph.ui.engine.converter.impl.UnionAllConverter";

@@ -16,20 +16,18 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.StraightPullCategory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Dedup.
+ * Model class for Remove Dups Component.
  * 
  * @author Bitwise
  */
 public class RemovedupsComponent extends StraightPullCategory{
 
 	/**
-	 * Instantiates a new dedup.
+	 * 
 	 */
-	public RemovedupsComponent(){
-		super();
-	}
+	private static final long serialVersionUID = -1807272944593595246L;
+	
 	@Override
 	public String getConverter()
 	{

@@ -360,6 +360,9 @@ public class Messages extends NLS {
 	public static String EXPRESSION_COMPOSITE;
 	public static String EXPRESSION_ID_PREFIX;
 	public static String FAILED_TO_IMPORT_SCHEMA_FILE;
+	public static String LOOP_XPATH_QUERY;
+	public static String XPATH;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

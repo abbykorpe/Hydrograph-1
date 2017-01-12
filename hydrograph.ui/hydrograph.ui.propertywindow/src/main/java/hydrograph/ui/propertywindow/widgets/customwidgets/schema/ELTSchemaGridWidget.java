@@ -166,6 +166,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
 	public static final String PRECISION = Messages.PRECISION;
+	public static final String XPATH = Messages.XPATH;
 	public static final String SCALE = Messages.SCALE;
 	public static final String SCALE_TYPE = Messages.SCALE_TYPE;
 	public static final String FIELD_DESCRIPTION = Messages.FIELD_DESCRIPTION;
@@ -1941,7 +1942,7 @@ if(deleteButton!=null)
 	 }
 
 	 private void addShortcutKeyListener (Control currentControl) {
-		 logger.info("currentControl is: " + currentControl);
+		 logger.trace("currentControl is: " + currentControl);
 		 currentControl.addKeyListener(new KeyListener() {						
 
 			 @Override

@@ -64,6 +64,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.metastore.ELTExtractMe
 import hydrograph.ui.propertywindow.widgets.customwidgets.operational.TransformWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.runtimeproperty.ELTRuntimePropertiesWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.schema.ELTGenericSchemaGridWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.XPathSchemaGridWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys.SecondaryColumnKeysWidget;
 
 
@@ -80,6 +81,7 @@ public class WidgetFactory {
 	
 	public enum Widgets{
 		SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
+		XPATH_SCHEMA_WIDGET(XPathSchemaGridWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
 		STRAIGHT_SCHEMA_WIDGET(ELTGenericSchemaGridWidget.class, WidgetHelper.INSTANCE.getStraightPullSchemaConfig()),
 		FIXED_WIDGET(ELTFixedWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
 		MIXED_SCHEME(ELTMixedSchemeWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),		
@@ -100,24 +102,26 @@ public class WidgetFactory {
 		CHARACTER_SET_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getCharacterSetWidgetConfig()),
 		HAS_HEADER_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getHasHeaderWidgetConfig()),
 		OVERWRITE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getOverWriteWidgetConfig()),
-		JDBC_DRIVER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
 
-		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
-		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
+		JDBC_DRIVER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
 		BATCH_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getBatchWidgetConfig()),
-		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
 		SID_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getSIDNameWidgetConfig()),
 		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
-		ORACLE_SCHEMA_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getOracleSchemaWidgetConfig()),
 		HOST_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getHostNameWidgetConfig()),
 		PORT_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPortWidgetConfig()),
 		TABLE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getTableNameWidgetConfig()),
-        	USER_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getUserNameWidgetConfig()),
+		USER_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getUserNameWidgetConfig()),
+		NO_OF_RECORDS_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getNoOfRecordsWidgetConfig()),
+		COUNT_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getCountWidgetConfig ()),
+		XPATH_QUERY_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getXPathQueryWidgetConfig()),
+
+		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
+		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
+		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
+		ORACLE_SCHEMA_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getOracleSchemaWidgetConfig()),
 		PASSWORD_WIDGET(TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents.class, WidgetHelper.INSTANCE.getPasswordWidgetConfig()),
 		CHUNK_SIZE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getChunkSizeWidgetConfig()),
 		
-		NO_OF_RECORDS_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getNoOfRecordsWidgetConfig()),
-		COUNT_WIDGET (TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getCountWidgetConfig ()),
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
 		PARTITION_KEYS_WIDGET(HiveOutputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),

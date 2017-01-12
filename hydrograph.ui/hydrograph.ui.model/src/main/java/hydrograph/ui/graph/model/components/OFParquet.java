@@ -17,20 +17,17 @@ package hydrograph.ui.graph.model.components;
 import hydrograph.ui.graph.model.categories.OutputCategory;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class OFParquet.
+ * Model class for OFParquet component.
  * 
- * @author Mustafa Dasorwala
+ * @author Bitwise
  */
 public class OFParquet extends OutputCategory {
 
 	/**
-	 * Instantiates a new OF delimited.
+	 * 
 	 */
-	public OFParquet() {
-		super();
-	}
+	private static final long serialVersionUID = -4198090355702252219L;
 
 	public String getConverter() {
 		return "hydrograph.ui.engine.converter.impl.OutputParquetConverter";

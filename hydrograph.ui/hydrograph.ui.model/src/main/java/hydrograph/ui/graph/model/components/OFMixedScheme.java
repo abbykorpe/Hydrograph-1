@@ -15,7 +15,17 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.OutputCategory;
 
+/**
+ * Model class for Output Mixed Scheme component
+ * @author Bitwise
+ *
+ */
 public class OFMixedScheme extends OutputCategory {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9032975675287787431L;
 
 	@Override
 	public String getConverter() {

@@ -493,4 +493,13 @@ public class WidgetHelper {
 		radioConfig.setPropertyName(Messages.LOAD_UTILITY_TYPE);
 		return radioConfig;
 	}
+	
+	public WidgetConfig getXPathQueryWidgetConfig() {
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LOOP_XPATH_QUERY);
+		textBoxConfig.getListeners().add(Listners.MODIFY);
+		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
+		textBoxConfig.setWidgetWidth(78);
+		return textBoxConfig;
+	}
 }

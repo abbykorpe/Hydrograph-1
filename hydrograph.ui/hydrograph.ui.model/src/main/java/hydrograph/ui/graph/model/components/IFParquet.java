@@ -17,23 +17,19 @@ package hydrograph.ui.graph.model.components;
 import hydrograph.ui.graph.model.categories.InputCategory;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class IFParquet.
+ * Model class for IFParquet Component
  * 
- * @author Mustafa Dasorwala
+ * @author Bitwise
  */
 public class IFParquet extends InputCategory {
-
-	/**
-	 * Instantiates a new IF delimited.
-	 */
-	public IFParquet() {
-	super();
-	}
 	
-	public String getConverter()
-	{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4624935681844904337L;
+
+	public String getConverter(){
 		return "hydrograph.ui.engine.converter.impl.InputParquetConverter";
 		
 	}

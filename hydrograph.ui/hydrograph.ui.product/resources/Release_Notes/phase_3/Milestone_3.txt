@@ -8,6 +8,7 @@ Features Added:
 5.<10-Jan-16> - [Rakesh Kanchalwar] - Restart button under File Menu option
 6.<06-Jan-17> - [Pooja Yadav] - Created Partition By Expression Component.
 7.<02-Jan-16> -[Shashank karnik,Akhilesh Joshi]-Expression editor support for Aggregate,cumulate and normalize
+8.<16-Jan-17> - [Rakesh Kanchalwar] - Input Xml component
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
