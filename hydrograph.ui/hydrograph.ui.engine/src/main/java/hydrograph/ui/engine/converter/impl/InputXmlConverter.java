@@ -3,17 +3,22 @@ package hydrograph.ui.engine.converter.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.ifxml.TypeInputXmlOutSocket;
+import hydrograph.engine.jaxb.ifxml.TypeXmlField;
 import hydrograph.engine.jaxb.inputtypes.XmlFile;
 import hydrograph.engine.jaxb.inputtypes.XmlFile.AbsoluteXPath;
 import hydrograph.engine.jaxb.inputtypes.XmlFile.RootTag;
 import hydrograph.engine.jaxb.inputtypes.XmlFile.RowTag;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.XPathGridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.InputConverter;
 import hydrograph.ui.graph.model.Component;
@@ -87,7 +92,12 @@ public class InputXmlConverter extends InputConverter {
 		List<TypeBaseField> typeBaseFields = new ArrayList<>();
 		if (gridList != null && gridList.size() != 0) {
 			for (GridRow object : gridList) {
-				typeBaseFields.add(converterHelper.getSchemaGridTargetData(object));
+				XPathGridRow xPathGridRow = (XPathGridRow) object;
+				TypeXmlField gridRow = (TypeXmlField)converterHelper.getSchemaGridTargetData(object);
+				if (StringUtils.isNotBlank(xPathGridRow.getXPath())) {
+					gridRow.getOtherAttributes().put(new QName(Constants.DELIMITER_QNAME), xPathGridRow.getXPath());
+				}
+				typeBaseFields.add(gridRow);
 			}
 		}
 		return typeBaseFields;
