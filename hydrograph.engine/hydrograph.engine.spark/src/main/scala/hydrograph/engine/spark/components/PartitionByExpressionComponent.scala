@@ -9,7 +9,7 @@ import hydrograph.engine.expression.userfunctions.PartitionByExpressionForExpres
 import hydrograph.engine.spark.components.base.OperationComponentBase
 import hydrograph.engine.spark.components.handler.OperationHelper
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{EncoderHelper, ReusableRowHelper, RowHelper, SparkReusableRow}
+import hydrograph.engine.spark.components.utils.EncoderHelper
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
@@ -49,23 +49,9 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
       + ", operationInputField : " + partitionByExpressionEntity.getOperationsList.get(0).getOperationInputFields.toList.mkString(",")
       + "] ")
 
-    val fieldNameSet = new util.LinkedHashSet[String]()
-    partitionByExpressionEntity.getOperation.getOperationInputFields.foreach(e => fieldNameSet.add(e))
-
     var map: Map[String, DataFrame] = Map()
-
-    LOG.trace("Component id '" + partitionByExpressionEntity.getComponentId
-      + "' scheme " + fieldNameSet.asScala.toList.mkString(","))
-
     try {
-      val fieldPosition = ReusableRowHelper(partitionByExpressionEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
-      val inputReusableRow = new SparkReusableRow(fieldNameSet)
-
-      LOG.trace("Operation input Field " + partitionByExpressionEntity.getOperationsList.get(0).getOperationInputFields.toList.mkString(",")
-        + " having field position [" + fieldPosition.mkString(",") + "]")
-
       partitionByExpressionEntity.getOutSocketList.asScala.foreach { outSocket =>
-
         val df= componentsParams.getDataFrame.mapPartitions( itr =>{
           val partitionByExpressionClass =  initializeOperationList[PartitionByExpressionForExpression](partitionByExpressionEntity.getOperationsList,
             inputSchema, outputSchema).head
@@ -75,7 +61,7 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
             case t: CustomPartitionExpression => t.prepare(partitionByExpressionEntity.getOperation.getOperationProperties)
           }
           val rs= itr.filter( row =>{
-            partitionByExpressionClass.baseClassInstance.getPartition(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow),
+            partitionByExpressionClass.baseClassInstance.getPartition(partitionByExpressionClass.inputRow.setRow(row),
               partitionByExpressionEntity.getNumPartitions.toInt).equals(outSocket.getSocketId)
           })
           rs
