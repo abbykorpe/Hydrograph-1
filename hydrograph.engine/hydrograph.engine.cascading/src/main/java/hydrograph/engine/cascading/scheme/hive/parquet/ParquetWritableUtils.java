@@ -13,12 +13,17 @@
 package hydrograph.engine.cascading.scheme.hive.parquet;
 
 import cascading.tuple.Tuple;
+
 import org.apache.hadoop.hive.common.type.HiveDecimal;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.io.*;
 import org.apache.hadoop.hive.serde2.objectinspector.*;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.*;
 import org.apache.hadoop.io.*;
+import org.apache.hadoop.io.ByteWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.ShortWritable;
+
 import parquet.io.api.Binary;
 
 import java.io.UnsupportedEncodingException;

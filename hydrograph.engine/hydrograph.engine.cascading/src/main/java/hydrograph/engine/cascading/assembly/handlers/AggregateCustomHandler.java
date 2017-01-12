@@ -27,8 +27,10 @@ import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.cascading.utilities.TupleHelper;
 import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.expression.userfunctions.AggregateForExpression;
+import hydrograph.engine.expression.utils.ExpressionWrapper;
 import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,17 +104,9 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 						+ transformInstance.getClass().getName());
 				
 				if (transformInstance instanceof AggregateForExpression) {
+					ExpressionWrapper expressionWrapper=new ExpressionWrapper(context.getSingleExpressionInstances(), "");
 					((AggregateForExpression) transformInstance)
-							.setValidationAPI(context
-									.getExpressionInstancesList()
-									.toArray(
-											new ValidationAPI[context
-													.getExpressionInstancesList()
-													.size()]));
-					((AggregateForExpression) transformInstance)
-							.setInitialValueExpression(initialValues);
-					((AggregateForExpression) transformInstance)
-							.setCounter(counter);
+							.setValidationAPI(expressionWrapper);
 					((AggregateForExpression) transformInstance).callPrepare();
 				}
 				
@@ -200,10 +194,10 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 						fieldManupulatingHandler.getInputPositions(counter),
 						call.getArguments().getTuple(),
 						context.getInputRow(counter));
-				if (transformInstance instanceof AggregateForExpression) {
-					((AggregateForExpression) transformInstance)
-							.setCounter(counter);
-				}
+//				if (transformInstance instanceof AggregateForExpression) {
+//					((AggregateForExpression) transformInstance)
+//							.setCounter(counter);
+//				}
 				try {
 					transformInstance.aggregate(reusableRow);
 				} catch (Exception e) {
