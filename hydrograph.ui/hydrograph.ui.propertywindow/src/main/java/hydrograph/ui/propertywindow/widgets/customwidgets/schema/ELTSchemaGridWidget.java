@@ -1436,7 +1436,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		 if(StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.STRAIGHTPULL)
 				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.FILTER_COMPONENT)
-				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.UNIQUE_SEQUENCE_COMPONENT))))
+				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.UNIQUE_SEQUENCE_COMPONENT))
+				 || (StringUtils.equalsIgnoreCase(getComponent().getComponentName(), Constants.PARTITION_BY_EXPRESSION)))
+			 )
 		 
 		 {	
 			 //table.setEnabled(false);
