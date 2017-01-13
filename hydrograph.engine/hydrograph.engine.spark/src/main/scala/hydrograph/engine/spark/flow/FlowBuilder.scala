@@ -22,8 +22,8 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
   val accList=new ListBuffer[LongAccumulator]
 
-  def buildFlow(): mutable.ListBuffer[SparkFlow] ={
-    val flow=new mutable.ListBuffer[SparkFlow]()
+  def buildFlow(): mutable.LinkedHashSet[SparkFlow] ={
+    val flow=new mutable.LinkedHashSet[SparkFlow]()
     for(batch<- runtimeContext.traversal.getFlowsNumber.asScala){
      flow ++= createAndConnect(batch)
     }
@@ -32,8 +32,8 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
   }
 
 
-  def createAndConnect(batch:String): mutable.ListBuffer[SparkFlow] = {
-    val flow=new mutable.ListBuffer[SparkFlow]()
+  def createAndConnect(batch:String): mutable.LinkedHashSet[SparkFlow] = {
+    val flow=new mutable.LinkedHashSet[SparkFlow]()
     val outLinkMap = new mutable.HashMap[String, Map[String,DataFrame]]()
 
 
