@@ -195,7 +195,7 @@ public class ConverterUiHelper {
 		if (!filePath.isAbsolute()) {
 			filePath = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath).getRawLocation();
 		}
-		if(filePath!=null){
+		if(filePath!=null && filePath.toFile().exists()){
 		GridRowLoader gridRowLoader=new GridRowLoader(schemaType, filePath.toFile());
 		return gridRowLoader.importGridRowsFromXML();
 		
