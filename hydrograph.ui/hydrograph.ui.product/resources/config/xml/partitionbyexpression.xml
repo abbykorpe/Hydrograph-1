@@ -65,7 +65,7 @@
 		</tns:property>
 
 		<tns:property dataType="string" name="OPERATION_CLASS"
-			renderer="OPERATIONAL_CLASS_WIDGET" type="USER" group="GENERAL"
+			renderer="PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET" type="USER" group="GENERAL"
 			subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED"
 			propertyHelpText="Specify java class for performing the partitioning.#Specify expression for performing the partitioning.">
@@ -100,7 +100,7 @@
 
 		<tns:operations>
 			<tns:interface class="hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression"
-				name="PARTITION_BY_EXPRESSION" />
+				name="PartitionByExpression" />
 		</tns:operations>
 	</tns:component>
 </tns:Config>

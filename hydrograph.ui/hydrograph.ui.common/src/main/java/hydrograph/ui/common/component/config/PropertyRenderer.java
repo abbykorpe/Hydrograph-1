@@ -99,6 +99,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="OUTPUT_RECORD_COUNT_WIDGET"/>
  *     &lt;enumeration value="SELECT_INTERFACE_WITH_EXPORT_WIDGET/>
  *     &lt;enumeration value="SELECT_INTERFACE_WITH_LOAD_WIDGET/>
+ *     &lt;enumeration value="PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET/>
  *     
  *   &lt;/restriction>
  * &lt;/simpleType>
@@ -175,7 +176,8 @@ public enum PropertyRenderer {
     OUTPUT_RECORD_COUNT_WIDGET,
     SELECT_INTERFACE_WITH_EXPORT_WIDGET,
     SELECT_INTERFACE_WITH_LOAD_WIDGET,
-	PARTITION_COMPONENT_OUTPUT_COUNT_WIDGET;
+	PARTITION_COMPONENT_OUTPUT_COUNT_WIDGET,
+	PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET;
 
     public String value() {
         return name();

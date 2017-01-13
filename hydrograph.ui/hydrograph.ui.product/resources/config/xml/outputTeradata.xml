@@ -17,7 +17,7 @@
 		name="OTeradata" nameInPalette="Teradata" defaultNamePrefix="OTeradata" 
 		description="Used to write data to Teradata tables"
 		helpFilePath="/hydrograph.ui.help/html/Components/Output_Teradata.html"
-		acronym="OTeradata">
+		acronym="OTdata">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="left" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
