@@ -50,12 +50,27 @@ public class SchemaField implements Cloneable,Serializable {
 	private String fieldDefaultValue;
 	private String fieldToRangeValue;
 	private String fieldFromRangeValue;
+	private String absoluteOrRelativeXPath;
 	private String colDef;
 	private static Logger LOG = LoggerFactory.getLogger(SchemaField.class);
 	
 	public SchemaField(String fieldName, String fieldDataType) {
 		this.fieldName = fieldName;
 		this.fieldDataType = fieldDataType;
+	}
+
+	/**
+	 * @param absoluteOrRelativeXPath
+	 */
+	public void setAbsoluteOrRelativeXPath(String absoluteOrRelativeXPath) {
+		this.absoluteOrRelativeXPath = absoluteOrRelativeXPath;
+	}
+
+	/**
+	 * @return the absoluteOrRelativeXPath
+	 */
+	public String getAbsoluteOrRelativeXPath() {
+		return absoluteOrRelativeXPath;
 	}
 
 	/**

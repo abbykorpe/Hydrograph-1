@@ -80,7 +80,7 @@ public class InputEntityUtils implements Serializable{
 	 * Extracts the field type for all the fields from the Schema of output
 	 * socket object of type {@link TypeBaseField}, passed as a parameter
 	 * 
-	 * @param TypeBaseField
+	 * @param list
 	 *            list of {@link TypeBaseField} objects which contain the fields
 	 *            type information
 	 * @return a list of {@link SchemaField} objects. Each object in the list
@@ -121,11 +121,37 @@ public class InputEntityUtils implements Serializable{
 
 			setTypeofLengthDelimeter(list, fields, i);
 
+			setAbsoluteOrRelativeXPath(list, fields, i);
+
 			fieldList.add(fields);
 		}
 
 		return fieldList;
 
+	}
+
+	/**
+	 * Sets the AbsoluteOrRelativeXPath value for the SchemaField object
+	 *
+	 * @param list
+	 *            of {@link TypeBaseField} objects which contain the fields type
+	 *            information
+	 * @param fields
+	 *            of {@link SchemaField} objects which contain the fields type
+	 *            information
+	 * @param i
+	 *            index
+	 */
+	private static void setAbsoluteOrRelativeXPath(List<Object> list, SchemaField fields, int i) {
+		if (((TypeBaseField) list.get(i)).getOtherAttributes() != null) {
+			Map<QName, String> otherAttributes = ((TypeBaseField) list.get(i))
+					.getOtherAttributes();
+			for (QName absoluteOrRelativeXPath : otherAttributes.keySet()) {
+				if (absoluteOrRelativeXPath.getLocalPart().equalsIgnoreCase(
+						"absoluteOrRelativeXPath"))
+					fields.setAbsoluteOrRelativeXPath(otherAttributes.get(absoluteOrRelativeXPath));
+			}
+		}
 	}
 
 	/**
