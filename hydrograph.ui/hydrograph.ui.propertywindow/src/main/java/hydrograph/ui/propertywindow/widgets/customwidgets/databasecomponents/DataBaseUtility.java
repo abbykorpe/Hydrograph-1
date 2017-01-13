@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hydrograph.ui.common.datastructures.property.database.DatabaseParameterType;
-import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.datastructures.metadata.MetaDataDetails;
@@ -146,25 +145,12 @@ public class DataBaseUtility {
         connectionDetails.setHost(parameterType.getHostName());
         connectionDetails.setPort(parameterType.getPortNo());
         connectionDetails.setUserId(parameterType.getUserName());
-        connectionDetails.setPassword(validatePasswordWidget(parameterType.getPassword()));
+        connectionDetails.setPassword(parameterType.getPassword());
         connectionDetails.setDatabase(parameterType.getDatabaseName());
         connectionDetails.setTableName(dataBaseTables.get(0));
         connectionDetails.setDriverType(parameterType.getJdbcName());
         connectionDetails.setSid(parameterType.getSid());
 		return connectionDetails;
-	}
-	
-	/**
-	 * It will remove parameterized characters from text
-	 * @param password
-	 * @return
-	 */
-	private String validatePasswordWidget(String password){
-		if(password.contains(Constants.PARAMETER_PREFIX)){
-			password = password.replace(Constants.PARAMETER_PREFIX, "");
-			password = password.replace(Constants.PARAMETER_SUFFIX, "");
-		}
-		return password;
 	}
 	
 	/**
@@ -178,7 +164,7 @@ public class DataBaseUtility {
         testConnectionDetails.setHost(parameterType.getHostName());
         testConnectionDetails.setPort(parameterType.getPortNo());
         testConnectionDetails.setUserId(parameterType.getUserName());
-        testConnectionDetails.setPassword(validatePasswordWidget(parameterType.getPassword()));
+        testConnectionDetails.setPassword(parameterType.getPassword());
         testConnectionDetails.setDatabase(parameterType.getDatabaseName());
         testConnectionDetails.setDriverType(parameterType.getJdbcName());
         testConnectionDetails.setSid(parameterType.getSid());

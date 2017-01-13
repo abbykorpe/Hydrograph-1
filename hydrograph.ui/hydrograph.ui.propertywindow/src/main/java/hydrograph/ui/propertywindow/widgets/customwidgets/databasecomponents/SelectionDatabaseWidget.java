@@ -97,6 +97,7 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 	private static final String ORACLE = "oracle";
 	private static final String REDSHIFT = "redshift";
 	private static final String MYSQL = "mysql";
+	private static final String TERADATA = "teradata";
 	
 	private int key_value = 0;
 
@@ -532,6 +533,8 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 			return REDSHIFT;
 		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
 			return MYSQL;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), TERADATA)){
+			return TERADATA;
 		}
 		return "";
 	}
