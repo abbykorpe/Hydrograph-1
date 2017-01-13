@@ -60,6 +60,7 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 	private static final String ORACLE = "oracle";
 	private static final String REDSHIFT = "redshift";
 	private static final String MYSQL = "mysql";
+	private static final String TERADATA = "teradata";
 	private static final String TEST_CONNECTION="\"Connection";
 	
 	public DatabaseTestConnectionWidget(
@@ -114,6 +115,8 @@ public class DatabaseTestConnectionWidget extends AbstractWidget{
 			return REDSHIFT;
 		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), MYSQL)){
 			return MYSQL;
+		}else if(StringUtils.equalsIgnoreCase(getComponent().getType(), TERADATA)){
+			return TERADATA;
 		}
 		return "";
 	}
