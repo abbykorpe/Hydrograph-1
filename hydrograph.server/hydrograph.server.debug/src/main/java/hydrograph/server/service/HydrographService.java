@@ -24,10 +24,7 @@ import hydrograph.server.debug.lingual.querygenerator.LingualQueryCreator;
 import hydrograph.server.execution.websocket.ExecutionTrackingWebsocketHandler;
 import hydrograph.server.metadata.exception.ParamsCannotBeNullOrEmpty;
 import hydrograph.server.metadata.exception.TableOrQueryParamNotFound;
-import hydrograph.server.metadata.strategy.HiveMetadataStrategy;
-import hydrograph.server.metadata.strategy.MysqlMetadataStrategy;
-import hydrograph.server.metadata.strategy.OracleMetadataStrategy;
-import hydrograph.server.metadata.strategy.RedshiftMetadataStrategy;
+import hydrograph.server.metadata.strategy.*;
 import hydrograph.server.utilities.Constants;
 import hydrograph.server.utilities.ServiceUtilities;
 import hydrograph.server.utilities.kerberos.KerberosUtilities;
@@ -156,6 +153,23 @@ public class HydrographService {
                                 LOG.trace("Connection UnSuccessful");
                                 objectAsString = objectMapper
                                         .writeValueAsString("Connection To Redshift database UnSuccessful");
+                            }
+                        } catch (Exception e) {
+                            LOG.error("Connection fails with exception : " + e);
+                            objectAsString = e.getLocalizedMessage();
+                        }
+                        break;
+                    case Constants.TERADATA:
+                        try {
+                            if (ServiceUtilities.getConnectionStatus(metadataProperties, Constants.TERADATA_JDBC_CLASSNAME,
+                                    Constants.QUERY_TO_TEST_TERADATA)) {
+                                LOG.trace("Connection Successful");
+                                objectAsString = objectMapper
+                                        .writeValueAsString("Connection To Teradata database is Successful");
+                            } else {
+                                LOG.trace("Connection UnSuccessful");
+                                objectAsString = objectMapper
+                                        .writeValueAsString("Connection To Teradata database UnSuccessful");
                             }
                         } catch (Exception e) {
                             LOG.error("Connection fails with exception : " + e);
@@ -294,6 +308,16 @@ public class HydrographService {
                             objectAsString = objectMapper
                                     .writeValueAsString(mysqlMetadataHelper.fillComponentSchema(metadataProperties));
                             LOG.trace("Schema json for mysql : " + objectAsString);
+                            LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
+                            break;
+                        case Constants.TERADATA:
+                            dbClassName = Constants.teradata;
+                            TeradataMetadataStrategy teradataMetadataHelper = (TeradataMetadataStrategy) Class.forName(dbClassName)
+                                    .newInstance();
+                            teradataMetadataHelper.setConnection(metadataProperties);
+                            objectAsString = objectMapper
+                                    .writeValueAsString(teradataMetadataHelper.fillComponentSchema(metadataProperties));
+                            LOG.trace("Schema json for teradata : " + objectAsString);
                             LOG.info("+++ Stop: " + new Timestamp((new Date()).getTime()));
                             break;
                     }

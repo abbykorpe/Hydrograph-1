@@ -42,8 +42,8 @@ public class HydrographServiceClient {
             System.out.println("+++ Start: " + new Timestamp((new Date()).getTime()));
             // client.calltoReadService();
             // client.calltoFilterService();
-            client.calltoReadMetastore();
-            // client.chcekConnectionStatus();
+          //  client.calltoReadMetastore();
+             client.chcekConnectionStatus();
             // client.calltoDeleteLocalDebugService();
 
             System.out.println("done:");
@@ -62,10 +62,12 @@ public class HydrographServiceClient {
         //String oraclejson = "{\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
         // String mysqljson =
         // "{\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test1\",\"dbtype\":\"mysql\"}";
-        String redshiftjson = "{\"username\":\"awsusers\",\"password\":\"1qaz2wsxA#5\",\"hostname\":\"redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com\",\"database\":\"dev\",\"dbtype\":\"redshift\",\"port\":\"5439\"}";
+        //String redshiftjson = "{\"username\":\"awsusers\",\"password\":\"1qaz2wsxA#5\",\"hostname\":\"redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com\",\"database\":\"dev\",\"dbtype\":\"redshift\",\"port\":\"5439\"}";
+        String teradatajson = "{\"username\":\"hydrograph\",\"password\":\"teradata\",\"hostname\":\"10.130.250.235\",\"database\":\"hydrograph_db\",\"dbtype\":\"teradata\",\"port\":\"1025\"}";
         PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/getConnectionStatus");
 
-        postMethod.addParameter("request_parameters", redshiftjson);
+        //postMethod.addParameter("request_parameters", redshiftjson);
+        postMethod.addParameter("request_parameters", teradatajson);
 
         int response = httpClient.executeMethod(postMethod);
         InputStream inputStream = postMethod.getResponseBodyAsStream();
@@ -97,11 +99,13 @@ public class HydrographServiceClient {
         //String mysqljson = "{\"table\":\"allType\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
         // String hivejson =
         // "{\"database\":\"textdata\",\"table\":\"personal\",\"username\":\"username\",\"password\":\"yourpassword\",\"dbtype\":\"hive\"}";
-        String redshiftjson = "{\"table\":\"testing2\",\"username\":\"awsuser\",\"password\":\"1qaz2wsxA#5\",\"hostname\":\"redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com\",\"database\":\"dev\",\"dbtype\":\"redshift\",\"port\":\"5439\"}";
+        //String redshiftjson = "{\"table\":\"testing2\",\"username\":\"awsuser\",\"password\":\"1qaz2wsxA#5\",\"hostname\":\"redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com\",\"database\":\"dev\",\"dbtype\":\"redshift\",\"port\":\"5439\"}";
+        String teradatajson = "{\"table\":\"testting2\",\"username\":\"hydrograph\",\"password\":\"teradata\",\"hostname\":\"10.130.250.235\",\"database\":\"hydrograph_db\",\"dbtype\":\"teradata\",\"port\":\"1025\"}";
 
         PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/readFromMetastore");
 
-        postMethod.addParameter("request_parameters", redshiftjson);
+        //postMethod.addParameter("request_parameters", redshiftjson);
+        postMethod.addParameter("request_parameters", teradatajson);
 
         int response = httpClient.executeMethod(postMethod);
         InputStream inputStream = postMethod.getResponseBodyAsStream();

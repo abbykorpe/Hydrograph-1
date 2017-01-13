@@ -144,6 +144,14 @@ public class ServiceUtilities {
                         .toString();
                 jdbcUrl = "jdbc:redshift://" + host + ":" + port + "/" + databasename;
                 break;
+            case Constants.TERADATA:
+                String database_teradata = metadataOperationProperteies
+                        .getOrDefault(Constants.DATABASE_NAME,
+                                new ParamsCannotBeNullOrEmpty(Constants.DATABASE_NAME + " not found in request parameter"))
+                        .toString();
+
+                jdbcUrl = "jdbc:teradata://" + host + "/" + "DBS_PORT" + "=" + port + "," + "DATABASE" + "=" + database_teradata;
+                break;
         }
         Class.forName(jdbcClassName);
         Connection connectionObject;
