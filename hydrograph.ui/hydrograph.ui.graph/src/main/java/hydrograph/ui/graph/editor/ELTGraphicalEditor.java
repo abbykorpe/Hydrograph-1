@@ -1869,10 +1869,9 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	@Override
 	public void saveParamterFileSequence(List<ParameterFile> parameterFiles) {
-		if(!getParamterFileSequence().equals(parameterFiles)){
+		if(!getParamterFileSequence().isEmpty() && !getParamterFileSequence().equals(parameterFiles)){
 			setDirty(true);
 		}
-		
 		container.saveParamterFileSequence(parameterFiles);
 	}
 

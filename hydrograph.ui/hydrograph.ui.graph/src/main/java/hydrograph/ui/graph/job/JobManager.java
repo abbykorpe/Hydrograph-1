@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -38,6 +39,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -53,10 +56,12 @@ import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.dialog.SaveJobFileBeforeRunDialog;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.logger.ExecutionTrackingFileLogger;
 import hydrograph.ui.graph.execution.tracking.preferences.ExecutionPreferenceConstants;
+import hydrograph.ui.graph.execution.tracking.preferences.JobRunPreference;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.execution.tracking.windows.ExecutionTrackingConsole;
 import hydrograph.ui.graph.handler.JobHandler;
@@ -65,6 +70,7 @@ import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.graph.utility.DataViewerUtility;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.graph.utility.MessageBox;
+import hydrograph.ui.graph.utility.SubJobUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
@@ -563,11 +569,26 @@ public class JobManager {
 		}
 		
 		filepathList.addAll(getComponentCanvas().getJobLevelParamterFiles());
-		
 		MultiParameterFileDialog parameterFileDialog = new MultiParameterFileDialog(Display.getDefault().getActiveShell(), activeProjectLocation);
 		parameterFileDialog.setParameterFiles(filepathList);
 		parameterFileDialog.setJobLevelParamterFiles(getComponentCanvas().getJobLevelParamterFiles());
 		parameterFileDialog.open();
+		if(SubJobUtility.getCurrentEditor().isDirty())
+		{
+		   if(!StringUtils.equals(Activator.getDefault().getPreferenceStore()
+				.getString(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE), MessageDialogWithToggle.ALWAYS)){
+			   	SaveJobFileBeforeRunDialog messageBox = new SaveJobFileBeforeRunDialog
+			    (Display.getCurrent().getActiveShell(),"'"+SubJobUtility.getCurrentEditor().getEditorInput().getName()+"' "+Messages.DO_YOU_WANT_TO_SAVE_CHANGES );
+			   	if(messageBox.open()==IDialogConstants.OK_ID){
+			   		SubJobUtility.getCurrentEditor().doSave(null);
+			   		SubJobUtility.getCurrentEditor().setDirty(false);
+		    	}
+		   }
+		   else{
+			   SubJobUtility.getCurrentEditor().doSave(null);
+			   SubJobUtility.getCurrentEditor().setDirty(false);
+		   }	
+		}
 		
 		return parameterFileDialog;
 	}
