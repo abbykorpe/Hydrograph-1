@@ -183,7 +183,7 @@ public class TrackingStatusUpdateUtils {
 		if (!componentNameAndLink.isEmpty()) {
 			for (Map.Entry<String, SubjobDetails> entry : componentNameAndLink.entrySet()) {
 				for (ComponentStatus componentStatus : executionStatus.getComponentStatus()) {
-					if (componentStatus.getComponentId().contains(entry.getKey())) {
+					if (entry.getKey().contains(componentStatus.getComponentId())) {
 						List<String> portList = new ArrayList(componentStatus.getProcessedRecordCount().keySet());
 						for (String port : portList) {
 							if ((((SubjobDetails) entry.getValue()).getSourceTerminal()).equals(port)) {
@@ -230,9 +230,9 @@ public class TrackingStatusUpdateUtils {
 						componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+portNumber, subjobDetails);
 					}else{
 						if(isParent)
-							componentNameAndLink.put(component.getComponentId()+"."+componentPrevToOutput.getComponentId(), subjobDetails);
+							componentNameAndLink.put(component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+portNumber, subjobDetails);
 						else
-							componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId(), subjobDetails);
+							componentNameAndLink.put(subjobPrefix+component.getComponentId()+"."+componentPrevToOutput.getComponentId()+"."+portNumber, subjobDetails);
 					}
 				}
 			}
