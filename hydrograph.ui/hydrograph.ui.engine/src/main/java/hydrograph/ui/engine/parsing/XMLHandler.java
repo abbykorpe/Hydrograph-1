@@ -41,7 +41,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLHandler extends DefaultHandler {
 
-	private static final String PROPERTY = "property";
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(XMLParser.class);
 	private String currentComponent;
 	private UIComponentRepo componentRepo;
@@ -64,7 +63,6 @@ public class XMLHandler extends DefaultHandler {
 	 */
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-//		LOGGER.debug("Parsing - start elements uri:{} , localName:{}, qname:{}, attributes:{}", new Object[] { uri,localName, qName, attributes });
 		List<ParameterData> tempParammeterList;
 		Matcher matcher = null;
 		if (isComponent(qName)) {

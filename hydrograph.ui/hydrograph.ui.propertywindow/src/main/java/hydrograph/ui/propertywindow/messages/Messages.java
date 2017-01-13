@@ -359,7 +359,7 @@ public class Messages extends NLS {
 	public static String EXPRESSIONTEXTBOX;
 	public static String EXPRESSION_COMPOSITE;
 	public static String EXPRESSION_ID_PREFIX;
-	
+	public static String FAILED_TO_IMPORT_SCHEMA_FILE;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -14,19 +14,6 @@
  
 package hydrograph.ui.engine.ui.helper;
 
-import hydrograph.engine.jaxb.commontypes.TypeBaseField;
-import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
-import hydrograph.ui.engine.ui.converter.LinkingData;
-import hydrograph.ui.engine.ui.repository.UIComponentRepo;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
-import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
-
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -39,6 +26,23 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
+import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.engine.ui.converter.LinkingData;
+import hydrograph.ui.engine.ui.repository.UIComponentRepo;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.customwidgets.schema.GridRowLoader;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
  * The class ConverterUiHelper
@@ -178,6 +182,7 @@ public class ConverterUiHelper {
 	}
 	
 	/**
+	**
 	 * This methods loads schema from external schema file
 	 * 
 	 * @param externalSchemaFilePath
@@ -186,11 +191,21 @@ public class ConverterUiHelper {
 	 */
 	public List<GridRow> loadSchemaFromExternalFile(String externalSchemaFilePath,String schemaType) {
 		IPath filePath=new Path(externalSchemaFilePath);
+		IPath copyOfFilePath=filePath;
 		if (!filePath.isAbsolute()) {
 			filePath = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath).getRawLocation();
 		}
+		if(filePath!=null){
 		GridRowLoader gridRowLoader=new GridRowLoader(schemaType, filePath.toFile());
 		return gridRowLoader.importGridRowsFromXML();
+		
+		}else{
+			MessageBox messageBox=new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_ERROR);
+			messageBox.setMessage(Messages.FAILED_TO_IMPORT_SCHEMA_FILE+"\n"+copyOfFilePath.toString());
+			messageBox.setText(Messages.ERROR);
+			messageBox.open();
+		}
+		return null;
 	}
 	
 	public static String getFromSocketId(LinkingData linkingData, UIComponentRepo componentRepo) {

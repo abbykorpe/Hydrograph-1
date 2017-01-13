@@ -143,6 +143,9 @@ public class ExpressionEditorData implements IDataStructure {
 	public ExpressionEditorData clone() {
 		String clonedExpression=this.expression;
 		boolean isValid=this.isValid;
+		if(extraFieldDatatypeMap==null){
+			extraFieldDatatypeMap=new LinkedHashMap<String,Class<?>>();
+		}
 		List<String> clonedFieldsUsedInExpression = new ArrayList<>();
 		clonedFieldsUsedInExpression.addAll(this.fieldsUsedInExpression);
 		Map<String,Class<?>> clonedSelectedInputFieldsForExpression = new LinkedHashMap<String,Class<?>>();
