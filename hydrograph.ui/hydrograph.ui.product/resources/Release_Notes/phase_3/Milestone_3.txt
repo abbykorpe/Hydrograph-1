@@ -49,4 +49,5 @@ Issues/Defects fixed:
 34 #534 [Prateem Tadas] -  Incorrect confirmation popup is getting displayed on tool closer.
 35.#615 [Vibhor Tyagi] - Issues with MySQL component
 36.#624 [Pooja Yadav] -  Partition By Expression : Schema is editable.
+37.#625 [Pooja Yadav] - Partition By Expression: Data type is getting Vanished from the Expression window.
 

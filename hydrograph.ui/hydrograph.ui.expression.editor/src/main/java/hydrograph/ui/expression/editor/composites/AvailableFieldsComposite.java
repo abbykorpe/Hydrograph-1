@@ -127,7 +127,9 @@ public class AvailableFieldsComposite extends Composite {
 				table.removeAll();
 				for(String field:inputFields){
 					if(StringUtils.containsIgnoreCase(field,searchTextBox.getText())){
-						new TableItem(table, SWT.NONE).setText(field);
+						TableItem tableItem = new TableItem(table, SWT.NONE);
+						tableItem.setText(0,field);
+						tableItem.setText(1, fieldMap.get(field).getSimpleName());
 					}
 				}
 				
