@@ -236,7 +236,11 @@ public class Utils {
 	 public String getParamFilePath(String extSchemaPath, String paramValue, Text extSchemaPathText){
 			String remainingString = "";
 		    if( ParameterUtil.isParameter(extSchemaPath)){
-		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
+		    	if(StringUtils.isNotEmpty(paramValue)){
+		    		extSchemaPathText.setToolTipText(paramValue+remainingString);
+		    	}else{
+		    		extSchemaPathText.setToolTipText(PARAMETER_NOT_FOUND);
+		    	}
 		    }else if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND)){
 		    	extSchemaPathText.setToolTipText(remainingString);
 		    }else{

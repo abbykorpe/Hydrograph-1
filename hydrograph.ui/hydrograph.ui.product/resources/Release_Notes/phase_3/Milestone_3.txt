@@ -55,3 +55,5 @@ Issues/Defects fixed:
 40.#605 [Rakesh Kanchalwar] - Teradata Component: Name on the component is overlapping with error icon
 41.#629 [Rakesh Kanchalwar] - Interface Name is not getting displayed while creating custom operation class
 41 #611 [shashank karnik] -  Job is marked as unsaved after running the job.
+42.#625 [Pooja Yadav] - Partition By Expression: Data type is getting Vanished from the Expression window.
+43.#613 [Vibhor Tyagi] - Execution Tracking: On Subjob, count values are not getting display on connection links
