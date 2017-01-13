@@ -163,6 +163,10 @@ public class Constants {
      */
     public static final String mysql = "hydrograph.server.metadata.strategy.MysqlMetadataStrategy";
     /**
+     * Used to get the class name for teradata
+     */
+    public static final String teradata = "hydrograph.server.metadata.strategy.TeradataMetadataStrategy";
+    /**
      * checking the ORACLE type
      */
     public static final String ORACLE = "oracle";
@@ -179,8 +183,17 @@ public class Constants {
      */
     public static final String MYSQL = "mysql";
     /**
+     * checking the TERADATA type
+     */
+    public static final String TERADATA = "teradata";
+    /**
+     * checking the TERADATA type
+     */
+    public static final String TERADATA_DEFAULT_PORT = "1025";
+    /**
      * checking the MYSQL type
      */
+
     public static final String MYSQL_DEFAULT_PORT = "3306";
     /**
      * checking the ORACLE type
@@ -202,6 +215,14 @@ public class Constants {
      * Default redshift query to check for connection status.
      */
     public static final String DEFAULT_REDRESHIFT_QUERY_TO_TEST = "SELECT 1";
+    /**
+     * Teradata query to check for connection status.
+     */
+    public static final String QUERY_TO_TEST_TERADATA = "SELECT 1";
+    /**
+     * TERADATA JDBC driver class name.
+     */
+    public final static String TERADATA_JDBC_CLASSNAME = "com.teradata.jdbc.TeraDriver";
     /**
      * Redshift JDBC driver class name.
      */
