@@ -330,82 +330,72 @@ public class ComponentFigure extends Figure implements Validator {
 		Rectangle q = new Rectangle(4, 4 + componentLabelMargin, r.width - 8, r.height - 8 - componentLabelMargin);
 		graphics.fillRoundRectangle(q, 5, 5);
 
-		graphics.drawImage(canvasIcon, new Point((q.width - (acronym.length()*5))/2, q.height / 2 + componentLabelMargin - 11));
+		graphics.drawImage(canvasIcon, new Point(q.width / 2 - 16, q.height / 2 + componentLabelMargin - 11));
 		drawPropertyStatus(graphics);
 		if((StringUtils.equalsIgnoreCase(component.getCategory(), Constants.TRANSFORM)
-			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.FILTER)
-			&&!StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.UNIQUE_SEQUENCE))
-			 )
-		{
+			&& !StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.FILTER)
+			&& !StringUtils.equalsIgnoreCase(component.getComponentName(), Constants.UNIQUE_SEQUENCE))){
 			PropertyToolTipInformation propertyToolTipInformation;	
-			if(component.isContinuousSchemaPropogationAllow())
-			{
-		    drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
-		    propertyToolTipInformation =createPropertyToolTipInformation(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED, 
-		    		Constants.SHOW_TOOLTIP);
+			if(component.isContinuousSchemaPropogationAllow()){
+			    drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+			    propertyToolTipInformation = createPropertyToolTipInformation(
+			    		Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED, Constants.SHOW_TOOLTIP);
 		    }
-			else
-			{
-				 propertyToolTipInformation =createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);
+			else{
+				 propertyToolTipInformation = createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);
 			}
 			 component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}
-		else if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName())
-				)
-		{
-		    PropertyToolTipInformation propertyToolTipInformation;	
-		   if(component.getProperties().get(Constants.IS_UNION_ALL_COMPONENT_SYNC)!=null
-			&&StringUtils.equalsIgnoreCase(((String)component.getProperties().get(Constants.IS_UNION_ALL_COMPONENT_SYNC)), Constants.FALSE)
-			)
-		   {
-		   drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
-		   propertyToolTipInformation =createPropertyToolTipInformation(Messages.INPUTS_SCHEMA_ARE_NOT_IN_SYNC, Constants.SHOW_TOOLTIP);
+		else if(StringUtils.equalsIgnoreCase(Constants.UNION_ALL,component.getComponentName())){
+			PropertyToolTipInformation propertyToolTipInformation;	
+			if(component.getProperties().get(Constants.IS_UNION_ALL_COMPONENT_SYNC) != null
+					&& StringUtils.equalsIgnoreCase(((String)component.getProperties()
+							.get(Constants.IS_UNION_ALL_COMPONENT_SYNC)), Constants.FALSE))		   {
+				drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+				propertyToolTipInformation =createPropertyToolTipInformation(Messages.INPUTS_SCHEMA_ARE_NOT_IN_SYNC, Constants.SHOW_TOOLTIP);
 		   }
-		   else
-		   {
+		   else{
 			   propertyToolTipInformation =createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);   
 			}
 		    component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}
-		else if(component instanceof SubjobComponent)
-		{
+		else if(component instanceof SubjobComponent){
 			boolean isTransformComponentPresent=SubjobUtility.INSTANCE.checkIfSubJobHasTransformOrUnionAllComponent(component);
 			PropertyToolTipInformation propertyToolTipInformation;
-			if(isTransformComponentPresent)
-			{	
-			drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
-			 propertyToolTipInformation =createPropertyToolTipInformation(Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB, 
-					 Constants.SHOW_TOOLTIP); 
+			if(isTransformComponentPresent){	
+				drawSchemaPropogationInfoImageIfSchemaPropogationBreaks(graphics);
+				propertyToolTipInformation = createPropertyToolTipInformation(
+						Messages.CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB, Constants.SHOW_TOOLTIP); 
 			}
-			else
-			{
+			else{
 			  propertyToolTipInformation =createPropertyToolTipInformation("", Constants.HIDE_TOOLTIP);   
 			}
 			component.getTooltipInformation().put(Constants.ISSUE_PROPERTY_NAME,propertyToolTipInformation );
 		}	
-		graphics.drawText(acronym, new Point(q.width / 2 - 16 + 5, q.height / 2 + componentLabelMargin - 23));
+		graphics.drawText(acronym, new Point((q.width - (acronym.length()*5))/2, q.height / 2 + componentLabelMargin - 23));
        
 		if (componentProperties != null && componentProperties.get(StringUtils.lowerCase(Constants.BATCH)) != null) {
-			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))).length() > 2)
+			if (String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))).length() > 2){
 				graphics.drawText(
 						StringUtils.substring(
 								String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))), 0, 2)
 								+ "..", new Point(q.width - 16, q.height+ getComponentLabelMargin()-20));
-			else
+			}
+			else{
 				graphics.drawText(String.valueOf(componentProperties.get(StringUtils.lowerCase(Constants.BATCH))),
 						new Point(q.width - 14, q.height+ getComponentLabelMargin()-20));
+			}
 		}
 		
 		trackExecution(graphics);
 	}
  
-  private PropertyToolTipInformation createPropertyToolTipInformation(String message,String showHide)
-  {
-	  PropertyToolTipInformation propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, showHide, 
-				Constants.TOOLTIP_DATATYPE);
-	  propertyToolTipInformation.setPropertyValue(message);
-	  return propertyToolTipInformation;
-  }
+	  private PropertyToolTipInformation createPropertyToolTipInformation(String message,String showHide){
+		  PropertyToolTipInformation propertyToolTipInformation= new PropertyToolTipInformation(Constants.ISSUE_PROPERTY_NAME, showHide, 
+					Constants.TOOLTIP_DATATYPE);
+		  propertyToolTipInformation.setPropertyValue(message);
+		  return propertyToolTipInformation;
+	  }
   
   private void trackExecution(Graphics graphics) {
 		Rectangle rectangle = getBounds().getCopy();

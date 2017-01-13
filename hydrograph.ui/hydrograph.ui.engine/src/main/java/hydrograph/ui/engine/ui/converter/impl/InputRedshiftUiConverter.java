@@ -61,22 +61,22 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		Redshift redshift = (Redshift) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 
-		if (StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
+		if (redshift.getDatabaseName() != null && StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
 			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getJdbcDriver().getValue())) {
+		if (redshift.getJdbcDriver() != null && StringUtils.isNotBlank(redshift.getJdbcDriver().getValue())) {
 			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), redshift.getJdbcDriver().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getHostName().getValue())) {
+		if (redshift.getHostName() != null && StringUtils.isNotBlank(redshift.getHostName().getValue())) {
 			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), redshift.getHostName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
+		if (redshift.getPort() != null && StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
 			propertyMap.put(PropertyNameConstants.PORT_NO.value(), redshift.getPort().getValue().toString());
 		}
-		if (StringUtils.isNotBlank(redshift.getUserName().getValue()) ) {
+		if (redshift.getUserName() != null && StringUtils.isNotBlank(redshift.getUserName().getValue()) ) {
 			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUserName().getValue());
 		}
-		if (StringUtils.isNotBlank(redshift.getPassword().getValue())) {
+		if (redshift.getPassword() != null && StringUtils.isNotBlank(redshift.getPassword().getValue())) {
 			propertyMap.put(PropertyNameConstants.PASSWORD.value(), redshift.getPassword().getValue());
 		}
 		if ((redshift.getTableName()!= null)&& StringUtils.isNotBlank(redshift.getTableName().toString())){

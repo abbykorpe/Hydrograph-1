@@ -132,11 +132,13 @@ public class InputTeradataUiConverter extends InputUiConverter{
 	private MatchValueProperty getExportInterfaceValue() {
 		LOGGER.debug("Generating Match for -{}", componentName);
 		MatchValueProperty matchValue =  new MatchValueProperty();
-		Teradata outputTeradata = (Teradata) typeBaseComponent;
-		if(Constants.DEFAULT.equalsIgnoreCase(outputTeradata.getExportOptions().getValue())){
-			matchValue.setMatchValue(Messages.STANDARD);
-		}else if(Constants.FASTEXPORT.equalsIgnoreCase(outputTeradata.getExportOptions().getValue())){
-			matchValue.setMatchValue(Messages.FAST_EXPORT);
+		Teradata inputTeradata = (Teradata) typeBaseComponent;
+		if(inputTeradata.getExportOptions() != null){
+			if(Constants.DEFAULT.equalsIgnoreCase(inputTeradata.getExportOptions().getValue())){
+				matchValue.setMatchValue(Messages.STANDARD);
+			}else if(Constants.FASTEXPORT.equalsIgnoreCase(inputTeradata.getExportOptions().getValue())){
+				matchValue.setMatchValue(Messages.FAST_EXPORT);
+			}
 		}
 		matchValue.setRadioButtonSelected(true);
 		return matchValue;
