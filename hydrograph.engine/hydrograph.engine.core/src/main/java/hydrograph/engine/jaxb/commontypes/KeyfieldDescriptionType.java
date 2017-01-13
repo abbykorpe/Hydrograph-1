@@ -1,9 +1,13 @@
 
 package hydrograph.engine.jaxb.commontypes;
 
-import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -50,17 +54,17 @@ import java.util.List;
 public class KeyfieldDescriptionType {
 
     @XmlElement(required = true)
-    protected KeyFields keyFields;
+    protected KeyfieldDescriptionType.KeyFields keyFields;
 
     /**
      * Gets the value of the keyFields property.
      * 
      * @return
      *     possible object is
-     *     {@link KeyFields }
+     *     {@link KeyfieldDescriptionType.KeyFields }
      *     
      */
-    public KeyFields getKeyFields() {
+    public KeyfieldDescriptionType.KeyFields getKeyFields() {
         return keyFields;
     }
 
@@ -69,10 +73,10 @@ public class KeyfieldDescriptionType {
      * 
      * @param value
      *     allowed object is
-     *     {@link KeyFields }
+     *     {@link KeyfieldDescriptionType.KeyFields }
      *     
      */
-    public void setKeyFields(KeyFields value) {
+    public void setKeyFields(KeyfieldDescriptionType.KeyFields value) {
         this.keyFields = value;
     }
 
@@ -111,7 +115,7 @@ public class KeyfieldDescriptionType {
     public static class KeyFields {
 
         @XmlElement(required = true)
-        protected List<Field> field;
+        protected List<KeyfieldDescriptionType.KeyFields.Field> field;
 
         /**
          * Gets the value of the field property.
@@ -131,13 +135,13 @@ public class KeyfieldDescriptionType {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Field }
+         * {@link KeyfieldDescriptionType.KeyFields.Field }
          * 
          * 
          */
-        public List<Field> getField() {
+        public List<KeyfieldDescriptionType.KeyFields.Field> getField() {
             if (field == null) {
-                field = new ArrayList<Field>();
+                field = new ArrayList<KeyfieldDescriptionType.KeyFields.Field>();
             }
             return this.field;
         }

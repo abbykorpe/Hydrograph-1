@@ -38,35 +38,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Lookup.Match }
+     * Create an instance of {@link Aggregate }
      * 
      */
-    public Lookup.Match createLookupMatch() {
-        return new Lookup.Match();
-    }
-
-    /**
-     * Create an instance of {@link Subjob }
-     * 
-     */
-    public Subjob createSubjob() {
-        return new Subjob();
-    }
-
-    /**
-     * Create an instance of {@link Filter }
-     * 
-     */
-    public Filter createFilter() {
-        return new Filter();
-    }
-
-    /**
-     * Create an instance of {@link Lookup }
-     * 
-     */
-    public Lookup createLookup() {
-        return new Lookup();
+    public Aggregate createAggregate() {
+        return new Aggregate();
     }
 
     /**
@@ -78,19 +54,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GenerateSequence }
+     * Create an instance of {@link Subjob }
      * 
      */
-    public GenerateSequence createGenerateSequence() {
-        return new GenerateSequence();
+    public Subjob createSubjob() {
+        return new Subjob();
     }
 
     /**
-     * Create an instance of {@link PartitionByExpression }
+     * Create an instance of {@link Subjob.Path }
      * 
      */
-    public PartitionByExpression createPartitionByExpression() {
-        return new PartitionByExpression();
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
     /**
@@ -110,19 +86,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Aggregate }
+     * Create an instance of {@link Filter }
      * 
      */
-    public Aggregate createAggregate() {
-        return new Aggregate();
+    public Filter createFilter() {
+        return new Filter();
     }
 
     /**
-     * Create an instance of {@link Join }
+     * Create an instance of {@link Lookup }
      * 
      */
-    public Join createJoin() {
-        return new Join();
+    public Lookup createLookup() {
+        return new Lookup();
+    }
+
+    /**
+     * Create an instance of {@link Lookup.Match }
+     * 
+     */
+    public Lookup.Match createLookupMatch() {
+        return new Lookup.Match();
+    }
+
+    /**
+     * Create an instance of {@link GenerateSequence }
+     * 
+     */
+    public GenerateSequence createGenerateSequence() {
+        return new GenerateSequence();
+    }
+
+    /**
+     * Create an instance of {@link PartitionByExpression }
+     * 
+     */
+    public PartitionByExpression createPartitionByExpression() {
+        return new PartitionByExpression();
     }
 
     /**
@@ -134,11 +134,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Subjob.Path }
+     * Create an instance of {@link Join }
      * 
      */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
+    public Join createJoin() {
+        return new Join();
     }
 
 }

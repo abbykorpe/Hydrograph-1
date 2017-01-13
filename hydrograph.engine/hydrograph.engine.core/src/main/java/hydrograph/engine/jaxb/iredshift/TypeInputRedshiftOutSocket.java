@@ -1,18 +1,17 @@
 
 package hydrograph.engine.jaxb.iredshift;
 
-import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 
 
 /**
  * <p>Java class for type-input-redshift-out-socket complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="type-input-redshift-out-socket">
  *   &lt;complexContent>
@@ -26,13 +25,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "type-input-redshift-out-socket", namespace = "hydrograph/engine/jaxb/iredshift")
 public class TypeInputRedshiftOutSocket
-        extends TypeInputOutSocket
+    extends TypeInputOutSocket
 {
 
 

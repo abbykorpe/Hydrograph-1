@@ -1,10 +1,13 @@
 
 package hydrograph.engine.jaxb.inputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -46,7 +49,7 @@ public class GenerateRecord
 
     protected TypeProperties runtimeProperties;
     @XmlElement(required = true)
-    protected RecordCount recordCount;
+    protected GenerateRecord.RecordCount recordCount;
 
     /**
      * Gets the value of the runtimeProperties property.
@@ -77,10 +80,10 @@ public class GenerateRecord
      * 
      * @return
      *     possible object is
-     *     {@link RecordCount }
+     *     {@link GenerateRecord.RecordCount }
      *     
      */
-    public RecordCount getRecordCount() {
+    public GenerateRecord.RecordCount getRecordCount() {
         return recordCount;
     }
 
@@ -89,10 +92,10 @@ public class GenerateRecord
      * 
      * @param value
      *     allowed object is
-     *     {@link RecordCount }
+     *     {@link GenerateRecord.RecordCount }
      *     
      */
-    public void setRecordCount(RecordCount value) {
+    public void setRecordCount(GenerateRecord.RecordCount value) {
         this.recordCount = value;
     }
 

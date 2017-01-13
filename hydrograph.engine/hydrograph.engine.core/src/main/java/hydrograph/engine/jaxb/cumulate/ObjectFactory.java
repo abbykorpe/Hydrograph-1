@@ -30,6 +30,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeTransformExpression }
+     * 
+     */
+    public TypeTransformExpression createTypeTransformExpression() {
+        return new TypeTransformExpression();
+    }
+
+    /**
      * Create an instance of {@link TypeSecondaryKeyFields }
      * 
      */
@@ -38,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CumulateBase }
+     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
      * 
      */
-    public CumulateBase createCumulateBase() {
-        return new CumulateBase();
+    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
+        return new TypeSecondayKeyFieldsAttributes();
     }
 
     /**
@@ -62,19 +70,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
+     * Create an instance of {@link TypePrimaryKeyFields }
      * 
      */
-    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
-        return new TypeSecondayKeyFieldsAttributes();
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
     }
 
     /**
-     * Create an instance of {@link TypeOperationInputField }
+     * Create an instance of {@link CumulateBase }
      * 
      */
-    public TypeOperationInputField createTypeOperationInputField() {
-        return new TypeOperationInputField();
+    public CumulateBase createCumulateBase() {
+        return new CumulateBase();
     }
 
     /**
@@ -94,19 +102,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFields }
+     * Create an instance of {@link TypeOperationInputField }
      * 
      */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeTransformExpression }
-     * 
-     */
-    public TypeTransformExpression createTypeTransformExpression() {
-        return new TypeTransformExpression();
+    public TypeOperationInputField createTypeOperationInputField() {
+        return new TypeOperationInputField();
     }
 
 }

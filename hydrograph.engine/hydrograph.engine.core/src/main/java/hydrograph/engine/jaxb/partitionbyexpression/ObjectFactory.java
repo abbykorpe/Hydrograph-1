@@ -30,11 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionByExpressionBase }
+     * Create an instance of {@link TypePbeInputFields }
      * 
      */
-    public PartitionByExpressionBase createPartitionByExpressionBase() {
-        return new PartitionByExpressionBase();
+    public TypePbeInputFields createTypePbeInputFields() {
+        return new TypePbeInputFields();
     }
 
     /**
@@ -46,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePbeOperation }
+     * Create an instance of {@link TypePbeInSocket }
      * 
      */
-    public TypePbeOperation createTypePbeOperation() {
-        return new TypePbeOperation();
+    public TypePbeInSocket createTypePbeInSocket() {
+        return new TypePbeInSocket();
     }
 
     /**
@@ -62,19 +62,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePbeInSocket }
+     * Create an instance of {@link TypePbeOperation }
      * 
      */
-    public TypePbeInSocket createTypePbeInSocket() {
-        return new TypePbeInSocket();
+    public TypePbeOperation createTypePbeOperation() {
+        return new TypePbeOperation();
     }
 
     /**
-     * Create an instance of {@link TypePbeInputFields }
+     * Create an instance of {@link PartitionByExpressionBase }
      * 
      */
-    public TypePbeInputFields createTypePbeInputFields() {
-        return new TypePbeInputFields();
+    public PartitionByExpressionBase createPartitionByExpressionBase() {
+        return new PartitionByExpressionBase();
     }
 
 }

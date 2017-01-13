@@ -30,19 +30,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputSequenceInSocket }
-     * 
-     */
-    public TypeOutputSequenceInSocket createTypeOutputSequenceInSocket() {
-        return new TypeOutputSequenceInSocket();
-    }
-
-    /**
      * Create an instance of {@link TypeOutputFileSequenceBase }
      * 
      */
     public TypeOutputFileSequenceBase createTypeOutputFileSequenceBase() {
         return new TypeOutputFileSequenceBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeOutputSequenceInSocket }
+     * 
+     */
+    public TypeOutputSequenceInSocket createTypeOutputSequenceInSocket() {
+        return new TypeOutputSequenceInSocket();
     }
 
 }

@@ -30,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RunProgram.Command }
+     * Create an instance of {@link FtpIn.Host }
      * 
      */
-    public RunProgram.Command createRunProgramCommand() {
-        return new RunProgram.Command();
-    }
-
-    /**
-     * Create an instance of {@link Hplsql.Execute.Query }
-     * 
-     */
-    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
-        return new Hplsql.Execute.Query();
+    public FtpIn.Host createFtpInHost() {
+        return new FtpIn.Host();
     }
 
     /**
@@ -54,19 +46,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RunProgram }
+     * Create an instance of {@link Hplsql }
      * 
      */
-    public RunProgram createRunProgram() {
-        return new RunProgram();
+    public Hplsql createHplsql() {
+        return new Hplsql();
     }
 
     /**
-     * Create an instance of {@link FtpIn.Host }
+     * Create an instance of {@link Hplsql.Execute.Query }
      * 
      */
-    public FtpIn.Host createFtpInHost() {
-        return new FtpIn.Host();
+    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
+        return new Hplsql.Execute.Query();
     }
 
     /**
@@ -78,19 +70,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RunProgram }
+     * 
+     */
+    public RunProgram createRunProgram() {
+        return new RunProgram();
+    }
+
+    /**
+     * Create an instance of {@link FtpIn }
+     * 
+     */
+    public FtpIn createFtpIn() {
+        return new FtpIn();
+    }
+
+    /**
      * Create an instance of {@link Hplsql.Command }
      * 
      */
     public Hplsql.Command createHplsqlCommand() {
         return new Hplsql.Command();
-    }
-
-    /**
-     * Create an instance of {@link Hplsql }
-     * 
-     */
-    public Hplsql createHplsql() {
-        return new Hplsql();
     }
 
     /**
@@ -110,11 +110,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FtpIn }
+     * Create an instance of {@link RunProgram.Command }
      * 
      */
-    public FtpIn createFtpIn() {
-        return new FtpIn();
+    public RunProgram.Command createRunProgramCommand() {
+        return new RunProgram.Command();
     }
 
 }

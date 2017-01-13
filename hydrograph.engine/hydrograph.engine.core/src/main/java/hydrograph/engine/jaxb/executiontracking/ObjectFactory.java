@@ -30,6 +30,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeExecutiontrackingOutSocket }
+     * 
+     */
+    public TypeExecutiontrackingOutSocket createTypeExecutiontrackingOutSocket() {
+        return new TypeExecutiontrackingOutSocket();
+    }
+
+    /**
      * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
      * 
      */
@@ -46,11 +54,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeExecutiontrackingOutSocket }
+     * Create an instance of {@link TypeExecutiontrackingInSocket }
      * 
      */
-    public TypeExecutiontrackingOutSocket createTypeExecutiontrackingOutSocket() {
-        return new TypeExecutiontrackingOutSocket();
+    public TypeExecutiontrackingInSocket createTypeExecutiontrackingInSocket() {
+        return new TypeExecutiontrackingInSocket();
     }
 
     /**
@@ -59,14 +67,6 @@ public class ObjectFactory {
      */
     public TypeExecutiontrackingOperationInputFields createTypeExecutiontrackingOperationInputFields() {
         return new TypeExecutiontrackingOperationInputFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeExecutiontrackingInSocket }
-     * 
-     */
-    public TypeExecutiontrackingInSocket createTypeExecutiontrackingInSocket() {
-        return new TypeExecutiontrackingInSocket();
     }
 
     /**

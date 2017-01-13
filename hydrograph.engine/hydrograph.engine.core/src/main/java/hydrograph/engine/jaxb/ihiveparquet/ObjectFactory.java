@@ -30,22 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeInputDelimitedOutSocket }
-     * 
-     */
-    public TypeInputDelimitedOutSocket createTypeInputDelimitedOutSocket() {
-        return new TypeInputDelimitedOutSocket();
-    }
-
-    /**
-     * Create an instance of {@link HiveType }
-     * 
-     */
-    public HiveType createHiveType() {
-        return new HiveType();
-    }
-
-    /**
      * Create an instance of {@link HivePartitionFilterType }
      * 
      */
@@ -62,14 +46,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionColumn }
-     * 
-     */
-    public PartitionColumn createPartitionColumn() {
-        return new PartitionColumn();
-    }
-
-    /**
      * Create an instance of {@link HivePartitionFieldsType }
      * 
      */
@@ -78,11 +54,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FieldBasicType }
+     * Create an instance of {@link PartitionColumn }
      * 
      */
-    public FieldBasicType createFieldBasicType() {
-        return new FieldBasicType();
+    public PartitionColumn createPartitionColumn() {
+        return new PartitionColumn();
+    }
+
+    /**
+     * Create an instance of {@link HiveType }
+     * 
+     */
+    public HiveType createHiveType() {
+        return new HiveType();
     }
 
     /**
@@ -99,6 +83,22 @@ public class ObjectFactory {
      */
     public PartitionFieldBasicType createPartitionFieldBasicType() {
         return new PartitionFieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link FieldBasicType }
+     * 
+     */
+    public FieldBasicType createFieldBasicType() {
+        return new FieldBasicType();
+    }
+
+    /**
+     * Create an instance of {@link TypeInputDelimitedOutSocket }
+     * 
+     */
+    public TypeInputDelimitedOutSocket createTypeInputDelimitedOutSocket() {
+        return new TypeInputDelimitedOutSocket();
     }
 
 }

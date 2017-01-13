@@ -1,9 +1,12 @@
 
 package hydrograph.engine.jaxb.commandtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -42,17 +45,17 @@ public class RunProgram
 {
 
     @XmlElement(required = true)
-    protected Command command;
+    protected RunProgram.Command command;
 
     /**
      * Gets the value of the command property.
      * 
      * @return
      *     possible object is
-     *     {@link Command }
+     *     {@link RunProgram.Command }
      *     
      */
-    public Command getCommand() {
+    public RunProgram.Command getCommand() {
         return command;
     }
 
@@ -61,10 +64,10 @@ public class RunProgram
      * 
      * @param value
      *     allowed object is
-     *     {@link Command }
+     *     {@link RunProgram.Command }
      *     
      */
-    public void setCommand(Command value) {
+    public void setCommand(RunProgram.Command value) {
         this.command = value;
     }
 

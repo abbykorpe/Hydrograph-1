@@ -1,13 +1,16 @@
 
 package hydrograph.engine.jaxb.operationstypes;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.MatchValue;
 import hydrograph.engine.jaxb.lookup.LookupBase;
 import hydrograph.engine.jaxb.lookup.TypeKeyFields;
-
-import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -50,7 +53,7 @@ public class Lookup
     @XmlElement(required = true)
     protected List<TypeKeyFields> keys;
     @XmlElement(required = true)
-    protected Match match;
+    protected Lookup.Match match;
 
     /**
      * Gets the value of the keys property.
@@ -86,10 +89,10 @@ public class Lookup
      * 
      * @return
      *     possible object is
-     *     {@link Match }
+     *     {@link Lookup.Match }
      *     
      */
-    public Match getMatch() {
+    public Lookup.Match getMatch() {
         return match;
     }
 
@@ -98,10 +101,10 @@ public class Lookup
      * 
      * @param value
      *     allowed object is
-     *     {@link Match }
+     *     {@link Lookup.Match }
      *     
      */
-    public void setMatch(Match value) {
+    public void setMatch(Lookup.Match value) {
         this.match = value;
     }
 

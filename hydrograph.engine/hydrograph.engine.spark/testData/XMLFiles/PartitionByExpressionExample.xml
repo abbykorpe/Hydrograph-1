@@ -39,7 +39,7 @@
     <operations id="partitionByExpression" batch="0"
                 xsi:type="op:partitionByExpression">
         <inSocket fromComponentId="input1" fromSocketId="out0" id="in0"/>
-        <!-- <operation id="opt"
+       <!--  <operation id="opt"
                     class="userfunctions.PartitionByExpressionTest">
              <inputFields>
                  <field name="transaction_type" inSocketId="in0" />

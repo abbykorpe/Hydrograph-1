@@ -1,10 +1,13 @@
 
 package hydrograph.engine.jaxb.outputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.otfd.TypeOutputFileDelimitedBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -45,7 +48,7 @@ public class AvroFile
 {
 
     @XmlElement(required = true)
-    protected Path path;
+    protected AvroFile.Path path;
     protected TypeProperties runtimeProperties;
 
     /**
@@ -53,10 +56,10 @@ public class AvroFile
      * 
      * @return
      *     possible object is
-     *     {@link Path }
+     *     {@link AvroFile.Path }
      *     
      */
-    public Path getPath() {
+    public AvroFile.Path getPath() {
         return path;
     }
 
@@ -65,10 +68,10 @@ public class AvroFile
      * 
      * @param value
      *     allowed object is
-     *     {@link Path }
+     *     {@link AvroFile.Path }
      *     
      */
-    public void setPath(Path value) {
+    public void setPath(AvroFile.Path value) {
         this.path = value;
     }
 

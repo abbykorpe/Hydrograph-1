@@ -1,14 +1,17 @@
 
 package hydrograph.engine.jaxb.outputtypes;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.BooleanValueType;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
 import hydrograph.engine.jaxb.ohivetextfile.HivePathType;
 import hydrograph.engine.jaxb.ohivetextfile.HiveType;
 import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedBase;
-
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -75,9 +78,9 @@ public class HiveTextFile
     protected HiveType databaseName;
     @XmlElement(required = true)
     protected HiveType tableName;
-    protected Delimiter delimiter;
+    protected HiveTextFile.Delimiter delimiter;
     protected HivePathType externalTablePath;
-    protected Quote quote;
+    protected HiveTextFile.Quote quote;
     protected BooleanValueType safe;
     protected BooleanValueType strict;
     protected TypeProperties runtimeProperties;
@@ -159,10 +162,10 @@ public class HiveTextFile
      * 
      * @return
      *     possible object is
-     *     {@link Delimiter }
+     *     {@link HiveTextFile.Delimiter }
      *     
      */
-    public Delimiter getDelimiter() {
+    public HiveTextFile.Delimiter getDelimiter() {
         return delimiter;
     }
 
@@ -171,10 +174,10 @@ public class HiveTextFile
      * 
      * @param value
      *     allowed object is
-     *     {@link Delimiter }
+     *     {@link HiveTextFile.Delimiter }
      *     
      */
-    public void setDelimiter(Delimiter value) {
+    public void setDelimiter(HiveTextFile.Delimiter value) {
         this.delimiter = value;
     }
 
@@ -207,10 +210,10 @@ public class HiveTextFile
      * 
      * @return
      *     possible object is
-     *     {@link Quote }
+     *     {@link HiveTextFile.Quote }
      *     
      */
-    public Quote getQuote() {
+    public HiveTextFile.Quote getQuote() {
         return quote;
     }
 
@@ -219,10 +222,10 @@ public class HiveTextFile
      * 
      * @param value
      *     allowed object is
-     *     {@link Quote }
+     *     {@link HiveTextFile.Quote }
      *     
      */
-    public void setQuote(Quote value) {
+    public void setQuote(HiveTextFile.Quote value) {
         this.quote = value;
     }
 

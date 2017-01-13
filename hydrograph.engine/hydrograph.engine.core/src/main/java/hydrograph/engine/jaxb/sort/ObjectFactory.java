@@ -30,38 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSortBase }
-     * 
-     */
-    public TypeSortBase createTypeSortBase() {
-        return new TypeSortBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
-     * 
-     */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
-     * 
-     */
-    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
-        return new TypeOutSocketAsInSocketIn0();
-    }
-
-    /**
-     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
-     * 
-     */
-    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
-        return new TypeSecondayKeyFieldsAttributes();
-    }
-
-    /**
      * Create an instance of {@link TypePrimaryKeyFields }
      * 
      */
@@ -78,11 +46,43 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOutSocketAsInSocketIn0 }
+     * 
+     */
+    public TypeOutSocketAsInSocketIn0 createTypeOutSocketAsInSocketIn0() {
+        return new TypeOutSocketAsInSocketIn0();
+    }
+
+    /**
+     * Create an instance of {@link TypeSortBase }
+     * 
+     */
+    public TypeSortBase createTypeSortBase() {
+        return new TypeSortBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeSecondayKeyFieldsAttributes }
+     * 
+     */
+    public TypeSecondayKeyFieldsAttributes createTypeSecondayKeyFieldsAttributes() {
+        return new TypeSecondayKeyFieldsAttributes();
+    }
+
+    /**
      * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
      * 
      */
     public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
         return new TypePrimaryKeyFieldsAttributes();
+    }
+
+    /**
+     * Create an instance of {@link TypeSecondaryKeyFields }
+     * 
+     */
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
     }
 
 }
