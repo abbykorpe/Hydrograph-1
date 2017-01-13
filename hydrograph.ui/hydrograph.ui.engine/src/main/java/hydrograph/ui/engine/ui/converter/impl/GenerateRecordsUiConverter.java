@@ -26,6 +26,7 @@ import hydrograph.ui.graph.model.components.GenerateRecords;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -152,6 +153,11 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 				{
 					generateRecordsSchemaGridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField
 							.getScaleType().value()));	
+					generateRecordsSchemaGridRow.setScaleTypeValue(typeBaseField.getScaleType().value());
+				
+				} else if(StringUtils.equals(generateRecordsSchemaGridRow.getDataTypeValue(),BigDecimal.class.getName() )){
+					generateRecordsSchemaGridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Constants.EXPLICIT_SCALE_TYPE_VALUE));
+					generateRecordsSchemaGridRow.setScaleTypeValue(Constants.EXPLICIT_SCALE_TYPE_VALUE);
 				}
 				generateRecordsSchemaGridRow.setDateFormat(converterUiHelper.getStringValue(typeBaseField.getFormat()));
 				generateRecordsSchemaGridRow.setFieldName(converterUiHelper.getStringValue(typeBaseField.getName()));
