@@ -18,6 +18,7 @@ import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -29,7 +30,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   private val EXECUTION_TRACKING: String = "hydrograph.execution.tracking"
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
   private var flowManipulationContext: FlowManipulationContext = null;
-  private var flows: ListBuffer[SparkFlow] = null
+  private var flows: mutable.LinkedHashSet[SparkFlow] = null
   var executionTrackingListener : ExecutionTrackingListener = null
 
 
@@ -53,6 +54,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
     val sparkSessionBuilder: SparkSession.Builder = SparkSession.builder()
       .appName(hydrographJob.getJAXBObject.getName)
+        .config("spark.sql.shuffle.partitions","1")
       .config(configProperties)
 
 
@@ -151,7 +153,7 @@ class HydrographRuntime extends HydrographRuntimeService {
           LOG.info("Deleting temp path:" + tmpPath)
           try {
             fileSystem = FileSystem.get(RuntimeContext.instance.sparkSession.sparkContext.hadoopConfiguration)
-            fileSystem.delete(fullPath, true)
+//            fileSystem.delete(fullPath, true)
           }
           catch {
             case exception: NullPointerException => {
