@@ -150,6 +150,8 @@ public class Messages extends NLS {
 
 	public static String SHOW_ERROR_MESSAGE_ON_DELETING_XML_RELATED__PROPERTY_RESOURCE;
 	
+	public static String DO_YOU_WANT_TO_SAVE_CHANGES;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

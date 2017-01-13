@@ -578,7 +578,7 @@ public class JobManager {
 		   if(!StringUtils.equals(Activator.getDefault().getPreferenceStore()
 				.getString(JobRunPreference.SAVE_JOB_BEFORE_RUN_PREFRENCE), MessageDialogWithToggle.ALWAYS)){
 			   	SaveJobFileBeforeRunDialog messageBox = new SaveJobFileBeforeRunDialog
-			    (Display.getCurrent().getActiveShell(),"'"+SubJobUtility.getCurrentEditor().getEditorInput().getName()+"' "+Messages.CONFIRM_TO_SAVE_JOB_BEFORE_RUN );
+			    (Display.getCurrent().getActiveShell(),"'"+SubJobUtility.getCurrentEditor().getEditorInput().getName()+"' "+Messages.DO_YOU_WANT_TO_SAVE_CHANGES );
 			   	if(messageBox.open()==IDialogConstants.OK_ID){
 			   		SubJobUtility.getCurrentEditor().doSave(null);
 			   		SubJobUtility.getCurrentEditor().setDirty(false);
