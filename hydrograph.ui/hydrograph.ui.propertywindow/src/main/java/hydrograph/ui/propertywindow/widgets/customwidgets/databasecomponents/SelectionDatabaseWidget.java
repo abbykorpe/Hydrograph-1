@@ -301,7 +301,9 @@ public class SelectionDatabaseWidget extends AbstractWidget {
 				SQLQueryStatementDialog sqlQueryStatementDialog = new SQLQueryStatementDialog(
 						Display.getCurrent().getActiveShell(), text);
 				sqlQueryStatementDialog.open();
-				textWidget.setText(sqlQueryStatementDialog.getStyleTextSqlQuery());
+				if(sqlQueryStatementDialog.getStyleTextSqlQuery() != null){
+					textWidget.setText(sqlQueryStatementDialog.getStyleTextSqlQuery());
+				}
 				if(sqlQueryStatementDialog.isTextValueChanged()){
 					propertyDialogButtonBar.enableApplyButton(true);
 				}
