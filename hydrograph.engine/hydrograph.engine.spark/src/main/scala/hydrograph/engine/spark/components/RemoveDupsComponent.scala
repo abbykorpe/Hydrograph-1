@@ -6,33 +6,28 @@ import hydrograph.engine.core.component.entity.elements.KeyField
 import hydrograph.engine.core.constants.Keep
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{EncoderHelper, RowHelper}
-import org.apache.spark.sql.{Column, DataFrame, Row}
+import hydrograph.engine.spark.components.utils.EncoderHelper
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types.{BooleanType, StructField}
+import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.mutable.ListBuffer
 
 class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: BaseComponentParams)
-    extends StraightPullComponentBase {
+  extends StraightPullComponentBase {
   val logger = LoggerFactory.getLogger(classOf[RemoveDupsComponent])
 
   override def createComponent(): Map[String, DataFrame] = {
 
     try {
-      logger.trace(removeDupsEntity.toString());
+      logger.trace(removeDupsEntity.toString())
       val fm = RemoveDupsFieldManupulating(removeDupsEntity, componentsParams)
-      val prevOutRow = new Array[Any](fm.getOutputFields().size + 2)
       var firstRowFlag: Boolean = true
-      var prevKeysArray: Array[Any] = null
       var map: Map[String, DataFrame] = Map()
-
-      val flag1Pos = fm.getOutputFields().size
-      val flag2Pos = fm.getOutputFields().size + 1
-
+      var previousRow: Row = null
       val inputColumn = new Array[Column](fm.getinputFields().size)
       fm.getinputFields().zipWithIndex.foreach(f => {
         inputColumn(f._2) = col(f._1)
@@ -41,43 +36,38 @@ class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: 
       val keep = removeDupsEntity.getKeep
       val isUnusedRequired = removeDupsEntity.getOutSocketList.asScala.filter(p => p.getSocketType.equals("unused")).size > 0
       val primaryKeys = if (removeDupsEntity.getKeyFields == null) (Array[KeyField]()) else (removeDupsEntity.getKeyFields)
+      val keyFieldsIndexArray = fm.determineKeyFieldPos
       val secondaryKeys = if (removeDupsEntity.getSecondaryKeyFields == null) (Array[KeyField]()) else (removeDupsEntity.getSecondaryKeyFields)
       val sourceDf = componentsParams.getDataFrame().select(inputColumn: _*)
       val repartitionedDf = if (primaryKeys.isEmpty) (sourceDf.repartition(1)) else (sourceDf.repartition(primaryKeys.map { field => col(field.getName) }: _*))
       val sortedDf = repartitionedDf.sortWithinPartitions(populateSortKeys(primaryKeys ++ secondaryKeys): _*)
       val intermediateDf = sortedDf.mapPartitions(itr => {
+        def compare(row: Row, previousRow: Row, keyFieldPosition: ListBuffer[Int]): Boolean = {
+          keyFieldPosition.forall(i => row(i).equals(previousRow(i))
+          )
+        }
 
-        itr.flatMap { row =>
-          {
-            val currKeysArray: Array[Any] = RowHelper.extractKeyFields(row, fm.determineKeyFieldPos())
-            val isPrevKeyDifferent = {
-              if (prevKeysArray == null)
-                (true)
-              else if (!(prevKeysArray.zip(currKeysArray).forall(p => p._1.equals(p._2))))
-                (true)
-              else (false)
-            }
-            val isItrEmpty = itr.isEmpty
-            prevOutRow(flag1Pos) = if (prevKeysArray == null) null else if (!isPrevKeyDifferent) (false) else (true)
-
-            // to find first row
-            prevOutRow(flag2Pos) = if (prevKeysArray == null) null else firstRowFlag
-            var tempOutRow = prevOutRow.clone
-            prevKeysArray = currKeysArray
-
-            //Assign Fields
-            RowHelper.setTupleFromRow(prevOutRow, fm.determineFieldsPos(), row, fm.determineFieldsPos())
-
-            firstRowFlag = if (!isPrevKeyDifferent) (false) else (true)
-
-            if (itr.isEmpty) {
-              prevOutRow(flag1Pos) = if (prevKeysArray == null) null else if (!isPrevKeyDifferent) (false) else (true)
-              // to find first row
-              prevOutRow(flag2Pos) = if (prevKeysArray == null) null else firstRowFlag
-              Iterator(Row.fromSeq(tempOutRow), Row.fromSeq(prevOutRow))
-            } else
-              Iterator(Row.fromSeq(tempOutRow))
+        def addElement(row: Row, element: Any, element1: Any): Row = {
+          Row.fromSeq(row.toSeq :+ element :+ element1)
+        }
+        itr.flatMap { row => {
+          val isPrevKeyDifferent: Boolean = {
+            if (previousRow == null)
+              (true)
+            else (!compare(row, previousRow, keyFieldsIndexArray))
           }
+          val flag1 = if (previousRow == null) null else if (isPrevKeyDifferent) (true) else (false)
+          val flag2 = if (previousRow == null) null else firstRowFlag
+          var tempRow = if (previousRow == null) row.copy() else previousRow.copy()
+          previousRow = row
+          firstRowFlag = if (isPrevKeyDifferent) (true) else (false)
+          if (itr.isEmpty) {
+            val flag3 = true
+            val flag4 = if (previousRow == null) null else firstRowFlag
+            Iterator(addElement(tempRow, flag1, flag2), addElement(previousRow, flag3, flag4))
+          } else
+            Iterator(addElement(tempRow, flag1, flag2))
+        }
         }
       })(RowEncoder(EncoderHelper().getEncoder(fm.getOutputFields(), componentsParams.getSchemaFields()).add(StructField("flag1", BooleanType, true)).add(StructField("flag2", BooleanType, true))))
 
@@ -156,7 +146,6 @@ class RemoveDupsFieldManupulating(removeDupsEntity: RemoveDupsEntity, components
 }
 
 object RemoveDupsFieldManupulating {
-
   def apply(removeDupsEntity: RemoveDupsEntity, componentsParams: BaseComponentParams): RemoveDupsFieldManupulating = {
     val fm = new RemoveDupsFieldManupulating(removeDupsEntity, componentsParams)
     fm
