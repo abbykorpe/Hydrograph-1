@@ -348,6 +348,15 @@ public class WidgetHelper {
 	}
 	
 	/**
+	 * Configuration for operation class widget
+	 */
+	public WidgetConfig getOperationClassForPartitionByExpressionWidgetConfig() {
+		OperationClassConfig operationClassConfig = new OperationClassConfig();
+		operationClassConfig.setComponentName(Constants.PARTITION_BY_EXPRESSION);
+		return operationClassConfig;
+	}
+	
+	/**
 	 * Configuration for Transform component operation class widget
 	 */
 	public WidgetConfig getOperationClassForTransformWidgetConfig(String componentName, String componentDisplayName,String windowTitle) {

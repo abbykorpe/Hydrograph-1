@@ -62,6 +62,7 @@
 			<enumeration value="COMPONENT_NAME_WIDGET" />
 			<enumeration value="FILTER_PROPERTY_WIDGET" />
 			<enumeration value="OPERATIONAL_CLASS_WIDGET" />
+			<enumeration value="PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET" />
 			<enumeration value="STRICT_CLASS_WIDGET" />
 			<enumeration value="RETENTION_LOGIC_WIDGET"/>
 			<enumeration value="COLUMN_NAME_WIDGET"/>

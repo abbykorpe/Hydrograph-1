@@ -41,7 +41,6 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinMapWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTLookupConfigWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTLookupMapWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.RadioButtonsWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTOperationClassWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
@@ -49,6 +48,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.HiveInputSingleColumnW
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveOutputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.OutputRecordCountWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.PropogateWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.RadioButtonsWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents;
@@ -124,7 +124,10 @@ public class WidgetFactory {
 		
 		TEST_CONNECTION_WIDGET(DatabaseTestConnectionWidget.class),
 		PARTITION_KEYS_WIDGET_INPUT_HIVE(HiveInputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
+		
 		OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
+		PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET(ELTOperationClassWidget.class, WidgetHelper.INSTANCE.getOperationClassForFilterWidgetConfig()),
+		
 		RUNTIME_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.RUNTIME_PROPERTY_LABEL,Constants.RUNTIME_PROPERTIES_WINDOW_LABEL)),
 		SUBJOB_PROPERTIES_WIDGET(ELTRuntimePropertiesWidget.class,WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.SUBJOB_PROPERTY_LABEL,Constants.SUBJOB_WINDOW_LABEL)),
 		PRIMARY_COLUMN_KEYS_WIDGET(SecondaryColumnKeysWidget.class, WidgetHelper.INSTANCE.getPrimaryKeyWidgetConfig()),
