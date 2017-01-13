@@ -53,6 +53,8 @@ publishing {
 test {
     exclude '**/SparkUnionAllComponentTest*'
     exclude '**/InputMysqlComponentTest*'
+    exclude '**/InputFileParquetComponentTest*'
+    exclude '**/OutputFileParquetComponentTest*'
 	}
 
 //  version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar 
