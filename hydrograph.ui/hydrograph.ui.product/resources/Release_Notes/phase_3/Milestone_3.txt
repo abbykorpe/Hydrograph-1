@@ -53,4 +53,5 @@ Issues/Defects fixed:
 38 #599 [Akhilesh Joshi] -  Aggregate Component : Key field should be optional.
 39 		[Nitin Gupta] - Fixed import issues : 1) Failed to open Property window of transform component 2) Added proper error message if ui fails to import schema from external schema file 3) Paramerterized value of property tag was not importing
 40.#605 [Rakesh Kanchalwar] - Teradata Component: Name on the component is overlapping with error icon
+41.#629 [Rakesh Kanchalwar] - Interface Name is not getting displayed while creating custom operation class
 
