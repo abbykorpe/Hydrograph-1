@@ -14,6 +14,7 @@
  
 package hydrograph.ui.engine.parsing;
 
+import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.repository.InSocketDetail;
 import hydrograph.ui.engine.ui.repository.ParameterData;
 import hydrograph.ui.engine.ui.repository.UIComponentRepo;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -46,6 +48,7 @@ public class XMLHandler extends DefaultHandler {
 	private static final String VALUE = "value";
 	private static final String INSOCKET_TAG = "inSocket";
 	private static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}";
+	private static final String NAME = "name";
 
 	public	XMLHandler(UIComponentRepo componentRepo){
 		this.componentRepo=componentRepo;
@@ -60,7 +63,6 @@ public class XMLHandler extends DefaultHandler {
 	 */
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-//		LOGGER.debug("Parsing - start elements uri:{} , localName:{}, qname:{}, attributes:{}", new Object[] { uri,localName, qName, attributes });
 		List<ParameterData> tempParammeterList;
 		Matcher matcher = null;
 		if (isComponent(qName)) {
@@ -77,6 +79,9 @@ public class XMLHandler extends DefaultHandler {
 			if (matcher.matches()) {
 				tempParammeterList = componentRepo.getParammeterFactory().get(currentComponent);
 				if (tempParammeterList != null) {
+					if(StringUtils.equals(qName, PropertyNameConstants.PROPERTY_TAG.value())){
+						tempParammeterList.add(new ParameterData(qName, attributes.getValue(NAME)+"="+attributes.getValue(VALUE)));
+					}else
 					tempParammeterList.add(new ParameterData(qName, attributes.getValue(VALUE)));
 				}
 			}

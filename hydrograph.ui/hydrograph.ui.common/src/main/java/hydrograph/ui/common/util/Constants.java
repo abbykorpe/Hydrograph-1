@@ -342,4 +342,5 @@ public class Constants {
 	public static final String PREVIOUS_COMPONENT_OLD_SCHEMA = "previous_component_old_schema";
 	public static final String _INDEX = "_index";
 	public static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_ROOT_NODE = "Hydrograph";
+	public static final String EXPLICIT_SCALE_TYPE_VALUE = "explicit";
 }
