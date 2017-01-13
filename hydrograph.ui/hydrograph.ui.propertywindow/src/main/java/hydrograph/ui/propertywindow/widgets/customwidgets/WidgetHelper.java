@@ -508,7 +508,7 @@ public class WidgetHelper {
 		textBoxConfig.setName(Messages.ROOT_TAG);
 		textBoxConfig.getListeners().add(Listners.MODIFY);
 		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
-		textBoxConfig.setWidgetWidth(78);
+		textBoxConfig.setGrabExcessSpace(true);
 		return textBoxConfig;
 	}
 
@@ -517,7 +517,7 @@ public class WidgetHelper {
 		textBoxConfig.setName(Messages.ROW_TAG);
 		textBoxConfig.getListeners().add(Listners.MODIFY);
 		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
-		textBoxConfig.setWidgetWidth(78);
+		textBoxConfig.setGrabExcessSpace(true);
 		return textBoxConfig;
 	}
 }

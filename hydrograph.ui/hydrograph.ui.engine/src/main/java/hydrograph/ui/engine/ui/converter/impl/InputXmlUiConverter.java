@@ -18,17 +18,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.xml.namespace.QName;
+
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
+import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.jaxb.inputtypes.Teradata;
 import hydrograph.engine.jaxb.inputtypes.XmlFile;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.XPathGridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.InputUiConverter;
@@ -89,10 +93,15 @@ public class InputXmlUiConverter extends InputUiConverter{
 			for (Object record : outSocket.getSchema().getFieldOrRecordOrIncludeExternalSchema()) {
 				if ((TypeExternalSchema.class).isAssignableFrom(record.getClass())) {
 					schema.setIsExternal(true);
-					if (((TypeExternalSchema) record).getUri() != null)
+					if (((TypeExternalSchema) record).getUri() != null){
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
+					}
 				} else {
-					gridRowList.add(converterUiHelper.getSchema(record));
+					TypeBaseField typeBaseField = (TypeBaseField) record;
+					XPathGridRow xPathGridRow = new XPathGridRow();
+					converterUiHelper.getCommonSchema(xPathGridRow, typeBaseField);
+					xPathGridRow.setXPath(typeBaseField.getOtherAttributes().get(new QName(Constants.ABSOLUTE_OR_RELATIVE_XPATH_QNAME)));
+					gridRowList.add(xPathGridRow);
 					schema.setGridRow(gridRowList);
 					schema.setIsExternal(false);
 				}
@@ -103,11 +112,12 @@ public class InputXmlUiConverter extends InputUiConverter{
 	}
 
 	
+	
 	@Override
 	protected Map<String, String> getRuntimeProperties() {
 		LOGGER.debug("Generating Runtime Properties for -{}", componentName);
 		TreeMap<String, String> runtimeMap = null;
-		TypeProperties typeProperties = ((Teradata) typeBaseComponent).getRuntimeProperties();
+		TypeProperties typeProperties = ((XmlFile) typeBaseComponent).getRuntimeProperties();
 		if (typeProperties != null) {
 			runtimeMap = new TreeMap<>();
 			for (Property runtimeProperty : typeProperties.getProperty()) {

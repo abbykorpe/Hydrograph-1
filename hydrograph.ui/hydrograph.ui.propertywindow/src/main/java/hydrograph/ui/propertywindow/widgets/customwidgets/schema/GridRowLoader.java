@@ -14,27 +14,8 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.schema;
 
-import hydrograph.ui.common.schema.Field;
-import hydrograph.ui.common.schema.FieldDataTypes;
-import hydrograph.ui.common.schema.Fields;
-import hydrograph.ui.common.schema.ScaleTypes;
-import hydrograph.ui.common.schema.Schema;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
-import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -59,6 +40,25 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
+
+import hydrograph.ui.common.schema.Field;
+import hydrograph.ui.common.schema.FieldDataTypes;
+import hydrograph.ui.common.schema.Fields;
+import hydrograph.ui.common.schema.ScaleTypes;
+import hydrograph.ui.common.schema.Schema;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.datastructure.property.XPathGridRow;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDetails;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 
 /**
@@ -143,19 +143,23 @@ public class GridRowLoader {
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getGenerateRecordGridRow(field), schemaGridRowListToImport);
 						}	
+					}else if(Messages.XPATH_GRID_ROW.equals(gridRowType)){
+						for (Field field : fieldsList) {
+							XPathGridRow xPathGridRow = new XPathGridRow();
+							populateCommonFields(xPathGridRow, field);
+							xPathGridRow.setXPath(field.getAbsoluteOrRelativeXpath());
+							addRowToList(gridDetails, grids, xPathGridRow, schemaGridRowListToImport);
+						}	
 					}else if(Messages.MIXEDSCHEME_GRID_ROW.equals(gridRowType)){
 						for (Field field : fieldsList) {
 							addRowToList(gridDetails, grids, getMixedSchemeGridRow(field), schemaGridRowListToImport);
 						}	
 					}
-				
 				}
 			}else{
-				
 				logger.error(Messages.EXPORT_XML_EMPTY_FILENAME);
 				throw new Exception(Messages.EXPORT_XML_EMPTY_FILENAME);
 			}
-
 		} catch (JAXBException e1) {
 			grids.clear();
 			showMessageBox(Messages.IMPORT_XML_FORMAT_ERROR + " -\n"+e1.getMessage(),"Error",SWT.ERROR);
@@ -185,16 +189,11 @@ public class GridRowLoader {
 	public List<GridRow> importGridRowsFromXML(){
 
 		List<GridRow> schemaGridRowListToImport = new ArrayList<GridRow>();
-		InputStream xml, xsd;
-		try {
-			if(StringUtils.isNotBlank(schemaFile.getPath())){
-				
-				xml = new FileInputStream(schemaFile);
-				
-				xsd = new FileInputStream(SCHEMA_CONFIG_XSD_PATH);
+		if(StringUtils.isNotBlank(schemaFile.getPath())){
+			try(InputStream xml = new FileInputStream(schemaFile);
+					InputStream xsd = new FileInputStream(SCHEMA_CONFIG_XSD_PATH)) {
 				
 				if(validateXML(xml, xsd)){
-					
 					JAXBContext jaxbContext = JAXBContext.newInstance(Schema.class);
 					Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 					
@@ -204,51 +203,48 @@ public class GridRowLoader {
 					GridRow gridRow = null;
 					schemaGridRowListToImport = new ArrayList<GridRow>();
 
-
 					if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
-
 						for (Field field : fieldsList) {
 							gridRow = getBasicSchemaGridRow(field);
 							schemaGridRowListToImport.add(gridRow);
 						}	
-						
 					}else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
-
 						for (Field field : fieldsList) {
 							schemaGridRowListToImport.add(getFixedWidthGridRow(field));
 						}
 					}else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
-						
 						for (Field field : fieldsList) {
-							schemaGridRowListToImport.add(gridRow = getGenerateRecordGridRow(field));
+							gridRow = getGenerateRecordGridRow(field);
+							schemaGridRowListToImport.add(gridRow);
 						}
 					}else if(Messages.MIXEDSCHEME_GRID_ROW.equals(gridRowType)){
-						
 						for (Field field : fieldsList) {
-							schemaGridRowListToImport.add(gridRow = getMixedSchemeGridRow(field));
+							gridRow = getMixedSchemeGridRow(field);
+							schemaGridRowListToImport.add(gridRow);
 						}
 					}
-				
+					else if(Messages.XPATH_GRID_ROW.equals(gridRowType)){
+						for (Field field : fieldsList) {
+							gridRow = new XPathGridRow();
+							populateCommonFields(gridRow, field);
+							((XPathGridRow)gridRow).setXPath(field.getAbsoluteOrRelativeXpath());
+							schemaGridRowListToImport.add(gridRow);
+						}
+					}
 				}
-			}else{
-				
-				logger.warn(Messages.EXPORT_XML_EMPTY_FILENAME);
+			} catch (JAXBException e1) {
+				logger.warn(Messages.IMPORT_XML_FORMAT_ERROR);
+				return schemaGridRowListToImport;
 			}
-
-		} catch (JAXBException e1) {
-			logger.warn(Messages.IMPORT_XML_FORMAT_ERROR);
-			return schemaGridRowListToImport;
+			catch (IOException ioException) {
+				logger.warn(Messages.IMPORT_XML_ERROR);
+				return schemaGridRowListToImport;
+			}
+		}else{
+			logger.warn(Messages.EXPORT_XML_EMPTY_FILENAME);
 		}
-		catch (FileNotFoundException e) {
-			logger.warn(Messages.IMPORT_XML_ERROR);
-			return schemaGridRowListToImport;
-		}
-
 		return schemaGridRowListToImport;
-
 	}
-
-
 
 	/**
 	 * The method exports schema rows from schema grid into schema file.
@@ -327,6 +323,13 @@ public class GridRowLoader {
 			Field field = new Field();
 			field.setName(gridRow.getFieldName());
 			field.setType(FieldDataTypes.fromValue(gridRow.getDataTypeValue()));
+			
+			if(gridRow instanceof XPathGridRow){
+				if(StringUtils.isNotBlank(((XPathGridRow)gridRow).getXPath())){
+					field.setAbsoluteOrRelativeXpath((((XPathGridRow)gridRow).getXPath()));
+				}
+			}
+			
 			if(StringUtils.isNotBlank(gridRow.getDateFormat())){
 				field.setFormat(gridRow.getDateFormat());
 			}

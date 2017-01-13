@@ -14,6 +14,23 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -35,23 +52,6 @@ import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
 
 
 /**
@@ -111,7 +111,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	@Override
 	public void attachToPropertySubGroup(AbstractELTContainerWidget container) {
 		
-		logger.debug("Starting {} textbox creation", textBoxConfig.getName());
+		logger.trace("Starting {} textbox creation", textBoxConfig.getName());
 		lableAndTextBox = new ELTDefaultSubgroupComposite(container.getContainerControl());
 		lableAndTextBox.createContainerWidget();
 		
@@ -144,7 +144,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		cursor = container.getContainerControl().getDisplay().getSystemCursor(SWT.CURSOR_HAND);
 		
 		populateWidget();
-		logger.debug("Finished {} textbox creation", textBoxConfig.getName());
+		logger.trace("Finished {} textbox creation", textBoxConfig.getName());
 	}
 
 	protected void attachListeners(AbstractELTWidget textBoxWidget) {
@@ -168,7 +168,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	}
 	
 	protected void populateWidget(){
-		logger.debug("Populating {} textbox", textBoxConfig.getName());
+		logger.trace("Populating {} textbox", textBoxConfig.getName());
 		String property = propertyValue;
 		if(StringUtils.isNotBlank(property) ){
 			textBox.setText(property);

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.ifxml.TypeInputXmlOutSocket;
-import hydrograph.engine.jaxb.ifxml.TypeXmlField;
 import hydrograph.engine.jaxb.inputtypes.XmlFile;
 import hydrograph.engine.jaxb.inputtypes.XmlFile.AbsoluteXPath;
 import hydrograph.engine.jaxb.inputtypes.XmlFile.RootTag;
@@ -46,6 +45,7 @@ public class InputXmlConverter extends InputConverter {
 		
 		XmlFile.Path path = new XmlFile.Path();
 		path.setUri((String) properties.get(PropertyNameConstants.PATH.value()));
+		xmlFile.setPath(path);
 		
 		XmlFile.AbsoluteXPath absoluteXPath = new AbsoluteXPath();
 		absoluteXPath.setValue((String) properties.get(PropertyNameConstants.XPATH_QUERY.value()));
@@ -93,9 +93,9 @@ public class InputXmlConverter extends InputConverter {
 		if (gridList != null && gridList.size() != 0) {
 			for (GridRow object : gridList) {
 				XPathGridRow xPathGridRow = (XPathGridRow) object;
-				TypeXmlField gridRow = (TypeXmlField)converterHelper.getSchemaGridTargetData(object);
+				TypeBaseField gridRow = converterHelper.getSchemaGridTargetData(object);
 				if (StringUtils.isNotBlank(xPathGridRow.getXPath())) {
-					gridRow.getOtherAttributes().put(new QName(Constants.DELIMITER_QNAME), xPathGridRow.getXPath());
+					gridRow.getOtherAttributes().put(new QName(Constants.ABSOLUTE_OR_RELATIVE_XPATH_QNAME), xPathGridRow.getXPath());
 				}
 				typeBaseFields.add(gridRow);
 			}

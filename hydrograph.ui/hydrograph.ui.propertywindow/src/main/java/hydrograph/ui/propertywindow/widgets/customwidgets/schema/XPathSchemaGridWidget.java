@@ -57,7 +57,7 @@ public class XPathSchemaGridWidget extends ELTSchemaGridWidget {
 	public XPathSchemaGridWidget(ComponentConfigrationProperty componentConfigrationProperty,
 			ComponentMiscellaneousProperties componentMiscellaneousProperties, PropertyDialogButtonBar propertyDialogButtonBar) {
 		super(componentConfigrationProperty, componentMiscellaneousProperties,propertyDialogButtonBar);
-		this.gridRowType = Messages.GENERIC_GRID_ROW;
+		this.gridRowType = Messages.XPATH_GRID_ROW;
 	}
 	
 	@Override
