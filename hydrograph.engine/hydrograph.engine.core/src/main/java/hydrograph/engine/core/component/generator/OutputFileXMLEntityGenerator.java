@@ -16,7 +16,6 @@ import hydrograph.engine.core.component.entity.OutputFileXMLEntity;
 import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.component.generator.base.OutputComponentGeneratorBase;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.outputtypes.XmlFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
