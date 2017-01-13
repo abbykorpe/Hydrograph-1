@@ -13,6 +13,13 @@
 
 package hydrograph.ui.engine.converter.impl;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.aggregate.TypePrimaryKeyFields;
 import hydrograph.engine.jaxb.aggregate.TypeSecondaryKeyFields;
 import hydrograph.engine.jaxb.aggregate.TypeSecondayKeyFieldsAttributes;
@@ -20,7 +27,6 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeSortOrder;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
 import hydrograph.engine.jaxb.operationstypes.Aggregate;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
@@ -32,13 +38,6 @@ import hydrograph.ui.engine.converter.TransformConverter;
 import hydrograph.ui.engine.xpath.ComponentXpathConstants;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.slf4j.Logger;
 
 /**
  * Aggregate converter
@@ -106,12 +105,14 @@ public class AggregateConverter extends TransformConverter {
 		logger.debug("Generating XML for :{}", properties.get(Constants.PROPERTY_COLUMN_NAME));
 		List<String> columnNameProperties = (List<String>) component.getProperties()
 				.get(Constants.PROPERTY_COLUMN_NAME);
-		if (columnNameProperties != null && !columnNameProperties.isEmpty()) {
-			TypePrimaryKeyFields primaryKeyFields = new TypePrimaryKeyFields();
+		TypePrimaryKeyFields primaryKeyFields = new TypePrimaryKeyFields();
+		if (columnNameProperties != null ) {
 			aggregate.setPrimaryKeys(primaryKeyFields);
 			List<TypeFieldName> field = primaryKeyFields.getField();
 			if (!converterHelper.hasAllStringsInListAsParams(columnNameProperties)) {
-				for (String columnNameProperty : columnNameProperties) {
+				
+					
+					for (String columnNameProperty : columnNameProperties) {
 					if (!ParameterUtil.isParameter(columnNameProperty)) {
 						TypeFieldName fieldName = new TypeFieldName();
 						fieldName.setName(columnNameProperty);
@@ -120,8 +121,15 @@ public class AggregateConverter extends TransformConverter {
 						converterHelper.addParamTag(this.ID, columnNameProperty,
 								ComponentXpathConstants.OPERATIONS_PRIMARY_KEYS.value(), false);
 					}
-				}
-			} else {
+					}
+				
+				
+			}
+			else if(columnNameProperties.isEmpty())
+			{
+				primaryKeyFields.setNone("");
+			}
+			else {
 				StringBuffer parameterFieldNames = new StringBuffer();
 				TypeFieldName fieldName = new TypeFieldName();
 				fieldName.setName("");
@@ -131,6 +139,9 @@ public class AggregateConverter extends TransformConverter {
 				converterHelper.addParamTag(this.ID, parameterFieldNames.toString(),
 						ComponentXpathConstants.OPERATIONS_PRIMARY_KEYS.value(), true);
 			}
+		}else{
+			aggregate.setPrimaryKeys(primaryKeyFields);
+			primaryKeyFields.setNone("");
 		}
 	}
 
