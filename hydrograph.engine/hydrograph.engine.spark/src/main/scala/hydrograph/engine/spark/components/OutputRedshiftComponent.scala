@@ -42,6 +42,11 @@ class OutputRedshiftComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsP
     properties.setProperty("user", outputRDBMSEntity.getUsername)
     properties.setProperty("password", outputRDBMSEntity.getPassword)
     properties.setProperty("driver", outputRDBMSEntity.getJdbcDriver);
+    val driverName = "com.amazon.redshift.jdbc42.Driver"
+
+    if (outputRDBMSEntity.getJdbcDriver().equals("JDBC 4.2")) {
+      properties.setProperty("driver", driverName)
+    }
     val connectionURL = "jdbc:redshift://" + outputRDBMSEntity.getHostName + ":" + outputRDBMSEntity.getPort() + "/" +
       outputRDBMSEntity.getDatabaseName;
 

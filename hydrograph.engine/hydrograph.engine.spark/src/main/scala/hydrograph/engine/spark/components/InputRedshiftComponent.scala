@@ -36,6 +36,12 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
     properties.setProperty("user", inputRDBMSEntity.getUsername)
     properties.setProperty("password", inputRDBMSEntity.getPassword)
     properties.setProperty("driver", inputRDBMSEntity.getJdbcDriver)
+    val driverName = "com.amazon.redshift.jdbc42.Driver"
+
+    if (inputRDBMSEntity.getJdbcDriver.equals("JDBC 4.2")) {
+      properties.setProperty("driver", driverName)
+    }
+
     LOG.info("Created Input Redshift Component '" + inputRDBMSEntity.getComponentId
       + "' in Batch " + inputRDBMSEntity.getBatch
       + " with output socket " + inputRDBMSEntity.getOutSocketList.get(0).getSocketId)
