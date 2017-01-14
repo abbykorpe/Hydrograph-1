@@ -27,12 +27,11 @@ import java.util.List;
 
 public class HydrographExecution {
 
+    private static Logger LOG = LoggerFactory.getLogger(HydrographExecution.class);
     private PropertiesLoader propertiesLoader;
     private HydrographRuntimeService runtimeService;
     private HydrographXMLInputService hydrographXmlInputService;
     private HydrographJob hydrographJob;
-
-    private static Logger LOG = LoggerFactory.getLogger(HydrographExecution.class);
 
     public HydrographExecution() {
         this.propertiesLoader = PropertiesLoader.getInstance();

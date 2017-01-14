@@ -36,7 +36,7 @@
         </outSocket>
         <databaseName value="dev"/>
         <!-- 	<query value="select testingtable1.num as num,testingtable1.lwr as lwr,testingtable1.upr as upr from testingtable2 inner join testingtable1 on testingtable2.num!=testingtable1.num  " />  -->
-        <hostName value="redshift-demo.cnmrntvjuquk.us-east-1.redshift.amazonaws.com"/>
+        <hostName value="redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com"/>
         <port value="5439"/>
         <jdbcDriver value="JDBC 4.2"/>
         <userName value="awsuser"/>
@@ -47,7 +47,7 @@
         <!--<schemaName value="public"/>
         <tableName value="testingAllTypes"/>-->
 
-        <selectQuery value="select * from testingalltypesbatchsizee"/>
+        <selectQuery value="select * from testingalltypesbatchsize4"/>
     </inputs>
 
     <outputs id="OFDelimited_01" batch="0" xsi:type="ot:textFileDelimited">
