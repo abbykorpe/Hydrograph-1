@@ -13,10 +13,12 @@ import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
 import hydrograph.engine.spark.executiontracking.plugin.{ExecutionTrackingListener, ExecutionTrackingPlugin}
+import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
-import org.apache.spark.SparkConf
+
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -28,7 +30,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   private val EXECUTION_TRACKING: String = "hydrograph.execution.tracking"
   private val LOG: Logger = LoggerFactory.getLogger(classOf[HydrographRuntime])
   private var flowManipulationContext: FlowManipulationContext = null;
-  private var flows: ListBuffer[SparkFlow] = null
+  private var flows: mutable.LinkedHashSet[SparkFlow] = null
   var executionTrackingListener : ExecutionTrackingListener = null
 
 
@@ -48,12 +50,14 @@ class HydrographRuntime extends HydrographRuntimeService {
   override def initialize(properties: Properties, args: Array[String], hydrographJob: HydrographJob,
                           jobId: String, udfPath: String): Unit = {
 
-    val configProperties = getSparkProperties(hydrographJob)
+    val configProperties = getSparkProperties(hydrographJob,properties)
 
     val sparkSessionBuilder: SparkSession.Builder = SparkSession.builder()
-      .master(properties.getProperty("hydrograph.spark.master"))
       .appName(hydrographJob.getJAXBObject.getName)
+        .config("spark.sql.shuffle.partitions","1")
       .config(configProperties)
+
+
 
 
     val schemaFieldHandler = new SchemaFieldHandler(
@@ -149,7 +153,7 @@ class HydrographRuntime extends HydrographRuntimeService {
           LOG.info("Deleting temp path:" + tmpPath)
           try {
             fileSystem = FileSystem.get(RuntimeContext.instance.sparkSession.sparkContext.hadoopConfiguration)
-            fileSystem.delete(fullPath, true)
+//            fileSystem.delete(fullPath, true)
           }
           catch {
             case exception: NullPointerException => {
@@ -170,14 +174,19 @@ class HydrographRuntime extends HydrographRuntimeService {
     clazz(0).newInstance().asInstanceOf[T]
   }
 
-  def getSparkProperties(hydrographJob: HydrographJob): SparkConf = {
+  def getSparkProperties(hydrographJob: HydrographJob, properties: Properties): SparkConf = {
     val configProperties = new SparkConf()
+    val sparkProperties = properties.entrySet().asScala
+    for (property <- sparkProperties) {
+      configProperties.set(property.getKey.toString, property.getValue.toString)
+    }
     val runttimeProperties = hydrographJob.getJAXBObject().getRuntimeProperties
     if (runttimeProperties != null) {
       for (runtimeProperty <- runttimeProperties.getProperty.asScala) {
         configProperties.set(runtimeProperty.getName, runtimeProperty.getValue)
       }
     }
+
     configProperties
   }
 

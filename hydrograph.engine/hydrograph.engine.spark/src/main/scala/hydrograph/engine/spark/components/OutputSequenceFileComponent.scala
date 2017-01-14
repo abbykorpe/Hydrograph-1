@@ -3,6 +3,7 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.OutputFileSequenceFormatEntity
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.utils.SchemaCreator
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
@@ -16,7 +17,8 @@ BaseComponentParams) extends SparkFlow {
     try {
       LOG.info("Created Output File Delimited Component " + outputSequenceEntity.getComponentId
         + " in Batch " + outputSequenceEntity.getBatch)
-      baseComponentParams.getDataFrame().rdd.saveAsObjectFile(outputSequenceEntity.getPath);
+      val schemaCreator = SchemaCreator(outputSequenceEntity)
+      baseComponentParams.getDataFrame().select(schemaCreator.createSchema():_*).rdd.saveAsObjectFile(outputSequenceEntity.getPath);
     } catch {
       case
         e: Exception =>
