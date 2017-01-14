@@ -28,8 +28,6 @@ public class OutputRedshiftEntityGenerator extends OutputComponentGeneratorBase 
 
     private static Logger LOG = LoggerFactory.getLogger(OutputRedshiftEntityGenerator.class);
     private final String DATABASE_TYPE = "Redshift";
-    private final String REDSHIFT_DRIVER_CLASS_NAME = "com.amazon.redshift.jdbc42.Driver";
-    private final String JDBC_DRIVER_NAME = "JDBC 4.2";
     private Redshift jaxbOutputRedshift;
     private OutputRDBMSEntity outputRDBMSEntity;
 
@@ -61,8 +59,7 @@ public class OutputRedshiftEntityGenerator extends OutputComponentGeneratorBase 
         outputRDBMSEntity.setHostName(jaxbOutputRedshift.getHostName().getValue());
         outputRDBMSEntity.setTableName(jaxbOutputRedshift.getTableName().getValue());
         outputRDBMSEntity.setDatabaseType(DATABASE_TYPE);
-        if (jaxbOutputRedshift.getJdbcDriver().getValue().equalsIgnoreCase(JDBC_DRIVER_NAME))
-            outputRDBMSEntity.setJdbcDriver(REDSHIFT_DRIVER_CLASS_NAME);
+        outputRDBMSEntity.setJdbcDriver(jaxbOutputRedshift.getJdbcDriver() == null ? null : jaxbOutputRedshift.getJdbcDriver().getValue());
         outputRDBMSEntity.setRuntimeProperties(jaxbOutputRedshift.getRuntimeProperties() == null ? new Properties() :
                 OutputEntityUtils.extractRuntimeProperties(jaxbOutputRedshift.getRuntimeProperties()));
         outputRDBMSEntity.setBatch(jaxbOutputRedshift.getBatch());
