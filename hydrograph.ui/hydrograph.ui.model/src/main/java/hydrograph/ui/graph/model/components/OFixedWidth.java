@@ -16,20 +16,17 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.OutputCategory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class OutputFixedWidth.
+ * Model class for  OutputFixedWidth component.
  * 
  * @author Bitwise
  */
 public class OFixedWidth extends OutputCategory {
 
 	/**
-	 * Instantiates a new output fixed width.
+	 * 
 	 */
-	public OFixedWidth() {
-		super();
-	}
+	private static final long serialVersionUID = 3113182976371337014L;
 
 	public String getConverter() {
 		return "hydrograph.ui.engine.converter.impl.OutputFileFixedWidthConverter";

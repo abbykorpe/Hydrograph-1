@@ -16,20 +16,17 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.InputCategory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class InputFixedWidth.
+ * Model class for InputFixedWidth Component.
  * 
  * @author Bitwise
  */
 public class IFixedWidth extends InputCategory{
 
 	/**
-	 * Instantiates a new input fixed width.
+	 * 
 	 */
-	public IFixedWidth() {
-		super();
-	}
+	private static final long serialVersionUID = -6739476372451888365L;
 
 	public String getConverter() {
 		return "hydrograph.ui.engine.converter.impl.InputFileFixedWidthConverter";

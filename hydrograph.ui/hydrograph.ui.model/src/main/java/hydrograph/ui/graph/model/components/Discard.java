@@ -19,10 +19,15 @@ import hydrograph.ui.graph.model.categories.OutputCategory;
 /**
  * The model class for Discard
  * 
- * @author Jay Tripathi
+ * @author Bitwise
  */
 public class Discard extends OutputCategory{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3172857428737521895L;
+
 	/**
 	 * Instantiates a new Discard Component.
 	 */

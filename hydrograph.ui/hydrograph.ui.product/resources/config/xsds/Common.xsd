@@ -113,6 +113,10 @@
 			<enumeration value="OUTPUT_RECORD_COUNT_WIDGET"/>
 			<enumeration value="SELECT_INTERFACE_WITH_LOAD_WIDGET"/>
 			<enumeration value="SELECT_INTERFACE_WITH_EXPORT_WIDGET"/>
+			<enumeration value="XPATH_SCHEMA_WIDGET"/>
+			<enumeration value="XPATH_QUERY_WIDGET"/>
+			<enumeration value="ROOT_TAG_WIDGET"/>
+			<enumeration value="ROW_TAG_WIDGET"/>
 		</restriction>
 	</simpleType>
 
@@ -321,6 +325,13 @@
 		          <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="ToggleSelectionValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="XPATH_SCHEMA_GRID_VALIDATOR">
+		          <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="XPathSchemaGridValidationRule" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

@@ -24,6 +24,11 @@ import hydrograph.ui.graph.model.categories.TransformCategory;
 
 public class Lookup extends TransformCategory{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7452281900413266328L;
+
 	@Override
 	public String getConverter() {
 		return "hydrograph.ui.engine.converter.impl.LookupConverter";

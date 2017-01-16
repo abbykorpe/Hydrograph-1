@@ -54,6 +54,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="HIVE_PARQUET_VALIDATOR"/>
  *     &lt;enumeration value="LONG_VALIDATOR"/>
  *     &lt;enumeration value="NORMALIZE_MAPPING_VALIDATOR"/>
+ *     &lt;enumeration value="XPATH_SCHEMA_GRID_VALIDATOR"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -104,7 +105,9 @@ public enum Validators {
     @XmlEnumValue("TOGGLE_SELECTION_VALIDATOR")
     ToggleSelectionValidationRule("TOGGLE_SELECTION_VALIDATOR"),
     @XmlEnumValue("NORMALIZE_MAPPING_VALIDATOR")
-    NormalizeMappingValidator("NORMALIZE_MAPPING_VALIDATOR");
+    NormalizeMappingValidator("NORMALIZE_MAPPING_VALIDATOR"),
+    @XmlEnumValue("XPATH_SCHEMA_GRID_VALIDATOR")
+    XPathSchemaGridValidationRule("XPATH_SCHEMA_GRID_VALIDATOR");
 
     
     private final String value;

@@ -100,7 +100,10 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="SELECT_INTERFACE_WITH_EXPORT_WIDGET/>
  *     &lt;enumeration value="SELECT_INTERFACE_WITH_LOAD_WIDGET/>
  *     &lt;enumeration value="PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET/>
- *     
+ *     &lt;enumeration value="XPATH_SCHEMA_WIDGET/>
+ *     &lt;enumeration value="XPATH_QUERY_WIDGET/>
+ *     &lt;enumeration value="ROOT_TAG_WIDGET"/>
+ *     &lt;enumeration value="ROW_TAG_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -177,7 +180,11 @@ public enum PropertyRenderer {
     SELECT_INTERFACE_WITH_EXPORT_WIDGET,
     SELECT_INTERFACE_WITH_LOAD_WIDGET,
 	PARTITION_COMPONENT_OUTPUT_COUNT_WIDGET,
-	PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET;
+	PARTITION_BY_EXP_OPERATIONAL_CLASS_WIDGET,
+    XPATH_SCHEMA_WIDGET,
+    XPATH_QUERY_WIDGET,
+    ROOT_TAG_WIDGET,
+    ROW_TAG_WIDGET;
 
     public String value() {
         return name();

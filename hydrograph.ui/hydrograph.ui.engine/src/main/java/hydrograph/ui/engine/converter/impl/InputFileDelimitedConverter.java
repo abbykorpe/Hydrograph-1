@@ -14,15 +14,6 @@
  
 package hydrograph.ui.engine.converter.impl;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.engine.constants.PropertyNameConstants;
-import hydrograph.ui.engine.converter.InputConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +24,18 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 import hydrograph.engine.jaxb.inputtypes.TextFileDelimited.Quote;
 import hydrograph.engine.jaxb.itfd.TypeInputDelimitedOutSocket;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.engine.constants.PropertyNameConstants;
+import hydrograph.ui.engine.converter.InputConverter;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * Converter for Input File Delimited Converter
+ * @author Bitwise
+ */
 public class InputFileDelimitedConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(InputFileDelimitedConverter.class);

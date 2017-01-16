@@ -21,6 +21,7 @@
 package hydrograph.ui.common.schema;
 
 import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="type" use="required" type="{hydrograph/ui/graph/schema}field_data_types" />
+ *       &lt;attribute name="type" use="required" type="{hydrograph/ui/graph/schema}string" />
  *       &lt;attribute name="format" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="precision" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="scale" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -64,6 +66,8 @@ public class Field {
     protected String name;
     @XmlAttribute(name = "type", required = true)
     protected FieldDataTypes type;
+    @XmlAttribute(name = "absoluteOrRelativeXpath")
+    protected String absoluteOrRelativeXpath;
     @XmlAttribute(name = "format")
     protected String format;
     @XmlAttribute(name = "precision")
@@ -133,7 +137,31 @@ public class Field {
     public void setType(FieldDataTypes value) {
         this.type = value;
     }
-
+   
+    /**
+     * Gets the value of the type property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAbsoluteOrRelativeXpath() {
+		return absoluteOrRelativeXpath;
+	}
+    
+    /**
+     * Sets the value of the type property.
+     * 
+     * @param absoluteOrRelativeXpath
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAbsoluteOrRelativeXpath(String absoluteOrRelativeXpath) {
+		this.absoluteOrRelativeXpath = absoluteOrRelativeXpath;
+	}
+    
     /**
      * Gets the value of the format property.
      * 

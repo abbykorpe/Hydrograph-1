@@ -10,27 +10,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
- 
 package hydrograph.ui.graph.model.components;
 
-import hydrograph.ui.graph.model.categories.InputCategory;
-
+import hydrograph.ui.graph.model.Component;
 
 /**
- * Model class for IFParquet Component
- * 
+ * Model class for Input XML component 
  * @author Bitwise
  */
-public class IFParquet extends InputCategory {
-	
+public class IXml extends Component {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4624935681844904337L;
+	private static final long serialVersionUID = -2171620373618501184L;
 
-	public String getConverter(){
-		return "hydrograph.ui.engine.converter.impl.InputParquetConverter";
-		
+	@Override
+	public String getConverter() {
+		return "hydrograph.ui.engine.converter.impl.InputXmlConverter";
 	}
+
 }

@@ -16,20 +16,16 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.OutputCategory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class OFDelimited.
- * 
+ * Model class for  OFDelimited component.
  * @author Bitwise
  */
 public class OFDelimited extends OutputCategory {
 
 	/**
-	 * Instantiates a new OF delimited.
+	 * 
 	 */
-	public OFDelimited() {
-		super();
-	}
+	private static final long serialVersionUID = 1285015520502140436L;
 
 	public String getConverter() {
 		return "hydrograph.ui.engine.converter.impl.OutputFileDelimitedConverter";

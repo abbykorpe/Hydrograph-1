@@ -145,6 +145,7 @@ public class Constants {
 	public static final String RANGE_FROM_QNAME = "rangeFrom";
 	public static final String RANGE_TO_QNAME = "rangeTo";
 	public static final String DEFAULT_VALUE_QNAME = "default";
+	public static final String ABSOLUTE_OR_RELATIVE_XPATH_QNAME = "absoluteOrRelativeXPath";
 	
 	
 	public static final String GENERATE_RECORDS_COMPONENT_TYPE = "Generate Records";

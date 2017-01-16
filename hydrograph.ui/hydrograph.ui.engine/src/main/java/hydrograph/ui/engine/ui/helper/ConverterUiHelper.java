@@ -126,24 +126,26 @@ public class ConverterUiHelper {
 		return null;
 	}
 	
-	private void getCommonSchema(GridRow fixedWidthGrid, TypeBaseField typeBaseField) {
+	public void getCommonSchema(GridRow gridRow, TypeBaseField typeBaseField) {
 		if (typeBaseField != null) {
 			if (typeBaseField.getType() != null) {
-				fixedWidthGrid.setDataTypeValue(getStringValue(typeBaseField.getType().value()));
-				fixedWidthGrid.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
+				gridRow.setDataTypeValue(getStringValue(typeBaseField.getType().value()));
+				gridRow.setDataType(GridWidgetCommonBuilder.getDataTypeByValue(typeBaseField.getType().value()));
 			}
-			fixedWidthGrid.setDateFormat(getStringValue(typeBaseField.getFormat()));
-			fixedWidthGrid.setFieldName(getStringValue(typeBaseField.getName()));
-			fixedWidthGrid.setScale(getStringValue(String.valueOf(typeBaseField.getScale())));
-			fixedWidthGrid.setPrecision(getStringValue(String.valueOf(typeBaseField.getPrecision())));
-			fixedWidthGrid.setDescription(getStringValue(typeBaseField.getDescription()));
+			
+			gridRow.setDateFormat(getStringValue(typeBaseField.getFormat()));
+			gridRow.setFieldName(getStringValue(typeBaseField.getName()));
+			gridRow.setScale(getStringValue(String.valueOf(typeBaseField.getScale())));
+			gridRow.setPrecision(getStringValue(String.valueOf(typeBaseField.getPrecision())));
+			gridRow.setDescription(getStringValue(typeBaseField.getDescription()));
+			
 			if (typeBaseField.getScaleType() != null) {
-				fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(typeBaseField.getScaleType()
-						.value()));
-				fixedWidthGrid.setScaleTypeValue(typeBaseField.getScaleType().value());
-			}else if(StringUtils.equals(fixedWidthGrid.getDataTypeValue(),BigDecimal.class.getName() )){
-				fixedWidthGrid.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Constants.EXPLICIT_SCALE_TYPE_VALUE));
-				fixedWidthGrid.setScaleTypeValue(Constants.EXPLICIT_SCALE_TYPE_VALUE);
+				gridRow.setScaleType(GridWidgetCommonBuilder
+						.getScaleTypeByValue(typeBaseField.getScaleType().value()));
+				gridRow.setScaleTypeValue(typeBaseField.getScaleType().value());
+			}else if(StringUtils.equals(gridRow.getDataTypeValue(),BigDecimal.class.getName() )){
+				gridRow.setScaleType(GridWidgetCommonBuilder.getScaleTypeByValue(Constants.EXPLICIT_SCALE_TYPE_VALUE));
+				gridRow.setScaleTypeValue(Constants.EXPLICIT_SCALE_TYPE_VALUE);
 			}
 		}
 	}

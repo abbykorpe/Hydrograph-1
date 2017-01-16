@@ -112,6 +112,7 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.XPathGridRow;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -166,6 +167,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String DATEFORMAT = Messages.DATEFORMAT;
 	public static final String DATATYPE = Messages.DATATYPE;
 	public static final String PRECISION = Messages.PRECISION;
+	public static final String XPATH = Messages.XPATH;
 	public static final String SCALE = Messages.SCALE;
 	public static final String SCALE_TYPE = Messages.SCALE_TYPE;
 	public static final String FIELD_DESCRIPTION = Messages.FIELD_DESCRIPTION;
@@ -436,59 +438,67 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 					 if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new BasicSchemaGridRow();
-							 populateCommonFields(gridRow, temp);
+							 populateCommonFields(gridRow, field);
 							 schemasFromFile.add(gridRow);
 						 }	
 
+					 }else if(Messages.XPATH_GRID_ROW.equals(gridRowType)){
+						 for (Field field : fieldsList) {
+							 gridRow = new XPathGridRow();
+							 populateCommonFields(gridRow, field);
+							 String xpath = field.getAbsoluteOrRelativeXpath();
+							 ((XPathGridRow)gridRow).setXPath(StringUtils.isNotBlank(xpath) ? xpath : "");
+							 schemasFromFile.add(gridRow);
+						 }
 					 }else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new FixedWidthGridRow();
-							 populateCommonFields(gridRow, temp);
+							 populateCommonFields(gridRow, field);
 
-							 if(temp.getLength()!=null)
-								 ((FixedWidthGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							 if(field.getLength()!=null)
+								 ((FixedWidthGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 							 else
 								 ((FixedWidthGridRow) gridRow).setLength("");
 							 schemasFromFile.add(gridRow);
 						 }
 					 }else if(Messages.MIXEDSCHEME_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new MixedSchemeGridRow();
-							 populateCommonFields(gridRow, temp);
-							 if(temp.getLength()!=null)
-								 ((MixedSchemeGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							 populateCommonFields(gridRow, field);
+							 if(field.getLength()!=null)
+								 ((MixedSchemeGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 							 else
 								 ((MixedSchemeGridRow) gridRow).setLength("");
-							 ((MixedSchemeGridRow) gridRow).setDelimiter(temp.getDelimiter());
+							 ((MixedSchemeGridRow) gridRow).setDelimiter(field.getDelimiter());
 							 schemasFromFile.add(gridRow);
 						 }
 					 }else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new GenerateRecordSchemaGridRow();
-							 populateCommonFields(gridRow, temp);
+							 populateCommonFields(gridRow, field);
 
-							 if(temp.getLength()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							 if(field.getLength()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setLength("");
 
-							 if(temp.getDefault()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(temp.getDefault())));
+							 if(field.getDefault()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(field.getDefault())));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf("")));
 
-							 if(temp.getRangeFrom()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(temp.getRangeFrom()));
+							 if(field.getRangeFrom()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(field.getRangeFrom()));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setRangeFrom("");
 
-							 if(temp.getRangeFrom()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeTo()));
+							 if(field.getRangeFrom()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(field.getRangeTo()));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
 
@@ -1941,7 +1951,7 @@ if(deleteButton!=null)
 	 }
 
 	 private void addShortcutKeyListener (Control currentControl) {
-		 logger.info("currentControl is: " + currentControl);
+		 logger.trace("currentControl is: " + currentControl);
 		 currentControl.addKeyListener(new KeyListener() {						
 
 			 @Override

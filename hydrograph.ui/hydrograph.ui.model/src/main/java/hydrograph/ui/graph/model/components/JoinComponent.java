@@ -16,9 +16,18 @@ package hydrograph.ui.graph.model.components;
 
 import hydrograph.ui.graph.model.categories.TransformCategory;
 
+/**
+ * Model class for Join Component
+ * @author Bitwise
+ *
+ */
 public class JoinComponent extends TransformCategory{
 	
-	//private static final long serialVersionUID = -5885805870300509574L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8829548518198115697L;
 
 	@Override
 	public String getConverter() {
