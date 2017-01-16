@@ -438,67 +438,67 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 					 if(Messages.GENERIC_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new BasicSchemaGridRow();
-							 populateCommonFields(gridRow, temp);
+							 populateCommonFields(gridRow, field);
 							 schemasFromFile.add(gridRow);
 						 }	
 
 					 }else if(Messages.XPATH_GRID_ROW.equals(gridRowType)){
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new XPathGridRow();
-							 populateCommonFields(gridRow, temp);
-							 String xpath = temp.getAbsoluteOrRelativeXpath();
+							 populateCommonFields(gridRow, field);
+							 String xpath = field.getAbsoluteOrRelativeXpath();
 							 ((XPathGridRow)gridRow).setXPath(StringUtils.isNotBlank(xpath) ? xpath : "");
 							 schemasFromFile.add(gridRow);
 						 }
 					 }else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new FixedWidthGridRow();
-							 populateCommonFields(gridRow, temp);
+							 populateCommonFields(gridRow, field);
 
-							 if(temp.getLength()!=null)
-								 ((FixedWidthGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							 if(field.getLength()!=null)
+								 ((FixedWidthGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 							 else
 								 ((FixedWidthGridRow) gridRow).setLength("");
 							 schemasFromFile.add(gridRow);
 						 }
 					 }else if(Messages.MIXEDSCHEME_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new MixedSchemeGridRow();
-							 populateCommonFields(gridRow, temp);
-							 if(temp.getLength()!=null)
-								 ((MixedSchemeGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							 populateCommonFields(gridRow, field);
+							 if(field.getLength()!=null)
+								 ((MixedSchemeGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 							 else
 								 ((MixedSchemeGridRow) gridRow).setLength("");
-							 ((MixedSchemeGridRow) gridRow).setDelimiter(temp.getDelimiter());
+							 ((MixedSchemeGridRow) gridRow).setDelimiter(field.getDelimiter());
 							 schemasFromFile.add(gridRow);
 						 }
 					 }else if(Messages.GENERATE_RECORD_GRID_ROW.equals(gridRowType)){
 
-						 for (Field temp : fieldsList) {
+						 for (Field field : fieldsList) {
 							 gridRow = new GenerateRecordSchemaGridRow();
-							 populateCommonFields(gridRow, temp);
+							 populateCommonFields(gridRow, field);
 
-							 if(temp.getLength()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(temp.getLength()));
+							 if(field.getLength()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setLength(String.valueOf(field.getLength()));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setLength("");
 
-							 if(temp.getDefault()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(temp.getDefault())));
+							 if(field.getDefault()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf(field.getDefault())));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setDefaultValue((String.valueOf("")));
 
-							 if(temp.getRangeFrom()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(temp.getRangeFrom()));
+							 if(field.getRangeFrom()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setRangeFrom(String.valueOf(field.getRangeFrom()));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setRangeFrom("");
 
-							 if(temp.getRangeFrom()!=null)
-								 ((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(temp.getRangeTo()));
+							 if(field.getRangeFrom()!=null)
+								 ((GenerateRecordSchemaGridRow) gridRow).setRangeTo(String.valueOf(field.getRangeTo()));
 							 else
 								 ((GenerateRecordSchemaGridRow) gridRow).setRangeTo("");
 

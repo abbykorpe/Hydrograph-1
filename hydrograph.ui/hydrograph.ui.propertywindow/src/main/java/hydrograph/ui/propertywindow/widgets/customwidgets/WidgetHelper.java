@@ -499,7 +499,7 @@ public class WidgetHelper {
 		textBoxConfig.setName(Messages.LOOP_XPATH_QUERY);
 		textBoxConfig.getListeners().add(Listners.MODIFY);
 		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
-		textBoxConfig.setWidgetWidth(78);
+		textBoxConfig.setGrabExcessSpace(true);
 		return textBoxConfig;
 	}
 
