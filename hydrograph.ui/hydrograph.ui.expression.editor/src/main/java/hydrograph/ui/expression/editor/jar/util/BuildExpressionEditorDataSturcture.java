@@ -141,17 +141,19 @@ public class BuildExpressionEditorDataSturcture {
 	}
 
 	public IProject getCurrentProject() {
-		 ISelectionService selectionService = Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();    
-		 ISelection selection = selectionService.getSelection();    
-		        IProject project = null;    
-		        if(selection instanceof IStructuredSelection) {    
-		            Object element = ((IStructuredSelection)selection).getFirstElement();    
-		            if (element instanceof IProject) {    
-		                project= ((IResource)element).getProject();    
-		            } else
-		            	project =getProjectFromActiveGraph();
-		        }     
-		        return project;  
+		ISelectionService selectionService = Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();
+		ISelection selection = selectionService.getSelection();
+		IProject project = null;
+		if (selection instanceof IStructuredSelection) {
+			Object element = ((IStructuredSelection) selection).getFirstElement();
+			if (element instanceof IProject) {
+				project = ((IResource) element).getProject();
+			} else if (element instanceof IFolder) {
+				project = ((IFolder) element).getProject();
+			} else
+				project = getProjectFromActiveGraph();
+		}
+		return project;
 	}
 
 	private IProject getProjectFromActiveGraph() {
