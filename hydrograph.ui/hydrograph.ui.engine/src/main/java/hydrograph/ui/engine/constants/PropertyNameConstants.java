@@ -55,9 +55,9 @@ public enum PropertyNameConstants {
 		OVER_WRITE("overWrite"),
 		SELECT_INTERFACE("selectInterface"),
 		PROPERTY_TAG("property"),
-		XPATH_QUERY("xpath_query"),
-		ROOT_TAG("root_tag"),
-		ROW_TAG("row_tag");
+		ABSOLUTE_XPATH("absoluteXPath"),
+		ROOT_TAG("rootTag"),
+		ROW_TAG("rowTag");
 		
 	private final String value;
 

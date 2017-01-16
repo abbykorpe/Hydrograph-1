@@ -48,7 +48,7 @@ public class InputXmlConverter extends InputConverter {
 		xmlFile.setPath(path);
 		
 		XmlFile.AbsoluteXPath absoluteXPath = new AbsoluteXPath();
-		absoluteXPath.setValue((String) properties.get(PropertyNameConstants.XPATH_QUERY.value()));
+		absoluteXPath.setValue((String) properties.get(PropertyNameConstants.ABSOLUTE_XPATH.value()));
 		xmlFile.setAbsoluteXPath(absoluteXPath);
 	
 		XmlFile.Charset charset = new XmlFile.Charset();

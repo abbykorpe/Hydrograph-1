@@ -14,12 +14,6 @@
  
 package hydrograph.ui.validators.impl;
 
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +21,18 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.XPathGridRow;
+import hydrograph.ui.logging.factory.LogFactory;
 
+
+/**
+ * Validation Rule class for Xml File Schema grid
+ * @author Bitwise
+ *
+ */
 public class XPathSchemaGridValidationRule implements IValidator {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(XPathSchemaGridValidationRule.class); 
 
@@ -76,26 +81,21 @@ public class XPathSchemaGridValidationRule implements IValidator {
 		
 		/*this list is used for checking duplicate names in the grid*/
 		List<String> uniqueNamesList = new ArrayList<>();
-		boolean fixedWidthGrid = false;
-		boolean generateRecordSchemaGrid = false;
 		
 		if(gridRowList == null || gridRowList.isEmpty()){
 			errorMessage = propertyName + " is mandatory";
 			return false;
 		}
 		
-		GridRow gridRowTest = gridRowList.iterator().next();
-		
-		if (gridRowTest instanceof GenerateRecordSchemaGridRow) {
-			generateRecordSchemaGrid = true;
-		}
-		if (gridRowTest instanceof FixedWidthGridRow) {
-			fixedWidthGrid = true;
-		}
-		
 		for (GridRow gridRow : gridRowList) {
 			if(StringUtils.isBlank(gridRow.getFieldName())){
 				errorMessage = "Field name can not be blank";
+				return false;
+			}
+			
+			XPathGridRow xPathGridRow = (XPathGridRow) gridRow;
+			if(StringUtils.isBlank(xPathGridRow.getXPath())){
+				errorMessage = "Absolute/Relative Xpath can not be blank";
 				return false;
 			}
 			
@@ -145,16 +145,6 @@ public class XPathSchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
-			if(fixedWidthGrid && (!generateRecordSchemaGrid)){
-				FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow) gridRow;
-				if(StringUtils.isBlank(fixedWidthGridRow.getLength())){
-					logger.debug("Length is mandatory for FixedWidthComponent");
-				return false;
-				} else if(!(fixedWidthGridRow.getLength().matches(REGULAR_EXPRESSION_FOR_NUMBER))|| (fixedWidthGridRow.getLength().equals("0"))){
-					logger.debug("Length should be a positive Integer greater than 0");
-                return false;
-          }
-			}
 			if(uniqueNamesList.isEmpty() || !uniqueNamesList.contains(gridRow.getFieldName())){
 				uniqueNamesList.add(gridRow.getFieldName());
 			}

@@ -20,6 +20,7 @@ import java.util.TreeMap;
 
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
@@ -62,15 +63,49 @@ public class InputXmlUiConverter extends InputUiConverter{
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Xml-Properties for {}", componentName);
 		XmlFile xmlFile = (XmlFile) typeBaseComponent;
+		
+		String filePath = null;
 		if (xmlFile.getPath() != null){
-			propertyMap.put(PropertyNameConstants.PATH.value(), xmlFile.getPath().getUri());
+			if(StringUtils.isNotBlank(xmlFile.getPath().getUri())){
+				filePath = xmlFile.getPath().getUri();
+			} else {
+				filePath = getValue(PropertyNameConstants.PATH.value());
+			}
 		}
+		propertyMap.put(PropertyNameConstants.PATH.value(), StringUtils.isNotBlank(filePath)? filePath : "");
+
+		String absolutePath = null;
+		if (xmlFile.getAbsoluteXPath() != null) {
+			if (StringUtils.isNotBlank(xmlFile.getAbsoluteXPath().getValue())) {
+				absolutePath = xmlFile.getAbsoluteXPath().getValue();
+			} else {
+				absolutePath = getValue(PropertyNameConstants.ABSOLUTE_XPATH.value());
+			}
+		}
+		propertyMap.put(PropertyNameConstants.ABSOLUTE_XPATH.value(), StringUtils.isNotBlank(absolutePath)? absolutePath : "");
+		
+		String rowTag = null;
+		if (xmlFile.getRowTag() != null) {
+			if (StringUtils.isNotBlank(xmlFile.getRowTag().getValue())) {
+				rowTag = xmlFile.getRowTag().getValue();
+			} else {
+				rowTag = getValue(PropertyNameConstants.ROW_TAG.value());
+			}
+		}
+		propertyMap.put(PropertyNameConstants.ROW_TAG.value(), StringUtils.isNotBlank(rowTag)? rowTag : "");
+		
+		String rootTag = null;
+		if (xmlFile.getRootTag() != null) {
+			if (StringUtils.isNotBlank(xmlFile.getRootTag().getValue())) {
+				rootTag = xmlFile.getRootTag().getValue();
+			} else {
+				rootTag = getValue(PropertyNameConstants.ROOT_TAG.value());
+			}
+		}
+		propertyMap.put(PropertyNameConstants.ROOT_TAG.value(), StringUtils.isNotBlank(rootTag)? rootTag : "");
+		
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(xmlFile.getStrict(), PropertyNameConstants.STRICT.value()));
-			
-		propertyMap.put(PropertyNameConstants.XPATH_QUERY.value(), xmlFile.getAbsoluteXPath().getValue());
-		propertyMap.put(PropertyNameConstants.ROW_TAG.value(), xmlFile.getRowTag().getValue());
-		propertyMap.put(PropertyNameConstants.ROOT_TAG.value(), xmlFile.getRootTag().getValue());
 		
 		uiComponent.setType(UIComponentsConstants.XML.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());

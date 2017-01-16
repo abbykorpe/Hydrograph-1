@@ -112,6 +112,7 @@ import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.datastructure.property.XPathGridRow;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -443,6 +444,14 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 							 schemasFromFile.add(gridRow);
 						 }	
 
+					 }else if(Messages.XPATH_GRID_ROW.equals(gridRowType)){
+						 for (Field temp : fieldsList) {
+							 gridRow = new XPathGridRow();
+							 populateCommonFields(gridRow, temp);
+							 String xpath = temp.getAbsoluteOrRelativeXpath();
+							 ((XPathGridRow)gridRow).setXPath(StringUtils.isNotBlank(xpath) ? xpath : "");
+							 schemasFromFile.add(gridRow);
+						 }
 					 }else if(Messages.FIXEDWIDTH_GRID_ROW.equals(gridRowType)){
 
 						 for (Field temp : fieldsList) {
