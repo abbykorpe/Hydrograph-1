@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -396,9 +397,11 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 	private void appendErrorMessage(AbstractWidget customWidget, IValidator validator) {
 		if(toolTipErrorMessages.containsKey(customWidget.getPropertyName())){
 			String errorMessage = toolTipErrorMessages.get(customWidget.getPropertyName());
-			errorMessage = errorMessage + "\n" + validator.getErrorMessage(); 
+				errorMessage = errorMessage + "\n" + validator.getErrorMessage();
 		}else{
-			toolTipErrorMessages.put(customWidget.getPropertyName(), validator.getErrorMessage());
+			if (!StringUtils.isBlank(validator.getErrorMessage())) {
+				toolTipErrorMessages.put(customWidget.getPropertyName(), validator.getErrorMessage());
+			}
 		}
 	}
 
