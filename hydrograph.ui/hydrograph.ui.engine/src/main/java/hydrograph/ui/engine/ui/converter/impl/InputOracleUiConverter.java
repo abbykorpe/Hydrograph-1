@@ -63,19 +63,26 @@ public class InputOracleUiConverter extends InputUiConverter {
 		Oracle inputOracle = (Oracle) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 
-		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(), inputOracle.getDriverType().getValue());
+		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(),
+				inputOracle.getDriverType() == null ? "" : inputOracle.getDriverType().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(), inputOracle.getHostName().getValue());
+		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),
+				inputOracle.getHostName() == null ? "" : inputOracle.getHostName().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), inputOracle.getPort().getValue());
+		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
+				inputOracle.getPort() == null ? "" : inputOracle.getPort().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.ORACLE_SID.value(), inputOracle.getSid().getValue());
+		setValueInPropertyMap(PropertyNameConstants.ORACLE_SID.value(),
+				inputOracle.getSid() == null ? "" : inputOracle.getSid().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.ORACLE_SCHEMA.value(), inputOracle.getSchemaName().getValue());
+		setValueInPropertyMap(PropertyNameConstants.ORACLE_SCHEMA.value(),
+				inputOracle.getSchemaName() == null ? "" : inputOracle.getSchemaName().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), inputOracle.getUserName().getValue());
-		
-		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(), inputOracle.getPassword().getValue());
+		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(),
+				inputOracle.getUserName() == null ? "" : inputOracle.getUserName().getValue());
+
+		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(),
+				inputOracle.getPassword() == null ? "" : inputOracle.getPassword().getValue());
 
 		if (inputOracle.getTableName() != null && StringUtils.isNotBlank(inputOracle.getTableName().getValue())) {
 			databaseSelectionConfig.setTableName(inputOracle.getTableName().getValue());
