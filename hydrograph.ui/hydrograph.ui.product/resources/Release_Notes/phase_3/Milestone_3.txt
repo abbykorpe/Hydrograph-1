@@ -57,3 +57,5 @@ Issues/Defects fixed:
 41 #611 [shashank karnik] -  Job is marked as unsaved after running the job.
 42.#625 [Pooja Yadav] - Partition By Expression: Data type is getting Vanished from the Expression window.
 43.#613 [Vibhor Tyagi] - Execution Tracking: On Subjob, count values are not getting display on connection links
+44.#626 [Sonia Raheja] - Cumulate Component : Error for key field is not getting displayed on tooltip.
+ 
