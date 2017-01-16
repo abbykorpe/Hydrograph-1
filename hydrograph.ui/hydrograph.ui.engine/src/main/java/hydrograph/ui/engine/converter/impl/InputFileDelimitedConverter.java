@@ -69,8 +69,7 @@ public class InputFileDelimitedConverter extends InputConverter {
 			Quote quote = new Quote();
 			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 			fileDelimited.setQuote(quote);
-		}
-			 	
+		}			 	
 	}
 
 	@Override
@@ -102,3 +101,4 @@ public class InputFileDelimitedConverter extends InputConverter {
 		return typeBaseFields;
 	}
 }
+

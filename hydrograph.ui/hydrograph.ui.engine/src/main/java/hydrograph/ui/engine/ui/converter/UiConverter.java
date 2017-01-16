@@ -118,7 +118,7 @@ import org.eclipse.core.resources.IFile;
 			List<ParameterData> parameterList = currentRepository.getParammeterFactory().get(componentName);
 			if (parameterList != null) {
 				for (ParameterData param : parameterList) {
-					if (param.getPropertyName().equals(propertyName)) {
+					if(StringUtils.equalsIgnoreCase(param.getPropertyName(), propertyName)){
 						return param.getParameterName();
 					}
 				}
@@ -149,6 +149,21 @@ import org.eclipse.core.resources.IFile;
 				LOGGER.warn("Unable to generate ui property for property tag :" + propertyNameAttribute);
 			}
 			return "";
+		}
+			
+		/**
+		 * Returns parameter name of property.
+		 * 
+		 * @param propertyName
+		 * @parm currentValue
+		 * @return String
+		 */
+		protected String getParameterValue(String propertyName,Object currentValue) {
+			
+			if(currentValue ==null){
+				return getValue(propertyName);
+			}
+			return currentValue.toString();
 		}
 		
 		/**

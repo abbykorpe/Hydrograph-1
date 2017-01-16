@@ -123,13 +123,11 @@ public class InputOracleConverter extends InputConverter {
 				}
 				
 			} else {
-				//TODO Below Code will be used in future
-				/*ElementValueStringType sqlQueryCounter = new ElementValueStringType();
-				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQueryCounter())){
-					ElementValueStringType sqlQueryCounter = new ElementValueStringType();
-					sqlQueryCounter.setValue(databaseSelectionConfig.getSqlQuery());
-					oracleInput.setCountQuery(sqlQueryCounter);
-				}*/
+				if(StringUtils.isNotBlank(databaseSelectionConfig.getSqlQuery())){
+					ElementValueStringType sqlQuery = new ElementValueStringType();
+					sqlQuery.setValue(databaseSelectionConfig.getSqlQuery());
+					oracleInput.setSelectQuery(sqlQuery);
+				}
 			}
 		}
 

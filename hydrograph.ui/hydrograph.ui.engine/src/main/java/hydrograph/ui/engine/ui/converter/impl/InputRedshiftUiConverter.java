@@ -60,37 +60,42 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		LOGGER.debug("Fetching Input-Redshift-Properties for {}", componentName);
 		Redshift redshift = (Redshift) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
-
-		if (redshift.getDatabaseName() != null && StringUtils.isNotBlank(redshift.getDatabaseName().getValue())) {
-			propertyMap.put(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
-		}
-		if (redshift.getJdbcDriver() != null && StringUtils.isNotBlank(redshift.getJdbcDriver().getValue())) {
-			propertyMap.put(PropertyNameConstants.JDBC_DRIVER.value(), redshift.getJdbcDriver().getValue());
-		}
-		if (redshift.getHostName() != null && StringUtils.isNotBlank(redshift.getHostName().getValue())) {
-			propertyMap.put(PropertyNameConstants.HOST_NAME.value(), redshift.getHostName().getValue());
-		}
-		if (redshift.getPort() != null && StringUtils.isNotBlank(redshift.getPort().getValue().toString())) {
-			propertyMap.put(PropertyNameConstants.PORT_NO.value(), redshift.getPort().getValue().toString());
-		}
-		if (redshift.getUserName() != null && StringUtils.isNotBlank(redshift.getUserName().getValue()) ) {
-			propertyMap.put(PropertyNameConstants.USER_NAME.value(), redshift.getUserName().getValue());
-		}
-		if (redshift.getPassword() != null && StringUtils.isNotBlank(redshift.getPassword().getValue())) {
-			propertyMap.put(PropertyNameConstants.PASSWORD.value(), redshift.getPassword().getValue());
-		}
-		if ((redshift.getTableName()!= null)&& StringUtils.isNotBlank(redshift.getTableName().toString())){
+		
+		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), redshift.getDatabaseName().getValue());
+		
+		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(),redshift.getJdbcDriver().getValue());
+		
+		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),redshift.getHostName().getValue());
+		
+		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), redshift.getPort().getValue());
+		
+		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), redshift.getUserName().getValue());
+		
+		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(),redshift.getPassword().getValue());
+		
+		
+		if(redshift.getTableName() != null && StringUtils.isNotBlank(redshift.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(redshift.getTableName().getValue());
 			databaseSelectionConfig.setTableNameSelection(true);
 		}else{
-			databaseSelectionConfig.setTableNameSelection(false);
-			if ((redshift.getSelectQuery()!= null)&& StringUtils.isNotBlank(redshift.getSelectQuery().toString())) {
-				databaseSelectionConfig.setSqlQuery(redshift.getSelectQuery().getValue());
+			if(redshift.getTableName()!=null){
+				setValueInPropertyMap(PropertyNameConstants.TABLE_NAME.value(),redshift.getTableName().getValue());
+				databaseSelectionConfig.setTableName( getParameterValue(PropertyNameConstants.TABLE_NAME.value(),null));
+				databaseSelectionConfig.setTableNameSelection(true);
 			}
-			/*if ((redshift.getCountQuery().getValue() != null)&& StringUtils.isNotBlank(redshift.getCountQuery().toString())) {
-				databaseSelectionConfig.setSqlQueryCounter(redshift.getCountQuery().getValue());
-			}*/
 		}
+		
+		if(redshift.getSelectQuery() != null && StringUtils.isNotBlank(redshift.getSelectQuery().getValue())){
+			databaseSelectionConfig.setSqlQuery(redshift.getSelectQuery().getValue());
+			databaseSelectionConfig.setTableNameSelection(false);
+		}else{
+			if(redshift.getSelectQuery()!=null){
+				setValueInPropertyMap(PropertyNameConstants.SELECT_QUERY.value(),redshift.getSelectQuery().getValue());
+				databaseSelectionConfig.setSqlQuery(getParameterValue(PropertyNameConstants.SELECT_QUERY.value(),null));
+				databaseSelectionConfig.setTableNameSelection(false);
+			}
+		}
+				
 		propertyMap.put(PropertyNameConstants.SELECT_OPTION.value(), databaseSelectionConfig);
 		uiComponent.setType(UIComponentsConstants.REDSHIFT.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
@@ -137,5 +142,9 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 			}
 		}
 		return runtimeMap;
+	}
+	
+	private void setValueInPropertyMap(String propertyName,Object value){
+		propertyMap.put(propertyName, getParameterValue(propertyName,value));
 	}
 }

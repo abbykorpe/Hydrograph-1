@@ -61,33 +61,41 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		Mysql inputMysql = (Mysql) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 
-		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(), 
-				inputMysql.getJdbcDriver() == null ? "" : inputMysql.getJdbcDriver().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(), 
-				inputMysql.getHostName() == null ? "" : inputMysql.getHostName().getValue());
+		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(),inputMysql.getJdbcDriver().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
-				inputMysql.getPort() == null ? "" : inputMysql.getPort().getValue().toString());
+		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),inputMysql.getHostName().getValue());
+				
+		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), inputMysql.getPort().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), 
-				inputMysql.getDatabaseName() == null ? "" : inputMysql.getDatabaseName().getValue());
+		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), inputMysql.getDatabaseName().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), 
-				inputMysql.getUsername() == null ? "" : inputMysql.getUsername().getValue());
+		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), inputMysql.getUsername().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(), 
-				inputMysql.getPassword()==null ? "" : inputMysql.getPassword().getValue());
+		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(),inputMysql.getPassword().getValue());
 		
 		if(inputMysql.getTableName() != null && StringUtils.isNotBlank(inputMysql.getTableName().getValue())){
 			databaseSelectionConfig.setTableName(inputMysql.getTableName().getValue());
 			databaseSelectionConfig.setTableNameSelection(true);
+		}else{
+			if(inputMysql.getTableName()!=null){
+				setValueInPropertyMap(PropertyNameConstants.TABLE_NAME.value(),inputMysql.getTableName().getValue());
+				databaseSelectionConfig.setTableName( getParameterValue(PropertyNameConstants.TABLE_NAME.value(),null));
+				databaseSelectionConfig.setTableNameSelection(true);
+			}
 		}
 		
 		if(inputMysql.getSelectQuery() != null && StringUtils.isNotBlank(inputMysql.getSelectQuery().getValue())){
 			databaseSelectionConfig.setSqlQuery(inputMysql.getSelectQuery().getValue());
 			databaseSelectionConfig.setTableNameSelection(false);
+		}else{
+			if(inputMysql.getSelectQuery()!=null){
+				setValueInPropertyMap(PropertyNameConstants.SELECT_QUERY.value(),inputMysql.getSelectQuery().getValue());
+				databaseSelectionConfig.setSqlQuery(getParameterValue(PropertyNameConstants.SELECT_QUERY.value(),null));
+				databaseSelectionConfig.setTableNameSelection(false);
+			}
 		}
+		
 		//TODO Below code will be use in future
 		/*if(inputMysql.getCountQuery() != null && StringUtils.isNotBlank(inputMysql.getCountQuery().getValue())){
 			databaseSelectionConfig.setSqlQueryCounter(inputMysql.getCountQuery().getValue());
@@ -142,8 +150,7 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		return runtimeMap;
 	}
 
-	private void setValueInPropertyMap(String propertyName,String value){
-		propertyMap.put(propertyName, StringUtils.isNotBlank(value) ? value : "");
+	private void setValueInPropertyMap(String propertyName,Object value){
+		propertyMap.put(propertyName, getParameterValue(propertyName,value));
 	}
-	
 }

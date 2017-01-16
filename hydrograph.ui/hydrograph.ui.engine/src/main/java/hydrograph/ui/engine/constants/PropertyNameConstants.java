@@ -43,14 +43,14 @@ public enum PropertyNameConstants {
 		PASSWORD("password"),
 		CHUNK_SIZE("chunkSize"),
 		TABLE_NAME("tableName"),
-		ORACLE_SCHEMA("oracleSchema"),
+		ORACLE_SCHEMA("schemaName"),
 		ORACLE_SELECT_OPTION("selectOption"),
 		EXTERNAL_TABLE_PATH("externalTablePath"),
 		LOAD_TYPE_CONFIGURATION("load_type_configuration"),
 		PARTITION_KEYS("partitionKeys"),
 		QUOTE("quote"),
 		SELECT_OPTION("selectOption"),
-		REDSHIFT_SQL_QUERY("selectQuery"),
+		SELECT_QUERY("selectQuery"),
 		REDSHIFT_COUNT_QUERY("countQuery"), 
 		OVER_WRITE("overWrite"),
 		SELECT_INTERFACE("selectInterface"),
@@ -58,8 +58,8 @@ public enum PropertyNameConstants {
 		ABSOLUTE_XPATH("absoluteXPath"),
 		ROOT_TAG("rootTag"),
 		ROW_TAG("rowTag");
-		
-	private final String value;
+	
+		private final String value;
 
 	PropertyNameConstants(String value) {
 		this.value = value;

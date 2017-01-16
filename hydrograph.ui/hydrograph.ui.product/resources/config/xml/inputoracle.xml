@@ -60,7 +60,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="oracleSchema" value="" renderer="ORACLE_SCHEMA_WIDGET"
+		<tns:property dataType="string" name="schemaName" value="" renderer="ORACLE_SCHEMA_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Displays the Oracle Sehema Name provided by the user">
 		</tns:property>
