@@ -64,41 +64,57 @@ public class InputTeradataUiConverter extends InputUiConverter{
 		Teradata inputTeradata = (Teradata) typeBaseComponent;
 		DatabaseSelectionConfig databaseSelectionConfig = new DatabaseSelectionConfig();
 
-		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(), 
+		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(),
 				inputTeradata.getJdbcDriver() == null ? "" : inputTeradata.getJdbcDriver().getValue());
-		
-		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(), 
+
+		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),
 				inputTeradata.getHostName() == null ? "" : inputTeradata.getHostName().getValue());
-		
-		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
-				inputTeradata.getPort() == null ? "" : inputTeradata.getPort().getValue().toString());
-		
-		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), 
+
+		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
+				inputTeradata.getPort() == null ? "" : inputTeradata.getPort().getValue());
+
+		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(),
 				inputTeradata.getDatabaseName() == null ? "" : inputTeradata.getDatabaseName().getValue());
-		
-		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), 
+
+		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(),
 				inputTeradata.getUsername() == null ? "" : inputTeradata.getUsername().getValue());
-		
-		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(), 
-				inputTeradata.getPassword()==null ? "" : inputTeradata.getPassword().getValue());
-		
-		if(inputTeradata.getTableName() != null && StringUtils.isNotBlank(inputTeradata.getTableName().getValue())){
+
+		setValueInPropertyMap(PropertyNameConstants.PASSWORD.value(),
+				inputTeradata.getPassword() == null ? "" : inputTeradata.getPassword().getValue());
+
+		if (inputTeradata.getTableName() != null && StringUtils.isNotBlank(inputTeradata.getTableName().getValue())) {
 			databaseSelectionConfig.setTableName(inputTeradata.getTableName().getValue());
 			databaseSelectionConfig.setTableNameSelection(true);
+		} else {
+			if (inputTeradata.getTableName() != null) {
+				setValueInPropertyMap(PropertyNameConstants.TABLE_NAME.value(),
+						inputTeradata.getTableName().getValue());
+				databaseSelectionConfig.setTableName(getParameterValue(PropertyNameConstants.TABLE_NAME.value(), null));
+				databaseSelectionConfig.setTableNameSelection(true);
+			}
 		}
-		
-		if(inputTeradata.getSelectQuery() != null && StringUtils.isNotBlank(inputTeradata.getSelectQuery().getValue())){
+
+		if (inputTeradata.getSelectQuery() != null
+				&& StringUtils.isNotBlank(inputTeradata.getSelectQuery().getValue())) {
 			databaseSelectionConfig.setSqlQuery(inputTeradata.getSelectQuery().getValue());
 			databaseSelectionConfig.setTableNameSelection(false);
+		} else {
+			if (inputTeradata.getSelectQuery() != null) {
+				setValueInPropertyMap(PropertyNameConstants.SELECT_QUERY.value(),
+						inputTeradata.getSelectQuery().getValue());
+				databaseSelectionConfig
+						.setSqlQuery(getParameterValue(PropertyNameConstants.SELECT_QUERY.value(), null));
+				databaseSelectionConfig.setTableNameSelection(false);
+			}
 		}
-		
+
 		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
-		
+
 		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getExportInterfaceValue());
-			
+
 		uiComponent.setType(UIComponentsConstants.TERADATA.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
-		
+
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
 		container.getComponentNames().add(inputTeradata.getId());
 		uiComponent.setProperties(propertyMap);
@@ -158,8 +174,11 @@ public class InputTeradataUiConverter extends InputUiConverter{
 		return runtimeMap;
 	}
 
-	private void setValueInPropertyMap(String propertyName,String value){
+	/*private void setValueInPropertyMap(String propertyName,String value){
 		propertyMap.put(propertyName, StringUtils.isNotBlank(value) ? value : "");
-	}
+	}*/
 	
+	private void setValueInPropertyMap(String propertyName,Object value){
+		propertyMap.put(propertyName, getParameterValue(propertyName,value));
+	}
 }
