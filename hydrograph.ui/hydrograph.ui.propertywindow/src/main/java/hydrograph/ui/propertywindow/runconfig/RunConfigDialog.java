@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -80,10 +81,15 @@ public class RunConfigDialog extends Dialog {
 	private Text txtEdgeNode;
 	private Text txtUserName;
 	private Text txtPassword;
+	private Text txtPassKey;
 	private Text txtRunUtility;
 	private Text txtProjectPath;
+	
+	private Button browseButton;
+	private Button radioPassword;
+	private Button radioPassKey;
 	private Button chkbtnSavePassword;
-
+	
 	private HydroGroup runModeGroup;
 	private HydroGroup serverDetailsGroup;
 	private HydroGroup remotePathConfigGroup;
@@ -108,8 +114,8 @@ public class RunConfigDialog extends Dialog {
 	public static final String SELECTION_BUTTON_KEY = "REMOTE_BUTTON_KEY";
 	
 	private static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_RUNCONFIG_DIALOG_NODE = "Run Dialog";
-	private static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_RUNCONFIG_DIALOG_HOST_NODE = "host";
 		
+	private String passKey;
 	private String password;
 	private String userId;
 	private String edgeNodeText;
@@ -219,10 +225,26 @@ public class RunConfigDialog extends Dialog {
 		gridLayout.horizontalSpacing = 15;
 		serverDetailsGroup.getHydroGroupClientArea().setLayout(gridLayout);
 
+		new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);	
+		
+		Composite radioComposite = new Composite(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
+		radioComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		radioComposite.setLayout(new GridLayout(2, false));
+		
+		radioPassword = new Button(radioComposite, SWT.RADIO);
+		radioPassword.setText("Password");
+		radioPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		radioPassword.addSelectionListener(radioPasswordSelectionListener);
+		
+		radioPassKey = new Button(radioComposite, SWT.RADIO);
+		radioPassKey.setText("Passkey");
+		radioPassKey.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		radioPassKey.addSelectionListener(radioPassKeySelectionListener);
+	
 		Label lblEdgeNode = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblEdgeNode.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEdgeNode.setText("Edge Node ");
-
+		
 		txtEdgeNode = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtEdgeNode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtEdgeNode.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
@@ -248,6 +270,24 @@ public class RunConfigDialog extends Dialog {
 		txtPassword = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.PASSWORD | SWT.BORDER);
 		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtPassword.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
+		
+		Label lblPasskey = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
+		lblPasskey.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPasskey.setText("Passkey");
+
+		Composite passKeyComposite = new Composite(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
+		passKeyComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
+		passKeyComposite.setLayout(new GridLayout(2, false));
+		
+		txtPassKey = new Text(passKeyComposite, SWT.BORDER);
+		txtPassKey.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtPassKey.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
+		
+		browseButton = new Button(passKeyComposite, SWT.NONE);
+		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		browseButton.setText("...");
+		browseButton.addSelectionListener(browseListener);
+		radioPassword.setSelection(true);
 		
 		new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);		
 		chkbtnSavePassword = new Button(serverDetailsGroup.getHydroGroupClientArea(), SWT.CHECK);
@@ -379,6 +419,36 @@ public class RunConfigDialog extends Dialog {
 		}
 	};
 
+	SelectionListener browseListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent event) {
+			FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
+		    fd.setText("Open");
+		    fd.setFilterPath("C:/");
+		    String[] filterExt = { "*.ppk" };
+		    fd.setFilterExtensions(filterExt);
+		    txtPassKey.setText(fd.open());
+		}
+	};
+	
+	SelectionListener radioPasswordSelectionListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent event) {
+			txtPassword.setEnabled(true);
+			txtPassKey.setEnabled(false);
+			browseButton.setEnabled(false);
+		}
+	};
+	
+	SelectionListener radioPassKeySelectionListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent event) {
+			txtPassKey.setEnabled(true);
+			browseButton.setEnabled(true);
+			txtPassword.setEnabled(false);
+		}
+	};
+    
 	private void showRemoteRunDetailsHolderComposite() {
 		Point shellSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		getShell().setSize(shellSize);
@@ -755,5 +825,4 @@ public class RunConfigDialog extends Dialog {
 			}
 		});
 	}
-
 }
