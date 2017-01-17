@@ -93,8 +93,8 @@ public class InputOracleConverter extends InputConverter {
 		oracleInput.setDriverType(jdbcDriver);
 		
 		ElementValueStringType oracleSchema = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
-			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.SCHEMA_NAME.value()))){
+			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.SCHEMA_NAME.value())));
 			oracleInput.setSchemaName(oracleSchema);
 		}
 		
@@ -111,7 +111,7 @@ public class InputOracleConverter extends InputConverter {
 		}
 
 		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) properties
-				.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
+				.get(PropertyNameConstants.SELECT_OPTION.value());
 
 		if (databaseSelectionConfig != null) {
 

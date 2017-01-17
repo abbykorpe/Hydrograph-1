@@ -72,12 +72,12 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 				outputOracle.getHostName() == null ? "" : outputOracle.getHostName().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
-				outputOracle.getPort() == null ? "" : outputOracle.getPort().getValue().toString());
+				outputOracle.getPort() == null ? "" : outputOracle.getPort().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.ORACLE_SID.value(), 
 				outputOracle.getSid() == null ? "" : outputOracle.getSid().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.ORACLE_SCHEMA.value(), 
+		setValueInPropertyMap(PropertyNameConstants.SCHEMA_NAME.value(), 
 				outputOracle.getSchemaName() == null ? "" : outputOracle.getSchemaName().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), 
@@ -181,8 +181,7 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		return runtimeMap;
 	}
 
-	private void setValueInPropertyMap(String propertyName,String value){
-		propertyMap.put(propertyName, StringUtils.isNotBlank(value) ? value : "");
+	private void setValueInPropertyMap(String propertyName,Object value){
+		propertyMap.put(propertyName, getParameterValue(propertyName,value));
 	}
-	
 }

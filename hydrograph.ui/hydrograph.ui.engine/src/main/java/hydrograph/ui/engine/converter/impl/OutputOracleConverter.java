@@ -90,8 +90,8 @@ public class OutputOracleConverter extends OutputConverter {
 		oracleOutput.setDriverType(jdbcDriver);
 		
 		ElementValueStringType oracleSchema = new ElementValueStringType();
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.ORACLE_SCHEMA.value()))){
-			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.ORACLE_SCHEMA.value())));
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.SCHEMA_NAME.value()))){
+			oracleSchema.setValue(String.valueOf(properties.get(PropertyNameConstants.SCHEMA_NAME.value())));
 			oracleOutput.setSchemaName(oracleSchema);
 		}
 		

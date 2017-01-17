@@ -74,7 +74,7 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 				outputTeradata.getHostName() == null ? "" : outputTeradata.getHostName().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
-				outputTeradata.getPort() == null ? "" : outputTeradata.getPort().getValue().toString());
+				outputTeradata.getPort() == null ? "" : outputTeradata.getPort().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), 
 				outputTeradata.getDatabaseName() == null ? "" : outputTeradata.getDatabaseName().getValue());
@@ -195,9 +195,9 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 		}
 		return runtimeMap;
 	}
-	
-	private void setValueInPropertyMap(String propertyName,String value){
-		propertyMap.put(propertyName, StringUtils.isNotBlank(value) ? value : "");
+
+	private void setValueInPropertyMap(String propertyName,Object value){
+		propertyMap.put(propertyName, getParameterValue(propertyName,value));
 	}
 	
 }

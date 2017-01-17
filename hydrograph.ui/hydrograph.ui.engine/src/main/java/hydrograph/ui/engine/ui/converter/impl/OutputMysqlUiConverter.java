@@ -72,7 +72,7 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 				outputMysql.getHostName() == null ? "" : outputMysql.getHostName().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
-				outputMysql.getPort() == null ? "" : outputMysql.getPort().getValue().toString());
+				outputMysql.getPort() == null ? "" : outputMysql.getPort().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), 
 				outputMysql.getDatabaseName() == null ? "" : outputMysql.getDatabaseName().getValue());
@@ -177,9 +177,8 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 		}
 		return runtimeMap;
 	}
-	
-	private void setValueInPropertyMap(String propertyName,String value){
-		propertyMap.put(propertyName, StringUtils.isNotBlank(value) ? value : "");
+			
+	private void setValueInPropertyMap(String propertyName,Object value){
+		propertyMap.put(propertyName, getParameterValue(propertyName,value));
 	}
-	
 }

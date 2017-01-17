@@ -75,7 +75,7 @@ public class InputOracleUiConverter extends InputUiConverter {
 		setValueInPropertyMap(PropertyNameConstants.ORACLE_SID.value(),
 				inputOracle.getSid() == null ? "" : inputOracle.getSid().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.ORACLE_SCHEMA.value(),
+		setValueInPropertyMap(PropertyNameConstants.SCHEMA_NAME.value(),
 				inputOracle.getSchemaName() == null ? "" : inputOracle.getSchemaName().getValue());
 
 		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(),
@@ -108,7 +108,7 @@ public class InputOracleUiConverter extends InputUiConverter {
 			}
 		}
 
-		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
+		propertyMap.put(PropertyNameConstants.SELECT_OPTION.value(), databaseSelectionConfig);
 
 		uiComponent.setType(UIComponentsConstants.ORACLE.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
