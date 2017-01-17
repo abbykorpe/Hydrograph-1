@@ -16,7 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 
@@ -50,10 +49,9 @@ public class SecondaryColumnKeyValidation implements IValidator{
 						List<FixedWidthGridRow> gridRowList = entry.getValue();
 						gridRowList.forEach(gridRow -> tmpList.add(gridRow.getFieldName()));
 					}
-					for(Entry<String, Object> entry : keyFieldsList.entrySet()){
-						if(!tmpList.contains(entry.getKey())){
-							return false;
-						}
+					long count = keyFieldsList.entrySet().stream().filter(gridRow -> !tmpList.contains(gridRow.getKey())).count();
+					if(count >0){
+						return false;
 					}
 				return true;
 			}
