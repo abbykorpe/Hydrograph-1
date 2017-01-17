@@ -1,12 +1,13 @@
 package hydrograph.ui.expression.editor.repo;
 
-import hydrograph.ui.expression.editor.datastructure.ClassDetails;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.internal.core.SourceType;
+
+import hydrograph.ui.expression.editor.datastructure.ClassDetails;
 
 public class ClassRepo {
 
@@ -24,6 +25,7 @@ public class ClassRepo {
 	}
 
 	public List<ClassDetails> getClassList() {
+		Collections.sort(classList);
 		return new ArrayList<ClassDetails>(classList);
 	}
 
