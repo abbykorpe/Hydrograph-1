@@ -30,6 +30,8 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
   val inputSchema: StructType = componentsParams.getDataFrame().schema
   val outputFields = OperationUtils.getAllFields(cumulateEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
+  val fieldsForOperation=OperationUtils.getAllFieldsWithOperationFields(cumulateEntity,outputFields.toList.asJava)
+  val operationSchema:StructType = EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = cumulateEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
@@ -55,7 +57,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
         + outSocket.getSocketType() + "'")
     }
 
-    val outRow = new Array[Any](outputFields.size)
+    val outRow = new Array[Any](operationSchema.size)
 
     val primaryKeys = if (cumulateEntity.getKeyFields == null) Array[KeyField]() else cumulateEntity.getKeyFields
     val secondaryKeys = if (cumulateEntity.getSecondaryKeyFields == null) Array[KeyField]() else cumulateEntity.getSecondaryKeyFields
@@ -75,7 +77,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
       val cumulateList: List[SparkOperation[CumulateTransformBase]] = initializeOperationList[CumulateForExpression](cumulateEntity
         .getOperationsList,
         inputSchema,
-        outputSchema)
+        operationSchema)
 
       cumulateList.foreach(sparkOperation => {
         sparkOperation.baseClassInstance match {
