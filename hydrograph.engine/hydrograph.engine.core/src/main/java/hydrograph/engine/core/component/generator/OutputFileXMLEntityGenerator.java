@@ -51,6 +51,8 @@ public class OutputFileXMLEntityGenerator extends OutputComponentGeneratorBase {
         outputFileXMLEntity.setBatch(jaxbOutputFileXML.getBatch());
         outputFileXMLEntity.setComponentName(jaxbOutputFileXML.getName());
         outputFileXMLEntity.setPath(jaxbOutputFileXML.getPath().getUri());
+        outputFileXMLEntity.setRootTag(jaxbOutputFileXML.getRootTag().getValue());
+        outputFileXMLEntity.setRowTag(jaxbOutputFileXML.getRowTag().getValue());
         outputFileXMLEntity.setSafe(
                 jaxbOutputFileXML.getSafe() != null ? jaxbOutputFileXML.getSafe().isValue() : false);
         outputFileXMLEntity.setCharset(jaxbOutputFileXML.getCharset() != null
