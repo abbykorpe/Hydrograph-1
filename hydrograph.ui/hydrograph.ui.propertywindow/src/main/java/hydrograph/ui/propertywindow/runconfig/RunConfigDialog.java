@@ -579,7 +579,9 @@ public class RunConfigDialog extends Dialog {
 		if (isUsernamePasswordOrHostEmpty()) {
 			return false;
 		} else {
-			return isValidUserNamePasswordOrHost();
+			//TODO : disabled it temporarily in order to test the connectivity with .ppk file. 
+			//return isValidUserNamePasswordOrHost();
+			return true;
 		}
 	}
 
