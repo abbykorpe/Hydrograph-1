@@ -4,7 +4,8 @@ import hydrograph.engine.core.component.entity.InputFileXMLEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.SchemaCreator
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.{Column, DataFrame}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
@@ -15,6 +16,17 @@ import scala.collection.JavaConverters._
   */
 class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsParams: BaseComponentParams)
   extends InputComponentBase with Serializable {
+
+  def flattenSchema(schema: StructType, prefix: String = null) : Array[Column] = {
+    schema.fields.flatMap(f => {
+      val colName = if (prefix == null) f.name else (prefix + "." + f.name)
+
+      f.dataType match {
+        case st: StructType => flattenSchema(st, colName)
+        case _ => Array(new Column(colName))
+      }
+    })
+  }
 
   private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileXMLComponent])
   override def createComponent(): Map[String, DataFrame] = {
@@ -51,6 +63,13 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
         + " absoluteXPath as " + iFileXMLEntity.getAbsoluteXPath
         + " at Path: " + iFileXMLEntity.getPath)
       Map(key -> df)
+
+//      val flattenedSchema = flattenSchema(df.schema)
+//      val renamedCols = flattenedSchema.map(name => new Column(name.toString()).as(name.toString().replace(".","_")))
+//      val df_new: DataFrame = df.select(renamedCols:_*)
+
+//      Map(key -> df_new)
+
     } catch {
 
       case e : Exception =>

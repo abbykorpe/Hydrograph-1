@@ -9,15 +9,30 @@ import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
 import org.slf4j.{Logger, LoggerFactory}
+import collection.mutable.HashMap
 
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
 
 case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   private val precision:Int=38 
   
   private val LOG:Logger = LoggerFactory.getLogger(classOf[SchemaCreator[T]])
+
+  def buildSchema(rootNode: TreeNode): List[StructField] = {
+    def schema(currentNode: TreeNode, parent: String, structList: List[StructField]): List[StructField] = currentNode match {
+      case x if (x.children == ListBuffer() || x.children == List()) => {
+        structList ++ List(StructField(x.fieldContext.name, x.fieldContext.datatype, x.fieldContext.isNullable))
+      }
+      case x => {
+        List(StructField(x.fieldContext.name,StructType(x.children.toList.flatMap(a => schema(a, a.fieldContext.name, List[StructField]())).toArray)))
+      }
+    }
+
+    rootNode.children.toList.flatMap(x => schema(x, rootNode.fieldContext.name, List[StructField]()))
+  }
 
   def getRelativePath(absPath:String):String = absPath.replace(inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getAbsoluteXPath,"")
 
@@ -31,14 +46,34 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   private def createStructFieldsForXMLInputOutputComponents(): Array[StructField] = {
     LOG.trace("In method createStructFieldsForXMLInputOutputComponents() which returns Array[StructField] for Input and Output components")
-    val structFields = new Array[StructField](inputOutputEntityBase.getFieldsList.size)
     val strict:Boolean = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].isStrict
     val relativeXPaths = extractRelativeXPath()
+    val rowTag: String = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getRowTag
+    var fcMap:HashMap[String,FieldContext] = HashMap[String,FieldContext]()
 
     for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
       val schemaField: SchemaField = inputOutputEntityBase.getFieldsList.get(i)
-      structFields(i) = StructField(schemaField.getFieldName, getDataType(schemaField), strict)
+      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName, getDataType(schemaField), strict))
     }
+
+    fcMap += (rowTag -> FieldContext(rowTag, DataTypes.StringType, strict))
+
+    var xmlTree:XMLTree = XMLTree(fcMap.get(rowTag).get)
+
+    relativeXPaths.map(x => x match {
+      case a if(!a.contains('/'))=> xmlTree.addChild(rowTag,fcMap.get(a).get)
+      case a => {
+        var parentTag = rowTag
+        a.split("/").map(b => {
+          if(!xmlTree.isPresent(b)) {
+            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b, DataTypes.StringType, strict)))
+          }
+          parentTag = b
+        })
+      }
+    })
+
+    val structFields = buildSchema(xmlTree.rootNode).toArray
     LOG.debug("Array of StructField created for XML Components from schema is : " + structFields.mkString)
     structFields
   }
