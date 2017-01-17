@@ -1,8 +1,5 @@
 package hydrograph.ui.expression.editor.datastructure;
 
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +16,11 @@ import org.eclipse.jdt.internal.core.SourceMethod;
 import org.eclipse.jdt.internal.core.SourceType;
 import org.slf4j.Logger;
 
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.logging.factory.LogFactory;
+
 @SuppressWarnings("restriction")
-public class ClassDetails {
+public class ClassDetails implements Comparable<ClassDetails> {
 
 	private boolean isUserDefined;
 	private String displayName;
@@ -190,5 +190,11 @@ public class ClassDetails {
 
 	public boolean isUserDefined() {
 		return isUserDefined;
+	}
+
+	@Override
+	public int compareTo(ClassDetails o) {
+		
+		return this.cName.compareToIgnoreCase(((ClassDetails)o).cName);
 	}
 }
