@@ -126,7 +126,17 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		trackingLogPathText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
 		trackingLogPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		trackingLogPathText.setText(prefernce.getTrackingLogPathText());
+		trackingLogPathText.setData(ERROR_KEY, null);
 
+		trackingLogPathText.addModifyListener(new ModifyListener(){
+
+			@Override
+			public void modifyText(ModifyEvent event) {
+					validationForTextField(trackingLogPathText, trackingLogPathText.getText() , Messages.BLANK_TRACKING_LOG_PATH_ERROR );
+			}
+		});
+		
+		
 		enableOrDisableFields(enableTrackingCheckBox.getSelection());
 		localPortNoText.addModifyListener(new ModifyListener() {
 			@Override
@@ -181,20 +191,14 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		
 		remoteHostNameText.addModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e) {
-				String value = ((Text) e.getSource()).getText();
-				if (StringUtils.isBlank(value)) {
-					remoteHostNameText.setData(ERROR_KEY, Messages.BLANK_REMOTE_HOST_NAME_ERROR);
-					checkState();
-				} else {
-					remoteHostNameText.setData(ERROR_KEY, "");
-					checkState();
-				}
+		public void modifyText(ModifyEvent e) {
+				validationForTextField(remoteHostNameText, remoteHostNameText.getText() ,  Messages.BLANK_REMOTE_HOST_NAME_ERROR );
 			}
 		});
 		editorList.add(localPortNoText);
 		editorList.add(remotePortNoText);
 		editorList.add(remoteHostNameText);
+		editorList.add(trackingLogPathText);
 	}
 
 	/**
@@ -277,6 +281,23 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 	 */
 	private void validationForIntegerField(Text textBox, String value, String message) {
 		if (StringUtils.isBlank(value) || !value.matches("\\d+") || Integer.parseInt(value) < 1) {
+			textBox.setData(ERROR_KEY, message);
+			executionTrackPreference.setValid(false);
+		} else {
+			textBox.setData(ERROR_KEY, null);
+			executionTrackPreference.setValid(true);
+		}
+		checkState();
+	}
+
+	/**
+	 * Check if text box is blank
+	 * @param textBox
+	 * @param value
+	 * @param message
+	 */
+	protected void validationForTextField(Text textBox, String value, String message) {
+		if (StringUtils.isBlank(value)) {
 			textBox.setData(ERROR_KEY, message);
 			executionTrackPreference.setValid(false);
 		} else {
