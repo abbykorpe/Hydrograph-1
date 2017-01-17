@@ -13,16 +13,6 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
-import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -75,7 +65,16 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
-import org.eclipse.ui.forms.widgets.ColumnLayoutData;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.EditButtonWithLabelConfig;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.SingleClickEvent;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 /**
@@ -166,7 +165,7 @@ public class SecondaryColumnKeysDialog extends Dialog {
 	}
 
 	private void createTargetTable(Composite container) {
-		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI|SWT.FULL_SELECTION);
+		targetTableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI);
 		targetTable = targetTableViewer.getTable();
 		GridData gd_table_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
 		gd_table_1.heightHint = 401;
@@ -608,6 +607,12 @@ public class SecondaryColumnKeysDialog extends Dialog {
 					p.setColumnName(key);
 					p.setSortOrder(secondaryColumnsMap.get(key));
 					propertyList.add(p);
+					tv.refresh();
+					if(!sourceFieldsList.contains(key)){
+						tv.getTable().getItem(propertyList.size()-1).setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+					}else{
+						tv.getTable().getItem(propertyList.size()-1).setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+					}
 				}
 			}
 			tv.refresh();

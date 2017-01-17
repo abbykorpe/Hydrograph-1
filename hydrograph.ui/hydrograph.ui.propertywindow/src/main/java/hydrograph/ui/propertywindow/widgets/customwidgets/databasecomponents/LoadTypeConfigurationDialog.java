@@ -250,7 +250,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 				}
 				fieldDialog.open();
 				String valueForNewTableTextBox = fieldDialog.getResultAsCommaSeprated();
-				if(valueForNewTableTextBox !=null && StringUtils.isNotBlank(valueForNewTableTextBox)){
+				if(valueForNewTableTextBox !=null){
 					textBox.setText(valueForNewTableTextBox);
 				}
 			}

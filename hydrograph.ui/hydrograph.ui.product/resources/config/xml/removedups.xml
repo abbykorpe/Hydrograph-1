@@ -50,6 +50,7 @@
 		<tns:property dataType="string" name="Secondary_keys" renderer="SECONDARY_COLUMN_KEYS_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LIST"
 			usage="OPTIONAL" propertyHelpText="Fields used for sorting within the groups.">
+			<tns:validator>SECONDARY_KEY_VALIDATION</tns:validator>
 			</tns:property>
 
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"

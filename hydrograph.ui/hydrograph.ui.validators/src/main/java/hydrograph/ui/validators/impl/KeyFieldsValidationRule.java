@@ -13,10 +13,11 @@
 
 package hydrograph.ui.validators.impl;
 
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 
 public class KeyFieldsValidationRule implements IValidator {
 	private String errorMessage;
@@ -33,8 +34,21 @@ public class KeyFieldsValidationRule implements IValidator {
 	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
 			,boolean isJobImported){
 		if (object != null) {
+			List<String> tmpList = new LinkedList<>();
 			List<String> keyFieldList = (List<String>) object;
 			if (keyFieldList.size() != 0) {
+				if(inputSchemaMap != null){
+					for(java.util.Map.Entry<String, List<FixedWidthGridRow>> entry : inputSchemaMap.entrySet()){
+						List<FixedWidthGridRow> gridRowList = entry.getValue();
+						gridRowList.forEach(gridRow -> tmpList.add(gridRow.getFieldName()));
+					}
+					
+					for(String str : keyFieldList){
+						if(!tmpList.contains(str)){
+							return false;
+						}
+					}
+				}
 				return true;
 			}
 		}
