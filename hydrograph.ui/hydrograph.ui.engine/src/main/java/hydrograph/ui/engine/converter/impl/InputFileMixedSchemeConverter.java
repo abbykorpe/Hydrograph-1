@@ -13,16 +13,6 @@
 
 package hydrograph.ui.engine.converter.impl;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
-import hydrograph.ui.engine.constants.PropertyNameConstants;
-import hydrograph.ui.engine.converter.InputConverter;
-import hydrograph.ui.engine.helper.ConverterHelper;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.graph.model.Link;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +22,15 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.ifmixedscheme.TypeInputMixedOutSocket;
 import hydrograph.engine.jaxb.inputtypes.TextFileMixedScheme;
+import hydrograph.engine.jaxb.inputtypes.TextFileMixedScheme.Quote;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.engine.constants.PropertyNameConstants;
+import hydrograph.ui.engine.converter.InputConverter;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.logging.factory.LogFactory;
 
 public class InputFileMixedSchemeConverter extends InputConverter {
 
@@ -62,6 +61,11 @@ public class InputFileMixedSchemeConverter extends InputConverter {
 				.value()));
 		textFileMixedScheme.setCharset(charset);
 		textFileMixedScheme.setRuntimeProperties(getRuntimeProperties());	
+		if (properties.get(PropertyNameConstants.QUOTE.value()) != null) {
+			Quote quote = new Quote();
+			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
+			textFileMixedScheme.setQuote(quote);
+		}	
 
 	}
 

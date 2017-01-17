@@ -63,6 +63,10 @@ public class OutputMixedSchemeUiConverter extends OutputUiConverter {
 				convertBooleanValue(fileMixedScheme.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(fileMixedScheme.getStrict(), PropertyNameConstants.STRICT.value()));
+		
+		if(fileMixedScheme.getQuote()!=null)
+			 propertyMap.put(PropertyNameConstants.QUOTE.value(), getParameterValue(PropertyNameConstants.QUOTE.value(),fileMixedScheme.getQuote().getValue()));
+		
 		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
 				convertToTrueFalseValue(fileMixedScheme.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
 

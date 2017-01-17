@@ -41,6 +41,11 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
+		<tns:property dataType="string" name="quote" value="" renderer="QUOTE_WIDGET"
+ 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+ 			usage="OPTIONAL" propertyHelpText="Specifies Quote present in the input file.">
+ 		</tns:property>
+ 		
 		<tns:property dataType="string" group="GENERAL" subGroup="CONFIGURATION" name="overWrite" value="False"
 			renderer="OVERWRITE_WIDGET" type="USER" showAsTooltip="FALSE" tooltipDataType="NONE"
 			usage="OPTIONAL" propertyHelpText="If ‘Overwrite’ property is true, the output location will be overwritten. Existing file / folder contents will be deleted.">

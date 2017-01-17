@@ -64,6 +64,9 @@ public class InputMixedSchemeUiConverter extends InputUiConverter {
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanValue(fileMixedSchema.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 
+		if(fileMixedSchema.getQuote()!=null)
+			 propertyMap.put(PropertyNameConstants.QUOTE.value(), getParameterValue(PropertyNameConstants.QUOTE.value(),fileMixedSchema.getQuote().getValue()));
+		
 		uiComponent.setType(UIComponentsConstants.FILE_MIXEDSCHEMA.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
