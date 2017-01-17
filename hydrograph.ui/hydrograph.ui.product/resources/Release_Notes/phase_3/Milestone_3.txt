@@ -7,8 +7,13 @@ Features Added:
 4.<06-Jan-16> - [Rakesh Kanchalwar] - Teradata Input and Output Component5. 
 5.<10-Jan-16> - [Rakesh Kanchalwar] - Restart button under File Menu option
 6.<06-Jan-17> - [Pooja Yadav] - Created Partition By Expression Component.
-7.<02-Jan-16> -[Shashank karnik,Akhilesh Joshi]-Expression editor support for Aggregate,cumulate and normalize
+7.<02-Jan-16> - [Shashank karnik,Akhilesh Joshi]-Expression editor support for Aggregate,cumulate and normalize
 8.<16-Jan-17> - [Rakesh Kanchalwar] - Input Xml component
+
+=====================================================================================================
+Enhancements implemented:
+=====================================================================================================
+1.<17-Jan-17>- [Shashank karnik] In expression editor,display class name in alphabetically order.  
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -60,5 +65,6 @@ Issues/Defects fixed:
 43.#613 [Vibhor Tyagi] - Execution Tracking: On Subjob, count values are not getting display on connection links
 44.#626 [Sonia Raheja] - Cumulate Component : Error for key field is not getting displayed on tooltip.
 45.#633 [Pooja Yadav} - Partition By Expression : Warning bubble is getting displayed on component after importing job.
-46.#632 [Rakesh Kanchalwar] - Input Redshift component: Job getting failed due to there is no space between driver value 
+46.#632 [Rakesh Kanchalwar] - Input Redshift component: Job getting failed due to there is no space between driver value.
+47.#637 [shashank karnik]- Tag for Input field is getting removed when job with expressions are imported (edit). 
  
