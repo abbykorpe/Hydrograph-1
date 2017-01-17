@@ -106,7 +106,8 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
 //    println("Status in TaskEnd : "+Status)
 
     if(taskEnd.taskInfo.status.equals("FAILED"))
-    componentInfoList.asScala.forall(a=>{a.setCurrentStatus("FAILED"); true})
+    componentInfoList.asScala.forall(a=>{if (!a.getCurrentStatus.equals("SUCCESSFUL"))
+      a.setCurrentStatus("FAILED"); true})
 
     taskEnd.taskInfo.accumulables.foreach(f => {
 
@@ -176,7 +177,8 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
     else taskStart.taskInfo.status*/
 
     if(taskStart.taskInfo.status.equals("FAILED"))
-      componentInfoList.asScala.forall(a=>{a.setCurrentStatus("FAILED"); true})
+      componentInfoList.asScala.forall(a=>{if (!a.getCurrentStatus.equals("SUCCESSFUL"))
+        a.setCurrentStatus("FAILED"); true})
 
     taskStart.taskInfo.accumulables.foreach(f => {
 //      println("acumulator name : "+f.name.get + "accumulator value : "+ f.value.get)
@@ -199,7 +201,11 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
             componentInfo.setComponentName(component.compName)
             componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
             componentInfo.setStatusPerSocketMap(component.outSocket, Status)
-            componentInfo.setCurrentStatus("RUNNING")
+            if(Status.equals("FAILED")){
+              componentInfo.setCurrentStatus("FAILED")
+              componentInfo.setProcessedRecordCount(component.outSocket, -1)
+            }
+            else{componentInfo.setCurrentStatus("RUNNING")}
 //            println("mark status as running of taskStart")
             //           componentInfoHashSet.add(componentInfo)
           })
