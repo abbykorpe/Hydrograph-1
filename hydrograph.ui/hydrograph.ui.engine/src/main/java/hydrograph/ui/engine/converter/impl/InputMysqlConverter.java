@@ -107,7 +107,7 @@ public class InputMysqlConverter extends InputConverter{
 		}
 		
 		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) properties
-				.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
+				.get(PropertyNameConstants.SELECT_OPTION.value());
 		
 		if (databaseSelectionConfig != null) {
 

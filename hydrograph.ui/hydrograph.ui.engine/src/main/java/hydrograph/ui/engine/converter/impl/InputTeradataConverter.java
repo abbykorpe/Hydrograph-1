@@ -111,7 +111,7 @@ public class InputTeradataConverter extends InputConverter{
 		teradataInput.setExportOptions(getSelectExportValue());
 		
 		DatabaseSelectionConfig databaseSelectionConfig = (DatabaseSelectionConfig) 
-				properties.get(PropertyNameConstants.ORACLE_SELECT_OPTION.value());
+				properties.get(PropertyNameConstants.SELECT_OPTION.value());
 		
 		if (databaseSelectionConfig != null) {
 

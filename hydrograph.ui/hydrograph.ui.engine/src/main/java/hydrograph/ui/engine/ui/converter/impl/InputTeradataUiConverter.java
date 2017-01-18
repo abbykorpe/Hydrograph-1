@@ -108,7 +108,7 @@ public class InputTeradataUiConverter extends InputUiConverter{
 			}
 		}
 
-		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
+		propertyMap.put(PropertyNameConstants.SELECT_OPTION.value(), databaseSelectionConfig);
 
 		propertyMap.put(PropertyNameConstants.SELECT_INTERFACE.value(), getExportInterfaceValue());
 

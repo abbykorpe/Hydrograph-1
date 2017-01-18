@@ -111,7 +111,7 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		 * .getValue()); }
 		 */
 
-		propertyMap.put(PropertyNameConstants.ORACLE_SELECT_OPTION.value(), databaseSelectionConfig);
+		propertyMap.put(PropertyNameConstants.SELECT_OPTION.value(), databaseSelectionConfig);
 
 		uiComponent.setType(UIComponentsConstants.MYSQL.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
