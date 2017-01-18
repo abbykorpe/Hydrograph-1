@@ -488,8 +488,9 @@ public class WidgetHelper {
 	
 	public WidgetConfig getSelectInterfaceWithLoadWidgetConfig() {
 		RadioButtonConfig radioConfig = new RadioButtonConfig();
-		radioConfig.setWidgetDisplayNames(new String []{Messages.STANDARD, Messages.FAST_LOAD});
-		radioConfig.getRadioButtonListners().add(Listners.VERIFY_FAST_LOAD_FOR_TERADATA);
+		//TODO Currently we don't have Fast_load utility at Engine side. So commenting the code.
+		radioConfig.setWidgetDisplayNames(new String []{Messages.STANDARD /*,Messages.FAST_LOAD*/});
+		//radioConfig.getRadioButtonListners().add(Listners.VERIFY_FAST_LOAD_FOR_TERADATA);
 		radioConfig.setPropertyName(Messages.LOAD_UTILITY_TYPE);
 		return radioConfig;
 	}
