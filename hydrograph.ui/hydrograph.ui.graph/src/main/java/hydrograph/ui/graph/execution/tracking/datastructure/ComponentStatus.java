@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * The Class ComponentStatus.
- * @author Butwise
+ * @author Bitwise
  */
 public class ComponentStatus {
 	

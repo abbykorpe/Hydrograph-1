@@ -39,6 +39,12 @@ import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.TextFileMixedScheme;
 
+/**
+ * The Class InputMixedSchemeUiConverter.
+ * UiConverter for InputMixedScheme component.
+ * @author Bitwise
+ */
+
 public class InputMixedSchemeUiConverter extends InputUiConverter {
 	
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(InputMixedSchemeUiConverter.class);
@@ -64,6 +70,9 @@ public class InputMixedSchemeUiConverter extends InputUiConverter {
 		propertyMap.put(PropertyNameConstants.IS_SAFE.value(),
 				convertBooleanValue(fileMixedSchema.getSafe(), PropertyNameConstants.IS_SAFE.value()));
 
+		if(fileMixedSchema.getQuote()!=null){
+			 propertyMap.put(PropertyNameConstants.QUOTE.value(), getParameterValue(PropertyNameConstants.QUOTE.value(),fileMixedSchema.getQuote().getValue()));
+		}
 		uiComponent.setType(UIComponentsConstants.FILE_MIXEDSCHEMA.value());
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);

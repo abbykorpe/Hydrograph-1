@@ -41,6 +41,10 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
+		<tns:property dataType="string" name="quote" value="" renderer="QUOTE_WIDGET"
+ 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+ 			usage="OPTIONAL" propertyHelpText="Specifies Quote present in the input file.">
+ 		</tns:property>
 		
 		<tns:property dataType="boolean" name="safe" value="False" renderer="SAFE_PROPERTY_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="NONE"

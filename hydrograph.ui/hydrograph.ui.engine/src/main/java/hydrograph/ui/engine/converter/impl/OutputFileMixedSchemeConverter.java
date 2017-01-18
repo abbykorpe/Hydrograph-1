@@ -17,6 +17,7 @@ import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.ofmixedscheme.TypeOutputMixedInSocket;
 import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme;
+import hydrograph.engine.jaxb.outputtypes.TextFileMixedScheme.Quote;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -31,6 +32,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+/**
+ * The Class OutputFileMixedSchemeConverter.
+ * Converter for OutputFileMixedScheme component.
+ * @author Bitwise
+ */
 public class OutputFileMixedSchemeConverter extends OutputConverter {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileMixedSchemeConverter.class);	
@@ -56,6 +62,11 @@ public class OutputFileMixedSchemeConverter extends OutputConverter {
 		fileMixedScheme.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		fileMixedScheme.setCharset(charset);
 		fileMixedScheme.setRuntimeProperties(getRuntimeProperties());
+		if (properties.get(PropertyNameConstants.QUOTE.value()) != null) {
+			Quote quote = new Quote();
+			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
+			fileMixedScheme.setQuote(quote);
+		}
 		fileMixedScheme.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
 	}
 	
