@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package hydrograph.ui.validators.impl;
 
 import java.util.LinkedHashMap;
@@ -20,6 +19,11 @@ import java.util.Map;
 
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 
+/**
+ * The Class Sort Component KeysFields ValidationRule
+ * @author Bitwise
+ *
+ */
 public class SortComponentKeysFieldsValidationRule implements IValidator{
 	private String errorMessage;
 	
@@ -35,6 +39,7 @@ public class SortComponentKeysFieldsValidationRule implements IValidator{
 	@Override
 	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
 			,boolean isJobImported){
+		
 		if (object != null) {
 			List<String> tmpList = new LinkedList<>();
 			Map<String, Object> keyFieldsList = (LinkedHashMap<String, Object>) object;
@@ -46,9 +51,7 @@ public class SortComponentKeysFieldsValidationRule implements IValidator{
 						gridRowList.forEach(gridRow -> tmpList.add(gridRow.getFieldName()));
 					}
 				}
-				
-				long count = keyFieldsList.entrySet().stream().filter(gridRow -> !tmpList.contains(gridRow.getKey())).count();
-				if(count >0){
+				if(keyFieldsList.entrySet().stream().anyMatch(gridRow -> !tmpList.contains(gridRow.getKey()))){
 					return false;
 				}
 				return true;

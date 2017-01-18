@@ -49,8 +49,7 @@ public class SecondaryColumnKeyValidation implements IValidator{
 						List<FixedWidthGridRow> gridRowList = entry.getValue();
 						gridRowList.forEach(gridRow -> tmpList.add(gridRow.getFieldName()));
 					}
-					long count = keyFieldsList.entrySet().stream().filter(gridRow -> !tmpList.contains(gridRow.getKey())).count();
-					if(count >0){
+					if(keyFieldsList.entrySet().stream().anyMatch(gridRow -> !tmpList.contains(gridRow.getKey()))){
 						return false;
 					}
 				return true;
