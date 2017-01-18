@@ -365,7 +365,8 @@ public class Messages extends NLS {
 	public static String ROOT_TAG;
 	public static String ROW_TAG;
 	public static String XPATH_GRID_ROW;
-
+	public static String X_PATH_MUST_NOT_BE_BLANK;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

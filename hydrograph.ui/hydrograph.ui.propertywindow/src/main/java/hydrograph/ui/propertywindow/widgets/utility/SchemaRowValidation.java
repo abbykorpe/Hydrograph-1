@@ -13,13 +13,6 @@
 
 package hydrograph.ui.propertywindow.widgets.utility;
 
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,9 +25,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.datastructure.property.XPathGridRow;
+import hydrograph.ui.logging.factory.LogFactory;
+
 public class SchemaRowValidation{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(SchemaRowValidation.class);
-	
 	private static final String NONE = "none";
 	private static final String REGULAR_EXPRESSION_FOR_NUMBER = "\\d+";
 	private static final String PARQUET = "parquet";
@@ -48,7 +47,7 @@ public class SchemaRowValidation{
 	private static final String JAVA_LANG_LONG = "java.lang.Long";
 	private boolean invalidDateFormat = false;
 	private boolean invalidLength = false;
-	
+	private boolean isRowInvalid;
 	
 	public static final SchemaRowValidation INSTANCE = new SchemaRowValidation();
 	
@@ -57,6 +56,15 @@ public class SchemaRowValidation{
 		
 	}
 	
+	/**
+	 * @param gridRow
+	 * @param item
+	 * @param table
+	 * @param componentType
+	 * 
+	 * This method highlight invalid data row with red color.
+	 * 
+	 */
 	public void highlightInvalidRowWithRedColor(GridRow gridRow,TableItem item,Table table,String componentType ){ 
 		if(item==null){
 			for(TableItem tableItem:table.getItems()){		
@@ -77,17 +85,33 @@ public class SchemaRowValidation{
 			}else{
 				executeIfObjectIsFixedWidthRow(gridRow, componentType, tableItem);
 			}
-		}else if(gridRow instanceof BasicSchemaGridRow){
-			executeIfObjectIsBasicSchemaRow(gridRow, componentType, tableItem);
+		}
+		else if(gridRow instanceof GridRow){
+			validationCheckForBigDecimalAndDateDatatype(gridRow, componentType, tableItem);
+			if(!isRowInvalid)
+			{	
+				if(gridRow instanceof XPathGridRow){
+					validationCheckForXpathGridRow(gridRow,tableItem);
+				}
+			}
 		}
 	}
 	
 	
-	private void executeIfObjectIsBasicSchemaRow(GridRow gridRow, String componentType, TableItem tableItem){
+	private void validationCheckForXpathGridRow(GridRow gridRow,TableItem tableItem) {
+		if(StringUtils.isBlank(((XPathGridRow)gridRow).getXPath())){
+			setRedColor(tableItem);
+		}
+		else{
+			setBlackColor(tableItem);
+		}
+	}
+
+	private void validationCheckForBigDecimalAndDateDatatype(GridRow gridRow, String componentType, TableItem tableItem){
 		if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
-			executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem);
+			validationCheckForBigDecimalDatatype(gridRow, componentType, tableItem);
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
-			executeIfDataTypeIsDate(gridRow, tableItem);	
+			validationCheckForDateDatatype(gridRow, tableItem);	
 		}
 		else{
 			setBlackColor(tableItem);
@@ -99,10 +123,10 @@ public class SchemaRowValidation{
 			String componentType, TableItem tableItem){
 		
 		if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
-			if(executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem))
+			if(validationCheckForBigDecimalDatatype(gridRow, componentType, tableItem))
 				return;
 		}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
-			executeIfDataTypeIsDate(gridRow, tableItem);
+			validationCheckForDateDatatype(gridRow, tableItem);
 			return;
 		}
 		
@@ -344,9 +368,9 @@ public class SchemaRowValidation{
 			setRedColor(tableItem);
 		}else{
 			if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL)){
-				executeIfDataTypeIsBigDecimal(gridRow, componentType, tableItem);
+				validationCheckForBigDecimalDatatype(gridRow, componentType, tableItem);
 			}else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(),JAVA_UTIL_DATE)){
-				executeIfDataTypeIsDate(gridRow, tableItem);	
+				validationCheckForDateDatatype(gridRow, tableItem);	
 			}else{
 				setBlackColor(tableItem);
 			}
@@ -356,15 +380,17 @@ public class SchemaRowValidation{
 
 	private void setBlackColor(TableItem tableItem){
 		tableItem.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+		isRowInvalid=false;
 	}
 
 	
 	private void setRedColor(TableItem tableItem){
 		tableItem.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		isRowInvalid=true;
 	}
 	
 	
-	private void executeIfDataTypeIsDate(GridRow gridRow, TableItem tableItem){
+	private void validationCheckForDateDatatype(GridRow gridRow, TableItem tableItem){
 		if((StringUtils.isBlank(gridRow.getDateFormat()))){
 			setRedColor(tableItem);
 			invalidDateFormat = true;
@@ -375,7 +401,7 @@ public class SchemaRowValidation{
 	}
 	
 	
-	private boolean executeIfDataTypeIsBigDecimal(GridRow gridRow,
+	private boolean validationCheckForBigDecimalDatatype(GridRow gridRow,
 			String componentType, TableItem tableItem){
 		
 		int precision = 0 , scale = 0 ;

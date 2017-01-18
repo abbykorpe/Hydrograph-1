@@ -13,19 +13,6 @@
 
 package hydrograph.ui.propertywindow.widgets.listeners.grid;
 
-import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.factory.ListenerFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-import hydrograph.ui.propertywindow.widgets.listeners.MouseActionListener;
-
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,7 +30,23 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 import org.slf4j.Logger;
 
+import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.MixedSchemeGridRow;
+import hydrograph.ui.datastructure.property.XPathGridRow;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.factory.ListenerFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.listeners.MouseActionListener;
+
 public class MouseHoverOnSchemaGridListener extends MouseActionListener{
+
+
 private static final Logger logger = LogFactory.INSTANCE.getLogger(MouseHoverOnSchemaGridListener.class);
 	
 	Table table=null;
@@ -411,7 +414,19 @@ private static final Logger logger = LogFactory.INSTANCE.getLogger(MouseHoverOnS
 			}else if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
 				return setToolTipForBigDecimal(gridRow, componentType);			
 			}
+
 		}
+		else if(gridRow instanceof XPathGridRow){
+		    if(StringUtils.isBlank(((XPathGridRow) gridRow).getXPath())){
+				return Messages.X_PATH_MUST_NOT_BE_BLANK;
+			}
+		    else if(StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_UTIL_DATE) 
+					&& StringUtils.isBlank(gridRow.getDateFormat())){
+				return setToolTipForDateFormatIfBlank(gridRow);
+			}else if((StringUtils.equalsIgnoreCase(gridRow.getDataTypeValue(), JAVA_MATH_BIG_DECIMAL))){
+				return setToolTipForBigDecimal(gridRow, componentType);			
+			}
+        }
 		return "";
 	}
 	
