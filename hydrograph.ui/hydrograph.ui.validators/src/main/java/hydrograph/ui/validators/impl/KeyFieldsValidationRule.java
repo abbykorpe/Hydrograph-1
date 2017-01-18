@@ -42,11 +42,8 @@ public class KeyFieldsValidationRule implements IValidator {
 						List<FixedWidthGridRow> gridRowList = entry.getValue();
 						gridRowList.forEach(gridRow -> tmpList.add(gridRow.getFieldName()));
 					}
-					
-					for(String str : keyFieldList){
-						if(!tmpList.contains(str)){
-							return false;
-						}
+					if(keyFieldList.stream().anyMatch(gridRow -> !tmpList.contains(gridRow))){
+						return false;
 					}
 				}
 				return true;

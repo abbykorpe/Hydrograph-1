@@ -45,13 +45,15 @@ public class SecondaryColumnKeyValidation implements IValidator{
 			Map<String, Object> keyFieldsList = (LinkedHashMap<String, Object>) object;
 			
 			if (keyFieldsList != null && !keyFieldsList.isEmpty()) {
+				if(inputSchemaMap != null){
 					for(java.util.Map.Entry<String, List<FixedWidthGridRow>> entry : inputSchemaMap.entrySet()){
 						List<FixedWidthGridRow> gridRowList = entry.getValue();
 						gridRowList.forEach(gridRow -> tmpList.add(gridRow.getFieldName()));
 					}
-					if(keyFieldsList.entrySet().stream().anyMatch(gridRow -> !tmpList.contains(gridRow.getKey()))){
-						return false;
-					}
+				}
+				if(keyFieldsList.entrySet().stream().anyMatch(gridRow -> !tmpList.contains(gridRow.getKey()))){
+					return false;
+				}
 				return true;
 			}
 		}
