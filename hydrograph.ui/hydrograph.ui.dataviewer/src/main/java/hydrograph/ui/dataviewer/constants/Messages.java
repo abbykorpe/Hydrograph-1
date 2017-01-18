@@ -120,8 +120,7 @@ public class Messages extends NLS{
 	public static String OVERRIDE_REMOTE_HOST_LABEL;
 	public static String REMOTE_HOST_NAME_LABEL;
 	public static String TRACKING_LOG_PATH_LABEL;
-
-
+	public static String BLANK_TRACKING_LOG_PATH_ERROR;
 	public static String BLANK_REMOTE_HOST_NAME_ERROR;
 
 	static {

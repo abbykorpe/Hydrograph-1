@@ -1,0 +1,11 @@
+====================================================================================================
+Features Added:
+=====================================================================================================
+Sr.No. <date> - [developer names] - description
+
+=====================================================================================================
+Issues/Defects fixed:
+=====================================================================================================
+Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
+
+1.#1208 [Pooja Yadav] - Preferences window: Validation error Message is Not Getting Displayed When 'Tracking Log path' is Blank.
