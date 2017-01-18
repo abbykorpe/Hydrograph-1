@@ -345,6 +345,13 @@
 		          </appinfo>
         	</annotation>
 		</enumeration>
+		<enumeration value="PORT_VALIDATOR">
+		          <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="PortValidationRule" />
+		          </appinfo>
+        	</annotation>
+		</enumeration>
 	</restriction>
 	</simpleType>
 	</schema>

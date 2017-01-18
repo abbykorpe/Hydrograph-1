@@ -53,17 +53,16 @@ public class VerifyNumericAndParameterListener  implements IELTListener{
 			@Override
 			public void handleEvent(Event event) {
 				
-				Text text = (Text)widgetList[0];
-				String string=text.getText();
+				String string = ((Text)widgetList[0]).getText();
 				Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(string);
 				if(StringUtils.isNotBlank(string) && matchs.matches()){
-					txtDecorator.hide();
-			}else{
-				txtDecorator.setDescriptionText("Should be numeric or Paramerter e.g. 1234, @{Param}");
-				txtDecorator.show();
-				event.doit=false;
-				
-			}
+						txtDecorator.hide();
+				}else{
+					txtDecorator.setDescriptionText("Should be numeric or Paramerter e.g. 1234, @{Param}");
+					txtDecorator.show();
+					//event.doit=false;
+					
+				}
 			}
 		};
 	return listener;

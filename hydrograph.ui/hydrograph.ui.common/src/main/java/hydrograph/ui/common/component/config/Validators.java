@@ -109,6 +109,8 @@ public enum Validators {
     NormalizeMappingValidator("NORMALIZE_MAPPING_VALIDATOR"),
     @XmlEnumValue("XPATH_SCHEMA_GRID_VALIDATOR")
     XPathSchemaGridValidationRule("XPATH_SCHEMA_GRID_VALIDATOR"),
+    @XmlEnumValue("PORT_VALIDATOR")
+    PortValidationRule("PORT_VALIDATOR"),
     @XmlEnumValue("SECONDARY_KEY_VALIDATION")
     SecondaryColumnKeyValidation("SECONDARY_KEY_VALIDATION");
 

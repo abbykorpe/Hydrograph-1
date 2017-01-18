@@ -48,6 +48,8 @@ import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.JoinInputCountFocusOutListener;
 import hydrograph.ui.propertywindow.widgets.listeners.OperationClassComboChangeListener;
 import hydrograph.ui.propertywindow.widgets.listeners.OverWriteWidgetSelectionListener;
+import hydrograph.ui.propertywindow.widgets.listeners.PortFocusInListener;
+import hydrograph.ui.propertywindow.widgets.listeners.PortFocusOutListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyCharacterLimitListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyDigitLimitNumericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
@@ -127,7 +129,9 @@ public class ListenerFactory {
 		OVER_WRITE_LISTENER(OverWriteWidgetSelectionListener.class),
 		MODIFY_NUMERIC_AND_PARAMETER(VerifyNumericAndParameterListener.class), 
 		VERIFY_FAST_LOAD_FOR_TERADATA(VerifyTeraDataFastLoadOption.class),
-		XML_FILE_PATH_MODIFY(XmlFilePathModifyListener.class);
+		XML_FILE_PATH_MODIFY(XmlFilePathModifyListener.class),
+		PORT_FOCUS_IN(PortFocusInListener.class),
+		PORT_FOCUS_OUT(PortFocusOutListener.class);
 		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {

@@ -119,7 +119,8 @@ public class WidgetHelper {
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_PORT);
 		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.getListeners().add(Listners.PORT_FOCUS_IN);
+		textBoxConfig.getListeners().add(Listners.PORT_FOCUS_OUT);
 		textBoxConfig.getListeners().add(Listners.MODIFY_NUMERIC_AND_PARAMETER);
 		return textBoxConfig;
 	}
