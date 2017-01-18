@@ -1,31 +1,57 @@
 package hydrograph.engine.spark.components
 
 import java.util
-
+import scala.collection.JavaConversions.bufferAsJavaList
+import scala.collection.JavaConversions.seqAsJavaList
+import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.collection.JavaConverters.seqAsJavaListConverter
+import scala.collection.mutable.ListBuffer
+import org.apache.spark.annotation.DeveloperApi
+import org.apache.spark.annotation.Experimental
+import org.apache.spark.sql.Column
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.catalyst.encoders.RowEncoder
+import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.types.StructType
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import hydrograph.engine.core.component.entity.NormalizeEntity
 import hydrograph.engine.core.component.entity.elements.Operation
+import hydrograph.engine.core.component.utils.OperationUtils
 import hydrograph.engine.expression.api.ValidationAPI
-import hydrograph.engine.expression.userfunctions.NormalizeForExpression
+import hydrograph.engine.expression.userfunctions.{AggregateForExpression, NormalizeForExpression}
+import hydrograph.engine.expression.utils.ExpressionWrapper
 import hydrograph.engine.spark.components.base.OperationComponentBase
-import hydrograph.engine.spark.components.handler.NormalizeOperation
+import hydrograph.engine.spark.components.handler.{OperationHelper, SparkOperation}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils._
-import hydrograph.engine.transformation.userfunctions.base.{OutputDispatcher, ReusableRow}
-import org.apache.spark.sql.catalyst.encoders.RowEncoder
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{Column, DataFrame, Row}
-import org.slf4j.{Logger, LoggerFactory}
-
-import scala.collection.JavaConversions._
-import scala.collection.JavaConverters._
-import scala.collection.mutable.ListBuffer
+import hydrograph.engine.spark.components.utils.EncoderHelper
+import hydrograph.engine.spark.components.utils.FieldManupulating
+import hydrograph.engine.spark.components.utils.OperationSchemaCreator
+import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, NormalizeTransformBase, OutputDispatcher, ReusableRow}
+import oracle.jdbc.driver.OutRawAccessor
 
 /**
   * Created by bitwise on 10/18/2016.
   */
-class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with NormalizeOperation with Serializable {
+class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: BaseComponentParams) 
+ extends OperationComponentBase with Serializable with OperationHelper[NormalizeTransformBase] {
 
-  private val LOG:Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[NormalizeComponent])
+  val outSocketEntity = normalizeEntity.getOutSocketList.get(0)
+  val inputSchema: StructType = componentsParams.getDataFrame().schema
+  val outputFields = OperationUtils.getAllFields(normalizeEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
+    .toList
+  val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
+  val inSocketId: String = normalizeEntity.getInSocketList.get(0).getInSocketId
+  val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
+  val passthroughFields: Array[String] = OperationUtils.getPassThrougFields(outSocketEntity.getPassThroughFieldsList,
+    inputSchema
+      .map
+      (_.name).asJava).asScala.toArray[String]
+  val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
+  val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
+
   def getAllInputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
     LOG.trace("In method getAllInputFieldsForExpr()")
     var list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationInputFields)
@@ -45,7 +71,6 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
       case hd :: tail => hd :: loop(set + hd, tail)
       case Nil => Nil
     }
-
     loop(Set(), ls)
   }
 
@@ -58,7 +83,6 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
         convert(xs, arrayList)
       }
     }
-
     convert(listBuffer.toList, new util.ArrayList[String]())
   }
 
@@ -70,7 +94,6 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
         case (f, c) if c == 0 => f
         case (f, count) => flattenList(strings, f += strings.flatten, count - 1)
       }
-
       flattenList(strings, ListBuffer[ListBuffer[String]](), strings.length)
     }
 
@@ -84,10 +107,8 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
           convert(xs, arrayList)
         }
       }
-
       convert(listBuffer.toList, new util.ArrayList[util.ArrayList[String]]())
     }
-
     val temp = listBufferToArrayList(flattenBufferList(strings).map(e => convertToList(e)))
     temp
   }
@@ -99,84 +120,63 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
   override def createComponent(): Map[String, DataFrame] = {
     LOG.trace("In method createComponent()")
 
-    val op = OperationSchemaCreator[NormalizeEntity](normalizeEntity, componentsParams, normalizeEntity.getOutSocketList().get(0))
-
-    val fm = FieldManupulating(op.getOperationInputFields(), op.getOperationOutputFields(), op.getPassThroughFields(), op.getMapFields(), op.getOperationFields(), null)
-
-    val outRow = new Array[Any](fm.getOutputFields().size)
-
-    val inputColumn = new Array[Column](fm.getinputFields().size)
-    fm.getinputFields().zipWithIndex.foreach(f => {
-      inputColumn(f._2) = col(f._1)
-    })
-
+    val outRow = new Array[Any](outputFields.size)
     var outputDispatcher: NormalizeOutputCollector = null
 
-    val df = componentsParams.getDataFrame.select(inputColumn: _*).mapPartitions(itr => {
-      val normalizeList = initializeNormalize(normalizeEntity.getOperationsList, fm, op.getExpressionObject)
+    val df = componentsParams.getDataFrame.mapPartitions(itr => {
+
+      val normalizeList: List[SparkOperation[NormalizeTransformBase]] = initializeOperationList[NormalizeForExpression](normalizeEntity.getOperationsList, inputSchema, outputSchema)
+
+      var nr1 = normalizeList.get(0)
+
+      if(!nr1.baseClassInstance.isInstanceOf[NormalizeForExpression]){
+        nr1.baseClassInstance.prepare(nr1.operationEntity.getOperationProperties)
+      }
       val it = itr.flatMap(row => {
-        //Map Fields
-        RowHelper.setTupleFromRow(outRow, fm.determineMapSourceFieldsPos(), row, fm.determineMapTargetFieldsPos())
-        //Passthrough Fields
-        RowHelper.setTupleFromRow(outRow, fm.determineInputPassThroughFieldsPos(), row, fm.determineOutputPassThroughFieldsPos())
+        copyFields(row, outRow, mapFieldIndexes)
+        copyFields(row, outRow, passthroughIndexes)
 
-        var nr = normalizeList.get(0)
-        var inputReusableRow = RowHelper.convertToReusebleRow(nr.inputFieldPositions, row, nr.inputReusableRow)
-        var outputReusableRow = nr.outputReusableRow
-        var outputPositions = nr.outputFieldPositions
-        outputDispatcher = new NormalizeOutputCollector(outputReusableRow, outRow, fm.determineOutputFieldPositions()(0))
+        outputDispatcher = new NormalizeOutputCollector(outRow)
 
-        if (nr.baseClassInstance.isInstanceOf[NormalizeForExpression]) {
-          LOG.info("Normalize Operation contains Expressions, so NormalizeForExpression class will be used for processing.")
-          var fieldNames: ListBuffer[String] = fm.getinputFields()
-          var tuples: Array[Object] = (0 to (fieldNames.length - 1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
-          var inputFields: List[String] = unique(getAllInputFieldsForExpr(normalizeEntity.getOperationsList, List[String]()))
-          var outputFields: List[String] = getAllOutputFieldsForExpr(normalizeEntity.getOperationsList, List[String]())
-          var inputPositions: List[Int] = extractAllInputPositions(inputFields)
-          outputPositions = extractAllOutputPositions(outputFields).to[ListBuffer]
-          inputReusableRow = RowHelper.convertToReusebleRow(inputPositions.to[ListBuffer], row, ReusableRowHelper(normalizeEntity.getOperation, fm).convertToReusableRow(inputFields))
-          outputReusableRow = ReusableRowHelper(normalizeEntity.getOperation, fm).convertToReusableRow(outputFields)
+        if(nr1.baseClassInstance.isInstanceOf[NormalizeForExpression]){
+            LOG.info("Normalize Operation contains Expressions, so NormalizeForExpression class will be used for processing.")
+            var fieldNames: Array[String] = inputSchema.map(_.name).toArray[String]
+            var tuples: Array[Object] = (0 to (fieldNames.length - 1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
+            var inputFields: List[String] = unique(getAllInputFieldsForExpr(normalizeEntity.getOperationsList, List[String]()))
+            var outputFields: List[String] = getAllOutputFieldsForExpr(normalizeEntity.getOperationsList, List[String]())
+            var inputPositions: List[Int] = extractAllInputPositions(inputFields)
+            var outputPositions = extractAllOutputPositions(outputFields).to[ListBuffer]
+            val x = normalizeList.map(sp => sp.validatioinAPI.getExpr)
+            LOG.info("List of Expressions: [" + x.toString + "].")
+            nr1.baseClassInstance.asInstanceOf[NormalizeForExpression].setValidationAPI(new ExpressionWrapper(nr1.validatioinAPI, fieldNames, tuples
+              , normalizeEntity.getOutputRecordCount, normalizeList.length, nr1.operationOutFields, x.asJava))
+          outputDispatcher = new NormalizeOutputCollector(outRow)
+          }
 
-          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setValidationAPI(op.getExpressionObject().get(0).asInstanceOf[ValidationAPI])
-          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setTransformInstancesSize(normalizeList.length)
-          val x: java.util.List[String] = op.getExpressionObject().map(e => e.asInstanceOf[ValidationAPI].getExpr)
-          LOG.info("List of Expressions: ["+x.toString+"].")
-          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setListOfExpressions(new java.util.ArrayList[String](x))
-          LOG.info("outputRecordCount Expression: "+normalizeEntity.getOutputRecordCount+".")
-          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setCountExpression(normalizeEntity.getOutputRecordCount)
-          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setOperationOutputFields(getOperationOutputFields(op.getOperationOutputFields()))
-          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setFieldNames(convertToList(fieldNames).toArray(new Array[String](fieldNames.size)))
-          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setTuples(tuples)
-
-          outputDispatcher = new NormalizeOutputCollector(outputReusableRow, outRow, outputPositions)
-        }
         outputDispatcher.initialize
-        LOG.info("Calling Normalize() method of " + nr.baseClassInstance.getClass.toString +" class.")
-        nr.baseClassInstance.Normalize(inputReusableRow, outputReusableRow, outputDispatcher)
+        LOG.trace("Calling Normalize() method of " + nr1.baseClassInstance.getClass.toString + " class.")
+        nr1.baseClassInstance.Normalize(nr1.inputRow.setRow(row), nr1.outputRow.setRow(outRow), outputDispatcher)
         if (itr.isEmpty) {
-          LOG.info("Calling cleanup() method of " + nr.baseClassInstance.getClass.toString + " class.")
-          nr.baseClassInstance.cleanup()
+          LOG.debug("Calling cleanup() method of " + nr1.baseClassInstance.getClass.toString + " class.")
+          nr1.baseClassInstance.cleanup()
         }
         outputDispatcher.getOutRows
       })
       it
-
-    })(RowEncoder(EncoderHelper().getEncoder(fm.getOutputFields(), componentsParams.getSchemaFields())))
+    })(RowEncoder(outputSchema))
 
     val key = normalizeEntity.getOutSocketList.get(0).getSocketId
     Map(key -> df)
   }
-
 }
 
-class NormalizeOutputCollector(outputReusableRow: ReusableRow, outRow: Array[Any], outputFieldPositions: ListBuffer[Int]) extends OutputDispatcher {
+class NormalizeOutputCollector(outRow: Array[Any]) extends OutputDispatcher {
 
   private val list = new ListBuffer[Row]()
-  private val LOG:Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[NormalizeComponent])
 
   override def sendOutput(): Unit = {
     LOG.trace("In method sendOutput()")
-    RowHelper.setTupleFromReusableRow(outRow, outputReusableRow, outputFieldPositions)
     val clonedRow = outRow.clone()
     list += Row.fromSeq(clonedRow)
   }

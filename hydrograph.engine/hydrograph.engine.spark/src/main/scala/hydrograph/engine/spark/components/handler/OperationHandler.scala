@@ -1,16 +1,25 @@
 package hydrograph.engine.spark.components.handler
 
-import java.util.{ArrayList, Properties}
-
-import hydrograph.engine.core.component.entity.elements.{KeyField, Operation}
-import hydrograph.engine.expression.api.ValidationAPI
-import hydrograph.engine.expression.userfunctions.{AggregateForExpression, CumulateForExpression, NormalizeForExpression, TransformForExpression}
-import hydrograph.engine.expression.utils.ExpressionWrapper
-import hydrograph.engine.spark.components.utils.{FieldManupulating, ReusableRowHelper}
-import hydrograph.engine.transformation.userfunctions.base.{AggregateTransformBase, CumulateTransformBase, NormalizeTransformBase, ReusableRow, TransformBase}
-
-import scala.collection.JavaConverters._
+import java.util.ArrayList
+import java.util.Properties
+import com.amazon.redshift.dataengine.ExpectedResult
+import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.mutable.ListBuffer
+import hydrograph.engine.core.component.entity.elements.KeyField
+import hydrograph.engine.core.component.entity.elements.Operation
+import hydrograph.engine.expression.api.ValidationAPI
+import hydrograph.engine.expression.userfunctions.AggregateForExpression
+import hydrograph.engine.expression.userfunctions.CumulateForExpression
+import hydrograph.engine.expression.userfunctions.NormalizeForExpression
+import hydrograph.engine.expression.userfunctions.TransformForExpression
+import hydrograph.engine.expression.utils.ExpressionWrapper
+import hydrograph.engine.spark.components.utils.FieldManupulating
+import hydrograph.engine.spark.components.utils.ReusableRowHelper
+import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase
+import hydrograph.engine.transformation.userfunctions.base.CumulateTransformBase
+import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBase
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow
+import hydrograph.engine.transformation.userfunctions.base.TransformBase
 
 /**
   * Created by gurdits on 12/1/2016.
@@ -167,7 +176,7 @@ trait NormalizeOperation{
         val normalizeBase: NormalizeTransformBase = (x,y) match {
           case (_,_) if(y != None && x.getOperationClass == null) => {
             var normalize = new NormalizeForExpression()
-            normalize.setValidationAPI(y.asInstanceOf[ValidationAPI])
+            normalize.setValidationAPI(y.asInstanceOf[ExpressionWrapper])
             normalize
           }
           case _ => classLoader[NormalizeTransformBase](x.getOperationClass)
