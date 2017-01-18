@@ -671,14 +671,20 @@ public class RunConfigDialog extends Dialog {
 		if (StringUtils.isNotBlank(password) && chkbtnSavePassword.getSelection()
 				&& StringUtils.isNotBlank(txtEdgeNode.getText()) && StringUtils.isNotBlank(txtUserName.getText())) {
 
-			ISecurePreferences hydrographSecureStorageRunDialogHostNode = getSecureStorageHostNode(
-					txtEdgeNode.getText().toLowerCase(), true);
+			savePasswordToSecureStorage(password);
+		}else{
+			savePasswordToSecureStorage("");
+		}
+	}
 
-			try {
-				hydrographSecureStorageRunDialogHostNode.put(txtUserName.getText(), password, true);
-			} catch (StorageException storageException) {
-				logger.debug("Failed to save the password in secure storage", storageException);
-			}
+	private void savePasswordToSecureStorage(String password) {
+		ISecurePreferences hydrographSecureStorageRunDialogHostNode = getSecureStorageHostNode(
+				txtEdgeNode.getText().toLowerCase(), true);
+
+		try {
+			hydrographSecureStorageRunDialogHostNode.put(txtUserName.getText(), password, true);
+		} catch (StorageException storageException) {
+			logger.debug("Failed to save the password in secure storage", storageException);
 		}
 	}
 
