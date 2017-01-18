@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 
 public class PortValidationRule implements IValidator{
@@ -28,7 +29,7 @@ public class PortValidationRule implements IValidator{
 			boolean isJobFileImported) {
 		String value = (String)object;
 		if(StringUtils.isNotBlank(value)){
-			Matcher matchs=Pattern.compile("^([\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1})|([\\d]{4})$").matcher(value);
+			Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(value);
 			if(!matchs.matches()){
 				errorMessage = propertyName + " Should be Numeric or Parameter E.g. 1234 or @{1234}";
 				return false;
