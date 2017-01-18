@@ -28,7 +28,7 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
- * ELTVerifyNumericAndParameterListener verifies value is numeric or parameter
+ * VerifyNumericAndParameterListener verifies value is numeric or parameter
  * @author Bitwise
  *
  */
@@ -58,9 +58,8 @@ public class VerifyNumericAndParameterListener  implements IELTListener{
 				if(StringUtils.isNotBlank(string) && matchs.matches()){
 						txtDecorator.hide();
 				}else{
-					txtDecorator.setDescriptionText("Should be numeric or Paramerter e.g. 1234, @{Param}");
+					txtDecorator.setDescriptionText(Constants.PORT_WIDGET_ERROR);
 					txtDecorator.show();
-					//event.doit=false;
 					
 				}
 			}
