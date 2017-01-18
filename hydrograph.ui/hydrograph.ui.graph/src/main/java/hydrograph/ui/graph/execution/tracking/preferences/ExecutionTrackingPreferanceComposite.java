@@ -132,7 +132,7 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 
 			@Override
 			public void modifyText(ModifyEvent event) {
-					validationForTextField(trackingLogPathText, trackingLogPathText.getText() , Messages.BLANK_TRACKING_LOG_PATH_ERROR );
+					validationForTextField(trackingLogPathText , Messages.BLANK_TRACKING_LOG_PATH_ERROR );
 			}
 		});
 		
@@ -192,7 +192,7 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		remoteHostNameText.addModifyListener(new ModifyListener() {
 			@Override
 		public void modifyText(ModifyEvent e) {
-				validationForTextField(remoteHostNameText, remoteHostNameText.getText() ,  Messages.BLANK_REMOTE_HOST_NAME_ERROR );
+				validationForTextField(remoteHostNameText,  Messages.BLANK_REMOTE_HOST_NAME_ERROR );
 			}
 		});
 		editorList.add(localPortNoText);
@@ -296,8 +296,8 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 	 * @param value
 	 * @param message
 	 */
-	protected void validationForTextField(Text textBox, String value, String message) {
-		if (StringUtils.isBlank(value)) {
+	protected void validationForTextField(Text textBox, String message) {
+		if (StringUtils.isBlank(textBox.getText())) {
 			textBox.setData(ERROR_KEY, message);
 			executionTrackPreference.setValid(false);
 		} else {
