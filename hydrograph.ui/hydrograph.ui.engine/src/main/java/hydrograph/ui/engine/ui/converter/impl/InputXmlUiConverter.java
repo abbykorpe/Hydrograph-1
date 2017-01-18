@@ -29,6 +29,7 @@ import hydrograph.engine.jaxb.commontypes.TypeExternalSchema;
 import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.jaxb.inputtypes.TextFileDelimited;
 import hydrograph.engine.jaxb.inputtypes.XmlFile;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -103,7 +104,7 @@ public class InputXmlUiConverter extends InputUiConverter{
 			}
 		}
 		propertyMap.put(PropertyNameConstants.ROOT_TAG.value(), StringUtils.isNotBlank(rootTag)? rootTag : "");
-		
+		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(xmlFile.getStrict(), PropertyNameConstants.STRICT.value()));
 		
@@ -115,6 +116,21 @@ public class InputXmlUiConverter extends InputUiConverter{
 		uiComponent.setProperties(propertyMap);
 		
 	}
+	
+	private Object getCharSet() {
+		XmlFile xmlFile = (XmlFile) typeBaseComponent;
+		Object value = null;
+		if (xmlFile.getCharset() != null) {
+			value = xmlFile.getCharset().getValue();
+			if (value != null) {
+				return xmlFile.getCharset().getValue().value();
+			} else {
+				value = getValue(PropertyNameConstants.CHAR_SET.value());
+			}
+		}
+		return value;
+	}
+
 	
 	@Override
 	protected Object getSchema(TypeInputOutSocket outSocket) {
