@@ -32,6 +32,11 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
 
+/**
+ * The Class InputFileMixedSchemeConverter.
+ * Converter for InputFileMixedScheme component.
+ * @author Bitwise
+ */
 public class InputFileMixedSchemeConverter extends InputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE

@@ -40,6 +40,12 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
+/**
+ * The Class OutputFileDelimitedUiConverter.
+ * UiConverter for OutputFileDelimited component.
+ * @author Bitwise
+ */
+
 public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 
 	private static final Logger LOGGER = LogFactory.INSTANCE.getLogger(OutputFileDelimitedUiConverter.class);
@@ -75,9 +81,9 @@ public class OutputFileDelimitedUiConverter extends OutputUiConverter {
 				propertyMap.put(PropertyNameConstants.DELIMITER.value(), fileDelimited.getDelimiter().getValue());
 		}
 		
-		if(fileDelimited.getQuote()!=null)
+		if(fileDelimited.getQuote()!=null){
 			 propertyMap.put(PropertyNameConstants.QUOTE.value(), getParameterValue(PropertyNameConstants.QUOTE.value(),fileDelimited.getQuote().getValue()));
-		
+		}
 		propertyMap.put(PropertyNameConstants.OVER_WRITE.value(),
 				convertToTrueFalseValue(fileDelimited.getOverWrite(), PropertyNameConstants.OVER_WRITE.value()));
 		

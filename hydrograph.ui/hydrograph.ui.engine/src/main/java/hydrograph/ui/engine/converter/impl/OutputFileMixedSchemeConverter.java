@@ -32,6 +32,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+/**
+ * The Class OutputFileMixedSchemeConverter.
+ * Converter for OutputFileMixedScheme component.
+ * @author Bitwise
+ */
 public class OutputFileMixedSchemeConverter extends OutputConverter {
 	
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileMixedSchemeConverter.class);	
