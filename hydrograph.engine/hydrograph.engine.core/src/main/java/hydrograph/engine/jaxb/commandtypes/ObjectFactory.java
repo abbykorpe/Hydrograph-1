@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 
 package hydrograph.engine.jaxb.commandtypes;
 
@@ -30,22 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FtpIn.Host }
-     * 
-     */
-    public FtpIn.Host createFtpInHost() {
-        return new FtpIn.Host();
-    }
-
-    /**
-     * Create an instance of {@link Subjob }
-     * 
-     */
-    public Subjob createSubjob() {
-        return new Subjob();
-    }
-
-    /**
      * Create an instance of {@link Hplsql }
      * 
      */
@@ -54,19 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Hplsql.Execute.Query }
+     * Create an instance of {@link Hplsql.Execute }
      * 
      */
-    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
-        return new Hplsql.Execute.Query();
-    }
-
-    /**
-     * Create an instance of {@link Subjob.Path }
-     * 
-     */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
+    public Hplsql.Execute createHplsqlExecute() {
+        return new Hplsql.Execute();
     }
 
     /**
@@ -86,6 +74,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Subjob }
+     * 
+     */
+    public Subjob createSubjob() {
+        return new Subjob();
+    }
+
+    /**
      * Create an instance of {@link Hplsql.Command }
      * 
      */
@@ -94,11 +90,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Hplsql.Execute }
+     * Create an instance of {@link Hplsql.Execute.Query }
      * 
      */
-    public Hplsql.Execute createHplsqlExecute() {
-        return new Hplsql.Execute();
+    public Hplsql.Execute.Query createHplsqlExecuteQuery() {
+        return new Hplsql.Execute.Query();
     }
 
     /**
@@ -115,6 +111,22 @@ public class ObjectFactory {
      */
     public RunProgram.Command createRunProgramCommand() {
         return new RunProgram.Command();
+    }
+
+    /**
+     * Create an instance of {@link FtpIn.Host }
+     * 
+     */
+    public FtpIn.Host createFtpInHost() {
+        return new FtpIn.Host();
+    }
+
+    /**
+     * Create an instance of {@link Subjob.Path }
+     * 
+     */
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
 }

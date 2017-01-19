@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 
 package hydrograph.engine.jaxb.oteradata;
 
@@ -30,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeTeradataRecord }
+     * Create an instance of {@link TypePrimaryKeys }
      * 
      */
-    public TypeTeradataRecord createTypeTeradataRecord() {
-        return new TypeTeradataRecord();
+    public TypePrimaryKeys createTypePrimaryKeys() {
+        return new TypePrimaryKeys();
     }
 
     /**
-     * Create an instance of {@link TypeTeradataField }
+     * Create an instance of {@link DatabaseType }
      * 
      */
-    public TypeTeradataField createTypeTeradataField() {
-        return new TypeTeradataField();
+    public DatabaseType createDatabaseType() {
+        return new DatabaseType();
     }
 
     /**
@@ -62,14 +74,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputTeradataBase }
-     * 
-     */
-    public TypeOutputTeradataBase createTypeOutputTeradataBase() {
-        return new TypeOutputTeradataBase();
-    }
-
-    /**
      * Create an instance of {@link TypeUpdateKeys }
      * 
      */
@@ -78,19 +82,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DatabaseType }
+     * Create an instance of {@link TypeTeradataRecord }
      * 
      */
-    public DatabaseType createDatabaseType() {
-        return new DatabaseType();
+    public TypeTeradataRecord createTypeTeradataRecord() {
+        return new TypeTeradataRecord();
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeys }
+     * Create an instance of {@link TypeOutputTeradataBase }
      * 
      */
-    public TypePrimaryKeys createTypePrimaryKeys() {
-        return new TypePrimaryKeys();
+    public TypeOutputTeradataBase createTypeOutputTeradataBase() {
+        return new TypeOutputTeradataBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeTeradataField }
+     * 
+     */
+    public TypeTeradataField createTypeTeradataField() {
+        return new TypeTeradataField();
     }
 
 }

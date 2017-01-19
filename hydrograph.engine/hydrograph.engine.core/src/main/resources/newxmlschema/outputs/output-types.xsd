@@ -25,6 +25,7 @@
            xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
            xmlns:oteradata="hydrograph/engine/jaxb/oteradata"
            xmlns:ofxml="hydrograph/engine/jaxb/ofxml"
+           xmlns:ojdbcupdate="hydrograph/engine/jaxb/ojdbcupdate"
            xmlns="hydrograph/engine/jaxb/outputtypes"
            targetNamespace="hydrograph/engine/jaxb/outputtypes"
            elementFormDefault="unqualified">
@@ -60,6 +61,8 @@
     <xs:import
             schemaLocation="./xml-file/output-file-xml-types.xsd"
             namespace="hydrograph/engine/jaxb/ofxml" />
+    <xs:import schemaLocation="./jdbcupdate-type/output-jdbcupdate-types.xsd"
+               namespace="hydrograph/engine/jaxb/ojdbcupdate" />
 
     <xs:complexType name="avroFile">
         <xs:complexContent>
@@ -465,4 +468,28 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="jdbcUpdate">
+        <xs:complexContent>
+            <xs:extension base="ojdbcupdate:type-output-jdbcupdate-base">
+                <xs:sequence>
+                    <xs:element name="url" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="jdbcDriverClass" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="tableName" type="cmn:element-value-string-type"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="batchSize" type="cmn:element-value-integer-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="userName" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="password" type="cmn:element-value-string-type"
+                                minOccurs="0" maxOccurs="1" />
+                    <xs:element name="update" type="ojdbcupdate:type-update-keys"
+                                minOccurs="1" maxOccurs="1" />
+                    <xs:element name="runtimeProperties" type="cmn:type-properties"
+                                minOccurs="0" maxOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 </xs:schema>
