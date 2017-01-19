@@ -23,7 +23,7 @@ class InputTeradataComponentTest {
     inputRDBMSEntity setComponentId ("TeradataInputComponent")
     inputRDBMSEntity setDatabaseName ("hydrograph_db")
     inputRDBMSEntity setHostName ("10.130.250.235")
-    //inputRDBMSEntity setPort (3306)
+    inputRDBMSEntity setPort (1025)
     inputRDBMSEntity setJdbcDriver ("TeraJDBC4")
     inputRDBMSEntity setTableName ("tableTest")
     inputRDBMSEntity setUsername ("hydrograph")
@@ -57,7 +57,7 @@ class InputTeradataComponentTest {
     cp.setSparkSession(sparkSession)
 
     //when
-    val df: Map[String, DataFrame] = new InputMysqlComponent(inputRDBMSEntity, cp).createComponent()
+    val df: Map[String, DataFrame] = new InputTeradataComponent(inputRDBMSEntity, cp).createComponent()
 
     val rows = df.get("outSocket").get.select("id").collect().toList
 
@@ -75,7 +75,7 @@ class InputTeradataComponentTest {
     inputRDBMSEntity setComponentId ("TeradataInputComponent")
     inputRDBMSEntity setDatabaseName ("hydrograph_db")
     inputRDBMSEntity setHostName ("10.130.250.235")
-    //inputRDBMSEntity setPort (3306)
+    inputRDBMSEntity setPort (1025)
     inputRDBMSEntity setJdbcDriver ("TeraJDBC4")
     inputRDBMSEntity setSelectQuery ("select * from tableTest where id=40")
     inputRDBMSEntity setUsername ("hydrograph")
@@ -109,7 +109,7 @@ class InputTeradataComponentTest {
     cp.setSparkSession(sparkSession)
 
     //when
-    val df: Map[String, DataFrame] = new InputMysqlComponent(inputRDBMSEntity, cp).createComponent()
+    val df: Map[String, DataFrame] = new InputTeradataComponent(inputRDBMSEntity, cp).createComponent()
 
     val rows = df.get("outSocket").get.select("id").collect()
 

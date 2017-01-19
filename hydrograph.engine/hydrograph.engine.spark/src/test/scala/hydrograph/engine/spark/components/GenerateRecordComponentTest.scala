@@ -5,8 +5,8 @@ import java.util
 import hydrograph.engine.core.component.entity.GenerateRecordEntity
 import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import org.apache.spark.sql._
-import org.junit.Test
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.json.Test
 import org.scalatest.Matchers._
 
 class GenerateRecordComponentTest {
@@ -17,7 +17,7 @@ class GenerateRecordComponentTest {
     // given
     val generateRecordEntity: GenerateRecordEntity = new GenerateRecordEntity
     generateRecordEntity.setComponentId("generate_data");
-    generateRecordEntity.setRecordCount(2);
+    generateRecordEntity.setRecordCount(2.toLong);
 
     val sf1 = new SchemaField("f1", "java.lang.String");
     sf1.setFieldLength(5);

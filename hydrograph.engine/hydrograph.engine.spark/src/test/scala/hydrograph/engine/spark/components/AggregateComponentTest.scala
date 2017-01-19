@@ -184,7 +184,7 @@ class AggregateComponentTest {
     println("data" + dataFrame("out0").toString())
     val actual = Bucket(Fields(List("count", "col3_new")), dataFrame("out0")).result()
 
-    println("actual:" + actual(0))
+
     Assert.assertEquals(1, actual.length)
     Assert.assertEquals("[3,C3Rx]", actual(0).toString())
 
@@ -263,7 +263,7 @@ class AggregateComponentTest {
 
     val schema = Array(
       new SchemaField("sum", "java.lang.Integer"),
-      new SchemaField("count", "java.lang.Integer"),
+      new SchemaField("count", "java.lang.Long"),
       new SchemaField("col1", "java.lang.String"),
       new SchemaField("col2", "java.lang.String"))
 
@@ -274,11 +274,11 @@ class AggregateComponentTest {
 
     val dataFrame: Map[String, DataFrame] = aggregate.createComponent()
 
-    println("data" + dataFrame("out0").toString())
+
     val actual = Bucket(Fields(List("sum", "count", "col1", "col2")), dataFrame("out0")).result()
 
     Assert.assertEquals(1, actual.length)
-    Assert.assertEquals("[300,3,C1R1]",actual(0).toString())
+    Assert.assertEquals("[300,3,C1R1,C2R3]",actual(0).toString())
 
   }
 
