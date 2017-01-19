@@ -30,7 +30,6 @@ BaseComponentParams) extends SparkFlow with Serializable {
        .option("charset", outputFileDelimitedEntity.getCharset)
        .option("strict", outputFileDelimitedEntity.isStrict)
        .option("safe", outputFileDelimitedEntity.getSafe)
-       .option("codec", "bzip2")
        .option("dateFormats", schemaCreator.getDateFormats)
        .mode(if (outputFileDelimitedEntity.isOverWrite ) SaveMode.Overwrite else SaveMode.ErrorIfExists)
        .format("hydrograph.engine.spark.datasource.csv")
