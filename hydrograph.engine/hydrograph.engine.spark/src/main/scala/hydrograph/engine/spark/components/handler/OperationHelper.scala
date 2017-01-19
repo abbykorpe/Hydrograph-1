@@ -8,12 +8,12 @@ import hydrograph.engine.spark.core.reusablerow.{InputReusableRow, OutputReusabl
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
-
+import scala.collection.JavaConverters._
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.reflect.ClassTag
 
 case class SparkOperation[T](baseClassInstance: T, operationEntity: Operation, inputRow: InputReusableRow, outputRow:
-OutputReusableRow, validatioinAPI: ValidationAPI, initalValue: String)
+OutputReusableRow, validatioinAPI: ValidationAPI, initalValue: String,operationOutFields:Array[String])
 
 trait OperationHelper[T] {
 
@@ -27,13 +27,13 @@ trait OperationHelper[T] {
         case (x :: xs) if x.isExpressionPresent => {
           val tf = classLoader[T](ct.runtimeClass.getCanonicalName)
           SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
-            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), new ValidationAPI(x.getExpression, ""), x.getAccumulatorInitialValue) ::
+            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), new ValidationAPI(x.getExpression, ""), x.getAccumulatorInitialValue,x.getOperationOutputFields) ::
             populateOperation(xs)
         }
         case (x :: xs) => {
           val tf = classLoader[T](x.getOperationClass)
           SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
-            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), null, null) ::
+            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), null, null,null) ::
             populateOperation(xs)
         }
       }
