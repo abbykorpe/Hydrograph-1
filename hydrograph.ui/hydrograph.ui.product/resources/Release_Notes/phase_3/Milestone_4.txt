@@ -17,3 +17,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 7.#596  [Vibhor Tyagi] -   Issues with Sort and Remove Dups components
 8.#601  [Prateem Tadas] - Kill Job :- Tool shows improper log when user Kill the remote run job.
 9.#638  [Prateem Tadas]- Job execution is still continue after killing job when SCP logs are getting displayed.
+10.#464  [Pooja Yadav] - Quote characters to dataset components.
+11.#640  [Pooja Yadav] - Xml Input component : Validation while browsing file is not present.

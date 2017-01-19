@@ -51,7 +51,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 	Shell shell;
 	private ControlDecoration txtDecorator;
 	private Component currentComponent;
-	private String[] filterFileExtensions={Constants.ADD_ALL_FIELDS_SYMBOL+Constants.JOB_EXTENSION};
+	private String[] filterFileExtensions;
 	@Override
 	public int getListenerType() {
 		return SWT.Selection;
@@ -65,6 +65,11 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 		if (helpers != null) {
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 			currentComponent = (Component) helpers.get(HelperType.CURRENT_COMPONENT);
+			filterFileExtensions=(String[]) helpers.get(HelperType.FILE_EXTENSION);
+			if(filterFileExtensions==null){
+				filterFileExtensions = new String[1];
+				filterFileExtensions[0] = "*.*";
+			}
 		}
 
 		Listener listener = new Listener() {
@@ -74,6 +79,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 					File file = null;
 					String path = null;
 					FileDialog filedialog = new FileDialog(button.getShell(), SWT.None);
+					filedialog.setFilterExtensions(filterFileExtensions);
 					filedialog.setFileName(((Text) widgets[1]).getText());
 						path = filedialog.open();
 						file = new File(path);

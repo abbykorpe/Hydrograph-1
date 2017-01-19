@@ -34,6 +34,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTCon
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.utility.Extensions;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 import java.util.ArrayList;
@@ -165,23 +166,35 @@ public class ELTFilePathWidget extends AbstractWidget{
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 		helper.put(HelperType.CURRENT_COMPONENT, getComponent());
 
+		if(StringUtils.equalsIgnoreCase("IXml", getComponent().getComponentName())){
+			String[] fileExtention = {"*.xml"};
+			helper.put(HelperType.FILE_EXTENSION,fileExtention);
+		}
+		
 		try {
-			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(), propertyDialogButtonBar,  null,eltDefaultTextBox.getSWTWidgetControl());
-			if(filepathConfig.isMandatory())
-			eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,  helper, eltDefaultTextBox.getSWTWidgetControl());
-			
-			if (StringUtils.equalsIgnoreCase(Constants.OUTPUT, getComponent().getCategory())){
+			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),
+					propertyDialogButtonBar, null, eltDefaultTextBox.getSWTWidgetControl());
+			if (filepathConfig.isMandatory())
+				eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,
+						helper, eltDefaultTextBox.getSWTWidgetControl());
+
+			if (StringUtils.equalsIgnoreCase(Constants.OUTPUT, getComponent().getCategory())) {
 				eltDefaultButton.attachListener(ListenerFactory.Listners.DIRECTORY_DIALOG_SELECTION.getListener(),
 						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
 						eltDefaultTextBox.getSWTWidgetControl());
-				eltDefaultTextBox.attachListener(ListenerFactory.Listners.FILE_PATH_MODIFY.getListener(), propertyDialogButtonBar,  helper, eltDefaultTextBox.getSWTWidgetControl());
-			}
-			else
+				eltDefaultTextBox.attachListener(ListenerFactory.Listners.FILE_PATH_MODIFY.getListener(),
+						propertyDialogButtonBar, helper, eltDefaultTextBox.getSWTWidgetControl());
+			} else {
 				eltDefaultButton.attachListener(ListenerFactory.Listners.FILE_DIALOG_SELECTION.getListener(),
 						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
 						eltDefaultTextBox.getSWTWidgetControl());
-			//eltDefaultTextBox.attachListener(listenerFactory.getListener("ELTFocusOutListener"), propertyDialogButtonBar,  helper,eltDefaultTextBox.getSWTWidgetControl());
-			} catch (Exception exception) {
+				// eltDefaultTextBox.attachListener(listenerFactory.getListener("ELTFocusOutListener"),propertyDialogButtonBar, helper,eltDefaultTextBox.getSWTWidgetControl());
+				if (StringUtils.equalsIgnoreCase("IXml", getComponent().getComponentName())) {
+					eltDefaultTextBox.attachListener(ListenerFactory.Listners.XML_FILE_PATH_MODIFY.getListener(),
+							propertyDialogButtonBar, helper, eltDefaultTextBox.getSWTWidgetControl());
+				}
+			}
+		} catch (Exception exception) {
 			LOGGER.error("Exception occurred while attaching listeners to ELTFileWidget",exception);
 		}
 		/**

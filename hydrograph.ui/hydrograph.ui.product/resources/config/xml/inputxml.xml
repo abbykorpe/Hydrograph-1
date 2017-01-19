@@ -14,7 +14,7 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_xml_palette.png" canvasIconPath="/icons/input_xml_canvas.png"
-		name="IXml" nameInPalette="Xml" defaultNamePrefix="IXml" 
+		name="IXml" nameInPalette="XML" defaultNamePrefix="IXml" 
 		description="Used to read xml file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_Xml.html"
 		acronym="IXml">
