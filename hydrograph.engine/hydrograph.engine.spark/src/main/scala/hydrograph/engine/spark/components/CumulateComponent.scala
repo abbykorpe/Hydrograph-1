@@ -132,7 +132,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
           Row.fromSeq(outRow)
         }
       }
-    })(RowEncoder(outputSchema))
+    })(RowEncoder(operationSchema))
     Map(key -> outputDf)
   }
 

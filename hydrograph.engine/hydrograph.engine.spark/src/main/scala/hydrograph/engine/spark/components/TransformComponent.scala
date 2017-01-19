@@ -69,7 +69,7 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
         Row.fromSeq(outRow)
       })
 
-    })(RowEncoder(outputSchema))
+    })(RowEncoder(operationSchema))
 
     val key = transformEntity.getOutSocketList.get(0).getSocketId
     Map(key -> df)

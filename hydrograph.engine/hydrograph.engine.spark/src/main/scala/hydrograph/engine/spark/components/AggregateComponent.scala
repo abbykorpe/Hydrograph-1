@@ -152,7 +152,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
           nullRow
       }
       }
-    })(RowEncoder(outputSchema))
+    })(RowEncoder(operationSchema))
 
     val outputDf = intermediateDf.na.drop("all")
 
