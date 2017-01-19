@@ -58,7 +58,7 @@ class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: 
           }
           val flag1 = if (previousRow == null) null else if (isPrevKeyDifferent) (true) else (false)
           val flag2 = if (previousRow == null) null else firstRowFlag
-          var tempRow = if (previousRow == null) row.copy() else previousRow.copy()
+          var tempRow = if (previousRow == null) row else previousRow
           previousRow = row
           firstRowFlag = if (isPrevKeyDifferent) (true) else (false)
           if (itr.isEmpty) {
@@ -70,6 +70,7 @@ class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: 
         }
         }
       })(RowEncoder(EncoderHelper().getEncoder(fm.getOutputFields(), componentsParams.getSchemaFields()).add(StructField("flag1", BooleanType, true)).add(StructField("flag2", BooleanType, true))))
+
 
       val outputDf = {
         if (keep == Keep.first)
