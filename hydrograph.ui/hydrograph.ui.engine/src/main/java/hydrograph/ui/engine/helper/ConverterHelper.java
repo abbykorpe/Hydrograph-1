@@ -193,21 +193,21 @@ public class ConverterHelper {
 		TypeOperationInputFields inputFields = null;
 		if (mappingSheetRow != null)
 		{		
-		List<String> expressionInputFields=new ArrayList<>
-		(mappingSheetRow.getExpressionEditorData().getSelectedInputFieldsForExpression().keySet());
+		List<FilterProperties> expressionInputFields=new ArrayList<>
+		(mappingSheetRow.getInputFields());
 		if (!expressionInputFields.isEmpty()) 
 		{
 			inputFields = new TypeOperationInputFields();
 
-			if (!hasAllStringsInListAsParams(expressionInputFields)) {	
-				for (String field : expressionInputFields){
-					if(!ParameterUtil.isParameter(field)){
+			if (!hasAllFilterPropertiesAsParams(expressionInputFields)) {	
+				for (FilterProperties field : expressionInputFields){
+					if(!ParameterUtil.isParameter(field.getPropertyname())){
 						TypeInputField typeInputField = new TypeInputField();
 						typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
-						typeInputField.setName(field.trim());
+						typeInputField.setName(field.getPropertyname().trim());
 						inputFields.getField().add(typeInputField);
 					}else{
-						addParamTag(ID, field,
+						addParamTag(ID, field.getPropertyname(),
 								ComponentXpathConstants.TRANSFORM_INPUT_FIELDS.value().replace("$operationId", mappingSheetRow.getOperationID()), false);
 					}
 				}
@@ -218,8 +218,8 @@ public class ConverterHelper {
 				typeInputField.setInSocketId(Constants.FIXED_INSOCKET_ID);
 				typeInputField.setName("");
 				inputFields.getField().add(typeInputField);
-				for (String field : expressionInputFields){
-					parameterFieldNames.append(field.trim() + " ");
+				for (FilterProperties field : expressionInputFields){
+					parameterFieldNames.append(field.getPropertyname().trim() + " ");
 				}
 				addParamTag(ID, parameterFieldNames.toString(),
 						ComponentXpathConstants.TRANSFORM_INPUT_FIELDS.value().replace("$operationId", mappingSheetRow.getOperationID()), true);

@@ -11,3 +11,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 1.#1208 [Pooja Yadav] - Preferences window: Validation error Message is Not Getting Displayed When 'Tracking Log path' is Blank.
 2.#627  [Shrirang Kumbhar] - All Data base components: On job import configured details from the properties window become empty
 3.#641  [Shrirang Kumbhar] - Save Password: On unchecking save Password checkbox tool unsave password
+4.#645  [Shashank karnik]- Xml input component: Fields under schema tab is not getting highlighted in red when error is present.
