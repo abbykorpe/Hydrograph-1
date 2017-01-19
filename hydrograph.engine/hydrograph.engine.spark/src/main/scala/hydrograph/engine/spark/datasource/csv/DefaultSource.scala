@@ -192,7 +192,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     }
 
     val quote = parameters.getOrElse("quote", "\"")
-    val quoteChar: Character = if (quote == null) {
+    val quoteChar: Character = if (quote == null || quote.isEmpty) {
       null
     } else if (quote.length == 1) {
       quote.charAt(0)
