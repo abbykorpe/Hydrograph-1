@@ -47,11 +47,15 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
           .filter { str => !lookupJoinOp.keyFields.contains(str) }
           .map { str => if (matchType == "first") (first(str).as(str)) else (last(str).as(str)) }
 
-        lookupJoinOp.dataFrame.groupBy(lookupKeyFields: _*).agg(lit(null), lookupOtherFields: _*)
+          if (lookupOtherFields.isEmpty)
+            lookupJoinOp.dataFrame.dropDuplicates()
+          else
+            lookupJoinOp.dataFrame.groupBy(lookupKeyFields: _*).agg(lookupOtherFields.head, lookupOtherFields.tail: _*)
       }
     })
 
-    val outputDF = getDFWithRequiredFields(driverJoinOp.dataFrame.join(broadcastDF, createJoinKey(driverJoinOp.keyFields, lookupJoinOp.keyFields), "leftouter"))
+    val joinKey = createJoinKey(driverJoinOp.keyFields, lookupJoinOp.keyFields)
+    val outputDF = getDFWithRequiredFields(driverJoinOp.dataFrame.join(broadcastDF, joinKey, "leftouter"))
 
     val key = driverJoinOp.outSocketId
 
