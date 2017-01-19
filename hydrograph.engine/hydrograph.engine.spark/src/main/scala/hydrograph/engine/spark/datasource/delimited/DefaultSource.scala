@@ -135,7 +135,7 @@ class DefaultSource extends RelationProvider
     } else {
       "" // There is no need to generate header in this case
     }
-
+   val recordSeparator : String = System.getProperty("line.separator")
    val strRDD = dataFrame.rdd.mapPartitions {
 
       case (iter) =>
@@ -160,7 +160,7 @@ class DefaultSource extends RelationProvider
 
               }
 
-              val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({
+             /* val values: Seq[AnyRef] = tuple.toSeq.zipWithIndex.map({
                 case (value, i) =>
                   val castedValue = TypeCast.outputValue(value, schema.fields(i).dataType, dateFormat(i))
                   var string:String = ""
@@ -172,12 +172,28 @@ class DefaultSource extends RelationProvider
                       string = quote + string + quote
                   }
                   string
-              })
+              })*/
+              val fields = new Array[String](schema.fields.length)
+              var i = 0
+              while (i < tuple.length){
+                val castedValue = TypeCast.outputValue(tuple.get(i), schema.fields(i).dataType, dateFormat(i))
+                var string:String = ""
+                if (castedValue != null ){
+                  string = castedValue.toString
+                  if (string.contains(quote))
+                    string = string.replaceAll(quote, quote + quote)
+                  if (string.contains(delimiter))
+                    string = quote + string + quote
+                }
+                fields(i) = string
+                i = i + 1
+                string
+              }
 
-              val row: String = values.mkString(delimiter)
+              val row: String = fields.mkString(delimiter)
               if (firstRow) {
                 firstRow = false
-                header + System.getProperty("line.separator") + row
+                header + recordSeparator + row
               } else {
                 row
               }
