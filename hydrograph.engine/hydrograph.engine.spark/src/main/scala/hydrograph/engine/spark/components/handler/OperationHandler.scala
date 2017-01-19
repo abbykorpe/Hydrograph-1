@@ -72,7 +72,7 @@ trait CumulateOperation{
 
               val cumulateBase: CumulateTransformBase = (x,y) match {
                 case (_,_) if(x.getOperationClass == null) => {
-                  var cumulate = new CumulateForExpression
+                  val cumulate = new CumulateForExpression
 //                  cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
 //                  cumulate.setCounter(counter)
 //                  cumulate.setInitialValueExpression((z::zs).toArray)
@@ -80,7 +80,7 @@ trait CumulateOperation{
                   cumulate
                 }
                 case _ => {
-                  var cumulate = CustomClassLoader.initializeObject[CumulateTransformBase](x.getOperationClass)
+                  val cumulate = CustomClassLoader.initializeObject[CumulateTransformBase](x.getOperationClass)
                   cumulate.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
                   cumulate
                 }
@@ -134,13 +134,13 @@ trait AggregateOperation{
         val aggregateBase: AggregateTransformBase = (x,y) match {
           case (_,_) if(x.getOperationClass == null) => {
             val expressionWrapper=new ExpressionWrapper(y.asInstanceOf[ValidationAPI],z);
-            var aggregate = new AggregateForExpression
+            val aggregate = new AggregateForExpression
               aggregate.setValidationAPI(expressionWrapper)
               aggregate.callPrepare
             aggregate
           }
           case _ => {
-            var aggregate = CustomClassLoader.initializeObject[AggregateTransformBase](x.getOperationClass)
+            val aggregate = CustomClassLoader.initializeObject[AggregateTransformBase](x.getOperationClass)
             aggregate.prepare(props, operationInputFieldList, operationOutputFieldList, keyFieldList)
             aggregate
           }
@@ -175,7 +175,7 @@ trait NormalizeOperation{
 
         val normalizeBase: NormalizeTransformBase = (x,y) match {
           case (_,_) if(y != None && x.getOperationClass == null) => {
-            var normalize = new NormalizeForExpression()
+            val normalize = new NormalizeForExpression()
             normalize.setValidationAPI(y.asInstanceOf[ExpressionWrapper])
             normalize
           }
@@ -229,7 +229,7 @@ trait TransformOperation{
 
         val transformBase: TransformBase = (x,y) match {
           case (_,_) if(y != None && x.getOperationClass == null) => {
-            var transform = new TransformForExpression()
+            val transform = new TransformForExpression()
             transform.setValidationAPI(y.asInstanceOf[ValidationAPI])
             transform
           }

@@ -54,13 +54,13 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
 
   def getAllInputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
     LOG.trace("In method getAllInputFieldsForExpr()")
-    var list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationInputFields)
+    val list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationInputFields)
     list1
   }
 
   def getAllOutputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
     LOG.trace("In method getAllOutputFieldsForExpr()")
-    var list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationOutputFields)
+    val list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationOutputFields)
     list1
   }
 
@@ -127,7 +127,7 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
 
       val normalizeList: List[SparkOperation[NormalizeTransformBase]] = initializeOperationList[NormalizeForExpression](normalizeEntity.getOperationsList, inputSchema, outputSchema)
 
-      var nr1 = normalizeList.get(0)
+      val nr1 = normalizeList.get(0)
 
       if(!nr1.baseClassInstance.isInstanceOf[NormalizeForExpression]){
         nr1.baseClassInstance.prepare(nr1.operationEntity.getOperationProperties)
@@ -140,12 +140,12 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
 
         if(nr1.baseClassInstance.isInstanceOf[NormalizeForExpression]){
             LOG.info("Normalize Operation contains Expressions, so NormalizeForExpression class will be used for processing.")
-            var fieldNames: Array[String] = inputSchema.map(_.name).toArray[String]
-            var tuples: Array[Object] = (0 to (fieldNames.length - 1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
-            var inputFields: List[String] = unique(getAllInputFieldsForExpr(normalizeEntity.getOperationsList, List[String]()))
-            var outputFields: List[String] = getAllOutputFieldsForExpr(normalizeEntity.getOperationsList, List[String]())
-            var inputPositions: List[Int] = extractAllInputPositions(inputFields)
-            var outputPositions = extractAllOutputPositions(outputFields).to[ListBuffer]
+            val fieldNames: Array[String] = inputSchema.map(_.name).toArray[String]
+            val tuples: Array[Object] = (0 to (fieldNames.length - 1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
+            val inputFields: List[String] = unique(getAllInputFieldsForExpr(normalizeEntity.getOperationsList, List[String]()))
+            val outputFields: List[String] = getAllOutputFieldsForExpr(normalizeEntity.getOperationsList, List[String]())
+            val inputPositions: List[Int] = extractAllInputPositions(inputFields)
+            val outputPositions = extractAllOutputPositions(outputFields).to[ListBuffer]
             val x = normalizeList.map(sp => sp.validatioinAPI.getExpr)
             LOG.info("List of Expressions: [" + x.toString + "].")
             nr1.baseClassInstance.asInstanceOf[NormalizeForExpression].setValidationAPI(new ExpressionWrapper(nr1.validatioinAPI, fieldNames, tuples
