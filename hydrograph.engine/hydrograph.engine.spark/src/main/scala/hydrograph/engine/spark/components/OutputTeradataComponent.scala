@@ -1,20 +1,21 @@
 /*******************************************************************************
- *    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *    http://www.apache.org/licenses/LICENSE-2.0
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- ******************************************************************************/
+  *    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+  *    Licensed under the Apache License, Version 2.0 (the "License");
+  *    you may not use this file except in compliance with the License.
+  *    You may obtain a copy of the License at
+  *    http://www.apache.org/licenses/LICENSE-2.0
+  *    Unless required by applicable law or agreed to in writing, software
+  *    distributed under the License is distributed on an "AS IS" BASIS,
+  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  *    See the License for the specific language governing permissions and
+  *    limitations under the License.
+  ******************************************************************************/
 
 package hydrograph.engine.spark.components
 
 import java.sql.SQLException
 import java.util
+import java.util.Properties
 
 import hydrograph.engine.core.component.entity.OutputRDBMSEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
@@ -25,6 +26,7 @@ import org.apache.spark.sql.Column
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.functions._
 import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 
 class OutputTeradataComponent(outputRDBMSEntity: OutputRDBMSEntity,
@@ -46,8 +48,8 @@ class OutputTeradataComponent(outputRDBMSEntity: OutputRDBMSEntity,
 
 
     val connectionURL = "jdbc:teradata://" + outputRDBMSEntity.getHostName() + "/DBS_PORT="+outputRDBMSEntity.getPort()+",DATABASE=" +
-      outputRDBMSEntity.getDatabaseName()+",TYPE="+outputRDBMSEntity.get_interface()+"";
-
+      outputRDBMSEntity.getDatabaseName()+",TYPE=DEFAULT,TMODE=ANSI";
+    /*outputRDBMSEntity.get_interface()*/
 
     LOG.info("Created Output Teradata Component '"+ outputRDBMSEntity.getComponentId
       + "' in Batch "+ outputRDBMSEntity.getBatch
@@ -64,18 +66,53 @@ class OutputTeradataComponent(outputRDBMSEntity: OutputRDBMSEntity,
     outputRDBMSEntity.getLoadType
     match {
       case "newTable" =>
+        LOG.info("selected " + outputRDBMSEntity.get_interface() + " option")
         executeQuery(connectionURL, properties, TeradataTableUtils().getCreateTableQuery(outputRDBMSEntity))
         //cp.getDataFrame()
-        cp.getDataFrame()
-          .select(createSchema(outputRDBMSEntity.getFieldsList): _*)
-          .write
-          .mode("append")
-          .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+        outputRDBMSEntity.get_interface() match {
+          case  "FASTLOAD" => if(areRecordsPresent(connectionURL, properties, outputRDBMSEntity)==false){
+            cp.getDataFrame()
+              .select(createSchema(outputRDBMSEntity.getFieldsList): _*)
+              .write.mode("append")
+              .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
 
-      case "insert" => cp.getDataFrame()
+          } else {
+            LOG.error("Cannot update/append records to a table with pre-existing records in FASTLOAD mode!")
+            throw new RuntimeException("Cannot update a table with pre-existing records in FASTLOAD mode!")
+          }
+          case "DEFAULT" => {
+            cp.getDataFrame()
+              .select(createSchema(outputRDBMSEntity.getFieldsList): _*)
+              .write.mode("append")
+              .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+          }
+        }
+      /*cp.getDataFrame()
         .select(createSchema(outputRDBMSEntity.getFieldsList): _*)
-        .write.mode("append")
-        .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+        .write
+        .mode("append")
+        .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)*/
+
+      case "insert" =>
+        LOG.info("selected " + outputRDBMSEntity.get_interface() + " option")
+        outputRDBMSEntity.get_interface() match {
+          case  "FASTLOAD" => if(areRecordsPresent(connectionURL, properties, outputRDBMSEntity)==false){
+            cp.getDataFrame()
+              .select(createSchema(outputRDBMSEntity.getFieldsList): _*)
+              .write.mode("append")
+              .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+
+          } else {
+            LOG.error("Cannot update/append records to a table with pre-existing records in FASTLOAD mode!")
+            throw new RuntimeException("Cannot update a table with pre-existing records in FASTLOAD mode!")
+          }
+          case "DEFAULT" => {
+            cp.getDataFrame()
+              .select(createSchema(outputRDBMSEntity.getFieldsList): _*)
+              .write.mode("append")
+              .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
+          }
+        }
 
       case "truncateLoad" =>
         executeQuery(connectionURL, properties, getTruncateQuery)
@@ -85,6 +122,15 @@ class OutputTeradataComponent(outputRDBMSEntity: OutputRDBMSEntity,
           .mode("append")
           .jdbc(connectionURL, outputRDBMSEntity.getTableName, properties)
     }
+  }
+
+  def areRecordsPresent(connectionURL: String, properties:Properties, outputRDBMSEntity: OutputRDBMSEntity): Boolean = {
+    LOG.warn("FASTLOAD WORKS ONLY IF THERE EXISTS NO RECORDS IN THE TARGET TABLE")
+    val connection = JdbcUtils.createConnectionFactory(connectionURL, properties)()
+    LOG.info("Performing a check to analyze the presence of data in table")
+    val statment = connection.prepareStatement("select TOP 1 * from " + outputRDBMSEntity.getTableName + ";")
+    val resultSet = statment.executeQuery()
+    resultSet.next
   }
 
   def executeQuery(connectionURL: String, properties: java.util.Properties, query: String): Unit = {

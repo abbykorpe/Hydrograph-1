@@ -1,15 +1,15 @@
 /*******************************************************************************
- *    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *    http://www.apache.org/licenses/LICENSE-2.0
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- ******************************************************************************/
+  *    Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+  *    Licensed under the Apache License, Version 2.0 (the "License");
+  *    you may not use this file except in compliance with the License.
+  *    You may obtain a copy of the License at
+  *    http://www.apache.org/licenses/LICENSE-2.0
+  *    Unless required by applicable law or agreed to in writing, software
+  *    distributed under the License is distributed on an "AS IS" BASIS,
+  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  *    See the License for the specific language governing permissions and
+  *    limitations under the License.
+  ******************************************************************************/
 
 package hydrograph.engine.spark.components
 
@@ -32,7 +32,7 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
   override def createComponent(): Map[String, DataFrame] = {
 
-     val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
+    val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
 
     val sparkSession = iComponentsParams.getSparkSession()
 
@@ -48,10 +48,6 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
     LOG.info("Created Input Teradata Component '" + inputRDBMSEntity.getComponentId
       + "' in Batch " + inputRDBMSEntity.getBatch
       + " with output socket " + inputRDBMSEntity.getOutSocketList.get(0).getSocketId)
-
-   /* val tableorQuery = if (inputRDBMSEntity.getTableName == null)
-      "(" + inputRDBMSEntity.getSelectQuery + ") as alias"
-      else inputRDBMSEntity.getTableName*/
 
     val selectQuery = if (inputRDBMSEntity.getTableName == null) {
       LOG.debug("Select query :  " + inputRDBMSEntity.getSelectQuery)
@@ -74,8 +70,8 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
 
     val connectionURL = "jdbc:teradata://" + inputRDBMSEntity.getHostName() + "/DBS_PORT=" + inputRDBMSEntity.getPort() + ",DATABASE=" +
-      inputRDBMSEntity.getDatabaseName()+",TYPE="+inputRDBMSEntity.get_interface()+"";
-
+      inputRDBMSEntity.getDatabaseName()+",TYPE=DEFAULT";
+    /*+inputRDBMSEntity.get_interface()+*/
     LOG.info("Connection  url for Teradata input component: " + connectionURL)
 
 
@@ -95,15 +91,12 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
   private def getDataType(dataType: DataType): Option[DataType] = {
     val answer = dataType.typeName.toUpperCase match {
-      case "DOUBLE" => FloatType
-
-       /** In teradata if we create a table with a field type as Double, it creates a schema and replaces the
-        * Double datatype with Float datatype which is Teradata specific. Contrary to that if we attempt to read the
-        * data from a Teradata table, we have created by using the output schema as Double, the execution gets stopped
+      case "DOUBLE" => FloatType  /** In teradata if we create a table with a field type as Double,
+        *it creates a schema and replaces the Double datatype with Float datatype which is Teradata specific.
+        * Contrary to that if we attempt to read the data from a Teradata table, we have created by using the
+        * output schema as Double, the execution gets stopped
         * as the data gets exported from Teradata as Float. In order to get Double type data while reading from a Teradata
-        * datanase, we mapped FLoatType to java.lang.
         * datanase, we mapped FLoatType to java.lang.Double*/
-
       case "SHORT" => IntegerType
       case "BOOLEAN" => IntegerType
 
