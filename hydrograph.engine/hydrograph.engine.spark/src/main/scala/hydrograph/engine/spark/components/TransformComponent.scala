@@ -22,6 +22,8 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
   val inputSchema: StructType = componentsParams.getDataFrame.schema
   val outputFields = OperationUtils.getAllFields(transformEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
+  val fieldsForOperation=OperationUtils.getAllFieldsWithOperationFields(transformEntity,outputFields.toList.asJava)
+  val operationSchema:StructType = EncoderHelper().getEncoder(fieldsForOperation.asScala.toList, componentsParams.getSchemaFields())
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = transformEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
@@ -38,7 +40,7 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
     LOG.trace("In method createComponent()")
     val df = componentsParams.getDataFrame.mapPartitions(itr => {
       //Initialize Transform to call prepare Method
-      val transformsList = initializeOperationList[TransformForExpression](transformEntity.getOperationsList, inputSchema, outputSchema)
+      val transformsList = initializeOperationList[TransformForExpression](transformEntity.getOperationsList, inputSchema, operationSchema)
 
       transformsList.foreach {
         sparkOperation =>
@@ -51,7 +53,7 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
       }
 
       itr.map(row => {
-        val outRow = new Array[Any](outputFields.size)
+        val outRow = new Array[Any](operationSchema.size)
         //Map Fields
         copyFields(row, outRow, mapFieldIndexes)
         //Passthrough Fields
@@ -67,7 +69,7 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
         Row.fromSeq(outRow)
       })
 
-    })(RowEncoder(outputSchema))
+    })(RowEncoder(operationSchema))
 
     val key = transformEntity.getOutSocketList.get(0).getSocketId
     Map(key -> df)

@@ -13,6 +13,7 @@
 package hydrograph.engine.core.component.entity.utils;
 
 import hydrograph.engine.core.component.entity.elements.*;
+import hydrograph.engine.core.component.utils.OperationOutputField;
 import hydrograph.engine.jaxb.commontypes.*;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.join.TypeKeyFields;
@@ -62,6 +63,8 @@ public class OperationEntityUtils implements Serializable{
 				operation.setOperationInputFields(extractOperationInputFields(
 						((TypeTransformOperation) typeTransformOperation).getInputFields()));
 				operation.setOperationOutputFields(extractOperationOutputFields(
+						((TypeTransformOperation) typeTransformOperation).getOutputFields()));
+				operation.setOperationFields(extractOperationFields(
 						((TypeTransformOperation) typeTransformOperation).getOutputFields()));
 				operation.setOperationClass(((TypeTransformOperation) typeTransformOperation).getClazz());
 				operation.setOperationProperties(
@@ -219,6 +222,37 @@ public class OperationEntityUtils implements Serializable{
 
 	}
 
+
+
+	/**
+	 * Extracts the operation output fields from the
+	 * {@link TypeOperationOutputFields} object passed as a parameter
+	 * <p>
+	 * The method returns {@code null} if the {@code typeOperationOutputFields}
+	 * parameter is null
+	 *
+	 * @param typeOperationOutputFields
+	 *            the object of {@link TypeOperationOutputFields} which contain
+	 *            information of operation output fields for the component
+	 * @return a array OperationOutputField containing  the output fields for an operation
+	 */
+	private static OperationOutputField[] extractOperationFields(TypeOperationOutputFields typeOperationOutputFields) {
+
+		if (typeOperationOutputFields == null) {
+			return null;
+		} else if (typeOperationOutputFields.getField() == null) {
+			return null;
+		}
+		List<TypeBaseField> typeOutputFieldList = typeOperationOutputFields.getField();
+		OperationOutputField[] outputFields = new OperationOutputField[typeOutputFieldList.size()];
+		int i = 0;
+		for (TypeBaseField outputField : typeOutputFieldList) {
+			outputFields[i++] = new OperationOutputField(outputField.getName(), outputField.getType().value(), outputField.getFormat()!=null?outputField.getFormat():"yyyy-MM-dd", outputField.getScale()!=null?outputField.getScale():38, outputField.getPrecision()!=null?outputField.getPrecision():38);
+		}
+		return outputFields;
+
+	}
+
 	/**
 	 * Extracts the operation output fields from the
 	 * {@link TypeExpressionOutputFields} object passed as a parameter
@@ -226,7 +260,7 @@ public class OperationEntityUtils implements Serializable{
 	 * The method returns {@code null} if the {@code TypeExpressionOutputFields}
 	 * parameter is null
 	 * 
-	 * @param TypeExpressionOutputFields
+	 * @param typeOperationOutputFields
 	 *            the object of {@link TypeExpressionOutputFields} which contain
 	 *            information of operation output fields for the component
 	 * @return a string array containing the output fields for an operation

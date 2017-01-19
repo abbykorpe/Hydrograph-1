@@ -1,9 +1,8 @@
 package hydrograph.engine.core.component.utils;
 
-import hydrograph.engine.core.component.entity.elements.MapField;
-import hydrograph.engine.core.component.entity.elements.OperationField;
-import hydrograph.engine.core.component.entity.elements.OutSocket;
-import hydrograph.engine.core.component.entity.elements.PassThroughField;
+
+import hydrograph.engine.core.component.entity.base.OperationEntityBase;
+import hydrograph.engine.core.component.entity.elements.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +29,18 @@ public class OperationUtils {
         }
         return outFields;
     }
+
+    public static List<String> getAllFieldsWithOperationFields(OperationEntityBase entity, List<String> inputSchema) {
+        List<String> outFields = new ArrayList<>();
+        outFields.addAll(inputSchema);
+        for (Operation operation : entity.getOperationsList()) {
+            for (String field : operation.getOperationOutputFields())
+                if (!inputSchema.contains(field))
+                    outFields.add(field);
+        }
+        return outFields;
+    }
+
 
     public static List<String> getPassThrougFields(List<PassThroughField> passThroughFieldList, List<String>
             inputSchemaList) {
