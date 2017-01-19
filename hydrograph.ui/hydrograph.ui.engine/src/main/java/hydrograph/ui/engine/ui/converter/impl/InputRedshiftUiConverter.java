@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,8 +72,13 @@ public class InputRedshiftUiConverter extends InputUiConverter {
 		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),
 				redshift.getHostName() == null ? "" : redshift.getHostName().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-				redshift.getPort() == null ? "" : redshift.getPort().getValue());
+		try {
+			BigInteger bigInteger = redshift.getPort().getValue();
+			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
+					bigInteger == null ? "" : redshift.getPort().getValue());
+		} catch (Exception e) {
+			LOGGER.error("Exception" + e);
+		}
 
 		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(),
 				redshift.getUserName() == null ? "" : redshift.getUserName().getValue());

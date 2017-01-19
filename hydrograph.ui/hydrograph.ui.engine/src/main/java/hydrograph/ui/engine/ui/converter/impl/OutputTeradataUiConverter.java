@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -73,8 +74,13 @@ public class OutputTeradataUiConverter extends OutputUiConverter{
 		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(), 
 				outputTeradata.getHostName() == null ? "" : outputTeradata.getHostName().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(), 
-				outputTeradata.getPort() == null ? "" : outputTeradata.getPort().getValue());
+		try {
+			BigInteger bigInteger = outputTeradata.getPort().getValue();
+			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
+					bigInteger == null ? "" : outputTeradata.getPort().getValue());
+		} catch (Exception e) {
+			LOGGER.error("Exception" + e);
+		}
 		
 		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(), 
 				outputTeradata.getDatabaseName() == null ? "" : outputTeradata.getDatabaseName().getValue());

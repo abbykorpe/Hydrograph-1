@@ -28,7 +28,7 @@ import hydrograph.ui.datastructure.property.FixedWidthGridRow;
  *
  */
 public class PortValidationRule implements IValidator{
-
+	String errorMessage;
 	@Override
 	public boolean validateMap(Object object, String propertyName,
 			Map<String, List<FixedWidthGridRow>> inputSchemaMap) {
@@ -46,7 +46,7 @@ public class PortValidationRule implements IValidator{
 		if(StringUtils.isNotBlank(value)){
 			Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(value);
 			if(!matchs.matches()){
-				String errorMessage = propertyName + Constants.PORT_WIDGET_ERROR;
+				errorMessage = propertyName + Constants.PORT_WIDGET_ERROR;
 				return false;
 			}else{
 				return true;
@@ -57,7 +57,7 @@ public class PortValidationRule implements IValidator{
 
 	@Override
 	public String getErrorMessage() {
-		return null;
+		return errorMessage;
 	}
 
 }

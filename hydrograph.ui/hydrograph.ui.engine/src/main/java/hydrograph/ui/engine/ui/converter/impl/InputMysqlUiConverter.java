@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,8 +68,13 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),
 				inputMysql.getHostName() == null ? "" : inputMysql.getHostName().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-				inputMysql.getPort() == null ? "" : inputMysql.getPort().getValue());
+		try {
+			BigInteger bigInteger = inputMysql.getPort().getValue();
+			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
+					bigInteger == null ? "" : inputMysql.getPort().getValue());
+		} catch (Exception e) {
+			LOGGER.error("Exception" + e);
+		}
 
 		setValueInPropertyMap(PropertyNameConstants.DATABASE_NAME.value(),
 				inputMysql.getDatabaseName() == null ? "" : inputMysql.getDatabaseName().getValue());
