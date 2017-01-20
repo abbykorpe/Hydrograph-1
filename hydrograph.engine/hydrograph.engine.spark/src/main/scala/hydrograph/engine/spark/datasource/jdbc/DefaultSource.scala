@@ -38,12 +38,25 @@ class DefaultSource extends CreatableRelationProvider with Serializable {
     val updateIndex = parameters.getOrElse("updateIndex", "Update index must be present for output jdbc update Component")
     val updateQuery = parameters.getOrElse("updateQuery", throw new RuntimeException("Update query must be present for output jdbc update Component"))
     LOG.debug("Updating table '" + table + "' with update query : " + updateQuery)
+
     val connectionProperties = new java.util.Properties()
-    connectionProperties.setProperty("user", user)
-    connectionProperties.setProperty("password", password)
+
+    (user, password) match {
+      case (u, p) if u == null && p == null =>
+        LOG.warn("Output jdbc update component , both userName and password are empty")
+      case (u, p) if u != null && p == null =>
+        LOG.warn("Output jdbc update component, password is empty")
+        connectionProperties.setProperty("user", user)
+      case (u, p) if u == null && p != null =>
+        LOG.warn("Output jdbc update component, userName is empty")
+        connectionProperties.setProperty("password", password)
+      case (u, p) =>
+        connectionProperties.setProperty("user", user)
+        connectionProperties.setProperty("password", password)
+    }
 
     val conn: Connection = HydrographJDBCUtils().createConnectionFactory(driver, url, connectionProperties)()
-    LOG.debug("Connection created successfully with driver '"+driver+"' url '"+url +"'")
+    LOG.debug("Connection created successfully with driver '" + driver + "' url '" + url + "'")
     try {
       val tableExists = HydrographJDBCUtils().tableExists(conn, table)
       if (tableExists) {

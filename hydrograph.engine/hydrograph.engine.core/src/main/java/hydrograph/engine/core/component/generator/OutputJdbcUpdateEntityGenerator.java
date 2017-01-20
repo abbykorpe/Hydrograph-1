@@ -48,8 +48,8 @@ public class OutputJdbcUpdateEntityGenerator extends OutputComponentGeneratorBas
                         .getInSocket().get(0).getSchema()
                         .getFieldOrRecordOrIncludeExternalSchema()));
 
-        outputJdbcUpdateEntity.setUserName(jaxbJdbcUpdate.getUserName().getValue());
-        outputJdbcUpdateEntity.setPassword(jaxbJdbcUpdate.getPassword().getValue() );
+        outputJdbcUpdateEntity.setUserName((jaxbJdbcUpdate.getUserName() !=null) ? jaxbJdbcUpdate.getUserName().getValue():null);
+        outputJdbcUpdateEntity.setPassword((jaxbJdbcUpdate.getPassword() !=null) ? jaxbJdbcUpdate.getPassword().getValue():null);
         outputJdbcUpdateEntity.setUrl(jaxbJdbcUpdate.getUrl().getValue());
         outputJdbcUpdateEntity.setJdbcDriverClass(jaxbJdbcUpdate.getJdbcDriverClass().getValue());
         outputJdbcUpdateEntity.setTableName(jaxbJdbcUpdate.getTableName().getValue());

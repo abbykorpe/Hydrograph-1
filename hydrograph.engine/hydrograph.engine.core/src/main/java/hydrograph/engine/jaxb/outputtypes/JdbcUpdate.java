@@ -38,8 +38,8 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeUpdateKeys;
  *         &lt;element name="jdbcDriverClass" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
  *         &lt;element name="batchSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
- *         &lt;element name="userName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
- *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="userName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
+ *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
  *         &lt;element name="update" type="{hydrograph/engine/jaxb/ojdbcupdate}type-update-keys"/>
  *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
  *       &lt;/sequence>
@@ -72,9 +72,7 @@ public class JdbcUpdate
     @XmlElement(required = true)
     protected ElementValueStringType tableName;
     protected ElementValueIntegerType batchSize;
-    @XmlElement(required = true)
     protected ElementValueStringType userName;
-    @XmlElement(required = true)
     protected ElementValueStringType password;
     @XmlElement(required = true)
     protected TypeUpdateKeys update;

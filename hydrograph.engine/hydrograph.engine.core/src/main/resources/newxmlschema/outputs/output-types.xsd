@@ -481,9 +481,9 @@
                     <xs:element name="batchSize" type="cmn:element-value-integer-type"
                                 minOccurs="0" maxOccurs="1" />
                     <xs:element name="userName" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
+                                minOccurs="0" maxOccurs="1" />
                     <xs:element name="password" type="cmn:element-value-string-type"
-                                minOccurs="1" maxOccurs="1" />
+                                minOccurs="0" maxOccurs="1" />
                     <xs:element name="update" type="ojdbcupdate:type-update-keys"
                                 minOccurs="1" maxOccurs="1" />
                     <xs:element name="runtimeProperties" type="cmn:type-properties"
