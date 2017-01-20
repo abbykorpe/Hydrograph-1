@@ -27,10 +27,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
-import org.slf4j.Logger;
 
 import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
@@ -46,7 +44,6 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
  */
 public class ELTFileDialogSelectionListener implements IELTListener{
 
-	private Logger LOGGER = LogFactory.INSTANCE.getLogger(ELTFileDialogSelectionListener.class);
 	Shell shell;
 	private ControlDecoration txtDecorator;
 	private Component currentComponent;

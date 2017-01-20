@@ -13,6 +13,7 @@
 
 package hydrograph.ui.propertywindow.widgets.listeners;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -58,7 +59,7 @@ private ControlDecoration txtDecorator;
 			public void handleEvent(Event event) {
 				IPath path = new Path(((Text) widgetList[0]).getText().trim());
 				if (event.type == SWT.Modify ) {
-					if (path.segment(0) != null) {
+					if (StringUtils.isNotBlank(path.segment(0))) {
 						if (path.toFile().exists() && path.lastSegment().endsWith(".xml")) {
 							txtDecorator.hide();
 							((Text) widgetList[0]).setToolTipText("");
