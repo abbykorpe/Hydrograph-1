@@ -117,6 +117,7 @@
 			<enumeration value="XPATH_QUERY_WIDGET"/>
 			<enumeration value="ROOT_TAG_WIDGET"/>
 			<enumeration value="ROW_TAG_WIDGET"/>
+			<enumeration value="XML_FILE_PATH_WIDGET"/>
 		</restriction>
 	</simpleType>
 

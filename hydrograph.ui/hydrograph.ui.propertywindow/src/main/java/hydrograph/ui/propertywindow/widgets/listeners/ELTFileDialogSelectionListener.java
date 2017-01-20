@@ -15,12 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.listeners;
 
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-
 import java.io.File;
 
 import org.apache.commons.lang.StringUtils;
@@ -34,6 +28,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.slf4j.Logger;
+
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 
 /**
@@ -66,10 +65,7 @@ public class ELTFileDialogSelectionListener implements IELTListener{
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 			currentComponent = (Component) helpers.get(HelperType.CURRENT_COMPONENT);
 			filterFileExtensions=(String[]) helpers.get(HelperType.FILE_EXTENSION);
-			if(filterFileExtensions==null){
-				filterFileExtensions = new String[1];
-				filterFileExtensions[0] = "*.*";
-			}
+			
 		}
 
 		Listener listener = new Listener() {
