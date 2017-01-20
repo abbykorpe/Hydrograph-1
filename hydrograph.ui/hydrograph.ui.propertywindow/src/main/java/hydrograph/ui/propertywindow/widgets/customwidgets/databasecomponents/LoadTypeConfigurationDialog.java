@@ -245,7 +245,7 @@ public class LoadTypeConfigurationDialog extends Dialog {
 				FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 				fieldDialog.setComponentName(buttonText);
 				fieldDialog.setSourceFieldsFromPropagatedSchema(schemaFields);
-				if(textBox.getText() != null){
+				if(StringUtils.isNotBlank(textBox.getText())){
 					fieldDialog.setPropertyFromCommaSepratedString(textBox.getText());
 				}
 				fieldDialog.open();

@@ -52,6 +52,7 @@ public class SortComponentKeysFieldsValidationRule implements IValidator{
 					}
 				}
 				if(keyFieldsList.entrySet().stream().anyMatch(gridRow -> !tmpList.contains(gridRow.getKey()))){
+					errorMessage = "Target Fields Should be present in Available Fields";
 					return false;
 				}
 				return true;

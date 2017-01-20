@@ -68,4 +68,4 @@ Issues/Defects fixed:
 46.#632 [Rakesh Kanchalwar] - Input Redshift component: Job getting failed due to there is no space between driver value.
 47.#637 [shashank karnik]- Tag for Input field is getting removed when job with expressions are imported (edit). 
 48.#632 [Rakesh Kanchalwar] - Input Redshift component: Job getting failed due to there is no space between driver value 
-49.#596 [Vibhor Tyagi] -   Issues with Sort and Remove Dups components
+
