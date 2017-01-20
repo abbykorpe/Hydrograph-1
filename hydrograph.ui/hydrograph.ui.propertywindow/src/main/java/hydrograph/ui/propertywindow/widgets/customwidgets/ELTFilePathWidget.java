@@ -15,27 +15,6 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.factory.ListenerFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
-import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
-import hydrograph.ui.propertywindow.property.Property;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.utils.Utils;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.FilePathConfig;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -55,6 +34,28 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.factory.ListenerFactory;
+import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
+import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
+import hydrograph.ui.propertywindow.property.Property;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.utils.Utils;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.FilePathConfig;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 
@@ -164,24 +165,34 @@ public class ELTFilePathWidget extends AbstractWidget{
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
 		helper.put(HelperType.CURRENT_COMPONENT, getComponent());
-
+		helper.put(HelperType.FILE_EXTENSION,filepathConfig.getfileExtension());	
+		
 		try {
-			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(), propertyDialogButtonBar,  null,eltDefaultTextBox.getSWTWidgetControl());
-			if(filepathConfig.isMandatory())
-			eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,  helper, eltDefaultTextBox.getSWTWidgetControl());
-			
-			if (StringUtils.equalsIgnoreCase(Constants.OUTPUT, getComponent().getCategory())){
+			eltDefaultTextBox.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(),
+					propertyDialogButtonBar, null, eltDefaultTextBox.getSWTWidgetControl());
+			if (filepathConfig.isMandatory())
+				eltDefaultTextBox.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,
+						helper, eltDefaultTextBox.getSWTWidgetControl());
+
+			if (StringUtils.equalsIgnoreCase(Constants.OUTPUT, getComponent().getCategory())) {
 				eltDefaultButton.attachListener(ListenerFactory.Listners.DIRECTORY_DIALOG_SELECTION.getListener(),
 						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
 						eltDefaultTextBox.getSWTWidgetControl());
-				eltDefaultTextBox.attachListener(ListenerFactory.Listners.FILE_PATH_MODIFY.getListener(), propertyDialogButtonBar,  helper, eltDefaultTextBox.getSWTWidgetControl());
-			}
-			else
+				eltDefaultTextBox.attachListener(ListenerFactory.Listners.FILE_PATH_MODIFY.getListener(),
+						propertyDialogButtonBar, helper, eltDefaultTextBox.getSWTWidgetControl());
+			} else {
 				eltDefaultButton.attachListener(ListenerFactory.Listners.FILE_DIALOG_SELECTION.getListener(),
 						propertyDialogButtonBar, helper, eltDefaultButton.getSWTWidgetControl(),
 						eltDefaultTextBox.getSWTWidgetControl());
-			//eltDefaultTextBox.attachListener(listenerFactory.getListener("ELTFocusOutListener"), propertyDialogButtonBar,  helper,eltDefaultTextBox.getSWTWidgetControl());
-			} catch (Exception exception) {
+				// eltDefaultTextBox.attachListener(listenerFactory.getListener("ELTFocusOutListener"),propertyDialogButtonBar, helper,eltDefaultTextBox.getSWTWidgetControl());
+					if(filepathConfig.getListeners() != null){
+						for(Listners listener : filepathConfig.getListeners()){
+							eltDefaultTextBox.attachListener(listener.getListener(),
+									propertyDialogButtonBar, helper, eltDefaultTextBox.getSWTWidgetControl());
+						}
+					}
+				}
+		} catch (Exception exception) {
 			LOGGER.error("Exception occurred while attaching listeners to ELTFileWidget",exception);
 		}
 		/**

@@ -14,10 +14,10 @@
 <tns:Config xmlns:tns="hydrograph/ui/ComponentConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd ">
 	<tns:component paletteIconPath="/icons/input_xml_palette.png" canvasIconPath="/icons/input_xml_canvas.png"
-		name="IXml" nameInPalette="Xml" defaultNamePrefix="IXml" 
+		name="IXml" nameInPalette="XML" defaultNamePrefix="IXML" 
 		description="Used to read xml file."
 		helpFilePath="/hydrograph.ui.help/html/Components/Input_Xml.html"
-		acronym="IXml">
+		acronym="IXML">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification  numberOfPorts="1" portAlignment="right" changePortCountDynamically="false" allowMultipleLinks="false" linkMandatory="true">
@@ -35,7 +35,7 @@
 			<tns:validator>XPATH_SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 		
-		<tns:property dataType="string" name="Path" renderer="FILE_PATH_WIDGET" type="USER"
+		<tns:property dataType="string" name="Path" renderer="XML_FILE_PATH_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="LINK"
 			usage="REQUIRED" propertyHelpText="Displays the location of the file either Remote/Local. 
 			\nAllows only underscore ‘_’ and alphanumeric characters.">

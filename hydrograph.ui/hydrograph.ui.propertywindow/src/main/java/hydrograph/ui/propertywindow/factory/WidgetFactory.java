@@ -88,6 +88,7 @@ public class WidgetFactory {
 		TRANSFORM_SCHEMA_WIDGET(TransformSchemaWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
 		GENERATE_RECORDS_SCHEMA_WIDGET(GenerateRecordsGridWidget.class,WidgetHelper.INSTANCE.getSchemaConfig()),
 		FILE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getFilePathWidgetConfig(Messages.FILE_PATH_LABEL)),
+		XML_FILE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getXMLFilePathWidgetConfig()),
 		EXTERNAL_TABLE_PATH_WIDGET(ELTFilePathWidget.class,WidgetHelper.INSTANCE.getExternalTablePathWidgetConfig(Messages.EXTERNAL_TABLE_PATH_LABEL)),
 		BROWSE_WORKSPACE_WIDGET(ELTBrowseWorkspaceWidget.class),
 		COMPONENT_NAME_WIDGET(ELTComponentNameWidget.class),

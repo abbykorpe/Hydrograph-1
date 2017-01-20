@@ -29,6 +29,7 @@ public class FilePathConfig implements WidgetConfig {
 	private String label;
 	private List<Listners> listeners = new ArrayList<>();
 	private boolean isMandatory;
+	private String[] fileExtension;
 
 	public String getLabel() {
 		return label;
@@ -48,5 +49,12 @@ public class FilePathConfig implements WidgetConfig {
 
 	public void setMandatory(boolean isMandatory) {
 		this.isMandatory = isMandatory;
+	}
+	public String[] getfileExtension(){
+		return fileExtension;
+	}
+	
+	public void setfileExtension(String[] fileExtension){
+		this.fileExtension=fileExtension;
 	}
 }

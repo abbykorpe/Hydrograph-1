@@ -40,8 +40,6 @@ import hydrograph.ui.propertywindow.widgets.listeners.ELTSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTShortcutKeyGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyComponentNameListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyNumbericListener;
-import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumericAndParameterListener;
-import hydrograph.ui.propertywindow.widgets.listeners.VerifyTeraDataFastLoadOption;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifySequenceFieldName;
 import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyTextListener;
 import hydrograph.ui.propertywindow.widgets.listeners.FilePathModifyListener;
@@ -49,11 +47,14 @@ import hydrograph.ui.propertywindow.widgets.listeners.FocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.JoinInputCountFocusOutListener;
 import hydrograph.ui.propertywindow.widgets.listeners.OperationClassComboChangeListener;
-import hydrograph.ui.propertywindow.widgets.listeners.VerifyCharacterLimitListener;
 import hydrograph.ui.propertywindow.widgets.listeners.OverWriteWidgetSelectionListener;
+import hydrograph.ui.propertywindow.widgets.listeners.VerifyCharacterLimitListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyDigitLimitNumericListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusInListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterFocusOutListener;
+import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumericAndParameterListener;
+import hydrograph.ui.propertywindow.widgets.listeners.VerifyTeraDataFastLoadOption;
+import hydrograph.ui.propertywindow.widgets.listeners.XmlFilePathModifyListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.DisposeSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDeleteAllSelectionListener;
@@ -66,8 +67,6 @@ import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseExitSchemaGridLi
 import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseHoverOnSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.MouseMoveOnSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.transform.ELTTransformDeleteSelectionListener;
-
-import org.slf4j.Logger;
 
 
 /**
@@ -127,7 +126,8 @@ public class ListenerFactory {
 		GRID_KEY_LISTENER(ELTShortcutKeyGridListener.class),
 		OVER_WRITE_LISTENER(OverWriteWidgetSelectionListener.class),
 		MODIFY_NUMERIC_AND_PARAMETER(VerifyNumericAndParameterListener.class), 
-		VERIFY_FAST_LOAD_FOR_TERADATA(VerifyTeraDataFastLoadOption.class); 
+		VERIFY_FAST_LOAD_FOR_TERADATA(VerifyTeraDataFastLoadOption.class),
+		XML_FILE_PATH_MODIFY(XmlFilePathModifyListener.class);
 		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {

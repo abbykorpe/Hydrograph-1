@@ -440,9 +440,20 @@ public class WidgetHelper {
 	
 	public FilePathConfig getFilePathWidgetConfig(String label) {
 		FilePathConfig filePathConfig= new FilePathConfig();
-		filePathConfig.setLabel(label);
+		filePathConfig.setLabel(Messages.FILE_PATH_LABEL);
 		filePathConfig.setMandatory(true);
+		filePathConfig.setfileExtension(new String[] {"*.*"});
 		return filePathConfig;
+	}
+	
+	public FilePathConfig getXMLFilePathWidgetConfig() {
+		FilePathConfig filePathConfig= new FilePathConfig();
+		filePathConfig.setLabel(Messages.FILE_PATH_LABEL);
+		filePathConfig.setMandatory(true);
+		filePathConfig.setfileExtension(new String[] {"*.xml"});
+		filePathConfig.getListeners().add(Listners.XML_FILE_PATH_MODIFY);
+		return filePathConfig;
+		
 	}
 
 
