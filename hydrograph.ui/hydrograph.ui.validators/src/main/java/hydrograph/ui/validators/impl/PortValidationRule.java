@@ -52,6 +52,7 @@ public class PortValidationRule implements IValidator{
 				return true;
 			}
 		}
+		errorMessage = propertyName + " can not be blank";
 		return false;
 	}
 

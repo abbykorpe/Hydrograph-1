@@ -121,6 +121,7 @@ public class WidgetHelper {
 		textBoxConfig.setGrabExcessSpace(true);
 		textBoxConfig.getListeners().add(Listners.PORT_FOCUS_IN);
 		textBoxConfig.getListeners().add(Listners.PORT_FOCUS_OUT);
+		textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
 		textBoxConfig.getListeners().add(Listners.MODIFY_NUMERIC_AND_PARAMETER);
 		return textBoxConfig;
 	}

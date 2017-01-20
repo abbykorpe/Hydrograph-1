@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -29,10 +31,11 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
  * VerifyNumericAndParameterListener verifies value is numeric or parameter
+ * 
  * @author Bitwise
  *
  */
-public class VerifyNumericAndParameterListener  implements IELTListener{
+public class VerifyNumericAndParameterListener implements IELTListener {
 
 	private ControlDecoration txtDecorator;
 
@@ -49,22 +52,35 @@ public class VerifyNumericAndParameterListener  implements IELTListener{
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 		}
 
-		Listener listener=new Listener() {
+		Listener listener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				
-				String string = ((Text)widgetList[0]).getText();
-				Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(string);
-				if(StringUtils.isNotBlank(string) && matchs.matches()){
-						txtDecorator.hide();
+				String string = ((Text) widgetList[0]).getText();
+				if (event.type == SWT.Modify) {
+					if (StringUtils.isNotBlank(string)) {
+						Matcher matchs = Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(string);
+						if (matchs.matches()) {
+							txtDecorator.hide();
+							((Text) widgetList[0]).setToolTipText("");
+							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						} else {
+							txtDecorator.show();
+							txtDecorator.setDescriptionText(Constants.PORT_WIDGET_ERROR);
+							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						}
+					} else {
+						txtDecorator.show();
+						((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
+						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+
+					}
 				}else{
-					txtDecorator.setDescriptionText(Constants.PORT_WIDGET_ERROR);
-					txtDecorator.show();
-					
+					txtDecorator.hide();
+					((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
 				}
 			}
 		};
-	return listener;
+		return listener;
 	}
 
 }

@@ -680,8 +680,18 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 					}
 				}
 
-			} else {
-				lblDecorator.show();
+			} else if(propertyInfo.getPropertyValue() != null && StringUtils.equalsIgnoreCase(propertyInfo.getPropertyName().toString(), "PORT")){
+				if(!propertyInfo.getPropertyValue().toString().matches(Constants.REGEX_NUMERIC_AND_PARAMETER)){
+					lblDecorator.show();
+				}else{
+					lblDecorator.hide();
+				}
+			}else {
+				if (propertyInfo.getPropertyValue() != null && (!propertyInfo.getPropertyValue().equals(""))) {
+					lblDecorator.hide();
+				} else {
+					lblDecorator.show();
+				}
 			}
 		}
 	}
