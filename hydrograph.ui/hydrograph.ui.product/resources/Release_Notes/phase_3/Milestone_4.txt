@@ -14,5 +14,6 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 4.#645  [Shashank karnik]- Xml input component: Fields under schema tab is not getting highlighted in red when error is present.
 5.#652  [Pooja Yadav} - xml input component: Alignment Issue.
 6.#642  [Pooja Yadav] - Xml Input Component : Character Set property is not present
-7.#596 [Vibhor Tyagi] -   Issues with Sort and Remove Dups components
-
+7.#596  [Vibhor Tyagi] -   Issues with Sort and Remove Dups components
+8.#601  [Prateem Tadas] - Kill Job :- Tool shows improper log when user Kill the remote run job.
+9.#638  [Prateem Tadas]- Job execution is still continue after killing job when SCP logs are getting displayed.

@@ -378,6 +378,7 @@ public class JobManager {
 		logger.debug("property File :" + parameterGrid.getParameterFilesForExecution());
 	
 		TrackingDisplayUtils.INSTANCE.clearTrackingStatus(job.getUniqueJobId());
+		TrackingDisplayUtils.INSTANCE.changeStatusForExecTracking(job);
 		final String xmlPath = getJobXMLPath();
 		String debugXmlPath = getJobDebugXMLPath();
 		if (xmlPath == null){
@@ -787,6 +788,7 @@ public class JobManager {
 		new Thread(new Runnable() {
 			private InputStream stream = process.getInputStream();
 
+			@Override
 			public void run() {
 				BufferedReader reader = null;
 				try {

@@ -91,7 +91,7 @@ public class TrackingDisplayUtils {
 				.getActiveEditor();
 		if (editor != null && editor instanceof ELTGraphicalEditor) {
 			editor.closeAllSubJobLinkedEditors();
-			String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "." + ((ELTGraphicalEditor) editor).getJobName();	
+			String currentJobName = editor.getActiveProject() + "." + editor.getJobName();	
 			Job job = editor.getJobInstance(currentJobName);			
 			if(job!=null){			
 				job.setJobStatus(JobStatus.PENDING);			
@@ -114,11 +114,8 @@ public class TrackingDisplayUtils {
 		if (editor != null && editor instanceof ELTGraphicalEditor
 				&& (editor.getJobId().equals(jobId))) {
 			editor.closeAllSubJobLinkedEditors();
-			String currentJobName = ((ELTGraphicalEditor) editor).getActiveProject() + "." + ((ELTGraphicalEditor) editor).getJobName();	
+			String currentJobName = editor.getActiveProject() + "." + editor.getJobName();	
 			Job job = editor.getJobInstance(currentJobName);			
-			if(job!=null){			
-				job.setJobStatus(JobStatus.PENDING);			
-			}
 			clearTrackingStatusForEditor(editor);
 		}
 	}
@@ -134,7 +131,7 @@ public class TrackingDisplayUtils {
 				.getAdapter(GraphicalViewer.class);
 		for (Iterator<EditPart> ite = graphicalViewer.getEditPartRegistry()
 				.values().iterator(); ite.hasNext();) {
-			EditPart editPart = (EditPart) ite.next();
+			EditPart editPart = ite.next();
 			if (editPart instanceof ComponentEditPart) {
 				Component component = ((ComponentEditPart) editPart)
 						.getCastedModel();
@@ -279,4 +276,14 @@ public class TrackingDisplayUtils {
 		}
 
 	}
+/**
+ * 
+ * @param job
+ */
+ public void changeStatusForExecTracking(Job job){
+	 
+		if(job!=null){			
+			job.setJobStatus(JobStatus.PENDING);			
+		}
+ }
 }
