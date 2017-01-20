@@ -14,10 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -44,6 +40,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
 
 /**
  * The Class WidgetUtility.

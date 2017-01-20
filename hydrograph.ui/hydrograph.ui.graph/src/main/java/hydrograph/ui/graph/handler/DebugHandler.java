@@ -223,6 +223,8 @@ public class DebugHandler{
 		job.setRemoteMode(runConfigDialog.isRemoteMode());
 		job.setPassword(clusterPassword);
 		job.setUniqueJobId(uniqueJobID);
+		job.setKeyFile(runConfigDialog.getKeyFile());
+		job.setUsePassword(runConfigDialog.getIsUsePassword());
 		
 		IFile file=ResourcesPlugin.getWorkspace().getRoot().getFile(currentJobIPath);
 		job.setDebugFilePath(file.getFullPath().toString());

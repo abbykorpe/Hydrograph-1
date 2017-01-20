@@ -326,6 +326,7 @@ public class Messages extends NLS {
 	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;
 	public static String EMPTY_FIELDS_MESSAGE_BOX_TITLE;
 	public static String EMPTY_PASSWORD_FIELD_MESSAGE;
+	public static String EMPTY_KEY_FILE_MESSAGE;
 	public static String EMPTY_USERNAME_FIELD_MESSAGE;
 	public static String EMPTY_HOST_FIELD_MESSAGE;
 	public static String CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE;
@@ -364,9 +365,21 @@ public class Messages extends NLS {
 	public static String XPATH;
 	public static String ROOT_TAG;
 	public static String ROW_TAG;
-	public static String XPATH_GRID_ROW;
 	public static String X_PATH_MUST_NOT_BE_BLANK;
-	
+	public static String XPATH_GRID_ROW;
+	public static String RUN_CONFIGURATION_SETTINGS;
+	public static String BASE_PATH;
+	public static String EDGE_NODE;
+	public static String HOST;
+	public static String RUN_UTILITY;
+	public static String PROJECT_PATH;
+	public static String KEY_FILE;
+	public static String REMOTE_MODE;
+	public static String VIEW_DATA;
+	public static String LOCAL_MODE;
+	public static String USER;
+	public static String SAVE_PASSWORD;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

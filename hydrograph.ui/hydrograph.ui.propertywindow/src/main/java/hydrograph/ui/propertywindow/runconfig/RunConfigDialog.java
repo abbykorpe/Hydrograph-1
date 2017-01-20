@@ -75,19 +75,21 @@ import hydrograph.ui.propertywindow.messages.Messages;
  */
 public class RunConfigDialog extends Dialog {
 	
+	private static final String TRUE = "true";
+
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(RunConfigDialog.class);
 	
 	private Text txtBasePath;
 	private Text txtEdgeNode;
 	private Text txtUserName;
 	private Text txtPassword;
-	private Text txtPassKey;
+	private Text txtKeyFile;
 	private Text txtRunUtility;
 	private Text txtProjectPath;
 	
 	private Button browseButton;
 	private Button radioPassword;
-	private Button radioPassKey;
+	private Button radioKeyFile;
 	private Button chkbtnSavePassword;
 	
 	private HydroGroup runModeGroup;
@@ -106,16 +108,18 @@ public class RunConfigDialog extends Dialog {
 	private final String REMOTE_MODE = "remote";
 	private final String HOST = "host";
 	private final String USER_NAME = "userName";
+	private final String KEY_FILE = "KeyFile";
 
 	private final String RUN_UTILITY = "runUtility";
 	private final String REMOTE_DIRECTORY = "remoteDirectory";
 	private final String BASE_PATH = "basePath";
 	private final String VIEW_DATA_CHECK = "viewDataCheck";
+	private final String USE_PASSWORD_AUTHENTICATION = "usePasswordAuthentication";
 	public static final String SELECTION_BUTTON_KEY = "REMOTE_BUTTON_KEY";
 	
 	private static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_RUNCONFIG_DIALOG_NODE = "Run Dialog";
 		
-	private String passKey;
+	private String KeyFile;
 	private String password;
 	private String userId;
 	private String edgeNodeText;
@@ -125,7 +129,11 @@ public class RunConfigDialog extends Dialog {
 	private String username;
 	private boolean isDebug;
 	private boolean runGraph;
-
+	private boolean usePassword;
+	
+	EmptyTextListener textPasswordListener;
+	EmptyTextListener keyFileListener;
+	
 	private static String LOCAL_HOST = "localhost";
 
 	private Composite container;
@@ -153,7 +161,7 @@ public class RunConfigDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
-		container.getShell().setText("Run Configuration Settings");
+		container.getShell().setText(Messages.RUN_CONFIGURATION_SETTINGS);
 
 		groupHolderComposite = new Composite(container, SWT.BORDER);
 		groupHolderComposite.setLayout(new GridLayout(1, false));
@@ -177,11 +185,11 @@ public class RunConfigDialog extends Dialog {
 		composite_4.setLayout(new GridLayout(2, false));
 
 		btnLocalMode = new Button(composite_4, SWT.RADIO);
-		btnLocalMode.setText("Local Mode");
+		btnLocalMode.setText(Messages.LOCAL_MODE);
 		btnLocalMode.addSelectionListener(runModeSelectionListener);
 
 		btnRemoteMode = new Button(composite_4, SWT.RADIO);
-		btnRemoteMode.setText("Remote mode");
+		btnRemoteMode.setText(Messages.REMOTE_MODE);
 		btnRemoteMode.addSelectionListener(runModeSelectionListener);
 
 		Composite composite_5 = new Composite(composite_1, SWT.NONE);
@@ -189,7 +197,7 @@ public class RunConfigDialog extends Dialog {
 		composite_5.setLayout(new GridLayout(1, false));
 
 		viewDataCheckBox = new Button(composite_5, SWT.CHECK);
-		viewDataCheckBox.setText("View Data");
+		viewDataCheckBox.setText(Messages.VIEW_DATA);
 		viewDataCheckBox.addSelectionListener(viewDataSelectionListener);
 
 		Composite composite_2 = new Composite(composite_3, SWT.NONE);
@@ -200,13 +208,13 @@ public class RunConfigDialog extends Dialog {
 
 		Label lblDebugFileLocation = new Label(composite_2, SWT.NONE);
 		lblDebugFileLocation.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblDebugFileLocation.setText("Base Path ");
+		lblDebugFileLocation.setText(Messages.BASE_PATH);
 
 		txtBasePath = new Text(composite_2, SWT.BORDER);
 		txtBasePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtBasePath.setEnabled(false);
 		txtBasePath.setData(SELECTION_BUTTON_KEY, viewDataCheckBox);
-		EmptyTextListener basePathListener = new EmptyTextListener("Base Path ");
+		EmptyTextListener basePathListener = new EmptyTextListener(Messages.BASE_PATH);
 		txtBasePath.addModifyListener(basePathListener);
 
 		remoteRunDetailsHolder = new Composite(groupHolderComposite, SWT.NONE);
@@ -232,71 +240,74 @@ public class RunConfigDialog extends Dialog {
 		radioComposite.setLayout(new GridLayout(2, false));
 		
 		radioPassword = new Button(radioComposite, SWT.RADIO);
-		radioPassword.setText("Password");
+		radioPassword.setText(Messages.LABEL_PASSWORD);
 		radioPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		radioPassword.addSelectionListener(radioPasswordSelectionListener);
 		
-		radioPassKey = new Button(radioComposite, SWT.RADIO);
-		radioPassKey.setText("Passkey");
-		radioPassKey.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		radioPassKey.addSelectionListener(radioPassKeySelectionListener);
+		radioKeyFile = new Button(radioComposite, SWT.RADIO);
+		radioKeyFile.setText(Messages.KEY_FILE);
+		radioKeyFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		radioKeyFile.addSelectionListener(radioKeyFileSelectionListener);
 	
 		Label lblEdgeNode = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblEdgeNode.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEdgeNode.setText("Edge Node ");
+		lblEdgeNode.setText(Messages.EDGE_NODE);
 		
 		txtEdgeNode = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtEdgeNode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtEdgeNode.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
-		EmptyTextListener textEdgeNodeListener = new EmptyTextListener("Edge Node");
+		EmptyTextListener textEdgeNodeListener = new EmptyTextListener(Messages.EDGE_NODE);
 		txtEdgeNode.addModifyListener(textEdgeNodeListener);
 		addFocusListener(txtEdgeNode);
 		
 		Label lblUser = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblUser.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblUser.setText("User");
+		lblUser.setText(Messages.USER);
 
 		txtUserName = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtUserName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtUserName.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
-		EmptyTextListener textUserListener = new EmptyTextListener("Host");
+		EmptyTextListener textUserListener = new EmptyTextListener(Messages.HOST);
 		txtUserName.addModifyListener(textUserListener);
 		addFocusListener(txtUserName);
 
 		Label lblPassword = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPassword.setText("Password");
+		lblPassword.setText(Messages.LABEL_PASSWORD);
 
 		txtPassword = new Text(serverDetailsGroup.getHydroGroupClientArea(), SWT.PASSWORD | SWT.BORDER);
 		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtPassword.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		
-		Label lblPasskey = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
-		lblPasskey.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPasskey.setText("Passkey");
+		new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);		
+		chkbtnSavePassword = new Button(serverDetailsGroup.getHydroGroupClientArea(), SWT.CHECK);
+		chkbtnSavePassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		chkbtnSavePassword.setText(Messages.SAVE_PASSWORD);
+		
+		textPasswordListener = new EmptyTextListener(Messages.LABEL_PASSWORD);
+		txtPassword.addModifyListener(textPasswordListener);
+		
+		Label lblKeyFile = new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
+		lblKeyFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblKeyFile.setText(Messages.KEY_FILE);
 
-		Composite passKeyComposite = new Composite(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
-		passKeyComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
-		passKeyComposite.setLayout(new GridLayout(2, false));
+		Composite keyFileComposite = new Composite(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);
+		keyFileComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
+		keyFileComposite.setLayout(new GridLayout(2, false));
 		
-		txtPassKey = new Text(passKeyComposite, SWT.BORDER);
-		txtPassKey.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtPassKey.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
+		txtKeyFile = new Text(keyFileComposite, SWT.BORDER);
+		txtKeyFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtKeyFile.setData(SELECTION_BUTTON_KEY, btnRemoteMode);
 		
-		browseButton = new Button(passKeyComposite, SWT.NONE);
+		browseButton = new Button(keyFileComposite, SWT.NONE);
 		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		browseButton.setText("...");
 		browseButton.addSelectionListener(browseListener);
 		radioPassword.setSelection(true);
 		
-		new Label(serverDetailsGroup.getHydroGroupClientArea(), SWT.NONE);		
-		chkbtnSavePassword = new Button(serverDetailsGroup.getHydroGroupClientArea(), SWT.CHECK);
-		chkbtnSavePassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		chkbtnSavePassword.setText("Save password");
+		keyFileListener = new EmptyTextListener(Messages.KEY_FILE);
+		txtKeyFile.addModifyListener(keyFileListener);
 		
-		EmptyTextListener textPasswordListener = new EmptyTextListener("Password");
-		txtPassword.addModifyListener(textPasswordListener);
-
 		remotePathConfigGroup = new HydroGroup(remoteRunDetailsHolder, SWT.NONE);
 		remotePathConfigGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		remotePathConfigGroup.setHydroGroupText("Remote Path Configurations");
@@ -306,18 +317,24 @@ public class RunConfigDialog extends Dialog {
 
 		Label lblRunUtility = new Label(remotePathConfigGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblRunUtility.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblRunUtility.setText("Run Utility ");
+		lblRunUtility.setText(Messages.RUN_UTILITY);
 
 		txtRunUtility = new Text(remotePathConfigGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtRunUtility.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
+		EmptyTextListener runUtilityListener = new EmptyTextListener(Messages.RUN_UTILITY);
+		txtRunUtility.addModifyListener(runUtilityListener);
+		
 		Label lblProjectPath = new Label(remotePathConfigGroup.getHydroGroupClientArea(), SWT.NONE);
 		lblProjectPath.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblProjectPath.setText("Project Path ");
+		lblProjectPath.setText(Messages.PROJECT_PATH);
 
 		txtProjectPath = new Text(remotePathConfigGroup.getHydroGroupClientArea(), SWT.BORDER);
 		txtProjectPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
+		EmptyTextListener projectPathListener = new EmptyTextListener(Messages.PROJECT_PATH);
+		txtProjectPath.addModifyListener(projectPathListener);
+		
 		serverDetailsGroup.setVisible(false);
 		remotePathConfigGroup.setVisible(false);
 
@@ -395,7 +412,9 @@ public class RunConfigDialog extends Dialog {
 		applyServerDetailsCrossTextEmptyValidationListener(txtPassword);
 		applyServerDetailsCrossTextEmptyValidationListener(txtUserName);
 		applyServerDetailsCrossTextEmptyValidationListener(txtBasePath);
-		
+		applyServerDetailsCrossTextEmptyValidationListener(txtKeyFile);
+		applyServerDetailsCrossTextEmptyValidationListener(txtRunUtility);
+		applyServerDetailsCrossTextEmptyValidationListener(txtProjectPath);
 		loadBuildProperties();
 	}
 
@@ -411,7 +430,7 @@ public class RunConfigDialog extends Dialog {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			Button button = ((Button) event.widget);
-			if (button.getText().equals("Remote mode")) {
+			if (button.getText().equals(Messages.REMOTE_MODE)) {
 				showRemoteRunDetailsHolderComposite();
 			} else {
 				hideRemoteRunDetailsHolderComposite();
@@ -427,7 +446,7 @@ public class RunConfigDialog extends Dialog {
 		    fd.setFilterPath("C:/");
 		    String[] filterExt = { "*.ppk" };
 		    fd.setFilterExtensions(filterExt);
-		    txtPassKey.setText(fd.open());
+		    txtKeyFile.setText(fd.open());
 		}
 	};
 	
@@ -435,17 +454,29 @@ public class RunConfigDialog extends Dialog {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			txtPassword.setEnabled(true);
-			txtPassKey.setEnabled(false);
+			chkbtnSavePassword.setEnabled(true);
+			txtKeyFile.setEnabled(false);
 			browseButton.setEnabled(false);
+			keyFileListener.getErrorDecoration().hide();
+			if(StringUtils.isBlank(txtPassword.getText())){
+				textPasswordListener.getErrorDecoration().show();
+			}
+			toggleOkButton();
 		}
 	};
 	
-	SelectionListener radioPassKeySelectionListener = new SelectionAdapter() {
+	SelectionListener radioKeyFileSelectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
-			txtPassKey.setEnabled(true);
+			txtKeyFile.setEnabled(true);
 			browseButton.setEnabled(true);
 			txtPassword.setEnabled(false);
+			chkbtnSavePassword.setEnabled(false);
+			textPasswordListener.getErrorDecoration().hide();
+			if(StringUtils.isBlank(txtKeyFile.getText())){
+				keyFileListener.getErrorDecoration().show();
+			}
+			toggleOkButton();
 		}
 	};
     
@@ -455,6 +486,7 @@ public class RunConfigDialog extends Dialog {
 		txtEdgeNode.setText(txtEdgeNode.getText());
 		txtUserName.setText(txtUserName.getText());
 		txtPassword.setText(txtPassword.getText());
+		txtKeyFile.setText(txtKeyFile.getText());
 		serverDetailsGroup.setVisible(true);
 		remotePathConfigGroup.setVisible(true);
 	}
@@ -467,6 +499,7 @@ public class RunConfigDialog extends Dialog {
 		txtEdgeNode.setText(txtEdgeNode.getText());
 		txtUserName.setText(txtUserName.getText());
 		txtPassword.setText(txtPassword.getText());
+		txtKeyFile.setText(txtKeyFile.getText());
 		serverDetailsGroup.setVisible(false);
 		remotePathConfigGroup.setVisible(false);
 	}
@@ -509,7 +542,7 @@ public class RunConfigDialog extends Dialog {
 	}
 
 	private void populateTextBoxes(Enumeration propertyNames) {
-		if (StringUtils.equals(buildProps.getProperty("local"), "true")) {
+		if (StringUtils.equals(buildProps.getProperty(LOCAL_MODE), TRUE)) {
 			btnLocalMode.setSelection(true);
 			btnRemoteMode.setSelection(false);
 			hideRemoteRunDetailsHolderComposite();
@@ -520,24 +553,49 @@ public class RunConfigDialog extends Dialog {
 		}
 		txtEdgeNode.setText(getBuildProperty(HOST));
 		txtUserName.setText(getBuildProperty(USER_NAME));
+		txtKeyFile.setText(getBuildProperty(KEY_FILE));
 		txtRunUtility.setText(getBuildProperty(RUN_UTILITY));
 		txtProjectPath.setText(getBuildProperty(REMOTE_DIRECTORY));
 		txtBasePath.setText(getBuildProperty(BASE_PATH));
 
-		if (StringUtils.equals(buildProps.getProperty(VIEW_DATA_CHECK), "true")) {
+		if (StringUtils.equals(buildProps.getProperty(VIEW_DATA_CHECK), TRUE)) {
 			viewDataCheckBox.setSelection(true);
 			txtBasePath.setEnabled(true);
-
 		}
-		
+		if(StringUtils.equals(buildProps.getProperty(USE_PASSWORD_AUTHENTICATION), TRUE)){
+			togglePasswordAndKeyFile(true);
+			keyFileListener.getErrorDecoration().hide();
+			if(StringUtils.isBlank(txtKeyFile.getText())){
+				textPasswordListener.getErrorDecoration().show();
+			}
+		}
+		else{
+			togglePasswordAndKeyFile(false);
+			
+			textPasswordListener.getErrorDecoration().hide();
+			if(StringUtils.isBlank(txtKeyFile.getText())){
+				keyFileListener.getErrorDecoration().show();
+			}
+		}
 		populatePasswordField();
 	}
-
+	
+	private void togglePasswordAndKeyFile(Boolean state){
+		radioPassword.setSelection(state);
+		txtPassword.setEnabled(state);
+		chkbtnSavePassword.setEnabled(state);
+		radioKeyFile.setSelection(!state);
+		txtKeyFile.setEnabled(!state);
+		browseButton.setEnabled(!state);
+		
+	}
+	
 	private String getBuildProperty(String key) {
 		if (buildProps.getProperty(VIEW_DATA_CHECK) == null) {
 			return "";
 		} else {
-			return buildProps.getProperty(key);
+			String value = buildProps.getProperty(key);
+			return StringUtils.isNotBlank(value) ? value : "";
 		}
 	}
 
@@ -627,6 +685,14 @@ public class RunConfigDialog extends Dialog {
 		return isDebug;
 	}
 
+	public String getKeyFile() {
+		return KeyFile;
+	}
+	
+	public boolean getIsUsePassword(){
+		return usePassword;
+	}
+	
 	@Override
 	protected void okPressed() {
 		saveRunConfigurations();
@@ -649,13 +715,16 @@ public class RunConfigDialog extends Dialog {
 		if (isUsernamePasswordOrHostEmpty()) {
 			return false;
 		} else {
-			//TODO : disabled it temporarily in order to test the connectivity with .ppk file. 
-			//return isValidUserNamePasswordOrHost();
-			return true;
+			if(radioPassword.getSelection()){
+				return connectAndValidateUserNamePasswordAndHost();
+			}
+			else{
+				return true;
+			}
 		}
 	}
 
-	private boolean isValidUserNamePasswordOrHost() {
+	private boolean connectAndValidateUserNamePasswordAndHost() {
 		Message message = SCPUtility.INSTANCE.validateCredentials(host, username, password);
 		if (message.getMessageType() != MessageType.SUCCESS) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.CREDENTIAL_VALIDATION_MESSAGEBOX_TITLE,
@@ -676,8 +745,7 @@ public class RunConfigDialog extends Dialog {
 			if (StringUtils.isEmpty(txtUserName.getText())){
 				notification.addError(Messages.EMPTY_USERNAME_FIELD_MESSAGE);
 			}
-				
-			if (StringUtils.isEmpty(txtPassword.getText())){
+			if(radioPassword.getSelection() && StringUtils.isEmpty(txtPassword.getText())){
 				notification.addError(Messages.EMPTY_PASSWORD_FIELD_MESSAGE);
 			}
 		}
@@ -701,10 +769,12 @@ public class RunConfigDialog extends Dialog {
 			buildProps.put(REMOTE_MODE, String.valueOf(btnRemoteMode.getSelection()));
 			buildProps.put(HOST, txtEdgeNode.getText());
 			buildProps.put(USER_NAME, txtUserName.getText());
+			buildProps.put(KEY_FILE, txtKeyFile.getText());
 			buildProps.put(RUN_UTILITY, txtRunUtility.getText());
 			buildProps.put(REMOTE_DIRECTORY, txtProjectPath.getText());
 			buildProps.put(BASE_PATH, txtBasePath.getText());
 			buildProps.put(VIEW_DATA_CHECK, String.valueOf(viewDataCheckBox.getSelection()));
+			buildProps.put(USE_PASSWORD_AUTHENTICATION, String.valueOf(radioPassword.getSelection()));
 			buildProps.store(out, null);
 
 			String buildPropFilePath = buildPropFilePath();
@@ -719,11 +789,12 @@ public class RunConfigDialog extends Dialog {
 		}
 		this.userId = txtUserName.getText();
 		this.password = txtPassword.getText();
+		this.KeyFile = txtKeyFile.getText();
 		this.username = txtUserName.getText();
 		this.host = txtEdgeNode.getText();
 		this.basePath = txtBasePath.getText();
 		this.isDebug = viewDataCheckBox.getSelection();
-		
+		this.usePassword = radioPassword.getSelection();
 		 savePassword();
 		try {
 			checkBuildProperties(btnRemoteMode.getSelection());
@@ -801,28 +872,44 @@ public class RunConfigDialog extends Dialog {
 			@Override
 			public void modifyText(ModifyEvent e) {
 
-				if (okButton == null) {
-					return;
-				}
-
-				if (btnRemoteMode.getSelection()) {
-					if (StringUtils.isEmpty(txtEdgeNode.getText()) || StringUtils.isEmpty(txtUserName.getText())
-							|| StringUtils.isEmpty(txtPassword.getText())) {
-						
-						okButton.setEnabled(false);
-					} else {
-						okButton.setEnabled(true);
-					}
-				} else {
-					okButton.setEnabled(true);
-				}
-				
-				if(viewDataCheckBox.getSelection()){
-					if (StringUtils.isEmpty(txtBasePath.getText())) {
-						okButton.setEnabled(false);
-					} 
-				}
+				toggleOkButton();
 			}
 		});
+	}
+	
+	private void toggleOkButton() {
+		if (okButton == null) {
+			return;
+		}
+
+		if (btnRemoteMode.getSelection()) {
+			if(radioPassword.getSelection()){
+				if ( checkAllForBlank() || StringUtils.isEmpty(txtPassword.getText())) {
+					okButton.setEnabled(false);
+				} else {
+					okButton.setEnabled(true);
+				}	
+			}
+			else {
+				if (checkAllForBlank() || StringUtils.isEmpty(txtKeyFile.getText())) {
+					okButton.setEnabled(false);
+				} else {
+					okButton.setEnabled(true);
+				}	
+			}
+		} else {
+			okButton.setEnabled(true);
+		}
+		
+		if(viewDataCheckBox.getSelection()){
+			if (StringUtils.isEmpty(txtBasePath.getText())) {
+				okButton.setEnabled(false);
+			} 
+		}
+	}
+
+	private boolean checkAllForBlank() {
+		return StringUtils.isEmpty(txtEdgeNode.getText()) || StringUtils.isEmpty(txtUserName.getText()) ||
+		StringUtils.isEmpty(txtRunUtility.getText()) || StringUtils.isEmpty(txtProjectPath.getText());
 	}
 }

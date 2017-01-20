@@ -13,16 +13,16 @@
 
 package hydrograph.ui.graph.handler;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.ui.PlatformUI;
+
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.utility.CanvasUtils;
 import hydrograph.ui.propertywindow.runconfig.RunConfigDialog;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.ui.PlatformUI;
 
 /**
  * Handler use to run the job using gradle command.
@@ -62,7 +62,10 @@ public class RunJobHandler{
 		String canvasName = consoleName;
 		String localJobID = consoleName;
 
-		JobManager.INSTANCE.executeJob(generateJob(localJobID, consoleName, canvasName), null,runConfigDialog);
+		Job job = generateJob(localJobID, consoleName, canvasName);
+		job.setUsePassword(runConfigDialog.getIsUsePassword());
+		job.setKeyFile(runConfigDialog.getKeyFile());
+		JobManager.INSTANCE.executeJob(job, null,runConfigDialog);
 		
 		CanvasUtils.INSTANCE.getComponentCanvas().restoreMenuToolContextItemsState();		
 		return null;
