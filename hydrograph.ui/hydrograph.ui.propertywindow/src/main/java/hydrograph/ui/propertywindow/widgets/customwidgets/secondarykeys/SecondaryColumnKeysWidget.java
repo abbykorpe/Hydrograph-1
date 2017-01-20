@@ -14,6 +14,15 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.secondarykeys;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -36,15 +45,6 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-import org.slf4j.Logger;
 
 
 /**
@@ -150,8 +150,8 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 			setProperties(propertyName, new LinkedHashMap<String, String>());
 
 		}
-		secondaryColumnDialog.setSecondaryColumnsMap(new LinkedHashMap<String,String>(InstializeMap));
 		secondaryColumnDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
+		secondaryColumnDialog.setSecondaryColumnsMap(new LinkedHashMap<String,String>(InstializeMap));
 		
 		secondaryColumnDialog.open();
 		
@@ -208,12 +208,7 @@ public class SecondaryColumnKeysWidget extends AbstractWidget {
 
 	@Override
 	public boolean isWidgetValid() {
-		if(StringUtils.equalsIgnoreCase(buttonWithLabelConfig.getName(), "Key\nFields"))
-		{
 			return validateAgainstValidationRule(getProperties().get(propertyName));
-		}
-		return true;
-		
 	}
 
 	

@@ -67,4 +67,5 @@ Issues/Defects fixed:
 45.#633 [Pooja Yadav} - Partition By Expression : Warning bubble is getting displayed on component after importing job.
 46.#632 [Rakesh Kanchalwar] - Input Redshift component: Job getting failed due to there is no space between driver value.
 47.#637 [shashank karnik]- Tag for Input field is getting removed when job with expressions are imported (edit). 
- 
+48.#632 [Rakesh Kanchalwar] - Input Redshift component: Job getting failed due to there is no space between driver value 
+

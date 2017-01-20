@@ -200,6 +200,7 @@ public class FieldDialog extends Dialog {
 		this.componentName = componentName;
 	}
 
+	
 	// Loads Already Saved Properties..
 	private void loadProperties(TableViewer tv) {
 
@@ -209,6 +210,12 @@ public class FieldDialog extends Dialog {
 				if (validateBeforeLoad(key)) {
 					filter.setPropertyname(key);
 					propertyList.add(filter);
+					tv.refresh();
+					if(!sourceFieldsList.contains(filter.getPropertyname())){
+						tv.getTable().getItem(propertyList.size()-1).setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+					}else{
+						tv.getTable().getItem(propertyList.size()-1).setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+					}
 				}
 			}
 			tv.refresh();
@@ -541,6 +548,7 @@ public class FieldDialog extends Dialog {
 		}));
 		
 	}
+	
 	
 	private void attachShortcutListner(String controlName){
 		Control currentControl;

@@ -332,6 +332,13 @@
 		          <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="XPathSchemaGridValidationRule" />
+		             </appinfo>
+        	</annotation>
+		</enumeration>
+		<enumeration value="SECONDARY_KEY_VALIDATION">
+		          <annotation>
+		          <appinfo>
+		            <jaxb:typesafeEnumMember name="SecondaryColumnKeyValidation" />
 		          </appinfo>
         	</annotation>
 		</enumeration>

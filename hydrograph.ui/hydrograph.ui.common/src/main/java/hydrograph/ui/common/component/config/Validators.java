@@ -55,6 +55,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="LONG_VALIDATOR"/>
  *     &lt;enumeration value="NORMALIZE_MAPPING_VALIDATOR"/>
  *     &lt;enumeration value="XPATH_SCHEMA_GRID_VALIDATOR"/>
+ *     &lt;enumeration value="SECONDARY_KEY_VALIDATION"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -107,7 +108,9 @@ public enum Validators {
     @XmlEnumValue("NORMALIZE_MAPPING_VALIDATOR")
     NormalizeMappingValidator("NORMALIZE_MAPPING_VALIDATOR"),
     @XmlEnumValue("XPATH_SCHEMA_GRID_VALIDATOR")
-    XPathSchemaGridValidationRule("XPATH_SCHEMA_GRID_VALIDATOR");
+    XPathSchemaGridValidationRule("XPATH_SCHEMA_GRID_VALIDATOR"),
+    @XmlEnumValue("SECONDARY_KEY_VALIDATION")
+    SecondaryColumnKeyValidation("SECONDARY_KEY_VALIDATION");
 
     
     private final String value;

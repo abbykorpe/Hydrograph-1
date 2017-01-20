@@ -10,15 +10,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package hydrograph.ui.validators.impl;
 
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+
+/**
+ * The Class Sort Component KeysFields ValidationRule
+ * @author Bitwise
+ *
+ */
 public class SortComponentKeysFieldsValidationRule implements IValidator{
 	private String errorMessage;
 	
@@ -34,9 +39,22 @@ public class SortComponentKeysFieldsValidationRule implements IValidator{
 	@Override
 	public boolean validate(Object object, String propertyName,Map<String,List<FixedWidthGridRow>> inputSchemaMap
 			,boolean isJobImported){
+		
 		if (object != null) {
+			List<String> tmpList = new LinkedList<>();
 			Map<String, Object> keyFieldsList = (LinkedHashMap<String, Object>) object;
+			
 			if (keyFieldsList != null && !keyFieldsList.isEmpty()) {
+				if(inputSchemaMap != null){
+					for(java.util.Map.Entry<String, List<FixedWidthGridRow>> entry : inputSchemaMap.entrySet()){
+						List<FixedWidthGridRow> gridRowList = entry.getValue();
+						gridRowList.forEach(gridRow -> tmpList.add(gridRow.getFieldName()));
+					}
+				}
+				if(keyFieldsList.entrySet().stream().anyMatch(gridRow -> !tmpList.contains(gridRow.getKey()))){
+					errorMessage = "Target Fields Should be present in Available Fields";
+					return false;
+				}
 				return true;
 			}
 		}
