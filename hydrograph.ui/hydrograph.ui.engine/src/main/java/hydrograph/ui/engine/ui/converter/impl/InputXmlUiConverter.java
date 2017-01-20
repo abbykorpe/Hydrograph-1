@@ -103,7 +103,7 @@ public class InputXmlUiConverter extends InputUiConverter{
 			}
 		}
 		propertyMap.put(PropertyNameConstants.ROOT_TAG.value(), StringUtils.isNotBlank(rootTag)? rootTag : "");
-		
+		propertyMap.put(PropertyNameConstants.CHAR_SET.value(), getCharSet());
 		propertyMap.put(PropertyNameConstants.STRICT.value(),
 				convertBooleanValue(xmlFile.getStrict(), PropertyNameConstants.STRICT.value()));
 		
@@ -115,6 +115,21 @@ public class InputXmlUiConverter extends InputUiConverter{
 		uiComponent.setProperties(propertyMap);
 		
 	}
+	
+	private Object getCharSet() {
+		XmlFile xmlFile = (XmlFile) typeBaseComponent;
+		Object value = null;
+		if (xmlFile.getCharset() != null) {
+			value = xmlFile.getCharset().getValue();
+			if (value != null) {
+				return xmlFile.getCharset().getValue().value();
+			} else {
+				value = getValue(PropertyNameConstants.CHAR_SET.value());
+			}
+		}
+		return value;
+	}
+
 	
 	@Override
 	protected Object getSchema(TypeInputOutSocket outSocket) {

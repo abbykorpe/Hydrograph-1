@@ -13,3 +13,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 3.#641  [Shrirang Kumbhar] - Save Password: On unchecking save Password checkbox tool unsave password
 4.#645  [Shashank karnik]- Xml input component: Fields under schema tab is not getting highlighted in red when error is present.
 5.#652  [Pooja Yadav} - xml input component: Alignment Issue.
+6.#642  [Pooja Yadav] - Xml Input Component : Character Set property is not present
+
