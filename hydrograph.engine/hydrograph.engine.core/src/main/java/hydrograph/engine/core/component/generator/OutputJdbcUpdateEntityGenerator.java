@@ -48,13 +48,13 @@ public class OutputJdbcUpdateEntityGenerator extends OutputComponentGeneratorBas
                         .getInSocket().get(0).getSchema()
                         .getFieldOrRecordOrIncludeExternalSchema()));
 
-        outputJdbcUpdateEntity.setUserName((jaxbJdbcUpdate.getUserName() != null)? jaxbJdbcUpdate.getUserName().getValue():null);
-        outputJdbcUpdateEntity.setPassword((jaxbJdbcUpdate.getPassword() != null)? jaxbJdbcUpdate.getPassword().getValue():null );
+        outputJdbcUpdateEntity.setUserName(jaxbJdbcUpdate.getUserName().getValue());
+        outputJdbcUpdateEntity.setPassword(jaxbJdbcUpdate.getPassword().getValue() );
         outputJdbcUpdateEntity.setUrl(jaxbJdbcUpdate.getUrl().getValue());
         outputJdbcUpdateEntity.setJdbcDriverClass(jaxbJdbcUpdate.getJdbcDriverClass().getValue());
         outputJdbcUpdateEntity.setTableName(jaxbJdbcUpdate.getTableName().getValue());
         outputJdbcUpdateEntity.setBatchSize((jaxbJdbcUpdate.getBatchSize() != null)? jaxbJdbcUpdate.getBatchSize().getValue().intValue(): Constants.DEFAULT_DB_BATCHSIZE);
-        outputJdbcUpdateEntity.setUpdateByKeys((jaxbJdbcUpdate.getUpdate().getUpdateByKeys() != null)? jaxbJdbcUpdate.getUpdate().getUpdateByKeys().getField():null);
+        outputJdbcUpdateEntity.setUpdateByKeys(jaxbJdbcUpdate.getUpdate().getUpdateByKeys().getField());
 
         outputJdbcUpdateEntity.setRuntimeProperties(jaxbJdbcUpdate.getRuntimeProperties() == null ? new Properties() : OutputEntityUtils
                 .extractRuntimeProperties(jaxbJdbcUpdate.getRuntimeProperties()));

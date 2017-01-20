@@ -60,5 +60,5 @@ class DefaultSource extends CreatableRelationProvider with Serializable {
   }
 }
 
-case class TableDoesNotExistException(message: String = "", cause: Throwable = null) extends RuntimeException
+case class TableDoesNotExistException(message: String = "", cause: Throwable = null) extends Exception(message, cause)
 

@@ -19,8 +19,8 @@
                namespace="hydrograph/engine/jaxb/commontypes"/>
 
     <xs:complexType name="type-update-keys">
-        <xs:sequence minOccurs="0">
-            <xs:element name="updateByKeys" type="cmn:type-key-fields"/>
+        <xs:sequence>
+            <xs:element name="updateByKeys" type="cmn:type-key-fields" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -59,7 +59,7 @@
             </xs:restriction>
         </xs:complexContent>
     </xs:complexType>
-						  
+
     <xs:complexType name="type-output-jdbcupdate-base">
         <xs:complexContent>
             <xs:restriction base="cmn:type-output-component">

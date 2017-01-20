@@ -26,16 +26,10 @@ case class DbUpdateTableDescriptor(tableName: String, columnNames: Array[String]
 
   def makeUpdateQuery(): String = {
     if (validateUpdateKeys(columnNames, updateKeys)) {
-      addUpdateTableBody()
-      "update " + tableName + " set " + setColumn.mkString(", ") + " where " + whereColumn.mkString(" and ")
+      "update " + tableName + " set " + setColumnBody.mkString(", ") + " where " + setWhereColumnBody.mkString(" and ")
     } else {
       " "
     }
-  }
-
-  def addUpdateTableBody() = {
-    setColumn = setColumnBody();
-    whereColumn = setWhereColumnBody();
   }
 
   def setWhereColumnBody(): List[String] = updateKeys.map(field => field + "=?").toList
@@ -46,7 +40,7 @@ case class DbUpdateTableDescriptor(tableName: String, columnNames: Array[String]
     for (i <- 0 until updateKeys.length) {
       if (!columnNames.contains(updateKeys(i))) {
         LOG.error("Update key '" + updateKeys(i) + "' does not exist in user provided schema")
-        throw new UpdateKeyFieldNotExistInUserSpecifiedColumnField("Exception : Update key '"
+        throw UpdateKeyFieldNotExistInUserSpecifiedColumnField("Exception : Update key '"
           + updateKeys(i) + "' does not exist in user provided schema ")
         false
       }

@@ -15,6 +15,7 @@ package hydrograph.engine.jaxb.ojdbcupdate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 
@@ -28,7 +29,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
  * &lt;complexType name="type-update-keys">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence minOccurs="0">
+ *       &lt;sequence>
  *         &lt;element name="updateByKeys" type="{hydrograph/engine/jaxb/commontypes}type-key-fields"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -44,6 +45,7 @@ import hydrograph.engine.jaxb.commontypes.TypeKeyFields;
 })
 public class TypeUpdateKeys {
 
+    @XmlElement(required = true)
     protected TypeKeyFields updateByKeys;
 
     /**

@@ -55,7 +55,7 @@ BaseComponentParams) extends SparkFlow {
     val schema = new Array[Column](getFieldsList.size())
 
     getFieldsList.asScala.zipWithIndex.foreach { case (f, i) => schema(i) =  col(f.getFieldName) }
-    LOG.debug("Schema created for Output MYSQL Component : " + schema.mkString)
+    LOG.debug("Schema created for Output Jdbc Update Component : " + schema.mkString)
     schema
   }
 
