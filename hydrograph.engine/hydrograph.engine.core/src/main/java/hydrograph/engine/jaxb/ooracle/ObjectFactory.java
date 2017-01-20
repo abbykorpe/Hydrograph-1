@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 
 package hydrograph.engine.jaxb.ooracle;
 
@@ -30,22 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeOutputOracleBase }
-     * 
-     */
-    public TypeOutputOracleBase createTypeOutputOracleBase() {
-        return new TypeOutputOracleBase();
-    }
-
-    /**
-     * Create an instance of {@link TypeOracleField }
-     * 
-     */
-    public TypeOracleField createTypeOracleField() {
-        return new TypeOracleField();
-    }
-
-    /**
      * Create an instance of {@link TypeOutputOracleInSocket }
      * 
      */
@@ -54,19 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeUpdateKeys }
+     * Create an instance of {@link TypePrimaryKeys }
      * 
      */
-    public TypeUpdateKeys createTypeUpdateKeys() {
-        return new TypeUpdateKeys();
-    }
-
-    /**
-     * Create an instance of {@link TypeLoadChoice }
-     * 
-     */
-    public TypeLoadChoice createTypeLoadChoice() {
-        return new TypeLoadChoice();
+    public TypePrimaryKeys createTypePrimaryKeys() {
+        return new TypePrimaryKeys();
     }
 
     /**
@@ -78,6 +66,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeOracleField }
+     * 
+     */
+    public TypeOracleField createTypeOracleField() {
+        return new TypeOracleField();
+    }
+
+    /**
+     * Create an instance of {@link TypeLoadChoice }
+     * 
+     */
+    public TypeLoadChoice createTypeLoadChoice() {
+        return new TypeLoadChoice();
+    }
+
+    /**
+     * Create an instance of {@link TypeUpdateKeys }
+     * 
+     */
+    public TypeUpdateKeys createTypeUpdateKeys() {
+        return new TypeUpdateKeys();
+    }
+
+    /**
      * Create an instance of {@link TypeOracleRecord }
      * 
      */
@@ -86,11 +98,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeys }
+     * Create an instance of {@link TypeOutputOracleBase }
      * 
      */
-    public TypePrimaryKeys createTypePrimaryKeys() {
-        return new TypePrimaryKeys();
+    public TypeOutputOracleBase createTypeOutputOracleBase() {
+        return new TypeOutputOracleBase();
     }
 
 }

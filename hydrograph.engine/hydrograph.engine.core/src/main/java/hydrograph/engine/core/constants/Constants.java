@@ -52,6 +52,7 @@ public class Constants {
     public static final String LENGTHS_AND_DELIMITERS_SEPARATOR = "~!@#@!~";
     public static final String DEFAULT_FORMAT = "yyyy-MM-dd";
 
+    public static final int DEFAULT_DB_BATCHSIZE = 1000;
     /**
      * The default number of record to be read per roundtrip
      */
