@@ -14,8 +14,8 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 /**
- * Created by gurdits on 10/21/2016.
- */
+  * Created by gurdits on 10/21/2016.
+  */
 object ComponentParameterBuilder {
 
   def apply(componentID: String, runtimeContext: RuntimeContext, outLinkMap: mutable.HashMap[String, Map[String, DataFrame]],
@@ -86,11 +86,13 @@ object ComponentParameterBuilder {
         for(operation :Operation <- linkGenerator.getOperation(componentID).asScala) {
           if (operation.getOperationFields != null) {
             operation.getOperationFields.foreach(field => {
-              val f: SchemaField = new SchemaField(field.getFieldName, field.getDataType)
-              f.setFieldFormat(field.getFormat)
-              f.setFieldScale(field.getScale)
-              f.setFieldPrecision(field.getPrecision)
-              schemaFieldList.add(f)
+              if(schemaFieldList.asScala.count(_.getFieldName.equals(field.getFieldName))<=0) {
+                val f: SchemaField = new SchemaField(field.getFieldName, field.getDataType)
+                f.setFieldFormat(field.getFormat)
+                f.setFieldScale(field.getScale)
+                f.setFieldPrecision(field.getPrecision)
+                schemaFieldList.add(f)
+              }
             })
           }
         }

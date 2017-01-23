@@ -33,10 +33,12 @@ public class OperationUtils {
     public static List<String> getAllFieldsWithOperationFields(OperationEntityBase entity, List<String> inputSchema) {
         List<String> outFields = new ArrayList<>();
         outFields.addAll(inputSchema);
+        if (null != entity.getOperationsList() && entity.getOperationsList().size() > 0) {
         for (Operation operation : entity.getOperationsList()) {
-            for (String field : operation.getOperationOutputFields())
-                if (!inputSchema.contains(field))
-                    outFields.add(field);
+                for (String field : operation.getOperationOutputFields())
+                    if (!inputSchema.contains(field))
+                        outFields.add(field);
+            }
         }
         return outFields;
     }
