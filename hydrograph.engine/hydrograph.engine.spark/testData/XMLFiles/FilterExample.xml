@@ -35,7 +35,7 @@
 
 	<operations id="trans" batch="0" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<operation id="operation1" class="userfunctions.Filter">
+		<operation id="operation1" class="hydrograph.engine.transformation.userfunctions.filter.FilterForXML">
 			<inputFields>
 				<field name="Gift" inSocketId="in0" />
 			</inputFields>

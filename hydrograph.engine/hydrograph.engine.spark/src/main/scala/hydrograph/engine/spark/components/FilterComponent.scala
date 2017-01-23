@@ -25,7 +25,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
 
     if (filterEntity.getOperation.getOperationInputFields==null) {
       LOG.error("Filter Operation Input Fields Can not be Empty")
-      throw new Exception("Operation Input Fields are Empty Exception ")
+      throw new Exception("Filter Operation Input Fields Can not be Empty")
     }
 
     val scheme = componentsParams.getDataFrame.schema.map(e => e.name)
@@ -50,7 +50,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
     val inputReusableRow = new SparkReusableRow(fieldNameSet)
 
     filterEntity.getOutSocketList.asScala.foreach{outSocket=>
-      LOG.info("Creating filter assembly for '" + filterEntity.getComponentId + "' for socket: '"
+      LOG.info("Creating filter Component for '" + filterEntity.getComponentId + "' for socket: '"
         + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
 
 
