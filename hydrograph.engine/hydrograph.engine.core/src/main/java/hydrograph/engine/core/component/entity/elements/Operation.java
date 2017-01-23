@@ -12,15 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.core.component.entity.elements;
 
+import hydrograph.engine.core.component.utils.OperationOutputField;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Properties;
 
 /**
  * This is a POJO which holds the information for one operation in any of the
- * operation type components like
- * {@link hydrograph.engine.cascading.assembly.TransformAssembly Transform},
- * {@link hydrograph.engine.cascading.assembly.FilterAssembly Filter} etc. The
+ * operation type components The
  * object of this class is supposed to be used in the entity classes for the
  * transform type components
  * 
@@ -43,8 +43,18 @@ public class Operation implements Serializable{
 	private String expression;
 	private String accumulatorInitialValue;
 	private boolean isExpressionPresent;
+	private OperationOutputField[] operationFields;
+
 	public Operation() {
 
+	}
+
+	public OperationOutputField[] getOperationFields() {
+		return operationFields;
+	}
+
+	public void setOperationFields(OperationOutputField[] operationFields) {
+		this.operationFields = operationFields;
 	}
 
 
@@ -64,7 +74,7 @@ public class Operation implements Serializable{
 	}
 
 	/**
-	 * @param Expression
+	 * @param expression
 	 *            the Expression to set
 	 */
 	public void setExpression(String expression) {

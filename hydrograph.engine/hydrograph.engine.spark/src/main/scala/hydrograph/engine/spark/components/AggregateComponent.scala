@@ -31,6 +31,8 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   val inputSchema: StructType = componentsParams.getDataFrame().schema
   val outputFields = OperationUtils.getAllFields(aggregateEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
+  val fieldsForOPeration=OperationUtils.getAllFieldsWithOperationFields(aggregateEntity,outputFields.toList.asJava)
+  val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = aggregateEntity.getInSocketList.get(0).getInSocketId
   val mapFields = outSocketEntity.getMapFieldsList.asScala.toList
@@ -63,9 +65,9 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
     LOG.trace("In method createComponent()")
     //    val op = OperationSchemaCreator[AggregateEntity](aggregateEntity, componentsParams, aggregateEntity.getOutSocketList().get(0))
     //    val fm = FieldManupulating(op.getOperationInputFields(), op.getOperationOutputFields(), op.getPassThroughFields(), op.getMapFields(), op.getOperationFields(), aggregateEntity.getKeyFields)
-    val outRow = new Array[Any](outputFields.size)
+    val outRow = new Array[Any](operationSchema.size)
     var outRowToReturn = ListBuffer[Row]()
-    val nullRow = Iterable(Row.fromSeq(new Array[Any](outputFields.size)))
+    val nullRow = Iterable(Row.fromSeq(new Array[Any](operationSchema.size)))
 
 
     val primaryKeys = if (aggregateEntity.getKeyFields == null) Array[KeyField]() else aggregateEntity.getKeyFields
@@ -86,7 +88,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
       val aggregateList: List[SparkOperation[AggregateTransformBase]] = initializeOperationList[AggregateForExpression](aggregateEntity
       .getOperationsList,
         inputSchema,
-        outputSchema)
+        operationSchema)
 
       aggregateList.foreach(sparkOperation => {
         sparkOperation.baseClassInstance match {
@@ -150,7 +152,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
           nullRow
       }
       }
-    })(RowEncoder(outputSchema))
+    })(RowEncoder(operationSchema))
 
     val outputDf = intermediateDf.na.drop("all")
 

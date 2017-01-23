@@ -79,6 +79,7 @@ public class NormalizeEntityGenerator extends OperationComponentGeneratorBase {
 		normalizeEntity.setOutputRecordCount(OperationEntityUtils
 				.extractOutputRecordCount(jaxbNormalize
 						.getOutputRecordCount()));
+		normalizeEntity.setInSocketList(OperationEntityUtils.extractInSocketList(jaxbNormalize.getInSocket()));
 
 		OperationEntityUtils
 				.checkIfOutputRecordCountIsPresentInCaseOfExpressionProcessing(

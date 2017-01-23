@@ -12,24 +12,29 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
+import java.util.ArrayList;
+import java.util.Properties;
+
 import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.utils.ExpressionWrapper;
 import hydrograph.engine.transformation.userfunctions.base.NormalizeTransformBase;
 import hydrograph.engine.transformation.userfunctions.base.OutputDispatcher;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
 public class NormalizeForExpression implements NormalizeTransformBase {
 
+	private ExpressionWrapper expressionWrapper;
 	private ValidationAPI validationAPI;
 	private String[] fieldNames;
 	private Object[] tuples;
 	private String countExpression;
 	private int transformInstancesSize;
-	private ArrayList<ArrayList<String>> operationOutputFields;
+	private ArrayList<String> operationOutputFields;
 	private ArrayList<String> listOfExpressions;
 
+	public void setValidationAPI(ExpressionWrapper expressionWrapper){
+		this.expressionWrapper = expressionWrapper;
+	}
 	public void setValidationAPI(ValidationAPI validationAPI){
 		this.validationAPI = validationAPI;
 	}
@@ -65,7 +70,7 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 						Object obj = validationAPI.execute(fieldNames,
 								tuples, listOfExpressions.get(counter));
 						outputRow.setField(
-								operationOutputFields.get(0).get(counter),
+								operationOutputFields.get(counter),
 								(Comparable) obj);
 					}
 					outputDispatcher.sendOutput();
@@ -102,13 +107,14 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	}
 
 	public void setOperationOutputFields(
-			ArrayList<ArrayList<String>> operationOutputFields) {
+			ArrayList<String> operationOutputFields) {
 		this.operationOutputFields = operationOutputFields;
 	}
 
 	public void setListOfExpressions(ArrayList<String> listOfExpressions) {
 		this.listOfExpressions = listOfExpressions;
 	}
+	
 	
 	@Override
 	public void cleanup() {

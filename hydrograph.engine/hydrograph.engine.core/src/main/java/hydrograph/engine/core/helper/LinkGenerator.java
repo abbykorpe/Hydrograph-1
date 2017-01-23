@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.core.helper;
 
+import hydrograph.engine.core.component.entity.elements.Operation;
+import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
 import hydrograph.engine.core.entity.Link;
 import hydrograph.engine.jaxb.commontypes.*;
 import hydrograph.engine.jaxb.main.Graph;
@@ -36,6 +38,15 @@ public class LinkGenerator {
 			linkMap.put(baseComponent.getId(), generateLink(baseComponent));
 		}
 		return linkMap;
+	}
+
+	public List<Operation> getOperation(String compID){
+		for (TypeBaseComponent baseComponent : componentFactoryMap) {
+			if(baseComponent.getId().equals(compID) && baseComponent instanceof TypeOperationsComponent){
+				return OperationEntityUtils.extractOperations(((TypeOperationsComponent) baseComponent).getOperationOrExpression());
+			}
+		}
+		return null;
 	}
 
 	private Link generateLink(TypeBaseComponent component) {

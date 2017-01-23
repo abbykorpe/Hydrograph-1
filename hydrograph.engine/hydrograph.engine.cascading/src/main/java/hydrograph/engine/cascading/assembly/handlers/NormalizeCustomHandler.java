@@ -193,7 +193,7 @@ public class NormalizeCustomHandler extends
 				((NormalizeForExpression) transformInstance)
 				.setCountExpression(context.getExprCount());
 				((NormalizeForExpression) transformInstance)
-				.setOperationOutputFields(populateOperationOutputFieldsForExpression());
+				.setOperationOutputFields(flattenSchema(populateOperationOutputFieldsForExpression()));
 				
 				((NormalizeForExpression) transformInstance)
 						.setFieldNames(fieldNames);
@@ -216,6 +216,15 @@ public class NormalizeCustomHandler extends
 		}
 	}
 	
+	private ArrayList<String> flattenSchema(ArrayList<ArrayList<String>> arrayList) {
+		ArrayList<String> strings = new ArrayList<String>();
+		for (int i = 0; i < fieldManupulatingHandler.getOperationOutputFields().size(); i++) {
+			for (int j = 0; j < fieldManupulatingHandler.getOperationOutputFields().get(i).size(); j++) {
+				strings.add((String) fieldManupulatingHandler.getOperationOutputFields().get(i).get(j));
+			}
+		}
+		return strings;
+	}
 	private ArrayList<int[]> getAllOutputPositions(
 			ArrayList<int[]> allOutputPositions) {
 		int[] outputPositions = new int[fieldManupulatingHandler

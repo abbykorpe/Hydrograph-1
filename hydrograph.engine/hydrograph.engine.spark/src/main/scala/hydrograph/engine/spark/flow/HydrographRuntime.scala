@@ -54,10 +54,7 @@ class HydrographRuntime extends HydrographRuntimeService {
 
     val sparkSessionBuilder: SparkSession.Builder = SparkSession.builder()
       .appName(hydrographJob.getJAXBObject.getName)
-        .config("spark.sql.shuffle.partitions","1")
       .config(configProperties)
-
-
 
 
     val schemaFieldHandler = new SchemaFieldHandler(

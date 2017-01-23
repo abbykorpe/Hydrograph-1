@@ -1,9 +1,12 @@
 package hydrograph.engine.spark.components.utils
 
-import hydrograph.engine.core.component.entity.OutputRDBMSEntity
-import hydrograph.engine.core.component.entity.elements.SchemaField
-import org.slf4j.{Logger, LoggerFactory}
+import java.util
 
+import hydrograph.engine.core.component.entity.{OutputJdbcUpdateEntity, OutputRDBMSEntity}
+import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.jaxb.commontypes.TypeFieldName
+import org.slf4j.{Logger, LoggerFactory}
+import scala.collection.JavaConverters._
 /**
   * Created by santlalg on 12/12/2016.
   */
@@ -73,6 +76,28 @@ case class DbTableUtils() {
     LOG.debug("Select query :  " + query)
     query
   }
+
+  /**
+    * Give update query
+    * @param outputJdbcUpdateEntity
+    * @return String update Query
+    */
+  def getUpdateQuery(outputJdbcUpdateEntity: OutputJdbcUpdateEntity): String = {
+    val fieldsCreator = new InputOutputFieldsAndTypesCreator[OutputJdbcUpdateEntity](outputJdbcUpdateEntity);
+    val tableName = outputJdbcUpdateEntity.getTableName
+    val columnName = fieldsCreator.getFieldNames
+    val updateKeys: Array[String] = getUpdateKeys(outputJdbcUpdateEntity.getUpdateByKeys)
+
+    DbUpdateTableDescriptor(tableName, columnName, updateKeys).makeUpdateQuery()
+  }
+
+  /**
+    * Retrieve update kesys from TypeFieldName and return as Array of field name
+    * @param updateKeys
+    * @return Array[String] arrays of String of update keys
+    */
+  private def getUpdateKeys(updateKeys: util.List[TypeFieldName]): Array[String] =  updateKeys.asScala.map(_.getName).toArray
+
 }
 
 
