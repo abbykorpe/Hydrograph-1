@@ -46,17 +46,17 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   private def createStructFieldsForXMLInputOutputComponents(): Array[StructField] = {
     LOG.trace("In method createStructFieldsForXMLInputOutputComponents() which returns Array[StructField] for Input and Output components")
-    val strict:Boolean = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].isStrict
+    val safe:Boolean = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].isSafe
     val relativeXPaths = extractRelativeXPath()
     val rowTag: String = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getRowTag
     var fcMap:HashMap[String,FieldContext] = HashMap[String,FieldContext]()
 
     for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
       val schemaField: SchemaField = inputOutputEntityBase.getFieldsList.get(i)
-      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName, getDataType(schemaField), strict))
+      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName, getDataType(schemaField), safe))
     }
 
-    fcMap += (rowTag -> FieldContext(rowTag, DataTypes.StringType, strict))
+    fcMap += (rowTag -> FieldContext(rowTag, DataTypes.StringType, safe))
 
     var xmlTree:XMLTree = XMLTree(fcMap.get(rowTag).get)
 
@@ -66,7 +66,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
         var parentTag = rowTag
         a.split("/").map(b => {
           if(!xmlTree.isPresent(b)) {
-            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b, DataTypes.StringType, strict)))
+            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b, DataTypes.StringType, safe)))
           }
           parentTag = b
         })
