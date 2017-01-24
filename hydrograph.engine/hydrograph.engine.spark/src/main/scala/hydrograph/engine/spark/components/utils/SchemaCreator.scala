@@ -27,7 +27,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
         structList ++ List(StructField(x.fieldContext.name, x.fieldContext.datatype, x.fieldContext.isNullable))
       }
       case x => {
-        List(StructField(x.fieldContext.name,StructType(x.children.toList.flatMap(a => schema(a, a.fieldContext.name, List[StructField]())).toArray)))
+        List(StructField(x.fieldContext.name,StructType(x.children.toList.flatMap(a => schema(a, a.fieldContext.name, List[StructField]())).toArray),x.fieldContext.isNullable))
       }
     }
 
@@ -66,6 +66,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
         var parentTag = rowTag
         a.split("/").map(b => {
           if(!xmlTree.isPresent(b,parentTag)) {
+
             xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b,parentTag, DataTypes.StringType, safe)))
           }
           parentTag = b
