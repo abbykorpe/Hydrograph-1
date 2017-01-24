@@ -7,7 +7,7 @@ import scala.collection.mutable.ListBuffer
 /**
   * Created by bitwise on 1/13/2017.
   */
-case class FieldContext(name: String, datatype: DataType, isNullable: Boolean) {
+case class FieldContext(name: String,parentName:String, datatype: DataType, isNullable: Boolean) {
 }
 
 case class TreeNode(fieldContext: FieldContext) {
@@ -31,11 +31,11 @@ case class XMLTree(fc: FieldContext) {
     findAndAdd(rootNode)
   }
 
-  def isPresent(prospectNodeName: String): Boolean = {
+  def isPresent(prospectNodeName: String,parentName:String): Boolean = {
     var present: Boolean = false
 
     def find(treeNode: TreeNode): Unit = treeNode match {
-      case x if (x.fieldContext.name.equals(prospectNodeName)) => present = true
+      case x if (x.fieldContext.name.equals(prospectNodeName)&&x.fieldContext.parentName.equals(parentName)) => present = true
       case x => x.children.toList.map(a => find(a))
     }
 

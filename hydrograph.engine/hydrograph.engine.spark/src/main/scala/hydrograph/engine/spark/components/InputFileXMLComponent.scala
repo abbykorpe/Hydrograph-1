@@ -33,7 +33,7 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
     LOG.trace("In method createComponent()")
 
     val schemaCreator = SchemaCreator(iFileXMLEntity)
-    val writeMode:String= iFileXMLEntity.asInstanceOf[InputFileXMLEntity].isSafe match {
+    val writeMode:String= iFileXMLEntity.asInstanceOf[InputFileXMLEntity].isStrict match {
       case x if(x) => "FAILFAST"
       case x if(!x) => "PERMISSIVE"
     }
