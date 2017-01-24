@@ -449,7 +449,13 @@ public abstract class TransformUiConverter extends UiConverter {
 
 	private void intializeOutputRecordCount(TransformMapping atMapping) {
 		Normalize normalize=(Normalize)typeBaseComponent;
-		ExpressionEditorData expressionEditorData=new ExpressionEditorData(normalize.getOutputRecordCount().getValue(),
+		String expression;
+		if(!atMapping.isExpression()){
+			expression="";
+		}else{
+			expression=normalize.getOutputRecordCount().getValue();
+		}
+		ExpressionEditorData expressionEditorData=new ExpressionEditorData(expression,
 				uiComponent.getComponentName());
 		atMapping.setExpressionEditorData(expressionEditorData);
 	}
