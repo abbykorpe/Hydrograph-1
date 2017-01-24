@@ -109,7 +109,7 @@ def getFilePath(def path){
 		return path  
 }
 
-def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,def password,def basePath){
+def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,def password,def basePath,def keyfile,def usepassword){
  
 	     ant.taskdef(
     	            	name: 'scp',
@@ -118,12 +118,22 @@ def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,
                 	)
      	
           try {
-  		 	  	ant.scp(
-                   	 	file: fileToMove,
-                    	todir: ""+username+"@"+host+":"+basePath+ "/" +toDirectoryPath,
-                    	password: password,
-                    	trust: true,
-            	)
+          		if(usepassword.equals(true)){
+			 	  	ant.scp(
+		               	 	file: fileToMove,
+		                	todir: ""+username+"@"+host+":"+basePath+ "/" +toDirectoryPath,
+		                	password: password,
+		                	trust: true,
+		        	)
+            	}
+            	else{
+            		ant.scp(
+		               	 	file: fileToMove,
+		                	todir: ""+username+"@"+host+":"+basePath+ "/" +toDirectoryPath,
+		                	keyfile: keyfile,
+		                	trust: true,
+		        	)
+            	}
           } 
           catch (Exception gradleException) {
           	println 'common.scpToRemoteServer: #Gradle failed to execute task#'
@@ -132,7 +142,7 @@ def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,
           }
 }
 
-def sshToRemoteServer(def host, def username, def password,def executeCommand ){
+def sshToRemoteServer(def host, def username, def password,def executeCommand,def keyfile,def usepassword){
 
    		ant.taskdef(
                		name: 'sshexec',
@@ -140,13 +150,24 @@ def sshToRemoteServer(def host, def username, def password,def executeCommand ){
                		classpath: configurations.sshAntTask.asPath)
 
         try {
-            ant.sshexec(
-                    host: host,
-                    username: username,
-                    password: password,
-                    trust: true,
-                    command: executeCommand
-            )
+        	if(usepassword.equals(true)){
+	            ant.sshexec(
+	                    host: host,
+	                    username: username,
+	                    password: password,
+	                    trust: true,
+	                    command: executeCommand
+	            )
+            }
+            else{
+				ant.sshexec(
+	                    host: host,
+	                    username: username,
+	                    keyfile: keyfile,
+	                    trust: true,
+	                    command: executeCommand
+	            )
+            }
         } 
         catch (Exception gradleException) {
         	println 'common.sshToRemoteServer: #Gradle failed to execute task#'
@@ -178,7 +199,7 @@ def createResourceDirectory(def resourceDirectoryRelativePath, def remoteDirecto
 				
 				def command="mkdir -p " +remoteDirectory+"/{" + directoryPath + "}"
 				println "Executing commoand to create resource folder directory structure on remote server : "+command
-				sshToRemoteServer(host,username,password,command)
+				sshToRemoteServer(host,username,password,command,keyfile,usepassword)
 								
 			} catch (Exception gradleException) {
 					println 'common.createResourceDirectory: #Gradle failed to execute task#'

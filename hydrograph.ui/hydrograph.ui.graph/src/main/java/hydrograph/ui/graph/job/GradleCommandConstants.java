@@ -37,6 +37,8 @@ public class GradleCommandConstants {
 	
 	public static final String GPARAM_USERNAME=" -Pusername=";
 	public static final String GPARAM_PASSWORD=" -Ppassword=";
+	public static final String GPARAM_PASSKEY=" -Pkeyfile=";
+	public static final String GPARAM_USE_PASSWORD=" -Pusepassword=";
 	public static final String GPARAM_HOST=" -Phost=";
 	public static final String GPARAM_JOB_XML=" -PjobXML=";
 	public static final String GPARAM_PARAM_FILE=" -PparameterFile=";

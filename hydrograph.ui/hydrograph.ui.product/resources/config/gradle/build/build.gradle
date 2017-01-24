@@ -163,15 +163,17 @@ task createDirectories() {
          	println "createDirectories: Creating directories on remote server"
  			def  command="mkdir -p " +properties.remoteDirectory+"/{"+jobXML+","+moveJar+","+moveParameterFile+","+moveExternalSchemaFiles+","+moveSubJobFiles+","+moveResourceFile+"}"
  			println "Command to create directories on remote server:" + command
-			sshToRemoteServer(host,username,password,command)
+			sshToRemoteServer(host,username,password,command,keyfile,usepassword)
 			
 			createResourceDirectory(moveResourceFile, properties.remoteDirectory)
 		} 
 }
 createDirectories.onlyIf {
-    project.hasProperty('host')
+	project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
     project.hasProperty('jobXML')
     !project.hasProperty('localjob');
 }
@@ -196,10 +198,9 @@ task scpJarFiles(dependsOn: ['build']) {
             File file ->
                 jarFile = file.absolutePath
                 jarName = file.name
-        	}
-
-        try {
-				scpToRemoteServer(jarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
+        	}        
+    try {
+				scpToRemoteServer(jarFile, project.name+"/lib",username,host,password,properties.remoteDirectory,keyfile,usepassword)
     	    } catch (Exception gradleException) {
     	     	println 'scpJarFiles: #Gradle failed to execute task#'
         	    println 'Cause: Failed to transfer lib folder data on remote server'
@@ -208,10 +209,12 @@ task scpJarFiles(dependsOn: ['build']) {
     }
 }
 scpJarFiles.onlyIf {
-    project.hasProperty('host')
+	project.hasProperty('host')
     project.hasProperty('username')
-    project.hasProperty('password')
-    !project.hasProperty('localjob');
+    project.hasProperty('password') 
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
+    !project.hasProperty('localjob');   
 }
 
 /*
@@ -220,21 +223,23 @@ scpJarFiles.onlyIf {
 -------------------------------------------------------------------------------------------------
 */
 task scpJobXML() {
- 		  doLast {
- 		  			println "scpJobXML: Transferring XML to $host"
+	  doLast {
+  			println "scpJobXML: Transferring XML to $host"
 
-					scpToRemoteServer(jobXML,project.name+ "/" +getFilePath(jobXML),username,host,password,properties.remoteDirectory)
+			scpToRemoteServer(jobXML,project.name+ "/" +getFilePath(jobXML),username,host,password,properties.remoteDirectory,keyfile,usepassword)
 
-    		        if(project.hasProperty('debugJobXML')){
-						println "scpJobXML: Transferring view data XML to: $host"
-						scpToRemoteServer(debugJobXML,project.name+ "/" +getFilePath(debugJobXML),username,host,password,properties.remoteDirectory)
-            		}
-		    }
+	        if(project.hasProperty('debugJobXML')){
+				println "scpJobXML: Transferring view data XML to: $host"
+				scpToRemoteServer(debugJobXML,project.name+ "/" +getFilePath(debugJobXML),username,host,password,properties.remoteDirectory,keyfile,usepassword)
+    		}
+	    }
 }
 scpJobXML.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
-    project.hasProperty('password')
+    project.hasProperty('password') 
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
     project.hasProperty('jobXML')
     !project.hasProperty('localjob');
 }
@@ -254,7 +259,7 @@ task scpParameterFile() {
 						println "scpParameterFile: copying parameter file: " + parameterFiles[i];             
 		                //println 'copying parameter file: ' + parameterFiles[i];
 		                if(!parameterFiles[i].trim().equals("")){
-		 					scpToRemoteServer( ""+parameterFiles[i]+"",""+project.name+"/param",username,host,password,properties.remoteDirectory)
+		 					scpToRemoteServer( ""+parameterFiles[i]+"",""+project.name+"/param",username,host,password,properties.remoteDirectory,keyfile,usepassword)
 		                  }
 		            }
 		        } catch (Exception gradleException) {
@@ -268,6 +273,8 @@ scpParameterFile.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
     project.hasProperty('parameterFile')
     !project.hasProperty('localjob');
 }
@@ -291,7 +298,7 @@ task scpSchemaFiles() {
 				}
 		
 		    sampleMap.each {
-		       	scpToRemoteServer("${it.value}", getFilePath("${it.key}"),username,host,password,properties.remoteDirectory)
+		       	scpToRemoteServer("${it.value}", getFilePath("${it.key}"),username,host,password,properties.remoteDirectory,keyfile,usepassword)
 		      }//;
 		    } 
 }
@@ -300,6 +307,8 @@ scpSchemaFiles.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
     project.hasProperty('externalSchemaFiles')
     !project.hasProperty('localjob');
 
@@ -323,11 +332,20 @@ task scpSubJobFiles() {
 				 }
 		
 		    sampleMap.each {
-		      	 scpToRemoteServer("${it.value}", getFilePath("${it.key}"),username,host,password,properties.remoteDirectory)
+		      	 scpToRemoteServer("${it.value}", getFilePath("${it.key}"),username,host,password,properties.remoteDirectory,keyfile,usepassword)
 		      }
 		    } 
 }
+scpSchemaFiles.onlyIf {
+    project.hasProperty('host')
+    project.hasProperty('username')
+    project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
+    project.hasProperty('subJobFiles')
+    !project.hasProperty('localjob');
 
+}
 /*
 -------------------------------------------------------------------------------------------------------------
              Securely transfer user-functions properties file from project resources folder to remote server  
@@ -344,7 +362,7 @@ task scpUserFunctionsPropertyFile(dependsOn: ['build']) {
 							def targetDirectory=element.file.getParentFile().getPath().replace( project.projectDir.path , project.name )
 							targetDirectory = targetDirectory.replace("\\","/")
 							println "scpUserFunctionsPropertyFile: Transferring "+ element.file +" to "+ targetDirectory +" directory"
-							scpToRemoteServer( element.file, targetDirectory,username,host,password,properties.remoteDirectory )
+							scpToRemoteServer( element.file, targetDirectory,username,host,password,properties.remoteDirectory,keyfile,usepassword)
 						}
 					}
 															
@@ -359,6 +377,8 @@ scpUserFunctionsPropertyFile.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
 }
 
 /*
@@ -383,7 +403,7 @@ doLast {
             File file ->
                 otherJarFile = file.absolutePath
 				 println 'Copying ' + file.name
-               	scpToRemoteServer(otherJarFile, project.name+"/lib",username,host,password,properties.remoteDirectory)
+               	scpToRemoteServer(otherJarFile, project.name+"/lib",username,host,password,properties.remoteDirectory,keyfile,usepassword)
         	}
       			
     	    } catch (Exception gradleException) {
@@ -397,6 +417,8 @@ scpLibFolderJarFiles.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
 }
 
 
@@ -461,7 +483,7 @@ task executeRemoteJob() {
 	        println "executeRemoteJob: Executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId+" -udfpath " + udfpath + " -isexecutiontracking " + isExecutionTracking  +" -trackingclientsocketport " + executionTrackingPort
 			
 			def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId+" -udfpath " + udfpath + " -isexecutiontracking " + isExecutionTracking  +" -trackingclientsocketport " + executionTrackingPort
-	   		sshToRemoteServer(host,username,password,command)
+	   		sshToRemoteServer(host,username,password,command,keyfile,usepassword)
 	    }
 	 }
 }
@@ -469,6 +491,8 @@ executeRemoteJob.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
     project.hasProperty('jobXML')
     project.hasProperty('parameterFile')
     !project.hasProperty('localjob');
@@ -537,7 +561,7 @@ task executeDebugRemoteJob() {
 	        
 	        println "executeDebugRemoteJob: Executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath + " -udfpath" + udfpath  + " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
 	        def command="cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList+ " -debugxmlpath "+ debugJobXML + " -jobid " + jobId + " -basepath " + basePath + " -udfpath " + udfpath  + " -isexecutiontracking " + isExecutionTracking + " -trackingclientsocketport " + executionTrackingPort
-			sshToRemoteServer(host,username,password,command)
+			sshToRemoteServer(host,username,password,command,keyfile,usepassword)
 	    }
 	  }
 }
@@ -545,6 +569,8 @@ executeDebugRemoteJob.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
     project.hasProperty('jobXML')
     project.hasProperty('parameterFile')
     project.hasProperty('debugJobXML')
@@ -563,7 +589,7 @@ task killRemoteJob() {
 			println "scpSubJobFiles: Killing $jobprocessid"
 		
 			def command="sh "+properties.runUtility+" -k " + jobprocessid
-	        sshToRemoteServer(host,username,password,command)
+	        sshToRemoteServer(host,username,password,command,keyfile,usepassword)
 	     }
 	}
 }
@@ -571,5 +597,7 @@ killRemoteJob.onlyIf {
     project.hasProperty('host')
     project.hasProperty('username')
     project.hasProperty('password')
+	project.hasProperty('keyfile')
+	project.hasProperty('usepassword')
     project.hasProperty('jobprocessid');
 }

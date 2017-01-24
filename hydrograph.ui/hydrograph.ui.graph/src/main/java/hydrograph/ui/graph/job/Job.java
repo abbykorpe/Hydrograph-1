@@ -27,6 +27,8 @@ public class Job implements Cloneable{
 	private String host;
 	private String username;
 	private String password;
+	private String keyFile;	
+	private boolean usePassword;
 	private String jobProjectDirectory;
 	private String jobStatus;
 	private boolean remoteMode;
@@ -39,7 +41,8 @@ public class Job implements Cloneable{
 	private String debugFilePath;
 	private boolean isExecutionTrackOn=true;
 	
-	public Job(String localJobID,String consoleName, String canvasName, String ipAddress,String userId, String basePath, String password) {
+	public Job(String localJobID,String consoleName, String canvasName, String ipAddress,String userId, 
+			String basePath, String password) {
 		this.localJobID = localJobID;
 		this.consoleName = consoleName;
 		this.canvasName = canvasName;
@@ -47,11 +50,10 @@ public class Job implements Cloneable{
 		this.userId = userId;
 		this.password = password;
 		this.basePath = basePath;
+		this.password = password;
 		this.debugMode = false;
 		this.remoteMode=false;
 	}
-
-	
 	
 	public boolean isDebugMode() {
 		return debugMode;
@@ -180,14 +182,6 @@ public class Job implements Cloneable{
 		this.remoteMode = remoteMode;
 	}
 
-	@Override
-	public String toString() {
-		return "Job [localJobID=" + localJobID + ", localJobProcess=" + localJobProcess + ", remoteJobProcessID="
-				+ remoteJobProcessID + ", consoleName=" + consoleName + ", canvasName=" + canvasName + ", host=" + host
-				+ ", username=" + username + ", password=" + password + ", jobProjectDirectory=" + jobProjectDirectory
-				+ ", jobStatus=" + jobStatus + ", remoteMode=" + remoteMode + "]";
-	}
-
 	public String getUniqueJobId() {
 		return uniqueJobId;
 	}
@@ -221,9 +215,45 @@ public class Job implements Cloneable{
 		this.isExecutionTrackOn = isExecutionTrack;
 	}	
 	
+	
+	/**
+	 * @return the keyFile
+	 */
+	public String getKeyFile() {
+		return keyFile;
+	}
+
+	/**
+	 * @param keyFile the keyFile to set
+	 */
+	public void setKeyFile(String keyFile) {
+		this.keyFile = keyFile;
+	}
+
+	/**
+	 * @return the usePassword
+	 */
+	public boolean isUsePassword() {
+		return usePassword;
+	}
+
+	/**
+	 * @param usePassword the usePassword to set
+	 */
+	public void setUsePassword(boolean usePassword) {
+		this.usePassword = usePassword;
+	}
+
+	@Override
+	public String toString() {
+		return "Job [localJobID=" + localJobID + ", localJobProcess=" + localJobProcess + ", remoteJobProcessID="
+				+ remoteJobProcessID + ", consoleName=" + consoleName + ", canvasName=" + canvasName + ", host=" + host
+				+ ", username=" + username + ", usePassword=" + usePassword + " keyFile=" + keyFile + ", jobProjectDirectory=" + jobProjectDirectory
+				+ ", jobStatus=" + jobStatus + ", remoteMode=" + remoteMode + "]";
+	}
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
-	
 }
