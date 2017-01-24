@@ -24,6 +24,10 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages";
 
+	public static String RUN_SQL_QUERY;
+
+	public static String LABEL_DATABASE_LIST;
+
 	public static String COULD_NOT_SAVE_PROPERTY_SHEET;
 	public static String INVALID_MAPPING;
 	public static String OPERATION_CALSS_LABEL;
@@ -379,7 +383,12 @@ public class Messages extends NLS {
 	public static String LOCAL_MODE;
 	public static String USER;
 	public static String SAVE_PASSWORD;
-
+	
+	public static String ORACLE;
+	public static String REDSHIFT;
+	public static String MYSQL;
+	public static String TERADATA;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

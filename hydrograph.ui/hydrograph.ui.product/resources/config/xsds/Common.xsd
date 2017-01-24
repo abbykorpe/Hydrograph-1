@@ -118,6 +118,8 @@
 			<enumeration value="ROOT_TAG_WIDGET"/>
 			<enumeration value="ROW_TAG_WIDGET"/>
 			<enumeration value="XML_FILE_PATH_WIDGET"/>
+			<enumeration value="DATABASE_LIST_WIDGET"/>
+			<enumeration value="RUN_SQL_QUERY_WIDGET"/>
 		</restriction>
 	</simpleType>
 
@@ -333,7 +335,7 @@
 		          <annotation>
 		          <appinfo>
 		            <jaxb:typesafeEnumMember name="XPathSchemaGridValidationRule" />
-		             </appinfo>
+		          </appinfo>
         	</annotation>
 		</enumeration>
 		<enumeration value="SECONDARY_KEY_VALIDATION">

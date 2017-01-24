@@ -105,6 +105,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="ROOT_TAG_WIDGET"/>
  *     &lt;enumeration value="ROW_TAG_WIDGET"/>
  *     &lt;enumeration value="XML_FILE_PATH_WIDGET"/>
+ *     &lt;enumeration value="RUN_SQL_QUERY_WIDGET"/>
+ *     &lt;enumeration value="DATABASE_LIST_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -186,7 +188,9 @@ public enum PropertyRenderer {
     XPATH_QUERY_WIDGET,
     ROOT_TAG_WIDGET,
     ROW_TAG_WIDGET,
-    XML_FILE_PATH_WIDGET;
+    XML_FILE_PATH_WIDGET,
+    RUN_SQL_QUERY_WIDGET,
+    DATABASE_LIST_WIDGET;
 
     public String value() {
         return name();
@@ -197,3 +201,4 @@ public enum PropertyRenderer {
     }
 
 }
+

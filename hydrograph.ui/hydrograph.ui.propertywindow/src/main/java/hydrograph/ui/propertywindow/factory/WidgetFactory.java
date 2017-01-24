@@ -49,6 +49,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.HiveOutputSingleColumn
 import hydrograph.ui.propertywindow.widgets.customwidgets.OutputRecordCountWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.PropogateWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.RadioButtonsWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.RunSQLQueryWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.SingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents;
@@ -166,8 +167,10 @@ public class WidgetFactory {
 		LOAD_TYPE_CONFIGURATION_WIDGET(LoadTypeConfigurationWidget.class, WidgetHelper.INSTANCE.getRunTimeWidgetConfig(Constants.LOAD_TYPE_CONFIGURATION_LABEL,Messages.LOAD_TYPE_CONFIGURATION_WINDOW_LABEL)),
 		PROPOGATE_WIDGET(PropogateWidget.class),
 		RUNPROGRAM_TEXT_WIDGET (RunComponentWidget.class),
-		OUTPUT_RECORD_COUNT_WIDGET(OutputRecordCountWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.NORMALIZE,Constants.NORMALIZE_DISPLAYNAME, Constants.NORMALIZE_WINDOW_TITLE));
-              
+		OUTPUT_RECORD_COUNT_WIDGET(OutputRecordCountWidget.class,WidgetHelper.INSTANCE.getOperationClassForTransformWidgetConfig(Constants.NORMALIZE,Constants.NORMALIZE_DISPLAYNAME, Constants.NORMALIZE_WINDOW_TITLE)),
+		RUN_SQL_QUERY_WIDGET(RunSQLQueryWidget.class),
+		DATABASE_LIST_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getDatabaseListWidgetConfig());
+		
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
 		
