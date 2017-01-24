@@ -120,6 +120,12 @@
 			<enumeration value="XML_FILE_PATH_WIDGET"/>
 			<enumeration value="DATABASE_LIST_WIDGET"/>
 			<enumeration value="RUN_SQL_QUERY_WIDGET"/>
+			<enumeration value="DATABASE_WIDGET"/>
+			<enumeration value="JDBC_DRIVER_CLASS_WIDGET"/>
+			<enumeration value="DB_URL_WIDGET"/>
+			<enumeration value="DB_UPDATE_USER_NAME_WIDGET"/>
+			<enumeration value="DB_UPDATE_PASSWORD_WIDGET"/>
+			<enumeration value="SELECT_BY_KEYS_WIDGET"/>
 		</restriction>
 	</simpleType>
 

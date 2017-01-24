@@ -105,8 +105,11 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="ROOT_TAG_WIDGET"/>
  *     &lt;enumeration value="ROW_TAG_WIDGET"/>
  *     &lt;enumeration value="XML_FILE_PATH_WIDGET"/>
- *     &lt;enumeration value="RUN_SQL_QUERY_WIDGET"/>
- *     &lt;enumeration value="DATABASE_LIST_WIDGET"/>
+ *     &lt;enumeration value="DATABASE_WIDGET"/>
+ *     &lt;enumeration value="JDBC_DRIVER_CLASS_WIDGET"/>
+ *     &lt;enumeration value="DB_URL_WIDGET"/>
+ *     &lt;enumeration value="DB_UPDATE_USER_NAME_WIDGET"/>
+ *     &lt;enumeration value="DB_UPDATE_PASSWORD_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -189,7 +192,13 @@ public enum PropertyRenderer {
     ROOT_TAG_WIDGET,
     ROW_TAG_WIDGET,
     XML_FILE_PATH_WIDGET,
-    RUN_SQL_QUERY_WIDGET,
+    DATABASE_WIDGET,
+	JDBC_DRIVER_CLASS_WIDGET,
+	DB_URL_WIDGET,
+	DB_UPDATE_USER_NAME_WIDGET,
+	SELECT_BY_KEYS_WIDGET,
+	DB_UPDATE_PASSWORD_WIDGET,
+	RUN_SQL_QUERY_WIDGET,
     DATABASE_LIST_WIDGET;
 
     public String value() {
@@ -201,4 +210,3 @@ public enum PropertyRenderer {
     }
 
 }
-

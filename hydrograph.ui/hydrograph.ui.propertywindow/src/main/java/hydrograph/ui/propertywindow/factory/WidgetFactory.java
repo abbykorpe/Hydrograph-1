@@ -46,6 +46,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTRetentionLogicWidge
 import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContainer;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveInputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveOutputSingleColumnWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.JDBCDriverClassWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.OutputRecordCountWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.PortWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.PropogateWidget;
@@ -56,6 +57,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameter
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.TextBoxWithLabelWidgetWithoutAnyValidation;
+import hydrograph.ui.propertywindow.widgets.customwidgets.UpdateByKeysWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.WidgetHelper;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.databasecomponents.DatabaseTestConnectionWidget;
@@ -105,7 +107,8 @@ public class WidgetFactory {
 		CHARACTER_SET_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getCharacterSetWidgetConfig()),
 		HAS_HEADER_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getHasHeaderWidgetConfig()),
 		OVERWRITE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getOverWriteWidgetConfig()),
-
+		DATABASE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getDatabaseWidgetConfig()),
+		
 		JDBC_DRIVER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
 		BATCH_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getBatchWidgetConfig()),
 		SID_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getSIDNameWidgetConfig()),
@@ -119,18 +122,22 @@ public class WidgetFactory {
 		XPATH_QUERY_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getXPathQueryWidgetConfig()),
 		ROOT_TAG_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRootTagWidgetConfig()),
 	    ROW_TAG_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRowTagWidgetConfig()),
+	    JDBC_DRIVER_CLASS_WIDGET(JDBCDriverClassWidget.class),
+	    DB_URL_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDBUrlWidgetConfig()),
+	    DB_UPDATE_USER_NAME_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getTextBoxWithoutAnyValidationWidgetConfig(Messages.LABEL_USER_NAME)),
+	    DB_UPDATE_PASSWORD_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getTextBoxWithoutAnyValidationWidgetConfig(Messages.LABEL_PASSWORD)),
 
 		TEXTBOX_WITH_IS_PARAMETER_CHECKBOX_WIDGET(TextBoxWithIsParameterCheckBoxWidget.class,WidgetHelper.INSTANCE.getSequenceFieldWidgetConfig()),
 		DELIMETER_WIDGET(DelimiterWidget.class, WidgetHelper.INSTANCE.getDelimiterWidgetConfig()),
 		QUOTE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getQuoteWidgetConfig()),
 		ORACLE_SCHEMA_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getOracleSchemaWidgetConfig()),
 		PASSWORD_WIDGET(TextBoxWithIsParameterCheckBoxWidgetForDatabaseComponents.class, WidgetHelper.INSTANCE.getPasswordWidgetConfig()),
-		CHUNK_SIZE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getChunkSizeWidgetConfig()),
-		
+		CHUNK_SIZE_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getTextBoxWithoutAnyValidationWidgetConfig(Messages.LABEL_CHUNK_SIZE)),
 		FILTER_PROPERTY_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getOperationFieldsConfig()),
 		COLUMN_NAME_WIDGET(SingleColumnWidget.class, WidgetHelper.INSTANCE.getColumnNameConfig()),
 		PARTITION_KEYS_WIDGET(HiveOutputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfig()),
 		
+		SELECT_BY_KEYS_WIDGET(UpdateByKeysWidget.class),
 		TEST_CONNECTION_WIDGET(DatabaseTestConnectionWidget.class),
 		PARTITION_KEYS_WIDGET_INPUT_HIVE(HiveInputSingleColumnWidget.class, WidgetHelper.INSTANCE.getPartitionKeysConfigInputHive()),
 		
