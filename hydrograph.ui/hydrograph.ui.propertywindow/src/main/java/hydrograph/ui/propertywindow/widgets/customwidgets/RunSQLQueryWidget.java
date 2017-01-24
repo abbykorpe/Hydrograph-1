@@ -71,6 +71,7 @@ public class RunSQLQueryWidget extends AbstractWidget{
 		styledText=new StyledText(defaultSubgroupComposite.getContainerControl(), SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		GridData gridData=new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint=80;
+		gridData.widthHint = 120;
 		styledText.setLayoutData(gridData);
 		
 		txtDecorator = WidgetUtility.addDecorator(styledText, Messages.bind(Messages.EMPTY_FIELD, Messages.EXECUTION_COMMAND));
