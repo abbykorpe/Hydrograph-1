@@ -592,14 +592,4 @@ public class JobScpAndProcessUtility {
 			}
 		}
 	}
-
-	/*private void appendPassKeyOrPassword(Job job, StringBuffer command) {
-		if(job.isUsePassword()){
-			command.append(GradleCommandConstants.GPARAM_PASSWORD).append(job.getPassword());
-			command.append(GradleCommandConstants.GPARAM_PASSKEY).append(job.getPasskey();
-		}
-		else{
-			command.append(GradleCommandConstants.GPARAM_PASSKEY).append(job.getPasskey());
-		}
-	}*/
 }

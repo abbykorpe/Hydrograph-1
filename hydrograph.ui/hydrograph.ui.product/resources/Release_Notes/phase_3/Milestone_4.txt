@@ -2,12 +2,11 @@
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
-
+1.<24-Jan-16> - [Rakesh Kanchalwar] - KeyFile support to launch job using passphrase. 
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
 Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
-
 1.#1208 [Pooja Yadav] - Preferences window: Validation error Message is Not Getting Displayed When 'Tracking Log path' is Blank.
 2.#627  [Shrirang Kumbhar] - All Data base components: On job import configured details from the properties window become empty
 3.#641  [Shrirang Kumbhar] - Save Password: On unchecking save Password checkbox tool unsave password
