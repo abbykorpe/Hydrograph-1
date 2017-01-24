@@ -53,10 +53,10 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
     for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
       val schemaField: SchemaField = inputOutputEntityBase.getFieldsList.get(i)
-      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName, getDataType(schemaField), safe))
+      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName,"", getDataType(schemaField), safe))
     }
 
-    fcMap += (rowTag -> FieldContext(rowTag, DataTypes.StringType, safe))
+    fcMap += (rowTag -> FieldContext(rowTag,"", DataTypes.StringType, safe))
 
     var xmlTree:XMLTree = XMLTree(fcMap.get(rowTag).get)
 
@@ -65,8 +65,8 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
       case a => {
         var parentTag = rowTag
         a.split("/").map(b => {
-          if(!xmlTree.isPresent(b)) {
-            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b, DataTypes.StringType, safe)))
+          if(!xmlTree.isPresent(b,parentTag)) {
+            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b,parentTag, DataTypes.StringType, safe)))
           }
           parentTag = b
         })
