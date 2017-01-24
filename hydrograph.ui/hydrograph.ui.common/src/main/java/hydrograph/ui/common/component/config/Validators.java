@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -112,7 +113,10 @@ public enum Validators {
     @XmlEnumValue("PORT_VALIDATOR")
     PortValidationRule("PORT_VALIDATOR"),
     @XmlEnumValue("SECONDARY_KEY_VALIDATION")
-    SecondaryColumnKeyValidation("SECONDARY_KEY_VALIDATION");
+    SecondaryColumnKeyValidation("SECONDARY_KEY_VALIDATION"),
+    @XmlEnumValue("JDBC_Driver_DB_Widget_Validation")
+    JDBCDriverClassWidgetDatastructureValidation("JDBC_Driver_DB_Widget_Validation");
+
 
     
     private final String value;

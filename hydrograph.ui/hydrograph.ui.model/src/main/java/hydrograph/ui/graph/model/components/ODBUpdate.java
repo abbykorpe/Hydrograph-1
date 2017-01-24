@@ -33,7 +33,7 @@ public class ODBUpdate extends OutputCategory{
 	}
 
 	public String getConverter() {
-		return "hydrograph.ui.engine.converter.impl.OutputOracleConverter";
+		return "hydrograph.ui.engine.converter.impl.OutputDBUpdateConverter";
 
 	}
 }

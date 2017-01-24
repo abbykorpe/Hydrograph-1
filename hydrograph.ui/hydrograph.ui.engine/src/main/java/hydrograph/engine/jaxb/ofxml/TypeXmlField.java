@@ -16,7 +16,6 @@ package hydrograph.engine.jaxb.ofxml;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 
 

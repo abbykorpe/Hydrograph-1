@@ -67,6 +67,7 @@ import hydrograph.ui.engine.ui.converter.impl.LookupUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.NormalizeUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OperationSubJobUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputComponentSubjobUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.OutputDBUpdateUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputFileDelimitedUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputFixedWidthUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.OutputHiveParquetUiConverter;
@@ -257,11 +258,13 @@ public class UiConverterFactory {
 		if((hydrograph.engine.jaxb.commontypes.TypeUnknownComponent.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new UnknownUiConverter(typeBaseComponent, container);
 		}
-		
 		if((hydrograph.engine.jaxb.commandtypes.RunSQL.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new RunSQLUiConverter(typeBaseComponent, container);
 		}
 		
+		if((hydrograph.engine.jaxb.outputtypes.JdbcUpdate.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new OutputDBUpdateUiConverter(typeBaseComponent, container);
+		}
 		return new UnknownUiConverter(typeBaseComponent,container);
 	}
 }

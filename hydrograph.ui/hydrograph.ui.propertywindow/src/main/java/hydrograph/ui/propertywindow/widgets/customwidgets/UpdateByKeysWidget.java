@@ -3,6 +3,7 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,13 +35,17 @@ public class UpdateByKeysWidget extends AbstractWidget{
 	private String propertyName;
 	private String propertyValue;
 	private Button selectKeysButton;
+	private List<AbstractWidget> widgets;
 	private Text textBox;
+	LinkedHashMap<String, Object> tempPropertyMap;
+	private Map<String, String> initialMap;
+	List<String> schemaFields;
 
 	public UpdateByKeysWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
-		this.propertyValue =  String.valueOf(componentConfigProp.getPropertyValue());
+		this.propertyValue = (String) componentConfigProp.getPropertyValue();
 	}
 
 	@Override
@@ -63,15 +68,18 @@ public class UpdateByKeysWidget extends AbstractWidget{
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Select Keys");
 		selectUpdateKeysComposite.attachWidget(eltDefaultButton);
 		selectKeysButton=(Button)eltDefaultButton.getSWTWidgetControl();
+		
+		if(StringUtils.isNotEmpty(propertyValue)){
+			textBox.setText(propertyValue);
+		}
+		
 		attachButtonListner(selectKeysButton);
 	}
 	
 	
 
 	private void attachButtonListner(Button selectKeysButton) {
-		
 		selectKeysButton.addSelectionListener(new SelectionAdapter() {
-			
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -88,10 +96,12 @@ public class UpdateByKeysWidget extends AbstractWidget{
 				if(valueForNewTableTextBox !=null){
 					textBox.setText(valueForNewTableTextBox);
 				}
+				showHideErrorSymbol(widgets);
 			}
 		});
 		
 	}
+	
 
 	/**
 	 * Propogates the schema from GridRow
@@ -111,22 +121,38 @@ public class UpdateByKeysWidget extends AbstractWidget{
 		return list;
 	}
 	
+	/**
+	 * Set the tool tip error message
+	 */
+	protected void setToolTipErrorMessage() {
+		String toolTipErrorMessage = null;
+
+		if (StringUtils.isBlank(textBox.getText()))
+			toolTipErrorMessage = "Text can not be blank";
+
+		setToolTipMessage(toolTipErrorMessage);
+	}
+	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		tempPropertyMap = new LinkedHashMap<>();
+		tempPropertyMap.put(this.propertyName, textBox.getText());
+		
+		setToolTipErrorMessage();
+		return tempPropertyMap;
 	}
 
 	@Override
 	public boolean isWidgetValid() {
-		// TODO Auto-generated method stub
+		if (StringUtils.isNotBlank(textBox.getText())) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public void addModifyListener(Property property, ArrayList<AbstractWidget> widgetList) {
-		// TODO Auto-generated method stub
-		
+		widgets = widgetList;
 	}
 
 }

@@ -384,7 +384,6 @@ public class WidgetHelper {
 		dropDownConfig.getItems().add(Constants.TERADATA);
 		dropDownConfig.getItems().add(Constants.PARAMETER);
 		addComboBoxListeners(dropDownConfig);
-		
 		return dropDownConfig;
 	}
 	

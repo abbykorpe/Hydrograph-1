@@ -53,7 +53,8 @@ public enum UIComponentsConstants {
 	RUN_SQL("RunSQL"),
 	BATCH("batch"),
 	PARTITION_BY_EXPRESSION("PartitionByExpression"),
-	XML("XML");
+	XML("XML"),
+	DB_UPDATE("DB Update");
 	
 	private final String value;
 

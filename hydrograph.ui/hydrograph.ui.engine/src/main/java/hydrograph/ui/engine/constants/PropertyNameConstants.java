@@ -58,7 +58,10 @@ public enum PropertyNameConstants {
 		ROOT_TAG("rootTag"),
 		ROW_TAG("rowTag"),
 		RUN_SQL_DATABASE_CONNECTION_NAME("databaseConnectionName"),
-		RUN_SQL_QUERY("runsqlquery");
+		RUN_SQL_QUERY("runsqlquery"),
+		SELECT_BY_KEYS("selectByKeys"),
+		DB_URL("DBUrl"),
+		JDBC_DB_DRIVER("jdbcDriverClass");
 	
 		private final String value;
 
