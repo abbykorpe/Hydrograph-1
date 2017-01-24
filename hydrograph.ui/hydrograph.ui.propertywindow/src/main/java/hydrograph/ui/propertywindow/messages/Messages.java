@@ -383,7 +383,12 @@ public class Messages extends NLS {
 	public static String LOCAL_MODE;
 	public static String USER;
 	public static String SAVE_PASSWORD;
-
+	
+	public static String ORACLE;
+	public static String REDSHIFT;
+	public static String MYSQL;
+	public static String TERADATA;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

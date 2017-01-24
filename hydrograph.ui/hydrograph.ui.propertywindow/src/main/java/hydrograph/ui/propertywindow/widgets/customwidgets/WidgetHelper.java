@@ -333,11 +333,11 @@ public class WidgetHelper {
 	public WidgetConfig getDatabaseListWidgetConfig(){
 		DropDownConfig dropDownConfig = new DropDownConfig();
 		dropDownConfig.setName(Messages.LABEL_DATABASE_LIST);
-		dropDownConfig.getItems().add(Constants.ORACLE);
-		dropDownConfig.getItems().add(Constants.REDSHIFT);
-		dropDownConfig.getItems().add(Constants.MYSQL);
-		dropDownConfig.getItems().add(Constants.TERADATA);
-		dropDownConfig.getItems().add(Constants.PARAMETER);
+		dropDownConfig.getItems().add(Messages.ORACLE);
+		dropDownConfig.getItems().add(Messages.REDSHIFT);
+		dropDownConfig.getItems().add(Messages.MYSQL);
+		dropDownConfig.getItems().add(Messages.TERADATA);
+		dropDownConfig.getItems().add(Messages.PARAMETER);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
