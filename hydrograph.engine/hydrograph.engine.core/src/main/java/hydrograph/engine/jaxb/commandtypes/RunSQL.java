@@ -1,0 +1,644 @@
+
+package hydrograph.engine.jaxb.commandtypes;
+
+import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
+
+import javax.xml.bind.annotation.*;
+
+
+/**
+ * <p>Java class for runSQL complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="runSQL">
+ *   &lt;complexContent>
+ *     &lt;extension base="{hydrograph/engine/jaxb/commontypes}type-command-component">
+ *       &lt;sequence>
+ *         &lt;element name="database_Connection_Name">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="databaseConnectionName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="server_Name">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="ip_address" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="port_Number">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="portNumber" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="database_Name">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="databaseName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="db_User_Name">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="userName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="db_Password">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="password" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="queryCommand">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="query" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *       &lt;/sequence>
+ *     &lt;/extension>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "runSQL", namespace = "hydrograph/engine/jaxb/commandtypes", propOrder = {
+    "databaseConnectionName",
+    "serverName",
+    "portNumber",
+    "databaseName",
+    "dbUserName",
+    "dbPassword",
+    "queryCommand"
+})
+public class RunSQL
+    extends TypeCommandComponent
+{
+
+    @XmlElement(name = "database_Connection_Name", required = true)
+    protected DatabaseConnectionName databaseConnectionName;
+    @XmlElement(name = "server_Name", required = true)
+    protected ServerName serverName;
+    @XmlElement(name = "port_Number", required = true)
+    protected PortNumber portNumber;
+    @XmlElement(name = "database_Name", required = true)
+    protected DatabaseName databaseName;
+    @XmlElement(name = "db_User_Name", required = true)
+    protected DbUserName dbUserName;
+    @XmlElement(name = "db_Password", required = true)
+    protected DbPassword dbPassword;
+    @XmlElement(required = true)
+    protected QueryCommand queryCommand;
+
+    /**
+     * Gets the value of the databaseConnectionName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DatabaseConnectionName }
+     *     
+     */
+    public DatabaseConnectionName getDatabaseConnectionName() {
+        return databaseConnectionName;
+    }
+
+    /**
+     * Sets the value of the databaseConnectionName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DatabaseConnectionName }
+     *     
+     */
+    public void setDatabaseConnectionName(DatabaseConnectionName value) {
+        this.databaseConnectionName = value;
+    }
+
+    /**
+     * Gets the value of the serverName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ServerName }
+     *     
+     */
+    public ServerName getServerName() {
+        return serverName;
+    }
+
+    /**
+     * Sets the value of the serverName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ServerName }
+     *     
+     */
+    public void setServerName(ServerName value) {
+        this.serverName = value;
+    }
+
+    /**
+     * Gets the value of the portNumber property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PortNumber }
+     *     
+     */
+    public PortNumber getPortNumber() {
+        return portNumber;
+    }
+
+    /**
+     * Sets the value of the portNumber property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PortNumber }
+     *     
+     */
+    public void setPortNumber(PortNumber value) {
+        this.portNumber = value;
+    }
+
+    /**
+     * Gets the value of the databaseName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DatabaseName }
+     *     
+     */
+    public DatabaseName getDatabaseName() {
+        return databaseName;
+    }
+
+    /**
+     * Sets the value of the databaseName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DatabaseName }
+     *     
+     */
+    public void setDatabaseName(DatabaseName value) {
+        this.databaseName = value;
+    }
+
+    /**
+     * Gets the value of the dbUserName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DbUserName }
+     *     
+     */
+    public DbUserName getDbUserName() {
+        return dbUserName;
+    }
+
+    /**
+     * Sets the value of the dbUserName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DbUserName }
+     *     
+     */
+    public void setDbUserName(DbUserName value) {
+        this.dbUserName = value;
+    }
+
+    /**
+     * Gets the value of the dbPassword property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DbPassword }
+     *     
+     */
+    public DbPassword getDbPassword() {
+        return dbPassword;
+    }
+
+    /**
+     * Sets the value of the dbPassword property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DbPassword }
+     *     
+     */
+    public void setDbPassword(DbPassword value) {
+        this.dbPassword = value;
+    }
+
+    /**
+     * Gets the value of the queryCommand property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link QueryCommand }
+     *     
+     */
+    public QueryCommand getQueryCommand() {
+        return queryCommand;
+    }
+
+    /**
+     * Sets the value of the queryCommand property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link QueryCommand }
+     *     
+     */
+    public void setQueryCommand(QueryCommand value) {
+        this.queryCommand = value;
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="databaseConnectionName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class DatabaseConnectionName {
+
+        @XmlAttribute(name = "databaseConnectionName", required = true)
+        protected String databaseConnectionName;
+
+        /**
+         * Gets the value of the databaseConnectionName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getDatabaseConnectionName() {
+            return databaseConnectionName;
+        }
+
+        /**
+         * Sets the value of the databaseConnectionName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setDatabaseConnectionName(String value) {
+            this.databaseConnectionName = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="databaseName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class DatabaseName {
+
+        @XmlAttribute(name = "databaseName", required = true)
+        protected String databaseName;
+
+        /**
+         * Gets the value of the databaseName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getDatabaseName() {
+            return databaseName;
+        }
+
+        /**
+         * Sets the value of the databaseName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setDatabaseName(String value) {
+            this.databaseName = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="password" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class DbPassword {
+
+        @XmlAttribute(name = "password", required = true)
+        protected String password;
+
+        /**
+         * Gets the value of the password property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getPassword() {
+            return password;
+        }
+
+        /**
+         * Sets the value of the password property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setPassword(String value) {
+            this.password = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="userName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class DbUserName {
+
+        @XmlAttribute(name = "userName", required = true)
+        protected String userName;
+
+        /**
+         * Gets the value of the userName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getUserName() {
+            return userName;
+        }
+
+        /**
+         * Sets the value of the userName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setUserName(String value) {
+            this.userName = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="portNumber" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class PortNumber {
+
+        @XmlAttribute(name = "portNumber")
+        protected String portNumber;
+
+        /**
+         * Gets the value of the portNumber property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getPortNumber() {
+            return portNumber;
+        }
+
+        /**
+         * Sets the value of the portNumber property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setPortNumber(String value) {
+            this.portNumber = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="query" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class QueryCommand {
+
+        @XmlAttribute(name = "query", required = true)
+        protected String query;
+
+        /**
+         * Gets the value of the query property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getQuery() {
+            return query;
+        }
+
+        /**
+         * Sets the value of the query property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setQuery(String value) {
+            this.query = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="ip_address" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class ServerName {
+
+        @XmlAttribute(name = "ip_address", required = true)
+        protected String ipAddress;
+
+        /**
+         * Gets the value of the ipAddress property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getIpAddress() {
+            return ipAddress;
+        }
+
+        /**
+         * Sets the value of the ipAddress property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setIpAddress(String value) {
+            this.ipAddress = value;
+        }
+
+    }
+
+}

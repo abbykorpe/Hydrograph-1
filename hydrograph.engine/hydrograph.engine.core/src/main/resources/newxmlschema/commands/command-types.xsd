@@ -63,7 +63,53 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
+
+	<xs:complexType name="runSQL">
+		<xs:complexContent>
+			<xs:extension base="cmn:type-command-component">
+				<xs:sequence>
+					<xs:element name="database_Connection_Name">
+						<xs:complexType>
+							<xs:attribute name="databaseConnectionName" use="required" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="server_Name">
+						<xs:complexType>
+							<xs:attribute name="ip_address" use="required" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="port_Number">
+						<xs:complexType>
+							<xs:attribute name="portNumber" use="optional" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="database_Name">
+						<xs:complexType>
+							<xs:attribute name="databaseName" use="required" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="db_User_Name">
+						<xs:complexType>
+							<xs:attribute name="userName" use="required" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="db_Password">
+						<xs:complexType>
+							<xs:attribute name="password" use="required" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="queryCommand">
+						<xs:complexType>
+							<xs:attribute name="query" use="required" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
 	<xs:complexType name="hplsql">
 		<xs:complexContent>
 			<xs:extension base="cmn:type-command-component">
