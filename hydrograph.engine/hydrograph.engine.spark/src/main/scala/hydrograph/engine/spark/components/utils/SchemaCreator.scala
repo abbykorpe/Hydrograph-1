@@ -66,7 +66,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
         var parentTag = rowTag
         a.split("/").map(b => {
           if(!xmlTree.isPresent(b,parentTag)) {
-            safe
+
             xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b,parentTag, DataTypes.StringType, safe)))
           }
           parentTag = b
