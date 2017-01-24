@@ -2039,7 +2039,20 @@ if(deleteButton!=null)
 			List<GridRow> tempList = (List<GridRow>) ((ArrayList<GridRow>)outputSchema).clone();
 			tempList.forEach(gridRow -> {if(!internalSchema.contains(gridRow)){ outputSchema.remove(gridRow);}});
 			internalSchema.forEach(gridRow -> {if(!outputSchema.contains(gridRow)){outputSchema.add(gridRow);}});
-			 
+			sequencingOfSchemaFieldsInOrderOfInternalSchemaFields(outputSchema,internalSchema);
 			return outputSchema;
 		 }
+		
+		private void sequencingOfSchemaFieldsInOrderOfInternalSchemaFields(List<GridRow> outputSchema,
+				List<GridRow> internalSchema2) {
+			for(int index=0;index<internalSchema2.size();index++){
+				if(!StringUtils.equalsIgnoreCase(outputSchema.get(index).getFieldName(), internalSchema2.get(index).getFieldName())){
+					{
+					outputSchema.remove(index);
+					outputSchema.add(index,internalSchema2.get(index));
+					}
+				}
+			}
+		 
+		}
 }
