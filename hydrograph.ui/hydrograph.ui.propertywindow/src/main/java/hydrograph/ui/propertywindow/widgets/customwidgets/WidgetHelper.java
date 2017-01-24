@@ -375,6 +375,19 @@ public class WidgetHelper {
 		return dropDownConfig;
 	}
 	
+	public WidgetConfig getJDBCDriverClassWidgetConfig(){
+		DropDownConfig dropDownConfig = new DropDownConfig();
+		dropDownConfig.setName(Messages.LABEL_DATABASE);
+		dropDownConfig.getItems().add(Constants.ORACLE);
+		dropDownConfig.getItems().add(Constants.REDSHIFT);
+		dropDownConfig.getItems().add(Constants.MYSQL);
+		dropDownConfig.getItems().add(Constants.TERADATA);
+		dropDownConfig.getItems().add(Constants.PARAMETER);
+		addComboBoxListeners(dropDownConfig);
+		
+		return dropDownConfig;
+	}
+	
 	/**
 	 * Configuration to customize text box as JDBC Driver property 
 	 */

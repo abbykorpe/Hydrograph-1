@@ -107,7 +107,7 @@ public class WidgetFactory {
 		CHARACTER_SET_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getCharacterSetWidgetConfig()),
 		HAS_HEADER_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getHasHeaderWidgetConfig()),
 		OVERWRITE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getOverWriteWidgetConfig()),
-		DATABASE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getDatabaseWidgetConfig()),
+		//DATABASE_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getDatabaseWidgetConfig()),
 		
 		JDBC_DRIVER_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getJdbcDriverWidgetConfig()),
 		BATCH_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getBatchWidgetConfig()),
@@ -122,7 +122,7 @@ public class WidgetFactory {
 		XPATH_QUERY_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getXPathQueryWidgetConfig()),
 		ROOT_TAG_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRootTagWidgetConfig()),
 	    ROW_TAG_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getRowTagWidgetConfig()),
-	    JDBC_DRIVER_CLASS_WIDGET(JDBCDriverClassWidget.class),
+	    JDBC_DRIVER_CLASS_WIDGET(JDBCDriverClassWidget.class, WidgetHelper.INSTANCE.getJDBCDriverClassWidgetConfig()),
 	    DB_URL_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDBUrlWidgetConfig()),
 	    DB_UPDATE_USER_NAME_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getTextBoxWithoutAnyValidationWidgetConfig(Messages.LABEL_USER_NAME)),
 	    DB_UPDATE_PASSWORD_WIDGET(TextBoxWithLabelWidgetWithoutAnyValidation.class, WidgetHelper.INSTANCE.getTextBoxWithoutAnyValidationWidgetConfig(Messages.LABEL_PASSWORD)),
