@@ -81,6 +81,7 @@ import hydrograph.ui.engine.ui.converter.impl.OutputTeradataUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.PartitionByExpressionUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RemoveDupsUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.RunProgramUiConverter;
+import hydrograph.ui.engine.ui.converter.impl.RunSQLUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.SortUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.TransformComponentUiConverter;
 import hydrograph.ui.engine.ui.converter.impl.UnionAllUiConverter;
@@ -256,6 +257,11 @@ public class UiConverterFactory {
 		if((hydrograph.engine.jaxb.commontypes.TypeUnknownComponent.class).isAssignableFrom(typeBaseComponent.getClass())){
 			return new UnknownUiConverter(typeBaseComponent, container);
 		}
+		
+		if((hydrograph.engine.jaxb.commandtypes.RunSQL.class).isAssignableFrom(typeBaseComponent.getClass())){
+			return new RunSQLUiConverter(typeBaseComponent, container);
+		}
+		
 		return new UnknownUiConverter(typeBaseComponent,container);
 	}
 }

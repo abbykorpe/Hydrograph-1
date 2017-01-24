@@ -326,6 +326,23 @@ public class WidgetHelper {
 		return dropDownConfig;
 	}
 	
+	
+	/**
+	 * Configuration to customize dropdown as characterSet property 
+	 */
+	public WidgetConfig getDatabaseListWidgetConfig(){
+		DropDownConfig dropDownConfig = new DropDownConfig();
+		dropDownConfig.setName(Messages.LABEL_DATABASE_LIST);
+		dropDownConfig.getItems().add(Constants.ORACLE);
+		dropDownConfig.getItems().add(Constants.REDSHIFT);
+		dropDownConfig.getItems().add(Constants.MYSQL);
+		dropDownConfig.getItems().add(Constants.TERADATA);
+		dropDownConfig.getItems().add(Constants.PARAMETER);
+		addComboBoxListeners(dropDownConfig);
+		return dropDownConfig;
+	}
+	
+	
 	/**
 	 * Configuration to customize text box as JDBC Driver property 
 	 */

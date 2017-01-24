@@ -5,9 +5,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+
 import hydrograph.engine.jaxb.commandtypes.FtpIn;
 import hydrograph.engine.jaxb.commandtypes.Hplsql;
 import hydrograph.engine.jaxb.commandtypes.RunProgram;
+import hydrograph.engine.jaxb.commandtypes.RunSQL;
 import hydrograph.engine.jaxb.commandtypes.Subjob;
 
 
@@ -33,6 +35,7 @@ import hydrograph.engine.jaxb.commandtypes.Subjob;
     Subjob.class,
     FtpIn.class,
     RunProgram.class,
+    RunSQL.class,
     Hplsql.class
 })
 public abstract class TypeCommandComponent

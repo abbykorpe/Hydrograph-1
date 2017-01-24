@@ -24,6 +24,10 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "resources.messages";
 
+	public static String RUN_SQL_QUERY;
+
+	public static String LABEL_DATABASE_LIST;
+
 	public static String COULD_NOT_SAVE_PROPERTY_SHEET;
 	public static String INVALID_MAPPING;
 	public static String OPERATION_CALSS_LABEL;

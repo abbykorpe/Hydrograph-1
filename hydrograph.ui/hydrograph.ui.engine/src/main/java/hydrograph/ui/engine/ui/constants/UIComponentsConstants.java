@@ -50,6 +50,7 @@ public enum UIComponentsConstants {
 	VALID("VALID"),
 	COMMAND_CATEGORY("COMMAND"),
 	RUN_PROGRAM("RunProgram"),
+	RUN_SQL("RunSQL"),
 	BATCH("batch"),
 	PARTITION_BY_EXPRESSION("PartitionByExpression"),
 	XML("XML");

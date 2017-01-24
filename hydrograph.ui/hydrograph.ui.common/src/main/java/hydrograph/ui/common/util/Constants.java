@@ -344,4 +344,11 @@ public class Constants {
 	public static final String _INDEX = "_index";
 	public static final String SECURE_STORAGE_HYDROGRAPH_CREDENTIALS_ROOT_NODE = "Hydrograph";
 	public static final String EXPLICIT_SCALE_TYPE_VALUE = "explicit";
+	
+	public static final String ORACLE = "Oracle";
+	public static final String REDSHIFT = "Redshift";
+	public static final String MYSQL = "MySQL";
+	public static final String TERADATA = "Teradata";
+	public static final String RUN_SQL_DATABASE_CONNECTION_NAME = "databaseConnectionName";
+	public static final Object RUN_SQL_QUERY = "runsqlquery";
 }

@@ -56,7 +56,9 @@ public enum PropertyNameConstants {
 		PROPERTY_TAG("property"),
 		ABSOLUTE_XPATH("absoluteXPath"),
 		ROOT_TAG("rootTag"),
-		ROW_TAG("rowTag");
+		ROW_TAG("rowTag"),
+		RUN_SQL_DATABASE_CONNECTION_NAME("databaseConnectionName"),
+		RUN_SQL_QUERY("runsqlquery");
 	
 		private final String value;
 
