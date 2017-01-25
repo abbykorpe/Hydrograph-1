@@ -199,6 +199,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 		}
 	}
 	
+	
 	private int openErrorMessageBox(String message) {
 		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ERROR | SWT.YES | SWT.NO);
 		messageBox.setText(Constants.ERROR);
@@ -279,7 +280,7 @@ public class JobDeleteParticipant extends DeleteParticipant{
 	private void getDeleteChanges(final HashMap<IFile, DeleteResourceChange> changes, IResource resource) {
 		DeleteResourceChange change = (DeleteResourceChange) changes.get((IFile)resource);
 		if (change == null) {
-			change= new DeleteResourceChange(resource.getFullPath(), true);
+			change= new DeleteResourceChange(resource.getFullPath(), true,true);
 			changes.put((IFile)resource, change);
 		}
 	}
