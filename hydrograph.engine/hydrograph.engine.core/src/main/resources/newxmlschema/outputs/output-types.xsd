@@ -21,6 +21,7 @@
            xmlns:ofsubjob="hydrograph/engine/jaxb/ofsubjob"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns:omysql="hydrograph/engine/jaxb/omysql"
+           xmlns:excel="hydrograph/engine/jaxb/exceltype"
            xmlns:oredshift="hydrograph/engine/jaxb/oredshift"
            xmlns:ooracle="hydrograph/engine/jaxb/ooracle"
            xmlns:oteradata="hydrograph/engine/jaxb/oteradata"
@@ -58,6 +59,11 @@
                namespace="hydrograph/engine/jaxb/ooracle"/>
     <xs:import schemaLocation="./teradata-type/output-teradata-types.xsd"
                namespace="hydrograph/engine/jaxb/oteradata"/>
+
+    <xs:import schemaLocation="./excel-output-type/output-excel-types.xsd"
+               namespace="hydrograph/engine/jaxb/exceltype"/>
+
+
     <xs:import
             schemaLocation="./xml-file/output-file-xml-types.xsd"
             namespace="hydrograph/engine/jaxb/ofxml" />
@@ -73,10 +79,8 @@
                             <xs:attribute name="uri" type="xs:string" use="required"/>
                         </xs:complexType>
                     </xs:element>
-
                     <xs:element name="runtimeProperties" type="cmn:type-properties"
                                 minOccurs="0"/>
-
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -114,6 +118,47 @@
                     <xs:element name="quote" minOccurs="0">
                         <xs:complexType>
                             <xs:attribute name="value" type="xs:string"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="excelFile">
+        <xs:complexContent>
+            <xs:extension base="excel:type-file-excel-base">
+                <xs:sequence>
+                    <xs:element name="sourcePath">
+                        <xs:complexType>
+                            <xs:attribute name="uri" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="targetPath">
+                        <xs:complexType>
+                            <xs:attribute name="uri" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="delimiter">
+                        <xs:complexType>
+                            <xs:attribute name="value" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="overWrite" type="cmn:type-true-false"
+								minOccurs="1" maxOccurs="1" />
+                    <xs:element name="templateExcelPath">
+                        <xs:complexType>
+                            <xs:attribute name="uri" type="xs:string" use="optional"/>
+                        </xs:complexType>
+                    </xs:element>
+                    
+                    <xs:element name="stripLeadingQuote" type="cmn:type-true-false" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="autoColumnSize" type="cmn:type-true-false" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="abortOnError" type="cmn:type-true-false" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="charset" minOccurs="0">
+                        <xs:complexType>
+                            <xs:attribute name="value" type="cmn:standard-charsets"
+                                          use="required"/>
                         </xs:complexType>
                     </xs:element>
                 </xs:sequence>

@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.sort;
 
@@ -42,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSecondaryKeyFields }
+     * Create an instance of {@link TypePrimaryKeyFields }
      * 
      */
-    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
-        return new TypeSecondaryKeyFields();
-    }
-
-    /**
-     * Create an instance of {@link TypeOutSocket }
-     * 
-     */
-    public TypeOutSocket createTypeOutSocket() {
-        return new TypeOutSocket();
+    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
+        return new TypePrimaryKeyFields();
     }
 
     /**
@@ -66,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeSortBase }
+     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
      * 
      */
-    public TypeSortBase createTypeSortBase() {
-        return new TypeSortBase();
+    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
+        return new TypePrimaryKeyFieldsAttributes();
     }
 
     /**
@@ -82,19 +62,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFieldsAttributes }
+     * Create an instance of {@link TypeOutSocket }
      * 
      */
-    public TypePrimaryKeyFieldsAttributes createTypePrimaryKeyFieldsAttributes() {
-        return new TypePrimaryKeyFieldsAttributes();
+    public TypeOutSocket createTypeOutSocket() {
+        return new TypeOutSocket();
     }
 
     /**
-     * Create an instance of {@link TypePrimaryKeyFields }
+     * Create an instance of {@link TypeSortBase }
      * 
      */
-    public TypePrimaryKeyFields createTypePrimaryKeyFields() {
-        return new TypePrimaryKeyFields();
+    public TypeSortBase createTypeSortBase() {
+        return new TypeSortBase();
+    }
+
+    /**
+     * Create an instance of {@link TypeSecondaryKeyFields }
+     * 
+     */
+    public TypeSecondaryKeyFields createTypeSecondaryKeyFields() {
+        return new TypeSecondaryKeyFields();
     }
 
 }
