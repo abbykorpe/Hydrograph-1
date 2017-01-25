@@ -21,3 +21,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 11.#640  [Pooja Yadav] - Xml Input component : Validation while browsing file is not present.
 12.#636  [Ashika Holkar] - All Data base components: Port field accepts string values
 13.#668 [Rakesh Kanchalwar] - Safe property should be present on xml input component 
+14.#644 [Rakesh Kanchalwar] -  Run Config setting window: Run Utility and Project should be mandatory
+
