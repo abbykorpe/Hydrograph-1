@@ -391,7 +391,7 @@ public class Messages extends NLS {
 	public static String MYSQL;
 	public static String TERADATA;
 	public static String OTHERS;
-	public static String THIN;
+	public static String ORACLE_DRIVER_CLASS;
 	public static  String REDSHIFT_DRIVER_CLASS;
 	public static  String MYSQL_DRIVER_CLASS;
 	public static  String TERADATA_DRIVER_CLASS;
