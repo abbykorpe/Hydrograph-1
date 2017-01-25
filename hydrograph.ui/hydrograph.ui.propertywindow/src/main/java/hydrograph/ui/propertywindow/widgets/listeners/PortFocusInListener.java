@@ -30,53 +30,41 @@ import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 /**
- * VerifyNumericAndParameterListener verifies value is numeric or parameter
- * 
+ * PortFocusInListener class sets focus on Port Widget
  * @author Bitwise
  *
  */
-public class VerifyNumericAndParameterListener implements IELTListener {
-
-	private ControlDecoration txtDecorator;
+public class PortFocusInListener implements IELTListener{
+	
+	ControlDecoration txtDecorator;
 
 	@Override
 	public int getListenerType() {
-		return SWT.Modify;
+		return SWT.FocusIn;
 	}
 
 	@Override
 	public Listener getListener(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helpers,
 			Widget... widgets) {
-		final Widget[] widgetList = widgets;
-		if (helpers != null) {
+		if (helpers != null){
 			txtDecorator = (ControlDecoration) helpers.get(HelperType.CONTROL_DECORATION);
 		}
-
+		
 		Listener listener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				String string = ((Text) widgetList[0]).getText();
-				if (event.type == SWT.Modify) {
-					if (StringUtils.isNotBlank(string)) {
-						Matcher matchs = Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(string);
-						if (matchs.matches()) {
-							txtDecorator.hide();
-							((Text) widgetList[0]).setToolTipText("");
-							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
-						} else {
-							txtDecorator.show();
-							txtDecorator.setDescriptionText(Constants.PORT_WIDGET_ERROR);
-							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
-						}
-					} else {
+				String charSet = ((Text) widgets[0]).getText().trim();
+				if(SWT.FocusIn == event.type) {
+					Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(charSet);
+					if (StringUtils.isBlank(charSet)) {
 						txtDecorator.show();
-						((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
-
+						((Text) widgets[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						((Text) widgets[0]).setToolTipText(txtDecorator.getDescriptionText());
+					} else if(!matchs.matches()) {
+						txtDecorator.show();
+					} else{
+						txtDecorator.hide();
 					}
-				}else{
-					txtDecorator.hide();
-					((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
 				}
 			}
 		};

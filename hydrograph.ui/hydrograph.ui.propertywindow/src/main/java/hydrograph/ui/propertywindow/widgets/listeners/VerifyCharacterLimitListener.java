@@ -3,7 +3,6 @@ package hydrograph.ui.propertywindow.widgets.listeners;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -27,7 +26,7 @@ public class VerifyCharacterLimitListener implements IELTListener{
 
 	@Override
 	public int getListenerType() {
-		return SWT.Verify;
+		return SWT.Modify;
 	}
 
 	@Override
@@ -40,22 +39,20 @@ public class VerifyCharacterLimitListener implements IELTListener{
 		}
 
 		
-		Listener listener=new Listener() {
+		Listener listener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				Text text = (Text)widgetList[0];
+				Text text = (Text) widgetList[0];
 				text.setTextLimit(characterLimit);
-				String string=event.text;
-				Matcher matchs=Pattern.compile(Constants.REGEX).matcher(string);
-				if((!matchs.matches())){
+				String value = ((Text) widgets[0]).getText().trim();
+				Matcher matchs = Pattern.compile(Constants.PARAMETER_REGEX).matcher(value);
+				if ((!matchs.matches())) {
 					txtDecorator.setDescriptionText(Messages.FIELDCHARACTER);
 					txtDecorator.show();
-					event.doit=false;
-			}else if((matchs.matches())|| 
-						((StringUtils.startsWith(string, "@")||(StringUtils.startsWith(string, "@{") || StringUtils.endsWith(string, "}")) ||
-								!StringUtils.contains(string, "@{}")))){
-				txtDecorator.hide();
-			}
+					event.doit = false;
+				} else if (matchs.matches()) {
+					txtDecorator.hide();
+				}
 			}
 		};
 	return listener;

@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
+
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.SWTResourceManager;
@@ -679,7 +680,13 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 					}
 				}
 
-			} else {
+			} else if(propertyInfo.getPropertyValue() != null && StringUtils.equalsIgnoreCase(propertyInfo.getPropertyName().toString(), "PORT")){
+				if(!propertyInfo.getPropertyValue().toString().matches(Constants.REGEX_NUMERIC_AND_PARAMETER)){
+					lblDecorator.show();
+				}else{
+					lblDecorator.hide();
+				}
+			}else {
 				if (propertyInfo.getPropertyValue() != null && (!propertyInfo.getPropertyValue().equals(""))) {
 					lblDecorator.hide();
 				} else {

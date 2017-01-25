@@ -47,6 +47,7 @@ import hydrograph.ui.propertywindow.widgets.customwidgets.ELTXmlPropertiesContai
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveInputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.HiveOutputSingleColumnWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.OutputRecordCountWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.PortWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.PropogateWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.RadioButtonsWidget;
 import hydrograph.ui.propertywindow.widgets.customwidgets.RunSQLQueryWidget;
@@ -110,7 +111,7 @@ public class WidgetFactory {
 		SID_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getSIDNameWidgetConfig()),
 		DATABASE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getDatabaseNameWidgetConfig()),
 		HOST_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getHostNameWidgetConfig()),
-		PORT_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getPortWidgetConfig()),
+		PORT_WIDGET(PortWidget.class, WidgetHelper.INSTANCE.getPortWidgetConfig()),
 		TABLE_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getTableNameWidgetConfig()),
 		USER_NAME_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getUserNameWidgetConfig()),
 		NO_OF_RECORDS_WIDGET(TextBoxWithLabelWidget.class, WidgetHelper.INSTANCE.getNoOfRecordsWidgetConfig()),
@@ -171,6 +172,7 @@ public class WidgetFactory {
 		RUN_SQL_QUERY_WIDGET(RunSQLQueryWidget.class),
 		DATABASE_LIST_WIDGET(DropDownWidget.class, WidgetHelper.INSTANCE.getDatabaseListWidgetConfig());
 		
+              
 		private Class<?> clazz = null;
 		private WidgetConfig widgetConfig = null;
 		

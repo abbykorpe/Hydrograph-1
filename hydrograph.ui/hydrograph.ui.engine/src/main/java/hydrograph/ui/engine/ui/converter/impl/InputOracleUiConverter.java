@@ -12,6 +12,7 @@
  ******************************************************************************/
 package hydrograph.ui.engine.ui.converter.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,8 +70,13 @@ public class InputOracleUiConverter extends InputUiConverter {
 		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),
 				inputOracle.getHostName() == null ? "" : inputOracle.getHostName().getValue());
 
-		setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-				inputOracle.getPort() == null ? "" : inputOracle.getPort().getValue());
+		try {
+			BigInteger bigInteger = inputOracle.getPort().getValue();
+			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
+					bigInteger == null ? "" : inputOracle.getPort().getValue());
+		} catch (Exception e) {
+			LOGGER.error("Exception" + e);
+		}
 
 		setValueInPropertyMap(PropertyNameConstants.ORACLE_SID.value(),
 				inputOracle.getSid() == null ? "" : inputOracle.getSid().getValue());

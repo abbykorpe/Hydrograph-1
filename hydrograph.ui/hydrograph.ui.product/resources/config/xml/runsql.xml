@@ -50,7 +50,7 @@
 		<tns:property dataType="string" name="port" value="1521" renderer="PORT_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the Database Port provided by the user">
-		
+			<tns:validator>PORT_VALIDATOR</tns:validator>
 		</tns:property>
 		
 		
