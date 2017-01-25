@@ -67,6 +67,7 @@ public class InputXmlConverter extends InputConverter {
 		rowTag.setValue((String) properties.get(PropertyNameConstants.ROW_TAG.value()));
 		xmlFile.setRowTag(rowTag);
 		
+		xmlFile.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 	}
 	
 	@Override
