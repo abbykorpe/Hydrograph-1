@@ -114,12 +114,12 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 //        println("+++++++++++++++++++++Application End+++++++++++++++++++++")
 
 
-    jobInfo.componentInfoList.asScala.foreach(c=>{
+    /*jobInfo.componentInfoList.asScala.foreach(c=>{
       if(!c.getCurrentStatus.equals("FAILED") && c.getStageId.equals(-1)){
         c.setCurrentStatus("SUCCESSFUL")
       }
 
-    })
+    })*/
 //        println("Spark ApplicationEnd: " + applicationEnd.time+" msec");
   }
 

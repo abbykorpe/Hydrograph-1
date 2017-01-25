@@ -1,9 +1,10 @@
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputFileXMLEntity
+import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.SchemaCreator
+import hydrograph.engine.spark.components.utils.{FieldContext, SchemaCreator}
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Column, DataFrame}
 import org.slf4j.{Logger, LoggerFactory}
@@ -62,13 +63,15 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
         + " rootTag as " + iFileXMLEntity.getRootTag
         + " absoluteXPath as " + iFileXMLEntity.getAbsoluteXPath
         + " at Path: " + iFileXMLEntity.getPath)
-      Map(key -> df)
+     // Map(key -> df)
 
-//      val flattenedSchema = flattenSchema(df.schema)
-//      val renamedCols = flattenedSchema.map(name => new Column(name.toString()).as(name.toString().replace(".","_")))
-//      val df_new: DataFrame = df.select(renamedCols:_*)
 
-//      Map(key -> df_new)
+
+      val flattenedSchema = flattenSchema(df.schema)
+      val renamedCols = flattenedSchema.map(name => new Column(name.toString()).as(name.toString().replace(".","_")))
+      val df_new: DataFrame = df.select(renamedCols:_*)
+
+      Map(key -> df_new)
 
     } catch {
 
