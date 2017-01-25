@@ -40,7 +40,7 @@
 				<field name="Gift" inSocketId="in0" />
 			</inputFields>
 			<properties>
-				<property name="Filter" value="10" />
+				<property name="Filter" value="120" />
 			</properties>
 		</operation>
 		<outSocket id="out1" type="out">
