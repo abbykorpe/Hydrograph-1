@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -29,6 +32,7 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 public class UpdateByKeysWidget extends AbstractWidget{
 
@@ -37,10 +41,11 @@ public class UpdateByKeysWidget extends AbstractWidget{
 	private String propertyValue;
 	private Button selectKeysButton;
 	private List<AbstractWidget> widgets;
-	private Text textBox;
+	private Text updateByKeysTextBox;
 	LinkedHashMap<String, Object> tempPropertyMap;
 	private Map<String, String> initialMap;
 	List<String> schemaFields;
+	private ControlDecoration updateByKeysTextBoxDecorator;
 
 	public UpdateByKeysWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
@@ -60,21 +65,40 @@ public class UpdateByKeysWidget extends AbstractWidget{
 		selectUpdateKeysComposite.attachWidget(defaultLable1);
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 		
-		ELTDefaultTextBox defaultTextBox = new ELTDefaultTextBox();
-		selectUpdateKeysComposite.attachWidget(defaultTextBox);
-		 textBox=(Text)defaultTextBox.getSWTWidgetControl();
-		 textBox.setEnabled(false);
-		setPropertyHelpWidget((Control) defaultTextBox.getSWTWidgetControl());
+		ELTDefaultTextBox defaultUpdateByKeysTextBox = new ELTDefaultTextBox();
+		selectUpdateKeysComposite.attachWidget(defaultUpdateByKeysTextBox);
+		 updateByKeysTextBox=(Text)defaultUpdateByKeysTextBox.getSWTWidgetControl();
+		 updateByKeysTextBox.setEnabled(false);
+		setPropertyHelpWidget((Control) defaultUpdateByKeysTextBox.getSWTWidgetControl());
 		
 		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Messages.LABEL_SELECT_KEYS);
 		selectUpdateKeysComposite.attachWidget(eltDefaultButton);
 		selectKeysButton=(Button)eltDefaultButton.getSWTWidgetControl();
 		
+		updateByKeysTextBoxDecorator = WidgetUtility.addDecorator(updateByKeysTextBox, Messages.bind(Messages.EMPTY_FIELD, "JDBC Driver \n Class"));
+		updateByKeysTextBoxDecorator.setMarginWidth(3);
+
 		if(StringUtils.isNotEmpty(propertyValue)){
-			textBox.setText(propertyValue);
+			updateByKeysTextBox.setText(propertyValue);
+			updateByKeysTextBoxDecorator.hide();
 		}
 		
 		attachButtonListner(selectKeysButton);
+		
+		
+		updateByKeysTextBox.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent event) {
+				Text textBox=(Text)event.widget;
+				if(StringUtils.isBlank(textBox.getText())){
+					updateByKeysTextBoxDecorator.show();
+				}else{
+					updateByKeysTextBoxDecorator.hide();
+				}
+			}
+		});
+		
 	}
 	
 	
@@ -89,13 +113,13 @@ public class UpdateByKeysWidget extends AbstractWidget{
 				FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 				fieldDialog.setComponentName(buttonText);
 				fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
-				if(StringUtils.isNotBlank(textBox.getText())){
-					fieldDialog.setPropertyFromCommaSepratedString(textBox.getText());
+				if(StringUtils.isNotBlank(updateByKeysTextBox.getText())){
+					fieldDialog.setPropertyFromCommaSepratedString(updateByKeysTextBox.getText());
 				}
 				fieldDialog.open();
 				String valueForNewTableTextBox = fieldDialog.getResultAsCommaSeprated();
 				if(valueForNewTableTextBox !=null){
-					textBox.setText(valueForNewTableTextBox);
+					updateByKeysTextBox.setText(valueForNewTableTextBox);
 				}
 				showHideErrorSymbol(widgets);
 			}
@@ -128,7 +152,7 @@ public class UpdateByKeysWidget extends AbstractWidget{
 	protected void setToolTipErrorMessage() {
 		String toolTipErrorMessage = null;
 
-		if (StringUtils.isBlank(textBox.getText()))
+		if (StringUtils.isBlank(updateByKeysTextBox.getText()))
 			toolTipErrorMessage = "Text can not be blank";
 
 		setToolTipMessage(toolTipErrorMessage);
@@ -137,7 +161,7 @@ public class UpdateByKeysWidget extends AbstractWidget{
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
 		tempPropertyMap = new LinkedHashMap<>();
-		tempPropertyMap.put(this.propertyName, textBox.getText());
+		tempPropertyMap.put(this.propertyName, updateByKeysTextBox.getText());
 		
 		setToolTipErrorMessage();
 		return tempPropertyMap;
@@ -145,7 +169,7 @@ public class UpdateByKeysWidget extends AbstractWidget{
 
 	@Override
 	public boolean isWidgetValid() {
-		if (StringUtils.isNotBlank(textBox.getText())) {
+		if (StringUtils.isNotBlank(updateByKeysTextBox.getText())) {
 			return true;
 		}
 		return false;

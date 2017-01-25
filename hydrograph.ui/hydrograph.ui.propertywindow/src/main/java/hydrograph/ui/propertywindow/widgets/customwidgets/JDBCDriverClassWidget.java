@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -21,6 +20,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.JDBCDriverClassWidgetDatastructure;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.datastructures.ComboBoxParameter;
+import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -44,18 +44,16 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(UpdateByKeysWidget.class);
 	private String propertyName;
 	private JDBCDriverClassWidgetDatastructure propertyValue;
-	private Text textBox;
+	private Text jdbcDriverClassTextBox;
 	private DropDownConfig dropDownConfig;
 	private Combo combo;
 	private LinkedHashMap<String, Object> property=new LinkedHashMap<>();
 	private ComboBoxParameter comboBoxParameter=new ComboBoxParameter();
 	private List<AbstractWidget> widgetList;
-	private Text text;
-	private ControlDecoration txtDecorator;
-	private ControlDecoration textBoxDecorator;
+	private Text parameterTextBox;
+	private ControlDecoration paramterTextBoxDecorator;
+	private ControlDecoration jdbcDriverClassTextBoxDecorator;
 	private LinkedHashMap<String, String> map;
-	
-
 	public JDBCDriverClassWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
@@ -63,6 +61,7 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 		this.propertyValue =  (JDBCDriverClassWidgetDatastructure)componentConfigProp.getPropertyValue();
 		if(propertyValue==null){
 			propertyValue=new JDBCDriverClassWidgetDatastructure();
+			propertyValue.setJdbcDriverClassValue(Constants.THIN);
 		}
 	}
 	
@@ -85,35 +84,35 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 		ELTDefaultTextBox eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(true);
 		jdbcDriverClassComposite.attachWidget(eltDefaultTextBox);
 		eltDefaultTextBox.visibility(false);
-		text=(Text)eltDefaultTextBox.getSWTWidgetControl();
+		parameterTextBox=(Text)eltDefaultTextBox.getSWTWidgetControl();
 		
 		
-		ELTDefaultLable defaultLable = new ELTDefaultLable("JDBC Driver \n Class");
-		jdbcDriverClassComposite.attachWidget(defaultLable);
-		setPropertyHelpWidget((Control) defaultLable.getSWTWidgetControl());
+		ELTDefaultLable driverClassLable = new ELTDefaultLable(Messages.LABEL_JDBC_DRIVER_CLASS);
+		jdbcDriverClassComposite.attachWidget(driverClassLable);
+		setPropertyHelpWidget((Control) driverClassLable.getSWTWidgetControl());
 		
-		AbstractELTWidget textBoxWidget = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(120);
+		ELTDefaultTextBox textBoxWidget = new ELTDefaultTextBox().grabExcessHorizontalSpace(true).textBoxWidth(120);
 		jdbcDriverClassComposite.attachWidget(textBoxWidget);
-		textBox=(Text)textBoxWidget.getSWTWidgetControl();
-		textBox.setText("thin");
-		textBoxDecorator = WidgetUtility.addDecorator(textBox, Messages.bind(Messages.EMPTY_FIELD, "JDBC Driver \n Class"));
-		textBoxDecorator.hide();
+		jdbcDriverClassTextBox=(Text)textBoxWidget.getSWTWidgetControl();
+		jdbcDriverClassTextBoxDecorator = WidgetUtility.addDecorator(jdbcDriverClassTextBox, Messages.bind(Messages.EMPTY_FIELD, Messages.LABEL_JDBC_DRIVER_CLASS));
+		jdbcDriverClassTextBoxDecorator.setMarginWidth(3);
+		jdbcDriverClassTextBoxDecorator.hide();
+		ListenerHelper helper1 = new ListenerHelper();
+		helper1.put(HelperType.CONTROL_DECORATION, jdbcDriverClassTextBoxDecorator);
+
+		try {
+			textBoxWidget.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,
+					helper1, textBoxWidget.getSWTWidgetControl());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		textBox.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent event) {
-				if(StringUtils.isNotBlank(((Text)event.getSource()).getText())){
-					textBoxDecorator.hide();
-					textBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
-				}
-			}
-		});
 		
 		setPropertyHelpWidget((Control) textBoxWidget.getSWTWidgetControl());	
-		txtDecorator = WidgetUtility.addDecorator(text, Messages.bind(Messages.EMPTY_FIELD, dropDownConfig.getName()));
+		paramterTextBoxDecorator = WidgetUtility.addDecorator(parameterTextBox, Messages.bind(Messages.EMPTY_FIELD, dropDownConfig.getName()));
 		
 		ListenerHelper helper = new ListenerHelper();
-		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		helper.put(HelperType.CONTROL_DECORATION, paramterTextBoxDecorator);
 		
 		
 		try {
@@ -140,16 +139,16 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 	
 	private void populateWidget(){	
 		if(propertyValue.isParameter()){
-			text.setVisible(true);
-			text.setText(propertyValue.getDataBaseValue());
+			parameterTextBox.setVisible(true);
+			parameterTextBox.setText(propertyValue.getDataBaseValue());
 			combo.select(dropDownConfig.getItems().indexOf(Constants.PARAMETER));
 		}else{
 			if(dropDownConfig.getItems().contains(propertyValue.getDataBaseValue())){
-				int indexOf = dropDownConfig.getItems().indexOf(propertyValue);
+				int indexOf = dropDownConfig.getItems().indexOf(propertyValue.getDataBaseValue());
 				combo.select(indexOf);
 			}
 		}
-			textBox.setText(propertyValue.getJdbcDriverClassValue());
+			jdbcDriverClassTextBox.setText(propertyValue.getJdbcDriverClassValue());
 	}
 	
 	private boolean addComboSelectionListner() {
@@ -159,21 +158,21 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 				showHideErrorSymbol(widgetList);
 				String str = ((Combo)event.getSource()).getText();
 				if(dropDownConfig.getItems().contains(str)){
-					textBoxDecorator.hide();
-					textBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+					jdbcDriverClassTextBoxDecorator.hide();
+					jdbcDriverClassTextBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 					if(str.equalsIgnoreCase(Constants.ORACLE)){
-						textBox.setText("thin");
+						jdbcDriverClassTextBox.setText(Constants.THIN);
 					}else if(str.equalsIgnoreCase(Constants.REDSHIFT)){
-						textBox.setText("JDBC 4.2");
+						jdbcDriverClassTextBox.setText(Constants.REDSHIFT_DRIVER_CLASS);
 					}else if(str.equalsIgnoreCase(Constants.MYSQL)){
-						textBox.setText("Connector/J");
+						jdbcDriverClassTextBox.setText(Constants.MYSQL_DRIVER_CLASS);
 					}else if(str.equalsIgnoreCase(Constants.TERADATA)){
-						textBox.setText("TeraJDBC4");
+						jdbcDriverClassTextBox.setText(Constants.TERADATA_DRIVER_CLASS);
 					}else if(str.equalsIgnoreCase(Constants.PARAMETER)){
-						textBox.setText("");
-						textBox.setBackground(new Color(Display.getDefault(), 255, 255, 204));
-						textBoxDecorator.setMarginWidth(3);
-						textBoxDecorator.show();
+						jdbcDriverClassTextBox.setText("");
+						jdbcDriverClassTextBox.setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						jdbcDriverClassTextBoxDecorator.setMarginWidth(3);
+						jdbcDriverClassTextBoxDecorator.show();
 					}
 				}
 			}
@@ -190,11 +189,11 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 			/*comboBoxParameter.setOption(text.getText());
 			comboBoxParameter.setOptionValue(text.getText());*/
 			datastructure.setParameter(true);
-			datastructure.setJdbcDriverClassValue(textBox.getText());
-			datastructure.setDataBaseValue(text.getText());
+			datastructure.setJdbcDriverClassValue(jdbcDriverClassTextBox.getText());
+			datastructure.setDataBaseValue(parameterTextBox.getText());
 		}else{
 			datastructure.setDataBaseValue(combo.getText());
-			datastructure.setJdbcDriverClassValue(textBox.getText());
+			datastructure.setJdbcDriverClassValue(jdbcDriverClassTextBox.getText());
 		}
 		propertymap.put(this.propertyName, datastructure);
 		setToolTipErrorMessage();
@@ -213,8 +212,8 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 	
 	private void setToolTipErrorMessage(){
 		String toolTipErrorMessage = null;
-		if(txtDecorator.isVisible())
-			toolTipErrorMessage = txtDecorator.getDescriptionText();
+		if(paramterTextBoxDecorator.isVisible())
+			toolTipErrorMessage = paramterTextBoxDecorator.getDescriptionText();
 						
 		setToolTipMessage(toolTipErrorMessage);
 	}
@@ -222,7 +221,7 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 	@Override
 	public void addModifyListener(Property property, ArrayList<AbstractWidget> widgetList) {
 		this.widgetList = widgetList;
-		   text.addModifyListener(new ModifyListener() {
+		   parameterTextBox.addModifyListener(new ModifyListener() {
 				
 				@Override
 				public void modifyText(ModifyEvent e) {

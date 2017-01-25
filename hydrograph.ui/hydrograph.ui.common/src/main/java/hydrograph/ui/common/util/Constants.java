@@ -64,7 +64,6 @@ public class Constants {
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
 	// Used for validating Numeric values (only 4 digits) E.g. 1234 and Parameters E.g  @{Param_123}
 	public static final String REGEX_NUMERIC_AND_PARAMETER = "^([\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1})|([\\d]{4})$";
-	
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX ="^[\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1}";
 
@@ -354,4 +353,10 @@ public class Constants {
 	public static final String RUN_SQL_DATABASE_CONNECTION_NAME = "databaseConnectionName";
 	public static final Object RUN_SQL_QUERY = "runsqlquery";
 	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter e.g. 1234, @{Param}";
-	}
+
+	//database driver class name for jdbc component
+	public static final String THIN= "thin";
+	public static final String REDSHIFT_DRIVER_CLASS ="JDBC 4.2";
+	public static final String MYSQL_DRIVER_CLASS ="Connector/J";
+	public static final String TERADATA_DRIVER_CLASS ="TeraJDBC4";
+}
