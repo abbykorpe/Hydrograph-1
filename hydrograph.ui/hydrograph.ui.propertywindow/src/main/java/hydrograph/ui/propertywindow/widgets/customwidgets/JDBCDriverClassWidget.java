@@ -108,7 +108,7 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 	
 	private void populateWidget(){	
 		jdbcDriverClassTextBox.setText(propertyValue);
-		if(StringUtils.equalsIgnoreCase(propertyValue, Messages.THIN)){
+		if(StringUtils.equalsIgnoreCase(propertyValue, Messages.ORACLE_DRIVER_CLASS)){
 			combo.select(dropDownConfig.getItems().indexOf(Messages.ORACLE));
 		}else if(StringUtils.equalsIgnoreCase(propertyValue, Messages.REDSHIFT_DRIVER_CLASS)){
 			combo.select(dropDownConfig.getItems().indexOf(Messages.REDSHIFT));
@@ -140,7 +140,7 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 					jdbcDriverClassTextBoxDecorator.hide();
 					jdbcDriverClassTextBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
 					if(str.equalsIgnoreCase(Messages.ORACLE)){
-						jdbcDriverClassTextBox.setText(Messages.THIN);
+						jdbcDriverClassTextBox.setText(Messages.ORACLE_DRIVER_CLASS);
 					}else if(str.equalsIgnoreCase(Messages.REDSHIFT)){
 						jdbcDriverClassTextBox.setText(Messages.REDSHIFT_DRIVER_CLASS);
 					}else if(str.equalsIgnoreCase(Messages.MYSQL)){
