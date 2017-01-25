@@ -258,6 +258,8 @@ public class Messages extends NLS {
 	public static String SUBJOB_PATH;
 	public static String LABEL_DATABASE;
 	public static String LABEL_DB_URL;
+	public static String LABEL_SELECT_KEYS;
+	public static String LABEL_UPDATE_BY_KEYS;
 
 	public static String HIVE_FIELD_DIALOG_ERROR;
 	public static String EMPTY_TARGET_FIELD_ERROR;

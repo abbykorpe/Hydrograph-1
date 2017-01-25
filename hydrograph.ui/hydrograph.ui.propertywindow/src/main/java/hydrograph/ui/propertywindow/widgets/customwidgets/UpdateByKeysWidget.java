@@ -18,6 +18,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
@@ -55,7 +56,7 @@ public class UpdateByKeysWidget extends AbstractWidget{
 		ELTDefaultSubgroupComposite selectUpdateKeysComposite = new ELTDefaultSubgroupComposite(subGroup.getContainerControl());
 		selectUpdateKeysComposite.createContainerWidget();
 		
-		ELTDefaultLable defaultLable1 = new ELTDefaultLable("Update By \n Keys");
+		ELTDefaultLable defaultLable1 = new ELTDefaultLable(Messages.LABEL_UPDATE_BY_KEYS);
 		selectUpdateKeysComposite.attachWidget(defaultLable1);
 		setPropertyHelpWidget((Control) defaultLable1.getSWTWidgetControl());
 		
@@ -65,7 +66,7 @@ public class UpdateByKeysWidget extends AbstractWidget{
 		 textBox.setEnabled(false);
 		setPropertyHelpWidget((Control) defaultTextBox.getSWTWidgetControl());
 		
-		ELTDefaultButton eltDefaultButton = new ELTDefaultButton("Select Keys");
+		ELTDefaultButton eltDefaultButton = new ELTDefaultButton(Messages.LABEL_SELECT_KEYS);
 		selectUpdateKeysComposite.attachWidget(eltDefaultButton);
 		selectKeysButton=(Button)eltDefaultButton.getSWTWidgetControl();
 		
@@ -84,7 +85,7 @@ public class UpdateByKeysWidget extends AbstractWidget{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				String buttonText = "Update Keys";//Messages.PRIMARY_KEYS_WINDOW_LABEL;
+				String buttonText = Messages.UPDATE_KEYS_WINDOW_LABEL;
 				FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 				fieldDialog.setComponentName(buttonText);
 				fieldDialog.setSourceFieldsFromPropagatedSchema(getPropagatedSchema());
