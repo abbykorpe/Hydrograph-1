@@ -118,7 +118,7 @@ def scpToRemoteServer(def fileToMove,def toDirectoryPath ,def username,def host,
                 	)
      	
           try {
-          		if(usepassword.equals(true)){
+          		if(usepassword.equals('true')){
 			 	  	ant.scp(
 		               	 	file: fileToMove,
 		                	todir: ""+username+"@"+host+":"+basePath+ "/" +toDirectoryPath,
@@ -150,7 +150,7 @@ def sshToRemoteServer(def host, def username, def password,def executeCommand,de
                		classpath: configurations.sshAntTask.asPath)
 
         try {
-        	if(usepassword.equals(true)){
+        	if(usepassword.equals('true')){
 	            ant.sshexec(
 	                    host: host,
 	                    username: username,
