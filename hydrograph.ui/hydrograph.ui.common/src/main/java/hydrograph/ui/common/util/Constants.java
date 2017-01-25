@@ -46,6 +46,8 @@ public class Constants {
 	public static final String US_ASCII = "US-ASCII";
 	public static final String UTF_8 = "UTF-8";
 
+	public static final String OTHERS= "Others";
+	
 	public static final String TRUE = "True";
 	public static final String FALSE = "False";
 	public static final String OPERATION_FIELDS_WINDOW_TITLE = "Operation Fields";
@@ -58,7 +60,6 @@ public class Constants {
 	public static final String REGEX = "[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*";
 	// Used for validating Numeric values (only 4 digits) E.g. 1234 and Parameters E.g  @{Param_123}
 	public static final String REGEX_NUMERIC_AND_PARAMETER = "^([\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1})|([\\d]{4})$";
-	
 	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX ="^[\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1}";
 
@@ -348,4 +349,5 @@ public class Constants {
 	public static final String RUN_SQL_DATABASE_CONNECTION_NAME = "databaseConnectionName";
 	public static final Object RUN_SQL_QUERY = "runsqlquery";
 	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter e.g. 1234, @{Param}";
+
 }

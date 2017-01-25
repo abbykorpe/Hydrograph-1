@@ -14,14 +14,14 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
+import org.slf4j.Logger;
+
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-
-import org.slf4j.Logger;
 
 
 /**
@@ -45,7 +45,7 @@ public class TextBoxWithLabelWidgetWithoutAnyValidation extends TextBoxWithLabel
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
-		this.propertyValue = String.valueOf(componentConfigProp.getPropertyValue());
+		this.propertyValue = componentConfigProp.getPropertyValue()==null?"":String.valueOf(componentConfigProp.getPropertyValue());
 	}
 
 	protected void setToolTipErrorMessage(){

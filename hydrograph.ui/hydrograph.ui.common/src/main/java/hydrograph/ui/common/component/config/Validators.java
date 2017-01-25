@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -113,6 +114,7 @@ public enum Validators {
     PortValidationRule("PORT_VALIDATOR"),
     @XmlEnumValue("SECONDARY_KEY_VALIDATION")
     SecondaryColumnKeyValidation("SECONDARY_KEY_VALIDATION");
+
 
     
     private final String value;

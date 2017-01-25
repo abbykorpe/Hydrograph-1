@@ -41,7 +41,7 @@ public enum PropertyNameConstants {
 		JDBC_DRIVER("jdbcDriver"),
 		USER_NAME("userName"),
 		PASSWORD("password"),
-		CHUNK_SIZE("chunkSize"),
+		BATCH_SIZE("batchSize"),
 		TABLE_NAME("tableName"),
 		SCHEMA_NAME("schemaName"),
 		EXTERNAL_TABLE_PATH("externalTablePath"),
@@ -58,7 +58,10 @@ public enum PropertyNameConstants {
 		ROOT_TAG("rootTag"),
 		ROW_TAG("rowTag"),
 		RUN_SQL_DATABASE_CONNECTION_NAME("databaseConnectionName"),
-		RUN_SQL_QUERY("runsqlquery");
+		RUN_SQL_QUERY("runsqlquery"),
+		SELECT_UPDATE_KEYS("update"),
+		URL("url"),
+		JDBC_DB_DRIVER("jdbcDriverClass");
 	
 		private final String value;
 

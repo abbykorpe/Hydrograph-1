@@ -11,7 +11,6 @@
  * limitations under the License.
  ******************************************************************************/
 
- 
 package hydrograph.ui.propertywindow.messages;
 
 import org.eclipse.osgi.util.NLS;
@@ -40,11 +39,11 @@ public class Messages extends NLS {
 	public static String WARNING;
 	public static String FILE_NOT_FOUND;
 	public static String NOT_EXISTS;
-	public static String FILE_DOES_NOT_EXISTS ;
+	public static String FILE_DOES_NOT_EXISTS;
 
 	public static String SCHEMA_CONFIG_XSD_PATH;
 	public static String EXPORT_SCHEMA;
-	public static String SCHEMA_IS_INVALID_DO_YOU_WISH_TO_CONTINUE; 
+	public static String SCHEMA_IS_INVALID_DO_YOU_WISH_TO_CONTINUE;
 	public static String FIELDNAME_NOT_ALPHANUMERIC_ERROR;
 	public static String FIELDNAME_SHOULD_NOT_BE_BLANK;
 	public static String EMPTY_XML_CONTENT;
@@ -143,11 +142,11 @@ public class Messages extends NLS {
 	public static String COPY_GRID_SUFFIX;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
-    public static String ADD_ICON;
-    public static String DELETE_ICON;
-    public static String UP_ICON;
-    public static String DOWN_ICON;
-    public static String INFORMATION;
+	public static String ADD_ICON;
+	public static String DELETE_ICON;
+	public static String UP_ICON;
+	public static String DOWN_ICON;
+	public static String INFORMATION;
 	public static String SAVE_JOB_MESSAGE;
 	public static String IS_PARAMETER;
 	public static String CLASS_NOT_EXIST;
@@ -168,11 +167,11 @@ public class Messages extends NLS {
 	public static String ALPHA_NUMRIC_REGULAR_EXPRESSION;
 	public static String TEXT_FIELD_SHOULD_MATCH;
 	public static String BROWSE_BUTTON_TEXT;
-	public static  String TRANSFORM_EDITOR ;
-	public static  String MANUAL_SYNC;
-	public static  String SYNC_NOW;
-	public static  String MAPPING_SHEET;
-	public static  String PERVIOUS_VALUE;
+	public static String TRANSFORM_EDITOR;
+	public static String MANUAL_SYNC;
+	public static String SYNC_NOW;
+	public static String MAPPING_SHEET;
+	public static String PERVIOUS_VALUE;
 	public static String EmptyFieldNameNotification;
 	public static String EmptySourceFieldNotification;
 	public static String EmptyOutputFieldNotification;
@@ -188,7 +187,7 @@ public class Messages extends NLS {
 	public static String PRECISION_MUST_NOT_BE_BLANK;
 	public static String DATE_FORMAT_MUST_NOT_BE_BLANK;
 	public static String LENGTH_MUST_BE_AN_INTEGER_VALUE;
-	public static String LENGTH_MUST_NOT_BE_BLANK ;
+	public static String LENGTH_MUST_NOT_BE_BLANK;
 	public static String LENGTH_OR_DELIMITER_MUST_NOT_BE_BLANK;
 	public static String ONLY_SPECIFY_LENGTH_OR_DELIMITER;
 	public static String LENGTH_SHOULD_NOT_BE_ZERO;
@@ -197,36 +196,35 @@ public class Messages extends NLS {
 	public static String FILE_DOES_NOT_EXIST;
 	public static String INVALID_FILE_FORMATE;
 	public static String OPERATION_ID_PREFIX;
-    public static String OPERATION_LIST_EMPTY;
-    public static String PULL_BUTTON_LABEL;
-    public static String PULL_SCHEMA;
-    public static String OPERATION_CONTROL;
-    public static String SOURCE;
-    public static String TARGET;
-    public static String MAP_FIELD;
-    public static String OPERATION_ID;
-    public static String OP_CLASS;
-    public static String PARAMETER_LABEL;
-    public static String ALL_DATA_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE;
-    public static String IS_PARAM;
-    public static String FIXEDWIDTH_GRID_ROW ;
+	public static String OPERATION_LIST_EMPTY;
+	public static String PULL_BUTTON_LABEL;
+	public static String PULL_SCHEMA;
+	public static String OPERATION_CONTROL;
+	public static String SOURCE;
+	public static String TARGET;
+	public static String MAP_FIELD;
+	public static String OPERATION_ID;
+	public static String OP_CLASS;
+	public static String PARAMETER_LABEL;
+	public static String ALL_DATA_WILL_BE_LOST_DO_YOU_WISH_TO_CONTINUE;
+	public static String IS_PARAM;
+	public static String FIXEDWIDTH_GRID_ROW;
 	public static String GENERATE_RECORD_GRID_ROW;
 	public static String GENERIC_GRID_ROW;
-	public static String MIXEDSCHEME_GRID_ROW ;
+	public static String MIXEDSCHEME_GRID_ROW;
 
 	public static String MESSAGE_FOR_FETCHING_PROPAGATED_SCHEMA;
 	public static String TITLE_FOR_MESSAGE_BOX_OF_FETCHING_PROPAGATED_SCHEMA;
 	public static String ADD_OPERATION_CONTROL;
 	public static String DELETE_OPERATION_CONTROL;
-	
+
 	public static String IN0_PORT;
 	public static String IN1_PORT;
 	public static String LOOKUP_PORT_LABEL;
 	public static String DRIVER_PORT_LABEL;
 	public static String LOOKUP_PORT_CHANGE;
 	public static String INVALID_HOST_NAME;
-    
-	
+
 	public static String LABEL_DELIMITER;
 	public static String LABEL_QUOTE;
 	public static String LABEL_SID_NAME;
@@ -247,7 +245,7 @@ public class Messages extends NLS {
 	public static String LABEL_CHUNK_SIZE;
 	public static String LABEL_NO_OF_RECORDS;
 	public static String LABEL_HAS_HEADER;
-	public static String LABEL_SAFE_PROPERTY;	
+	public static String LABEL_SAFE_PROPERTY;
 	public static String LABEL_STRICT;
 	public static String LABEL_COUNT;
 	public static String LABEL_OVERWRITE;
@@ -258,7 +256,12 @@ public class Messages extends NLS {
 	public static String SCHEMA_IS_UPTO_DATE_MESSAGE;
 	public static String FILE_NAME;
 	public static String SUBJOB_PATH;
-	
+	public static String LABEL_DATABASE;
+	public static String LABEL_DB_URL;
+	public static String LABEL_SELECT_KEYS;
+	public static String LABEL_UPDATE_BY_KEYS;
+	public static String LABEL_JDBC_DRIVER_CLASS;
+
 	public static String HIVE_FIELD_DIALOG_ERROR;
 	public static String EMPTY_TARGET_FIELD_ERROR;
 	public static String PARTI_KEY_VALUE_DIALOG_NAME;
@@ -268,10 +271,10 @@ public class Messages extends NLS {
 	public static String HIVE_PARTI_KEY_CHECKBOX_NAME;
 	public static String HIVE_PARTI_KEY_DEL_TOOLTIP;
 	public static String PULL_SCHEMA_MESSAGE_TITLE;
-	
+
 	public static String SCHEMA_IS_NOT_IN_SYNC_WITH_MAPPING;
 	public static String PARAMETER_GRID_SAVE_TOOLTIP;
-	
+
 	public static String ADD_KEY_SHORTCUT_TOOLTIP;
 	public static String DELETE_KEY_SHORTCUT_TOOLTIP;
 	public static String MOVE_UP_KEY_SHORTCUT_TOOLTIP;
@@ -280,31 +283,31 @@ public class Messages extends NLS {
 	public static String EXTRACT;
 
 	public static String CONNECTION_NOT_ESTABLISHED;
-	public static  String HOST_NAME_BLANK_ERROR ;
-	public static  String METASTORE_FORMAT_ERROR;
-	public static String  METASTORE_FORMAT_ERROR_FOR_SQL_QUERY;
-	public static  String INVALID_DB_ERROR;
+	public static String HOST_NAME_BLANK_ERROR;
+	public static String METASTORE_FORMAT_ERROR;
+	public static String METASTORE_FORMAT_ERROR_FOR_SQL_QUERY;
+	public static String INVALID_DB_ERROR;
 
 	public static String EXPRESSION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 
 	public static String OPERATION_COMPOSITE_BROWSE_BUTTON_TOOL_TIP;
 	public static String METASTORE_IMPORT_SUCCESS;
 	public static String ALL_UNSAVED_CHANGES_WILL_BE_LOST_DO_YOU_WISH_TO_EXIT;
-	
+
 	public static String PARAMETER_NOT_FOUND;
-	public static String  GENERATE_NEW_UNIQUE_JOB_ID_FOR_JOB;
-	public static String  GENERATE_NEW_UNIQUE_JOB_ID_FOR_SUB_JOB;
+	public static String GENERATE_NEW_UNIQUE_JOB_ID_FOR_JOB;
+	public static String GENERATE_NEW_UNIQUE_JOB_ID_FOR_SUB_JOB;
 
 	public static String INPUTS_SCHEMA_ARE_NOT_IN_SYNC;
 	public static String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED_IN_SUBJOB;
-	public static String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED; 
+	public static String CONTINUOUS_SCHEMA_PROPAGATION_STOPPED;
 	public static String FILE_PATH_LABEL;
 	public static String EXTERNAL_TABLE_PATH_LABEL;
-	
+
 	public static String DATABASE_SELECT;
 	public static String DATABASE_TABLE_NAME;
 	public static String DATABASE_SQL_QUERY;
-	
+
 	public static String SQL_QUERY_COUNTER;
 	public static String SQL_QUERY;
 	public static String TEST_CONNECTION;
@@ -324,7 +327,6 @@ public class Messages extends NLS {
 	public static String EXPORT_OPTIONS;
 	public static String LOAD_UTILITY_TYPE;
 	public static String FAST_LOAD_ERROR_MESSAGE;
-	
 
 	public static String BASE_PATH_FIELD_VALIDATION_MESSAGE;
 	public static String EMPTY_BASE_PATH_FIELD_MESSAGE;
@@ -388,6 +390,11 @@ public class Messages extends NLS {
 	public static String REDSHIFT;
 	public static String MYSQL;
 	public static String TERADATA;
+	public static String OTHERS;
+	public static String THIN;
+	public static  String REDSHIFT_DRIVER_CLASS;
+	public static  String MYSQL_DRIVER_CLASS;
+	public static  String TERADATA_DRIVER_CLASS;
 	
 	static {
 		// initialize resource bundle

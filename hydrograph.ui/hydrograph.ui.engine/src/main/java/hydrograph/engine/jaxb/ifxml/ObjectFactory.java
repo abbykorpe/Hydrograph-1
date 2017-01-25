@@ -42,6 +42,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TypeXmlRecord }
+     * 
+     */
+    public TypeXmlRecord createTypeXmlRecord() {
+        return new TypeXmlRecord();
+    }
+
+    /**
      * Create an instance of {@link TypeInputXmlOutSocket }
      * 
      */
@@ -50,11 +58,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeXmlRecord }
+     * Create an instance of {@link TypeXmlField }
      * 
      */
-    public TypeXmlRecord createTypeXmlRecord() {
-        return new TypeXmlRecord();
+    public TypeXmlField createTypeXmlField() {
+        return new TypeXmlField();
     }
 
     /**
@@ -64,12 +72,5 @@ public class ObjectFactory {
     public TypeInputFileXmlBase createTypeInputFileXmlBase() {
         return new TypeInputFileXmlBase();
     }
-    
-    /**
-     * Create an instance of {@link TypeXmlField }
-     * 
-     */
-    public TypeXmlField createTypeXmlField() {
-        return new TypeXmlField();
-    }
+
 }

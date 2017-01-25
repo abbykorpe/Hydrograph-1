@@ -16,6 +16,8 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import java.util.List;
 
+import org.eclipse.swt.internal.C;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -129,9 +131,9 @@ public class WidgetHelper {
 	/**
 	 * Configuration to customize text box as chunk size property 
 	 */
-	public WidgetConfig getChunkSizeWidgetConfig(){
+	public WidgetConfig getTextBoxWithoutAnyValidationWidgetConfig(String label){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-		textBoxConfig.setName(Messages.LABEL_CHUNK_SIZE);
+		textBoxConfig.setName(label);
 		textBoxConfig.setCharacterLimit(10);
 		textBoxConfig.setGrabExcessSpace(true);
 		addTextBoxListeners(textBoxConfig);
@@ -152,6 +154,8 @@ public class WidgetHelper {
 		addTextBoxListeners(textBoxConfig);
 		return textBoxConfig;
 	}
+	
+	
 	
 	/**
 	 * Configuration to customize text box as User Name property 
@@ -228,6 +232,21 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
+//	public WidgetConfig getJDBCDriverClassWidgetConfig(){
+//		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+//		textBoxConfig.setName("JDBC Driver \n Class");
+//		textBoxConfig.setGrabExcessSpace(true);
+//		addTextBoxListeners(textBoxConfig);
+//		return textBoxConfig;
+//	}
+	
+	public WidgetConfig getDBUrlWidgetConfig(){
+		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
+		textBoxConfig.setName(Messages.LABEL_DB_URL);
+		textBoxConfig.setGrabExcessSpace(true);
+		addTextBoxListeners(textBoxConfig);
+		return textBoxConfig;
+	}
 	
 	/**
 	 * Configuration to customize text box as noOfRecords property 
@@ -344,6 +363,31 @@ public class WidgetHelper {
 		return dropDownConfig;
 	}
 	
+	
+	public WidgetConfig getDatabaseWidgetConfig(){
+		DropDownConfig dropDownConfig = new DropDownConfig();
+		dropDownConfig.setName(Messages.LABEL_DATABASE);
+		dropDownConfig.getItems().add(Messages.ORACLE);
+		dropDownConfig.getItems().add(Messages.REDSHIFT);
+		dropDownConfig.getItems().add(Messages.MYSQL);
+		dropDownConfig.getItems().add(Messages.TERADATA);
+		dropDownConfig.getItems().add(Messages.PARAMETER);
+		addComboBoxListeners(dropDownConfig);
+		
+		return dropDownConfig;
+	}
+	
+	public WidgetConfig getJDBCDriverClassWidgetConfig(){
+		DropDownConfig dropDownConfig = new DropDownConfig();
+		dropDownConfig.setName(Messages.LABEL_DATABASE);
+		dropDownConfig.getItems().add(Messages.ORACLE);
+		dropDownConfig.getItems().add(Messages.REDSHIFT);
+		dropDownConfig.getItems().add(Messages.MYSQL);
+		dropDownConfig.getItems().add(Messages.TERADATA);
+		dropDownConfig.getItems().add(Messages.OTHERS);
+		addComboBoxListeners(dropDownConfig);
+		return dropDownConfig;
+	}
 	
 	/**
 	 * Configuration to customize text box as JDBC Driver property 
