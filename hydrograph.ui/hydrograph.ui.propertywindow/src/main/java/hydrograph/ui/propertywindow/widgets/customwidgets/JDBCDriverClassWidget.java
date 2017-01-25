@@ -103,6 +103,8 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 		try {
 			textBoxWidget.attachListener(ListenerFactory.Listners.MODIFY.getListener(), propertyDialogButtonBar,
 					helper1, textBoxWidget.getSWTWidgetControl());
+			textBoxWidget.attachListener(ListenerFactory.Listners.EVENT_CHANGE.getListener(), propertyDialogButtonBar,
+					helper1, textBoxWidget.getSWTWidgetControl());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
