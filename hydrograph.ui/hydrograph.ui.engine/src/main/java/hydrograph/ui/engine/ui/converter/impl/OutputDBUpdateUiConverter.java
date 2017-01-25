@@ -44,13 +44,13 @@ public class OutputDBUpdateUiConverter extends OutputUiConverter{
 		LOGGER.debug("Fetching Output-Oracle-Properties for {}", componentName);
 		JdbcUpdate jdbcUpdate = (JdbcUpdate) typeBaseComponent;
 		
-		setValueInPropertyMap(PropertyNameConstants.DB_URL.value(), 
+		setValueInPropertyMap(PropertyNameConstants.URL.value(), 
 				jdbcUpdate.getUrl() == null ? "" : jdbcUpdate.getUrl().getValue()); 
 		
 		setValueInPropertyMap(PropertyNameConstants.TABLE_NAME.value(), 
 				jdbcUpdate.getTableName() == null ? "" : jdbcUpdate.getTableName().getValue());
 		
-		setValueInPropertyMap(PropertyNameConstants.CHUNK_SIZE.value(), 
+		setValueInPropertyMap(PropertyNameConstants.BATCH_SIZE.value(), 
 				jdbcUpdate.getBatchSize() == null ? "" : jdbcUpdate.getBatchSize().getValue());
 		
 		setValueInPropertyMap(PropertyNameConstants.USER_NAME.value(), 
@@ -60,9 +60,12 @@ public class OutputDBUpdateUiConverter extends OutputUiConverter{
 				jdbcUpdate.getPassword()== null ? "" : jdbcUpdate.getPassword().getValue());
 		
 		if(jdbcUpdate.getUpdate() !=null){
-			propertyMap.put(PropertyNameConstants.SELECT_BY_KEYS.value(),getUpdateKeyUIValue(jdbcUpdate.getUpdate()));
+			propertyMap.put(PropertyNameConstants.SELECT_UPDATE_KEYS.value(),getUpdateKeyUIValue(jdbcUpdate.getUpdate()));
 		}
 		
+		if(StringUtils.isNotBlank(jdbcUpdate.getJdbcDriverClass().getValue())){
+			propertyMap.put(PropertyNameConstants.JDBC_DB_DRIVER.value(), jdbcUpdate.getJdbcDriverClass().getValue());
+		}
 		uiComponent.setType(UIComponentsConstants.DB_UPDATE.value());
 		uiComponent.setCategory(UIComponentsConstants.OUTPUT_CATEGORY.value());
 		

@@ -15,7 +15,7 @@ package hydrograph.ui.graph.model.components;
 import hydrograph.ui.graph.model.categories.OutputCategory;
 
 /**
- * The class OOracle
+ * The class ODBUpdate
  * @author Bitwise
  */
 public class ODBUpdate extends OutputCategory{
@@ -26,7 +26,7 @@ public class ODBUpdate extends OutputCategory{
 	private static final long serialVersionUID = -7298521820693698799L;
 
 	/**
-	 *  Instantiates a new Output Oracle.
+	 *  Instantiates a new Output ODBUpdate.
 	 */
 	public ODBUpdate() {
 		super();

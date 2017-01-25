@@ -18,7 +18,6 @@ import hydrograph.engine.jaxb.ojdbcupdate.TypeUpdateKeys;
 import hydrograph.engine.jaxb.outputtypes.JdbcUpdate;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.JDBCDriverClassWidgetDatastructure;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.graph.model.Component;
@@ -43,20 +42,18 @@ public class OutputDBUpdateConverter extends OutputConverter {
 		jdbcUpdate.setRuntimeProperties(getRuntimeProperties());
 
 		if(StringUtils.isNotBlank(String.valueOf(properties.get(PropertyNameConstants.JDBC_DB_DRIVER.value())))){
-			JDBCDriverClassWidgetDatastructure db = (JDBCDriverClassWidgetDatastructure) properties.get(PropertyNameConstants.JDBC_DB_DRIVER.value());
+			String jdbcDriverClassUIValue = (String) properties.get(PropertyNameConstants.JDBC_DB_DRIVER.value());
 			
-			
-			JDBCDriverClassWidgetDatastructure JDBCDriverClassWidgetDatastructureValue= (JDBCDriverClassWidgetDatastructure)properties.get(PropertyNameConstants.JDBC_DB_DRIVER.value());
-			
-			ElementValueStringType jdbcDriverClass = new ElementValueStringType();
-			jdbcDriverClass.setValue(JDBCDriverClassWidgetDatastructureValue.getJdbcDriverClassValue());
-			
-			jdbcUpdate.setJdbcDriverClass(jdbcDriverClass);
+			if(StringUtils.isNotBlank(jdbcDriverClassUIValue)){
+				ElementValueStringType jdbcDriverClass = new ElementValueStringType();
+						jdbcDriverClass.setValue(jdbcDriverClassUIValue);
+						jdbcUpdate.setJdbcDriverClass(jdbcDriverClass);
+			}
 		}
 		
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.DB_URL.value()))){
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.URL.value()))){
 			ElementValueStringType url = new ElementValueStringType();
-			url.setValue(String.valueOf(properties.get(PropertyNameConstants.DB_URL.value())));
+			url.setValue(String.valueOf(properties.get(PropertyNameConstants.URL.value())));
 			jdbcUpdate.setUrl(url);
 		}
 		
@@ -66,9 +63,9 @@ public class OutputDBUpdateConverter extends OutputConverter {
 			jdbcUpdate.setTableName(tableName);
 		}
 		
-		if(properties.get(PropertyNameConstants.CHUNK_SIZE.value()) !=null){
+		if(properties.get(PropertyNameConstants.BATCH_SIZE.value()) !=null){
 			ElementValueIntegerType chunkSize = new ElementValueIntegerType();
-			BigInteger db_chunkSize = getBigInteger(PropertyNameConstants.CHUNK_SIZE.value());
+			BigInteger db_chunkSize = getBigInteger(PropertyNameConstants.BATCH_SIZE.value());
 			chunkSize.setValue(db_chunkSize);
 			jdbcUpdate.setBatchSize(chunkSize);
 		}
@@ -86,8 +83,8 @@ public class OutputDBUpdateConverter extends OutputConverter {
 		}
 		
 		
-		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.SELECT_BY_KEYS.value()))){
-			String str = (String) properties.get(PropertyNameConstants.SELECT_BY_KEYS.value());
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.SELECT_UPDATE_KEYS.value()))){
+			String str = (String) properties.get(PropertyNameConstants.SELECT_UPDATE_KEYS.value());
 			TypeUpdateKeys updateKeys = new TypeUpdateKeys();
 			String[] updateKeyColumnsFeilds = StringUtils.split(str, Constants.LOAD_TYPE_NEW_TABLE_VALUE_SEPERATOR);
 			if(updateKeyColumnsFeilds !=null && updateKeyColumnsFeilds.length>0){

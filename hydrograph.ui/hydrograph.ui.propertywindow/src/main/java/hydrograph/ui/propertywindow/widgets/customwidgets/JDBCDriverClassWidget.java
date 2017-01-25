@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -16,12 +15,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.JDBCDriverClassWidgetDatastructure;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.datastructures.ComboBoxParameter;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
-import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
 import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
@@ -35,7 +31,6 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
-import hydrograph.ui.propertywindow.widgets.listeners.IELTListener;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
@@ -43,26 +38,20 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 public class JDBCDriverClassWidget extends AbstractWidget{
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(UpdateByKeysWidget.class);
 	private String propertyName;
-	private JDBCDriverClassWidgetDatastructure propertyValue;
+	private String propertyValue;
 	private Text jdbcDriverClassTextBox;
 	private DropDownConfig dropDownConfig;
 	private Combo combo;
 	private LinkedHashMap<String, Object> property=new LinkedHashMap<>();
 	private ComboBoxParameter comboBoxParameter=new ComboBoxParameter();
-	private List<AbstractWidget> widgetList;
-	private Text parameterTextBox;
-	private ControlDecoration paramterTextBoxDecorator;
 	private ControlDecoration jdbcDriverClassTextBoxDecorator;
 	private LinkedHashMap<String, String> map;
 	public JDBCDriverClassWidget(ComponentConfigrationProperty componentConfigProp,
 			ComponentMiscellaneousProperties componentMiscProps, PropertyDialogButtonBar propDialogButtonBar) {
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
-		this.propertyValue =  (JDBCDriverClassWidgetDatastructure)componentConfigProp.getPropertyValue();
-		if(propertyValue==null){
-			propertyValue=new JDBCDriverClassWidgetDatastructure();
-			propertyValue.setJdbcDriverClassValue(Constants.THIN);
-		}
+		this.propertyValue =  (String)componentConfigProp.getPropertyValue();
+		
 	}
 	
 	@Override
@@ -81,10 +70,8 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 		combo=(Combo)defaultCombo.getSWTWidgetControl();
 		combo.select(0);
 		
-		ELTDefaultTextBox eltDefaultTextBox = new ELTDefaultTextBox().grabExcessHorizontalSpace(true);
-		jdbcDriverClassComposite.attachWidget(eltDefaultTextBox);
-		eltDefaultTextBox.visibility(false);
-		parameterTextBox=(Text)eltDefaultTextBox.getSWTWidgetControl();
+		ELTDefaultLable dummyLabel = new ELTDefaultLable("");
+		jdbcDriverClassComposite.attachWidget(dummyLabel);
 		
 		
 		ELTDefaultLable driverClassLable = new ELTDefaultLable(Messages.LABEL_JDBC_DRIVER_CLASS);
@@ -110,26 +97,6 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 		}
 		
 		
-		setPropertyHelpWidget((Control) textBoxWidget.getSWTWidgetControl());	
-		paramterTextBoxDecorator = WidgetUtility.addDecorator(parameterTextBox, Messages.bind(Messages.EMPTY_FIELD, dropDownConfig.getName()));
-		
-		ListenerHelper helper = new ListenerHelper();
-		helper.put(HelperType.CONTROL_DECORATION, paramterTextBoxDecorator);
-		
-		
-		try {
-			for (Listners listenerNameConstant : dropDownConfig.getDropDownListeners()) {
-				IELTListener listener = listenerNameConstant.getListener();
-				defaultCombo.attachListener(listener,propertyDialogButtonBar, helper,defaultCombo.getSWTWidgetControl(),
-						eltDefaultTextBox.getSWTWidgetControl());
-			}
-			for (Listners listenerNameConstant : dropDownConfig.getTextBoxListeners()) {
-				IELTListener listener = listenerNameConstant.getListener();
-				eltDefaultTextBox.attachListener(listener, propertyDialogButtonBar, helper,eltDefaultTextBox.getSWTWidgetControl());
-			}
-		} catch (Exception exception) {
-			logger.error("Failed in attaching listeners to {}, {}", dropDownConfig.getName(), exception);
-		}
 		
 		addComboSelectionListner();
 		 populateWidget();
@@ -140,37 +107,47 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 	
 	
 	private void populateWidget(){	
-		if(propertyValue.isParameter()){
-			parameterTextBox.setVisible(true);
-			parameterTextBox.setText(propertyValue.getDataBaseValue());
-			combo.select(dropDownConfig.getItems().indexOf(Constants.PARAMETER));
+		jdbcDriverClassTextBox.setText(propertyValue);
+		if(StringUtils.equalsIgnoreCase(propertyValue, Messages.THIN)){
+			combo.select(dropDownConfig.getItems().indexOf(Messages.ORACLE));
+		}else if(StringUtils.equalsIgnoreCase(propertyValue, Messages.REDSHIFT_DRIVER_CLASS)){
+			combo.select(dropDownConfig.getItems().indexOf(Messages.REDSHIFT));
+		}else if(StringUtils.equalsIgnoreCase(propertyValue, Messages.MYSQL_DRIVER_CLASS)){
+			combo.select(dropDownConfig.getItems().indexOf(Messages.MYSQL));
+		}else if(StringUtils.equalsIgnoreCase(propertyValue, Messages.TERADATA_DRIVER_CLASS)){
+			combo.select(dropDownConfig.getItems().indexOf(Messages.TERADATA));
 		}else{
-			if(dropDownConfig.getItems().contains(propertyValue.getDataBaseValue())){
-				int indexOf = dropDownConfig.getItems().indexOf(propertyValue.getDataBaseValue());
-				combo.select(indexOf);
-			}
+			combo.select(dropDownConfig.getItems().indexOf(Messages.OTHERS));
 		}
-			jdbcDriverClassTextBox.setText(propertyValue.getJdbcDriverClassValue());
+		
+//		if(propertyValue.isParameter()){
+//			combo.select(dropDownConfig.getItems().indexOf(Constants.PARAMETER));
+//		}else{
+//			if(dropDownConfig.getItems().contains(propertyValue.getDataBaseValue())){
+//				int indexOf = dropDownConfig.getItems().indexOf(propertyValue.getDataBaseValue());
+//				combo.select(indexOf);
+//			}
+//		}
+//			jdbcDriverClassTextBox.setText(propertyValue.getJdbcDriverClassValue());
 	}
 	
 	private boolean addComboSelectionListner() {
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				showHideErrorSymbol(widgetList);
 				String str = ((Combo)event.getSource()).getText();
 				if(dropDownConfig.getItems().contains(str)){
 					jdbcDriverClassTextBoxDecorator.hide();
 					jdbcDriverClassTextBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
-					if(str.equalsIgnoreCase(Constants.ORACLE)){
-						jdbcDriverClassTextBox.setText(Constants.THIN);
-					}else if(str.equalsIgnoreCase(Constants.REDSHIFT)){
-						jdbcDriverClassTextBox.setText(Constants.REDSHIFT_DRIVER_CLASS);
-					}else if(str.equalsIgnoreCase(Constants.MYSQL)){
-						jdbcDriverClassTextBox.setText(Constants.MYSQL_DRIVER_CLASS);
-					}else if(str.equalsIgnoreCase(Constants.TERADATA)){
-						jdbcDriverClassTextBox.setText(Constants.TERADATA_DRIVER_CLASS);
-					}else if(str.equalsIgnoreCase(Constants.PARAMETER)){
+					if(str.equalsIgnoreCase(Messages.ORACLE)){
+						jdbcDriverClassTextBox.setText(Messages.THIN);
+					}else if(str.equalsIgnoreCase(Messages.REDSHIFT)){
+						jdbcDriverClassTextBox.setText(Messages.REDSHIFT_DRIVER_CLASS);
+					}else if(str.equalsIgnoreCase(Messages.MYSQL)){
+						jdbcDriverClassTextBox.setText(Messages.MYSQL_DRIVER_CLASS);
+					}else if(str.equalsIgnoreCase(Messages.TERADATA)){
+						jdbcDriverClassTextBox.setText(Messages.TERADATA_DRIVER_CLASS);
+					}else if(str.equalsIgnoreCase(Messages.OTHERS)){
 						jdbcDriverClassTextBox.setText("");
 						jdbcDriverClassTextBox.setBackground(new Color(Display.getDefault(), 255, 255, 204));
 						jdbcDriverClassTextBoxDecorator.setMarginWidth(3);
@@ -185,20 +162,8 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 	
 	@Override
 	public LinkedHashMap<String, Object> getProperties() {
-		JDBCDriverClassWidgetDatastructure datastructure = new JDBCDriverClassWidgetDatastructure();
 		LinkedHashMap<String, Object> propertymap = new LinkedHashMap<>();
-		if( combo.getText().equalsIgnoreCase(Constants.PARAMETER)){
-			/*comboBoxParameter.setOption(text.getText());
-			comboBoxParameter.setOptionValue(text.getText());*/
-			datastructure.setParameter(true);
-			datastructure.setJdbcDriverClassValue(jdbcDriverClassTextBox.getText());
-			datastructure.setDataBaseValue(parameterTextBox.getText());
-		}else{
-			datastructure.setDataBaseValue(combo.getText());
-			datastructure.setJdbcDriverClassValue(jdbcDriverClassTextBox.getText());
-		}
-		propertymap.put(this.propertyName, datastructure);
-		setToolTipErrorMessage();
+		propertymap.put(this.propertyName, jdbcDriverClassTextBox.getText());
 		return propertymap;
 	}
 
@@ -212,25 +177,9 @@ public class JDBCDriverClassWidget extends AbstractWidget{
 //		return false;
 	}
 	
-	private void setToolTipErrorMessage(){
-		String toolTipErrorMessage = null;
-		if(paramterTextBoxDecorator.isVisible())
-			toolTipErrorMessage = paramterTextBoxDecorator.getDescriptionText();
-						
-		setToolTipMessage(toolTipErrorMessage);
-	}
 	
 	@Override
 	public void addModifyListener(Property property, ArrayList<AbstractWidget> widgetList) {
-		this.widgetList = widgetList;
-		   parameterTextBox.addModifyListener(new ModifyListener() {
-				
-				@Override
-				public void modifyText(ModifyEvent e) {
-				 showHideErrorSymbol(widgetList);
-				}
-			});
-			
 	}
 	
 	private String[] convertToArray(List<String> items) {

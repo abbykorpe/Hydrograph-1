@@ -46,10 +46,6 @@ public class Constants {
 	public static final String US_ASCII = "US-ASCII";
 	public static final String UTF_8 = "UTF-8";
 
-	public static final String ORACLE = "Oracle";
-	public static final String REDSHIFT = "Redshift";	
-	public static final String MYSQL = "MYSQL";
-	public static final String TERADATA = "Teradata";
 	public static final String OTHERS= "Others";
 	
 	public static final String TRUE = "True";
@@ -354,9 +350,4 @@ public class Constants {
 	public static final Object RUN_SQL_QUERY = "runsqlquery";
 	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter e.g. 1234, @{Param}";
 
-	//database driver class name for jdbc component
-	public static final String THIN= "thin";
-	public static final String REDSHIFT_DRIVER_CLASS ="JDBC 4.2";
-	public static final String MYSQL_DRIVER_CLASS ="Connector/J";
-	public static final String TERADATA_DRIVER_CLASS ="TeraJDBC4";
 }

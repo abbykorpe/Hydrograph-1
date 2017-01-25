@@ -110,6 +110,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="DB_URL_WIDGET"/>
  *     &lt;enumeration value="DB_UPDATE_USER_NAME_WIDGET"/>
  *     &lt;enumeration value="DB_UPDATE_PASSWORD_WIDGET"/>
+ *     &lt;enumeration value="RUN_SQL_QUERY_WIDGET"/>
+ *     &lt;enumeration value="DATABASE_LIST_WIDGET"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>

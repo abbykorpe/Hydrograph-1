@@ -15,7 +15,7 @@
 	<tns:component paletteIconPath="/icons/DBUpdate_palette.png"
 		canvasIconPath="/icons/DBUpdate_canvas.png" name="ODBUpdate"
 		nameInPalette="DB Update" defaultNamePrefix="DBUpdate" description=""
-		helpFilePath="" acronym="DBUpd">
+		helpFilePath="/hydrograph.ui.help/html/Components/ODBUpdate.html" acronym="DBUpd">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1"
@@ -37,36 +37,31 @@
 			<tns:validator>SCHEMA_GRID_VALIDATOR</tns:validator>
 		</tns:property>
 
-<!-- 		<tns:property dataType="string" name="database" value="" -->
-<!-- 			renderer="DATABASE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION" -->
-<!-- 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="OPTIONAL" -->
-<!-- 			propertyHelpText="Displays the Hive Database Name provided by the user"> -->
-<!-- 		</tns:property> -->
-
 		<tns:property dataType="string" name="jdbcDriverClass"
 			 renderer="JDBC_DRIVER_CLASS_WIDGET" type="USER" group="GENERAL"
-			subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Displays the Hive Table Name provided by the user">
+			value="thin" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Displays the Database Driver class name selected by user">
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
-		<tns:property dataType="string" name="DBUrl" value=""
+		<tns:property dataType="string" name="url" value=""
 			renderer="DB_URL_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED"
-			propertyHelpText="Displays the Hive Table Name provided by the user">
+			propertyHelpText="Displays the DB url provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
 		<tns:property dataType="string" name="tableName" value=""
 			renderer="TABLE_NAME_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED"
-			propertyHelpText="Displays the Hive Table Name provided by the user">
+			propertyHelpText="Displays the Update Table Name provided by the user">
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
-		<tns:property dataType="string" name="chunkSize" value=""
+		<tns:property dataType="string" name="batchSize" value=""
 			renderer="CHUNK_SIZE_WIDGET" type="USER" group="GENERAL" subGroup="CONFIGURATION"
 			showAsTooltip="TRUE" tooltipDataType="TEXT" usage="REQUIRED"
-			propertyHelpText="Displays the Hive Table Name provided by the user">
+			propertyHelpText="Displays the Update chunk size provided by the user">
 		</tns:property>
 
 		<tns:property dataType="string" name="userName" value=""
@@ -75,19 +70,20 @@
 			usage="OPTIONAL" propertyHelpText="Displays the Database User Name provided by the user">
 		</tns:property>
 
-		<tns:property dataType="string" name="password" value=""
-			renderer="DB_UPDATE_PASSWORD_WIDGET" type="USER" group="GENERAL"
-			subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
-			usage="OPTIONAL" propertyHelpText="Password requires for connection with Database">
+		<tns:property dataType="string" name="password" value="" renderer="PASSWORD_WIDGET"
+			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
+			usage="REQUIRED" propertyHelpText="Password requires for connection with Update database">
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
+		
 
-		<tns:property dataType="string" name="selectByKeys"
+		<tns:property dataType="string" name="update"
 			value="" renderer="SELECT_BY_KEYS_WIDGET" type="USER" group="GENERAL"
 			subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
-			usage="REQUIRED" propertyHelpText="Password requires for connection with Database">
+			usage="REQUIRED" propertyHelpText="Displays the update keys provided by user">
 		</tns:property>
 
-		<tns:property dataType="string" name="runtime_properties"
+		<tns:property dataType="string" name="runtimeProperties"
 			renderer="RUNTIME_PROPERTIES_WIDGET" type="USER" group="GENERAL"
 			subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL"

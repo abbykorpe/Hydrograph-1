@@ -56,7 +56,6 @@ public class ELTModifyListener implements IELTListener{
 			@Override
 			public void handleEvent(Event event) {
 				String string=((Text)widgetList[0]).getText().trim();
-				System.out.println(string);
 				if(event.type==SWT.Modify){
 					if(StringUtils.isBlank(string)){
 						//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);

@@ -16,6 +16,8 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import java.util.List;
 
+import org.eclipse.swt.internal.C;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -365,11 +367,11 @@ public class WidgetHelper {
 	public WidgetConfig getDatabaseWidgetConfig(){
 		DropDownConfig dropDownConfig = new DropDownConfig();
 		dropDownConfig.setName(Messages.LABEL_DATABASE);
-		dropDownConfig.getItems().add(Constants.ORACLE);
-		dropDownConfig.getItems().add(Constants.REDSHIFT);
-		dropDownConfig.getItems().add(Constants.MYSQL);
-		dropDownConfig.getItems().add(Constants.TERADATA);
-		dropDownConfig.getItems().add(Constants.PARAMETER);
+		dropDownConfig.getItems().add(Messages.ORACLE);
+		dropDownConfig.getItems().add(Messages.REDSHIFT);
+		dropDownConfig.getItems().add(Messages.MYSQL);
+		dropDownConfig.getItems().add(Messages.TERADATA);
+		dropDownConfig.getItems().add(Messages.PARAMETER);
 		addComboBoxListeners(dropDownConfig);
 		
 		return dropDownConfig;
@@ -378,11 +380,11 @@ public class WidgetHelper {
 	public WidgetConfig getJDBCDriverClassWidgetConfig(){
 		DropDownConfig dropDownConfig = new DropDownConfig();
 		dropDownConfig.setName(Messages.LABEL_DATABASE);
-		dropDownConfig.getItems().add(Constants.ORACLE);
-		dropDownConfig.getItems().add(Constants.REDSHIFT);
-		dropDownConfig.getItems().add(Constants.MYSQL);
-		dropDownConfig.getItems().add(Constants.TERADATA);
-		dropDownConfig.getItems().add(Constants.PARAMETER);
+		dropDownConfig.getItems().add(Messages.ORACLE);
+		dropDownConfig.getItems().add(Messages.REDSHIFT);
+		dropDownConfig.getItems().add(Messages.MYSQL);
+		dropDownConfig.getItems().add(Messages.TERADATA);
+		dropDownConfig.getItems().add(Messages.OTHERS);
 		addComboBoxListeners(dropDownConfig);
 		return dropDownConfig;
 	}
