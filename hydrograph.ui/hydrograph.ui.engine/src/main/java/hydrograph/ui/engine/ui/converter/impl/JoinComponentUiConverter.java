@@ -69,7 +69,7 @@ public class JoinComponentUiConverter extends TransformUiConverter {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Join-Properties for -{}", componentName);
 
-		if(inPortCounter==0){
+		if(inPortCounter<=2){
 			inPortCounter = 2;
 		}
 		
