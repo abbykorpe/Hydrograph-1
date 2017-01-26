@@ -182,12 +182,12 @@ public class SchemaPropagationHelper {
 	 * @return
 	 */
 	public boolean isGridRowEqual(GridRow sourceGridRow, GridRow targetGridRow) {
-		if (!StringUtils.equalsIgnoreCase(sourceGridRow.getFieldName(), targetGridRow.getFieldName())
-				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getDateFormat(), targetGridRow.getDateFormat())
-				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getScale(), targetGridRow.getScale())
-				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getDataTypeValue(), targetGridRow.getDataTypeValue())
-				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getPrecision(), targetGridRow.getPrecision())
-				|| !StringUtils.equalsIgnoreCase(sourceGridRow.getDescription(), targetGridRow.getDescription()) ) {
+		if (!StringUtils.equals(sourceGridRow.getFieldName(), targetGridRow.getFieldName())
+				|| !StringUtils.equals(sourceGridRow.getDateFormat(), targetGridRow.getDateFormat())
+				|| !StringUtils.equals(sourceGridRow.getScale(), targetGridRow.getScale())
+				|| !StringUtils.equals(sourceGridRow.getDataTypeValue(), targetGridRow.getDataTypeValue())
+				|| !StringUtils.equals(sourceGridRow.getPrecision(), targetGridRow.getPrecision())
+				|| !StringUtils.equals(sourceGridRow.getDescription(), targetGridRow.getDescription()) ) {
 		
 			return false;
 		}
