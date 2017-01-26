@@ -10,6 +10,7 @@ import org.apache.spark.sql.{Column, DataFrame}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
+import scala.collection.mutable.HashMap
 
 
 /**
@@ -27,6 +28,16 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
         case _ => Array(new Column(colName))
       }
     })
+  }
+
+
+  def getNamesOfFields():scala.collection.mutable.HashMap[String,String]= {
+    var fieldNamesAndXpathMap:HashMap[String,String] = HashMap[String,String]()
+    for (i <- 0 until iFileXMLEntity.getFieldsList.size()) {
+      val schemaField: SchemaField = iFileXMLEntity.getFieldsList.get(i)
+      fieldNamesAndXpathMap += (schemaField.getAbsoluteOrRelativeXPath.replaceAll("\\/", "\\.") -> schemaField.getFieldName)
+    }
+    fieldNamesAndXpathMap
   }
 
   private val LOG:Logger = LoggerFactory.getLogger(classOf[InputFileXMLComponent])
@@ -66,9 +77,10 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
      // Map(key -> df)
 
 
-
+      val xpathAndFieldNamesMap=getNamesOfFields()
       val flattenedSchema = flattenSchema(df.schema)
-      val renamedCols = flattenedSchema.map(name => new Column(name.toString()).as(name.toString().replace(".","_")))
+//      val renamedCols = flattenedSchema.map(name => new Column(name.toString()).as(name.toString().replace(".","_")))
+      val renamedCols = flattenedSchema.map(name => new Column(name.toString()).as(xpathAndFieldNamesMap.get(name.toString()).get))
       val df_new: DataFrame = df.select(renamedCols:_*)
 
       Map(key -> df_new)
