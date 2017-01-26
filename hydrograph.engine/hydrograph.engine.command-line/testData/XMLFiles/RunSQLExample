@@ -17,14 +17,25 @@
          name="RunSQLExample"
          xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../hydrograph.engine.core/src/main/resources/newxmlschema/main/main.xsd  ">
 
+    <!--   <commands id="runSQL" batch="0" xsi:type="ct:runSQL">
+           <database_Connection_Name databaseConnectionName="MYSQL"/>
+           <server_Name ip_address="10.130.248.53"/>
+           <port_Number portNumber="3306"/>
+           <database_Name databaseName="test_db"/>
+           <db_User_Name userName="root"/>
+           <db_Password password="root"/>
+           <queryCommand query="INSERT INTO testSP(User_id,Emp_id,Dep_id,Branch_id) VALUES (1,2,3,4)"/>
+       </commands>-->
+
     <commands id="runSQL" batch="0" xsi:type="ct:runSQL">
-        <database_Connection_Name databaseConnectionName="MYSQL"/>
-        <server_Name ip_address="10.130.248.53"/>
-        <port_Number portNumber="3306"/>
-        <database_Name databaseName="test_db"/>
-        <db_User_Name userName="root"/>
-        <db_Password password="root"/>
-        <queryCommand query="INSERT INTO testSP(User_id,Emp_id,Dep_id,Branch_id) VALUES (1,2,3,4)"/>
+        <database_Connection_Name databaseConnectionName="Oracle"/>
+        <server_Name ip_address="DBDEVSRV"/>
+        <port_Number portNumber="1521"/>
+        <database_Name databaseName="PRACTICE"/>
+        <db_User_Name userName="htcd"/>
+        <db_Password password="htcd"/>
+        <queryCommand
+                query=" INSERT INTO TEST_SANDEEP_ORACLE(User_id ,Emp_id ,Dep_id , Branch_id ) values ('0101','0101','0101','0101');  INSERT INTO TEST_SANDEEP_ORACLE(User_id ,Emp_id ,Dep_id , Branch_id ) values ('0','0','0','0'"/>
     </commands>
 
 
