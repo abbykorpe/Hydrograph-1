@@ -36,12 +36,12 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   def getRelativePath(absPath:String):String = absPath.replace(inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getAbsoluteXPath,"")
 
-  def extractRelativeXPath():List[String] = {
-    def extract(schemaFieldList:List[SchemaField],relativeXPath:List[String]):List[String] = (schemaFieldList,relativeXPath) match {
+  def extractRelativeXPath():List[(String,String)] = {
+    def extract(schemaFieldList:List[SchemaField],relativeXPath:List[(String,String)]):List[(String,String)] = (schemaFieldList,relativeXPath) match {
       case (List(),y) => y
-      case (x::xs,y) => extract(xs,List[String](getRelativePath(x.getAbsoluteOrRelativeXPath)) ++ y)
+      case (x::xs,y) => extract(xs,List[(String,String)]((getRelativePath(x.getAbsoluteOrRelativeXPath),x.getFieldName)) ++ y)
     }
-    extract(inputOutputEntityBase.getFieldsList.asScala.toList,List[String]())
+    extract(inputOutputEntityBase.getFieldsList.asScala.toList,List[(String,String)]())
   }
 
   private def createStructFieldsForXMLInputOutputComponents(): Array[StructField] = {
@@ -61,13 +61,14 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
     var xmlTree:XMLTree = XMLTree(fcMap.get(rowTag).get)
 
     relativeXPaths.map(x => x match {
-      case a if(!a.contains('/'))=> xmlTree.addChild(rowTag,fcMap.get(a).get)
+      case a if(!a._1.contains('/'))=> xmlTree.addChild(rowTag,FieldContext(a._1,"",fcMap.get(a._2).get.datatype,safe))
       case a => {
         var parentTag = rowTag
-        a.split("/").map(b => {
+        a._1.split("/").map(b => {
           if(!xmlTree.isPresent(b,parentTag)) {
 
-            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b,parentTag, DataTypes.StringType, safe)))
+//            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b,parentTag, DataTypes.StringType, safe)))
+            xmlTree.addChild(parentTag,FieldContext(b,parentTag,fcMap.get(a._2).get.datatype,safe))
           }
           parentTag = b
         })
