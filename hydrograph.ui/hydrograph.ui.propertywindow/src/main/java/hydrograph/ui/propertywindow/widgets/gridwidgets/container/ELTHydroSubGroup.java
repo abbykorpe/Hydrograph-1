@@ -55,7 +55,7 @@ public class ELTHydroSubGroup extends AbstractELTContainerWidget{
 	@Override
 	public void createContainerWidget(){
 		createGroupWidget();
-		subGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		subGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		subGroup.getHydroGroupClientArea().setLayout(new GridLayout(1, false));
 		super.outputContainer = subGroup.getHydroGroupClientArea();
 	}
