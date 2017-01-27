@@ -52,7 +52,7 @@ public class LookupUiConverter extends TransformUiConverter {
 	private static final String driverLabel = "drv";
 	private static final String IN0_PORT = "in0";
 	private static final String IN1_PORT = "in1";
-	private int inPortCounter = 0;
+	private static final int inPortCounter = 2;
 	
 	
 	public LookupUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -69,9 +69,6 @@ public class LookupUiConverter extends TransformUiConverter {
 		LOGGER.debug("Fetching Lookup-Properties for -{}", componentName);
 		lookup = (Lookup) typeBaseComponent;
 		
-		if(inPortCounter<=2){
-			inPortCounter = 2;
-		}
 		getPortLabels();
 			
 		propertyMap.put(Constants.MATCH_PROPERTY_WIDGET, getMatch());
