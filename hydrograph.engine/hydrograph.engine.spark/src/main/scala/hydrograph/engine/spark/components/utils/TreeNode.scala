@@ -7,7 +7,7 @@ import scala.collection.mutable.ListBuffer
 /**
   * Created by bitwise on 1/13/2017.
   */
-case class FieldContext(name: String,parentName:String, datatype: DataType, isNullable: Boolean) {
+case class FieldContext(name: String, xPath:String, datatype: DataType, isNullable: Boolean) {
 }
 
 case class TreeNode(fieldContext: FieldContext) {
@@ -24,20 +24,29 @@ case class XMLTree(fc: FieldContext) {
 
   def addChild(parent: String, child: FieldContext): Unit = {
     def findAndAdd(node: TreeNode): Unit = node match {
-      case x if (x.fieldContext.name.equals(parent)) => x.addChild(child)
+
+      case x if (x.fieldContext.name.equals(parent)&&checkXpaths(x.fieldContext,child)) => x.addChild(child)
       case x => x.children.toList.map(a => findAndAdd(a))
+    }
+
+    def checkXpaths(parent: FieldContext, child: FieldContext):Boolean={
+
+      parent.xPath.equals(child.xPath.substring(0,child.xPath.lastIndexOf("/")))
     }
 
     findAndAdd(rootNode)
   }
 
-  def isPresent(prospectNodeName: String,parentName:String): Boolean = {
+
+
+  def isPresent(prospectNodeName: String, prospectNodeXPath:String): Boolean = {
     var present: Boolean = false
 
     def find(treeNode: TreeNode): Unit = treeNode match {
-      case x if (x.fieldContext.name.equals(prospectNodeName)&&x.fieldContext.parentName.equals(parentName)) => present = true
+      case x if (x.fieldContext.name.equals(prospectNodeName)&&x.fieldContext.xPath.equals(prospectNodeXPath)) => present = true
       case x => x.children.toList.map(a => find(a))
     }
+
 
     find(rootNode)
     present
