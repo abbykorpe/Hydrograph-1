@@ -36,7 +36,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   def getRelativePath(absPath:String):String = absPath.replace(inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getAbsoluteXPath,"")
 
-  def extractRelativeXPath():List[(String,String)] = {
+  def extractXPathWithFields():List[(String,String)] = {
     def extract(schemaFieldList:List[SchemaField],relativeXPath:List[(String,String)]):List[(String,String)] = (schemaFieldList,relativeXPath) match {
       case (List(),y) => y
       case (x::xs,y) => extract(xs,List[(String,String)]((getRelativePath(x.getAbsoluteOrRelativeXPath),x.getFieldName)) ++ y)
@@ -47,30 +47,32 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
   private def createStructFieldsForXMLInputOutputComponents(): Array[StructField] = {
     LOG.trace("In method createStructFieldsForXMLInputOutputComponents() which returns Array[StructField] for Input and Output components")
     val safe:Boolean = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].isSafe
-    val relativeXPaths = extractRelativeXPath()
+    val relativeXPathAndField = extractXPathWithFields()
     val rowTag: String = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getRowTag
     var fcMap:HashMap[String,FieldContext] = HashMap[String,FieldContext]()
 
     for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
       val schemaField: SchemaField = inputOutputEntityBase.getFieldsList.get(i)
-      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName,"", getDataType(schemaField), safe))
+      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName,schemaField.getAbsoluteOrRelativeXPath, getDataType(schemaField), safe))
     }
 
-    fcMap += (rowTag -> FieldContext(rowTag,"", DataTypes.StringType, safe))
+    fcMap += (rowTag -> FieldContext(rowTag,rowTag, DataTypes.StringType, safe))
 
     var xmlTree:XMLTree = XMLTree(fcMap.get(rowTag).get)
 
-    relativeXPaths.map(x => x match {
-      case a if(!a._1.contains('/'))=> xmlTree.addChild(rowTag,FieldContext(a._1,"",fcMap.get(a._2).get.datatype,safe))
+    relativeXPathAndField.map(x => x match {
+      case a if(!a._1.contains('/'))=> xmlTree.addChild(rowTag,FieldContext(a._1,rowTag+"/"+a._1,fcMap.get(a._2).get.datatype,safe))
       case a => {
         var parentTag = rowTag
+        var xpath=rowTag+"/"
         a._1.split("/").map(b => {
-          if(!xmlTree.isPresent(b,parentTag)) {
+          xpath=xpath+b
+          if(!xmlTree.isPresent(b,xpath)) {
 
-//            xmlTree.addChild(parentTag,fcMap.get(b).getOrElse(FieldContext(b,parentTag, DataTypes.StringType, safe)))
-            xmlTree.addChild(parentTag,FieldContext(b,parentTag,fcMap.get(a._2).get.datatype,safe))
+            xmlTree.addChild(parentTag,FieldContext(b,xpath,fcMap.get(a._2).get.datatype,safe))
           }
           parentTag = b
+          xpath+="/"
         })
       }
     })
