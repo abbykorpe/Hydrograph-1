@@ -21,26 +21,14 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class Filter implements FilterBase {
-
-    //private static final int DEFAULT_VALUE = 0;
-    private static Logger LOG = LoggerFactory.getLogger(Filter.class);
-
-    int value;
-
     @Override
-    public void prepare(Properties props, ArrayList<String> inputFields) {
-
+    public boolean isRemove(ReusableRow inputRow) {
+        return false;
     }
 
-    @Override
-    public boolean isRemove(ReusableRow reusableRow) {
-        return reusableRow.getField("col2").equals("C2R3");
-    }
-
-    @Override
-    public void cleanup() {
-
-
-    }
+//    @Override
+//    public boolean isRemove(ReusableRow reusableRow) {
+//        return reusableRow.getField("col2").equals("C2R3");
+//    }
 
 }

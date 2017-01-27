@@ -33,31 +33,13 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
     val outputFields = OperationUtils.getAllFields(filterEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala.toList
     val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
 
-//    val fieldNameSet = new util.LinkedHashSet[String]()
-//    filterEntity.getOperation.getOperationInputFields.foreach(e => fieldNameSet.add(e))
-
     var map: Map[String, DataFrame] = Map()
 
- /*   LOG.info("Filter Operation Input Fields: {}", filterEntity.getOperation.getOperationInputFields)
-    val filterClass: FilterBase = filterEntity.getOperation match {
-      case x if x.getOperationClass == null => {
-        val filter = new FilterForExpression()
-        filter.setValidationAPI(new ValidationAPI(x.getExpression, ""))
-        filter
-      }
-      case y => classLoader[FilterBase](y.getOperationClass)
-    }
-
-    val fieldPosition = ReusableRowHelper(filterEntity.getOperation, null).determineInputFieldPositionsForFilter(scheme)
-
-    val inputReusableRow = new SparkReusableRow(fieldNameSet)
-*/
-
-    filterEntity.getOutSocketList.asScala.foreach { outSocket =>
-      LOG.info("Creating filter Component for '" + filterEntity.getComponentId + "' for socket: '"
-        + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
-
-      val isOutSocketTypeOut =outSocket.getSocketType.equalsIgnoreCase("out")
+  //filterEntity.getOutSocketList.asScala.foreach { outSocket =>
+//      LOG.info("Creating filter Component for '" + filterEntity.getComponentId + "' for socket: '"
+//        + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
+//
+//      val isOutSocketTypeOut =outSocket.getSocketType.equalsIgnoreCase("out")
 
       /*//Filter component with MapPartition Function for calling filter's prepare method
       val scheme = componentsParams.getDataFrame.schema.map(e => e.name)
@@ -86,13 +68,23 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
         case t: FilterBase => ;
         //t.prepare(filterEntity.getOperation.getOperationProperties, null)
       }
-      val df = componentsParams.getDataFrame.filter(
-        row =>{
-          if(isOutSocketTypeOut)
+      val outDF = componentsParams.getDataFrame.filter(row =>{
             !filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
-          else
+        })
+      map += ("out1"-> outDF)
+
+      val unusedDF = componentsParams.getDataFrame.filter(row =>{
             filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
         })
+      map += ("unused1"-> unusedDF)
+      /* val outDF = componentsParams.getDataFrame.filter(
+      row =>{
+        if(isOutSocketTypeOut)
+          !filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
+        else
+          filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
+      })*/
+
 
 
       /*val df= componentsParams.getDataFrame.mapPartitions( itr =>{
@@ -124,8 +116,8 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
              filterClass
                .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
          })*/
-      map += (outSocket.getSocketId -> df)
-    }
+     // map += (outSocket.getSocketId -> df)
+    //}
 
     map
   }
