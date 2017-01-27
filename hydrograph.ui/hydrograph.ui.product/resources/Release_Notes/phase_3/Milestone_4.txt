@@ -23,3 +23,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 13.#668 [Rakesh Kanchalwar] - Safe property should be present on xml input component 
 14.#644 [Rakesh Kanchalwar] -  Run Config setting window: Run Utility and Project should be mandatory
 15.#664  [Vibhor Tyagi] - View data: User is unable to see view data on a subjob connection links
+16.		[Nitin Gupta]	-	Fixed Job - ID issue form importing converted jobs.
