@@ -25,3 +25,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 15.#664  [Vibhor Tyagi] - View data: User is unable to see view data on a subjob connection links
 16.		[Nitin Gupta]	-	Fixed Job - ID issue form importing converted jobs.
 17.#667 [Vibhor Tyagi] - Job import: Size of a lookup component become small.
+18.#619 [Vibhor Tyagi] - Schema Window: User should be able to expand schema window vertically as well.
