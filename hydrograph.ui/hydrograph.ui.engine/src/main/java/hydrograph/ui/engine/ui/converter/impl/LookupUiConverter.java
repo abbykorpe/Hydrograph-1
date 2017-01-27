@@ -14,6 +14,13 @@
  
 package hydrograph.ui.engine.ui.converter.impl;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeFieldName;
@@ -31,16 +38,9 @@ import hydrograph.ui.datastructure.property.MatchValueProperty;
 import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
 import hydrograph.ui.engine.ui.converter.LinkingData;
 import hydrograph.ui.engine.ui.converter.TransformUiConverter;
-import hydrograph.ui.engine.ui.repository.UIComponentRepo;
 import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.PortTypeEnum;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 
 public class LookupUiConverter extends TransformUiConverter {
 
@@ -52,6 +52,7 @@ public class LookupUiConverter extends TransformUiConverter {
 	private static final String driverLabel = "drv";
 	private static final String IN0_PORT = "in0";
 	private static final String IN1_PORT = "in1";
+	private static final int inPortCounter = 2;
 	
 	
 	public LookupUiConverter(TypeBaseComponent typeBaseComponent, Container container) {
@@ -80,6 +81,7 @@ public class LookupUiConverter extends TransformUiConverter {
 
 		uiComponent.setProperties(propertyMap);
 		uiComponent.setType(UIComponentsConstants.LOOKUP.value());
+		uiComponent.setSize(new Dimension(((inPortCounter+1)*33), ((inPortCounter+1)*27) + 16));
 		
 	}
 	
