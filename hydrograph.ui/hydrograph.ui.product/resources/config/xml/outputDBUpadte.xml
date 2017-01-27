@@ -81,6 +81,7 @@
 			value="" renderer="SELECT_BY_KEYS_WIDGET" type="USER" group="GENERAL"
 			subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Displays the update keys provided by user">
+			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
 		<tns:property dataType="string" name="runtimeProperties"

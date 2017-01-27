@@ -26,3 +26,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 16.		[Nitin Gupta]	-	Fixed Job - ID issue form importing converted jobs.
 17.#667 [Vibhor Tyagi] - Job import: Size of a lookup component become small.
 18.#619 [Vibhor Tyagi] - Schema Window: User should be able to expand schema window vertically as well.
+19.		[Nitin Gupta]	-	XML Input Component : Error while view data from Xml : Invalid column type null 
+20. 	[Nitin Gupta]	-	DBUpdtae Component : component do not shows error bubble if we not fill any mandatory field 

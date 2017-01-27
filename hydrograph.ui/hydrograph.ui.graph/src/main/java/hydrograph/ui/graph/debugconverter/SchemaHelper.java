@@ -15,6 +15,7 @@
 package hydrograph.ui.graph.debugconverter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +38,7 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
@@ -74,7 +76,6 @@ public class SchemaHelper {
 		String socketName = null;
 		String componentName;
 		String component_Id = null;
-		ComponentsOutputSchema  componentsOutputSchema = null;
 		
 		IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(activeEditor instanceof ELTGraphicalEditor){
@@ -111,11 +112,10 @@ public class SchemaHelper {
 								 if(part instanceof PortEditPart){
 									 boolean isWatch = ((PortEditPart)part).getPortFigure().isWatched();
 									 if(isWatch && link.getSourceTerminal().equals(((PortEditPart)part).getPortFigure().getTerminal())){
-										componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
 										if(StringUtils.isNotBlank(schemaFilePath)){
 											String path = schemaFilePath.trim() + "_" + componentName + "_" + socketName;
 											String filePath=((IPath)new Path(path)).addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
-											List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
+											List<GridRow> gridRowList = getSchemaGridRowList(link);
 											file = new File(filePath);
 											GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
 											gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
@@ -130,6 +130,20 @@ public class SchemaHelper {
 			}
 		}
 		
+	}
+
+	private List<GridRow> getSchemaGridRowList(Link link) {
+		List<GridRow> gridRowList = new ArrayList<GridRow>();
+		ComponentsOutputSchema componentsOutputSchema = SchemaPropagation.INSTANCE.getComponentsOutputSchema(link);
+		if (componentsOutputSchema != null && !componentsOutputSchema.getGridRowList().isEmpty()) {
+			gridRowList.addAll(componentsOutputSchema.getGridRowList());
+		} else {
+			Schema schema = (Schema) link.getSource().getProperties().get(Constants.SCHEMA);
+			if (schema != null && schema.getGridRow() != null) {
+				gridRowList.addAll(schema.getGridRow());
+			}
+		}
+		return gridRowList;
 	}
 	 
 	private void removeDuplicateKeys(List<String> oldKeys, Map<String, SubjobDetails> componentNameAndLink){
