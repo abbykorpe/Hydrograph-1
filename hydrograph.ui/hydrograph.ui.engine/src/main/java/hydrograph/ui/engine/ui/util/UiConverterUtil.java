@@ -33,6 +33,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -172,6 +173,9 @@ public class UiConverterUtil {
 	 */
 	private int showMessageForGeneratingUniqueJobId(Container container, IFile jobFile, boolean isSubJob) {
 		int buttonId = SWT.NO;
+		if(StringUtils.isBlank(container.getUniqueJobId())){
+			return SWT.YES;
+		}
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(),
 				SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Question");
