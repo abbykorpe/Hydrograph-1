@@ -73,7 +73,6 @@
 		<tns:property dataType="string" name="password" value="" renderer="DB_UPDATE_PASSWORD_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Password requires for connection with Update database">
-			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 		
 

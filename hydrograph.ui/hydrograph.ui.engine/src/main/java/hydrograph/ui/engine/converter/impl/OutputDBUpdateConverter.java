@@ -63,7 +63,7 @@ public class OutputDBUpdateConverter extends OutputConverter {
 			jdbcUpdate.setTableName(tableName);
 		}
 		
-		if(properties.get(PropertyNameConstants.BATCH_SIZE.value()) !=null){
+		if(StringUtils.isNotBlank((String)properties.get(PropertyNameConstants.BATCH_SIZE.value()))){
 			ElementValueIntegerType chunkSize = new ElementValueIntegerType();
 			BigInteger db_chunkSize = getBigInteger(PropertyNameConstants.BATCH_SIZE.value());
 			chunkSize.setValue(db_chunkSize);
