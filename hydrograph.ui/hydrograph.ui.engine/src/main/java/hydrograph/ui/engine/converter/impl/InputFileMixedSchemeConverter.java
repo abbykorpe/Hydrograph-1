@@ -16,6 +16,7 @@ package hydrograph.ui.engine.converter.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
@@ -66,7 +67,7 @@ public class InputFileMixedSchemeConverter extends InputConverter {
 				.value()));
 		textFileMixedScheme.setCharset(charset);
 		textFileMixedScheme.setRuntimeProperties(getRuntimeProperties());	
-		if (properties.get(PropertyNameConstants.QUOTE.value()) != null) {
+		if (StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.QUOTE.value()))) {
 			Quote quote = new Quote();
 			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 			textFileMixedScheme.setQuote(quote);

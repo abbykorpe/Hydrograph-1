@@ -13,6 +13,12 @@
 
 package hydrograph.ui.engine.converter.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.ofmixedscheme.TypeOutputMixedInSocket;
@@ -26,11 +32,6 @@ import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
 
 /**
  * The Class OutputFileMixedSchemeConverter.
@@ -62,7 +63,7 @@ public class OutputFileMixedSchemeConverter extends OutputConverter {
 		fileMixedScheme.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		fileMixedScheme.setCharset(charset);
 		fileMixedScheme.setRuntimeProperties(getRuntimeProperties());
-		if (properties.get(PropertyNameConstants.QUOTE.value()) != null) {
+		if (StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.QUOTE.value()))) {
 			Quote quote = new Quote();
 			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 			fileMixedScheme.setQuote(quote);

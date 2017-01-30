@@ -31,3 +31,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 20. 	[Nitin Gupta]	-	DBUpdtae Component : component do not shows error bubble if we not fill any mandatory field 
 21.#665 [Pooja Yadav] - xml input component: Error bubble is displayed for File path field even if no error
 22.#607 [Akhilesh Joshi]-   Parameter Grid Window: Minimize button is not functional
+23.#657 [Ashika Holkar] - Need to remove quote tag from job XML file 
