@@ -16,8 +16,6 @@ package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 import java.util.List;
 
-import org.eclipse.swt.internal.C;
-
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -171,11 +169,16 @@ public class WidgetHelper {
 	/**
 	 * Configuration to customize text box as Password property 
 	 */
-	public WidgetConfig getPasswordWidgetConfig(){
+	public WidgetConfig getPasswordWidgetConfig(boolean isMandatory){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_PASSWORD);
 		textBoxConfig.setGrabExcessSpace(true);
-		addTextBoxListeners(textBoxConfig);
+		textBoxConfig.setMandatory(isMandatory);
+		if(isMandatory){
+			addTextBoxListeners(textBoxConfig);
+		}else{
+			textBoxConfig.getListeners().add(Listners.EVENT_CHANGE);
+		}	
 		return textBoxConfig;
 	}
 	

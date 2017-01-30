@@ -170,7 +170,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 	protected void populateWidget(){
 		logger.trace("Populating {} textbox", textBoxConfig.getName());
 		String property = propertyValue;
-		if(StringUtils.isNotBlank(property) ){
+		if(StringUtils.isNotBlank(property) || !textBoxConfig.isMandatory() ){
 			textBox.setText(property);
 			txtDecorator.hide();
 			Utils.INSTANCE.addMouseMoveListener(textBox, cursor);
