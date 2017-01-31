@@ -4,6 +4,7 @@ Features Added:
 Sr.No. <date> - [developer names] - description
 1.<24-Jan-16> - [Rakesh Kanchalwar] - KeyFile support to launch job using passphrase.
 2.<24-Jan-16> - [Shrirang Kumbhar] - Added RunSQL component support
+3.<24-Jan-16> - [Pooja Yadav] - Added DB Update component.
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================

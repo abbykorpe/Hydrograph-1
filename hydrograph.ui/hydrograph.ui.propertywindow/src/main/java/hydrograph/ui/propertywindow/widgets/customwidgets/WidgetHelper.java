@@ -235,14 +235,7 @@ public class WidgetHelper {
 		return textBoxConfig;
 	}
 	
-//	public WidgetConfig getJDBCDriverClassWidgetConfig(){
-//		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
-//		textBoxConfig.setName("JDBC Driver \n Class");
-//		textBoxConfig.setGrabExcessSpace(true);
-//		addTextBoxListeners(textBoxConfig);
-//		return textBoxConfig;
-//	}
-	
+
 	public WidgetConfig getDBUrlWidgetConfig(){
 		TextBoxWithLableConfig textBoxConfig = new TextBoxWithLableConfig();
 		textBoxConfig.setName(Messages.LABEL_DB_URL);
