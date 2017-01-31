@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -79,7 +80,10 @@ public class SchemaRowValidation{
 	
 	private void setRedColorOnTableRowBasedOnInvalidData(GridRow gridRow,
 			String componentType, TableItem tableItem){
-		if(gridRow instanceof FixedWidthGridRow){
+		if(!gridRow.getFieldName().matches(Constants.REGEX)){
+			setRedColor(tableItem);
+		}
+		else if(gridRow instanceof FixedWidthGridRow){
 			if(gridRow instanceof GenerateRecordSchemaGridRow){
 				executeIfObjectIsGenerateRecordRow(gridRow, componentType, tableItem);
 			}else{
