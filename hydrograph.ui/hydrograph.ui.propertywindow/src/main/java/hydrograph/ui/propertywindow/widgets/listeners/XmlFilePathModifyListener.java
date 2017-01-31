@@ -60,7 +60,7 @@ private ControlDecoration txtDecorator;
 				IPath path = new Path(((Text) widgetList[0]).getText().trim());
 				if (event.type == SWT.Modify ) {
 					if (StringUtils.isNotBlank(path.segment(0))) {
-						if (path.toFile().exists() && path.lastSegment().endsWith(".xml")) {
+						if (path.lastSegment().endsWith(".xml")) {
 							txtDecorator.hide();
 							((Text) widgetList[0]).setToolTipText("");
 							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));

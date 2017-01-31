@@ -29,3 +29,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 18.#619 [Vibhor Tyagi] - Schema Window: User should be able to expand schema window vertically as well.
 19.		[Nitin Gupta]	-	XML Input Component : Error while view data from Xml : Invalid column type null 
 20. 	[Nitin Gupta]	-	DBUpdtae Component : component do not shows error bubble if we not fill any mandatory field 
+21.#665 [Pooja Yadav] - xml input component: Error bubble is displayed for File path field even if no error
+
