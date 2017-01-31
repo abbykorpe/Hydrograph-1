@@ -2047,12 +2047,8 @@ if(deleteButton!=null)
 				List<GridRow> internalSchema2) {
 			for(int index=0;index<internalSchema2.size();index++){
 				if(!StringUtils.equalsIgnoreCase(outputSchema.get(index).getFieldName(), internalSchema2.get(index).getFieldName())){
-					{
-					outputSchema.remove(index);
-					outputSchema.add(index,internalSchema2.get(index));
-					}
+					outputSchema.set(index,internalSchema2.get(index));
 				}
 			}
-		 
 		}
 }
