@@ -31,7 +31,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   val inputSchema: StructType = componentsParams.getDataFrame().schema
   val outputFields = OperationUtils.getAllFields(aggregateEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
-  val fieldsForOPeration=OperationUtils.getAllFieldsWithOperationFields(aggregateEntity,outputFields.toList.asJava)
+  val fieldsForOPeration = OperationUtils.getAllFieldsWithOperationFields(aggregateEntity, outputFields.toList.asJava)
   val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = aggregateEntity.getInSocketList.get(0).getInSocketId
@@ -42,11 +42,12 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
       (_.name).asJava).asScala.toArray[String]
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
-  val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]() else  aggregateEntity.getKeyFields.map(_
+  val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]()
+  else aggregateEntity.getKeyFields.map(_
     .getName)
   val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
 
-  private val LOG: Logger = LoggerFactory.getLogger(classOf[OutputFileMixedSchemeComponent])
+  private val LOG: Logger = LoggerFactory.getLogger(classOf[AggregateComponent])
 
   def extractInitialValues(getOperationsList: util.List[Operation]): List[String] = {
     LOG.trace("In method extractInitialValues()")
@@ -86,7 +87,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
 
       //Initialize Aggregarte to call prepare Method
       val aggregateList: List[SparkOperation[AggregateTransformBase]] = initializeOperationList[AggregateForExpression](aggregateEntity
-      .getOperationsList,
+        .getOperationsList,
         inputSchema,
         operationSchema)
 
@@ -133,20 +134,26 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
         }
 
         aggregateList.foreach(agt => {
-          LOG.info("Calling aggregate() method of " + agt.baseClassInstance.getClass.toString + " class.")
-          agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
+          try {
+            agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
+          }  catch {
+            case e: Exception =>
+              LOG.error("Error in aggregate() method of " + agt.baseClassInstance.getClass.toString + " class. Error: " + e.getMessage + "\nRow being processed: " + agt.inputRow)
+              throw e
+          }
         })
 
         if (isEndOfIterator) {
-          aggregateList.foreach(agt => {
-            LOG.info("Calling onCompleteGroup() method of " + agt.baseClassInstance.getClass.toString + " class.")
+         aggregateList.foreach(agt => {
             agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(outRow))
           })
           outRowToReturn += Row.fromSeq(outRow.clone())
         }
 
         if ((isPrevKeyDifferent && (!isPrevKeyNull)) || isEndOfIterator) {
-          val tempRow = outRowToReturn; outRowToReturn = ListBuffer[Row](); tempRow
+          val tempRow = outRowToReturn;
+          outRowToReturn = ListBuffer[Row]();
+          tempRow
         }
         else
           nullRow
