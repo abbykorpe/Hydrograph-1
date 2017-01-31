@@ -35,3 +35,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 24.#648 [Shashank karnik]-Transform component:Schema is not in sync popup displays but on clicking auto sync,Schema is not getting synced as per the order of mapping output field.
 25.#639 [Shashank karnik]- Renaming is not working.
 26.#660 [shashank karnik]-Error is not getting displayed on component after importing job when xml contains special character in field name. 
+27.#670 [shashank karnik]-xml Input component: Datatype is not propagating correctly. 
