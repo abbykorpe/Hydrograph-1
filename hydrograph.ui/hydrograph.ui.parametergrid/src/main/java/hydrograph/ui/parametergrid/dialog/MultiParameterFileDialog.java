@@ -200,7 +200,7 @@ public class MultiParameterFileDialog extends Dialog {
 
 		this.activeProjectLocation = activeProjectLocation;
 		setShellStyle(SWT.CLOSE | SWT.TITLE | SWT.WRAP | SWT.APPLICATION_MODAL
-				| SWT.RESIZE | SWT.MAX );
+				| SWT.RESIZE | SWT.MAX |SWT.MIN );
 		
 		jobLevelParamterFiles = new ArrayList<>();
 	}
