@@ -14,10 +14,17 @@
  
 package hydrograph.ui.engine.converter.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.otfd.TypeOutputDelimitedInSocket;
 import hydrograph.engine.jaxb.outputtypes.TextFileDelimited;
+import hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Quote;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
@@ -25,12 +32,6 @@ import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import hydrograph.engine.jaxb.outputtypes.TextFileDelimited.Quote;
 public class OutputFileDelimitedConverter extends OutputConverter {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(OutputFileDelimitedConverter.class);
@@ -65,7 +66,7 @@ public class OutputFileDelimitedConverter extends OutputConverter {
 		fileDelimited.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		fileDelimited.setCharset(charset);
 		fileDelimited.setRuntimeProperties(getRuntimeProperties());
-		if (properties.get(PropertyNameConstants.QUOTE.value()) != null) {
+		if (StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.QUOTE.value()))) {
 			Quote quote = new Quote();
 			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 			fileDelimited.setQuote(quote);

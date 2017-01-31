@@ -14,6 +14,13 @@
 
 package hydrograph.ui.engine.converter.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+
 import hydrograph.engine.jaxb.commontypes.TypeBaseField;
 import hydrograph.engine.jaxb.commontypes.TypeOutputInSocket;
 import hydrograph.engine.jaxb.ohivetextfile.HivePartitionFieldsType;
@@ -29,14 +36,6 @@ import hydrograph.ui.engine.converter.OutputConverter;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 /**
  * Converter implementation for Output Hive TextFile component
  * @author Bitwise
@@ -72,12 +71,14 @@ public class OutputHiveTextFileConverter extends OutputConverter {
 		
 		HiveTextFile.Delimiter delimiter = new HiveTextFile.Delimiter();
 		delimiter.setValue((String) properties.get(PropertyNameConstants.DELIMITER.value()));
-		HiveTextFile.Quote quote = new HiveTextFile.Quote();
-		quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 		hiveTextfile.setDelimiter(delimiter);
-		if(StringUtils.isNotBlank(quote.getValue())){
+		
+		HiveTextFile.Quote quote = new HiveTextFile.Quote();
+		if(StringUtils.isNotBlank((String) properties.get(PropertyNameConstants.QUOTE.value()))){
+			quote.setValue((String) properties.get(PropertyNameConstants.QUOTE.value()));
 			hiveTextfile.setQuote(quote);
 		}
+		
 		hiveTextfile.setStrict(getBoolean(PropertyNameConstants.STRICT.value()));
 		hiveTextfile.setSafe(getBoolean(PropertyNameConstants.IS_SAFE.value()));
 		hiveTextfile.setOverWrite(getTrueFalse(PropertyNameConstants.OVER_WRITE.value()));
