@@ -1608,8 +1608,14 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 		attributes.setExecutable(true);
 
 		try {
-			fileJob.setResourceAttributes(attributes);
-			fileXml.setResourceAttributes(attributes);
+			if(fileJob.exists()){
+				
+				fileJob.setResourceAttributes(attributes);
+			}
+			if(fileXml.exists()){
+				
+				fileXml.setResourceAttributes(attributes);
+			}
 		} catch (CoreException e) {
 			logger.error("Unable to enable locked job resources",e);
 		}

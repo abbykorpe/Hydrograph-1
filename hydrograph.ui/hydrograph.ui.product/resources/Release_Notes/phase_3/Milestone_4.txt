@@ -32,3 +32,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 21.#665 [Pooja Yadav] - xml input component: Error bubble is displayed for File path field even if no error
 22.#607 [Akhilesh Joshi]-   Parameter Grid Window: Minimize button is not functional
 23.#657 [Ashika Holkar] - Need to remove quote tag from job XML file 
+24.#648 [Shashank karnik]-Transform component:Schema is not in sync popup displays but on clicking auto sync,Schema is not getting synced as per the order of mapping output field.
+25.#639 [Shashank karnik]- Renaming is not working.
