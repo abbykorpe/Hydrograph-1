@@ -14,8 +14,6 @@
  
 package hydrograph.ui.datastructure.property;
 
-import hydrograph.ui.common.cloneableinterface.IDataStructure;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -24,6 +22,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+
+import hydrograph.ui.common.cloneableinterface.IDataStructure;
 
 /**
  * This class stores output schema of each component in FixedWidth format.
@@ -56,9 +56,14 @@ public class ComponentsOutputSchema implements IDataStructure {
 			this.mixedSchemeGridRowsOutputFields.add((MixedSchemeGridRow) gridRow);
 		}else if (gridRow instanceof BasicSchemaGridRow) {
 			this.fixedWidthGridRowsOutputFields.add(convertSchemaGridRowToFixedWidthSchema((BasicSchemaGridRow) gridRow));
+		}else if (gridRow instanceof XPathGridRow){
+			this.fixedWidthGridRowsOutputFields.add(convertXPathGridRowToFixedWidthSchema((XPathGridRow)gridRow));
 		}
 
 	}
+
+
+	
 
 
 	/**
@@ -108,7 +113,23 @@ public class ComponentsOutputSchema implements IDataStructure {
 		return fixedWidthGridRow;
 	}
 
-
+	private FixedWidthGridRow convertXPathGridRowToFixedWidthSchema(XPathGridRow gridRow) {
+		FixedWidthGridRow fixedWidthGridRow = null;
+		if (gridRow != null) {
+			fixedWidthGridRow = new FixedWidthGridRow();
+			fixedWidthGridRow.setDataType(gridRow.getDataType());
+			fixedWidthGridRow.setDataTypeValue(gridRow.getDataTypeValue());
+			fixedWidthGridRow.setDateFormat(gridRow.getDateFormat());
+			fixedWidthGridRow.setPrecision(gridRow.getPrecision());
+			fixedWidthGridRow.setFieldName(gridRow.getFieldName());
+			fixedWidthGridRow.setScale(gridRow.getScale());
+			fixedWidthGridRow.setScaleType(gridRow.getScaleType());
+			fixedWidthGridRow.setScaleTypeValue(gridRow.getScaleTypeValue());
+			fixedWidthGridRow.setDescription(gridRow.getDescription());
+			fixedWidthGridRow.setLength("");
+		}
+		return fixedWidthGridRow;
+	}
 	/**
 	 * It updates the current schema as per its pass-through fields mapping
 	 * 
