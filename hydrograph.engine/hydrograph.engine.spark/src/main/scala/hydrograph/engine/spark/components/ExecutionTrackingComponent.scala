@@ -24,7 +24,7 @@ class ExecutionTrackingComponent(executionTrackingEntity: ExecutionTrackingEntit
 
     val dataFrame= df.mapPartitions(itr=>{
       val acc=longAccumulator
-            acc.add(1)
+            acc.add(0)
       itr.map(row=> {acc.add(1)
         row
       })
