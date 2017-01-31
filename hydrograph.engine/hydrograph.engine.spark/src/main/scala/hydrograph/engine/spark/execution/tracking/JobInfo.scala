@@ -129,7 +129,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
             componentInfo.setComponentId(component.compId)
             componentInfo.setBatch(component.batch)
             componentInfo.setComponentName(component.compName)
-            componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long]-1)
+            componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
             componentInfo.setStatusPerSocketMap(component.outSocket, Status)
             if(Status.equals("FAILED")){
               componentInfo.setCurrentStatus("FAILED")
@@ -199,7 +199,7 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
             componentInfo.setComponentId(component.compId)
             componentInfo.setBatch(component.batch)
             componentInfo.setComponentName(component.compName)
-            componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long]-1)
+            componentInfo.setProcessedRecordCount(component.outSocket, f.value.get.asInstanceOf[Long])
             componentInfo.setStatusPerSocketMap(component.outSocket, Status)
             if(Status.equals("FAILED")){
               componentInfo.setCurrentStatus("FAILED")
