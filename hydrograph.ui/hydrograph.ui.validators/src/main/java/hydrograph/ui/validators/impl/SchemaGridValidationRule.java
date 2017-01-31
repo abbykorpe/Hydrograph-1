@@ -14,18 +14,19 @@
  
 package hydrograph.ui.validators.impl;
 
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 public class SchemaGridValidationRule implements IValidator {
@@ -99,6 +100,10 @@ public class SchemaGridValidationRule implements IValidator {
 				return false;
 			}
 			
+			if(!gridRow.getFieldName().matches(Constants.REGEX)){
+				errorMessage="Only Underscore and Alphanumeric characters are allowed Ex.jKh_78.";
+				return false;
+			}
 			if(StringUtils.isNotBlank(gridRow.getScale())){
 				try{
 					if(StringUtils.isNotEmpty(gridRow.getPrecision())){

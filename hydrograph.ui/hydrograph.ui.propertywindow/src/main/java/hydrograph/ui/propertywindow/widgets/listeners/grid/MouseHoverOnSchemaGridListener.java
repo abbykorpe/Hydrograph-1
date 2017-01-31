@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
@@ -377,6 +378,9 @@ private static final Logger logger = LogFactory.INSTANCE.getLogger(MouseHoverOnS
 		
 		GridRow gridRow=(GridRow)item.getData();
 		
+		if(!gridRow.getFieldName().matches(Constants.REGEX)){
+			return Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR;
+		}
 		if(gridRow instanceof FixedWidthGridRow){
 			
 			FixedWidthGridRow fixedWidthGridRow = (FixedWidthGridRow)gridRow;
