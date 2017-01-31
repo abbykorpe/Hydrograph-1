@@ -14,12 +14,12 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.config;
 
-import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
 
 
 public class TextBoxWithLableConfig implements WidgetConfig {
@@ -30,6 +30,7 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	private int widgetWidth=100;
 	private Map<String, String> otherAttributes = new HashMap<String, String>();
 	private boolean enabled = true;
+	private boolean isMandatory = true;
     
     public boolean isEnabled() {
                     return enabled;
@@ -69,6 +70,13 @@ public class TextBoxWithLableConfig implements WidgetConfig {
 	}
 	public void setCharacterLimit(int characterLimit) {
 		this.characterLimit = characterLimit;
+	}
+	public boolean isMandatory() {
+		return isMandatory;
+	}
+
+	public void setMandatory(boolean isMandatory) {
+		this.isMandatory = isMandatory;
 	}
 	
 	
