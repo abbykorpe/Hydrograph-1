@@ -863,7 +863,18 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 Schema schema=null;
 		 if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
 			 for (Link link : getComponent().getTargetConnections()) {
-				 schema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(getComponent(), link);
+				 if(SchemaPropagation.INSTANCE.checkUnusedSocketAsSourceTerminal(link)){
+					 String unusedSocketId=link.getSourceTerminal();
+					 for(Link innerLink:link.getSource().getTargetConnections()){
+						 if(innerLink.getTargetTerminal().equals(SchemaPropagation.INSTANCE.getInSocketForUnusedSocket(unusedSocketId))){
+							 schema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(getComponent(), innerLink); 
+							 break;
+						 }
+					}
+				 }
+				 else{
+					 schema=SubjobUtility.INSTANCE.getSchemaFromPreviousComponentSchema(getComponent(), link);
+				 }		 
 				 if(schema!=null)
 				 {	 
 					List<FixedWidthGridRow> fixedWidthGridRows=
