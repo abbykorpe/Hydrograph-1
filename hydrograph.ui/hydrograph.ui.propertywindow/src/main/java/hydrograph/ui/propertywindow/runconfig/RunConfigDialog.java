@@ -442,9 +442,9 @@ public class RunConfigDialog extends Dialog {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
-		    fd.setText("Open");
-		    fd.setFilterPath("C:/");
-		    String[] filterExt = { "*.ppk" };
+		    fd.setText(Messages.OPEN_BUTTON_LABEL);
+		    fd.setFilterPath(Messages.C_DRIVE_LOCATION);
+		    String[] filterExt = {Messages.PPK_EXT,Messages.PEM_EXT};
 		    fd.setFilterExtensions(filterExt);
 		    txtKeyFile.setText(fd.open());
 		}
