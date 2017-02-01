@@ -81,6 +81,11 @@ public enum ImagePathConstant {
 	private static final ImageRegistry IMAGE_REGISTRY=new ImageRegistry();
 	private String value;
 
+	/**
+	 * Returns Image from image registry
+	 * 
+	 * @return
+	 */
 	public Image getImageFromRegistry() {
 		Image image = IMAGE_REGISTRY.get(this.value);
 		if (image == null) {
