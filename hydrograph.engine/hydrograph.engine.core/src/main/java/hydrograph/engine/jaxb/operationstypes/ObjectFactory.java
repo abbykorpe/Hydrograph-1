@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.operationstypes;
 
@@ -42,30 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PartitionByExpression }
-     * 
-     */
-    public PartitionByExpression createPartitionByExpression() {
-        return new PartitionByExpression();
-    }
-
-    /**
-     * Create an instance of {@link Lookup }
-     * 
-     */
-    public Lookup createLookup() {
-        return new Lookup();
-    }
-
-    /**
-     * Create an instance of {@link Subjob }
-     * 
-     */
-    public Subjob createSubjob() {
-        return new Subjob();
-    }
-
-    /**
      * Create an instance of {@link Filter }
      * 
      */
@@ -74,11 +38,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Cumulate }
+     * Create an instance of {@link Join }
      * 
      */
-    public Cumulate createCumulate() {
-        return new Cumulate();
+    public Join createJoin() {
+        return new Join();
+    }
+
+    /**
+     * Create an instance of {@link Lookup }
+     * 
+     */
+    public Lookup createLookup() {
+        return new Lookup();
     }
 
     /**
@@ -106,27 +78,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Join }
+     * Create an instance of {@link Subjob.Path }
      * 
      */
-    public Join createJoin() {
-        return new Join();
+    public Subjob.Path createSubjobPath() {
+        return new Subjob.Path();
     }
 
     /**
-     * Create an instance of {@link Executiontracking }
+     * Create an instance of {@link Cumulate }
      * 
      */
-    public Executiontracking createExecutiontracking() {
-        return new Executiontracking();
-    }
-
-    /**
-     * Create an instance of {@link Aggregate }
-     * 
-     */
-    public Aggregate createAggregate() {
-        return new Aggregate();
+    public Cumulate createCumulate() {
+        return new Cumulate();
     }
 
     /**
@@ -138,19 +102,43 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Aggregate }
+     * 
+     */
+    public Aggregate createAggregate() {
+        return new Aggregate();
+    }
+
+    /**
+     * Create an instance of {@link PartitionByExpression }
+     * 
+     */
+    public PartitionByExpression createPartitionByExpression() {
+        return new PartitionByExpression();
+    }
+
+    /**
+     * Create an instance of {@link Subjob }
+     * 
+     */
+    public Subjob createSubjob() {
+        return new Subjob();
+    }
+
+    /**
+     * Create an instance of {@link Executiontracking }
+     * 
+     */
+    public Executiontracking createExecutiontracking() {
+        return new Executiontracking();
+    }
+
+    /**
      * Create an instance of {@link Lookup.Match }
      * 
      */
     public Lookup.Match createLookupMatch() {
         return new Lookup.Match();
-    }
-
-    /**
-     * Create an instance of {@link Subjob.Path }
-     * 
-     */
-    public Subjob.Path createSubjobPath() {
-        return new Subjob.Path();
     }
 
 }

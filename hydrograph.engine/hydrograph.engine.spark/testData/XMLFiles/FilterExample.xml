@@ -35,12 +35,12 @@
 
 	<operations id="trans" batch="0" xsi:type="op:filter">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<operation id="operation1" class="userfunctions.Filter">
+		<operation id="operation1" class="hydrograph.engine.transformation.userfunctions.filter.FilterForXML">
 			<inputFields>
 				<field name="Gift" inSocketId="in0" />
 			</inputFields>
 			<properties>
-				<property name="Filter" value="10" />
+				<property name="Filter" value="120" />
 			</properties>
 		</operation>
 		<outSocket id="out1" type="out">

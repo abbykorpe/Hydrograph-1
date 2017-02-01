@@ -29,8 +29,7 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
 
     val scheme = componentsParams.getDataFrame.schema.map(e => e.name)
     val inputSchema: StructType = componentsParams.getDataFrame.schema
-    val outputFields = OperationUtils.getAllFields(partitionByExpressionEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
-      .toList
+    val outputFields = OperationUtils.getAllFields(partitionByExpressionEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala.toList
     val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
 
     LOG.info("Created PartitionByExpression Component '" + partitionByExpressionEntity.getComponentId
@@ -50,6 +49,7 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
     var map: Map[String, DataFrame] = Map()
     try {
       partitionByExpressionEntity.getOutSocketList.asScala.foreach { outSocket =>
+
         val df= componentsParams.getDataFrame.mapPartitions( itr =>{
           val partitionByExpressionClass =  initializeOperationList[PartitionByExpressionForExpression](partitionByExpressionEntity.getOperationsList,
             inputSchema, outputSchema).head
