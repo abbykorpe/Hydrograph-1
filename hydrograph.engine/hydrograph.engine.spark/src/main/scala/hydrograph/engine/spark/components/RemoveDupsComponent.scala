@@ -9,7 +9,6 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.spark.components.utils.EncoderHelper
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.functions.col
-import org.apache.spark.sql.types.{BooleanType, StructField}
 import org.apache.spark.sql.{Column, DataFrame, Row}
 import org.slf4j.LoggerFactory
 
@@ -24,133 +23,147 @@ class RemoveDupsComponent(removeDupsEntity: RemoveDupsEntity, componentsParams: 
 
     try {
       logger.trace(removeDupsEntity.toString())
-      val fm = RemoveDupsFieldManupulating(removeDupsEntity, componentsParams)
-      var firstRowFlag: Boolean = true
       var map: Map[String, DataFrame] = Map()
-      var previousRow: Row = null
-      val inputColumn = new Array[Column](fm.getinputFields().size)
-      fm.getinputFields().zipWithIndex.foreach(f => {
-        inputColumn(f._2) = col(f._1)
-      })
 
       val keep = removeDupsEntity.getKeep
       val isUnusedRequired = removeDupsEntity.getOutSocketList.asScala.filter(p => p.getSocketType.equals("unused")).size > 0
       val primaryKeys = if (removeDupsEntity.getKeyFields == null) (Array[KeyField]()) else (removeDupsEntity.getKeyFields)
-      val keyFieldsIndexArray = fm.determineKeyFieldPos
+      val keyFieldsIndexArray = determineKeyFieldPos
       val secondaryKeys = if (removeDupsEntity.getSecondaryKeyFields == null) (Array[KeyField]()) else (removeDupsEntity.getSecondaryKeyFields)
-      val sourceDf = componentsParams.getDataFrame().select(inputColumn: _*)
+      val sourceDf = componentsParams.getDataFrame()
+      val operationalSchema =  RowEncoder(componentsParams.getDataFrame().schema)
       val repartitionedDf = if (primaryKeys.isEmpty) (sourceDf.repartition(1)) else (sourceDf.repartition(primaryKeys.map { field => col(field.getName) }: _*))
       val sortedDf = repartitionedDf.sortWithinPartitions(populateSortKeys(primaryKeys ++ secondaryKeys): _*)
-      val intermediateDf = sortedDf.mapPartitions(itr => {
-        def compare(row: Row, previousRow: Row, keyFieldPosition: ListBuffer[Int]): Boolean = {
-          keyFieldPosition.forall(i => row(i).equals(previousRow(i))
+      val outDf = sortedDf.mapPartitions(itr => {
+        def compare(row: Row, previousRow: Row): Boolean = {
+          keyFieldsIndexArray.forall(i => row(i).equals(previousRow(i))
           )
         }
-
-        def addElement(row: Row, element: Any, element1: Any): Row = {
-          Row.fromSeq(row.toSeq :+ element :+ element1)
-        }
+        var firstRowFlag: Boolean = true
+        var previousRow: Row = null
         itr.flatMap { row => {
           val isPrevKeyDifferent: Boolean = {
             if (previousRow == null)
               (true)
-            else (!compare(row, previousRow, keyFieldsIndexArray))
+            else (!compare(row, previousRow))
           }
-          val flag1 = if (previousRow == null) null else if (isPrevKeyDifferent) (true) else (false)
-          val flag2 = if (previousRow == null) null else firstRowFlag
-          var tempRow = if (previousRow == null) row else previousRow
+          var flag = false
+
+          if (keep == Keep.last) {
+            flag = if (previousRow == null) false else isPrevKeyDifferent
+          } else if (keep == Keep.first) {
+            flag = if (previousRow == null) false else firstRowFlag
+          }
+          else {
+            flag = if (previousRow == null) false else isPrevKeyDifferent && firstRowFlag
+          }
+          val tempRow = previousRow
           previousRow = row
-          firstRowFlag = if (isPrevKeyDifferent) (true) else (false)
+          firstRowFlag = isPrevKeyDifferent
           if (itr.isEmpty) {
-            val flag3 = true
-            val flag4 = if (previousRow == null) null else firstRowFlag
-            Iterator(addElement(tempRow, flag1, flag2), addElement(previousRow, flag3, flag4))
-          } else
-            Iterator(addElement(tempRow, flag1, flag2))
+            if (flag == true) {
+              if (keep == Keep.first && !firstRowFlag) {
+                Iterator(tempRow)
+              } else
+                Iterator(tempRow, previousRow)
+            } else if (keep == Keep.last) {
+              Iterator(previousRow)
+            } else if (firstRowFlag) {
+              Iterator(previousRow)
+            }
+            else if (tempRow == null) {
+              Iterator(previousRow)
+            }
+            else {
+              Iterator()
+            }
+          } else if (flag == true) {
+            Iterator(tempRow)
+          } else {
+            Iterator()
+          }
         }
         }
-      })(RowEncoder(EncoderHelper().getEncoder(fm.getOutputFields(), componentsParams.getSchemaFields()).add(StructField("flag1", BooleanType, true)).add(StructField("flag2", BooleanType, true))))
+      })(operationalSchema)
 
-
-      val outputDf = {
-        if (keep == Keep.first)
-          (intermediateDf.filter("flag2 == true")).drop("flag1", "flag2")
-        else if (keep == Keep.last)
-          (intermediateDf.filter("flag1 == true")).drop("flag1", "flag2")
-        else
-          (intermediateDf.filter("flag1 == true AND flag2 == true")).drop("flag1", "flag2")
-      }
       val outKey = removeDupsEntity.getOutSocketList.asScala.filter(p => p.getSocketType.equals("out"))(0).getSocketId
-      map += (outKey -> outputDf)
+      map += (outKey -> outDf)
 
       if (isUnusedRequired) {
-        val unusedDf = {
-          if (keep == Keep.first)
-            (intermediateDf.filter("flag2 == false")).drop("flag1", "flag2")
-          else if (keep == Keep.last)
-            (intermediateDf.filter("flag1 == false")).drop("flag1", "flag2")
-          else
-            (intermediateDf.filter("flag2 == false OR flag1 == false")).drop("flag1", "flag2")
-        }
+        val unUsedDf = sortedDf.mapPartitions(itr => {
+          def compare(row: Row, previousRow: Row): Boolean = {
+              keyFieldsIndexArray.forall(i => row(i).equals(previousRow(i))
+              )
+          }
+          var firstRowFlag: Boolean = true
+          var previousRow: Row = null
+          itr.flatMap { row => {
+            val isPrevKeyDifferent: Boolean = {
+              if (previousRow == null)
+                (true)
+              else (!compare(row, previousRow))
+            }
+            var flag = true
+            if (keep == Keep.last) {
+              flag = if (previousRow == null) true else isPrevKeyDifferent
+            } else if (keep == Keep.first) {
+              flag = if (previousRow == null) true else firstRowFlag
+            }
+            else {
+              flag = if (previousRow == null) true else isPrevKeyDifferent && firstRowFlag
+            }
+            val tempRow = previousRow
+            previousRow = row
+            firstRowFlag = isPrevKeyDifferent
+            if (itr.isEmpty) {
+
+              if (!(keep == Keep.last) && flag == false) {
+                if (firstRowFlag) {
+                  Iterator(tempRow)
+                } else {
+                  Iterator(tempRow, previousRow)
+                }
+              } else if (keep == Keep.last && flag == false) {
+                Iterator(tempRow)
+              } else if (flag == true && keep == Keep.first && !firstRowFlag) {
+                Iterator(previousRow)
+              }
+              else {
+                Iterator()
+              }
+            } else if (flag == false) {
+              Iterator(tempRow)
+            } else {
+              Iterator()
+            }
+          }
+          }
+        })(operationalSchema)
 
         val unusedKey = removeDupsEntity.getOutSocketList.asScala.filter(p => p.getSocketType.equals("unused"))(0).getSocketId
-        map += (unusedKey -> unusedDf)
+        map += (unusedKey -> unUsedDf)
       }
+
       map
     } catch {
       case e: RuntimeException => logger.error("Error in RemoveDups Component : " + removeDupsEntity.getComponentId() + "\n" + e.getMessage, e); throw e
     }
   }
 
+
+  def determineKeyFieldPos(): Array[Int] = {
+    if (removeDupsEntity.getKeyFields == null) {
+      Array[Int]()
+    } else {
+      removeDupsEntity.getKeyFields.map(keyfield => {
+        componentsParams.getDataFrame().schema.fieldIndex(keyfield.getName)
+      })
+    }
+  }
+
+
   def populateSortKeys(keysArray: Array[KeyField]): Array[Column] = {
     keysArray.map { field => if (field.getSortOrder.toLowerCase() == "desc") (col(field.getName).desc) else (col(field.getName)) }
   }
 }
 
-class RemoveDupsFieldManupulating(removeDupsEntity: RemoveDupsEntity, componentsParams: BaseComponentParams) extends Serializable {
-
-  val inputFields = ListBuffer() ++ componentsParams.getSchemaFields().map(x => x.getFieldName)
-  val keyFields = removeDupsEntity.getKeyFields
-
-  def getinputFields(): ListBuffer[String] = {
-    inputFields
-  }
-
-  def getOutputFields(): ListBuffer[String] = {
-    inputFields
-  }
-
-  def determineFieldsPos(): ListBuffer[Int] = {
-    val inputPos = new ListBuffer[Int]()
-    inputFields.foreach(v => {
-      inputFields.zipWithIndex.foreach(f => {
-        if (f._1.equals(v))
-          inputPos += f._2
-      })
-    })
-    inputPos
-  }
-
-  def determineKeyFieldPos(): ListBuffer[Int] = {
-    val inputPos = new ListBuffer[Int]()
-
-    if (keyFields != null) {
-      keyFields.foreach(k => {
-        inputFields.zipWithIndex.foreach(f => {
-          if (f._1.equals(k.getName))
-            inputPos += f._2
-        })
-      })
-    }
-    inputPos
-  }
-}
-
-object RemoveDupsFieldManupulating {
-  def apply(removeDupsEntity: RemoveDupsEntity, componentsParams: BaseComponentParams): RemoveDupsFieldManupulating = {
-    val fm = new RemoveDupsFieldManupulating(removeDupsEntity, componentsParams)
-    fm
-  }
-}
-    
- 
