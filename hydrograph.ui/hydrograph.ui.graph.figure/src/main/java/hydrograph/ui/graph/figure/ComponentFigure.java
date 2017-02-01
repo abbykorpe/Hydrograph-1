@@ -405,15 +405,12 @@ public class ComponentFigure extends Figure implements Validator {
   private void trackExecution(Graphics graphics) {
 		Rectangle rectangle = getBounds().getCopy();
 		if(componentStatus!=null){
-			if(compStatusImage!=null){
-//				compStatusImage.dispose();
-			}
 			if (componentStatus.equals(ComponentExecutionStatus.BLANK)){
 				compStatusImage = null;
 			}else if (componentStatus.equals(ComponentExecutionStatus.PENDING)){
 				compStatusImage =ImagePathConstant.COMPONENT_PENDING_ICON.getImageFromRegistry();
 			}else if (componentStatus.equals(ComponentExecutionStatus.RUNNING)){
-				compStatusImage =ImagePathConstant.COMPONENT_PENDING_ICON.getImageFromRegistry();
+				compStatusImage =ImagePathConstant.COMPONENT_RUNNING_ICON.getImageFromRegistry();
 			}else if (componentStatus.equals(ComponentExecutionStatus.SUCCESSFUL)){
 				compStatusImage =ImagePathConstant.COMPONENT_SUCCESS_ICON.getImageFromRegistry();
 			}else if (componentStatus.equals(ComponentExecutionStatus.FAILED)){
@@ -449,9 +446,7 @@ public class ComponentFigure extends Figure implements Validator {
 		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(Constants.UPDATE_AVAILABLE)) {
 			statusImage = ImagePathConstant.COMPONENT_UPDATE_ICON.getImageFromRegistry();
 		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.VALID.name())){
-			if (statusImage != null && !statusImage.isDisposed()) {
-//				statusImage.dispose();
-			}
+			statusImage=null;
 		}
 		logger.trace("Component has {} property status.", getPropertyStatus());
 		if (statusImage != null && !statusImage.isDisposed()) {
@@ -490,10 +485,10 @@ public class ComponentFigure extends Figure implements Validator {
 			this.canvasIcon.dispose();
 		}
 		if(compStatusImage!=null){
-//			this.compStatusImage.dispose();
+			this.compStatusImage=null;
 		}
 		if(statusImage!=null){
-//			this.statusImage.dispose();
+			this.statusImage=null;
 		}
 	}
 	
