@@ -4,7 +4,7 @@ import hydrograph.engine.core.component.generator.RunProgramEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
 import hydrograph.engine.spark.components.RunProgramComponent
 import hydrograph.engine.spark.components.adapter.base.RunProgramAdapterBase
-import hydrograph.engine.spark.components.base.SparkFlow
+import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 
 class RunProgramAdapter(typeBaseComponent: TypeBaseComponent) extends RunProgramAdapterBase{
@@ -20,5 +20,5 @@ class RunProgramAdapter(typeBaseComponent: TypeBaseComponent) extends RunProgram
     runProgramComponent = new RunProgramComponent(runProgramEntityGenerator.getEntity)
   }
 
-  override def getComponent(): SparkFlow = runProgramComponent
+  override def getComponent(): CommandComponentSparkFlow = runProgramComponent
 }

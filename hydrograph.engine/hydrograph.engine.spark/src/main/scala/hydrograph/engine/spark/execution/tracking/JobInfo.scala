@@ -304,5 +304,9 @@ class JobInfo(componentInfoMap: mutable.ListBuffer[Component]) {
         })
   }
 
+  def getComponentInfoMap(): mutable.ListBuffer[Component] ={
+    componentInfoMap
+  }
+
 
 }

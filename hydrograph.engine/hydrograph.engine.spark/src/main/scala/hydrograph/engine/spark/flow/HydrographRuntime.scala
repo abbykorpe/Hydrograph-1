@@ -12,7 +12,7 @@ import hydrograph.engine.core.utilities.OrderedPropertiesHelper
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
-import hydrograph.engine.spark.executiontracking.plugin.{ExecutionTrackingListener, ExecutionTrackingPlugin}
+import hydrograph.engine.spark.executiontracking.plugin.{ ExecutionTrackingListener, ExecutionTrackingPlugin, HydrographCommandListener}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
@@ -32,7 +32,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   private var flowManipulationContext: FlowManipulationContext = null;
   private var flows: mutable.LinkedHashSet[SparkFlow] = null
   var executionTrackingListener : ExecutionTrackingListener = null
-
+  var hydrographListener : HydrographCommandListener = null
 
 
   override def kill(): Unit = {
@@ -91,6 +91,7 @@ class HydrographRuntime extends HydrographRuntimeService {
           val trackingInstance = Class.forName(getExecutionTrackingClass(EXECUTION_TRACKING)).newInstance()
           executionTrackingListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
           executionTrackingListener.addListener(runtimeContext)
+          hydrographListener = trackingInstance.asInstanceOf[ExecutionTrackingPlugin]
         }
 
   }
@@ -112,6 +113,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   override def prepareToExecute(): Unit = {
     LOG.info("Building spark flows")
       flows = FlowBuilder(RuntimeContext.instance).buildFlow()
+    hydrographListener.initialize(flows)
     LOG.info("Spark flows built successfully")
   }
 
@@ -121,8 +123,9 @@ class HydrographRuntime extends HydrographRuntimeService {
       return
     }*/
     for (sparkFlow <- flows) {
+//      hydrographListener.start(sparkFlow)
       sparkFlow.execute()
-
+      hydrographListener.end(sparkFlow)
       for(accumulator <- sparkFlow.getAccumulatorOnFlow()){
         accumulator.reset()
       }
