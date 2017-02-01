@@ -42,6 +42,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -50,6 +51,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
@@ -338,6 +340,14 @@ public class RunConfigDialog extends Dialog {
 		serverDetailsGroup.setVisible(false);
 		remotePathConfigGroup.setVisible(false);
 
+		Monitor primary = parent.getMonitor();
+	    Rectangle bounds = primary.getBounds();
+	    Rectangle rect = parent.getShell().getBounds();
+	    
+	    int y = bounds.y + (bounds.height - rect.height) / 2;
+	    
+	    parent.getShell().setLocation((bounds.width/2 - rect.width/4), y);
+	    
 		return container;
 	}
 

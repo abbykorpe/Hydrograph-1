@@ -14,11 +14,6 @@
  
 package hydrograph.ui.project.structure.wizard;
 
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.project.structure.Activator;
-import hydrograph.ui.project.structure.CustomMessages;
-import hydrograph.ui.project.structure.natures.ProjectNature;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -52,10 +47,15 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.slf4j.Logger;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.project.structure.Activator;
+import hydrograph.ui.project.structure.CustomMessages;
+import hydrograph.ui.project.structure.natures.ProjectNature;
 
 /**
  * Class to create the Custom Project Structure.
