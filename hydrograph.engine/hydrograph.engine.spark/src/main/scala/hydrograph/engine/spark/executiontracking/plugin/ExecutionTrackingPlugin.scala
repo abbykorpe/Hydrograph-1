@@ -3,14 +3,16 @@ package hydrograph.engine.spark.executiontracking.plugin
 import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, ManipulatorListener}
 import hydrograph.engine.core.utilities.SocketUtilities
 import hydrograph.engine.execution.tracking.ComponentInfo
-import hydrograph.engine.jaxb.commontypes.{TypeBaseComponent, TypeOutputComponent}
+import hydrograph.engine.jaxb.commontypes.{TypeBaseComponent, TypeCommandComponent, TypeOutputComponent}
 import hydrograph.engine.jaxb.operationstypes.Executiontracking
+import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow, SparkFlow}
 import hydrograph.engine.spark.execution.tracking.{ComponentMapping, JobInfo}
 import hydrograph.engine.spark.flow.RuntimeContext
 import org.apache.spark.scheduler._
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 
@@ -32,9 +34,10 @@ object Component{
   = new Component(compId, compName, batch, outSocket, newComponentId,inSocketsPresent)
 }
 
-class ExecutionTrackingPlugin extends ExecutionTrackingListener with ManipulatorListener {
+class ExecutionTrackingPlugin extends ExecutionTrackingListener with ManipulatorListener with HydrographCommandListener{
 
   var jobInfo:JobInfo=null
+  var listOfCommandCompFlows = new mutable.ListBuffer[CommandComponentSparkFlow]
 
   val LOG = LoggerFactory.getLogger(classOf[ExecutionTrackingPlugin])
 
@@ -45,6 +48,11 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     jaxbObjectList.++=(manipulationContext.getJaxbMainGraph.asScala.toIterator)
 
      manipulationContext.getJaxbMainGraph.asScala.foreach(typeBaseComponent=> {
+
+       if(typeBaseComponent.isInstanceOf[TypeCommandComponent]){
+         ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,"NoSocketId","NoExecutionTrackingComponent",false))
+       }
+
       val outSocketList = TrackComponentUtils.getOutSocketListofComponent(typeBaseComponent).asScala.toList
       outSocketList.foreach(outSocket => {
         val trackContext = new TrackContext
@@ -292,5 +300,48 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
   override def getStatus(): java.util.List[ComponentInfo] = {
     return jobInfo.getStatus()
+  }
+
+  override def initialize(startSparkFlow: mutable.LinkedHashSet[SparkFlow]): Unit = {
+    startSparkFlow.foreach(spf=>{
+      if(spf.isInstanceOf[CommandComponentSparkFlow]){
+        listOfCommandCompFlows+=spf.asInstanceOf[CommandComponentSparkFlow]
+      }
+    })
+  }
+
+
+  override def end(flow: SparkFlow): Unit = {
+
+    if(flow.isInstanceOf[CommandComponentSparkFlow]){
+      val cFlow = flow.asInstanceOf[CommandComponentSparkFlow]
+      val Status : String = if(cFlow.exitStatus==0){"SUCCESSFUL"}
+      else if(cFlow.exitStatus == -1)"FAILED"
+      else "PENDING"
+
+      jobInfo.getComponentInfoMap().filter(co=>{
+        co.inSocketsPresent.equals(false) && co.outSocket.equals("NoSocketId") && co.newComponentId.equals("NoExecutionTrackingComponent")
+      }).foreach(comp=>{
+        val alreadyPresentCompInfo  = jobInfo.componentInfoList.asScala
+          .filter(compInfo=> compInfo.getComponentId.equals(comp.compId))
+
+        if (alreadyPresentCompInfo.size > 0) {
+
+          jobInfo.componentInfoList.asScala
+            .filter(compInfo => {
+              compInfo.getComponentId.equals(comp.compId)
+            }).foreach(componentInfo => {
+            componentInfo.setStageId(0)
+            componentInfo.setStatusPerSocketMap(comp.outSocket, Status)
+            componentInfo.setCurrentStatus(Status)
+
+          })
+
+        }
+
+      })
+
+
+    }
   }
 }

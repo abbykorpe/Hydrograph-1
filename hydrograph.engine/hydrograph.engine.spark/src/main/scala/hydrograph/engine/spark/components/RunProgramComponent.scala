@@ -4,18 +4,18 @@ import java.io.{BufferedReader, IOException, InputStreamReader}
 
 import hydrograph.engine.core.component.entity.RunProgramEntity
 import hydrograph.engine.core.component.entity.base.AssemblyEntityBase
-import hydrograph.engine.spark.components.base.SparkFlow
+import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
   * Created by vaijnathp on 12/26/2016.
   */
-class RunProgramComponent(assemblyEntityBase: AssemblyEntityBase) extends SparkFlow with Serializable {
+class RunProgramComponent(assemblyEntityBase: AssemblyEntityBase) extends CommandComponentSparkFlow with Serializable {
 
   val LOG: Logger = LoggerFactory.getLogger(classOf[RunProgramComponent])
   var runProgramEntity: RunProgramEntity = assemblyEntityBase.asInstanceOf[RunProgramEntity]
 
-  var exitStatus = -1
+   exitStatus = -2
 
   override def execute() = {
     var command: String = this.runProgramEntity.getCommand

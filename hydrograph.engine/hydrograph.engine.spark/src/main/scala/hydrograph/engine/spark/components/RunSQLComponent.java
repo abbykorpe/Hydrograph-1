@@ -3,6 +3,7 @@ package hydrograph.engine.spark.components;
 import com.ibatis.common.jdbc.ScriptRunner;
 import hydrograph.engine.core.component.entity.RunSqlEntity;
 import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.spark.components.base.CommandComponentSparkFlow;
 import hydrograph.engine.spark.components.base.SparkFlow;
 import org.apache.log4j.Logger;
 
@@ -15,7 +16,7 @@ import java.util.Properties;
 /**
  * Created by sandeepv on 1/31/2017.
  */
-public class RunSQLComponent extends SparkFlow implements Serializable {
+public class RunSQLComponent extends CommandComponentSparkFlow implements Serializable {
 
     static Logger log = Logger.getLogger(RunSQLComponent.class.getName());
     File tempFile = File.createTempFile("query", ".txt", new File("C:\\tmp\\"));
@@ -45,12 +46,14 @@ public class RunSQLComponent extends SparkFlow implements Serializable {
                         Reader reader = new BufferedReader(new FileReader(tempFile));
                         sr.runScript(reader);
                         reader.close();
-
+                        exitStatus_$eq(0);
                     } catch (SQLException | IOException e) {
+                        exitStatus_$eq(-1);
                         log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                         throw new RuntimeException(e);
                     }
                 } catch (Exception e) {
+                    exitStatus_$eq(-1);
                     log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                     throw new RuntimeException(e);
                 }
@@ -66,11 +69,14 @@ public class RunSQLComponent extends SparkFlow implements Serializable {
                         Reader reader = new BufferedReader(new FileReader(tempFile));
                         sr.runScript(reader);
                         reader.close();
+                        exitStatus_$eq(0);
                     } catch (Exception e) {
+                        exitStatus_$eq(-1);
                         log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                         throw new RuntimeException(e);
                     }
                 } catch (SQLException e) {
+                    exitStatus_$eq(-1);
                     log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                     throw new RuntimeException(e);
                 }
@@ -86,11 +92,14 @@ public class RunSQLComponent extends SparkFlow implements Serializable {
                         Reader reader = new BufferedReader(new FileReader(tempFile));
                         sr.runScript(reader);
                         reader.close();
+                        exitStatus_$eq(0);
                     } catch (Exception e) {
+                        exitStatus_$eq(-1);
                         log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                         throw new RuntimeException(e);
                     }
                 } catch (SQLException e) {
+                    exitStatus_$eq(-1);
                     log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                     throw new RuntimeException(e);
                 }
@@ -106,16 +115,20 @@ public class RunSQLComponent extends SparkFlow implements Serializable {
                         Reader reader = new BufferedReader(new FileReader(tempFile));
                         sr.runScript(reader);
                         reader.close();
+                        exitStatus_$eq(0);
                     } catch (Exception e) {
+                        exitStatus_$eq(-1);
                         log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                         throw new RuntimeException(e);
                     }
                 } catch (SQLException e) {
+                    exitStatus_$eq(-1);
                     log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                     throw new RuntimeException(e);
                 }
             }
         } catch (Exception e) {
+            exitStatus_$eq(-1);
             e.printStackTrace();
         }
     }
@@ -127,6 +140,7 @@ public class RunSQLComponent extends SparkFlow implements Serializable {
             bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
             bufferedWriter.write(statement);
         } catch (IOException e) {
+            exitStatus_$eq(-1);
             e.printStackTrace();
         } finally {
             try {
@@ -135,9 +149,20 @@ public class RunSQLComponent extends SparkFlow implements Serializable {
                 if (fileWriter != null)
                     fileWriter.close();
             } catch (IOException ex) {
+                exitStatus_$eq(-1);
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public int exitStatus() {
+        return super.exitStatus();
+    }
+
+    @Override
+    public void exitStatus_$eq(int exitStatus) {
+        super.exitStatus_$eq(exitStatus);
     }
 }
 
