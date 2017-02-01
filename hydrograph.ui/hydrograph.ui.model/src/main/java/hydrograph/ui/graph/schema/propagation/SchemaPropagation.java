@@ -296,13 +296,13 @@ public class SchemaPropagation {
 		return false;
 	}
 
-	private String getInSocketForUnusedSocket(String unusedSocketId) {
+	public String getInSocketForUnusedSocket(String unusedSocketId) {
 		String unusedPortNo = unusedSocketId.substring(6);
 		String inSocket = Constants.INPUT_SOCKET_TYPE + unusedPortNo;
 		return inSocket;
 	}
 
-	private boolean checkUnusedSocketAsSourceTerminal(Link link) {
+	public boolean checkUnusedSocketAsSourceTerminal(Link link) {
 		LOGGER.debug("Checking whether link is connected to unused port");
 		if (link.getSource().getPort(link.getSourceTerminal()) != null
 				&& link.getSource().getPort(link.getSourceTerminal()).getPortType()
