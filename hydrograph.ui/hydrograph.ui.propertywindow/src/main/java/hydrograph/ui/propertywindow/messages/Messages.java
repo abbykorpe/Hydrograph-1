@@ -391,6 +391,9 @@ public class Messages extends NLS {
 	public static  String REDSHIFT_DRIVER_CLASS;
 	public static  String MYSQL_DRIVER_CLASS;
 	public static  String TERADATA_DRIVER_CLASS;
+	public static  String C_DRIVE_LOCATION;
+	public static String PPK_EXT;
+	public static String PEM_EXT;
 	
 	static {
 		// initialize resource bundle
