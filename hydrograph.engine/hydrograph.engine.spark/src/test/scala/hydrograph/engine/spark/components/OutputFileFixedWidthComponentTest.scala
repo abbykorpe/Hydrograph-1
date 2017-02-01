@@ -21,28 +21,31 @@ class OutputFileFixedWidthComponentTest {
   def itShouldCheckStrictAndSafeForCorrectOutputFormatAndCorrectLength(): Unit = {
     //given
 
-    val df = new DataBuilder(Fields(List("col1", "col2", "col3")).applyTypes(List(classOf[Integer],
+    val df = new DataBuilder(Fields(List("col1", "col2", "col3", "col4", "col5", "col6", "col7")).applyTypes(List(classOf[Integer],
       classOf[String], classOf[Long], classOf[Double], classOf[Boolean], classOf[Float], classOf[Date])))
-      .addData(List(123, "C2R12", 34234L, 3324.234234, true, 234.3342, "2013-02-03"))
-      .addData(List(1234, "C2R1", 2344L, 3324.234234, true, 234.3342, "2013-02-04"))
+      .addData(List(1235, "C2R12", 34234, 3324.234234, true, 234.3342, "2015-04-09"))
+      .addData(List(1234, "C2R13", 23445, 3324.234234, true, 234.3342, "2014-04-09"))
       .build()
 
     val outputPathCase: String = "testData/inputFiles/fixed_out.txt"
     val sf1 = new SchemaField("col1", "java.lang.Integer");
     val sf2 = new SchemaField("col2", "java.lang.String");
     val sf3 = new SchemaField("col3", "java.lang.Long");
-    val sf4 = new SchemaField("col3", "java.lang.Double");
-    val sf5 = new SchemaField("col3", "java.lang.Boolean");
-    val sf6 = new SchemaField("col3", "java.lang.Float");
-    val sf7 = new SchemaField("col3", "java.util.Date");
+    val sf4 = new SchemaField("col4", "java.lang.Double");
+    val sf5 = new SchemaField("col5", "java.lang.Boolean");
+    val sf6 = new SchemaField("col6", "java.lang.Float");
+    val sf7 = new SchemaField("col7", "java.util.Date");
 
-    sf1.setFieldLength(5)
-    sf2.setFieldLength(8)
-    sf3.setFieldLength(8)
-    sf4.setFieldLength(8)
-    sf5.setFieldLength(8)
+
+    sf1.setFieldLength(4)
+    sf2.setFieldLength(5)
+    sf3.setFieldLength(5)
+    sf4.setFieldLength(11)
+    sf5.setFieldLength(4)
     sf6.setFieldLength(8)
-    sf7.setFieldLength(8)
+    sf7.setFieldLength(10)
+
+
 
     val fieldList: util.List[SchemaField] = new util.ArrayList[SchemaField]();
     fieldList.add(sf1)
@@ -52,6 +55,7 @@ class OutputFileFixedWidthComponentTest {
     fieldList.add(sf5)
     fieldList.add(sf6)
     fieldList.add(sf7)
+
 
     val cp: BaseComponentParams = new BaseComponentParams
     cp.addinputDataFrame(df)
@@ -85,8 +89,8 @@ class OutputFileFixedWidthComponentTest {
 
     //Then
 
-    val expectedSize: Int = 3
-    val expectedResult: String = "[1234,C2R1    ,2344]"
+    val expectedSize: Int = 7
+    val expectedResult: String = "[1234,C2R13,23445,3324.234234,true,234.3342,2014-04-09]"
     val inputFileFixedWidthEntity: InputFileFixedWidthEntity = new InputFileFixedWidthEntity
     inputFileFixedWidthEntity.setComponentId("outputFileFixedWidth")
     inputFileFixedWidthEntity.setPath(outputPathCase)
@@ -95,7 +99,6 @@ class OutputFileFixedWidthComponentTest {
     inputFileFixedWidthEntity.setCharset("UTF-8")
     inputFileFixedWidthEntity.setFieldsList(fieldList)
     inputFileFixedWidthEntity.setOutSocketList(outSockets)
-
     val dataframeFromOutputFile: Map[String, DataFrame] = new InputFileFixedWidthComponent(inputFileFixedWidthEntity, cp).createComponent()
     Assert.assertEquals(expectedSize, dataframeFromOutputFile.get("outSocket").get.first().size)
     Assert.assertEquals(expectedResult, dataframeFromOutputFile.get("outSocket").get.first().toString())
