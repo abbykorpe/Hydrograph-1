@@ -10,15 +10,15 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 class RunSqlAdapter(typeBaseComponent: TypeBaseComponent) extends RunProgramAdapterBase {
 
   private var runSqlEntityGenerator: RunSqlGenerator = null
-  private var runSqlComponent: RunSQLComponent = null
+  private var runSQLComponenet: RunSQLComponent = null
 
   override def createGenerator(): Unit = {
     runSqlEntityGenerator = new RunSqlGenerator(typeBaseComponent)
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    runSqlComponent = new RunSQLComponent(runSqlEntityGenerator.getEntity)
+    runSQLComponenet= new RunSQLComponent(runSqlEntityGenerator.getEntity)
   }
 
-  override def getComponent(): SparkFlow = runSqlComponent
+  override def getComponent(): SparkFlow = runSQLComponenet
 }
