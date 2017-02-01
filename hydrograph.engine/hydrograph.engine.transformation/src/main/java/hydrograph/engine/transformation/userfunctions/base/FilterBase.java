@@ -44,7 +44,7 @@ public interface FilterBase extends Serializable {
 	 */
 	@Deprecated
 	default
-	void prepare(Properties props, ArrayList<String> inputFields){};
+	void prepare(Properties props, ArrayList<String> inputFields){}
 
 	/**
 	 * This method is the operation function and is called for each input row.
@@ -86,5 +86,5 @@ public interface FilterBase extends Serializable {
 	 */
 	@Deprecated
 	default
-	void cleanup(){};
+	void cleanup(){}
 }

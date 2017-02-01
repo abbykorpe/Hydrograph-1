@@ -23,102 +23,37 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
 
   override def createComponent(): Map[String, DataFrame] = {
 
-    if (filterEntity.getOperation.getOperationInputFields == null) {
-      LOG.error("Filter Operation Input Fields Can not be Empty")
-      throw new Exception("Filter Operation Input Fields Can not be Empty")
-    }
-
-    LOG.info("Filter Component Called with input Schema [in the form of(Column_name,DataType,IsNullable)]: {}", componentsParams.getDataFrame.schema)
-    val inputSchema: StructType = componentsParams.getDataFrame.schema
+    LOG.info("Filter Component Called with input Schema [in the form of(Column_name,DataType,IsNullable)]: {}", componentsParams.getDataFrame().schema)
+    val inputSchema: StructType = componentsParams.getDataFrame().schema
     val outputFields = OperationUtils.getAllFields(filterEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala.toList
     val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
 
     var map: Map[String, DataFrame] = Map()
 
-  //filterEntity.getOutSocketList.asScala.foreach { outSocket =>
-//      LOG.info("Creating filter Component for '" + filterEntity.getComponentId + "' for socket: '"
-//        + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
-//
-//      val isOutSocketTypeOut =outSocket.getSocketType.equalsIgnoreCase("out")
-
-      /*//Filter component with MapPartition Function for calling filter's prepare method
-      val scheme = componentsParams.getDataFrame.schema.map(e => e.name)
-      val df = componentsParams.getDataFrame.mapPartitions(itr => {
-        val filterClass = initializeOperationList[FilterForExpression](filterEntity.getOperationsList,
-          inputSchema, outputSchema).head
-        filterClass.baseClassInstance match {
-          case t: FilterForExpression => t.setValidationAPI(filterClass.validatioinAPI)
-          case t: FilterBase => t.prepare(filterEntity.getOperation.getOperationProperties, null)
-        }
-        itr.filter(row => {
-          if (itr.isEmpty)
-            filterClass.baseClassInstance.cleanup()
-
-          if (isOutSocketTypeOut)
-            !filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
-          else
-            filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
-        })
-      })(RowEncoder(EncoderHelper().getEncoder(scheme.toList, componentsParams.getSchemaFields())))*/
-
       val filterClass = initializeOperationList[FilterForExpression](filterEntity.getOperationsList,
         inputSchema, outputSchema).head
+
       filterClass.baseClassInstance match {
-        case t: FilterForExpression => t.setValidationAPI(filterClass.validatioinAPI)
-        case t: FilterBase => ;
-        //t.prepare(filterEntity.getOperation.getOperationProperties, null)
+        case expression: FilterForExpression => expression.setValidationAPI(filterClass.validatioinAPI)
+        case _ =>
       }
-      val outDF = componentsParams.getDataFrame.filter(row =>{
-            !filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
-        })
-      map += ("out1"-> outDF)
+    filterEntity.getOutSocketList.asScala.foreach { outSocket =>
 
-      val unusedDF = componentsParams.getDataFrame.filter(row =>{
-            filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
-        })
-      map += ("unused1"-> unusedDF)
-      /* val outDF = componentsParams.getDataFrame.filter(
-      row =>{
-        if(isOutSocketTypeOut)
+      LOG.info("Creating filter Component for '" + filterEntity.getComponentId + "' for socket: '"
+        + outSocket.getSocketId + "' of type: '" + outSocket.getSocketType + "'")
+      if (outSocket.getSocketType.equalsIgnoreCase("out")) {
+        val outDF = componentsParams.getDataFrame().filter(row => {
           !filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
-        else
-          filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
-      })*/
-
-
-
-      /*val df= componentsParams.getDataFrame.mapPartitions( itr =>{
-
-        filterClass.prepare(filterEntity.getOperation.getOperationProperties,null)
-        val rs= itr.filter( row =>{
-
-          if(itr.isEmpty)
-            filterClass.cleanup()
-
-          if(isOutSocketTypeOut)
-            !filterClass
-              .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row,inputReusableRow))
-          else
-            filterClass
-              .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
         })
-        rs
-      })(RowEncoder(EncoderHelper().getEncoder(scheme.toList, componentsParams.getSchemaFields())))
-      */
-
-
-      /* val df = componentsParams.getDataFrame.filter(
-         row =>{
-           if(isOutSocketTypeOut)
-             !filterClass
-               .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row,inputReusableRow))
-           else
-             filterClass
-               .isRemove(RowHelper.convertToReusebleRow(fieldPosition, row, inputReusableRow))
-         })*/
-     // map += (outSocket.getSocketId -> df)
-    //}
-
+        map += (outSocket.getSocketId -> outDF)
+      }
+      else {
+        val unusedDF = componentsParams.getDataFrame().filter(row => {
+          filterClass.baseClassInstance.isRemove(filterClass.inputRow.setRow(row))
+        })
+        map += (outSocket.getSocketId -> unusedDF)
+      }
+    }
     map
   }
 }
