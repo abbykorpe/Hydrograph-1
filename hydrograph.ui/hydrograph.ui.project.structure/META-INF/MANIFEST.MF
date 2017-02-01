@@ -37,6 +37,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.project.structure
-Import-Package: hydrograph.ui.expression.editor.dialogs,
+Import-Package: hydrograph.ui.common.util,
+ hydrograph.ui.expression.editor.dialogs,
  org.apache.commons.lang,
  org.junit

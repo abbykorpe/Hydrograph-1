@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.project.structure.Activator;
 import hydrograph.ui.project.structure.CustomMessages;
@@ -72,7 +73,7 @@ public class ProjectStructureCreator {
 
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(ProjectStructureCreator.class);
 
-	public static final String [] paths = {CustomMessages.ProjectSupport_Settings,CustomMessages.ProjectSupport_JOBS,CustomMessages.ProjectSupport_RESOURCES,CustomMessages.ProjectSupport_SRC,  
+	public static final String [] paths = {CustomMessages.ProjectSupport_Settings,CustomMessages.ProjectSupport_JOBS,CustomMessages.ProjectSupport_RESOURCES,Constants.ProjectSupport_SRC,  
 		CustomMessages.ProjectSupport_SCRIPTS,CustomMessages.ProjectSupport_PARAM,CustomMessages.ProjectSupport_GLOBAL_PARAM,CustomMessages.ProjectSupport_SCHEMA,CustomMessages.ProjectSupport_LIB};
 
 	public static final ProjectStructureCreator INSTANCE = new ProjectStructureCreator();
@@ -187,7 +188,7 @@ public class ProjectStructureCreator {
 	 * @throws JavaModelException
 	 */
 	private IClasspathEntry[] setSourceFolderInClassPath(IProject project,	IJavaProject javaProject) throws JavaModelException {
-		IFolder sourceFolder = project.getFolder(CustomMessages.ProjectSupport_SRC); //$NON-NLS-1$
+		IFolder sourceFolder = project.getFolder(Constants.ProjectSupport_SRC); //$NON-NLS-1$
 		IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(sourceFolder);
 		IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
 		IClasspathEntry[] newEntries = new IClasspathEntry[oldEntries.length + 1];
