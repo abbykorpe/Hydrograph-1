@@ -314,12 +314,14 @@ public class FilterOperationClassUtility  {
 			IJavaProject iJavaProject = JavaCore.create(project);
 			IPackageFragmentRoot packageFragmentRoot = iJavaProject
 					.getPackageFragmentRoot(project.getFolder(Constants.ProjectSupport_SRC));
+			if(packageFragmentRoot!= null){
 			for (IJavaElement iJavaElement : packageFragmentRoot.getChildren()) {
 				if (iJavaElement instanceof PackageFragment
 						&& StringUtils.equals(iJavaElement.getElementName(), packageStructure)) {
 					packageFragment = (PackageFragment) iJavaElement;
 					break;
 				}
+			}
 			}
 			if (packageFragment != null) {
 				for (IJavaElement element : packageFragment.getChildren()) {
