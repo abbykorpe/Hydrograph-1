@@ -14,6 +14,47 @@
  
 package hydrograph.ui.propertywindow.widgets.utility;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.core.CompilationUnit;
+import org.eclipse.jdt.internal.core.PackageFragment;
+import org.eclipse.jdt.ui.actions.OpenNewClassWizardAction;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
+import org.slf4j.Logger;
+
 import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
@@ -34,46 +75,6 @@ import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubg
 import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.ui.actions.OpenNewClassWizardAction;
-import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.FileEditorInput;
-import org.slf4j.Logger;
 
 
 /**
@@ -293,41 +294,49 @@ public class FilterOperationClassUtility  {
 	 *            the file name
 	 * @return true, if successful
 	 */
+	@SuppressWarnings("restriction")
 	public boolean openFileEditor(Text filePath,String pathFile) {
+		String fullQualifiedClassName = filePath.getText();
 		try {
-			String fileFullPath;
-			String fileName="";
-			if (filePath != null) {
-				String projectPath=(String) filePath.getData("path");
-				if(!projectPath.isEmpty()){
-					String splitedProjectPath[]=projectPath.split("/");
-					String formattedProjectPath="/"+splitedProjectPath[1]+"/"+splitedProjectPath[2]+"/";
-					String textBoxValue=((Text)filePath).getText().replace(".","/")+".java";
-					fileName = formattedProjectPath + textBoxValue;
+			logger.debug("Searching "+fullQualifiedClassName+" in project's source folder");
+			PackageFragment packageFragment = null;
+			String[] packages = StringUtils.split(fullQualifiedClassName, ".");
+			String className = fullQualifiedClassName;
+			String packageStructure="";
+			IFile javaFile=null;
+			if (packages.length > 1) {
+				className = packages[packages.length - 1];
+				packageStructure= StringUtils.replace(fullQualifiedClassName, "." + className, "");
+			}
+			IFileEditorInput editorInput = (IFileEditorInput) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().getActiveEditor().getEditorInput();
+			IProject project = editorInput.getFile().getProject();
+			IJavaProject iJavaProject = JavaCore.create(project);
+			IPackageFragmentRoot packageFragmentRoot = iJavaProject
+					.getPackageFragmentRoot(project.getFolder(Constants.ProjectSupport_SRC));
+			for (IJavaElement iJavaElement : packageFragmentRoot.getChildren()) {
+				if (iJavaElement instanceof PackageFragment
+						&& StringUtils.equals(iJavaElement.getElementName(), packageStructure)) {
+					packageFragment = (PackageFragment) iJavaElement;
+					break;
 				}
-			} else {
-				fileName = pathFile;  
 			}
-
-			File fileToOpen = new File(fileName);
-			if(StringUtils.isNotBlank(fileName) &&!fileToOpen.isFile()){
-				Path path = new Path(fileName);
-				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-				fileFullPath = file.getRawLocation().toOSString();
+			if (packageFragment != null) {
+				for (IJavaElement element : packageFragment.getChildren()) {
+					if (element instanceof CompilationUnit
+							&& StringUtils.equalsIgnoreCase(element.getElementName(), className + Constants.JAVA_EXTENSION)) {
+						javaFile = (IFile) element.getCorrespondingResource();
+						break;
+					}
+				}
 			}
-			else{
-				fileFullPath=fileName;
-			}
-			File fileToEditor = new File(fileFullPath);
-			if (fileToEditor.exists()) {
-				IFileStore fileStore = EFS.getLocalFileSystem().getStore(
-						fileToEditor.toURI());
-				IWorkbenchPage page = PlatformUI.getWorkbench()
-						.getActiveWorkbenchWindow().getActivePage();
+			if (javaFile !=null && javaFile.exists()) {
+				IFileStore fileStore = EFS.getLocalFileSystem().getStore(javaFile.getLocationURI());
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				IDE.openEditorOnFileStore(page, fileStore);
 				return true;
 			}
-		} catch (PartInitException e) {
+		} catch (Exception e) {
 			logger.error("Fail to open file");
 			return false;
 		}
