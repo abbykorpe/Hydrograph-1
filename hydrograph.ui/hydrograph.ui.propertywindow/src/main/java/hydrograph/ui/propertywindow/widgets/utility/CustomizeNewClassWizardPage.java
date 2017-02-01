@@ -24,7 +24,7 @@ public class CustomizeNewClassWizardPage extends NewClassWizardPage {
 			IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
 			IProject project = fileEditorInput.getFile().getProject();
 			if (project != null) {
-				IFolder srcFolder = project.getFolder("src");
+				IFolder srcFolder = project.getFolder("src/main/java");
 				if (srcFolder != null && srcFolder.exists()) {
 					text.setText(project.getName() + "/" + srcFolder.getProjectRelativePath().toString());
 				}
