@@ -18,6 +18,7 @@ import hydrograph.ui.common.component.config.Operations;
 import hydrograph.ui.common.component.config.TypeInfo;
 import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.NameValueProperty;
@@ -230,8 +231,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			addButtonSize = 325;
 		}
 		Button addButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { addButtonSize, 17, 20, 15 }, "");
-		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
-		addButton.setImage(addImage);
+		addButton.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		addButton.addMouseListener(new MouseAdapter() {
@@ -259,8 +259,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			deleteButtonSize = 355;
 		}
 		Button deleteButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { deleteButtonSize, 17, 20, 15 }, "");
-		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		deleteButton.setImage(deleteImage);
+		deleteButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		deleteButton.addMouseListener(new MouseAdapter() {
@@ -278,8 +277,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			upButtonSize = 385;
 		}
 		Button upButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { upButtonSize, 17, 20, 15 }, "");
-		Image upImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.UP_ICON);
-		upButton.setImage(upImage);
+		upButton.setImage(ImagePathConstant.MOVEUP_BUTTON.getImageFromRegistry());
 		upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		upButton.addMouseListener(new MouseAdapter() {
@@ -297,8 +295,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			downButtonSize = 415;
 		}
 		Button downButton = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { downButtonSize, 17, 20, 15 }, "");
-		Image downImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DOWN_ICON);
-		downButton.setImage(downImage);
+		downButton.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
 		downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);	
 		downButton.addMouseListener(new MouseAdapter() {

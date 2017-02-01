@@ -142,10 +142,6 @@ public class Messages extends NLS {
 	public static String COPY_GRID_SUFFIX;
 	public static String OUTPUT_FIELD_EXISTS;
 	public static String AVAILABLE_FIELDS_HEADER;
-	public static String ADD_ICON;
-	public static String DELETE_ICON;
-	public static String UP_ICON;
-	public static String DOWN_ICON;
 	public static String INFORMATION;
 	public static String SAVE_JOB_MESSAGE;
 	public static String IS_PARAMETER;

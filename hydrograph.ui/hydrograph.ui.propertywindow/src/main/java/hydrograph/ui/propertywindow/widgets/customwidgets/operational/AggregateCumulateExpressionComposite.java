@@ -27,7 +27,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -37,8 +36,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
@@ -87,10 +86,10 @@ public class AggregateCumulateExpressionComposite extends AbstractExpressionComp
 		buttonComposite.setLayoutData(gd_buttonComposite);
 
 		addButton = new Button(buttonComposite, SWT.NONE);
-		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addButton.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		deletButton = new Button(buttonComposite, SWT.NONE);
 		deletButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		deletButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		deletButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 
 		tableViewer = new TableViewer(selectColumnComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table = tableViewer.getTable();

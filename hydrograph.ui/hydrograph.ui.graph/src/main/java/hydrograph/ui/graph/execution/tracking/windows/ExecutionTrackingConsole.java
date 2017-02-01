@@ -159,9 +159,9 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 
 		ToolBarManager toolBarManager = new ToolBarManager();
 		coolBarManager.add(toolBarManager);
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CLEAR_EXEC_TRACKING_CONSOLE),
+		addtoolbarAction(toolBarManager, ImagePathConstant.CLEAR_EXEC_TRACKING_CONSOLE,
 				actionFactory.getAction(ClearConsoleAction.class.getName()));
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.CONSOLE_SCROLL_LOCK), 
+		addtoolbarAction(toolBarManager, ImagePathConstant.CONSOLE_SCROLL_LOCK, 
 				actionFactory.getAction(ScrollLockAction.class.getName()));
 		
 		return coolBarManager;
@@ -175,13 +175,12 @@ public class ExecutionTrackingConsole extends ApplicationWindow {
 	 * @param imagePath the image path
 	 * @param action the action
 	 */
-	private void addtoolbarAction(ToolBarManager toolBarManager, final String imagePath, Action action) {
+	private void addtoolbarAction(ToolBarManager toolBarManager, final ImagePathConstant imagePath, Action action) {
 
 		ImageDescriptor exportImageDescriptor = new ImageDescriptor() {
 			@Override
 			public ImageData getImageData() {
-				ImageData imageData = new ImageData(imagePath);
-				return imageData;
+				return imagePath.getImageFromRegistry().getImageData();
 			}
 		};
 		action.setImageDescriptor(exportImageDescriptor);

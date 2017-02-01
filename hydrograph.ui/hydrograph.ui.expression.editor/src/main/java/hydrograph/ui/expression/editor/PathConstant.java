@@ -15,8 +15,6 @@ package hydrograph.ui.expression.editor;
 
 public class PathConstant {
 	public static final String OPERATOR_CONFIG_FILE = "resources/expression_operator.properties";
-	public static final String DELETE_BUTTON_IMAGE = "resources/icons/delete.png";
-	public static final String INTELLISENCE_IMAGE = "/icons/intellisense_icon.png";
 	public static final String EXPRESSION_EDITOR_EXTERNAL_JARS_PROPERTIES_FILES = "UserFunctions.properties";
 
 	

@@ -323,14 +323,14 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		
 		keyValAddButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		keyValAddButton.setText("");
-		keyValAddButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH+ ImagePathConstant.ADD_BUTTON));
+		keyValAddButton.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		keyValAddButton.addSelectionListener(addButtonListner(keyValueDelButton));
 		keyValAddButton.setToolTipText(Messages.HIVE_PARTI_KEY_VALUE_ADD_TOOLTIP);
 		
 	    
 		keyValueDelButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		keyValueDelButton.setText("");
-		keyValueDelButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH+ ImagePathConstant.DELETE_BUTTON));
+		keyValueDelButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		keyValueDelButton.addSelectionListener(deleteButtonListner(keyValueDelButton));
 		keyValueDelButton.setToolTipText(Messages.HIVE_PARTI_KEY_VALUE_DEL_TOOLTIP);
 		
@@ -645,8 +645,7 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH
-				+ ImagePathConstant.DELETE_BUTTON));
+		deleteButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		deleteButton.setToolTipText(Messages.HIVE_PARTI_KEY_DEL_TOOLTIP);
 		attachDeleteButtonListener(deleteButton);
 
@@ -654,16 +653,14 @@ public class HivePartitionKeyValueDialog extends Dialog {
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH
-				+ ImagePathConstant.MOVEUP_BUTTON));
+		upButton.setImage(ImagePathConstant.MOVEUP_BUTTON.getImageFromRegistry());
 		attachUpButtonListener(upButton);
 
 		downButton = new Button(partKeyButtonPanel, SWT.NONE);
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH
-				+ ImagePathConstant.MOVEDOWN_BUTTON));
+		downButton.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
 		attachDownButtonListerner(downButton);
 		deleteButton.setEnabled(false);
 		upButton.setEnabled(false);

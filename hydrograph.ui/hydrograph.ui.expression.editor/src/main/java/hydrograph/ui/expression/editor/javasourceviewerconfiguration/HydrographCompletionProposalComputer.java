@@ -1,5 +1,6 @@
 package hydrograph.ui.expression.editor.javasourceviewerconfiguration;
 
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.PathConstant;
@@ -97,8 +98,7 @@ public class HydrographCompletionProposalComputer implements IJavaCompletionProp
 			String displayLabel;
 			String replacementString;
 			List<ClassDetails> classList = ClassRepo.INSTANCE.getClassList();
-			ImageData imageData=new ImageData(XMLConfigUtil.CONFIG_FILES_PATH +PathConstant.INTELLISENCE_IMAGE);
-			Image image=new Image(Display.getCurrent(),imageData);
+			Image image=ImagePathConstant.INTELLISENCE_IMAGE.getImageFromRegistry();
 			
 			for (ClassDetails classDetails : classList) {
 //				if (!classDetails.isUserDefined()) {

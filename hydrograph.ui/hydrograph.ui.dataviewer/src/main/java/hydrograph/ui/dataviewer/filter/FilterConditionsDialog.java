@@ -1016,7 +1016,7 @@ public class FilterConditionsDialog extends Dialog {
 
 	private void addButtonInTable(TableViewer tableViewer, TableItem tableItem, String columnName, 
 			String buttonPaneName, String editorName, int columnIndex, SelectionListener buttonSelectionListener,
-			String imagePath) {
+			ImagePathConstant imagePath) {
 		final Composite buttonPane = new Composite(tableViewer.getTable(), SWT.NONE);
 		buttonPane.setLayout(new FillLayout());
 		final Button button = new Button(buttonPane, SWT.NONE);
@@ -1025,7 +1025,7 @@ public class FilterConditionsDialog extends Dialog {
 		tableItem.setData(columnName, button);
 		tableItem.setData(buttonPaneName, buttonPane);
 		button.addSelectionListener(buttonSelectionListener);
-		button.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + imagePath));
+		button.setImage(imagePath.getImageFromRegistry());
 		
 		final TableEditor editor = new TableEditor(tableViewer.getTable());
 		editor.grabHorizontal = true;

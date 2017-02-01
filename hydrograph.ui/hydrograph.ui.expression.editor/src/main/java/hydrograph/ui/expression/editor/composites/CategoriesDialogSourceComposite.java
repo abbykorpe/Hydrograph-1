@@ -13,6 +13,7 @@
 
 package hydrograph.ui.expression.editor.composites;
 
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.expression.editor.Constants;
 import hydrograph.ui.expression.editor.Messages;
 import hydrograph.ui.expression.editor.PathConstant;
@@ -182,10 +183,9 @@ public class CategoriesDialogSourceComposite extends Composite {
 		deleteButton.setBounds(0, 0, 75, 25);
 		deleteButton.setToolTipText(Messages.EXTERNAL_JAR_DIALOG_DELETE_BUTTON_TOOLTIP);
 		try {
-			deleteButton.setImage(new Image(null, ExpressionEditorUtil.INSTANCE
-					.getPropertyFilePath(PathConstant.DELETE_BUTTON_IMAGE)));
-		} catch (IOException ioException) {
-			LOGGER.error("IOException occurred while attaching image to button", ioException);
+			deleteButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
+		} catch (Exception exception) {
+			LOGGER.error("Exception occurred while attaching image to button", exception);
 			deleteButton.setText("Delete");
 		}
 

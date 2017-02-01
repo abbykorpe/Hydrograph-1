@@ -239,8 +239,8 @@ public class DebugDataViewer extends ApplicationWindow {
 		formattedViewData = new LinkedList<>();
 		sortOrder=SortOrder.DSC;
 		
-		ascending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
-		descending=new org.eclipse.swt.graphics.Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
+		ascending=ImagePathConstant.SORT_ASC.getImageFromRegistry();
+		descending=ImagePathConstant.SORT_DESC.getImageFromRegistry();
 	}
 
 	/**
@@ -1543,29 +1543,29 @@ public class DebugDataViewer extends ApplicationWindow {
 
 		ToolBarManager toolBarManager = new ToolBarManager();
 		coolBarManager.add(toolBarManager);
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_EXPORT),
+		addtoolbarAction(toolBarManager, ImagePathConstant.DATA_VIEWER_EXPORT,
 				actionFactory.getAction(ExportAction.class.getName()));
 
 		/*
 		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FIND),
 		 * actionFactory.getAction(FindAction.class.getName()));
 		 */
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_RELOAD),
+		addtoolbarAction(toolBarManager, ImagePathConstant.DATA_VIEWER_RELOAD,
 				actionFactory.getAction(ReloadAction.class.getName()));
 		/*
 		 * addtoolbarAction( toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_FILTER),
 		 * actionFactory.getAction(FilterAction.class.getName()));
 		 */
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.RESET_SORT),
+		addtoolbarAction(toolBarManager,ImagePathConstant.RESET_SORT,
 				actionFactory.getAction(ResetSortAction.class.getName()));
 		
-		addtoolbarAction(toolBarManager,(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON),
+		addtoolbarAction(toolBarManager,ImagePathConstant.TABLE_ICON,
 				actionFactory.getAction(SelectColumnAction.class.getName()));
 
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.FIND_DATA), 
+		addtoolbarAction(toolBarManager, ImagePathConstant.FIND_DATA, 
 				actionFactory.getAction(FindAction.class.getName()));
 		
-		addtoolbarAction(toolBarManager, (XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.AUTO_ADJUST_COLUMNS), 
+		addtoolbarAction(toolBarManager, ImagePathConstant.AUTO_ADJUST_COLUMNS, 
 				actionFactory.getAction(AutoExpandColumnsAction.class.getName()));
 		
 		dropDownAction = new Action("", SWT.DROP_DOWN) {
@@ -1579,7 +1579,7 @@ public class DebugDataViewer extends ApplicationWindow {
 
 			@Override
 			public ImageData getImageData() {
-				return new ImageData(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DATA_VIEWER_SWITCH_VIEW);
+				return ImagePathConstant.DATA_VIEWER_SWITCH_VIEW.getImageFromRegistry().getImageData();
 			}
 		});
 
@@ -1589,13 +1589,12 @@ public class DebugDataViewer extends ApplicationWindow {
 		return coolBarManager;
 	}
 
-	private void addtoolbarAction(ToolBarManager toolBarManager, final String imagePath, Action action) {
+	private void addtoolbarAction(ToolBarManager toolBarManager, final ImagePathConstant imagePath, Action action) {
 
 		ImageDescriptor exportImageDescriptor = new ImageDescriptor() {
 			@Override
 			public ImageData getImageData() {
-				ImageData imageData = new ImageData(imagePath);
-				return imageData;
+				return imagePath.getImageFromRegistry().getImageData();
 			}
 		};
 		action.setImageDescriptor(exportImageDescriptor);

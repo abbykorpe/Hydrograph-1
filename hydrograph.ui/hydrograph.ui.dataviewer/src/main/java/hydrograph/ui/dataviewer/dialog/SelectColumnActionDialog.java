@@ -12,8 +12,6 @@
  ******************************************************************************/
 
 package hydrograph.ui.dataviewer.dialog;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,17 +29,17 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
+
+import hydrograph.ui.common.util.ImagePathConstant;
 
 /**
  * The Class SelectColumnActionDialog.
@@ -62,8 +60,6 @@ public class SelectColumnActionDialog extends Dialog {
 	private static final String ALL_COLUMNS = "All Columns";
 	private static final String SELECTED_COLUMNS = "Selected Columns";
 	private static final String SKIP = "skip";
-	private Image ascending = new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_ASC);
-	private Image descending = new Image(Display.getDefault(), XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SORT_DESC);
 	private boolean isAllColumnsAsce = false;
 	private boolean isSelectedColumnsAsce = false;
 	private Button sortAll;
@@ -95,8 +91,7 @@ public class SelectColumnActionDialog extends Dialog {
 
 		Shell shell=container.getShell();
 		shell.setText(SELECT_COLUMNS);
-		Image table = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.TABLE_ICON);
-		shell.setImage(table);
+		shell.setImage(ImagePathConstant.TABLE_ICON.getImageFromRegistry());
 		
 		Composite allColumnsComposite = new Composite(sashForm, SWT.NONE);
 		allColumnsComposite.setLayout(new GridLayout(2, false));
@@ -119,7 +114,7 @@ public class SelectColumnActionDialog extends Dialog {
 		sortAll = new Button(lblAndBtncomposite, SWT.NONE);
 		sortAll.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(allColumnsComposite, SWT.NONE);
-		sortAll.setImage(ascending);
+		sortAll.setImage(ImagePathConstant.SORT_ASC.getImageFromRegistry());
 		
 		
 		listAllComlumns = new List(allColumnsComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
@@ -137,23 +132,19 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		Label selectAllLabel = new Label(allColumnsControlButtons, SWT.NONE);
 		selectAllLabel.setBounds(6, 70, 25, 25);
-		Image selectAllColumns = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.SELECT_ALL_ICON);
-		selectAllLabel.setImage(selectAllColumns);
+		selectAllLabel.setImage(ImagePathConstant.SELECT_ALL_ICON.getImageFromRegistry());
 		
 		Label selectLabel = new Label(allColumnsControlButtons, SWT.NONE);
 		selectLabel.setBounds(6, 110, 25, 25);
-		Image select = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SELECT_ICON);
-		selectLabel.setImage(select);
+		selectLabel.setImage(ImagePathConstant.SELECT_ICON.getImageFromRegistry());
 		
 		Label disSelectLabel = new Label(allColumnsControlButtons, SWT.NONE);
 		disSelectLabel.setBounds(6, 150, 25, 25);
-		Image disSelect = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DESELECT_ICON);
-		disSelectLabel.setImage(disSelect);
+		disSelectLabel.setImage(ImagePathConstant.DESELECT_ICON.getImageFromRegistry());
 		
 		Label removeAll = new Label(allColumnsControlButtons, SWT.NONE);
 		removeAll.setBounds(6, 190, 25, 25);
-		Image disSelectAll = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DESELECT_ALL_ICON);
-		removeAll.setImage(disSelectAll);
+		removeAll.setImage(ImagePathConstant.DESELECT_ALL_ICON.getImageFromRegistry());
 		
 		
 		
@@ -180,7 +171,7 @@ public class SelectColumnActionDialog extends Dialog {
 		sortSelected = new Button(composite, SWT.NONE);
 		GridData gd_sortSelected = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		sortSelected.setLayoutData(gd_sortSelected);
-		sortSelected.setImage(ascending);
+		sortSelected.setImage(ImagePathConstant.SORT_ASC.getImageFromRegistry());
 		new Label(selectColumnComposite, SWT.NONE);
 		
 		listSelectedColumns = new List(selectColumnComposite, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
@@ -197,13 +188,11 @@ public class SelectColumnActionDialog extends Dialog {
 		
 		moveUpLable = new Label(moveElementsComposite, SWT.NONE);
 		moveUpLable.setBounds(0, 114, 24, 24);
-		Image up = new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.UP_ICON);
-		moveUpLable.setImage(up);
+		moveUpLable.setImage(ImagePathConstant.UP_ICON.getImageFromRegistry());
 		
 		moveDownLable = new Label(moveElementsComposite, SWT.NONE);
 		moveDownLable .setBounds(0, 160, 24, 25);
-		Image down= new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DOWN_ICON);
-		moveDownLable.setImage(down);
+		moveDownLable.setImage(ImagePathConstant.DOWN_ICON.getImageFromRegistry());
 
 		addListeners(selectAllLabel, selectLabel, disSelectLabel, removeAll);
 		sashForm.setWeights(new int[] {297, 274});
@@ -216,13 +205,13 @@ public class SelectColumnActionDialog extends Dialog {
 						Collections.sort(allColumns);
 						listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
 						isAllColumnsAsce = true;
-						sortAll.setImage(ascending);
+						sortAll.setImage(ImagePathConstant.SORT_ASC.getImageFromRegistry());
 					}
 					else{
 						Collections.sort(allColumns,comparator);
 						listAllComlumns.setItems(Arrays.copyOf(allColumns.toArray(),allColumns.toArray().length,String[].class));
 						isAllColumnsAsce = false;
-						sortAll.setImage(descending);
+						sortAll.setImage(ImagePathConstant.SORT_DESC.getImageFromRegistry());
 					}
 				}
 			}
@@ -235,13 +224,13 @@ public class SelectColumnActionDialog extends Dialog {
 					if(!isSelectedColumnsAsce){
 						Collections.sort(selectedColumns);
 						listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
-						sortSelected.setImage(ascending);
+						sortSelected.setImage(ImagePathConstant.SORT_ASC.getImageFromRegistry());
 						isSelectedColumnsAsce = true;
 					}
 					else{
 						Collections.sort(selectedColumns, comparator);
 						listSelectedColumns.setItems(Arrays.copyOf(selectedColumns.toArray(),selectedColumns.toArray().length,String[].class));
-						sortSelected.setImage(descending);
+						sortSelected.setImage(ImagePathConstant.SORT_DESC.getImageFromRegistry());
 						isSelectedColumnsAsce = false;
 					}
 				}

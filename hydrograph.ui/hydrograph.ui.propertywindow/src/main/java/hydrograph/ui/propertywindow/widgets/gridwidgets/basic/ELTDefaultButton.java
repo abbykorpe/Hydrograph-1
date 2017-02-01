@@ -14,13 +14,14 @@
  
 package hydrograph.ui.propertywindow.widgets.gridwidgets.basic;
 
-import hydrograph.ui.common.util.OSValidator;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -103,8 +104,8 @@ public class ELTDefaultButton extends AbstractELTWidget{
 		defaultELTButton.setVisible(visiblity);
 	}
 
-	public void setImage(String img) {
-		defaultELTButton.setImage(new Image(null, img));
+	public void setImage(ImagePathConstant img) {
+		defaultELTButton.setImage(img.getImageFromRegistry());
 		
 	}
 

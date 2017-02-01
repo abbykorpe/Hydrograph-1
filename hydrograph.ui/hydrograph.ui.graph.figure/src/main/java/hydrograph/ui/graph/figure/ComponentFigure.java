@@ -92,7 +92,6 @@ public class ComponentFigure extends Figure implements Validator {
 	private boolean incrementedHeight;
 	private int componentLabelMargin;
 	private String canvasIconPath;
-	private Image canvasIcon, statusImage, compStatusImage,schemaPropogationStopImage;
     private Component component;
 	private String propertyStatus;
 
@@ -108,6 +107,12 @@ public class ComponentFigure extends Figure implements Validator {
 	private ComponentExecutionStatus componentStatus;
 	private LinkedHashMap<String, Object> componentProperties;
 	private Font labelFont, acronymFont;
+
+	private Image canvasIcon;
+
+	private Image statusImage;
+
+	private Image compStatusImage;
 
 	/**
 	 * Instantiates a new component figure.
@@ -400,17 +405,16 @@ public class ComponentFigure extends Figure implements Validator {
   private void trackExecution(Graphics graphics) {
 		Rectangle rectangle = getBounds().getCopy();
 		if(componentStatus!=null){
-
 			if (componentStatus.equals(ComponentExecutionStatus.BLANK)){
 				compStatusImage = null;
 			}else if (componentStatus.equals(ComponentExecutionStatus.PENDING)){
-				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_PENDING_ICON);
+				compStatusImage =ImagePathConstant.COMPONENT_PENDING_ICON.getImageFromRegistry();
 			}else if (componentStatus.equals(ComponentExecutionStatus.RUNNING)){
-				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_RUNNING_ICON);
+				compStatusImage =ImagePathConstant.COMPONENT_RUNNING_ICON.getImageFromRegistry();
 			}else if (componentStatus.equals(ComponentExecutionStatus.SUCCESSFUL)){
-				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_SUCCESS_ICON);
+				compStatusImage =ImagePathConstant.COMPONENT_SUCCESS_ICON.getImageFromRegistry();
 			}else if (componentStatus.equals(ComponentExecutionStatus.FAILED)){
-				compStatusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_FAILED_ICON);
+				compStatusImage = ImagePathConstant.COMPONENT_FAILED_ICON.getImageFromRegistry();
 			}
 		}
 		if (compStatusImage != null) {
@@ -434,18 +438,15 @@ public class ComponentFigure extends Figure implements Validator {
 	 * @param graphics
 	 */
 	private void drawPropertyStatus(Graphics graphics) {
-		
 		Rectangle rectangle = getBounds().getCopy();
 		if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.WARN.name())) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_WARN_ICON);
+			statusImage = ImagePathConstant.COMPONENT_WARN_ICON.getImageFromRegistry();
 		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.ERROR.name())) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON);
+			statusImage = ImagePathConstant.COMPONENT_ERROR_ICON.getImageFromRegistry();
 		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(Constants.UPDATE_AVAILABLE)) {
-			statusImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.COMPONENT_UPDATE_ICON);
+			statusImage = ImagePathConstant.COMPONENT_UPDATE_ICON.getImageFromRegistry();
 		} else if (StringUtils.isNotBlank(getPropertyStatus()) && getPropertyStatus().equals(ValidityStatus.VALID.name())){
-			if (statusImage != null && !statusImage.isDisposed()) {
-				statusImage.dispose();
-			}
+			statusImage=null;
 		}
 		logger.trace("Component has {} property status.", getPropertyStatus());
 		if (statusImage != null && !statusImage.isDisposed()) {
@@ -461,8 +462,7 @@ public class ComponentFigure extends Figure implements Validator {
 	{
 		Rectangle rectangle=getBounds().getCopy();
 		
-		schemaPropogationStopImage=new Image(null, XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.SCHEMA_PROPOGATION_STOP_ICON);
-		graphics.drawImage(schemaPropogationStopImage, new Point(rectangle.width - 90, 8 + componentLabelMargin));
+		graphics.drawImage(ImagePathConstant.SCHEMA_PROPOGATION_STOP_ICON.getImageFromRegistry(), new Point(rectangle.width - 90, 8 + componentLabelMargin));
 	}
 	
 	/**
@@ -485,10 +485,10 @@ public class ComponentFigure extends Figure implements Validator {
 			this.canvasIcon.dispose();
 		}
 		if(compStatusImage!=null){
-			this.compStatusImage.dispose();
+			this.compStatusImage=null;
 		}
 		if(statusImage!=null){
-			this.statusImage.dispose();
+			this.statusImage=null;
 		}
 	}
 	

@@ -74,7 +74,6 @@
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="FALSE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Password requires for connection with Update database">
 		</tns:property>
-		
 
 		<tns:property dataType="string" name="update"
 			value="" renderer="SELECT_BY_KEYS_WIDGET" type="USER" group="GENERAL"

@@ -347,7 +347,7 @@ public class ViewDataPreferencesDialog extends Dialog {
 		warningImageLabel = new Label(composite, SWT.NONE);
 		warningImageLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		
-		warningImageLabel.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.WARNING_ICON));
+		warningImageLabel.setImage(ImagePathConstant.WARNING_ICON.getImageFromRegistry());
 
 		warningLabel = new Label(composite, SWT.NONE);
 		warningLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, true, 1, 1));

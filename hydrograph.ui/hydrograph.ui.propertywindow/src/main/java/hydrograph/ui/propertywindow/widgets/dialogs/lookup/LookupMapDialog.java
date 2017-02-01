@@ -498,8 +498,8 @@ public class LookupMapDialog extends Dialog {
 
 	private void createPullButton(Composite composite_11) {
 		btnPull = new Button(composite_11, SWT.NONE);
-	Image pullButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
-		btnPull.setImage(pullButtonImage);
+	
+		btnPull.setImage(ImagePathConstant.PULL_BUTTON.getImageFromRegistry());
 		btnPull.setToolTipText(PULL_TOOLTIP);
 		
 		btnPull.addSelectionListener(new SelectionAdapter() {
@@ -555,8 +555,7 @@ public class LookupMapDialog extends Dialog {
 	
 	private void createDownButton(Composite composite_11) {
 		btnDown = new Button(composite_11, SWT.NONE);
-	Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
-		btnDown.setImage(downButtonImage);
+		btnDown.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
 		btnDown.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -587,8 +586,7 @@ public class LookupMapDialog extends Dialog {
 
 	private void createUpButton(Composite composite_11) {
 		btnUp = new Button(composite_11, SWT.NONE);
-		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
-		btnUp.setImage(upButtonImage);
+		btnUp.setImage(ImagePathConstant.MOVEUP_BUTTON.getImageFromRegistry());
 		btnUp.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -618,8 +616,7 @@ public class LookupMapDialog extends Dialog {
 
 	private void createDeleteButton(Composite composite_11) {
 		btnDelete = new Button(composite_11, SWT.NONE);
-		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
-		btnDelete.setImage(deleteButtonImage);
+		btnDelete.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		btnDelete.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -658,8 +655,7 @@ public class LookupMapDialog extends Dialog {
 
 	private void createAddButton(Composite composite_11) {
 		btnAdd = new Button(composite_11, SWT.NONE);
-		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
-		btnAdd.setImage(addButtonImage);
+		btnAdd.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		btnAdd.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override

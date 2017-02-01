@@ -13,14 +13,6 @@
 
 package hydrograph.ui.expression.editor.composites;
 
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.PathConstant;
-import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
-import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
-import hydrograph.ui.logging.factory.LogFactory;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -39,7 +31,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,6 +39,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.PathConstant;
+import hydrograph.ui.expression.editor.jar.util.BuildExpressionEditorDataSturcture;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
+import hydrograph.ui.logging.factory.LogFactory;
 public class CategoriesDialogTargetComposite extends Composite {
 	private List targetList;
 	private Logger LOGGER = LogFactory.INSTANCE.getLogger(CategoriesDialogTargetComposite.class);
@@ -100,8 +98,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 		
 		addAllSelectedPackagesLabel = new Label(middleComposite, SWT.NONE);
 		addAllSelectedPackagesLabel.setBounds(6, 70, 25, 25);
-		Image selectAllColumns = new Image(middleComposite.getShell().getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH +ImagePathConstant.SELECT_ALL_ICON);
-		addAllSelectedPackagesLabel.setImage(selectAllColumns);
+		addAllSelectedPackagesLabel.setImage(ImagePathConstant.SELECT_ALL_ICON.getImageFromRegistry());
 		addAllSelectedPackagesLabel.setToolTipText("Add all packages");
 		addListenerToSelectAllLable(addAllSelectedPackagesLabel);
 		addAllSelectedPackagesLabel.setEnabled(false);
@@ -110,8 +107,7 @@ public class CategoriesDialogTargetComposite extends Composite {
 		
 		addSelectedPackagesLabel = new Label(middleComposite, SWT.NONE);
 		addSelectedPackagesLabel.setBounds(6, 110, 25, 25);
-		Image select = new Image(middleComposite.getShell().getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SELECT_ICON);
-		addSelectedPackagesLabel.setImage(select);
+		addSelectedPackagesLabel.setImage(ImagePathConstant.SELECT_ICON.getImageFromRegistry());
 		addSelectedPackagesLabel.setToolTipText("Add selected packages");
 		addListenerToSelectLable(addSelectedPackagesLabel);
 		addSelectedPackagesLabel.setEnabled(false);
@@ -216,10 +212,9 @@ public class CategoriesDialogTargetComposite extends Composite {
 		Button deleteButton = new Button(upperComposite, SWT.NONE);
 		deleteButton.setBounds(0, 0, 75, 25);
 		try {
-			deleteButton.setImage(new Image(null, ExpressionEditorUtil.INSTANCE
-					.getPropertyFilePath(PathConstant.DELETE_BUTTON_IMAGE)));
-		} catch (IOException ioException) {
-			LOGGER.error("IOException occurred while attaching image to button", ioException);
+			deleteButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
+		} catch (Exception exception) {
+			LOGGER.error("Exception occurred while attaching image to button", exception);
 			deleteButton.setText("Delete");
 		}
 		deleteButton.addSelectionListener(new SelectionListener() {
