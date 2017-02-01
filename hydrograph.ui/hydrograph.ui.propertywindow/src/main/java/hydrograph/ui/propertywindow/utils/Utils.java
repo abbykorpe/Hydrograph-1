@@ -209,8 +209,7 @@ public class Utils {
 	 public String getParamValue(String value){
 		 if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
 			String param = null;
-			value = StringUtils.replaceOnce(value, "@{", "");
-			value= StringUtils.replaceOnce(value, "}", "");
+			value=StringUtils.substringBetween(value, "@{", "}");
 			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
 				param = entry.getKey();
 			 if(StringUtils.equals(param, value)){
@@ -244,7 +243,7 @@ public class Utils {
 		    }else if(StringUtils.contains(paramValue, PARAMETER_NOT_FOUND)){
 		    	extSchemaPathText.setToolTipText(remainingString);
 		    }else{
-		    	remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+2, extSchemaPath.length());
+		    	remainingString = extSchemaPath.substring(extSchemaPath.indexOf("}")+1, extSchemaPath.length());
 		    	extSchemaPathText.setToolTipText(paramValue+remainingString);
 		   		}
 		    	
