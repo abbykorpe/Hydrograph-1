@@ -231,9 +231,7 @@ public class PropertyDialogBuilder {
 			for (CTabItem item : tabFolder.getItems()) {
 				if (StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()), subgroupTree
 						.get(subgroupName).get(0).getPropertyGroup())) {
-					item.setImage(new Image(null,
-							XMLConfigUtil.CONFIG_FILES_PATH
-									+ ImagePathConstant.COMPONENT_ERROR_ICON));
+					item.setImage(ImagePathConstant.COMPONENT_ERROR_ICON.getImageFromRegistry());
 				}
 			}
 		}

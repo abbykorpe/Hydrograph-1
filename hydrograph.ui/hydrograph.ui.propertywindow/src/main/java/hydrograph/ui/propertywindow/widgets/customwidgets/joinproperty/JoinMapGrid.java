@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -649,8 +650,7 @@ public class JoinMapGrid extends Dialog {
     
 	private void createLabel(Composite parent) {
 		Button addButton = widget.buttonWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "");
-		Image addImage = new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON);
-		addButton.setImage(addImage);
+		addButton.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 
 		addButton.addMouseListener(new MouseAdapter() {
@@ -669,8 +669,7 @@ public class JoinMapGrid extends Dialog {
 		});
 
 	    deleteButton = widget.buttonWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "");
-	    Image deleteImage = new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-	    deleteButton.setImage(deleteImage);
+	    deleteButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 	    deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.addMouseListener(new MouseAdapter() {
 
@@ -698,8 +697,7 @@ public class JoinMapGrid extends Dialog {
 		});
 
 		upButton = widget.buttonWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "");
-		 Image upImage = new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON);
-		 upButton.setImage(upImage);
+		 upButton.setImage(ImagePathConstant.UP_ICON.getImageFromRegistry());
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -731,8 +729,7 @@ public class JoinMapGrid extends Dialog {
 		});
 
 		downButton = widget.buttonWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "");
-		 Image downImage = new Image(null,XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON);
-		 downButton.setImage(downImage);
+		 downButton.setImage(ImagePathConstant.DOWN_ICON.getImageFromRegistry());
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.addMouseListener(new MouseAdapter() {
 			@Override

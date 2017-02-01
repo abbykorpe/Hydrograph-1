@@ -72,7 +72,7 @@ public class CustomEditActionProvider extends EditActionProvider {
 		};
 		pasteAction.setAccelerator(SWT.MOD1 | 'v');
 		Bundle bundle = Platform.getBundle(MENU_PLUGIN_NAME);
-		URL imagePath = BundleUtility.find(bundle,ImagePathConstant.PASTE_IMAGE_PATH);
+		URL imagePath = BundleUtility.find(bundle,ImagePathConstant.PASTE_IMAGE_PATH.getValue());
 		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(imagePath);
 		pasteAction.setImageDescriptor(imageDescriptor);
 		menu.insertAfter(COPY_ACTION_ID, pasteAction);

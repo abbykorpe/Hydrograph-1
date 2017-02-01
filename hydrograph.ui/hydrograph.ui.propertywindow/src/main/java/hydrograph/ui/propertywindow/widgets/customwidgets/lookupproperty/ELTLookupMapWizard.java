@@ -15,6 +15,7 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -432,8 +433,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 	
 	private void createLabel(Composite parent) {
-		Label addButton = eltswtWidgets.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", new Image(
-				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		Label addButton = eltswtWidgets.labelWidget(parent, SWT.CENTER | SWT.PUSH, new int[] { 0, 0, 25, 20 }, "", ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		addButton.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 
 		addButton.addMouseListener(new MouseAdapter() {
@@ -450,8 +450,7 @@ public class ELTLookupMapWizard extends Dialog {
 			}
 		});
 
-		deleteButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		deleteButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 25, 0, 25, 20 }, "", ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		deleteButton.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deleteButton.addMouseListener(new MouseAdapter() {
 
@@ -479,8 +478,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 		});
 
-		upButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", new Image(null,
-				XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.UP_ICON));
+		upButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 50, 0, 25, 20 }, "", ImagePathConstant.UP_ICON.getImageFromRegistry());
 		upButton.setToolTipText(Messages.MOVE_SCHEMA_UP_TOOLTIP);
 		upButton.addMouseListener(new MouseAdapter() {
 
@@ -511,8 +509,7 @@ public class ELTLookupMapWizard extends Dialog {
 			}
         });
 
-		downButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", new Image(
-				null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Messages.DOWN_ICON));
+		downButton = eltswtWidgets.labelWidget(parent, SWT.CENTER, new int[] { 74, 0, 25, 20 }, "", ImagePathConstant.DOWN_ICON.getImageFromRegistry());
 		downButton.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
 		downButton.addMouseListener(new MouseAdapter() {
 

@@ -102,7 +102,6 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.BasicSchemaGridRow;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FilterProperties;
@@ -1653,7 +1652,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(addButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		 buttonSubGroup.attachWidget(addButton);
-		 addButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
+		 addButton.setImage(ImagePathConstant.ADD_BUTTON);
 		 addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 	 }
 
@@ -1661,7 +1660,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 deleteButton = new ELTDefaultButton("");
 		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		 buttonSubGroup.attachWidget(deleteButton);
-		 deleteButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
+		 deleteButton.setImage(ImagePathConstant.DELETE_BUTTON);
 		 deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 	 }
 
@@ -1669,7 +1668,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 upButton = new ELTDefaultButton("");
 		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(upButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		 buttonSubGroup.attachWidget(upButton);
-		 upButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
+		 upButton.setImage(ImagePathConstant.MOVEUP_BUTTON);
 		 upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		 ((Button)upButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {
 
@@ -1704,7 +1703,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 		 SchemaButtonsSyncUtility.INSTANCE.buttonSize(downButton, macButtonWidth, macButtonHeight, windowButtonWidth, windowButtonHeight);
 		 buttonSubGroup.attachWidget(downButton);
 
-		 downButton.setImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
+		 downButton.setImage(ImagePathConstant.MOVEDOWN_BUTTON);
 		 downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 
 		 ((Button)downButton.getSWTWidgetControl()).addMouseListener(new MouseAdapter() {

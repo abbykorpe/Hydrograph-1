@@ -611,8 +611,7 @@ public class MultiParameterFileDialog extends Dialog {
 				applyButton.setEnabled(true);
 			}
 		});
-		Image addButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON);
-		btnAdd_1.setImage(addButtonImage);
+		btnAdd_1.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		
 
 		Button btnDelete = new Button(composite_8, SWT.NONE);
@@ -626,8 +625,7 @@ public class MultiParameterFileDialog extends Dialog {
 				applyButton.setEnabled(true);
 			}
 		});
-		Image deleteButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON);
-		btnDelete.setImage(deleteButtonImage);
+		btnDelete.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		
 
 		Button btnUp = new Button(composite_8, SWT.NONE);
@@ -641,8 +639,7 @@ public class MultiParameterFileDialog extends Dialog {
 				applyButton.setEnabled(true);
 			}
 		});
-		Image upButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
-		btnUp.setImage(upButtonImage);
+		btnUp.setImage(ImagePathConstant.MOVEUP_BUTTON.getImageFromRegistry());
 		
 
 		Button btnDown = new Button(composite_8, SWT.NONE);
@@ -656,8 +653,7 @@ public class MultiParameterFileDialog extends Dialog {
 				applyButton.setEnabled(true);
 			}
 		});
-		Image downButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
-		btnDown.setImage(downButtonImage);
+		btnDown.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
 
 		Button btnSave = new Button(composite_8, SWT.NONE);
 		btnSave.setToolTipText(Messages.PARAMETER_GRID_SAVE_TOOLTIP);
@@ -670,8 +666,7 @@ public class MultiParameterFileDialog extends Dialog {
 				applyButton.setEnabled(true);
 			}
 		});
-		Image saveButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.SAVE_BUTTON);
-		btnSave.setImage(saveButtonImage);
+		btnSave.setImage(ImagePathConstant.SAVE_BUTTON.getImageFromRegistry());
 		
 
 		Composite composite_1 = new Composite(composite_4, SWT.NONE);
@@ -1123,9 +1118,8 @@ public class MultiParameterFileDialog extends Dialog {
 		composite_1_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
 		Label lblForImage = new Label(composite_1_2, SWT.NONE);
-		Image image = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MULTI_PARAMETERGRID_DROP_BOX);
 		lblForImage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
-		lblForImage.setImage(image);
+		lblForImage.setImage(ImagePathConstant.MULTI_PARAMETERGRID_DROP_BOX.getImageFromRegistry());
 	   
 		DropTarget dt = new DropTarget(composite_1, DND.DROP_MOVE);
 		dt.setTransfer(new Transfer[] { TextTransfer.getInstance() });
@@ -1469,9 +1463,6 @@ public class MultiParameterFileDialog extends Dialog {
 	 
 	
 	private void createParameterFilesBoxButtonPanel(Composite composite_2) {
-		Image upImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON);
-		Image downImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON);
-		
 		Composite composite_3 = new Composite(composite_2, SWT.NONE);
 		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,false, 1, 1));
 		GridLayout gridLayout=new GridLayout(8, false);
@@ -1552,7 +1543,7 @@ public class MultiParameterFileDialog extends Dialog {
 				applyButton.setEnabled(true);
 			}
 		});
-		btnUp_1.setImage(upImage);
+		btnUp_1.setImage(ImagePathConstant.MOVEUP_BUTTON.getImageFromRegistry());
 		
 		Button btnDown_1 = new Button(composite_3, SWT.NONE);
 		btnDown_1.setToolTipText(Messages.MOVE_SCHEMA_DOWN_TOOLTIP);
@@ -1570,7 +1561,7 @@ public class MultiParameterFileDialog extends Dialog {
 				applyButton.setEnabled(true);
 			}
 		});
-		btnDown_1.setImage(downImage);
+		btnDown_1.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
 		btnAddProjectParam.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

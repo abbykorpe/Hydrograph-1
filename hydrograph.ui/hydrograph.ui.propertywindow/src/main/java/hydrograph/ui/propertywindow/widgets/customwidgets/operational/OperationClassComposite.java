@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
@@ -292,10 +293,10 @@ public class OperationClassComposite extends Composite {
 		buttonComposite.setLayoutData(gd_buttonComposite);
 		
 		 addButtonInputTable = new Button(buttonComposite, SWT.NONE);
-		 addButtonInputTable.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		 addButtonInputTable.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		 deletButtonInputTable = new Button(buttonComposite, SWT.NONE);
 		 deletButtonInputTable.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		 deletButtonInputTable.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		 deletButtonInputTable.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		
 		 inputTableViewer = new TableViewer(operationInputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION|SWT.MULTI);
 		inputTable = inputTableViewer.getTable();
@@ -325,10 +326,10 @@ public class OperationClassComposite extends Composite {
 		buttonCompositeForOperationOutputField.setLayoutData(gd_buttonCompositeForOperationOutputField);
 		
 		addButtonOutputTable = new Button(buttonCompositeForOperationOutputField, SWT.NONE);
-		addButtonOutputTable.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON));
+		addButtonOutputTable.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		deletButtonOutputTable = new Button(buttonCompositeForOperationOutputField, SWT.NONE);
 		deletButtonOutputTable.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		deletButtonOutputTable.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON));
+		deletButtonOutputTable.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		
 		 outputTableViewer = new TableViewer(operationOutputFieldComposite, SWT.BORDER | SWT.FULL_SELECTION|SWT.MULTI);
 		 outputTable = outputTableViewer.getTable();

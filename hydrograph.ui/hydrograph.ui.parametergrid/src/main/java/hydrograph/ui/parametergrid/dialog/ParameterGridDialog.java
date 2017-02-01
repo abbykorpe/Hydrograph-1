@@ -71,6 +71,7 @@ import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.parametergrid.constants.ErrorMessages;
@@ -231,7 +232,7 @@ public class ParameterGridDialog extends Dialog {
 		Label btnRemove = new Label(composite, SWT.NONE);
 		btnRemove.setLayoutData(getGridControlButtonLayout());
 		btnRemove.setText("");
-		btnRemove.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/delete.png"));
+		btnRemove.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		addRemoveRowButtonListener(btnRemove);
 	}
 
@@ -276,7 +277,7 @@ public class ParameterGridDialog extends Dialog {
 		GridData gd_btnAdd = getGridControlButtonLayout();
 		btnAdd.setLayoutData(gd_btnAdd);
 		btnAdd.setText("");
-		btnAdd.setImage(new Image(null, XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/add.png"));
+		btnAdd.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		
 		attachAddRowButtonListener(btnAdd);
 	}

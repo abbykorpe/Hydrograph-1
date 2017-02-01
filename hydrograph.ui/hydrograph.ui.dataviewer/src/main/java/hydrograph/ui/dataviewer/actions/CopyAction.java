@@ -43,7 +43,7 @@ public class CopyAction extends Action {
 		super(LABEL);
 		this.debugDataViewer = debugDataViewer;
 		setAccelerator(SWT.MOD1 | 'c');
-		setImageDescriptor(ImageDescriptor.createFromImage(SWTResourceManager.getImage(XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COPY_ICON)));
+		setImageDescriptor(ImageDescriptor.createFromImage(ImagePathConstant.COPY_ICON.getImageFromRegistry()));
 	}
 	@Override
 	public void run() {

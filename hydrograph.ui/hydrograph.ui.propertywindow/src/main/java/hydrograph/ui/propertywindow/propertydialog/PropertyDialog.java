@@ -344,9 +344,7 @@ public class PropertyDialog extends Dialog implements IOperationClassDialog{
 		String imagePath = null;
 		//TODO Please uncomment below code before build.
 		try{
-			imagePath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.APP_ICON;
-			Image shellImage = new Image(newShell.getDisplay(), imagePath);
-			newShell.setImage(shellImage);
+			newShell.setImage(ImagePathConstant.APP_ICON.getImageFromRegistry());
 			if(OSValidator.isMac()){
 				newShell.setMinimumSize(new Point(500, 500));
 			}else{

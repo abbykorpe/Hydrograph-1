@@ -471,25 +471,25 @@ public class SecondaryColumnKeysDialog extends Dialog {
 		Button addButton = new Button(composite_1, SWT.NONE);
 		addButton.setToolTipText(Messages.ADD_KEY_SHORTCUT_TOOLTIP);
 		addButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		addButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.ADD_BUTTON));
+		addButton.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		attachAddButtonListern(addButton);
 
 		deleteButton = new Button(composite_1, SWT.NONE);
 		deleteButton.setToolTipText(Messages.DELETE_KEY_SHORTCUT_TOOLTIP);
 		deleteButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		deleteButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.DELETE_BUTTON));
+		deleteButton.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		attachDeleteButtonListener(deleteButton);
 
 		upButton = new Button(composite_1, SWT.NONE);
 		upButton.setToolTipText(Messages.MOVE_UP_KEY_SHORTCUT_TOOLTIP);
 		upButton.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
-		upButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEUP_BUTTON));
+		upButton.setImage(ImagePathConstant.MOVEUP_BUTTON.getImageFromRegistry());
 		attachUpButtonListener(upButton);
 
 		downButton = new Button(composite_1, SWT.NONE);
 		downButton.setToolTipText(Messages.MOVE_DOWN_KEY_SHORTCUT_TOOLTIP);
 		downButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		downButton.setImage(new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.MOVEDOWN_BUTTON));
+		downButton.setImage(ImagePathConstant.MOVEDOWN_BUTTON.getImageFromRegistry());
 		attachDownButtonListerner(downButton);
 		deleteButton.setEnabled(false);
 		upButton.setEnabled(false);

@@ -12,11 +12,6 @@
  ******************************************************************************/
 package hydrograph.ui.propertywindow.transform.viewdata;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +35,12 @@ import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 
 /**
  * The Class TransformViewDataDialog displays the expressions or operations applied on Transform component.
@@ -79,8 +80,7 @@ public class TransformViewDataDialog extends Dialog {
 		
 		Shell shell=container.getShell();
 		shell.setText("View Transform");
-		Image hd= new Image(shell.getDisplay(),XMLConfigUtil.CONFIG_FILES_PATH + TransformViewDataDialogConstants.HYDROGRAPH);
-		shell.setImage(hd);
+		shell.setImage(ImagePathConstant.APP_ICON.getImageFromRegistry());
 		
 		CoolBar coolBar = new CoolBar(container, SWT.FLAT);
 		coolBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
@@ -317,8 +317,7 @@ public class TransformViewDataDialog extends Dialog {
 	private void createCopyButton(Composite buttonComposite){
 		Button copyButton = new Button(buttonComposite, SWT.PUSH);
 	 
-	    	Image copyImage =new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + TransformViewDataDialogConstants.COPY_ICON);
-	    	copyButton.setImage(copyImage);
+	    	copyButton.setImage(ImagePathConstant.ENABLE_COPY_ICON.getImageFromRegistry());
 	    	copyButton.setToolTipText(COPY_BUTTON_TOOL_TIP);
 	    	copyButton.addSelectionListener(new SelectionAdapter() {
 				@Override

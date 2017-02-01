@@ -51,7 +51,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -79,7 +78,6 @@ import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -295,14 +293,12 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 			}
 		});
 		btnPull.setBounds(20, 10, 20, 20);
-		Image pullButtonImage = new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.PULL_BUTTON);
-		btnPull.setImage(pullButtonImage);
+		btnPull.setImage(ImagePathConstant.PULL_BUTTON.getImageFromRegistry());
 		btnPull.setToolTipText("Pull Schema");
 	
 	
 		Button addLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 60, 3, 20, 15 }, "");
-		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
-		addLabel.setImage(addImage);
+		addLabel.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		addLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		addLabel.addMouseListener(new MouseAdapter() {
@@ -316,8 +312,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		
 		Button deletLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 160, 10, 20, 15 }, "");
-		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		deletLabel.setImage(deleteImage);
+		deletLabel.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deletLabel,macButtonWidth,macButtonHeight,windowButtonWidth,windowButtonHeight);
 		deletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 		deletLabel.addMouseListener(new MouseAdapter() {
@@ -609,8 +604,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		
 		
 		addLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 130, 10, 20, 15 }, "");
-		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
-		addLabel.setImage(addImage);
+		addLabel.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(addLabel,43,30,30,25);
 		addLabel.setToolTipText(Messages.ADD_OPERATION_CONTROL);
 		
@@ -627,9 +621,8 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		}else{
 			deleteLabel = widget.buttonWidget(topAddButtonComposite, SWT.CENTER, new int[] { 165, 10, 20, 15 },"");
 		}
-		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
 		SchemaButtonsSyncUtility.INSTANCE.buttonSize(deleteLabel,44,28,30,25);
-		deleteLabel.setImage(deleteImage);
+		deleteLabel.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		deleteLabel.setToolTipText(Messages.DELETE_OPERATION_CONTROL);
 		deleteLabel.addMouseListener(new MouseAdapter() {
 
@@ -866,8 +859,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 	
 
 		Button mapFieldAddLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 635, 10, 20, 15 }, "");
-		Image addImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.ADD_ICON);
-		mapFieldAddLabel.setImage(addImage);
+		mapFieldAddLabel.setImage(ImagePathConstant.ADD_BUTTON.getImageFromRegistry());
 		mapFieldAddLabel.setToolTipText(Messages.ADD_SCHEMA_TOOLTIP);
 		mapFieldAddLabel.addMouseListener(new MouseAdapter() {
 
@@ -878,8 +870,7 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
 		});
 
 		Button mapFieldDeletLabel = widget.buttonWidget(buttonComposite, SWT.CENTER, new int[] { 665, 10, 20, 15 }, "");
-		Image deleteImage = new Image(null, XMLConfigUtil.CONFIG_FILES_PATH + Messages.DELETE_ICON);
-		mapFieldDeletLabel.setImage(deleteImage);
+		mapFieldDeletLabel.setImage(ImagePathConstant.DELETE_BUTTON.getImageFromRegistry());
 		mapFieldDeletLabel.setToolTipText(Messages.DELETE_SCHEMA_TOOLTIP);
 
 		mapFieldDeletLabel.addMouseListener(new MouseAdapter() {

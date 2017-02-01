@@ -62,7 +62,6 @@ public class ELTLookupConfigGrid extends Dialog {
 	private String driverKey, lookupKey;
 	private Label driverEditLableAsButton, lookupEditLableAsButton;
 	private Map<String, List<String>> propagatedFiledNames;
-	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
 
 	private static final String LOOKUP_PORT = "Lookup Port";
 	private static final String LOOKUP_KEYS = "Lookup Key(s)";
@@ -156,7 +155,7 @@ public class ELTLookupConfigGrid extends Dialog {
 
 		driverEditLableAsButton = labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 415, 28, 20, 20 },
 				INSERT_IMAGE);
-		driverEditLableAsButton.setImage(new Image(null, editImageIconPath));
+		driverEditLableAsButton.setImage(ImagePathConstant.EDIT_BUTTON.getImageFromRegistry());
 		
 		driverEditLableAsButton.addMouseListener(new MouseAdapter() {
 
@@ -171,7 +170,7 @@ public class ELTLookupConfigGrid extends Dialog {
 
 		lookupEditLableAsButton = labelWidget(keyComposite, SWT.CENTER | SWT.READ_ONLY, new int[] { 415, 58, 20, 20 },
 				"");
-		lookupEditLableAsButton.setImage(new Image(null, editImageIconPath));
+		lookupEditLableAsButton.setImage(ImagePathConstant.EDIT_BUTTON.getImageFromRegistry());
 
 		lookupEditLableAsButton.addMouseListener(new MouseAdapter() {
 

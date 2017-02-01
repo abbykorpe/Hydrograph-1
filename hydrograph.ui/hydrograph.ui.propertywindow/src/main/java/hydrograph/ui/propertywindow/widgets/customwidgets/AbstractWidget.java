@@ -293,7 +293,7 @@ public abstract class AbstractWidget {
 				{
 					if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),getPropertyName()))
 							{
-						    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
+						    item.setImage(ImagePathConstant.COMPONENT_ERROR_ICON.getImageFromRegistry());
 							}			
 				}	
 		   }
@@ -388,7 +388,7 @@ public abstract class AbstractWidget {
 		{
 			if(StringUtils.equalsIgnoreCase(StringUtils.trim(item.getText()),property.getPropertyGroup()))
 					{
-				    item.setImage(new Image(null,XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.COMPONENT_ERROR_ICON));
+				    item.setImage(ImagePathConstant.COMPONENT_ERROR_ICON.getImageFromRegistry());
 					}			
 		}	
 	 	}

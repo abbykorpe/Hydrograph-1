@@ -61,7 +61,6 @@ public class ELTJoinConfigGrid extends Dialog {
 	private ELTSWTWidgets eltswtWidgets = new ELTSWTWidgets();
 	private Label editLableAsButton;
 	private Map<String, List<String>> propagatedFiledNames;
-	private String editImageIconPath = XMLConfigUtil.CONFIG_FILES_PATH + ImagePathConstant.EDIT_BUTTON;
 	private Component component;
     private List<List<FilterProperties>> sourceFieldList;
 	/**
@@ -172,7 +171,7 @@ public class ELTJoinConfigGrid extends Dialog {
 
 			editLableAsButton = new Label(composite_1, SWT.None);
 			editLableAsButton.setBounds(317, 5 + j, 20, 20);
-			editLableAsButton.setImage(new Image(null, editImageIconPath));
+			editLableAsButton.setImage(ImagePathConstant.EDIT_BUTTON.getImageFromRegistry());
 			editLableAsButton.addMouseListener(new MouseAdapter() {
 				
 				@Override
