@@ -64,8 +64,7 @@ class DefaultSource extends RelationProvider
 
     val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
 
-    val valueRDD = dataFrame.rdd.mapPartitions(itr => {
-      itr.map(row => {
+    val valueRDD = dataFrame.rdd.map(row => {
         if (strict && (row.length != fieldlen.length)){
           LOG.error("Input row does not have enough length to parse all fields. Input length is "
             + row.length
@@ -79,50 +78,52 @@ class DefaultSource extends RelationProvider
             + "\nRow being parsed: " + row)
         }
 
-        def getFieldValues(value: Any, acc: Int): Any = {
-          if (acc == row.size)
-            return value
+      def getFiller(filler:String, length: Int): String ={
+        var res:String = ""
+        for (i <- 0 until (length * -1) ) {
+          res += filler
+        }
+        res
+      }
 
+      var index = 0
+      val sb=new StringBuilder
 
-          def getFiller(filler:String, length: Int): String ={
-            var res:String = ""
-            for (i <- 0 until (length * -1) ) {
-              res += filler
-            }
-            res
-          }
+      while (index < schema.length) {
+        if (row.size == 0)
+          sb.toString()
 
-          val data = row.get(acc)
-          if (data == null ) {
-            if (!safe && !schema(acc).nullable) {
-              LOG.error("Field " + schema(acc).name + " has value null. Field length specified in the schema is "
-                + fieldlen(acc) + ". ")
-              throw new RuntimeException("Field " + schema(acc).name + " has value null. Field length specified in the schema is "
-                + fieldlen(acc) + ". ")
-            } else {
-              val res: String = getFiller(" ",fieldlen(acc))
-              getFieldValues(value + res + data, acc + 1)
-            }
+        val data = row.get(index)
+        if (data == null) {
+          if (!safe && !schema(index).nullable) {
+            LOG.error("Field " + schema(index).name + " has value null. Field length specified in the schema is "
+              + fieldlen(index) + ". ")
+            throw new RuntimeException("Field " + schema(index).name + " has value null. Field length specified in the schema is "
+              + fieldlen(index) + ". ")
           } else {
-
-            val coercedVal = TypeCast.outputValue(data, schema.fields(acc).dataType, dateFormat(acc))
-            val lengthDiff = coercedVal.toString.length - fieldlen(acc)
-            val result = lengthDiff match {
-              case _ if lengthDiff == 0 => coercedVal
-              case _ if lengthDiff > 0 => coercedVal.toString.substring(0, fieldlen(acc))
-              case _ if lengthDiff < 0 =>
-                schema(acc).dataType match {
-                  case BooleanType | ByteType | DateType
-                       | StringType | TimestampType | CalendarIntervalType => coercedVal + getFiller(" ",lengthDiff)
-                  case _ =>  getFiller("0",lengthDiff) + coercedVal
-                }
-            }
-            getFieldValues(value + result.toString, acc + 1)
+            sb.append(getFiller(" ", fieldlen(index)))
           }
         }
-        getFieldValues("", 0)
+        else {
+          val coercedVal = TypeCast.outputValue(data, schema.fields(index).dataType, dateFormat(index))
+          val lengthDiff = coercedVal.toString.length - fieldlen(index)
+          val result = lengthDiff match {
+            case _ if lengthDiff == 0 => coercedVal
+            case _ if lengthDiff > 0 => coercedVal.toString.substring(0, fieldlen(index))
+            case _ if lengthDiff < 0 =>
+              schema(index).dataType match {
+                case BooleanType | ByteType | DateType
+                     | StringType | TimestampType | CalendarIntervalType => coercedVal + getFiller(" ", lengthDiff)
+                case _ => getFiller("0", lengthDiff) + coercedVal
+              }
+          }
+          sb.append(result)
+        }
+        index = index + 1
+      }
+       sb.toString()
       })
-    })
+
     valueRDD.saveAsTextFile(path)
     LOG.info("Fixed Width Output File is successfully created at path : " + path)
   }
