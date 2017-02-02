@@ -1,21 +1,21 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
-	
-sourceCompatibility = 1.7
+
+sourceCompatibility = 1.8
 version = '0.1'
 ext.hadoopVersion = '2.6.0'
-
+ext.hiveVersion = '1.2.0'
 group = 'hygrograph'
-archivesBaseName = 'hydrograph.server'
+archivesBaseName = 'hydrograph.services'
 
 buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
-  }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
+    }
 }
 
 version = new Version(major: 0, minor: 1, revision: 1)
@@ -45,28 +45,51 @@ class Version {
 
 repositories {
     mavenLocal()
-    mavenCentral()
+    mavenCentral() 
     maven {
         url 'http://conjars.org/repo/'
     }
     maven {
         url 'http://maven.twttr.com/'
     }
+     maven {
+        url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
+    }
 }
-
-dependencies {
+   
+dependencies {   
 	compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
 	compile group: 'cascading', name: 'lingual-hadoop2-mr1', version: '1.2.1', classifier:'jdbc'
-  	compile group: 'com.sparkjava', name: 'spark-core', version: '1.1.1'
+  	compile group: 'com.sparkjava', name: 'spark-core', version: '2.5.1'
+	compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1' 
 	compile group: 'org.apache.hadoop', name: 'hadoop-minicluster', version: hadoopVersion
-	
-	testCompile 'junit:junit:4.11'
+	compile (group: 'org.apache.hive', name: 'hive-exec', version: hiveVersion) {
+        exclude group: 'com.google.guava'
+        exclude group: 'org.apache.curator'
+    }
+
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.34'
+    //The group Id and Artifact Id(Name) are Hydrograph Defined. Use the same Group Id/ Artifact Id while uploading the JARs to Artifact respository..
+
+    //Following are the URL’s to download the jars for Oracle:
+    //Oracle: http://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html
+    compileOnly(group: 'oracle', name: 'ojdbc6', version: '11.2.0.4')
+
+    //Following are the URL’s to download the jars for RedShift:
+    //Redshift: https://s3.amazonaws.com/redshift-downloads/drivers/RedshiftJDBC42-1.2.1.1001.jar
+    compileOnly(group: 'redshift', name: 'redshiftJDBC42', version: '1.2.1.1001')
+
+    //Following are the URL’s to download the jars for Teradata:
+    //Teradata: http://downloads.teradata.com/download/connectivity/jdbc-driver
+    compile(group: 'teraData', name: 'tdgssconfig', version: '0.1')
+    compile(group: 'teraData', name: 'terajdbc4', version: '0.1')
+
+    testCompile 'junit:junit:4.11'
 }	
-	
 jar {
   manifest {
   	attributes(
-  		'Main-Class': 'hydrograph.server.debug.service.DebugService'
+  		'Main-Class': 'hydrograph.server.service.DebugService'
   	)
     attributes(
       "Class-Path": configurations.compile.collect { it.getName() }.join(' ')

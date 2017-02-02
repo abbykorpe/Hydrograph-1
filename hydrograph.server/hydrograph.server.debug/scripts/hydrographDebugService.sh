@@ -14,13 +14,14 @@
 # ******************************************************************************
 
 
-#IMPORTANT: Please update the following paths for your environment for successful 
+#IMPORTANT: Please update the following paths for your environment for successful
 #           execution of the script.
 SERVER_JAR_PATH=./bin
-LIB_PATH=./lib
+LIB_PATH=./libs
 LOG_PATH=./log
 LIBJARS=""
-SERVER_JAR="hydrograph.server.debug.service"
+SERVER_JAR="elt-debug-0.1.1.jar"
+SERVER_NAME=`uname -n`
 
 export LIBPATHS=""
 export LIBJARS=""
@@ -36,19 +37,50 @@ SERVICE_START_IND=0
 
 
 #*********function declarations************
+exportMailConfigurations(){
+    mailConfigFile="./config/mail.properties"
+    if [ -f "$mailConfigFile" ]
+    then
+        . $mailConfigFile
+    else
+        echo "$mailConfigFile file not found"
+    fi
+}
+
+
+
+function monitor_service() {
+    while [ 1 ]
+    do
+        check_status "SUPRESS_LOGGING"
+        if  [ $SERVICE_START_IND -eq 0 ];
+        then
+            echo "View Data service has stopped on $SERVER_NAME" | mail -v -s "View Data Service has stopped" \
+				-S smtp=$mail_smtp_host \
+				-S from="$mail_smtp_from" \
+				"$mail_smtp_to"
+            rc=$?
+            if [ $rc -ne 0 ]; then
+                echo "Failed while sending email with return code: "$rc
+            fi
+            break
+        fi
+        sleep 30s
+    done
+}
 
 appendLibJars(){
 
   LIB_FOLDER=$1
-  
+
   for JARFILE in `ls -1 ${LIB_FOLDER}/*.jar`
-	do
-				if [ -n "$LIBJARS" ]; then
-						LIBJARS=${LIBJARS},$JARFILE
-				else
-						LIBJARS=$JARFILE
-				fi
-		done
+        do
+                                if [ -n "$LIBJARS" ]; then
+                                                LIBJARS=${LIBJARS},$JARFILE
+                                else
+                                                LIBJARS=$JARFILE
+                                fi
+                done
  }
 
 
@@ -86,9 +118,9 @@ return 0
 }
 
 function print_help {
-		echo "============================"
+                echo "============================"
         echo "Hydrograph UI Debug Service"
-		echo "============================"
+                echo "============================"
         echo "Starts the Hydrograph Debug Service to enable debugging on development environments."
         echo "*Only one instance of the service should be present on the server"
         echo ""
@@ -117,11 +149,13 @@ start_service () {
                    COLONSEPERATED="`echo "$LIBJARS"|tr ',' ':'`"
 
         SUPRESS=$1
-        check_status $SUPRESS
+        if [ ! "$SUPRESS" == "" ]; then
+			check_status $SUPRESS
+		fi
+
         if [ $SERVICE_START_IND -eq 0 ]; then
                 echo "Starting Debug Service"
-                echo "java -jar ${MAINJAR} -libjars $LIBJARS"
-                hadoop jar "$MAINJAR" -cp "$LIBJARS" > $LOG_PATH/$FILE_NAME &
+                java -cp config:${LIB_PATH}/*:"$MAINJAR" hydrograph.server.service.HydrographService > $LOG_PATH/$FILE_NAME &
                 SERVICE_ID=$!
                 echo $SERVICE_ID > ${LOG_PATH}/${PID_FILE}
                 echo "Service $SERVICE_ID started successfully!"
@@ -158,17 +192,20 @@ if [ $# -eq 0 ]; then
         print_help
         exit 1
 else
+		exportMailConfigurations
         case "$1" in
         stop) stop_service
         ;;
-        start) start_service
-        ;;
+ 		start)  start_service $1
+				monitor_service
+       ;;
         restart)
                 if ! check_status "SUPRESS"
                 then
                   stop_service
                 fi
                 start_service
+				monitor_service
         ;;
         status) check_status
         ;;

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package hydrograph.server.execution.tracking.server.status.datastructures;
+package hydrograph.server.execution.datastructure;
 
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public class ComponentStatus {
 	
 	/** The current status. */
 	String currentStatus;
-	
+	/** The batch of component */
 	String batch;
 	
 	/** The processed record count. */

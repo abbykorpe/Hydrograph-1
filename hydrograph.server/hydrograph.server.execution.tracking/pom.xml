@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hydrograph</groupId>
 	<artifactId>hydrograph.server.execution.tracking.server</artifactId>
-	<version>1.0.8</version>
+	<version>1.0.12</version>
 	<packaging>jar</packaging>
 	<properties>
 		<tyrus.version>1.13</tyrus.version>
@@ -65,7 +65,7 @@
  		<dependency>
 			<groupId>hydrograph</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
-			<version>0.1.10-SNAPSHOT</version>
+			<version>2.1.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency> 
  		<dependency>
