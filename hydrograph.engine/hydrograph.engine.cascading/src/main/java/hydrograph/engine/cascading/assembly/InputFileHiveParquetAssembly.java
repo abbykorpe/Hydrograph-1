@@ -12,25 +12,23 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
-import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
-import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
-import hydrograph.engine.utilities.HiveConfigurationMapping;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.operation.regex.RegexFilter;
 import cascading.tap.hive.HivePartitionTap;
 import cascading.tap.hive.HiveTableDescriptor;
 import cascading.tap.hive.HiveTableDescriptor.Factory;
 import cascading.tap.hive.HiveTap;
 import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.base.InputFileHiveBase;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.filters.PartitionFilter;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
+import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
+import hydrograph.engine.core.component.entity.InputFileHiveParquetEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
+import hydrograph.engine.utilities.HiveConfigurationMapping;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 
@@ -58,7 +56,7 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 		Configuration conf = new Configuration();
 		conf.addResource(new Path(HiveConfigurationMapping.getHiveConf("path_to_hive_site_xml")));
 
-		HiveTableDescriptor.Factory factory = new Factory(conf);
+		Factory factory = new Factory(conf);
 		HiveTableDescriptor tb = factory.newInstance(inputFileHiveParquetEntity.getDatabaseName(),
 				inputFileHiveParquetEntity.getTableName());
 
@@ -88,7 +86,7 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	}
 
 	private boolean isPartitionFilterEnabled() {
-		if ("".equals(inputFileHiveParquetEntity.getPartitionFilterRegex()))
+		if (inputFileHiveParquetEntity.getPartitionFilterList().size() > 0)
 			return false;
 		else
 			return true;
@@ -97,7 +95,7 @@ public class InputFileHiveParquetAssembly extends InputFileHiveBase {
 	private void addPartitionFilter(HivePartitionTap hivePartitionTap) {
 		hivePartitionTap.addSourcePartitionFilter(
 				new Fields(convertLowerCase(inputFileHiveParquetEntity.getPartitionKeys())),
-				new RegexFilter(inputFileHiveParquetEntity.getPartitionFilterRegex()));
+				new PartitionFilter(inputFileHiveParquetEntity.getPartitionFilterList()));
 	}
 
 	/*

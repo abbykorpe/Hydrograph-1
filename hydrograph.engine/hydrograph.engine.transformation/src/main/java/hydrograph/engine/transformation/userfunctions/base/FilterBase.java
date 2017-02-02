@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.base;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -27,7 +28,7 @@ import java.util.Properties;
  * @author bitwise
  *
  */
-public interface FilterBase {
+public interface FilterBase extends Serializable {
 
 	/**
 	 * This method is called before processing the first record in the input.
@@ -41,7 +42,9 @@ public interface FilterBase {
 	 * @param inputFields
 	 *            the list of input fields to the filter operation.
 	 */
-	public void prepare(Properties props, ArrayList<String> inputFields);
+	@Deprecated
+	default
+	void prepare(Properties props, ArrayList<String> inputFields){}
 
 	/**
 	 * This method is the operation function and is called for each input row.
@@ -74,12 +77,14 @@ public interface FilterBase {
 	 *         output, i.e. transmitted to the out port of the filter component.
 	 *         </p>
 	 */
-	public boolean isRemove(ReusableRow inputRow);
+	boolean isRemove(ReusableRow inputRow);
 
 	/**
 	 * This method is called after processing all the records in the input. This
 	 * function can be typically used to do cleanup activities as the name
 	 * suggests.
 	 */
-	public void cleanup();
+	@Deprecated
+	default
+	void cleanup(){}
 }

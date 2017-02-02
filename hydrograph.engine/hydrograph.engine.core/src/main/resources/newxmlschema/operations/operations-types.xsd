@@ -10,7 +10,8 @@
 <xs:schema xmlns="hydrograph/engine/jaxb/operationstypes"
 	xmlns:cmn="hydrograph/engine/jaxb/commontypes" xmlns:transform="hydrograph/engine/jaxb/transform"
 	xmlns:aggregate="hydrograph/engine/jaxb/aggregate" xmlns:join="hydrograph/engine/jaxb/join"
-	xmlns:filter="hydrograph/engine/jaxb/filter" xmlns:gen_seq="hydrograph/engine/jaxb/generatesequence"
+	xmlns:filter="hydrograph/engine/jaxb/filter"
+	xmlns:executiontracking="hydrograph/engine/jaxb/executiontracking" xmlns:gen_seq="hydrograph/engine/jaxb/generatesequence"
 	xmlns:cumulate="hydrograph/engine/jaxb/cumulate" xmlns:lookup="hydrograph/engine/jaxb/lookup"
 	xmlns:normalize="hydrograph/engine/jaxb/normalize" xmlns:pbe="hydrograph/engine/jaxb/partitionByExpression"
 	xmlns:subjob="hydrograph/engine/jaxb/subjob" xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -25,6 +26,10 @@
 	<xs:import schemaLocation="./join/join-types.xsd" namespace="hydrograph/engine/jaxb/join" />
 	<xs:import schemaLocation="./filter/filter-types.xsd"
 		namespace="hydrograph/engine/jaxb/filter" />
+		
+	<xs:import schemaLocation="./executiontracking/executiontracking-types.xsd"
+		namespace="hydrograph/engine/jaxb/executiontracking" />
+		
 	<xs:import schemaLocation="./generate-sequence/generate-sequence-types.xsd"
 		namespace="hydrograph/engine/jaxb/generatesequence" />
 	<xs:import schemaLocation="./cumulate/cumulate-types.xsd"
@@ -99,7 +104,28 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="filter">
+	<xs:complexType name="executiontracking">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-operations-component">
+				<xs:sequence>
+					<xs:element name="inSocket" type="executiontracking:type-executiontracking-in-socket"
+						minOccurs="1" maxOccurs="1" />
+					<xs:choice maxOccurs="1" minOccurs="1">
+						<xs:element name="operation" type="executiontracking:type-executiontracking-operation"
+							minOccurs="1" maxOccurs="1" />
+						<xs:element name="expression" type="cmn:type-transform-expression"
+							minOccurs="1" maxOccurs="1" />
+					</xs:choice>
+					<xs:element name="outSocket" type="executiontracking:type-executiontracking-out-socket"
+						minOccurs="1" maxOccurs="2" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+<xs:complexType name="filter">
 		<xs:complexContent>
 			<xs:restriction base="cmn:type-operations-component">
 				<xs:sequence>
@@ -175,7 +201,14 @@
 				<xs:sequence>
 					<xs:element name="inSocket" type="normalize:type-in-socket"
 						minOccurs="1" maxOccurs="1" />
-					<xs:element name="operation" type="normalize:type-operation" />
+					<xs:choice maxOccurs="1" minOccurs="1">
+						<xs:element name="operation" type="normalize:type-operation"
+							minOccurs="1" maxOccurs="1" />
+						<xs:element name="expression" type="normalize:type-transform-expression"
+							minOccurs="1" maxOccurs="unbounded" />
+					</xs:choice>
+					<xs:element name="outputRecordCount" type="cmn:type-output-record-count"
+						minOccurs="0" maxOccurs="1" />
 					<xs:element name="outSocket" type="normalize:type-out-socket"
 						minOccurs="1" maxOccurs="1" />
 					<xs:element name="runtimeProperties" type="cmn:type-properties"

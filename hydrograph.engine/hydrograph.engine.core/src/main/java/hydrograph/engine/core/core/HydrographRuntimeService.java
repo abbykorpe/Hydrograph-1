@@ -16,32 +16,40 @@ import java.util.Properties;
 
 public interface HydrographRuntimeService {
 
-	public void initialize(Properties config, String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath,String UDFPath);
+    /**
+     *
+     * @param config
+     * @param args
+     * @param hydrographJob
+     * @param jobId
+     * @param UDFPath
+     */
+    public void initialize(Properties config, String[] args, HydrographJob hydrographJob,
+                           String jobId, String UDFPath);
 
-	/**
-	 * Prepares the execution flow before executing it.
-	 */
-	public void prepareToExecute();
+    /**
+     * Prepares the execution flow before executing it.
+     */
+    public void prepareToExecute();
 
-	/**
-	 * Executes the Hydrograph job.
-	 */
-	public void execute();
+    /**
+     * Executes the Hydrograph job.
+     */
+    public void execute();
 
-	/**
-	 * Method onComplete executes after completion of Hydrograph job.
-	 */
-	public void oncomplete();
+    /**
+     * Method onComplete executes after completion of Hydrograph job.
+     */
+    public void oncomplete();
 
-	/**
-	 * Returns the current statistics of Hydrograph job.
-	 */
-	public Object getExecutionStatus();
+    /**
+     * Returns the current statistics of Hydrograph job.
+     */
+    public Object getExecutionStatus();
 
-	/**
-	 * kills the running Hydrograph job.
-	 */
-	public void kill();
+    /**
+     * kills the running Hydrograph job.
+     */
+    public void kill();
 
 }

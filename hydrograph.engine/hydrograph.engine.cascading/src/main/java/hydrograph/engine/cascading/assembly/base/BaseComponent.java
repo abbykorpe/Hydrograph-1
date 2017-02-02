@@ -12,12 +12,16 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.base;
 
+
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.constants.ComponentLinkType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -26,11 +30,7 @@ import org.slf4j.LoggerFactory;
 import cascading.pipe.Pipe;
 import cascading.pipe.SubAssembly;
 import cascading.property.ConfigDef;
-import cascading.property.ConfigDef.Mode;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
-import hydrograph.engine.cascading.assembly.constants.ComponentLinkType;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 
 /**
  * @author gurdits
@@ -156,7 +156,7 @@ public abstract class BaseComponent<T extends AssemblyEntityBase> extends
 		return outFieldsMap;
 	}
 	
-	public  Collection<HashMap<String, Pipe>> getAllOutLinkForAssembly() {
+	public Collection<HashMap<String, Pipe>> getAllOutLinkForAssembly() {
 		return  outLinksMap.values();
 	}
 
@@ -181,8 +181,8 @@ public abstract class BaseComponent<T extends AssemblyEntityBase> extends
 		Properties hadoopProps = baseComponentEntity.getRuntimeProperties();
 		if (hadoopProps != null) {
 			// Iterate over all hadoop props and set it for current component
-			for (Entry<Object, Object> entry : hadoopProps.entrySet()) {
-				conf.setProperty(Mode.REPLACE, (String) entry.getKey(),
+			for (Map.Entry<Object, Object> entry : hadoopProps.entrySet()) {
+				conf.setProperty(ConfigDef.Mode.REPLACE, (String) entry.getKey(),
 						(String) entry.getValue());
 			}
 		}

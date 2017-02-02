@@ -12,13 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.transform;
 
-import static hydrograph.engine.transformation.standardfunctions.NumericFunctions.getDoubleFromComparable;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+import hydrograph.engine.transformation.userfunctions.base.TransformBase;
 
 import java.util.ArrayList;
 import java.util.Properties;
 
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-import hydrograph.engine.transformation.userfunctions.base.TransformBase;
+import static hydrograph.engine.transformation.standardfunctions.NumericFunctions.getDoubleFromComparable;
 
 public class LibSVMFormat implements TransformBase{
 

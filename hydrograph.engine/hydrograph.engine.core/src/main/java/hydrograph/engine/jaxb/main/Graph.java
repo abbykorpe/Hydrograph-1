@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.main;
 
@@ -64,15 +52,15 @@ import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
     "runtimeProperties",
     "inputsOrOutputsOrStraightPulls"
 })
-@XmlRootElement(name = "graph")
+@XmlRootElement(name = "graph", namespace = "hydrograph/engine/jaxb/main")
 public class Graph {
 
     protected TypeProperties runtimeProperties;
     @XmlElements({
-        @XmlElement(name = "inputs", type = TypeInputComponent.class),
         @XmlElement(name = "outputs", type = TypeOutputComponent.class),
-        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class),
         @XmlElement(name = "operations", type = TypeOperationsComponent.class),
+        @XmlElement(name = "inputs", type = TypeInputComponent.class),
+        @XmlElement(name = "straightPulls", type = TypeStraightPullComponent.class),
         @XmlElement(name = "commands", type = TypeCommandComponent.class)
     })
     protected List<TypeBaseComponent> inputsOrOutputsOrStraightPulls;
@@ -123,10 +111,10 @@ public class Graph {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link TypeInputComponent }
      * {@link TypeOutputComponent }
-     * {@link TypeStraightPullComponent }
      * {@link TypeOperationsComponent }
+     * {@link TypeInputComponent }
+     * {@link TypeStraightPullComponent }
      * {@link TypeCommandComponent }
      * 
      * 

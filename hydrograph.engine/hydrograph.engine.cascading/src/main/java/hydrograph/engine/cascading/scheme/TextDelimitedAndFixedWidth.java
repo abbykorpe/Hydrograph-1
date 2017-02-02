@@ -12,26 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme;
 
-import hydrograph.engine.hadoop.inputformat.DelimitedAndFixedWidthInputFormat;
-
-import java.beans.ConstructorProperties;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Calendar;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.FileInputFormat;
-import org.apache.hadoop.mapred.InputFormat;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.OutputFormat;
-import org.apache.hadoop.mapred.RecordReader;
-import org.apache.hadoop.mapred.TextOutputFormat;
-
 import cascading.flow.FlowProcess;
 import cascading.scheme.Scheme;
 import cascading.scheme.SinkCall;
@@ -40,6 +20,18 @@ import cascading.scheme.util.DelimitedParser;
 import cascading.tap.Tap;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
+import hydrograph.engine.hadoop.inputformat.DelimitedAndFixedWidthInputFormat;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.*;
+
+import java.beans.ConstructorProperties;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Calendar;
 
 @SuppressWarnings("rawtypes")
 public class TextDelimitedAndFixedWidth
@@ -55,6 +47,7 @@ public class TextDelimitedAndFixedWidth
 	protected boolean safe;
 	protected int[] lengths;
 	protected Type[] types;
+	protected String quote;
 
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	private static final long serialVersionUID = 1L;
@@ -64,6 +57,7 @@ public class TextDelimitedAndFixedWidth
 	public static final boolean DEFAULT_STRICT = false;
 	public static final boolean DEFAULT_SAFE = false;
 	private static final Type[] DEFAULT_TYPES = null;
+	private static final String DEFAULT_QUOTE = "";
 
 	Compress sinkCompression = Compress.DISABLE;
 	String charsetName = DEFAULT_CHARSET;
@@ -84,7 +78,7 @@ public class TextDelimitedAndFixedWidth
 			String[] lengthsAndDelimiters, Type[] typesOfLengthsAndDelimiters) {
 		this(sourceFields, lengthsAndDelimiters, typesOfLengthsAndDelimiters,
 				DEFAULT_TYPES, DEFAULT_STRICT, DEFAULT_SAFE, DEFAULT_FILLER,
-				DEFAULT_CHARSET);
+				DEFAULT_CHARSET, DEFAULT_QUOTE);
 	}
 
 	public TextDelimitedAndFixedWidth(Fields sourceFields,
@@ -92,34 +86,52 @@ public class TextDelimitedAndFixedWidth
 			Type[] types) {
 		this(sourceFields, lengthsAndDelimiters, typesOfLengthsAndDelimiters,
 				types, DEFAULT_STRICT, DEFAULT_SAFE, DEFAULT_FILLER,
-				DEFAULT_CHARSET);
+				DEFAULT_CHARSET, DEFAULT_QUOTE);
 	}
 
 	public TextDelimitedAndFixedWidth(Fields sourceFields,
 			String[] lengthsAndDelimiters, Type[] typesOfLengthsAndDelimiters,
 			Type[] types, boolean strict) {
 		this(sourceFields, lengthsAndDelimiters, typesOfLengthsAndDelimiters,
-				types, strict, DEFAULT_SAFE, DEFAULT_FILLER, DEFAULT_CHARSET);
+				types, strict, DEFAULT_SAFE, DEFAULT_FILLER, DEFAULT_CHARSET,
+				DEFAULT_QUOTE);
 	}
 
 	public TextDelimitedAndFixedWidth(Fields sourceFields,
 			String[] lengthsAndDelimiters, Type[] typesOfLengthsAndDelimiters,
 			Type[] types, boolean strict, boolean safe) {
 		this(sourceFields, lengthsAndDelimiters, typesOfLengthsAndDelimiters,
-				types, strict, safe, DEFAULT_FILLER, DEFAULT_CHARSET);
+				types, strict, safe, DEFAULT_FILLER, DEFAULT_CHARSET,
+				DEFAULT_QUOTE);
 	}
 
 	public TextDelimitedAndFixedWidth(Fields sourceFields,
 			String[] lengthsAndDelimiters, Type[] typesOfLengthsAndDelimiters,
 			Type[] types, boolean strict, boolean safe, String charsetName) {
 		this(sourceFields, lengthsAndDelimiters, typesOfLengthsAndDelimiters,
-				types, strict, safe, DEFAULT_FILLER, charsetName);
+				types, strict, safe, DEFAULT_FILLER, charsetName, DEFAULT_QUOTE);
+	}
+
+	public TextDelimitedAndFixedWidth(Fields sourceFields,
+			String[] lengthsAndDelimiters, Type[] typesOfLengthsAndDelimiters,
+			Type[] types, boolean strict, boolean safe, String charsetName,
+			String quote) {
+		this(sourceFields, lengthsAndDelimiters, typesOfLengthsAndDelimiters,
+				types, strict, safe, DEFAULT_FILLER, charsetName, quote);
+	}
+
+	public TextDelimitedAndFixedWidth(Fields sourceFields,
+			String[] lengthsAndDelimiters, Type[] typesOfLengthsAndDelimiters,
+			String quote) {
+		this(sourceFields, lengthsAndDelimiters, typesOfLengthsAndDelimiters,
+				DEFAULT_TYPES, DEFAULT_STRICT, DEFAULT_SAFE, DEFAULT_FILLER,
+				DEFAULT_CHARSET, quote);
 	}
 
 	public TextDelimitedAndFixedWidth(Fields fields,
 			String[] lengthsAndDelimiters, Type[] typesOfLengthsAndDelimiters,
 			Type[] types, boolean strict, boolean safe, char filler,
-			String charsetName) {
+			String charsetName, String quote) {
 		super(fields, fields);
 		setCharsetName(charsetName);
 
@@ -138,6 +150,7 @@ public class TextDelimitedAndFixedWidth
 		this.lengthsAndDelimitersType = Arrays.toString(
 				typesOfLengthsAndDelimiters).split(",");
 		this.filler = filler;
+		this.quote = quote == null ? "" : quote;
 	}
 
 	public Compress getSinkCompression() {
@@ -185,7 +198,7 @@ public class TextDelimitedAndFixedWidth
 		tuple.clear();
 		tuple.addAll(new Tuple(DelimitedAndFixedWidthHelper.getFields(
 				getSourceFields(), makeEncodedString(sourceCall.getContext()),
-				lengthsAndDelimiters, lengthsAndDelimitersType, types, safe)));
+				lengthsAndDelimiters, lengthsAndDelimitersType, types, safe, quote)));
 		return true;
 	}
 
@@ -220,6 +233,7 @@ public class TextDelimitedAndFixedWidth
 		conf.setClass("mapred.input.format.class",
 				DelimitedAndFixedWidthInputFormat.class, InputFormat.class);
 		conf.set("charsetName", charsetName);
+		conf.set("quote", quote);
 		conf.set("lengthsAndDelimiters", DelimitedAndFixedWidthHelper
 				.arrayToString(lengthsAndDelimiters));
 		conf.setStrings("lengthsAndDelimitersType", lengthsAndDelimitersType);
@@ -263,7 +277,7 @@ public class TextDelimitedAndFixedWidth
 		charset = (Charset) sinkCall.getContext()[1];
 		sb.append(DelimitedAndFixedWidthHelper.createLine(sinkCall
 				.getOutgoingEntry().getTuple(), lengthsAndDelimiters,
-				lengthsAndDelimitersType, strict, filler, types));
+				lengthsAndDelimitersType, strict, filler, types, quote));
 		if (hasaNewLineField) {
 			recordToBeSpilled = DelimitedAndFixedWidthHelper
 					.spillOneLineToOutput(sb, lengthsAndDelimiters);

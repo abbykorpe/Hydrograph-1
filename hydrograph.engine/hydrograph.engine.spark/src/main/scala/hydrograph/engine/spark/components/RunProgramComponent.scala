@@ -1,0 +1,66 @@
+package hydrograph.engine.spark.components
+
+import java.io.{BufferedReader, IOException, InputStreamReader}
+
+import hydrograph.engine.core.component.entity.RunProgramEntity
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase
+import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow}
+import org.slf4j.{Logger, LoggerFactory}
+
+/**
+  * Created by vaijnathp on 12/26/2016.
+  */
+class RunProgramComponent(assemblyEntityBase: AssemblyEntityBase) extends CommandComponentSparkFlow with Serializable {
+
+  val LOG: Logger = LoggerFactory.getLogger(classOf[RunProgramComponent])
+  var runProgramEntity: RunProgramEntity = assemblyEntityBase.asInstanceOf[RunProgramEntity]
+
+   exitStatus = -2
+
+  override def execute() = {
+    var command: String = this.runProgramEntity.getCommand
+    try {
+      if (System.getProperty("os.name").toLowerCase.contains("windows")) {
+        LOG.debug("Command: " + command)
+        command = "cmd /c" + command
+      }
+      LOG.debug("Executing Command.")
+      val p: Process = Runtime.getRuntime.exec(command)
+
+      val stdError = new BufferedReader(new InputStreamReader(p.getErrorStream))
+
+      var errorMessage: String = stdError.readLine()
+      try {
+        if (errorMessage != null) {
+          for (s <- stdError.readLine) {
+            errorMessage += s
+          }
+        }
+      }
+      catch {
+        case e => {
+          throw new RuntimeException(e)
+        }
+      }
+      finally {
+        if (errorMessage!=null) {
+          throw new RuntimeException(errorMessage).initCause(new RuntimeException(errorMessage))
+        }
+        exitStatus = p.waitFor
+      }
+    }
+    catch {
+      case e: IOException => {
+        throw new RuntimeException(e)
+      }
+      case e: InterruptedException => {
+        throw new RuntimeException(e)
+      }
+    }
+
+  }
+
+  def getStatus(): Int = {
+    exitStatus
+  }
+}

@@ -12,21 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.core.commandlineparser;
 
-import java.util.Arrays;
-import java.util.Properties;
-
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
+import hydrograph.engine.core.xmlparser.parametersubstitution.IParameterBank;
+import hydrograph.engine.core.xmlparser.parametersubstitution.PropertyBank;
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
-import hydrograph.engine.core.xmlparser.parametersubstitution.IParameterBank;
-import hydrograph.engine.core.xmlparser.parametersubstitution.PropertyBank;
+import java.util.Arrays;
+import java.util.Properties;
 
 public class CLIParser {
 

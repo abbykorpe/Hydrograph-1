@@ -12,21 +12,20 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
-import java.util.Arrays;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.operation.FilterCall;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
-import cascading.tuple.TupleEntry;
 import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
 import hydrograph.engine.cascading.assembly.context.RecordFilterContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.userfunctions.FilterForExpression;
 import hydrograph.engine.transformation.userfunctions.base.FilterBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Properties;
 
 public class FilterCustomHandler implements RecordFilterHandlerBase {
 
@@ -98,27 +97,21 @@ public class FilterCustomHandler implements RecordFilterHandlerBase {
 		CustomHandlerContext<FilterBase> context = (CustomHandlerContext<FilterBase>) call.getContext()
 				.getHandlerContext();
 
-		TupleEntry tupleEntry = call.getArguments();
-		// LOG.trace("calling isRemove method of: " +
-		// context.getSingleTransformInstance().getClass().getName());
-
 		if (context.getSingleExpressionInstances() != null) {
-			String fieldNames[] = new String[inputFields.size()];
-			Object tuples[] = new Object[inputFields.size()];
-			for (int i = 0; i < inputFields.size(); i++) {
-				fieldNames[i] = String.valueOf(inputFields.get(i));
-				tuples[i] = tupleEntry.getObject(inputFields.get(i));
-			}
 			try {
-				return isUnused ? !(boolean) context.getSingleExpressionInstances().execute(fieldNames, tuples)
-						: (boolean) context.getSingleExpressionInstances().execute(fieldNames, tuples);
+				if(context.getTransformInstance(0) instanceof FilterForExpression)
+					((FilterForExpression)context.getTransformInstance(0)).setValidationAPI(expressionValidationAPI);
+				boolean isRemove = context.getSingleTransformInstance().isRemove(ReusableRowHelper
+						.extractFromTuple(call.getArguments().getTuple(), context.getSingleInputRow()));
+
+				return isUnused ? !isRemove : isRemove;
 			} catch (Exception e) {
 				LOG.error(
-						"Exception in expression: " + context.getSingleExpressionInstances().getValidExpression()
+						"Exception in isRemove method of: " + context.getSingleTransformInstance().getClass().getName()
 								+ ".\nRow being processed: " + call.getArguments(),
 						e);
 				throw new RuntimeException(
-						"Exception in isRemove method of: " + context.getSingleExpressionInstances().getValidExpression()
+						"Exception in isRemove method of: " + context.getSingleTransformInstance().getClass().getName()
 								+ ".\nRow being processed: " + call.getArguments(),
 						e);
 			}

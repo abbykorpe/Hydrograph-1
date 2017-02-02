@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -22,7 +10,13 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import hydrograph.engine.jaxb.ofmixedscheme.TypeMixedBase;
 import hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedSubjob;
+import hydrograph.engine.jaxb.ofxml.TypeOutputFileXmlBase;
 import hydrograph.engine.jaxb.ohivetextfile.TypeOutputHiveTextFileDelimitedBase;
+import hydrograph.engine.jaxb.ojdbcupdate.TypeOutputJdbcupdateBase;
+import hydrograph.engine.jaxb.omysql.TypeOutputMysqlBase;
+import hydrograph.engine.jaxb.ooracle.TypeOutputOracleBase;
+import hydrograph.engine.jaxb.oredshift.TypeOutputRedshiftBase;
+import hydrograph.engine.jaxb.oteradata.TypeOutputTeradataBase;
 import hydrograph.engine.jaxb.otffw.TypeFixedWidthBase;
 import hydrograph.engine.jaxb.otfs.TypeOutputFileSequenceBase;
 import hydrograph.engine.jaxb.outputtypes.Discard;
@@ -49,7 +43,7 @@ import hydrograph.engine.jaxb.outputtypes.Discard;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-output-component", propOrder = {
+@XmlType(name = "type-output-component", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "inSocket",
     "overWrite"
 })
@@ -63,7 +57,13 @@ import hydrograph.engine.jaxb.outputtypes.Discard;
     TypeOutputHiveTextFileDelimitedBase.class,
     TypeMixedBase.class,
     TypeOutputFileDelimitedSubjob.class,
-    hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase.class
+    hydrograph.engine.jaxb.ofsubjob.TypeOutputFileDelimitedBase.class,
+    TypeOutputMysqlBase.class,
+    TypeOutputRedshiftBase.class,
+    TypeOutputOracleBase.class,
+    TypeOutputTeradataBase.class,
+    TypeOutputFileXmlBase.class,
+    TypeOutputJdbcupdateBase.class
 })
 public abstract class TypeOutputComponent
     extends TypeBaseComponent

@@ -12,9 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.commandtype.component;
 
-import hydrograph.engine.assembly.entity.RunProgramEntity;
 import hydrograph.engine.commandtype.component.RunProgram;
-
+import hydrograph.engine.core.component.entity.RunProgramEntity;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

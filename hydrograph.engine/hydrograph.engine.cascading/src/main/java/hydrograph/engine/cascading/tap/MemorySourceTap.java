@@ -12,20 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.tap;
 
-import hydrograph.engine.cascading.tuplegenerator.ITupleGenerator;
-import hydrograph.engine.hadoop.inputformat.TupleMemoryInputFormat;
-import hydrograph.engine.hadoop.inputformat.TupleWrapper;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.UUID;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.mapred.InputFormat;
-import org.apache.hadoop.mapred.RecordReader;
-
 import cascading.flow.FlowProcess;
 import cascading.scheme.Scheme;
 import cascading.scheme.SinkCall;
@@ -35,6 +21,18 @@ import cascading.tap.Tap;
 import cascading.tap.hadoop.io.HadoopTupleEntrySchemeIterator;
 import cascading.tuple.Fields;
 import cascading.tuple.TupleEntryIterator;
+import hydrograph.engine.cascading.tuplegenerator.ITupleGenerator;
+import hydrograph.engine.hadoop.inputformat.TupleMemoryInputFormat;
+import hydrograph.engine.hadoop.inputformat.TupleWrapper;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.mapred.InputFormat;
+import org.apache.hadoop.mapred.RecordReader;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.UUID;
 
 public class MemorySourceTap extends
 		SourceTap<Configuration, RecordReader<TupleWrapper, NullWritable>> implements

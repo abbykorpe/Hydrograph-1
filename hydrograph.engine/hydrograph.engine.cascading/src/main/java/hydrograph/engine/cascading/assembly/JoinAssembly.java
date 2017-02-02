@@ -12,14 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.primitives.Booleans;
-
 import cascading.pipe.Checkpoint;
 import cascading.pipe.CoGroup;
 import cascading.pipe.Each;
@@ -30,9 +22,7 @@ import cascading.pipe.joiner.Joiner;
 import cascading.pipe.joiner.MixedJoin;
 import cascading.pipe.joiner.OuterJoin;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.JoinEntity;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+import com.google.common.primitives.Booleans;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.JoinHelper;
@@ -40,8 +30,15 @@ import hydrograph.engine.cascading.filters.BlockAllFilter;
 import hydrograph.engine.cascading.filters.JoinGetUnmatchedRecordsFilter;
 import hydrograph.engine.cascading.filters.JoinOutLinkFilter;
 import hydrograph.engine.cascading.filters.JoinUnusedLinkFilter;
+import hydrograph.engine.core.component.entity.JoinEntity;
+import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
 import hydrograph.engine.utilities.ComponentHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Join Component for joining two or more files.
  * 
@@ -92,7 +89,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 					+ joinEntity.getComponentId() + "' for socket: '"
 					+ outSocket.getSocketId() + "' of type: '"
 					+ outSocket.getSocketType() + "'");
-			Pipe join = new CoGroup(ComponentHelper.getComponentName("join",joinEntity.getComponentId(),outSocket.getSocketId()),inputLinks, uniqKeyFields,
+			Pipe join = new CoGroup(joinEntity.getComponentId()+outSocket.getSocketId(),inputLinks, uniqKeyFields,
 					getJoinOutputFields(outSocket), joiner);
 			setHadoopProperties(join.getStepConfigDef());
 
@@ -137,7 +134,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 			for (JoinKeyFields joinKeyFields : joinEntity.getKeyFields()) {
 				if (joinKeyFields.getInSocketId().equalsIgnoreCase(
 						componentParameters.getinSocketId().get(i))) {
-					keyFields = joinKeyFields.getFields();
+					keyFields = new Fields(joinKeyFields.getFields());
 					joinTypes[i] = joinKeyFields.isRecordRequired();
 				}
 			}
@@ -187,7 +184,7 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 	 * @return List of {@link OutSocket}
 	 */
 	private List<OutSocket> getSocketForType(List<OutSocket> outSocketList,
-			String socketType) {
+											 String socketType) {
 		List<OutSocket> outSockets = new ArrayList<OutSocket>();
 		List<OutSocket> unusedOutSockets = new ArrayList<OutSocket>();
 		for (int i = 0; i < outSocketList.size(); i++) {
@@ -266,8 +263,6 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 	/**
 	 * get record present flags fields of files on which outer join is applied
 	 * 
-	 * @param outSocket
-	 * 
 	 * @return appended record present flags Fields of files on which outer join
 	 *         is specified
 	 */
@@ -316,7 +311,6 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 	 * 
 	 * @param joinResult
 	 * @param outSocket
-	 * @param string
 	 */
 	private void setOutLink(Pipe joinResult, OutSocket outSocket) {
 		Pipe joinFiltered;
@@ -356,8 +350,6 @@ public class JoinAssembly extends BaseComponent<JoinEntity> {
 	 * records are required.
 	 * 
 	 * @param joinResult
-	 * @param unusedOutSocket2
-	 * @param i
 	 */
 	private void setUnusedLinks(Pipe joinResult, List<OutSocket> unusedOutSocket) {
 		Pipe unUsedLink;

@@ -111,6 +111,7 @@
 	<!--*******************base component starts********************** -->
 	<xs:complexType name="type-base-component">
 		<xs:attribute name="id" type="xs:string" use="required" />
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="batch" type="xs:string" use="optional"
 			default="0" />
 	</xs:complexType>
@@ -168,6 +169,8 @@
 						<xs:element name="expression" type="type-transform-expression"
 							minOccurs="0" maxOccurs="unbounded" />
 					</xs:choice>
+					<xs:element name="outputRecordCount" type="type-output-record-count"
+						minOccurs="0" maxOccurs="1" />
 					<xs:element name="outSocket" type="type-operations-out-socket"
 						minOccurs="1" maxOccurs="unbounded" />
 					<xs:element name="runtimeProperties" type="type-properties"
@@ -180,6 +183,21 @@
 	<xs:complexType name="type-command-component" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="type-base-component">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="type-unknown-component">
+		<xs:complexContent>
+			<xs:extension base="type-base-component">
+				<xs:sequence>
+					<xs:element name="inSocket" type="type-base-inSocket" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="outSocket" type="type-base-outSocket" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="properties" minOccurs="0" maxOccurs="1">
+						<xs:complexType>
+							<xs:attribute name="value" use="optional" type="xs:string" />
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -270,10 +288,15 @@
 				minOccurs="0" />
 			<xs:element name="properties" type="type-properties"
 				minOccurs="0" />
-		</xs:sequence>
+				</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required" />
 		<xs:attribute name="expr" type="xs:string" use="required" />
+		<xs:attribute name="accumulatorInitalValue" type="xs:string" use="optional" />
 		<xs:anyAttribute />
+	</xs:complexType>
+	
+	<xs:complexType name="type-output-record-count">
+		<xs:attribute name="value" type="xs:string" use="required" />
 	</xs:complexType>
 
 	<xs:complexType name="type-operations-out-socket">
@@ -352,6 +375,20 @@
 	<xs:complexType name="type-expression-field">
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="expressionId" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="element-value-string-type">
+		<xs:attribute name="value" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="element-value-integer-type">
+		<xs:attribute name="value" type="xs:integer" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="type-key-fields">
+		<xs:choice>
+			<xs:element name="field" maxOccurs="unbounded" type="type-field-name" />
+		</xs:choice>
 	</xs:complexType>
 
 	<!--**************other standard types ends************ -->

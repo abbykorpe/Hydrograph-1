@@ -12,24 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.pipe.HashJoin;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Rename;
 import cascading.pipe.assembly.Retain;
 import cascading.pipe.joiner.Joiner;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.LookupEntity;
-import hydrograph.engine.assembly.entity.elements.JoinKeyFields;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.JoinHelper;
 import hydrograph.engine.cascading.joiners.HashJoinJoiner;
 import hydrograph.engine.cascading.joiners.HashJoinJoiner.Option;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.LookupEntity;
+import hydrograph.engine.core.component.entity.elements.JoinKeyFields;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * HashJoin Component for joining two or more files.
@@ -69,7 +67,7 @@ public class LookupAssembly extends BaseComponent<LookupEntity> {
 
 				prepare(outSocket);
 
-				Pipe join = new HashJoin(ComponentHelper.getComponentName("lookup:",lookupEntity.getComponentId(),outSocket.getSocketId()), inputPipes,
+				Pipe join = new HashJoin(lookupEntity.getComponentId()+outSocket.getSocketId(), inputPipes,
 						uniqKeyFields, getJoinOutputFields(), joiner);
 
 				setHadoopProperties(join.getStepConfigDef());
@@ -194,7 +192,7 @@ public class LookupAssembly extends BaseComponent<LookupEntity> {
 			for (JoinKeyFields keyFieldsEntity : lookupEntity.getKeyFields()) {
 				if (keyFieldsEntity.getInSocketId().equalsIgnoreCase(
 						componentParameters.getinSocketId().get(i))) {
-					keyFields = keyFieldsEntity.getFields();
+					keyFields = new Fields(keyFieldsEntity.getFields());
 				}
 			}
 

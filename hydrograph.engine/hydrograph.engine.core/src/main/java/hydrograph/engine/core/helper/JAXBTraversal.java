@@ -12,24 +12,16 @@
  *******************************************************************************/
 package hydrograph.engine.core.helper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hydrograph.engine.core.entity.Link;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
 import hydrograph.engine.jaxb.main.Graph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 public class JAXBTraversal {
 
@@ -170,6 +162,16 @@ public class JAXBTraversal {
 		for (TypeBaseComponent component : jaxbGraph) {
 			flowCount.add(component.getBatch());
 		}
+	}
+	
+	public String getComponentNameFromComponentId(String componentId){
+		for (TypeBaseComponent component : jaxbGraph) {
+			if(component.getId().equals(componentId)){
+				return component.getName();
+			}
+		}
+		return null;
+		
 	}
 
 	public boolean isHiveComponentPresentInFlow() {

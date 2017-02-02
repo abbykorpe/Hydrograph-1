@@ -12,11 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.scheme.util.DelimitedParser;
 import cascading.tap.TapException;
 import cascading.tuple.Tuple;
@@ -24,6 +19,10 @@ import cascading.tuple.coerce.Coercions;
 import cascading.tuple.coerce.StringCoerce;
 import cascading.tuple.type.DateType;
 import cascading.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * Created a custom class to trim spaces from numerical and date fields while

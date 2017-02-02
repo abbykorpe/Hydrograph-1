@@ -12,32 +12,21 @@
  *******************************************************************************/
 package hydrograph.engine.execution.tracking.plugin;
 
+import cascading.cascade.Cascade;
+import cascading.flow.Flow;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
+import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
+import hydrograph.engine.core.component.entity.utils.StraightPullEntityUtils;
+import hydrograph.engine.core.utilities.SocketUtilities;
+import hydrograph.engine.jaxb.commontypes.*;
+import hydrograph.engine.jaxb.operationstypes.Filter;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import cascading.cascade.Cascade;
-import cascading.flow.Flow;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
-import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
-import hydrograph.engine.assembly.entity.utils.StraightPullEntityUtils;
-import hydrograph.engine.core.utilities.SocketUtilities;
-import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
-import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeInputField;
-import hydrograph.engine.jaxb.commontypes.TypeOperationInputFields;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
-import hydrograph.engine.jaxb.commontypes.TypeOperationsOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutSocketAsInSocket;
-import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
-import hydrograph.engine.jaxb.commontypes.TypeStraightPullComponent;
-import hydrograph.engine.jaxb.commontypes.TypeTransformOperation;
-import hydrograph.engine.jaxb.operationstypes.Filter;
 
 class TrackComponentUtils {
 	
@@ -153,6 +142,7 @@ class TrackComponentUtils {
 		filter.setId(TrackComponentUtils.generateUniqueComponentId(trackContext.getFromComponentId(),
 				"generatedHydrographFilter", jaxbObjectList));
 		filter.setBatch(trackContext.getBatch());
+		filter.setName(trackContext.getComponentName());
 		filter.getInSocket().add(TrackComponentUtils.getStraightPullInSocket(trackContext.getFromComponentId(),
 				trackContext.getFromOutSocketId(), trackContext.getFromOutSocketType()));
 

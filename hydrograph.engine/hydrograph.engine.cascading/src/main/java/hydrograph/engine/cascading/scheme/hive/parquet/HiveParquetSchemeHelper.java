@@ -12,18 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme.hive.parquet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-
+import cascading.tap.hive.HiveTableDescriptor;
+import cascading.tuple.Fields;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hive.ql.io.parquet.convert.HiveSchemaConverter;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 
-import cascading.tap.hive.HiveTableDescriptor;
-import cascading.tuple.Fields;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 public class HiveParquetSchemeHelper {
 

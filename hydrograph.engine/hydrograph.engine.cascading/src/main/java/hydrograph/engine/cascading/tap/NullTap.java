@@ -12,14 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.tap;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.UUID;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.RecordReader;
-
 import cascading.flow.Flow;
 import cascading.flow.FlowListener;
 import cascading.flow.FlowProcess;
@@ -29,6 +21,13 @@ import cascading.tuple.Fields;
 import cascading.tuple.TupleEntry;
 import cascading.tuple.TupleEntryCollector;
 import cascading.tuple.TupleEntryIterator;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.RecordReader;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.UUID;
 
 @SuppressWarnings("rawtypes")
 public class NullTap extends Tap<Configuration, RecordReader, OutputCollector>

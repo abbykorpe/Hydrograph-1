@@ -12,12 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.hadoop.recordreader;
 
+import cascading.tap.TapException;
 import hydrograph.engine.cascading.scheme.DelimitedAndFixedWidthHelper;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -27,7 +23,9 @@ import org.apache.hadoop.mapred.FileSplit;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.RecordReader;
 
-import cascading.tap.TapException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
 @SuppressWarnings("unused")
 public class DelimitedAndFixedWidthRecordReader implements
@@ -35,6 +33,7 @@ public class DelimitedAndFixedWidthRecordReader implements
 
 	private static final int DEFAULT_BUFFER_SIZE = 64 * 1024;
 	String charsetName = "UTF-8";
+	String quote;
 	StringBuilder stringBuilder;
 	long start;
 	long end;
@@ -45,6 +44,7 @@ public class DelimitedAndFixedWidthRecordReader implements
 	final Path file;
 	InputStreamReader inputStreamReader;
 	char[] singleChar, multipleChars;
+	boolean isQuotePresent = false;
 
 	public DelimitedAndFixedWidthRecordReader(JobConf conf, FileSplit split)
 			throws IOException {
@@ -52,6 +52,7 @@ public class DelimitedAndFixedWidthRecordReader implements
 				.modifyIdentifier(DelimitedAndFixedWidthHelper
 						.stringToArray(conf.get("lengthsAndDelimiters")));
 		lengthsAndDelimitersType = conf.getStrings("lengthsAndDelimitersType");
+		quote = conf.get("quote");
 		charsetName = conf.get("charsetName");
 		start = split.getStart();
 		pos = start;
@@ -63,6 +64,17 @@ public class DelimitedAndFixedWidthRecordReader implements
 		inputStreamReader = new InputStreamReader(fileIn, charsetName);
 		singleChar = new char[1];
 		stringBuilder = new StringBuilder();
+		isQuotePresent = isQuotePresent(quote);
+	}
+
+	private boolean isQuotePresent(String string) {
+		if (string != null) {
+			if (string.equals(""))
+				return false;
+			else
+				return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -93,14 +105,14 @@ public class DelimitedAndFixedWidthRecordReader implements
 	@Override
 	public synchronized boolean next(LongWritable key, Text value)
 			throws IOException {
-		boolean fieldFound, isMatchingDelimiterInProgress = false, isSecondLastFieldNewlineField = false, isThirdLastFieldNewlineField = false;
+		boolean fieldNotFound, isMatchingDelimiterInProgress = false, isSecondLastCharNewline = false, isThirdLastCharNewline = false;
+		boolean quoteCharFound = false;
 		int fieldLength, delimiterCharCounter;
 		stringBuilder.setLength(0);
-		if (!isEOFEncountered() && !isSecondLastFieldNewlineField
-				&& !isThirdLastFieldNewlineField) {
+		if (!isEOFEncountered() && !isSecondLastCharNewline
+				&& !isThirdLastCharNewline) {
 			for (int i = 0; i < lengthsAndDelimiters.length
-					&& !isSecondLastFieldNewlineField
-					&& !isThirdLastFieldNewlineField; i++) {
+					&& !isSecondLastCharNewline && !isThirdLastCharNewline; i++) {
 				if (lengthsAndDelimitersType[i].contains("Integer")) {
 					fieldLength = Integer.parseInt(lengthsAndDelimiters[i]);
 					if (!(pos + fieldLength > end)) {
@@ -111,8 +123,8 @@ public class DelimitedAndFixedWidthRecordReader implements
 					} else if ((isSecondLastChar() && isSecondLastCharNewline())
 							|| (isThirdLastChar() && isThirdLastCharNewline())) {
 						stringBuilder.setLength(0);
-						isSecondLastFieldNewlineField = true;
-						isThirdLastFieldNewlineField = true;
+						isSecondLastCharNewline = true;
+						isThirdLastCharNewline = true;
 					} else {
 						String message = "The input data is not according to specified schema. Expected data with delimiters or lengths as "
 								+ Arrays.toString(lengthsAndDelimiters)
@@ -120,22 +132,29 @@ public class DelimitedAndFixedWidthRecordReader implements
 						throw new TapException(message);
 					}
 				} else {
-					fieldFound = true;
+					fieldNotFound = true;
 					delimiterCharCounter = 0;
 					do {
 						if (!isEOFEncountered()) {
 							inputStreamReader.read(singleChar);
 							pos += new String(singleChar).getBytes(charsetName).length;
-							if (lengthsAndDelimiters[i]
-									.charAt(delimiterCharCounter) == singleChar[0]) {
-								if (++delimiterCharCounter == lengthsAndDelimiters[i]
-										.length()) {
-									fieldFound = false;
+							if (isQuotePresent) {
+								if (isQuoteChar(singleChar[0]) == true) {
+									quoteCharFound = !quoteCharFound;
 								}
-								isMatchingDelimiterInProgress = true;
-							} else if (isMatchingDelimiterInProgress) {
-								isMatchingDelimiterInProgress = false;
-								delimiterCharCounter = 0;
+							}
+							if (!quoteCharFound) {
+								if (lengthsAndDelimiters[i]
+										.charAt(delimiterCharCounter) == singleChar[0]) {
+									if (++delimiterCharCounter == lengthsAndDelimiters[i]
+											.length()) {
+										fieldNotFound = false;
+									}
+									isMatchingDelimiterInProgress = true;
+								} else if (isMatchingDelimiterInProgress) {
+									isMatchingDelimiterInProgress = false;
+									delimiterCharCounter = 0;
+								}
 							}
 							stringBuilder.append(singleChar);
 						} else if ((stringBuilder.toString().length() == 1 || stringBuilder
@@ -143,30 +162,37 @@ public class DelimitedAndFixedWidthRecordReader implements
 								&& (stringBuilder.toString().contentEquals(
 										"\r\n") || stringBuilder.toString()
 										.contentEquals("\n"))) {
-							fieldFound = false;
+							fieldNotFound = false;
 							stringBuilder.setLength(0);
-							isSecondLastFieldNewlineField = true;
-							isThirdLastFieldNewlineField = true;
+							isSecondLastCharNewline = true;
+							isThirdLastCharNewline = true;
 						} else {
-							fieldFound = false;
+							fieldNotFound = false;
 							String message = "The input data is not according to specified schema. Expected data with delimiters or lengths as: "
 									+ Arrays.toString(lengthsAndDelimiters)
 									+ ", gotW: " + stringBuilder.toString();
 							throw new TapException(message);
 						}
-					} while (fieldFound);
+					} while (fieldNotFound);
 				}
 			}
 		} else {
 			return false;
 		}
-		if (!isThirdLastFieldNewlineField && !isSecondLastFieldNewlineField) {
+		if (!isThirdLastCharNewline && !isSecondLastCharNewline) {
 			value.set(stringBuilder.toString());
 			return true;
 		} else {
 			return false;
 		}
 
+	}
+
+	private boolean isQuoteChar(char c) {
+		if (quote.charAt(0) == c) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isThirdLastCharNewline() throws IOException {

@@ -12,16 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.coercetype;
 
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.CascadingException;
 import cascading.tuple.type.CoercibleType;
 import cascading.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class ImplicitBigDecimalType implements CoercibleType<BigDecimal> {
 

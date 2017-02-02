@@ -12,13 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser;
 
-import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.jaxb.debug.Debug;
 import hydrograph.engine.jaxb.main.Graph;
-
-import java.io.IOException;
-import java.io.StringReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -26,17 +25,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import java.io.IOException;
 
 public class HydrographJobGenerator {
 	JAXBContext context;
 	Unmarshaller unmarshaller;
 	Graph graph;
-	Debug debug;
 	private static Logger LOG = LoggerFactory.getLogger(HydrographJobGenerator.class);
 
 	/**
@@ -68,36 +62,6 @@ public class HydrographJobGenerator {
 		} catch (JAXBException e) {
 			LOG.error("Error while creating JAXB objects from job XML.", e);
 			throw new RuntimeException("Error while creating JAXB objects from job XML.", e);
-		}
-	}
-
-	/**
-	 * Creates the object of type {@link HydrographDebugInfo} from the graph xml of type
-	 * {@link Document}.
-	 * 
-	 * The method uses jaxb framework to unmarshall the xml document
-	 * 
-	 * @param graphDocument
-	 *            the xml document with all the graph contents to unmarshall
-	 * @return an object of type "{@link HydrographDebugInfo}
-	 * @throws SAXException
-	 */
-	public HydrographDebugInfo createHydrographDebugInfo(Document graphDocument, String debugXSDLocation) throws SAXException {
-		try {
-			LOG.trace("Creating DebugJAXB object.");
-			SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = sf.newSchema(ClassLoader.getSystemResource(debugXSDLocation));
-			context = JAXBContext.newInstance(Debug.class);
-			unmarshaller = context.createUnmarshaller();
-			unmarshaller.setSchema(schema);
-			unmarshaller.setEventHandler(new ComponentValidationEventHandler());
-			debug = (Debug) unmarshaller.unmarshal(graphDocument);
-			HydrographDebugInfo hydrographDebugInfo = new HydrographDebugInfo(debug);
-			LOG.trace("DebugJAXB object created successfully");
-			return hydrographDebugInfo;
-		} catch (JAXBException e) {
-			LOG.error("Error while creating JAXB objects from debug XML.", e);
-			throw new RuntimeException("Error while creating JAXB objects from debug XML.", e);
 		}
 	}
 }

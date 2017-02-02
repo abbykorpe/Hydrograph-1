@@ -12,19 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import cascading.cascade.CascadeDef;
+import cascading.flow.FlowDef;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
+import org.apache.hadoop.mapred.JobConf;
 
 import java.util.HashMap;
 import java.util.Properties;
-
-import org.apache.hadoop.mapred.JobConf;
-
-import cascading.cascade.CascadeDef;
-import cascading.flow.FlowDef;
 
 public class FlowContext {
 
@@ -36,7 +34,7 @@ public class FlowContext {
 	private HadoopConfigProvider hadoopConfProvider;
 
 	public FlowContext(HydrographJob hydrographJob, JAXBTraversal traversal,
-			Properties hadoopProps) {
+					   Properties hadoopProps) {
 		this.hydrographJob = hydrographJob;
 		this.traversal = traversal;
 		this.flowDef = FlowDef.flowDef();

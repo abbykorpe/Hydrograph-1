@@ -23,7 +23,8 @@ package hydrograph.ui.datastructure.property;
 public class FixedWidthGridRow extends GridRow{
 	private String length="";
 	protected String delimiter="";
-
+	protected String columnDefinition="";
+	
 	/**
 	 * Gets the length.
 	 * 
@@ -62,11 +63,21 @@ public class FixedWidthGridRow extends GridRow{
 		this.delimiter = delimiter;
 	}
 
+	public String getColumnDefinition() {
+		return columnDefinition;
+	}
+
+	public void setColumnDefinition(String columnDefinition) {
+		this.columnDefinition = columnDefinition;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("FixedWidthGridRow [length=");
 		builder.append(length);
+		builder.append(", toString()=");
+		builder.append(columnDefinition);
 		builder.append(", toString()=");
 		builder.append(super.toString());
 		builder.append("]");
@@ -85,7 +96,7 @@ public class FixedWidthGridRow extends GridRow{
 		tempschemaGrid.setScaleTypeValue(getScaleTypeValue());
 		tempschemaGrid.setDescription(getDescription());
 		tempschemaGrid.setLength(length);
-		
+		tempschemaGrid.setColumnDefinition(columnDefinition);
 		return tempschemaGrid;
 	}
 		

@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.hadoop.utils;
 
+import org.apache.hadoop.mapred.JobConf;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import org.apache.hadoop.mapred.JobConf;
 
 public class HadoopConfigProvider {
 

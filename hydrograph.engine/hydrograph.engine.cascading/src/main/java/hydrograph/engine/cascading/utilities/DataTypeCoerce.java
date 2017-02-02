@@ -12,14 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.utilities;
 
+import cascading.tuple.coerce.Coercions;
 import hydrograph.engine.cascading.coercetype.ImplicitBigDecimalType;
 import hydrograph.engine.cascading.coercetype.StrictDateType;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import cascading.tuple.coerce.Coercions;
 
 public class DataTypeCoerce {
 

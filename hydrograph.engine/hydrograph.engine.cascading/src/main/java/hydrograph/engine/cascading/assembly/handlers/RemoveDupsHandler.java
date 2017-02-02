@@ -12,14 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
-import hydrograph.engine.cascading.assembly.constants.Keep;
-import hydrograph.engine.cascading.assembly.context.RemoveDupsHandlerContext;
-import hydrograph.engine.cascading.assembly.infra.AssemblyCreationException;
-
-import java.util.Iterator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.BaseOperation;
@@ -29,6 +21,13 @@ import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
+import hydrograph.engine.cascading.assembly.context.RemoveDupsHandlerContext;
+import hydrograph.engine.cascading.assembly.infra.AssemblyCreationException;
+import hydrograph.engine.core.constants.Keep;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
 
 public class RemoveDupsHandler extends BaseOperation<RemoveDupsHandlerContext>
 		implements Buffer<RemoveDupsHandlerContext> {

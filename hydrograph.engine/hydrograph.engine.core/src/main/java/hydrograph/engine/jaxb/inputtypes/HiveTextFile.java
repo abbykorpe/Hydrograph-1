@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.inputtypes;
 
@@ -39,7 +27,7 @@ import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
  *       &lt;sequence>
  *         &lt;element name="partitionKeys" type="{hydrograph/engine/jaxb/ihivetextfile}hive_partition_fields_type" minOccurs="0"/>
  *         &lt;element name="partitionFilter" type="{hydrograph/engine/jaxb/ihivetextfile}hive_partition_filter_type" minOccurs="0"/>
- *         &lt;element name="delimiter">
+ *         &lt;element name="delimiter" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -72,7 +60,7 @@ import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextFileDelimitedBase;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "hiveTextFile", propOrder = {
+@XmlType(name = "hiveTextFile", namespace = "hydrograph/engine/jaxb/inputtypes", propOrder = {
     "partitionKeys",
     "partitionFilter",
     "delimiter",
@@ -90,7 +78,6 @@ public class HiveTextFile
 
     protected HivePartitionFieldsType partitionKeys;
     protected HivePartitionFilterType partitionFilter;
-    @XmlElement(required = true)
     protected HiveTextFile.Delimiter delimiter;
     @XmlElement(required = true)
     protected HiveType databaseName;

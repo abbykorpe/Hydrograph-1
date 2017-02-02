@@ -12,14 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static data.InputData.inputFileFixedWidth;
-import hydrograph.engine.assembly.entity.InputFileFixedWidthEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
 import hydrograph.engine.cascading.assembly.InputFileFixedWidthAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.InputFileFixedWidthEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,11 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import static data.InputData.inputFileFixedWidth;
 
 public class InputFileFixedWidthTest {
 

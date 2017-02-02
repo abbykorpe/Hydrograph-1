@@ -12,26 +12,24 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.utils;
 
+import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.base.OperationEntityBase;
+import hydrograph.engine.core.component.entity.elements.Operation;
+import hydrograph.engine.core.component.entity.elements.OperationField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
+import hydrograph.engine.expression.api.ValidationAPI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaFileObject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.base.OperationEntityBase;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.expression.api.ValidationAPI;
 
 public class OperationFieldsCreator<T extends OperationEntityBase> {
 
@@ -51,7 +49,7 @@ public class OperationFieldsCreator<T extends OperationEntityBase> {
 	/**
 	 * OperationFieldsCreator class is used to initialize passthrough fields
 	 * and operation fields
-	 * 
+	 *
 	 * @param entity
 	 * @param componentParameters
 	 * @param outSocket
@@ -74,12 +72,22 @@ public class OperationFieldsCreator<T extends OperationEntityBase> {
 
 	private Fields initPassThroughFields() {
 		String[] passThroughFields = OutSocketUtils.getPassThroughFieldsFromOutSocket(
-				outSocket.getPassThroughFieldsList(), componentParameters.getInputFields());
+				outSocket.getPassThroughFieldsList(), getStringArrayFromFields(componentParameters.getInputFields()));
 		if (passThroughFields != null && passThroughFields.length == 0 && !assemblyEntityBase.isOperationPresent()) {
 			return initPassThroughFields = componentParameters.getInputFields();
 		} else {
 			return initPassThroughFields = new Fields(passThroughFields);
 		}
+	}
+
+	private String[] getStringArrayFromFields(Fields fields) {
+
+		String[] arrayFields = new String[fields.size()];
+
+		for (int i = 0; i < fields.size(); i++)
+			arrayFields[i] = fields.get(i).toString();
+
+		return arrayFields;
 	}
 
 	private void initializeOperationFieldsForOutSocket() {
@@ -97,7 +105,7 @@ public class OperationFieldsCreator<T extends OperationEntityBase> {
 						ValidationAPI validationAPI = new ValidationAPI(eachOperation.getExpression(), componentParameters.getUDFPath());
 						expressionValidate(validationAPI);
 						expressionObjectList.add(validationAPI);
-						
+
 					}else
 						expressionObjectList.add(null);
 					operationPropertiesList.add(eachOperation.getOperationProperties());
@@ -109,20 +117,20 @@ public class OperationFieldsCreator<T extends OperationEntityBase> {
 			}
 		}
 	}
-	
+
 	private void expressionValidate(ValidationAPI validationAPI) {
-			Map<String, Class<?>> schemaMap = new HashMap<String, Class<?>>();
-			try {
-				for (SchemaField schemaField : componentParameters.getSchemaFields()) {
-					schemaMap.put( schemaField.getFieldName(), Class.forName(schemaField.getFieldDataType()));
-				}
-				DiagnosticCollector<JavaFileObject> diagnostic = validationAPI.transformCompiler(schemaMap);
-				if (diagnostic.getDiagnostics().size() > 0) {
-					throw new RuntimeException(diagnostic.getDiagnostics().get(0).getMessage(null));
-				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+		Map<String, Class<?>> schemaMap = new HashMap<String, Class<?>>();
+		try {
+			for (SchemaField schemaField : componentParameters.getSchemaFields()) {
+				schemaMap.put( schemaField.getFieldName(), Class.forName(schemaField.getFieldDataType()));
 			}
+			DiagnosticCollector<JavaFileObject> diagnostic = validationAPI.transformCompiler(schemaMap);
+			if (diagnostic.getDiagnostics().size() > 0) {
+				throw new RuntimeException(diagnostic.getDiagnostics().get(0).getMessage(null));
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private boolean isOperationIDExistsInOperationFields(String operationId, OutSocket outSocket) {
@@ -176,7 +184,7 @@ public class OperationFieldsCreator<T extends OperationEntityBase> {
 	public boolean checkIfOperationExistsInOperationFields() {
 		return isOperationExistinOperationField;
 	}
-	
+
 	/**
 	 * @return expressionList
 	 */

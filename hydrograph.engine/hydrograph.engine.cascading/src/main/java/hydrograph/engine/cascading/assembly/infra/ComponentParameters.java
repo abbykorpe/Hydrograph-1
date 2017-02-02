@@ -12,18 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.infra;
 
+import cascading.flow.FlowDef;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import org.apache.hadoop.mapred.JobConf;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.apache.hadoop.mapred.JobConf;
-
 //import hydrograph.engine.assembly.entity.elements.CopyOfInSocket;
-import cascading.flow.FlowDef;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.cascading.debug.DebugPoint;
 
 public class ComponentParameters implements Cloneable {
 
@@ -35,13 +34,12 @@ public class ComponentParameters implements Cloneable {
 	private static final String INSOCKET_ID = "inSocket_id";
 	private static final String INSOCKET_TYPE = "inSocket_type";
 	private static final String PATH_URI_KEY = "path_uri";
-	private static final String DEBUG_POINTS_KEY = "debug_points_uri";
 	private static final String TEMP_PATH_KEY = "temp_path_uri";
 	private static final String JOB_ID = "job_id";
 	private static final String BASE_PATH = "base_path";
 	private static final String UDF_PATH = "udf_path";
 	/**
-	 * 
+	 *
 	 */
 
 	private HashMap<String, Object> parameters;
@@ -49,7 +47,7 @@ public class ComponentParameters implements Cloneable {
 
 	public ComponentParameters() {
 		this.parameters = new HashMap<String, Object>();
-		this.copyOfInSocket = new HashMap<>();
+		this.copyOfInSocket = new HashMap<String, Fields>();
 	}
 
 	public ComponentParameters(HashMap<String, Object> parameters) {
@@ -87,10 +85,6 @@ public class ComponentParameters implements Cloneable {
 		addParameterToList(input, SCHEMA_FIELDS_KEY);
 	}
 
-	public void addDebugPoints(ArrayList<DebugPoint> input) {
-		addParameterToList(input, DEBUG_POINTS_KEY);
-	}
-
 	public void addTempPath(JobConf input) {
 		addParameterToList(input, TEMP_PATH_KEY);
 	}
@@ -125,10 +119,6 @@ public class ComponentParameters implements Cloneable {
 
 	public ArrayList<Set<SchemaField>> getSchemaFieldList() {
 		return getEntireList(SCHEMA_FIELDS_KEY);
-	}
-
-	public ArrayList<DebugPoint> getDebugPoints() {
-		return getParameterfromList(DEBUG_POINTS_KEY);
 	}
 
 	public JobConf getJobConf() {

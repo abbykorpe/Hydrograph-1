@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.tuplegenerator;
 
+import cascading.tuple.Fields;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-
-import cascading.tuple.Fields;
 
 public class GenerateDataEntity implements Serializable, Cloneable {
 

@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.commandline.utilities;
 
+import hydrograph.engine.execution.tracking.ComponentInfo;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import hydrograph.engine.execution.tracking.ComponentInfo;
 
 /**
  * Class HydrographService is used to execute {@link HydrographExecution} , kill
@@ -28,7 +28,7 @@ import hydrograph.engine.execution.tracking.ComponentInfo;
 public class HydrographService {
 
 	private HydrographExecution execution;
-
+	private boolean isJobRunning = false;
 	/**
 	 * Class Constructor
 	 */
@@ -47,11 +47,15 @@ public class HydrographService {
 	 */
 	public int executeGraph(String[] args) throws Exception {
 		try{
+			isJobRunning = true;
 			execution.run(args);
 			return 0;
 		}
 		catch(Exception e){
 			throw e;
+		}
+		finally{
+			isJobRunning = false;
 		}
 	}
 
@@ -66,6 +70,10 @@ public class HydrographService {
 			return new ArrayList<>(execution.getExecutionStatus());
 		else
 			return Collections.emptyList();
+	}
+	
+	public boolean getJobRunningStatus(){
+		return isJobRunning;
 	}
 
 	/**

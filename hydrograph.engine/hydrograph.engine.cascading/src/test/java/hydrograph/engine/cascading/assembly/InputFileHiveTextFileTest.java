@@ -12,24 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileHiveTextEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
 import hydrograph.engine.cascading.assembly.InputFileHiveTextAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.InputFileHiveTextEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
 
 public class InputFileHiveTextFileTest {
 	@Test

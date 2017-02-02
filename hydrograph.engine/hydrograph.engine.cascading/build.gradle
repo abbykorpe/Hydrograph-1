@@ -1,9 +1,24 @@
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+apply from: '../version.gradle'
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
+//version = '0.1'
 
 group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.cascading'
@@ -42,21 +57,22 @@ publishing {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': archivesBaseName
-                //,'Implementation-Version': version
-    }
-    version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
+        attributes 'Implementation-Title': archivesBaseName,
+                'Implementation-Version': version
+       }
+       //version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
 }
-
-
 
 test {
     exclude '**/CascadingTestCase*'
     exclude '**/DataGeneratorTest*'
     exclude '**/InputFileHiveParquetFileTest*'
+    exclude '**/InputMysqlAssemblyTest*'
+    exclude '**/OutputMysqlAssemblyTest*'
     exclude '**/OutputFileHiveParquetFileTest*'
     exclude '**/InputFileHiveTextFileTest*'
     exclude '**/OutputFileHiveTextFileTest*'
+    exclude '**/RunProgramTest*'
 }
 
 uploadArchives {
@@ -74,17 +90,36 @@ repositories {
     maven {
         url 'http://maven.twttr.com/'
     }
+    maven {
+        url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
+    }
 
 }
 
+
 dependencies {
-	compile group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'
+	compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion, changing: true
+    testCompile( group: 'org.apache.tez', name: 'tez-tests', version: tezVersion, classifier: 'tests' )
+    testCompile( group: 'org.apache.tez', name: 'tez-api', version: tezVersion )
+    testCompile( group: 'org.apache.tez', name: 'tez-dag', version: tezVersion )
+    
+
+	compile group: 'cascading', name: 'cascading-jdbc-core', version: '3.0.0'
+ 	compile group: 'cascading', name: 'cascading-jdbc-mysql', version: '3.0.0'
+  	compile group: 'cascading', name: 'cascading-jdbc-redshift', version: '3.0.0'
+    compile (group: 'cascading', name: 'cascading-jdbc-oracle', version: '0.1')
+
+
+	compile (group: 'cascading.avro', name: 'avro-scheme', version: '2.5.0'){
+        exclude group: 'cascading', module: 'cascading-hadoop'
+    }
     compile group: 'cascading', name: 'cascading-core', version: cascadingVersion
     compile group: 'cascading', name: 'cascading-hadoop2-mr1', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-local', version: cascadingVersion //required for plunger
     compile group: 'cascading', name: 'cascading-hadoop2-tez', version: cascadingVersion
     //compile group: 'cascading', name: 'cascading-hadoop', version: cascadingVersion //using hadoop2-mr1 instead
-    compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
+ 
+ 	compile group: 'cascading', name: 'cascading-hadoop2-io', version: cascadingVersion //required for plunger
 
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: hadoopVersion //required for plunger
 
@@ -116,6 +151,7 @@ dependencies {
     compile 'org.hamcrest:hamcrest-core:1.3' //required by plunger
     testCompile 'org.mockito:mockito-core:1.9.5' //required by plunger
     testCompile 'commons-io:commons-io:2.4' //required by plunger
+    compileOnly(group: 'oracle', name: 'ojdbc6', version: '11.2.0.4')
 }
 
 task writePom {

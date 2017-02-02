@@ -12,27 +12,25 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme.parquet;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
-
+import cascading.tuple.TupleEntry;
 import jodd.typeconverter.Convert;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import parquet.hadoop.api.WriteSupport;
 import parquet.io.api.Binary;
 import parquet.io.api.RecordConsumer;
 import parquet.schema.MessageType;
 import parquet.schema.MessageTypeParser;
 import parquet.schema.Type;
-import cascading.tuple.TupleEntry;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 
 public class ParquetTupleWriter extends WriteSupport<TupleEntry> {

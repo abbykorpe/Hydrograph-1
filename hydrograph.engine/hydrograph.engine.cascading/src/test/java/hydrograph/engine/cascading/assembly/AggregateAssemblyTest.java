@@ -12,33 +12,26 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import hydrograph.engine.assembly.entity.AggregateEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.MapField;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+import com.hotels.plunger.Bucket;
+import com.hotels.plunger.Data;
+import com.hotels.plunger.DataBuilder;
+import com.hotels.plunger.Plunger;
 import hydrograph.engine.cascading.assembly.AggregateAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.AggregateEntity;
+import hydrograph.engine.core.component.entity.elements.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
-
-import com.hotels.plunger.Bucket;
-import com.hotels.plunger.Data;
-import com.hotels.plunger.DataBuilder;
-import com.hotels.plunger.Plunger;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class AggregateAssemblyTest {
 

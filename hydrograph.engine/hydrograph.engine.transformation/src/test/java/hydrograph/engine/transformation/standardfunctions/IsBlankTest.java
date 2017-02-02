@@ -12,10 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import static hydrograph.engine.transformation.standardfunctions.ValidationFunctions.isBlank;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import static hydrograph.engine.transformation.standardfunctions.ValidationFunctions.isBlank;
 
 public class IsBlankTest {
 

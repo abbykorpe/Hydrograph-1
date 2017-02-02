@@ -26,14 +26,7 @@
 
 package hydrograph.engine.cascading.scheme.avro;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import cascading.tuple.Tuple;
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
@@ -43,7 +36,13 @@ import org.apache.avro.generic.GenericData.Fixed;
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.hadoop.io.BytesWritable;
 
-import cascading.tuple.Tuple;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CustomAvroToCascading {
 

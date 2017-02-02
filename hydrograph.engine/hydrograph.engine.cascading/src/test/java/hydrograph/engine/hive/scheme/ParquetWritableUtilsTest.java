@@ -12,11 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.hive.scheme;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
+import cascading.tuple.Tuple;
+import hydrograph.engine.cascading.scheme.hive.parquet.ParquetWritableUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
@@ -31,8 +28,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.tuple.Tuple;
-import hydrograph.engine.cascading.scheme.hive.parquet.ParquetWritableUtils;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class ParquetWritableUtilsTest {
 

@@ -12,20 +12,19 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.Collections;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.SortEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.SortEntity;
+import hydrograph.engine.core.component.entity.elements.KeyField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+
 
 /**
  * @author Prabodh
@@ -62,7 +61,7 @@ public class SortAssembly extends BaseComponent<SortEntity> {
 					LOG.debug("Secondary key fields for sort component: '" + sortEntity.getComponentId() + "':  "
 							+ secondaryKeyFields.toString());
 				}
-				Pipe sortOutput = new GroupBy(ComponentHelper.getComponentName("sort",sortEntity.getComponentId() , outSocket.getSocketId()), componentParameters.getInputPipe(),
+				Pipe sortOutput = new GroupBy(sortEntity.getComponentId()+outSocket.getSocketId(), componentParameters.getInputPipe(),
 						keyFields, secondaryKeyFields);
 
 				setHadoopProperties(sortOutput.getStepConfigDef());

@@ -12,28 +12,25 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.AggregateEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
+import cascading.pipe.Every;
+import cascading.pipe.GroupBy;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.AggregateCustomHandler;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.AggregateEntity;
+import hydrograph.engine.core.component.entity.elements.KeyField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Every;
-import cascading.pipe.GroupBy;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
 
 public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 
@@ -46,7 +43,17 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 	public AggregateAssembly(AggregateEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
-
+	
+	private void setOperationClassInCaseExpression() {
+		for (int i = 0; i < aggregateEntity.getOperationsList().size(); i++) {
+			if (aggregateEntity.getOperationsList().get(i).getOperationClass() == null) {
+				aggregateEntity.getOperationsList().get(i)
+						.setOperationClass(
+								"hydrograph.engine.expression.userfunctions.AggregateForExpression");
+			}
+		}
+	}
+	
 	@Override
 	public void initializeEntity(AggregateEntity assemblyEntityBase) {
 		aggregateEntity = assemblyEntityBase;
@@ -58,6 +65,7 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(aggregateEntity.toString());
 			}
+			setOperationClassInCaseExpression();
 			for (OutSocket outSocket : aggregateEntity.getOutSocketList()) {
 				LOG.trace("Creating aggregate assembly for '" + aggregateEntity.getComponentId() + "' for socket: '"
 						+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
@@ -88,8 +96,7 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket.getOperationFieldList()));
 
 		
-		Pipe sortAggPipe = new Pipe(ComponentHelper.getComponentName("aggregate",
-				aggregateEntity.getComponentId(), aggregateEntity.getOutSocketList().get(0).getSocketId()),
+		Pipe sortAggPipe = new Pipe(aggregateEntity.getComponentId()+ aggregateEntity.getOutSocketList().get(0).getSocketId(),
 				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys
@@ -103,14 +110,26 @@ public class AggregateAssembly extends BaseComponent<AggregateEntity> {
 				operationFieldsCreator.getOperationalOutputFieldsList(), keyFields, passThroughFields, mapFields,
 				operationFields);
 
-		AggregateCustomHandler groupingHandler = new AggregateCustomHandler(fieldManupulatingHandler,
+		AggregateCustomHandler groupingHandler = new AggregateCustomHandler(
+				fieldManupulatingHandler,
 				operationFieldsCreator.getOperationalOperationPropertiesList(),
-				operationFieldsCreator.getOperationalTransformClassList());
+				operationFieldsCreator.getOperationalTransformClassList(),
+				operationFieldsCreator.getOperationalExpressionList(),
+				extractInitialValues());
 		setHadoopProperties(sortAggPipe.getStepConfigDef());
 		sortAggPipe = new Every(sortAggPipe, groupingHandler.getInputFields(), groupingHandler, Fields.RESULTS);
 
 		setOutLink(outSocket.getSocketType(), outSocket.getSocketId(), aggregateEntity.getComponentId(), sortAggPipe,
 				fieldManupulatingHandler.getOutputFields());
+	}
+
+	private String[] extractInitialValues() {
+		String[] initialValues = new String[aggregateEntity.getNumOperations()];
+		for (int i = 0; i < aggregateEntity.getNumOperations(); i++) {
+			initialValues[i] = aggregateEntity.getOperationsList().get(i)
+					.getAccumulatorInitialValue();
+		}
+		return initialValues;
 	}
 
 	/**

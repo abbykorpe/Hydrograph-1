@@ -12,28 +12,26 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import hydrograph.engine.assembly.entity.LimitEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.LimitAssembly;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
-
 import com.hotels.plunger.Bucket;
 import com.hotels.plunger.Data;
 import com.hotels.plunger.DataBuilder;
 import com.hotels.plunger.Plunger;
+import hydrograph.engine.cascading.assembly.LimitAssembly;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.LimitEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Test limit sub assembly. The tests are written using plunger framework

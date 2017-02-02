@@ -12,19 +12,17 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.OutputFileHiveParquetEntity;
-import hydrograph.engine.assembly.entity.base.HiveEntityBase;
+import cascading.tap.SinkMode;
+import cascading.tap.hive.HivePartitionTap;
+import cascading.tap.hive.HiveTap;
 import hydrograph.engine.cascading.assembly.base.OutputFileHiveBase;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetScheme;
 import hydrograph.engine.cascading.scheme.hive.parquet.HiveParquetTableDescriptor;
-
+import hydrograph.engine.core.component.entity.OutputFileHiveParquetEntity;
+import hydrograph.engine.core.component.entity.base.HiveEntityBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import cascading.tap.SinkMode;
-import cascading.tap.hive.HivePartitionTap;
-import cascading.tap.hive.HiveTap;
 
 public class OutputFileHiveParquetAssembly extends
 		OutputFileHiveBase<OutputFileHiveParquetEntity> {

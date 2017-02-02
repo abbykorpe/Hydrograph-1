@@ -12,12 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.standardfunctions;
 
-import java.util.TreeSet;
-
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+import java.util.TreeSet;
 
 /**
  * The class CommonFunctions provides vector related functions.

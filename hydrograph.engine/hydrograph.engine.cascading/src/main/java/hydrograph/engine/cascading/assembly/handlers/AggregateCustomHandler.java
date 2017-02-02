@@ -12,19 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
-import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
-import hydrograph.engine.cascading.utilities.ReusableRowHelper;
-import hydrograph.engine.cascading.utilities.TupleHelper;
-import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowProcess;
 import cascading.management.annotation.Property;
 import cascading.management.annotation.PropertyDescription;
@@ -35,6 +22,21 @@ import cascading.operation.BaseOperation;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
+import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
+import hydrograph.engine.cascading.utilities.ReusableRowHelper;
+import hydrograph.engine.cascading.utilities.TupleHelper;
+import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.userfunctions.AggregateForExpression;
+import hydrograph.engine.expression.utils.ExpressionWrapper;
+import hydrograph.engine.transformation.userfunctions.base.AggregateTransformBase;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Properties;
 
 public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<AggregateTransformBase>>
 		implements Aggregator<CustomHandlerContext<AggregateTransformBase>> {
@@ -52,14 +54,24 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 	private ArrayList<Properties> props;
 	private ArrayList<String> transformClassNames;
 	private FieldManupulatingHandler fieldManupulatingHandler;
+	private ArrayList<ValidationAPI> expressionList;
+	private String[] initialValues;
 
-	public AggregateCustomHandler(FieldManupulatingHandler fieldManupulatingHandler, ArrayList<Properties> props,
-			ArrayList<String> transformClassNames) {
+	public AggregateCustomHandler(
+			FieldManupulatingHandler fieldManupulatingHandler,
+			ArrayList<Properties> props, ArrayList<String> transformClassNames,
+			ArrayList<ValidationAPI> expressionObjectList, String[] initialValues) {
 		super(fieldManupulatingHandler.getInputFields().size(), fieldManupulatingHandler.getOutputFields());
 		this.props = props;
 		this.transformClassNames = transformClassNames;
 		this.fieldManupulatingHandler = fieldManupulatingHandler;
-		LOG.trace("AggregateCustomHandler object created for: " + Arrays.toString(transformClassNames.toArray()));
+		this.expressionList = expressionObjectList;
+		this.initialValues = initialValues;
+		if (transformClassNames != null) {
+			LOG.trace("AggregateCustomHandler object created for: " + Arrays.toString(transformClassNames.toArray()));
+		} else {
+			LOG.trace("AggregateCustomHandler object created for:" + Arrays.toString(expressionObjectList.toArray()));
+		}
 	}
 
 	public Fields getOutputFields() {
@@ -78,38 +90,75 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 	@Override
 	public void prepare(FlowProcess flowProcess, OperationCall<CustomHandlerContext<AggregateTransformBase>> call) {
 
+		Object[] accumulatorValues = new Object[initialValues.length];
 		CustomHandlerContext<AggregateTransformBase> context = new CustomHandlerContext<AggregateTransformBase>(
-				fieldManupulatingHandler, transformClassNames);
-
+				fieldManupulatingHandler, transformClassNames, expressionList,
+				initialValues, accumulatorValues);
+		
 		int counter = -1;
-		for (AggregateTransformBase transformInstance : context.getTransformInstances()) {
+		for (AggregateTransformBase transformInstance : context
+				.getTransformInstances()) {
 			counter = counter + 1;
-			LOG.trace("calling prepare method of: " + transformInstance.getClass().getName());
-			try {
-			transformInstance.prepare(props.get(counter), context.getInputRow(counter).getFieldNames(),
-					context.getOutputRow(counter).getFieldNames(),
-					ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields));
-			
-			}  catch(Exception e) {
-				LOG.error("Exception in prepare method of: "
-						+ transformInstance.getClass().getName()
-						+ ".\nArguments passed to prepare() method are: \nProperties: "
-						+ props + "\nInput Fields: " 
-						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
-						+ "\nOutput Fields: " 
-						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray())
-						+ "\nKey Fields: " 
-						+ Arrays.toString(ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields).toArray()), e);
-				throw new RuntimeException("Exception in prepare method of: "
-						+ transformInstance.getClass().getName()
-						+ ".\nArguments passed to prepare() method are: \nProperties: "
-						+ props + "\nInput Fields: " 
-						+ Arrays.toString(context.getInputRow(counter).getFieldNames().toArray())
-						+ "\nOutput Fields: " 
-						+ Arrays.toString(context.getOutputRow(counter).getFieldNames().toArray())
-						+ "\nKey Fields: " 
-						+ Arrays.toString(ReusableRowHelper.getListFromFields(fieldManupulatingHandler.keyFields).toArray()), e);
-			}
+			if (transformInstance != null) {
+				LOG.trace("calling prepare method of: "
+						+ transformInstance.getClass().getName());
+				
+				if (transformInstance instanceof AggregateForExpression) {
+					ExpressionWrapper expressionWrapper=new ExpressionWrapper(context.getSingleExpressionInstances(), "");
+					((AggregateForExpression) transformInstance)
+							.setValidationAPI(expressionWrapper);
+					((AggregateForExpression) transformInstance).callPrepare();
+				}
+				
+				try {
+					transformInstance
+							.prepare(
+									props.get(counter),
+									context.getInputRow(counter)
+											.getFieldNames(),
+									context.getOutputRow(counter)
+											.getFieldNames(),
+									ReusableRowHelper
+											.getListFromFields(fieldManupulatingHandler.keyFields));
+
+				} catch (Exception e) {
+					LOG.error(
+							"Exception in prepare method of: "
+									+ transformInstance.getClass().getName()
+									+ ".\nArguments passed to prepare() method are: \nProperties: "
+									+ props
+									+ "\nInput Fields: "
+									+ Arrays.toString(context
+											.getInputRow(counter)
+											.getFieldNames().toArray())
+									+ "\nOutput Fields: "
+									+ Arrays.toString(context
+											.getOutputRow(counter)
+											.getFieldNames().toArray())
+									+ "\nKey Fields: "
+									+ Arrays.toString(ReusableRowHelper
+											.getListFromFields(
+													fieldManupulatingHandler.keyFields)
+											.toArray()), e);
+					throw new RuntimeException(
+							"Exception in prepare method of: "
+									+ transformInstance.getClass().getName()
+									+ ".\nArguments passed to prepare() method are: \nProperties: "
+									+ props
+									+ Arrays.toString(context
+											.getInputRow(counter)
+											.getFieldNames().toArray())
+									+ "\nOutput Fields: "
+									+ Arrays.toString(context
+											.getOutputRow(counter)
+											.getFieldNames().toArray())
+									+ "\nKey Fields: "
+									+ Arrays.toString(ReusableRowHelper
+											.getListFromFields(
+													fieldManupulatingHandler.keyFields)
+											.toArray()), e);
+				}
+			} 
 		}
 
 		call.setContext(context);
@@ -122,8 +171,11 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 		CustomHandlerContext<AggregateTransformBase> context = call.getContext();
 
 		for (AggregateTransformBase transformInstance : context.getTransformInstances()) {
-			LOG.trace("calling cleanup method of: " + transformInstance.getClass().getName());
-			transformInstance.cleanup();
+			if (transformInstance != null) {
+				LOG.trace("calling cleanup method of: "
+						+ transformInstance.getClass().getName());
+				transformInstance.cleanup();
+			}
 		}
 	}
 
@@ -131,22 +183,35 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 	@Override
 	public void aggregate(FlowProcess flowProcess, AggregatorCall<CustomHandlerContext<AggregateTransformBase>> call) {
 		CustomHandlerContext<AggregateTransformBase> context = call.getContext();
-
 		int counter = -1;
+
 		for (AggregateTransformBase transformInstance : context.getTransformInstances()) {
-			LOG.trace("calling aggregate method of: " + transformInstance.getClass().getName());
 			counter = counter + 1;
-			ReusableRow reusableRow = ReusableRowHelper.extractFromTuple(
-					fieldManupulatingHandler.getInputPositions(counter), call.getArguments().getTuple(),
-					context.getInputRow(counter));
-			try {
-				transformInstance.aggregate(reusableRow);
-			} catch (Exception e) {
-				LOG.error("Exception in aggregate method of: " + transformInstance.getClass().getName()
-						+ ".\nRow being processed: " + call.getArguments(), e);
-				throw new RuntimeException("Exception in aggregate method of: " + transformInstance.getClass().getName()
-						+ ".\nRow being processed: " + call.getArguments(), e);
-			}
+			if (transformInstance != null) {
+				LOG.trace("calling aggregate method of: "
+						+ transformInstance.getClass().getName());
+				ReusableRow reusableRow = ReusableRowHelper.extractFromTuple(
+						fieldManupulatingHandler.getInputPositions(counter),
+						call.getArguments().getTuple(),
+						context.getInputRow(counter));
+//				if (transformInstance instanceof AggregateForExpression) {
+//					((AggregateForExpression) transformInstance)
+//							.setCounter(counter);
+//				}
+				try {
+					transformInstance.aggregate(reusableRow);
+				} catch (Exception e) {
+					LOG.error("Exception in aggregate method of: "
+							+ transformInstance.getClass().getName()
+							+ ".\nRow being processed: " + call.getArguments(),
+							e);
+					throw new RuntimeException(
+							"Exception in aggregate method of: "
+									+ transformInstance.getClass().getName()
+									+ ".\nRow being processed: "
+									+ call.getArguments(), e);
+				}
+			} 
 		}
 
 		call.getContext().setUserObject(call.getArguments().getTuple());
@@ -160,9 +225,13 @@ public class AggregateCustomHandler extends BaseOperation<CustomHandlerContext<A
 		// call on group complete to gather results for earlier group
 		int counter = -1;
 		for (AggregateTransformBase transformInstance : context.getTransformInstances()) {
-			LOG.trace("calling onCompleteGroup method of: " + transformInstance.getClass().getName());
 			counter = counter + 1;
-			transformInstance.onCompleteGroup(context.getOutputRow(counter));
+			if (transformInstance != null) {
+				LOG.trace("calling onCompleteGroup method of: "
+						+ transformInstance.getClass().getName());
+				transformInstance
+						.onCompleteGroup(context.getOutputRow(counter));
+			}	 
 		}
 
 		// set output tuple entry with map field values

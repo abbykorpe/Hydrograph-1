@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.context;
 
-import java.util.ArrayList;
-
 import cascading.tuple.Fields;
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.util.ArrayList;
 
 public class CustomPartitionContext {
 	private String  currentPartitionId;

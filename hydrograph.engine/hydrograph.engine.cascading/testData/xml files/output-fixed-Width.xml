@@ -13,11 +13,9 @@
  -->
 
 <p:graph xmlns:p="http://www.bitwiseglobal.com/graph/main"
-	xmlns:it="http://www.bitwiseglobal.com/graph/inputtypes" xmlns:ot="http://www.bitwiseglobal.com/graph/outputtypes"
-	xmlns:spt="http://www.bitwiseglobal.com/graph/straightpulltypes"
-	xmlns:tt="http://www.bitwiseglobal.com/graph/transformtypes" xmlns:ct="http://www.bitwiseglobal.com/graph/commandtypes"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
+		 xmlns:ot="http://www.bitwiseglobal.com/graph/outputtypes"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.bitwiseglobal.com/graph/main ./main/main.xsd ">
 	
 	<output id="output1" xsi:type="ot:file-fixed-width">
 		<inSocket fromComponentId="input" fromSocketId="out0" id="in0">

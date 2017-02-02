@@ -12,14 +12,14 @@
  *******************************************************************************/
 package hydrograph.engine.schemapropagation;
 
-import hydrograph.engine.assembly.entity.elements.MapField;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.assembly.entity.utils.InputEntityUtils;
-import hydrograph.engine.assembly.entity.utils.OperationEntityUtils;
-import hydrograph.engine.assembly.entity.utils.OutputEntityUtils;
+import hydrograph.engine.core.component.entity.elements.MapField;
+import hydrograph.engine.core.component.entity.elements.OperationField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.PassThroughField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.utils.InputEntityUtils;
+import hydrograph.engine.core.component.entity.utils.OperationEntityUtils;
+import hydrograph.engine.core.component.entity.utils.OutputEntityUtils;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;

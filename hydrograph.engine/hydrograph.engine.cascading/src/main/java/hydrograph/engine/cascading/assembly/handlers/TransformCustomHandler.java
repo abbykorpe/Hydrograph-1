@@ -1,4 +1,5 @@
 /*******************************************************************************
+
  * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +13,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowProcess;
 import cascading.management.annotation.Property;
 import cascading.management.annotation.PropertyDescription;
@@ -29,13 +23,18 @@ import cascading.operation.FunctionCall;
 import cascading.operation.OperationCall;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
-import cascading.tuple.TupleEntry;
 import hydrograph.engine.cascading.assembly.context.CustomHandlerContext;
 import hydrograph.engine.cascading.utilities.ReusableRowHelper;
 import hydrograph.engine.cascading.utilities.TupleHelper;
 import hydrograph.engine.expression.api.ValidationAPI;
+import hydrograph.engine.expression.userfunctions.TransformForExpression;
 import hydrograph.engine.transformation.userfunctions.base.TransformBase;
-import hydrograph.engine.utilities.UserClassLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Properties;
 
 public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<TransformBase>>
 		implements Function<CustomHandlerContext<TransformBase>> {
@@ -115,7 +114,6 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 		CustomHandlerContext<TransformBase> context = call.getContext();
 
 		Tuple inputTuple = new Tuple(call.getArguments().getTuple());
-		TupleEntry inTupleEntry = call.getArguments();
 
 		// copy the field values of map fields into a temporary object
 		// ReusableRowHelper.extractFromTuple(
@@ -152,6 +150,9 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 			// LOG.trace("calling transform method of: " +
 			// transformInstance.getClass().getName());
 			if (transformInstance != null) {
+				if(transformInstance instanceof TransformForExpression)
+					((TransformForExpression) transformInstance)
+							.setValidationAPI(expressionList.get(counter));
 				try {
 					transformInstance.transform(
 							ReusableRowHelper.extractFromTuple(fieldManupulatingHandler.getInputPositions(counter),
@@ -164,29 +165,7 @@ public class TransformCustomHandler extends BaseOperation<CustomHandlerContext<T
 							+ transformInstance.getClass().getName() + ".\nRow being processed: " + call.getArguments(),
 							e);
 				}
-			} else {
-				String fieldNames[] = new String[fieldManupulatingHandler.getOperationInputFields().get(counter)
-						.size()];
-				Object tuples[] = new Object[fieldManupulatingHandler.getOperationInputFields().get(counter).size()];
-				for (int i = 0; i < fieldManupulatingHandler.getOperationInputFields().get(counter).size(); i++) {
-					fieldNames[i] = String
-							.valueOf(fieldManupulatingHandler.getOperationInputFields().get(counter).get(i));
-					tuples[i] = inTupleEntry
-							.getObject(fieldManupulatingHandler.getOperationInputFields().get(counter).get(i));
-				}
-				try {
-					context.getOutputRow(counter).setField(
-							fieldManupulatingHandler.getOperationOutputFields().get(counter).get(0).toString(),
-							(Comparable) context.getExpressionInstancesList().get(counter).execute(fieldNames, tuples));
-				} catch (Exception e) {
-					LOG.error("Exception in tranform expression: "
-							+ context.getExpressionInstancesList().get(counter).getValidExpression()
-							+ ".\nRow being processed: " + call.getArguments(), e);
-					throw new RuntimeException("Exception in tranform expression: "
-							+ context.getExpressionInstancesList().get(counter).getValidExpression()
-							+ ".\nRow being processed: " + call.getArguments(), e);
-				}
-			}
+			} 
 		}
 		// // set operation row, copy operation fields
 		// ReusableRowHelper.extractOperationRowFromAllOutputRow(

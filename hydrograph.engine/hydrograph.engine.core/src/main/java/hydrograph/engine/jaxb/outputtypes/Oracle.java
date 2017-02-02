@@ -1,0 +1,345 @@
+
+package hydrograph.engine.jaxb.outputtypes;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.commontypes.ElementValueIntegerType;
+import hydrograph.engine.jaxb.commontypes.ElementValueStringType;
+import hydrograph.engine.jaxb.commontypes.TypeProperties;
+import hydrograph.engine.jaxb.ooracle.TypeLoadChoice;
+import hydrograph.engine.jaxb.ooracle.TypeOutputOracleBase;
+
+
+/**
+ * <p>Java class for oracle complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="oracle">
+ *   &lt;complexContent>
+ *     &lt;extension base="{hydrograph/engine/jaxb/ooracle}type-output-oracle-base">
+ *       &lt;sequence>
+ *         &lt;element name="sid" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="hostName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="port" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
+ *         &lt;element name="driverType" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="tableName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="userName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="password" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type"/>
+ *         &lt;element name="loadType" type="{hydrograph/engine/jaxb/ooracle}type-load-choice"/>
+ *         &lt;element name="schemaName" type="{hydrograph/engine/jaxb/commontypes}element-value-string-type" minOccurs="0"/>
+ *         &lt;element name="chunkSize" type="{hydrograph/engine/jaxb/commontypes}element-value-integer-type" minOccurs="0"/>
+ *         &lt;element name="runtimeProperties" type="{hydrograph/engine/jaxb/commontypes}type-properties" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/extension>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "oracle", namespace = "hydrograph/engine/jaxb/outputtypes", propOrder = {
+    "sid",
+    "hostName",
+    "port",
+    "driverType",
+    "tableName",
+    "userName",
+    "password",
+    "loadType",
+    "schemaName",
+    "chunkSize",
+    "runtimeProperties"
+})
+public class Oracle
+    extends TypeOutputOracleBase
+{
+
+    @XmlElement(required = true)
+    protected ElementValueStringType sid;
+    @XmlElement(required = true)
+    protected ElementValueStringType hostName;
+    protected ElementValueIntegerType port;
+    @XmlElement(required = true)
+    protected ElementValueStringType driverType;
+    @XmlElement(required = true)
+    protected ElementValueStringType tableName;
+    @XmlElement(required = true)
+    protected ElementValueStringType userName;
+    @XmlElement(required = true)
+    protected ElementValueStringType password;
+    @XmlElement(required = true)
+    protected TypeLoadChoice loadType;
+    protected ElementValueStringType schemaName;
+    protected ElementValueIntegerType chunkSize;
+    protected TypeProperties runtimeProperties;
+
+    /**
+     * Gets the value of the sid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getSid() {
+        return sid;
+    }
+
+    /**
+     * Sets the value of the sid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setSid(ElementValueStringType value) {
+        this.sid = value;
+    }
+
+    /**
+     * Gets the value of the hostName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getHostName() {
+        return hostName;
+    }
+
+    /**
+     * Sets the value of the hostName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setHostName(ElementValueStringType value) {
+        this.hostName = value;
+    }
+
+    /**
+     * Gets the value of the port property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public ElementValueIntegerType getPort() {
+        return port;
+    }
+
+    /**
+     * Sets the value of the port property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public void setPort(ElementValueIntegerType value) {
+        this.port = value;
+    }
+
+    /**
+     * Gets the value of the driverType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getDriverType() {
+        return driverType;
+    }
+
+    /**
+     * Sets the value of the driverType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setDriverType(ElementValueStringType value) {
+        this.driverType = value;
+    }
+
+    /**
+     * Gets the value of the tableName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getTableName() {
+        return tableName;
+    }
+
+    /**
+     * Sets the value of the tableName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setTableName(ElementValueStringType value) {
+        this.tableName = value;
+    }
+
+    /**
+     * Gets the value of the userName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getUserName() {
+        return userName;
+    }
+
+    /**
+     * Sets the value of the userName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setUserName(ElementValueStringType value) {
+        this.userName = value;
+    }
+
+    /**
+     * Gets the value of the password property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets the value of the password property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setPassword(ElementValueStringType value) {
+        this.password = value;
+    }
+
+    /**
+     * Gets the value of the loadType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TypeLoadChoice }
+     *     
+     */
+    public TypeLoadChoice getLoadType() {
+        return loadType;
+    }
+
+    /**
+     * Sets the value of the loadType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TypeLoadChoice }
+     *     
+     */
+    public void setLoadType(TypeLoadChoice value) {
+        this.loadType = value;
+    }
+
+    /**
+     * Gets the value of the schemaName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public ElementValueStringType getSchemaName() {
+        return schemaName;
+    }
+
+    /**
+     * Sets the value of the schemaName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueStringType }
+     *     
+     */
+    public void setSchemaName(ElementValueStringType value) {
+        this.schemaName = value;
+    }
+
+    /**
+     * Gets the value of the chunkSize property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public ElementValueIntegerType getChunkSize() {
+        return chunkSize;
+    }
+
+    /**
+     * Sets the value of the chunkSize property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ElementValueIntegerType }
+     *     
+     */
+    public void setChunkSize(ElementValueIntegerType value) {
+        this.chunkSize = value;
+    }
+
+    /**
+     * Gets the value of the runtimeProperties property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TypeProperties }
+     *     
+     */
+    public TypeProperties getRuntimeProperties() {
+        return runtimeProperties;
+    }
+
+    /**
+     * Sets the value of the runtimeProperties property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TypeProperties }
+     *     
+     */
+    public void setRuntimeProperties(TypeProperties value) {
+        this.runtimeProperties = value;
+    }
+
+}

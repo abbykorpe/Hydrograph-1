@@ -13,11 +13,10 @@
  -->
 
 <p:graph name="example2" xmlns:p="hydrograph/engine/jaxb/main"
-	xmlns:it="hydrograph/engine/jaxb/inputtypes" xmlns:ot="hydrograph/engine/jaxb/outputtypes"
-	xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"
-	xmlns:tt="hydrograph/engine/jaxb/transformtypes" xmlns:ct="hydrograph/engine/jaxb/commandtypes"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
+		 xmlns:it="hydrograph/engine/jaxb/inputtypes" xmlns:ot="hydrograph/engine/jaxb/outputtypes"
+		 xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
 
 

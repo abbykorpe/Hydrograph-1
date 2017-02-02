@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.scheme;
 
-import hydrograph.engine.utilities.GeneralUtilities;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.tap.TapException;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
@@ -28,6 +19,13 @@ import cascading.tuple.coerce.Coercions;
 import cascading.tuple.coerce.StringCoerce;
 import cascading.tuple.type.CoercibleType;
 import cascading.tuple.type.DateType;
+import hydrograph.engine.core.utilities.GeneralUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 
 @SuppressWarnings("rawtypes")
 public class DelimitedAndFixedWidthHelper {
@@ -43,13 +41,13 @@ public class DelimitedAndFixedWidthHelper {
 
 	public static Object[] getFields(Fields sourceFields, String line,
 			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-			Type[] types, boolean safe) {
+			Type[] types, boolean safe, String quote) {
 
 		if (!line.equals("")) {
 
 			try {
 				String[] tokens = generateTokensFromRawData(line,
-						lengthsAndDelimiters, lengthsAndDelimitersType);
+						lengthsAndDelimiters, lengthsAndDelimitersType, quote);
 				Type[] fieldDataTypes = types;
 				if (fieldDataTypes == null) {
 					fieldDataTypes = new Type[sourceFields.size()];
@@ -69,7 +67,7 @@ public class DelimitedAndFixedWidthHelper {
 								+ "\nDatatypes in scheme: "
 								+ Arrays.toString(types)
 								+ "\nSafe was set to: " + safe, e);
-				throw new RuntimeException(e);			
+				throw new RuntimeException(e);
 			}
 		} else {
 			return new Object[lengthsAndDelimiters.length];
@@ -77,21 +75,32 @@ public class DelimitedAndFixedWidthHelper {
 	}
 
 	private static String[] generateTokensFromRawData(String line,
-			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType) {
+			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
+			String quote) {
 		String tokens[] = new String[lengthsAndDelimiters.length];
 		String strings[];
 		String identifier;
+		quote = DelimitedAndFixedWidthHelper.maskRegexChar(quote);
 		for (int i = 0; i < lengthsAndDelimiters.length; i++) {
 			identifier = DelimitedAndFixedWidthHelper
-					.checkIfDelimiterIsRegexChar(lengthsAndDelimiters[i]);
+					.maskRegexChar(lengthsAndDelimiters[i]);
 			if (lengthsAndDelimitersType[i].contains("Integer")) {
 				tokens[i] = line.substring(0, Integer.parseInt(identifier));
 				if (i != (lengthsAndDelimiters.length - 1))
 					line = line.substring(Integer.parseInt(identifier));
 			} else {
+				if (!"".equals(quote) && line.contains(quote.replace("\\", ""))) {
+					// Creation of RegEx to split data based on delimiter
+					// ignoring the delimiter present in data based on 
+					// presence of quote char
+					identifier = identifier + "(?=(?:[^" + quote + "]*" + quote
+							+ "[^" + quote + "]*[^" + quote + identifier + "]*"
+							+ quote + ")*(?![^" + quote + "]*" + quote + "))";
+				}
 				strings = line.split(identifier);
 				if (strings.length != 0) {
-					tokens[i] = (strings)[0];
+					tokens[i] = ((strings)[0]).replace(quote.replace("\\", ""),
+							"");
 					if (i != (lengthsAndDelimiters.length - 1))
 						line = (line.split(identifier, 2))[1];
 				} else {
@@ -131,7 +140,7 @@ public class DelimitedAndFixedWidthHelper {
 
 	public static StringBuilder createLine(Tuple tuple,
 			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-			boolean strict, char filler, Type[] types) {
+			boolean strict, char filler, Type[] types, String quote) {
 		counter = 0;
 		StringBuilder buffer = new StringBuilder();
 		for (Object value : tuple) {
@@ -206,6 +215,10 @@ public class DelimitedAndFixedWidthHelper {
 					continue;
 				}
 			}
+			if (quoteCharPresent(quote)) {
+				value = appendQuoteChars(value, quote,
+						lengthsAndDelimiters[counter]);
+			}
 			buffer.append(value);
 			if (lengthsAndDelimiters[counter].contentEquals("\\n"))
 				lengthsAndDelimiters[counter] = "\n";
@@ -218,6 +231,18 @@ public class DelimitedAndFixedWidthHelper {
 			counter++;
 		}
 		return buffer;
+	}
+
+	private static boolean quoteCharPresent(String quote) {
+		return !quote.equals("");
+	}
+
+	private static Object appendQuoteChars(Object value, String quote,
+			String lengthsAndDelimiters) {
+		if (value instanceof String && ((String) value).contains(lengthsAndDelimiters)) {
+			value = quote + ((String) value) + quote;
+		}
+		return value;
 	}
 
 	private static boolean isFixedWidthField(String[] lengthsAndDelimitersType,
@@ -315,36 +340,36 @@ public class DelimitedAndFixedWidthHelper {
 		}
 	}
 
-	public static String checkIfDelimiterIsRegexChar(
-			String delimiterToBePassedToRecordReader) {
-		String string = delimiterToBePassedToRecordReader;
-		if (delimiterToBePassedToRecordReader.contains("|")) {
-			string = delimiterToBePassedToRecordReader.replace("|", "\\|");
+	public static String maskRegexChar(
+			String singleChar) {
+		String string = singleChar;
+		if (singleChar.contains("|")) {
+			string = singleChar.replace("|", "\\|");
 		}
-		if (delimiterToBePassedToRecordReader.contains(".")) {
-			string = delimiterToBePassedToRecordReader.replace(".", "\\.");
+		if (singleChar.contains(".")) {
+			string = singleChar.replace(".", "\\.");
 		}
-		if (delimiterToBePassedToRecordReader.contains("+")) {
-			string = delimiterToBePassedToRecordReader.replace("+", "\\+");
+		if (singleChar.contains("+")) {
+			string = singleChar.replace("+", "\\+");
 		}
-		if (delimiterToBePassedToRecordReader.contains("$")) {
-			string = delimiterToBePassedToRecordReader.replace("$", "\\$");
+		if (singleChar.contains("$")) {
+			string = singleChar.replace("$", "\\$");
 		}
-		if (delimiterToBePassedToRecordReader.contains("*")) {
-			string = delimiterToBePassedToRecordReader.replace("*", "\\*");
+		if (singleChar.contains("*")) {
+			string = singleChar.replace("*", "\\*");
 		}
-		if (delimiterToBePassedToRecordReader.contains("?")) {
-			string = delimiterToBePassedToRecordReader.replace("?", "\\?");
+		if (singleChar.contains("?")) {
+			string = singleChar.replace("?", "\\?");
 		}
-		if (delimiterToBePassedToRecordReader.contains("^")) {
-			string = delimiterToBePassedToRecordReader.replace("^", "\\^");
+		if (singleChar.contains("^")) {
+			string = singleChar.replace("^", "\\^");
 		}
-		if (delimiterToBePassedToRecordReader.contains("-")) {
-			string = delimiterToBePassedToRecordReader.replace("-", "\\-");
+		if (singleChar.contains("-")) {
+			string = singleChar.replace("-", "\\-");
 		}
-		if (delimiterToBePassedToRecordReader.contains("\\x")) {
+		if (singleChar.contains("\\x")) {
 			string = GeneralUtilities
-					.parseHex(delimiterToBePassedToRecordReader);
+					.parseHex(singleChar);
 		}
 		return string;
 	}
@@ -352,7 +377,7 @@ public class DelimitedAndFixedWidthHelper {
 	public static String[] checkIfDelimiterIsRegexChar(
 			String[] lengthsAndDelimiters) {
 		for (int i = 0; i < lengthsAndDelimiters.length; i++)
-			lengthsAndDelimiters[i] = checkIfDelimiterIsRegexChar(lengthsAndDelimiters[i]);
+			lengthsAndDelimiters[i] = maskRegexChar(lengthsAndDelimiters[i]);
 		return lengthsAndDelimiters;
 	}
 

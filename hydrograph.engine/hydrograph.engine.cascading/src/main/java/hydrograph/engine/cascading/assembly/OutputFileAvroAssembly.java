@@ -13,29 +13,19 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-
-
-
-
-
-
-
-import hydrograph.engine.assembly.entity.OutputFileAvroEntity;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
-import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
-import hydrograph.engine.utilities.ComponentHelper;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.SinkMode;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.scheme.avro.AvroDescriptor;
+import hydrograph.engine.cascading.scheme.avro.CustomAvroScheme;
+import hydrograph.engine.core.component.entity.OutputFileAvroEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputFileAvroAssembly extends BaseComponent<OutputFileAvroEntity> {
 
@@ -72,7 +62,7 @@ public class OutputFileAvroAssembly extends BaseComponent<OutputFileAvroEntity> 
 		filePathToWrite = outputFileAvroEntity.getPath();
 		tailPipe = componentParameters.getInputPipe();
 		prepareScheme();
-		Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileAvro",outputFileAvroEntity.getComponentId(),""),
+		Pipe sinkPipe = new Pipe(outputFileAvroEntity.getComponentId()+"",
 				tailPipe);
 		setOutLink("output","NoSocketId",
 				outputFileAvroEntity.getComponentId(), sinkPipe, componentParameters

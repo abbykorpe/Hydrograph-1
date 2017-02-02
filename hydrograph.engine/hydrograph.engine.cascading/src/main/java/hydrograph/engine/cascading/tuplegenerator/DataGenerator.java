@@ -12,6 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.tuplegenerator;
 
+import org.fluttercode.datafactory.impl.DataFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -19,10 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-
-import org.fluttercode.datafactory.impl.DataFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DataGenerator {
 

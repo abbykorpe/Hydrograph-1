@@ -12,24 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.NormalizeEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.handlers.NormalizeCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.NormalizeEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Map;
 
 public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 
@@ -44,13 +42,24 @@ public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 			ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
-
+	
+	private void setOperationClassInCaseExpression() {
+		for (int i = 0; i < normalizeEntity.getOperationsList().size(); i++) {
+			if (normalizeEntity.getOperationsList().get(i).getOperationClass() == null) {
+				normalizeEntity.getOperationsList().get(i)
+						.setOperationClass(
+								"hydrograph.engine.expression.userfunctions.NormalizeForExpression");
+			}
+		}
+	}
+	
 	@Override
 	protected void createAssembly() {
 		try {
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(normalizeEntity.toString());
 			}
+			setOperationClassInCaseExpression();
 			for (OutSocket outSocket : normalizeEntity.getOutSocketList()) {
 				LOG.trace("Creating normalize assembly for '"
 						+ normalizeEntity.getComponentId() + "' for socket: '"
@@ -97,14 +106,16 @@ public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 				passThroughFields, mapFields, operationFields);
 		NormalizeCustomHandler normalizeCustomHandler = null;
 
-		Pipe normalizePipe = new Pipe(ComponentHelper.getComponentName("normalize",
-				normalizeEntity.getComponentId(),outSocket.getSocketId()),
+		Pipe normalizePipe = new Pipe(normalizeEntity.getComponentId()+outSocket.getSocketId(),
 				componentParameters.getInputPipe());
+
 
 		normalizeCustomHandler = new NormalizeCustomHandler(
 				fieldManupulatingHandler,
 				operationFieldsCreator.getOperationalOperationPropertiesList(),
-				operationFieldsCreator.getOperationalTransformClassList());
+				operationFieldsCreator.getOperationalTransformClassList(),
+				operationFieldsCreator.getOperationalExpressionList(),
+				normalizeEntity.getOutputRecordCount());
 
 		setHadoopProperties(normalizePipe.getStepConfigDef());
 
@@ -121,5 +132,5 @@ public class NormalizeAssembly extends BaseComponent<NormalizeEntity> {
 	public void initializeEntity(NormalizeEntity assemblyEntityBase) {
 		this.normalizeEntity=assemblyEntityBase;
 	}
-
+	
 }

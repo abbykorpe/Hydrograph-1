@@ -12,23 +12,18 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.hadoop.mapred.JobConf;
-
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
-import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
-import hydrograph.engine.cascading.assembly.generator.base.GeneratorBase;
+import hydrograph.engine.adapters.base.BaseAdapter;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.component.mapping.ComponentAdapterFactory;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.helper.JAXBTraversal;
+import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
 import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
-import hydrograph.engine.schemapropagation.SchemaFieldHandler;
+import org.apache.hadoop.mapred.JobConf;
+
+import java.util.*;
 
 @SuppressWarnings("rawtypes")
 public class RuntimeContext {
@@ -40,17 +35,17 @@ public class RuntimeContext {
 	private HadoopConfigProvider hadoopConfProvider;
 	private LinkedHashMap<String, ComponentParameters> tempPathParameters;
 	private Properties hadoopProperties;
-	private AssemblyGeneratorFactory assemblyGeneratorFactory;
+	private ComponentAdapterFactory componentAdapterFactory;
 	private Map<String, FlowContext> flowContext;
 	private SchemaFieldHandler schemaFieldHandler;
 	private String UDFPath;
 
 	public RuntimeContext(HydrographJob hydrographJob, JAXBTraversal traversal, Properties hadoopProps,
-			AssemblyGeneratorFactory assemblyGeneratorFactory, SchemaFieldHandler schemaFieldHandler, String UDFPath) {
+						  ComponentAdapterFactory componentAdapterFactory, SchemaFieldHandler schemaFieldHandler, String UDFPath) {
 		this.hydrographJob = hydrographJob;
 		this.traversal = traversal;
 		this.hadoopProperties = hadoopProps;
-		this.assemblyGeneratorFactory = assemblyGeneratorFactory;
+		this.componentAdapterFactory = componentAdapterFactory;
 		this.hadoopConfProvider = new HadoopConfigProvider(hadoopProps);
 		this.schemaFieldHandler = schemaFieldHandler;
 		this.UDFPath=UDFPath;
@@ -61,7 +56,7 @@ public class RuntimeContext {
 	public String getUDFPath() {
 		return UDFPath;
 	}
-	
+
 	public void setSchemaFieldHandler(SchemaFieldHandler schemaFieldHandler){
 		this.schemaFieldHandler=schemaFieldHandler;
 	}
@@ -98,15 +93,15 @@ public class RuntimeContext {
 	}
 
 	public void setCascade(Cascade[] cascades) {
-		this.cascades = cascades;
+		this.cascades = cascades != null ? cascades.clone() : null;
 	}
 
 	public Cascade[] getCascade() {
-		return cascades;
+		return cascades != null ? cascades.clone() : null;
 	}
 
-	public Map<String, GeneratorBase> getAssemblyGeneratorMap() {
-		return assemblyGeneratorFactory.getAssemblyGeneratorMap();
+	public Map<String, BaseAdapter> getAssemblyGeneratorMap() {
+		return componentAdapterFactory.getAssemblyGeneratorMap();
 	}
 
 	/*

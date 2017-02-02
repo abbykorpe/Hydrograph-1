@@ -12,27 +12,26 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static data.InputData.outputFileFixedWidth;
-import hydrograph.engine.assembly.entity.OutputFileFixedWidthEntity;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import cascading.flow.Flow;
+import cascading.flow.FlowDef;
+import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.OutputFileFixedWidthAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.OutputFileFixedWidthEntity;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.utilites.AssemblyBuildHelper;
 import hydrograph.engine.utilites.CascadingTestCase;
+import org.apache.hadoop.conf.Configuration;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.hadoop.conf.Configuration;
-import org.junit.Test;
-
-import cascading.flow.Flow;
-import cascading.flow.FlowDef;
-import cascading.flow.hadoop2.Hadoop2MR1FlowConnector;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
+import static data.InputData.outputFileFixedWidth;
 
 @SuppressWarnings({ "rawtypes", "unused" })
 public class OutputFileFixedWidthTest {

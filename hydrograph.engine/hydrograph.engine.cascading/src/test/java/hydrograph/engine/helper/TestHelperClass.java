@@ -12,18 +12,15 @@
  *******************************************************************************/
 package hydrograph.engine.helper;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.StringReader;
-import java.util.Scanner;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import hydrograph.engine.core.utilities.FileEncodingEnum;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.jaxb.main.Graph;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class TestHelperClass {
 

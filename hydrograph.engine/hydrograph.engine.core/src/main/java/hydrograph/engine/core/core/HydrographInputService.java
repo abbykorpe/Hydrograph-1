@@ -12,16 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.core.core;
 
-import java.util.Properties;
-
-import javax.xml.bind.JAXBException;
-
 import org.apache.commons.cli.ParseException;
 
-public interface HydrographInputService {
+import javax.xml.bind.JAXBException;
+import java.util.Properties;
 
+public interface HydrographInputService {
 	public HydrographJob parseHydrographJob(Properties config, String[] args) throws JAXBException, ParseException;
-	
-	public HydrographDebugInfo parseHydrographDebugInfo(Properties config, String[] args) throws JAXBException, ParseException;
-	
 }

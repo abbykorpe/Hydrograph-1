@@ -12,11 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
@@ -24,12 +19,15 @@ import cascading.tap.SinkMode;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.OutputFileFixedWidthEntity;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
 import hydrograph.engine.cascading.scheme.TextFixedWidth;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.OutputFileFixedWidthEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedWidthEntity> {
 
@@ -71,8 +69,7 @@ public class OutputFileFixedWidthAssembly extends BaseComponent<OutputFileFixedW
 			LOG.trace("Creating output file fixed width assembly for '" + outputFileFixedWidthEntity.getComponentId()
 					+ "'");
 			prepareAssembly();
-			Pipe sinkPipe = new Pipe(ComponentHelper.getComponentName("outputFileFixedWidth",
-					outputFileFixedWidthEntity.getComponentId(), ""), tailPipe);
+			Pipe sinkPipe = new Pipe(outputFileFixedWidthEntity.getComponentId()+"", tailPipe);
 			setOutLink("output","NoSocketId",
 					outputFileFixedWidthEntity.getComponentId(), sinkPipe, componentParameters
 					.getInputFieldsList().get(0));

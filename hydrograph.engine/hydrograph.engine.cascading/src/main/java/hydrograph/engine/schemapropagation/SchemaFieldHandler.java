@@ -12,12 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.schemapropagation;
 
-import hydrograph.engine.assembly.entity.elements.SchemaField;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.commontypes.TypeBaseInSocket;
 import hydrograph.engine.jaxb.commontypes.TypeBaseOutSocket;
-import hydrograph.engine.jaxb.commontypes.TypeCommandComponent;
 import hydrograph.engine.jaxb.commontypes.TypeInputComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOperationsComponent;
 import hydrograph.engine.jaxb.commontypes.TypeOutputComponent;
@@ -66,9 +65,9 @@ public class SchemaFieldHandler {
 			} else if (baseComponent instanceof TypeOperationsComponent) {
 
 				schemaFields.putAll(operationHandler.getOperation());
-			} else if (baseComponent instanceof TypeCommandComponent) {
+			} /*else if (baseComponent instanceof TypeCommandComponent) {
 				// no need of schema fields
-			}
+			}*/
 		}
 	}
 

@@ -12,28 +12,25 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.CumulateEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
+import cascading.pipe.Every;
+import cascading.pipe.GroupBy;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.CumulateCustomHandler;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.CumulateEntity;
+import hydrograph.engine.core.component.entity.elements.KeyField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cascading.pipe.Every;
-import cascading.pipe.GroupBy;
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
 
 public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 
@@ -46,13 +43,24 @@ public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 			ComponentParameters parameters) {
 		super(assemblyEntityBase, parameters);
 	}
-
+	
+	private void setOperationClassInCaseExpression() {
+		for (int i = 0; i < cumulateEntity.getOperationsList().size(); i++) {
+			if (cumulateEntity.getOperationsList().get(i).getOperationClass() == null) {
+				cumulateEntity.getOperationsList().get(i)
+						.setOperationClass(
+								"hydrograph.engine.expression.userfunctions.CumulateForExpression");
+			}
+		}
+	}
+	
 	@Override
 	protected void createAssembly() {
 		try {
 			if (LOG.isTraceEnabled()) {
 				LOG.trace(cumulateEntity.toString());
 			}
+			setOperationClassInCaseExpression();
 			for (OutSocket outSocket : cumulateEntity.getOutSocketList()) {
 				LOG.trace("Creating cumulate assembly for '"
 						+ cumulateEntity.getComponentId() + "' for socket: '"
@@ -94,7 +102,7 @@ public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 				OutSocketUtils.getOperationFieldsFromOutSocket(outSocket
 						.getOperationFieldList()));
 
-		Pipe scanSortPipe = new Pipe(ComponentHelper.getComponentName("cumulate",cumulateEntity.getComponentId(),outSocket.getSocketId()),
+		Pipe scanSortPipe = new Pipe(cumulateEntity.getComponentId()+outSocket.getSocketId(),
 				componentParameters.getInputPipe());
 
 		// perform groupby operation on keys
@@ -113,7 +121,9 @@ public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 		CumulateCustomHandler scanHandler = new CumulateCustomHandler(
 				fieldManupulatingHandler,
 				operationFieldsCreator.getOperationalOperationPropertiesList(),
-				operationFieldsCreator.getOperationalTransformClassList());
+				operationFieldsCreator.getOperationalTransformClassList(),
+				operationFieldsCreator.getOperationalExpressionList(),
+				extractInitialValues());
 
 		setHadoopProperties(scanSortPipe.getStepConfigDef());
 
@@ -162,4 +172,14 @@ public class CumulateAssembly extends BaseComponent<CumulateEntity> {
 	public void initializeEntity(CumulateEntity assemblyEntityBase) {
 		this.cumulateEntity = (CumulateEntity) assemblyEntityBase;
 	}
+	
+	private String[] extractInitialValues() {
+		String[] initialValues = new String[cumulateEntity.getNumOperations()];
+		for (int i = 0; i < cumulateEntity.getNumOperations(); i++) {
+			initialValues[i] = cumulateEntity.getOperationsList().get(i)
+					.getAccumulatorInitialValue();
+		}
+		return initialValues;
+	}
+	
 }

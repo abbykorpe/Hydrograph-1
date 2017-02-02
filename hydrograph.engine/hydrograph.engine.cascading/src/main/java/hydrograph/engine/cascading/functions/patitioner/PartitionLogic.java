@@ -12,11 +12,10 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.functions.patitioner;
 
+import cascading.tuple.Tuple;
 import hydrograph.engine.cascading.assembly.context.PartitionContext;
 
 import java.io.Serializable;
-
-import cascading.tuple.Tuple;
 
 public interface PartitionLogic extends Serializable {
 	public int getPartition(Tuple key, PartitionContext context);

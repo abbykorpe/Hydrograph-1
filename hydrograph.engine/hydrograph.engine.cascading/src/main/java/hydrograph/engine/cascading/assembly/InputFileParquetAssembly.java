@@ -12,26 +12,23 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import hydrograph.engine.assembly.entity.InputFileParquetEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.cascading.assembly.base.BaseComponent;
-import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
-import hydrograph.engine.utilities.ComponentHelper;
-
-import java.io.IOException;
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
+import hydrograph.engine.cascading.assembly.base.BaseComponent;
+import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
+import hydrograph.engine.cascading.scheme.parquet.ParquetTupleScheme;
+import hydrograph.engine.core.component.entity.InputFileParquetEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class InputFileParquetAssembly extends BaseComponent<InputFileParquetEntity> {
 
@@ -94,8 +91,8 @@ public class InputFileParquetAssembly extends BaseComponent<InputFileParquetEnti
 		}
 		flowDef = componentParameters.getFlowDef();
 		tap = new Hfs(scheme, inputFileParquetEntity.getPath());
-		pipe = new Pipe(ComponentHelper.getComponentName("inputFileParquet", inputFileParquetEntity.getComponentId(),
-				inputFileParquetEntity.getOutSocketList().get(0).getSocketId()));
+		pipe = new Pipe(inputFileParquetEntity.getComponentId()+
+				inputFileParquetEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(tap.getStepConfigDef());
 		setHadoopProperties(pipe.getStepConfigDef());

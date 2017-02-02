@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -18,9 +6,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.exceltype.TypeExcelOutSocket;
 import hydrograph.engine.jaxb.ifmixedscheme.TypeInputMixedOutSocket;
+import hydrograph.engine.jaxb.ifxml.TypeInputXmlOutSocket;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordOutSocket;
 import hydrograph.engine.jaxb.ihivetextfile.TypeInputHiveTextDelimitedOutSocket;
+import hydrograph.engine.jaxb.imysql.TypeInputMysqlOutSocket;
+import hydrograph.engine.jaxb.ioracle.TypeInputOracleOutSocket;
+import hydrograph.engine.jaxb.iredshift.TypeInputRedshiftOutSocket;
+import hydrograph.engine.jaxb.iteradata.TypeInputTeradataOutSocket;
 import hydrograph.engine.jaxb.itffw.TypeInputFixedwidthOutSocket;
 import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
 
@@ -46,7 +40,7 @@ import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-input-outSocket", propOrder = {
+@XmlType(name = "type-input-outSocket", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "schema"
 })
 @XmlSeeAlso({
@@ -58,7 +52,13 @@ import hydrograph.engine.jaxb.itfs.TypeInputSequenceOutSocket;
     hydrograph.engine.jaxb.ihiveparquet.TypeInputDelimitedOutSocket.class,
     TypeInputHiveTextDelimitedOutSocket.class,
     TypeInputMixedOutSocket.class,
-    hydrograph.engine.jaxb.ifsubjob.TypeInputDelimitedOutSocket.class
+    hydrograph.engine.jaxb.ifsubjob.TypeInputDelimitedOutSocket.class,
+    TypeInputMysqlOutSocket.class,
+    TypeInputRedshiftOutSocket.class,
+    TypeInputOracleOutSocket.class,
+    TypeInputTeradataOutSocket.class,
+    TypeInputXmlOutSocket.class,
+    TypeExcelOutSocket.class
 })
 public class TypeInputOutSocket
     extends TypeBaseOutSocket

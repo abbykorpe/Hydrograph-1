@@ -12,12 +12,12 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.handlers;
 
+import cascading.tuple.Fields;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import cascading.tuple.Fields;
 
 public class FieldManupulatingHandler implements Serializable {
 
@@ -243,6 +243,10 @@ public class FieldManupulatingHandler implements Serializable {
 	public int[] getInputPositions(int index) {
 		return inputPositions.get(index);
 	}
+	
+	public ArrayList<int[]> getAllInputPositions(){
+		return inputPositions;
+	}
 
 	/**
 	 * @return the field positions of pass through fields in the input row
@@ -264,7 +268,7 @@ public class FieldManupulatingHandler implements Serializable {
 	 * @return the field positions of pass through fields in the input row
 	 */
 	public int[] getOperationPositions() {
-		return operationFieldsPositions;
+		return operationFieldsPositions != null ? operationFieldsPositions.clone() : null;
 	}
 
 	public int[] getInputPositions() {
@@ -277,6 +281,10 @@ public class FieldManupulatingHandler implements Serializable {
 
 	public ArrayList<int[]> getAllOutputPositions() {
 		return outputPositions;
+	}
+	
+	public void setAllOutputPositions(ArrayList<int[]> outputPositions) {
+		this.outputPositions = outputPositions;
 	}
 
 
@@ -299,11 +307,11 @@ public class FieldManupulatingHandler implements Serializable {
 	 *         row
 	 */
 	public int[] getMapSourceFieldPositions() {
-		return mapSourceFieldPositions;
+		return mapSourceFieldPositions != null ? mapSourceFieldPositions.clone() : null;
 	}
 	
 	public int[] getMapTargetFieldPositions() {
-		return mapTargetFieldPositions;
+		return mapTargetFieldPositions != null ? mapTargetFieldPositions.clone() : null;
 	}
 
 	/**

@@ -12,11 +12,11 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.test.customtransformclasses;
 
-import java.io.Serializable;
-import java.util.Properties;
-
 import hydrograph.engine.transformation.userfunctions.base.CustomPartitionExpression;
 import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
+import java.io.Serializable;
+import java.util.Properties;
 
 /**
  * This class is used as custom partitionbyexpression class in

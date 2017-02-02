@@ -12,23 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.flow.FlowDef;
 import cascading.pipe.Pipe;
 import cascading.scheme.hadoop.SequenceFile;
 import cascading.tap.Tap;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.InputFileSequenceFormatEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.InputOutputFieldsAndTypesCreator;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.InputFileSequenceFormatEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
 
 public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequenceFormatEntity> {
 
@@ -81,9 +80,8 @@ public class InputFileSequenceFormatAssembly extends BaseComponent<InputFileSequ
 
 		// initializing each pipe and tap
 		tap = new Hfs(scheme, inputFileSequenceFormatEntity.getPath());
-		pipe = new Pipe(ComponentHelper.getComponentName("inputFileSequenceFormat",
-				inputFileSequenceFormatEntity.getComponentId(),
-				inputFileSequenceFormatEntity.getOutSocketList().get(0).getSocketId()));
+		pipe = new Pipe(inputFileSequenceFormatEntity.getComponentId()+
+				inputFileSequenceFormatEntity.getOutSocketList().get(0).getSocketId());
 
 		setHadoopProperties(pipe.getStepConfigDef());
 		setHadoopProperties(tap.getStepConfigDef());

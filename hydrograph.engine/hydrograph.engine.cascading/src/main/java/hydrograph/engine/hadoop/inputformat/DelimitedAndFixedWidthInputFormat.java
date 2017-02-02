@@ -13,19 +13,13 @@
 package hydrograph.engine.hadoop.inputformat;
 
 import hydrograph.engine.hadoop.recordreader.DelimitedAndFixedWidthRecordReader;
-
-import java.io.IOException;
-
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.FileInputFormat;
-import org.apache.hadoop.mapred.FileSplit;
-import org.apache.hadoop.mapred.InputSplit;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.RecordReader;
-import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.*;
+
+import java.io.IOException;
 
 public class DelimitedAndFixedWidthInputFormat extends
 		FileInputFormat<LongWritable, Text> {

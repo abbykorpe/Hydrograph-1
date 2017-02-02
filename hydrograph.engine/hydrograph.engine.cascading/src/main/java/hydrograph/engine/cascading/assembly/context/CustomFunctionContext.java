@@ -12,9 +12,9 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly.context;
 
-import hydrograph.engine.cascading.utilities.TupleHelper;
 import cascading.tuple.Fields;
 import cascading.tuple.TupleEntry;
+import hydrograph.engine.cascading.utilities.TupleHelper;
 
 public class CustomFunctionContext {
 

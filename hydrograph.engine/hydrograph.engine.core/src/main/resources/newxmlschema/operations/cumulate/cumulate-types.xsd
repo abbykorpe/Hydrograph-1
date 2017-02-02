@@ -73,6 +73,7 @@
           <xs:choice maxOccurs="unbounded" minOccurs="1">
             <xs:element name="passThroughField" type="type-operation-input-field" />
             <xs:element name="operationField" type="cmn:type-operation-field" />
+            <xs:element name="expressionField" type="cmn:type-expression-field" />
             <xs:element name="mapField" type="cmn:type-map-field" />
           </xs:choice>
         </xs:choice>
@@ -110,21 +111,45 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="cumulate-base">
-    <xs:complexContent>
-      <xs:restriction base="cmn:type-operations-component">
-        <xs:sequence>
-          <xs:element name="inSocket" type="type-in-socket"
-            minOccurs="1" maxOccurs="1" />
-          <xs:element name="operation" type="type-operation"
-            minOccurs="0" maxOccurs="unbounded" />
-          <xs:element name="outSocket" type="type-out-socket"
-            minOccurs="1" maxOccurs="1" />
-          <xs:element name="runtimeProperties" type="cmn:type-properties"
-						minOccurs="0" maxOccurs="1" />  
-        </xs:sequence>
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
+	<xs:complexType name="cumulate-base">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-operations-component">
+				<xs:sequence>
+					<xs:element name="inSocket" type="type-in-socket"
+						minOccurs="1" maxOccurs="1" />
+					<xs:choice maxOccurs="unbounded" minOccurs="0">
+						<xs:element name="operation" type="type-operation"
+							minOccurs="1" maxOccurs="unbounded" />
+						<xs:element name="expression" type="type-transform-expression"
+							minOccurs="1" maxOccurs="unbounded" />
+					</xs:choice>
+					<xs:element name="outSocket" type="type-out-socket"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="runtimeProperties" type="cmn:type-properties"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+  
+  	<xs:complexType name="type-transform-expression">
+		<xs:complexContent>
+			<xs:restriction base="cmn:type-transform-expression">
+				<xs:sequence>
+					<xs:element name="inputFields" type="type-operation-input-fields"
+						minOccurs="0" />
+					<xs:element name="outputFields" type="cmn:type-expression-output-fields"
+						minOccurs="0" />
+					<xs:element name="properties" type="cmn:type-properties"
+						minOccurs="0" />
+				</xs:sequence>
+				<xs:attribute name="id" type="xs:string" use="required" />
+				<xs:attribute name="expr" type="xs:string" use="required" />
+				<xs:attribute name="accumulatorInitalValue" type="xs:string"
+					use="required" />
+				<xs:anyAttribute />
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
 
 </xs:schema>

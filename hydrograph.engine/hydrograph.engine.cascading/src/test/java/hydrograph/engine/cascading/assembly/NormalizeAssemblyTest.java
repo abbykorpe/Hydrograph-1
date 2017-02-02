@@ -12,38 +12,28 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import hydrograph.engine.assembly.entity.NormalizeEntity;
-import hydrograph.engine.assembly.entity.elements.MapField;
-import hydrograph.engine.assembly.entity.elements.Operation;
-import hydrograph.engine.assembly.entity.elements.OperationField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.PassThroughField;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+import com.hotels.plunger.Bucket;
+import com.hotels.plunger.Data;
+import com.hotels.plunger.DataBuilder;
+import com.hotels.plunger.Plunger;
 import hydrograph.engine.cascading.assembly.NormalizeAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-
+import hydrograph.engine.core.component.entity.NormalizeEntity;
+import hydrograph.engine.core.component.entity.elements.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
+import java.io.IOException;
+import java.util.*;
 
-import com.hotels.plunger.Bucket;
-import com.hotels.plunger.Data;
-import com.hotels.plunger.DataBuilder;
-import com.hotels.plunger.Plunger;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test normalize sub assembly. The tests are written using plunger framework
@@ -75,8 +65,10 @@ public class NormalizeAssemblyTest {
 															// to an input of
 															// normalize
 															// component
-
+		ArrayList<Fields>fieldList = new ArrayList<Fields>();
+		fieldList.add(fields);
 		ComponentParameters parameters = new ComponentParameters();
+		parameters.setInputFieldsList(fieldList);
 		parameters.addInputPipe(pipe1);
 
 		NormalizeEntity normalizeEnitity = new NormalizeEntity();
@@ -166,8 +158,10 @@ public class NormalizeAssemblyTest {
 															// to an input of
 															// normalize
 															// component
-
+		ArrayList<Fields>fieldList = new ArrayList<Fields>();
+		fieldList.add(fields);
 		ComponentParameters parameters = new ComponentParameters();
+		parameters.setInputFieldsList(fieldList);
 		parameters.addInputPipe(pipe1);
 
 		NormalizeEntity normalizeEnitity = new NormalizeEntity();

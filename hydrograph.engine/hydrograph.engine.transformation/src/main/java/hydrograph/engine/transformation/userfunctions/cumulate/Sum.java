@@ -12,13 +12,13 @@
  *******************************************************************************/
 package hydrograph.engine.transformation.userfunctions.cumulate;
 
+import hydrograph.engine.transformation.userfunctions.base.CumulateTransformBase;
+import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Properties;
-
-import hydrograph.engine.transformation.userfunctions.base.CumulateTransformBase;
-import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 
 public class Sum implements CumulateTransformBase {
 

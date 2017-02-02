@@ -12,24 +12,24 @@
  *******************************************************************************/
 package hydrograph.engine.core.props;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-
+import hydrograph.engine.core.utilities.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class PropertiesLoader {
 
 	public static final String ENGINE_PROPERTY_FILE = "engine.properties";
 	public static final String INPUT_SERVICE_PROPERTY_FILE = "input_service.properties";
 	public static final String RUNTIME_SERVICE_PROPERTY_FILE = "runtime_service.properties";
-	public static final String XPATH_PROPERTY_FILE = "xpath.properties";
+	//public static final String XPATH_PROPERTY_FILE = "xpath.properties";
 
 	private Properties engineProps;
 	private Properties inputServiceProps;
 	private Properties runtimeServiceProps;
-	private Properties xpathProps;
+	//private Properties xpathProps;
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(PropertiesLoader.class);
@@ -42,12 +42,10 @@ public class PropertiesLoader {
 	}
 
 	public static PropertiesLoader getInstance() {
-
 		if (loaderInstance == null) {
 			loaderInstance = new PropertiesLoader();
 		}
 		return loaderInstance;
-
 	}
 
 	public String getInputServiceClassName() {
@@ -56,7 +54,6 @@ public class PropertiesLoader {
 			throw new PropertiesException(
 					"Unable to find property inputService in engine properties");
 		}
-
 		return name;
 	}
 
@@ -66,9 +63,7 @@ public class PropertiesLoader {
 			throw new PropertiesException(
 					"Unable to find property runtimeService in engine properties");
 		}
-
 		return name;
-
 	}
 
 	public Properties getEngineProperties() {
@@ -83,76 +78,37 @@ public class PropertiesLoader {
 		return runtimeServiceProps;
 	}
 
-	public Properties getXpathProperties() {
+	/*public Properties getXpathProperties() {
 		return xpathProps;
-	}
+	}*/
 
 	private void loadAllProperties() {
-
-		engineProps = loadPropertiesFile(ENGINE_PROPERTY_FILE);
-
-		inputServiceProps = loadPropertiesFile(INPUT_SERVICE_PROPERTY_FILE);
-		runtimeServiceProps = loadPropertiesFile(RUNTIME_SERVICE_PROPERTY_FILE);
-		xpathProps = loadPropertiesFile(XPATH_PROPERTY_FILE);
-	}
-
-	private Properties loadPropertiesFile(String fileName) {
-		Properties properties = new Properties();
-
-		String propFileName = null;
-
-		propFileName = System.getProperty(fileName);
-		if (propFileName == null) {
-			propFileName = fileName;
-			try {
-				properties.load(ClassLoader
-						.getSystemResourceAsStream(propFileName));
-			} catch (Exception e) {
-				throw new UnableToLoadPropertiesException(e);
-			}
-		} else {
-			FileReader reader = null;
-			try {
-				reader = new FileReader(propFileName);
-				properties.load(reader);
-			} catch (Exception e) {
-				throw new UnableToLoadPropertiesException(e);
-			} finally {
-				if (reader != null) {
-					try {
-						reader.close();
-					} catch (IOException e) {
-						LOG.error("Error closing the properties file: "
-								+ propFileName, e);
-						throw new RuntimeException(
-								"Error closing the properties file: "
-										+ propFileName, e);
-					}
-				}
-			}
+		try {
+			engineProps = PropertiesHelper.getProperties(ENGINE_PROPERTY_FILE);
+		} catch (IOException e) {
+			LOG.error("Error loading engine property file: " + ENGINE_PROPERTY_FILE, e);
+			throw new RuntimeException(e);
 		}
-
-		LOG.info("Loading property file " + propFileName);
-
-		return properties;
-
-	}
-
-	private class UnableToLoadPropertiesException extends RuntimeException {
-		private static final long serialVersionUID = 4031525765978790699L;
-
-		public UnableToLoadPropertiesException(Throwable e) {
-			super(e);
+		try {
+			inputServiceProps = PropertiesHelper.getProperties(INPUT_SERVICE_PROPERTY_FILE);
+		} catch (IOException e) {
+			LOG.error("Error loading input service property file: " + INPUT_SERVICE_PROPERTY_FILE, e);
+			throw new RuntimeException(e);
 		}
+		try {
+			runtimeServiceProps = PropertiesHelper.getProperties(RUNTIME_SERVICE_PROPERTY_FILE);
+		} catch (IOException e) {
+			LOG.error("Error loading runtime service property file: " + RUNTIME_SERVICE_PROPERTY_FILE, e);
+			throw new RuntimeException(e);
+		}
+		//xpathProps = PropertiesHelper.getProperties(XPATH_PROPERTY_FILE);
 	}
 
 	private class PropertiesException extends RuntimeException {
-
 		private static final long serialVersionUID = 6239127278298773996L;
 
 		public PropertiesException(String msg) {
 			super(msg);
 		}
-
 	}
 }

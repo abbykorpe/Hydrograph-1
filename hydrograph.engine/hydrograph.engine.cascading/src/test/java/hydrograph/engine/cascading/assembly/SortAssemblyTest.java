@@ -12,32 +12,30 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import hydrograph.engine.assembly.entity.SortEntity;
-import hydrograph.engine.assembly.entity.elements.KeyField;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
+import cascading.pipe.Pipe;
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+import com.hotels.plunger.Bucket;
+import com.hotels.plunger.Data;
+import com.hotels.plunger.DataBuilder;
+import com.hotels.plunger.Plunger;
 import hydrograph.engine.cascading.assembly.SortAssembly;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
+import hydrograph.engine.core.component.entity.SortEntity;
+import hydrograph.engine.core.component.entity.elements.KeyField;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import junit.framework.Assert;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.hotels.plunger.Bucket;
-import com.hotels.plunger.Data;
-import com.hotels.plunger.DataBuilder;
-import com.hotels.plunger.Plunger;
-
-import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
-import junit.framework.Assert;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * This test class contain just a simple test as Sort component is on lower priority.

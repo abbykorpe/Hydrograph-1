@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.commandtype.component;
 
-import hydrograph.engine.assembly.entity.base.AssemblyEntityBase;
+import hydrograph.engine.core.component.entity.base.AssemblyEntityBase;
 
 public abstract class BaseCommandComponent {
 

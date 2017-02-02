@@ -12,294 +12,231 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.integration;
 
-import java.io.IOException;
-import java.util.Properties;
-
+import cascading.cascade.Cascade;
+import cascading.flow.Flow;
+import cascading.property.AppProps;
+import hydrograph.engine.component.mapping.ComponentAdapterFactory;
+import hydrograph.engine.core.core.HydrographJob;
+import hydrograph.engine.core.core.HydrographRuntimeService;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationHandler;
+import hydrograph.engine.core.helper.JAXBTraversal;
+import hydrograph.engine.core.props.PropertiesLoader;
+import hydrograph.engine.core.schemapropagation.SchemaFieldHandler;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
+import hydrograph.engine.core.utilities.GeneralUtilities;
+import hydrograph.engine.flow.utils.ExecutionTrackingListener;
+import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
+import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
+import hydrograph.engine.utilities.ExecutionTrackingUtilities;
+import hydrograph.engine.utilities.HiveMetastoreTokenProvider;
+import hydrograph.engine.utilities.UserClassLoader;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hive.conf.HiveConf;
-import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
-import org.apache.hadoop.hive.metastore.api.MetaException;
-import org.apache.hadoop.hive.thrift.DelegationTokenIdentifier;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.hadoop.security.token.Token;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cascading.cascade.Cascade;
-import cascading.flow.Flow;
-import cascading.property.AppProps;
-import hydrograph.engine.cascading.assembly.generator.AssemblyGeneratorFactory;
-import hydrograph.engine.core.core.HydrographDebugInfo;
-import hydrograph.engine.core.core.HydrographJob;
-import hydrograph.engine.core.core.HydrographRuntimeService;
-import hydrograph.engine.core.helper.JAXBTraversal;
-import hydrograph.engine.core.props.PropertiesLoader;
-import hydrograph.engine.flow.utils.ExecutionTrackingListener;
-import hydrograph.engine.flow.utils.FlowManipulationContext;
-import hydrograph.engine.flow.utils.FlowManipulationHandler;
-import hydrograph.engine.hadoop.utils.HadoopConfigProvider;
-import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
-import hydrograph.engine.schemapropagation.SchemaFieldHandler;
-import hydrograph.engine.utilities.GeneralUtilities;
-import hydrograph.engine.utilities.HiveConfigurationMapping;
-import hydrograph.engine.utilities.UserClassLoader;
+import java.io.IOException;
+import java.util.Properties;
 
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({"rawtypes"})
 public class HydrographRuntime implements HydrographRuntimeService {
 
-	final String EXECUTION_TRACKING = "hydrograph.execution.tracking";
-	private Properties hadoopProperties = new Properties();
-	private ExecutionTrackingListener executionTrackingListener;
-	private FlowBuilder flowBuilder;
-	private RuntimeContext runtimeContext;
-	private String[] args;
-	private PropertiesLoader config;
-	private FlowManipulationContext flowManipulationContext;
-	private static Logger LOG = LoggerFactory.getLogger(HydrographRuntime.class);
+    final String EXECUTION_TRACKING = "hydrograph.execution.tracking";
+    private static final String OPTION_DOT_PATH = "dotpath";
+    private Properties hadoopProperties = new Properties();
+    private ExecutionTrackingListener executionTrackingListener;
+    private FlowBuilder flowBuilder;
+    private RuntimeContext runtimeContext;
+    private String[] args;
+    private PropertiesLoader config;
+    private FlowManipulationContext flowManipulationContext;
+    private static Logger LOG = LoggerFactory.getLogger(HydrographRuntime.class);
 
-	public void executeProcess(String[] args, HydrographJob hydrographJob) {
-		this.args = args;
-		config = PropertiesLoader.getInstance();
-		LOG.info("Invoking initialize on runtime service");
-		initialize(config.getRuntimeServiceProperties(), this.args, hydrographJob, new HydrographDebugInfo(null), null,
-				null,null);
-		LOG.info("Preparation started");
-		prepareToExecute();
-		LOG.info("Preparation completed. Now starting execution");
-		LOG.info("Execution Started");
-		execute();
-		LOG.info("Execution Complete");
-		oncomplete();
-	}
+    public void executeProcess(String[] args, HydrographJob hydrographJob) {
+        this.args = args != null ? args.clone() : null;
+        config = PropertiesLoader.getInstance();
+        LOG.info("Invoking initialize on runtime service");
+        initialize(config.getRuntimeServiceProperties(), this.args, hydrographJob, null,
+                null);
+        LOG.info("Preparation started");
+        prepareToExecute();
+        LOG.info("Preparation completed. Now starting execution");
+        LOG.info("Execution Started");
+        execute();
+        LOG.info("Execution Complete");
+        oncomplete();
+    }
 
-	public void initialize(Properties config, String[] args, HydrographJob hydrographJob,
-			HydrographDebugInfo hydrographDebugInfo, String jobId, String basePath,String UDFPath) {
+    public void initialize(Properties config, String[] args, HydrographJob hydrographJob, String jobId, String UDFPath) {
 
-		AppProps.setApplicationName(hadoopProperties, hydrographJob.getJAXBObject().getName());
+        AppProps.setApplicationName(hadoopProperties, hydrographJob.getJAXBObject().getName());
 
-		hadoopProperties.putAll(config);
-		
-		Configuration conf = new HadoopConfigProvider(hadoopProperties).getJobConf();
-		
-		SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(
-				hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
+        hadoopProperties.putAll(config);
 
-		flowManipulationContext = new FlowManipulationContext(hydrographJob, hydrographDebugInfo, schemaFieldHandler,
-				jobId, basePath,conf);
+        Configuration conf = new HadoopConfigProvider(hadoopProperties).getJobConf();
 
-		hydrographJob = FlowManipulationHandler.execute(flowManipulationContext);
+        SchemaFieldHandler schemaFieldHandler = new SchemaFieldHandler(
+                hydrographJob.getJAXBObject().getInputsOrOutputsOrStraightPulls());
 
-		if (hydrographJob.getJAXBObject().getRuntimeProperties() != null
-				&& hydrographJob.getJAXBObject().getRuntimeProperties().getProperty() != null) {
-			for (Property property : hydrographJob.getJAXBObject().getRuntimeProperties().getProperty()) {
-				hadoopProperties.put(property.getName(), property.getValue());
-			}
-		}
+        flowManipulationContext = new FlowManipulationContext(hydrographJob, args, schemaFieldHandler,
+                jobId);
 
-		
+        FlowManipulationHandler flowManipulationHandler = new FlowManipulationHandler();
 
-		JAXBTraversal traversal = new JAXBTraversal(hydrographJob.getJAXBObject());
+        hydrographJob = flowManipulationHandler.execute(flowManipulationContext);
 
-		if (traversal.isHiveComponentPresentInFlow()) {
-			try {
-				obtainTokenForHiveMetastore(conf);
-			} catch (TException | IOException e) {
-				throw new HydrographRuntimeException(e);
-			}
-		}
+        if (hydrographJob.getJAXBObject().getRuntimeProperties() != null
+                && hydrographJob.getJAXBObject().getRuntimeProperties().getProperty() != null) {
+            for (Property property : hydrographJob.getJAXBObject().getRuntimeProperties().getProperty()) {
+                hadoopProperties.put(property.getName(), property.getValue());
+            }
+        }
 
-		String[] otherArgs;
-		try {
-			otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-		} catch (IOException e) {
-			throw new HydrographRuntimeException(e);
-		}
+        JAXBTraversal traversal = new JAXBTraversal(hydrographJob.getJAXBObject());
 
-		String argsString = "";
-		for (String arg : otherArgs) {
-			argsString = argsString + " " + arg;
-		}
-		LOG.info("After processing arguments are:" + argsString);
-		this.args = otherArgs;
-		// setJar(otherArgs);
+        if (traversal.isHiveComponentPresentInFlow()) {
+            try {
+                HiveMetastoreTokenProvider.obtainTokenForHiveMetastore(conf);
+            } catch (TException e) {
+                throw new HydrographRuntimeException(e);
+            } catch (IOException e) {
+                throw new HydrographRuntimeException(e);
+            }
+        }
 
-		hadoopProperties.putAll(conf.getValByRegex(".*"));
+        String[] otherArgs;
+        try {
+            otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+        } catch (IOException e) {
+            throw new HydrographRuntimeException(e);
+        }
 
-		AssemblyGeneratorFactory assemblyGeneratorFactory = new AssemblyGeneratorFactory(hydrographJob.getJAXBObject());
+        String argsString = "";
+        for (String arg : otherArgs) {
+            argsString = argsString + " " + arg;
+        }
+        LOG.info("After processing arguments are:" + argsString);
+        this.args = otherArgs;
+        // setJar(otherArgs);
 
-		flowBuilder = new FlowBuilder();
+        hadoopProperties.putAll(conf.getValByRegex(".*"));
 
-		runtimeContext = new RuntimeContext(hydrographJob, traversal, hadoopProperties, assemblyGeneratorFactory,
-				flowManipulationContext.getSchemaFieldHandler(),UDFPath);
+        ComponentAdapterFactory componentAdapterFactory = new ComponentAdapterFactory(hydrographJob.getJAXBObject());
 
-		LOG.info(
-				"Graph '" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "' initialized successfully");
-	}
+        flowBuilder = new FlowBuilder();
 
-	@Override
-	public void prepareToExecute() {
-		flowBuilder.buildFlow(runtimeContext);
+        runtimeContext = new RuntimeContext(hydrographJob, traversal, hadoopProperties, componentAdapterFactory,
+                flowManipulationContext.getSchemaFieldHandler(), UDFPath);
 
-		if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_DOT_PATH)) {
-			writeDotFiles();
-		}
+        LOG.info(
+                "Graph '" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "' initialized successfully");
+    }
 
-	}
+    @Override
+    public void prepareToExecute() {
+        flowBuilder.buildFlow(runtimeContext);
 
-	@Override
-	public void execute() {
-		if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_NO_EXECUTION)) {
-			LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION + " option is provided so skipping execution");
-			return;
-		}
-		if (GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
-			executionTrackingListener = (ExecutionTrackingListener) UserClassLoader.loadAndInitClass(
-					GeneralUtilities.getExecutionTrackingClass(EXECUTION_TRACKING), "execution tracking");
-			executionTrackingListener.addListener(runtimeContext);
-		}
-		for (Cascade cascade : runtimeContext.getCascade()) {
-			cascade.complete();
-		}
-	}
+        if (GeneralUtilities.IsArgOptionPresent(args, OPTION_DOT_PATH)) {
+            writeDotFiles();
+        }
 
-	@Override
-	public void oncomplete() {
-		flowBuilder.cleanup(flowManipulationContext.getTmpPath(),runtimeContext);
-	}
+    }
 
-	/**
-	 * Returns the statistics of components in a job.
-	 * @see hydrograph.engine.execution.tracking.ComponentInfo
-	 */
-	@Override
-	public Object getExecutionStatus() {
-		if (executionTrackingListener != null)
-			return executionTrackingListener.getStatus();
-		return null;
-	}
+    @Override
+    public void execute() {
+        if (GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_NO_EXECUTION)) {
+            LOG.info(CommandLineOptionsProcessor.OPTION_NO_EXECUTION + " option is provided so skipping execution");
+            return;
+        }
+        if (ExecutionTrackingUtilities.getExecutionTrackingClass(EXECUTION_TRACKING) != null) {
+            executionTrackingListener = (ExecutionTrackingListener) UserClassLoader.loadAndInitClass(
+                    ExecutionTrackingUtilities.getExecutionTrackingClass(EXECUTION_TRACKING), "execution tracking");
+            executionTrackingListener.addListener(runtimeContext);
+        }
+        for (Cascade cascade : runtimeContext.getCascade()) {
+            cascade.complete();
+        }
+    }
 
-	public Cascade[] getFlow() {
-		return runtimeContext.getCascadingFlows();
-	}
+    @Override
+    public void oncomplete() {
+        flowBuilder.cleanup(flowManipulationContext.getTmpPath(), runtimeContext);
+    }
 
-	private void writeDotFiles() {
+    /**
+     * Returns the statistics of components in a job.
+     *
+     * @see hydrograph.engine.execution.tracking.ComponentInfo
+     */
+    @Override
+    public Object getExecutionStatus() {
+        if (executionTrackingListener != null)
+            return executionTrackingListener.getStatus();
+        return null;
+    }
 
-		String basePath = CommandLineOptionsProcessor.getDotPath(args);
+    public Cascade[] getFlow() {
+        return runtimeContext.getCascadingFlows();
+    }
 
-		if (basePath == null) {
-			throw new HydrographRuntimeException(
-					CommandLineOptionsProcessor.OPTION_DOT_PATH + " option is provided but is not followed by path");
-		}
-		LOG.info("Dot files will be written under " + basePath);
+    private void writeDotFiles() {
 
-		String flowDotPath = basePath + "/" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "/"
-				+ "flow";
-		String flowStepDotPath = basePath + "/" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "/"
-				+ "flowstep";
+        String[] paths = GeneralUtilities.getArgsOption(args, OPTION_DOT_PATH);
 
-		int batchCounter = 0;
-		for (Cascade cascadingFlow : runtimeContext.getCascadingFlows()) {
-			for (Flow flows : cascadingFlow.getFlows()) {
-				flows.writeDOT(flowDotPath + "_" + batchCounter);
-				flows.writeStepsDOT(flowStepDotPath + "_" + batchCounter);
-				batchCounter++;
-			}
-		}
-	}
+        if (paths == null) {
+            throw new HydrographRuntimeException(
+                    OPTION_DOT_PATH + " option is provided but is not followed by path");
+        }
+        String basePath = paths[0];
+        LOG.info("Dot files will be written under " + basePath);
 
-	private static void obtainTokenForHiveMetastore(Configuration conf) throws TException, IOException {
-		conf.addResource(new Path(HiveConfigurationMapping.getHiveConf("path_to_hive_site_xml")));
-		HiveConf hiveConf = new HiveConf();
-		hiveConf.addResource(conf);
-		try {
-			UserGroupInformation ugi = UserGroupInformation.getCurrentUser();
-			HiveMetaStoreClient hiveMetaStoreClient = new HiveMetaStoreClient(hiveConf);
+        String flowDotPath = basePath + "/" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "/"
+                + "flow";
+        String flowStepDotPath = basePath + "/" + runtimeContext.getHydrographJob().getJAXBObject().getName() + "/"
+                + "flowstep";
 
-			if (UserGroupInformation.isSecurityEnabled()) {
-				String metastore_uri = conf.get("hive.metastore.uris");
+        int batchCounter = 0;
+        for (Cascade cascadingFlow : runtimeContext.getCascadingFlows()) {
+            for (Flow flows : cascadingFlow.getFlows()) {
+                flows.writeDOT(flowDotPath + "_" + batchCounter);
+                flows.writeStepsDOT(flowStepDotPath + "_" + batchCounter);
+                batchCounter++;
+            }
+        }
+    }
 
-				LOG.trace("Metastore URI:" + metastore_uri);
 
-				// Check for local metastore
-				if (metastore_uri != null && metastore_uri.length() > 0) {
-					String principal = conf.get("hive.metastore.kerberos.principal");
-					String username = ugi.getUserName();
+    public class HydrographRuntimeException extends RuntimeException {
 
-					if (principal != null && username != null) {
-						LOG.debug("username: " + username);
-						LOG.debug("principal: " + principal);
+        /**
+         *
+         */
+        private static final long serialVersionUID = -7891832980227676974L;
 
-						String tokenStr;
-						try {
-							// Get a delegation token from the Metastore.
-							tokenStr = hiveMetaStoreClient.getDelegationToken(username, principal);
-							// LOG.debug("Token String: " + tokenStr);
-						} catch (TException e) {
-							LOG.error(e.getMessage(), e);
-							throw new RuntimeException(e);
-						}
+        public HydrographRuntimeException(String msg) {
+            super(msg);
+        }
 
-						// Create the token from the token string.
-						Token<DelegationTokenIdentifier> hmsToken = new Token<>();
-						hmsToken.decodeFromUrlString(tokenStr);
-						// LOG.debug("Hive Token: " + hmsToken);
+        public HydrographRuntimeException(Throwable e) {
+            super(e);
+        }
+    }
 
-						// Add the token to the credentials.
-						ugi.addToken(new Text("hive.metastore.delegation.token"), hmsToken);
-						LOG.trace("Added hive.metastore.delegation.token to conf.");
-					} else {
-						LOG.debug("Username or principal == NULL");
-						LOG.debug("username= " + username);
-						LOG.debug("principal= " + principal);
-						throw new IllegalArgumentException("username and/or principal is equal to null!");
-					}
-
-				} else {
-					LOG.info("HiveMetaStore configured in local mode");
-				}
-			}
-		} catch (IOException e) {
-			LOG.error(e.getMessage(), e);
-			throw new RuntimeException(e);
-		} catch (MetaException e) {
-			LOG.error(e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	public class HydrographRuntimeException extends RuntimeException {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -7891832980227676974L;
-
-		public HydrographRuntimeException(String msg) {
-			super(msg);
-		}
-
-		public HydrographRuntimeException(Throwable e) {
-			super(e);
-		}
-	}
-
-	/**
-	 * Method to kill the job
-	 */
-	@Override
-	public void kill() {
-		LOG.info("Kill signal received");
-		if (runtimeContext.getCascade() != null) {
-			for (Cascade cascade : runtimeContext.getCascade()) {				
-				LOG.info("Killing Cascading jobs: "+cascade.getID());
-				cascade.stop();
-			}
-		} else
-			LOG.info("No cascading jobs present to kill. Exiting code.");
-			System.exit(0);
-	}
+    /**
+     * Method to kill the job
+     */
+    @Override
+    public void kill() {
+        LOG.info("Kill signal received");
+        if (runtimeContext.getCascade() != null) {
+            for (Cascade cascade : runtimeContext.getCascade()) {
+                LOG.info("Killing Cascading jobs: " + cascade.getID());
+                cascade.stop();
+            }
+        } else
+            LOG.info("No cascading jobs present to kill. Exiting code.");
+        System.exit(0);
+    }
 }

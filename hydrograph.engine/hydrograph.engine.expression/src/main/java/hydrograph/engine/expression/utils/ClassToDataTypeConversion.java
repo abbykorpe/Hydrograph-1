@@ -21,7 +21,7 @@ public enum ClassToDataTypeConversion {
 	String {
 		@Override
 		public String getValue(String fieldName) {
-			return "String " + fieldName + "=null;";
+			return "String " + fieldName + "=\"\";";
 		}
 
 	},
@@ -63,7 +63,7 @@ public enum ClassToDataTypeConversion {
 	BigDecimal {
 		@Override
 		public String getValue(String fieldName) {
-			return "BigDecimal " + fieldName + "=null;";
+			return "BigDecimal " + fieldName + "=new BigDecimal(99.99);";
 		}
 
 	},
@@ -77,7 +77,7 @@ public enum ClassToDataTypeConversion {
 	Boolean {
 		@Override
 		public String getValue(String fieldName) {
-			return "boolean" + fieldName + "=true;";
+			return "boolean " + fieldName + "=true;";
 		}
 
 	};

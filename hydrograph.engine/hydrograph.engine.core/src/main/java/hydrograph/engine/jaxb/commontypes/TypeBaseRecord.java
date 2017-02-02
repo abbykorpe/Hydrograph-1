@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 
 package hydrograph.engine.jaxb.commontypes;
 
@@ -22,7 +10,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import hydrograph.engine.jaxb.exceltype.TypeExcelRecord;
 import hydrograph.engine.jaxb.igr.TypeGenerateRecordRecord;
+import hydrograph.engine.jaxb.ojdbcupdate.TypeJdbcupdateRecord;
+import hydrograph.engine.jaxb.omysql.TypeMysqlRecord;
+import hydrograph.engine.jaxb.ooracle.TypeOracleRecord;
+import hydrograph.engine.jaxb.oredshift.TypeRedshiftRecord;
+import hydrograph.engine.jaxb.oteradata.TypeTeradataRecord;
 
 
 /**
@@ -48,22 +42,30 @@ import hydrograph.engine.jaxb.igr.TypeGenerateRecordRecord;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "type-base-record", propOrder = {
+@XmlType(name = "type-base-record", namespace = "hydrograph/engine/jaxb/commontypes", propOrder = {
     "fieldOrRecordOrIncludeExternalSchema"
 })
 @XmlSeeAlso({
     hydrograph.engine.jaxb.itffw.TypeFixedwidthRecord.class,
     TypeGenerateRecordRecord.class,
     hydrograph.engine.jaxb.ifmixedscheme.TypeMixedRecord.class,
+    hydrograph.engine.jaxb.ifxml.TypeXmlRecord.class,
     hydrograph.engine.jaxb.otffw.TypeFixedwidthRecord.class,
-    hydrograph.engine.jaxb.ofmixedscheme.TypeMixedRecord.class
+    hydrograph.engine.jaxb.ofmixedscheme.TypeMixedRecord.class,
+    TypeMysqlRecord.class,
+    TypeRedshiftRecord.class,
+    TypeOracleRecord.class,
+    TypeTeradataRecord.class,
+    TypeExcelRecord.class,
+    hydrograph.engine.jaxb.ofxml.TypeXmlRecord.class,
+    TypeJdbcupdateRecord.class
 })
 public class TypeBaseRecord {
 
     @XmlElements({
-        @XmlElement(name = "field", type = TypeBaseField.class),
         @XmlElement(name = "record", type = TypeBaseRecord.class),
-        @XmlElement(name = "includeExternalSchema", type = TypeExternalSchema.class)
+        @XmlElement(name = "includeExternalSchema", type = TypeExternalSchema.class),
+        @XmlElement(name = "field", type = TypeBaseField.class)
     })
     protected List<Object> fieldOrRecordOrIncludeExternalSchema;
     @XmlAttribute(name = "name", required = true)
@@ -87,9 +89,9 @@ public class TypeBaseRecord {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link TypeBaseField }
      * {@link TypeBaseRecord }
      * {@link TypeExternalSchema }
+     * {@link TypeBaseField }
      * 
      * 
      */

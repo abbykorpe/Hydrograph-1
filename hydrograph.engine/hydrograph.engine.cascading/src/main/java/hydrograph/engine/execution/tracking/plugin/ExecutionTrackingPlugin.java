@@ -12,31 +12,27 @@
  *******************************************************************************/
 package hydrograph.engine.execution.tracking.plugin;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import cascading.cascade.Cascade;
 import cascading.flow.Flow;
 import cascading.stats.CascadingStats;
 import cascading.stats.CascadingStats.Status;
 import cascading.stats.FlowNodeStats;
 import cascading.stats.FlowStepStats;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
 import hydrograph.engine.cascading.integration.RuntimeContext;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.elements.SchemaField;
+import hydrograph.engine.core.flowmanipulation.FlowManipulationContext;
+import hydrograph.engine.core.flowmanipulation.ManipulatorListener;
 import hydrograph.engine.core.utilities.SocketUtilities;
 import hydrograph.engine.execution.tracking.ComponentInfo;
 import hydrograph.engine.execution.tracking.ComponentPipeMapping;
 import hydrograph.engine.execution.tracking.JobInfo;
 import hydrograph.engine.execution.tracking.JobInfo.ElementGraphNotFoundException;
 import hydrograph.engine.flow.utils.ExecutionTrackingListener;
-import hydrograph.engine.flow.utils.FlowManipulationContext;
-import hydrograph.engine.flow.utils.ManipulatorListener;
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.operationstypes.Filter;
+
+import java.util.*;
 
 public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTrackingListener {
 
@@ -47,17 +43,18 @@ public class ExecutionTrackingPlugin implements ManipulatorListener, ExecutionTr
 	@Override
 	public List<TypeBaseComponent> execute(FlowManipulationContext manipulationContext) {
 		TrackContext trackContext;
-		List<TypeBaseComponent> orginalComponentList = manipulationContext.getJaxbMainGraph();
-		jaxbObjectList.addAll(orginalComponentList);
+		List<TypeBaseComponent> originalComponentList = manipulationContext.getJaxbMainGraph();
+		jaxbObjectList.addAll(originalComponentList);
 		schemaFieldsMap = manipulationContext.getSchemaFieldMap();
 
-		for (Iterator<TypeBaseComponent> iterator = orginalComponentList.iterator(); iterator.hasNext();) {
+		for (Iterator<TypeBaseComponent> iterator = originalComponentList.iterator(); iterator.hasNext();) {
 			TypeBaseComponent typeBaseComponent = (TypeBaseComponent) iterator.next();
 			List<OutSocket> outSocketList = TrackComponentUtils.getOutSocketListofComponent(typeBaseComponent);
 			for (OutSocket outSocket : outSocketList) {
 				trackContext = new TrackContext();
 				trackContext.setFromComponentId(typeBaseComponent.getId());
 				trackContext.setBatch(typeBaseComponent.getBatch());
+				trackContext.setComponentName(typeBaseComponent.getName());
 				trackContext.setFromOutSocketId(outSocket.getSocketId());
 				trackContext.setFromOutSocketType(outSocket.getSocketType());
 				Filter newFilter = TrackComponentUtils.generateFilterAfterEveryComponent(trackContext, jaxbObjectList,

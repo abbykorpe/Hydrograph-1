@@ -13,18 +13,16 @@
 package hydrograph.engine.core.xmlparser.subjob;
 
 import hydrograph.engine.core.utilities.XmlUtilities;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.xpath.XPathExpressionException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.xpath.XPathExpressionException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParseSubjob {
 

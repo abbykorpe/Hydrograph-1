@@ -12,15 +12,6 @@
  *******************************************************************************/
 package hydrograph.engine.execution.tracking;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import cascading.flow.FlowNode;
 import cascading.flow.FlowStep;
 import cascading.flow.planner.Scope;
@@ -29,6 +20,9 @@ import cascading.pipe.Pipe;
 import cascading.stats.CascadingStats;
 import cascading.stats.FlowNodeStats;
 import cascading.stats.FlowStepStats;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Class JobInfo processes @{link CascadingStats} to store the information of
@@ -43,6 +37,8 @@ public class JobInfo {
 
 	private final String COUNTER_GROUP = "com.hydrograph.customgroup";
 	private Map<String, ComponentInfo> componentInfoMap = new HashMap<>();
+	private Map<String,String> batchMap;
+	private Map<String,String> componentNamesMap;
 	private Map<String, Pipe> componentPipeMap;
 	private Map<String, List<String>> componentSocketMap;
 	private Map<String, List<String>> componentAndPreviousMap;
@@ -80,6 +76,8 @@ public class JobInfo {
 		}
 	}
 	private void checkAndCreateMaps() {
+		componentNamesMap = ComponentPipeMapping.getComponentNamesMap();
+		batchMap = ComponentPipeMapping.getBatchMap();
 		componentPipeMap = ComponentPipeMapping.getComponentToPipeMapping();
 		componentSocketMap = ComponentPipeMapping.getComponentSocketMap();
 		componentAndPreviousMap = ComponentPipeMapping.getComponentAndPreviousMap();
@@ -158,16 +156,20 @@ public class JobInfo {
 		ComponentInfo componentInfo = null;
 		String currentComponentId = getComponentIdFromComponentSocketID(component_SocketId);
 		if (currentComponentId != null) {
+			String batchNumber = batchMap.get(currentComponentId);
+			String componentName = componentNamesMap.get(currentComponentId);
 			removeCompletedFlowFromComponent(cascadingStats, currentComponentId);
 			if (componentInfoMap.containsKey(currentComponentId)) {
 				componentInfo = componentInfoMap.get(currentComponentId);
 				componentInfo.setStatusPerSocketMap(getSocketIdFromComponentSocketID(component_SocketId),
-						cascadingStats.getStatus());
+						cascadingStats.getStatus().name());
 			} else {
 				componentInfo = new ComponentInfo();
 				componentInfo.setComponentId(currentComponentId);
+				componentInfo.setBatch(batchNumber);
+				componentInfo.setComponentName(componentName);
 				for (String socketId : componentSocketMap.get(currentComponentId)) {
-					componentInfo.setStatusPerSocketMap(socketId, cascadingStats.getStatus());
+					componentInfo.setStatusPerSocketMap(socketId, cascadingStats.getStatus().name());
 					componentInfo.setProcessedRecordCount(socketId, 0);
 				}
 				componentInfo.setCurrentStatus(CascadingStats.Status.PENDING.name());

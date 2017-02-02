@@ -12,17 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.core.xmlparser.externalschema;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import hydrograph.engine.core.xmlparser.XmlParsingUtils;
+import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -31,8 +22,15 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import hydrograph.engine.core.xmlparser.XmlParsingUtils;
-import hydrograph.engine.core.xmlparser.parametersubstitution.ParameterSubstitutor;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParseExternalSchema {
 
@@ -69,7 +67,9 @@ public class ParseExternalSchema {
 			try {
 				xmlDocument = documentBuilder.parse(new InputSource(
 						new StringReader(xmlContents)));
-			} catch (SAXException | IOException e) {
+			} catch (SAXException e) {
+				throw new RuntimeException(e);
+			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		} catch (ParserConfigurationException e) {
@@ -132,7 +132,9 @@ public class ParseExternalSchema {
 						String xml = parameterSubstitutor.substitute(XmlParsingUtils.getXMLStringFromPath(path));
 						xmlDocument2 = documentBuilder.parse(new InputSource(
 								new StringReader(xml)));
-					} catch (SAXException | IOException e) {
+					} catch (SAXException e) {
+						throw new RuntimeException(e);
+					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
 					nodeList.addAll(createNodes(xmlDocument2.getElementsByTagName("fields").item(0)));

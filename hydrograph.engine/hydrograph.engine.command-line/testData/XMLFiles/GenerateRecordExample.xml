@@ -13,11 +13,9 @@
  -->
 
 <p:graph name="GenerateRecordExample" xmlns:p="hydrograph/engine/jaxb/main"
-	xmlns:it="hydrograph/engine/jaxb/inputtypes" xmlns:ot="hydrograph/engine/jaxb/outputtypes"
-	xmlns:spt="hydrograph/engine/jaxb/straightpulltypes"
-	xmlns:op="hydrograph/engine/jaxb/operationstypes" xmlns:ct="hydrograph/engine/jaxb/commandtypes"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
+		 xmlns:it="hydrograph/engine/jaxb/inputtypes" xmlns:ot="hydrograph/engine/jaxb/outputtypes"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="hydrograph/engine/jaxb/main ../../../elt-core/src/main/resources/newxmlschema/main/main.xsd  ">
 
 	<inputs id="input1" batch="0" xsi:type="it:generateRecord">
 		<outSocket id="out0">
@@ -33,9 +31,14 @@
 				<field name="f7" type="java.lang.Short" />
 				<field name="f8" type="java.lang.Boolean" />
 				<field name="f9" type="java.lang.Long"/>
+				<field name="f10" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss.SSS"
+					rangeFrom="2015-02-02 02:02:02.222" rangeTo="2015-05-05 02:02:02.222" />
 			</schema>
 		</outSocket>
-		<recordCount value="10" />
+		<runtimeProperties>
+			<property name="noOfPartition" value="1" />
+		</runtimeProperties>
+		<recordCount value="5" />
 	</inputs>
 
 
@@ -45,7 +48,7 @@
 			type="in">
 			<schema name="kj">
 				<field name="f1" type="java.lang.String" />
-				<field name="f2" type="java.math.BigDecimal" scale="3" />
+				<field name="f2" type="java.math.BigDecimal"/>
 				<field name="f3" type="java.util.Date" format="yyyy-MM-dd" />
 				<field name="f4" type="java.lang.Integer" />
 				<field name="f5" type="java.lang.Double" />
@@ -53,6 +56,7 @@
 				<field name="f7" type="java.lang.Short" />
 				<field name="f8" type="java.lang.Boolean"  />
 				<field name="f9" type="java.lang.Long" />
+				<field name="f10" type="java.util.Date" format="dd/MM/yyyy HH:mm:ss.SSS" />
 			</schema>
 		</inSocket>
 		<path uri="testData/Output/generateRecordOp" />

@@ -15,8 +15,6 @@ package hydrograph.engine.transformation.standardfunctions;
 import org.junit.Assert;
 import org.junit.Test;
 
-import hydrograph.engine.transformation.standardfunctions.NumericFunctions;
-
 public class DecimalStrip {
 	@Test
 	public void itShouldFetchNumericValue1() {

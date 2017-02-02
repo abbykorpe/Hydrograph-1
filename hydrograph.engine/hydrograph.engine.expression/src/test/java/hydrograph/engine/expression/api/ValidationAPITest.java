@@ -1,26 +1,35 @@
+/*******************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package hydrograph.engine.expression.api;
 
 
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaFileObject;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import hydrograph.engine.expression.api.DescriptiveErrorListener;
-import hydrograph.engine.expression.api.ValidationAPI;
-
 public class ValidationAPITest {
 
-	@Test(expected = DescriptiveErrorListener.HydrographExpressionError.class)
+	@Test
 	public void itShouldThrowException() {
 		ValidationAPI validationAPI = new ValidationAPI("(1==1)12:20;", "");
-		validationAPI.isExpressionValid();
+		boolean isValid = validationAPI.isExpressionValid();
+		Assert.assertFalse(isValid);
 	}
 
 	@Test

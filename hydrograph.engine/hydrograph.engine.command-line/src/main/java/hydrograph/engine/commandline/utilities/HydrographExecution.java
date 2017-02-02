@@ -12,116 +12,102 @@
  *******************************************************************************/
 package hydrograph.engine.commandline.utilities;
 
-import java.util.List;
-
-import javax.xml.bind.JAXBException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import hydrograph.engine.core.core.HydrographDebugInfo;
 import hydrograph.engine.core.core.HydrographJob;
 import hydrograph.engine.core.core.HydrographRuntimeService;
 import hydrograph.engine.core.props.PropertiesLoader;
+import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
-import hydrograph.engine.core.xmlparser.parametersubstitution.CommandLineOptionsProcessor;
 import hydrograph.engine.execution.tracking.ComponentInfo;
-import hydrograph.engine.execution.tracking.JobInfo;
-import hydrograph.engine.utilities.GeneralUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.bind.JAXBException;
+import java.util.List;
 
 public class HydrographExecution {
 
-	private GeneralCommandLineUtilities generalUtilities;
-	private PropertiesLoader propertiesLoader;
-	private HydrographRuntimeService runtimeService;
-	private HydrographXMLInputService hydrographXmlInputService;
-	private HydrographJob hydrographJob;
-	private HydrographDebugInfo bhsDebug;
+    private static Logger LOG = LoggerFactory.getLogger(HydrographExecution.class);
+    private PropertiesLoader propertiesLoader;
+    private HydrographRuntimeService runtimeService;
+    private HydrographXMLInputService hydrographXmlInputService;
+    private HydrographJob hydrographJob;
 
-	private static Logger LOG = LoggerFactory.getLogger(HydrographExecution.class);
+    public HydrographExecution() {
+        this.propertiesLoader = PropertiesLoader.getInstance();
+        this.hydrographXmlInputService = new HydrographXMLInputService();
+        loadService();
+    }
 
-	public HydrographExecution() {
-		this.propertiesLoader = PropertiesLoader.getInstance();
-		this.generalUtilities = new GeneralCommandLineUtilities();
-		this.hydrographXmlInputService = new HydrographXMLInputService();
-		loadService();
-	}
+    public static void main(String args[]) throws Exception {
+        if (GeneralCommandLineUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)) {
+            GeneralCommandLineUtilities.printUsage();
+        } else {
+            HydrographExecution execution = new HydrographExecution();
+            execution.run(args);
+        }
+    }
 
-	public static void main(String args[]) throws Exception {
-		
-		
-		if(GeneralUtilities.IsArgOptionPresent(args, CommandLineOptionsProcessor.OPTION_HELP)){
-			
-			CommandLineOptionsProcessor.printUsage();
-		}
-		else{
-		HydrographExecution execution = new HydrographExecution();
-		execution.run(args);
-		}
-		
-	}
+    public void run(String[] args) throws Exception {
+        hydrographJob = createHydrographJob(args);
+        initialization(args, hydrographJob,
+                XmlParsingUtils.getJobId(args), XmlParsingUtils.getUDFPath(args));
+        prepareToExecute();
+        finalExecute();
+    }
 
-	public void run(String[] args) throws Exception {
-		hydrographJob = createHydrographJob(args);
-		bhsDebug = createHydrographDebugInfo(args);
-		initialization(args, hydrographJob, bhsDebug,
-				XmlParsingUtils.getJobId(args),
-				XmlParsingUtils.getBasePath(args),XmlParsingUtils.getUDFPath(args));
-		prepareToExecute();
-		finalExecute();
-	}
-	
-	public List<ComponentInfo> getExecutionStatus(){
-		return (List<ComponentInfo>) runtimeService.getExecutionStatus();
-	}
+    public List<ComponentInfo> getExecutionStatus() {
+        return (List<ComponentInfo>) runtimeService.getExecutionStatus();
+    }
 
-	private HydrographJob createHydrographJob(String[] args) throws JAXBException {
-		LOG.info("Invoking input service");
-		return hydrographXmlInputService.parseHydrographJob(
-				propertiesLoader.getInputServiceProperties(), args);
-	}
+    private HydrographJob createHydrographJob(String[] args) throws JAXBException {
+        LOG.info("Invoking input service");
+        return hydrographXmlInputService.parseHydrographJob(
+                propertiesLoader.getInputServiceProperties(), args);
+    }
 
-	private HydrographDebugInfo createHydrographDebugInfo(String[] args) throws JAXBException {
-		LOG.info("Invoking input service");
-		return hydrographXmlInputService.parseHydrographDebugInfo(
-				propertiesLoader.getInputServiceProperties(), args);
-	}
+    private void initialization(String[] args, HydrographJob bhsGraph,
+                                String jobId, String udfPath) {
+        LOG.info("Invoking initialize on runtime service");
+        runtimeService.initialize(
+                propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
+                jobId, udfPath);
+    }
 
-	private void initialization(String[] args, HydrographJob bhsGraph,
-			HydrographDebugInfo bhsDebug, String jobId, String basePath, String UDFPath) {
-		LOG.info("Invoking initialize on runtime service");
-		runtimeService.initialize(
-				propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
-				bhsDebug, jobId,basePath,UDFPath);
-	}
+    private void prepareToExecute() {
+        runtimeService.prepareToExecute();
+        LOG.info("Preparation completed. Now starting execution");
+    }
 
-	private void prepareToExecute()  {
-		runtimeService.prepareToExecute();
-		LOG.info("Preparation completed. Now starting execution");
-	}
+    private void finalExecute() {
+        try {
+            runtimeService.execute();
+            LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
+                    + "' executed successfully!");
+        } finally {
+            LOG.info("Invoking on complete for cleanup");
+            runtimeService.oncomplete();
+        }
+    }
 
-	private void finalExecute()  {
-		try {
-			runtimeService.execute();
-			LOG.info("Graph '" + hydrographJob.getJAXBObject().getName()
-					+ "' executed successfully!");
-		} finally {
-			LOG.info("Invoking on complete for cleanup");
-			runtimeService.oncomplete();
-		}
-	}
+    private void loadService() {
+        try {
+            runtimeService = (HydrographRuntimeService) GeneralCommandLineUtilities
+                    .loadAndInitClass(propertiesLoader.getRuntimeServiceClassName());
+        } catch (IllegalAccessException | InstantiationException e) {
+            LOG.error("Error in instantiating runtime service class.", e);
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            LOG.error("Error in loading runtime service class.", e);
+            throw new RuntimeException(e);
+        }
+    }
 
-	private void loadService() {
-		runtimeService = (HydrographRuntimeService) generalUtilities
-				.loadAndInitClass(propertiesLoader.getRuntimeServiceClassName());
-	}
-	
-	/**
-	 * Method to kill the job
-	 */
-	public void kill() {
-		runtimeService.kill();
-	}
+    /**
+     * Method to kill the job
+     */
+    public void kill() {
+        runtimeService.kill();
+    }
 
 }

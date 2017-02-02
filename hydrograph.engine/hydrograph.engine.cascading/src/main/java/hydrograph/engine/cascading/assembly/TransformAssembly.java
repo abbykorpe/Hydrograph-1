@@ -12,30 +12,22 @@
  *******************************************************************************/
 package hydrograph.engine.cascading.assembly;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaFileObject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
-import hydrograph.engine.assembly.entity.TransformEntity;
-import hydrograph.engine.assembly.entity.elements.OutSocket;
-import hydrograph.engine.assembly.entity.elements.SchemaField;
-import hydrograph.engine.assembly.entity.utils.OutSocketUtils;
 import hydrograph.engine.cascading.assembly.base.BaseComponent;
 import hydrograph.engine.cascading.assembly.handlers.FieldManupulatingHandler;
 import hydrograph.engine.cascading.assembly.handlers.TransformCustomHandler;
 import hydrograph.engine.cascading.assembly.infra.ComponentParameters;
 import hydrograph.engine.cascading.assembly.utils.OperationFieldsCreator;
-import hydrograph.engine.expression.api.ValidationAPI;
-import hydrograph.engine.utilities.ComponentHelper;
+import hydrograph.engine.core.component.entity.TransformEntity;
+import hydrograph.engine.core.component.entity.elements.OutSocket;
+import hydrograph.engine.core.component.entity.utils.OutSocketUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Map;
 
 public class TransformAssembly extends BaseComponent<TransformEntity> {
 
@@ -47,13 +39,24 @@ public class TransformAssembly extends BaseComponent<TransformEntity> {
 	public TransformAssembly(TransformEntity baseComponentEntity, ComponentParameters componentParameters) {
 		super(baseComponentEntity, componentParameters);
 	}
-
+	
+	private void setOperationClassInCaseExpression() {
+		for (int i = 0; i < transformEntity.getNumOperations(); i++) {
+			if (transformEntity.getOperationsList().get(i).getOperationClass() == null) {
+				transformEntity.getOperationsList().get(i)
+						.setOperationClass(
+								"hydrograph.engine.expression.userfunctions.TransformForExpression");
+			}
+		}
+	}
+	
 	@Override
 	protected void createAssembly() {
 
 		if (LOG.isTraceEnabled()) {
 			LOG.trace(transformEntity.toString());
 		}
+		setOperationClassInCaseExpression();
 		for (OutSocket outSocket : transformEntity.getOutSocketList()) {
 			LOG.trace("Creating transform assembly for '" + transformEntity.getComponentId() + "' for socket: '"
 					+ outSocket.getSocketId() + "' of type: '" + outSocket.getSocketType() + "'");
@@ -73,7 +76,7 @@ public class TransformAssembly extends BaseComponent<TransformEntity> {
 	}
 
 	protected void createAssemblyForOutSocket(OutSocket outSocket) {
-		Pipe transformPipe = new Pipe(ComponentHelper.getComponentName("transform",transformEntity.getComponentId() ,outSocket.getSocketId()), componentParameters.getInputPipe());
+		Pipe transformPipe = new Pipe(transformEntity.getComponentId()+outSocket.getSocketId(), componentParameters.getInputPipe());
 
 		// initialize the out socket fields
 		Fields passThroughFields = operationFieldsCreator.getPassThroughFields();

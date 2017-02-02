@@ -26,17 +26,9 @@
 
 package hydrograph.engine.cascading.scheme.avro;
 
-import java.math.BigDecimal;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+import cascading.tuple.TupleEntry;
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
@@ -47,26 +39,26 @@ import org.apache.avro.generic.GenericData.Record;
 import org.apache.hadoop.hive.serde2.avro.AvroSerDe;
 import org.apache.hadoop.io.BytesWritable;
 
-import cascading.tuple.Fields;
-import cascading.tuple.Tuple;
-import cascading.tuple.TupleEntry;
+import java.math.BigDecimal;
+import java.nio.ByteBuffer;
+import java.util.*;
 
 public class CustomCascadingToAvro {
 
 	@SuppressWarnings("serial")
-	private static Map<Class<?>, Schema.Type> TYPE_MAP = new HashMap<Class<?>, Schema.Type>() {
+	private static Map<Class<?>, Type> TYPE_MAP = new HashMap<Class<?>, Type>() {
 		{
-			put(Integer.class, Schema.Type.INT);
-			put(Long.class, Schema.Type.LONG);
-			put(Boolean.class, Schema.Type.BOOLEAN);
-			put(Double.class, Schema.Type.DOUBLE);
-			put(Float.class, Schema.Type.FLOAT);
-			put(String.class, Schema.Type.STRING);
-			put(Date.class, Schema.Type.INT);
-			put(BigDecimal.class, Schema.Type.BYTES);
+			put(Integer.class, Type.INT);
+			put(Long.class, Type.LONG);
+			put(Boolean.class, Type.BOOLEAN);
+			put(Double.class, Type.DOUBLE);
+			put(Float.class, Type.FLOAT);
+			put(String.class, Type.STRING);
+			put(Date.class, Type.INT);
+			put(BigDecimal.class, Type.BYTES);
 			// Note : Cascading field type for Array and Map is really a Tuple
-			put(List.class, Schema.Type.ARRAY);
-			put(Map.class, Schema.Type.MAP);
+			put(List.class, Type.ARRAY);
+			put(Map.class, Type.MAP);
 
 		}
 	};
@@ -291,19 +283,19 @@ public class CustomCascadingToAvro {
 		else if (element instanceof Iterable)
 			return generateAvroSchemaFromIterable((Iterable) element, name);
 		else if (element instanceof BytesWritable)
-			return Schema.create(Schema.Type.BYTES);
+			return Schema.create(Type.BYTES);
 		else if (element instanceof String)
-			return Schema.create(Schema.Type.STRING);
+			return Schema.create(Type.STRING);
 		else if (element instanceof Double)
-			return Schema.create(Schema.Type.DOUBLE);
+			return Schema.create(Type.DOUBLE);
 		else if (element instanceof Float)
-			return Schema.create(Schema.Type.FLOAT);
+			return Schema.create(Type.FLOAT);
 		else if (element instanceof Integer)
-			return Schema.create(Schema.Type.INT);
+			return Schema.create(Type.INT);
 		else if (element instanceof Long)
-			return Schema.create(Schema.Type.LONG);
+			return Schema.create(Type.LONG);
 		else if (element instanceof Boolean)
-			return Schema.create(Schema.Type.BOOLEAN);
+			return Schema.create(Type.BOOLEAN);
 		else
 			throw new AvroRuntimeException("Can't create schema from type "
 					+ element.getClass());
@@ -340,7 +332,7 @@ public class CustomCascadingToAvro {
 
 	private static Schema generateUnionSchema(Object element, String name) {
 		List<Schema> types = new ArrayList<Schema>();
-		types.add(Schema.create(Schema.Type.NULL));
+		types.add(Schema.create(Type.NULL));
 		types.add(generateAvroSchemaFromElement(element, name, false));
 		return Schema.createUnion(types);
 	}
@@ -422,7 +414,7 @@ public class CustomCascadingToAvro {
 		// Since we support arrays and maps that means we can have nested
 		// records
 
-		List<Schema.Field> fields = new ArrayList<Schema.Field>();
+		List<Field> fields = new ArrayList<Field>();
 		for (int typeIndex = 0, fieldIndex = 0; typeIndex < schemeTypes.length; typeIndex++, fieldIndex++) {
 			String fieldName = schemeFields.get(fieldIndex).toString();
 			Class<?>[] subSchemeTypes = new Class[2]; // at most 2, since we
@@ -439,7 +431,7 @@ public class CustomCascadingToAvro {
 			final Schema schema = createAvroSchema(recordName, schemeFields,
 					subSchemeTypes, depth + 1, fieldPrecision[typeIndex],
 					fieldScale[typeIndex]);
-			final Schema nullSchema = Schema.create(Schema.Type.NULL);
+			final Schema nullSchema = Schema.create(Type.NULL);
 			List<Schema> schemas = new LinkedList<Schema>() {
 				{
 					add(nullSchema);
@@ -447,7 +439,7 @@ public class CustomCascadingToAvro {
 				}
 			};
 
-			fields.add(new Schema.Field(fieldName, Schema.createUnion(schemas),
+			fields.add(new Field(fieldName, Schema.createUnion(schemas),
 					"", null));
 		}
 
@@ -468,7 +460,7 @@ public class CustomCascadingToAvro {
 		Map<Class<?>, Type> avroType = toAvroSchemaType(fieldTypes[0]);
 
 		int remainingFields = schemeFields.size() - 1;
-		if (avroType.get(fieldTypes[0]) == Schema.Type.ARRAY) {
+		if (avroType.get(fieldTypes[0]) == Type.ARRAY) {
 			Schema schema;
 			if (remainingFields == 0) {
 				schema = Schema.createArray(Schema.create(toAvroSchemaType(
@@ -480,7 +472,7 @@ public class CustomCascadingToAvro {
 						arrayTypes, depth + 1, fieldPrecision, fieldScale));
 			}
 			return schema;
-		} else if (avroType.get(fieldTypes[0]) == Schema.Type.MAP) {
+		} else if (avroType.get(fieldTypes[0]) == Type.MAP) {
 			Schema schema;
 			if (remainingFields == 0) {
 				schema = Schema.createMap(Schema.create(toAvroSchemaType(
@@ -492,7 +484,7 @@ public class CustomCascadingToAvro {
 						mapTypes, depth + 1, fieldPrecision, fieldScale));
 			}
 			return schema;
-		} else if (avroType.get(fieldTypes[0]) == Schema.Type.ENUM) {
+		} else if (avroType.get(fieldTypes[0]) == Type.ENUM) {
 			Class<?> clazz = fieldTypes[0];
 			Object[] names = clazz.getEnumConstants();
 			List<String> enumNames = new ArrayList<String>(names.length);

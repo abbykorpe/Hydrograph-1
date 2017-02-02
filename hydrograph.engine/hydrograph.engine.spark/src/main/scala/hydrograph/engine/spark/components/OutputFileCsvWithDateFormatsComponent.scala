@@ -1,0 +1,57 @@
+package hydrograph.engine.spark.components
+
+import java.util
+
+import hydrograph.engine.core.component.entity.OutputFileDelimitedEntity
+import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.spark.components.base.SparkFlow
+import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.components.utils.SchemaCreator
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{AnalysisException, Column, SaveMode}
+import org.slf4j.{Logger, LoggerFactory}
+
+import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
+
+class OutputFileCsvWithDateFormatsComponent(outputFileDelimitedEntity: OutputFileDelimitedEntity, cp:
+BaseComponentParams) extends SparkFlow with Serializable {
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[OutputFileCsvWithDateFormatsComponent])
+
+  override def execute() = {
+    LOG.trace("In method execute()")
+    val schemaCreator = SchemaCreator(outputFileDelimitedEntity)
+
+   try {
+     cp.getDataFrame().select(schemaCreator.createSchema(): _*).write
+       .option("delimiter", outputFileDelimitedEntity.getDelimiter)
+       .option("quote", outputFileDelimitedEntity.getQuote)
+       .option("header", outputFileDelimitedEntity.getHasHeader)
+       .option("charset", outputFileDelimitedEntity.getCharset)
+       .option("strict", outputFileDelimitedEntity.isStrict)
+       .option("safe", outputFileDelimitedEntity.getSafe)
+       .option("dateFormats", schemaCreator.getDateFormats)
+       .mode(if (outputFileDelimitedEntity.isOverWrite ) SaveMode.Overwrite else SaveMode.ErrorIfExists)
+       .format("hydrograph.engine.spark.datasource.csv")
+       .save(outputFileDelimitedEntity.getPath)
+   } catch {
+     case e: AnalysisException if (e.getMessage().matches("(.*)cannot resolve(.*)given input columns(.*)"))=>
+       LOG.error("Error in Output File Delimited Component "+ outputFileDelimitedEntity.getComponentId, e)
+       throw new RuntimeException("Error in Output File Delimited Component "
+         + outputFileDelimitedEntity.getComponentId, e )
+     case e:Exception =>
+       LOG.error("Error in Output File Delimited Component "+ outputFileDelimitedEntity.getComponentId, e)
+       throw new RuntimeException("Error in Output File Delimited Component "
+         + outputFileDelimitedEntity.getComponentId, e)
+   }
+    LOG.info("Created Output File Delimited Component "+ outputFileDelimitedEntity.getComponentId
+      + " in Batch "+ outputFileDelimitedEntity.getBatch +" with path " + outputFileDelimitedEntity.getPath)
+    LOG.debug("Component Id: '"+ outputFileDelimitedEntity.getComponentId
+      +"' in Batch: " + outputFileDelimitedEntity.getBatch
+      + " having schema: [ " + outputFileDelimitedEntity.getFieldsList.asScala.mkString(",")
+      + " ] with delimiter: " + outputFileDelimitedEntity.getDelimiter + " and quote: " + outputFileDelimitedEntity.getQuote
+      + " strict as " + outputFileDelimitedEntity.isStrict + " safe as " + outputFileDelimitedEntity.getSafe
+      + " at Path: " + outputFileDelimitedEntity.getPath)
+  }
+
+}
