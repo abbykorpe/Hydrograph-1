@@ -12,7 +12,7 @@ import hydrograph.engine.core.utilities.OrderedPropertiesHelper
 import hydrograph.engine.spark.components.adapter.factory.AdapterFactory
 import hydrograph.engine.spark.components.base.SparkFlow
 import org.apache.hadoop.fs.{FileSystem, Path}
-import hydrograph.engine.spark.executiontracking.plugin.{ ExecutionTrackingListener, ExecutionTrackingPlugin, HydrographCommandListener}
+import hydrograph.engine.spark.executiontracking.plugin.{CommandComponentsDefaultPlugin, ExecutionTrackingListener, ExecutionTrackingPlugin, HydrographCommandListener}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}
@@ -32,7 +32,7 @@ class HydrographRuntime extends HydrographRuntimeService {
   private var flowManipulationContext: FlowManipulationContext = null;
   private var flows: mutable.LinkedHashSet[SparkFlow] = null
   var executionTrackingListener : ExecutionTrackingListener = null
-  var hydrographListener : HydrographCommandListener = null
+  var hydrographListener : HydrographCommandListener = new CommandComponentsDefaultPlugin
 
 
   override def kill(): Unit = {
