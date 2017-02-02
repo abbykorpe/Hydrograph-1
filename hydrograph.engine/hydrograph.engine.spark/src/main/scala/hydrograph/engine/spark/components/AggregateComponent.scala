@@ -31,7 +31,7 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
   val inputSchema: StructType = componentsParams.getDataFrame().schema
   val outputFields = OperationUtils.getAllFields(aggregateEntity.getOutSocketList, inputSchema.map(_.name).asJava).asScala
     .toList
-  val fieldsForOPeration = OperationUtils.getAllFieldsWithOperationFields(aggregateEntity, outputFields.toList.asJava)
+  val fieldsForOPeration=OperationUtils.getAllFieldsWithOperationFields(aggregateEntity,outputFields.toList.asJava)
   val operationSchema: StructType = EncoderHelper().getEncoder(fieldsForOPeration.asScala.toList, componentsParams.getSchemaFields())
   val outputSchema: StructType = EncoderHelper().getEncoder(outputFields, componentsParams.getSchemaFields())
   val inSocketId: String = aggregateEntity.getInSocketList.get(0).getInSocketId
@@ -42,33 +42,19 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
       (_.name).asJava).asScala.toArray[String]
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
-  val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]()
-  else aggregateEntity.getKeyFields.map(_
+  val keyFields = if (aggregateEntity.getKeyFields == null) Array[String]() else  aggregateEntity.getKeyFields.map(_
     .getName)
   val keyFieldsIndexes = getIndexes(inputSchema, keyFields)
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[AggregateComponent])
 
-  def extractInitialValues(getOperationsList: util.List[Operation]): List[String] = {
-    LOG.trace("In method extractInitialValues()")
-    def extract(operationList: List[Operation], stringList: List[String]): List[String] = (operationList, stringList) match {
-      case (List(), _) => stringList
-      case (x :: xs, str) => extract(xs, str ++ List(x.getAccumulatorInitialValue))
-    }
-    if (getOperationsList != null)
-      extract(getOperationsList.asScala.toList, List[String]())
-    else
-      List[String]()
-  }
+
 
   override def createComponent(): Map[String, DataFrame] = {
 
     LOG.trace("In method createComponent()")
     //    val op = OperationSchemaCreator[AggregateEntity](aggregateEntity, componentsParams, aggregateEntity.getOutSocketList().get(0))
     //    val fm = FieldManupulating(op.getOperationInputFields(), op.getOperationOutputFields(), op.getPassThroughFields(), op.getMapFields(), op.getOperationFields(), aggregateEntity.getKeyFields)
-    val outRow = new Array[Any](operationSchema.size)
-    var outRowToReturn = ListBuffer[Row]()
-    val nullRow = Iterable(Row.fromSeq(new Array[Any](operationSchema.size)))
 
 
     val primaryKeys = if (aggregateEntity.getKeyFields == null) Array[KeyField]() else aggregateEntity.getKeyFields
@@ -84,6 +70,11 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
     val sortedDf = repartitionedDf.sortWithinPartitions(populateSortKeys(primaryKeys ++ secondaryKeys): _*)
 
     val intermediateDf = sortedDf.mapPartitions(itr => {
+
+      def compare(row: Row, previousRow: Row): Boolean = {
+        keyFieldsIndexes.forall(i => row(i._1).equals(previousRow(i._1))
+        )
+      }
 
       //Initialize Aggregarte to call prepare Method
       val aggregateList: List[SparkOperation[AggregateTransformBase]] = initializeOperationList[AggregateForExpression](aggregateEntity
@@ -102,69 +93,77 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
         }
       })
 
-      var prevKeysArray: Array[Any] = null
 
-      itr.flatMap { row => {
-        val currKeysArray: Array[Any] = new Array[Any](primaryKeys.size)
-        copyFields(row, currKeysArray, keyFieldsIndexes)
-        val isPrevKeyDifferent: Boolean = {
-          if (prevKeysArray == null)
-            true
-          else if (!prevKeysArray.zip(currKeysArray).forall(p => p._1 == p._2))
-            true
-          else false
+      var outRow: Array[Any] = null
+      var previousRow: Row = null
+      var tempOutRow: Array[Any] = null
+      val outSize = operationSchema.size
+
+      new Iterator[Row] {
+
+        var isContinue: Boolean = true
+        var isItrEmpty: Boolean = itr.isEmpty
+
+        override def hasNext: Boolean = {
+          isContinue && !isItrEmpty
         }
-        val isPrevKeyNull: Boolean = prevKeysArray == null
-        val isEndOfIterator: Boolean = itr.isEmpty
-        prevKeysArray = currKeysArray
+        override def next(): Row = {
+          //          isItrEmpty=false
+          val isEndOfIterator: Boolean = itr.isEmpty
+          val isPrevKeyNull: Boolean = previousRow == null
 
-        if (isPrevKeyDifferent) {
-          if (!isPrevKeyNull) {
-            //Calling OnCompleteGroup
+          if (isEndOfIterator) {
             aggregateList.foreach(agt => {
-              agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(outRow))
+              agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
             })
-            outRowToReturn += Row.fromSeq(outRow.clone())
+            isContinue = false;
+            isItrEmpty = true;
+            return Row.fromSeq(tempOutRow)
           }
 
-          //Map Fields
-          copyFields(row, outRow, mapFieldIndexes)
-          //Passthrough Fields
-          copyFields(row, outRow, passthroughIndexes)
-        }
+          val row: Row = itr.next()
 
-        aggregateList.foreach(agt => {
-          try {
+          val isPrevKeyDifferent: Boolean = {
+            if (previousRow == null)
+              true
+            else !compare(row, previousRow)
+          }
+          previousRow = row
+
+          if (isPrevKeyDifferent) {
+
+            if (!isPrevKeyNull) {
+              //Calling OnCompleteGroup
+              aggregateList.foreach(agt => {
+                agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(tempOutRow))
+              })
+            }
+
+            outRow = tempOutRow
+            tempOutRow = new Array[Any](outSize)
+
+            //Map Fields
+            copyFields(row, tempOutRow, mapFieldIndexes)
+            //Passthrough Fields
+            copyFields(row, tempOutRow, passthroughIndexes)
+
+          }
+
+          aggregateList.foreach(agt => {
             agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
-          }  catch {
-            case e: Exception =>
-              LOG.error("Error in aggregate() method of " + agt.baseClassInstance.getClass.toString + " class. Error: " + e.getMessage + "\nRow being processed: " + agt.inputRow)
-              throw e
-          }
-        })
-
-        if (isEndOfIterator) {
-         aggregateList.foreach(agt => {
-            agt.baseClassInstance.onCompleteGroup(agt.outputRow.setRow(outRow))
           })
-          outRowToReturn += Row.fromSeq(outRow.clone())
-        }
 
-        if ((isPrevKeyDifferent && (!isPrevKeyNull)) || isEndOfIterator) {
-          val tempRow = outRowToReturn;
-          outRowToReturn = ListBuffer[Row]();
-          tempRow
+          if (isPrevKeyDifferent && (!isPrevKeyNull))
+            return Row.fromSeq(outRow)
+          else
+            next()
         }
-        else
-          nullRow
       }
-      }
+
     })(RowEncoder(operationSchema))
 
-    val outputDf = intermediateDf.na.drop("all")
-
     val key = aggregateEntity.getOutSocketList.get(0).getSocketId
-    Map(key -> outputDf)
+    Map(key -> intermediateDf)
 
   }
 
