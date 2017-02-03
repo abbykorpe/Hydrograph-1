@@ -15,7 +15,7 @@
   <groupId>hydrograph</groupId>
   <artifactId>hydrograph.ui.perspective</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>eclipse-test-plugin</packaging>
+  <packaging>eclipse-plugin</packaging>
   <parent>
     <groupId>hydrograph</groupId>
     <artifactId>hydrograph.ui.parent</artifactId>
