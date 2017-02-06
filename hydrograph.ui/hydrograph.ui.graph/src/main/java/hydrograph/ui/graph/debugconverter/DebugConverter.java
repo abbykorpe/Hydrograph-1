@@ -18,11 +18,15 @@ package hydrograph.ui.graph.debugconverter;
 import hydrograph.engine.jaxb.debug.Debug;
 import hydrograph.engine.jaxb.debug.ViewData;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.InputSubjobComponent;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.utility.ViewDataUtils;
 
 import java.io.ByteArrayInputStream;
@@ -81,6 +85,12 @@ public class DebugConverter {
 				EditPart editPart = (EditPart) iterator.next();
 				if(editPart instanceof ComponentEditPart){
 					Component component = ((ComponentEditPart)editPart).getCastedModel();
+					if (component instanceof SubjobComponent) {
+						Link link=component.getInputLinks().get(0);
+						String previousComponent=link.getSource().getComponentId();
+						traverseSubjob(component,debug,component.getComponentId(),previousComponent);
+						
+					}
 					
 					Map<String, Long> map = component.getWatcherTerminals();
 					if(!map.isEmpty()){
@@ -125,6 +135,55 @@ public class DebugConverter {
 		}
 		
 		return debug;
+	}
+	
+	private void traverseSubjob(Component component, Debug debug, String componenetId, String previousComponent) {
+		Container subJobContainer = ((Container) component.getProperties().get(Constants.CONTAINER));
+		for (Component componentObject : subJobContainer.getUIComponentList()) {
+			if (componentObject instanceof SubjobComponent) {
+				Link link=componentObject.getInputLinks().get(0);
+				String previousComponentObject=componenetId+Constants.DOT_SEPERATOR+link.getSource().getComponentId();
+				traverseSubjob(componentObject, debug, componenetId+Constants.DOT_SEPERATOR+componentObject.getComponentId(),previousComponentObject);
+			}
+			Map<String, Long> map = componentObject.getWatcherTerminals();
+			if (!map.isEmpty()) {
+				for (Entry<String, Long> entrySet : map.entrySet()) {
+					ViewData viewData = new ViewData();
+					if (componentObject instanceof InputSubjobComponent) {
+						viewData.setFromComponentId(previousComponent);
+					}
+					else if(componentObject instanceof SubjobComponent){
+							String componentObjectId=getComponentName(componentObject);
+							if(componentObjectId!=null)
+							viewData.setFromComponentId(componenetId + Constants.DOT_SEPERATOR + componentObject.getComponentId()+Constants.DOT_SEPERATOR+componentObjectId);
+					}
+					else {
+						viewData.setFromComponentId(
+								componenetId + Constants.DOT_SEPERATOR + componentObject.getComponentId());
+					}
+					viewData.setOutSocketId(entrySet.getKey());
+					String portType = entrySet.getKey().substring(0, 3);
+					viewData.setOutSocketType(checkPortType(portType));
+					debug.getViewData().add(viewData);
+				}
+			}
+		}
+	}
+	private String getComponentName(Component component)
+	{
+		Component componentPrevToOutput = null;
+		String componentName="";
+		Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
+		if(outputSubjobComponent!=null){
+			for(Link link:outputSubjobComponent.getTargetConnections()){
+					componentPrevToOutput = link.getSource();
+					if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
+						componentName=componentPrevToOutput.getComponentId()+Constants.DOT_SEPERATOR+getComponentName(componentPrevToOutput);
+					}else
+						componentName= componentPrevToOutput.getComponentId();
+			}
+		}
+		return componentName;
 	}
 	
 	private String checkPortType(String portType){

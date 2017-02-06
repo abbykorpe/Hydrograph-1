@@ -126,6 +126,7 @@ public class SubJobTrackingAction extends SelectionAction{
 						editorPart.setDeleteOnDispose(true);
 						eltGraphicalEditor.addSubJobEditor(editorPart);
 						editorPart.getContainer().openedForTracking(true);
+						editorPart.getContainer().setSubjobComponentEditPart(obj);
 						COOLBAR_ITEMS_UTILITY.disableCoolBarIcons(false);
 						} catch (PartInitException e) {
 							logger.error("Failed to open tracking view for subjob", e);

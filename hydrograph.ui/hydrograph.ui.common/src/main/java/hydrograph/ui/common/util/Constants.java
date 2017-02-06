@@ -358,5 +358,9 @@ public class Constants {
 	
 	public static final String COMMENT_BOX_IMAGE_PATH="/icons/comment-box-icon.png";
 	public static final String PORT_VALIDATION_REGEX="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
+	public static final String CONTAINER="Container";
+  	public static final String DOT_SEPERATOR=".";
+  	public static final String UNDERSCORE_SEPERATOR="_";
 
 }
+

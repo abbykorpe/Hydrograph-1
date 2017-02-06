@@ -37,14 +37,18 @@ import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.communication.debugservice.DebugServiceClient;
 import hydrograph.ui.dataviewer.utilities.Utils;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.controller.ComponentEditPart;
+import hydrograph.ui.graph.controller.ContainerEditPart;
 import hydrograph.ui.graph.controller.PortEditPart;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
+import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.logging.factory.LogFactory;
 
 /**
@@ -296,5 +300,33 @@ public class ViewDataUtils {
 	 */
 	public Map<String, List<JobDetails>> getViewDataJobDetails(){
 		return viewDataJobDetails;
+	}
+	public String getComponentId() {
+		Container mainContainer = (Container) getComponentCanvas().getContainer();
+		ComponentEditPart componentEditPart = (ComponentEditPart) mainContainer.getSubjobComponentEditPart();
+		ContainerEditPart containerEditPart = null;
+		Container subContainer = null;
+		String componentId = "";
+		while (componentEditPart != null) {
+			containerEditPart = (ContainerEditPart) componentEditPart.getParent();
+			subContainer = (Container) containerEditPart.getModel();
+			SubjobComponent subjobComponent = (SubjobComponent) componentEditPart.getModel();
+			componentId = componentId + subjobComponent.getComponentId() + ".";
+			componentEditPart = (ComponentEditPart) subContainer.getSubjobComponentEditPart();
+		}
+		return componentId;
+	}
+	
+
+	public void clearRemoteFilterConditions(DebugDataViewer window) {
+		window.getConditions().setRemoteCondition("");
+		window.getConditions().getRemoteConditions().clear();
+		window.getConditions().getRemoteGroupSelectionMap().clear();
+	}
+
+	public void clearLocalFilterConditions(DebugDataViewer window) {
+		window.getConditions().setLocalCondition("");
+		window.getConditions().getLocalConditions().clear();
+		window.getConditions().getLocalGroupSelectionMap().clear();
 	}
 }

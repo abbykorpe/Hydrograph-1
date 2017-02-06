@@ -33,11 +33,13 @@ import hydrograph.ui.dataviewer.constants.MessageBoxText;
 import hydrograph.ui.dataviewer.filter.FilterConditions;
 import hydrograph.ui.dataviewer.window.DebugDataViewer;
 import hydrograph.ui.graph.Messages;
+import hydrograph.ui.graph.controller.ComponentEditPart;
 import hydrograph.ui.graph.controller.LinkEditPart;
 import hydrograph.ui.graph.execution.tracking.datastructure.SubjobDetails;
 import hydrograph.ui.graph.job.Job;
 import hydrograph.ui.graph.job.JobManager;
 import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.graph.utility.ViewDataUtils;
@@ -142,53 +144,115 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 		// Check if job is executed in debug mode
 				Job job = JobManager.INSTANCE.getPreviouslyExecutedJobs().get(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
 				if(job==null){
-					MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB_IN_DEBUG_MODE);
-					return;
-				}
-				
-				//Create data viewer window name, if window exist reopen same window
-				String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
-						+ watchRecordInner.getSocketId();
-				if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
-					Point originalWindowSize=dataViewerMap.get(dataViewerWindowName).getShell().getSize();
-					dataViewerMap.get(dataViewerWindowName).getShell().setActive();
-					dataViewerMap.get(dataViewerWindowName).getShell().setMaximized(true);
-					dataViewerMap.get(dataViewerWindowName).getShell().setSize(new Point(originalWindowSize.x, originalWindowSize.y));
-					return;
-				}
-				
-				final JobDetails jobDetails = getJobDetails(job);
+					String jobName = StringUtils.split(getComponentCanvas().getJobName(), ".")[0];
+					Job mainJob = JobManager.INSTANCE.getPreviouslyExecutedJobs()
+							.get(getComponentCanvas().getActiveProject() + "." + jobName);
+					if (mainJob!=null && mainJob.isDebugMode() && mainJob.isExecutionTrack()==true) {
+						Container mainContainer = (Container) getComponentCanvas().getContainer();
+						ComponentEditPart componentEditPart = (ComponentEditPart) mainContainer.getSubjobComponentEditPart();
+						LinkEditPart linkEditPart=(LinkEditPart)componentEditPart.getTargetConnections().get(0);
+						Link link=(Link)linkEditPart.getModel();
+						String previousComponentId=link.getSource().getComponentId();
+						String componentId = ViewDataUtils.getInstance().getComponentId();
+						JobDetails jobDetails = getJobDetails(mainJob);
+						if (jobDetails.getComponentID().equalsIgnoreCase(Constants.INPUT_SUBJOB)) {
+							componentId = componentId.substring(componentId.indexOf(".") + 1) + previousComponentId;
+						} else {
+							componentId = componentId + jobDetails.getComponentID();
+						}
+						jobDetails.setComponentID(componentId);
 
-				final String dataViewerWindowTitle = dataViewerWindowName;	
-				
-				DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
-				String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
-				dataViewerMap.put(dataViewerWindowTitle, window);
-				window.setBlockOnOpen(true);
-				window.setDataViewerMap(dataViewerMap);
-				if(watcherAndConditon.containsKey(watcherId))
+						String dataViewerWindowName = mainJob.getLocalJobID().replace(".", "_") + "_"
+								+ watchRecordInner.getComponentId() + "_" + watchRecordInner.getSocketId();
+						if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
+							Point originalWindowSize = dataViewerMap.get(dataViewerWindowName).getShell().getSize();
+							dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+							dataViewerMap.get(dataViewerWindowName).getShell().setMaximized(true);
+							dataViewerMap.get(dataViewerWindowName).getShell()
+									.setSize(new Point(originalWindowSize.x, originalWindowSize.y));
+							return;
+						}
+
+						final String dataViewerWindowTitle = dataViewerWindowName;
+
+						DebugDataViewer window = new DebugDataViewer(jobDetails, dataViewerWindowTitle);
+						String watcherId = getWatcherId(dataViewerWindowTitle, window);
+
+						window.open();
+						if (window.getConditions() != null) {
+							if (!window.getConditions().getRetainLocal()) {
+								ViewDataUtils.getInstance().clearLocalFilterConditions(window);
+							}
+							if (!window.getConditions().getRetainRemote()) {
+								ViewDataUtils.getInstance().clearRemoteFilterConditions(window);
+							}
+							watcherAndConditon.put(watcherId, window.getConditions());
+						}
+					} else {
+						if (mainJob==null) {
+							MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_JOB_IN_DEBUG_OR_OPEN_SUBJOB_THROUGH_TRACKSUBJOB);
+						} else {
+							if (!mainJob.isDebugMode()) {
+								MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB_IN_DEBUG_MODE);
+							}
+							else
+							{
+								if (!mainJob.isExecutionTrack()) {
+									MessageBox.INSTANCE.showMessage(MessageBoxText.INFO,
+											Messages.OPEN_SUBJOB_THROUGH_TRACK_SUBJOB);
+								}
+							}
+						}
+						return;
+					}
+				}
+				else
 				{
-					window.setConditions(watcherAndConditon.get(watcherId));
-					if(watcherAndConditon.get(watcherId).isOverWritten()){
-						window.setOverWritten(watcherAndConditon.get(watcherId).isOverWritten());
+					//Create data viewer window name, if window exist reopen same window
+					String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
+							+ watchRecordInner.getSocketId();
+					if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
+						Point originalWindowSize=dataViewerMap.get(dataViewerWindowName).getShell().getSize();
+						dataViewerMap.get(dataViewerWindowName).getShell().setActive();
+						dataViewerMap.get(dataViewerWindowName).getShell().setMaximized(true);
+						dataViewerMap.get(dataViewerWindowName).getShell().setSize(new Point(originalWindowSize.x, originalWindowSize.y));
+						return;
+					}
+					
+					final JobDetails jobDetails = getJobDetails(job);
+
+					final String dataViewerWindowTitle = dataViewerWindowName;	
+					
+					DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
+					String watcherId = getWatcherId(dataViewerWindowTitle, window);
+					
+					window.open();
+					if(window.getConditions()!=null){
+						if(!window.getConditions().getRetainLocal()){
+							ViewDataUtils.getInstance().clearLocalFilterConditions(window);
+						}
+						if(!window.getConditions().getRetainRemote()){
+							ViewDataUtils.getInstance().clearRemoteFilterConditions(window);
+						}
+						watcherAndConditon.put(watcherId,window.getConditions());
 					}
 				}
 				
-				window.open();
-				if(window.getConditions()!=null){
-					if(!window.getConditions().getRetainLocal()){
-						window.getConditions().setLocalCondition("");
-						window.getConditions().getLocalConditions().clear();
-						window.getConditions().getLocalGroupSelectionMap().clear();
-					}
-					if(!window.getConditions().getRetainRemote()){
-						window.getConditions().setRemoteCondition("");
-						window.getConditions().getRemoteConditions().clear();
-						window.getConditions().getRemoteGroupSelectionMap().clear();
-					}
-					watcherAndConditon.put(watcherId,window.getConditions());
-				}
 			}
+	private String getWatcherId(final String dataViewerWindowTitle, DebugDataViewer window) {
+		String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
+		dataViewerMap.put(dataViewerWindowTitle, window);
+		window.setBlockOnOpen(true);
+		window.setDataViewerMap(dataViewerMap);
+		if(watcherAndConditon.containsKey(watcherId))
+		{
+			window.setConditions(watcherAndConditon.get(watcherId));
+			if(watcherAndConditon.get(watcherId).isOverWritten()){
+				window.setOverWritten(watcherAndConditon.get(watcherId).isOverWritten());
+			}
+		}
+		return watcherId;
+	}
 
 			
 		private JobDetails getJobDetails(Job job) {

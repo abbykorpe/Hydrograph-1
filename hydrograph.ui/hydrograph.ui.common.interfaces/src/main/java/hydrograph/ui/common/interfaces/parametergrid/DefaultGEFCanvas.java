@@ -132,4 +132,6 @@ public interface DefaultGEFCanvas {
 	public void saveParamterFileSequence(List<ParameterFile> parameterFiles);
 	
 	public List<ParameterFile> getParamterFileSequence();
+	
+	public Object getContainer();
 }
