@@ -333,6 +333,14 @@ openFile
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
       <plugin id="org.eclipse.text"/>
+      <plugin id="org.eclipse.tm.terminal.connector.local"/>
+      <plugin id="org.eclipse.tm.terminal.connector.process"/>
+      <plugin id="org.eclipse.tm.terminal.connector.serial"/>
+      <plugin id="org.eclipse.tm.terminal.connector.ssh"/>
+      <plugin id="org.eclipse.tm.terminal.connector.telnet"/>
+      <plugin id="org.eclipse.tm.terminal.control"/>
+      <plugin id="org.eclipse.tm.terminal.view.core"/>
+      <plugin id="org.eclipse.tm.terminal.view.ui"/>
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.browser"/>
       <plugin id="org.eclipse.ui.cheatsheets"/>
