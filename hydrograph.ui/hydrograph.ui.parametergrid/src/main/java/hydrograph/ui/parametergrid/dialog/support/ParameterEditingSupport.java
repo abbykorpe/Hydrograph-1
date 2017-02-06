@@ -13,13 +13,15 @@
 
 package hydrograph.ui.parametergrid.dialog.support;
 
-import hydrograph.ui.parametergrid.constants.MultiParameterFileDialogConstants;
-import hydrograph.ui.parametergrid.dialog.models.Parameter;
-
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+
+import hydrograph.ui.parametergrid.constants.MultiParameterFileDialogConstants;
+import hydrograph.ui.parametergrid.dialog.MultiParameterFileDialog;
+import hydrograph.ui.parametergrid.dialog.models.Parameter;
 
 
 /**
@@ -33,12 +35,14 @@ public class ParameterEditingSupport extends EditingSupport {
 	private final TableViewer viewer;
 	private final CellEditor editor;
 	private String columnName;
-		
-	public ParameterEditingSupport(TableViewer viewer,String columnName) {
+	private MultiParameterFileDialog multiParameterFileDialog;
+	
+	public ParameterEditingSupport(TableViewer viewer,String columnName,MultiParameterFileDialog multiParameterFileDialog) {
 		super(viewer);
 		this.viewer = viewer;
 		this.editor = new TextCellEditor(viewer.getTable());
 		this.columnName = columnName;
+		this.multiParameterFileDialog=multiParameterFileDialog;
 	}
 
 	@Override
@@ -64,11 +68,19 @@ public class ParameterEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object userInputValue) {
 		
-		if(MultiParameterFileDialogConstants.PARAMETER_NAME.equals(columnName))
-			((Parameter) element).setParameterName(String.valueOf(userInputValue));
-		else if(MultiParameterFileDialogConstants.PARAMETER_VALUE.equals(columnName))
-			((Parameter) element).setParameterValue(String.valueOf(userInputValue));
-		
+		if(MultiParameterFileDialogConstants.PARAMETER_NAME.equals(columnName)){
+			if(!StringUtils.equalsIgnoreCase(((Parameter) element).getParameterName(),String.valueOf(userInputValue))){
+				((Parameter) element).setParameterName(String.valueOf(userInputValue));
+				multiParameterFileDialog.getApplyButton().setEnabled(true);
+			}
+			
+		}
+		else if(MultiParameterFileDialogConstants.PARAMETER_VALUE.equals(columnName)){
+			if(!StringUtils.equalsIgnoreCase(((Parameter) element).getParameterValue(),String.valueOf(userInputValue))){
+				((Parameter) element).setParameterValue(String.valueOf(userInputValue));
+				multiParameterFileDialog.getApplyButton().setEnabled(true);
+			}
+		}
 		viewer.update(element, null);
 	}
 }
