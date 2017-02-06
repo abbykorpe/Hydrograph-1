@@ -1,5 +1,5 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+/********************************************************************************
+ * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -9,15 +9,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ ******************************************************************************/
 
  
 package hydrograph.ui.propertywindow.widgets.listeners;
-
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +23,12 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 
 /**
@@ -40,6 +41,8 @@ import org.slf4j.Logger;
  * @see ELTVerifyTextEvent
  */
 public class ELTVerifyTextListener implements IELTListener{
+	protected String regex =Constants.REGEX;
+	protected String errorMessage=Messages.CHARACTERSET;
 	private ControlDecoration txtDecorator;
 	Logger logger = LogFactory.INSTANCE.getLogger(ELTVerifyTextListener.class);
 	@Override
@@ -57,10 +60,10 @@ public class ELTVerifyTextListener implements IELTListener{
 				@Override
 				public void handleEvent(Event event) {
 					String string=event.text;
-					Matcher matchs=Pattern.compile("[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\w]*").matcher(string);
+					Matcher matchs=Pattern.compile(regex).matcher(string);
 					logger.debug(this+"::ELTVerifyTextListener is called");
 					if(!matchs.matches()){
-						txtDecorator.setDescriptionText(Messages.CHARACTERSET);
+						txtDecorator.setDescriptionText(errorMessage);
 						txtDecorator.show();
 						event.doit=false;
 						logger.trace("Pattern does not matches !matchs.matches() with :" + string);

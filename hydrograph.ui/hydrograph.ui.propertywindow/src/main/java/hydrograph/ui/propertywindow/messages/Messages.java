@@ -76,6 +76,7 @@ public class Messages extends NLS {
 	public static String FIELDBATCH;
 	public static String FIELDCHARACTER;
 	public static String CHARACTERSET;
+	public static String CHARACTERSET_XPATH_QUERY;
 	public static String SCALE;
 	public static String SCALEERROR;
 	public static String RuntimePropertAlreadyExists;
@@ -405,5 +406,4 @@ public class Messages extends NLS {
 
 	private Messages() {
 	}
-
 }
