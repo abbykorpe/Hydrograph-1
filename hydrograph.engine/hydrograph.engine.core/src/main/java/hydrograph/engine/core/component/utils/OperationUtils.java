@@ -67,12 +67,6 @@ public class OperationUtils {
         if (passThroughFields.contains("*")) {
             return inputSchemaList;
         } else {
-            for (String field : passThroughFields) {
-                for (String inputSchema : inputSchemaList) {
-                    if (inputSchema.matches(field))
-                        outPutpassThroughFields.add(inputSchema);
-                }
-            }
             return new ArrayList<String>(outPutpassThroughFields);
         }
     }
