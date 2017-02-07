@@ -124,8 +124,6 @@ public class XmlParsingUtils {
 
 	}
 
-
-
 	public static class HydrographXMLInputServiceException extends RuntimeException {
 		private static final long serialVersionUID = -7709930763943833311L;
 

@@ -23,6 +23,7 @@ public class CommandLineOptionsProcessor {
 
 	public static final String OPTION_XML_PATH = "xmlpath";
 	public static final String OPTION_JOB_ID = "jobid";
+	public static final String OPTION_LOG_LEVEL = "loglevel";
 	public static final String OPTION_PARAMETER_FILES = "paramfiles";
 	public static final String OPTION_COMMANDLINE_PARAM = "param";
 	public static final String OPTION_HELP = "help";
@@ -67,6 +68,19 @@ public class CommandLineOptionsProcessor {
 			return jobId[0];
 		} else {
 			return null;
+		}
+	}
+
+	public String getLogLevel(String[] args) {
+		String[] logLevel = null;
+
+		logLevel = GeneralUtilities.getArgsOption(args, OPTION_LOG_LEVEL);
+
+		if (logLevel != null) {
+			// only the first path
+			return logLevel[0];
+		} else {
+			return "info";
 		}
 	}
 
