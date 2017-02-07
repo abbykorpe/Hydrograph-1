@@ -28,10 +28,9 @@ import org.slf4j.Logger;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.preferences.Utils;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
-import hydrograph.ui.graph.handler.JobHandler;
-import hydrograph.ui.graph.handler.StopJobHandler;
 import hydrograph.ui.graph.utility.JobScpAndProcessUtility;
 import hydrograph.ui.joblogger.JobLogger;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -108,16 +107,20 @@ public class LocalJobLauncher extends AbstractJobLauncher {
 	}
 
 	private String getExecututeJobCommand(String xmlPath, String paramFile, String userFunctionsPropertyFile, Job job) {
-		String exeCommond = GradleCommandConstants.GCMD_EXECUTE_LOCAL_JOB 
-				+ GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\""
-				+ GradleCommandConstants.GPARAM_JOB_XML +   "\""+ xmlPath.split("/", 2)[1] +"\"" 
-				+ GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID 
-				+ job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON 
-				+ job.isExecutionTrack() + GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT
-				+ TrackingDisplayUtils.INSTANCE.getPortFromPreference()
-				+ GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH+userFunctionsPropertyFile;;
-		logger.info("Gradle Command: {}", exeCommond);
-		return exeCommond + " --stacktrace";
+		StringBuffer exeCommond = new StringBuffer();
+				
+		exeCommond.append(GradleCommandConstants.GCMD_EXECUTE_LOCAL_JOB )
+		.append( GradleCommandConstants.GPARAM_PARAM_FILE + "\""+ paramFile+"\"" )
+		.append( GradleCommandConstants.GPARAM_JOB_XML +   "\""+ xmlPath.split("/", 2)[1] +"\"" )
+		.append( GradleCommandConstants.GPARAM_LOCAL_JOB + GradleCommandConstants.GPARAM_UNIQUE_JOB_ID )
+		.append( job.getUniqueJobId() + GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON )
+		.append( job.isExecutionTrack() + GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT )
+		.append(TrackingDisplayUtils.INSTANCE.getPortFromPreference() )
+		.append( GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH+userFunctionsPropertyFile)
+		.append( GradleCommandConstants.GPARAM_CONSOLE_LOGGING_LEVEL+Utils.INSTANCE.getConsoleLogLevel())
+		.append(" --stacktrace");
+		logger.info("Gradle Command: {}", exeCommond.toString());
+		return exeCommond.toString() ;
 	}
 
 	private void logProcessLogsAsynchronously(final JobLogger joblogger, final Process process, final Job job) {

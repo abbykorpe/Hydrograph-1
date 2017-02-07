@@ -13,14 +13,16 @@
 
 package hydrograph.ui.graph.execution.tracking.preferences;
 
+
 /**
  * The Class Utils.
  * @author Bitwise
  */
 
-import hydrograph.ui.common.util.OSValidator;
-
 import org.eclipse.core.runtime.Platform;
+
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.graph.Activator;
 
 public class Utils {
 
@@ -44,5 +46,21 @@ public class Utils {
 		}
 		return installationPath;
 
+	}
+	
+	
+	/**
+	 * 
+	 * @return console log level
+	 */
+	public String getConsoleLogLevel(){
+		
+		String logLevel = Platform.getPreferencesService().getString(
+				Activator.PLUGIN_ID,
+				JobRunPreference.LOG_LEVEL_PREFERENCE,
+				JobRunPreference.DEFUALT_LOG_LEVEL, null);
+
+		return logLevel;
+		
 	}
 }

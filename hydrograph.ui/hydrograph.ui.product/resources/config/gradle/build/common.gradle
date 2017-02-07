@@ -94,6 +94,13 @@ def getArgsForRunJob(runEvent) {
        	runParameters.add(executionTrackingPort)
         println " executionTrackingPort is: "+executionTrackingPort
     }
+    
+     if(project.hasProperty("loglevel")){
+   	    runParameters.add("-loglevel")
+       	runParameters.add(loglevel)
+        println " loglevel is: "+loglevel
+    }
+    
   	  return runParameters+"";
 }
 
