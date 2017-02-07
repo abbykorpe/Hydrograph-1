@@ -96,7 +96,6 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
     val outRow = new Array[Any](outputFields.size)
     var outputDispatcher: NormalizeOutputCollector = null
 
-    try {
     val df = componentsParams.getDataFrame.mapPartitions(itr => {
 
       val normalizeList: List[SparkOperation[NormalizeTransformBase]] = initializeOperationList[NormalizeForExpression](normalizeEntity.getOperationsList, inputSchema, outputSchema)
@@ -104,9 +103,14 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
       val nr1 = normalizeList.get(0)
 
       if(!nr1.baseClassInstance.isInstanceOf[NormalizeForExpression]){
-        LOG.trace("Calling prepare() method of " + nr1.baseClassInstance.getClass.toString + " class.")
-        nr1.baseClassInstance.prepare(nr1.operationEntity.getOperationProperties)
-      }
+          try {
+            LOG.trace("Calling prepare() method of " + nr1.baseClassInstance.getClass.toString + " class.")
+            nr1.baseClassInstance.prepare(nr1.operationEntity.getOperationProperties)
+          } catch {
+            case e: Exception =>
+              throw new RuntimeException("Error in prepare() method of " + normalizeEntity.getComponentId, e)
+          }
+        }
       val it = itr.flatMap(row => {
         copyFields(row, outRow, mapFieldIndexes)
         copyFields(row, outRow, passthroughIndexes)
@@ -142,10 +146,6 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
 
     val key = normalizeEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
-    } catch {
-      case e: Exception =>
-        throw new RuntimeException("Error in Normalize Component " + normalizeEntity.getComponentId, e)
-    }
   }
 }
 
