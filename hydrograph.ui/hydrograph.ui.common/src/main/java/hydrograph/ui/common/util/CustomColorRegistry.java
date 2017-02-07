@@ -19,7 +19,7 @@ import org.eclipse.swt.graphics.RGB;
 
 /**
  * 
- * Class to store Image path constants
+ * Class to store swt color objects 
  * 
  * @author Bitwise
  * 
@@ -36,7 +36,7 @@ public class CustomColorRegistry {
 	public Color getColorFromRegistry(int red, int green, int blue) {
 		RGB colorValue = new RGB(red, green, blue);
 		Color color = COLOR_REGISTRY.get(colorValue.toString());
-		if (color == null) {
+		if (color == null || (color !=null && color.isDisposed())) {
 			COLOR_REGISTRY.put(colorValue.toString(), colorValue);
 		}
 		return COLOR_REGISTRY.get(colorValue.toString());
