@@ -80,6 +80,9 @@
    <topic href="html/Components/Output_Redshift.html" label="Output Redshift">
       <anchor id="Output_Redshift"/>
    </topic>
+   <topic href="html/Components/DBUpdate.html" label="Output DB Update">
+      <anchor id="outputDBUpdate"/>
+   </topic>
    <topic href="html/Components/Join.html" label="Join">
       <anchor id="Join"/>
    </topic>
@@ -118,4 +121,3 @@
    </topic>
    
 </toc>
-

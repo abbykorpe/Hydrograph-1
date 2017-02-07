@@ -315,6 +315,10 @@
             file="xml/Components/runProgram.xml">
       </toc>
       <toc
+         	file="xml/Components/outputDBUpdate.xml"
+	  		primary="false">
+	  </toc>
+      <toc
             file="hydrograph.ui.help.toc6"
             primary="false">
       </toc>
