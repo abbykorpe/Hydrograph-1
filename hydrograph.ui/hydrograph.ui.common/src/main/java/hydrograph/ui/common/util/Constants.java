@@ -351,5 +351,7 @@ public class Constants {
 	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter e.g. 1234, @{Param}";
 	public static final String JAVA_EXTENSION = ".java";
 	public static final String ProjectSupport_SRC = "src/main/java";
+	
+	public static final String COMMENT_BOX_IMAGE_PATH="/icons/comment-box-icon.png";
 
 }
