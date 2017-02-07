@@ -19,7 +19,7 @@ import scala.collection.mutable.ListBuffer
 /**
   * Created by bitwise on 1/13/2017.
   */
-case class FieldContext(name: String, xPath:String, datatype: DataType, isNullable: Boolean) {
+case class FieldContext(name: String, xPath:String, datatype: DataType, isNullable: Boolean,format: String) {
 }
 
 case class TreeNode(fieldContext: FieldContext) {

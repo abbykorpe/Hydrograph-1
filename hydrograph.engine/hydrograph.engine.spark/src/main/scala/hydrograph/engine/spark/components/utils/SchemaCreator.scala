@@ -19,10 +19,9 @@ import hydrograph.engine.core.component.entity.base.InputOutputEntityBase
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
+import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
 import collection.mutable.HashMap
-
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer
@@ -35,11 +34,16 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
   def buildSchema(rootNode: TreeNode): List[StructField] = {
     def schema(currentNode: TreeNode, parent: String, structList: List[StructField]): List[StructField] = currentNode match {
       case x if (x.children == ListBuffer() || x.children == List()) => {
-        structList ++ List(StructField(x.fieldContext.name, x.fieldContext.datatype, x.fieldContext.isNullable))
+
+        structList ++ List(StructField(x.fieldContext.name, x.fieldContext.datatype, x.fieldContext.isNullable,getMetadataWithProperty("dateFormat",x.fieldContext.format)))
       }
       case x => {
-        List(StructField(x.fieldContext.name,StructType(x.children.toList.flatMap(a => schema(a, a.fieldContext.name, List[StructField]())).toArray),x.fieldContext.isNullable))
+        List(StructField(x.fieldContext.name,StructType(x.children.toList.flatMap(a => schema(a, a.fieldContext.name, List[StructField]())).toArray),x.fieldContext.isNullable,getMetadataWithProperty("dateFormat",x.fieldContext.format)))
       }
+    }
+
+    def getMetadataWithProperty(key: String,value: String):Metadata={
+      new MetadataBuilder().putString(key,value).build()
     }
 
     rootNode.children.toList.flatMap(x => schema(x, rootNode.fieldContext.name, List[StructField]()))
@@ -64,15 +68,15 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
     for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
       val schemaField: SchemaField = inputOutputEntityBase.getFieldsList.get(i)
-      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName,schemaField.getAbsoluteOrRelativeXPath, getDataType(schemaField), safe))
+      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName,schemaField.getAbsoluteOrRelativeXPath, getDataType(schemaField), safe,schemaField.getFieldFormat))
     }
 
-    fcMap += (rowTag -> FieldContext(rowTag,rowTag, DataTypes.StringType, safe))
+    fcMap += (rowTag -> FieldContext(rowTag,rowTag, DataTypes.StringType, safe,"yyyy-MM-dd"))
 
     var xmlTree:XMLTree = XMLTree(fcMap.get(rowTag).get)
 
     relativeXPathAndField.map(x => x match {
-      case a if(!a._1.contains('/'))=> xmlTree.addChild(rowTag,FieldContext(a._1,rowTag+"/"+a._1,fcMap.get(a._2).get.datatype,safe))
+      case a if(!a._1.contains('/'))=> xmlTree.addChild(rowTag,FieldContext(a._1,rowTag+"/"+a._1,fcMap.get(a._2).get.datatype,safe,fcMap.get(a._2).get.format))
       case a => {
         var parentTag = rowTag
         var xpath=rowTag+"/"
@@ -80,7 +84,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
           xpath=xpath+b
           if(!xmlTree.isPresent(b,xpath)) {
 
-            xmlTree.addChild(parentTag,FieldContext(b,xpath,fcMap.get(a._2).get.datatype,safe))
+            xmlTree.addChild(parentTag,FieldContext(b,xpath,fcMap.get(a._2).get.datatype,safe,fcMap.get(a._2).get.format))
           }
           parentTag = b
           xpath+="/"

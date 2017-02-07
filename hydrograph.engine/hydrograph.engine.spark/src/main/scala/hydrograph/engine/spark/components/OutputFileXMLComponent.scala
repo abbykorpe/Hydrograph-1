@@ -54,7 +54,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
         .mode( SaveMode.Overwrite)
         .option("dateFormats", schemaCreator.getDateFormats)
 //        .schema(schemaCreator.makeSchema)
-        .format("com.databricks.spark.xml")
+        .format("hydrograph.engine.spark.datasource.xml")
         .save(outputFileXMLEntity.getPath)
     } catch {
       case e: AnalysisException if (e.getMessage().matches("(.*)cannot resolve(.*)given input columns(.*)"))=>

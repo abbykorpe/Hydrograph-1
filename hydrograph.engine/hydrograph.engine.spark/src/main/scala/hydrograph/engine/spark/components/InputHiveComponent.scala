@@ -30,10 +30,8 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     LOG.trace("In method createComponent()")
     val sparkSession = parameters.getSparkSession()
 
-    import sparkSession.sql
 
-
-    val data = sql(constructQuery(entity))
+    val data = sparkSession.sql(constructQuery(entity))
     val key = entity.getOutSocketList.get(0).getSocketId
 
     LOG.info("Created Hive Input component " + entity.getComponentId + " in batch " + entity.getBatch + " with out socket " + key + " to read Hive table " + entity.getDatabaseName + "." + entity.getTableName)
@@ -51,9 +49,9 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     val partitionKeyValueMap = entity.getListOfPartitionKeyValueMap.asScala.toList
 
 
-    query = query + "SELECT " + getFieldsForSelectHiveQuery(fieldList) + " FROM " + entity.getDatabaseName + "." + entity.getTableName
+    query = query + "SELECT " + getFieldsForSelectHiveQuery(fieldList) + " FROM " + databaseName + "." + tableName
 
-    if (partitionKeyValueMap != null && partitionKeyValueMap.size > 0)
+    if (partitionKeyValueMap.nonEmpty)
       query = query + " WHERE " + getpartitionKeysClause(partitionKeyValueMap)
 
     query

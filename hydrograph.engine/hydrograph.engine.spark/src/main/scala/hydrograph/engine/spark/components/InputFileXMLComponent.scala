@@ -70,7 +70,7 @@ class InputFileXMLComponent (iFileXMLEntity: InputFileXMLEntity, iComponentsPara
         .option("mode", writeMode)
         .option("dateFormats", schemaCreator.getDateFormats)
         .schema(schemaCreator.makeSchema)
-        .format("com.databricks.spark.xml")
+        .format("hydrograph.engine.spark.datasource.xml")
         .load(iFileXMLEntity.getPath)
 
       val key = iFileXMLEntity.getOutSocketList.get(0).getSocketId
