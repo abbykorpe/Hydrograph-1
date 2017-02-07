@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -30,7 +30,7 @@ public class ComponentContentProposal extends ContentProposal {
 
 	/**
 	 * Gets the component details
-	 * @return
+	 * @return componentDetails
 	 */
 	public ComponentDetails getComponentDetails() {
 		return componentDetails;

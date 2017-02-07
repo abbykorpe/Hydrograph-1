@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,6 +26,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.ImageData;
 
 import hydrograph.ui.common.component.config.Component;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 
 /**
@@ -77,7 +78,7 @@ public class HydrographComponentProposalProvider implements IContentProposalProv
 		componentDetails.setName(COMMENT_BOX);
 		componentDetails.setCategoryAndPalletteName(COMMENT_BOX);
 		componentDetails.setDescription(COMMENT_BOX);
-		componentDetails.setDescriptor(getImageDisDescriptor());
+		componentDetails.setDescriptor(getCommentBoxImageDisDescriptor());
 		proposalList.add(new ComponentContentProposal(componentDetails));
 		return proposalList.toArray(new IContentProposal[0]);
 	}
@@ -86,12 +87,12 @@ public class HydrographComponentProposalProvider implements IContentProposalProv
 	 * Provides the image descriptor for Comment box
 	 * @return imageDescriptor
 	 */
-	private ImageDescriptor getImageDisDescriptor() {
+	private ImageDescriptor getCommentBoxImageDisDescriptor() {
 		ImageDescriptor imageDescriptor = new ImageDescriptor() {
 
 			@Override
 			public ImageData getImageData() {
-				return new ImageData(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + "/icons/comment-box-icon.png");
+				return new ImageData(XMLConfigUtil.INSTANCE.CONFIG_FILES_PATH + Constants.COMMENT_BOX_IMAGE_PATH);
 			}
 		};
 		return imageDescriptor;

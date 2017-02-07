@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
+ * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -178,10 +178,8 @@ public class ComponentSearchUtility {
 		});
 	}
 
-	/**
-	 * Fetch the elements from Content Proposal
-	 */
-	protected void acceptProposal() {
+	
+	private void acceptProposal() {
 
 		String componentName = assistText.getText().trim();
 		Iterator<IContentProposal> iter = proposalList.iterator();
@@ -197,9 +195,7 @@ public class ComponentSearchUtility {
 		acceptProposal(componentDetails);
 	}
 
-	/**
-	 * @param componentDetails
-	 */
+	
 	private void acceptProposal(ComponentDetails componentDetails) {
 		Point componentLocation = assistText.getLocation();
 		componentLocation.y += assistText.getLineHeight();
@@ -236,36 +232,49 @@ public class ComponentSearchUtility {
 		hydrograph.ui.graph.model.Component newInstance = null;
 		if (componentDetails != null) {
 			if (componentDetails.getName().equalsIgnoreCase(COMMENT_BOX)) {
-				editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.getActiveEditor();
-				if (editor != null) {
-					Container container = editor.getContainer();
-					checkComponentCoordinates(event, container);
-					org.eclipse.draw2d.geometry.Point point = new org.eclipse.draw2d.geometry.Point(event.x, event.y);
-					CommentBox label = new CommentBox(LABEL);
-					label.setSize(new Dimension(300, 60));
-					label.setLocation(point);
-					CommentBoxCommand command = new CommentBoxCommand(label, LABEL, container);
-					command.execute();
-				}
+					createCommentBox(event);
 			} else {
-				Component component = XMLConfigUtil.INSTANCE.getComponent(componentDetails.getName());
-				Container container = (Container) graphicViewer.getContents().getModel();
-				Class<?> class1 = DynamicClassProcessor.INSTANCE.getClazz(component.getName());
-				ComponentCreateCommand componentCreateCommand;
-				try {
-					newInstance = (hydrograph.ui.graph.model.Component) class1.newInstance();
-					checkComponentCoordinates(event, container);
-					componentCreateCommand = new ComponentCreateCommand(newInstance, container,
-							new Rectangle(event.x, event.y, 0, 0));
-					componentCreateCommand.execute();
-				} catch (InstantiationException | IllegalAccessException e) {
-					logger.error("Component cannot be created:" + e);
-					WidgetUtility.createMessageBox("Component cannot be created", Messages.ERROR, SWT.ICON_ERROR);
-				}
+				newInstance = createComponent(componentDetails, event, newInstance);
+			}
+			if (bindingService != null) {
+				bindingService.setKeyFilterEnabled(true);
 			}
 		}
 		return newInstance;
+	}
+
+	private hydrograph.ui.graph.model.Component createComponent(ComponentDetails componentDetails, Event event,
+			hydrograph.ui.graph.model.Component newInstance) {
+		Component component = XMLConfigUtil.INSTANCE.getComponent(componentDetails.getName());
+		Container container = (Container) graphicViewer.getContents().getModel();
+		Class<?> class1 = DynamicClassProcessor.INSTANCE.getClazz(component.getName());
+		ComponentCreateCommand componentCreateCommand;
+		try {
+			newInstance = (hydrograph.ui.graph.model.Component) class1.newInstance();
+			checkComponentCoordinates(event, container);
+			componentCreateCommand = new ComponentCreateCommand(newInstance, container,
+					new Rectangle(event.x, event.y, 0, 0));
+			componentCreateCommand.execute();
+		} catch (InstantiationException | IllegalAccessException e) {
+			logger.error("Component cannot be created:" + e);
+			WidgetUtility.createMessageBox("Component cannot be created", Messages.ERROR, SWT.ICON_ERROR);
+		}
+		return newInstance;
+	}
+
+	private void createCommentBox(Event event) {
+		editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+		if (editor != null) {
+			Container container = editor.getContainer();
+			checkComponentCoordinates(event, container);
+			org.eclipse.draw2d.geometry.Point point = new org.eclipse.draw2d.geometry.Point(event.x, event.y);
+			CommentBox label = new CommentBox(LABEL);
+			label.setSize(new Dimension(300, 60));
+			label.setLocation(point);
+			CommentBoxCommand command = new CommentBoxCommand(label, LABEL, container);
+			command.execute();
+		}
 	}
 
 	/**
@@ -321,18 +330,26 @@ public class ComponentSearchUtility {
 		if (bindingService != null) {
 			bindingService.setKeyFilterEnabled(false);
 		}
-		assistText = new Text((Composite) graphicControl, SWT.BORDER);
-		assistText.setLocation(cursorRelativePosition.x, cursorRelativePosition.y - assistText.getLineHeight());
-		assistText.setSize(200, assistText.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		assistText.setTextLimit(51);
-		assistText.setFocus();
+		createAssitTextBox(cursorRelativePosition);
 
+		createContentProposal();
+	}
+
+	private void createContentProposal() {
 		HydrographComponentProposalProvider hydrographComponentProposalProvider = new HydrographComponentProposalProvider(
 				this, proposalList, paletteRoot);
 		contentProposalAdapter = new ContentProposalAdapter(assistText, new TextContentAdapter(),
 				hydrographComponentProposalProvider, null, null);
 		contentProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		contentProposalAdapter.setLabelProvider(new SearchCanvasLabelProvider());
+	}
+
+	private void createAssitTextBox(Point cursorRelativePosition) {
+		assistText = new Text((Composite) graphicControl, SWT.BORDER);
+		assistText.setLocation(cursorRelativePosition.x, cursorRelativePosition.y - assistText.getLineHeight());
+		assistText.setSize(200, assistText.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		assistText.setTextLimit(51);
+		assistText.setFocus();
 	}
 
 	/**
