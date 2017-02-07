@@ -65,4 +65,5 @@ public class GradleCommandConstants {
 	public static final String GCMD_SCP_LIB_FOLDER_JAR_FILES="gradle scpLibFolderJarFiles ";
 	public static final String REMOTE_FIXED_DIRECTORY_RESOURCES="resources";
 	public static final String GPARAM_USER_DEFINED_FUNCTIONS_PATH=" -Pudfpath=";
+	public static final String GPARAM_CONSOLE_LOGGING_LEVEL=" -Ploglevel=";
 }

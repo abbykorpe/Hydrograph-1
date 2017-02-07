@@ -8,6 +8,7 @@ Sr.No. <date> - [developer names] - description
 4.<07-Feb-17> - [Shrirang Kumbhar] - Added gradle nature to Hydrograph project.
 5.<07-Feb-17> - [Shrirang Kumbhar] - Updated Hydrograph Icons and splash screen.
 6.<07-Feb-17> - [Shrirang Kumbhar] - Changed ports in yml file to 990
+7.<07-Feb-17> - [Prateem Tadas] - Logging level added for console log.
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================

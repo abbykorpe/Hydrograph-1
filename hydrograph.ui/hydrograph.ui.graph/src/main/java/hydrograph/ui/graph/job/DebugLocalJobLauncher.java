@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.graph.execution.tracking.connection.HydrographServerConnection;
+import hydrograph.ui.graph.execution.tracking.preferences.Utils;
 import hydrograph.ui.graph.execution.tracking.replay.ViewExecutionHistoryUtility;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.handler.JobHandler;
@@ -150,17 +151,21 @@ public void launchJobInDebug(String xmlPath, String debugXmlPath,String paramFil
 	 * @return the executute job command
 	 */
 	private String getExecututeJobCommand(String xmlPath, String paramFile,String userFunctionsPropertyFile, String debugXmlPath, Job job) {
-		return GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB 
-				+ GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML
-				+ xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_LOCAL_JOB
-				+ GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1]
-				+ GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath()
-				+ GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId()
-				+ GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack()
-				+ GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT
-				+ TrackingDisplayUtils.INSTANCE.getPortFromPreference()
-				+GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH+userFunctionsPropertyFile ;
+		StringBuffer exeCommond = new StringBuffer();
+		
+		exeCommond.append(GradleCommandConstants.GCMD_EXECUTE_DEBUG_LOCAL_JOB )
+			.append(GradleCommandConstants.GPARAM_PARAM_FILE + paramFile + GradleCommandConstants.GPARAM_JOB_XML)
+			.append(xmlPath.split("/", 2)[1] + GradleCommandConstants.GPARAM_LOCAL_JOB)
+			.append(GradleCommandConstants.GPARAM_JOB_DEBUG_XML + debugXmlPath.split("/", 2)[1])
+			.append(GradleCommandConstants.GPARAM_JOB_BASE_PATH + job.getBasePath())
+			.append(GradleCommandConstants.GPARAM_UNIQUE_JOB_ID + job.getUniqueJobId())
+			.append(GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON + job.isExecutionTrack())
+			.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT)
+			.append(TrackingDisplayUtils.INSTANCE.getPortFromPreference())
+			.append(GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH + userFunctionsPropertyFile)
+			.append(GradleCommandConstants.GPARAM_CONSOLE_LOGGING_LEVEL + Utils.INSTANCE.getConsoleLogLevel());
 
+	return exeCommond.toString();
 	}
 	
 	/**
