@@ -71,17 +71,25 @@ public class CommandLineOptionsProcessor {
 		}
 	}
 
-	public String getLogLevel(String[] args) {
+	public static  String getLogLevel(String[] args) {
 		String[] logLevel = null;
 
 		logLevel = GeneralUtilities.getArgsOption(args, OPTION_LOG_LEVEL);
 
-		if (logLevel != null) {
+		if (logLevel != null ) {
 			// only the first path
-			return logLevel[0];
+			return getValidLogLevel(logLevel[0].toUpperCase());
 		} else {
 			return "info";
 		}
+	}
+
+	private static String getValidLogLevel(String str) {
+		if(str.equals("WARN") || str.equals("DEBUG") || str.equals("TRACE") || str.equals("INFO")
+				|| str.equals("ERROR") || str.equals("FATAL") || str.equals("ALL"))
+			return str.toLowerCase();
+		else
+			return "info";
 	}
 
 	public String getParamFiles(String[] args) {
