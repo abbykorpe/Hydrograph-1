@@ -1,4 +1,4 @@
-﻿====================================================================================================
+====================================================================================================
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
@@ -43,7 +43,6 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 27.#670 [shashank karnik]-xml Input component: Datatype is not propagating correctly. 
 28.#678 [shashank karnik]-Parameter appended with a value does not get resolved on UI. 
 29.#676 [shashank karnik]-Schema of Unused ports of Join Component:Schema of out port of join is used for populating schema of unused ports.
-<<<<<<< HEAD
 30.#669 [shashank karnik]-Parameter Grid: Need to remove Save icon from the and enable apply button on editing parameter name or value.
 31.#682 [shashank karnik]-Renaming job does not change the job specific file name in job parameter list.
 32.#683 [Vibhor Tyagi] - Issues with Run SQL component
@@ -51,3 +50,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 34.#697 [shashank karnik]-Generate Records: "No of records” should allow parameterized values. 
 35.     [Rakesh Kanchalwar]- Redshift jar version updated in gradle
 36.#692 [Nitin Gupta] - Jar issue :- Please follow steps from attached doc
+37.#661 [Ashika Holkar] -  All database components: Need to change error message validation on primary key window

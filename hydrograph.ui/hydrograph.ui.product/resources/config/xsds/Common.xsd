@@ -359,7 +359,13 @@
 					</appinfo>
 				</annotation>
 			</enumeration>
-
+			<enumeration value="DATABASE_KEY_VALIDATION">
+				<annotation>
+					<appinfo>
+						<jaxb:typesafeEnumMember name="DatabaseKeyValidation" />
+					</appinfo>
+				</annotation>
+			</enumeration>
 		</restriction>
 	</simpleType>
 </schema>

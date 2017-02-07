@@ -57,6 +57,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="NORMALIZE_MAPPING_VALIDATOR"/>
  *     &lt;enumeration value="XPATH_SCHEMA_GRID_VALIDATOR"/>
  *     &lt;enumeration value="SECONDARY_KEY_VALIDATION"/>
+ *     &lt;enumeration value="DATABASE_KEY_VALIDATION"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -113,7 +114,9 @@ public enum Validators {
     @XmlEnumValue("PORT_VALIDATOR")
     PortValidationRule("PORT_VALIDATOR"),
     @XmlEnumValue("SECONDARY_KEY_VALIDATION")
-    SecondaryColumnKeyValidation("SECONDARY_KEY_VALIDATION");
+    SecondaryColumnKeyValidation("SECONDARY_KEY_VALIDATION"),
+    @XmlEnumValue("DATABASE_KEY_VALIDATION")
+    DatabaseKeyValidation("DATABASE_KEY_VALIDATION");
 
 
     

@@ -88,6 +88,7 @@
 		<tns:property dataType="string" name="load_type_configuration" renderer="LOAD_TYPE_CONFIGURATION_WIDGET"
 			type="USER" group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL" propertyHelpText="Provides user to select the Load Type i.e. records are to be inserted,updated or to create a new table.">
+			<tns:validator>DATABASE_KEY_VALIDATION</tns:validator>
 		</tns:property>
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
