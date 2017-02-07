@@ -18,6 +18,7 @@ import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -59,10 +60,12 @@ public class JoinInputCountFocusOutListener implements IELTListener {
 				if (event.type == SWT.FocusOut) {
 					Text textBox = (Text) widgetList[0];
 					String textBoxValue = ((Text) event.widget).getText();
+					if(StringUtils.isNotBlank(textBoxValue) && StringUtils.isNumeric(textBoxValue)){
 					if ((Integer.parseInt(textBoxValue) < minimunPortCount || Integer.parseInt(textBoxValue) > 25)
 							&& currentComponent.getProperties().get(Constants.UNUSED_AND_INPUT_PORT_COUNT_PROPERTY) != null){
 						textBox.setText((String) currentComponent.getProperties().get(
 								Constants.UNUSED_AND_INPUT_PORT_COUNT_PROPERTY));
+					}
 					}
 				}
 			}
