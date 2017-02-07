@@ -39,7 +39,7 @@ configurations {
 }
 sourceSets {
     main {
-        java.srcDir 'src'
+        java.srcDir 'src/main/java'
     }
 }
 configurations.all {
@@ -483,6 +483,7 @@ task executeRemoteJob() {
 	        println "executeRemoteJob: Executing command -cd "+properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId+" -udfpath " + udfpath + " -isexecutiontracking " + isExecutionTracking  +" -trackingclientsocketport " + executionTrackingPort +" -loglevel " + loglevel
 			
 			def command = "cd " +properties.remoteDirectory+"/"+project.name+ " && " + properties.runUtility + " -xmlpath " +jobXML + " -libjars lib/" + jarName + " -paramfiles " + unixParameterFileList +" -jobid "+jobId+" -udfpath " + udfpath + " -isexecutiontracking " + isExecutionTracking  +" -trackingclientsocketport " + executionTrackingPort  +" -loglevel " + loglevel
+
 	   		sshToRemoteServer(host,username,password,command,keyfile,usepassword)
 	    }
 	 }
