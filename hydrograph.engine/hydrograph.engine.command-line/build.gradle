@@ -29,20 +29,20 @@ jar {
                 'Implementation-Version': version,
                 'Main-Class': 'hydrograph.engine.commandline.utilities.HydrographExecution'
     }
-   // version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
+    // version = null //Version in jar name set to null to keep the name consistent for travis.yml to ftp the jar
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            artifact (testJar) { 
+            artifact (testJar) {
                 classifier = 'tests'
             }
-             artifact (sourcesJar) { 
+            artifact (sourcesJar) {
                 classifier = 'sources'
             }
-            
+
             pom.withXml {
                 asNode().dependencies.'*'.findAll() {
                     it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
@@ -52,9 +52,9 @@ publishing {
                     it.scope*.value = 'compile'
                 }
             }
-  		}
-  	}
-  }
+        }
+    }
+}
 
 test {
     exclude '**/ExecutionTrackingCloneXmlTest*'
@@ -82,16 +82,19 @@ uploadArchives {
 repositories {
     mavenLocal()
     mavenCentral()
-     maven {
+    maven {
         url 'http://conjars.org/repo/'
     }
     maven {
         url 'http://maven.twttr.com/'
     }
-       maven {
+    maven {
         url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
     }
-
+    maven {
+        name 'redshift'
+        url 'http://redshift-maven-repository.s3-website-us-east-1.amazonaws.com/release'
+    }
 }
 
 
@@ -102,5 +105,5 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'org.slf4j:slf4j-log4j12:1.7.12'
     compile 'commons-lang:commons-lang:2.6'
- 	compile 'commons-cli:commons-cli:1.2'
+    compile 'commons-cli:commons-cli:1.2'
 }
