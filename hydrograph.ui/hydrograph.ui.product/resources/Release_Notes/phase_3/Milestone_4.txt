@@ -9,6 +9,7 @@ Sr.No. <date> - [developer names] - description
 5.<07-Feb-17> - [Shrirang Kumbhar] - Updated Hydrograph Icons and splash screen.
 6.<07-Feb-17> - [Shrirang Kumbhar] - Changed ports in yml file to 990
 7.<07-Feb-17> - [Prateem Tadas] - Logging level added for console log.
+8.<07-Feb-17> - [Ashika Holkar] - Added Component Search and Place on Canvas functionality
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================

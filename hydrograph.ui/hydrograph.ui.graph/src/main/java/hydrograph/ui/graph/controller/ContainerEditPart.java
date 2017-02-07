@@ -39,6 +39,8 @@ import hydrograph.ui.graph.policy.ShapesXYLayoutEditPolicy;
  */
 public class ContainerEditPart extends AbstractGraphicalEditPart implements PropertyChangeListener{
 	
+	private ShapesXYLayoutEditPolicy shapeXYLayoutEditPolicyInstance;
+
 	/**
 	 * Upon activation, attach to the model element as a property change
 	 * listener.
@@ -79,10 +81,15 @@ public class ContainerEditPart extends AbstractGraphicalEditPart implements Prop
 		// disallows the removal of this edit part from its parent
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes (e.g. moving and/or resizing) of model elements
-		// and creation of new model elements
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ShapesXYLayoutEditPolicy());
+				// and creation of new model elements
+		shapeXYLayoutEditPolicyInstance = new ShapesXYLayoutEditPolicy();
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, shapeXYLayoutEditPolicyInstance);
 	}
 
+	public ShapesXYLayoutEditPolicy getShapeXYLayoutEditPolicyInstance() {
+		return shapeXYLayoutEditPolicyInstance;
+	}
+	
 	@Override
 	protected List getModelChildren() {
 		// return a list of models

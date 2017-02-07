@@ -167,6 +167,7 @@ import hydrograph.ui.graph.action.subjob.SubJobAction;
 import hydrograph.ui.graph.action.subjob.SubJobOpenAction;
 import hydrograph.ui.graph.action.subjob.SubJobTrackingAction;
 import hydrograph.ui.graph.action.subjob.SubJobUpdateAction;
+import hydrograph.ui.graph.canvas.search.ComponentSearchUtility;
 import hydrograph.ui.graph.command.CommentBoxSetConstraintCommand;
 import hydrograph.ui.graph.command.ComponentSetConstraintCommand;
 import hydrograph.ui.graph.controller.CommentBoxEditPart;
@@ -372,12 +373,20 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP))){
 					
 					moveComponentWithArrowKey(event);
-				}
-				else{
+				} else {
 					setCustomToolUndoRedoStatus();
 					hideToolTip();
+					if (event.stateMask == 0) {
+						if (StringUtils.isAlpha(String.valueOf(event.character))) {
+							new ComponentSearchUtility().showComponentCreationOnCanvas(event, viewer, paletteRoot);
+							setDirty(true);
+						} else if (((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0 && (event.keyCode == SWT.SHIFT
+								|| event.keyCode == SWT.ALT || event.keyCode == SWT.BS))) {
+							return;
+						}
+					}
+
 				}
-				
 			}
 		});
 
