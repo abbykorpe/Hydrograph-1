@@ -7,7 +7,7 @@ Sr.No. <date> - [developer names] - description
 3.<24-Jan-17> - [Pooja Yadav] - Added DB Update component.
 4.<07-Feb-17> - [Shrirang Kumbhar] - Added gradle nature to Hydrograph project.
 5.<07-Feb-17> - [Shrirang Kumbhar] - Updated Hydrograph Icons and splash screen.
-6.<07-Feb-17> - [Shrirang Kumbhar] - Changed ports is yml file to 990
+6.<07-Feb-17> - [Shrirang Kumbhar] - Changed ports in yml file to 990
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
