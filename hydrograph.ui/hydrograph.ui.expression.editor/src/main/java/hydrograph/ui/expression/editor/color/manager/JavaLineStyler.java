@@ -27,6 +27,8 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
+import hydrograph.ui.common.util.CustomColorRegistry;
+
 public class JavaLineStyler implements LineStyleListener {
 	
 
@@ -92,14 +94,13 @@ public class JavaLineStyler implements LineStyleListener {
 	}
 
 	void initializeColors() {
-		Display display = Display.getDefault();
-		colors = new Color[] { new Color(display, new RGB(0, 0, 0)), // black
-				new Color(display, new RGB(255, 0, 0)), // red
-				new Color(display, new RGB(0, 255, 0)), // green
-				new Color(display, new RGB(0, 0, 255)), // blue
-				new Color(display, new RGB(139, 69, 19)), //brown
-				new Color(display, new RGB(0, 100, 0)), // custom
-			new Color(display, new RGB(255,20,147))// deep -pink
+		colors = new Color[] {CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0), // black
+				CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0), // red
+				CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 255, 0), // green
+				CustomColorRegistry.INSTANCE.getColorFromRegistry(  0, 0, 255), // blue
+				CustomColorRegistry.INSTANCE.getColorFromRegistry( 139, 69, 19), //brown
+				CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 100, 0), // custom
+				CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,20,147)// deep -pink
 		};
 		tokenColors = new int[MAXIMUM_TOKEN];
 		tokenColors[WORD] = 0;
@@ -114,11 +115,6 @@ public class JavaLineStyler implements LineStyleListener {
 		tokenColors[FIELDS] = 6;
 	}
 
-	void disposeColors() {
-		for (int i = 0; i < colors.length; i++) {
-			colors[i].dispose();
-		}
-	}
 
 	/**
 	 * Event.detail line start offset (input) Event.text line text (input) LineStyleEvent.styles Enumeration of

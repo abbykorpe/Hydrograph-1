@@ -14,17 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.JoinConfigProperty;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,8 +27,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -49,6 +36,17 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.JoinConfigProperty;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialogs.FieldDialog;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaSyncUtility;
 
 
 public class ELTJoinConfigGrid extends Dialog {
@@ -151,7 +149,7 @@ public class ELTJoinConfigGrid extends Dialog {
 
 			final Text keyText = eltswtWidgets.textBoxWidget(composite_1, SWT.BORDER | SWT.READ_ONLY, new int[] { 144,
 					28 + j, 170, 23 }, "", false);
-			keyText.setBackground(new Color(null, 255, 255, 255));
+			keyText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 
 
 			Combo joinTypeCombo = eltswtWidgets.comboWidget(composite_1, SWT.BORDER,

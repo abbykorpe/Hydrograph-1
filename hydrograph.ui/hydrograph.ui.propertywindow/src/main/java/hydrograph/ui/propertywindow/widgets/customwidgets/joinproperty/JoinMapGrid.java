@@ -14,25 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.joinproperty;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.JoinMappingGrid;
-import hydrograph.ui.datastructure.property.LookupMapProperty;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
-import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
-import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
-import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -85,6 +66,25 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.JoinMappingGrid;
+import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.ELTJoinWidget;
+import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
+import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
+import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 
 
 public class JoinMapGrid extends Dialog {
@@ -212,8 +212,8 @@ public class JoinMapGrid extends Dialog {
 			joinOutputList = new ArrayList<>();
 		}
 		expandBar.getItem(0).setExpanded(true);
-		expandBar.setBackground(new Color(Display.getDefault(), new RGB(250,
-				250, 250)));
+		expandBar.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry(250,
+				250, 250));
 		Listener updateScrolledSize = new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
@@ -254,7 +254,7 @@ public class JoinMapGrid extends Dialog {
 		gd_lblNewLabel_1.heightHint = 20;
 		gd_lblNewLabel_1.widthHint = 260;
 		errorLabel.setLayoutData(gd_lblNewLabel_1);
-		errorLabel.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		errorLabel.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 		errorLabel.setText("PropertyError");
 		errorLabel.setVisible(false);
 		new Label(container, SWT.NONE);
@@ -344,7 +344,7 @@ public class JoinMapGrid extends Dialog {
 		});
 		errorLabel = new Label(composite_1, SWT.None);
 		errorLabel.setBounds(0, 576, 350, 25);
-		errorLabel.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		errorLabel.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 		errorLabel.setVisible(false);
 
 		new Label(container, SWT.NONE);
@@ -447,7 +447,7 @@ public class JoinMapGrid extends Dialog {
 				for (String sourceField : nonMappedFieldList) {
 					if (joinOutputList.get(i).getSource_Field().equalsIgnoreCase(sourceField) &&
 							!ParameterUtil.isParameter(sourceField)) {
-						items[i].setForeground(0, new Color(null, 255, 0, 0));
+						items[i].setForeground(0, CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 					}
 				}
 			}

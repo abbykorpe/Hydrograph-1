@@ -21,8 +21,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.swt.graphics.Color;
 
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.graph.figure.CommentBoxFeedbackFigure;
 import hydrograph.ui.graph.model.CommentBox;
 
@@ -93,7 +93,7 @@ protected IFigure createFigure(GraphicalEditPart part, IFigure parent) {
 			figure = new RectangleFigure();
 			((RectangleFigure)figure).setXOR(true);
 			((RectangleFigure)figure).setFill(true);
-			figure.setBackgroundColor(new Color(null, 31, 31, 31));
+			figure.setBackgroundColor(CustomColorRegistry.INSTANCE.getColorFromRegistry( 31, 31, 31));
 			figure.setForegroundColor(ColorConstants.white);
 		}
 		

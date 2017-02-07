@@ -19,13 +19,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -383,13 +382,13 @@ public class SchemaRowValidation{
 
 
 	private void setBlackColor(TableItem tableItem){
-		tableItem.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+		tableItem.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
 		isRowInvalid=false;
 	}
 
 	
 	private void setRedColor(TableItem tableItem){
-		tableItem.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		tableItem.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 		isRowInvalid=true;
 	}
 	

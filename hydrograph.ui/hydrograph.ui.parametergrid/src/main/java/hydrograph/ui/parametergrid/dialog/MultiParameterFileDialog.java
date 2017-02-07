@@ -104,6 +104,7 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLUtil;
@@ -709,7 +710,7 @@ public class MultiParameterFileDialog extends Dialog {
 			public Color getBackground(Object element) {
 				Parameter p = (Parameter) element;
 				if(StringUtils.isEmpty(p.getParameterName())){
-					return new Color(Display.getCurrent(),0xFF, 0xDD, 0xDD);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0xFF, 0xDD, 0xDD);
 				}
 				return super.getBackground(element);
 			}
@@ -1290,7 +1291,7 @@ public class MultiParameterFileDialog extends Dialog {
 			public Color getForeground(Object element) {
 				ParameterFile parameterFile = (ParameterFile) element;
 				if (parameterFile.getFileType().equals(ParamterFileTypes.JOB_SPECIFIC))
-					return new Color(Display.getDefault(), 0, 0, 255);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 255);
 				return super.getForeground(element);
 			}
 

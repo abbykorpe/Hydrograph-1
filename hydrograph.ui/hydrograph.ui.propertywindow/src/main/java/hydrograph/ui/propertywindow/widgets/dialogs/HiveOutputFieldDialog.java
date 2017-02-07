@@ -14,20 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.dialogs;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.HiveFieldDialogHelper;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -62,15 +48,12 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -80,6 +63,20 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ColumnLayoutData;
 import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialog.hiveInput.HiveFieldDialogHelper;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 /**
@@ -286,7 +283,7 @@ public class HiveOutputFieldDialog extends Dialog {
 		cld_lblPropertyError.heightHint = 24;
 		lblPropertyError.setLayoutData(cld_lblPropertyError);
 		lblPropertyError.setVisible(false);
-		lblPropertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		lblPropertyError.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 	}
 
 	protected Composite addButtonPanel(Composite container) {

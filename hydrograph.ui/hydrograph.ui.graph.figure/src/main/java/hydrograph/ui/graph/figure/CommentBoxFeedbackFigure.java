@@ -16,7 +16,8 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.swt.graphics.Color;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
 /**
  * The Class CommentBoxFeedbackFigure.
  * 
@@ -38,7 +39,7 @@ protected void paintFigure(Graphics graphics) {
 	
 	graphics.setXORMode(true);
 	graphics.setForegroundColor(ColorConstants.white);
-	graphics.setBackgroundColor(new Color(null, 31, 31, 31));
+	graphics.setBackgroundColor(CustomColorRegistry.INSTANCE.getColorFromRegistry( 31, 31, 31));
 	
 	graphics.translate(getLocation());
 	

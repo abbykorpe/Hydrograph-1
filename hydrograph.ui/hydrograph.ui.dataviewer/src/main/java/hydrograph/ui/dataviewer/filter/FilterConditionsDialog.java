@@ -12,14 +12,6 @@
  *******************************************************************************/
 package hydrograph.ui.dataviewer.filter;
 
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.dataviewer.actions.ReloadAction;
-import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
-import hydrograph.ui.dataviewer.constants.Messages;
-import hydrograph.ui.dataviewer.window.DebugDataViewer;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +33,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -50,8 +43,6 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -64,7 +55,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.custom.StyledText;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.dataviewer.actions.ReloadAction;
+import hydrograph.ui.dataviewer.adapters.DataViewerAdapter;
+import hydrograph.ui.dataviewer.constants.Messages;
+import hydrograph.ui.dataviewer.window.DebugDataViewer;
 
 /**
  * The Class FilterConditionsDialog.
@@ -954,7 +952,7 @@ public class FilterConditionsDialog extends Dialog {
 							}	
 						}
 						else{
-							cell.setBackground(new Color(null, 255,255,255));
+							cell.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255,255,255));
 						}
 					}
 				}

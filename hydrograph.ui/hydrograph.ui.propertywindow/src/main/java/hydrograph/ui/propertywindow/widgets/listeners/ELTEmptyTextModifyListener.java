@@ -14,22 +14,21 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners;
 
-import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+
+import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 
 /**
@@ -78,7 +77,7 @@ public class ELTEmptyTextModifyListener implements IELTListener {
 				if (!((Button) widgetList[2]).getSelection()) {
 					//Text box is empty
 					if(StringUtils.isEmpty(((Text) widgetList[0]).getText())){
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 						//Disable the edit button
 						((Button) widgetList[1]).setEnabled(false);
 						fieldNameDecorator.show();

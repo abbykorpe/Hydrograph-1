@@ -116,8 +116,6 @@ public class ComponentEditPart extends AbstractGraphicalEditPart implements Node
 			super.deactivate();
 			((Component) getModel()).removePropertyChangeListener(this);
 			getComponentFigure().disposeFonts();
-			getComponentFigure().disposeImages();
-			getComponentFigure().disposeColors();
 		}
 	}
 

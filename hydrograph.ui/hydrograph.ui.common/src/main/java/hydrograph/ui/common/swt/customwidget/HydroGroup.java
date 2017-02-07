@@ -16,11 +16,13 @@ package hydrograph.ui.common.swt.customwidget;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Font;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
 
 /**
  * The custom SWT group widget
@@ -55,7 +57,7 @@ public class HydroGroup extends Composite {
 		gl_hydroGroupBorder.marginHeight = 1;
 		gl_hydroGroupBorder.horizontalSpacing = 1;
 		hydroGroupBorder.setLayout(gl_hydroGroupBorder);
-		hydroGroupBorder.setBackground(new Color(null, 0, 0, 0));
+		hydroGroupBorder.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
 		hydroGroupBorder.setData("org.eclipse.e4.ui.css.id", "HydroGroupBorder");
 		
 		hydroGroupClientArea = new Composite(hydroGroupBorder, SWT.NONE);

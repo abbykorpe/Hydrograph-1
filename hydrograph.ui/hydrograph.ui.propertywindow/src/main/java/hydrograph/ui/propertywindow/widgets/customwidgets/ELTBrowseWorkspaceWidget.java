@@ -15,6 +15,22 @@
 package hydrograph.ui.propertywindow.widgets.customwidgets;
 
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.messages.Messages;
@@ -32,23 +48,6 @@ import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 import hydrograph.ui.propertywindow.widgets.utility.Extensions;
 import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
 
 
 
@@ -124,7 +123,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 			public void focusLost(FocusEvent e) {
 				if (subJobPath.getText().isEmpty()) {
 					decorator.show();
-					subJobPath.setBackground(new Color(Display.getDefault(), 250, 250, 250));
+					subJobPath.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 250, 250, 250));
 				} else {
 					decorator.hide();
 				}
@@ -133,7 +132,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 			@Override
 			public void focusGained(FocusEvent e) {
 				decorator.hide();
-				subJobPath.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				subJobPath.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			}
 		});
 
@@ -146,7 +145,7 @@ public class ELTBrowseWorkspaceWidget extends AbstractWidget{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				decorator.hide();
-				subJobPath.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				subJobPath.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 
 			}
 

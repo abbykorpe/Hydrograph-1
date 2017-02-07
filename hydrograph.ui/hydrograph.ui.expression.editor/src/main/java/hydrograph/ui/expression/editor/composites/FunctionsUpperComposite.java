@@ -13,24 +13,24 @@
 
 package hydrograph.ui.expression.editor.composites;
 
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.datastructure.ClassDetails;
-import hydrograph.ui.expression.editor.datastructure.MethodDetails;
-import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.datastructure.ClassDetails;
+import hydrograph.ui.expression.editor.datastructure.MethodDetails;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 public class FunctionsUpperComposite extends Composite {
 	private static final String TITLE = "Functions";
@@ -69,7 +69,7 @@ public class FunctionsUpperComposite extends Composite {
 		GridData gd_searchTextBox = new GridData(SWT.RIGHT, SWT.CENTER, true, true, 0, 0);
 		gd_searchTextBox.widthHint = 150;
 		functionSearchTextBox.setLayoutData(gd_searchTextBox);
-		functionSearchTextBox.setForeground(new Color(null, 128, 128, 128));
+		functionSearchTextBox.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 128, 128, 128));
 		functionSearchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
 		functionSearchTextBox.setEnabled(false);
 		addListnersToSearchTextBox();

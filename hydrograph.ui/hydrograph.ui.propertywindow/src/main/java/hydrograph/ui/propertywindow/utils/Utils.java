@@ -36,7 +36,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
@@ -45,6 +44,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
@@ -258,13 +258,13 @@ public class Utils {
 		 */
 	 public void addMouseMoveListener(Text extSchemaPathText , Cursor cursor){
 		 if(ParameterUtil.containsParameter(extSchemaPathText.getText(),'/')){
-				extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 255));	
+				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 255));	
 				extSchemaPathText.setCursor(cursor);
 				extSchemaPathText.addMouseMoveListener(getMouseListner(extSchemaPathText));
 					}
 			else{
 				extSchemaPathText.removeMouseMoveListener(getMouseListner(extSchemaPathText));
-				extSchemaPathText.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+				extSchemaPathText.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
 				extSchemaPathText.setCursor(null);
 			}
 	 }		

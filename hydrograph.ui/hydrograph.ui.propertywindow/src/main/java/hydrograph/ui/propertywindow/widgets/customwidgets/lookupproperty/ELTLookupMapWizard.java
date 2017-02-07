@@ -14,24 +14,6 @@
  
 package hydrograph.ui.propertywindow.widgets.customwidgets.lookupproperty;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.LookupMapProperty;
-import hydrograph.ui.datastructure.property.LookupMappingGrid;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
-import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
-import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -71,13 +53,30 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.datastructure.property.LookupMappingGrid;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.JoinContentProvider;
+import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupCellModifier;
+import hydrograph.ui.propertywindow.widgets.customwidgets.joinlookupproperty.LookupLabelProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTCellModifier;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterLabelProvider;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
 
 
 public class ELTLookupMapWizard extends Dialog {
@@ -255,7 +254,7 @@ public class ELTLookupMapWizard extends Dialog {
 
 		propertyError = new Label(composite_1, SWT.None);
 		propertyError.setBounds(0, 572, 350, 25);
-		propertyError.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		propertyError.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 		propertyError.setVisible(false);
 
 		Composite composite_2 = new Composite(composite_1, SWT.None);
@@ -299,7 +298,7 @@ public class ELTLookupMapWizard extends Dialog {
 				for (String sourceField : sourceFieldList) {
 					if (joinOutputList.get(i).getSource_Field().equalsIgnoreCase(sourceField) &&
 							!ParameterUtil.isParameter(sourceField)) {
-						items[i].setForeground(0, new Color(null, 255, 0, 0));
+						items[i].setForeground(0, CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 					}
 				}
 			}

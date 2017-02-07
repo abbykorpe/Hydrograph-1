@@ -62,11 +62,11 @@ public class TransformMappingFeatureUtility {
 	private void setForegroundColorToBlack(Table inputtable, Table outputTable) {
 		for(TableItem tableItem:inputtable.getItems())
 		{	
-			tableItem.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+			tableItem.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
 		}
 		for(TableItem tableItem:outputTable.getItems())
 		{	
-			tableItem.setForeground(new Color(Display.getDefault(), 0, 0, 0));
+			tableItem.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 0, 0));
 		}
 	}
 	public void highlightInputAndOutputFields
@@ -95,7 +95,7 @@ public class TransformMappingFeatureUtility {
 				
 			if(StringUtils.equalsIgnoreCase(tableItem.getText(),filterProperties.getPropertyname()))
 					{
-				tableItem.setForeground(new Color(Display.getDefault(), 0, 128, 255));
+				tableItem.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 0, 128, 255));
 				break;
 					}		
 			}
@@ -109,7 +109,7 @@ public class TransformMappingFeatureUtility {
 				
 			if(StringUtils.equalsIgnoreCase(tableItem.getText(),filterProperties.getPropertyname())&&templist.contains(filterProperties))
 					{
-				tableItem.setForeground(new Color(Display.getDefault(),0, 128,255));
+				tableItem.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry(0, 128,255));
 				break;
 					}		
 			}

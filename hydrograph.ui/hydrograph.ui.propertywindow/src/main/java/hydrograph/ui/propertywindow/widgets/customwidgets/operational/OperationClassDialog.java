@@ -14,30 +14,6 @@
 
 package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
-import hydrograph.ui.common.component.config.Operations;
-import hydrograph.ui.common.component.config.TypeInfo;
-import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.NameValueProperty;
-import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
-import hydrograph.ui.propertywindow.messagebox.ConfirmCancelMessageBox;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
-import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultCombo;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
-import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
-import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
-import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
-import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -60,8 +36,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -69,12 +43,36 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.component.config.Operations;
+import hydrograph.ui.common.component.config.TypeInfo;
+import hydrograph.ui.common.datastructures.tooltip.TootlTipErrorMessage;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.XMLConfigUtil;
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.propertywindow.messagebox.ConfirmCancelMessageBox;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.filterproperty.ELTFilterContentProvider;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultCheckBox;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultCombo;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultTextBox;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTSWTWidgets;
+import hydrograph.ui.propertywindow.widgets.interfaces.IOperationClassDialog;
+import hydrograph.ui.propertywindow.widgets.utility.FilterOperationClassUtility;
+import hydrograph.ui.propertywindow.widgets.utility.SchemaButtonsSyncUtility;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 public class OperationClassDialog extends Dialog implements IOperationClassDialog {
 
@@ -314,7 +312,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		errorComposite.setLayoutData(griddata);
 		
 		errorLabel=new Label(errorComposite,SWT.NONE);
-		errorLabel.setForeground(new Color(Display.getDefault(), 255, 0, 0));
+		errorLabel.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0));
 		errorLabel.setText(Messages.EmptyFiledNotification);
 		errorLabel.setVisible(false);
 		checkNameValueFieldBlankOrNot();
@@ -401,7 +399,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 		
 		if (mappingSheetRow.getOperationClassPath()!=null && StringUtils.isNotBlank(mappingSheetRow.getOperationClassPath())) 
 		{
-			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+			fileName.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			emptyDecorator.hide();
 			mappingSheetRow.setComboBoxValue(mappingSheetRow.getComboBoxValue());
 			fileName.setText(mappingSheetRow.getOperationClassPath());
@@ -419,7 +417,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 			}
 		} else {
 			FilterOperationClassUtility.INSTANCE.getOpenBtn().setEnabled(false);
-			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 204));
+			fileName.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 			operationClasses.select(0);
 			isParameterCheckBox.setEnabled(false);
 		}
@@ -449,12 +447,12 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 					if (StringUtils.isNotBlank(fileName.getText()) && !fileName.getText().startsWith("@{")
 							&& !fileName.getText().endsWith("}")) {
 						fileName.setText("@{" + fileName.getText() + "}");
-						fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						fileName.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 					}
 				} else {
 					if (StringUtils.isNotBlank(fileName.getText()) && fileName.getText().startsWith("@{")) {
 						fileName.setText(fileName.getText().substring(2, fileName.getText().length() - 1));
-						fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						fileName.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 					}
 					okButton.setEnabled(true);
 					applyButton.setEnabled(true);
@@ -476,13 +474,13 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				if (isParameterCheckBox.getSelection()) {
 					if (StringUtils.isNotBlank(textBoxValue)
 							&& (!textBoxValue.startsWith("@{") || !textBoxValue.endsWith("}"))) {
-						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						((Text) e.widget).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 						parameterDecorator.show();
 						emptyDecorator.hide();
 						okButton.setEnabled(false);
 						applyButton.setEnabled(false);
 					} else {
-						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						((Text) e.widget).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 						emptyDecorator.show();
 						parameterDecorator.hide();
 						okButton.setEnabled(true);
@@ -490,12 +488,12 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 					}
 				} else {
 					if (StringUtils.isNotBlank(textBoxValue)) {
-						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						((Text) e.widget).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 						applyButton.setEnabled(true);
 						isParameterCheckBox.setEnabled(true);
 						emptyDecorator.hide();
 					} else {
-						((Text) e.widget).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						((Text) e.widget).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 						isParameterCheckBox.setEnabled(false);
 						emptyDecorator.show();
 					}
@@ -507,7 +505,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 
 	private void hasTextBoxAlphanumericCharactorsOnly(String textBoxValue) {
 		if (StringUtils.isNotBlank(textBoxValue)) {
-			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+			fileName.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			emptyDecorator.hide();
 			Matcher matchs = Pattern.compile(Constants.REGEX).matcher(textBoxValue);
 			if (!matchs.matches()) {
@@ -520,7 +518,7 @@ public class OperationClassDialog extends Dialog implements IOperationClassDialo
 				applyButton.setEnabled(true);
 			}
 		} else {
-			fileName.setBackground(new Color(Display.getDefault(), 255, 255, 204));
+			fileName.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 			emptyDecorator.show();
 			alphanumericDecorator.hide();
 			okButton.setEnabled(false);

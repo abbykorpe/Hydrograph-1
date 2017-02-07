@@ -18,13 +18,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
@@ -63,13 +62,13 @@ private ControlDecoration txtDecorator;
 						if (path.lastSegment().endsWith(".xml")) {
 							txtDecorator.hide();
 							((Text) widgetList[0]).setToolTipText("");
-							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+							((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 
 						}else{
 							txtDecorator.show();
 							txtDecorator.setDescriptionText("Select valid XML file");
 							((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
-							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+							((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 						}
 					}
 				}

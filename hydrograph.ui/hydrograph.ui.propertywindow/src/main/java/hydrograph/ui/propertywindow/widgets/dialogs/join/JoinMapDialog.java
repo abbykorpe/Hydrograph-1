@@ -63,7 +63,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
@@ -75,9 +74,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.FilterProperties;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
@@ -541,7 +540,7 @@ public class JoinMapDialog extends Dialog {
 				int occurrences = Collections.frequency(getOutputFieldList(),
 						((LookupMapProperty)element).getOutput_Field());
 				if (occurrences > 1) {
-					return new Color(null, 255, 0, 0);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0);
 				} else {
 					return super.getForeground(element);
 				}
@@ -553,7 +552,7 @@ public class JoinMapDialog extends Dialog {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
 
 				if (StringUtils.isBlank(lookupMapProperty.getOutput_Field()))
-					return new Color(Display.getDefault(), 0xFF, 0xDD, 0xDD);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0xFF, 0xDD, 0xDD);
 				else
 					return super.getBackground(element);
 			}
@@ -616,7 +615,7 @@ public class JoinMapDialog extends Dialog {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
 				if (!allInputFields.contains(lookupMapProperty
 						.getSource_Field()) && !ParameterUtil.isParameter(lookupMapProperty.getSource_Field())) {
-					return new Color(null, 255, 0, 0);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0);
 				} else {
 					return super.getForeground(element);
 				}
@@ -628,7 +627,7 @@ public class JoinMapDialog extends Dialog {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
 
 				if (StringUtils.isBlank(lookupMapProperty.getSource_Field()))
-					return new Color(Display.getDefault(), 0xFF, 0xDD, 0xDD);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0xFF, 0xDD, 0xDD);
 				else
 					return super.getBackground(element);
 			}
@@ -935,7 +934,7 @@ public class JoinMapDialog extends Dialog {
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
 		
-		expandBar.setBackground(new Color(null, 240, 240, 240));
+		expandBar.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 240, 240, 240));
 		populateInputFieldExpandBarSection(expandBar);
 
 		expandBar.getItem(0).setExpanded(true);

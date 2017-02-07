@@ -14,13 +14,14 @@
  
 package hydrograph.ui.graph.policy;
 
-import hydrograph.ui.graph.figure.ELTColorConstants;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 import org.eclipse.swt.graphics.Color;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.graph.figure.ELTColorConstants;
 
 /**
  * The Class LinkEndPointEditPolicy.
@@ -32,7 +33,7 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 	@Override
 	protected void addSelectionHandles() {
 		if(linkSelectedColor==null || linkSelectedColor.isDisposed()){
-			linkSelectedColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
+			linkSelectedColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 		}
 		getLinkFigure().setForegroundColor(linkSelectedColor);
 		super.addSelectionHandles();
@@ -46,8 +47,5 @@ public class LinkEndPointEditPolicy extends ConnectionEndpointEditPolicy{
 	protected void removeSelectionHandles() {
 		super.removeSelectionHandles();
 		getLinkFigure().setForegroundColor(ColorConstants.black);
-		if(linkSelectedColor!=null){
-			 linkSelectedColor.dispose();
-		}
 	}
 }

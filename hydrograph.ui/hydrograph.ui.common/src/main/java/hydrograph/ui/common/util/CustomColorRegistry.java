@@ -10,20 +10,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package hydrograph.ui.dataviewer.constants;
 
+package hydrograph.ui.common.util;
+
+import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.swt.graphics.Color;
-
-import hydrograph.ui.common.util.CustomColorRegistry;
+import org.eclipse.swt.graphics.RGB;
 
 /**
- * The Class DataViewerColors.
- * Provides Color constants to be used in watcher windows.
+ * 
+ * Class to store Image path constants
  * 
  * @author Bitwise
- *
+ * 
  */
-public class DataViewerColors {
-	public static final Color COLOR_WHITE=CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255);
-	public static final Color COLOR_CELL_SELECTION=CustomColorRegistry.INSTANCE.getColorFromRegistry( 218, 234, 255);
+public class CustomColorRegistry {
+
+	private static final ColorRegistry COLOR_REGISTRY=new ColorRegistry();
+	public static final CustomColorRegistry INSTANCE=new CustomColorRegistry();
+	/**
+	 * Returns Color from color registry
+	 * 
+	 * @return
+	 */
+	public Color getColorFromRegistry(int red, int green, int blue) {
+		RGB colorValue = new RGB(red, green, blue);
+		Color color = COLOR_REGISTRY.get(colorValue.toString());
+		if (color == null) {
+			COLOR_REGISTRY.put(colorValue.toString(), colorValue);
+		}
+		return COLOR_REGISTRY.get(colorValue.toString());
+	}
+
 }

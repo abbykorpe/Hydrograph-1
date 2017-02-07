@@ -19,14 +19,12 @@ import java.io.File;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
-import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
@@ -67,13 +65,13 @@ public class FilePathModifyListener implements IELTListener{
 							txtDecorator.show();
 							txtDecorator.setDescriptionText("please enter folder location instead of file.");	
 							((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
-							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+							((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 							
 						}else{
 							//txtDecorator.setDescriptionText(Messages.EMPTYFIELDMESSAGE);
 							txtDecorator.hide();
 							((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
-							((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+							((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 							
 						}
 					}
