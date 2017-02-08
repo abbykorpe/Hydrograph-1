@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 
 package hydrograph.engine.spark.components.utils
 
@@ -21,9 +21,9 @@ import org.slf4j.{Logger, LoggerFactory}
 
 
 class TeradataTableDescriptor(tableName: String,
-                              columnNames: Array[String],
-                              columnDefs: Array[String],
-                              primaryKeys: Array[String],
+                              columnNames: List[String],
+                              columnDefs: List[String],
+                              primaryKeys: List[String],
                               databaseType: String) extends Serializable {
   val LOG: Logger = LoggerFactory.getLogger(classOf[TeradataTableDescriptor])
 
@@ -38,9 +38,6 @@ class TeradataTableDescriptor(tableName: String,
       tableName,
       joinField(createTableStatement.reverse, ",")) + addPrimaryKey()
 
-
-
-
     LOG.info("Create query '" + createTableStatment + "' for " + databaseType + " output component")
     createTableStatment
   }
@@ -51,25 +48,21 @@ class TeradataTableDescriptor(tableName: String,
     createTableStatement;
   }
 
-
-
-  def addDefinitions():List[String] = {
-    for(i <- 0 until columnNames.length) {
-      if(hasUniquePrimaryIndex()){
-        /**Checking conditions for suffixing NOT NULL with the primary key fields*/
-        if(primaryKeys.toList.contains(columnNames(i))){
-          createTableStatement = (quoteIdentifier(columnNames(i)) + " " + columnDefs(i) + "  NOT NULL") :: createTableStatement
-
-        }else createTableStatement = (quoteIdentifier(columnNames(i))+" "+ columnDefs(i)) :: createTableStatement
-      } else {
-        /**
-          * to create a table in absence of a primary key
-          * */
-        createTableStatement = (quoteIdentifier(columnNames(i))+" "+ columnDefs(i)) :: createTableStatement
-      }
+  def addDefinitions(): List[String] = {
+    if (hasUniquePrimaryIndex()) {
+      (columnNames zip columnDefs).map(cc => {
+        if (primaryKeys.contains(cc._1)) {
+          createTableStatement = (quoteIdentifier(cc._1) + " " + cc._2 + "  NOT NULL") :: createTableStatement
+        } else {
+          createTableStatement = (quoteIdentifier(cc._1) + " " + cc._2) :: createTableStatement
+        }
+      })
+    } else {
+      (columnNames zip columnDefs).map(cc => createTableStatement = (quoteIdentifier(cc._1) + " " + cc._2) :: createTableStatement)
     }
     createTableStatement
   }
+
   def quoteIdentifier(colName: String): String = {
     s""""$colName""""
   }
@@ -88,12 +81,5 @@ class TeradataTableDescriptor(tableName: String,
 
   private def hasUniquePrimaryIndex(): Boolean = primaryKeys != null && primaryKeys.length != 0
 
-  def joinField(createTableStatement: List[String], s: String): String = {
-    field = ""
-    for (in <- 0 until createTableStatement.length) {
-      if (in != 0) field = field + s
-      if (createTableStatement(in) != null) field = field + createTableStatement(in)
-    }
-    field
-  }
+  def joinField(createTableStatement: List[String], s: String): String = createTableStatement.mkString(s)
 }
