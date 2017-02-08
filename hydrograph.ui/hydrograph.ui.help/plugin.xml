@@ -288,6 +288,25 @@
       <toc
             file="xml/Components/cumulate.xml">
       </toc>
+      <toc
+            file="xml/Components/inpuMysql.xml">
+      </toc>
+      <toc
+            file="xml/Components/inputRedshift.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputMysql.xml">
+      </toc>
+      <toc
+            file="xml/Components/outputRedshift.xml">
+      </toc>
+      <toc
+            file="xml/Components/runProgram.xml">
+      </toc>
+      <toc
+            file="hydrograph.ui.help.toc6"
+            primary="false">
+      </toc>
    </extension>
    <extension
          point="org.eclipse.help.index">
