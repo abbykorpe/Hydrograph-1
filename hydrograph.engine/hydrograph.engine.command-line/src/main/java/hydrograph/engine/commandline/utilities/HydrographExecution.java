@@ -19,11 +19,14 @@ import hydrograph.engine.core.utilities.CommandLineOptionsProcessor;
 import hydrograph.engine.core.xmlparser.HydrographXMLInputService;
 import hydrograph.engine.core.xmlparser.XmlParsingUtils;
 import hydrograph.engine.execution.tracking.ComponentInfo;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBException;
 import java.util.List;
+import java.util.Locale;
 
 public class HydrographExecution {
 
@@ -49,6 +52,7 @@ public class HydrographExecution {
     }
 
     public void run(String[] args) throws Exception {
+        setLogLevelOnRootLogger(CommandLineOptionsProcessor.getLogLevel(args).toUpperCase(Locale.ENGLISH));
         hydrographJob = createHydrographJob(args);
         initialization(args, hydrographJob,
                 XmlParsingUtils.getJobId(args), XmlParsingUtils.getUDFPath(args));
@@ -72,6 +76,10 @@ public class HydrographExecution {
         runtimeService.initialize(
                 propertiesLoader.getRuntimeServiceProperties(), args, bhsGraph,
                 jobId, udfPath);
+    }
+
+    private void setLogLevelOnRootLogger(String loggingLevel) {
+        LogManager.getRootLogger().setLevel(Level.toLevel(loggingLevel));
     }
 
     private void prepareToExecute() {
