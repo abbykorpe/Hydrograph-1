@@ -19,6 +19,9 @@ import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
 import hydrograph.ui.datastructure.property.GridRow;
 import hydrograph.ui.engine.constants.PropertyNameConstants;
 import hydrograph.ui.engine.converter.InputConverter;
+import hydrograph.ui.engine.xpath.ComponentXpath;
+import hydrograph.ui.engine.xpath.ComponentXpathConstants;
+import hydrograph.ui.engine.xpath.ComponentsAttributeAndValue;
 import hydrograph.ui.graph.model.Component;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -74,7 +77,15 @@ public class GenerateRecordsConverter extends InputConverter {
 		String recordCountPropertyValue = (String) properties.get(Constants.PARAM_NO_OF_RECORDS);
 		if (StringUtils.isNotBlank(recordCountPropertyValue) && !recordCountPropertyValue.trim().isEmpty()) {
 			recordCount = new RecordCount();
-			recordCount.setValue(Long.valueOf(recordCountPropertyValue));
+			try{
+			Long longCount=Long.parseLong(recordCountPropertyValue);
+			recordCount.setValue(longCount);
+			}
+			catch(NumberFormatException exception){
+				ComponentXpath.INSTANCE.getXpathMap().put(
+						(ComponentXpathConstants.COMPONENT_XPATH_COUNT.value().replace(ID, componentName)),
+						new ComponentsAttributeAndValue(null, recordCountPropertyValue));
+			}
 		}
 		return recordCount;
 	}
