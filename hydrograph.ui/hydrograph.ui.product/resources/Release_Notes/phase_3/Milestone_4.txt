@@ -47,3 +47,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 31.#682 [shashank karnik]-Renaming job does not change the job specific file name in job parameter list.
 32.#683 [Vibhor Tyagi] - Issues with Run SQL component
 33.#675 [Vibhor Tyagi] - Evaluate Expression window:- Need to remove space after Output word
+34.#697 [shashank karnik]-Generate Records: "No of records” should allow parameterized values. 
