@@ -12,7 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.utils
 
-import org.apache.spark.sql.types.{DataType, StructType}
+import org.apache.spark.sql.types.{DataType, StructField, StructType}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
@@ -28,10 +28,7 @@ case class SchemaUtils() {
    * @param mdSchema MetaData schema from metadata
    * @return Boolean true or false(Exception)
    */
-  def compareSchema(readSchema: StructType, mdSchema: StructType): Boolean = {
-
-    val metaDataSchema = mdSchema.toList
-    val inputReadSchema = readSchema.toList
+  def compareSchema(inputReadSchema: List[StructField], metaDataSchema:  List[StructField]): Boolean = {
 
     var dbDataType: DataType = null
     var dbFieldName: String = null

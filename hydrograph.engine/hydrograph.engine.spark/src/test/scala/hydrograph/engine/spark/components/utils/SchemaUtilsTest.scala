@@ -40,7 +40,7 @@ class SchemaUtilsTest {
 
     val structType2 = new StructType(schema2)
 
-    Assert.assertTrue(SchemaUtils().compareSchema(structType1, structType2))
+    Assert.assertTrue(SchemaUtils().compareSchema(structType1.toList, structType2.toList))
   }
 
   @Test
@@ -62,7 +62,7 @@ class SchemaUtilsTest {
 
     val structType1 = new StructType(schema1)
 
-    Assert.assertTrue(SchemaUtils().compareSchema(structType1, structType2))
+    Assert.assertTrue(SchemaUtils().compareSchema(structType1.toList, structType2.toList))
   }
 
   @Test (expected = classOf[hydrograph.engine.spark.components.utils.SchemaMismatchException])
@@ -84,7 +84,7 @@ class SchemaUtilsTest {
 
     val structType2 = new StructType(schema2)
 
-    SchemaUtils().compareSchema(structType1, structType2)
+    SchemaUtils().compareSchema(structType1.toList, structType2.toList)
   }
 
   @Test (expected = classOf[hydrograph.engine.spark.components.utils.SchemaMismatchException])
@@ -106,6 +106,6 @@ class SchemaUtilsTest {
 
     val structType2 = new StructType(schema2)
 
-    SchemaUtils().compareSchema(structType1, structType2)
+    SchemaUtils().compareSchema(structType1.toList, structType2.toList)
   }
 }
