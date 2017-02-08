@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 
 package hydrograph.engine.spark.components
 
@@ -66,7 +66,7 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, tableorQuery, properties)
-      compareSchema(getMappedSchema(schemaField), df.schema)
+      compareSchema(getMappedSchema(schemaField), df.schema.toList)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
@@ -76,16 +76,14 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
     }
   }
 
-  def getMappedSchema(schema: StructType): StructType = StructType(schema.toList.map(stuctField => new StructField(stuctField.name, getDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
+  def getMappedSchema(schema: StructType): List[StructField] = schema.toList.map(stuctField => new StructField(stuctField.name, getDataType(stuctField.dataType).getOrElse(stuctField.dataType)))
 
   private def getDataType(dataType: DataType): Option[DataType] = {
-    val answer = dataType.typeName.toUpperCase match {
-      case "FLOAT" => DoubleType
-      case "SHORT" => IntegerType
-      case _ => null
+    dataType.typeName.toUpperCase match {
+      case "FLOAT" => Option(DoubleType)
+      case "SHORT" => Option(IntegerType)
+      case _ => None
     }
-    if (answer != null) Option(answer) else None
-
   }
 
   /*
@@ -94,16 +92,13 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
    * @param mdSchema MetaData schema from metadata
    * @return Boolean true or false(Exception)
    */
-  def compareSchema(readSchema: StructType, mdSchema: StructType): Boolean = {
-
-    val metaDataSchema = mdSchema.toList
-    val inputReadSchema = readSchema.toList
+  def compareSchema(readSchema: List[StructField], mdSchema: List[StructField]): Boolean = {
 
     var dbDataType: DataType = null
     var dbFieldName: String = null
 
-    inputReadSchema.foreach(f = inSchema => {
-      var fieldExist = metaDataSchema.exists(ds => {
+    readSchema.foreach(f = inSchema => {
+      var fieldExist = mdSchema.exists(ds => {
         dbDataType = ds.dataType
         dbFieldName = ds.name
         ds.name.equalsIgnoreCase(inSchema.name)

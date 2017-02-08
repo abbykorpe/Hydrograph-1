@@ -69,12 +69,7 @@
                 </primaryKeys>
             </newTable>
             <!--<truncateLoad/>-->
-            <!-- <Insert/>-->
-            <!-- 			<update> -->
-            <!-- 				<updateByKeys> -->
-            <!-- 					<field name="num" />	 -->
-            <!-- 				</updateByKeys> -->
-            <!--  			</update>  -->
+            <!--<Insert/>-->
         </loadType>
         <runtimeProperties>
             <property name="batchsize" value="10"/>

@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 package hydrograph.engine.spark.components
 
 import java.sql.SQLException
@@ -33,14 +33,13 @@ import scala.collection.JavaConverters._
   */
 class OutputOracleComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsParams: BaseComponentParams) extends
   SparkFlow {
+
   val LOG: Logger = LoggerFactory.getLogger(classOf[OutputOracleComponent])
 
   override def execute(): Unit = {
-
-    val  properties = outputRDBMSEntity.getRuntimeProperties ;
+    val properties = outputRDBMSEntity.getRuntimeProperties;
     properties.setProperty("user", outputRDBMSEntity.getUsername)
     properties.setProperty("password", outputRDBMSEntity.getPassword)
-
     val connectionURL = "jdbc:oracle:" + outputRDBMSEntity.getDriverType + "://@" + outputRDBMSEntity.getHostName + ":" + outputRDBMSEntity.getPort() + "/" +
       outputRDBMSEntity.getSid;
 
@@ -83,14 +82,12 @@ class OutputOracleComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsPar
     }
   }
 
-  def createSchema(fields: util.List[SchemaField]): Array[Column] = {
+  def createSchema(fields: util.List[SchemaField]): util.List[Column] = {
     LOG.trace("In method createSchema()")
-    val schema = new Array[Column](fields.size())
-    fields.zipWithIndex.foreach { case (f, i) => schema(i) = col(f.getFieldName.toUpperCase()) }
+    val schema = fields.map(sf => col(sf.getFieldName.toUpperCase()))
     LOG.debug("Schema created for Output Oracle Component : " + schema.mkString)
     schema
   }
 
   def getTruncateQuery(): String = "truncate table " + outputRDBMSEntity.getTableName
 }
-

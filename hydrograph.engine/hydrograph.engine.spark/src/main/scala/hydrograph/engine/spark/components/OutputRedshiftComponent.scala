@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 
 package hydrograph.engine.spark.components
 
@@ -43,7 +43,6 @@ class OutputRedshiftComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsP
     properties.setProperty("password", outputRDBMSEntity.getPassword)
     properties.setProperty("driver", outputRDBMSEntity.getJdbcDriver);
     val driverName = "com.amazon.redshift.jdbc42.Driver"
-
     if (outputRDBMSEntity.getJdbcDriver().equals("JDBC 4.2")) {
       properties.setProperty("driver", driverName)
     }
@@ -54,6 +53,7 @@ class OutputRedshiftComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsP
       + "' in Batch " + outputRDBMSEntity.getBatch
       + " with Connection url " + connectionURL
       + " with data load option " + outputRDBMSEntity.getLoadType)
+
     LOG.debug("Component Id '" + outputRDBMSEntity.getComponentId
       + "' in Batch " + outputRDBMSEntity.getBatch
       + " having schema [ " + outputRDBMSEntity.getFieldsList.asScala.mkString(",")
@@ -89,10 +89,9 @@ class OutputRedshiftComponent(outputRDBMSEntity: OutputRDBMSEntity, oComponentsP
     }
   }
 
-  def createSchema(fields: util.List[SchemaField]): Array[Column] = {
+  def createSchema(fields: util.List[SchemaField]): util.List[Column] = {
     LOG.trace("In method createSchema()")
-    val schema = new Array[Column](fields.size())
-    fields.zipWithIndex.foreach { case (f, i) => schema(i) = col(f.getFieldName) }
+    val schema = fields.map(sf => col(sf.getFieldName))
     LOG.debug("Schema created for Output Redshift Component : " + schema.mkString)
     schema
   }
