@@ -25,8 +25,8 @@ class DbUpdateTableDescriptorTest {
   def itShouldGenerateUpdateQueryWithSingleUpdateKeys(): Unit = {
     //given
     val tableName = "abc"
-    val columnNames: List[String] = Array("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn").toList
-    val updateKeys: List[String] = Array("ssn").toList
+    val columnNames: List[String] = List("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
+    val updateKeys: List[String] = List("ssn")
     val expectedUpdateQuery = "update abc set name=?, address=?, zip=?, mobileNumber=?, Zipcode=?, city=? where ssn=?"
 
     //when
@@ -40,8 +40,8 @@ class DbUpdateTableDescriptorTest {
   def itShouldGenerateUpdateQueryWithMultipleUpdateKeys(): Unit = {
     //given
     val tableName = "employee"
-    val columnNames: List[String] = Array("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn").toList
-    val updateKeys: List[String] = Array("zip", "mobileNumber").toList
+    val columnNames: List[String] = List("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
+    val updateKeys: List[String] = List("zip", "mobileNumber")
     val expectedUpdateQuery = "update employee set name=?, address=?, Zipcode=?, city=?, ssn=? where zip=? and mobileNumber=?"
 
     //when
@@ -54,11 +54,11 @@ class DbUpdateTableDescriptorTest {
     def itShouldGenerateExceptionWhenUpdateKeyDoesNotExistInUserDefinedSchema(): Unit = {
       //given
       val tableName = "employee"
-      val columnNames: List[String] = Array("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn").toList
+      val columnNames: List[String] = List("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
       val expectedUpdateQuery = "update employee set name=?, address=?, Zipcode=?, city=?, ssn=? where zip=? and mobileNumber=?"
 
       //when
-      val updateKeys: List[String] = Array("Salary").toList;
+      val updateKeys: List[String] = List("Salary")
 
       //then
       val actualUpdateQuery = new DbUpdateTableDescriptor(tableName, columnNames, updateKeys).makeUpdateQuery()
