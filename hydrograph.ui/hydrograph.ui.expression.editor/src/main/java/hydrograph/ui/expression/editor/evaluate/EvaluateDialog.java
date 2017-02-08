@@ -51,8 +51,8 @@ import org.eclipse.swt.widgets.Text;
  *
  */
 public class EvaluateDialog extends Dialog {
-	private static final String OUTPUT_COSOLE_ERROR_PREFIX = "Error\t\t: ";
-	private static final String OUTPUT_CONSOLE_PREFIX = "Output\t\t: ";
+	private static final String OUTPUT_COSOLE_ERROR_PREFIX = "Error : ";
+	private static final String OUTPUT_CONSOLE_PREFIX = "Output : ";
 	private StyledText outputConsole;
 	private StyledText expressionEditor;
 	private Composite previousExpressionEditorComposite;
