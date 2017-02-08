@@ -395,6 +395,8 @@ public class Messages extends NLS {
 	public static String PPK_EXT;
 	public static String PEM_EXT;
 	
+	public static String RUN_SQL_MESSAGE;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

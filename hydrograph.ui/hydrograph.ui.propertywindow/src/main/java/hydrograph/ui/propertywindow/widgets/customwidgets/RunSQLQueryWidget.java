@@ -23,6 +23,8 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Label;
 
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.property.ComponentConfigrationProperty;
@@ -30,6 +32,7 @@ import hydrograph.ui.propertywindow.property.ComponentMiscellaneousProperties;
 import hydrograph.ui.propertywindow.property.Property;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.AbstractELTWidget;
+import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultButton;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.basic.ELTDefaultLable;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.AbstractELTContainerWidget;
 import hydrograph.ui.propertywindow.widgets.gridwidgets.container.ELTDefaultSubgroupComposite;
@@ -75,6 +78,18 @@ public class RunSQLQueryWidget extends AbstractWidget{
 		styledText.setLayoutData(gridData);
 		
 		txtDecorator = WidgetUtility.addDecorator(styledText, Messages.bind(Messages.EMPTY_FIELD, Messages.EXECUTION_COMMAND));
+		
+		AbstractELTWidget eltDefaultButton = new ELTDefaultButton("");
+			defaultSubgroupComposite.attachWidget(eltDefaultButton);
+			((Button) eltDefaultButton.getSWTWidgetControl()).setVisible(false);
+			
+			AbstractELTWidget label = new ELTDefaultLable("");
+			defaultSubgroupComposite.attachWidget(label);
+			((Label) label.getSWTWidgetControl()).setVisible(false);
+			
+			AbstractELTWidget textLabel = new ELTDefaultLable(Messages.RUN_SQL_MESSAGE);
+			defaultSubgroupComposite.attachWidget(textLabel);
+			((Label) textLabel.getSWTWidgetControl()).setLayoutData(new GridData(0, 0, true, false));
 		
 		ListenerHelper helper = new ListenerHelper();
 		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
