@@ -20,8 +20,7 @@
     <inputs id="oracle" batch="0" xsi:type="it:oracle">
         <outSocket id="out0">
             <schema name="schema1">
-                <field name="VSD" type="java.lang.Float"/>
-                <!--  <field name="aa" type="java.lang.Short"/>
+                <field name="aa" type="java.lang.Short"/>
                   <field name="bb" type="java.lang.Boolean"/>
                   <field name="cc" type="java.lang.Long"/>
                   <field name="dd" type="java.lang.Float"/>
@@ -31,7 +30,7 @@
                   <field name="hh" type="java.util.Date" format="yyyy-MM-dd"/>
                   <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss"/>
                   <field name="jj" type="java.math.BigDecimal" scale="2"
-                         precision="10" scaleType="explicit"/>-->
+                         precision="10" scaleType="explicit"/>
             </schema>
         </outSocket>
         <sid value="PRACTICE"/>
@@ -39,7 +38,7 @@
         <port value="1521"/>
         <driverType value="thin"/>
         <userName value="HTCD"/>
-        <password value="htcd"/>
+        <password value="Bitwise2017"/>
 
         <!--<jdbcurl value="jdbc:oracle:thin://@DBDEVSRV:1521:PRACTICE" />
         <condition value="num > 11" />
@@ -56,15 +55,14 @@
         <!-- <query value="SELECT * FROM testingTable4 t JOIN testingTable2 t2
             ON t.NUM = t2.NUM" /> -->
         <!--  <selectQuery value="SELECT * FROM Hydrograph_UI_test46"/>-->
-        <tableName value="testingbinaryfloat"/>
+        <tableName value="testingTableAllTablesbatchSize"/>
     </inputs>
 
     <outputs id="OFDelimited_01" batch="0" xsi:type="ot:textFileDelimited">
         <inSocket fromComponentId="oracle" fromSocketId="out0" id="in0"
                   type="in">
             <schema name="schema2">
-                <field name="VSD" type="java.lang.Float"/>
-                <!--<field name="aa" type="java.lang.Short"/>
+                <field name="aa" type="java.lang.Short"/>
                 <field name="bb" type="java.lang.Boolean"/>
                 <field name="cc" type="java.lang.Long"/>
                 <field name="dd" type="java.lang.Float"/>
@@ -74,7 +72,7 @@
                 <field name="hh" type="java.util.Date" format="yyyy-MM-dd"/>
                 <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss"/>
                 <field name="jj" type="java.math.BigDecimal" scale="2"
-                       precision="10" scaleType="explicit"/>-->
+                       precision="10" scaleType="explicit"/>
             </schema>
         </inSocket>
         <path uri="hydrograph.engine.spark/testData/output/oracleOutput1"/>

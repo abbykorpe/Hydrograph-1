@@ -27,8 +27,8 @@
                 <field name="ee" type="java.lang.Integer"/>
                 <field name="gg" type="java.lang.String"/>
                 <field name="ff" type="java.lang.Double"/>
-                <field name="hh" type="java.util.Date" format="yyyy-MM-dd"/>
-                <field name="ii" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss"/>
+                <field name="hh" type="java.util.Date" format="yyyy/MM/dd"/>
+                <field name="ii" type="java.util.Date" format="yyyy/MM/dd HH:mm:ss"/>
                 <field name="jj" type="java.math.BigDecimal" scale="2"
                        precision="10" scaleType="explicit"/>
             </schema>
@@ -60,7 +60,7 @@
         <driverType value="thin"/>
         <tableName value="testingTableAllTablesbatchSize"/>
         <userName value="htcd"/>
-        <password value="htcd"/>
+        <password value="Bitwise2017"/>
         <loadType>
             <newTable>
                 <primaryKeys>
@@ -69,7 +69,6 @@
             </newTable>
             <!--<truncateLoad />-->
             <!--<Insert/>-->
-            <!-- <update> <updateByKeys> <field name="num" /> </updateByKeys> </update> -->
         </loadType>
         <!--<schemaName value="htcd"/>-->
         <!--<chunkSize value="2"/>-->

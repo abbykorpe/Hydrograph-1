@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+/** *****************************************************************************
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * ******************************************************************************/
 package hydrograph.engine.spark.components
 
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
@@ -28,9 +28,7 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
 
   override def createComponent(): Map[String, DataFrame] = {
     val schemaField = SchemaCreator(inputRDBMSEntity).makeSchema()
-
     val sparkSession = iComponentsParams.getSparkSession()
-
     val properties = inputRDBMSEntity.getRuntimeProperties;
     properties.setProperty("user", inputRDBMSEntity.getUsername)
     properties.setProperty("password", inputRDBMSEntity.getPassword)
@@ -59,7 +57,6 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, tableorQuery, properties)
-
       compareSchema(getSchema(schemaField), getMappedSchema(df.schema))
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
@@ -70,10 +67,10 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
     }
   }
 
-  def getSchema(schema: StructType): StructType = StructType(schema.toList.map(stuctField => new StructField(stuctField.name, getInputDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
+  def getSchema(schema: StructType): List[StructField] = schema.toList.map(stuctField => new StructField(stuctField.name, getInputDataType(stuctField.dataType).getOrElse(stuctField.dataType)))
 
   private def getInputDataType(dataType: DataType): Option[DataType] = {
-     dataType.typeName.toUpperCase match {
+    dataType.typeName.toUpperCase match {
       case "SHORT" => Option(IntegerType)
       case "BOOLEAN" => Option(StringType)
       case "DATE" => Option(TimestampType)
@@ -81,8 +78,7 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
     }
   }
 
-
-  def getMappedSchema(schema: StructType): StructType = StructType(schema.toList.map(stuctField => new StructField(stuctField.name, getDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
+  def getMappedSchema(schema: StructType): List[StructField] = schema.toList.map(stuctField => new StructField(stuctField.name, getDataType(stuctField.dataType).getOrElse(stuctField.dataType)))
 
   private def getDataType(dataType: DataType): Option[DataType] =
     Option(getDataTypes(dataType.typeName.toUpperCase))
@@ -97,16 +93,12 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
  * @param mdSchema MetaData schema from metadata
  * @return Boolean true or false(Exception)
  */
-  def compareSchema(readSchema: StructType, mdSchema: StructType): Boolean = {
-
-    val metaDataSchema = mdSchema.toList
-    val inputReadSchema = readSchema.toList
+  def compareSchema(readSchema: List[StructField], mdSchema: List[StructField]): Boolean = {
 
     var dbDataType: DataType = null
     var dbFieldName: String = null
-
-    inputReadSchema.foreach(f = inSchema => {
-      var fieldExist = metaDataSchema.exists(ds => {
+    readSchema.foreach(f = inSchema => {
+      var fieldExist = mdSchema.exists(ds => {
         dbDataType = ds.dataType
         dbFieldName = ds.name
         ds.name.equalsIgnoreCase(inSchema.name)

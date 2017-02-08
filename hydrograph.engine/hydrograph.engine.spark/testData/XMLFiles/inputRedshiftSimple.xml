@@ -47,7 +47,7 @@
         <!--<schemaName value="public"/>
         <tableName value="testingAllTypes"/>-->
 
-        <selectQuery value="select * from testingalltypesbatchsize4"/>
+        <selectQuery value="select * from testingalltypesbatchsize7"/>
     </inputs>
 
     <outputs id="OFDelimited_01" batch="0" xsi:type="ot:textFileDelimited">
