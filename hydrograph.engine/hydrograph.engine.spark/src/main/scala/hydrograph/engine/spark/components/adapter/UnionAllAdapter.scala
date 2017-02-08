@@ -14,7 +14,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.UnionAllEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.SparkUnionAllComponent
+import hydrograph.engine.spark.components.UnionAllComponent
 import hydrograph.engine.spark.components.adapter.base.StraightPullAdatperBase
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -25,12 +25,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 class UnionAllAdapter(typeBaseComponent: TypeBaseComponent) extends StraightPullAdatperBase{
 
   private var unionAllGenerator:UnionAllEntityGenerator=null
-  private var unionAllComponent:SparkUnionAllComponent=null
+  private var unionAllComponent:UnionAllComponent=null
 
   override def getComponent(): StraightPullComponentBase = unionAllComponent
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    unionAllComponent=new SparkUnionAllComponent(unionAllGenerator.getEntity,baseComponentParams)
+    unionAllComponent=new UnionAllComponent(unionAllGenerator.getEntity,baseComponentParams)
   }
 
   override def createGenerator(): Unit = {

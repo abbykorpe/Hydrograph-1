@@ -14,7 +14,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.DiscardEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.SparkDiscardComponent
+import hydrograph.engine.spark.components.DiscardComponent
 import hydrograph.engine.spark.components.adapter.base.OutputAdatperBase
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -25,14 +25,14 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 class DiscardAdapter(typeBaseComponent: TypeBaseComponent) extends OutputAdatperBase{
 
   var discardEntityGenerator:DiscardEntityGenerator=null;
-  var sparkDiscardComponent:SparkDiscardComponent=null;
+  var sparkDiscardComponent:DiscardComponent=null;
 
   override def createGenerator(): Unit = {
     discardEntityGenerator=  new DiscardEntityGenerator(typeBaseComponent)
   }
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    sparkDiscardComponent= new SparkDiscardComponent(discardEntityGenerator.getEntity,baseComponentParams)
+    sparkDiscardComponent= new DiscardComponent(discardEntityGenerator.getEntity,baseComponentParams)
   }
 
   override def getComponent(): SparkFlow = sparkDiscardComponent

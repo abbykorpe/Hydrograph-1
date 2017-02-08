@@ -38,7 +38,7 @@ class LimitComponentTest{
 
     val limitEntity: LimitEntity = new LimitEntity
     limitEntity.setComponentId("limit")
-    limitEntity.setMaxRecord(3)
+    limitEntity.setMaxRecord(3L)
 
     val outSocket1:OutSocket  = new OutSocket("out0")
     val outSocketList: List[OutSocket] = List(outSocket1)
@@ -48,7 +48,7 @@ class LimitComponentTest{
     val baseComponentParams = new BaseComponentParams
     baseComponentParams.addinputDataFrame(df)
 
-    val limitDF = new SparkLimitComponent(limitEntity, baseComponentParams).createComponent()
+    val limitDF = new LimitComponent(limitEntity, baseComponentParams).createComponent()
 
     val rows = Bucket(Fields(List("col1", "col2", "col3", "col4")), limitDF.get("out0").get).result()
 

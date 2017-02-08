@@ -14,7 +14,7 @@ package hydrograph.engine.spark.components.adapter
 
 import hydrograph.engine.core.component.generator.SortEntityGenerator
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent
-import hydrograph.engine.spark.components.SparkSortComponent
+import hydrograph.engine.spark.components.SortComponent
 import hydrograph.engine.spark.components.adapter.base.StraightPullAdatperBase
 import hydrograph.engine.spark.components.base.StraightPullComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
@@ -22,12 +22,12 @@ import hydrograph.engine.spark.components.platform.BaseComponentParams
 class SortAdapter(typeBaseComponent: TypeBaseComponent) extends StraightPullAdatperBase {
 
   private var sortGenerator: SortEntityGenerator = null
-  private var sortComponent: SparkSortComponent = null
+  private var sortComponent: SortComponent = null
 
   override def getComponent(): StraightPullComponentBase = sortComponent
 
   override def createComponent(baseComponentParams: BaseComponentParams): Unit = {
-    sortComponent = new SparkSortComponent(sortGenerator.getEntity, baseComponentParams)
+    sortComponent = new SortComponent(sortGenerator.getEntity, baseComponentParams)
   }
 
   override def createGenerator(): Unit = {
