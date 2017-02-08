@@ -46,8 +46,9 @@ public class OperationUtils {
 		outFields.addAll(inputSchema);
 		if (null != entity.getOperationsList() && entity.getOperationsList().size() > 0) {
 			for (Operation operation : entity.getOperationsList()) {
-				for (String field : operation.getOperationOutputFields())
-					if (!inputSchema.contains(field))
+                if(operation.getOperationOutputFields()!=null)
+                    for (String field : operation.getOperationOutputFields())
+					    if (!inputSchema.contains(field))
 						outFields.add(field);
 			}
 		}

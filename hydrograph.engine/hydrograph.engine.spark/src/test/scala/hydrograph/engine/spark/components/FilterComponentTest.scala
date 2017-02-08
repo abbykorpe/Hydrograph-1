@@ -137,7 +137,7 @@ class FilterComponentTest {
   }
 
   @Test
-  def TestFilterAssemblyWithOnlyUnusedPort(): Unit = {
+  def TestFilterWithOnlyUnusedPort(): Unit = {
     val df1 = new DataBuilder(Fields(List("col1", "col2", "col3")).applyTypes(List(classOf[String], classOf[String], classOf[String])))
       .addData(List("C1R1", "C2R1", "C3R1"))
       .addData(List("C1R1", "C2R2", "C3R2"))
@@ -173,7 +173,7 @@ class FilterComponentTest {
   }
 
   @Test
-  def TestFilterAssemblyWithOutAndUnusedPort(): Unit = {
+  def TestFilterWithOutAndUnusedPort(): Unit = {
     val df1 = new DataBuilder(Fields(List("col1", "col2", "col3")).applyTypes(List(classOf[String], classOf[String], classOf[String])))
       .addData(List("C1R1", "C2R1", "C3R1"))
       .addData(List("C1R2", "C2R2", "C3R2"))
@@ -216,5 +216,42 @@ class FilterComponentTest {
     assertThat(usedRows(0), is(Row("C1R2", "C2R2", "C3R2")))
 
 
+  }
+  @Test
+  def TestFilterWithOutOperationInputFields(): Unit = {
+    val df1 = new DataBuilder(Fields(List("col1", "col2", "col3")).applyTypes(List(classOf[String], classOf[String], classOf[String])))
+      .addData(List("C1R1", "C2R1", "C3R1"))
+      .addData(List("C1R2", "C2R2", "C3R2"))
+      .build()
+
+    val operationProperties: Properties = new Properties
+
+    operationProperties.put("Filter", "filter")
+
+    val operationClass: String = "hydrograph.engine.transformation.userfunctions.filter.FilterWithEmptyOperationFields"
+    val filterEntity: FilterEntity = new FilterEntity
+    filterEntity.setComponentId("filterTest")
+    val operation: Operation = new Operation
+    operation.setOperationClass(operationClass)
+    operation.setOperationProperties(operationProperties)
+    filterEntity.setOperation(operation)
+
+    val outSocketList: util.List[OutSocket] = new util.ArrayList[OutSocket]
+    outSocketList.add(new OutSocket("unused1", "unused"))
+    outSocketList.add(new OutSocket("used1", "out"))
+    filterEntity.setOutSocketList(outSocketList)
+
+    val cp = new BaseComponentParams
+    cp.addinputDataFrame(df1)
+    cp.addSchemaFields(Array(new SchemaField("col1", "java.lang.String"), new SchemaField("col2", "java.lang.String"), new SchemaField("col3", "java.lang.String"), new SchemaField("col3", "java.lang.String")))
+
+    val FilterDF = new FilterComponent(filterEntity, cp).createComponent()
+    val unusedRows = Bucket(Fields(List("col1", "col2", "col3")), FilterDF.get("unused1").get).result()
+
+    val usedRows = Bucket(Fields(List("col1", "col2", "col3")), FilterDF.get("used1").get).result()
+
+
+    assertThat(unusedRows.size, is(2))
+    assertThat(usedRows.size, is(0))
   }
 }
