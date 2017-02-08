@@ -1,36 +1,22 @@
-/*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package hydrograph.engine.spark.components
 
 import java.util
+import java.util.Properties
 
-import hydrograph.engine.core.component.entity.elements.{OutSocket, SchemaField}
-import hydrograph.engine.core.component.entity.{GenerateRecordEntity, UniqueSequenceEntity}
+import hydrograph.engine.core.component.entity.UniqueSequenceEntity
+import hydrograph.engine.core.component.entity.elements._
 import hydrograph.engine.spark.components.platform.BaseComponentParams
 import hydrograph.engine.testing.wrapper.{Bucket, DataBuilder, Fields}
 import org.apache.spark.sql.SparkSession
 import org.junit.{Assert, Test}
 
-/**
-  * Created by sandeepv on 1/6/2017.
-  */
 class UniqueSequenceComponentTest {
 
   @Test
   def itShouldCheckComponentExecution(): Unit = {
 
     val uniqueSequenceEntity: UniqueSequenceEntity = new UniqueSequenceEntity
-    uniqueSequenceEntity.setComponentId("1")
+    uniqueSequenceEntity.setComponentId("unique")
     uniqueSequenceEntity.setComponentName("Unique Sequence")
 
     val df1 = new DataBuilder(Fields(List("col1", "col2", "col3", "col4")).applyTypes(List(classOf[String],
@@ -50,21 +36,55 @@ class UniqueSequenceComponentTest {
     val baseComponentParams = new BaseComponentParams
     baseComponentParams .setSparkSession(sparkSession)
 
+
+
+    val operationList: util.ArrayList[Operation] = new util.ArrayList[Operation]()
+
+    val operation: Operation = new Operation
+    operation.setOperationId("operation1")
+    operation.setOperationOutputFields(Array("seq"))
+    operation.setOperationProperties(new Properties())
+    operationList.add(operation)
+
+    uniqueSequenceEntity.setOperationsList(operationList)
+
+
+
     val outSocketList: util.ArrayList[OutSocket] = new util.ArrayList[OutSocket]();
-    outSocketList.add(new OutSocket("out0", "out"));
+
+
+    // create outSocket
+    val outSocket1: OutSocket = new OutSocket("out0")
+    // set pass through fields
+    val passThroughFieldsList1: util.ArrayList[PassThroughField] = new util.ArrayList[PassThroughField]()
+    passThroughFieldsList1.add(new PassThroughField("col1", "in"))
+    passThroughFieldsList1.add(new PassThroughField("col2", "in"))
+    passThroughFieldsList1.add(new PassThroughField("col3", "in"))
+    passThroughFieldsList1.add(new PassThroughField("col4", "in"))
+    outSocket1.setPassThroughFieldsList(passThroughFieldsList1)
+
+    // set Operation Field
+    val operationFieldsList: util.ArrayList[OperationField] = new util.ArrayList[OperationField]()
+    val operationField: OperationField = new OperationField("seq", "operation1")
+    operationFieldsList.add(operationField)
+    outSocket1.setOperationFieldList(operationFieldsList)
+    outSocketList.add(outSocket1)
+
     uniqueSequenceEntity.setOutSocketList(outSocketList);
 
     val schema = Array(
       new SchemaField("col1", "java.lang.String"),
       new SchemaField("col2", "java.lang.String"),
       new SchemaField("col3", "java.lang.String"),
-      new SchemaField("col4", "java.lang.String"))
+      new SchemaField("col4", "java.lang.String"),
+      new SchemaField("seq", "java.lang.Long")
+      )
 
     baseComponentParams.addinputDataFrame(df1)
     baseComponentParams.addSchemaFields(schema)
 
     val uniqueSequenceDF = new UniqueSequenceComponent(uniqueSequenceEntity, baseComponentParams ).createComponent()
-    val rows = Bucket(Fields(List("col1", "col2", "col3", "col4")), uniqueSequenceDF.get("out0").get).result()
+    val rows = Bucket(Fields(List("col1", "col2", "col3", "col4", "seq")), uniqueSequenceDF.get("out0").get).result()
     val checkUniqueValues = rows.distinct
     Assert.assertEquals(checkUniqueValues.size, rows.size)
   }
