@@ -1,21 +1,21 @@
 /*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *******************************************************************************/
 package hydrograph.engine.spark.executiontracking.plugin
 
 import hydrograph.engine.core.flowmanipulation.{FlowManipulationContext, ManipulatorListener}
 import hydrograph.engine.core.utilities.SocketUtilities
 import hydrograph.engine.execution.tracking.ComponentInfo
-import hydrograph.engine.jaxb.commontypes.{TypeBaseComponent, TypeCommandComponent, TypeOutputComponent}
+import hydrograph.engine.jaxb.commontypes._
 import hydrograph.engine.jaxb.operationstypes.Executiontracking
 import hydrograph.engine.spark.components.base.{CommandComponentSparkFlow, SparkFlow}
 import hydrograph.engine.spark.execution.tracking.{ComponentMapping, JobInfo}
@@ -59,11 +59,16 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     val jaxbObjectList =new ListBuffer[TypeBaseComponent];
     jaxbObjectList.++=(manipulationContext.getJaxbMainGraph.asScala.toIterator)
 
-     manipulationContext.getJaxbMainGraph.asScala.foreach(typeBaseComponent=> {
+    manipulationContext.getJaxbMainGraph.asScala.foreach(typeBaseComponent=> {
 
-       if(typeBaseComponent.isInstanceOf[TypeCommandComponent]){
-         ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,"NoSocketId","NoExecutionTrackingComponent",false))
-       }
+      if(typeBaseComponent.isInstanceOf[TypeCommandComponent]){
+        ComponentMapping.addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,"NoSocketId","NoExecutionTrackingComponent",false))
+        val list : ListBuffer[String] = new ListBuffer[String]
+        val map : mutable.HashMap[String,ListBuffer[String]] = new mutable.HashMap[String,ListBuffer[String]]
+        list+=typeBaseComponent.getId
+        map.put(typeBaseComponent.getId,list)
+        ComponentMapping.addComps(map)
+      }
 
       val outSocketList = TrackComponentUtils.getOutSocketListofComponent(typeBaseComponent).asScala.toList
       outSocketList.foreach(outSocket => {
@@ -93,11 +98,24 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
 
     jaxbObjectList.foreach(typeBaseComponent=>{
       if(typeBaseComponent.isInstanceOf[TypeOutputComponent]){
-       val inSocketList= TrackComponentUtils
-         .extractInSocketList(typeBaseComponent.asInstanceOf[TypeOutputComponent].getInSocket)
+        val inSocketList= TrackComponentUtils
+          .extractInSocketList(typeBaseComponent.asInstanceOf[TypeOutputComponent].getInSocket)
         inSocketList.asScala.foreach(inSocket=>{
           ComponentMapping.
             addComponent(Component(typeBaseComponent.getId,typeBaseComponent.getName,typeBaseComponent.getBatch,"NoSocketId",inSocket.getFromComponentId,false))
+
+
+          var listOfPrevComps : mutable.ListBuffer[String] = new mutable.ListBuffer[String]
+          val outCompID = typeBaseComponent.getId
+          val prevComp = TrackComponentUtils.getCurrentComponent(jaxbObjectList.asJava,inSocket.getFromComponentId,inSocket.getFromSocketId)
+          listOfPrevComps+=inSocket.getFromComponentId
+          val mapOfOutCompAndPrevComps = getFlowMapFromOuputComp(prevComp,jaxbObjectList,outCompID,listOfPrevComps)
+          ComponentMapping.addComps(mapOfOutCompAndPrevComps)
+          /*while(!prevComp.isInstanceOf[TypeInputComponent]){
+              val tempInSocketList = TrackComponentUtils.extractInSocketListOfComponents(prevComp)
+            tempInSocketList.asScala.foreach(inSock1=>{
+              inSock1})
+          }*/
         })
       }
 
@@ -106,20 +124,42 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     jaxbObjectList.asJava
   }
 
-//  override def addListener(runtimeContext: RuntimeContext): Unit = {
-//    runtimeContext.sparkSession.sparkContext.addSparkListener(this)
-//
-//    ComponentMapping.generateComponentAndPreviousrMap(runtimeContext)
-//  }
+  def getFlowMapFromOuputComp(typeBaseComponent: TypeBaseComponent,jaxbObjectList : ListBuffer[TypeBaseComponent],outCompID : String,listOfPrevComps : mutable.ListBuffer[String]):mutable.HashMap[String,ListBuffer[String]]= {
+
+    var outCompAndPrevCompsMap : mutable.HashMap[String,ListBuffer[String]] = new mutable.HashMap[String,ListBuffer[String]]()
+    //      var listOfPrevComps : mutable.ListBuffer[String] = new mutable.ListBuffer[String]
+    //    while(!typeBaseComponent.isInstanceOf[TypeInputComponent]){}
+    val tempInSocketList = TrackComponentUtils.extractInSocketListOfComponents(typeBaseComponent)
+    tempInSocketList.asScala.foreach(inSock1=>{
+      val prevComp = TrackComponentUtils.getCurrentComponent(jaxbObjectList.asJava,inSock1.getFromComponentId,                      inSock1.getFromSocketId)
+      if(!prevComp.isInstanceOf[TypeInputComponent]){
+        listOfPrevComps+=prevComp.getId
+        getFlowMapFromOuputComp(prevComp,jaxbObjectList,outCompID,listOfPrevComps)
+      }
+      else{
+        listOfPrevComps+=prevComp.getId
+      }
+      outCompAndPrevCompsMap.put(outCompID,listOfPrevComps)
+
+    })
+    return outCompAndPrevCompsMap
+
+  }
+
+  //  override def addListener(runtimeContext: RuntimeContext): Unit = {
+  //    runtimeContext.sparkSession.sparkContext.addSparkListener(this)
+  //
+  //    ComponentMapping.generateComponentAndPreviousrMap(runtimeContext)
+  //  }
 
 
-//  override def addListener(sparkSession: SparkSession): Unit = super.addListener(sparkSession)
-override def addListener(runtimeContext: RuntimeContext): Unit = {
-   jobInfo = new JobInfo(ComponentMapping.getComponentInfoMap())
-  jobInfo.createComponentInfos()
-  runtimeContext.sparkSession.sparkContext.addSparkListener(this)
+  //  override def addListener(sparkSession: SparkSession): Unit = super.addListener(sparkSession)
+  override def addListener(runtimeContext: RuntimeContext): Unit = {
+    jobInfo = new JobInfo(ComponentMapping.getComponentInfoMap())
+    jobInfo.createComponentInfos()
+    runtimeContext.sparkSession.sparkContext.addSparkListener(this)
 
-}
+  }
 
   override def onApplicationStart(applicationStart: SparkListenerApplicationStart) {
     //    println("+++++++++++++++++++++Application Start+++++++++++++++++++++")
@@ -131,7 +171,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   }
 
   override def onApplicationEnd(applicationEnd: SparkListenerApplicationEnd) {
-//        println("+++++++++++++++++++++Application End+++++++++++++++++++++")
+    //        println("+++++++++++++++++++++Application End+++++++++++++++++++++")
 
 
     /*jobInfo.componentInfoList.asScala.foreach(c=>{
@@ -140,18 +180,18 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
       }
 
     })*/
-//        println("Spark ApplicationEnd: " + applicationEnd.time+" msec");
+    //        println("Spark ApplicationEnd: " + applicationEnd.time+" msec");
   }
 
 
   override def onJobStart(jobStart: SparkListenerJobStart) {
-//        println("+++++++++++++++++++++Job Start+++++++++++++++++++++")
+    //        println("+++++++++++++++++++++Job Start+++++++++++++++++++++")
     //    println(s"Job id : ${jobStart.jobId} ")
     //    println(s"Job stage ids : ${jobStart.stageIds.foreach(f => print(f + " , "))} ")
     //    print("Job stage Info : ")
-        /*jobStart.stageInfos.foreach(f => {
-          print(" Stage id "+ f.stageId )
-        })*/
+    /*jobStart.stageInfos.foreach(f => {
+      print(" Stage id "+ f.stageId )
+    })*/
 
     //    println(s"Job properties : ${jobStart.properties} ")
     //    println("+++++++++++++++++++++Job Start End+++++++++++++++++++++")
@@ -168,11 +208,11 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   }
 
   override def onStageSubmitted(stageSubmitted: SparkListenerStageSubmitted) {
-//        println("+++++++++++++++++++++Stage Submit Start+++++++++++++++++++++")
+    //        println("+++++++++++++++++++++Stage Submit Start+++++++++++++++++++++")
     //
     //    println("Stage Id : "+stageSubmitted.stageInfo.stageId)
-//    println("Stage details: "+stageSubmitted.stageInfo.details)
-//        println("Stage name: "+stageSubmitted.stageInfo.name)
+    //    println("Stage details: "+stageSubmitted.stageInfo.details)
+    //        println("Stage name: "+stageSubmitted.stageInfo.name)
 
     jobInfo.updateStatusOfComponentsOnStageSubmitted(stageSubmitted)
     //    println("Stage no of Tasks : "+stageSubmitted.stageInfo.numTasks)
@@ -182,40 +222,40 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     //    println("Records Read "+stageSubmitted.stageInfo.taskMetrics.inputMetrics.recordsRead)
     //    println("Records Written "+stageSubmitted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
     //    println("Stage Submit Properties "+stageSubmitted.properties)
-//        println("+++++++++++++++++++++Stage Submit End+++++++++++++++++++++")
+    //        println("+++++++++++++++++++++Stage Submit End+++++++++++++++++++++")
   }
 
 
   override def onStageCompleted(stageCompleted: SparkListenerStageCompleted) {
-//        LOG.info("+++++++++++++++++++++Stage Complete Start+++++++++++++++++++++")
-//        println("attemptId :"+stageCompleted.stageInfo.attemptId)
+    //        LOG.info("+++++++++++++++++++++Stage Complete Start+++++++++++++++++++++")
+    //        println("attemptId :"+stageCompleted.stageInfo.attemptId)
 
     jobInfo.updateStatusOfComponents(stageCompleted)
 
-//        println("stageId :"+stageCompleted.stageInfo.stageId)
+    //        println("stageId :"+stageCompleted.stageInfo.stageId)
 
-//    println("failureReason :"+stageCompleted.stageInfo.failureReason)
-//        stageCompleted.stageInfo.accumulables.foreach(f =>{
+    //    println("failureReason :"+stageCompleted.stageInfo.failureReason)
+    //        stageCompleted.stageInfo.accumulables.foreach(f =>{
 
-//          if(f._2.name.get.startsWith("filter")){
-//            LOG.info("Acc long Value= "+f._1)
-//          LOG.info("Acc iD : " + f._2.id + " Acc name : " + f._2.name.get + " Acc value : " + f._2.value.get + " Acc update : "
-//            + f
-//            ._2.update)
-//        })
-//    LOG.info("+++++++++++++++++++++Stage Complete end+++++++++++++++++++++")
-        /*println(s"Stage ${stageCompleted.stageInfo.stageId} completed with ${stageCompleted.stageInfo.numTasks} tasks.")*/
+    //          if(f._2.name.get.startsWith("filter")){
+    //            LOG.info("Acc long Value= "+f._1)
+    //          LOG.info("Acc iD : " + f._2.id + " Acc name : " + f._2.name.get + " Acc value : " + f._2.value.get + " Acc update : "
+    //            + f
+    //            ._2.update)
+    //        })
+    //    LOG.info("+++++++++++++++++++++Stage Complete end+++++++++++++++++++++")
+    /*println(s"Stage ${stageCompleted.stageInfo.stageId} completed with ${stageCompleted.stageInfo.numTasks} tasks.")*/
     //    println("+++++++++++++++++++++Stage Complete Start+++++++++++++++++++++")
     //    println("attemptId :"+stageCompleted.stageInfo.attemptId)
     //    println("stageId :"+stageCompleted.stageInfo.stageId)
     //    println("Stage Name :"+stageCompleted.stageInfo.name)
-//                println("Stage Details:"+stageCompleted.stageInfo.details)
+    //                println("Stage Details:"+stageCompleted.stageInfo.details)
     //    println("Stage Rdd Info Name: "+stageCompleted.stageInfo.rddInfos.foreach(f=>f.name))
     //    println("Stage Rdd Info Scope: "+stageCompleted.stageInfo.rddInfos.foreach(f=>f.scope))
     //    println("submissionTime :"+stageCompleted.stageInfo.submissionTime+" ms")
     //    println("Completion Time :"+stageCompleted.stageInfo.completionTime+" ms")
     //    println("numTasks :"+stageCompleted.stageInfo.numTasks)
-//        println("recordsWritten :"+stageCompleted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
+    //        println("recordsWritten :"+stageCompleted.stageInfo.taskMetrics.outputMetrics.recordsWritten)
     //    println("recordsRead :"+stageCompleted.stageInfo.taskMetrics.inputMetrics.recordsRead)
     //    println("Input Size :"+(stageCompleted.stageInfo.taskMetrics.inputMetrics.bytesRead).toInt/(1024*1024)+" MB")
 
@@ -235,24 +275,24 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
 
       })*/
-//    stageCompleted
-//    println("------------------------- STAGE COMPLELTED---------------------------")
+    //    stageCompleted
+    //    println("------------------------- STAGE COMPLELTED---------------------------")
   }
 
 
   override def onTaskGettingResult(taskGettingResult: SparkListenerTaskGettingResult) {
-//        println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
-//        println("Task geeting result status : " + taskGettingResult.taskInfo.status)
+    //        println("+++++++++++++++++++++Task Getting Result Start+++++++++++++++++++++")
+    //        println("Task geeting result status : " + taskGettingResult.taskInfo.status)
 
     jobInfo.storeComponentStatsForTaskGettingResult(taskGettingResult)
-//    getStatus().asScala.foreach(println)
+    //    getStatus().asScala.foreach(println)
     //    println("Task geeting result id : " + taskGettingResult.taskInfo.taskId)
-//        println("+++++++++++++++++++++Task Getting Result End+++++++++++++++++++++")
+    //        println("+++++++++++++++++++++Task Getting Result End+++++++++++++++++++++")
   }
 
 
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
-//    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
+    //    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
 
     /*println("Task id: " + taskEnd.taskInfo.taskId)
     taskEnd.taskInfo.accumulables.foreach(f => {
@@ -261,13 +301,13 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
           .update)
     })*/
     jobInfo.storeComponentStatsForTaskEnd(taskEnd)
-//    getStatus().asScala.foreach(println)
+//        getStatus().asScala.foreach(println)
     //    println("Task id: " + taskEnd.taskInfo.taskId)
     ////    println("Task Accumulables Info: " + taskEnd.taskInfo.accumulables.mkString)
     //    println("Task attemptNo: " + taskEnd.taskInfo.attemptNumber)
     //    println("Task duration: " + taskEnd.taskInfo.duration)
     //    println("Task launchTime: " + taskEnd.taskInfo.launchTime)
-//        println("Task Status: " + taskEnd.taskInfo.status)
+    //        println("Task Status: " + taskEnd.taskInfo.status)
     //    println("Task executorId: " + taskEnd.taskInfo.executorId)
     //    println("Task host: " + taskEnd.taskInfo.host)
     //    println("Task host: " + taskEnd.taskInfo.taskLocality)
@@ -277,7 +317,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     //    println("Task records written: " + taskEnd.taskMetrics.outputMetrics.recordsWritten)
     //    println("Task stage Id : " + taskEnd.stageId)
     //    println("Task records read: " + taskEnd.taskMetrics.inputMetrics.recordsRead)
-//    LOG.info("+++++++++++++++++++++Task End End+++++++++++++++++++++")
+    //    LOG.info("+++++++++++++++++++++Task End End+++++++++++++++++++++")
 
   }
 
@@ -289,8 +329,8 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
   }
 
   override def onTaskStart(taskStart: SparkListenerTaskStart) {
-//        println("+++++++++++++++++++++Task Start Start+++++++++++++++++++++")
-//        println("TaskStart id: " + taskStart.taskInfo.taskId)
+    //        println("+++++++++++++++++++++Task Start Start+++++++++++++++++++++")
+    //        println("TaskStart id: " + taskStart.taskInfo.taskId)
     //    println("id: " + taskStart.taskInfo.id)
 
     /*taskStart.taskInfo.accumulables.foreach(f => {
@@ -300,14 +340,14 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
     })*/
 
     jobInfo.storeComponentStatsForTaskStart(taskStart)
-//    getStatus().asScala.foreach(println)
+//        getStatus().asScala.foreach(println)
     //    println("Task attemptNo: " + taskStart.taskInfo.attemptNumber)
     //    //        println("Task duration: " + taskStart.taskInfo.duration)
     //    println("Task launchTime: " + taskStart.taskInfo.launchTime)
-//        println("Task Status: " + taskStart.taskInfo.status)
+    //        println("Task Status: " + taskStart.taskInfo.status)
     //    println("Task executorId: " + taskStart.taskInfo.executorId)
     //    println("Task stage Id : " + taskStart.stageId)
-//        println("+++++++++++++++++++++Task Start End+++++++++++++++++++++")
+    //        println("+++++++++++++++++++++Task Start End+++++++++++++++++++++")
   }
 
   override def getStatus(): java.util.List[ComponentInfo] = {
@@ -325,7 +365,7 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
 
   override def end(flow: SparkFlow): Unit = {
 
-    if(flow.isInstanceOf[CommandComponentSparkFlow]){
+    /*if(flow.isInstanceOf[CommandComponentSparkFlow]){
       val cFlow = flow.asInstanceOf[CommandComponentSparkFlow]
       val Status : String = if(cFlow.exitStatus==0){"SUCCESSFUL"}
       else if(cFlow.exitStatus == -1)"FAILED"
@@ -338,7 +378,6 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
           .filter(compInfo=> compInfo.getComponentId.equals(comp.compId))
 
         if (alreadyPresentCompInfo.size > 0) {
-
           jobInfo.componentInfoList.asScala
             .filter(compInfo => {
               compInfo.getComponentId.equals(comp.compId)
@@ -346,14 +385,95 @@ override def addListener(runtimeContext: RuntimeContext): Unit = {
             componentInfo.setStageId(0)
             componentInfo.setStatusPerSocketMap(comp.outSocket, Status)
             componentInfo.setCurrentStatus(Status)
-
           })
-
         }
-
       })
+    }*/
+    val flowName = flow.getSparkFlowName()
+    val mapOfOutCompsAndPrevComps = ComponentMapping.getComps()
+    mapOfOutCompsAndPrevComps.filter(p=>p._1.equals(flowName))
+      .foreach(f=>f._2
+        .foreach(eachComp=>{
+          jobInfo.componentInfoList.asScala
+            .filter(compInfo => {
+              compInfo.getComponentId.equals(eachComp)
+            }).foreach(co=>{
+            if(!co.getCurrentStatus.equals("SUCCESSFUL") && !co.getCurrentStatus.equals("RUNNING") && !co.getCurrentStatus.equals("FAILED")){
+              co.setCurrentStatus("SUCCESSFUL")
+            }
+          })
+        }))
+  }
 
 
-    }
+  override def start(flow: SparkFlow): Unit = {
+    val flowName = flow.getSparkFlowName()
+    val mapOfOutCompsAndPrevComps = ComponentMapping.getComps()
+    mapOfOutCompsAndPrevComps.filter(p=>p._1.equals(flowName))
+      .foreach(f=>f._2
+        .foreach(eachComp=>{
+          jobInfo.componentInfoList.asScala
+            .filter(compInfo => {
+              compInfo.getComponentId.equals(eachComp)
+            }).foreach(co=>{
+            if(co.getCurrentStatus == null){
+              co.setCurrentStatus("PENDING")
+            }
+            else if(!co.getCurrentStatus.equals("SUCCESSFUL") && !co.getCurrentStatus.equals("RUNNING") && !co.getCurrentStatus.equals("FAILED")){
+              co.setCurrentStatus("PENDING")
+            }
+          })
+        }))
+
+    jobInfo.componentInfoList.asScala
+      .filter(compInfo => {
+        compInfo.getComponentId.equals(flowName)
+      }).foreach(co=>{
+      if(co.getCurrentStatus == null){
+        co.setCurrentStatus("PENDING")
+      }
+      else if(!co.getCurrentStatus.equals("SUCCESSFUL") && !co.getCurrentStatus.equals("RUNNING") && !co.getCurrentStatus.equals("FAILED")){
+        co.setCurrentStatus("PENDING")
+      }
+    })
+  }
+
+  override def failComponentsOfFlow(sparkFlow: SparkFlow): Unit = {
+    val flowName = sparkFlow.getSparkFlowName()
+    val mapOfOutCompsAndPrevComps = ComponentMapping.getComps()
+    mapOfOutCompsAndPrevComps.filter(p=>p._1.equals(flowName))
+      .foreach(f=>f._2
+        .foreach(eachComp=>{
+          jobInfo.componentInfoList.asScala
+            .filter(compInfo => {
+              compInfo.getComponentId.equals(eachComp)
+            }).foreach(co=>{
+            if(co.getCurrentStatus == null){
+              co.setCurrentStatus("")
+            }
+            else if (co.getCurrentStatus.equals("RUNNING") || co.getCurrentStatus.equals("PENDING")){
+              co.setCurrentStatus("FAILED")
+            }
+          })
+        }))
+    jobInfo.componentInfoList.asScala
+      .filter(compInfo => {
+        compInfo.getComponentId.equals(flowName)
+      }).foreach(c=>{
+      if(c.getCurrentStatus == null){
+        c.setCurrentStatus("")
+      }
+      else if (c.getCurrentStatus.equals("RUNNING") || c.getCurrentStatus.equals("PENDING")){
+        c.setCurrentStatus("FAILED")
+      }
+    })
+
+    jobInfo.componentInfoList.asScala.forall(a=>{
+      if(a.getCurrentStatus == null || a.getCurrentStatus.equals("PENDING")){
+        a.setCurrentStatus("")
+        true
+      }
+      else{true}
+    })
   }
 }

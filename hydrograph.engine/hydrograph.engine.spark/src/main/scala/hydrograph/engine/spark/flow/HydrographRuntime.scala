@@ -135,17 +135,26 @@ class HydrographRuntime extends HydrographRuntimeService {
       return
     }*/
     for (sparkFlow <- flows) {
-//      hydrographListener.start(sparkFlow)
-      sparkFlow.execute()
-      hydrographListener.end(sparkFlow)
-      for(accumulator <- sparkFlow.getAccumulatorOnFlow()){
-        accumulator.reset()
-      }
+      try{
+        hydrographListener.start(sparkFlow)
 
+        //        HydrographFlowPlugin.getComps()
+        sparkFlow.execute()
+        hydrographListener.end(sparkFlow)
+       /* for(accumulator <- sparkFlow.getAccumulatorOnFlow()){
+          accumulator.reset()
+        }*/
+      }
+      catch{case e: Exception => {
+        hydrographListener.failComponentsOfFlow(sparkFlow)
+//                executionTrackingListener.getStatus().asScala.foreach(println)
+        throw e
+      }
+      }
     }
-//    RuntimeContext.instance.sparkSession.sparkContext.longAccumulator
+    //    RuntimeContext.instance.sparkSession.sparkContext.longAccumulator
     RuntimeContext.instance.sparkSession.stop()
-//    executionTrackingListener.getStatus().asScala.foreach(println)
+//        executionTrackingListener.getStatus().asScala.foreach(println)
   }
 
   override def getExecutionStatus: AnyRef = {
@@ -209,6 +218,7 @@ class HydrographRuntime extends HydrographRuntimeService {
         properties = OrderedPropertiesHelper.getOrderedProperties("RegisterPlugin.properties")
       }
       catch {
+
         case e: IOException => {
           throw new RuntimeException("Error reading the properties file: RegisterPlugin.properties" + e)
         }

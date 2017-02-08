@@ -1,17 +1,18 @@
 /*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+  * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * http://www.apache.org/licenses/LICENSE-2.0
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *******************************************************************************/
 package hydrograph.engine.spark.components.base
 
+import hydrograph.engine.spark.execution.tracking.PartitionStageAccumulator
 import org.apache.spark.util.LongAccumulator
 
 import scala.collection.mutable.ListBuffer
@@ -21,14 +22,23 @@ import scala.collection.mutable.ListBuffer
   */
 abstract class SparkFlow {
 
-  var accList=new ListBuffer[LongAccumulator]
+  var accList=new ListBuffer[PartitionStageAccumulator]
+  var sparkFlowName : String = new String
 
-  def setAccumulatorOnFlow(acc : ListBuffer[LongAccumulator]): Unit ={
+  def setAccumulatorOnFlow(acc : ListBuffer[PartitionStageAccumulator]): Unit ={
     accList = acc
   }
 
-  def getAccumulatorOnFlow():ListBuffer[LongAccumulator] ={
+  def getAccumulatorOnFlow():ListBuffer[PartitionStageAccumulator] ={
     accList
+  }
+
+  def setSparkFlowName(flowName : String): Unit ={
+    sparkFlowName = flowName
+  }
+
+  def getSparkFlowName(): String = {
+    sparkFlowName
   }
 
 
