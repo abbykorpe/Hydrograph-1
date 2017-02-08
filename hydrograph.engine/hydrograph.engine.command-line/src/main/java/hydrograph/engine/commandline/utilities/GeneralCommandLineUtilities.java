@@ -62,6 +62,7 @@ public class GeneralCommandLineUtilities {
         LOG.info("  -xmlpath \t\t Required, single, to specify main/parent xml file to execute");
         LOG.info("  -libjars \t\t Optional, single, comma seperated paths of jar files to be included in classpath");
         LOG.info("  -debugxmlpath \t Optional, single, location of the debug file");
+        LOG.info("  -loglevel \t Optional, single, set log level");
         LOG.info("  -jobid \t\t Optional (Required when -debugxmlpath option is specified), single, the job id");
         LOG.info(
                 "  -basepath \t\t Optional (Required when -debugxmlpath option is specified), single, the base path where the debug files will be written");

@@ -64,19 +64,19 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
   val mapFieldIndexes = getIndexes(inputSchema, outputSchema, getMapSourceFields(mapFields, inSocketId), getMapTargetFields(mapFields, inSocketId))
   val passthroughIndexes = getIndexes(inputSchema, outputSchema, passthroughFields)
 
-  def getAllInputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
+  private def getAllInputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
     LOG.trace("In method getAllInputFieldsForExpr()")
     val list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationInputFields)
     list1
   }
 
-  def getAllOutputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
+  private def getAllOutputFieldsForExpr(getOperationsList: util.List[Operation], list: List[String]): List[String] = {
     LOG.trace("In method getAllOutputFieldsForExpr()")
     val list1 = getOperationsList.asScala.toList.flatMap(e => e.getOperationOutputFields)
     list1
   }
 
-  def unique[A](ls: List[A]) = {
+  private def unique[A](ls: List[A]) = {
     LOG.trace("In method unique()")
     def loop(set: Set[A], ls: List[A]): List[A] = ls match {
       case hd :: tail if set contains hd => loop(set, tail)
@@ -85,49 +85,10 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
     }
     loop(Set(), ls)
   }
+  
+  private def extractAllInputPositions(inputFields: List[String]): List[Int] = Seq(0 to (inputFields.length - 1)).toList.flatten
 
-  def convertToList(listBuffer: ListBuffer[String]): util.ArrayList[String] = {
-    LOG.trace("In method convertToList()")
-    def convert(list: List[String], arrayList: util.ArrayList[String]): util.ArrayList[String] = list match {
-      case List() => arrayList
-      case x :: xs => {
-        arrayList.add(x)
-        convert(xs, arrayList)
-      }
-    }
-    convert(listBuffer.toList, new util.ArrayList[String]())
-  }
-
-  def getOperationOutputFields(strings: ListBuffer[ListBuffer[String]]): util.ArrayList[util.ArrayList[String]] = {
-    LOG.trace("In method getOperationOutputFields()")
-
-    def flattenBufferList(strings: ListBuffer[ListBuffer[String]]): ListBuffer[ListBuffer[String]] = {
-      def flattenList(strings: ListBuffer[ListBuffer[String]], finalList: ListBuffer[ListBuffer[String]], count: Int): ListBuffer[ListBuffer[String]] = (finalList, count) match {
-        case (f, c) if c == 0 => f
-        case (f, count) => flattenList(strings, f += strings.flatten, count - 1)
-      }
-      flattenList(strings, ListBuffer[ListBuffer[String]](), strings.length)
-    }
-
-    def listBufferToArrayList(listBuffer: ListBuffer[java.util.ArrayList[String]]): util.ArrayList[util.ArrayList[String]] = {
-      LOG.trace("In method listBufferToArrayList()")
-
-      def convert(list: List[util.ArrayList[String]], arrayList: util.ArrayList[util.ArrayList[String]]): util.ArrayList[util.ArrayList[String]] = list match {
-        case List() => arrayList
-        case x :: xs => {
-          arrayList.add(x)
-          convert(xs, arrayList)
-        }
-      }
-      convert(listBuffer.toList, new util.ArrayList[util.ArrayList[String]]())
-    }
-    val temp = listBufferToArrayList(flattenBufferList(strings).map(e => convertToList(e)))
-    temp
-  }
-
-  def extractAllInputPositions(inputFields: List[String]): List[Int] = Seq(0 to (inputFields.length - 1)).toList.flatten
-
-  def extractAllOutputPositions(outputFields: List[String]): List[Int] = Seq(0 to (outputFields.length - 1)).toList.flatten
+  private def extractAllOutputPositions(outputFields: List[String]): List[Int] = Seq(0 to (outputFields.length - 1)).toList.flatten
 
   override def createComponent(): Map[String, DataFrame] = {
     LOG.trace("In method createComponent()")
@@ -142,8 +103,14 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
       val nr1 = normalizeList.get(0)
 
       if(!nr1.baseClassInstance.isInstanceOf[NormalizeForExpression]){
-        nr1.baseClassInstance.prepare(nr1.operationEntity.getOperationProperties)
-      }
+          try {
+            LOG.trace("Calling prepare() method of " + nr1.baseClassInstance.getClass.toString + " class.")
+            nr1.baseClassInstance.prepare(nr1.operationEntity.getOperationProperties)
+          } catch {
+            case e: Exception =>
+              throw new RuntimeException("Error in prepare() method of " + normalizeEntity.getComponentId, e)
+          }
+        }
       val it = itr.flatMap(row => {
         copyFields(row, outRow, mapFieldIndexes)
         copyFields(row, outRow, passthroughIndexes)
@@ -178,14 +145,14 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
     })(RowEncoder(outputSchema))
 
     val key = normalizeEntity.getOutSocketList.get(0).getSocketId
-    Map(key -> df)
+      Map(key -> df)
   }
 }
 
 class NormalizeOutputCollector(outRow: Array[Any]) extends OutputDispatcher {
 
   private val list = new ListBuffer[Row]()
-  private val LOG:Logger = LoggerFactory.getLogger(classOf[NormalizeComponent])
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[NormalizeOutputCollector])
 
   override def sendOutput(): Unit = {
     LOG.trace("In method sendOutput()")
