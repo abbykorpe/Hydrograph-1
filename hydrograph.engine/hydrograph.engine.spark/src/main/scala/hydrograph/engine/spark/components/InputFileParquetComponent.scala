@@ -37,7 +37,7 @@ class InputFileParquetComponent(iFileParquetEntity: InputFileParquetEntity, iCom
       fieldList.foreach { field => LOG.debug("Field name '" + field.getFieldName + "for Component " + iFileParquetEntity.getComponentId) }
 
       val df = iComponentsParams.getSparkSession().read.parquet(path)
-      SchemaUtils().compareSchema(schemaField, df.schema)
+      SchemaUtils().compareSchema(schemaField.toList, df.schema.toList)
 
       val key = iFileParquetEntity.getOutSocketList.get(0).getSocketId
 

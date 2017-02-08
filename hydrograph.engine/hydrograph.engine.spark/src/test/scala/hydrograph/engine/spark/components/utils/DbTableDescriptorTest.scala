@@ -26,12 +26,12 @@ class DbTableDescriptorTest {
     //given
     val databaseType:String="Mysql"
     val tableName="abc"
-    val fieldNames : Array[String]=Array("f1","f2","f3","f4","f5","f6","f7")
+    val fieldNames : List[String]= List("f1","f2","f3","f4","f5","f6","f7")
     val fieldDataType:Array[String] = Array("java.lang.String","java.lang.Integer","java.lang.Double","java.math.BigDecimal","java.util.Date","java.lang.Boolean","java.util.Date");
     val fieldScale:Array[Int]=Array(-999,-999,-999,2,-999,-999,-999)
     val fieldPrecision:Array[Int]=Array(-999,-999,-999,10,-999,-999,-999)
     val fieldFormat:Array[String]= Array("","","","","yyyy-MM-dd","","yyyy-MM-dd HH:mm:ss")
-    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision,fieldFormat)
+    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision,fieldFormat).toList
     val primaryKeys=null
 
     //when
@@ -50,13 +50,13 @@ class DbTableDescriptorTest {
     //given
     val databaseType:String="Mysql"
     val tableName="abc"
-    val fieldNames : Array[String]=Array("f1","f2","f3","f4","f5","f6","f7")
+    val fieldNames : List[String]=List("f1","f2","f3","f4","f5","f6","f7")
     val fieldDataType:Array[String] = Array("java.lang.String","java.lang.Integer","java.lang.Double","java.math.BigDecimal","java.util.Date","java.lang.Boolean","java.util.Date");
     val fieldScale:Array[Int]=Array(-999,-999,-999,2,-999,-999,-999)
     val fieldPrecision:Array[Int]=Array(-999,-999,-999,10,-999,-999,-999)
     val fieldFormat:Array[String]= Array("","","","","yyyy-MM-dd","","yyyy-MM-dd HH:mm:ss")
-    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision,fieldFormat)
-    val primaryKeys:Array[String]= Array("f1","f2")
+    val colDefs = JavaToSQLTypeMapping.createTypeMapping(databaseType,fieldDataType,fieldScale,fieldPrecision,fieldFormat).toList
+    val primaryKeys:List[String]= List("f1","f2")
 
     //when
     val createQuery= new DbTableDescriptor(tableName, fieldNames, colDefs, primaryKeys,databaseType).getCreateTableStatement()

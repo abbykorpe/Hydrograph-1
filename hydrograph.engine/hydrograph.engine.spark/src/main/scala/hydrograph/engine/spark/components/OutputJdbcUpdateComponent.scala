@@ -38,12 +38,14 @@ BaseComponentParams) extends SparkFlow {
     LOG.info("Created Output Jdbc update Component '"+ outputJdbcUpdateEntity.getComponentId
       + "' in Batch "+ outputJdbcUpdateEntity.getBatch
       +" Connection url '" + outputJdbcUpdateEntity.getUrl
+      + "' table Name '" + outputJdbcUpdateEntity.getTableName
       + "' with update Keys [" + outputJdbcUpdateEntity.getUpdateByKeys.asScala.map(_.getName).mkString(", ")+"]")
 
     LOG.debug("Component Id '"+ outputJdbcUpdateEntity.getComponentId
       +"' in Batch " + outputJdbcUpdateEntity.getBatch
       + " having schema [ " + outputJdbcUpdateEntity.getFieldsList.asScala.mkString(",")
       + " ] comnnect url '" + outputJdbcUpdateEntity.getUrl
+      + "' table Name '" + outputJdbcUpdateEntity.getTableName
       + "' with update keys [" + outputJdbcUpdateEntity.getUpdateByKeys.asScala.map(_.getName).mkString(", ") + "]"
       )
 
@@ -64,11 +66,10 @@ BaseComponentParams) extends SparkFlow {
 
   def createSchema(getFieldsList: util.List[SchemaField]): Array[Column] =  {
     LOG.trace("In method createSchema()")
-    val schema = new Array[Column](getFieldsList.size())
 
-    getFieldsList.asScala.zipWithIndex.foreach { case (f, i) => schema(i) =  col(f.getFieldName) }
+    val schema = getFieldsList.asScala.map(sf => col(sf.getFieldName))
     LOG.debug("Schema created for Output Jdbc Update Component : " + schema.mkString)
-    schema
+    schema.toArray
   }
 
   private def getColumnAndUpdateKeyIndexs(outputJdbcUpdateEntity: OutputJdbcUpdateEntity): Array[Int] = {

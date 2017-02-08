@@ -73,23 +73,19 @@ class InputOracleComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsParams
   def getSchema(schema: StructType): StructType = StructType(schema.toList.map(stuctField => new StructField(stuctField.name, getInputDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
 
   private def getInputDataType(dataType: DataType): Option[DataType] = {
-    val answer = dataType.typeName.toUpperCase match {
-      case "SHORT" => IntegerType
-      case "BOOLEAN" => StringType
-      case "DATE" => TimestampType
-      case _ => null
+     dataType.typeName.toUpperCase match {
+      case "SHORT" => Option(IntegerType)
+      case "BOOLEAN" => Option(StringType)
+      case "DATE" => Option(TimestampType)
+      case _ => None
     }
-    if (answer != null) Option(answer) else None
-
   }
+
 
   def getMappedSchema(schema: StructType): StructType = StructType(schema.toList.map(stuctField => new StructField(stuctField.name, getDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
 
-  private def getDataType(dataType: DataType): Option[DataType] = {
-    val datatype = dataType.typeName.toUpperCase
-    val answer = getDataTypes(datatype)
-    if (answer != null) Option(answer) else None
-  }
+  private def getDataType(dataType: DataType): Option[DataType] =
+    Option(getDataTypes(dataType.typeName.toUpperCase))
 
   def getDataTypes(datatype: String): DataType = {
     if (datatype.matches("[(DECIMAL(]+[0-5],0[)]")) IntegerType else if (datatype.matches("[(DECIMAL(]+([6-9]|10),0[)]")) IntegerType else if (datatype.matches("[(DECIMAL(]+(1[1-9]),0[)]")) LongType else null

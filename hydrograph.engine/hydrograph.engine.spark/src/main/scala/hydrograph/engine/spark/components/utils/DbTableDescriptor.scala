@@ -17,7 +17,7 @@ import org.slf4j.{Logger, LoggerFactory}
 /**
   * Created by santlalg on 12/12/2016.
   */
-class DbTableDescriptor(tableName: String, columnNames: Array[String], columnDefs: Array[String], primaryKeys: Array[String], databaseType: String) extends Serializable {
+class DbTableDescriptor(tableName: String, columnNames: List[String], columnDefs: List[String], primaryKeys: List[String], databaseType: String) extends Serializable {
 
   val LOG: Logger = LoggerFactory.getLogger(classOf[DbTableDescriptor])
   val DB_TYPE_ORACLE = "oracle"
@@ -41,14 +41,11 @@ class DbTableDescriptor(tableName: String, columnNames: Array[String], columnDef
   }
 
   def addDefinitions(): List[String] = {
-    if (databaseType.equalsIgnoreCase(DB_TYPE_ORACLE))
-      for (i <- 0 until columnNames.length) {
-        createTableStatement = (quoteIdentifier(columnNames(i).toUpperCase) + " " + columnDefs(i)) :: createTableStatement
-      }
-    else {
-      for (i <- 0 until columnNames.length) {
-        createTableStatement = (columnNames(i) + " " + columnDefs(i)) :: createTableStatement
-      }
+    if(databaseType.equalsIgnoreCase(DB_TYPE_ORACLE)){
+      (columnNames zip columnDefs).map(cc => createTableStatement = quoteIdentifier(cc._1.toUpperCase) + " " + cc._2 ::createTableStatement)
+    }else
+    {
+      (columnNames zip columnDefs).map(cc => createTableStatement = cc._1 + " " + cc._2 ::createTableStatement)
     }
     createTableStatement
   }
@@ -67,12 +64,5 @@ class DbTableDescriptor(tableName: String, columnNames: Array[String], columnDef
 
   private def hasPrimaryKey(): Boolean = primaryKeys != null && primaryKeys.length != 0
 
-  def joinField(createTableStatement: List[String], s: String): String = {
-    field = ""
-    for (in <- 0 until createTableStatement.length) {
-      if (in != 0) field = field + s
-      if (createTableStatement(in) != null) field = field + createTableStatement(in)
-    }
-    field
-  }
+  def joinField(createTableStatement: List[String], s: String): String =  createTableStatement.mkString(s)
 }

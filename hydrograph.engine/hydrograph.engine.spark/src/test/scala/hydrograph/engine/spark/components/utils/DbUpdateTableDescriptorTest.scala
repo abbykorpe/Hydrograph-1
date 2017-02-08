@@ -25,8 +25,8 @@ class DbUpdateTableDescriptorTest {
   def itShouldGenerateUpdateQueryWithSingleUpdateKeys(): Unit = {
     //given
     val tableName = "abc"
-    val columnNames: Array[String] = Array("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
-    val updateKeys: Array[String] = Array("ssn");
+    val columnNames: List[String] = List("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
+    val updateKeys: List[String] = List("ssn")
     val expectedUpdateQuery = "update abc set name=?, address=?, zip=?, mobileNumber=?, Zipcode=?, city=? where ssn=?"
 
     //when
@@ -40,8 +40,8 @@ class DbUpdateTableDescriptorTest {
   def itShouldGenerateUpdateQueryWithMultipleUpdateKeys(): Unit = {
     //given
     val tableName = "employee"
-    val columnNames: Array[String] = Array("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
-    val updateKeys: Array[String] = Array("zip", "mobileNumber");
+    val columnNames: List[String] = List("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
+    val updateKeys: List[String] = List("zip", "mobileNumber")
     val expectedUpdateQuery = "update employee set name=?, address=?, Zipcode=?, city=?, ssn=? where zip=? and mobileNumber=?"
 
     //when
@@ -50,19 +50,18 @@ class DbUpdateTableDescriptorTest {
     //then
     Assert.assertEquals(actualUpdateQuery, expectedUpdateQuery)
   }
+    @Test(expected = classOf[hydrograph.engine.spark.components.utils.UpdateKeyFieldNotExistInUserSpecifiedColumnField])
+    def itShouldGenerateExceptionWhenUpdateKeyDoesNotExistInUserDefinedSchema(): Unit = {
+      //given
+      val tableName = "employee"
+      val columnNames: List[String] = List("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
+      val expectedUpdateQuery = "update employee set name=?, address=?, Zipcode=?, city=?, ssn=? where zip=? and mobileNumber=?"
 
-  @Test(expected = classOf[hydrograph.engine.spark.components.utils.UpdateKeyFieldNotExistInUserSpecifiedColumnField])
-  def itShouldGenerateExceptionWhenUpdateKeyDoesNotExistInUserDefinedSchema(): Unit = {
-    //given
-    val tableName = "employee"
-    val columnNames: Array[String] = Array("name", "address", "zip", "mobileNumber", "Zipcode", "city", "ssn")
-    val expectedUpdateQuery = "update employee set name=?, address=?, Zipcode=?, city=?, ssn=? where zip=? and mobileNumber=?"
+      //when
+      val updateKeys: List[String] = List("Salary")
 
-    //when
-    val updateKeys: Array[String] = Array("Salary");
+      //then
+      val actualUpdateQuery = new DbUpdateTableDescriptor(tableName, columnNames, updateKeys).makeUpdateQuery()
 
-    //then
-    val actualUpdateQuery = new DbUpdateTableDescriptor(tableName, columnNames, updateKeys).makeUpdateQuery()
-
-  }
+    }
 }

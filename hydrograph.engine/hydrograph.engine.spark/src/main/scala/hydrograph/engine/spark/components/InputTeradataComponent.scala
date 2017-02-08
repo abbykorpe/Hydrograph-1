@@ -77,7 +77,7 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
 
     try {
       val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
-      SchemaUtils().compareSchema(getMappedSchema(schemaField),df.schema)
+      SchemaUtils().compareSchema(getMappedSchema(schemaField),df.schema.toList)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
     } catch {
@@ -87,23 +87,19 @@ class InputTeradataComponent(inputRDBMSEntity: InputRDBMSEntity,
     }
   }
 
-  def getMappedSchema(schema:StructType) : StructType = StructType(schema.toList.map(stuctField=> new StructField(stuctField.name,getDataType(stuctField.dataType).getOrElse(stuctField.dataType))).toArray)
+  def getMappedSchema(schema:StructType) : List[StructField] = schema.toList.map(stuctField=> new StructField(stuctField.name,getDataType(stuctField.dataType).getOrElse(stuctField.dataType)))
 
   private def getDataType(dataType: DataType): Option[DataType] = {
-    val answer = dataType.typeName.toUpperCase match {
-      case "DOUBLE" => FloatType  /** In teradata if we create a table with a field type as Double,
+    dataType.typeName.toUpperCase match {
+      case "DOUBLE" => Option(FloatType)  /** In teradata if we create a table with a field type as Double,
         *it creates a schema and replaces the Double datatype with Float datatype which is Teradata specific.
         * Contrary to that if we attempt to read the data from a Teradata table, we have created by using the
         * output schema as Double, the execution gets stopped
         * as the data gets exported from Teradata as Float. In order to get Double type data while reading from a Teradata
         * datanase, we mapped FLoatType to java.lang.Double*/
-      case "SHORT" => IntegerType
-      case "BOOLEAN" => IntegerType
-
-      case _ => null
+      case "SHORT" => Option(IntegerType)
+      case "BOOLEAN" => Option(IntegerType)
+      case _ => None
     }
-    if (answer != null) Option(answer) else None
-
   }
-
 }
