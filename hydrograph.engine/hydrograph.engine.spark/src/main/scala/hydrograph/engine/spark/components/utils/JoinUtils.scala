@@ -43,11 +43,37 @@ class JoinUtils(operationEntity: OperationEntityBase, baseComponentParams: BaseC
         val unusedSocketId = if (unusedSocket.size > 0) unusedSocket(0).getSocketId else ""
 
         val keyFields = {
-          if (operationEntity.isInstanceOf[JoinEntity])
             operationEntity.asInstanceOf[JoinEntity].getKeyFields.asScala.filter(key => key.getInSocketId.equals(in.getInSocketId))(0)
-          else
-            operationEntity.asInstanceOf[LookupEntity].getKeyFields.asScala.filter(key => key.getInSocketId.equals(in.getInSocketId))(0)
         }
+
+        val outSocket = operationEntity.getOutSocketList.asScala.filter(out => out.getSocketType.equals("out"))
+
+        val outSocketId = if (outSocket.size > 0) outSocket(0).getSocketId else ""
+
+        val dataFrame = baseComponentParams.getDataFrameMap().getOrElse(in.getFromComponentId, sys.error("input data " +
+          "frame should be present"))
+
+        joinHelperArray(i) = JoinOperation(in.getFromComponentId, in.getInSocketId, dataFrame, keyFields.getFields, unusedSocket.size > 0, keyFields
+          .isRecordRequired, outSocketId, unusedSocketId)
+
+    }
+    joinHelperArray
+  }
+
+  def prepareLookupOperation(): Array[JoinOperation] = {
+
+    val joinHelperArray = new Array[JoinOperation](operationEntity.getInSocketList.size())
+
+    operationEntity.getInSocketList().asScala.zipWithIndex.foreach {
+      case (in, i) =>
+        val unusedSocket = operationEntity.getOutSocketList.asScala.filter(out => out.getSocketType.equals("unused") && out
+          .getCopyOfInSocketId
+          .equals(in.getInSocketId))
+
+        val unusedSocketId = if (unusedSocket.size > 0) unusedSocket(0).getSocketId else ""
+
+        val keyFields =
+            operationEntity.asInstanceOf[LookupEntity].getKeyFields.asScala.filter(key => key.getInSocketId.equals(in.getInSocketId))(0)
 
         val outSocket = operationEntity.getOutSocketList.asScala.filter(out => out.getSocketType.equals("out"))
 
