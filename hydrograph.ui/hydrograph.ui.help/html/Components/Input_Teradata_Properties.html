@@ -14,16 +14,16 @@
 <html>
 <head>
 
-<title>Input Oracle Properties</title>
+<title>Input Teradata Properties</title>
 
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 
 </head>
 <body>
 
-	<p><span class="header-1">Input Oracle Properties</span></p>
+	<p><span class="header-1">Input Teradata Properties</span></p>
 
-	<p><span><span><b>Properties</b>&nbsp;for the Input Oracle component can be viewed by Double click the component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, scale etc. </span></span></p>
+	<p><span><span><b>Properties</b>&nbsp;for the Input Teradata component can be viewed by Double click the component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, scale etc. </span></span></p>
 
 	<p>
 		<a name="general_properties"></a><span class="header-2">General Properties</span>
@@ -38,7 +38,7 @@
 	<ul>
 		<li><span><b>Name</b> - The Name field will specify the name of the component as desired by the user.</span></li>
 		<li><span><b>ID</b> - ID field will specify unique id for every component. </span></li>
-		<li><span><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Oracle.</span></li>
+		<li><span><b>Type </b> - Type further categorizes the component to detailed operation that it intends to perform. Here it is of type Teradata.</span></li>
 	</ul>
 
 	<p>
@@ -46,14 +46,21 @@
 	</p>
 	
 	<ul>
-	<li><span><b>SID</b> - SID is used to specify the Oracle instance name. This field should be mandatory to user. </span></li>
+	<li><span><b>Database Name</b> - Database Name is used to specify the Teradata instance name. This field should be mandatory to user. </span></li>
 	<li><span><b>Host Name</b> - Host Name is used to specify the Host server IP address or localhost name. This field should be mandatory to user.</span></li>
-	<li><span><b>Driver Name</b> - Driver Name is used to specify ‘thin(Oracle Thin)’ driver should be displayed to user by default. This is non-editable field. </span></li>
-	<li><span><b>Port</b> - Port simply accepts a numeric number starting from 0 to maximum 99. By default this is 1521.</span></li>
-	<li><span><b>User</b> - User is required to specify the User name to login to Oracle Database.</span></li>
+	<li><span><b>Driver Name</b> - Driver Name is used to specify ‘TeraJDBC4’ driver should be displayed to user by default. This is non-editable field. </span></li>
+	<li><span><b>Port</b> - Port simply accepts a numeric number starting from 0 to maximum 99. By default this is 1025.</span></li>
+	<li><span><b>User</b> - User is required to specify the User name to login to Teradata Database.</span></li>
 	<li><span><b>Password</b> - Password used to specify the password.</span></li>
-	<li><span><b>Oracle Schema</b> - Schema is used to specify the schema name used by Oracle to access data.</span></li>
+	<li><span><b>Oracle Schema</b> - Schema is used to specify the schema name used by Teradata to access data.</span></li>
 	<li><span><b>Test Connection</b> - Test Connection is used to specify a response to engine should be sent to verify/test if using the above parameter values connection to database will be successful or some invalid parameters are specified by user.</span></li>
+</ul>
+
+<ul>
+	<li><span><b>Export Options</b> - Export has two options -
+	<ul><b>Standard</b>  - Standard is used to specify the standard way to export/extract the data from Teradata tables.</ul>
+	<ul><b>Fast Export</b> - Fast Export is used to export data from Teradata tables into flat files.It is useful for extracting large volume of data.</ul>
+	</span></li>
 </ul>
 
 <ul>
@@ -67,7 +74,7 @@
 	<li><span><b>Import from Metastore</b> - Import from Metastore used to fetch schema with fieldname, datatype, length, scale type, precision details should be generated from the layout of table name. 
 											 In case of SQL statement, the Import should be disabled and schema should be manually populated.</span></li>
 	
-	<li><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Input Oracle component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></li>
+	<li><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Input Teradata component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span></li>
 	
 	<p><span>Check <a href="../How To Steps/How_To_Pass_Hadoop_Properties_To_Component.html"> How to pass Hadoop properties to component</a></span></p></li>
 	
@@ -80,12 +87,12 @@
 	<p>
 		<a name="schema_tab"></a><span class="header-2">Schema tab</span> 
 	</p>
-	<p><span>Schema is <b>mandatory</b> for Input Oracle component. Schema tab defines the record format on the out port of the Input Oracle component. A field in schema has multiple attributes as described below.</span></p>
+	<p><span>Schema is <b>mandatory</b> for Input Teradata component. Schema tab defines the record format on the out port of the Input Teradata component. A field in schema has multiple attributes as described below.</span></p>
 	
 	<p><img alt="" src="../images/Input_File_Delimited_Properties_Schema.png" /></p>
 	
 	<ul>
-	<li><span><b>Internal</b> - User is provided a Grid to enter the internal schema of the Input Oracle file.</span></li>
+	<li><span><b>Internal</b> - User is provided a Grid to enter the internal schema of the Input Teradata file.</span></li>
 	<ul><li><span><b>Field Name</b> - User needs to enter all the Field names in this column.</span></li>
 	<li><span><b>Data type</b> - By default "string" Data type has been selected for any field added to the Grid. User can select from different Data type values like "integer", "double", "float" etc.</span></li>
 	<li><span><b>Date Format</b> - User can specify desired date format like "YY-DD-MM", "YYYYMMDD" etc for a date field in this column. Refer to <a href="../references/Java_Date_Formats.html">java date formats</a> page for acceptable date formats.</span></li>
@@ -101,8 +108,8 @@
 		<a name="validations"></a><span class="header-2">Validations</span>
 	</p>
 	<p>
-		<span>The Input Oracle components applies validations to the mandatory fields. Upon placing the 
-			Input Oracle component on job canvas for the first time (from component palette), the component shows up a warning icon as
+		<span>The Input Teradata components applies validations to the mandatory fields. Upon placing the 
+			Input Teradata component on job canvas for the first time (from component palette), the component shows up a warning icon as
 			mandatory properties are not provided.</span>
 	</p>
 	<img alt="To be updated" src=""  />
@@ -114,7 +121,7 @@
 	<img alt="To be updated" src="" />
 
 	<p>
-		<span>If the properties window has some error even after user visit's it once, then the warning icon on the Input Oracle 
+		<span>If the properties window has some error even after user visit's it once, then the warning icon on the Input Teradata 
 			component on the job canvas changes to error icon. This error icon is removed only when all the mandatory fields are supplied
 			with correct values.</span>
 	</p>

@@ -121,6 +121,9 @@
             file="xml/Components/inputOracle.xml">
       </toc>
       <toc
+            file="xml/Components/inputTeradata.xml">
+      </toc>
+      <toc
             file="xml/Components/join.xml">
       </toc>
       <toc
