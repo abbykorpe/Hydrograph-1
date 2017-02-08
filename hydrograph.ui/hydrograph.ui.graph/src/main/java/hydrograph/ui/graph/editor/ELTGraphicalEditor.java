@@ -145,6 +145,7 @@ import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
+import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
 import hydrograph.ui.engine.exceptions.EngineException;
 import hydrograph.ui.engine.util.ConverterUtil;
 import hydrograph.ui.graph.Activator;
@@ -1891,7 +1892,13 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	}
 
 	@Override
-	public List<ParameterFile> getParamterFileSequence() {		
+	public List<ParameterFile> getParamterFileSequence() {
+		for(ParameterFile parameterFile:container.getParamterFileSequence()){
+			if(StringUtils.equals(ParamterFileTypes.JOB_SPECIFIC.name(),parameterFile.getFileType().name())){
+				parameterFile.setFileName(getJobName());
+				break;
+			}
+			}
 		return container.getParamterFileSequence();
 	}
 	
