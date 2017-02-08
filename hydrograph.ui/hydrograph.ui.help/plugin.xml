@@ -118,6 +118,9 @@
             file="xml/Components/inputHiveTextFile.xml">
       </toc>
       <toc
+            file="xml/Components/inputOracle.xml">
+      </toc>
+      <toc
             file="xml/Components/join.xml">
       </toc>
       <toc
@@ -137,6 +140,9 @@
       </toc>
       <toc
             file="xml/Components/outputHiveTextFile.xml">
+      </toc>
+       <toc
+            file="xml/Components/outputOracle.xml">
       </toc>
       <toc
             file="xml/Components/removeDups.xml">
