@@ -70,7 +70,7 @@ class LookupComponent(lookupEntity: LookupEntity, componentsParams: BaseComponen
       })
 
       val joinKey = createJoinKey(driverJoinOp.keyFields, lookupJoinOp.keyFields)
-      val outputDF = getDFWithRequiredFields(driverJoinOp.dataFrame.join(broadcastDF, joinKey, "left_outer"))
+      val outputDF = getDFWithRequiredFields(driverJoinOp.dataFrame.join(broadcastDF, joinKey, "leftouter"))
 
       val key = driverJoinOp.outSocketId
 
