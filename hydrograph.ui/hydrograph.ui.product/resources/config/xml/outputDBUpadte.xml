@@ -86,7 +86,7 @@
 			<tns:validator>NON_BLANK_STRING_VALIDATOR</tns:validator>
 		</tns:property>
 
-		<tns:property dataType="string" name="runtimeProperties"
+		<tns:property dataType="string" name="runtime_properties"
 			renderer="RUNTIME_PROPERTIES_WIDGET" type="USER" group="GENERAL"
 			subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="OPTIONAL"
