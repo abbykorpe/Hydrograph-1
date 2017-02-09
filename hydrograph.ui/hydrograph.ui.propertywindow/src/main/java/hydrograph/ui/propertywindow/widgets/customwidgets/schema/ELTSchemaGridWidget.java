@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import javax.xml.XMLConstants;
@@ -861,6 +862,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 	 private void schemaFromConnectedLinks() {
 		 Schema schema=null;
+		 Map<String,Schema> oldSchemaMap=new TreeMap<>();
 		 if (StringUtils.equalsIgnoreCase(getComponent().getCategory(), Constants.OUTPUT))
 			 for (Link link : getComponent().getTargetConnections()) {
 				 if(SchemaPropagation.INSTANCE.checkUnusedSocketAsSourceTerminal(link)){
@@ -888,8 +890,10 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 				 } else {
 					 this.properties = getPropagatedSchema(fixedWidthGridRows);
 				 }
+					 oldSchemaMap.put(link.getTargetTerminal(),schema );	
 				 }
 			 }
+		 getComponent().getProperties().put(Constants.PREVIOUS_COMPONENT_OLD_SCHEMA, oldSchemaMap);
 	 }
 
 	 private boolean isAnyUpdateAvailableOnPropagatedSchema(Schema schema) {
