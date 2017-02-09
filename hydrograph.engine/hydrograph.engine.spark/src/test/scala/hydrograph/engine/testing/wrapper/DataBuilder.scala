@@ -80,7 +80,7 @@ object Fields {
       case "short" => DataTypes.ShortType
       case "float" => DataTypes.FloatType
       case "boolean" => DataTypes.BooleanType
-      case "bigdecimal" => DataTypes.createDecimalType(38, 30)
+      case "bigdecimal" => DataTypes.createDecimalType(38, 10)
       case "date" => DataTypes.DateType
       case "timestamp" => DataTypes.TimestampType
       case _ => throw new RuntimeException(s"Unsupported type: ${dataType}")
