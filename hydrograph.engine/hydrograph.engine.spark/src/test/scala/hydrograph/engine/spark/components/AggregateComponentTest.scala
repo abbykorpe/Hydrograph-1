@@ -603,7 +603,7 @@ class AggregateComponentTest {
       new SchemaField("col1", "java.lang.String"),
       new SchemaField("col2", "java.lang.String"),
       new SchemaField("col3", "java.lang.String"),
-    new SchemaField("count1", "java.lang.Integer"))
+      new SchemaField("count1", "java.lang.Integer"))
 
     cp.addSchemaFields(schema)
 
@@ -616,6 +616,89 @@ class AggregateComponentTest {
     Assert.assertEquals(2, actual.length)
     Assert.assertEquals(actual(0).toString(),"[3,C3R3,C1K1,C2R3,C3R3]")
     Assert.assertEquals(actual(1).toString(),"[1,C3R1,C1K2,C2R1,C3R1]")
+
+  }
+  @Test
+  def itShouldTestAggregateWithoutOperationInFields : Unit = {
+
+    val df1 = new DataBuilder(Fields(List("col1", "col2", "col3","count1")).applyTypes(List(classOf[String],
+      classOf[String], classOf[String],classOf[Integer])))
+      .addData(List("C1K1", "C2R1", "C3R1", 1))
+      .addData(List("C1K1", "C2R2", "C3R2", 1))
+      .addData(List("C1K1", "C2R3", "C3R3", 1))
+      .addData(List("C1K2", "C2R1", "C3R1", 1))
+      .build()
+
+    val aggregateEntity: AggregateEntity = new AggregateEntity
+    aggregateEntity.setComponentId("AggregateTest")
+    val keyField: KeyField = new KeyField
+    keyField.setName("col1")
+    keyField.setSortOrder("asc")
+    aggregateEntity.setKeyFields(Array(keyField))
+
+    val operationList: util.ArrayList[Operation] = new util.ArrayList[Operation]()
+
+    val operation: Operation = new Operation
+    operation.setOperationId("operation1")
+    //operation.setOperationInputFields(Array("col2"))
+    operation.setOperationOutputFields(Array("count"))
+    operation.setOperationClass("hydrograph.engine.transformation.userfunctions.aggregate.AggregateWithoutOperationInFields")
+    operation.setOperationProperties(new Properties())
+    operationList.add(operation)
+
+    aggregateEntity.setOperationsList(operationList)
+    aggregateEntity.setNumOperations(1)
+    aggregateEntity.setOperationPresent(true)
+
+    // create outSocket
+    val outSocket1: OutSocket = new OutSocket("out0")
+    val inSocket1: InSocket = new InSocket("input1", "out0", "in0")
+    aggregateEntity.setInSocketList(List(inSocket1).asJava)
+
+    // set map fields
+    val mapFieldsList: util.ArrayList[MapField]= new util.ArrayList[MapField]()
+    mapFieldsList.add(new MapField("col3", "col3_new", "in0"))
+    outSocket1.setMapFieldsList(mapFieldsList)
+
+    // set pass through fields
+    val passThroughFieldsList1: util.ArrayList[PassThroughField] = new util.ArrayList[PassThroughField]()
+    passThroughFieldsList1.add(new PassThroughField("*", "in0"))
+    outSocket1.setPassThroughFieldsList(passThroughFieldsList1)
+
+    // set Operation Field
+    val operationFieldsList: util.ArrayList[OperationField] = new util.ArrayList[OperationField]()
+    val operationField: OperationField = new OperationField("count", "operation1")
+    operationFieldsList.add(operationField)
+    outSocket1.setOperationFieldList(operationFieldsList)
+
+    // add outSocket in list
+    val outSocketList: util.ArrayList[OutSocket] = new util.ArrayList[OutSocket]()
+    outSocketList.add(outSocket1)
+    aggregateEntity.setOutSocketList(outSocketList)
+
+    val cp = new BaseComponentParams
+
+    cp.addinputDataFrame(df1)
+
+    val schema = Array(
+      new SchemaField("count", "java.lang.Long"),
+      new SchemaField("col3_new", "java.lang.String"),
+      new SchemaField("col1", "java.lang.String"),
+      new SchemaField("col2", "java.lang.String"),
+      new SchemaField("col3", "java.lang.String"),
+      new SchemaField("count1", "java.lang.Integer"))
+
+    cp.addSchemaFields(schema)
+
+    val aggregate: AggregateComponent = new AggregateComponent(aggregateEntity,cp)
+
+    val dataFrame: Map[String, DataFrame] = aggregate.createComponent()
+
+    val actual = Bucket(Fields(List("count", "col3_new", "col1", "col2", "col3")), dataFrame("out0")).result()
+
+    Assert.assertEquals(2, actual.length)
+    Assert.assertEquals(actual(0).toString(),"[0,C3R3,C1K1,C2R3,C3R3]")
+    Assert.assertEquals(actual(1).toString(),"[0,C3R1,C1K2,C2R1,C3R1]")
 
   }
 }
