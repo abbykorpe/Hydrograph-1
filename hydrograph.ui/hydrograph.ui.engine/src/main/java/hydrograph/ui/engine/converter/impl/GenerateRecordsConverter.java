@@ -83,7 +83,7 @@ public class GenerateRecordsConverter extends InputConverter {
 			}
 			catch(NumberFormatException exception){
 				ComponentXpath.INSTANCE.getXpathMap().put(
-						(ComponentXpathConstants.COMPONENT_XPATH_COUNT.value().replace(ID, componentName)),
+						(ComponentXpathConstants.COMPONENT_NO_OF_RECORDS_COUNT.value().replace(ID, componentName)),
 						new ComponentsAttributeAndValue(null, recordCountPropertyValue));
 			}
 		}
