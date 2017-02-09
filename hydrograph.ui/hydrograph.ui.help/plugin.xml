@@ -36,6 +36,17 @@
       <toc
             file="xml/Introduction/GlossaryTerminology.xml">
       </toc>
+      
+      
+      <toc
+            file="xml/Hydrograph Features/components.xml"
+            primary="true">
+      </toc>
+      
+      
+      
+      
+       
       <toc
             file="xml/Installation and Configuration/installation.xml"
             primary="true">
