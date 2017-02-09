@@ -539,9 +539,6 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 	private void validatePortField(String value, IntegerFieldEditor editor, String message){
 		if(StringUtils.isBlank(value) || !value.matches(Constants.PORT_VALIDATION_REGEX)){
 			showErrorMessage(editor, message,false);
-			setErrorMessage(message);
-			editor.setErrorMessage(message);
-			setValid(false);
 		}else{
 			showErrorMessage(editor, null,true);
 			checkState();
