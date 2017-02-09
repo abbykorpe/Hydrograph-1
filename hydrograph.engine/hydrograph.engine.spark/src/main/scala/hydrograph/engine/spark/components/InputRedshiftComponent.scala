@@ -16,7 +16,7 @@ package hydrograph.engine.spark.components
 import hydrograph.engine.core.component.entity.InputRDBMSEntity
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{SchemaCreator, SchemaMismatchException}
+import hydrograph.engine.spark.components.utils.{DbTableUtils, SchemaCreator, SchemaMismatchException}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
@@ -46,18 +46,22 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
       + "' in Batch " + inputRDBMSEntity.getBatch
       + " with output socket " + inputRDBMSEntity.getOutSocketList.get(0).getSocketId)
 
-    val tableorQuery = if (inputRDBMSEntity.getTableName == null || inputRDBMSEntity.getSelectQuery != null) ("(" + inputRDBMSEntity.getSelectQuery + ")") else inputRDBMSEntity.getTableName
 
+    val selectQuery = if (inputRDBMSEntity.getTableName == null) {
+      LOG.debug("Select query :  " + inputRDBMSEntity.getSelectQuery)
+      "(" + inputRDBMSEntity.getSelectQuery + ")"
+    }
+    else "(" + DbTableUtils().getSelectQuery(inputRDBMSEntity.getFieldsList.asScala.toList, inputRDBMSEntity.getTableName) + ")"
     if (inputRDBMSEntity.getTableName != null)
       LOG.debug("Component Id '" + inputRDBMSEntity.getComponentId
         + "' in Batch " + inputRDBMSEntity.getBatch
         + " having schema: [ " + inputRDBMSEntity.getFieldsList.asScala.mkString(",") + " ]"
-        + " reading data from '" + tableorQuery + "' table")
+        + " reading data from '" + selectQuery + "' table")
     else
       LOG.debug("Component Id '" + inputRDBMSEntity.getComponentId
         + "' in Batch " + inputRDBMSEntity.getBatch
         + " having schema: [ " + inputRDBMSEntity.getFieldsList.asScala.mkString(",") + " ]"
-        + " reading data from '" + tableorQuery + "' query")
+        + " reading data from '" + selectQuery + "' query")
 
     val connectionURL = "jdbc:redshift://" + inputRDBMSEntity.getHostName + ":" + inputRDBMSEntity.getPort() + "/" +
       inputRDBMSEntity.getDatabaseName;
@@ -65,7 +69,7 @@ class InputRedshiftComponent(inputRDBMSEntity: InputRDBMSEntity, iComponentsPara
     LOG.info("Connection  url for input Redshift  component: " + connectionURL)
 
     try {
-      val df = sparkSession.read.jdbc(connectionURL, tableorQuery, properties)
+      val df = sparkSession.read.jdbc(connectionURL, selectQuery, properties)
       compareSchema(getMappedSchema(schemaField), df.schema.toList)
       val key = inputRDBMSEntity.getOutSocketList.get(0).getSocketId
       Map(key -> df)
