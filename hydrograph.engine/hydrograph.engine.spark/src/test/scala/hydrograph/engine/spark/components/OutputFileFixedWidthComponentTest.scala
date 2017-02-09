@@ -39,7 +39,7 @@ class OutputFileFixedWidthComponentTest {
       .addData(List(1234, "C2R13", 23445, 3324.234234, true, 234.3342, "2014-04-09"))
       .build()
 
-    val outputPathCase: String = "testData/inputFiles/fixed_out.txt"
+    val outputPathCase: String = "testData/inputFiles/fixed_out"
     val sf1 = new SchemaField("col1", "java.lang.Integer");
     val sf2 = new SchemaField("col2", "java.lang.String");
     val sf3 = new SchemaField("col3", "java.lang.Long");
@@ -74,7 +74,7 @@ class OutputFileFixedWidthComponentTest {
 
     val outputFileFixedWidthEntity: OutputFileFixedWidthEntity = new OutputFileFixedWidthEntity
     outputFileFixedWidthEntity.setComponentId("outputFileFixedWidth");
-    outputFileFixedWidthEntity.setPath(outputPathCase)
+    outputFileFixedWidthEntity.setPath("testData/inputFiles/fixed_out")
     outputFileFixedWidthEntity.setStrict(true)
     outputFileFixedWidthEntity.setSafe(false)
     outputFileFixedWidthEntity.setCharset("UTF-8")
@@ -105,7 +105,7 @@ class OutputFileFixedWidthComponentTest {
     val expectedResult: String = "[1234,C2R13,23445,3324.234234,true,234.3342,2014-04-09]"
     val inputFileFixedWidthEntity: InputFileFixedWidthEntity = new InputFileFixedWidthEntity
     inputFileFixedWidthEntity.setComponentId("outputFileFixedWidth")
-    inputFileFixedWidthEntity.setPath(outputPathCase)
+    inputFileFixedWidthEntity.setPath("testData/inputFiles/fixed_out/part-00000")
     inputFileFixedWidthEntity.setStrict(true)
     inputFileFixedWidthEntity.setSafe(false)
     inputFileFixedWidthEntity.setCharset("UTF-8")

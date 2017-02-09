@@ -28,6 +28,7 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import java.text.ParseException
 
 
 class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iComponentsParams: BaseComponentParams) extends InputComponentBase with Serializable {
@@ -43,37 +44,32 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
     val prop = generateRecordEntity.getRuntimeProperties
     val noOfPartitions: Int = if (prop != null) {
-      prop.getProperty("noOfPartition").toInt
+      try {
+        prop.getProperty("noOfPartitions").toInt
+      } catch {
+
+        case nfe: NumberFormatException =>
+          LOG.error("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", invalid noOfPartitions")
+          throw new RuntimeException("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", invalid noOfPartitions")
+      }
     } else {
       spark.sparkContext.defaultParallelism
     }
 
-    val recordsPerPartition: ListBuffer[Int] = ListBuffer[Int]()
-    val evenRecordsPerPartition: Int = (recordCount / noOfPartitions).toInt
-    if (recordCount % noOfPartitions == 0) {
+    
 
-      LOG.info("Generate Record Component is processing with : "
-        + noOfPartitions
-        + " no of partitions will generate : "
-        + noOfPartitions
-        + " no of part files on cluster")
-
-      for (i <- 1 to noOfPartitions) {
-        recordsPerPartition += evenRecordsPerPartition
+    val recordsPerPartition: ListBuffer[Int] =
+      try {
+        recordCount % noOfPartitions match {
+          case 0 => ListBuffer.fill(noOfPartitions)((recordCount / noOfPartitions))
+          case x => ListBuffer.fill(noOfPartitions - 1)((recordCount / noOfPartitions)) ++
+            ListBuffer((recordCount / noOfPartitions) + x)
+        }
+      } catch {
+        case ae: ArithmeticException =>
+          LOG.error("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", noOfPartitions may be zero")
+          throw new RuntimeException("Error in Generate Record Component " + generateRecordEntity.getComponentId + ", noOfPartitions may be zero")
       }
-    } else {
-
-      LOG.info("Generate Record Component is processing with : "
-        + noOfPartitions
-        + " no of partitions will generate : "
-        + noOfPartitions
-        + " no of part files on cluster")
-
-      for (i <- 1 until noOfPartitions) {
-        recordsPerPartition += evenRecordsPerPartition
-      }
-      recordsPerPartition += evenRecordsPerPartition + (recordCount % noOfPartitions)
-    }
 
     try {
       val (fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]) = getFieldPropertiesList()
@@ -81,7 +77,6 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
         .mapPartitionsWithIndex {
           (index, itr) =>
             {
-
               LOG.info("Currently partition no : "
                 + index
                 + " is being processed")
@@ -89,9 +84,7 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
               (1 to recordsPerPartition(index)).toStream.map { _ =>
                 {
 
-                  val fieldsList: ArrayBuffer[Any] = getFieldsData(fieldEntityLists, simpleDateFormats)
-
-                  Row.fromSeq(fieldsList.toSeq)
+                  Row.fromSeq(getFieldsData(fieldEntityLists, simpleDateFormats))
 
                 }
               }.iterator
@@ -118,33 +111,40 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
     }
   }
 
-  val fieldsSize: Int = generateRecordEntity.getFieldsList.size().toInt
+  val fieldsSize: Int = generateRecordEntity.getFieldsList.size()
 
   def getFieldsData(fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]): ArrayBuffer[Any] =
     {
 
-      val rowFieldsList: ArrayBuffer[Any] = ArrayBuffer[Any]()
+      try {
 
-      for (fieldIndex <- 0 until fieldsSize) {
+        val rowFieldsList: ArrayBuffer[Any] = ArrayBuffer[Any]()
 
-        val dataType: String = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldDataType.split("\\.").last
-        rowFieldsList += generateFields(dataType, fieldIndex, fieldEntityLists, simpleDateFormats)
+        for (fieldIndex <- 0 until fieldsSize) {
+
+          val dataType: String = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldDataType.split("\\.").last
+          rowFieldsList += generateFields(dataType, fieldIndex, fieldEntityLists, simpleDateFormats)
+        }
+        return rowFieldsList
+      } catch {
+
+        case aiob: ArrayIndexOutOfBoundsException =>
+          LOG.error("Error in Generate Record Component in getFieldsData()" + generateRecordEntity.getComponentId + aiob)
+          throw new RuntimeException("Error in Generate Record Component in getFieldsData()" + generateRecordEntity.getComponentId + aiob)
       }
-      return rowFieldsList
     }
 
   def generateFields(dataType: String, fieldIndex: Int, fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]): Any = {
 
     try {
-      
-      
+
       val fieldEntity: FieldEntity = fieldEntityLists(fieldIndex)
 
       dataType match {
-        case "Integer"    =>FieldTypeEnum.INTEGER(fieldEntity)
-        case "String"     =>FieldTypeEnum.STRING(fieldEntity)
-        case "Long"       =>FieldTypeEnum.LONG(fieldEntity)
-        case "BigDecimal" =>FieldTypeEnum.BIGDECIMAL(fieldEntity)
+        case "Integer"    => FieldTypeEnum.INTEGER(fieldEntity)
+        case "String"     => FieldTypeEnum.STRING(fieldEntity)
+        case "Long"       => FieldTypeEnum.LONG(fieldEntity)
+        case "BigDecimal" => FieldTypeEnum.BIGDECIMAL(fieldEntity)
         case "Date" => {
 
           val dateFormat: String = fieldEntity.fieldFormat
@@ -157,20 +157,24 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
           }
         }
-        case "Double"  =>FieldTypeEnum.DOUBLE(fieldEntity)
-        case "Float"   =>FieldTypeEnum.FLOAT(fieldEntity)
-        case "Short"   =>FieldTypeEnum.SHORT(fieldEntity)
-        case "Boolean" =>FieldTypeEnum.BOOLEAN(fieldEntity)
+        case "Double"  => FieldTypeEnum.DOUBLE(fieldEntity)
+        case "Float"   => FieldTypeEnum.FLOAT(fieldEntity)
+        case "Short"   => FieldTypeEnum.SHORT(fieldEntity)
+        case "Boolean" => FieldTypeEnum.BOOLEAN(fieldEntity)
       }
 
     } catch {
       case nfe: NumberFormatException =>
-        LOG.error("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId, nfe)
-        throw new RuntimeException("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId, nfe)
+        LOG.error("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " can not cast to integer type")
+        throw new RuntimeException("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " can not cast to integer type")
+
+      case pe: ParseException =>
+        LOG.error("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " unable to parse in simple date format")
+        throw new RuntimeException("Error in Generate Record Component in DataGenerator.java" + generateRecordEntity.getComponentId + " unable to parse in  simple date format")
 
       case e: Exception =>
-        LOG.error("Error in Generate Record Component in generateFields()" + generateRecordEntity.getComponentId, e)
-        throw new RuntimeException("Error in Generate Record Component in generateFields()" + generateRecordEntity.getComponentId, e)
+        LOG.error("Error in Generate Record Component in generateFields()" + generateRecordEntity.getComponentId + e)
+        throw new RuntimeException("Error in Generate Record Component in generateFields()" + generateRecordEntity.getComponentId + e)
     }
 
   }
@@ -186,17 +190,14 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
         val fieldProperties = generateRecordEntity.getFieldsList.get(fieldIndex)
 
-      
-        
-         val fieldEntity: FieldEntity = FieldEntity(
-            fieldProperties.getFieldDefaultValue,
-            fieldProperties.getFieldFromRangeValue,
-           fieldProperties.getFieldToRangeValue,
-           fieldProperties.getFieldLength,
-            fieldProperties.getFieldFormat,
-            fieldProperties.getFieldScale
-           )
-        
+        val fieldEntity: FieldEntity = FieldEntity(
+          fieldProperties.getFieldDefaultValue,
+          fieldProperties.getFieldFromRangeValue,
+          fieldProperties.getFieldToRangeValue,
+          fieldProperties.getFieldLength,
+          fieldProperties.getFieldFormat,
+          fieldProperties.getFieldScale)
+
         fieldEntityLists += fieldEntity
 
         val simpleDateFormat: SimpleDateFormat = if (fieldProperties.getFieldFormat != null) new SimpleDateFormat(fieldProperties.getFieldFormat) else null
@@ -210,9 +211,8 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
     } catch {
 
       case aiob: ArrayIndexOutOfBoundsException =>
-        LOG.error("Error in Generate Record Component in getFieldPropertiesList()" + generateRecordEntity.getComponentId, aiob)
-        throw new RuntimeException("Error in Generate Record Component in getFieldPropertiesList()" + generateRecordEntity.getComponentId, aiob)
+        LOG.error("Error in Generate Record Component in getFieldPropertiesList()" + generateRecordEntity.getComponentId + aiob)
+        throw new RuntimeException("Error in Generate Record Component in getFieldPropertiesList()" + generateRecordEntity.getComponentId + aiob)
     }
   }
-
 }
