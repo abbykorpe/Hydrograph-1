@@ -27,6 +27,7 @@ repositories {
 		mavenLocal()
 		maven{	url AWUrl }
    		maven{	url BWUrl }
+		maven{  url RedShiftUrl }
 }
 /*
 -------------------------------------------------------------------------------------------------
@@ -80,7 +81,11 @@ dependencies {
     	
     	compile(group: 'mysql', name: 'mysql-connector-java', version: '5.1.34')
     	
-    	compile(group: 'redshift', name: 'redshiftJDBC42', version: '1.2.1.1001')
+    	compile(group: 'com.amazon.redshift', name: 'redshift-jdbc42', version: '1.2.1.1001')
+    	
+    	compile(group: 'teraData', name: 'terajdbc4', version: '0.1')
+		
+		compile(group: 'teraData', name: 'tdgssconfig', version: '0.1')
 }
 
 

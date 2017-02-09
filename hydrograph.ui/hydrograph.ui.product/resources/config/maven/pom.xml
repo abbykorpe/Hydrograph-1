@@ -27,6 +27,10 @@
 			<id>mavenRepo1</id>
 			<url>http://10.30.127.67:9091/artifactory/hydrograph-for-spark</url>
 		</repository>
+		<repository>
+			<id>mavenRepo1</id>
+			<url>http://redshift-maven-repository.s3-website-us-east-1.amazonaws.com/release</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
