@@ -16,7 +16,7 @@ import hydrograph.engine.core.component.entity.InputFileXMLEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.InputComponentBase
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.{FieldContext, SchemaCreator}
+import hydrograph.engine.spark.components.utils.SchemaCreator
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Column, DataFrame}
 import org.slf4j.{Logger, LoggerFactory}

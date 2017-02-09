@@ -17,28 +17,39 @@ import java.util
 import hydrograph.engine.core.component.entity.InputFileXMLEntity
 import hydrograph.engine.core.component.entity.base.InputOutputEntityBase
 import hydrograph.engine.core.component.entity.elements.SchemaField
+import hydrograph.engine.spark.datasource.xml.util.{FieldContext, TreeNode, XMLTree}
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import org.slf4j.{Logger, LoggerFactory}
+
 import collection.mutable.HashMap
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable
+
 
 case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   
   private val LOG:Logger = LoggerFactory.getLogger(classOf[SchemaCreator[T]])
 
+  /** Creates a List of StructField by recursively traversing TreeNode.
+    *
+    * @param rootNode
+    *                 root node of XMLTree to traverse
+    * @return
+    *         List of StructField
+    */
   def buildSchema(rootNode: TreeNode): List[StructField] = {
+
     def schema(currentNode: TreeNode, parent: String, structList: List[StructField]): List[StructField] = currentNode match {
-      case x if (x.children == ListBuffer() || x.children == List()) => {
+      case x if x.children.isEmpty => {
 
         structList ++ List(StructField(x.fieldContext.name, x.fieldContext.datatype, x.fieldContext.isNullable,getMetadataWithProperty("dateFormat",x.fieldContext.format)))
       }
       case x => {
-        List(StructField(x.fieldContext.name,StructType(x.children.toList.flatMap(a => schema(a, a.fieldContext.name, List[StructField]())).toArray),x.fieldContext.isNullable,getMetadataWithProperty("dateFormat",x.fieldContext.format)))
+        List(StructField(x.fieldContext.name,StructType(x.children.flatMap(a => schema(a, a.fieldContext.name, List[StructField]())).toArray),x.fieldContext.isNullable,getMetadataWithProperty("dateFormat",x.fieldContext.format)))
       }
     }
 
@@ -51,55 +62,76 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   def getRelativePath(absPath:String):String = absPath.replace(inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getAbsoluteXPath,"")
 
-  def extractXPathWithFields():List[(String,String)] = {
-    def extract(schemaFieldList:List[SchemaField],relativeXPath:List[(String,String)]):List[(String,String)] = (schemaFieldList,relativeXPath) match {
-      case (List(),y) => y
-      case (x::xs,y) => extract(xs,List[(String,String)]((getRelativePath(x.getAbsoluteOrRelativeXPath),x.getFieldName)) ++ y)
+
+  /** Returns a list of paired elements each containing a xpath and field name.
+    * @return
+    *         List[(String,String)]
+    *         each pair of list contains xpath and respsective field to read
+  */
+
+  def extractXPathWithFieldName():List[(String,String)] = {
+
+    def extract(schemaFieldList:List[SchemaField],relativeXPath:List[(String,String)]):List[(String,String)] ={
+      if(schemaFieldList.isEmpty)relativeXPath
+      else
+      extract(schemaFieldList.tail,(getRelativePath(schemaFieldList.head.getAbsoluteOrRelativeXPath),schemaFieldList.head.getFieldName)+:relativeXPath)
+
     }
+
+
     extract(inputOutputEntityBase.getFieldsList.asScala.toList,List[(String,String)]())
   }
+
+  /**
+    * Creates an Array of StructField by fetching SchemaField list from InputOutputEntityBase and returns the same.
+    * @return
+    *         Array of StructField
+    */
 
   private def createStructFieldsForXMLInputOutputComponents(): Array[StructField] = {
     LOG.trace("In method createStructFieldsForXMLInputOutputComponents() which returns Array[StructField] for Input and Output components")
     val safe:Boolean = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].isSafe
-    val relativeXPathAndField = extractXPathWithFields()
+    val relativeXPathWithFieldName = extractXPathWithFieldName()
     val rowTag: String = inputOutputEntityBase.asInstanceOf[InputFileXMLEntity].getRowTag
-    var fcMap:HashMap[String,FieldContext] = HashMap[String,FieldContext]()
+    var fcMap:mutable.HashMap[String,FieldContext] = mutable.HashMap[String,FieldContext]()
 
-    for (i <- 0 until inputOutputEntityBase.getFieldsList.size()) {
-      val schemaField: SchemaField = inputOutputEntityBase.getFieldsList.get(i)
-      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName,schemaField.getAbsoluteOrRelativeXPath, getDataType(schemaField), safe,schemaField.getFieldFormat))
+
+    for (schemaField <- inputOutputEntityBase.getFieldsList) {
+      fcMap += (schemaField.getFieldName -> FieldContext(schemaField.getFieldName, schemaField.getAbsoluteOrRelativeXPath,
+        getDataType(schemaField), safe, schemaField.getFieldFormat))
     }
 
-    fcMap += (rowTag -> FieldContext(rowTag,rowTag, DataTypes.StringType, safe,"yyyy-MM-dd"))
 
-    var xmlTree:XMLTree = XMLTree(fcMap.get(rowTag).get)
+    fcMap += (rowTag -> FieldContext(rowTag,rowTag, DataTypes.StringType, safe,"yyyy-MM-dd")) // add context of rowTag to be used by schema fields to check XPaths
 
-    relativeXPathAndField.map(x => x match {
-      case a if(!a._1.contains('/'))=> xmlTree.addChild(rowTag,FieldContext(a._1,rowTag+"/"+a._1,fcMap.get(a._2).get.datatype,safe,fcMap.get(a._2).get.format))
-      case a => {
+    val xmlTree: XMLTree = XMLTree(fcMap(rowTag))// add rowTag as root of tree to be used as parent of fields
+
+    relativeXPathWithFieldName.foreach { xpathAndFieldPair=>{// iterating on list of field and its XPath's pair
+       if (!xpathAndFieldPair._1.contains('/'))
+         xmlTree.addChild(rowTag, FieldContext(xpathAndFieldPair._1, rowTag + "/" + xpathAndFieldPair._1, fcMap(xpathAndFieldPair._2).datatype, safe, fcMap(xpathAndFieldPair._2).format))// add field as child of root if its XPath doesnt contains "/"
+      else  {
         var parentTag = rowTag
-        var xpath=rowTag+"/"
-        a._1.split("/").map(b => {
-          xpath=xpath+b
-          if(!xmlTree.isPresent(b,xpath)) {
+        var xpath = rowTag + "/"
+        xpathAndFieldPair._1.split("/").foreach(currentField => {
+          xpath = xpath + currentField
+          if (!xmlTree.isPresent(currentField, xpath)) {//check if tree contains field on given XPath
 
-            xmlTree.addChild(parentTag,FieldContext(b,xpath,fcMap.get(a._2).get.datatype,safe,fcMap.get(a._2).get.format))
+            xmlTree.addChild(parentTag, FieldContext(currentField, xpath, fcMap(xpathAndFieldPair._2).datatype, safe, fcMap(xpathAndFieldPair._2).format))
           }
-          parentTag = b
-          xpath+="/"
+          parentTag = currentField // make currentField parent of next field as its a nested schema
+          xpath += "/"
         })
       }
-    })
+    }}
 
     val structFields = buildSchema(xmlTree.rootNode).toArray
-    LOG.debug("Array of StructField created for XML Components from schema is : " + structFields.mkString)
+    LOG.debug("Array of StructField created for XML Component: "+inputOutputEntityBase.getComponentId+" from schema is : " + structFields.mkString)
     structFields
   }
 
   def makeSchema(): StructType = inputOutputEntityBase match {
-    case x if(x.isInstanceOf[InputFileXMLEntity]) => StructType(createStructFieldsForXMLInputOutputComponents())
-    case x if(!x.isInstanceOf[InputFileXMLEntity]) => StructType(createStructFields())
+    case x if x.isInstanceOf[InputFileXMLEntity] => StructType(createStructFieldsForXMLInputOutputComponents())
+    case x if !x.isInstanceOf[InputFileXMLEntity] => StructType(createStructFields())
   }
 
   def getTypeNameFromDataType(dataType: String): String = {
@@ -115,7 +147,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
       case "Boolean" => DataTypes.BooleanType
       case "Float" => DataTypes.FloatType
       case "Double" => DataTypes.DoubleType
-      case "Date" if (schemaField.getFieldFormat.matches(".*[H|m|s|S].*")) => DataTypes.TimestampType
+      case "Date" if schemaField.getFieldFormat.matches(".*[H|m|s|S].*") => DataTypes.TimestampType
       case "Date" => DataTypes.DateType
       case "BigDecimal" => DataTypes.createDecimalType(checkPrecision(schemaField.getFieldPrecision),schemaField.getFieldScale)
     }
@@ -143,9 +175,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
   def createSchema(): Array[Column] ={
     LOG.trace("In method createSchema()")
-    val fields = inputOutputEntityBase.getFieldsList
-    val schema=new Array[Column](fields.size())
-    fields.zipWithIndex.foreach{ case(f,i)=> schema(i)=col(f.getFieldName)}
+    val schema=inputOutputEntityBase.getFieldsList.map(sf=>col(sf.getFieldName)).toArray
     LOG.debug("Schema created : " + schema.mkString )
     schema
   }

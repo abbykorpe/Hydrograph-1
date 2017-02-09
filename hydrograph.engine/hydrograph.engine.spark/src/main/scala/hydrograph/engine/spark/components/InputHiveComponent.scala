@@ -39,6 +39,7 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
 
   }
 
+
   def constructQuery(entity: HiveEntityBase): String = {
     LOG.trace("In method constructQuery() which returns constructed query to execute with spark-sql")
     var query = ""
@@ -49,7 +50,7 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     val partitionKeyValueMap = entity.getListOfPartitionKeyValueMap.asScala.toList
 
 
-    query = query + "SELECT " + getFieldsForSelectHiveQuery(fieldList) + " FROM " + databaseName + "." + tableName
+    query = query + "SELECT " + getFieldsForSelectClause(fieldList) + " FROM " + databaseName + "." + tableName
 
     if (partitionKeyValueMap.nonEmpty)
       query = query + " WHERE " + getpartitionKeysClause(partitionKeyValueMap)
@@ -57,7 +58,7 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     query
   }
 
-  def getFieldsForSelectHiveQuery(listOfFields: List[SchemaField]): String = {
+  def getFieldsForSelectClause(listOfFields: List[SchemaField]): String = {
 
     listOfFields.map(field => field.getFieldName).mkString(",")
   }
