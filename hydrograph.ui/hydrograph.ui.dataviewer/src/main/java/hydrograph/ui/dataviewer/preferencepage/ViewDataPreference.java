@@ -378,7 +378,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void modifyText(ModifyEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForPortField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		remotePortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
@@ -387,7 +387,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void focusGained(FocusEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForPortField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		remotePortNo.setPreferenceStore(getPreferenceStore());
@@ -417,7 +417,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void modifyText(ModifyEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForPortField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		localPortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
@@ -426,7 +426,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void focusGained(FocusEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForPortField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		localPortNo.setPreferenceStore(getPreferenceStore());
@@ -536,19 +536,22 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		}
 	}
 	
-	private void validationForPortField(String value, IntegerFieldEditor editor, String message){
-		if(StringUtils.isBlank(value) || !value.matches(Constants.PORT_REGEX)){
+	private void validatePortField(String value, IntegerFieldEditor editor, String message){
+		if(StringUtils.isBlank(value) || !value.matches(Constants.PORT_VALIDATION_REGEX)){
+			showErrorMessage(editor, message,false);
 			setErrorMessage(message);
 			editor.setErrorMessage(message);
 			setValid(false);
 		}else{
-			setErrorMessage(null);
-			editor.setErrorMessage("");
-			setValid(true);
+			showErrorMessage(editor, null,true);
 			checkState();
 		}
 	}
-	
+	private void showErrorMessage(IntegerFieldEditor editor, String message,boolean validState) {
+		setErrorMessage(message);
+		editor.setErrorMessage(message);
+		setValid(validState);
+	}
 
 	@Override
 	public void init(IWorkbench workbench) {

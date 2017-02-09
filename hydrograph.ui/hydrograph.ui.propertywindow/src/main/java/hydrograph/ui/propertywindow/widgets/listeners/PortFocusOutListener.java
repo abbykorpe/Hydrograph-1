@@ -58,7 +58,7 @@ public class PortFocusOutListener implements IELTListener {
 			public void handleEvent(Event event) {
 				String charSet = ((Text) widgets[0]).getText().trim();
 				if (SWT.FocusOut == event.type) {
-					Matcher matchs=Pattern.compile(Constants.PORT_REGEX).matcher(charSet);
+					Matcher matchs=Pattern.compile(Constants.PORT_VALIDATION_REGEX).matcher(charSet);
 					if (StringUtils.isBlank(charSet)){
 						txtDecorator.show();
 						((Text) widgets[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));

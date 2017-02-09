@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.common.util.SWTResourceManager;
 import hydrograph.ui.common.util.WordUtils;
 import hydrograph.ui.datastructure.property.JoinConfigProperty;
@@ -681,10 +682,10 @@ public class ComponentTooltip extends AbstractInformationControl implements IInf
 				}
 
 			} else if(propertyInfo.getPropertyValue() != null && StringUtils.equalsIgnoreCase(propertyInfo.getPropertyName().toString(), "PORT")){
-				if(!propertyInfo.getPropertyValue().toString().matches(Constants.REGEX_NUMERIC_AND_PARAMETER)){
-					lblDecorator.show();
-				}else{
+				if(propertyInfo.getPropertyValue().toString().matches(Constants.PORT_VALIDATION_REGEX)|| ParameterUtil.isParameter(propertyInfo.getPropertyValue().toString())){
 					lblDecorator.hide();
+				}else{
+					lblDecorator.show();
 				}
 			}else {
 				if (propertyInfo.getPropertyValue() != null && (!propertyInfo.getPropertyValue().equals(""))) {
