@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
 
 /***
@@ -45,11 +46,11 @@ public class PortValidationRule implements IValidator{
 		String value = (String)object;
 		if(StringUtils.isNotBlank(value)){
 			Matcher matchs=Pattern.compile(Constants.PORT_REGEX).matcher(value);
-			if(!matchs.matches()){
+			if(matchs.matches()||ParameterUtil.isParameter(value)){
+				return true;
+			}else{
 				errorMessage = propertyName + Constants.PORT_WIDGET_ERROR;
 				return false;
-			}else{
-				return true;
 			}
 		}
 		errorMessage = propertyName + " can not be blank";
