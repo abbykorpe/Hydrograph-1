@@ -29,7 +29,6 @@ import scala.collection.mutable.ListBuffer
 
 case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
 
-  private val precision:Int=38 
   
   private val LOG:Logger = LoggerFactory.getLogger(classOf[SchemaCreator[T]])
 
@@ -114,8 +113,14 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
       case "Double" => DataTypes.DoubleType
       case "Date" if (schemaField.getFieldFormat.matches(".*[H|m|s|S].*")) => DataTypes.TimestampType
       case "Date" => DataTypes.DateType
-      case "BigDecimal" => DataTypes.createDecimalType(returnScalePrecision(schemaField.getFieldPrecision), returnScalePrecision(schemaField.getFieldScale))
+      case "BigDecimal" => DataTypes.createDecimalType(checkPrecision(schemaField.getFieldPrecision),schemaField.getFieldScale)
     }
+  }
+  
+  
+  
+  def checkPrecision(precision:Int):Int={
+    if(precision== -999) 38 else precision
   }
 
   private def createStructFields(): Array[StructField] = {
@@ -130,10 +135,7 @@ case class SchemaCreator[T <: InputOutputEntityBase](inputOutputEntityBase: T) {
     structFields
   }
   
-  
-  def returnScalePrecision(data:Int):Int={
-    if(data== -999) precision else data
-  }
+ 
 
   def createSchema(): Array[Column] ={
     LOG.trace("In method createSchema()")

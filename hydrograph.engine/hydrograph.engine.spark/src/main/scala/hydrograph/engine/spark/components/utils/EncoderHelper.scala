@@ -37,10 +37,13 @@ class EncoderHelper extends Serializable {
       case "Double" => DataTypes.DoubleType
       case "Date" if (schema.getFieldFormat.matches(".*[H|m|s|S].*")) => DataTypes.TimestampType
       case "Date" => DataTypes.DateType
-      case "BigDecimal" => DataTypes.createDecimalType(schema.getFieldPrecision, schema.getFieldScale)
+      case "BigDecimal" => DataTypes.createDecimalType(checkPrecision(schema.getFieldPrecision),schema.getFieldScale)
     }
   }
-
+ def checkPrecision(precision:Int):Int={
+    if(precision== -999) 38 else precision
+  }
+  
   def getStructFields(schemaFields: Array[SchemaField]): StructType ={
     val structFields = new Array[StructField](schemaFields.size)
     schemaFields.zipWithIndex.foreach(s=>{

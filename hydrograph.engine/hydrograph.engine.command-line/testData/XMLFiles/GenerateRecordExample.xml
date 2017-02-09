@@ -36,7 +36,7 @@
 			</schema>
 		</outSocket>
 		<runtimeProperties>
-			<property name="noOfPartition" value="1" />
+			<property name="noOfPartitions" value="1" />
 		</runtimeProperties>
 		<recordCount value="5" />
 	</inputs>
