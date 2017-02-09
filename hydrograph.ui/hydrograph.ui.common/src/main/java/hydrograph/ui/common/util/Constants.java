@@ -348,10 +348,11 @@ public class Constants {
 	
 	public static final String RUN_SQL_DATABASE_CONNECTION_NAME = "databaseConnectionName";
 	public static final Object RUN_SQL_QUERY = "runsqlquery";
-	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter e.g. 1234, @{Param}";
+	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter and range should be 0 to 65535 e.g. 1234, @{Param}";
 	public static final String JAVA_EXTENSION = ".java";
 	public static final String ProjectSupport_SRC = "src/main/java";
 	
 	public static final String COMMENT_BOX_IMAGE_PATH="/icons/comment-box-icon.png";
+	public static final String PORT_REGEX="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
 
 }

@@ -44,7 +44,7 @@ public class PortValidationRule implements IValidator{
 			boolean isJobFileImported) {
 		String value = (String)object;
 		if(StringUtils.isNotBlank(value)){
-			Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(value);
+			Matcher matchs=Pattern.compile(Constants.PORT_REGEX).matcher(value);
 			if(!matchs.matches()){
 				errorMessage = propertyName + Constants.PORT_WIDGET_ERROR;
 				return false;

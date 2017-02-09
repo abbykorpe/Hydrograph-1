@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
@@ -57,15 +58,15 @@ public class PortFocusOutListener implements IELTListener {
 			public void handleEvent(Event event) {
 				String charSet = ((Text) widgets[0]).getText().trim();
 				if (SWT.FocusOut == event.type) {
-					Matcher matchs=Pattern.compile(Constants.REGEX_NUMERIC_AND_PARAMETER).matcher(charSet);
+					Matcher matchs=Pattern.compile(Constants.PORT_REGEX).matcher(charSet);
 					if (StringUtils.isBlank(charSet)){
 						txtDecorator.show();
 						((Text) widgets[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
 						((Text) widgets[0]).setToolTipText(txtDecorator.getDescriptionText());
-					} else if (!matchs.matches()) {
-						txtDecorator.show();
-					}else{
+					} else if (matchs.matches()||ParameterUtil.isParameter(charSet)) {
 						txtDecorator.hide();
+					}else{
+						txtDecorator.show();
 					}
 				} 
 			}
