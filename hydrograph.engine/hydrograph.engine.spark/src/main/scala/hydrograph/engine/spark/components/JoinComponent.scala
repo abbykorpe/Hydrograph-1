@@ -20,6 +20,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{ Column, DataFrame }
 import scala.collection.mutable.ListBuffer
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
  * Created by gurdits on 10/18/2016.
@@ -28,18 +29,28 @@ import scala.collection.mutable.ListBuffer
 
 class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParams) extends OperationComponentBase with Serializable {
 
+  private val LOG: Logger = LoggerFactory.getLogger(classOf[JoinComponent])
+
   override def createComponent(): Map[String, DataFrame] = {
 
-    val joinUtils = new JoinUtils(joinEntity, componentsParams)
-    val joinOperations = joinUtils.prepareJoinOperation()
+    try {
+      val joinUtils = new JoinUtils(joinEntity, componentsParams)
+      val joinOperations = joinUtils.prepareJoinOperation()
 
-    val passthroughFields = joinUtils.getPassthroughFields()
-    val mapFields = joinUtils.getMapFields()
-    val copyOfInSocketFields = joinUtils.getCopyOfInSocketFields()
+      val passthroughFields = joinUtils.getPassthroughFields()
+      val mapFields = joinUtils.getMapFields()
+      val copyOfInSocketFields = joinUtils.getCopyOfInSocketFields()
 
-    val joinOperationsSorted = joinOperations.sortBy(j => (j.recordRequired, !j.unused)).reverse
+      val joinOperationsSorted = joinOperations.sortBy(j => (j.recordRequired, !j.unused)).reverse
 
-    join(joinOperationsSorted, passthroughFields, mapFields, copyOfInSocketFields)
+      LOG.debug("Created Join Component '" + joinEntity.getComponentId + "' in Batch" + joinEntity.getBatch)
+
+      join(joinOperationsSorted, passthroughFields, mapFields, copyOfInSocketFields)
+    }
+    catch {
+      case ex: RuntimeException =>
+        LOG.error("Error in Join component '" + joinEntity.getComponentId + "', Error" + ex.getMessage, ex); throw ex
+    }
   }
 
   def join(joinOperations: Array[JoinOperation], passthroughFields: List[(String, String)], mapFields: List[(String, String)], copyOfInSocketFields: List[(String, String)]): Map[String, DataFrame] = {
@@ -167,12 +178,15 @@ class JoinComponent(joinEntity: JoinEntity, componentsParams: BaseComponentParam
 
       val joinedDF = lhsDF.withColumn("input1", lit(1)).join(rhsDF.withColumn("input2", lit(1)), createJoinKey(lhsKeys, rhsKeys), "outer")
 
+      val unusedDF_lhs = joinedDF.filter("false").select(convertStructFieldsTOString(lhsDF.schema): _*)
       val unusedDF_rhs = joinedDF.filter("(input1 is null) and (input2 == 1)").select(convertStructFieldsTOString(rhsDF.schema): _*)
 
+      val unusedDF_lhs_prefixRemoved = unusedDF_lhs.select(unusedDF_lhs.columns.map(c => col(c).as(c.replaceFirst(lhs.inSocketId + "_", ""))): _*)
       val unusedDF_rhs_prefixRemoved = unusedDF_rhs.select(unusedDF_rhs.columns.map(c => col(c).as(c.replaceFirst(rhs.inSocketId + "_", ""))): _*)
 
       val outputDF = joinedDF.filter("(input1 == 1)").select(convertStructFieldsTOString(lhsDF.schema) ++ convertStructFieldsTOString(rhsDF.schema): _*)
 
+      if (lhs.unused) (outCollection += ((lhs.unusedSocketId, unusedDF_lhs_prefixRemoved)))
       if (rhs.unused) (outCollection += ((rhs.unusedSocketId, unusedDF_rhs_prefixRemoved)))
 
       JoinOperation("join", "in", outputDF, lhsKeys, false, true, lhs.outSocketId, "")
