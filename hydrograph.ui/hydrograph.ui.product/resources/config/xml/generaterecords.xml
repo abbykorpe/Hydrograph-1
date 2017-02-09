@@ -42,7 +42,7 @@
 		<tns:property dataType="string" name="no_of_records" value="0" renderer="NO_OF_RECORDS_WIDGET" type="USER"
 			group="GENERAL" subGroup="CONFIGURATION" showAsTooltip="TRUE" tooltipDataType="TEXT"
 			usage="REQUIRED" propertyHelpText="Specify number of records to be generated">
-			<tns:validator>LONG_VALIDATOR</tns:validator>
+			<tns:validator>INTEGER_OR_PARAMETER_VALIDATOR</tns:validator>
 		</tns:property>	
 		
 		<tns:property dataType="string" name="runtime_properties" renderer="RUNTIME_PROPERTIES_WIDGET"
