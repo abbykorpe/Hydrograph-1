@@ -348,7 +348,6 @@ public class Constants {
 	
 	public static final String RUN_SQL_DATABASE_CONNECTION_NAME = "databaseConnectionName";
 	public static final Object RUN_SQL_QUERY = "runsqlquery";
-	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter and range should be 0 to 65535 e.g. 3306, @{Param}";
 	public static final String JAVA_EXTENSION = ".java";
 	public static final String ProjectSupport_SRC = "src/main/java";
 	

@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ParameterUtil;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.validators.Messages;
 
 /***
  * This class validates port_no for all DB Components.
@@ -49,7 +50,7 @@ public class PortValidationRule implements IValidator{
 			if(matchs.matches()||ParameterUtil.isParameter(value)){
 				return true;
 			}else{
-				errorMessage = propertyName + Constants.PORT_WIDGET_ERROR;
+				errorMessage = propertyName +" "+ Messages.PORT_VALIDATION_ERROR;
 				return false;
 			}
 		}
