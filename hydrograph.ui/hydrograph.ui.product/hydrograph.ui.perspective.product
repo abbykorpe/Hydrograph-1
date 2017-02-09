@@ -3,7 +3,6 @@
 
 <product name="Hydrograph" uid="hydrograph.ui.perspective.ID" id="hydrograph.ui.perspective.productId" application="hydrograph.ui.perspective.application" version="0.0.1" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -96,7 +95,7 @@ openFile
    <splash
       location="hydrograph.ui.perspective" />
    <launcher name="hydrograph">
-      <macosx icon="/hydrograph.ui.product/icons/icons.icns"/>
+      <macosx icon="icons/icons.icns"/>
       <solaris/>
       <win useIco="false">
          <bmp
@@ -108,7 +107,6 @@ openFile
             winLargeLow="icons/48x48_8bit.bmp"/>
       </win>
    </launcher>
-
 
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
