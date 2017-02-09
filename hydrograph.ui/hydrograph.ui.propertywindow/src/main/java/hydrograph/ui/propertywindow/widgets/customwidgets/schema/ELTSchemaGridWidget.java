@@ -71,7 +71,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -99,6 +98,7 @@ import org.xml.sax.SAXException;
 import hydrograph.ui.common.schema.Field;
 import hydrograph.ui.common.schema.Fields;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.ParameterUtil;
@@ -1002,7 +1002,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 public void focusLost(FocusEvent e) {
 				 if (extSchemaPathText.getText().isEmpty()) {
 					 decorator.show();
-					 extSchemaPathText.setBackground(new Color(Display.getDefault(), 250, 250, 250));
+					 extSchemaPathText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 250, 250, 250));
 				 } else {
 					 decorator.hide();
 				 }
@@ -1011,7 +1011,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 @Override
 			 public void focusGained(FocusEvent e) {
 				 decorator.hide();
-				 extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				 extSchemaPathText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			 }
 		 });
 
@@ -1024,7 +1024,7 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 			 @Override
 			 public void widgetSelected(SelectionEvent e) {
 				 decorator.hide();
-				 extSchemaPathText.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				 extSchemaPathText.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 
 			 }
 

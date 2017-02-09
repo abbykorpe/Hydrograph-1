@@ -13,12 +13,6 @@
 
 package hydrograph.ui.expression.editor.evaluate;
 
-import hydrograph.ui.datastructure.property.FixedWidthGridRow;
-import hydrograph.ui.expression.editor.Constants;
-import hydrograph.ui.expression.editor.Messages;
-import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
-import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
-import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +28,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -44,6 +37,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.swt.customwidget.HydroGroup;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.datastructure.property.FixedWidthGridRow;
+import hydrograph.ui.expression.editor.Constants;
+import hydrograph.ui.expression.editor.Messages;
+import hydrograph.ui.expression.editor.dialogs.ExpressionEditorDialog;
+import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 
 /**
  * @author Bitwise
@@ -136,7 +137,7 @@ public class EvaluateDialog extends Dialog {
 	private void createSearchTextBox(Composite fieldTableComposite) {
 		searchTextBox = new Text(fieldTableComposite, SWT.BORDER);
 		searchTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		searchTextBox.setForeground(new Color(null,128,128,128));
+		searchTextBox.setForeground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 128,128,128));
 		searchTextBox.setText(Constants.DEFAULT_SEARCH_TEXT);
 		ExpressionEditorUtil.INSTANCE.addFocusListenerToSearchTextBox(searchTextBox);
 		searchTextBox.addModifyListener(new ModifyListener() {

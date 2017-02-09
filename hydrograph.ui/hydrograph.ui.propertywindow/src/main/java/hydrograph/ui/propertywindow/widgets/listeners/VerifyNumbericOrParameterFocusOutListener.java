@@ -14,19 +14,18 @@
  
 package hydrograph.ui.propertywindow.widgets.listeners;
 
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 
 
 /**
@@ -51,7 +50,7 @@ public class VerifyNumbericOrParameterFocusOutListener implements IELTListener{
 					if(!matcher.matches() && StringUtils.isNotBlank(string)){
 						((Text) widgetList[0]).setText(string.replace("@{", "").replace("}", ""));
 						((Text) widgetList[0]).setText("@{"+((Text) widgetList[0]).getText()+"}");
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 					}
 				}
 			};

@@ -143,6 +143,7 @@ import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructures.parametergrid.ParameterFile;
 import hydrograph.ui.datastructures.parametergrid.filetype.ParamterFileTypes;
@@ -227,7 +228,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 
 	private String uniqueJobId;
 
-	private static final Color palatteTextColor=new Color(null,51,51,51);
+	private static final Color palatteTextColor=CustomColorRegistry.INSTANCE.getColorFromRegistry(51,51,51);
 	
 	private CustomPaletteEditPartFactory paletteEditPartFactory;
 	public Point location;
@@ -1856,7 +1857,7 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 	public void applyPaletteTheme(){
 		paletteEditPartFactory.getPaletteTextFigure().setBackgroundColor(getCanvasControl().getBackground());
 		Color canvasBackColor = getCanvasControl().getBackground();
-		Color contrastColor = new Color(null, 255-canvasBackColor.getRed(), 255-canvasBackColor.getGreen(), 255-canvasBackColor.getBlue());
+		Color contrastColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( 255-canvasBackColor.getRed(), 255-canvasBackColor.getGreen(), 255-canvasBackColor.getBlue());
 		for(DrawerFigure drawerFigure:paletteEditPartFactory.getDrawerFigures()){
 			drawerFigure.getContentPane().setBackgroundColor(getCanvasControl().getBackground());
 			drawerFigure.getContentPane().setForegroundColor(contrastColor);

@@ -39,6 +39,7 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.core.PackageFragmentRoot;
 import org.eclipse.jdt.internal.core.SourceType;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -119,6 +120,18 @@ public class BuildExpressionEditorDataSturcture {
 		return true;
 	}
 	
+	@SuppressWarnings("restriction")
+	public PackageFragmentRoot getSrcPackageFragment(IJavaProject iJavaProject) throws JavaModelException {
+		for(IPackageFragmentRoot iPackageFragmentRoot:iJavaProject.getAllPackageFragmentRoots()){
+			if(iPackageFragmentRoot instanceof PackageFragmentRoot && iPackageFragmentRoot.getKind()==iPackageFragmentRoot.K_SOURCE){
+				if(StringUtils.startsWith(iPackageFragmentRoot.toString(),hydrograph.ui.common.util.Constants.ProjectSupport_SRC)){
+					return (PackageFragmentRoot) iPackageFragmentRoot;
+				}
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Returns packages of given jar file
 	 * 
@@ -130,6 +143,10 @@ public class BuildExpressionEditorDataSturcture {
 		IProject iProject = getCurrentProject();
 		IJavaProject javaProject = JavaCore.create(iProject);
 		try {
+			if(StringUtils.equals(jarFileName, hydrograph.ui.common.util.Constants.ProjectSupport_SRC)){
+				return getSrcPackageFragment(javaProject);
+			}
+			
 			IPackageFragmentRoot[] fragmentRoot = javaProject.getAllPackageFragmentRoots();
 			for (IPackageFragmentRoot iPackageFragmentRoot : fragmentRoot) {
 				if (StringUtils.contains(iPackageFragmentRoot.getElementName(), jarFileName))

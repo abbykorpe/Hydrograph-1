@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
@@ -176,9 +177,9 @@ public class AggregateCumulateExpressionComposite extends AbstractExpressionComp
 			textAccumulator.setText(mappingSheetRow.getAccumulator());
 		}
 		if (StringUtils.isBlank(textAccumulator.getText())) {
-			textAccumulator.setBackground(new Color(null, 255, 255, 000));
+			textAccumulator.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 000));
 		} else {
-			textAccumulator.setBackground(new Color(null, 255, 255, 255));
+			textAccumulator.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 		}
 		addDataTypes();
 		if (!StringUtils.isBlank(mappingSheetRow.getComboDataType())) {

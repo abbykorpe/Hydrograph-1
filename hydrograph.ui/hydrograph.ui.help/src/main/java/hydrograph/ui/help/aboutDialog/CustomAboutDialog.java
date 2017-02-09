@@ -66,6 +66,7 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.help.Activator;
 import hydrograph.ui.help.Messages;
 import hydrograph.ui.logging.factory.LogFactory;
@@ -270,7 +271,7 @@ public class CustomAboutDialog extends TrayDialog {
 		Composite newComposite = new Composite(topContainer, SWT.NONE);
 		newComposite.setLayout(new GridLayout(1, true));
 		newComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		newComposite.setBackground(new Color(null, 255, 255, 255));
+		newComposite.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		topContainer.setLayoutData(data);
 		// used only to drive initial size so that there are no hints in the
@@ -278,7 +279,7 @@ public class CustomAboutDialog extends TrayDialog {
 		final Link link = new Link(newComposite, SWT.NONE);
 		GridData data1 = new GridData(SWT.FILL, SWT.FILL, true, false, 0, 0);
 		link.setLayoutData(data1);
-		link.setBackground(new Color(null, 255, 255, 255));
+		link.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 		link.setText("<a>" + Messages.ABOUT_HEADER_TEXT + "</a>" + Messages.ABOUT_TEXT);
 
 		link.addMouseListener(new MouseAdapter() {

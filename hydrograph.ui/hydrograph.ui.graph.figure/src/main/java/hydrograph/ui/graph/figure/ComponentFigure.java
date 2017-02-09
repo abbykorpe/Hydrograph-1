@@ -51,6 +51,7 @@ import org.slf4j.Logger;
 import hydrograph.ui.common.datastructures.tooltip.PropertyToolTipInformation;
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.common.validator.Validator;
@@ -181,10 +182,10 @@ public class ComponentFigure extends Figure implements Validator {
 	}
    
 	private void setInitialColor() {
-		componentColor = new Color(null, ELTColorConstants.LIGHT_GREY_RGB[0], ELTColorConstants.LIGHT_GREY_RGB[1], ELTColorConstants.LIGHT_GREY_RGB[2]);
-		borderColor = new Color(null, ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
-		selectedComponentColor = new Color(null, ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[2]);
-		selectedBorderColor = new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
+		componentColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( ELTColorConstants.LIGHT_GREY_RGB[0], ELTColorConstants.LIGHT_GREY_RGB[1], ELTColorConstants.LIGHT_GREY_RGB[2]);
+		borderColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( ELTColorConstants.DARK_GREY_RGB[0], ELTColorConstants.DARK_GREY_RGB[1], ELTColorConstants.DARK_GREY_RGB[2]);
+		selectedComponentColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BACKGROUND_SELECTED_RGB[2]);
+		selectedBorderColor = CustomColorRegistry.INSTANCE.getColorFromRegistry( ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 	}
 
 	/**
@@ -477,39 +478,6 @@ public class ComponentFigure extends Figure implements Validator {
 		}
 	}
 	
-	/**
-	 * Calls dispose method on Images. Called by EditPart.
-	 */
-	public void disposeImages(){
-		if(canvasIcon!=null){
-			this.canvasIcon.dispose();
-		}
-		if(compStatusImage!=null){
-			this.compStatusImage=null;
-		}
-		if(statusImage!=null){
-			this.statusImage=null;
-		}
-	}
-	
-	/**
-	 * Calls dispose method on Images. Called by EditPart.
-	 */
-	public void disposeColors(){
-		
-		if(componentColor!=null){
-			this.componentColor.dispose();
-		}
-		if(borderColor!=null){
-			this.borderColor.dispose();
-		}
-		if(selectedComponentColor!=null){
-			this.selectedComponentColor.dispose();
-		}
-		if(selectedBorderColor!=null){
-			this.selectedBorderColor.dispose();
-		}
-	}
 	/**
 	 * Gets the connection anchor.
 	 * 

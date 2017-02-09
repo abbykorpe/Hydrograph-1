@@ -14,18 +14,17 @@
 package hydrograph.ui.propertywindow.widgets.listeners;
 
 
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 
 /**
@@ -58,16 +57,16 @@ public class DelimiterModifyListener  implements IELTListener{
 					if(StringUtils.isEmpty(string)){
 						txtDecorator.show();
 						((Text) widgetList[0]).setToolTipText(txtDecorator.getDescriptionText());
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 204));
+						((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 					}else{
 						txtDecorator.hide();
 						((Text) widgetList[0]).setToolTipText("");
-						((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+						((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 					}
 
 				}else{
 					txtDecorator.hide();
-					((Text) widgetList[0]).setBackground(new Color(Display.getDefault(), 255, 255, 255));
+					((Text) widgetList[0]).setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 				}
 			}		
 		};

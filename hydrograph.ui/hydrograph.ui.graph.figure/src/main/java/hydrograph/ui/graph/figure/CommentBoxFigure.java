@@ -24,13 +24,13 @@ import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import hydrograph.ui.common.interfaces.tooltip.ComponentCanvas;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.graph.model.CommentBox;
 
 /**
@@ -164,7 +164,7 @@ public class CommentBoxFigure extends BentCornerFigure {
 	 * Sets the initial color for border of comment box
 	 */
 	private void setInitialColor() {
-		new Color(null, ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0],
+		CustomColorRegistry.INSTANCE.getColorFromRegistry( ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[0],
 				ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[1], ELTColorConstants.COMPONENT_BORDER_SELECTED_RGB[2]);
 	}
 

@@ -27,15 +27,14 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.logging.factory.LogFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory;
 import hydrograph.ui.propertywindow.factory.ListenerFactory.Listners;
@@ -122,7 +121,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 			public void focusLost(FocusEvent e) {
 				if(textBox.getText().isEmpty() && filepathConfig.isMandatory()){
 					decorator.show();
-					textBox.setBackground(new Color(Display.getDefault(), 255, 255, 204));
+					textBox.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 204));
 				}
 				else{
 					decorator.hide();
@@ -132,7 +131,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 			@Override
 			public void focusGained(FocusEvent e) {
 				decorator.hide();
-				textBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				textBox.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			}
 		});
 	
@@ -146,7 +145,7 @@ public class ELTFilePathWidget extends AbstractWidget{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				decorator.hide();
-				textBox.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+				textBox.setBackground(CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255));
 			
 			}
 

@@ -12,27 +12,10 @@
  *******************************************************************************/
 package hydrograph.ui.propertywindow.widgets.dialogs.lookup;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.ParameterUtil;
-import hydrograph.ui.common.util.XMLConfigUtil;
-import hydrograph.ui.datastructure.property.FilterProperties;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.LookupMapProperty;
-import hydrograph.ui.datastructure.property.LookupMappingGrid;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.graph.model.Component;
-import hydrograph.ui.propertywindow.messages.Messages;
-import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
-import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
-import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
-import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -68,23 +51,33 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
+
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
+import hydrograph.ui.common.util.ImagePathConstant;
+import hydrograph.ui.common.util.ParameterUtil;
+import hydrograph.ui.datastructure.property.FilterProperties;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.LookupMapProperty;
+import hydrograph.ui.datastructure.property.LookupMappingGrid;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.graph.model.Component;
+import hydrograph.ui.propertywindow.messages.Messages;
+import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
+import hydrograph.ui.propertywindow.widgets.dialogs.join.support.JoinMappingEditingSupport;
+import hydrograph.ui.propertywindow.widgets.dialogs.join.utils.JoinMapDialogConstants;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 /**
  * 
@@ -361,7 +354,7 @@ public class LookupMapDialog extends Dialog {
 				int occurrences = Collections.frequency(getOutputFieldList(),
 						((LookupMapProperty)element).getOutput_Field());
 				if (occurrences > 1) {
-					return new Color(null, 255, 0, 0);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0);
 				} else {
 					return super.getForeground(element);
 				}
@@ -373,7 +366,7 @@ public class LookupMapDialog extends Dialog {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
 
 				if (StringUtils.isBlank(lookupMapProperty.getOutput_Field()))
-					return new Color(Display.getDefault(), 0xFF, 0xDD, 0xDD);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0xFF, 0xDD, 0xDD);
 				else
 					return super.getBackground(element);
 			}
@@ -425,7 +418,7 @@ public class LookupMapDialog extends Dialog {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
 				if (!allInputFields.contains(lookupMapProperty
 						.getSource_Field()) && !ParameterUtil.isParameter(lookupMapProperty.getSource_Field())) {
-					return new Color(null, 255, 0, 0);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 0, 0);
 				} else {
 					return super.getForeground(element);
 				}
@@ -437,7 +430,7 @@ public class LookupMapDialog extends Dialog {
 				LookupMapProperty lookupMapProperty = (LookupMapProperty) element;
 
 				if (StringUtils.isBlank(lookupMapProperty.getSource_Field()))
-					return new Color(Display.getDefault(), 0xFF, 0xDD, 0xDD);
+					return CustomColorRegistry.INSTANCE.getColorFromRegistry( 0xFF, 0xDD, 0xDD);
 				else
 					return super.getBackground(element);
 			}

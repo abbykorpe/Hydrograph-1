@@ -14,6 +14,8 @@ package hydrograph.ui.dataviewer.constants;
 
 import org.eclipse.swt.graphics.Color;
 
+import hydrograph.ui.common.util.CustomColorRegistry;
+
 /**
  * The Class DataViewerColors.
  * Provides Color constants to be used in watcher windows.
@@ -22,6 +24,6 @@ import org.eclipse.swt.graphics.Color;
  *
  */
 public class DataViewerColors {
-	public static final Color COLOR_WHITE=new Color(null, 255, 255, 255);
-	public static final Color COLOR_CELL_SELECTION=new Color(null, 218, 234, 255);
+	public static final Color COLOR_WHITE=CustomColorRegistry.INSTANCE.getColorFromRegistry( 255, 255, 255);
+	public static final Color COLOR_CELL_SELECTION=CustomColorRegistry.INSTANCE.getColorFromRegistry( 218, 234, 255);
 }

@@ -24,7 +24,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -37,8 +36,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.common.util.CustomColorRegistry;
 import hydrograph.ui.common.util.ImagePathConstant;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.property.NameValueProperty;
 import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
 
@@ -152,7 +151,7 @@ public class TransformViewDataDialog extends Dialog {
 					for(int i=0;i<mappingSheetRow.getOutputList().size();i++)
 						
 					{	
-					    Color blue = new Color(Display.getCurrent(), 92,172,238);
+					    Color blue =CustomColorRegistry.INSTANCE.getColorFromRegistry( 92,172,238);
 						int start5=stringOutput.length();
 						stringOutput.append(TransformViewDataDialogConstants.START + mappingSheetRow.getOperationID() + TransformViewDataDialogConstants.BEGIN);
 						int length5=stringOutput.length()-start5;
@@ -185,7 +184,7 @@ public class TransformViewDataDialog extends Dialog {
 				{
 					 for(int i=0;i<mappingSheetRow.getOutputList().size();i++){
 						
-						 Color green = new Color(Display.getCurrent(), 0,199,140);
+						 Color green = CustomColorRegistry.INSTANCE.getColorFromRegistry( 0,199,140);
 						 int start7=stringOutput.length();
 						 stringOutput.append(TransformViewDataDialogConstants.START + mappingSheetRow.getOperationID() + TransformViewDataDialogConstants.BEGIN);
 						 int length7=stringOutput.length()-start7;
@@ -232,7 +231,7 @@ public class TransformViewDataDialog extends Dialog {
 		
 		if(mapThrough.toString().length()!=0){
 		
-			 Color brown = new Color(Display.getCurrent(), 160,103,0);
+			 Color brown =CustomColorRegistry.INSTANCE.getColorFromRegistry( 160,103,0);
 			int start=stringOutput.length();
 			stringOutput.append(TransformViewDataDialogConstants.START+TransformViewDataDialogConstants.MAPTHROUGHBEGINS);
 			int length=stringOutput.length()-start;
@@ -249,7 +248,7 @@ public class TransformViewDataDialog extends Dialog {
 		
 		if(passThrough.toString().length()!=0){
 			
-			 Color cyan = new Color(Display.getCurrent(), 64,224,208);
+			 Color cyan = CustomColorRegistry.INSTANCE.getColorFromRegistry( 64,224,208);
 			int start3=stringOutput.length();
 			stringOutput.append(TransformViewDataDialogConstants.START+TransformViewDataDialogConstants.PASSTHROUGHBEGINS);
 			int length3=stringOutput.length()-start3;

@@ -349,14 +349,15 @@ public class CategoriesDialogSourceComposite extends Composite {
 		}
 	}
 
+	@SuppressWarnings("restriction")
 	private void loadComboJarListFromBuildPath(Combo comboJarList, String newJarName) {
 		comboJarList.removeAll();
 		IProject iProject = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject();
 		IJavaProject iJavaProject=null;
 		try {
 			iJavaProject = JavaCore.create(iProject);
-			PackageFragmentRoot srcfragmentRoot= getSrcPackageFragment(iJavaProject);
-			comboJarList.add(srcfragmentRoot.getElementName());
+			PackageFragmentRoot srcfragmentRoot= BuildExpressionEditorDataSturcture.INSTANCE.getSrcPackageFragment(iJavaProject);
+			comboJarList.add(hydrograph.ui.common.util.Constants.ProjectSupport_SRC);
 			comboJarList.setData(String.valueOf(comboJarList.getItemCount() - 1), srcfragmentRoot);
 			
 			for (IPackageFragmentRoot iPackageFragmentRoot : iJavaProject.getAllPackageFragmentRoots()) {
@@ -389,16 +390,6 @@ public class CategoriesDialogSourceComposite extends Composite {
 		}
 	}
 
-	private PackageFragmentRoot getSrcPackageFragment(IJavaProject iJavaProject) throws JavaModelException {
-		for(IPackageFragmentRoot iPackageFragmentRoot:iJavaProject.getAllPackageFragmentRoots()){
-			if(iPackageFragmentRoot instanceof PackageFragmentRoot){
-				if(StringUtils.equals(iPackageFragmentRoot.getElementName(),Constants.SRC_FOLDER)){
-					return (PackageFragmentRoot) iPackageFragmentRoot;
-				}
-			}
-		}
-		return null;
-	}
 
 	private boolean isJarPresentInLibFolder(IPath path) {
 		String currentProjectName = BuildExpressionEditorDataSturcture.INSTANCE.getCurrentProject().getName();
