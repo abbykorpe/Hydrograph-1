@@ -396,6 +396,7 @@ public class Messages extends NLS {
 	public static String PEM_EXT;
 	
 	public static String RUN_SQL_MESSAGE;
+	public static String PORT_VALIDATION_ERROR;
 	
 	static {
 		// initialize resource bundle

@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.dataviewer.constants.Messages;
 import hydrograph.ui.graph.execution.tracking.handlers.ExecutionTrackingConsoleHandler;
 import hydrograph.ui.graph.job.RunStopButtonCommunicator;
@@ -141,7 +142,7 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		localPortNoText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				validationForIntegerField(localPortNoText, localPortNoText.getText(), Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(localPortNoText, localPortNoText.getText(), Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		
@@ -185,7 +186,7 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String value = ((Text) e.getSource()).getText();
-				validationForIntegerField(remotePortNoText, value, Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(remotePortNoText, value, Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		
@@ -279,8 +280,8 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 	 * @param value
 	 * @param message
 	 */
-	private void validationForIntegerField(Text textBox, String value, String message) {
-		if (StringUtils.isBlank(value) || !value.matches("\\d+") || Integer.parseInt(value) < 1) {
+	private void validatePortField(Text textBox, String value, String message) {
+		if (StringUtils.isBlank(value) || !value.matches(Constants.PORT_VALIDATION_REGEX)) {
 			textBox.setData(ERROR_KEY, message);
 			executionTrackPreference.setValid(false);
 		} else {

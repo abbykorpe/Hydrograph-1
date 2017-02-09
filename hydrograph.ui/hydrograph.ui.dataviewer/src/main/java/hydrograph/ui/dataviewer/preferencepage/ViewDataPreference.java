@@ -14,6 +14,7 @@
 package hydrograph.ui.dataviewer.preferencepage;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ConvertHexValues;
 import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.dataviewer.Activator;
@@ -370,14 +371,14 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		grpServiceDetailsCmposite.setLayout(new GridLayout(1,false));
 		grpServiceDetailsCmposite.setLayoutData(serviceGridData);
 
-		localPortNo = new IntegerFieldEditor(PreferenceConstants.LOCAL_PORT_NO, Messages.LOCAL_PORT_NO_LABEL, grpServiceDetailsCmposite, 4);
+		localPortNo = new IntegerFieldEditor(PreferenceConstants.LOCAL_PORT_NO, Messages.LOCAL_PORT_NO_LABEL, grpServiceDetailsCmposite, 5);
 
-		remotePortNo = new IntegerFieldEditor(PreferenceConstants.REMOTE_PORT_NO, Messages.REMOTE_PORT_NO_LABEL, grpServiceDetailsCmposite, 4);
+		remotePortNo = new IntegerFieldEditor(PreferenceConstants.REMOTE_PORT_NO, Messages.REMOTE_PORT_NO_LABEL, grpServiceDetailsCmposite, 5);
 		remotePortNo.getTextControl(grpServiceDetailsCmposite).addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		remotePortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
@@ -386,7 +387,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void focusGained(FocusEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,remotePortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		remotePortNo.setPreferenceStore(getPreferenceStore());
@@ -416,7 +417,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void modifyText(ModifyEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		localPortNo.getTextControl(grpServiceDetailsCmposite).addFocusListener(new FocusListener() {
@@ -425,7 +426,7 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 			@Override
 			public void focusGained(FocusEvent event) {
 				String value = ((Text)event.getSource()).getText();
-				validationForIntegerField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
+				validatePortField(value,localPortNo,Messages.PORTNO_FIELD_VALIDATION);
 			}
 		});
 		localPortNo.setPreferenceStore(getPreferenceStore());
@@ -535,6 +536,19 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		}
 	}
 	
+	private void validatePortField(String value, IntegerFieldEditor editor, String message){
+		if(StringUtils.isBlank(value) || !value.matches(Constants.PORT_VALIDATION_REGEX)){
+			showErrorMessage(editor, message,false);
+		}else{
+			showErrorMessage(editor, null,true);
+			checkState();
+		}
+	}
+	private void showErrorMessage(IntegerFieldEditor editor, String message,boolean validState) {
+		setErrorMessage(message);
+		editor.setErrorMessage(message);
+		setValid(validState);
+	}
 
 	@Override
 	public void init(IWorkbench workbench) {
