@@ -20,6 +20,7 @@ import hydrograph.engine.core.component.entity.elements.SchemaField
 import org.apache.spark.sql.execution.datasources.jdbc.JDBCRDD
 import org.apache.spark.sql.types.StructType
 import org.slf4j.{Logger, LoggerFactory}
+import scala.collection.JavaConverters._
 
 /**
   * Created by AniruddhaS on 1/6/2017.
@@ -38,7 +39,7 @@ case class TeradataTableUtils() {
     val fieldsScale = fieldsCreator.getFieldScale();
     val fieldsPrecision = fieldsCreator.getFieldPrecision();
     val fieldFormat:Array[String] = fieldsCreator.getFieldFormat();
-    val columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision,fieldFormat);
+    val columnDefs = JavaToSQLTypeMapping.createTypeMapping(outputRDBMSEntity.getDatabaseType(), fieldsDataType, fieldsScale, fieldsPrecision,fieldFormat).toList
 
     LOG.trace("Generating create query for " + outputRDBMSEntity.getDatabaseName
       + " database for table '" + outputRDBMSEntity.getTableName
@@ -52,16 +53,13 @@ case class TeradataTableUtils() {
         + "' with column name [" + fieldsCreator.getFieldNames.toList.mkString + "] "
         + " primary key [" + outputRDBMSEntity.getPrimaryKeys + "] ")
 
-      val primaryKeys = new Array[String](outputRDBMSEntity.getPrimaryKeys.size())
       val iterator = outputRDBMSEntity.getPrimaryKeys.iterator()
       var index: Int = 0
 
-      while (iterator.hasNext) {
-        primaryKeys(index) = iterator.next().getName
-        index += 1
-      }
+      val primaryKeys =  outputRDBMSEntity.getPrimaryKeys.asScala.toList.map(prk => prk.getName)
+
       new TeradataTableDescriptor(outputRDBMSEntity.getTableName,
-        fieldsCreator.getFieldNames,
+        fieldsCreator.getFieldNames.toList,
         columnDefs,
         primaryKeys,
         outputRDBMSEntity.getDatabaseType).getCreateTableStatement()
@@ -73,7 +71,7 @@ case class TeradataTableUtils() {
       new TeradataTableDescriptor(
         outputRDBMSEntity
         .getTableName,
-        fieldsCreator.getFieldNames,
+        fieldsCreator.getFieldNames.toList,
         columnDefs,
         null,
         outputRDBMSEntity.getDatabaseType
