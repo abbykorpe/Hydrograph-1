@@ -1,4 +1,4 @@
-====================================================================================================
+﻿====================================================================================================
 Features Added:
 =====================================================================================================
 Sr.No. <date> - [developer names] - description
@@ -48,3 +48,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 32.#683 [Vibhor Tyagi] - Issues with Run SQL component
 33.#675 [Vibhor Tyagi] - Evaluate Expression window:- Need to remove space after Output word
 34.#697 [shashank karnik]-Generate Records: "No of records” should allow parameterized values. 
+35.     [Rakesh Kanchalwar]- Redshift jar version updated in gradle

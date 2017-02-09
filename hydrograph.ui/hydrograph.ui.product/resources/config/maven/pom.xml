@@ -67,8 +67,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>redshift</groupId>
-			<artifactId>redshiftJDBC42</artifactId>
+			<groupId>com.amazon.redshift</groupId>
+			<artifactId>redshift-jdbc42</artifactId>
 			<version>1.2.1.1001</version>
 		</dependency>
 	</dependencies>
