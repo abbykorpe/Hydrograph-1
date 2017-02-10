@@ -35,14 +35,15 @@ class OutputHiveComponent(entity: HiveEntityBase, oComponentParameters: BaseComp
   override def execute(): Unit = {
     LOG.trace("In method execute()")
     val sparkSession = oComponentParameters.getSparkSession()
-    import sparkSession.sql
+
 
     oComponentParameters.getDataFrame().createOrReplaceTempView(TEMPTABLE)
 
-    sql("set hive.exec.dynamic.partition.mode=nonstrict")
-    sql("CREATE DATABASE IF NOT EXISTS "+entity.getDatabaseName)
-    sql(constructCreateTableQuery(entity))
-    sql(constructInsertIntoTableQuery(entity))
+    LOG.debug("Setting hive.exec.dynamic.partition.mode to nonstrict as values for partition columns are known only during loading of the data into a Hive table")
+    sparkSession.sql("set hive.exec.dynamic.partition.mode=nonstrict")
+    sparkSession.sql("CREATE DATABASE IF NOT EXISTS "+entity.getDatabaseName)
+    sparkSession.sql(constructCreateTableQuery(entity))
+    sparkSession.sql(constructInsertIntoTableQuery(entity))
 
     LOG.info("Created Output Hive Component " + entity.getComponentId + " in batch " + entity.getBatch + " to write Hive table " + entity.getDatabaseName + "." + entity.getTableName)
 
@@ -68,14 +69,14 @@ class OutputHiveComponent(entity: HiveEntityBase, oComponentParameters: BaseComp
     val listOfAllFields = entity.getFieldsList.asScala.toList
     val partitionKeys = entity.getPartitionKeys
 
-    query = query + getFieldsForCreateTableHiveQuery(listOfAllFields.filter(field => (!partitionKeys.contains(field.getFieldName))))
+    query = query + getFieldsForCreateTableHiveQuery(listOfAllFields.filter(field => !partitionKeys.contains(field.getFieldName)))
 
-    if (partitionKeys != null && partitionKeys.length > 0) {
-      query = query + " PARTITIONED BY " + getFieldsForCreateTableHiveQuery(listOfAllFields.filter(field => (partitionKeys.contains(field.getFieldName))))
-    }
+    if (partitionKeys.nonEmpty)
+      query = query + " PARTITIONED BY " + getFieldsForCreateTableHiveQuery(listOfAllFields.filter(field => partitionKeys.contains(field.getFieldName)))
+
 
     if (componentName.equals(HIVETEXTTABLE))
-      query = query + " ROW FORMAT DELIMITED FIELDS TERMINATED BY '" + (entity.asInstanceOf[OutputFileHiveTextEntity]).getDelimiter + "'"
+      query = query + " ROW FORMAT DELIMITED FIELDS TERMINATED BY '" + entity.asInstanceOf[OutputFileHiveTextEntity].getDelimiter + "'"
 
     query = query + " STORED AS " + componentName
 
@@ -107,7 +108,7 @@ class OutputHiveComponent(entity: HiveEntityBase, oComponentParameters: BaseComp
     else
       query = "INSERT INTO TABLE " + database + "." + table + " "
 
-    if (entity.getPartitionKeys.length > 0)
+    if (!entity.getPartitionKeys.isEmpty)
       query = query + " PARTITION (" + entity.getPartitionKeys.mkString(",") + ") "
 
     query = query + "select " + getFieldsForSelectHiveQuery(entity.getFieldsList.asScala.toList) + " from "+TEMPTABLE

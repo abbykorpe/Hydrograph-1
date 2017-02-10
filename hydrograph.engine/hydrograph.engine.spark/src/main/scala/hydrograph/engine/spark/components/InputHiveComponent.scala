@@ -30,16 +30,15 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     LOG.trace("In method createComponent()")
     val sparkSession = parameters.getSparkSession()
 
-    import sparkSession.sql
 
-
-    val data = sql(constructQuery(entity))
+    val data = sparkSession.sql(constructQuery(entity))
     val key = entity.getOutSocketList.get(0).getSocketId
 
     LOG.info("Created Hive Input component " + entity.getComponentId + " in batch " + entity.getBatch + " with out socket " + key + " to read Hive table " + entity.getDatabaseName + "." + entity.getTableName)
     Map(key -> data)
 
   }
+
 
   def constructQuery(entity: HiveEntityBase): String = {
     LOG.trace("In method constructQuery() which returns constructed query to execute with spark-sql")
@@ -51,15 +50,15 @@ class InputHiveComponent(entity: HiveEntityBase, parameters: BaseComponentParams
     val partitionKeyValueMap = entity.getListOfPartitionKeyValueMap.asScala.toList
 
 
-    query = query + "SELECT " + getFieldsForSelectHiveQuery(fieldList) + " FROM " + entity.getDatabaseName + "." + entity.getTableName
+    query = query + "SELECT " + getFieldsForSelectClause(fieldList) + " FROM " + databaseName + "." + tableName
 
-    if (partitionKeyValueMap != null && partitionKeyValueMap.size > 0)
+    if (partitionKeyValueMap.nonEmpty)
       query = query + " WHERE " + getpartitionKeysClause(partitionKeyValueMap)
 
     query
   }
 
-  def getFieldsForSelectHiveQuery(listOfFields: List[SchemaField]): String = {
+  def getFieldsForSelectClause(listOfFields: List[SchemaField]): String = {
 
     listOfFields.map(field => field.getFieldName).mkString(",")
   }
