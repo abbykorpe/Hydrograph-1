@@ -44,17 +44,17 @@ object TypeCast {
         castType match {
 
           case _: ByteType => value.toString.toByte
-          case _: ShortType => value.toString.toShort
-          case _: IntegerType => value.toString.toInt
-          case _: LongType => value.toString.toLong
-          case _: FloatType => Try(value.toString.toFloat)
-            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value.toString).floatValue())
-          case _: DoubleType => Try(value.toString.toDouble)
-            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value.toString).doubleValue())
-          case _: BooleanType => value.toString.toBoolean
-          case _: DecimalType => new BigDecimal(value.toString.replaceAll(",",""))
-          case _: TimestampType  => new Timestamp(dateFormat.parse(value.toString).getTime)
-          case _: DateType =>  new Date(dateFormat.parse(value.toString).getTime)
+          case _: ShortType => value.toString.trim.toShort
+          case _: IntegerType => value.toString.trim.toInt
+          case _: LongType => value.toString.trim.toLong
+          case _: FloatType => Try(value.toString.trim.toFloat)
+            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value.toString.trim).floatValue())
+          case _: DoubleType => Try(value.toString.trim.toDouble)
+            .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value.toString.trim).doubleValue())
+          case _: BooleanType => value.toString.trim.toBoolean
+          case _: DecimalType => new BigDecimal(value.toString.trim.replaceAll(",",""))
+          case _: TimestampType  => new Timestamp(dateFormat.parse(value.toString.trim).getTime)
+          case _: DateType =>  new Date(dateFormat.parse(value.toString.trim).getTime)
           case _: StringType => value
           case _ => throw new RuntimeException(s"Unsupported type: ${castType.typeName}")
         }
