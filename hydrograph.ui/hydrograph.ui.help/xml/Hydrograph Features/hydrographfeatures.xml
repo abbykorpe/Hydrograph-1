@@ -14,15 +14,8 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Hydrograph Features">
-   <topic href="html/Components/Aggregate.html" label="View Data">
-      <anchor id="Aggregate"/>
+   <topic href="html/Hydrograph Features/View_Data.html" label="ViewData">
+      <anchor id="ViewData"/>
    </topic>
-   <topic href="html/Components/Clone.html" label="Clone">
-      <anchor id="Clone"/>
-   </topic>
-      <topic href="html/Components/Cumulate.html" label="Cumulate">
-      <anchor id="Cumulate"/>
-   </topic>
-   
 </toc>
 

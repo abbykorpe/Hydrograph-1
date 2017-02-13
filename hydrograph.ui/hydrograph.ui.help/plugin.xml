@@ -39,7 +39,7 @@
       
       
       <toc
-            file="xml/Hydrograph Features/components.xml"
+            file="xml/Hydrograph Features/hydrographfeatures.xml"
             primary="true">
       </toc>
       
