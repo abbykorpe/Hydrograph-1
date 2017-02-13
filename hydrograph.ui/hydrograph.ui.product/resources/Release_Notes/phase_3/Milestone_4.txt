@@ -51,3 +51,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 35.     [Rakesh Kanchalwar]- Redshift jar version updated in gradle
 36.#692 [Nitin Gupta] - Jar issue :- Please follow steps from attached doc
 37.#661 [Ashika Holkar] -  All database components: Need to change error message validation on primary key window
+38.#676 [Nitin Gupta] - Schema of Unused ports of Join Component:Schema of out port of join is used for populating schema of unused ports
