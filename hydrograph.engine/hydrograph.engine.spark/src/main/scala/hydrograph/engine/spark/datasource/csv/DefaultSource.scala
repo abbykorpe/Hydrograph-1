@@ -49,6 +49,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
       throw new Exception("Quotation cannot be more than one character.")
     }*/
     val useHeader = parameters.getOrElse("header", "false")
+    val componentId = parameters.getOrElse("componentId", "")
     val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
     val headerFlag = if (useHeader == "true") {
@@ -80,16 +81,18 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
       dateFormat,
       schema
     )(sqlContext)*/
-    CsvRelation(
-      charset,
-      path,
-      headerFlag,
-      delimiter,
-      quoteChar,
-      treatEmptyValuesAsNullsFlag,
-      dateFormat,
-      schema
-    )(sqlContext)
+      CsvRelation(
+        componentId,
+        charset,
+        path,
+        headerFlag,
+        delimiter,
+        quoteChar,
+        treatEmptyValuesAsNullsFlag,
+        dateFormat,
+        schema
+      )(sqlContext)
+
   }
 
   private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map { e =>
