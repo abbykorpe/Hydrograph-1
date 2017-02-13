@@ -439,15 +439,12 @@ public class ViewDataPreference extends PreferencePage implements IWorkbenchPref
 		booleanFieldEditor.setPreferenceStore(getPreferenceStore());
 		booleanFieldEditor.load();
 		
-		Button unusedButton4 = new Button(parentComposite, SWT.None);
-		unusedButton4.setText("unused");
-		unusedButton4.setVisible(false);
+		Composite parent_comp= new Composite(parentComposite, SWT.NONE);
+		parent_comp.setLayout(new GridLayout(3, false));
+		new Label(parent_comp, SWT.NONE).setText("Purge View Data Files ");
 		
-		new Label(parentComposite, SWT.None).setText("   Purge View Data Files ");
-		Composite purgeComposite = new Composite(parentComposite, SWT.None);
-		GridData purgeCompositeData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		purgeCompositeData.heightHint = 18;
-		purgeComposite.setLayoutData(purgeCompositeData);
+		Composite purgeComposite = new Composite(parent_comp, SWT.NONE);
+		purgeComposite.setLayout(new GridLayout(1, false));
 		 
 		purgeEditor = new BooleanFieldEditor(PreferenceConstants.PURGE_DATA_FILES, "", purgeComposite);
 		getPreferenceStore().setDefault(PreferenceConstants.PURGE_DATA_FILES, true);
