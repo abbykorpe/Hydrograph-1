@@ -26,14 +26,13 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public class DelimitedAndFixedWidthHelper {
 
+    private static final Logger LOG = LoggerFactory
+            .getLogger(DelimitedAndFixedWidthHelper.class);
+    static int counter = 0;
+    static boolean isFixedWidthField = false;
     private DelimitedAndFixedWidthHelper() {
 
     }
-
-    static int counter = 0;
-    static boolean isFixedWidthField = false;
-    private static final Logger LOG = LoggerFactory
-            .getLogger(DelimitedAndFixedWidthHelper.class);
 
     public static Object[] getFields(
             StructType schema, String line,
@@ -45,7 +44,7 @@ public class DelimitedAndFixedWidthHelper {
             try {
                 String[] tokens = generateTokensFromRawData(line,
                         lengthsAndDelimiters, lengthsAndDelimitersType, quote);
-                return coerceParsedTokens(line, (Object[]) tokens, safe,schema, dateFormats);
+                return coerceParsedTokens(line, tokens, safe, schema, dateFormats);
             } catch (Exception e) {
                 LOG.error(
                         "Exception while generating tokens.\nLine being parsed: "
@@ -150,8 +149,8 @@ public class DelimitedAndFixedWidthHelper {
 			String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
 			boolean strict, char filler, String quote) {
 		counter = 0;
-		Object[] tuple = (Object[])strTuple.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR);
-		StringBuilder buffer = new StringBuilder();
+        Object[] tuple = strTuple.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR);
+        StringBuilder buffer = new StringBuilder();
 		for (Object value : tuple) {
 			isFixedWidthField = false;
 			isFixedWidthField = isFixedWidthField(lengthsAndDelimitersType,
@@ -239,7 +238,7 @@ public class DelimitedAndFixedWidthHelper {
     private static Object appendQuoteChars(Object value, String quote,
                                            String lengthsAndDelimiters) {
         if (value instanceof String && ((String) value).contains(lengthsAndDelimiters)) {
-            value = quote + ((String) value) + quote;
+            value = quote + value + quote;
         }
         return value;
     }
@@ -284,10 +283,8 @@ public class DelimitedAndFixedWidthHelper {
     }
 
     public static boolean containsNewLine(String outputLine) {
-        if (outputLine.contains("\n") || outputLine.contains("\\n")
-                || outputLine.contains("\r\n") || outputLine.contains("\\r\\n"))
-            return true;
-        return false;
+        return outputLine.contains("\n") || outputLine.contains("\\n")
+                || outputLine.contains("\r\n") || outputLine.contains("\\r\\n");
     }
 
     public static String modifyIdentifier(String identifier) {
@@ -348,35 +345,40 @@ public class DelimitedAndFixedWidthHelper {
 
     public static String maskRegexChar(
             String singleChar) {
-        String string = singleChar;
         if (singleChar.contains("|")) {
-            string = singleChar.replace("|", "\\|");
+            singleChar = singleChar.replace("|", "\\|");
         }
         if (singleChar.contains(".")) {
-            string = singleChar.replace(".", "\\.");
+            singleChar = singleChar.replace(".", "\\.");
         }
         if (singleChar.contains("+")) {
-            string = singleChar.replace("+", "\\+");
+            singleChar = singleChar.replace("+", "\\+");
         }
         if (singleChar.contains("$")) {
-            string = singleChar.replace("$", "\\$");
+            singleChar = singleChar.replace("$", "\\$");
         }
         if (singleChar.contains("*")) {
-            string = singleChar.replace("*", "\\*");
+            singleChar = singleChar.replace("*", "\\*");
         }
         if (singleChar.contains("?")) {
-            string = singleChar.replace("?", "\\?");
+            singleChar = singleChar.replace("?", "\\?");
         }
         if (singleChar.contains("^")) {
-            string = singleChar.replace("^", "\\^");
+            singleChar = singleChar.replace("^", "\\^");
         }
         if (singleChar.contains("-")) {
-            string = singleChar.replace("-", "\\-");
+            singleChar = singleChar.replace("-", "\\-");
+        }
+        if (singleChar.contains(")")) {
+            singleChar = singleChar.replace(")", "\\)");
+        }
+        if (singleChar.contains("(")) {
+            singleChar = singleChar.replace("(", "\\(");
         }
         if (singleChar.contains("\\x")) {
-            string = parseHex(singleChar);
+            singleChar = parseHex(singleChar);
         }
-        return string;
+        return singleChar;
     }
 
     public static String[] checkIfDelimiterIsRegexChar(
