@@ -111,6 +111,17 @@ class TrackComponentUtils {
 				+ " are not properly configured");
 	}
 
+	static TypeBaseComponent getCurrentComponent(List<TypeBaseComponent> jaxbGraph, String compId,
+												 String socketId) {
+		for (TypeBaseComponent component : jaxbGraph) {
+			if(component.getId().equals(compId)){
+				return component;
+			}
+		}
+		throw new RuntimeException("debug FromComponent id: " + compId + " or Socket id: " + socketId
+				+ " are not properly configured");
+	}
+
 	/**
 	 * Creates an object of type {@link Filter}
 	 * @param trackContext
@@ -122,7 +133,7 @@ class TrackComponentUtils {
 	 * @return the object of type {@link Filter}
 	 */
 	static Executiontracking generateFilterAfterEveryComponent(TrackContext trackContext, List<TypeBaseComponent> jaxbObjectList,
-																		Map<String, Set<SchemaField>> schemaFieldsMap) {
+															   Map<String, Set<SchemaField>> schemaFieldsMap) {
 		Executiontracking executiontracking = new Executiontracking();
 		TypeTransformOperation filterOperation = new TypeTransformOperation();
 
@@ -203,7 +214,7 @@ class TrackComponentUtils {
 			return extractInSocketListOfTypeBaseInSocket(typeStraightPullComponent.getInSocket());
 		}
 		else if(typeBaseComponent instanceof TypeOperationsComponent) {
-            TypeOperationsComponent typeOperationsComponent = (TypeOperationsComponent) typeBaseComponent;
+			TypeOperationsComponent typeOperationsComponent = (TypeOperationsComponent) typeBaseComponent;
 			return extractInSocketListOfTypeBaseInSocket(typeOperationsComponent.getInSocket());
 		}
 

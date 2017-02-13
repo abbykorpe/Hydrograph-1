@@ -18,6 +18,7 @@ import hydrograph.engine.spark.components.adapter.{ExecutionTrackingAdapter, Out
 import hydrograph.engine.spark.components.adapter.base.{RunProgramAdapterBase, _}
 import hydrograph.engine.spark.components.base.{ComponentParameterBuilder, SparkFlow}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.execution.tracking.PartitionStageAccumulator
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.util.LongAccumulator
 
@@ -32,7 +33,7 @@ import scala.collection.mutable.ListBuffer
 
 class FlowBuilder(runtimeContext: RuntimeContext) {
 
-  val accList=new ListBuffer[LongAccumulator]
+  val accList=new ListBuffer[PartitionStageAccumulator]
 
   def buildFlow(): mutable.LinkedHashSet[SparkFlow] ={
     val flow=new mutable.LinkedHashSet[SparkFlow]()
@@ -66,13 +67,16 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
       }
         else if(adapterBase.isInstanceOf[ExecutionTrackingAdapter]){
 
-        val accumulator = runtimeContext.sparkSession.sparkContext.longAccumulator(compID)
+//        val accumulator = runtimeContext.sparkSession.sparkContext.longAccumulator(compID)
+        val partAcc = new PartitionStageAccumulator
+        runtimeContext.sparkSession.sparkContext.register(partAcc, compID)
 
         baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap,new BaseComponentParams())
           .setInputDataFrame().setSparkSession(runtimeContext.sparkSession).setInputDataFrameWithCompID().setInputSchemaFieldsWithCompID()
-          .setOutputSchemaFields().setInputSchemaFields().setAccumulator(accumulator).build()
+          .setOutputSchemaFields().setInputSchemaFields().setAccumulator(partAcc).build()
+        //.setLongAccumulator(accumulator)
 
-        accList+=accumulator
+        accList+=partAcc
 
         adapterBase.createComponent(baseComponentParams)
         val opDataFrame= adapterBase.asInstanceOf[OperationAdatperBase].getComponent().createComponent()
@@ -106,6 +110,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
         adapterBase.createComponent(baseComponentParams)
       flow += adapterBase.asInstanceOf[OutputAdatperBase].getComponent()
         adapterBase.asInstanceOf[OutputAdatperBase].getComponent().setAccumulatorOnFlow(accList)
+        adapterBase.asInstanceOf[OutputAdatperBase].getComponent().setSparkFlowName(compID)
 
       }
       else if (adapterBase.isInstanceOf[RunProgramAdapterBase]) {
@@ -113,6 +118,7 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
           .build()
         adapterBase.createComponent(baseComponentParams)
         flow += adapterBase.asInstanceOf[RunProgramAdapterBase].getComponent()
+        adapterBase.asInstanceOf[RunProgramAdapterBase].getComponent().setSparkFlowName(compID)
       }
 
     }

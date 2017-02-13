@@ -20,6 +20,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import java.util.Set
 
+import hydrograph.engine.spark.execution.tracking.PartitionStageAccumulator
 import org.apache.spark.util.LongAccumulator
 
 /**
@@ -40,7 +41,9 @@ class BaseComponentParams() extends Serializable {
 
   var schemaField:Array[SchemaField] = null
 
-  var accumulator:LongAccumulator = null
+  var accumulator:PartitionStageAccumulator = null
+
+  var longAccumulator:LongAccumulator = null
 
   def addSchemaFields(fields: Array[SchemaField]) = {
     schemaField = fields
@@ -50,12 +53,20 @@ class BaseComponentParams() extends Serializable {
     schemaField
   }
 
-  def getAccumulator(): LongAccumulator = {
+  def getAccumulator(): PartitionStageAccumulator = {
     accumulator
   }
 
-  def setAccumulaor(acc: LongAccumulator): Unit = {
+  def getLongAccumulator(): LongAccumulator = {
+    longAccumulator
+  }
+
+  def setAccumulaor(acc: PartitionStageAccumulator): Unit = {
     accumulator = acc
+  }
+
+  def setLongAccumulaor(longAcc: LongAccumulator): Unit = {
+    longAccumulator = longAcc
   }
 
   def getSparkSession(): SparkSession = {

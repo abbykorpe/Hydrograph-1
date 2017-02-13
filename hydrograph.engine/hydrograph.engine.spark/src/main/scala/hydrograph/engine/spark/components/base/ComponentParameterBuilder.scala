@@ -18,6 +18,7 @@ import hydrograph.engine.core.component.entity.elements.{Operation, SchemaField}
 import hydrograph.engine.core.helper.LinkGenerator
 import hydrograph.engine.jaxb.commontypes.{TypeBaseInSocket, TypeBaseOutSocket}
 import hydrograph.engine.spark.components.platform.BaseComponentParams
+import hydrograph.engine.spark.execution.tracking.PartitionStageAccumulator
 import hydrograph.engine.spark.flow.RuntimeContext
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.util.LongAccumulator
@@ -131,8 +132,13 @@ object ComponentParameterBuilder {
       this
     }
 
-    def setAccumulator(longAccumulator: LongAccumulator): Builder = {
+    def setAccumulator(longAccumulator: PartitionStageAccumulator): Builder = {
       baseComponent.setAccumulaor(longAccumulator)
+      this
+    }
+
+    def setLongAccumulator(longAccumulator: LongAccumulator): Builder = {
+      baseComponent.setLongAccumulaor(longAccumulator)
       this
     }
 
