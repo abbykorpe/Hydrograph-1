@@ -37,7 +37,7 @@ public class DelimitedAndFixedWidthHelper {
     public static Object[] getFields(
             StructType schema, String line,
             String[] lengthsAndDelimiters, String[] lengthsAndDelimitersType,
-            boolean safe, String quote, List<SimpleDateFormat> dateFormats) {
+            boolean safe, String quote, List<SimpleDateFormat> dateFormats)  throws Exception{
 
         if (!line.equals("")) {
 
@@ -46,15 +46,13 @@ public class DelimitedAndFixedWidthHelper {
                         lengthsAndDelimiters, lengthsAndDelimitersType, quote);
                 return coerceParsedTokens(line, tokens, safe, schema, dateFormats);
             } catch (Exception e) {
-                LOG.error(
-                        "Exception while generating tokens.\nLine being parsed: "
-                                + line + "\nFields: " + getFieldsFromSchema(schema,dateFormats.size())
-                                + "\nLengths and delimiters in scheme: "
-                                + Arrays.toString(lengthsAndDelimiters)
-                                + "\nDatatypes in scheme: "
-                                + getTypesFromSchema(schema,dateFormats.size())
-                                + "\nSafe was set to: " + safe, e);
-                throw new RuntimeException(e);
+                throw new RuntimeException("Exception while generating tokens.\nLine being parsed: "
+                        + line + "\nFields: " + getFieldsFromSchema(schema,dateFormats.size())
+                        + "\nLengths and delimiters in scheme: "
+                        + Arrays.toString(lengthsAndDelimiters)
+                        + "\nDatatypes in scheme: "
+                        + getTypesFromSchema(schema,dateFormats.size())
+                        + "\nSafe was set to: " + safe + "\n Error being -> " + e.getMessage());
             }
         } else {
             return new Object[lengthsAndDelimiters.length];
@@ -116,7 +114,7 @@ public class DelimitedAndFixedWidthHelper {
 
     private static Object[] coerceParsedTokens(
             String line, Object[] tokens, boolean safe,
-            StructType schema, List<SimpleDateFormat> dateFormats) {
+            StructType schema, List<SimpleDateFormat> dateFormats)  throws Exception {
 
         Object[] result = new Object[tokens.length];
         for (int i = 0; i < tokens.length; i++) {
@@ -127,7 +125,6 @@ public class DelimitedAndFixedWidthHelper {
             } catch (Exception exception) {
                 result[i] = null;
                 if (!safe) {
-                    LOG.error(getSafeMessage(tokens[i], i, schema) + "\n Line being parsed => " + line);
                     throw new RuntimeException(getSafeMessage(tokens[i], i, schema) + "\n Line being parsed => " + line);
                 }
             }

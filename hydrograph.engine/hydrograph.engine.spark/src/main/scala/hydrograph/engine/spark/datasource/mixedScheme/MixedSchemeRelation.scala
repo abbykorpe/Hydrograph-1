@@ -28,7 +28,7 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions._
 
-case class MixedSchemeRelation(
+case class MixedSchemeRelation(componentName:String,
                                 location: Option[String],
                                 charset: String,
                                 quote: String,
@@ -60,15 +60,26 @@ case class MixedSchemeRelation(
 
     val input = sc.hadoopFile(location.get, classOf[DelimitedAndFixedWidthInputFormat], classOf[LongWritable], classOf[Text])
 
-    val tokens = input.values.map( line =>
-      DelimitedAndFixedWidthHelper.getFields(schema,
-        line.toString, lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
-        lengthsAndDelimitersType.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
-        safe, quote, dateFormats))
+    val tokens:RDD[Array[AnyRef]] = {
+
+        input.values.map( line =>
+          try{
+          DelimitedAndFixedWidthHelper.getFields(schema,
+            line.toString, lengthsAndDelimiters.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
+            lengthsAndDelimitersType.split(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR),
+            safe, quote, dateFormats)
+          } catch {
+            case e:Exception => {
+              throw new RuntimeException("Error in Input Mixed Scheme Component:[\""+componentName+"\"] \n "+ e.getMessage )
+            }
+          })
+
+    }
 
     tokens.flatMap { t => {
       Some(Row.fromSeq(t))
     }
+
     }
   }
 

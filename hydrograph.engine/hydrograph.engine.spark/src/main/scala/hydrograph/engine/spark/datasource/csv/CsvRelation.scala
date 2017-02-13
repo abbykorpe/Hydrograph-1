@@ -74,7 +74,7 @@ case class CsvRelation( componentId:String,
           tokens = parseCSV(line, schemaFields)
         }catch{
           case e:RuntimeException => {
-            throw new RuntimeException("Error in Input Delimited Component:[\""+
+            throw new RuntimeException("Error in Input Component:[\""+
               componentId+"\"] for Record:[\""+line+"\"] , "+e.getMessage)
           }
         }
