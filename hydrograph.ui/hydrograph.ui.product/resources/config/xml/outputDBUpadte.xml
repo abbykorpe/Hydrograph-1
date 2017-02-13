@@ -18,8 +18,9 @@
 	xsi:schemaLocation="hydrograph/ui/ComponentConfig xsds/ComponentConfig.xsd">
 	<tns:component paletteIconPath="/icons/DBUpdate_palette.png"
 		canvasIconPath="/icons/DBUpdate_canvas.png" name="ODBUpdate"
-		nameInPalette="DB Update" defaultNamePrefix="DBUpdate" description="Used to update incoming data for all JDBC supported databases."
-		helpFilePath="/hydrograph.ui.help/html/Components/DBUpdate.html" acronym="DBUpd">
+
+		nameInPalette="DB Update" defaultNamePrefix="DBUpdate" description="It is used to connect different database and update the data in existing tables based on the keys specified by the user. "
+		helpFilePath="/hydrograph.ui.help/html/Components/ODBUpdate.html" acronym="DBUpd">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1"

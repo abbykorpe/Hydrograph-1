@@ -369,21 +369,22 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 			}
 
 			@Override
-			public void keyPressed(KeyEvent event){
-				if(((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0 
+			public void keyPressed(KeyEvent event) {
+				if (((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0
 						&& (event.keyCode == SWT.ARROW_DOWN || event.keyCode == SWT.ARROW_LEFT
-						|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP))){
-					
+								|| event.keyCode == SWT.ARROW_RIGHT || event.keyCode == SWT.ARROW_UP))) {
+
 					moveComponentWithArrowKey(event);
 				} else {
 					setCustomToolUndoRedoStatus();
 					hideToolTip();
 					if (event.stateMask == 0) {
-						if (StringUtils.isAlpha(String.valueOf(event.character))) {
+
+						if (event.character != 0) {
 							new ComponentSearchUtility().showComponentCreationOnCanvas(event, viewer, paletteRoot);
 							setDirty(true);
-						} else if (((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0 && (event.keyCode == SWT.SHIFT
-								|| event.keyCode == SWT.ALT || event.keyCode == SWT.BS))) {
+						} else if (((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0
+								&& (event.keyCode == SWT.ALT || event.keyCode == SWT.BS))) {
 							return;
 						}
 					}
