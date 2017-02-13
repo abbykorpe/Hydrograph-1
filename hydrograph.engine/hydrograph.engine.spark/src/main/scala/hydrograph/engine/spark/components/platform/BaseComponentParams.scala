@@ -43,6 +43,8 @@ class BaseComponentParams() extends Serializable {
 
   var accumulator:PartitionStageAccumulator = null
 
+  var longAccumulator:LongAccumulator = null
+
   def addSchemaFields(fields: Array[SchemaField]) = {
     schemaField = fields
   }
@@ -55,8 +57,16 @@ class BaseComponentParams() extends Serializable {
     accumulator
   }
 
+  def getLongAccumulator(): LongAccumulator = {
+    longAccumulator
+  }
+
   def setAccumulaor(acc: PartitionStageAccumulator): Unit = {
     accumulator = acc
+  }
+
+  def setLongAccumulaor(longAcc: LongAccumulator): Unit = {
+    longAccumulator = longAcc
   }
 
   def getSparkSession(): SparkSession = {

@@ -125,7 +125,6 @@ class HydrographRuntime extends HydrographRuntimeService {
   override def prepareToExecute(): Unit = {
     LOG.info("Building spark flows")
       flows = FlowBuilder(RuntimeContext.instance).buildFlow()
-    hydrographListener.initialize(flows)
     LOG.info("Spark flows built successfully")
   }
 
@@ -137,7 +136,6 @@ class HydrographRuntime extends HydrographRuntimeService {
     for (sparkFlow <- flows) {
       try{
         hydrographListener.start(sparkFlow)
-
         //        HydrographFlowPlugin.getComps()
         sparkFlow.execute()
         hydrographListener.end(sparkFlow)

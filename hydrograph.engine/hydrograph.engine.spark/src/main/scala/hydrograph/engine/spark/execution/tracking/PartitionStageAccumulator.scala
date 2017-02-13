@@ -26,7 +26,7 @@ class PartitionStageAccumulator extends AccumulatorV2 [Long, HashMap[Int, HashMa
   }
 
   override def add(v: Long): Unit = {
-    _count += 1
+    _count += v
   }
 
   def count: Long = _count

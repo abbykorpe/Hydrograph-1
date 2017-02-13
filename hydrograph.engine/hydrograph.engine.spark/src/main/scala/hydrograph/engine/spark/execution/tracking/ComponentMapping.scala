@@ -28,7 +28,7 @@ import scala.collection.mutable.ListBuffer
   */
 object ComponentMapping {
 
-  private val componentInfoMap = new mutable.ListBuffer[Component]
+  private val listOfComponents = new mutable.ListBuffer[Component]
 
   private val mapOfOutCompAndPreviousComps : mutable.HashMap[String,ListBuffer[String]] = new mutable.HashMap[String,ListBuffer[String]]
 
@@ -40,11 +40,11 @@ object ComponentMapping {
     mapOfOutCompAndPreviousComps
   }
 
-  def getComponentInfoMap(): mutable.ListBuffer[Component]= {
-    componentInfoMap
+  def getListOfComponents(): mutable.ListBuffer[Component]= {
+    listOfComponents
   }
 
   def addComponent( component: Component): Unit = {
-    componentInfoMap += (component)
+    listOfComponents += (component)
   }
 }

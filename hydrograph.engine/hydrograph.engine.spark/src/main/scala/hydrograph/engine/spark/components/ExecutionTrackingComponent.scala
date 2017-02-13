@@ -35,16 +35,21 @@ class ExecutionTrackingComponent(executionTrackingEntity: ExecutionTrackingEntit
     executionTrackingEntity.getOperation.getOperationInputFields.foreach(e => fieldNameSet.add(e))
     val df = componentsParams.getDataFrame()
     val partAcc: PartitionStageAccumulator = componentsParams.getAccumulator()
+//    val longAcc : LongAccumulator = componentsParams.getLongAccumulator()
     /*val partAcc = new PartitionStageAccumulator
     componentsParams.getSparkSession().sparkContext.register(partAcc, "partacc1")*/
 
     val dataFrame= df.mapPartitions(itr=>{
 
       TaskContext.get().addTaskCompletionListener { context => partAcc.onEnd(context.stageId(), context.partitionId(), context.attemptNumber()) }
+//      val custAcc = partAcc
+//      custAcc.add(0)
       partAcc.add(0)
-      //val acc=longAccumulator
-            //acc.add(0)
-      itr.map(row=> {//acc.add(1)
+//      val acc=longAcc
+//            acc.add(0)
+      itr.map(row=> {
+//        acc.add(1)
+//        custAcc.add(1)
         partAcc.add(1)
         row
       })

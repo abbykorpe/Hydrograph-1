@@ -67,13 +67,14 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
       }
         else if(adapterBase.isInstanceOf[ExecutionTrackingAdapter]){
 
-        val accumulator = runtimeContext.sparkSession.sparkContext.longAccumulator(compID)
+//        val accumulator = runtimeContext.sparkSession.sparkContext.longAccumulator(compID)
         val partAcc = new PartitionStageAccumulator
         runtimeContext.sparkSession.sparkContext.register(partAcc, compID)
 
         baseComponentParams = ComponentParameterBuilder(compID, runtimeContext, outLinkMap,new BaseComponentParams())
           .setInputDataFrame().setSparkSession(runtimeContext.sparkSession).setInputDataFrameWithCompID().setInputSchemaFieldsWithCompID()
           .setOutputSchemaFields().setInputSchemaFields().setAccumulator(partAcc).build()
+        //.setLongAccumulator(accumulator)
 
         accList+=partAcc
 

@@ -111,11 +111,6 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
           listOfPrevComps+=inSocket.getFromComponentId
           val mapOfOutCompAndPrevComps = getFlowMapFromOuputComp(prevComp,jaxbObjectList,outCompID,listOfPrevComps)
           ComponentMapping.addComps(mapOfOutCompAndPrevComps)
-          /*while(!prevComp.isInstanceOf[TypeInputComponent]){
-              val tempInSocketList = TrackComponentUtils.extractInSocketListOfComponents(prevComp)
-            tempInSocketList.asScala.foreach(inSock1=>{
-              inSock1})
-          }*/
         })
       }
 
@@ -127,8 +122,6 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
   def getFlowMapFromOuputComp(typeBaseComponent: TypeBaseComponent,jaxbObjectList : ListBuffer[TypeBaseComponent],outCompID : String,listOfPrevComps : mutable.ListBuffer[String]):mutable.HashMap[String,ListBuffer[String]]= {
 
     var outCompAndPrevCompsMap : mutable.HashMap[String,ListBuffer[String]] = new mutable.HashMap[String,ListBuffer[String]]()
-    //      var listOfPrevComps : mutable.ListBuffer[String] = new mutable.ListBuffer[String]
-    //    while(!typeBaseComponent.isInstanceOf[TypeInputComponent]){}
     val tempInSocketList = TrackComponentUtils.extractInSocketListOfComponents(typeBaseComponent)
     tempInSocketList.asScala.foreach(inSock1=>{
       val prevComp = TrackComponentUtils.getCurrentComponent(jaxbObjectList.asJava,inSock1.getFromComponentId,                      inSock1.getFromSocketId)
@@ -155,7 +148,7 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
 
   //  override def addListener(sparkSession: SparkSession): Unit = super.addListener(sparkSession)
   override def addListener(runtimeContext: RuntimeContext): Unit = {
-    jobInfo = new JobInfo(ComponentMapping.getComponentInfoMap())
+    jobInfo = new JobInfo(ComponentMapping.getListOfComponents())
     jobInfo.createComponentInfos()
     runtimeContext.sparkSession.sparkContext.addSparkListener(this)
 
@@ -294,7 +287,7 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
     //    LOG.info("+++++++++++++++++++++Task End Start+++++++++++++++++++++")
 
-    /*println("Task id: " + taskEnd.taskInfo.taskId)
+   /* println(" Task End Task id: " + taskEnd.taskInfo.taskId)
     taskEnd.taskInfo.accumulables.foreach(f => {
         LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
           + f
@@ -332,7 +325,12 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     //        println("+++++++++++++++++++++Task Start Start+++++++++++++++++++++")
     //        println("TaskStart id: " + taskStart.taskInfo.taskId)
     //    println("id: " + taskStart.taskInfo.id)
-
+   /* println(" Task Start Task id: " + taskStart.taskInfo.taskId)
+    taskStart.taskInfo.accumulables.foreach(f => {
+      LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
+        + f
+        .update)
+    })*/
     /*taskStart.taskInfo.accumulables.foreach(f => {
       LOG.info("Acc iD : " + f.id + " Acc name : " + f.name.get + " Acc value : " + f.value.get + " Acc update : "
         + f
@@ -353,15 +351,6 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
   override def getStatus(): java.util.List[ComponentInfo] = {
     return jobInfo.getStatus()
   }
-
-  override def initialize(startSparkFlow: mutable.LinkedHashSet[SparkFlow]): Unit = {
-    startSparkFlow.foreach(spf=>{
-      if(spf.isInstanceOf[CommandComponentSparkFlow]){
-        listOfCommandCompFlows+=spf.asInstanceOf[CommandComponentSparkFlow]
-      }
-    })
-  }
-
 
   override def end(flow: SparkFlow): Unit = {
 

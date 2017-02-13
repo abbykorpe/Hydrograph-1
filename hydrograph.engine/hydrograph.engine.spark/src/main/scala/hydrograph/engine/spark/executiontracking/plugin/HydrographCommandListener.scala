@@ -21,8 +21,6 @@ import scala.collection.mutable
   */
 trait HydrographCommandListener {
 
-  def initialize(startSparkFlow: mutable.LinkedHashSet[SparkFlow])
-
   def start(flow : SparkFlow)
 
   def end(flow : SparkFlow)

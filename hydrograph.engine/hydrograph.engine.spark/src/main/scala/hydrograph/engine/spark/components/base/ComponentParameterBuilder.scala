@@ -137,6 +137,11 @@ object ComponentParameterBuilder {
       this
     }
 
+    def setLongAccumulator(longAccumulator: LongAccumulator): Builder = {
+      baseComponent.setLongAccumulaor(longAccumulator)
+      this
+    }
+
     def build(): BaseComponentParams = {
       baseComponent
     }
