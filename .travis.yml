@@ -1,19 +1,35 @@
 language: java
 jdk:
   - oraclejdk8
-sudo: false
+  
+sudo: required
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+
+# Display Gradle version instead of letting Travis execute './gradlew assemble' by default
+install: ./gradlew -version  
+  
 script: 
   - chmod 777 build.sh
+  - java -version
+  - ./gradlew -version
   - ./build.sh
+  
 notifications: 
     email:
       recipients:
       - hydrograph_support@bitwiseglobal.com  
     on_success: always
     on_failure: always
-cache:
-  directories:
-  - $HOME/.m2
+  
 env:
   global:
     - secure: "XnkQzb20ybw/Ek/vlqMoUPJMnAg4vSo0XZDiMOUSScROEpgnhnC7H9X++9DQEe/E6R/3TreuET6Gr8NulOiuw86yUpkFc0ed28baniXfYVZKzNHuSbzpWZZ2igP8igrwWGeCboCysKf7bi7ks7O/XPh8LLQU7gUWKv7QntEr3b6yvASUoTvvssr55WNc5FpYvfXP6+CgsTFjQWC81R5bMA3DstnbMzE4eKhL9isxvDroJLKMvGi9HKGvlk5Zv/lzke52WRELS6KCegTd5O6EmiIHjgfZ3j4NHZhHhswjh+Eg88JUa1aeKAAXjo1/7oCX0ECMy+JKMoPZUDRmsNsujCic+YoEftT7kCIlLSrsZ0NPDvRIMANWfmaP7jsLXhg3zqDlX6VaWJ0EkB7uM3c9gH0qLPgnV6GnHx6D/3xCtYlOQQDzLejczGKmR2k+MksarbHOcVXPBQYoLAn+3d6dGwj02qL2pf8F2P0WvZV1aNU6pJC9aJnnenDS21c1wAndkhY9hzhvO7BRpD/emao9Y97KL5AmOOLYiCiF7t86DEESPFb3iQQ439sSSShSMPK8eEfSOebDui9bjgKpO1eezMpGFx1pyNBRwRkZ9SgJsLdcBcTZR1gIplP3+kjFZIOfe264h36jW6V0sOBvg0l6xjaQBwECxSynjVqvPYKUQ/c="
