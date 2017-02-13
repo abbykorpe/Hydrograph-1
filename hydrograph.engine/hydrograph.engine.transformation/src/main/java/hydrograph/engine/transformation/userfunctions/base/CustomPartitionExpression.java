@@ -13,6 +13,7 @@
 package hydrograph.engine.transformation.userfunctions.base;
 
 import java.io.Serializable;
+import java.security.PrivateKey;
 import java.util.Properties;
 
 /**
@@ -30,6 +31,8 @@ import java.util.Properties;
  */
 public interface CustomPartitionExpression extends Serializable {
 
+	 Properties properties=new Properties();
+
 	/**
 	 * This method is called before processing the first record in the input.
 	 * This method can be called for initialization / instantiation of of
@@ -40,7 +43,8 @@ public interface CustomPartitionExpression extends Serializable {
 	 *            passed in xml. The individual properties are wrapped as
 	 *            key-value pairs in the props object.
 	 */
-	public void prepare(Properties props);
+	@Deprecated
+	default void prepare(Properties props){}
 
 	/**
 	 * This method is the operation function and is called for each input row.
@@ -56,5 +60,5 @@ public interface CustomPartitionExpression extends Serializable {
 	 *            the number of partitions expected from this operation
 	 * @return the partition key
 	 */
-	public String getPartition(ReusableRow inputRow, int numOfPartitions);
+	String getPartition(ReusableRow inputRow, int numOfPartitions);
 }
