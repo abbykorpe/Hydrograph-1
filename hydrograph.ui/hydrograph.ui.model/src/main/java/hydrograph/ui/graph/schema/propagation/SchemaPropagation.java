@@ -47,6 +47,7 @@ public class SchemaPropagation {
 	private ComponentsOutputSchema componentsOutputSchema;
 	private List<Link> componentsLinkList = new ArrayList<>();
 	private List<Link> mainLinkList = new ArrayList<>();
+	private Schema schema;
 
 	private SchemaPropagation() {
 	}
@@ -261,7 +262,48 @@ public class SchemaPropagation {
 		componentsLinkList.clear();
 		return this.componentsOutputSchema;
 	}
+	
+	/**
+	 * This method retrieves schema property from source component
+	 * 
+	 * @param link
+	 * @return Schema, the Schema is output schema of component.
+	 */
+	public Schema getSchema(Link link) {
+		LOGGER.debug("Getting Source Output Schema for component.");
+		this.schema = null;
+		getSchemaFromUnusedPorts(link);
+		componentsLinkList.clear();
+		return this.schema;
+	}
 
+	
+	private void getSchemaFromUnusedPorts(Link link) {
+		LOGGER.debug("Reverse itration for fetching source schema for component.");
+		String socketId = link.getSourceTerminal();
+		if (isLinkChecked(link))
+			return;
+		if (!checkUnusedSocketAsSourceTerminal(link)) {
+			this.schema = getSchemaFromLink(link);
+			return;
+		}
+		for (Link link2 : link.getSource().getTargetConnections()) {
+			if (link2.getTargetTerminal().equals(getInSocketForUnusedSocket(socketId))) {
+				getSchemaFromUnusedPorts(link2);
+			}
+		}
+
+	}
+	
+	private Schema getSchemaFromLink(Link link) {
+		Schema schema=null;
+		if (link != null && link.getSource() != null) {
+		schema = (Schema) link.getSource().getProperties().get(Constants.SCHEMA);
+		}
+		return schema;
+	}
+	
+	
 	private void getSourceSchemaForUnusedPorts(Link link) {
 		LOGGER.debug("Reverse propagation for fetching source schema for component.");
 		String socketId = link.getSourceTerminal();

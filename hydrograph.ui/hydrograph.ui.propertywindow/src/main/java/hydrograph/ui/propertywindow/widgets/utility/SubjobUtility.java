@@ -321,7 +321,7 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 		}	
 		else
 		{
-			 previousComponentSchema=(Schema)link.getSource().getProperties().get(Constants.SCHEMA);
+			 previousComponentSchema=SchemaPropagation.INSTANCE.getSchema(link);
 		}
 		return previousComponentSchema;
 	}
