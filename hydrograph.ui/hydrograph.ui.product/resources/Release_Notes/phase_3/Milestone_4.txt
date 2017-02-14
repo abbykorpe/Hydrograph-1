@@ -57,3 +57,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 41.#707 [Nitin Gupta] -  Issue while creating subjob - component links are getting deleted automatically in created subjob
 42.#712 [Ashika Holkar] - All Database components: On job import, port number from properties window become empty
 43.#702 [Ashika Holkar] - Component Search and Place functionality related issues
+44.#703 [Ashika Holkar] - MAC : Component search and place functionality related issues
