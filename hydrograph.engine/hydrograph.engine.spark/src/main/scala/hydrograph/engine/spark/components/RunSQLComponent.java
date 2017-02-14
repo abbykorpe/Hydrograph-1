@@ -55,6 +55,7 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
                 Reader reader = new BufferedReader(new FileReader(tempFile));
                 sr.runScript(reader);
                 reader.close();
+                tempFile.deleteOnExit();
                 exitStatus_$eq(0);
             } catch (SQLException | IOException | ClassNotFoundException e) {
                 exitStatus_$eq(-1);
@@ -68,12 +69,15 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
                 conn = DriverManager.getConnection("jdbc:oracle:thin://@" + runSqlEntity.getServerName() + ":" + runSqlEntity.getPortNumber() + "/" + runSqlEntity.getDatabaseName(), runSqlEntity.getDbUserName(), runSqlEntity.getDbPassword());
                 conn.setAutoCommit(false);
                 testScriptDemo(runSqlEntity.getQueryCommand());
+                BufferedReader br = new BufferedReader(new FileReader(tempFile));
                 ScriptRunner sr = new ScriptRunner(conn, false, true);
                 Reader reader = new BufferedReader(new FileReader(tempFile));
                 sr.runScript(reader);
                 reader.close();
+                tempFile.deleteOnExit();
                 exitStatus_$eq(0);
             } catch (SQLException | IOException | ClassNotFoundException e) {
+                tempFile.deleteOnExit();
                 exitStatus_$eq(-1);
                 log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                 throw new RuntimeException(e);
@@ -82,15 +86,18 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
             log.debug("Request received test connection " + runSqlEntity.getDatabaseConnectionName());
             try {
                 properties.setProperty("className", "com.teradata.jdbc.TeraDriver");
-                conn = DriverManager.getConnection("jdbc:teradata://" + runSqlEntity.getServerName() + "/DATABASE=" + runSqlEntity.getDatabaseName() + ",USER=" + runSqlEntity.getDbUserName() + ",PASSWORD=" + runSqlEntity.getDbPassword());
+                conn = DriverManager.getConnection("jdbc:teradata://" + runSqlEntity.getServerName() + "/DATABASE=" + runSqlEntity.getDatabaseName() + ",USER=" + runSqlEntity.getDbUserName() + ",PASSWORD=" + runSqlEntity.getDbPassword() + ",TMODE=ANSI,CHARSET=UTF8");
                 conn.setAutoCommit(false);
                 testScriptDemo(runSqlEntity.getQueryCommand());
                 ScriptRunner sr = new ScriptRunner(conn, false, true);
                 Reader reader = new BufferedReader(new FileReader(tempFile));
                 sr.runScript(reader);
                 reader.close();
+                tempFile.deleteOnExit();
                 exitStatus_$eq(0);
             } catch (SQLException | IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                e.getMessage();
                 exitStatus_$eq(-1);
                 log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                 throw new RuntimeException(e);
@@ -106,9 +113,12 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
                 Reader reader = new BufferedReader(new FileReader(tempFile));
                 sr.runScript(reader);
                 reader.close();
+                tempFile.deleteOnExit();
                 exitStatus_$eq(0);
             } catch (SQLException | IOException | ClassNotFoundException e) {
                 exitStatus_$eq(-1);
+                e.printStackTrace();
+                e.getMessage();
                 log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
                 throw new RuntimeException(e);
             }
@@ -120,7 +130,25 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
         FileWriter fileWriter = null;
         try {
             bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
-            bufferedWriter.write(statement);
+            statement = statement.trim();
+            if (statement.toLowerCase().contains("procedure") || statement.toLowerCase().contains("function")) {
+                statement = statement.replaceAll("\r", " ");
+                statement = statement.replaceAll("\n", " ");
+                if (statement.endsWith(";") && !statement.endsWith(";;")) {
+                    bufferedWriter.write(statement + ";");
+                } else if (!statement.endsWith(";")) {
+                    bufferedWriter.write(statement + ";;");
+                }
+            } else {
+                String[] statementArray = statement.split(";");
+                if (statementArray.length > 1) {
+                    for (String tempStatement : statementArray)
+                        if (tempStatement.trim().length() > 0)
+                            bufferedWriter.write(tempStatement + ";\n");
+                }
+            }
+            bufferedWriter.flush();
+
         } catch (IOException e) {
             exitStatus_$eq(-1);
             log.debug("Failed to Execute" + runSqlEntity.getQueryCommand() + " The error is " + e.getMessage());
@@ -139,7 +167,6 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
 
     @Override
     public int exitStatus() {
-
         return super.exitStatus();
     }
 
@@ -148,5 +175,8 @@ public class RunSQLComponent extends CommandComponentSparkFlow implements Serial
         super.exitStatus_$eq(exitStatus);
     }
 }
+
+
+
 
 
