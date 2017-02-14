@@ -19,6 +19,12 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.propertydialog.PropertyDialogButtonBar;
 
+/**
+ * XpathQueryVerifyListener is used to verify Loop Xpath Query. 
+ * It allows user to input only alphanumeric characters and forward slash.
+ * 
+ * @see ELTVerifyTextListener
+ */
 public class XpathQueryVerifyListener extends ELTVerifyTextListener {
 	@Override
 	public Listener getListener(PropertyDialogButtonBar propertyDialogButtonBar, ListenerHelper helper,  Widget... widgets) {
