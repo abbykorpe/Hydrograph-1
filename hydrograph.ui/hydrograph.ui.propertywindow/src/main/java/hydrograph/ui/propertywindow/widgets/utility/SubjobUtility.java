@@ -32,6 +32,7 @@ import hydrograph.ui.graph.model.components.InputSubjobComponent;
 import hydrograph.ui.graph.model.components.OutputSubjobComponent;
 import hydrograph.ui.graph.model.components.SubjobComponent;
 import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
+import hydrograph.ui.propertywindow.schema.propagation.helper.SchemaPropagationHelper;
 
 public class SubjobUtility {
 public static final SubjobUtility INSTANCE= new SubjobUtility();
@@ -161,41 +162,37 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 	 * @return true if input schema are in sync otherwise false
 	 */
 	public boolean isUnionAllInputSchemaInSync(Component component) {
-		List<Component>	unionAllJustPreviousComponents=new ArrayList<>();
-        for(Link link:component.getTargetConnections())
-        {
-        	unionAllJustPreviousComponents.add(link.getSource());
-        }	
-        for(Component outerComponent:unionAllJustPreviousComponents)
-        {
-        	Schema outerSchema=(Schema)outerComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-        	
-        	for(Component innerComponent:unionAllJustPreviousComponents)
-        	{
-        		Schema innerSchema=(Schema)innerComponent.getProperties().get(Constants.SCHEMA_PROPERTY_NAME);
-        	if(outerSchema!=null &&innerSchema!=null)
-        	{	
-        	if(outerSchema.getGridRow()!=null &&innerSchema.getGridRow()!=null)
-        	{	
-        	 if(outerSchema.getGridRow().size()!=innerSchema.getGridRow().size())
-        	 {
-        		 return false;
-        	 }	 
-        	
-        		 for(GridRow inner:innerSchema.getGridRow())
-        		 {
-        			 if(!outerSchema.getGridRow().get(innerSchema.getGridRow().indexOf(inner)).checkGridRowEqauality(inner))
-        				return false; 
-        		 }	 
-        	
-        	}
-        	}
-        	else if(outerSchema!=null && innerSchema==null ||outerSchema==null &&innerSchema!=null)
-        	return false;	
-        	}
-        }	
+		Schema previousSchema=null;
+		if(component.getTargetConnections()!=null && component.getTargetConnections().size()>=2){
+			for(Link link:component.getTargetConnections()){
+				Schema currentComponentSchema=getSchemaFromPreviousComponentSchema(component,link);
+				if(previousSchema!=null && !isSameSchema(previousSchema,currentComponentSchema)){
+					return false;
+				}
+				previousSchema=currentComponentSchema;
+			}
+		}
        return true;
 	}
+	
+	
+	private boolean isSameSchema(Schema previousSchema, Schema currentComponentSchema) {
+		if(	(previousSchema!=null && currentComponentSchema!=null)
+			&&  (previousSchema.getIsExternal() == currentComponentSchema.getIsExternal())
+			&& (StringUtils.equals(previousSchema.getExternalSchemaPath(), currentComponentSchema.getExternalSchemaPath()))
+			&& (previousSchema.getGridRow()!=null && currentComponentSchema.getGridRow()!=null)
+			&& (previousSchema.getGridRow().size()==currentComponentSchema.getGridRow().size())){
+			for(int index=0;index<previousSchema.getGridRow().size();index++){
+				if(!SchemaPropagationHelper.INSTANCE.isGridRowEqual(previousSchema.getGridRow().get(index),
+						currentComponentSchema.getGridRow().get(index))){
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * check if sub job contains transform or union All component
 	 * 
@@ -316,14 +313,22 @@ public static final SubjobUtility INSTANCE= new SubjobUtility();
 			Map<String,Schema> inputSchemaMap=(HashMap<String,Schema>)link.getSource().getProperties().
 					get(Constants.SCHEMA_FOR_INPUTSUBJOBCOMPONENT);
 			if(inputSchemaMap!=null)
-			previousComponentSchema=inputSchemaMap.get(Constants.INPUT_SOCKET_TYPE+component.
-					getTargetConnections().indexOf(link));
+			previousComponentSchema=inputSchemaMap.get(Constants.INPUT_SOCKET_TYPE+getPortIndex(link));
 		}	
 		else
 		{
 			 previousComponentSchema=SchemaPropagation.INSTANCE.getSchema(link);
 		}
 		return previousComponentSchema;
+	}
+
+	private String getPortIndex(Link link) {
+			if(StringUtils.startsWithIgnoreCase(link.getSourceTerminal(), Constants.INPUT_SOCKET_TYPE)){
+				return StringUtils.remove(link.getSourceTerminal(), Constants.INPUT_SOCKET_TYPE);
+			}else {
+				return StringUtils.remove(link.getSourceTerminal(), Constants.OUTPUT_SOCKET_TYPE);
+			}
+		
 	}
 	
 	
