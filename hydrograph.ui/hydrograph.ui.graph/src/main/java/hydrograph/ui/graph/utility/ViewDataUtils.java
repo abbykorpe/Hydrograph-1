@@ -302,7 +302,7 @@ public class ViewDataUtils {
 		return viewDataJobDetails;
 	}
 	public String getComponentId() {
-		Container mainContainer = (Container) getComponentCanvas().getContainer();
+		Container mainContainer =((ELTGraphicalEditor)getComponentCanvas()).getContainer();
 		ComponentEditPart componentEditPart = (ComponentEditPart) mainContainer.getSubjobComponentEditPart();
 		ContainerEditPart containerEditPart = null;
 		Container subContainer = null;

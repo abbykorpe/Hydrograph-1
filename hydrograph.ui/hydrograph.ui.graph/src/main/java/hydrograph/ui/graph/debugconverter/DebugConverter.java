@@ -149,24 +149,30 @@ public class DebugConverter {
 			if (!map.isEmpty()) {
 				for (Entry<String, Long> entrySet : map.entrySet()) {
 					ViewData viewData = new ViewData();
-					if (componentObject instanceof InputSubjobComponent) {
-						viewData.setFromComponentId(previousComponent);
-					}
-					else if(componentObject instanceof SubjobComponent){
-							String componentObjectId=getComponentName(componentObject);
-							if(componentObjectId!=null)
-							viewData.setFromComponentId(componenetId + Constants.DOT_SEPERATOR + componentObject.getComponentId()+Constants.DOT_SEPERATOR+componentObjectId);
-					}
-					else {
-						viewData.setFromComponentId(
-								componenetId + Constants.DOT_SEPERATOR + componentObject.getComponentId());
-					}
+					setComponentId(componenetId, previousComponent, componentObject, viewData);
 					viewData.setOutSocketId(entrySet.getKey());
 					String portType = entrySet.getKey().substring(0, 3);
 					viewData.setOutSocketType(checkPortType(portType));
 					debug.getViewData().add(viewData);
 				}
 			}
+		}
+	}
+
+
+	private void setComponentId(String componenetId, String previousComponent, Component componentObject,
+			ViewData viewData) {
+		if (componentObject instanceof InputSubjobComponent) {
+			viewData.setFromComponentId(previousComponent);
+		}
+		else if(componentObject instanceof SubjobComponent){
+				String componentObjectId=getComponentName(componentObject);
+				if(componentObjectId!=null)
+				viewData.setFromComponentId(componenetId + Constants.DOT_SEPERATOR + componentObject.getComponentId()+Constants.DOT_SEPERATOR+componentObjectId);
+		}
+		else {
+			viewData.setFromComponentId(
+					componenetId + Constants.DOT_SEPERATOR + componentObject.getComponentId());
 		}
 	}
 	private String getComponentName(Component component)
