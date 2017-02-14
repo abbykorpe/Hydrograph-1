@@ -33,11 +33,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.m2e.model.edit,
  org.eclipse.m2e.refactoring,
  org.eclipse.m2e.scm,
- hydrograph.ui.expression.editor;bundle-version="0.0.1",
- org.eclipse.buildship.branding;bundle-version="1.0.18",
- org.eclipse.buildship.core;bundle-version="1.0.18",
- org.eclipse.buildship.stsmigration;bundle-version="1.0.18",
- org.eclipse.buildship.ui;bundle-version="1.0.18"
+ hydrograph.ui.expression.editor;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hydrograph.ui.project.structure
