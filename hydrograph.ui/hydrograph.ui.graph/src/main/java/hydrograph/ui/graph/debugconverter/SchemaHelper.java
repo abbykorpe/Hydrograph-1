@@ -182,6 +182,17 @@ public class SchemaHelper {
 			ComponentsOutputSchema componentsOutputSchema, Component componentObject) {
 		String path;
 		String componentObjectId = null;
+		path = getFilePath(schemaFilePath, componentId, componentObject, componentObjectId);
+		String xmlFilePath = ((IPath) new Path(path)).addFileExtension(Constants.XML_EXTENSION_FOR_IPATH).toString();
+		List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
+		File file = new File(xmlFilePath);
+		GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
+		gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
+	}
+
+	private String getFilePath(String schemaFilePath, String componentId, Component componentObject,
+			String componentObjectId) {
+		String path;
 		if(componentObject instanceof InputSubjobComponent)
 		{
 		 path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.UNDERSCORE_SEPERATOR
@@ -203,12 +214,7 @@ public class SchemaHelper {
 						+ Constants.DOT_SEPERATOR + componentObject.getComponentId() + Constants.UNDERSCORE_SEPERATOR
 						+ componentObject.getWatcherTerminals().toString().replace("{", "").split("=")[0];
 		}
-		String xmlFilePath = ((IPath) new Path(path)).addFileExtension(Constants.XML_EXTENSION_FOR_IPATH)
-				.toString();
-		List<GridRow> gridRowList = componentsOutputSchema.getGridRowList();
-		File file = new File(xmlFilePath);
-		GridRowLoader gridRowLoader = new GridRowLoader(Constants.GENERIC_GRID_ROW, file);
-		gridRowLoader.exportXMLfromGridRowsWithoutMessage(gridRowList);
+		return path;
 	}
 	
 	private String getComponentId(Component component)
