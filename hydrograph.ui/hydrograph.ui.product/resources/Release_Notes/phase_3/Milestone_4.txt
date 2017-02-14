@@ -59,3 +59,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 43.#702 [Ashika Holkar] - Component Search and Place functionality related issues
 44.#703 [Ashika Holkar] - MAC : Component search and place functionality related issues
 45.#690 [Vibhor Tyagi] - Parameter file should accept spacial characters
+46.#678 [Vibhor Tyagi] - Parameter appended with a value does not get resolved on UI
