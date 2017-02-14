@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ====================================================================================================
 Features Added:
 =====================================================================================================
@@ -54,3 +53,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 37.#661 [Ashika Holkar] -  All database components: Need to change error message validation on primary key window
 38.#676 [Nitin Gupta] - Schema of Unused ports of Join Component:Schema of out port of join is used for populating schema of unused ports
 39.#694 [Vibhor Tyagi] - Preference window : Checkbox location is not properly aligned
+40.#672 [Pooja Yadav] - xml Input component: Validation is not present for Loop Xpath Query field.

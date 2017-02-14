@@ -57,6 +57,7 @@ import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumbericOrParameterF
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyNumericAndParameterListener;
 import hydrograph.ui.propertywindow.widgets.listeners.VerifyTeraDataFastLoadOption;
 import hydrograph.ui.propertywindow.widgets.listeners.XmlFilePathModifyListener;
+import hydrograph.ui.propertywindow.widgets.listeners.XpathQueryVerifyListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.DisposeSchemaGridListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridAddSelectionListener;
 import hydrograph.ui.propertywindow.widgets.listeners.grid.ELTGridDeleteAllSelectionListener;
@@ -131,7 +132,8 @@ public class ListenerFactory {
 		VERIFY_FAST_LOAD_FOR_TERADATA(VerifyTeraDataFastLoadOption.class),
 		XML_FILE_PATH_MODIFY(XmlFilePathModifyListener.class),
 		PORT_FOCUS_IN(PortFocusInListener.class),
-		PORT_FOCUS_OUT(PortFocusOutListener.class);
+		PORT_FOCUS_OUT(PortFocusOutListener.class),
+		VERIFY_XPATH_QUERY_PATH(XpathQueryVerifyListener.class);
 		
 		Class<?> clazz = null;
 		private Listners(Class<?> clazz) {
