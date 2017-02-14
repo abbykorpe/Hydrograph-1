@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -236,11 +237,11 @@ public class Utils {
 	 * @return
 	 */
 	private String getResult(String value){
+		 Optional<String> opt = Optional.of(value);
 		 StringBuffer buffer = new StringBuffer();
-		 buffer.append(value);
-		 if(value != null && value.endsWith("/")){
-			 buffer = buffer.deleteCharAt(value.lastIndexOf("/"));
-		 }
+		 Optional<String> opt1 = opt.filter(s -> s.endsWith("/"));
+		 buffer.append(opt1.get());
+		 buffer = buffer.deleteCharAt(value.lastIndexOf("/"));
 		return buffer.toString();
 	 }
 		
