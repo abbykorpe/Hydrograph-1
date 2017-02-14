@@ -29,7 +29,7 @@ import java.util.Properties;
  *
  */
 public interface FilterBase extends Serializable {
-
+	Properties properties=new Properties();
 	/**
 	 * This method is called before processing the first record in the input.
 	 * This method can be called for initialization / instantiation of of
@@ -43,8 +43,7 @@ public interface FilterBase extends Serializable {
 	 *            the list of input fields to the filter operation.
 	 */
 	@Deprecated
-	default
-	void prepare(Properties props, ArrayList<String> inputFields){}
+	default	void prepare(Properties props, ArrayList<String> inputFields){}
 
 	/**
 	 * This method is the operation function and is called for each input row.
@@ -85,6 +84,5 @@ public interface FilterBase extends Serializable {
 	 * suggests.
 	 */
 	@Deprecated
-	default
-	void cleanup(){}
+	default	void cleanup(){}
 }
