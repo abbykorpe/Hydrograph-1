@@ -3,12 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hydrograph</groupId>
 	<artifactId>hydrograph.server.execution.tracking.server</artifactId>
-	<version>1.0.14</version>
+	<version>1.0.13</version>
 	<packaging>jar</packaging>
 	<properties>
 		<tyrus.version>1.13</tyrus.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<logback.version>1.0.7</logback.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<repositories>
 		<repository>
@@ -54,26 +56,26 @@
 	</build>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
-		</dependency> 
-		
+		</dependency>
+
 		<!--Jetty dependencies start here -->
- 		<dependency>
+		<dependency>
 			<groupId>hydrograph</groupId>
 			<artifactId>hydrograph.engine.command-line</artifactId>
 			<version>2.1.1-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency> 
- 		<dependency>
+		</dependency>
+		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.6.2</version>
 		</dependency>
- 
+
 		<!-- Tyrus API START -->
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
