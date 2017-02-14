@@ -51,7 +51,12 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
 
       val partitionByExpressionSparkOperation = initializeOperationList[PartitionByExpressionForExpression](partitionByExpressionEntity.getOperationsList,
         inputSchema, outputSchema).head
-      CustomPartitionExpression.properties.putAll(partitionByExpressionSparkOperation.operationEntity.getOperationProperties)
+
+      val opProps = partitionByExpressionSparkOperation.operationEntity.getOperationProperties
+
+      LOG.info("Operation Properties: " + opProps)
+      if(opProps!=null) CustomPartitionExpression.properties.putAll(opProps)
+
       val partitionByExpressionClass = partitionByExpressionSparkOperation.baseClassInstance
       partitionByExpressionClass match {
         case t: PartitionByExpressionForExpression => t.setValidationAPI(partitionByExpressionSparkOperation.validatioinAPI)
