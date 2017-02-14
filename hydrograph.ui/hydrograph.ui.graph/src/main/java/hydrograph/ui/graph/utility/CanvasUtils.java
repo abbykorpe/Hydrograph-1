@@ -14,11 +14,11 @@
  
 package hydrograph.ui.graph.utility;
 
-import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
-import hydrograph.ui.logging.factory.LogFactory;
-
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.io.StringReader;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -26,6 +26,9 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
+
+import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
@@ -108,6 +111,24 @@ public class CanvasUtils {
 		} catch (Exception e) {
 			logger.error("Failed to convert from Object to XML", e);
 		}
-		return str;
+
+		return unformatXMLString(str);
 	}
+	 
+	private static String unformatXMLString(String input) {
+		BufferedReader reader = new BufferedReader(new StringReader(input));
+		StringBuffer result = new StringBuffer();
+		try {
+			String line;
+			while ((line = reader.readLine()) != null){
+				result.append(line.trim() + "\n");
+			}
+			reader.close();
+			return result.toString();
+		} catch (IOException e) {
+			logger.warn("Unable to remove formatting while saving UI XML string",e);
+		}
+		return input;
+	}
+
 }

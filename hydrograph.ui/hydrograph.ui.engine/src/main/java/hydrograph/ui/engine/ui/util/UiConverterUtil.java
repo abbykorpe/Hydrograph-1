@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -307,6 +308,22 @@ public class UiConverterUtil {
 
 	}
 	
+	private static String unformatXMLString(String input) {
+		BufferedReader reader = new BufferedReader(new StringReader(input));
+		StringBuffer result = new StringBuffer();
+		try {
+			String line;
+			while ((line = reader.readLine()) != null){
+				result.append(line.trim() + "\n");
+			}
+			reader.close();
+			return result.toString();
+		} catch (IOException e) {
+			LOGGER.warn("Unable to remove formatting while saving UI XML string",e);
+		}
+		return input;
+	}
+	
 	/**
 	 * Creates the job file based for the container object.
 	 * 
@@ -322,6 +339,7 @@ public class UiConverterUtil {
 			XStream xs = new XStream();
 			xs.autodetectAnnotations(true);
 			jobXmlData = xs.toXML(container);
+			jobXmlData=unformatXMLString(jobXmlData);
 			storeParameterData(parameterFile, jobXmlData);
 			jobFile.create(new ByteArrayInputStream(jobXmlData.getBytes()), true, null);
 
