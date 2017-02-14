@@ -123,10 +123,16 @@ public class CanvasUtils {
 			while ((line = reader.readLine()) != null){
 				result.append(line.trim() + "\n");
 			}
-			reader.close();
+			
 			return result.toString();
 		} catch (IOException e) {
 			logger.warn("Unable to remove formatting while saving UI XML string",e);
+		}finally{
+			try {
+				reader.close();
+			} catch (IOException e) {
+				logger.warn("Unable to close xml string reader",e);
+			}
 		}
 		return input;
 	}
