@@ -208,21 +208,41 @@ public class Utils {
 		 */
 	 public String getParamValue(String value){
 		 if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
-			String param = null;
-			value=StringUtils.substringBetween(value, "@{", "}");
-			for (Map.Entry<String, String> entry : paramsMap.entrySet()){
-				param = entry.getKey();
-			 if(StringUtils.equals(param, value)){
-				 if(entry.getValue().endsWith("/")){
-					 return entry.getValue();
-				 }
-				return entry.getValue();
-	    			}
-				} 
+			String param = "";
+			String[] splitString = value.split("/");
+			for(String field : splitString){
+				if(field.startsWith("@{")){
+					field = StringUtils.substringBetween(field, "@{", "}");
+					for (Map.Entry<String, String> entry : paramsMap.entrySet()){
+						if(StringUtils.equals(entry.getKey(), field)){
+							if(entry.getValue().endsWith("/")){
+								param = param == null ? entry.getValue() : param.concat(entry.getValue() + "/");
+							}
+							param = param == null ? entry.getValue() : param.concat(entry.getValue() + "/");
+						}
+					}
+				}else{
+					param += field + "/";
+				}
 			}
+			return getResult(param);
+		}
 				return PARAMETER_NOT_FOUND;
-			
-		}		
+	}		
+	 
+	 /**
+	  * The function will remove last char of string.
+	 * @param value
+	 * @return
+	 */
+	private String getResult(String value){
+		 StringBuffer buffer = new StringBuffer();
+		 buffer.append(value);
+		 if(value != null && value.endsWith("/")){
+			 buffer = buffer.deleteCharAt(value.lastIndexOf("/"));
+		 }
+		return buffer.toString();
+	 }
 		
 	 	/**
 		 * 
