@@ -95,7 +95,7 @@ public class OutputTeradataConverter extends OutputConverter{
 		}
 		
 		ElementValueIntegerType portNo = new ElementValueIntegerType();
-		BigInteger portValue = getBigInteger(PropertyNameConstants.PORT_NO.value());
+		BigInteger portValue = getPortValue(PropertyNameConstants.PORT_NO.value());
 		portNo.setValue(portValue);
 		teradataOutput.setPort(portNo);
 		
