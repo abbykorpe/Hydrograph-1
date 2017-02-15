@@ -17,5 +17,8 @@
    <topic href="html/Hydrograph Features/View_Data.html" label="ViewData">
       <anchor id="ViewData"/>
    </topic>
+   <topic href="html/Components/Expression_Editor_window.html" label="Expression Editor">
+      <link toc="Link"/>
+   </topic>
 </toc>
 
