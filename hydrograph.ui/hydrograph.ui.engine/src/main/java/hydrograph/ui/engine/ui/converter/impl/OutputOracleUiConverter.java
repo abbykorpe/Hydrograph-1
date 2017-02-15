@@ -75,7 +75,7 @@ public class OutputOracleUiConverter extends OutputUiConverter {
 		try {
 			BigInteger bigInteger = outputOracle.getPort().getValue();
 			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-					bigInteger == null ? "" : outputOracle.getPort().getValue());
+					outputOracle.getPort() == null ? "" : bigInteger);
 		} catch (Exception e) {
 			LOGGER.error("Exception" + e);
 		}

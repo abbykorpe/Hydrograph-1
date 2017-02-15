@@ -75,7 +75,7 @@ public class OutputMysqlUiConverter extends OutputUiConverter{
 		try {
 			BigInteger bigInteger = outputMysql.getPort().getValue();
 			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-					bigInteger == null ? "" : outputMysql.getPort().getValue());
+					outputMysql.getPort() == null ? "" : bigInteger);
 		} catch (Exception e) {
 			LOGGER.error("Exception" + e);
 		}

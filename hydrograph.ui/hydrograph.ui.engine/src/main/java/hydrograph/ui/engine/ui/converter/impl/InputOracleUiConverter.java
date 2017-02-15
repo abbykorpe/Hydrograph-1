@@ -67,13 +67,17 @@ public class InputOracleUiConverter extends InputUiConverter {
 		setValueInPropertyMap(PropertyNameConstants.JDBC_DRIVER.value(),
 				inputOracle.getDriverType() == null ? "" : inputOracle.getDriverType().getValue());
 
+		if(inputOracle.getHostName()==null){
+			System.out.println("This is null");
+		}
+		
 		setValueInPropertyMap(PropertyNameConstants.HOST_NAME.value(),
 				inputOracle.getHostName() == null ? "" : inputOracle.getHostName().getValue());
 
 		try {
 			BigInteger bigInteger = inputOracle.getPort().getValue();
 			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-					bigInteger == null ? "" : inputOracle.getPort().getValue());
+					inputOracle.getPort() == null ? "" : bigInteger);
 		} catch (Exception e) {
 			LOGGER.error("Exception" + e);
 		}
