@@ -94,6 +94,9 @@
     <topic href="html/Components/Output_Oracle.html" label="Output Oracle">
       <anchor id="outputOracle"/>
    </topic>
+    <topic href="html/Components/Output_Teradata.html" label="Output Teradata">
+      <anchor id="outputTeradata"/>
+   </topic>
    <topic href="html/Components/Join.html" label="Join">
       <anchor id="Join"/>
    </topic>

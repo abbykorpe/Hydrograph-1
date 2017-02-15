@@ -148,6 +148,9 @@
             file="xml/Components/outputOracle.xml">
       </toc>
       <toc
+            file="xml/Components/outputTeradata.xml">
+      </toc>
+      <toc
             file="xml/Components/removeDups.xml">
       </toc>
       <toc

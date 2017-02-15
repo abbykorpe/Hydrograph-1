@@ -17,7 +17,7 @@
 	<topic label="Properties"  href="html/Components/Input_Oracle_Properties.html"> 
 		<topic href="html/Components/Input_Oracle_Properties.html#general_properties" label="General Properties">
 	    </topic>
-	    <topic href="html/Components/Input_Oracle_Properties.html#schema" label="Schema">
+	    <topic href="html/Components/Input_Oracle_Properties.html#schema_tab" label="Schema">
 	    </topic>
 	    <topic href="html/Components/Input_Oracle_Properties.html#validations" label="Validations">
 	    </topic> 

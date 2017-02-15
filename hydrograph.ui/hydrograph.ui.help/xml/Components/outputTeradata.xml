@@ -13,13 +13,13 @@
  
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Input Teradata" link_to="xml\Components\components.xml#inputTeradata" topic="html/Components/Input_Teradata.html"> 
-	<topic label="Properties"  href="html/Components/Input_Teradata_Properties.html"> 
-		<topic href="html/Components/Input_Teradata_Properties.html#general_properties" label="General Properties">
+<toc label="Output Teradata" link_to="xml\Components\components.xml#outputTeradata" topic="html/Components/Output_Teradata.html"> 
+	<topic label="Properties"  href="html/Components/Output_Teradata_Properties.html"> 
+		<topic href="html/Components/Output_Teradata_Properties.html#general_properties" label="General Properties">
 	    </topic>
-	    <topic href="html/Components/Input_Teradata_Properties.html#schema_tab" label="Schema">
+	    <topic href="html/Components/Output_Teradata_Properties.html#schema_tab" label="Schema">
 	    </topic>
-	    <topic href="html/Components/Input_Teradata_Properties.html#validations" label="Validations">
+	    <topic href="html/Components/Output_Teradata_Properties.html#validations" label="Validations">
 	    </topic> 
 	</topic>
 </toc>
