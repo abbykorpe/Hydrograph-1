@@ -15,12 +15,15 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -29,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
@@ -42,6 +46,8 @@ import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
 
 public class TransformExpressionComposite extends AbstractExpressionComposite {
 
@@ -245,6 +251,17 @@ public class TransformExpressionComposite extends AbstractExpressionComposite {
 			if (StringUtils.isNotBlank(mappingSheetRow.getOutputList().get(0).getPropertyname()))
 				outputFieldTextBox.setText(mappingSheetRow.getOutputList().get(0).getPropertyname());
 		}
+		
+		outputFieldTextBox.addVerifyListener(new VerifyListener() {
+			@Override
+			public void verifyText(VerifyEvent event) {
+				String string=event.text;
+				if(!string.matches(Constants.REGEX_ALPHA_NUMERIC)){
+					event.doit=false;
+				}
+			}
+		});
+		
 		if (mappingSheetRow.getExpressionEditorData() != null
 				&& StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression())) {
 			expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());
