@@ -16,6 +16,10 @@
 	<topic label="Properties"  href="html/Components/Partition_By_Expression_Properties.html">
     	<topic href="html/Components/Partition_By_Expression_Properties.html#general_properties" label="General Properties">
     	</topic>
+    	 <topic href="html/Components/Partition_By_Expression_Properties.html#details" label="Details">
+    	</topic>
+		<topic href="html/Components/Partition_By_Expression_Properties.html#configuration" label="Configuration">
+		</topic>
     	<topic href="html/Components/Partition_By_Expression_Properties.html#schema" label="Schema">
     	</topic>
    		<topic href="html/Components/Partition_By_Expression_Properties.html#validations" label="Validations">
@@ -24,9 +28,9 @@
  	<topic href="html/Components/Partition_By_Expression_Operation_Window.html" label="Operation Class">
     	<topic href="html/Components/Partition_By_Expression_Operation_Window.html#custom-operation-class" label="Custom Built Operation Class">
     	</topic>
-    	<topic href="html/Components/Partition_By_Expression_Operation_Window.html#Operation_Properties_Grid" label="Operations Properties Grid">
-    	</topic>
     	<topic href="html/Components/Partition_By_Expression_Operation_Window.html#using-existing-java-class" label="Using Existing Java Class">
+    	</topic>
+    	<topic href="html/Components/Partition_By_Expression_Operation_Window.html#Operation_Properties_Grid" label="Operations Properties Grid">
     	</topic>
  	</topic>
  	<topic href="html/Components/Expression_Editor_window.html" label="Expression Editor">
