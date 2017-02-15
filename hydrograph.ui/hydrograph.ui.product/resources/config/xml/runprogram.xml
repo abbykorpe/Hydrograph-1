@@ -17,7 +17,7 @@
 	<tns:component paletteIconPath="/icons/runprogram_palette.png" canvasIconPath="/icons/runprogram_canvas.png"
 		name="RunProgram" nameInPalette="Run Program" defaultNamePrefix="RunProgram" 
 		description="Run's command given as input"
-		helpFilePath="/hydrograph.ui.help/html/Components/Clone.html"
+		helpFilePath="/hydrograph.ui.help/html/Components/Run_Program.html"
 		acronym="Run">
 		<tns:category>COMMAND</tns:category>
 			<tns:port>

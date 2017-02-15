@@ -18,7 +18,7 @@
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
 		name="OMysql" nameInPalette="Mysql" defaultNamePrefix="OMysql" 
 		description="Used to write data from Mysql tables"
-		helpFilePath=""
+		helpFilePath="/hydrograph.ui.help/html/Components/Output_Mysql.html"
 		acronym="OMysql">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>

@@ -19,7 +19,7 @@
 	<tns:component paletteIconPath="/icons/DBUpdate_palette.png"
 		canvasIconPath="/icons/DBUpdate_canvas.png" name="ODBUpdate"
 		nameInPalette="DB Update" defaultNamePrefix="DBUpdate" description=""
-		helpFilePath="/hydrograph.ui.help/html/Components/ODBUpdate.html" acronym="DBUpd">
+		helpFilePath="/hydrograph.ui.help/html/Components/DBUpdate.html" acronym="DBUpd">
 		<tns:category>OUTPUT</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1"
