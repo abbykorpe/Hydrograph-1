@@ -94,6 +94,9 @@
             primary="true">
       </toc>
       <toc
+            file="xml/Components/commentBox.xml">
+      </toc>
+      <toc
             file="xml/Components/aggregate.xml">
       </toc>
       <toc
@@ -325,6 +328,9 @@
       </toc>
       <toc
             file="xml/Components/runProgram.xml">
+      </toc>
+      <toc
+            file="xml/Components/runSql.xml">
       </toc>
       <toc
          	file="xml/Components/outputDBUpdate.xml"
