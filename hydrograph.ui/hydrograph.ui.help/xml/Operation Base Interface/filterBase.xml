@@ -16,7 +16,4 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Filter Operation Class" link_to="xml/Operation Base Interface/operationBaseInterface.xml#FilterBase" topic="html/Operation Base Interface/Filter/FilterBase.html">
-   <topic href="html/gettingstarted/maintopic.html" label="Filter Operation Class">
-   </topic> 
-	
 </toc>

@@ -22,7 +22,7 @@
    <topic href="html/Operation Base Interface/Normalize/NormalizeTransformBase.html" label="NormalizeTransformBase">
       <anchor id="NormalizeTransformBase"/>
    </topic>
-   <topic label="FilterBase">
+   <topic href="html\Operation Base Interface\Filter\FilterBase.html"  label="FilterBase">
       <anchor id="FilterBase"/>
    </topic>
    <topic label="TransformBase">
