@@ -15,42 +15,48 @@
     <entry keyword="Aggregate">
         <topic href="/hydrograph.ui.help/html/Components/Aggregate.html"/>
     </entry>
+    
     <entry keyword="Sort">
     	<topic href="/hydrograph.ui.help/html/Components/Sort.html"/>
     	<topic href="/hydrograph.ui.help/html/Components/Sort_Properties.html"/>
     </entry>
+    
     <entry keyword="Discard">
     	<topic href="/hydrograph.ui.help/html/Components/Discard.html"/>
     	<topic href="/hydrograph.ui.help/html/Components/Discard_Properties.html"/>
     </entry>
+    
      <entry keyword="Normalize">
-	<topic
-		href="/hydrograph.ui.help/html/Components/Normalize_Operation_Class_Window.html" />
-	<topic
-		href="/hydrograph.ui.help/html/Components/Normalize_Operation_Editor.html" />
-	<topic href="/hydrograph.ui.help/html/Components/Normalize_Properties.html" />
-	<topic href="/hydrograph.ui.help/html/Components/Normalize.html" />
+		<topic href="/hydrograph.ui.help/html/Components/Normalize_Operation_Class_Window.html" />
+		<topic href="/hydrograph.ui.help/html/Components/Normalize_Operation_Editor.html" />
+		<topic href="/hydrograph.ui.help/html/Components/Normalize_Properties.html" />
+		<topic href="/hydrograph.ui.help/html/Components/Normalize.html" />
 	</entry>
-      <entry keyword="Clone">
+	
+     <entry keyword="Clone">
         <topic href="/hydrograph.ui.help/html/Components/Clone.html"/>
     </entry>
+    	
      <entry keyword="Filter">
         <topic href="/hydrograph.ui.help/html/Components/Filter.html"/>
         <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html"/>
         <topic href="/hydrograph.ui.help/html/Components/Filter_Properties.html"/>
     </entry>
+    
      <entry keyword="Operation Class Window">
         <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html"/>
         <entry keyword="In-built Operation Classes">
-        <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#using-existing-java-class"/>
+       	 	<topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#using-existing-java-class"/>
         </entry>
         <entry keyword="Create Custom Classes">
-        <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#custom-operation-class"/>
+        	<topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#custom-operation-class"/>
         </entry>
     </entry>
+    
      <entry keyword="Operation Property Grid">
         <topic href="/hydrograph.ui.help/html/Components/Filter_Operation_Window.html#Operation_Properties_Grid"/>
     </entry>
+    
     <entry keyword="Unique Sequence">
         <topic href="/hydrograph.ui.help/html/Components/Unique_Sequence.html"/>
 		<topic href="/hydrograph.ui.help/html/Components/Unique_Sequence_Properties.html"/>
@@ -68,6 +74,20 @@
 		<topic href="/hydrograph.ui.help/html/Components/Join_Mapping_View.html"/>
     </entry>
     
+    <entry keyword="Database Components">
+    	<entry keyword="Input Database Components">
+    		<topic href="/hydrograph.ui.help/html/Components/Input_Oracle.html"/>
+        	<topic href="/hydrograph.ui.help/html/Components/Input_Mysql.html"/>
+        	<topic href="/hydrograph.ui.help/html/Components/Input_Redshift.html"/>
+        	<topic href="/hydrograph.ui.help/html/Components/Input_Teradata.html"/>
+    	</entry>
+        <entry keyword="Output Database Components">
+    		<topic href="/hydrograph.ui.help/html/Components/Output_Oracle.html"/>
+        	<topic href="/hydrograph.ui.help/html/Components/Output_Mysql.html"/>
+        	<topic href="/hydrograph.ui.help/html/Components/Output_Redshift.html"/>
+        	<topic href="/hydrograph.ui.help/html/Components/Output_Teradata.html"/>
+    	</entry>
+    </entry>
     
     <entry keyword="Hydrograph Features">
         <topic href="/hydrograph.ui.help/html/Hydrograph Features/View_Data.html"/>
