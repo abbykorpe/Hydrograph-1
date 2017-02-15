@@ -19,7 +19,7 @@
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
 		name="IOracle" nameInPalette="Oracle" defaultNamePrefix="IOracle" 
 		description="Used to read and fetch data from Oracle tables"
-		helpFilePath=""
+		helpFilePath="/hydrograph.ui.help/html/Components/Input_Oracle.html"
 		acronym="IOrac">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
