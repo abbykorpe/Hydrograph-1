@@ -51,7 +51,7 @@ public class TransformForExpression implements TransformBase {
 		}
 		try {
 			outputRow.setField(0,
-					(Comparable) validationAPI.execute(fieldNames, tuples));
+					(Comparable) validationAPI.exec(tuples));
 		} catch (Exception e) {
 			throw new RuntimeException("Tranform Expression: "
 					+ validationAPI.getValidExpression()

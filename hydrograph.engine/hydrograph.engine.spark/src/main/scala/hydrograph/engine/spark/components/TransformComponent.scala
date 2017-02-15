@@ -58,7 +58,9 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
         sparkOperation =>
           sparkOperation.baseClassInstance match {
             //For Expression Editor call extra method setValidationAPI
-            case t: TransformForExpression => t.setValidationAPI(sparkOperation.validatioinAPI)
+            case t: TransformForExpression =>val validationApi=sparkOperation.validatioinAPI.init(sparkOperation
+              .validatioinAPI.getExpr,sparkOperation.fieldSchema.asJava)
+              t.setValidationAPI(validationApi)
             case t: TransformBase => t.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation
               .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields)
           }
