@@ -13,13 +13,23 @@
     limitations under the License.
  -->
 <plugin>
-   <extension
-         point="org.eclipse.ui.preferencePages">
+
+	<extension point="org.eclipse.ui.preferencePages">
+      <page
+            class="hydrograph.ui.dataviewer.preferencepage.ServicesPreference"
+            id="hydrograph.ui.Services"
+            name="Services">
+      </page>
+      
       <page
             class="hydrograph.ui.dataviewer.preferencepage.ViewDataPreference"
             id="hydrograph.ui.dataviewer"
-            name="View Data">
+            name="View Data"
+            category="hydrograph.ui.Services">
+            
       </page>
+      
    </extension>
+	
 
 </plugin>

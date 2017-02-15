@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
+
+import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 
@@ -46,10 +48,11 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		preferenceStore.setDefault(ExecutionPreferenceConstants.EXECUTION_TRACKING, true);
 		preferenceStore.setDefault(ExecutionPreferenceConstants.TRACKING_LOG_PATH,
 				TrackingDisplayUtils.INSTANCE.getInstallationPath());
-		preferenceStore.setDefault(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO,
-				TrackingDisplayUtils.INSTANCE.getExecutiontrackingPortNo());
-		preferenceStore.setDefault(ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO,
-				TrackingDisplayUtils.INSTANCE.getExecutiontrackingPortNo());
+		
+//		preferenceStore.setDefault(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO,
+//				TrackingDisplayUtils.INSTANCE.getExecutiontrackingPortNo());
+//		PREFERENCESTORE.SETDEFAULT(EXECUTIONPREFERENCECONSTANTS.REMOTE_TRACKING_PORT_NO,
+//				TRACkingDisplayUtils.INSTANCE.getExecutiontrackingPortNo());
 		setPreferenceStore(preferenceStore);
 	}
 
@@ -63,14 +66,12 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		IPreferenceStore preferenceStore = getPreferenceStore();
 		ExecutionTrackingPreferencesDataStructure defalultPreferences = new ExecutionTrackingPreferencesDataStructure();
 		defalultPreferences.setEnableTrackingCheckBox(true);
-		defalultPreferences.setLocalPortNoText(
-				preferenceStore.getDefaultString(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO));
-		defalultPreferences.setRemotePortNoText(
-				preferenceStore.getDefaultString(ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO));
+//		defalultPreferences.setLocalPortNoText(preferenceStore.getDefaultString(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO));
+//		defalultPreferences.setLocalPortNoText(preferenceStore.getString(PreferenceConstants.LOCAL_PORT_NO));
+//		defalultPreferences.setRemotePortNoText(preferenceStore.getDefaultString(ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO));
 		defalultPreferences.setOverrideRemoteHostButton(false);
 		// defalultPreferences.setRemoteHostNameText(remoteHostNameText);
-		defalultPreferences.setTrackingLogPathText(
-				preferenceStore.getDefaultString(ExecutionPreferenceConstants.TRACKING_LOG_PATH));
+		defalultPreferences.setTrackingLogPathText(preferenceStore.getDefaultString(ExecutionPreferenceConstants.TRACKING_LOG_PATH));
 		executionTrackingPreferanceComposite.setDefaults(defalultPreferences);
 	}
 
@@ -82,16 +83,13 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 		ExecutionTrackingPreferencesDataStructure preference = new ExecutionTrackingPreferencesDataStructure();
 		preference.setEnableTrackingCheckBox(
 				getPreferenceStore().getBoolean(ExecutionPreferenceConstants.EXECUTION_TRACKING));
-		preference.setLocalPortNoText(
-				getPreferenceStore().getString(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO));
-		preference.setRemotePortNoText(
-				getPreferenceStore().getString(ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO));
-		preference.setOverrideRemoteHostButton(
-				getPreferenceStore().getBoolean(ExecutionPreferenceConstants.USE_REMOTE_CONFIGURATION));
-		preference.setRemoteHostNameText(
-				getPreferenceStore().getString(ExecutionPreferenceConstants.REMOTE_TRACKING_HOST));
-		preference
-				.setTrackingLogPathText(getPreferenceStore().getString(ExecutionPreferenceConstants.TRACKING_LOG_PATH));
+//		preference.setLocalPortNoText(getPreferenceStore().getString(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO));
+		
+//		preference.setLocalPortNoText(getPreferenceStore().getString(PreferenceConstants.LOCAL_PORT_NO));
+//		preference.setRemotePortNoText(getPreferenceStore().getString(ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO));
+//		preference.setOverrideRemoteHostButton(getPreferenceStore().getBoolean(ExecutionPreferenceConstants.USE_REMOTE_CONFIGURATION));
+//		preference.setRemoteHostNameText(getPreferenceStore().getString(ExecutionPreferenceConstants.REMOTE_TRACKING_HOST));
+		preference.setTrackingLogPathText(getPreferenceStore().getString(ExecutionPreferenceConstants.TRACKING_LOG_PATH));
 
 		executionTrackingPreferanceComposite = new ExecutionTrackingPreferanceComposite(parent, SWT.NONE, this,
 				preference);
@@ -107,18 +105,16 @@ public class ExecutionTrackPreference extends PreferencePage implements IWorkben
 	@Override
 	public boolean performOk() {
 		ExecutionTrackingPreferencesDataStructure preference = executionTrackingPreferanceComposite.getPreferences();
-		getPreferenceStore().setValue(ExecutionPreferenceConstants.EXECUTION_TRACKING,
-				preference.isEnableTrackingCheckBox());
-		getPreferenceStore().setValue(ExecutionPreferenceConstants.EXECUTION_TRACKING,
-				preference.isEnableTrackingCheckBox());
-		getPreferenceStore().setValue(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO,
-				preference.getLocalPortNoText());
-		getPreferenceStore().setValue(ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO,
-				preference.getRemotePortNoText());
-		getPreferenceStore().setValue(ExecutionPreferenceConstants.USE_REMOTE_CONFIGURATION,
-				preference.isOverrideRemoteHostButton());
-		getPreferenceStore().setValue(ExecutionPreferenceConstants.REMOTE_TRACKING_HOST,
-				preference.getRemoteHostNameText());
+		getPreferenceStore().setValue(ExecutionPreferenceConstants.EXECUTION_TRACKING,preference.isEnableTrackingCheckBox());
+		getPreferenceStore().setValue(ExecutionPreferenceConstants.EXECUTION_TRACKING,preference.isEnableTrackingCheckBox());
+//		getPreferenceStore().setValue(ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO,
+//				preference.getLocalPortNoText());
+//		getPreferenceStore().setValue(ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO,
+//				preference.getRemotePortNoText());
+//		getPreferenceStore().setValue(ExecutionPreferenceConstants.USE_REMOTE_CONFIGURATION,
+//				preference.isOverrideRemoteHostButton());
+//		getPreferenceStore().setValue(ExecutionPreferenceConstants.REMOTE_TRACKING_HOST,
+//				preference.getRemoteHostNameText());
 		getPreferenceStore().setValue(ExecutionPreferenceConstants.TRACKING_LOG_PATH,
 				preference.getTrackingLogPathText());
 		return super.performOk();

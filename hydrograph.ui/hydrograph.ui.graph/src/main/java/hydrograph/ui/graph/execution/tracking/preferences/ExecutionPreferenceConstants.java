@@ -26,13 +26,13 @@ public class ExecutionPreferenceConstants {
 	public static final String TRACKING_LOG_PATH = "TRACKING_LOG_PATH";
 	
 	/** The Constant LOCAL_TRACKING_PORT_NO. */
-	public static final String LOCAL_TRACKING_PORT_NO = "LOCAL_TRACKING_PORT_NO";
+//	public static final String LOCAL_TRACKING_PORT_NO = "LOCAL_TRACKING_PORT_NO";
 	
-	public static final String REMOTE_TRACKING_PORT_NO = "REMOTE_TRACKING_PORT_NO";
+//	public static final String REMOTE_TRACKING_PORT_NO = "REMOTE_TRACKING_PORT_NO";
 
 	/** The Constant REMOTE_TRACKING_HOST. */
-	public static final String REMOTE_TRACKING_HOST = "REMOTE_TRACKING_HOST";
+//	public static final String REMOTE_TRACKING_HOST = "REMOTE_TRACKING_HOST";
 
-	public static final String USE_REMOTE_CONFIGURATION="USE_REMOTE_CONFIGURATION";
+//	public static final String USE_REMOTE_CONFIGURATION="USE_REMOTE_CONFIGURATION";
 	
 }

@@ -29,11 +29,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.util.ConfigFileReader;
 import hydrograph.ui.common.util.OSValidator;
+import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.Activator;
 import hydrograph.ui.graph.controller.ComponentEditPart;
@@ -169,18 +171,21 @@ public class TrackingDisplayUtils {
 	public String getWebSocketRemoteUrl(Job job) {
 		String remoteUrl = null;
 		String portNo = getPortFromPreference();
-		if (job.isRemoteMode()
-				&& Platform.getPreferencesService().getBoolean(Activator.PLUGIN_ID,
-						ExecutionPreferenceConstants.USE_REMOTE_CONFIGURATION, false, null)) {
-			portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
-					ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO, getExecutiontrackingPortNo(), null);
-			String remoteHost = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
-					ExecutionPreferenceConstants.REMOTE_TRACKING_HOST, "", null);
+		if (job.isRemoteMode()&& PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.USE_REMOTE_CONFIGURATION)) {
+			
+			portNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
+//			portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO, 
+//					getExecutiontrackingPortNo(), null);
+			
+			String remoteHost = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_HOST);
+//			String remoteHost = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,ExecutionPreferenceConstants.REMOTE_TRACKING_HOST
+//					, "", null);
 			remoteUrl = WEB_SOCKET + remoteHost + COLON + portNo + websocketRoute;
 		} else {
 			if (job.isRemoteMode()) {
-				portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,
-						ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO, getExecutiontrackingPortNo(), null);
+				portNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
+//				portNo = Platform.getPreferencesService().getString(Activator.PLUGIN_ID,ExecutionPreferenceConstants.REMOTE_TRACKING_PORT_NO,
+//			getExecutiontrackingPortNo(), null);
 			}
 			remoteUrl = WEB_SOCKET + job.getHost() + COLON + portNo + websocketRoute;
 		}
@@ -203,13 +208,13 @@ public class TrackingDisplayUtils {
 	 * Gets the port from preference.
 	 * 
 	 * @return the port from preference
-	 */
+	 */	
 	public String getPortFromPreference() {
-		String portNo = Platform.getPreferencesService().getString(
-				Activator.PLUGIN_ID,
-				ExecutionPreferenceConstants.LOCAL_TRACKING_PORT_NO,
-				getExecutiontrackingPortNo(), null);
-
+//		String portNo = Platform.getPreferencesService().getString(
+//				Activator.PLUGIN_ID,
+//				PreferenceConstants.LOCAL_PORT_NO,
+//				getExecutiontrackingPortNo(), null);
+		String portNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.LOCAL_PORT_NO);
 		return portNo;
 	}
 

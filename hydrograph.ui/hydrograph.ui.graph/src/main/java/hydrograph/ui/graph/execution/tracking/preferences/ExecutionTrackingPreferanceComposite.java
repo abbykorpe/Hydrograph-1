@@ -43,17 +43,17 @@ import hydrograph.ui.graph.job.RunStopButtonCommunicator;
  */
 public class ExecutionTrackingPreferanceComposite extends Composite {
 	private static final String ERROR_KEY = "ERROR";
-	private Text localPortNoText;
-	private Text remotePortNoText;
-	private Text remoteHostNameText;
+//	private Text localPortNoText;
+//	private Text remotePortNoText;
+//	private Text remoteHostNameText;
 	private Text trackingLogPathText;
 	private PreferencePage executionTrackPreference;
 	private Button enableTrackingCheckBox;
-	private Button overrideRemoteHostCheckBox;
-	private Label localPortNoLabel;
-	private Label remotePortNo;
-	private Label overrideRemoteHostLabel;
-	private Label remoteHostNameLabel;
+//	private Button overrideRemoteHostCheckBox;
+//	private Label localPortNoLabel;
+//	private Label remotePortNo;
+//	private Label overrideRemoteHostLabel;
+//	private Label remoteHostNameLabel;
 	private Label trackingLogPathLabel;
 	private ExecutionTrackingPreferencesDataStructure storePrefernces;
 	private List<Text> editorList = new ArrayList<Text>();
@@ -86,40 +86,40 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		enableTrackingCheckBox.setSelection(prefernce.isEnableTrackingCheckBox());
 
 
-		localPortNoLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		localPortNoLabel.setText(Messages.LOCAL_PORT_NO_LABEL);
+//		localPortNoLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
+//		localPortNoLabel.setText(Messages.LOCAL_PORT_NO_LABEL);
+//
+//		localPortNoText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
+//		localPortNoText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+//		localPortNoText.setText(prefernce.getLocalPortNoText());
+//		localPortNoText.setData(ERROR_KEY, null);
+//		localPortNoText.setTextLimit(6);
+//
+//		remotePortNo = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
+//		remotePortNo.setText(Messages.REMOTE_PORT_NO_LABEL);
+//
+//		remotePortNoText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
+//		remotePortNoText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+//		remotePortNoText.setText(prefernce.getRemotePortNoText());
+//		remotePortNoText.setData(ERROR_KEY, null);
+//		remotePortNoText.setTextLimit(6);
+//
+//		overrideRemoteHostLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
+//		overrideRemoteHostLabel.setText(Messages.OVERRIDE_REMOTE_HOST_LABEL);
 
-		localPortNoText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
-		localPortNoText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		localPortNoText.setText(prefernce.getLocalPortNoText());
-		localPortNoText.setData(ERROR_KEY, null);
-		localPortNoText.setTextLimit(6);
+//		overrideRemoteHostCheckBox = new Button(hydroGroup.getHydroGroupClientArea(), SWT.CHECK);
+//		overrideRemoteHostCheckBox.setSelection(prefernce.isOverrideRemoteHostButton());
 
-		remotePortNo = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		remotePortNo.setText(Messages.REMOTE_PORT_NO_LABEL);
-
-		remotePortNoText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
-		remotePortNoText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		remotePortNoText.setText(prefernce.getRemotePortNoText());
-		remotePortNoText.setData(ERROR_KEY, null);
-		remotePortNoText.setTextLimit(6);
-
-		overrideRemoteHostLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		overrideRemoteHostLabel.setText(Messages.OVERRIDE_REMOTE_HOST_LABEL);
-
-		overrideRemoteHostCheckBox = new Button(hydroGroup.getHydroGroupClientArea(), SWT.CHECK);
-		overrideRemoteHostCheckBox.setSelection(prefernce.isOverrideRemoteHostButton());
-
-		remoteHostNameLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
-		remoteHostNameLabel.setText(Messages.REMOTE_HOST_NAME_LABEL);
-
-		remoteHostNameText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
-		remoteHostNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		remoteHostNameText.setText(prefernce.getRemoteHostNameText());
-		if (!prefernce.isOverrideRemoteHostButton()) {
-			remoteHostNameText.setEnabled(false);
-		}
-		remoteHostNameText.setData(ERROR_KEY, null);
+//		remoteHostNameLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
+//		remoteHostNameLabel.setText(Messages.REMOTE_HOST_NAME_LABEL);
+//
+//		remoteHostNameText = new Text(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
+//		remoteHostNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+//		remoteHostNameText.setText(prefernce.getRemoteHostNameText());
+//		if (!prefernce.isOverrideRemoteHostButton()) {
+//			remoteHostNameText.setEnabled(false);
+//		}
+//		remoteHostNameText.setData(ERROR_KEY, null);
 
 		trackingLogPathLabel = new Label(hydroGroup.getHydroGroupClientArea(), SWT.NONE);
 		trackingLogPathLabel.setText(Messages.TRACKING_LOG_PATH_LABEL);
@@ -139,12 +139,12 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 		
 		
 		enableOrDisableFields(enableTrackingCheckBox.getSelection());
-		localPortNoText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				validatePortField(localPortNoText, localPortNoText.getText(), Messages.PORTNO_FIELD_VALIDATION);
-			}
-		});
+//		localPortNoText.addModifyListener(new ModifyListener() {
+//			@Override
+//			public void modifyText(ModifyEvent e) {
+//				validatePortField(localPortNoText, localPortNoText.getText(), Messages.PORTNO_FIELD_VALIDATION);
+//			}
+//		});
 		
 		enableTrackingCheckBox.addSelectionListener(new SelectionListener() {
 			@Override
@@ -158,47 +158,47 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 			}
 		});
 
-		overrideRemoteHostCheckBox.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Button btn = (Button) event.getSource();
-				remoteHostNameText.setEnabled(btn.getSelection());
-				remoteHostNameLabel.setEnabled(btn.getSelection());
-				if (!btn.getSelection()) {
-					remoteHostNameText.setData(ERROR_KEY, null);
-					checkState();
-				} else {
-					if (StringUtils.isBlank(remoteHostNameText.getText())) {
-						remoteHostNameText.setData(ERROR_KEY, Messages.BLANK_REMOTE_HOST_NAME_ERROR);
-						checkState();
-					} else {
-						remoteHostNameText.setData(ERROR_KEY, null);
-						checkState();
-					}
-				}
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-
-		remotePortNoText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String value = ((Text) e.getSource()).getText();
-				validatePortField(remotePortNoText, value, Messages.PORTNO_FIELD_VALIDATION);
-			}
-		});
-		
-		remoteHostNameText.addModifyListener(new ModifyListener() {
-			@Override
-		public void modifyText(ModifyEvent e) {
-				validationForTextField(remoteHostNameText,  Messages.BLANK_REMOTE_HOST_NAME_ERROR );
-			}
-		});
-		editorList.add(localPortNoText);
-		editorList.add(remotePortNoText);
-		editorList.add(remoteHostNameText);
+//		overrideRemoteHostCheckBox.addSelectionListener(new SelectionListener() {
+//			@Override
+//			public void widgetSelected(SelectionEvent event) {
+//				Button btn = (Button) event.getSource();
+//				remoteHostNameText.setEnabled(btn.getSelection());
+//				remoteHostNameLabel.setEnabled(btn.getSelection());
+//				if (!btn.getSelection()) {
+//					remoteHostNameText.setData(ERROR_KEY, null);
+//					checkState();
+//				} else {
+//					if (StringUtils.isBlank(remoteHostNameText.getText())) {
+//						remoteHostNameText.setData(ERROR_KEY, Messages.BLANK_REMOTE_HOST_NAME_ERROR);
+//						checkState();
+//					} else {
+//						remoteHostNameText.setData(ERROR_KEY, null);
+//						checkState();
+//					}
+//				}
+//			}
+//			@Override
+//			public void widgetDefaultSelected(SelectionEvent e) {
+//			}
+//		});
+//
+//		remotePortNoText.addModifyListener(new ModifyListener() {
+//			@Override
+//			public void modifyText(ModifyEvent e) {
+//				String value = ((Text) e.getSource()).getText();
+//				validatePortField(remotePortNoText, value, Messages.PORTNO_FIELD_VALIDATION);
+//			}
+//		});
+//		
+//		remoteHostNameText.addModifyListener(new ModifyListener() {
+//			@Override
+//		public void modifyText(ModifyEvent e) {
+//				validationForTextField(remoteHostNameText,  Messages.BLANK_REMOTE_HOST_NAME_ERROR );
+//			}
+//		});
+//		editorList.add(localPortNoText);
+//		editorList.add(remotePortNoText);
+//		editorList.add(remoteHostNameText);
 		editorList.add(trackingLogPathText);
 	}
 
@@ -208,14 +208,14 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 	 */
 	private void enableOrDisableFields(boolean enable) {
 		trackingLogPathText.setEnabled(enable);
-		localPortNoText.setEnabled(enable);
-		remotePortNoText.setEnabled(enable);
-		overrideRemoteHostCheckBox.setEnabled(enable);
-		remoteHostNameText.setEnabled(enable);
-		localPortNoLabel.setEnabled(enable);
-		remotePortNo.setEnabled(enable);
-		overrideRemoteHostLabel.setEnabled(enable);
-		remoteHostNameLabel.setEnabled(enable);
+//		localPortNoText.setEnabled(enable);
+//		remotePortNoText.setEnabled(enable);
+//		overrideRemoteHostCheckBox.setEnabled(enable);
+//		remoteHostNameText.setEnabled(enable);
+//		localPortNoLabel.setEnabled(enable);
+//		remotePortNo.setEnabled(enable);
+//		overrideRemoteHostLabel.setEnabled(enable);
+//		remoteHostNameLabel.setEnabled(enable);
 		trackingLogPathLabel.setEnabled(enable);
 		enableOrDisableRemoteHost();
 	}
@@ -224,13 +224,13 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 	 * Enable/Disable remote host name section
 	 */
 	public void enableOrDisableRemoteHost() {
-		if (!enableTrackingCheckBox.getSelection() || !overrideRemoteHostCheckBox.getSelection()) {
-			remoteHostNameText.setEnabled(false);
-			remoteHostNameLabel.setEnabled(false);
-		} else {
-			remoteHostNameText.setEnabled(true);
-			remoteHostNameLabel.setEnabled(true);
-		}
+//		if (!enableTrackingCheckBox.getSelection() || !overrideRemoteHostCheckBox.getSelection()) {
+//			remoteHostNameText.setEnabled(false);
+//			remoteHostNameLabel.setEnabled(false);
+//		} else {
+//			remoteHostNameText.setEnabled(true);
+//			remoteHostNameLabel.setEnabled(true);
+//		}
 	}
 
 	/**
@@ -239,10 +239,10 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 	 */
 	public ExecutionTrackingPreferencesDataStructure getPreferences() {
 		storePrefernces.setEnableTrackingCheckBox(enableTrackingCheckBox.getSelection());
-		storePrefernces.setLocalPortNoText(localPortNoText.getText());
-		storePrefernces.setRemotePortNoText(remotePortNoText.getText());
-		storePrefernces.setOverrideRemoteHostButton(overrideRemoteHostCheckBox.getSelection());
-		storePrefernces.setRemoteHostNameText(remoteHostNameText.getText());
+//		storePrefernces.setLocalPortNoText(localPortNoText.getText());
+//		storePrefernces.setRemotePortNoText(remotePortNoText.getText());
+//		storePrefernces.setOverrideRemoteHostButton(overrideRemoteHostCheckBox.getSelection());
+//		storePrefernces.setRemoteHostNameText(remoteHostNameText.getText());
 		storePrefernces.setTrackingLogPathText(trackingLogPathText.getText());
 		return storePrefernces;
 	}
@@ -265,11 +265,11 @@ public class ExecutionTrackingPreferanceComposite extends Composite {
 	 */
 	public void setDefaults(ExecutionTrackingPreferencesDataStructure defaultPreference) {
 		enableTrackingCheckBox.setSelection(defaultPreference.isEnableTrackingCheckBox());
-		localPortNoText.setText(defaultPreference.getLocalPortNoText());
-		remotePortNoText.setText(defaultPreference.getRemotePortNoText());
-		overrideRemoteHostCheckBox.setSelection(defaultPreference.isOverrideRemoteHostButton());
-		overrideRemoteHostCheckBox.setSelection(false);
-		remoteHostNameText.setEnabled(false);
+//		localPortNoText.setText(defaultPreference.getLocalPortNoText());
+//		remotePortNoText.setText(defaultPreference.getRemotePortNoText());
+//		overrideRemoteHostCheckBox.setSelection(defaultPreference.isOverrideRemoteHostButton());
+//		overrideRemoteHostCheckBox.setSelection(false);
+//		remoteHostNameText.setEnabled(false);
 		trackingLogPathText.setText(defaultPreference.getTrackingLogPathText());
 
 	}
