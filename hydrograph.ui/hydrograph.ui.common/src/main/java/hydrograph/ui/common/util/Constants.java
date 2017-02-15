@@ -24,7 +24,7 @@ public class Constants {
 	
 	public static final String ERROR = "ERROR";
 	public static final String BATCH = "Batch";
-	public static final String PARAM_NO_OF_RECORDS = "no_of_records";
+	public static final String PARAM_NO_OF_RECORDS = "recordCount";
 	
 	public static final String INPUT_PORT_COUNT_PROPERTY="inPortCount";
  	public static final String OUTPUT_PORT_COUNT_PROPERTY="outPortCount";
