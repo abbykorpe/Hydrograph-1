@@ -71,7 +71,7 @@ public class InputMysqlUiConverter extends InputUiConverter{
 		try {
 			BigInteger bigInteger = inputMysql.getPort().getValue();
 			setValueInPropertyMap(PropertyNameConstants.PORT_NO.value(),
-					bigInteger == null ? "" : inputMysql.getPort().getValue());
+					inputMysql.getPort() == null ? "" : bigInteger);
 		} catch (Exception e) {
 			LOGGER.error("Exception" + e);
 		}
