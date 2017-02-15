@@ -44,7 +44,6 @@ BaseComponentParams) extends SparkFlow with Serializable {
        .option("safe", outputFileDelimitedEntity.getSafe)
        .option("dateFormat", "yyyy/MM/dd")
        .option("timestampFormat", "yyyy/MM/dd HH:mm:ss")
-       .option("codec", "bzip2")
        .mode(if (outputFileDelimitedEntity.isOverWrite ) SaveMode.Overwrite else SaveMode.ErrorIfExists)
        .csv(outputFileDelimitedEntity.getPath)
 

@@ -13,7 +13,8 @@ class LimitComponent(limitEntity : LimitEntity, componentsParams : BaseComponent
   override def createComponent(): Map[String, DataFrame] = {
     try {
       LOG.trace(limitEntity.toString);
-      val output = componentsParams.getDataFrame.limit(limitEntity.getMaxRecord.toInt)
+      val limit = limitEntity.getMaxRecord.toInt
+      val output = componentsParams.getDataFrame.limit(limit)
       val outSocketId = limitEntity.getOutSocketList.get(0).getSocketId
 
       LOG.info("Created Limit component "
