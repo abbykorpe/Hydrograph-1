@@ -80,8 +80,6 @@ class InputSequenceFileComponentTest {
 
     //then
     val expectedSize: Int = 10
-    val expectedResult: String = "[14,true,251414,25.25,25,ddeeff,25.25,2014-02-08,2015-02-05 14:12:54.0,56435.36]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
-    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
   }
 }

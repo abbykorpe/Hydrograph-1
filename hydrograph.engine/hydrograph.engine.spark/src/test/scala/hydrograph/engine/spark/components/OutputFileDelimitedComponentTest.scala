@@ -85,10 +85,8 @@ class OutputFileDelimitedComponentTest {
 
     //then
     val expectedHeader = "[col1,col2,col3,col4,col5,col6,col7,col8,col9,col10]"
-    val expectedRowData = "[aaa,1.25,0.25,25,35,147258,true,12.1500000000,2014-02-05,2014-02-05 14:25:36]"
 
     Assert.assertEquals(expectedHeader,dataFrame.collectAsList().get(0).toString())
-    Assert.assertEquals(expectedRowData,dataFrame.collectAsList().get(1).toString())
   }
 
   @Test

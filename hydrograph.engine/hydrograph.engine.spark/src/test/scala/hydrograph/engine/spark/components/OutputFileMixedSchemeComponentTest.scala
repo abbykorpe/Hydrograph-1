@@ -104,7 +104,6 @@ class OutputFileMixedSchemeComponentTest {
     inputFileMixedSchemeEntity.setOutSocketList(outSockets)
     val dataframeFromOutputFile: Map[String, DataFrame] = new InputFileMixedSchemeComponent(inputFileMixedSchemeEntity, cp).createComponent()
     val rows = dataframeFromOutputFile.get("outSocket").get.collect().toList
-    println(rows)
     Assert.assertEquals(expected, rows.size)
   }
 
