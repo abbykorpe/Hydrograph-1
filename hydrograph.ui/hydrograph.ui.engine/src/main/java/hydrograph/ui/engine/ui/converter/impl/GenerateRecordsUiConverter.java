@@ -14,18 +14,6 @@
  
 package hydrograph.ui.engine.ui.converter.impl;
 
-import hydrograph.ui.common.util.Constants;
-import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
-import hydrograph.ui.datastructure.property.GridRow;
-import hydrograph.ui.datastructure.property.Schema;
-import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
-import hydrograph.ui.engine.ui.converter.InputUiConverter;
-import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
-import hydrograph.ui.graph.model.Container;
-import hydrograph.ui.graph.model.components.GenerateRecords;
-import hydrograph.ui.logging.factory.LogFactory;
-import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -42,6 +30,17 @@ import hydrograph.engine.jaxb.commontypes.TypeInputOutSocket;
 import hydrograph.engine.jaxb.commontypes.TypeProperties;
 import hydrograph.engine.jaxb.commontypes.TypeProperties.Property;
 import hydrograph.engine.jaxb.inputtypes.GenerateRecord;
+import hydrograph.ui.common.util.Constants;
+import hydrograph.ui.datastructure.property.GenerateRecordSchemaGridRow;
+import hydrograph.ui.datastructure.property.GridRow;
+import hydrograph.ui.datastructure.property.Schema;
+import hydrograph.ui.engine.ui.constants.UIComponentsConstants;
+import hydrograph.ui.engine.ui.converter.InputUiConverter;
+import hydrograph.ui.engine.ui.helper.ConverterUiHelper;
+import hydrograph.ui.graph.model.Container;
+import hydrograph.ui.graph.model.components.GenerateRecords;
+import hydrograph.ui.logging.factory.LogFactory;
+import hydrograph.ui.propertywindow.widgets.utility.GridWidgetCommonBuilder;
 
 /**
  * This class is used to create ui-GenerateRecords component from engine's GenerateRecord component 
@@ -72,8 +71,10 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 	public void prepareUIXML() {
 		super.prepareUIXML();
 		LOGGER.debug("Fetching Input-Delimited-Properties for {}", componentName);
-		propertyMap.put(Constants.PARAM_NO_OF_RECORDS,
-				String.valueOf(generateRecord.getRecordCount().getValue()));
+				
+		setValueInPropertyMap(Constants.PARAM_NO_OF_RECORDS,
+				generateRecord.getRecordCount() == null ? "" : generateRecord.getRecordCount().getValue());
+		
 		uiComponent.setType(Constants.GENERATE_RECORDS_COMPONENT_TYPE);
 		uiComponent.setCategory(UIComponentsConstants.INPUT_CATEGORY.value());
 		container.getComponentNextNameSuffixes().put(name_suffix, 0);
@@ -182,4 +183,7 @@ public class GenerateRecordsUiConverter extends InputUiConverter {
 		return null;
 	}
 
+	private void setValueInPropertyMap(String propertyName,Object value){
+		propertyMap.put(propertyName, getParameterValue(propertyName,value));
+	}
 }
