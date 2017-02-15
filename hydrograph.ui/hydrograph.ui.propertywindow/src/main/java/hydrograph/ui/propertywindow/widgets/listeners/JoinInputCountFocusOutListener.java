@@ -61,11 +61,11 @@ public class JoinInputCountFocusOutListener implements IELTListener {
 					Text textBox = (Text) widgetList[0];
 					String textBoxValue = ((Text) event.widget).getText();
 					if(StringUtils.isNotBlank(textBoxValue) && StringUtils.isNumeric(textBoxValue)){
-					if ((Integer.parseInt(textBoxValue) < minimunPortCount || Integer.parseInt(textBoxValue) > 25)
-							&& currentComponent.getProperties().get(Constants.UNUSED_AND_INPUT_PORT_COUNT_PROPERTY) != null){
-						textBox.setText((String) currentComponent.getProperties().get(
-								Constants.UNUSED_AND_INPUT_PORT_COUNT_PROPERTY));
-					}
+						if ((Integer.parseInt(textBoxValue) < minimunPortCount || Integer.parseInt(textBoxValue) > 25)
+								&& currentComponent.getProperties().get(Constants.UNUSED_AND_INPUT_PORT_COUNT_PROPERTY) != null){
+								textBox.setText((String) currentComponent.getProperties().get(
+										Constants.UNUSED_AND_INPUT_PORT_COUNT_PROPERTY));
+						}
 					}
 				}
 			}
