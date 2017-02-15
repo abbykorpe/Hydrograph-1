@@ -94,7 +94,10 @@
    </topic>
    <topic href="html/Components/Normalize.html" label="Normalize">
       <anchor id="Normalize"/>
-      </topic>
+   </topic>
+       <topic href="html/Components/Partition_By_Expression.html" label="Partition By Expression">
+      <anchor id="PartitionByExpression"/>
+   </topic>
    <topic href="html/Components/Remove_Dups.html" label="Remove Dups">
       <anchor id="RemoveDups"/>
    </topic>

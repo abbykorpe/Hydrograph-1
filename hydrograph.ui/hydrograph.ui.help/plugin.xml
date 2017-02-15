@@ -319,8 +319,7 @@
 	  		primary="false">
 	  </toc>
       <toc
-            file="hydrograph.ui.help.toc6"
-            primary="false">
+            file="xml/Components/partitionByExpression.xml">
       </toc>
    </extension>
    <extension
