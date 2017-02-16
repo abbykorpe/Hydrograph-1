@@ -33,25 +33,32 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     createRelation(sqlContext, parameters, null)
   }
 
+ 
+  
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): CsvRelation = {
 
-
-    val path = parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
+    
+    val filePath = parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
+    val filesystemPath = new Path(filePath)
+    val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
+    val path=if(fs.exists(filesystemPath)) filePath else  sys.error(" Provided file path does not exist")
+    
     val delimiter = parameters.getOrElse("delimiter", ",").charAt(0)
     val dateFormats = parameters.getOrElse("dateFormats", "null")
-    /*val quote = parameters.getOrElse("quote", "\"")*/
-    val quoteChar = parameters.getOrElse("quoteChar", "\"").charAt(0)
-    /* val quoteChar: Character = if (quote == null) {
+    val quote = parameters.getOrElse("quote", "\"")
+    
+    val quoteChar: Character = if (quote == null) {
       null
     } else if (quote.length == 1) {
       quote.charAt(0)
     } else {
       throw new Exception("Quotation cannot be more than one character.")
-    }*/
+    }
     val useHeader = parameters.getOrElse("header", "false")
     val componentId = parameters.getOrElse("componentId", "")
     val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
+    
     val headerFlag = if (useHeader == "true") {
       true
     } else if (useHeader == "false") {
@@ -60,6 +67,27 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
       throw new Exception("Header flag can be true or false")
     }
 
+    
+     val safe = parameters.getOrElse("safe", "false")
+    val safeFlag = if (safe == "true") {
+      true
+    } else if (safe == "false") {
+      false
+    } else {
+      throw new Exception("Safe flag can be true or false")
+    }
+     
+     
+    val strict = parameters.getOrElse("strict", "true")
+    val strictFlag = if (strict == "true") {
+      true
+    } else if (strict == "false") {
+      false
+    } else {
+      throw new Exception("Strict flag can be true or false")
+    }
+    
+     
     val treatEmptyValuesAsNulls = parameters.getOrElse("treatEmptyValuesAsNulls", "false")
     val treatEmptyValuesAsNullsFlag = if (treatEmptyValuesAsNulls == "false") {
       false
@@ -70,17 +98,6 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     }
     val charset = parameters.getOrElse("charset", TextFile.DEFAULT_CHARSET.name())
 
-
-    /* CsvRelation(
-      () => TextFile.withCharset(sqlContext.sparkContext, path, charset),
-      Some(path),
-      headerFlag,
-      delimiter,
-      quoteChar,
-      treatEmptyValuesAsNullsFlag,
-      dateFormat,
-      schema
-    )(sqlContext)*/
       CsvRelation(
         componentId,
         charset,
@@ -90,9 +107,10 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
         quoteChar,
         treatEmptyValuesAsNullsFlag,
         dateFormat,
+        safeFlag,
+        strictFlag,
         schema
       )(sqlContext)
-
   }
 
   private def getDateFormats(dateFormats: List[String]): List[SimpleDateFormat] = dateFormats.map { e =>
@@ -145,36 +163,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
   }
 
   def saveAsCsvFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
-    /*   val header = dataFrame.columns.mkString(",")
-
-    val strRDD = dataFrame.rdd.mapPartitionsWithIndex { case (index, iter) => {
-
-      new Iterator[String] {
-        var firstRow: Boolean = true
-
-        override def hasNext = iter.hasNext || firstRow
-
-        override def next: String = {
-          if (!iter.isEmpty) {
-            val rowValue = iter.next().toSeq.map(value => if(value==null)"" else value.toString)
-            val row = rowValue.mkString(",")
-
-            if (firstRow) {
-              firstRow = false
-              header + "\n" + row
-            } else {
-              row
-            }
-          } else {
-            firstRow = false
-            header
-          }
-        }
-      }
-    }
-    }
-    strRDD.saveAsTextFile(path)
-*/
+   
 
     /*new Code Added*/
 
@@ -213,23 +202,6 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     val schemaFields = schema.fields
 
 
-    /*   def formatForValue (fieldVal:Any, dateFormat:Any) = {
-     case DateType => (fieldVal: Any,dateFormat:Any) => {
-       if (fieldVal == null) "" else  new SimpleDateFormat(dateFormat.toString).format(fieldVal)
-     }
-     case _ => (fieldVal: Any) => fieldVal.asInstanceOf[AnyRef]
-   }*/
-
-    /*val formatForIdx:(Array[(AnyRef) => AnyRef]) = schema.fieldNames.map(*/
-    /* val formatForIdx = schema.fieldNames.map(
-      fname => schema(fname).dataType match {
-      case DateType => (date: Any) => {
-        if (date == null) "" else  new SimpleDateFormat(dateFormat).format(date)
-      }
-      case _ => (fieldValue: Any) => fieldValue.asInstanceOf[AnyRef]
-
-    })*/
-
 
     val strRDD = dataFrame.rdd.mapPartitions {
 
@@ -242,16 +214,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
 
           override def next: String = {
             if (iter.nonEmpty) {
-              /*  val values: Seq[Any] = iter.next().toSeq.zipWithIndex.map {
-
-
-               case (fieldVal, i) => {
-
-
-                  formatForIdx(i)(fieldVal,dateFormatList(i))
-               }
-
-             }*/
+             
               val tuple = iter.next()
               val fields = new Array[AnyRef](schemaFields.length)
 
@@ -260,19 +223,8 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
                 fields(i) = TypeCast.outputValue(tuple.get(i), schemaFields(i).dataType, dateFormat(i))
                 i = i + 1
               }
-
-              /*  val values:Seq[AnyRef] = iter.next().toSeq.zipWithIndex.map({
-               case (value, i)=>
-               TypeCast.outputValue(value, schemaFields(i).dataType, dateFormat(i))
-
-              /*  Seq(*/
-                   /*if(TypeCast.castTo(value.toString, schemaFields(i).dataType,schemaFields(index).nullable,false, dateFormatList(index))==null)""
-*/
-                 /*)*/
-
-             })*/
-
-              //            val row: String = csvFormat.format(values: _*)
+            
+             
               val row: String = csvFormat.format(fields: _*)
 
               if (firstRow) {

@@ -11,7 +11,7 @@ import org.junit.{Assert, Before, Test}
 
 class InputFileCsvWithDateFormatsComponentTest {
 
-  var inputFileDelimitedEntity: InputFileDelimitedEntity = new InputFileDelimitedEntity
+   var inputFileDelimitedEntity: InputFileDelimitedEntity = new InputFileDelimitedEntity
   var cp: BaseComponentParams = new BaseComponentParams
 
   @Before
@@ -70,57 +70,26 @@ class InputFileCsvWithDateFormatsComponentTest {
   }
 
   /**
-    * Test case for correct schema
-    */
+   * Test case for correct schema
+   */
 
   @Test
-  def itShouldCheckForCorrectInputFormatAndCorrectLength(): Unit = {
+  def itShouldCheckStrictAndSafeForCorrectInputFormatAndCorrectLength(): Unit = {
 
-    //given
+    //Given
+
     val inputPathCase0: String = "testData/inputFiles/employees.txt"
 
+    inputFileDelimitedEntity.setStrict(true)
+    inputFileDelimitedEntity.setSafe(false)
     inputFileDelimitedEntity.setPath(inputPathCase0)
 
     //when
+
     val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
 
-    //then
-    val expectedSize: Int = 8
-    val expectedResult: String = "[3,Hemant,Programmer,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,3]"
-    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
-    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
-  }
+    //Then
 
-  @Test
-  def itShouldCheckForHeaderAndReadData(): Unit = {
-
-    //given
-    val inputPathCase0: String = "testData/inputFiles/employees5.txt"
-    inputFileDelimitedEntity.setHasHeader(true)
-    inputFileDelimitedEntity.setPath(inputPathCase0)
-
-    //when
-    val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
-
-    //then
-    val expectedSize: Int = 8
-    val expectedResult: String = "[3,Hemant,Programmer,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,3]"
-    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
-    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
-  }
-
-  @Test
-  def itShouldCheckForQuoteAndReadData(): Unit = {
-
-    //given
-    val inputPathCase0: String = "testData/inputFiles/employees.txt"
-    inputFileDelimitedEntity.setQuote("\"")
-    inputFileDelimitedEntity.setPath(inputPathCase0)
-
-    //when
-    val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
-
-    //then
     val expectedSize: Int = 8
     val expectedResult: String = "[3,Hemant,Programmer,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,3]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
@@ -128,35 +97,72 @@ class InputFileCsvWithDateFormatsComponentTest {
   }
 
   @Test(expected = classOf[SparkException])
-  def itShouldThrowExceptionForIncorrectDataType(): Unit = {
+  def itShouldThrowExceptionForIncorrectDataTypeWhenSafeFalse(): Unit = {
 
     //Given
+
     val inputPathCase1: String = "testData/inputFiles/employees1.txt"
 
+    inputFileDelimitedEntity.setStrict(true)
+    inputFileDelimitedEntity.setSafe(false)
     inputFileDelimitedEntity.setPath(inputPathCase1)
 
     //when
+
     val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
 
     //Then
+
     val expectedSize: Int = 8
+    val expectedResult: String = "[3,Hemant,68.36,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
+
+  }
+
+  @Test
+  def itShouldReadFieldAsNullForIncorrectDataTypeWhenSafeTrue(): Unit = {
+
+    //Given
+
+    val inputPathCase2: String = "testData/inputFiles/employees2.txt"
+
+    inputFileDelimitedEntity.setStrict(true)
+    inputFileDelimitedEntity.setSafe(true)
+    inputFileDelimitedEntity.setPath(inputPathCase2)
+
+    //when
+
+    val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
+
+    //Then
+
+    val expectedSize: Int = 8
+    val expectedResult: String = "[3,Hemant,68.36,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]"
+    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
+
   }
 
   /*Test Cases For Blank Fields Input Starts Here*/
 
   @Test
-  def itShouldReadNullWhenFieldIsNull(): Unit = {
+  def itShouldReadNullWhenFieldIsNullAndSafeTrue(): Unit = {
 
-    //given
+    //Given
+
     val inputPathCase3: String = "testData/inputFiles/employees3.txt"
 
+    inputFileDelimitedEntity.setStrict(true)
+    inputFileDelimitedEntity.setSafe(true)
     inputFileDelimitedEntity.setPath(inputPathCase3)
 
     //when
+
     val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
 
     //Then
+
     val expectedSize: Int = 8
     val expectedResult: String = "[3,Hemant,null,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
@@ -164,15 +170,43 @@ class InputFileCsvWithDateFormatsComponentTest {
 
   }
 
+  @Test(expected = classOf[SparkException])
+  def itShouldThrowExceptionWhenFieldIsNullAndSafeFalse(): Unit = {
+
+    //Given
+
+    val inputPathCase3: String = "testData/inputFiles/employees6.txt"
+
+    inputFileDelimitedEntity.setStrict(true)
+    inputFileDelimitedEntity.setSafe(false)
+    inputFileDelimitedEntity.setPath(inputPathCase3)
+
+    //when
+
+    val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
+
+    //Then
+
+    val expectedSize: Int = 8
+    //val expectedResult: String = "[3.5,Hemant,null,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]"
+    println(df.get("outSocket").get.first().size)
+    println(df.get("outSocket").get.first().toString())
+    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    //Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
+
+  }
+
   /*Test Cases For Missing Fields Input Starts Here*/
 
   @Test(expected = classOf[SparkException])
-  def itShouldThrowExceptionWhenFieldMissing(): Unit = {
+  def itShouldThrowExceptionWhenFieldMissingAndStrictTrue(): Unit = {
 
     //Given
 
     val inputPathCase4: String = "testData/inputFiles/employees4.txt"
 
+    inputFileDelimitedEntity.setStrict(true)
+    inputFileDelimitedEntity.setSafe(true)
     inputFileDelimitedEntity.setPath(inputPathCase4)
 
     //when
@@ -182,46 +216,58 @@ class InputFileCsvWithDateFormatsComponentTest {
     //Then
 
     val expectedSize: Int = 8
+    val expectedResult: String = "[3,Hemant,null,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,null,null]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
+
   }
 
-
   @Test
-  def itShouldReadInCharacterSet(): Unit = {
+  def itShouldReadNullForMissingFieldWhenStrictFalseAndSafeTrue(): Unit = {
 
     //Given
-    val inputPathCase4: String = "testData/inputFiles/employeesISO.txt"
 
-    inputFileDelimitedEntity.setCharset("UTF-8");
-    inputFileDelimitedEntity.setDelimiter("Ç")  // cedilla in ISO
+    val inputPathCase4: String = "testData/inputFiles/employees4.txt"
+
+    inputFileDelimitedEntity.setStrict(false)
+    inputFileDelimitedEntity.setSafe(true)
     inputFileDelimitedEntity.setPath(inputPathCase4)
 
     //when
+
     val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
 
     //Then
+
     val expectedSize: Int = 8
-    val expectedResult : String = "[3,Hemant,Programmer,BBSROD,2015-06-25,2016-06-25 02:02:02.325,50.300,3]"
+    val expectedResult: String = "[3,Hemant,68.36,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,null,null]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
-    Assert.assertEquals(expectedResult,df.get("outSocket").get.first().toString)
+    Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
+
   }
 
   @Test(expected = classOf[SparkException])
-  def itShouldThrowExceptionWhenCharacterSetOfFileIsDiffernent(): Unit = {
+  def itShouldThrowExceptionForMissingFieldWhenStrictFalseAndSafeFalse(): Unit = {
 
     //Given
-    val inputPathCase4: String = "testData/inputFiles/employeesISO.txt"
 
-    inputFileDelimitedEntity.setCharset("ISO-8859-1");
-    inputFileDelimitedEntity.setDelimiter("Ç")  // cedilla in ISO
+    val inputPathCase4: String = "testData/inputFiles/employees7.txt"
+
+    inputFileDelimitedEntity.setStrict(false)
+    inputFileDelimitedEntity.setSafe(false)
     inputFileDelimitedEntity.setPath(inputPathCase4)
 
     //when
+
     val df: Map[String, DataFrame] = new InputFileCsvWithDateFormatsComponent(inputFileDelimitedEntity, cp).createComponent()
 
     //Then
+
     val expectedSize: Int = 8
+    //val expectedResult: String = "[null,Hemant,68.36,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,null,null]"
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
+    //Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
+
   }
 
 }
