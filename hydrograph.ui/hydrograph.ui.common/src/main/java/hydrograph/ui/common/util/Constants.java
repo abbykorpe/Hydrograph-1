@@ -65,6 +65,9 @@ public class Constants {
 	public static final String REGEX_NUMERIC_AND_PARAMETER = "^([\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1})|([\\d]{4})$";
 	public static final String PARAMETER_REGEX ="^[\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1}";
 
+	// Used for validating AlphaNumeric or Parameter E.g Aplha_123
+	public static final String REGEX_ALPHA_NUMERIC = "[\\w]*";
+		
 	public static final String MATCH_PROPERTY_WIDGET = "match_value";
 	public static final String MATCH = "Match";
 	public static final String FIRST = "First";
