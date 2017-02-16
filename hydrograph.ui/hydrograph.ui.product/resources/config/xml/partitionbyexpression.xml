@@ -20,7 +20,7 @@
 		canvasIconPath="/icons/partitionbyexpression_canvas.png" name="PartitionByExpression"
 		nameInPalette="Partition By Expression" defaultNamePrefix="PartByExp"
 		description="distributes data records to its output partitions based on evaluation of expression specified."
-		helpFilePath="" acronym="PartXp">
+		helpFilePath="/hydrograph.ui.help/html/Components/Partition_By_Expression.html" acronym="PartXp">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>
 			<tns:portSpecification numberOfPorts="1"

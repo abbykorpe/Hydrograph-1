@@ -18,7 +18,7 @@
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
 		name="IRedshift" nameInPalette="Redshift" defaultNamePrefix="IRedshift" 
 		description="Used to read data from Redshift tables stored in Parquet format."
-		helpFilePath=""
+		helpFilePath="/hydrograph.ui.help/html/Components/Input_Redshift.html"
 		acronym="IReds">
 		<tns:category>INPUT</tns:category>
 		<tns:port>

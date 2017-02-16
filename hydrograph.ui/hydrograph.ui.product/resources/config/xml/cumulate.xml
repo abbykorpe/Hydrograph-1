@@ -18,7 +18,7 @@
 	<tns:component paletteIconPath="/icons/cumulate_palette.png" canvasIconPath="/icons/cumulate_canvas.png"
 		name="Cumulate" nameInPalette="Cumulate" defaultNamePrefix="Cumulate" 
 		description="Performs cumulate on data specified in a java operation class."
-		helpFilePath="/hydrograph.ui.help/html/Components/Aggregate.html"
+		helpFilePath="/hydrograph.ui.help/html/Components/Cumulate.html"
 		acronym="Cmlt">
 		<tns:category>TRANSFORM</tns:category>
 		<tns:port>

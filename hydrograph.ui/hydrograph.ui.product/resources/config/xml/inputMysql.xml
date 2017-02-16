@@ -18,7 +18,7 @@
 	<tns:component paletteIconPath="/icons/rdbms_palette.png" canvasIconPath="/icons/rdbms_canvas.png"
 		name="IMysql" nameInPalette="Mysql" defaultNamePrefix="IMysql" 
 		description="Used to read and fetch data from Mysql tables"
-		helpFilePath=""
+		helpFilePath="/hydrograph.ui.help/html/Components/Input_Mysql.html"
 		acronym="IMysql">
 		<tns:category>INPUT</tns:category>
 		<tns:port>
