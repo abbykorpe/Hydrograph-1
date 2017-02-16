@@ -208,7 +208,8 @@ public class Utils {
 		 * @return value of Parameter if found in Map otherwise Parameter not found
 		 */
 	 public String getParamValue(String value){
-		 if(jobProps != null && !jobProps.isEmpty() && StringUtils.isNotBlank(value)){
+		 Optional<String> optional = Optional.of(value);
+		 if(jobProps != null && !jobProps.isEmpty() && optional.isPresent() && value.contains("@{")){
 			String param = "";
 			String[] splitString = value.split("/");
 			for(String field : splitString){
@@ -228,7 +229,7 @@ public class Utils {
 			}
 			return getResult(param);
 		}
-				return PARAMETER_NOT_FOUND;
+			return PARAMETER_NOT_FOUND;
 	}		
 	 
 	 /**
@@ -237,11 +238,11 @@ public class Utils {
 	 * @return
 	 */
 	private String getResult(String value){
-		 Optional<String> opt = Optional.of(value);
-		 StringBuffer buffer = new StringBuffer();
-		 Optional<String> opt1 = opt.filter(s -> s.endsWith("/"));
-		 buffer.append(opt1.get());
-		 buffer = buffer.deleteCharAt(value.lastIndexOf("/"));
+		StringBuffer buffer = new StringBuffer();
+		if(value.endsWith("/")){
+			buffer.append(value);
+			buffer = buffer.deleteCharAt(value.lastIndexOf("/"));
+		}
 		return buffer.toString();
 	 }
 		
@@ -255,7 +256,7 @@ public class Utils {
 		 */
 	 public String getParamFilePath(String extSchemaPath, String paramValue, Text extSchemaPathText){
 			String remainingString = "";
-		    if( ParameterUtil.isParameter(extSchemaPath)){
+		    if( checkParameterValue(extSchemaPath)){
 		    	if(StringUtils.isNotEmpty(paramValue)){
 		    		extSchemaPathText.setToolTipText(paramValue+remainingString);
 		    	}else{
@@ -271,6 +272,17 @@ public class Utils {
 			return paramValue+remainingString;
 		}		
 		
+	 private boolean checkParameterValue(String value){
+		 boolean isParam = false;
+		 String[] splitString = value.split("/");
+			for(String field : splitString){
+				if(ParameterUtil.isParameter(field)){
+					isParam = true;
+					break;
+				}
+			}
+		return isParam;
+	 }
 	 	/**
 		 * 
 		 * Add MouseMoveListner 
