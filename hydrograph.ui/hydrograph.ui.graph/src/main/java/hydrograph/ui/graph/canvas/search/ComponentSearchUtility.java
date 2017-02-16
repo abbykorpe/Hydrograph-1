@@ -40,6 +40,7 @@ import org.eclipse.ui.keys.IBindingService;
 import org.slf4j.Logger;
 
 import hydrograph.ui.common.component.config.Component;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.graph.command.CommentBoxCommand;
 import hydrograph.ui.graph.command.ComponentCreateCommand;
@@ -212,6 +213,9 @@ public class ComponentSearchUtility {
 		Object nodePart = graphicViewer.getEditPartRegistry().get(createdNode);
 		if (nodePart != null) {
 			graphicViewer.select((EditPart) nodePart);
+			if(OSValidator.isMac()){
+				graphicViewer.getControl().forceFocus();
+			}
 		}
 	}
 

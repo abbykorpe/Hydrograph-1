@@ -379,7 +379,8 @@ public class ELTGraphicalEditor extends GraphicalEditorWithFlyoutPalette impleme
 					setCustomToolUndoRedoStatus();
 					hideToolTip();
 					if (event.stateMask == 0) {
-						if (StringUtils.isAlpha(String.valueOf(event.character))) {
+						
+						if (Character.isLetterOrDigit(event.character)) {
 							new ComponentSearchUtility().showComponentCreationOnCanvas(event, viewer, paletteRoot);
 							setDirty(true);
 						} else if (((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0 && (event.keyCode == SWT.SHIFT
