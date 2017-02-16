@@ -24,7 +24,6 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
 
 import hydrograph.ui.common.datastructures.dataviewer.JobDetails;
 import hydrograph.ui.common.interfaces.parametergrid.DefaultGEFCanvas;
@@ -44,7 +43,6 @@ import hydrograph.ui.graph.model.Container;
 import hydrograph.ui.graph.model.Link;
 import hydrograph.ui.graph.utility.MessageBox;
 import hydrograph.ui.graph.utility.ViewDataUtils;
-import hydrograph.ui.logging.factory.LogFactory;
 
 /**
  * The Class WatchRecordAction used to view data at watch points after job execution
@@ -141,61 +139,60 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 	@Override
 	public void run() {
 		// Check if job is executed in debug mode
-				Job job = JobManager.INSTANCE.getPreviouslyExecutedJobs().get(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
-				if(job==null){
-					String jobName = StringUtils.split(getComponentCanvas().getJobName(), ".")[0];
-					Job mainJob = JobManager.INSTANCE.getPreviouslyExecutedJobs()
-							.get(getComponentCanvas().getActiveProject() + "." + jobName);
-					if (mainJob!=null && mainJob.isDebugMode() && mainJob.isExecutionTrack()==true) {
-						String previousComponentId = getPreviousComponentId();
-						String componentId = ViewDataUtils.getInstance().getComponentId();
-						JobDetails jobDetails = getJobDetails(mainJob);
-						componentId = getComponentId(previousComponentId, componentId, jobDetails);
-						jobDetails.setComponentID(componentId);
+		Job job = JobManager.INSTANCE.getPreviouslyExecutedJobs()
+				.get(getComponentCanvas().getActiveProject() + "." + getComponentCanvas().getJobName());
+		if (job == null) {
+			String jobName = StringUtils.split(getComponentCanvas().getJobName(), ".")[0];
+			Job mainJob = JobManager.INSTANCE.getPreviouslyExecutedJobs()
+					.get(getComponentCanvas().getActiveProject() + "." + jobName);
+			if (mainJob != null && mainJob.isDebugMode() && mainJob.isExecutionTrack() == true) {
+				String previousComponentId = getPreviousComponentId();
+				String componentId = ViewDataUtils.getInstance().getComponentId();
+				JobDetails jobDetails = getJobDetails(mainJob);
+				componentId = getComponentId(previousComponentId, componentId, jobDetails);
+				jobDetails.setComponentID(componentId);
 
-						String dataViewerWindowName = mainJob.getLocalJobID().replace(".", "_") + "_"
-								+ watchRecordInner.getComponentId() + "_" + watchRecordInner.getSocketId();
-						if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
-							Point originalWindowSize = dataViewerMap.get(dataViewerWindowName).getShell().getSize();
-							setShellProperties(dataViewerWindowName, originalWindowSize);
-							return;
-						}
-
-						final String dataViewerWindowTitle = dataViewerWindowName;
-
-						DebugDataViewer window = new DebugDataViewer(jobDetails, dataViewerWindowTitle);
-						String watcherId = getWatcherId(dataViewerWindowTitle, window);
-
-						window.open();
-						setWatcherAndConditionMap(window, watcherId);
-					} else {
-						showErrorMessage(mainJob);
-						return;
-					}
+				String dataViewerWindowName = mainJob.getLocalJobID().replace(".", "_") + "_"
+						+ watchRecordInner.getComponentId() + "_" + watchRecordInner.getSocketId();
+				if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
+					Point originalWindowSize = dataViewerMap.get(dataViewerWindowName).getShell().getSize();
+					setShellProperties(dataViewerWindowName, originalWindowSize);
+					return;
 				}
-				else
-				{
-					//Create data viewer window name, if window exist reopen same window
-					String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_" + watchRecordInner.getComponentId() + "_"
-							+ watchRecordInner.getSocketId();
-					if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
-						Point originalWindowSize=dataViewerMap.get(dataViewerWindowName).getShell().getSize();
-						setShellProperties(dataViewerWindowName, originalWindowSize);
-						return;
-					}
-					
-					final JobDetails jobDetails = getJobDetails(job);
 
-					final String dataViewerWindowTitle = dataViewerWindowName;	
-					
-					DebugDataViewer window = new DebugDataViewer(jobDetails,dataViewerWindowTitle);
-					String watcherId = getWatcherId(dataViewerWindowTitle, window);
-					
-					window.open();
-					setWatcherAndConditionMap(window, watcherId);
-				}
-				
+				final String dataViewerWindowTitle = dataViewerWindowName;
+
+				DebugDataViewer window = new DebugDataViewer(jobDetails, dataViewerWindowTitle);
+				String watcherId = getWatcherId(dataViewerWindowTitle, window);
+
+				window.open();
+				setWatcherAndConditionMap(window, watcherId);
+			} else {
+				showErrorMessage(mainJob);
+				return;
 			}
+		} else {
+			// Create data viewer window name, if window exist reopen same window
+			String dataViewerWindowName = job.getLocalJobID().replace(".", "_") + "_"
+					+ watchRecordInner.getComponentId() + "_" + watchRecordInner.getSocketId();
+			if (dataViewerMap.keySet().contains(dataViewerWindowName)) {
+				Point originalWindowSize = dataViewerMap.get(dataViewerWindowName).getShell().getSize();
+				setShellProperties(dataViewerWindowName, originalWindowSize);
+				return;
+			}
+
+			final JobDetails jobDetails = getJobDetails(job);
+
+			final String dataViewerWindowTitle = dataViewerWindowName;
+
+			DebugDataViewer window = new DebugDataViewer(jobDetails, dataViewerWindowTitle);
+			String watcherId = getWatcherId(dataViewerWindowTitle, window);
+
+			window.open();
+			setWatcherAndConditionMap(window, watcherId);
+		}
+
+	}
 
 	private void setWatcherAndConditionMap(DebugDataViewer window, String watcherId) {
 		if (window.getConditions() != null) {
@@ -210,17 +207,15 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 	}
 
 	private void showErrorMessage(Job mainJob) {
-		if (mainJob==null) {
-			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_JOB_IN_DEBUG_OR_OPEN_SUBJOB_THROUGH_TRACKSUBJOB);
+		if (mainJob == null) {
+			MessageBox.INSTANCE.showMessage(MessageBoxText.INFO,
+					Messages.RUN_JOB_IN_DEBUG_OR_OPEN_SUBJOB_THROUGH_TRACKSUBJOB);
 		} else {
 			if (!mainJob.isDebugMode()) {
 				MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.RUN_THE_JOB_IN_DEBUG_MODE);
-			}
-			else
-			{
+			} else {
 				if (!mainJob.isExecutionTrack()) {
-					MessageBox.INSTANCE.showMessage(MessageBoxText.INFO,
-							Messages.OPEN_SUBJOB_THROUGH_TRACK_SUBJOB);
+					MessageBox.INSTANCE.showMessage(MessageBoxText.INFO, Messages.OPEN_SUBJOB_THROUGH_TRACK_SUBJOB);
 				}
 			}
 		}
@@ -234,11 +229,11 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 	}
 
 	private String getPreviousComponentId() {
-		Container mainContainer =((ELTGraphicalEditor)getComponentCanvas()).getContainer();
+		Container mainContainer = ((ELTGraphicalEditor) getComponentCanvas()).getContainer();
 		ComponentEditPart componentEditPart = (ComponentEditPart) mainContainer.getSubjobComponentEditPart();
-		LinkEditPart linkEditPart=(LinkEditPart)componentEditPart.getTargetConnections().get(0);
-		Link link=(Link)linkEditPart.getModel();
-		String previousComponentId=link.getSource().getComponentId();
+		LinkEditPart linkEditPart = (LinkEditPart) componentEditPart.getTargetConnections().get(0);
+		Link link = (Link) linkEditPart.getModel();
+		String previousComponentId = link.getSource().getComponentId();
 		return previousComponentId;
 	}
 
@@ -250,15 +245,15 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 		}
 		return componentId;
 	}
+
 	private String getWatcherId(final String dataViewerWindowTitle, DebugDataViewer window) {
-		String watcherId=watchRecordInner.getComponentId()+watchRecordInner.getComponentId();
+		String watcherId = watchRecordInner.getComponentId() + watchRecordInner.getComponentId();
 		dataViewerMap.put(dataViewerWindowTitle, window);
 		window.setBlockOnOpen(true);
 		window.setDataViewerMap(dataViewerMap);
-		if(watcherAndConditon.containsKey(watcherId))
-		{
+		if (watcherAndConditon.containsKey(watcherId)) {
 			window.setConditions(watcherAndConditon.get(watcherId));
-			if(watcherAndConditon.get(watcherId).isOverWritten()){
+			if (watcherAndConditon.get(watcherId).isOverWritten()) {
 				window.setOverWritten(watcherAndConditon.get(watcherId).isOverWritten());
 			}
 		}
@@ -266,17 +261,10 @@ public class ViewDataCurrentJobAction extends SelectionAction{
 	}
 
 			
-		private JobDetails getJobDetails(Job job) {
-			final JobDetails jobDetails = new JobDetails(
-					job.getHost(), 
-					job.getPortNumber(), 
-					job.getUserId(), 
-					job.getPassword(), 
-					job.getBasePath(),
-					job.getUniqueJobId(), 
-					watchRecordInner.getComponentId(), 
-					watchRecordInner.getSocketId(),
-					job.isRemoteMode(), job.getJobStatus());
-			return jobDetails;
-		}
+	private JobDetails getJobDetails(Job job) {
+		final JobDetails jobDetails = new JobDetails(job.getHost(), job.getPortNumber(), job.getUserId(),
+				job.getPassword(), job.getBasePath(), job.getUniqueJobId(), watchRecordInner.getComponentId(),
+				watchRecordInner.getSocketId(), job.isRemoteMode(), job.getJobStatus());
+		return jobDetails;
+	}
 	}

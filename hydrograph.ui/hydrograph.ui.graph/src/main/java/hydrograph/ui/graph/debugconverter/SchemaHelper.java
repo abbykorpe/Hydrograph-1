@@ -140,17 +140,20 @@ public class SchemaHelper {
 		
 	}
 	
-	private void createDebugXmls(Component component, String schemaFilePath, String componentId, String previousComponent) {
+	private void createDebugXmls(Component component, String schemaFilePath, String componentId,
+			String previousComponent) {
 		Container container = (Container) component.getProperties().get(Constants.CONTAINER);
 		ComponentsOutputSchema componentsOutputSchema = null;
 		for (Component componentObject : container.getUIComponentList()) {
 			if (componentObject instanceof SubjobComponent) {
-				Link link=componentObject.getInputLinks().get(0);
-				String previousComponentObject=componentId + Constants.DOT_SEPERATOR+link.getSource().getComponentId();
+				Link link = componentObject.getInputLinks().get(0);
+				String previousComponentObject = componentId + Constants.DOT_SEPERATOR
+						+ link.getSource().getComponentId();
 				createDebugXmls(componentObject, schemaFilePath,
-						componentId + Constants.DOT_SEPERATOR + componentObject.getComponentId(),previousComponentObject);
+						componentId + Constants.DOT_SEPERATOR + componentObject.getComponentId(),
+						previousComponentObject);
 			}
-			
+
 			componentsOutputSchema = getComponentOutputSchema(componentsOutputSchema, componentObject);
 
 			Map<String, Long> watchPoints = componentObject.getWatcherTerminals();
@@ -193,45 +196,40 @@ public class SchemaHelper {
 	private String getFilePath(String schemaFilePath, String componentId, Component componentObject,
 			String componentObjectId) {
 		String path;
-		if(componentObject instanceof InputSubjobComponent)
-		{
-		 path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.UNDERSCORE_SEPERATOR
-				+ componentObject.getWatcherTerminals().toString().replace("{", "").split("=")[0];
-		}
-		else if(componentObject instanceof SubjobComponent){
+		if (componentObject instanceof InputSubjobComponent) {
+			path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.UNDERSCORE_SEPERATOR
+					+ componentObject.getWatcherTerminals().toString().replace("{", "").split("=")[0];
+		} else if (componentObject instanceof SubjobComponent) {
 			Map<String, Long> watchPoints = componentObject.getWatcherTerminals();
 			if (watchPoints != null && !watchPoints.isEmpty()) {
-				componentObjectId=getComponentId(componentObject);
+				componentObjectId = getComponentId(componentObject);
 			}
-			path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId
-						+ Constants.DOT_SEPERATOR + componentObject.getComponentId() + Constants.DOT_SEPERATOR
-						+ componentObjectId;
-				
-		}
-		else
-		{
-			 path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId
-						+ Constants.DOT_SEPERATOR + componentObject.getComponentId() + Constants.UNDERSCORE_SEPERATOR
-						+ componentObject.getWatcherTerminals().toString().replace("{", "").split("=")[0];
+			path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.DOT_SEPERATOR
+					+ componentObject.getComponentId() + Constants.DOT_SEPERATOR + componentObjectId;
+
+		} else {
+			path = schemaFilePath.trim() + Constants.UNDERSCORE_SEPERATOR + componentId + Constants.DOT_SEPERATOR
+					+ componentObject.getComponentId() + Constants.UNDERSCORE_SEPERATOR
+					+ componentObject.getWatcherTerminals().toString().replace("{", "").split("=")[0];
 		}
 		return path;
 	}
 	
-	private String getComponentId(Component component)
-	{
-		String componentId="";
+	private String getComponentId(Component component) {
+		String componentId = "";
 		Component componentPrevToOutput = null;
 		String portNumber = null;
-		Component outputSubjobComponent=(Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
-		if(outputSubjobComponent!=null){
-			for(Link link:outputSubjobComponent.getTargetConnections()){
-					componentPrevToOutput = link.getSource();
-					if(Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())){
-						componentId=componentPrevToOutput.getComponentId()+Constants.DOT_SEPERATOR+getComponentId(componentPrevToOutput);
-					}else{
-						portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
-						componentId=componentPrevToOutput.getComponentId()+"_"+portNumber;
-					}
+		Component outputSubjobComponent = (Component) component.getProperties().get(Messages.OUTPUT_SUBJOB_COMPONENT);
+		if (outputSubjobComponent != null) {
+			for (Link link : outputSubjobComponent.getTargetConnections()) {
+				componentPrevToOutput = link.getSource();
+				if (Constants.SUBJOB_COMPONENT.equals(componentPrevToOutput.getComponentName())) {
+					componentId = componentPrevToOutput.getComponentId() + Constants.DOT_SEPERATOR
+							+ getComponentId(componentPrevToOutput);
+				} else {
+					portNumber = link.getTargetTerminal().replace(Messages.IN_PORT_TYPE, Messages.OUT_PORT_TYPE);
+					componentId = componentPrevToOutput.getComponentId() + "_" + portNumber;
+				}
 			}
 		}
 		return componentId;

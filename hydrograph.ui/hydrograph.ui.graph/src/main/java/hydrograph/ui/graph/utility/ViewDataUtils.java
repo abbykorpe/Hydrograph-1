@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+\ * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -301,8 +301,9 @@ public class ViewDataUtils {
 	public Map<String, List<JobDetails>> getViewDataJobDetails(){
 		return viewDataJobDetails;
 	}
+
 	public String getComponentId() {
-		Container mainContainer =((ELTGraphicalEditor)getComponentCanvas()).getContainer();
+		Container mainContainer = ((ELTGraphicalEditor) getComponentCanvas()).getContainer();
 		ComponentEditPart componentEditPart = (ComponentEditPart) mainContainer.getSubjobComponentEditPart();
 		ContainerEditPart containerEditPart = null;
 		Container subContainer = null;
