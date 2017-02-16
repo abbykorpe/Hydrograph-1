@@ -130,7 +130,7 @@ import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
  * 
  */
 public class MultiParameterFileDialog extends Dialog {
-	private static final String FILE_NAME_VALIDATION_EXPRESSION = "^[a-zA-Z0-9]*$";
+	private static final String FILE_NAME_VALIDATION_EXPRESSION = "[\\w]*";
 
 	private static final int PROPERTY_VALUE_COLUMN_INDEX = 1;
 
