@@ -12,6 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.spark.datasource.csv
 
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
 import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
@@ -20,11 +21,12 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.sources.{BaseRelation, TableScan}
 import org.apache.spark.sql.types._
+import org.json4s.ParserUtil.ParseException
 
 import scala.collection.JavaConversions._
 import scala.util.control.NonFatal
 
-case class CsvRelation(
+case class CsvRelation( componentId:String,
                         charset: String,
                         path: String,
                         useHeader: Boolean,
@@ -59,15 +61,24 @@ case class CsvRelation(
 //    }
   }
 
+  @throws(classOf[RuntimeException])
   override def buildScan: RDD[Row] = {
     val baseRDD = TextFile.withCharset(sqlContext.sparkContext, path, charset)
     val schemaFields:Array[StructField] = schema.fields
     val rowArray = new Array[Any](schemaFields.length)
 
     tokenRdd(baseRDD, schemaFields.map(_.name)).map {
-
+      var tokens:Array[Any] = null
       line:String => {
-        val tokens = parseCSV(line, schemaFields)
+        try{
+          tokens = parseCSV(line, schemaFields)
+        }catch{
+          case e:RuntimeException => {
+            throw new RuntimeException("Error in Input Component:[\""+
+              componentId+"\"] for Record:[\""+line+"\"] , "+e.getMessage)
+          }
+        }
+
         var index: Int = 0
       /*  while (index < schemaFields.length) {
           val field = schemaFields(index)
@@ -105,7 +116,7 @@ case class CsvRelation(
       csvFormat: CSVFormat): Iterator[Array[String]] = {
 
 */
-
+  @throws(classOf[Exception])
     private def parseCSV(line: String, schemaFields: Array[StructField]): Array[Any] = {
     val tokenArray = new Array[Any](schemaFields.length)
     val records = CSVParser.parse(line, csvFormat).getRecords
@@ -117,7 +128,14 @@ case class CsvRelation(
       while (index < schemaFields.length) {
         val field = schemaFields(index)
         /*rowArray(index) = TypeCast.castTo(tokens(index), field.dataType,field.nullable,treatEmptyValuesAsNullsFlag, dateFormatter)*/
-        tokenArray(index) = TypeCast.inputValue(record.get(index), field.dataType, field.nullable, "", true, dateFormats(index))
+        try{
+          tokenArray(index) = TypeCast.inputValue(record.get(index), field.dataType, field.nullable, "", true, dateFormats(index))
+        }catch{
+          case e:RuntimeException => {
+            throw new RuntimeException("Field Name:[\""+field.name+"\"] "+e.getMessage)
+          }
+        }
+
         index = index + 1
       }
       tokenArray

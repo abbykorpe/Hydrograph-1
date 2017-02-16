@@ -44,6 +44,7 @@ class InputFileFixedWidthComponent(fileFixedWidthEntity: InputFileFixedWidthEnti
         .option("strict", fileFixedWidthEntity.isStrict)
         .option("safe", fileFixedWidthEntity.isSafe)
         .option("dateFormats", schemaCreator.getDateFormats)
+        .option("componentName", fileFixedWidthEntity.getComponentId)
         .schema(schemaCreator.makeSchema)
         .format("hydrograph.engine.spark.datasource.fixedwidth")
         .load(fileFixedWidthEntity.getPath)

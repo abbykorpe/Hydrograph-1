@@ -51,6 +51,7 @@ class DefaultSource extends RelationProvider
     val strict: Boolean = parameters.getOrElse("strict", "true").toBoolean
     val safe: Boolean = parameters.getOrElse("safe", "false").toBoolean
     val nullValue: String = parameters.getOrElse("nullValue", "")
+    val componentName: String = parameters.getOrElse("componentName", "")
     val quote: String = if (parameters.getOrElse("quote", "\"") == null) "\"" else parameters.getOrElse("quote", "\"")
     val treatEmptyValuesAsNulls: Boolean = parameters.getOrElse("treatEmptyValuesAsNulls", "false").toBoolean
     val charset: String = parameters.getOrElse("charset", TextFile.DEFAULT_CHARSET.name())
@@ -64,7 +65,7 @@ class DefaultSource extends RelationProvider
 
     val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
 
-    MixedSchemeRelation(
+    MixedSchemeRelation(componentName,
       Some(path),
       charset,
       quote,

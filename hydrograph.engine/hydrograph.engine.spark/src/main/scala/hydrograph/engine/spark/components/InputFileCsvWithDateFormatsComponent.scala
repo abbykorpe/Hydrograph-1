@@ -38,6 +38,7 @@ class InputFileCsvWithDateFormatsComponent(iFileDelimitedEntity: InputFileDelimi
         .option("safe", iFileDelimitedEntity.isSafe)
         .option("strict", iFileDelimitedEntity.isStrict)
         .option("dateFormats", schemaCreator.getDateFormats)
+        .option("componentId", iFileDelimitedEntity.getComponentId)
         .schema(schemaCreator.makeSchema)
 //        .csv(iFileDelimitedEntity.getPath)
         .format("hydrograph.engine.spark.datasource.csv")

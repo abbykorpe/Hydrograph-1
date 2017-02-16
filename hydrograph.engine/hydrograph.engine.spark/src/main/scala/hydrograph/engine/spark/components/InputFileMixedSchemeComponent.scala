@@ -55,6 +55,7 @@ class InputFileMixedSchemeComponent(iFileMixedSchemeEntity: InputFileMixedScheme
     try {
       val df = iComponentsParams.getSparkSession().read
         .option("quote", iFileMixedSchemeEntity.getQuote)
+        .option("componentName", iFileMixedSchemeEntity.getComponentId)
         .option("charset", iFileMixedSchemeEntity.getCharset)
         .option("safe", iFileMixedSchemeEntity.getSafe)
         .option("strict", iFileMixedSchemeEntity.getStrict)

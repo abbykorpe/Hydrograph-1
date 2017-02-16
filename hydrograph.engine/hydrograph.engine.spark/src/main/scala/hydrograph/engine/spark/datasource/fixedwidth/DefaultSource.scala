@@ -50,13 +50,14 @@ class DefaultSource extends RelationProvider
     val path: String = parameters.getOrElse("path", throw new RuntimeException("path option must be specified for Input File Fixed Width Component"))
     val fieldLengths = parameters.getOrElse("length", throw new RuntimeException("length option must be specified for Input File Fixed Width Component"))
     val inDateFormats: String = parameters.getOrElse("dateFormats", "null")
+    val componentName: String = parameters.getOrElse("componentName", "")
     if (path == null || path.equals("")){
       LOG.error("Fixed Width Input File path cannot be null or empty")
       throw new RuntimeException("Delimited Input File path cannot be null or empty")
     }
     val dateFormat: List[SimpleDateFormat] = getDateFormats(inDateFormats.split("\t").toList)
 
-    new FixedWidthRelation(path, parameters.get("charset").get,
+    new FixedWidthRelation(componentName,path, parameters.get("charset").get,
       fieldLengths, parameters.getOrElse("strict","true").toBoolean,
       parameters.getOrElse("safe","false").toBoolean, dateFormat, schema)(sqlContext)
   }

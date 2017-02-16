@@ -18,6 +18,7 @@ import java.text.{NumberFormat, SimpleDateFormat}
 import java.util.{Locale, TimeZone}
 
 import org.apache.spark.sql.types.{DateType, StringType, _}
+import org.json4s.ParserUtil.ParseException
 
 import scala.util.Try
 
@@ -34,7 +35,7 @@ object TypeCast {
     date.setTimeZone(TimeZone.getDefault)
     date
   } else null*/
-
+@throws(classOf[Exception])
   def inputValue(value: Any, castType: DataType, nullable: Boolean = true, nullValue:String, treatEmptyValuesAsNulls:Boolean=true, dateFormat: SimpleDateFormat) : Any= {
 
      if (value == nullValue && nullable || (value == nullValue && treatEmptyValuesAsNulls)) {
@@ -53,8 +54,23 @@ object TypeCast {
             .getOrElse(NumberFormat.getInstance(Locale.getDefault).parse(value.toString.trim).doubleValue())
           case _: BooleanType => value.toString.trim.toBoolean
           case _: DecimalType => new BigDecimal(value.toString.trim.replaceAll(",",""))
-          case _: TimestampType  => new Timestamp(dateFormat.parse(value.toString.trim).getTime)
-          case _: DateType =>  new Date(dateFormat.parse(value.toString.trim).getTime)
+          case _: TimestampType  => {
+            try{
+              new Timestamp(dateFormat.parse(value.toString.trim).getTime)
+            }catch{
+              case e:ParseException => throw new RuntimeException(e.getMessage)
+            }
+
+          }
+          case _: DateType =>  {
+            try{
+              new Date(dateFormat.parse(value.toString.trim).getTime)
+            }catch{
+              case e:Exception => {
+                throw new RuntimeException(", Error being -> "+e.getMessage)
+              }
+            }
+          }
           case _: StringType => value
           case _ => throw new RuntimeException(s"Unsupported type: ${castType.typeName}")
         }

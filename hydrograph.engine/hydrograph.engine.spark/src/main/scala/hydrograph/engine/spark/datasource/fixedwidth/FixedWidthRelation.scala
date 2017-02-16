@@ -21,7 +21,7 @@ import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{Row, SQLContext}
 import org.slf4j.{Logger, LoggerFactory}
 
-class FixedWidthRelation(path: String, charset: String, fieldslength: String,
+class FixedWidthRelation(componentName:String, path: String, charset: String, fieldslength: String,
                          strict:Boolean, safe:Boolean, dateFormats: List[SimpleDateFormat], userSchema: StructType)
                         (@transient val sqlContext: SQLContext)
   extends BaseRelation with TableScan with Serializable {
