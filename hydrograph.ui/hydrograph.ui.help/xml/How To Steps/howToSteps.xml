@@ -23,7 +23,6 @@
    <anchor id="RunJobCluster"/>
    <anchor id="RunJobLocally"/>
    <anchor id="ParameterizeComponentProperties"/>
-   <anchor id="PassParameterstoOperationClass"/>
    <anchor id="ImportEngineXMLtoUI"/>
    <anchor id="PassHadoopPropertiestoComponent"/>
 </toc>
