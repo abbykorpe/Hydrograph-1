@@ -27,15 +27,6 @@
       <toc
             file="xml/Introduction/WhatIsHydrograph.xml">
       </toc>
-      <toc
-            file="xml/Introduction/howItWorks.xml">
-      </toc>
-      <toc
-            file="xml/Introduction/gettingStarted.xml">
-      </toc>
-      <toc
-            file="xml/Introduction/GlossaryTerminology.xml">
-      </toc>
       
       
       <toc
@@ -224,9 +215,6 @@
       </toc>
       <toc
             file="xml/References/jobExamples.xml">
-      </toc>
-      <toc
-            file="xml/References/operationExamples.xml">
       </toc>
       <toc
             file="xml/References/referenceURLs.xml">
