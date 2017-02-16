@@ -78,7 +78,7 @@ case class CsvRelation(componentId:String,
         }
     }
   }
-
+  }
   @throws(classOf[Exception])
     private def parseCSV(line: String, schemaFields: Array[StructField]): Array[Any] = {
     val tokenArray = new Array[Any](schemaFields.length)

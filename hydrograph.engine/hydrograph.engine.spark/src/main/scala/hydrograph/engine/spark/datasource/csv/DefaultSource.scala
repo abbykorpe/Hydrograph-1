@@ -59,9 +59,9 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
     
-    val headerFlag = if (useHeader == "true") {
+    val headerFlag = if (useHeader.equals("true")) {
       true
-    } else if (useHeader == "false") {
+    } else if (useHeader.equals("false")) {
       false
     } else {
       throw new Exception("Header flag can be true or false")
@@ -69,9 +69,9 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
 
     
      val safe = parameters.getOrElse("safe", "false")
-    val safeFlag = if (safe == "true") {
+    val safeFlag = if (safe.equals("true")) {
       true
-    } else if (safe == "false") {
+    } else if (safe.equals("false")) {
       false
     } else {
       throw new Exception("Safe flag can be true or false")
@@ -79,9 +79,9 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
      
      
     val strict = parameters.getOrElse("strict", "true")
-    val strictFlag = if (strict == "true") {
+    val strictFlag = if (strict.equals("true")) {
       true
-    } else if (strict == "false") {
+    } else if (strict.equals("false")) {
       false
     } else {
       throw new Exception("Strict flag can be true or false")
@@ -89,9 +89,9 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     
      
     val treatEmptyValuesAsNulls = parameters.getOrElse("treatEmptyValuesAsNulls", "false")
-    val treatEmptyValuesAsNullsFlag = if (treatEmptyValuesAsNulls == "false") {
+    val treatEmptyValuesAsNullsFlag = if (treatEmptyValuesAsNulls.equals("false")) {
       false
-    } else if (treatEmptyValuesAsNulls == "true") {
+    } else if (treatEmptyValuesAsNulls.equals("true")) {
       true
     } else {
       throw new Exception("Treat empty values as null flag can be true or false")

@@ -189,8 +189,6 @@ class InputFileCsvWithDateFormatsComponentTest {
 
     val expectedSize: Int = 8
     //val expectedResult: String = "[3.5,Hemant,null,BBSR,OD,2015-06-25,2016-06-25 02:02:02.325,50.300,null]"
-    println(df.get("outSocket").get.first().size)
-    println(df.get("outSocket").get.first().toString())
     Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
     //Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
 
