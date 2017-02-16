@@ -62,7 +62,10 @@ test {
 
 
 repositories {
-    mavenLocal()
+	flatDir {
+       dirs '../libs'
+    }
+	mavenLocal()
     mavenCentral()
     maven {
         url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
@@ -80,6 +83,9 @@ sourceSets{
 }
 
 dependencies {
+	compile name: 'ojdbc6', version: '11.2.0.4'
+	compile name: 'tdgssconfig', version: '0.1'
+	compile name: 'terajdbc4', version: '0.1'
     compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.0.2'
     compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.0.2'
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.11.8'
@@ -89,14 +95,14 @@ dependencies {
 
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
 
-    compileOnly group: 'teraData', name: 'tdgssconfig', version: '0.1'
-    compileOnly group: 'teraData', name: 'terajdbc4', version: '0.1'
+    //compile group: 'teraData', name: 'tdgssconfig', version: '0.1'
+    //compile group: 'teraData', name: 'terajdbc4', version: '0.1'
     compile group: 'org.fluttercode.datafactory', name: 'datafactory', version: '0.8'
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile project(':hydrograph.engine.core')
     compile project(':hydrograph.engine.transformation')
     compile project(':hydrograph.engine.expression')
-    compileOnly(group: 'oracle', name: 'ojdbc6', version: '11.2.0.4')
+    //compile group: 'oracle', name: 'ojdbc6', version: '11.2.0.4'
     compile group: 'com.ibatis', name: 'ibatis2-common', version: '2.1.7.597'
-    compile(group: 'com.amazon.redshift', name: 'redshift-jdbc42', version: '1.2.1.1001')
+    compile group: 'com.amazon.redshift', name: 'redshift-jdbc42', version: '1.2.1.1001'
 }
