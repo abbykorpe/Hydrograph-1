@@ -12,7 +12,6 @@
     limitations under the License.
  -->
  
- 
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Components">
@@ -25,6 +24,7 @@
       <topic href="html/Components/Cumulate.html" label="Cumulate">
       <anchor id="Cumulate"/>
    </topic>
+    
    <topic href="html/Components/Discard.html" label="Discard">
       <anchor id="Discard"/>
       </topic>
@@ -117,6 +117,9 @@
    </topic>
    <topic href="html/Components/Run_Program.html" label="Run Program">
       <anchor id="Run_Program"/>
+   </topic>
+   <topic href="html/Components/Run_Sql.html" label="Run Sql">
+      <anchor id="Run_Sql"/>
    </topic>
    <topic href="html/Components/Sort.html" label="Sort">
       <anchor id="Sort"/>

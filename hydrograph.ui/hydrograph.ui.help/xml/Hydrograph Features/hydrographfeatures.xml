@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2016 Capital One Services, LLC and Bitwise, Inc.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,5 +29,7 @@
       <anchor id="View Execution History"/>
    </topic>
    
+    <topic href="html/Components/Comment_Box.html" label="Comment Box">
+      <anchor id="Comment_Box"/>
+   </topic>
 </toc>
-
