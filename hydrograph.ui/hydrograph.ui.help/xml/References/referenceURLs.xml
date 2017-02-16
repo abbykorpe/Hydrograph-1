@@ -16,7 +16,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Reference URLs" link_to="xml/References/references.xml#ReferenceURLs" topic="html/gettingstarted/maintopic.html">
-   <topic href="html/gettingstarted/maintopic.html" label="Reference URLs">
+   <topic href="html/refrence_urls/refrence_urls.html" label="Reference URLs">
    </topic> 
 	
 </toc>
