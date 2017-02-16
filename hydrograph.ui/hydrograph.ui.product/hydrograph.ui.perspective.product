@@ -116,7 +116,6 @@ openFile
       <plugin id="ch.qos.logback.classic"/>
       <plugin id="ch.qos.logback.core"/>
       <plugin id="ch.qos.logback.slf4j" fragment="true"/>
-      <plugin id="com.google.gson"/>
       <plugin id="com.google.guava"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.jcraft.jsch"/>
@@ -268,7 +267,6 @@ openFile
       <plugin id="org.eclipse.equinox.simpleconfigurator"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator.manipulator"/>
       <plugin id="org.eclipse.equinox.util"/>
-      <plugin id="org.eclipse.fx.osgi" fragment="true"/>
       <plugin id="org.eclipse.gef"/>
       <plugin id="org.eclipse.help"/>
       <plugin id="org.eclipse.help.base"/>
@@ -280,7 +278,6 @@ openFile
       <plugin id="org.eclipse.jdt.apt.ui"/>
       <plugin id="org.eclipse.jdt.compiler.apt" fragment="true"/>
       <plugin id="org.eclipse.jdt.compiler.tool" fragment="true"/>
-      <plugin id="org.eclipse.jdt.core"/>
       <plugin id="org.eclipse.jdt.core.manipulation"/>
       <plugin id="org.eclipse.jdt.debug"/>
       <plugin id="org.eclipse.jdt.debug.ui"/>
@@ -348,7 +345,6 @@ openFile
       <plugin id="org.eclipse.ui.intro"/>
       <plugin id="org.eclipse.ui.navigator"/>
       <plugin id="org.eclipse.ui.navigator.resources"/>
-      <plugin id="org.eclipse.ui.net"/>
       <plugin id="org.eclipse.ui.views"/>
       <plugin id="org.eclipse.ui.views.log"/>
       <plugin id="org.eclipse.ui.views.properties.tabbed"/>
@@ -366,7 +362,6 @@ openFile
       <plugin id="org.eclipse.wst.common.project.facet.core"/>
       <plugin id="org.eclipse.wst.common.ui"/>
       <plugin id="org.eclipse.wst.common.uriresolver"/>
-      <plugin id="org.eclipse.wst.internet.cache"/>
       <plugin id="org.eclipse.wst.sse.core"/>
       <plugin id="org.eclipse.wst.sse.ui"/>
       <plugin id="org.eclipse.wst.validation"/>
@@ -375,7 +370,6 @@ openFile
       <plugin id="org.eclipse.wst.xml.ui"/>
       <plugin id="org.eclipse.wst.xsd.core"/>
       <plugin id="org.eclipse.xsd"/>
-      <plugin id="org.eclipse.xtext.logging" fragment="true"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.json"/>
       <plugin id="org.junit"/>
