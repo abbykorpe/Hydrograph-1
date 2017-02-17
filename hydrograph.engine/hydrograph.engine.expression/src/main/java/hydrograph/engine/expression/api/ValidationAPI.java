@@ -47,7 +47,8 @@ public class ValidationAPI implements Serializable {
 	private String expr;
 	private Interpreter interpreter;
 	private List<String> listOfPackage;
-	private ExpressionEvaluator expressionEvaluator;
+	private  ExpressionEvaluator expressionEvaluator;
+	private ValidationAPIWrapper apiWrapper;
 
 
 	public ValidationAPI(String expression, String propertiesFilePath) {
@@ -295,24 +296,21 @@ public class ValidationAPI implements Serializable {
 
 	}
 
-	public ValidationAPI init(String[] fieldNames,String[] fieldTypes){
+	public void init(String[] fieldNames,String[] fieldTypes){
 		Class [] types=new Class[fieldTypes.length];
 		int index=0;
-		try {
 			for(String keys:fieldTypes){
 				types[index]=getType(keys);
 				index++;
 			}
-			expressionEvaluator=new ExpressionEvaluator(
-					packageNames + getValidExpression(),
-					Object.class,fieldNames,types);
+//			expressionEvaluator=new ExpressionEvaluator(
+//					packageNames + getValidExpression(),
+//					Object.class,fieldNames,types);
+
+			 apiWrapper=new ValidationAPIWrapper(packageNames+getValidExpression(),fieldNames,types);
 
 //			expressionEvaluator.setDefaultImports(listOfPackage.toArray(new String[listOfPackage.size()]));
 
-			return this;
-		} catch (CompileException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public ValidationAPI init(String validExpression,Map<String,String> fieldMap){
@@ -339,9 +337,8 @@ public class ValidationAPI implements Serializable {
 
 	public void init(String expression){
 		try {
-			expressionEvaluator=new ExpressionEvaluator();
-			expressionEvaluator.cook(expression);
-		} catch (CompileException e) {
+			apiWrapper=new ValidationAPIWrapper(expression,new String[]{},new Class[]{});
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -349,8 +346,8 @@ public class ValidationAPI implements Serializable {
 
 	public  Object exec(Object[] data) {
 		try {
-			return expressionEvaluator.evaluate(data);
-		}catch (InvocationTargetException e) {
+			return apiWrapper.execute(data);
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

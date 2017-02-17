@@ -32,6 +32,16 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 	public PartitionByExpressionForExpression() {
 	}
 
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+		try {
+			validationAPI.init(inputFieldNames,inputFieldTypes);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Exception in Filter Expression: "
+							+ validationAPI.getExpr() + ",", e);
+		}
+	}
+
 	@Override
 	public void prepare(Properties props) {
 

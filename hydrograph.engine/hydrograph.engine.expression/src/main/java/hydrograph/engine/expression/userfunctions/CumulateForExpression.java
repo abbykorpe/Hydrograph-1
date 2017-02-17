@@ -37,14 +37,35 @@ public class CumulateForExpression implements CumulateTransformBase {
 
 	public CumulateForExpression() {
 	}
-	
-	public void callPrepare(){
+
+	public void init(){
 		try {
+
+			expressionWrapper.getValidationAPI().init(expressionWrapper.getIntialValueExpression());
 			accumulatorValue = expressionWrapper.getValidationAPI()
-					.execute(expressionWrapper.getIntialValueExpression());
+					.exec(new Object[]{});
+
 		} catch (Exception e) {
 			throw new RuntimeException(
 					"Exception in aggregate initial value expression: "
+							+ expressionWrapper.getIntialValueExpression() + ".", e);
+		}
+	}
+
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+		try {
+			String fieldNames[] = new String[inputFieldNames.length + 1];
+			String fieldTypes[] = new String[inputFieldTypes.length + 1];
+			for(int i=0;i<inputFieldNames.length;i++){
+				fieldNames[i]=inputFieldNames[i];
+				fieldTypes[i]=inputFieldTypes[i];
+			}
+			fieldNames[inputFieldNames.length] = "_accumulator";
+			fieldTypes[inputFieldNames.length] = "string";
+			expressionWrapper.getValidationAPI().init(fieldNames,fieldTypes);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Exception in aggregate: "
 							+ expressionWrapper.getIntialValueExpression() + ".", e);
 		}
 	}
@@ -66,8 +87,8 @@ public class CumulateForExpression implements CumulateTransformBase {
 		fieldNames[i] = "_accumulator";
 		tuples[i] = accumulatorValue;
 		try {
-			accumulatorValue = expressionWrapper.getValidationAPI().execute(fieldNames,
-					tuples, expressionWrapper.getValidationAPI().getExpr());
+			accumulatorValue = expressionWrapper.getValidationAPI().exec(
+					tuples);
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in aggregate expression: "
 					+ expressionWrapper.getValidationAPI().getExpr() + ".\nRow being processed: "
