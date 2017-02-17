@@ -399,6 +399,9 @@ public class Messages extends NLS {
 	public static String RUN_SQL_MESSAGE;
 	public static String PORT_VALIDATION_ERROR;
 	
+	public static String PARAMETER_FIELD_VALIDATION;
+	public static String PARAMETER_FILE_EXISTS;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

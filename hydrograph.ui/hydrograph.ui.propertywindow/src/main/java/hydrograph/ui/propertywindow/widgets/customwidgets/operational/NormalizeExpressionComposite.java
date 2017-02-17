@@ -14,14 +14,15 @@ package hydrograph.ui.propertywindow.widgets.customwidgets.operational;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -31,7 +32,6 @@ import org.eclipse.swt.widgets.Text;
 
 import hydrograph.ui.common.util.ImagePathConstant;
 import hydrograph.ui.common.util.OSValidator;
-import hydrograph.ui.common.util.XMLConfigUtil;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
 import hydrograph.ui.datastructure.property.ComponentsOutputSchema;
 import hydrograph.ui.datastructure.property.FixedWidthGridRow;
@@ -43,6 +43,10 @@ import hydrograph.ui.graph.schema.propagation.SchemaPropagation;
 import hydrograph.ui.propertywindow.messages.Messages;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.OperationClassConfig;
 import hydrograph.ui.propertywindow.widgets.customwidgets.config.WidgetConfig;
+import hydrograph.ui.propertywindow.widgets.listeners.ELTVerifyTextListener;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper;
+import hydrograph.ui.propertywindow.widgets.listeners.ListenerHelper.HelperType;
+import hydrograph.ui.propertywindow.widgets.utility.WidgetUtility;
 
 public class NormalizeExpressionComposite extends AbstractExpressionComposite{
 	
@@ -246,6 +250,14 @@ public class NormalizeExpressionComposite extends AbstractExpressionComposite{
 			if (StringUtils.isNotBlank(mappingSheetRow.getOutputList().get(0).getPropertyname()))
 				outputFieldTextBox.setText(mappingSheetRow.getOutputList().get(0).getPropertyname());
 		}
+
+		ControlDecoration txtDecorator = WidgetUtility.addDecorator(outputFieldTextBox, Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);
+		txtDecorator.setMarginWidth(2);
+		txtDecorator.hide();
+		ListenerHelper helper = new ListenerHelper();
+		helper.put(HelperType.CONTROL_DECORATION, txtDecorator);
+		outputFieldTextBox.addListener(SWT.Verify, new ELTVerifyTextListener().getListener(null, helper, outputFieldTextBox));
+		
 		if (mappingSheetRow.getExpressionEditorData() != null
 				&& StringUtils.isNotBlank(mappingSheetRow.getExpressionEditorData().getExpression())) {
 			expressionTextBox.setText(mappingSheetRow.getExpressionEditorData().getExpression());

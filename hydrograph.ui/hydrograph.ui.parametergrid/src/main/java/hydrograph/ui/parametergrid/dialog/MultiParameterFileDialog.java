@@ -1427,12 +1427,12 @@ public class MultiParameterFileDialog extends Dialog {
 	    	@Override
 	        public String isValid(final String string) {
 	            if (StringUtils.isEmpty(string) || !string.matches(FILE_NAME_VALIDATION_EXPRESSION)) {
-	                return "Invalid file name. Name should contain only alphanumberics";
+	                return Messages.PARAMETER_FIELD_VALIDATION;
 	            }
 	            
 	            ParameterFile parameterFile = new ParameterFile(string + ".properties", paramterFileTypes);
 				if(parameterFiles.contains(parameterFile)){
-					return "File already exist";
+					return Messages.PARAMETER_FILE_EXISTS;
 				}
 	            
 	            return null;
