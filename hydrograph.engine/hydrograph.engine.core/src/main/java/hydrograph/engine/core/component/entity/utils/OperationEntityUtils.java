@@ -100,11 +100,11 @@ public class OperationEntityUtils implements Serializable{
 	}
 
 	private static String addSemiColonIfNotPresent(String expr) {
-//		if (expr.trim().endsWith(";")) {
-//			return expr;
-//		}
-//		return expr.concat(";");
+		if (expr.trim().endsWith(";")) {
+			return expr.substring(0,expr.length()-1);
+		}
 		return expr;
+//		return expr;
 	}
 
 	/**

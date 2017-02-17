@@ -45,6 +45,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
 
     filterClass match {
       case expression: FilterForExpression => expression.setValidationAPI(filterSparkOperations.validatioinAPI)
+        expression.callPrepare(filterSparkOperations.fieldName,filterSparkOperations.fieldType)
       case _ =>
     }
 
@@ -60,11 +61,11 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
       val isFilter = (row: Row) => filterClass.isRemove(filterSparkOperations.inputRow.setRow(row))
 
       if (outSocket.getSocketType.equalsIgnoreCase("out")) {
-        val outDF = componentsParams.getDataFrame().filter(row => !isFilter(row))
+        val outDF = componentsParams.getDataFrame().filter(row => !filterClass.isRemove(filterSparkOperations.inputRow.setRow(row)))
         map += (outSocket.getSocketId -> outDF)
       }
       else {
-        val unusedDF = componentsParams.getDataFrame().filter(row => isFilter(row))
+        val unusedDF = componentsParams.getDataFrame().filter(row => filterClass.isRemove(filterSparkOperations.inputRow.setRow(row)))
         map += (outSocket.getSocketId -> unusedDF)
       }
     }

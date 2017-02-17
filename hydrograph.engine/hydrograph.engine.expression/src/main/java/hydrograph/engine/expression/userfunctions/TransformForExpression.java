@@ -34,6 +34,16 @@ public class TransformForExpression implements TransformBase {
 
 	}
 
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+		try {
+			validationAPI.init(inputFieldNames,inputFieldTypes);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Exception in Transform Expression: "
+							+ validationAPI.getExpr() + ",", e);
+		}
+	}
+
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields,
 			ArrayList<String> outputFields) {

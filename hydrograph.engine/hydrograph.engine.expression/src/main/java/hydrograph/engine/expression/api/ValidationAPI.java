@@ -295,6 +295,26 @@ public class ValidationAPI implements Serializable {
 
 	}
 
+	public ValidationAPI init(String[] fieldNames,String[] fieldTypes){
+		Class [] types=new Class[fieldTypes.length];
+		int index=0;
+		try {
+			for(String keys:fieldTypes){
+				types[index]=getType(keys);
+				index++;
+			}
+			expressionEvaluator=new ExpressionEvaluator(
+					packageNames + getValidExpression(),
+					Object.class,fieldNames,types);
+
+//			expressionEvaluator.setDefaultImports(listOfPackage.toArray(new String[listOfPackage.size()]));
+
+			return this;
+		} catch (CompileException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public ValidationAPI init(String validExpression,Map<String,String> fieldMap){
 		String [] fields=new String[fieldMap.size()];
 		Class [] types=new Class[fieldMap.size()];
@@ -317,6 +337,14 @@ public class ValidationAPI implements Serializable {
 		}
 	}
 
+	public void init(String expression){
+		try {
+			expressionEvaluator=new ExpressionEvaluator();
+			expressionEvaluator.cook(expression);
+		} catch (CompileException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 
 	public  Object exec(Object[] data) {

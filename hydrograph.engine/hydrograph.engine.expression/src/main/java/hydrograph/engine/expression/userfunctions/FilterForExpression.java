@@ -32,6 +32,16 @@ public class FilterForExpression implements FilterBase {
 	public FilterForExpression() {
 	}
 
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+		try {
+			validationAPI.init(inputFieldNames,inputFieldTypes);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Exception in Filter Expression: "
+							+ validationAPI.getExpr() + ",", e);
+		}
+	}
+
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields) {
 	}
@@ -45,7 +55,7 @@ public class FilterForExpression implements FilterBase {
 			tuples[i] = reusableRow.getField(i);
 		}
 		try {
-			if ((Boolean) validationAPI.execute(fieldNames, tuples)) {
+			if ((Boolean) validationAPI.exec(tuples)) {
 				return true;
 			} else {
 				return false;

@@ -13,8 +13,7 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.reflect.ClassTag
 
 case class SparkOperation[T](baseClassInstance: T, operationEntity: Operation, inputRow: InputReusableRow, outputRow:
-OutputReusableRow, validatioinAPI: ValidationAPI, initalValue: String,operationOutFields:Array[String],
-                             fieldSchema:Map[String,String])
+OutputReusableRow, validatioinAPI: ValidationAPI, initalValue: String,operationOutFields:Array[String],fieldName:Array[String],fieldType:Array[String])
 
 trait OperationHelper[T] {
 
@@ -27,20 +26,24 @@ trait OperationHelper[T] {
         case (List()) => List()
         case (x :: xs) if x.isExpressionPresent => {
           val tf = classLoader[T](ct.runtimeClass.getCanonicalName)
+          val fieldName=new Array[String](x.getOperationInputFields.length)
+          val fieldType=new Array[String](x.getOperationInputFields.length)
 
-          val fieldsSchema=  x.getOperationInputFields.map(s=>{
-              (inputSchema(s).name,inputSchema(s).dataType.typeName)
-            }).toMap
+          val fieldsSchema=  x.getOperationInputFields.zipWithIndex.foreach(s=>{
+              fieldName(s._2)=inputSchema(s._1).name;
+            fieldType(s._2)=inputSchema(s._1).dataType.typeName
+            })
+
 
           SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
-            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), new ValidationAPI(x.getExpression, "")
-            ,  x.getAccumulatorInitialValue,x.getOperationOutputFields,fieldsSchema) ::
+            .getOperationInputFields)), getOutputReusableRow(outputSchema, x),new ValidationAPI(x.getExpression, "")
+            ,  x.getAccumulatorInitialValue,x.getOperationOutputFields,fieldName,fieldType) ::
             populateOperation(xs)
         }
         case (x :: xs) => {
           val tf = classLoader[T](x.getOperationClass)
           SparkOperation[T](tf, x, InputReusableRow(null, new RowToReusableMapper(inputSchema, x
-            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), null, null,null,null) ::
+            .getOperationInputFields)), getOutputReusableRow(outputSchema, x), null, null,null,null,null) ::
             populateOperation(xs)
         }
       }

@@ -88,7 +88,7 @@ trait CumulateOperation{
 //                  cumulate.setValidationAPI(convertToListOfValidation(y :: ys))
 //                  cumulate.setCounter(counter)
 //                  cumulate.setInitialValueExpression((z::zs).toArray)
-//                  cumulate.callPrepare
+//                  cumulate.init
                   cumulate
                 }
                 case _ => {
@@ -148,7 +148,7 @@ trait AggregateOperation{
             val expressionWrapper=new ExpressionWrapper(y.asInstanceOf[ValidationAPI],z);
             val aggregate = new AggregateForExpression
               aggregate.setValidationAPI(expressionWrapper)
-              aggregate.callPrepare
+              aggregate.init()
             aggregate
           }
           case _ => {
