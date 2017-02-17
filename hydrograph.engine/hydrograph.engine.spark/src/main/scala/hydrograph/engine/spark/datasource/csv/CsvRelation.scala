@@ -152,7 +152,7 @@ case class CsvRelation(componentId:String,
   def getSafeMessage(value: String, index: Int): String =
     {
       try {
-        return "field " + schema.apply(index).name + " with value : " + value + " to: " + schema.apply(index).dataType;
+        return "field '" + schema.apply(index).name + "' with value : [" + value + "] to DataType: " + schema.apply(index).dataType;
       } catch {
         case e: Exception =>
           {
