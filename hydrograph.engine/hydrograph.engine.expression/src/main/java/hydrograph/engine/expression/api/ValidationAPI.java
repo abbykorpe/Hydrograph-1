@@ -244,7 +244,7 @@ public class ValidationAPI implements Serializable {
 	public Object execute(String[] fieldNames, Object[] data) throws EvalError {
 		Interpreter interpreter = new Interpreter();
 		for (int i = 0; i < fieldNames.length; i++) {
-			interpreter.set(fieldNames[i], (String)data[i]);
+			interpreter.set(fieldNames[i], data[i]);
 		}
 		return interpreter.eval(getValidExpression());
 	}
