@@ -13,8 +13,27 @@
  -->
  
 <?NLS TYPE="org.eclipse.help.toc"?>
-
 <toc label="Components">
+   <topic label="Input">
+      <anchor id="Input"/>
+      <link toc="xml/Components/input/Input.xml"/>
+   </topic>
+    <topic label="Output">
+      <anchor id="Output"/>
+      <link toc="xml/Components/output/Output.xml"/>
+   </topic>
+    <topic label="Transform">
+      <anchor id="Transform"/>
+      <link toc="xml/Components/transform/Transform.xml"/>
+   </topic>
+    <topic label="Straightpull">
+      <anchor id="Straightpull"/>
+      <link toc="xml/Components/straighpull/Straightpull.xml"/>
+   </topic>
+    <topic label="Command">
+      <anchor id="Command"/>
+      <link toc="xml/Components/command/Command.xml"/>
+   </topic>
    <topic href="html/Components/Aggregate.html" label="Aggregate">
       <anchor id="Aggregate"/>
    </topic>
@@ -139,5 +158,4 @@
    <topic href="html/Components/Unknown.html" label="Unknown">
       <anchor id="Unknown"/>
    </topic>
-   
 </toc>
