@@ -41,7 +41,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     val filePath = parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
     val filesystemPath = new Path(filePath)
     val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
-    val path=if(fs.exists(filesystemPath)) filePath else  sys.error(" Provided file path does not exist")
+    val path=if(fs.exists(filesystemPath)) filePath else  sys.error(" Provided file path:[\""+filePath+"\"] does not exist ")
     
     val delimiter = parameters.getOrElse("delimiter", ",").charAt(0)
     val dateFormats = parameters.getOrElse("dateFormats", "null")

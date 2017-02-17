@@ -53,9 +53,9 @@ public class TransformForExpression implements TransformBase {
 			outputRow.setField(0,
 					(Comparable) validationAPI.execute(fieldNames, tuples));
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in tranform expression: "
+			throw new RuntimeException("Tranform Expression: "
 					+ validationAPI.getValidExpression()
-					+ ".\nRow being processed: " + inputRow.toString(), e);
+					+ ". Row being processed:[\"" + inputRow.toString()+"\"]", e);
 		}
 	}
 

@@ -36,7 +36,7 @@ import scala.collection.JavaConverters._
 class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseComponentParams) extends
   OperationComponentBase with OperationHelper[CumulateTransformBase] with Serializable {
 
-  val LOG = LoggerFactory.getLogger(classOf[FilterComponent])
+  val LOG = LoggerFactory.getLogger(classOf[CumulateComponent])
   val outSocketEntity = cumulateEntity.getOutSocketList.get(0)
   val key = outSocketEntity.getSocketId
   val inputSchema: StructType = componentsParams.getDataFrame().schema
@@ -60,7 +60,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
     if (LOG.isTraceEnabled) LOG.trace(cumulateEntity.toString)
 
     for (outSocket <- cumulateEntity.getOutSocketList().asScala) {
-      LOG.info("Creating cumulate assembly for '"
+      LOG.info("Creating cumulate component for '"
         + cumulateEntity.getComponentId() + "' for socket: '"
         + outSocket.getSocketId() + "' of type: '"
         + outSocket.getSocketType() + "'")
@@ -91,16 +91,16 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
       })
 
       var prevKeysArray: Array[Any] = null
-      var isfirstRow = false
+      var isFirstRow = false
       def isPrevKeyDifferent(currKeysArray: Array[Any]): Boolean = {
         if (prevKeysArray == null) {
           prevKeysArray = currKeysArray
-          isfirstRow = true
+          isFirstRow = true
           true
         }
         else if (!prevKeysArray.zip(currKeysArray).forall(p => p._1 == p._2)) {
           prevKeysArray = currKeysArray
-          isfirstRow = false
+          isFirstRow = false
           true
         } else false
       }
@@ -111,7 +111,7 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
           val currKeysArray: Array[Any] = new Array[Any](primaryKeys.size)
           copyFields(row, currKeysArray, keyFieldsIndexes)
 
-          if ((isPrevKeyDifferent(currKeysArray) && !isfirstRow)) {
+          if ((isPrevKeyDifferent(currKeysArray) && !isFirstRow)) {
             cumulateList.foreach(cmt => {
               cmt.baseClassInstance.onCompleteGroup()
             })
@@ -121,7 +121,12 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
           copyFields(row, outRow, passthroughIndexes)
 
           cumulateList.foreach(cmt => {
-            cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
+            try{
+              cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
+            } catch {
+              case e:Exception => throw new RuntimeException("Error in Cumulate Component:[\""+cumulateEntity.getComponentId+"\"] for "+e.getMessage)
+            }
+
           })
 
           if (itr.isEmpty) {

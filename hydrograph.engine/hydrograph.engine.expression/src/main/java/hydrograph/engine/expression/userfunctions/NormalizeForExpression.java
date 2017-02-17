@@ -50,15 +50,15 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void Normalize(ReusableRow inputRow, ReusableRow outputRow,
-			OutputDispatcher outputDispatcher) {
-		
+						  OutputDispatcher outputDispatcher) {
+
 		try {
-			int exprCount =(int) new ValidationAPI(countExpression,
-					"").execute(fieldNames, tuples);
-			int i=0,j=0;
+			int exprCount =(int) new ValidationAPI(expressionWrapper.getCountExpression(),"")
+					.execute(expressionWrapper.getFieldNames(), expressionWrapper.getTuples());
+			int i=0,j=0,counter=0;
 			for (j = 0; j < exprCount; j++) {
 				try {
-					for (int counter = 0; counter < transformInstancesSize; counter++) {
+//					for (counter = 0; counter < expressionWrapper.getTransformInstancesSize(); counter++) {
 						fieldNames = new String[inputRow.getFields().size() + 1];
 						tuples = new Object[inputRow.getFields().size() + 1];
 						for (i = 0; i < inputRow.getFieldNames().size(); i++) {
@@ -67,27 +67,25 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 						}
 						fieldNames[i] = "_index";
 						tuples[i] = j;
-						Object obj = validationAPI.execute(fieldNames,
-								tuples, listOfExpressions.get(counter));
+						Object obj = expressionWrapper.getValidationAPI().execute(fieldNames,
+								tuples);
 						outputRow.setField(
-								operationOutputFields.get(counter),
+								expressionWrapper.getOperationOutputFields().get(0),
 								(Comparable) obj);
-					}
+//					}
 					outputDispatcher.sendOutput();
 				} catch (Exception e) {
 					throw new RuntimeException(
-							"Exception in normalize expression: "
-									+ listOfExpressions
-											.get(i)
-									+ ".\nRow being processed: "
-									+ inputRow.toString(), e);
+							"Exception in normalize expression:[\""
+									+ expressionWrapper.getListOfExpressions().get(counter)
+									+ "\"].", e);
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in normalize expression: "
-					+ countExpression + ".", e);
+			throw new RuntimeException("Exception in normalize expression:[\""
+					+ expressionWrapper.getCountExpression() + "\"].", e);
 		}
-		
+
 	}
 
 	public void setFieldNames(String[] fieldNames) {
@@ -97,11 +95,11 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	public void setTuples(Object[] tuples) {
 		this.tuples = tuples;
 	}
-	
+
 	public void setCountExpression(String countExpression) {
 		this.countExpression = countExpression;
 	}
-	
+
 	public void setTransformInstancesSize(int transformInstancesSize) {
 		this.transformInstancesSize = transformInstancesSize;
 	}
@@ -114,8 +112,8 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	public void setListOfExpressions(ArrayList<String> listOfExpressions) {
 		this.listOfExpressions = listOfExpressions;
 	}
-	
-	
+
+
 	@Override
 	public void cleanup() {
 

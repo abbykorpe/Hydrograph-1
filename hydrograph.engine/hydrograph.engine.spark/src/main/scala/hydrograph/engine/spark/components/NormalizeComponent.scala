@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.components
 
 import java.util
+
 import scala.collection.JavaConversions.bufferAsJavaList
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.collection.JavaConverters.asScalaBufferConverter
@@ -112,33 +113,45 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
           }
         }
       val it = itr.flatMap(row => {
+
         copyFields(row, outRow, mapFieldIndexes)
         copyFields(row, outRow, passthroughIndexes)
 
         outputDispatcher = new NormalizeOutputCollector(outRow)
 
-        if(nr1.baseClassInstance.isInstanceOf[NormalizeForExpression]){
-            LOG.info("Normalize Operation contains Expressions, so NormalizeForExpression class will be used for processing.")
-            val fieldNames: Array[String] = inputSchema.map(_.name).toArray[String]
-            val tuples: Array[Object] = (0 to (fieldNames.length - 1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
-            val inputFields: List[String] = unique(getAllInputFieldsForExpr(normalizeEntity.getOperationsList, List[String]()))
-            val outputFields: List[String] = getAllOutputFieldsForExpr(normalizeEntity.getOperationsList, List[String]())
-            val inputPositions: List[Int] = extractAllInputPositions(inputFields)
-            val outputPositions = extractAllOutputPositions(outputFields).to[ListBuffer]
-            val x = normalizeList.map(sp => sp.validatioinAPI.getExpr)
-            LOG.info("List of Expressions: [" + x.toString + "].")
-            nr1.baseClassInstance.asInstanceOf[NormalizeForExpression].setValidationAPI(new ExpressionWrapper(nr1.validatioinAPI, fieldNames, tuples
-              , normalizeEntity.getOutputRecordCount, normalizeList.length, nr1.operationOutFields, x.asJava))
+                for(nr <- normalizeList){
+
+        if (nr.baseClassInstance.isInstanceOf[NormalizeForExpression]) {
+          LOG.info("Normalize Operation contains Expressions, so NormalizeForExpression class will be used for processing.")
+          val fieldNames: Array[String] = inputSchema.map(_.name).toArray[String]
+          val tuples: Array[Object] = (0 to (fieldNames.length - 1)).toList.map(e => row.get(e).asInstanceOf[Object]).toArray
+          val inputFields: List[String] = unique(getAllInputFieldsForExpr(normalizeEntity.getOperationsList, List[String]()))
+          val outputFields: List[String] = getAllOutputFieldsForExpr(normalizeEntity.getOperationsList, List[String]())
+          val inputPositions: List[Int] = extractAllInputPositions(inputFields)
+          val outputPositions = extractAllOutputPositions(outputFields).to[ListBuffer]
+          val x = normalizeList.map(sp => sp.validatioinAPI.getExpr)
+          val y = normalizeList.map(sp => sp.operationOutFields(0))
+          LOG.info("List of Expressions: [" + x.toString + "].")
+          nr.baseClassInstance.asInstanceOf[NormalizeForExpression].setValidationAPI(new ExpressionWrapper(nr.validatioinAPI, fieldNames, tuples
+            , normalizeEntity.getOutputRecordCount, normalizeList.length, List(nr.operationOutFields(0)).asJava, List(nr.validatioinAPI.getExpr).asJava))
           outputDispatcher = new NormalizeOutputCollector(outRow)
-          }
+        }
 
         outputDispatcher.initialize
-        LOG.trace("Calling Normalize() method of " + nr1.baseClassInstance.getClass.toString + " class.")
-        nr1.baseClassInstance.Normalize(nr1.inputRow.setRow(row), nr1.outputRow.setRow(outRow), outputDispatcher)
-        if (itr.isEmpty) {
-          LOG.debug("Calling cleanup() method of " + nr1.baseClassInstance.getClass.toString + " class.")
-          nr1.baseClassInstance.cleanup()
+        try {
+          LOG.trace("Calling Normalize() method of " + nr.baseClassInstance.getClass.toString + " class.")
+          nr.baseClassInstance.Normalize(nr.inputRow.setRow(row), nr.outputRow.setRow(outRow), outputDispatcher)
+        } catch {
+          case e: Exception => throw new RuntimeException("Error in Normalize Component:[\"" + normalizeEntity.getComponentId + "\"] for input row:[\"" + row.toString + "\"]. " + e.getMessage)
         }
+
+        if (itr.isEmpty) {
+          LOG.debug("Calling cleanup() method of " + nr.baseClassInstance.getClass.toString + " class.")
+          nr.baseClassInstance.cleanup()
+        }
+
+
+      }
         outputDispatcher.getOutRows
       })
       it

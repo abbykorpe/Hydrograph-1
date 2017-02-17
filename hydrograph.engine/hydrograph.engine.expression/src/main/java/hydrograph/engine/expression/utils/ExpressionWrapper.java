@@ -27,7 +27,7 @@ public class ExpressionWrapper {
 	private Object[] tuples;
 	private String countExpression;
 	private int transformInstancesSize;
-	private ArrayList<String> operationOutputFields;
+	private List<String> operationOutputFields;
 	private List<String> listOfExpressions;
 
 	public ExpressionWrapper(ValidationAPI validationAPI, String intialValue) {
@@ -36,7 +36,7 @@ public class ExpressionWrapper {
 	}
 
 	public ExpressionWrapper(ValidationAPI validationAPI, String[] fieldNames, Object[] tuples, String countExpression,
-			int transformInstancesSize, ArrayList<String> operationOutputFields, List<String> listOfExpressions) {
+			int transformInstancesSize, List<String> operationOutputFields, List<String> listOfExpressions) {
 		this.validationAPI = validationAPI;
 		this.fieldNames = fieldNames;
 		this.tuples = tuples;
@@ -70,7 +70,7 @@ public class ExpressionWrapper {
 		return transformInstancesSize;
 	}
 
-	public ArrayList<String> getOperationOutputFields() {
+	public List<String> getOperationOutputFields() {
 		return operationOutputFields;
 	}
 
