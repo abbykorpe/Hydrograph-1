@@ -83,9 +83,9 @@ sourceSets{
 }
 
 dependencies {
-	compile name: 'ojdbc6', version: '11.2.0.4'
-	compile name: 'tdgssconfig', version: '0.1'
-	compile name: 'terajdbc4', version: '0.1'
+	compile group: 'oracle', name: 'ojdbc6', version: '11.2.0.4'
+	compile group: 'teraData', name: 'tdgssconfig', version: '0.1'
+	compile group: 'teraData', name: 'terajdbc4', version: '0.1'
     compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.0.2'
     compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.0.2'
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.11.8'
