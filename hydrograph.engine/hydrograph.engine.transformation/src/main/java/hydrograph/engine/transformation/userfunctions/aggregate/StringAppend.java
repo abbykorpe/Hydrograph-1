@@ -20,7 +20,7 @@ import java.util.Properties;
 
 public class StringAppend implements AggregateTransformBase {
 
-	private String appended = null;
+	private StringBuilder appended = null;
 	public static final String DEFAULT_FILLER = ",";
 	private String filler = DEFAULT_FILLER;
 
@@ -36,17 +36,18 @@ public class StringAppend implements AggregateTransformBase {
 
 	@Override
 	public void aggregate(ReusableRow input) {
-		if (appended == null) {
-			appended = input.getString(0);
-		} else {
-			appended = appended + filler + input.getString(0);
+		if(appended == null){
+			appended = new StringBuilder(input.getString(0));
+		}
+		else{
+			appended = appended.append(filler + input.getString(0));
 		}
 
 	}
 
 	@Override
 	public void onCompleteGroup(ReusableRow output) {
-		output.setField(0, appended);
+		output.setField(0, appended.toString());
 		appended = null;
 
 	}
@@ -54,7 +55,6 @@ public class StringAppend implements AggregateTransformBase {
 	@Override
 	public void cleanup() {
 		appended = null;
-
 	}
 
 }
