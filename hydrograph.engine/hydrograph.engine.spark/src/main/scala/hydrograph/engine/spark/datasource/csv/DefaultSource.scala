@@ -147,7 +147,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
           fs.delete(filesystemPath, true)
           true
         case SaveMode.ErrorIfExists =>
-          sys.error(s"path $path already exists.")
+          sys.error(s"Output Path: $path already exists. Set Overwrite property to 'True' of OutputComponent to overwrite existing output path")
         case SaveMode.Ignore => false
       }
     } else {
