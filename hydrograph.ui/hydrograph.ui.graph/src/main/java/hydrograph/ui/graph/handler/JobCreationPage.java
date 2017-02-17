@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -36,6 +38,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.slf4j.Logger;
 
+import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.graph.Messages;
 import hydrograph.ui.graph.editor.ELTGraphicalEditor;
 import hydrograph.ui.graph.editor.ELTGraphicalEditorInput;
@@ -92,7 +95,11 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 		if (fileName[0].length() > 50) {
 			return showErrorIfFileNameIsGreaterThanFiftyCharactors();
 		}
+		
        else {
+    	   if(!getFileName().endsWith(DEFAULT_EXTENSION)){
+    		   this.setFileName(this.getFileName().concat(DEFAULT_EXTENSION));
+    	   }
 			IPath filePath = new Path(this.getContainerFullPath() + "/" + this.getFileName());
 			newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
 			if(isPageCreatedForSavingSubJob){
@@ -176,20 +183,30 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	 * Return true, if the file name entered in this page is valid.
 	 */
 	private boolean validateFilename() {
-		if (getFileName() != null && getFileName().endsWith(DEFAULT_EXTENSION)) {
+		if (getFileName() != null) {
 			return true;
 		}
-		setErrorMessage(Messages.FILE_END_MESSAGE + " " + DEFAULT_EXTENSION);
-		return false;
+			return false;
 	}
 
 	/*
 	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#validatePage()
 	 */
 	protected boolean validatePage() {
-		return super.validatePage() && validateFilename();
+		boolean returnCode=  super.validatePage() && validateFilename();
+		if(returnCode){
+			IFolder folder=ResourcesPlugin.getWorkspace().getRoot().getFolder(getContainerFullPath());
+			if(!StringUtils.endsWithIgnoreCase(getFileName(), Constants.JOB_EXTENSION)){
+				IFile newFile= folder.getFile(getFileName()+Constants.JOB_EXTENSION);
+				if(newFile.exists()){
+					setErrorMessage("'"+newFile.getName()+"'"+Constants.ALREADY_EXISTS);
+					return false;
+				}
+			}
+		}
+		return returnCode;
+		
 	}
-	
 	
 	public IFile getNewFile() {
 		return newFile;

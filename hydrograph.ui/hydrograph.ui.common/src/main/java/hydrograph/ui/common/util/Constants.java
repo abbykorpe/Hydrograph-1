@@ -61,13 +61,12 @@ public class Constants {
 	// Used for validating AlphaNumeric, Forward slash or Parameter E.g Aplha_123 or @{Param_123}
 	public static final String REGEX_FORWARD_SLASH ="[\\@]{1}[\\{]{1}[\\w]*[\\}]{1}||[\\/]*[\\w]*";
 	// Used for validating Numeric values (only 4 digits) E.g. 1234 and Parameters E.g  @{Param_123}
-	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String REGEX_NUMERIC_AND_PARAMETER = "^([\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1})|([\\d]{4})$";
+	// Used for validating only Parameters E.g  @{Param_123}
 	public static final String PARAMETER_REGEX ="^[\\@]{1}[\\{]{1}[\\s\\S]+[\\}]{1}";
 
 	// Used for validating AlphaNumeric or Parameter E.g Aplha_123
 	public static final String REGEX_ALPHA_NUMERIC = "[\\w]*";
-		
 	public static final String MATCH_PROPERTY_WIDGET = "match_value";
 	public static final String MATCH = "Match";
 	public static final String FIRST = "First";
@@ -129,6 +128,7 @@ public class Constants {
 	public static final String NONE_SORT_ORDER="From Param";
 	
 	public static final String SUBJOB_TOOLTIP_INFO = "Subjob Info";
+	public static final String ALREADY_EXISTS = " already exists.";
 
 
 	/*
@@ -353,9 +353,9 @@ public class Constants {
 	
 	public static final String RUN_SQL_DATABASE_CONNECTION_NAME = "databaseConnectionName";
 	public static final Object RUN_SQL_QUERY = "runsqlquery";
+	public static final String PORT_WIDGET_ERROR = "Should be numeric or Paramerter e.g. 1234, @{Param}";
 	public static final String JAVA_EXTENSION = ".java";
 	public static final String ProjectSupport_SRC = "src/main/java";
-	
 	public static final String COMMENT_BOX_IMAGE_PATH="/icons/comment-box-icon.png";
 	public static final String PORT_VALIDATION_REGEX="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
 	public static final String CONTAINER="Container";

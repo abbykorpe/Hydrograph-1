@@ -179,6 +179,9 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 	public static final String DEFAULT_VALUE =Messages.DEFAULT_VALUE;
 	public static final String SCHEMA_TAB ="Schema";
 	public static final String OPERATION ="operation";
+	public static final String NO_SCHEMA_NAME = "The file name of schema is not given";
+	public static final String SCHEMA_FILE_EXTENSION = ".schema";
+	public static final String XML_FILE_EXTENSION = ".xml";
 	private static final int tableHeight=340;
 	private static final int tableWidth=360;
 	private Integer windowButtonWidth = 35;
@@ -1084,11 +1087,31 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 							paramValue = Utils.INSTANCE.getParamValue(extSchemaPathText.getToolTipText());
 					    	finalParamPath = Utils.INSTANCE.getParamFilePath(extSchemaPathText.getToolTipText(), paramValue, extSchemaPathText);
 				    		}
-					  schemaPath = finalParamPath;
+						
+						if(finalParamPath.endsWith("/")){
+							WidgetUtility.createMessageBox(NO_SCHEMA_NAME,"Error",SWT.ICON_ERROR|SWT.OK);
+							 logger.error(NO_SCHEMA_NAME);
+							 return null;
+						}
+						else {
+							if(!(finalParamPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(finalParamPath.endsWith(XML_FILE_EXTENSION))){
+							schemaPath = finalParamPath.concat(SCHEMA_FILE_EXTENSION);
+						 }else{
+							schemaPath = finalParamPath;
+						 }
+						}
+					  
 				 }
-				 else{
-					  schemaPath = extSchemaPathText.getText();
-				 }
+			else {
+				if (extSchemaPathText.getText().endsWith("/")) {
+					WidgetUtility.createMessageBox(NO_SCHEMA_NAME, "Error",
+							SWT.ICON_ERROR | SWT.OK);
+					logger.error(NO_SCHEMA_NAME);
+					return null;
+				}else{
+					schemaPath = extSchemaPathText.getText();
+				}
+			}
 				 if(!StringUtils.isEmpty(schemaPath) && !ParameterUtil.containsParameter(schemaPath, Path.SEPARATOR) &&!new File(schemaPath).isAbsolute()){
 					 IWorkspace workspace = ResourcesPlugin.getWorkspace();
 					 IPath relativePath=null;
@@ -1101,14 +1124,29 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 						 logger.error(COULD_NOT_LOCATE_THE_EXTERNAL_SCHEMA_FILE_PATH,e);
 						 return null;
 					 }	
-					 if(relativePath!=null)
-						 schemaFile = new File(relativePath.toOSString());
-					 else
-						 schemaFile = new File(schemaPath);
+					 if(relativePath!=null){
+						 if(!(relativePath.toOSString().endsWith(SCHEMA_FILE_EXTENSION)) && !(relativePath.toOSString().endsWith(XML_FILE_EXTENSION))){
+							 schemaFile = new File(relativePath.toOSString().concat(SCHEMA_FILE_EXTENSION));
+						 }
+						 else{
+							 schemaFile = new File(relativePath.toOSString());
+						 }
+					 }
+					 else{
+						 if(!(schemaPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(schemaPath.endsWith(XML_FILE_EXTENSION))){
+							 schemaFile = new File(schemaPath.concat(SCHEMA_FILE_EXTENSION));
+						 }else{
+							 schemaFile = new File(schemaPath);
+						 }
+					 }
 				 }
 				 else
-				 {
-					 schemaFile = new File(schemaPath);
+				 {	
+					 if(!(schemaPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(schemaPath.endsWith(XML_FILE_EXTENSION))){
+						 schemaFile = new File(schemaPath.concat(SCHEMA_FILE_EXTENSION));
+					 }else{
+						 schemaFile = new File(schemaPath);
+					 }
 				 }
 			 }
 			 else{
@@ -1131,7 +1169,11 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 					 return schemaFile;
 				 }
 				 else {
-					 schemaFile = new File(schemaPath);				
+					 if(!(schemaPath.endsWith(SCHEMA_FILE_EXTENSION)) && !(schemaPath.endsWith(XML_FILE_EXTENSION))){
+						 schemaFile = new File(schemaPath.concat(SCHEMA_FILE_EXTENSION));
+					 }else{
+						 schemaFile = new File(schemaPath);
+					 }
 				 }
 			 }
 			 return schemaFile;
@@ -1162,7 +1204,8 @@ public abstract class ELTSchemaGridWidget extends AbstractWidget {
 
 				 tableViewer.setInput(schemaGridRowListToImport);
 				 tableViewer.refresh();
-
+				 
+				
 				 GridRowLoader gridRowLoader = new GridRowLoader(gridRowType, schemaFile);
 
 				 schemaGridRowListToImport = gridRowLoader.importGridRowsFromXML(helper);
