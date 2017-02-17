@@ -23,7 +23,6 @@
 				<field name="id" type="java.lang.String" />
 				<field name="name" type="java.lang.String" />
 				<field name="city" type="java.lang.String" />
-				<field name="temp" type="java.lang.String" />
 			</schema>
 		</outSocket>
 		<path uri="testData\Input\delimitedInputFile" />
