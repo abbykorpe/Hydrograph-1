@@ -233,10 +233,10 @@ public class ComponentSearchUtility {
 		event.button = 1;
 		event.count = 1;
 		event.widget = graphicControl;
-		hydrograph.ui.graph.model.Component newInstance = null;
+		Object newInstance = null;
 		if (componentDetails != null) {
 			if (componentDetails.getName().equalsIgnoreCase(COMMENT_BOX)) {
-					createCommentBox(event);
+				newInstance	= createCommentBox(event);
 			} else {
 				newInstance = createComponent(componentDetails, event, newInstance);
 			}
@@ -247,8 +247,8 @@ public class ComponentSearchUtility {
 		return newInstance;
 	}
 
-	private hydrograph.ui.graph.model.Component createComponent(ComponentDetails componentDetails, Event event,
-			hydrograph.ui.graph.model.Component newInstance) {
+	private Object createComponent(ComponentDetails componentDetails, Event event,
+			Object newInstance) {
 		Component component = XMLConfigUtil.INSTANCE.getComponent(componentDetails.getName());
 		Container container = (Container) graphicViewer.getContents().getModel();
 		Class<?> class1 = DynamicClassProcessor.INSTANCE.getClazz(component.getName());
@@ -256,7 +256,7 @@ public class ComponentSearchUtility {
 		try {
 			newInstance = (hydrograph.ui.graph.model.Component) class1.newInstance();
 			checkComponentCoordinates(event, container);
-			componentCreateCommand = new ComponentCreateCommand(newInstance, container,
+			componentCreateCommand = new ComponentCreateCommand((hydrograph.ui.graph.model.Component)newInstance, container,
 					new Rectangle(event.x, event.y, 0, 0));
 			componentCreateCommand.execute();
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -266,19 +266,21 @@ public class ComponentSearchUtility {
 		return newInstance;
 	}
 
-	private void createCommentBox(Event event) {
+	private Object createCommentBox(Event event) {
+		CommentBox commentBox = null;
 		editor = (ELTGraphicalEditor) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		if (editor != null) {
 			Container container = editor.getContainer();
 			checkComponentCoordinates(event, container);
 			org.eclipse.draw2d.geometry.Point point = new org.eclipse.draw2d.geometry.Point(event.x, event.y);
-			CommentBox label = new CommentBox(LABEL);
-			label.setSize(new Dimension(300, 60));
-			label.setLocation(point);
-			CommentBoxCommand command = new CommentBoxCommand(label, LABEL, container);
+			commentBox = new CommentBox(LABEL);
+			commentBox.setSize(new Dimension(300, 60));
+			commentBox.setLocation(point);
+			CommentBoxCommand command = new CommentBoxCommand(commentBox, LABEL, container);
 			command.execute();
 		}
+		return commentBox;
 	}
 
 	/**
