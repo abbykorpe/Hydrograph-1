@@ -13,6 +13,7 @@
 package hydrograph.engine.spark.components
 
 import java.util
+
 import scala.collection.JavaConversions.bufferAsJavaList
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.collection.JavaConverters.asScalaBufferConverter
@@ -112,6 +113,7 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
           }
         }
       val it = itr.flatMap(row => {
+
         copyFields(row, outRow, mapFieldIndexes)
         copyFields(row, outRow, passthroughIndexes)
 
@@ -126,9 +128,10 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
             val inputPositions: List[Int] = extractAllInputPositions(inputFields)
             val outputPositions = extractAllOutputPositions(outputFields).to[ListBuffer]
             val x = normalizeList.map(sp => sp.validatioinAPI.getExpr)
+            val y = normalizeList.map(sp => sp.operationOutFields(0))
             LOG.info("List of Expressions: [" + x.toString + "].")
             nr1.baseClassInstance.asInstanceOf[NormalizeForExpression].setValidationAPI(new ExpressionWrapper(nr1.validatioinAPI, fieldNames, tuples
-              , normalizeEntity.getOutputRecordCount, normalizeList.length, nr1.operationOutFields, x.asJava))
+              , normalizeEntity.getOutputRecordCount, normalizeList.length, y.asJava, x.asJava))
           outputDispatcher = new NormalizeOutputCollector(outRow)
           }
 
@@ -140,6 +143,7 @@ class NormalizeComponent(normalizeEntity: NormalizeEntity, componentsParams: Bas
           nr1.baseClassInstance.cleanup()
         }
         outputDispatcher.getOutRows
+
       })
       it
     })(RowEncoder(outputSchema))

@@ -167,7 +167,7 @@ public class ValidationAPI implements Serializable {
 	}
 
 	private DiagnosticCollector<JavaFileObject> filterCompiler(Map<String, Class<?>> schemaFields,
-			String externalJarPath) {
+															   String externalJarPath) {
 		String fields = "";
 		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
 		customExpressionVisitor.visit(generateAntlrTree());
@@ -182,7 +182,7 @@ public class ValidationAPI implements Serializable {
 	}
 
 	private DiagnosticCollector<JavaFileObject> transformCompiler(Map<String, Class<?>> schemaFields,
-			String externalJarPath) {
+																  String externalJarPath) {
 		String fields = "";
 		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
 		customExpressionVisitor.visit(generateAntlrTree());
@@ -244,11 +244,11 @@ public class ValidationAPI implements Serializable {
 	public Object execute(String[] fieldNames, Object[] data) throws EvalError {
 		Interpreter interpreter = new Interpreter();
 		for (int i = 0; i < fieldNames.length; i++) {
-			interpreter.set(fieldNames[i], data[i]);
+			interpreter.set(fieldNames[i], (String)data[i]);
 		}
 		return interpreter.eval(getValidExpression());
 	}
-	
+
 	/**
 	 * @param fieldNames
 	 *            values are {@link String} array which contains field name used
@@ -271,7 +271,7 @@ public class ValidationAPI implements Serializable {
 		}
 		return interpreter.eval(validExpression);
 	}
-	
+
 	/**
 	 * @param validExpression
 	 * 			  values are {@link String} which contains expression
@@ -284,7 +284,7 @@ public class ValidationAPI implements Serializable {
 		}
 		return interpreter.eval(validExpression);
 	}
-	
+
 	/**
 	 * @param expression
 	 *            {@link String} is a construct made up of fields, operators,
@@ -299,7 +299,7 @@ public class ValidationAPI implements Serializable {
 	 * @return
 	 */
 	public static DiagnosticCollector<JavaFileObject> filterCompiler(String expression, String propertiesFilePath,
-			Map<String, Class<?>> schemaFields, String externalJarPath) {
+																	 Map<String, Class<?>> schemaFields, String externalJarPath) {
 		return new ValidationAPI(expression, propertiesFilePath).filterCompiler(schemaFields, externalJarPath);
 	}
 
@@ -317,14 +317,14 @@ public class ValidationAPI implements Serializable {
 	 * @return
 	 */
 	public static DiagnosticCollector<JavaFileObject> transformCompiler(String expression, String propertiesFilePath,
-			Map<String, Class<?>> schemaFields, String externalJarPath) {
+																		Map<String, Class<?>> schemaFields, String externalJarPath) {
 		return new ValidationAPI(expression, propertiesFilePath).transformCompiler(schemaFields, externalJarPath);
 	}
 
 	public static List<String> getFieldNameList(Map<String, Class<?>> schemaFields,String expression,String propertiesFilePath) {
 		return new ValidationAPI(expression, propertiesFilePath).getFieldNameList(schemaFields);
 	}
-	
+
 	/**
 	 * @param expression
 	 *            {@link String} is a construct made up of fields, operators,
@@ -354,7 +354,7 @@ public class ValidationAPI implements Serializable {
 		}
 
 	}
-	
+
 	public String getExpr() {
 		return expr;
 	}
@@ -362,5 +362,5 @@ public class ValidationAPI implements Serializable {
 	public void setExpr(String expr) {
 		this.expr = expr;
 	}
-	
+
 }
