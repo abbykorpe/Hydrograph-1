@@ -32,7 +32,7 @@
 			</schema>
 		</outSocket>
 		<runtimeProperties>
-			<property name="noOfPartition" value="20"/>
+			<property name="noOfPartitions" value="20"/>
 		</runtimeProperties>
 		<recordCount value="100000" />
 	</inputs>
