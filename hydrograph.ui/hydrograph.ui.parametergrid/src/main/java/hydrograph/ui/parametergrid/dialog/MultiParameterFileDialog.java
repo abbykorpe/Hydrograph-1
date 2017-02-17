@@ -1427,7 +1427,7 @@ public class MultiParameterFileDialog extends Dialog {
 	    	@Override
 	        public String isValid(final String string) {
 	            if (StringUtils.isEmpty(string) || !string.matches(FILE_NAME_VALIDATION_EXPRESSION)) {
-	                return "Invalid file name. Name should contain only alphanumberics";
+	                return "Invalid file name. Name should contain only alphanumerics";
 	            }
 	            
 	            ParameterFile parameterFile = new ParameterFile(string + ".properties", paramterFileTypes);
