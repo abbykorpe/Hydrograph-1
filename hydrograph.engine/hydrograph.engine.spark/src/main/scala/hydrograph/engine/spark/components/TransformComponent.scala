@@ -72,7 +72,12 @@ class TransformComponent(transformEntity: TransformEntity, componentsParams: Bas
         copyFields(row, outRow, passthroughIndexes)
         transformsList.foreach { tr =>
           //Calling Transform Method
-          tr.baseClassInstance.transform(tr.inputRow.setRow(row), tr.outputRow.setRow(outRow))
+          try{
+            tr.baseClassInstance.transform(tr.inputRow.setRow(row), tr.outputRow.setRow(outRow))
+          } catch {
+            case e:Exception => throw new RuntimeException("Error in Transform Component:[\""+transformEntity.getComponentId+"\"] for "+e.getMessage)
+          }
+
           if (itr.isEmpty) {
             LOG.info("Calling cleanup() method of " + tr.baseClassInstance.getClass.toString + " class.")
             tr.baseClassInstance.cleanup()

@@ -57,7 +57,7 @@ class FixedWidthRelation(componentName:String, path: String, charset: String, fi
           + ". Sum of length of all fields is "
           + fieldlength.sum
           + "\nRow being parsed: " + row)
-        throw new RuntimeException("Input row does not have enough length to parse all fields. Input length is "
+        throw new RuntimeException("Error in Input Fixed Width Component:[\""+componentName+"\"]. Input Row does not have enough length to parse all fields. Input length is "
           + row.length()
           + ". Sum of length of all fields is "
           + fieldlength.sum

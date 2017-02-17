@@ -162,7 +162,12 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
           }
 
           aggregateList.foreach(agt => {
-            agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
+            try{
+              agt.baseClassInstance.aggregate(agt.inputRow.setRow(row))
+            } catch {
+              case e:Exception => throw new RuntimeException("Error in Aggregate Component:[\""+aggregateEntity.getComponentId+"\"] for "+e.getMessage)
+            }
+
           })
 
           if (isPrevKeyDifferent && (!isPrevKeyNull))

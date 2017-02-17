@@ -55,10 +55,10 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 		try {
 			int exprCount =(int) new ValidationAPI(expressionWrapper.getCountExpression(),"")
 					.execute(expressionWrapper.getFieldNames(), expressionWrapper.getTuples());
-			int i=0,j=0;
+			int i=0,j=0,counter=0;
 			for (j = 0; j < exprCount; j++) {
 				try {
-					for (int counter = 0; counter < expressionWrapper.getTransformInstancesSize(); counter++) {
+//					for (counter = 0; counter < expressionWrapper.getTransformInstancesSize(); counter++) {
 						fieldNames = new String[inputRow.getFields().size() + 1];
 						tuples = new Object[inputRow.getFields().size() + 1];
 						for (i = 0; i < inputRow.getFieldNames().size(); i++) {
@@ -68,24 +68,22 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 						fieldNames[i] = "_index";
 						tuples[i] = j;
 						Object obj = expressionWrapper.getValidationAPI().execute(fieldNames,
-								tuples, expressionWrapper.getListOfExpressions().get(counter));
+								tuples);
 						outputRow.setField(
-								expressionWrapper.getOperationOutputFields().get(counter),
+								expressionWrapper.getOperationOutputFields().get(0),
 								(Comparable) obj);
-					}
+//					}
 					outputDispatcher.sendOutput();
 				} catch (Exception e) {
 					throw new RuntimeException(
-							"Exception in normalize expression: "
-									+ expressionWrapper.getListOfExpressions()
-									.get(i)
-									+ ".\nRow being processed: "
-									+ inputRow.toString(), e);
+							"Exception in normalize expression:[\""
+									+ expressionWrapper.getListOfExpressions().get(counter)
+									+ "\"].", e);
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in normalize expression: "
-					+ expressionWrapper.getCountExpression() + ".", e);
+			throw new RuntimeException("Exception in normalize expression:[\""
+					+ expressionWrapper.getCountExpression() + "\"].", e);
 		}
 
 	}

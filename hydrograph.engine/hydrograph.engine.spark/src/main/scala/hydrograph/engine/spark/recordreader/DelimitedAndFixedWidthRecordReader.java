@@ -103,7 +103,7 @@ public class DelimitedAndFixedWidthRecordReader implements
 
 	@Override
 	public synchronized boolean next(LongWritable key, Text value)
-			throws IOException {
+			throws IOException, RuntimeException {
 		boolean fieldNotFound, isMatchingDelimiterInProgress = false, isSecondLastCharNewline = false, isThirdLastCharNewline = false;
 		boolean quoteCharFound = false;
 		int fieldLength, delimiterCharCounter;
@@ -169,7 +169,7 @@ public class DelimitedAndFixedWidthRecordReader implements
 							fieldNotFound = false;
 							String message = "The input data is not according to specified schema. Expected data with delimiters or lengths as: "
 									+ Arrays.toString(lengthsAndDelimiters)
-									+ ", gotW: " + stringBuilder.toString();
+									+ ", got: " + stringBuilder.toString();
 							throw new RuntimeException(message);
 						}
 					} while (fieldNotFound);

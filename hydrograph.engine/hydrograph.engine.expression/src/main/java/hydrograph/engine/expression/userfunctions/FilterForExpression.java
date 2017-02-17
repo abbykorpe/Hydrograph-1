@@ -51,7 +51,7 @@ public class FilterForExpression implements FilterBase {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in tranform expression: "
+			throw new RuntimeException("Exception in Filter expression: "
 					+ validationAPI.getValidExpression()
 					+ ".\nRow being processed: " + reusableRow.toString(), e);
 		}

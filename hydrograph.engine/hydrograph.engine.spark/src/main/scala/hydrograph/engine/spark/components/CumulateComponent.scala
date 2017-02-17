@@ -121,7 +121,12 @@ class CumulateComponent(cumulateEntity: CumulateEntity, componentsParams: BaseCo
           copyFields(row, outRow, passthroughIndexes)
 
           cumulateList.foreach(cmt => {
-            cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
+            try{
+              cmt.baseClassInstance.cumulate(cmt.inputRow.setRow(row), cmt.outputRow.setRow(outRow))
+            } catch {
+              case e:Exception => throw new RuntimeException("Error in Cumulate Component:[\""+cumulateEntity.getComponentId+"\"] for "+e.getMessage)
+            }
+
           })
 
           if (itr.isEmpty) {
