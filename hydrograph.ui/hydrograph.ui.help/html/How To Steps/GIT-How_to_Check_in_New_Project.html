@@ -22,16 +22,14 @@
 		<p><span>Whenever a new ELT project needs to be checked in the Git Repository, the target Git repository needs to be cloned on your machine. Refer steps 1 through 6 from <a href="Git_How_to_check_out_existing_Hydrograph_proj_from_Git.html">this</a> page for cloning Git Repository.</p></span>
 
 			<p><span>1)	Right click on the ELT project in Project Explorer > Team > Share Project</p></span>
-			<p><img alt="" src="../images/Git_share_project.png" /></p>
+			<p><img alt="" src="../images/share_project_into_git_repo.png" /></p>
 
-			<p><span>2)	If it shows following overlaying window, check 'Do not show again' and click OK.</p></span>
-			<p><img alt="" src="../images/Git_chk_homedir.png" /></p>
 
-			<p><span>3)	It will take to Configure Git Repository window. Select desired Git Repository from drop-down and click Finish.</p></span>
-			<p><img alt="" src="../images/Git_configure_repo.png" /></p>
+			<p><span>2)	It will take to Configure Git Repository window. Select desired Git Repository from drop-down and click Finish.</p></span>
+			<p><img alt="" src="../images/configure_git_repository.png" /></p>
 
-			<p><span>4)	Go to Project Explorer, Right click on the project > Team > Commit</p></span>
-			<p><img alt="" src="../images/Git_commit_1.png" /></p>
+			<p><span>3)	Go to Project Explorer, Right click on the project > Team > Commit</p></span>
+			<p><img alt="" src="../images/git_commit.png" /></p>
 			<p><span>Note: There may be few empty folders in your ELT project. By default, those folders will not be pushed to upstream repository. If you want to keep those folders in upstream Git repository, create a .gitigonre file with following 4-line content:</p></span>
 			
 			<p><span># Ignore everything in this directory</p></span>
@@ -48,13 +46,14 @@
 			<p><span>/.classpath</p></span>
 						
 
-			<p><span>5)	Enter commit message and choose files to commit (check in ) and then click Commit:</p></span>
-			<p><img alt="" src="../images/Git_commit_2.png" /></p>
+			<p><span>5)	Enter commit message and drag files from unstaged changes into staged changes then click Commit.</p></span>
+			<p><img alt="" src="../images/git_staging.png" /></p>
+			<p><img alt="" src="../images/git_staging_staged_changes.png" /></p>
 
 			<p><span>6)	Go to Project Explorer, right click on the project > Team > Push to upstream</p></span>
-			<p><img alt="" src="../images/Git_push_to_upstream.png" /></p>
+			<p><img alt="" src="../images/push_to_upstream.png" /></p>
 			<p><span>It should show following confirmation screen:</p></span>
-			<p><img alt="" src="../images/Git_push_results.png" /></p>
+			<p><img alt="" src="../images/push_results.png" /></p>
 
 	</body>
 </html>
