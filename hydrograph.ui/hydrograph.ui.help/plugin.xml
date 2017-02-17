@@ -28,16 +28,10 @@
             file="xml/Introduction/WhatIsHydrograph.xml">
       </toc>
       
-      
       <toc
             file="xml/Hydrograph Features/hydrographfeatures.xml"
             primary="true">
       </toc>
-      
-      
-      
-      
-       
       <toc
             file="xml/Installation and Configuration/installation.xml"
             primary="true">
@@ -193,9 +187,6 @@
       </toc>
       <toc
             file="xml/How To Steps/howToPassHadoopPropertiesToComponent.xml">
-      </toc>
-      <toc
-            file="xml/How To Steps/howToPassParametersToOperationClass.xml">
       </toc>
       <toc
             file="xml/How To Steps/howToRunAJobLocally.xml">
