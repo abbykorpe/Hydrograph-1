@@ -22,16 +22,7 @@ import scala.collection.mutable.ListBuffer
   */
 abstract class SparkFlow {
 
-  var accList=new ListBuffer[PartitionStageAccumulator]
   var sparkFlowName : String = new String
-
-  def setAccumulatorOnFlow(acc : ListBuffer[PartitionStageAccumulator]): Unit ={
-    accList = acc
-  }
-
-  def getAccumulatorOnFlow():ListBuffer[PartitionStageAccumulator] ={
-    accList
-  }
 
   def setSparkFlowName(flowName : String): Unit ={
     sparkFlowName = flowName

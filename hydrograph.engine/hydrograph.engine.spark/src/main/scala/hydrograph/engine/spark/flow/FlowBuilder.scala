@@ -33,7 +33,6 @@ import scala.collection.mutable.ListBuffer
 
 class FlowBuilder(runtimeContext: RuntimeContext) {
 
-  val accList=new ListBuffer[PartitionStageAccumulator]
 
   def buildFlow(): mutable.LinkedHashSet[SparkFlow] ={
     val flow=new mutable.LinkedHashSet[SparkFlow]()
@@ -76,7 +75,6 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
           .setOutputSchemaFields().setInputSchemaFields().setAccumulator(partAcc).build()
         //.setLongAccumulator(accumulator)
 
-        accList+=partAcc
 
         adapterBase.createComponent(baseComponentParams)
         val opDataFrame= adapterBase.asInstanceOf[OperationAdatperBase].getComponent().createComponent()
@@ -109,7 +107,6 @@ class FlowBuilder(runtimeContext: RuntimeContext) {
 
         adapterBase.createComponent(baseComponentParams)
       flow += adapterBase.asInstanceOf[OutputAdatperBase].getComponent()
-        adapterBase.asInstanceOf[OutputAdatperBase].getComponent().setAccumulatorOnFlow(accList)
         adapterBase.asInstanceOf[OutputAdatperBase].getComponent().setSparkFlowName(compID)
 
       }
