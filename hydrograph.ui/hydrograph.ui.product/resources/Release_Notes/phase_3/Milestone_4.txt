@@ -64,3 +64,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 48.#699 [Vibhor Tyagi] - job rename issues
 49.#696 - XML file is not getting created on job rename
 50.#717 -[Akhilesh Joshi] Tool shouldn't ask extensions to user 
+51.#719	-[Nitin Gupta] Getting error popup on create job window 
