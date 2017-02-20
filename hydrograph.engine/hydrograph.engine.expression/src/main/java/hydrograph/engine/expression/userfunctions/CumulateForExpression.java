@@ -24,11 +24,6 @@ public class CumulateForExpression implements CumulateTransformBase {
 
 	private ExpressionWrapper expressionWrapper;
 	private Object accumulatorValue;
-	private int counter;
-
-	public void setCounter(int counter) {
-		this.counter = counter;
-	}
 
 	public void setValidationAPI(ExpressionWrapper expressionWrapper) {
 		this.expressionWrapper = expressionWrapper;
@@ -39,17 +34,9 @@ public class CumulateForExpression implements CumulateTransformBase {
 	}
 
 	public void init(){
-		try {
-
 			expressionWrapper.getValidationAPI().init(expressionWrapper.getIntialValueExpression());
 			accumulatorValue = expressionWrapper.getValidationAPI()
 					.exec(new Object[]{});
-
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Exception in aggregate initial value expression: "
-							+ expressionWrapper.getIntialValueExpression() + ".", e);
-		}
 	}
 
 	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
@@ -77,20 +64,17 @@ public class CumulateForExpression implements CumulateTransformBase {
 
 	@Override
 	public void cumulate(ReusableRow input, ReusableRow output) {
-		String fieldNames[] = new String[input.getFieldNames().size() + 1];
 		Object tuples[] = new Object[input.getFieldNames().size() + 1];
 		int i = 0;
 		for (; i < input.getFieldNames().size(); i++) {
-			fieldNames[i] = input.getFieldNames().get(i);
 			tuples[i] = input.getField(i);
 		}
-		fieldNames[i] = "_accumulator";
 		tuples[i] = accumulatorValue;
 		try {
 			accumulatorValue = expressionWrapper.getValidationAPI().exec(
 					tuples);
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in aggregate expression: "
+			throw new RuntimeException("Exception in cumulate expression: "
 					+ expressionWrapper.getValidationAPI().getExpr() + ".\nRow being processed: "
 					+ input.toString(), e);
 		}
@@ -104,7 +88,7 @@ public class CumulateForExpression implements CumulateTransformBase {
 					.execute(expressionWrapper.getIntialValueExpression());
 		} catch (Exception e) {
 			throw new RuntimeException(
-					"Exception in aggregate initial value expression: "
+					"Exception in cumulate initial value expression: "
 							+ expressionWrapper.getIntialValueExpression() + ".", e);
 		}
 	}

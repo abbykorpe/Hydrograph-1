@@ -35,21 +35,13 @@ public class AggregateForExpression implements AggregateTransformBase {
 	}
 	
 	public void init(){
-		try {
-
 			expressionWrapper.getValidationAPI().init(expressionWrapper.getIntialValueExpression());
 			accumulatorValue = expressionWrapper.getValidationAPI()
 					.exec(new Object[]{});
-
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Exception in aggregate initial value expression: "
-							+ expressionWrapper.getIntialValueExpression() + ".", e);
-		}
 	}
 
 	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
-		try {
+
 			String fieldNames[] = new String[inputFieldNames.length + 1];
 			String fieldTypes[] = new String[inputFieldTypes.length + 1];
 			for(int i=0;i<inputFieldNames.length;i++){
@@ -59,11 +51,7 @@ public class AggregateForExpression implements AggregateTransformBase {
 			fieldNames[inputFieldNames.length] = "_accumulator";
 			fieldTypes[inputFieldNames.length] = "string";
 			expressionWrapper.getValidationAPI().init(fieldNames,fieldTypes);
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Exception in aggregate: "
-							+ expressionWrapper.getIntialValueExpression() + ".", e);
-		}
+
 	}
 
 	@Override
@@ -74,14 +62,11 @@ public class AggregateForExpression implements AggregateTransformBase {
 
 	@Override
 	public void aggregate(ReusableRow input) {
-		String fieldNames[] = new String[input.getFieldNames().size() + 1];
 		Object tuples[] = new Object[input.getFieldNames().size() + 1];
 		int i = 0;
 		for (; i < input.getFieldNames().size(); i++) {
-			fieldNames[i] = input.getFieldNames().get(i);
 			tuples[i] = input.getField(i);
 		}
-		fieldNames[i] = "_accumulator";
 		tuples[i] = accumulatorValue;
 		try {
 			accumulatorValue = expressionWrapper.getValidationAPI().exec(tuples);

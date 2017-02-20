@@ -33,13 +33,7 @@ public class FilterForExpression implements FilterBase {
 	}
 
 	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
-		try {
 			validationAPI.init(inputFieldNames,inputFieldTypes);
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Exception in Filter Expression: "
-							+ validationAPI.getExpr() + ",", e);
-		}
 	}
 
 	@Override
@@ -48,10 +42,8 @@ public class FilterForExpression implements FilterBase {
 
 	@Override
 	public boolean isRemove(ReusableRow reusableRow) {
-		fieldNames = new String[reusableRow.getFields().size()];
 		tuples = new Object[reusableRow.getFields().size()];
 		for(int i=0;i<reusableRow.getFields().size();i++){
-			fieldNames[i] = reusableRow.getFieldName(i);
 			tuples[i] = reusableRow.getField(i);
 		}
 		try {
@@ -61,7 +53,7 @@ public class FilterForExpression implements FilterBase {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in Filter expression: "
+			throw new RuntimeException("Exception in filter expression: "
 					+ validationAPI.getValidExpression()
 					+ ".\nRow being processed: " + reusableRow.toString(), e);
 		}

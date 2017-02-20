@@ -23,7 +23,6 @@ import java.util.Properties;
 public class TransformForExpression implements TransformBase {
 
 	ValidationAPI validationAPI;
-	String[] fieldNames;
 	Object[] tuples;
 
 	public void setValidationAPI(ValidationAPI validationAPI){
@@ -53,10 +52,8 @@ public class TransformForExpression implements TransformBase {
 	@Override
 	public void transform(ReusableRow inputRow, ReusableRow outputRow) {
 		outputRow.reset();
-		fieldNames = new String[inputRow.getFields().size()];
 		tuples = new Object[inputRow.getFields().size()];
 		for(int i=0;i<inputRow.getFields().size();i++){
-			fieldNames[i] = inputRow.getFieldName(i);
 			tuples[i] = inputRow.getField(i);
 		}
 		try {

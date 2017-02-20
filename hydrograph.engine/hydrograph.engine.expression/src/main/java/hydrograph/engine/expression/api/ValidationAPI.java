@@ -348,9 +348,8 @@ public class ValidationAPI implements Serializable {
 		try {
 			return apiWrapper.execute(data);
 		}catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	
