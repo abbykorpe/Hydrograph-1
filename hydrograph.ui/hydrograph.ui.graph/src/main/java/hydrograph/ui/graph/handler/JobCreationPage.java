@@ -22,6 +22,7 @@ import java.io.ObjectOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -48,6 +49,7 @@ import hydrograph.ui.logging.factory.LogFactory;
  * @author Bitwise
  */
 public class JobCreationPage extends WizardNewFileCreationPage {
+	private static final String JOBS_FOLDER_NAME = "/jobs";
 	private Logger logger = LogFactory.INSTANCE.getLogger(JobCreationPage.class);
 	private static int jobCounter = 1;
 	private static final String DEFAULT_EXTENSION = ".job";
@@ -195,7 +197,8 @@ public class JobCreationPage extends WizardNewFileCreationPage {
 	protected boolean validatePage() {
 		boolean returnCode=  super.validatePage() && validateFilename();
 		if(returnCode){
-			IFolder folder=ResourcesPlugin.getWorkspace().getRoot().getFolder(getContainerFullPath());
+			IPath iPath=new Path(getContainerFullPath()+JOBS_FOLDER_NAME);
+			IFolder folder=ResourcesPlugin.getWorkspace().getRoot().getFolder(iPath);
 			if(!StringUtils.endsWithIgnoreCase(getFileName(), Constants.JOB_EXTENSION)){
 				IFile newFile= folder.getFile(getFileName()+Constants.JOB_EXTENSION);
 				if(newFile.exists()){
