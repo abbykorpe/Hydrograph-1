@@ -69,8 +69,8 @@ repositories {
     mavenCentral()
     maven {
 		url 'http://artifactory.bitwiseglobal.net:9091/artifactory/libs-release'
--   }
--    maven {
+    }
+    maven {
         name 'redshift'
         url 'http://redshift-maven-repository.s3-website-us-east-1.amazonaws.com/release'
     }
