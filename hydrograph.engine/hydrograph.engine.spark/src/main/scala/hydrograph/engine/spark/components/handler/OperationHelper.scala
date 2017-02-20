@@ -100,9 +100,10 @@ trait OperationHelper[T] {
     }
   }
 
-    def copyFields(input: Row, output: Array[Any], indexes: Array[(Int, Int)]): Unit = {
-      indexes.foreach(pair => output(pair._2) = input(pair._1))
-    }
+  def copyFields(input: Row, output: Array[Any], indexes: Array[(Int, Int)]): Unit = {
+    indexes.foreach(pair => output(pair._2) = input.get(pair._1))
+  }
+
 
 
 }

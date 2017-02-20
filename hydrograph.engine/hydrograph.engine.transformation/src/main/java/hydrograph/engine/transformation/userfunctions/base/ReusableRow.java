@@ -364,7 +364,7 @@ public abstract class ReusableRow implements Comparable<ReusableRow>, Serializab
 	 *            The name of the field whose value to be fetched
 	 * @return The value of the field
 	 */
-	public Date getDate(String fieldName) throws ParseException {
+	public Date getDate(String fieldName) {
 		return (Date) getField(fieldName);
 	}
 
@@ -375,7 +375,7 @@ public abstract class ReusableRow implements Comparable<ReusableRow>, Serializab
 	 *            The index of the field whose value to be fetched
 	 * @return The value of the field
 	 */
-	public Date getDate(int index) throws ParseException {
+	public Date getDate(int index) {
 		return (Date) getField(index);
 	}
 
@@ -388,8 +388,7 @@ public abstract class ReusableRow implements Comparable<ReusableRow>, Serializab
 	 *            The format in which the date value is to be fetched
 	 * @return The value of the field as string
 	 */
-	public String getDate(String fieldName, String dateFormat)
-			throws ParseException {
+	public String getDate(String fieldName, String dateFormat){
 		if (getDate(fieldName) != null) {
 			Long date = getDate(fieldName).getTime();
 			DateFormat df = new SimpleDateFormat(dateFormat);
@@ -407,7 +406,7 @@ public abstract class ReusableRow implements Comparable<ReusableRow>, Serializab
 	 *            The format in which the date value is to be fetched
 	 * @return The value of the field as string
 	 */
-	public String getDate(int index, String dateFormat) throws ParseException {
+	public String getDate(int index, String dateFormat){
 		if (getDate(index) != null) {
 			Long date = getDate(index).getTime();
 			DateFormat df = new SimpleDateFormat(dateFormat);
