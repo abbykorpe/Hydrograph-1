@@ -22,9 +22,9 @@
 
 <p><span><b>Properties</b>&nbsp;for the Output Hive Parquet component can be viewed by Double click-&gt;component on canvas. The properties contain a &#39;General&#39; tab and a &#39;Schema&#39; tab. Common and mandatory properties are present in the General tab. Schema displays option to accept the field schema i.e. field name, Data type, scale etc. </span></span></p>
 
-<p><font ><b>General Properties:</b></font></p>
+<p><a name="general_properties"></a><span class="header-2">General Properties</span></p>
 
-<p><img alt="" src="../images/Output_Hive_Parquet_Properties_General.png" /></p>
+<p><img alt="" src="../images/output_hive_parquet_general.png" /></p>
 
 <p><span class="header-2">Display</span></p>
 
@@ -51,7 +51,7 @@
 <ul>
 	<li><a name="partiton_keys"></a><span><b>Partition Keys</b> - Partition keys accepts the partition field names. The window also allows users to specify the partition field values to read filtered data. As per Hive requirement, the partition keys should always be at the end of the schema. The partition keys window validates whether the partition fields are at the end of the schema.</span></li>
 </ul>
-	<p><img alt="" src="../images/Output_Hive_Text_File_PartitionKeys.png" /></p>
+	<p><img alt="" src="../images/output_hive_parquet_partition_keys.png" /></p>
 <ul>
 	<li><a name="runtime_properties"></a><span><b>Runtime Properties</b> -&nbsp;Runtime properties are used to override the Hadoop configurations specific to Output Hive TextFile component at run time. User is required to enter the Property Name and Value in the runtime properties grid.</span>
 	<p><span>Check <a href="../How To Steps/How_To_Pass_Hadoop_Properties_To_Component.html"> How to pass Hadoop properties to component</a></span></p></li>
@@ -61,9 +61,9 @@
 	<li><a name="phase"></a><span><b>Batch</b> - Batch simply accepts a numeric value starting from 0 to  maximum 99 and signifies the phase this component will execute in. By default this is 0.</span></li>
 </ul>
 
-<p><font><b>Schema tab: </b></span></font></p>
+<p><a name="schema"></a><span class="header-2">Schema Tab</span></p>
 
-<p><img alt="" src="../images/Output_Hive_Parquet_Properties_Schema.png" /></p>
+<p><img alt="" src="../images/output_hive_parquet_schema.png" /></p>
 <p><span><b>Schema Types</b></span></p>
 <ul>
 	<li><span><b>Internal</b> - User is provided a Grid to enter the internal schema of the Output Parquet file.</span></li>
@@ -84,7 +84,7 @@
 <img src="../images/Output_Hive_Parquest_Component_Validation_Warning.png" alt="Warning icon displayed on component" />
 
 <p><span>The properties window also displays error icon on mandatory fields if it has an incorrect value. The error icon is displayed on the tab as well, if any of the field within the tab has some error.</span></p>
-<img src="../images/Output_Hive_Parquest_Component_Property_Window_Error.png" alt="Error icon displayed on tabs" />
+<img src="../images/output_hive_parquet_error.png" alt="Error icon displayed on tabs" />
 
 <p><span>If the properties window has some error even after user visit's it once, then the warning icon on the Output Hive Text File component on the job canvas changes to error icon. This error icon is removed only when all the mandatory fields are supplied with correct values.</span></p>
 <img src="../images/Output_Hive_Parquest_Component_Validation_Canvas_Error.png" alt="Error icon on component" />
