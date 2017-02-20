@@ -14,8 +14,12 @@
  
  
 <?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="Generate Records" link_to="xml\Components\components.xml#GenerateRecords"> 
-	<topic label="Properties"  href="html/Components/Generate_Records_Properties.html"> 
-	</topic>
+<toc label="InputXml" link_to="xml/input/Input.xml#InputXml"> 
+   <topic href="html/Components/input/Input_Xml_Properties.html" label="Properties">
+	   <topic href="html/Components/input/Input_Xml_Properties.html#general_properties" label="General Properties"/>
+	   <topic href="html/Components/input/Input_Xml_Properties.html#details" label="details"/>
+	   <topic href="html/Components/input/Input_Xml_Properties.html#configuration" label="Configuration"/>
+	   <topic href="html/Components/input/Input_Xml_Properties.html#schema_tab" label="Schema tab"/>
+	   <anchor id="Properties"/>
+   </topic>
 </toc>

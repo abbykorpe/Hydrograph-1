@@ -14,8 +14,9 @@
  
  
 <?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="Generate Records" link_to="xml\Components\components.xml#GenerateRecords"> 
-	<topic label="Properties"  href="html/Components/Generate_Records_Properties.html"> 
-	</topic>
+<toc label="Input" link_to="xml/Components.xml#Input"> 
+   <topic label="InputXml" href="html/Components/input/Input_Xml.html">
+      <anchor id="InputXml"/>
+      <link toc="xml/Components/input/InputXml.xml"/>
+   </topic>
 </toc>

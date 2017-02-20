@@ -27,7 +27,15 @@
       <toc
             file="xml/Introduction/WhatIsHydrograph.xml">
       </toc>
-      
+      <toc
+            file="xml/Introduction/howItWorks.xml">
+      </toc>
+      <toc
+            file="xml/Introduction/gettingStarted.xml">
+      </toc>
+      <toc
+            file="xml/Introduction/GlossaryTerminology.xml">
+      </toc>
       <toc
             file="xml/Hydrograph Features/hydrographfeatures.xml"
             primary="true">
@@ -68,11 +76,14 @@
             file="xml/Components/components.xml"
             primary="true">
       </toc>
-      <toc
-            file="xml/Components/transform.xml">
+       <toc
+            file="xml/Components/input/Input.xml">
+      </toc>
+        <toc
+            file="xml/Components/input/InputXml.xml">
       </toc>
       <toc
-            file="xml/Components/inputFileDelimited.xml">
+            file="xml/Components/transform.xml">
       </toc>
       <toc
             file="xml/Components/components.xml"
@@ -110,6 +121,9 @@
       </toc>
       <toc
             file="xml/Components/inputTeradata.xml">
+      </toc>
+      <toc
+            file="xml/Components/input/inputXml.xml">
       </toc>
       <toc
             file="xml/Components/join.xml">
