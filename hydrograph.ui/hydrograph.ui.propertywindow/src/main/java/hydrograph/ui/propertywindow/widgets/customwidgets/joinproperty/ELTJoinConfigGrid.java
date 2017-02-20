@@ -214,7 +214,7 @@ public class ELTJoinConfigGrid extends Dialog {
 	}
 	
 	private String launchDialogToSelectFields(String availableValues, String socketId) {
-		String teminalNumber=socketId.substring(socketId.length()-1);
+		String teminalNumber=socketId.substring("in".length()); //to get a port number removing 'in' from socketId
 		FieldDialog fieldDialog = new FieldDialog(new Shell(), propertyDialogButtonBar);
 		fieldDialog.setPropertyFromCommaSepratedString(availableValues);
 		if(!sourceFieldList.isEmpty()&& Integer.parseInt(teminalNumber) < sourceFieldList.size())
