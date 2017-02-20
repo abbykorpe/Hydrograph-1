@@ -68,3 +68,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 50.#717 -[Akhilesh Joshi] Tool shouldn't ask extensions to user 
 51.#719	-[Nitin Gupta] Getting error popup on create job window 
 52.#689 -[Sonia Raheja] View data port #:- Port number should accept 5 digits.
+53.#688 -[Sonia Raheja] Mac: Key file : User should able to browse .ppk and .pem files.
