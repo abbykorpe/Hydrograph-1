@@ -50,7 +50,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -1218,6 +1217,14 @@ public class TransformDialog extends Dialog implements IOperationClassDialog {
     	 operationalOutputFieldTableViewer.setCellModifier(new ELTCellModifier(operationalOutputFieldTableViewer, this));
     	 operationalOutputFieldTableViewer.setInput(mappingSheetRowForOperationClass.getOutputList());
     	 operationalOutputFieldTableViewer.setLabelProvider(new ELTFilterLabelProvider());
+    	 
+    	 CellEditor[] operationalOutputFieldEditor=operationalOutputFieldTableViewer.getCellEditors();
+    	 ControlDecoration operationalOutputfieldDecorator = WidgetUtility.addDecorator(operationalOutputFieldEditor[0].getControl(),Messages.FIELDNAME_SHOULD_NOT_BE_BLANK);
+    	 ControlDecoration operationalOutputfieldAlphaNumeric = WidgetUtility.addDecorator(operationalOutputFieldEditor[0].getControl(),Messages.FIELDNAME_NOT_ALPHANUMERIC_ERROR);	
+    	 operationalOutputFieldEditor[0].setValidator(new TransformCellEditorFieldValidator(operationalOutputfieldDecorator,operationalOutputfieldAlphaNumeric));
+    	 operationalOutputfieldAlphaNumeric.setMarginWidth(8);
+    	 operationalOutputfieldDecorator.setMarginWidth(8);
+    	 
     	 attachFocuListenerToParamaterTextBox(operationClassComposite.getParameterTextBox());
     	 addSelectionListenerToBrowseButton(operationClassComposite);
     	 operationClassComposite.getBrowseButton().setData(Messages.MAPPING_SHEET,mappingSheetRowForOperationClass);
