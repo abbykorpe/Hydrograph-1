@@ -71,3 +71,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 53.#688 -[Sonia Raheja] Mac: Key file : User should able to browse .ppk and .pem files.
 54.#542 - [Vibhor Tyagi] By Default scroll is getting locked on console log
 55.#720 - [Pooja Yadav] - Alignment of Console Log Level drop down field is not proper on Mac.
+56.#721 - [Pooja Yadav] - Rename Track Subjob option as View Tracking / Watch Point Data.
+57.#673 - [Pooja Yadav] Tool show question mark if user move pointer on Expression or Operation radio button.
