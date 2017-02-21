@@ -353,7 +353,7 @@ public abstract class AbstractWidget {
 			
 			for(int index=0;index<=array.length-1;index++){
 				Control propertyHelpWidget = (Control)this.propertyHelpWidget.getData(String.valueOf(index));
-			   if(null!=propertyHelpWidget){
+			   if(null!=propertyHelpWidget  && null!= ShowHidePropertyHelpHandler.getInstance() && ShowHidePropertyHelpHandler.getInstance().isShowHidePropertyHelpChecked()){
 				   propertyHelpWidget.setToolTipText(array[index]);
 				   propertyHelpWidget.setCursor(new Cursor(propertyHelpWidget.getDisplay(), SWT.CURSOR_HELP));		
 				}
