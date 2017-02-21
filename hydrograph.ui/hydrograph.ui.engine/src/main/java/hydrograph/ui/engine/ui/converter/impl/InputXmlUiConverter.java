@@ -150,6 +150,9 @@ public class InputXmlUiConverter extends InputUiConverter{
 					if (((TypeExternalSchema) record).getUri() != null){
 						schema.setExternalSchemaPath(((TypeExternalSchema) record).getUri());
 					}
+					gridRowList.addAll(converterUiHelper.loadSchemaFromExternalFile(schema.getExternalSchemaPath(),
+							Constants.XPATH_GRID_ROW));
+					schema.setGridRow(gridRowList);
 				} else {
 					TypeBaseField typeBaseField = (TypeBaseField) record;
 					XPathGridRow xPathGridRow = new XPathGridRow();
