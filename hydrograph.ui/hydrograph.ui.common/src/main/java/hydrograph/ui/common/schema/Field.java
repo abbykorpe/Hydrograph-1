@@ -66,8 +66,8 @@ public class Field {
     protected String name;
     @XmlAttribute(name = "type", required = true)
     protected FieldDataTypes type;
-    @XmlAttribute(name = "absoluteOrRelativeXpath")
-    protected String absoluteOrRelativeXpath;
+    @XmlAttribute(name = "absoluteOrRelativeXPath")
+    protected String absoluteOrRelativeXPath;
     @XmlAttribute(name = "format")
     protected String format;
     @XmlAttribute(name = "precision")
@@ -147,7 +147,7 @@ public class Field {
      *     
      */
     public String getAbsoluteOrRelativeXpath() {
-		return absoluteOrRelativeXpath;
+		return absoluteOrRelativeXPath;
 	}
     
     /**
@@ -158,8 +158,8 @@ public class Field {
      *     {@link String }
      *     
      */
-    public void setAbsoluteOrRelativeXpath(String absoluteOrRelativeXpath) {
-		this.absoluteOrRelativeXpath = absoluteOrRelativeXpath;
+    public void setAbsoluteOrRelativeXpath(String absoluteOrRelativeXPath) {
+		this.absoluteOrRelativeXPath = absoluteOrRelativeXPath;
 	}
     
     /**

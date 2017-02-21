@@ -73,3 +73,6 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 55.#720 - [Pooja Yadav] - Alignment of Console Log Level drop down field is not proper on Mac.
 56.#721 - [Pooja Yadav] - Rename Track Subjob option as View Tracking / Watch Point Data.
 57.#673 - [Pooja Yadav] Tool show question mark if user move pointer on Expression or Operation radio button.
+59.#737 - [Nitin Gupta] - xml Input component : External schema is getting removed after importing job
+60.#715 - [Nitin Gupta] - xml Input component : Loop Xpath Query field value is not getting saved
+61.#732 - [Nitin Gupta] - xml input component: Job is geeting failed when External schema is provided in xml input component
