@@ -10,6 +10,8 @@ Sr.No. <date> - [developer names] - description
 6.<07-Feb-17> - [Shrirang Kumbhar] - Changed ports in yml file to 990
 7.<07-Feb-17> - [Prateem Tadas] - Logging level added for console log.
 8.<07-Feb-17> - [Ashika Holkar] - Added Component Search and Place on Canvas functionality
+9.<16-Feb-17> - [Sonia Raheja] -User is unable to view data within subjob.
+
 =====================================================================================================
 Issues/Defects fixed:
 =====================================================================================================
@@ -65,3 +67,5 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 49.#696 - XML file is not getting created on job rename
 50.#717 -[Akhilesh Joshi] Tool shouldn't ask extensions to user 
 51.#719	-[Nitin Gupta] Getting error popup on create job window 
+52.#689 -[Sonia Raheja] View data port #:- Port number should accept 5 digits.
+53.#688 -[Sonia Raheja] Mac: Key file : User should able to browse .ppk and .pem files.
