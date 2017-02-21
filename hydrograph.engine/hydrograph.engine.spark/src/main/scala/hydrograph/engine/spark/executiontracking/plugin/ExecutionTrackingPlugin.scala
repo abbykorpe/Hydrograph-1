@@ -49,7 +49,6 @@ object Component{
 class ExecutionTrackingPlugin extends ExecutionTrackingListener with ManipulatorListener with HydrographCommandListener{
 
   var jobInfo:JobInfo=null
-  var listOfCommandCompFlows = new mutable.ListBuffer[CommandComponentSparkFlow]
 
   val LOG = LoggerFactory.getLogger(classOf[ExecutionTrackingPlugin])
 
@@ -381,7 +380,7 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     val flowName = flow.getSparkFlowName()
     val mapOfOutCompsAndPrevComps = ComponentMapping.getComps()
     mapOfOutCompsAndPrevComps.filter(p=>p._1.equals(flowName))
-      .foreach(f=>f._2
+      .foreach(f=>{f._2
         .foreach(eachComp=>{
           jobInfo.componentInfoList.asScala
             .filter(compInfo => {
@@ -391,7 +390,14 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
               co.setCurrentStatus("SUCCESSFUL")
             }
           })
-        }))
+        })
+        jobInfo.componentInfoList.asScala.filter(comp=>comp.getComponentId.equals( f._1)).foreach(com=>{
+          if(!com.getCurrentStatus.equals("SUCCESSFUL") && !com.getCurrentStatus.equals("RUNNING") && !com.getCurrentStatus.equals("FAILED")){
+            com.setCurrentStatus("SUCCESSFUL")
+          }
+        })
+
+      })
   }
 
 
