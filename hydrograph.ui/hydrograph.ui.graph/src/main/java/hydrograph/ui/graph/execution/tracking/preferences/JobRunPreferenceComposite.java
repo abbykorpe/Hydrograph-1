@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
+import hydrograph.ui.common.util.OSValidator;
 import hydrograph.ui.graph.Messages;
 
 /**
@@ -89,6 +90,9 @@ public class JobRunPreferenceComposite extends Composite {
 		ccLogLevels=new CCombo(hydroGroup.getHydroGroupClientArea(), SWT.BORDER);
 		GridData gd_ccLogLevels = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_ccLogLevels.widthHint = 300;
+		if(OSValidator.isMac()){
+			gd_ccLogLevels.heightHint=20;
+		}
 		ccLogLevels.setLayoutData(gd_ccLogLevels);
 		
 		ccLogLevels.setItems(Messages.COMBO_LOG_LEVELS.split(HASH_REGEX));
