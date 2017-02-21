@@ -45,6 +45,7 @@ class FilterComponent(filterEntity: FilterEntity, componentsParams: BaseComponen
 
     filterClass match {
       case expression: FilterForExpression => expression.setValidationAPI(filterSparkOperations.validatioinAPI)
+        expression.callPrepare(filterSparkOperations.fieldName,filterSparkOperations.fieldType)
       case _ =>
     }
 

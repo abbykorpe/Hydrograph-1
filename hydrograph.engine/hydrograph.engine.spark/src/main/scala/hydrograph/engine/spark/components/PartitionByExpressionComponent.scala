@@ -60,6 +60,7 @@ class PartitionByExpressionComponent(partitionByExpressionEntity: PartitionByExp
       val partitionByExpressionClass = partitionByExpressionSparkOperation.baseClassInstance
       partitionByExpressionClass match {
         case t: PartitionByExpressionForExpression => t.setValidationAPI(partitionByExpressionSparkOperation.validatioinAPI)
+          t.callPrepare(partitionByExpressionSparkOperation.fieldName,partitionByExpressionSparkOperation.fieldType)
         case _ =>
       }
 

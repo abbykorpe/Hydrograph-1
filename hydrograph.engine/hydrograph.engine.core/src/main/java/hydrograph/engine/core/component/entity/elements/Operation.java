@@ -100,7 +100,7 @@ public class Operation implements Serializable{
 	 * @return the operationInputFields
 	 */
 	public String[] getOperationInputFields() {
-		return operationInputFields != null ? operationInputFields.clone() : null;
+		return operationInputFields != null ? operationInputFields.clone() : new String[]{};
 	}
 
 	/**

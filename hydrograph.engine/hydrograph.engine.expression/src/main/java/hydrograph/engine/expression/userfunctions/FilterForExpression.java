@@ -32,26 +32,28 @@ public class FilterForExpression implements FilterBase {
 	public FilterForExpression() {
 	}
 
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+			validationAPI.init(inputFieldNames,inputFieldTypes);
+	}
+
 	@Override
 	public void prepare(Properties props, ArrayList<String> inputFields) {
 	}
 
 	@Override
 	public boolean isRemove(ReusableRow reusableRow) {
-		fieldNames = new String[reusableRow.getFields().size()];
 		tuples = new Object[reusableRow.getFields().size()];
 		for(int i=0;i<reusableRow.getFields().size();i++){
-			fieldNames[i] = reusableRow.getFieldName(i);
 			tuples[i] = reusableRow.getField(i);
 		}
 		try {
-			if ((Boolean) validationAPI.execute(fieldNames, tuples)) {
+			if ((Boolean) validationAPI.exec(tuples)) {
 				return true;
 			} else {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in Filter expression: "
+			throw new RuntimeException("Exception in filter expression: "
 					+ validationAPI.getValidExpression()
 					+ ".\nRow being processed: " + reusableRow.toString(), e);
 		}

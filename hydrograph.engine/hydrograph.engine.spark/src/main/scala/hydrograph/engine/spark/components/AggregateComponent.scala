@@ -99,7 +99,8 @@ class AggregateComponent(aggregateEntity: AggregateEntity, componentsParams: Bas
           //For Expression Editor call extra methods
           case a: AggregateForExpression =>
             a.setValidationAPI(new ExpressionWrapper(sparkOperation.validatioinAPI, sparkOperation.initalValue))
-            a.callPrepare
+            a.init()
+            a.callPrepare(sparkOperation.fieldName,sparkOperation.fieldType)
           case a: AggregateTransformBase => a.prepare(sparkOperation.operationEntity.getOperationProperties, sparkOperation
             .operationEntity.getOperationInputFields, sparkOperation.operationEntity.getOperationOutputFields, keyFields)
         }

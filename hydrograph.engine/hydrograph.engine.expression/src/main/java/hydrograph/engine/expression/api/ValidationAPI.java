@@ -16,16 +16,21 @@ import bsh.EvalError;
 import bsh.Interpreter;
 import hydrograph.engine.expression.antlr.ExpressionEditorLexer;
 import hydrograph.engine.expression.antlr.ExpressionEditorParser;
+import hydrograph.engine.expression.api.wrapper.ValidationAPIWrapper;
 import hydrograph.engine.expression.utils.ClassToDataTypeConversion;
 import hydrograph.engine.expression.utils.CompileUtils;
 import hydrograph.engine.expression.utils.PropertiesLoader;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.codehaus.commons.compiler.CompileException;
+import org.codehaus.janino.ExpressionEvaluator;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +46,13 @@ public class ValidationAPI implements Serializable {
 	private String packageNames = "";
 	private String expr;
 	private Interpreter interpreter;
+	private List<String> listOfPackage;
+	private  ExpressionEvaluator expressionEvaluator;
+	private ValidationAPIWrapper apiWrapper;
+
 
 	public ValidationAPI(String expression, String propertiesFilePath) {
+		listOfPackage=new ArrayList<>();
 		if (propertiesFilePath != null && !propertiesFilePath.equals(""))
 			this.packageNames += generatePackageName(propertiesFilePath);
 		if (expression != null && !expression.equals("")) {
@@ -63,6 +73,7 @@ public class ValidationAPI implements Serializable {
 		}
 		for (Object importPackage : properties.keySet()) {
 			PACKAGE_NAME += "import " + importPackage.toString() + "; ";
+			listOfPackage.add(importPackage.toString());
 		}
 		return PACKAGE_NAME;
 	}
@@ -167,7 +178,7 @@ public class ValidationAPI implements Serializable {
 	}
 
 	private DiagnosticCollector<JavaFileObject> filterCompiler(Map<String, Class<?>> schemaFields,
-															   String externalJarPath) {
+			String externalJarPath) {
 		String fields = "";
 		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
 		customExpressionVisitor.visit(generateAntlrTree());
@@ -182,7 +193,7 @@ public class ValidationAPI implements Serializable {
 	}
 
 	private DiagnosticCollector<JavaFileObject> transformCompiler(Map<String, Class<?>> schemaFields,
-																  String externalJarPath) {
+			String externalJarPath) {
 		String fields = "";
 		CustomExpressionVisitor customExpressionVisitor = new CustomExpressionVisitor();
 		customExpressionVisitor.visit(generateAntlrTree());
@@ -248,7 +259,7 @@ public class ValidationAPI implements Serializable {
 		}
 		return interpreter.eval(getValidExpression());
 	}
-
+	
 	/**
 	 * @param fieldNames
 	 *            values are {@link String} array which contains field name used
@@ -272,6 +283,84 @@ public class ValidationAPI implements Serializable {
 		return interpreter.eval(validExpression);
 	}
 
+	private Class getType(String className){
+		if(className.equalsIgnoreCase("string"))
+			return String.class;
+		else if(className.equalsIgnoreCase("Integer"))
+				return Integer.class;
+		else if(className.equalsIgnoreCase("Long"))
+			return Long.class;
+		else if(className.equalsIgnoreCase("Boolean"))
+			return Boolean.class;
+		else if(className.equalsIgnoreCase("Float"))
+			return Float.class;
+		else if(className.equalsIgnoreCase("Double"))
+			return Double.class;
+		else if(className.equalsIgnoreCase("Date"))
+			return Date.class;
+		else if(className.contains("decimal") || className.contains("BigDecimal") )
+			return BigDecimal.class;
+		return String.class;
+
+	}
+
+	public void init(String[] fieldNames,String[] fieldTypes){
+		Class [] types=new Class[fieldTypes.length];
+		int index=0;
+			for(String keys:fieldTypes){
+				types[index]=getType(keys);
+				index++;
+			}
+//			expressionEvaluator=new ExpressionEvaluator(
+//					packageNames + getValidExpression(),
+//					Object.class,fieldNames,types);
+
+			 apiWrapper=new ValidationAPIWrapper(packageNames+getValidExpression(),fieldNames,types);
+
+//			expressionEvaluator.setDefaultImports(listOfPackage.toArray(new String[listOfPackage.size()]));
+
+	}
+
+	public ValidationAPI init(String validExpression,Map<String,String> fieldMap){
+		String [] fields=new String[fieldMap.size()];
+		Class [] types=new Class[fieldMap.size()];
+		int index=0;
+		try {
+		for(String keys:fieldMap.keySet()){
+				fields[index]=keys;
+				types[index]=getType(fieldMap.get(keys));
+			index++;
+		}
+			expressionEvaluator=new ExpressionEvaluator(
+					packageNames + validExpression,
+					Object.class,fields,types);
+
+//			expressionEvaluator.setDefaultImports(listOfPackage.toArray(new String[listOfPackage.size()]));
+
+			return this;
+		} catch (CompileException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void init(String expression){
+		try {
+			apiWrapper=new ValidationAPIWrapper(expression,new String[]{},new Class[]{});
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
+	public  Object exec(Object[] data) {
+		try {
+			return apiWrapper.execute(data);
+		}catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	
 	/**
 	 * @param validExpression
 	 * 			  values are {@link String} which contains expression
@@ -284,7 +373,7 @@ public class ValidationAPI implements Serializable {
 		}
 		return interpreter.eval(validExpression);
 	}
-
+	
 	/**
 	 * @param expression
 	 *            {@link String} is a construct made up of fields, operators,
@@ -299,7 +388,7 @@ public class ValidationAPI implements Serializable {
 	 * @return
 	 */
 	public static DiagnosticCollector<JavaFileObject> filterCompiler(String expression, String propertiesFilePath,
-																	 Map<String, Class<?>> schemaFields, String externalJarPath) {
+			Map<String, Class<?>> schemaFields, String externalJarPath) {
 		return new ValidationAPI(expression, propertiesFilePath).filterCompiler(schemaFields, externalJarPath);
 	}
 
@@ -317,14 +406,14 @@ public class ValidationAPI implements Serializable {
 	 * @return
 	 */
 	public static DiagnosticCollector<JavaFileObject> transformCompiler(String expression, String propertiesFilePath,
-																		Map<String, Class<?>> schemaFields, String externalJarPath) {
+			Map<String, Class<?>> schemaFields, String externalJarPath) {
 		return new ValidationAPI(expression, propertiesFilePath).transformCompiler(schemaFields, externalJarPath);
 	}
 
 	public static List<String> getFieldNameList(Map<String, Class<?>> schemaFields,String expression,String propertiesFilePath) {
 		return new ValidationAPI(expression, propertiesFilePath).getFieldNameList(schemaFields);
 	}
-
+	
 	/**
 	 * @param expression
 	 *            {@link String} is a construct made up of fields, operators,
@@ -354,7 +443,7 @@ public class ValidationAPI implements Serializable {
 		}
 
 	}
-
+	
 	public String getExpr() {
 		return expr;
 	}
@@ -362,5 +451,5 @@ public class ValidationAPI implements Serializable {
 	public void setExpr(String expr) {
 		this.expr = expr;
 	}
-
+	
 }

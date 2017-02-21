@@ -22,7 +22,6 @@ import java.util.Properties;
 public class PartitionByExpressionForExpression implements CustomPartitionExpression, Serializable {
 
 	ValidationAPI validationAPI;
-	String[] fieldNames;
 	Object[] tuples;
 
 	public void setValidationAPI(ValidationAPI validationAPI) {
@@ -32,6 +31,10 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 	public PartitionByExpressionForExpression() {
 	}
 
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+			validationAPI.init(inputFieldNames,inputFieldTypes);
+	}
+
 	@Override
 	public void prepare(Properties props) {
 
@@ -39,16 +42,14 @@ public class PartitionByExpressionForExpression implements CustomPartitionExpres
 
 	@Override
 	public String getPartition(ReusableRow reusableRow, int numOfPartitions) {
-		fieldNames = new String[reusableRow.getFields().size()];
 		tuples = new Object[reusableRow.getFields().size()];
 		for(int i=0;i<reusableRow.getFields().size();i++){
-			fieldNames[i] = reusableRow.getFieldName(i);
 			tuples[i] = reusableRow.getField(i);
 		}
 		try {
-			return (String)validationAPI.execute(fieldNames, tuples);
+			return (String)validationAPI.exec( tuples);
 		} catch (Exception e) {
-			throw new RuntimeException("Exception in tranform expression: "
+			throw new RuntimeException("Exception in PartitionByExpression expression: "
 					+ validationAPI.getValidExpression()
 					+ ".\nRow being processed: " + reusableRow.toString(), e);
 		}
