@@ -84,6 +84,7 @@ public class TextBoxWithLabelWidget extends AbstractWidget{
 		super(componentConfigProp, componentMiscProps, propDialogButtonBar);
 		this.propertyName = componentConfigProp.getPropertyName();
 		this.propertyValue = componentConfigProp.getPropertyValue() ==null ?"":String.valueOf(componentConfigProp.getPropertyValue());
+		System.out.println();
 	}
 
 	protected void setToolTipErrorMessage(){
