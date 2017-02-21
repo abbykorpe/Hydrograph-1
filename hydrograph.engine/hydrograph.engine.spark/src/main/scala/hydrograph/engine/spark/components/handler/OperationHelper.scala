@@ -29,7 +29,7 @@ trait OperationHelper[T] {
           val fieldName=new Array[String](x.getOperationInputFields.length)
           val fieldType=new Array[String](x.getOperationInputFields.length)
 
-          val fieldsSchema=  x.getOperationInputFields.zipWithIndex.foreach(s=>{
+          x.getOperationInputFields.zipWithIndex.foreach(s=>{
               fieldName(s._2)=inputSchema(s._1).name;
             fieldType(s._2)=inputSchema(s._1).dataType.typeName
             })
