@@ -49,7 +49,6 @@ object Component{
 class ExecutionTrackingPlugin extends ExecutionTrackingListener with ManipulatorListener with HydrographCommandListener{
 
   var jobInfo:JobInfo=null
-  var listOfCommandCompFlows = new mutable.ListBuffer[CommandComponentSparkFlow]
 
   val LOG = LoggerFactory.getLogger(classOf[ExecutionTrackingPlugin])
 
@@ -380,36 +379,43 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     }*/
     val flowName = flow.getSparkFlowName()
     val mapOfOutCompsAndPrevComps = ComponentMapping.getComps()
-    mapOfOutCompsAndPrevComps.filter(p=>p._1.equals(flowName))
-      .foreach(f=>f._2
+    mapOfOutCompsAndPrevComps.filter(flow=>flow._1.equals(flowName))
+      .foreach(lastComponentAndPrevComponentsMap=>{lastComponentAndPrevComponentsMap._2
         .foreach(eachComp=>{
           jobInfo.componentInfoList.asScala
             .filter(compInfo => {
               compInfo.getComponentId.equals(eachComp)
-            }).foreach(co=>{
-            if(!co.getCurrentStatus.equals("SUCCESSFUL") && !co.getCurrentStatus.equals("RUNNING") && !co.getCurrentStatus.equals("FAILED")){
-              co.setCurrentStatus("SUCCESSFUL")
+            }).foreach(component=>{
+            if(component.getCurrentStatus.equals("PENDING")){
+              component.setCurrentStatus("SUCCESSFUL")
             }
           })
-        }))
+        })
+        jobInfo.componentInfoList.asScala.filter(comp=>comp.getComponentId.equals( lastComponentAndPrevComponentsMap._1)).foreach(component=>{
+          if(component.getCurrentStatus.equals("PENDING")){
+            component.setCurrentStatus("SUCCESSFUL")
+          }
+        })
+
+      })
   }
 
 
   override def start(flow: SparkFlow): Unit = {
     val flowName = flow.getSparkFlowName()
     val mapOfOutCompsAndPrevComps = ComponentMapping.getComps()
-    mapOfOutCompsAndPrevComps.filter(p=>p._1.equals(flowName))
-      .foreach(f=>f._2
+    mapOfOutCompsAndPrevComps.filter(flow=>flow._1.equals(flowName))
+      .foreach(lastComponentAndPrevComponentsMap=>lastComponentAndPrevComponentsMap._2
         .foreach(eachComp=>{
           jobInfo.componentInfoList.asScala
             .filter(compInfo => {
               compInfo.getComponentId.equals(eachComp)
-            }).foreach(co=>{
-            if(co.getCurrentStatus == null){
-              co.setCurrentStatus("PENDING")
+            }).foreach(component=>{
+            if(component.getCurrentStatus == null){
+              component.setCurrentStatus("PENDING")
             }
-            else if(!co.getCurrentStatus.equals("SUCCESSFUL") && !co.getCurrentStatus.equals("RUNNING") && !co.getCurrentStatus.equals("FAILED")){
-              co.setCurrentStatus("PENDING")
+            else if(!component.getCurrentStatus.equals("SUCCESSFUL") && !component.getCurrentStatus.equals("RUNNING") && !component.getCurrentStatus.equals("FAILED")){
+              component.setCurrentStatus("PENDING")
             }
           })
         }))
@@ -417,12 +423,12 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
     jobInfo.componentInfoList.asScala
       .filter(compInfo => {
         compInfo.getComponentId.equals(flowName)
-      }).foreach(co=>{
-      if(co.getCurrentStatus == null){
-        co.setCurrentStatus("PENDING")
+      }).foreach(component=>{
+      if(component.getCurrentStatus == null){
+        component.setCurrentStatus("PENDING")
       }
-      else if(!co.getCurrentStatus.equals("SUCCESSFUL") && !co.getCurrentStatus.equals("RUNNING") && !co.getCurrentStatus.equals("FAILED")){
-        co.setCurrentStatus("PENDING")
+      else if(!component.getCurrentStatus.equals("SUCCESSFUL") && !component.getCurrentStatus.equals("RUNNING") && !component.getCurrentStatus.equals("FAILED")){
+        component.setCurrentStatus("PENDING")
       }
     })
   }
@@ -430,36 +436,36 @@ class ExecutionTrackingPlugin extends ExecutionTrackingListener with Manipulator
   override def failComponentsOfFlow(sparkFlow: SparkFlow): Unit = {
     val flowName = sparkFlow.getSparkFlowName()
     val mapOfOutCompsAndPrevComps = ComponentMapping.getComps()
-    mapOfOutCompsAndPrevComps.filter(p=>p._1.equals(flowName))
-      .foreach(f=>f._2
+    mapOfOutCompsAndPrevComps.filter(flow=>flow._1.equals(flowName))
+      .foreach(lastComponentAndPrevComponentsMap=>lastComponentAndPrevComponentsMap._2
         .foreach(eachComp=>{
           jobInfo.componentInfoList.asScala
             .filter(compInfo => {
               compInfo.getComponentId.equals(eachComp)
-            }).foreach(co=>{
-            if(co.getCurrentStatus == null){
-              co.setCurrentStatus("")
+            }).foreach(component=>{
+            if(component.getCurrentStatus == null){
+              component.setCurrentStatus("")
             }
-            else if (co.getCurrentStatus.equals("RUNNING") || co.getCurrentStatus.equals("PENDING")){
-              co.setCurrentStatus("FAILED")
+            else if (component.getCurrentStatus.equals("RUNNING") || component.getCurrentStatus.equals("PENDING")){
+              component.setCurrentStatus("FAILED")
             }
           })
         }))
     jobInfo.componentInfoList.asScala
       .filter(compInfo => {
         compInfo.getComponentId.equals(flowName)
-      }).foreach(c=>{
-      if(c.getCurrentStatus == null){
-        c.setCurrentStatus("")
+      }).foreach(component=>{
+      if(component.getCurrentStatus == null){
+        component.setCurrentStatus("")
       }
-      else if (c.getCurrentStatus.equals("RUNNING") || c.getCurrentStatus.equals("PENDING")){
-        c.setCurrentStatus("FAILED")
+      else if (component.getCurrentStatus.equals("RUNNING") || component.getCurrentStatus.equals("PENDING")){
+        component.setCurrentStatus("FAILED")
       }
     })
 
-    jobInfo.componentInfoList.asScala.forall(a=>{
-      if(a.getCurrentStatus == null || a.getCurrentStatus.equals("PENDING")){
-        a.setCurrentStatus("")
+    jobInfo.componentInfoList.asScala.forall(component=>{
+      if(component.getCurrentStatus == null || component.getCurrentStatus.equals("PENDING")){
+        component.setCurrentStatus("")
         true
       }
       else{true}
