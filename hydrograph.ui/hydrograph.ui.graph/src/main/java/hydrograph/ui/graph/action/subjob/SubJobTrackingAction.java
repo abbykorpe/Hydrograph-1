@@ -81,7 +81,7 @@ public class SubJobTrackingAction extends SelectionAction{
 		super.init();
 
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Constants.SUBJOB_TRACKING); 
+		setText(Constants.VIEW_TRACKING_OR_WATCH_POINT_DATA);
 		setId(Constants.SUBJOB_TRACKING);
 		setEnabled(false);
 	}

@@ -194,6 +194,7 @@ public class Constants {
 	public static final String SUBJOB_CREATE = "Create";
 	public static final String SUBJOB_OPEN = "Open"; 	
 	public static final String SUBJOB_TRACKING = "Track Subjob"; 
+	public static final String VIEW_TRACKING_OR_WATCH_POINT_DATA = "View Tracking / Watch Point Data";
 	public static final String SUBJOB_ACTION = "SubJob";
 	public static final String SUBJOB_ACTION_ToolTip = "Path operations";
 	public static final String SUBJOB_CONTAINER = "Container";
