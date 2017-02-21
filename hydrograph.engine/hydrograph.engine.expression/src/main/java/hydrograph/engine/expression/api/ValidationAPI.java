@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -290,7 +291,15 @@ public class ValidationAPI implements Serializable {
 				return Integer.class;
 		else if(className.equalsIgnoreCase("Long"))
 			return Long.class;
-		else if(className.contains("decimal"))
+		else if(className.equalsIgnoreCase("Boolean"))
+			return Boolean.class;
+		else if(className.equalsIgnoreCase("Float"))
+			return Float.class;
+		else if(className.equalsIgnoreCase("Double"))
+			return Double.class;
+		else if(className.equalsIgnoreCase("Date"))
+			return Date.class;
+		else if(className.contains("decimal") || className.contains("BigDecimal") )
 			return BigDecimal.class;
 		return String.class;
 
