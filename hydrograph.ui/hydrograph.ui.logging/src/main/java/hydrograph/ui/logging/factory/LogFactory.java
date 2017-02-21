@@ -37,9 +37,11 @@ import ch.qos.logback.core.util.Loader;
  * @author Bitwise
  */
 public class LogFactory {
+	
+	final private String HYDROGRAPH_INSTALLATION_LOCATION = "hydrograph.installation.location";
 	final public String CLASSIC_FILE = "logback.xml";
     final public String LOG_DIR = "config/logger/";
-    
+  
     private static final Logger loggers = LoggerFactory.getLogger(LogFactory.class);
     public static final LogFactory INSTANCE = new LogFactory();
     
@@ -61,6 +63,7 @@ public class LogFactory {
 	private void writeLogsOnFileAndConsole() {
 		loggers.debug("****Configuring Logger****");
         try {
+        	    System.setProperty(HYDROGRAPH_INSTALLATION_LOCATION, Platform.getInstallLocation().getURL().getPath());
 	            ClassLoader loader = new URLClassLoader(new URL[]
 	            		{new File(Platform.getInstallLocation().getURL().getPath() + LOG_DIR).toURI().toURL()});
 	            LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
