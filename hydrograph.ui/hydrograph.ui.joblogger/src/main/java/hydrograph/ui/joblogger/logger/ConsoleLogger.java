@@ -14,14 +14,17 @@
  
 package hydrograph.ui.joblogger.logger;
 
-import hydrograph.ui.logging.factory.LogFactory;
-
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.ui.internal.console.ConsoleView;
 import org.slf4j.Logger;
+
+import hydrograph.ui.logging.factory.LogFactory;
 
 
 /**
@@ -62,6 +65,13 @@ public class ConsoleLogger extends AbstractJobLogger{
 		
 		messageConsoleStream=messageConsole.newMessageStream();
 		logger.debug("Created message console stream");
+		messageConsoleStream.getConsole().addPropertyChangeListener(new IPropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				((ConsoleView)event.getSource()).setScrollLock(true);
+			}
+		});
+		
 	}
 
 	/**
