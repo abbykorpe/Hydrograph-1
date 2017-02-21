@@ -80,6 +80,6 @@ class InputSequenceFileComponentTest {
 
     //then
     val expectedSize: Int = 10
-    //Assert.assertEquals(expectedResult, df.get("outSocket").get.first().toString())
+    Assert.assertEquals(expectedSize, df.get("outSocket").get.first().size)
   }
 }
