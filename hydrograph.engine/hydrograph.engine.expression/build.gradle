@@ -11,6 +11,7 @@
  * limitations under the License.
  ******************************************************************************/
 apply from: '../version.gradle'
+apply plugin: 'scala'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -20,6 +21,8 @@ sourceCompatibility = 1.8
 group = 'hydrograph'
 archivesBaseName = 'hydrograph.engine.expression'
 
+sourceSets.main.scala.srcDir "src/main/java"
+sourceSets.main.java.srcDirs = []
 
 jar {
     manifest {
