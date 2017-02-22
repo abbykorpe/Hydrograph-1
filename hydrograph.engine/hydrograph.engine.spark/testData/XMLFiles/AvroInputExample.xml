@@ -35,7 +35,7 @@
                 <field name="BECE" type="java.math.BigDecimal" precision="6" scale="3"/>
        </schema>
         </outSocket>
-		<path uri="../hydrograph.engine.spark/testData/csvToAvro/part-r-00000-f43a6542-74b5-4eb3-9e93-d389968aa29e.avro" />
+		<path uri="../hydrograph.engine.spark/testData/csvToAvro" />
 	</inputs>
 	  <outputs id="output1" xsi:type="ot:textFileDelimited">
 		<inSocket  fromComponentId="input1" fromSocketId="out0" id="in0">

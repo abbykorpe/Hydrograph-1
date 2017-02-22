@@ -33,7 +33,7 @@ class OutputFileAvroComponent(outputFileAvroEntity: OutputFileAvroEntity, baseCo
   private val LOG: Logger = LoggerFactory.getLogger(classOf[OutputFileAvroComponent])
   
    private def createSchema(fields: util.List[SchemaField]): Array[Column] = {
-    CustomSparkToAvro.setInputFields(fields.size())
+    CustomSparkToAvro.setInputFieldsNumber(fields.size())
     val schema = new Array[Column](fields.size())
     fields.zipWithIndex.foreach {
       case (f, i) =>
