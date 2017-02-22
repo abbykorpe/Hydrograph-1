@@ -298,6 +298,8 @@ public class ValidationAPI implements Serializable {
 			return Double.class;
 		else if(className.equalsIgnoreCase("Date"))
 			return Date.class;
+		else if(className.equalsIgnoreCase("Object"))
+			return Object.class;
 		else if(className.contains("decimal") || className.contains("BigDecimal") )
 			return BigDecimal.class;
 		return String.class;
@@ -338,7 +340,7 @@ public class ValidationAPI implements Serializable {
 //			expressionEvaluator.setDefaultImports(listOfPackage.toArray(new String[listOfPackage.size()]));
 
 			return this;
-		} catch (CompileException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

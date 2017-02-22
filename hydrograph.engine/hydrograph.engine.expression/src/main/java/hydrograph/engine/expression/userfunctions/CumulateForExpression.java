@@ -48,7 +48,7 @@ public class CumulateForExpression implements CumulateTransformBase {
 				fieldTypes[i]=inputFieldTypes[i];
 			}
 			fieldNames[inputFieldNames.length] = "_accumulator";
-			fieldTypes[inputFieldNames.length] = "string";
+			fieldTypes[inputFieldNames.length] = "Object";
 			expressionWrapper.getValidationAPI().init(fieldNames,fieldTypes);
 		} catch (Exception e) {
 			throw new RuntimeException(

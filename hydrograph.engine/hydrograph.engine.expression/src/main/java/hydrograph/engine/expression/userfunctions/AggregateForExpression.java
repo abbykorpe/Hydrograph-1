@@ -49,7 +49,7 @@ public class AggregateForExpression implements AggregateTransformBase {
 				fieldTypes[i]=inputFieldTypes[i];
 			}
 			fieldNames[inputFieldNames.length] = "_accumulator";
-			fieldTypes[inputFieldNames.length] = "string";
+			fieldTypes[inputFieldNames.length] = "Object";
 			expressionWrapper.getValidationAPI().init(fieldNames,fieldTypes);
 
 	}
