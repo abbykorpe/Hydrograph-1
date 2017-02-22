@@ -122,13 +122,15 @@ public class ImportedSchemaPropagation {
 							|| StringUtils.equalsIgnoreCase(Constants.AGGREGATE, component.getComponentName())
 							|| StringUtils.equalsIgnoreCase(Constants.NORMALIZE, component.getComponentName())
 							|| StringUtils.equalsIgnoreCase(Constants.CUMULATE, component.getComponentName())) {
-						TransformMapping transformMapping = (TransformMapping) component.getProperties()
-								.get(Constants.OPERATION);
-						List<FilterProperties> sortedList = SchemaSyncUtility.INSTANCE
-								.sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(component),
-										transformMapping);
-						transformMapping.getOutputFieldList().clear();
-						transformMapping.getOutputFieldList().addAll(sortedList);
+						if ((TransformMapping) component.getProperties().get(Constants.OPERATION) != null) {
+							TransformMapping transformMapping = (TransformMapping) component.getProperties()
+									.get(Constants.OPERATION);
+							List<FilterProperties> sortedList = SchemaSyncUtility.INSTANCE
+									.sortOutputFieldToMatchSchemaSequence(convertSchemaToFilterProperty(component),
+											transformMapping);
+							transformMapping.getOutputFieldList().clear();
+							transformMapping.getOutputFieldList().addAll(sortedList);
+						}
 					}
 					
 				}
