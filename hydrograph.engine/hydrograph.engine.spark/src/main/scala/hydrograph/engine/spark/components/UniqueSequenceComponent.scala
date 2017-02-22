@@ -25,8 +25,7 @@ class UniqueSequenceComponent(uniqueSequenceEntity: UniqueSequenceEntity, baseCo
 
     LOG.trace(uniqueSequenceEntity.toString)
     try {
-      val passThroughFields = OperationUtils.getPassThrougFields(uniqueSequenceEntity.getOutSocketList.get(0).getPassThroughFieldsList,
-        baseComponentParams.getDataFrame().schema.map(_.name)).asScala.toArray[String]
+      val passThroughFields = OperationUtils.getPassThrougFields(uniqueSequenceEntity.getOutSocketList.get(0).getPassThroughFieldsList, baseComponentParams.getDataFrame().schema.map(_.name)).asScala.toArray[String]
 
       val inputColumn = new Array[Column](passThroughFields.size)
 
