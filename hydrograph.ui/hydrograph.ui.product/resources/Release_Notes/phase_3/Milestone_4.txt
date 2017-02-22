@@ -76,3 +76,4 @@ Sr.No. <GitHub/Bugzilla Issue #>  - [fixed by] - description
 59.#737 - [Nitin Gupta] - xml Input component : External schema is getting removed after importing job
 60.#715 - [Nitin Gupta] - xml Input component : Loop Xpath Query field value is not getting saved
 61.#732 - [Nitin Gupta] - xml input component: Job is geeting failed when External schema is provided in xml input component
+62.#698 - [shashank karnik]- Tool logs folder is missing from config/logger/tool_logs folder if tool gets launched through toolbar on windows.
