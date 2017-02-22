@@ -83,7 +83,7 @@ object CustomAvroToSpark {
     }
   }
 
-  private def methodForCreatingExpectedSchema(byteBuffer: ByteBuffer, schema: Schema): BigDecimal = {
+  private def convertingAvroDecimalSchemaToSpark(byteBuffer: ByteBuffer, schema: Schema): BigDecimal = {
     val scale: Int = schema.getJsonProp("scale").asInt();
     val arrayValue: BigInteger = new BigInteger(byteBuffer.array())
     val finalValue: BigDecimal = new BigDecimal(arrayValue).movePointLeft(scale)
@@ -110,7 +110,7 @@ object CustomAvroToSpark {
           if (item == null) {
             null
           } else {
-            methodForCreatingExpectedSchema(item.asInstanceOf[ByteBuffer], avroSchema)
+            convertingAvroDecimalSchemaToSpark(item.asInstanceOf[ByteBuffer], avroSchema)
           }
         case (StringType, STRING) | (StringType, ENUM) =>
           (item: AnyRef) => if (item == null) null else item.toString

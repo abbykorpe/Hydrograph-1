@@ -21,7 +21,7 @@ package object avro {
    * the DataFileWriter
    */
   implicit class AvroDataFrameWriter[T](writer: DataFrameWriter[T]) {
-    def avro: String => Unit = writer.format("hydrograph.engine.spark.datasource").save
+    def avro: String => Unit = writer.format("hydrograph.engine.spark.datasource.avro").save
   }
 
   /**
@@ -29,6 +29,6 @@ package object avro {
    * the DataFileReade
    */
   implicit class AvroDataFrameReader(reader: DataFrameReader) {
-    def avro: String => DataFrame = reader.format("hydrograph.engine.spark.datasource").load
+    def avro: String => DataFrame = reader.format("hydrograph.engine.spark.datasource.avro").load
   }
 }

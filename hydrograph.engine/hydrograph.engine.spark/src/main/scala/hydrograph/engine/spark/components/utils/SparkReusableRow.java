@@ -106,7 +106,7 @@ public class SparkReusableRow extends ListBasedReusableRow implements Serializab
 	 *            The name of the field whose value to be fetched
 	 * @return The value of the field
 	 */
-	public Date getDate(String fieldName) throws ParseException {
+	public Date getDate(String fieldName){
 		if (getFieldInternal(fieldName) != null) {
 			Long date = (Long) getFieldInternal(fieldName);
 			return new Date(date);
@@ -121,7 +121,7 @@ public class SparkReusableRow extends ListBasedReusableRow implements Serializab
 	 *            The index of the field whose value to be fetched
 	 * @return The value of the field
 	 */
-	public Date getDate(int index) throws ParseException {
+	public Date getDate(int index) {
 		if (getFieldInternal(index) != null) {
 			Long date = (Long) getFieldInternal(index);
 			return new Date(date);

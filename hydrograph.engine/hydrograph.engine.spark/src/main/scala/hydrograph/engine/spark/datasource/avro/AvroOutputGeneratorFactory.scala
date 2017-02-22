@@ -18,7 +18,7 @@ import org.apache.spark.sql.execution.datasources.text.TextOutputWriter
 import org.apache.spark.sql.execution.datasources.{OutputWriter, OutputWriterFactory}
 import org.apache.spark.sql.types.StructType
 
- private class AvroOutputWriterFactory(schema: StructType, recordName: String, recordNamespace: String) extends OutputWriterFactory {
+ private class AvroOutputGeneratorFactory(schema: StructType, recordName: String, recordNamespace: String) extends OutputWriterFactory {
 
    override def newInstance(
       path: String,

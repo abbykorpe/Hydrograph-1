@@ -32,8 +32,8 @@ import org.apache.avro.generic.GenericData.Record
 import org.apache.hadoop.hive.serde2.avro.AvroSerDe
 import org.apache.hadoop.io.BytesWritable
 import org.apache.avro.Schema.Type._
-import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
-import org.slf4j.{Logger, LoggerFactory}
+import org.apache.spark.sql.types.{ DataType, DataTypes, StructField, StructType }
+import org.slf4j.{ Logger, LoggerFactory }
 import scala.collection.JavaConversions._
 import org.apache.spark.sql.types.StructType
 import org.apache.hadoop.io.ByteWritable
@@ -43,18 +43,18 @@ import hydrograph.engine.core.constants.Constants
 
 object CustomSparkToAvro {
 
-  var inputFieldsNumber : Int = 0
-  var arrayOfScale : Array[Int] = null
-  var arrayOfPrecision : Array[Int] = null
+  var inputFieldsNumber: Int = 0
+  var arrayOfScale: Array[Int] = null
+  var arrayOfPrecision: Array[Int] = null
   var indexForPrecision: Int = 0;
   var subIndexForPrecision: Int = 0;
   var indexForScale: Int = 0;
   var subIndexForScale: Int = 0;
-  
+
   def generateAvroSchemaFromFieldsAndTypes(recordName: String,
     schemeTypes: StructType,
     fieldPrecision: Array[Int],
-    fieldScale : Array[Int]): Schema = {
+    fieldScale: Array[Int]): Schema = {
     var typeOfField: Array[DataType] = new Array[DataType](schemeTypes.size);
 
     if (schemeTypes.fields.length == 0) {
@@ -83,22 +83,23 @@ object CustomSparkToAvro {
     var typeIndex = 0
     while (typeIndex < schemeFields.length) {
       val fieldName = schemeFields.apply(typeIndex).name
-      val schema = createAvroSchema(recordName, schemeFields,dataType(typeIndex), depth + 1, fieldPrecision(typeIndex), 
+      val schema = createAvroSchema(recordName, schemeFields, dataType(typeIndex), depth + 1, fieldPrecision(typeIndex),
         fieldScale(typeIndex))
-        val nullSchema = Schema.create(Type.NULL)
-        val schemas = new LinkedList[Schema]() {
-  	      add(nullSchema)
-          add(schema)
+      val nullSchema = Schema.create(Type.NULL)
+      val schemas = new LinkedList[Schema]() {
+        add(nullSchema)
+        add(schema)
       }
       fields.add(new Field(fieldName, Schema.createUnion(schemas), "", null))
       typeIndex += 1
     }
     if (depth > 0) {
-    recordName + depth     
+      recordName + depth
     }
     val schema = Schema.createRecord(recordName, "auto generated", "", false)
     schema.setFields(fields)
-    schema}
+    schema
+  }
 
   private def createAvroSchema(recordName: String,
     schemeFields: Array[StructField],
@@ -106,7 +107,7 @@ object CustomSparkToAvro {
     depth: Int,
     fieldPrecision: Int,
     fieldScale: Int): Schema = {
-    
+
     if (fieldTypes.isInstanceOf[DateType] || fieldTypes.isInstanceOf[TimestampType]) {
       AvroSchemaUtils.getSchemaFor("{" + "\"type\":\"" + AvroSerDe.AVRO_LONG_TYPE_NAME +
         "\"," +
@@ -122,7 +123,7 @@ object CustomSparkToAvro {
       var scale: String = String.valueOf(fieldScale);
       return AvroSchemaUtils.getSchemaFor("{" + "\"type\":\"bytes\","
         + "\"logicalType\":\"decimal\"," + "\"precision\":"
-        +  precision+ "," + "\"scale\":" + scale + "}");
+        + precision + "," + "\"scale\":" + scale + "}");
     } else {
       Schema.create(methodTocheckType(fieldTypes))
     }
@@ -140,33 +141,33 @@ object CustomSparkToAvro {
     }
   }
 
-  def setInputFields(input : Int) ={
+  def setInputFieldsNumber(input: Int) = {
     inputFieldsNumber = input
     arrayOfPrecision = new Array[Int](inputFieldsNumber)
     arrayOfScale = new Array[Int](inputFieldsNumber)
   }
-   def getInputFields() : Int={
-    inputFieldsNumber
-  }
-     
-  def getPrecison(): Array[Int] = {
-    arrayOfPrecision
-  }
-  def getScale(): Array[Int] = {
-    arrayOfScale
-  }
-  def setPrecison(componentPrecision: Int) = {
-    while (indexForPrecision == subIndexForPrecision) {
-      arrayOfPrecision(indexForPrecision) = componentPrecision
-    		  indexForPrecision += 1
+
+  def setPrecison(fieldPrecision: Int) = {
+    if (indexForPrecision == subIndexForPrecision) {
+      arrayOfPrecision(indexForPrecision) = fieldPrecision
+      indexForPrecision += 1
     }
     subIndexForPrecision += 1
   }
-  def setScale(componentScale: Int) = {
-    while (indexForScale == subIndexForScale) {
-      arrayOfScale(indexForScale) = componentScale
+
+  def getPrecison(): Array[Int] = {
+    arrayOfPrecision
+  }
+
+  def setScale(fieldScale: Int) = {
+    if (indexForScale == subIndexForScale) {
+      arrayOfScale(indexForScale) = fieldScale
       indexForScale += 1
     }
     subIndexForScale += 1
+  }
+
+  def getScale(): Array[Int] = {
+    arrayOfScale
   }
 }
