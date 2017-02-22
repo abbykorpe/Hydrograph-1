@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -32,7 +31,6 @@ import org.eclipse.ui.PlatformUI;
 import hydrograph.ui.common.swt.customwidget.HydroGroup;
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.PreferenceConstants;
-import hydrograph.ui.dataviewer.Activator;
 import hydrograph.ui.dataviewer.constants.Messages;
 
 public class ServicesPreference extends PreferencePage implements IWorkbenchPreferencePage {
@@ -57,8 +55,7 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 	
 	@Override
 	public void init(IWorkbench workbench) {
-		IPreferenceStore preferenceStore =PlatformUI.getWorkbench().getPreferenceStore();
-		//IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore preferenceStore =PlatformUI.getPreferenceStore();
 		preferenceStore.setDefault(PreferenceConstants.LOCAL_PORT_NO, DEFAULT_LOCAL_PORT);
 		preferenceStore.setDefault(PreferenceConstants.REMOTE_PORT_NO, DEFAULT_REMOTE_PORT);
 		preferenceStore.setDefault(PreferenceConstants.USE_REMOTE_CONFIGURATION, DEFAULT_USE_REMOTE_CONFIGURATION_CHECK);
@@ -67,7 +64,6 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 
 	@Override
 	protected Control createContents(Composite parent) {
-		// TODO Auto-generated method stub
 		final Composite parentComposite = new Composite(parent, SWT.None);
 		parentComposite.setToolTipText("Export Data");
 		GridData parentCompositeData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 3, 3);

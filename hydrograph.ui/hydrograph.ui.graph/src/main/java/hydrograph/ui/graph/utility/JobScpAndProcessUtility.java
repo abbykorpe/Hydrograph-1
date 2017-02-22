@@ -189,7 +189,7 @@ public class JobScpAndProcessUtility {
 					.append(GradleCommandConstants.GPARAM_UNIQUE_JOB_ID).append(job.getUniqueJobId()) 
 					.append(GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH).append(userFunctionsPropertyFile)
 					.append(GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON).append(job.isExecutionTrack())
-					.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getPortFromPreference())
+					.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getRemotePortFromPreference())
 					.append(GradleCommandConstants.GPARAM_CONSOLE_LOGGING_LEVEL+Utils.INSTANCE.getConsoleLogLevel());
 
 		}else{
@@ -204,7 +204,7 @@ public class JobScpAndProcessUtility {
 			.append(GradleCommandConstants.GPARAM_UNIQUE_JOB_ID).append(job.getUniqueJobId())
 			.append(GradleCommandConstants.GPARAM_USER_DEFINED_FUNCTIONS_PATH).append(userFunctionsPropertyFile)
 			.append(GradleCommandConstants.GPARAM_IS_EXECUTION_TRACKING_ON).append(job.isExecutionTrack())
-			.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getPortFromPreference())
+			.append(GradleCommandConstants.GPARAM_EXECUTION_TRACKING_PORT).append(TrackingDisplayUtils.INSTANCE.getRemotePortFromPreference())
 			.append(GradleCommandConstants.GPARAM_CONSOLE_LOGGING_LEVEL+Utils.INSTANCE.getConsoleLogLevel());
 		}
 		logger.debug("Gradle Command: {}", command.toString());

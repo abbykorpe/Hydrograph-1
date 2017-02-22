@@ -17,8 +17,9 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
-import org.eclipse.core.runtime.Platform;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,6 @@ public class DataBaseUtility {
 	private static final Logger logger = LogFactory.INSTANCE.getLogger(DataBaseUtility.class);
 	private static DataBaseUtility INSTANCE = new DataBaseUtility();
 
-	private static final String PLUGIN_ID = "hydrograph.ui.dataviewer";
 	
 	
 	/**
@@ -122,15 +122,18 @@ public class DataBaseUtility {
 	 * @return host value
 	 */
 	public String getServiceHost(){
-		return Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_HOST, "", null);
+		return PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_HOST);
 	}
 	
 	/**
 	 * @return port value
 	 */
 	public String getServicePort(){
-		return Platform.getPreferencesService().getString(PLUGIN_ID, PreferenceConstants.REMOTE_PORT_NO, 
-				PreferenceConstants.DEFAULT_PORT_NO, null);
+		String port = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
+		if(StringUtils.isBlank(port)){
+			port = PreferenceConstants.DEFAULT_PORT_NO;
+		}
+		return  port;
 	}
 	
 	/***

@@ -18,15 +18,18 @@ import java.util.Collections;
 
 import javax.websocket.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.glassfish.tyrus.client.ClientManager;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
+import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.graph.execution.tracking.datastructure.ExecutionStatus;
 import hydrograph.ui.graph.execution.tracking.utils.TrackingDisplayUtils;
 import hydrograph.ui.graph.job.Job;
@@ -154,9 +157,28 @@ public class HydrographServerConnection {
 	 * @param shell the shell
 	 */
 	public void messageDialogForExecutionTracking(Job job, Shell shell) {
-		String portNo = TrackingDisplayUtils.INSTANCE.getPortFromPreference();
+		String portNo;
+		String host;
+		if(job.isRemoteMode()){
+			portNo = TrackingDisplayUtils.INSTANCE.getRemotePortFromPreference();
+			if(StringUtils.isBlank(portNo)){
+				portNo = PreferenceConstants.DEFAULT_PORT_NO;
+			}
+			if(PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.USE_REMOTE_CONFIGURATION)){
+				host = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_HOST);
+			}else{
+				host = job.getHost();
+			}
+			
+		}else{
+			portNo = TrackingDisplayUtils.INSTANCE.getPortFromPreference();
+			if(StringUtils.isBlank(portNo)){
+				portNo = PreferenceConstants.DEFAULT_PORT_NO;
+			}
+			host = job.getHost();
+		}
 		String msg = "Execution tracking can't be displayed as connection refused on host: "
-				+ job.getHost() + " with port no: " + portNo;
+				+ host + " with port no: " + portNo;
 		MessageDialog dialog = new MessageDialog(shell, "Warning", null, msg,
 				SWT.ICON_WARNING, new String[] { "OK" }, 0);
 		dialog.open();
