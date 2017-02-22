@@ -354,11 +354,6 @@ public class ValidationAPI implements Serializable {
 	}
 
 
-	public static void main(String[] args) throws Exception {
-		ExpressionEvaluator ee=new ExpressionEvaluator("f1==f2?1:2",Object.class,new String[]{"f1","f2"},new Class[]{Integer.class,Object.class});
-		System.out.println(ee.evaluate(new Object[]{2,5}));
-	}
-
 	public  Object exec(Object[] data) {
 		try {
 			return apiWrapper.execute(data);
