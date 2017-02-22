@@ -79,6 +79,12 @@ public class NormalizeMappingValidator implements IValidator{
 			
 		 }
 		 transformMapping.setInputFields(inputFieldsList);
+			for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
+				transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
+			}
+			for (NameValueProperty nameValueProperty : transformMapping.getMapAndPassthroughField()) {
+				transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
+			}
 		}
 		if(isExpressionSelected)
 		{
