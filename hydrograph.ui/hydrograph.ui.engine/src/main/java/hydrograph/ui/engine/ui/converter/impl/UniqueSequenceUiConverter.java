@@ -90,8 +90,8 @@ public class UniqueSequenceUiConverter extends TransformUiConverter {
 	
 	private FixedWidthGridRow createSchemaForNewField(String fieldName) {
 		FixedWidthGridRow fixedWidthGridRow = SchemaPropagationHelper.INSTANCE.createFixedWidthGridRow(fieldName);
-		fixedWidthGridRow.setDataType(1);
-		fixedWidthGridRow.setDataTypeValue(Integer.class.getCanonicalName());
+		fixedWidthGridRow.setDataType(8);
+		fixedWidthGridRow.setDataTypeValue(Long.class.getCanonicalName());
 		return fixedWidthGridRow;
 	}
 }
