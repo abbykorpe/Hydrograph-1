@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.{Locale, TimeZone}
 
 import hydrograph.engine.core.constants.Constants
-import hydrograph.engine.spark.datasource.utils.{TextFile, TypeCast}
+import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, TextFile, TypeCast}
 import hydrograph.engine.spark.helper.DelimitedAndFixedWidthHelper
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.sql.sources._
@@ -147,7 +147,7 @@ class DefaultSource extends RelationProvider
     val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
     var outputRow: String = ""
     var recordToBeSpilled: String = ""
-
+    val codec = CompressionCodecs.getCodec(dataFrame.sparkSession.sparkContext,parameters.getOrElse("codec", null))
     val strRDD = dataFrame.rdd.mapPartitionsWithIndex {
 
       case (index, iter) =>
@@ -195,7 +195,11 @@ class DefaultSource extends RelationProvider
           }
         }
     }
-    strRDD.filter(e => !e.equals(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR)).saveAsTextFile(path)
+    val codecClass = CompressionCodecs.getCodecClass(codec)
+    codecClass match {
+      case null => strRDD.filter(e => !e.equals(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR)).saveAsTextFile(path)
+      case codeClass => strRDD.filter(e => !e.equals(Constants.LENGTHS_AND_DELIMITERS_SEPARATOR)).saveAsTextFile(path, codeClass)
+    }
     LOG.info("MixedScheme Output File is successfully created at path : " + path)
   }
 

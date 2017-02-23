@@ -18,6 +18,7 @@ import java.util.{Locale, TimeZone}
 import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, TextFile, TypeCast}
 import org.apache.commons.csv.CSVFormat
 import org.apache.hadoop.fs.Path
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.sources._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
@@ -33,20 +34,20 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     createRelation(sqlContext, parameters, null)
   }
 
- 
-  
+
+
   override def createRelation(sqlContext: SQLContext, parameters: Map[String, String], schema: StructType): CsvRelation = {
 
-    
+
     val filePath = parameters.getOrElse("path", sys.error("'path' must be specified for CSV data."))
     val filesystemPath = new Path(filePath)
     val fs = filesystemPath.getFileSystem(sqlContext.sparkContext.hadoopConfiguration)
     val path=if(fs.exists(filesystemPath)) filePath else  sys.error(" Provided file path:[\""+filePath+"\"] does not exist ")
-    
+
     val delimiter = parameters.getOrElse("delimiter", ",").charAt(0)
     val dateFormats = parameters.getOrElse("dateFormats", "null")
     val quote = parameters.getOrElse("quote", "\"")
-    
+
     val quoteChar: Character = if (quote == null) {
       null
     } else if (quote.length == 1) {
@@ -58,7 +59,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     val componentId = parameters.getOrElse("componentId", "")
     val dateFormat: List[SimpleDateFormat] = getDateFormats(dateFormats.split("\t").toList)
 
-    
+
     val headerFlag = if (useHeader.equals("true")) {
       true
     } else if (useHeader.equals("false")) {
@@ -67,7 +68,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
       throw new Exception("Header flag can be true or false")
     }
 
-    
+
      val safe = parameters.getOrElse("safe", "false")
     val safeFlag = if (safe.equals("true")) {
       true
@@ -76,8 +77,8 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     } else {
       throw new Exception("Safe flag can be true or false")
     }
-     
-     
+
+
     val strict = parameters.getOrElse("strict", "true")
     val strictFlag = if (strict.equals("true")) {
       true
@@ -86,8 +87,8 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
     } else {
       throw new Exception("Strict flag can be true or false")
     }
-    
-     
+
+
     val treatEmptyValuesAsNulls = parameters.getOrElse("treatEmptyValuesAsNulls", "false")
     val treatEmptyValuesAsNullsFlag = if (treatEmptyValuesAsNulls.equals("false")) {
       false
@@ -129,6 +130,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
   } else null
 
 
+
   /*Saving Data in csv format*/
 
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
@@ -163,7 +165,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
   }
 
   def saveAsCsvFile(dataFrame: DataFrame, parameters: Map[String, String], path: String) = {
-   
+
 
     /*new Code Added*/
 
@@ -197,7 +199,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
       "" // There is no need to generate header in this case
     }
 
-    val codec = parameters.getOrElse("codec", null)
+    val codec = CompressionCodecs.getCodec(dataFrame.sparkSession.sparkContext,parameters.getOrElse("codec", null))
     val schema = dataFrame.schema
     val schemaFields = schema.fields
 
@@ -214,7 +216,7 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
 
           override def next: String = {
             if (iter.nonEmpty) {
-             
+
               val tuple = iter.next()
               val fields = new Array[AnyRef](schemaFields.length)
 
@@ -223,8 +225,8 @@ class DefaultSource  extends RelationProvider  with SchemaRelationProvider  with
                 fields(i) = TypeCast.outputValue(tuple.get(i), schemaFields(i).dataType, dateFormat(i))
                 i = i + 1
               }
-            
-             
+
+
               val row: String = csvFormat.format(fields: _*)
 
               if (firstRow) {

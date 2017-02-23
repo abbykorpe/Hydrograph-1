@@ -18,7 +18,7 @@ import hydrograph.engine.core.component.entity.OutputFileFixedWidthEntity
 import hydrograph.engine.core.component.entity.elements.SchemaField
 import hydrograph.engine.spark.components.base.SparkFlow
 import hydrograph.engine.spark.components.platform.BaseComponentParams
-import hydrograph.engine.spark.components.utils.SchemaCreator
+import hydrograph.engine.spark.components.utils.{SchemaUtils, SchemaCreator}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{AnalysisException, Column, SaveMode}
 import org.slf4j.{Logger, LoggerFactory}
@@ -54,6 +54,7 @@ BaseComponentParams) extends SparkFlow with Serializable {
       .option("strict", outputFileFixedWidthEntity.isStrict)
       .option("safe", outputFileFixedWidthEntity.isSafe)
       .option("dateFormats", schemaCreator.getDateFormats)
+      .option("codec", SchemaUtils().getCodec(outputFileFixedWidthEntity))
       .mode( if (outputFileFixedWidthEntity.isOverWrite) SaveMode.Overwrite else SaveMode.ErrorIfExists )
       .format("hydrograph.engine.spark.datasource.fixedwidth")
       .save(outputFileFixedWidthEntity.getPath)
