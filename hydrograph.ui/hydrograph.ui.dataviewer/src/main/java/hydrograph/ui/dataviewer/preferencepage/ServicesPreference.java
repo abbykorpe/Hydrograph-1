@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright 2017 Capital One Services, LLC and Bitwise, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package hydrograph.ui.dataviewer.preferencepage;
 
 import java.util.ArrayList;
@@ -33,6 +45,13 @@ import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.PreferenceConstants;
 import hydrograph.ui.dataviewer.constants.Messages;
 
+/**
+ * @author Bitwise
+ * ServicesPreference Class creates preference page for 
+ * defining common parameters for view data and execution
+ * tracking service.
+ *
+ */
 public class ServicesPreference extends PreferencePage implements IWorkbenchPreferencePage {
 	
 	private Composite grpServiceDetailsCmposite;
@@ -53,6 +72,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 	
 	
 	
+	/* 
+	 * Set default values 
+	 */
 	@Override
 	public void init(IWorkbench workbench) {
 		IPreferenceStore preferenceStore =PlatformUI.getPreferenceStore();
@@ -62,6 +84,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 		setPreferenceStore(preferenceStore);
 	}
 
+	/* Creates contents of the preference page
+	 * 
+	 */
 	@Override
 	protected Control createContents(Composite parent) {
 		final Composite parentComposite = new Composite(parent, SWT.None);
@@ -157,6 +182,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 		return null;
 	}
 	
+	/* 
+	 * Saves the preferences on ok button click
+	 */
 	@Override
 	public boolean performOk() { 
 		localPortNo.getStringValue();
@@ -167,6 +195,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 		return super.performOk();
 	}
 
+	/* 
+	 * Apply the preferences 
+	 */
 	@Override
 	protected void performApply() {
 		localPortNo.store();
@@ -174,6 +205,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 		useRemoteConfigBooleanFieldEditor.store();
 		remoteHostFieldEditor.store();
 	}
+	/* 
+	 * Set defaults values
+	 */
 	@Override
 	protected void performDefaults() {
 		IPreferenceStore preferenceStore = getPreferenceStore();
@@ -183,6 +217,12 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 		super.performDefaults();
 }
 	
+	/**
+	 * @param value
+	 * @param editor
+	 * @param message
+	 * Validates port values
+	 */
 	private void validatePortField(String value, IntegerFieldEditor editor, String message){
 		if(StringUtils.isBlank(value) || !value.matches(Constants.PORT_VALIDATION_REGEX)){
 			showErrorMessage(editor, message,false);
@@ -191,6 +231,13 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 			checkState();
 		}
 	}
+	/**
+	 * @param editor
+	 * @param message
+	 * @param validState
+	 * Display error message
+	 */
+	
 	private void showErrorMessage(IntegerFieldEditor editor, String message,boolean validState) {
 		setErrorMessage(message);
 		editor.setErrorMessage(message);
@@ -198,6 +245,10 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 	}
 
 	
+	/**
+	 * Check if all fields are valid
+	 * 
+	 */
 	private void checkState() {
 		if(editorList != null){
 			int size = editorList.size();
@@ -215,6 +266,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 	}
 	
 
+	/**
+	 * Add fields to list
+	 */
 	private void addFields(FieldEditor editor){
 		if (editorList == null) {
 			editorList = new ArrayList<>();
@@ -222,6 +276,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 		editorList.add(editor);
 	}
 	
+	/**
+	 * Listner on check box to validate remote host 
+	 */
 	private void addListenerToRemoteConfigBooleanEditor(Composite headerRemoteComposite) {
 		useRemoteConfigbutton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -230,6 +287,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 			}
 		});
 	}
+	/**
+	 * check if remote host name is valid
+	 */
 	private void validateRemoteHost() {
 		if(useRemoteConfigbutton.getSelection() && StringUtils.isEmpty(remoteHostFieldEditor.getStringValue())){
 			remoteHostFieldEditor.setErrorMessage(Messages.BLANK_REMOTE_HOST_NAME_ERROR);
@@ -242,6 +302,9 @@ public class ServicesPreference extends PreferencePage implements IWorkbenchPref
 		}
 	}
 	
+	/* 
+	 * Returns preference store
+	 */
 	@Override
 	public IPreferenceStore getPreferenceStore() {
 		return PlatformUI.getPreferenceStore();

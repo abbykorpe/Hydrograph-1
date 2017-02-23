@@ -277,8 +277,6 @@ public class ViewDataUtils {
 	 * @return viewData service port no
 	 */
 	private String getViewDataLocalPort(){
-//		String localPortNo = Platform.getPreferencesService().getString(DATAVIEWER_PLUGIN_ID, PreferenceConstants.LOCAL_PORT_NO, 
-//				PreferenceConstants.DEFAULT_PORT_NO, null);
 		
 		String localPortNo = PlatformUI.getPreferenceStore().getString(PreferenceConstants.LOCAL_PORT_NO);
 		if(StringUtils.isBlank(localPortNo)){

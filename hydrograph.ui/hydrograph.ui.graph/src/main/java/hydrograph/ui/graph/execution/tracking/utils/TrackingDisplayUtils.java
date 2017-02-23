@@ -214,6 +214,9 @@ public class TrackingDisplayUtils {
 		return portNo;
 	}
 
+	/**
+	 * @return remote port number
+	 */
 	public String getRemotePortFromPreference(){
 		 String port = PlatformUI.getPreferenceStore().getString(PreferenceConstants.REMOTE_PORT_NO);
 		 if(StringUtils.isBlank(port)){
