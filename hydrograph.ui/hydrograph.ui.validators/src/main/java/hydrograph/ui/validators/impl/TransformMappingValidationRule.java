@@ -15,6 +15,15 @@
 package hydrograph.ui.validators.impl;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+
 import hydrograph.ui.common.util.Constants;
 import hydrograph.ui.common.util.TransformMappingFeatureUtility;
 import hydrograph.ui.datastructure.expression.ExpressionEditorData;
@@ -28,15 +37,6 @@ import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.expression.editor.util.ExpressionEditorUtil;
 import hydrograph.ui.expression.editor.util.FieldDataTypeMap;
 import hydrograph.ui.validators.utils.ValidatorUtility;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
 
 public class TransformMappingValidationRule implements IValidator{
 	private String errorMessage;
@@ -72,6 +72,7 @@ public class TransformMappingValidationRule implements IValidator{
 			
 		}
 		transformMapping.setInputFields(inputFieldsList);
+		ValidatorUtility.INSTANCE.putOutputFieldsInTransformMapping(transformMapping);
 		isJobImported=false;
 		}
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
@@ -189,6 +190,7 @@ public class TransformMappingValidationRule implements IValidator{
 		
 		return true;
 	}
+
 
 	private void validateAllExpressions(List<MappingSheetRow> mappingSheetRows,
 			Map<String, List<FixedWidthGridRow>> inputSchemaMap) {

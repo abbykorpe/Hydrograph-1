@@ -37,6 +37,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.Workbench;
 import org.slf4j.Logger;
 
+import hydrograph.ui.datastructure.property.NameValueProperty;
+import hydrograph.ui.datastructure.property.mapping.MappingSheetRow;
+import hydrograph.ui.datastructure.property.mapping.TransformMapping;
 import hydrograph.ui.logging.factory.LogFactory;
 
 
@@ -134,4 +137,13 @@ private IJavaProject createJavaProjectThroughActiveEditor() {
 	 	    }
 	 	    return null;
 }
+
+	public void putOutputFieldsInTransformMapping(TransformMapping transformMapping) {
+		for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
+			transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
+		}
+		for (NameValueProperty nameValueProperty : transformMapping.getMapAndPassthroughField()) {
+			transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
+		}
+	}
 }

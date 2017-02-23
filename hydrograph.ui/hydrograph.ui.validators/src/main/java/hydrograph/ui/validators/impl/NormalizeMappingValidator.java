@@ -79,6 +79,7 @@ public class NormalizeMappingValidator implements IValidator{
 			
 		 }
 		 transformMapping.setInputFields(inputFieldsList);
+		 ValidatorUtility.INSTANCE.putOutputFieldsInTransformMapping(transformMapping);
 		}
 		if(isExpressionSelected)
 		{
