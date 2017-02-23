@@ -72,12 +72,7 @@ public class TransformMappingValidationRule implements IValidator{
 			
 		}
 		transformMapping.setInputFields(inputFieldsList);
-			for (MappingSheetRow mappingSheetRow : transformMapping.getMappingSheetRows()) {
-				transformMapping.getOutputFieldList().addAll(mappingSheetRow.getOutputList());
-			}
-			for (NameValueProperty nameValueProperty : transformMapping.getMapAndPassthroughField()) {
-				transformMapping.getOutputFieldList().add(nameValueProperty.getFilterProperty());
-			}
+		ValidatorUtility.INSTANCE.putOutputFieldsInTransformMapping(transformMapping);
 		isJobImported=false;
 		}
 		if((mappingSheetRows==null || mappingSheetRows.isEmpty()) && (mapOrPassthroughfields==null || mapOrPassthroughfields.isEmpty() ) )
@@ -195,6 +190,7 @@ public class TransformMappingValidationRule implements IValidator{
 		
 		return true;
 	}
+
 
 	private void validateAllExpressions(List<MappingSheetRow> mappingSheetRows,
 			Map<String, List<FixedWidthGridRow>> inputSchemaMap) {
