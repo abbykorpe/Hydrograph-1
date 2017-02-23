@@ -15,8 +15,9 @@ package hydrograph.engine.spark.datasource.fixedwidth
 import java.text.SimpleDateFormat
 import java.util.{TimeZone, Locale}
 
-import hydrograph.engine.spark.datasource.utils.TypeCast
+import hydrograph.engine.spark.datasource.utils.{CompressionCodecs, TypeCast}
 import org.apache.hadoop.fs.Path
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.sources.{BaseRelation, CreatableRelationProvider, RelationProvider, SchemaRelationProvider}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
@@ -74,7 +75,7 @@ class DefaultSource extends RelationProvider
     val safe: Boolean = parameters.getOrElse("safe","false").toBoolean
     val schema = dataFrame.schema
     val fieldlen: Array[Int] = toIntLength( parameters.get("length").get)
-
+    val codec = CompressionCodecs.getCodec(dataFrame.sparkSession.sparkContext,parameters.getOrElse("codec", null))
     val dateFormat: List[SimpleDateFormat] = getDateFormats(outDateFormats.split("\t").toList)
 
     val valueRDD = dataFrame.rdd.map(row => {
@@ -137,9 +138,15 @@ class DefaultSource extends RelationProvider
        sb.toString()
       })
 
-    valueRDD.saveAsTextFile(path)
+    val codecClass = CompressionCodecs.getCodecClass(codec)
+    codecClass match {
+      case null => valueRDD.saveAsTextFile(path)
+      case codeClass => valueRDD.saveAsTextFile(path, codeClass)
+    }
     LOG.info("Fixed Width Output File is successfully created at path : " + path)
   }
+
+
 
   override def createRelation(sqlContext: SQLContext, mode: SaveMode, parameters: Map[String, String], data: DataFrame): BaseRelation = {
     LOG.trace("In method createRelation for creating Fixed Width Output File")

@@ -81,4 +81,16 @@ object CompressionCodecs {
             s"available. Known codecs are ${shortCompressionCodecNames.keys.mkString(", ")}.")
       }
   }
+
+  def getCodec(sparkContext: SparkContext, s: String): String = {
+    if (s == null){
+      if (sparkContext.getConf.contains("spark.io.compression.codec")){
+        sparkContext.getConf.get("spark.io.compression.codec")
+      } else {
+        null
+      }
+    } else {
+      s
+    }
+  }
 }

@@ -12,6 +12,8 @@
  *******************************************************************************/
 package hydrograph.engine.spark.components.utils
 
+import hydrograph.engine.core.component.entity.OutputFileDelimitedEntity
+import hydrograph.engine.core.component.entity.base.InputOutputEntityBase
 import org.apache.spark.sql.types.{DataType, StructField, StructType}
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -21,6 +23,16 @@ import org.slf4j.{Logger, LoggerFactory}
 case class SchemaUtils() {
 
   val LOG: Logger = LoggerFactory.getLogger(classOf[SchemaUtils])
+
+  def getCodec(outputFileEntity: InputOutputEntityBase): String = {
+    if (outputFileEntity.getRuntimeProperties != null &&
+      outputFileEntity.getRuntimeProperties.containsKey("hydrograph.output.compression.codec")){
+      outputFileEntity.getRuntimeProperties.getProperty("hydrograph.output.compression.codec")
+    } else {
+      null
+    }
+  }
+
 
   /*
    * This will compare two schema and check whether @readSchema is exist in @mdSchema
