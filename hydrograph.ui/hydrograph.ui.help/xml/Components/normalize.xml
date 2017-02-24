@@ -42,10 +42,4 @@
     <topic href="html/Components/Normalize_Operation_Class_Window.html#Operation_Properties_Grid" label="Operation Properties Grid">
     </topic>
  </topic>
- <topic href="html/Operation Base Interface/Normalize/NormalizeTransformBase.html" label="NormalizeTransformBase">
-    <topic href="html/Operation Base Interface/Normalize/MetaPivot.html" label="MetaPivot">
-    </topic>
-    <topic href="html/Operation Base Interface/Normalize/RegexSplitNormalize.html" label="RegexSplitNormalize">
-    </topic>
- </topic>
 </toc>
