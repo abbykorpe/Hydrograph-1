@@ -42,16 +42,4 @@
     <topic href="html/Components/Aggregate_Operation_Class_Window.html#Operation_Properties_Grid" label="Operation Properties Grid">
     </topic>
  </topic>
- <topic href="html/Operation Base Interface/Aggregate/AggregateTransformBase.html" label="AggregateTransformBase">
-    <topic href="html/Operation Base Interface/Aggregate/Count.html" label="Count">
-    </topic>
-    <topic href="html/Operation Base Interface/Aggregate/Max.html" label="Max">
-    </topic>
-    <topic href="html/Operation Base Interface/Aggregate/Min.html" label="Min">
-    </topic>
-    <topic href="html/Operation Base Interface/Aggregate/StringAppend.html" label="StringAppend">
-    </topic>
-    <topic href="html/Operation Base Interface/Aggregate/Sum.html" label="Sum">
-    </topic>
- </topic>
 </toc>
