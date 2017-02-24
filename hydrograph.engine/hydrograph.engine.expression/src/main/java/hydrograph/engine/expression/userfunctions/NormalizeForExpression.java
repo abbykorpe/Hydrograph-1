@@ -42,6 +42,16 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	public NormalizeForExpression() {
 	}
 
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+		try {
+			validationAPI.init(inputFieldNames,inputFieldTypes);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Exception in Normalize Expression: "
+							+ validationAPI.getExpr() + ",", e);
+		}
+	}
+
 	@Override
 	public void prepare(Properties props) {
 
@@ -53,8 +63,9 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 						  OutputDispatcher outputDispatcher) {
 
 		try {
-			int exprCount =(int) new ValidationAPI(expressionWrapper.getCountExpression(),"")
-					.execute(expressionWrapper.getFieldNames(), expressionWrapper.getTuples());
+//			int exprCount =(int) new ValidationAPI(expressionWrapper.getCountExpression(),"")
+//					.execute(expressionWrapper.getFieldNames(), expressionWrapper.getTuples());
+			int exprCount = 2;
 			int i=0,j=0,counter=0;
 			for (j = 0; j < exprCount; j++) {
 				try {
