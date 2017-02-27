@@ -113,24 +113,29 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
   val fieldsSize: Int = generateRecordEntity.getFieldsList.size()
 
+  @throws(classOf[Exception])
   def getFieldsData(fieldEntityLists: ArrayBuffer[FieldEntity], simpleDateFormats: ArrayBuffer[SimpleDateFormat]): ArrayBuffer[Any] =
     {
 
+      var fieldIndex = 0
+      var dataType: String = ""
+      var fieldName: String = ""
       try {
 
         val rowFieldsList: ArrayBuffer[Any] = ArrayBuffer[Any]()
 
         for (fieldIndex <- 0 until fieldsSize) {
-
-          val dataType: String = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldDataType.split("\\.").last
+          fieldName = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldName
+          dataType = generateRecordEntity.getFieldsList.get(fieldIndex).getFieldDataType.split("\\.").last
           rowFieldsList += generateFields(dataType, fieldIndex, fieldEntityLists, simpleDateFormats)
         }
         return rowFieldsList
       } catch {
 
-        case aiob: ArrayIndexOutOfBoundsException =>
+        case aiob: RuntimeException =>
           LOG.error("Error in Generate Record Component in getFieldsData()" + generateRecordEntity.getComponentId + aiob)
-          throw new RuntimeException("Error in Generate Record Component in getFieldsData()" + generateRecordEntity.getComponentId + aiob)
+          throw new RuntimeException("Error in Generate Record Component:[\""+generateRecordEntity.getComponentId +"\"] for field name:[\""+fieldName+"\"] whose field index:[\""+fieldIndex+"\"] and data type is [\""+dataType+"\"]. Cause of Error: " + aiob.getMessage)
+
       }
     }
 
@@ -174,7 +179,7 @@ class GenerateRecordComponent(generateRecordEntity: GenerateRecordEntity, iCompo
 
       case e: Exception =>
         LOG.error("Error in Generate Record Component in generateFields()" + generateRecordEntity.getComponentId + e)
-        throw new RuntimeException("Error in Generate Record Component in generateFields()" + generateRecordEntity.getComponentId + e)
+        throw new RuntimeException(e)
     }
 
   }
