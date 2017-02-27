@@ -118,9 +118,9 @@ public class ServiceUtilities {
                 .getOrDefault(Constants.USERNAME,
                         new ParamsCannotBeNullOrEmpty(Constants.USERNAME + " not found in request parameter"))
                 .toString();
-        String password = metadataOperationProperteies
-                .getOrDefault(Constants.PASSWORD,
-                        new ParamsCannotBeNullOrEmpty(Constants.PASSWORD + " not found in request parameter"))
+        String service_pwd = metadataOperationProperteies
+                .getOrDefault(Constants.SERVICE_PWD,
+                        new ParamsCannotBeNullOrEmpty(Constants.SERVICE_PWD + " not found in request parameter"))
                 .toString();
         switch (dbType.toLowerCase()) {
             case Constants.ORACLE:
@@ -156,7 +156,7 @@ public class ServiceUtilities {
         Class.forName(jdbcClassName);
         Connection connectionObject;
         try {
-            connectionObject = DriverManager.getConnection(jdbcUrl, userId, password);
+            connectionObject = DriverManager.getConnection(jdbcUrl, userId, service_pwd);
         } catch (SQLException e) {
             LOG.error("Error while connecting to database ", e.getMessage());
             throw new Exception(e.getLocalizedMessage());

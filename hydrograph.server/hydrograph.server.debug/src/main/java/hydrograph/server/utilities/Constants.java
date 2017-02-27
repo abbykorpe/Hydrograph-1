@@ -85,7 +85,7 @@ public class Constants {
     /**
      * The URL parameter for password sent in the request object to the service
      */
-    public static final String PASSWORD = "password";
+    public static final String SERVICE_PWD = "password";
     public static final String FILE_SIZE = "file_size";
     public static final String FIELD_DELIMITER = "file_size";
     public static final String ESCAPE_CHAR = "file_size";
