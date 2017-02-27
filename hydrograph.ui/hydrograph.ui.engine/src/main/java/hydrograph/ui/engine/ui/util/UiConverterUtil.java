@@ -32,6 +32,8 @@ import java.util.Properties;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,12 +49,14 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.slf4j.Logger;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.thoughtworks.xstream.XStream;
 
 import hydrograph.engine.jaxb.commontypes.TypeBaseComponent;
 import hydrograph.engine.jaxb.main.Graph;
+import hydrograph.ui.common.component.config.Config;
 import hydrograph.ui.common.util.CanvasDataAdapter;
 import hydrograph.ui.common.util.ComponentCacheUtil;
 import hydrograph.ui.common.util.Constants;
@@ -389,10 +393,14 @@ public class UiConverterUtil {
 		Graph graph = null;
 		parseXML(inputFile);
 		String inputFileAsString = replaceParametersWithDefaultValues(inputFile);
-		
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+		builderFactory.setExpandEntityReferences(false);
+		builderFactory.setNamespaceAware(true);
+		DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+		Document document = documentBuilder.parse(new ByteArrayInputStream(inputFileAsString.getBytes()));
 		jaxbContext = JAXBContext.newInstance(Graph.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		graph = (Graph) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(inputFileAsString.getBytes()));
+		graph = (Graph) jaxbUnmarshaller.unmarshal(document);
 		if (graph != null){
 			componentRepo.genrateComponentRepo(graph);
 		}
