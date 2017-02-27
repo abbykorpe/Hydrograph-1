@@ -26,15 +26,13 @@ public class HydrographServiceClient {
     String JOB_ID = "CloneDebug";
     String COMPONENT_ID = "input1";
     String SOCKET_ID = "out0";
-
-    // String BASE_PATH = "C:/Users/Bhaveshs/git/hydrograph";
-    String BASE_PATH = "hdfs://UbuntuD1.bitwiseglobal.net:8020/user/hduser";
-    String USER_ID = "hduser";
-    String PASSWORD = "Bitwise2012";
-    String FILE_SIZE_TO_READ = "1";
-    String HOST_NAME = "127.0.0.1";
-    // String HOST_NAME = "10.130.248.53";
-    String PORT = "8004";
+    //TODO : Add values while testing the class, remove it once testing is done.
+    String BASE_PATH = "";
+    String USER_ID = "";
+    String PASSWORD = "";
+    String FILE_SIZE_TO_READ = "";
+    String HOST_NAME = "";
+    String PORT = "";
 
     public static void main(String[] args) {
         HydrographServiceClient client = new HydrographServiceClient();
@@ -58,12 +56,8 @@ public class HydrographServiceClient {
     public void chcekConnectionStatus() throws IOException {
 
         HttpClient httpClient = new HttpClient();
-
-        //String oraclejson = "{\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-        // String mysqljson =
-        // "{\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test1\",\"dbtype\":\"mysql\"}";
-        //String redshiftjson = "{\"username\":\"awsusers\",\"password\":\"1qaz2wsxA#5\",\"hostname\":\"redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com\",\"database\":\"dev\",\"dbtype\":\"redshift\",\"port\":\"5439\"}";
-        String teradatajson = "{\"username\":\"hydrograph\",\"password\":\"teradata\",\"hostname\":\"10.130.250.235\",\"database\":\"hydrograph_db\",\"dbtype\":\"teradata\",\"port\":\"1025\"}";
+        //TODO : add connection details while testing only,remove it once done
+        String teradatajson = "{\"username\":\"\",\"password\":\"\",\"hostname\":\"\",\"database\":\"\",\"dbtype\":\"\",\"port\":\"\"}";
         PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/getConnectionStatus");
 
         //postMethod.addParameter("request_parameters", redshiftjson);
@@ -85,22 +79,8 @@ public class HydrographServiceClient {
     public void calltoReadMetastore() throws IOException {
 
         HttpClient httpClient = new HttpClient();
-
-        // String json =
-        // "{\"condition\":\"abc\",\"schema\":[{\"fieldName\":\"f1\",\"dateFormat\":\"\",\"dataType\":\"1\",\"scale\":\"scale\",\"dataTypeValue\":\"java.lang.String\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f2\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f3\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.util.Date\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"},{\"fieldName\":\"f4\",\"dateFormat\":\"\",\"dataType\":1,\"scale\":\"scale\",\"dataTypeValue\":\"java.math.BigDecimal\",\"scaleType\":1,\"scaleTypeValue\":\"scaleTypeValue\",\"precision\":\"precision\",\"description\":\"description\"}],\"fileSize\":1,\"jobDetails\":{\"host\":\"127.0.0.1\",\"port\":\"8005\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"basepath\":\"C:/Users/santlalg/git/Hydrograph/hydrograph.engine/hydrograph.engine.command-line\",\"uniqueJobID\":\"debug_job\",\"componentID\":\"input\",\"componentSocketID\":\"out0\",\"isRemote\":false}}";
-        // String oraclejson = "{\"query\":\"Select * from
-        // testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-        // String oraclejson =
-        // "{\"table\":\"testingTable414\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"port\":\"1521\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-        //String oraclejson = "{\"table\":\"testingTable1113\",\"username\":\"htcd\",\"password\":\"htcd\",\"hostname\":\"DBDEVSRV\",\"sid\":\"PRACTICE\",\"drivertype\":\"thin\",\"dbtype\":\"oracle\"}";
-        //String mysqljson = "{\"query\":\"Select * from ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"port\":\"3306\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
-        // String mysqljson = "{\"query\":\"Select * from
-        // ideaJDBC\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
-        //String mysqljson = "{\"table\":\"allType\",\"username\":\"hduser\",\"password\":\"Bitwise2012\",\"hostname\":\"10.130.248.53\",\"database\":\"test\",\"dbtype\":\"mysql\"}";
-        // String hivejson =
-        // "{\"database\":\"textdata\",\"table\":\"personal\",\"username\":\"username\",\"password\":\"yourpassword\",\"dbtype\":\"hive\"}";
-        //String redshiftjson = "{\"table\":\"testing2\",\"username\":\"awsuser\",\"password\":\"1qaz2wsxA#5\",\"hostname\":\"redshift-demo.coz8kmgqksna.us-west-2.redshift.amazonaws.com\",\"database\":\"dev\",\"dbtype\":\"redshift\",\"port\":\"5439\"}";
-        String teradatajson = "{\"table\":\"testting2\",\"username\":\"hydrograph\",\"password\":\"teradata\",\"hostname\":\"10.130.250.235\",\"database\":\"hydrograph_db\",\"dbtype\":\"teradata\",\"port\":\"1025\"}";
+      //TODO : add connection details while testing only,remove it once done
+        String teradatajson = "{\"table\":\"testting2\",\"username\":\"\",\"password\":\"\",\"hostname\":\"\",\"database\":\"\",\"dbtype\":\"\",\"port\":\"\"}";
 
         PostMethod postMethod = new PostMethod("http://" + HOST_NAME + ":" + PORT + "/readFromMetastore");
 
