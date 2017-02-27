@@ -194,9 +194,9 @@ public class HydrographService {
                     userId = requestParameterValues.getString(Constants.USERNAME);
                     metadataProperties.put(Constants.USERNAME, userId);
                 }
-                if (!requestParameterValues.isNull(Constants.PASSWORD)) {
-                    password = requestParameterValues.getString(Constants.PASSWORD);
-                    metadataProperties.put(Constants.PASSWORD, password);
+                if (!requestParameterValues.isNull(Constants.SERVICE_PWD)) {
+                    password = requestParameterValues.getString(Constants.SERVICE_PWD);
+                    metadataProperties.put(Constants.SERVICE_PWD, password);
                 }
                 if (!requestParameterValues.isNull(Constants.HOST_NAME)) {
                     host = requestParameterValues.getString(Constants.HOST_NAME);
@@ -346,9 +346,9 @@ public class HydrographService {
                     userId = requestParameterValues.getString(Constants.USERNAME);
                     metadataProperties.put(Constants.USERNAME, userId);
                 }
-                if (!requestParameterValues.isNull(Constants.PASSWORD)) {
-                    password = requestParameterValues.getString(Constants.PASSWORD);
-                    metadataProperties.put(Constants.PASSWORD, password);
+                if (!requestParameterValues.isNull(Constants.SERVICE_PWD)) {
+                    password = requestParameterValues.getString(Constants.SERVICE_PWD);
+                    metadataProperties.put(Constants.SERVICE_PWD, password);
                 }
                 if (!requestParameterValues.isNull(Constants.HOST_NAME)) {
                     host = requestParameterValues.getString(Constants.HOST_NAME);
@@ -411,7 +411,7 @@ public class HydrographService {
 
                 // String host = request.queryParams(Constants.HOST);
                 String userID = request.queryParams(Constants.USER_ID);
-                String password = request.queryParams(Constants.PASSWORD);
+                String password = request.queryParams(Constants.SERVICE_PWD);
 
                 double sizeOfData = Double.parseDouble(request.queryParams(Constants.FILE_SIZE)) * 1024 * 1024;
                 LOG.info("Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}, DataSize:{}",
@@ -540,7 +540,7 @@ public class HydrographService {
                 String componentId = request.queryParams(Constants.COMPONENT_ID);
                 String socketId = request.queryParams(Constants.SOCKET_ID);
                 String userID = request.queryParams(Constants.USER_ID);
-                String password = request.queryParams(Constants.PASSWORD);
+                String password = request.queryParams(Constants.SERVICE_PWD);
 
                 LOG.info("Base Path: {}, Job Id: {}, Component Id: {}, Socket ID: {}, User ID:{}",
                         basePath, jobId, componentId, socketId, userID);

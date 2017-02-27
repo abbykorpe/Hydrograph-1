@@ -16,12 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
@@ -87,10 +82,11 @@ public class LingualFilter {
 		Connection connection;
 		Class.forName("cascading.lingual.jdbc.Driver");
 		connection = DriverManager.getConnection("jdbc:lingual:hadoop2-mr1", properties);
-		Statement statement = connection.createStatement();
+        PreparedStatement psmt = connection.prepareStatement(query);
+
 
 		LOG.debug("executing query: " + query);
-		ResultSet resultSet = statement.executeQuery(query);
+		ResultSet resultSet = psmt.executeQuery();
 
 		writeFiles(resultSet, sizeOfDataInByte, localDebugFile);
 		resultSet.close();

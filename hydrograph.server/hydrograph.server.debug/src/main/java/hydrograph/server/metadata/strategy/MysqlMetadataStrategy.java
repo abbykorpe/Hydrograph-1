@@ -54,9 +54,9 @@ public class MysqlMetadataStrategy extends MetadataStrategyTemplate {
                 .getOrDefault(Constants.USERNAME,
                         new ParamsCannotBeNullOrEmpty(Constants.USERNAME + " not found in request parameter"))
                 .toString();
-        String password = connectionProperties
-                .getOrDefault(Constants.PASSWORD,
-                        new ParamsCannotBeNullOrEmpty(Constants.PASSWORD + " not found in request parameter"))
+        String service_pwd = connectionProperties
+                .getOrDefault(Constants.SERVICE_PWD,
+                        new ParamsCannotBeNullOrEmpty(Constants.SERVICE_PWD + " not found in request parameter"))
                 .toString();
         String database = connectionProperties
                 .getOrDefault(Constants.DATABASE_NAME,
@@ -66,7 +66,7 @@ public class MysqlMetadataStrategy extends MetadataStrategyTemplate {
         LOG.info("Connection url for mysql = '" + jdbcurl + "'");
         LOG.info("Connecting with '" + userId + "' user id.");
         Class.forName(Constants.MYSQL_JDBC_CLASSNAME);
-        connection = DriverManager.getConnection(jdbcurl, userId, password);
+        connection = DriverManager.getConnection(jdbcurl, userId, service_pwd);
     }
 
     /**
