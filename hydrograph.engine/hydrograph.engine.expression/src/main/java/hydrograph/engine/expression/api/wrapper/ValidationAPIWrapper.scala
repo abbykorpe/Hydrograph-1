@@ -9,7 +9,12 @@ class ValidationAPIWrapper(expression:String,fieldNames:Array[String],fieldTypes
   @transient lazy val expressionEvaluator=new ExpressionEvaluator(expression,classOf[Object],fieldNames,fieldTypes)
 
   def execute(data:Array[Object]): Object ={
-    expressionEvaluator.evaluate(data)
+    try{
+      expressionEvaluator.evaluate(data)
+    } catch {
+      case e:Exception => throw new RuntimeException("--------------------->"+e.getMessage)
+    }
+
   }
 
 }

@@ -29,10 +29,16 @@ public class ExpressionWrapper {
 	private int transformInstancesSize;
 	private List<String> operationOutputFields;
 	private List<String> listOfExpressions;
+	private List<ValidationAPI> validationAPIList;
 
 	public ExpressionWrapper(ValidationAPI validationAPI, String intialValue) {
 		this.validationAPI = validationAPI;
 		this.intialValueExpression = intialValue;
+	}
+
+	public ExpressionWrapper(List<ValidationAPI> validationAPIList, String countExpression) {
+		this.validationAPIList = validationAPIList;
+		this.countExpression = countExpression;
 	}
 
 	public ExpressionWrapper(ValidationAPI validationAPI, String[] fieldNames, Object[] tuples, String countExpression,
@@ -48,6 +54,10 @@ public class ExpressionWrapper {
 
 	public ValidationAPI getValidationAPI() {
 		return validationAPI;
+	}
+
+	public List<ValidationAPI> getValidationAPIList() {
+		return validationAPIList;
 	}
 
 	public String getIntialValueExpression() {

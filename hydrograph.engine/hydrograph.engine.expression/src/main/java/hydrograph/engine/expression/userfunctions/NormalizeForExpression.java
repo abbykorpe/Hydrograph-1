@@ -12,8 +12,7 @@
  *******************************************************************************/
 package hydrograph.engine.expression.userfunctions;
 
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.*;
 
 import hydrograph.engine.expression.api.ValidationAPI;
 import hydrograph.engine.expression.utils.ExpressionWrapper;
@@ -24,22 +23,55 @@ import hydrograph.engine.transformation.userfunctions.base.ReusableRow;
 public class NormalizeForExpression implements NormalizeTransformBase {
 
 	private ExpressionWrapper expressionWrapper;
-	private ValidationAPI validationAPI;
-	private String[] fieldNames;
+	private ValidationAPI validationAPIForCountExpre;
 	private Object[] tuples;
-	private String countExpression;
-	private int transformInstancesSize;
-	private ArrayList<String> operationOutputFields;
-	private ArrayList<String> listOfExpressions;
+	private List<String[]> validationAPIFieldNames;
+	private List<String[]> outFieldsList;
 
 	public void setValidationAPI(ExpressionWrapper expressionWrapper){
 		this.expressionWrapper = expressionWrapper;
 	}
-	public void setValidationAPI(ValidationAPI validationAPI){
-		this.validationAPI = validationAPI;
-	}
 
 	public NormalizeForExpression() {
+	}
+
+	public void callPrepare(String[] inputFieldNames,String[] inputFieldTypes){
+		try {
+			validationAPIForCountExpre = new ValidationAPI(expressionWrapper.getCountExpression(),"");
+			validationAPIForCountExpre.init(inputFieldNames,inputFieldTypes);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Exception in Normalize Expression: "
+							+ validationAPIForCountExpre.getExpr() + ",", e);
+		}
+	}
+
+	public void initialize(List<String[]> inputFieldNames, List<String[]> inputFieldTypes, List<String[]> outFieldsList){
+		List<String[]> listInputFieldNames = new ArrayList<String[]>();
+		List<String[]> listInputFieldTypes = new ArrayList<String[]>();
+		int i = 0, counter = 0;
+		try {
+			for(ValidationAPI validationAPI : expressionWrapper.getValidationAPIList()){
+				String[] fNames = new String[inputFieldNames.get(i).length + 1];
+				String[] fTypes = new String[inputFieldNames.get(i).length + 1];
+				for(counter = 0 ; counter < inputFieldNames.get(i).length ; counter++ ){
+					fNames[counter] = inputFieldNames.get(i)[counter];
+					fTypes[counter] = inputFieldTypes.get(i)[counter];
+				}
+				fNames[counter] = "_index";
+				fTypes[counter] = "Integer";
+				listInputFieldNames.add(fNames);
+				listInputFieldTypes.add(fTypes);
+				validationAPI.init(fNames,fTypes);
+				i++;
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Exception in Normalize Expression: "
+							+ validationAPIForCountExpre.getExpr() + ",", e);
+		}
+		validationAPIFieldNames = listInputFieldNames;
+		this.outFieldsList = outFieldsList;
 	}
 
 	@Override
@@ -50,69 +82,43 @@ public class NormalizeForExpression implements NormalizeTransformBase {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void Normalize(ReusableRow inputRow, ReusableRow outputRow,
-						  OutputDispatcher outputDispatcher) {
-
+						  OutputDispatcher outputDispatcher) throws RuntimeException{
 		try {
-			int exprCount =(int) new ValidationAPI(expressionWrapper.getCountExpression(),"")
-					.execute(expressionWrapper.getFieldNames(), expressionWrapper.getTuples());
-			int i=0,j=0,counter=0;
+			int inputRowLength = inputRow.getFieldNames().size();
+			Object[] tuple = new Object[inputRowLength];
+			for(int ctr = 0; ctr < inputRowLength; ctr++){
+				tuple[ctr] = inputRow.getField(ctr);
+			}
+			int exprCount = (int) validationAPIForCountExpre.exec(tuple);
+			int i=0,counter=0;
+			Integer j= 0;
 			for (j = 0; j < exprCount; j++) {
 				try {
-//					for (counter = 0; counter < expressionWrapper.getTransformInstancesSize(); counter++) {
-						fieldNames = new String[inputRow.getFields().size() + 1];
-						tuples = new Object[inputRow.getFields().size() + 1];
-						for (i = 0; i < inputRow.getFieldNames().size(); i++) {
-							fieldNames[i] = inputRow.getFieldName(i);
-							tuples[i] = inputRow.getField(i);
+					for(counter = 0; counter < expressionWrapper.getValidationAPIList().size() ; counter++) {
+						String[] fieldNames = validationAPIFieldNames.get(counter);
+						tuples = new Object[fieldNames.length];
+						for (i = 0; i < fieldNames.length - 1; i++) {
+							tuples[i] = inputRow.getField(fieldNames[i]);
 						}
-						fieldNames[i] = "_index";
 						tuples[i] = j;
-						Object obj = expressionWrapper.getValidationAPI().execute(fieldNames,
-								tuples);
-						outputRow.setField(
-								expressionWrapper.getOperationOutputFields().get(0),
+						Object obj = expressionWrapper.getValidationAPIList().get(counter).exec(tuples);
+						outputRow.setField(outFieldsList.get(counter)[0],
 								(Comparable) obj);
-//					}
+					}
 					outputDispatcher.sendOutput();
 				} catch (Exception e) {
 					throw new RuntimeException(
 							"Exception in normalize expression:[\""
-									+ expressionWrapper.getListOfExpressions().get(counter)
-									+ "\"].", e);
+									+ expressionWrapper.getValidationAPIList().get(counter)
+									+ "\"]. Error being : "+e.getMessage(), e);
 				}
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in normalize expression:[\""
-					+ expressionWrapper.getCountExpression() + "\"].", e);
+					+ validationAPIForCountExpre.getExpr() + "\"].", e);
 		}
 
 	}
-
-	public void setFieldNames(String[] fieldNames) {
-		this.fieldNames = fieldNames;
-	}
-
-	public void setTuples(Object[] tuples) {
-		this.tuples = tuples;
-	}
-
-	public void setCountExpression(String countExpression) {
-		this.countExpression = countExpression;
-	}
-
-	public void setTransformInstancesSize(int transformInstancesSize) {
-		this.transformInstancesSize = transformInstancesSize;
-	}
-
-	public void setOperationOutputFields(
-			ArrayList<String> operationOutputFields) {
-		this.operationOutputFields = operationOutputFields;
-	}
-
-	public void setListOfExpressions(ArrayList<String> listOfExpressions) {
-		this.listOfExpressions = listOfExpressions;
-	}
-
 
 	@Override
 	public void cleanup() {

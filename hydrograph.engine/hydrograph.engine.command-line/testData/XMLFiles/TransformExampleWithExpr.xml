@@ -44,10 +44,20 @@
 				<field name="new_field" type="java.lang.String" />
 			</outputFields>
 		</expression>
+		<expression expr="StringFunctions.stringMatch(city,name)?&quot;tRuE&quot;:&quot;fAlSe&quot;;" id="e2">
+			<inputFields>
+				<field name="name" inSocketId="in0" />
+				<field name="city" inSocketId="in0" />
+			</inputFields>
+			<outputFields>
+				<field name="new_field2" type="java.lang.String" />
+			</outputFields>
+		</expression>
 		<outSocket id="out0">
 			<passThroughField name="id" inSocketId="in0" />
 			<mapField sourceName="city" name="new_city" inSocketId="in0" />
 			<expressionField name="new_field" expressionId="e1"/>
+			<expressionField name="new_field2" expressionId="e2"/>
 		</outSocket>
 	</operations>
 
@@ -57,6 +67,7 @@
 				<field name="id" type="java.lang.String" />
 				<field name="new_city" type="java.lang.String" />
 				<field name="new_field" type="java.lang.String" />
+				<field name="new_field2" type="java.lang.String" />
 			</schema>
 		</inSocket>
 		<path uri="testData/Output/TransformOutput1" />

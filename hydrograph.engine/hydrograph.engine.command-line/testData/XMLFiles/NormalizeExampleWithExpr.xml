@@ -26,7 +26,7 @@
 				<field name="Rewards" type="java.lang.String" />
 			</schema>
 		</outSocket>
-		<path uri="C:\Users\abhishekk\IdeaProjects\Hydrograph_GitHub\hydrograph.engine\hydrograph.engine.command-line\testData\Input\delimitedInputFileForExpr" />
+		<path uri="testData\Input\delimitedInputFileForExpr" />
 		<delimiter value="|" />
 		<hasHeader value="false" />
 		<safe value="true" />
@@ -35,27 +35,26 @@
 
 	<operations id="normalize" xsi:type="op:normalize">
 		<inSocket fromComponentId="input1" fromSocketId="out0" id="in0" />
-		<expression expr="(_index >= (Transactions.split(&quot;,&quot;)).length)?&quot;zzz&quot;:(Transactions.split(&quot;,&quot;))[_index]"
+		<expression expr="(_index >= (Transactions.split(&quot;,&quot;)).length)?&quot;zzz&quot;:(Transactions.split(&quot;,&quot;))[_index.intValue()]"
 					id="e1" >
 			<inputFields>
 				<field name="Transactions" inSocketId="in0" />
+				<field name="Rewards" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
 				<field name="Transaction" type="java.lang.String" />
 			</outputFields>
 		</expression>
-		<!--<expression expr="(Rewards.split(&quot;,&quot;))[_index]"
-					id="e2" >-->
-		<expression expr="(_index >= (Transactions.split(&quot;,&quot;)).length)?&quot;zzz&quot;:&quot;zxc&quot;"
+		<expression expr="(Rewards.split(&quot;,&quot;))[_index.intValue()]"
 					id="e2" >
 			<inputFields>
-				<field name="Transactions" inSocketId="in0" />
+				<field name="Rewards" inSocketId="in0" />
 			</inputFields>
 			<outputFields>
 				<field name="Reward" type="java.lang.String" />
 			</outputFields>
 		</expression>
-		<!--<expression expr="((Rewards.split(&quot;,&quot;))[_index].equals(&quot;xxx&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
+		<expression expr="((Rewards.split(&quot;,&quot;))[_index.intValue()].equals(&quot;xxx&quot;))?&quot;TransactionsalReward&quot;:&quot;AdditionalReward&quot;"
 					id="e3" >
 			<inputFields>
 				<field name="Rewards" inSocketId="in0" />
@@ -63,17 +62,15 @@
 			<outputFields>
 				<field name="RewardCategory" type="java.lang.String" />
 			</outputFields>
-		</expression>-->
-		<!--<outputRecordCount value="((Transactions.split(&quot;,&quot;)).length>(Rewards.split(&quot;,&quot;)).length)?(Transactions.split(&quot;,&quot;)).length:(Rewards.split(&quot;,&quot;)).length"/>-->
-		<outputRecordCount value="Transactions.split(&quot;,&quot;).length"/>
-		<!--<outputRecordCount value="2"/>-->
+		</expression>
+		<outputRecordCount value="((Transactions.split(&quot;,&quot;)).length>(Rewards.split(&quot;,&quot;)).length)?(Transactions.split(&quot;,&quot;)).length:(Rewards.split(&quot;,&quot;)).length"/>
 		<outSocket id="out0">
 			<passThroughField name="*" inSocketId="in0" />
 			<mapField sourceName="ID" name="ID_new"
 					  inSocketId="in0" />
 			<expressionField name="Transaction" expressionId="e1" />
 			<expressionField name="Reward" expressionId="e2" />
-			<!--<expressionField name="RewardCategory" expressionId="e3" />-->
+			<expressionField name="RewardCategory" expressionId="e3" />
 		</outSocket>
 	</operations>
 
@@ -83,10 +80,10 @@
 				<field name="ID_new" type="java.lang.String" />
 				<field name="Transaction" type="java.lang.String" />
 				<field name="Reward" type="java.lang.String" />
-				<!--<field name="RewardCategory" type="java.lang.String" />-->
+				<field name="RewardCategory" type="java.lang.String" />
 			</schema>
 		</inSocket>
-		<path uri="C:\Users\abhishekk\IdeaProjects\Hydrograph_GitHub\hydrograph.engine\hydrograph.engine.command-line\testData\Output\NormalizeOp1" />
+		<path uri="testData/Output/NormalizeOp1" />
 		<delimiter value="," />
 		<hasHeader value="true" />
 		<charset value="ISO-8859-1" />
